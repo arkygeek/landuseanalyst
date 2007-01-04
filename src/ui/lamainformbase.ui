@@ -78,7 +78,7 @@ Jason Jorgenson
            <string/>
           </property>
           <property name="pixmap" >
-           <pixmap/>
+           <pixmap resource="../resources/resources.qrc" >:/new/prefix1/liverpool_uni_logo.png</pixmap>
           </property>
           <property name="alignment" >
            <set>Qt::AlignCenter</set>
