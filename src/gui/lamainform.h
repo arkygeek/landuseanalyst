@@ -34,6 +34,8 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
 		LaMainForm(QWidget* parent = 0, Qt::WFlags fl = 0 );
 		~LaMainForm();
   public slots:
+	void on_calculate_button_clicked();
+	void on_pigview_clicked();
   private slots:
 	private:
 		void readSettings();

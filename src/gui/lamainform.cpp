@@ -47,3 +47,13 @@ void LaMainForm::writeSettings()
   mySettings.setValue("mainwindow/pos", pos());
   mySettings.setValue("mainwindow/size", size());
 }
+
+void LaMainForm::on_calculate_button_clicked()
+{
+	qDebug("QGIS Rocks");
+}
+
+void LaMainForm::on_pigview_clicked()
+{
+	qDebug("Jason Rocks");
+}
