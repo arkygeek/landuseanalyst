@@ -25,7 +25,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "labase.h"
+#include "lamainform.h"
 //qt includes
 #include <QApplication>
 #include <QSplashScreen>
@@ -91,7 +91,7 @@ int main(int argc, char *argv[])
 	}
   */
   LaMainForm * mypForm = new LaMainForm();
-  mypForm.show()
+  mypForm->show();
   return myApp.exec();
 }
 /* Test to determine if this program was started on Mac OS X by double-clicking
