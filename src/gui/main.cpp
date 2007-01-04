@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Tim Sutton   *
+ *   Copyright (C) 2007 by Tim Sutton   *
  *   tim@linfiniti.com   *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -25,7 +25,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "zintatuform.h"
+#include "labase.h"
 //qt includes
 #include <QApplication>
 #include <QSplashScreen>
@@ -45,8 +45,8 @@ int main(int argc, char *argv[])
 
   //NOTE: make sure these lines stay after myApp init above
   QCoreApplication::setOrganizationName("linfiniti.com");
-  QCoreApplication::setOrganizationDomain("zintatu.linfiniti.com");
-  QCoreApplication::setApplicationName("zintatu");
+  QCoreApplication::setOrganizationDomain("landuseanalyst.linfiniti.com");
+  QCoreApplication::setApplicationName("LanduseAnalyst");
 	
 #ifdef Q_OS_MACX
   // Install OpenDocuments AppleEvent handler after application object is initialized
@@ -66,6 +66,7 @@ int main(int argc, char *argv[])
 #endif
 
 	//dont display the splash on first run...
+  /*
 	QSettings mySettings;
 	if (mySettings.value("firstRun/firstRun",true).toBool()==false)
 	{
@@ -88,6 +89,9 @@ int main(int argc, char *argv[])
 		ZintatuForm * mypZintatu = new ZintatuForm();
 		mypZintatu->show();
 	}
+  */
+  LaMainForm * mypForm = new LaMainForm();
+  mypForm.show()
   return myApp.exec();
 }
 /* Test to determine if this program was started on Mac OS X by double-clicking

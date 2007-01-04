@@ -36,6 +36,7 @@ RESOURCES = ../resources/resources.qrc
 #QT += network
 
 #INCLUDEPATH += ../lib 
+INCLUDEPATH += ../ui/
 
 #################################################################
 
