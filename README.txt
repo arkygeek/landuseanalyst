@@ -1,4 +1,4 @@
 Project Authors:
 
-Jason Jorgensson
+Jason Jorgenson
 Tim Sutton
