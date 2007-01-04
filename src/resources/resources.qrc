@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/new/prefix1" >
+        <file>errordunums.png</file>
+        <file>errorpercent.png</file>
+        <file>liverpool_uni_logo.png</file>
+    </qresource>
+</RCC>
