@@ -34,12 +34,16 @@ message("Building $${TARGET} (exe) into $${DESTDIR}")
 RESOURCES = ../resources/resources.qrc 
 
 #QT += network
+QT += gui core
 
 #INCLUDEPATH += ../lib 
 INCLUDEPATH += ../ui/
 
 #################################################################
 
-FORMS += labase.ui 
+FORMS += ../ui/lamainformbase.ui 
 
-SOURCES += main.cpp 
+HEADERS += lamainform.h
+
+SOURCES += main.cpp \
+           lamainform.cpp
