@@ -56,4 +56,28 @@ void LaMainForm::on_calculate_button_clicked()
 void LaMainForm::on_pigview_clicked()
 {
 	qDebug("Jason Rocks");
+/*
+	int myPigSnoutLength = spinSnoutLength->value();
+pigpercent
+piglittersize
+pigweight
+pigfodderuse
+pigfodderamount
+pigfoddercrop
+pigfoddertime
+piggrazefallow
+pigraster
+dietslider   for overall MEAT value
+meatslider   for tame percentage
+dailycalories
+*/
+
+//float myPigSnoutLength = spinSnoutLength->value();
+
+
+}
+
+void LaMainForm::on_meatslider_valueChanged(int theValue)
+{
+qDebug("Some plonker moved the slider! New value:" + QString::number(theNumber).toLocal8Bit());
 }
