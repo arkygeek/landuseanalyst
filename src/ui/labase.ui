@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>Dialog</class>
- <widget class="QDialog" name="Dialog" >
+ <class>LaMainFormBase</class>
+ <widget class="QDialog" name="LaMainFormBase" >
   <property name="geometry" >
    <rect>
     <x>0</x>
@@ -22,7 +22,7 @@
     </rect>
    </property>
    <property name="currentIndex" >
-    <number>4</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="TabPage" >
     <attribute name="title" >
@@ -78,7 +78,7 @@ Jason Jorgenson
          <string/>
         </property>
         <property name="pixmap" >
-         <pixmap resource="landuseanalyst.qrc" >:/new/prefix1/tw-education-scholarships-btco-joint-shcolarships-btco-university-of-liverpool-joint-scholarship-logo-100x56.png</pixmap>
+         <pixmap/>
         </property>
         <property name="alignment" >
          <set>Qt::AlignCenter</set>
@@ -5055,7 +5055,7 @@ p, li { white-space: pre-wrap; }
     <attribute name="title" >
      <string>Help</string>
     </attribute>
-    <widget class="MultiPageWidget" name="multipagewidget" >
+    <widget class="MultiPageWidget" native="1" name="multipagewidget" >
      <property name="geometry" >
       <rect>
        <x>0</x>
@@ -5064,7 +5064,15 @@ p, li { white-space: pre-wrap; }
        <height>301</height>
       </rect>
      </property>
-     <widget class="QWidget" name="page_2" >
+     <widget class="QWidget" native="1" name="page_2" >
+      <property name="geometry" >
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>487</width>
+        <height>254</height>
+       </rect>
+      </property>
       <property name="windowTitle" >
        <string>Effects of Model Precision on Area</string>
       </property>
@@ -5081,14 +5089,22 @@ p, li { white-space: pre-wrap; }
         <string/>
        </property>
        <property name="pixmap" >
-        <pixmap resource="landuseanalyst.qrc" >:/new/prefix1/errordunums.png</pixmap>
+        <pixmap/>
        </property>
        <property name="scaledContents" >
         <bool>true</bool>
        </property>
       </widget>
      </widget>
-     <widget class="QWidget" name="page_3" >
+     <widget class="QWidget" native="1" name="page_3" >
+      <property name="geometry" >
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>485</width>
+        <height>253</height>
+       </rect>
+      </property>
       <property name="windowTitle" >
        <string>Effects of Model Precision on percent of error</string>
       </property>
@@ -5105,7 +5121,7 @@ p, li { white-space: pre-wrap; }
         <string/>
        </property>
        <property name="pixmap" >
-        <pixmap resource="landuseanalyst.qrc" >:/new/prefix1/errorpercent.png</pixmap>
+        <pixmap/>
        </property>
        <property name="scaledContents" >
         <bool>true</bool>
@@ -5194,7 +5210,7 @@ p, li { white-space: pre-wrap; }
      <property name="title" >
       <string>Something to do while you wait!</string>
      </property>
-     <widget class="TicTacToe" name="tictactoe" >
+     <widget class="TicTacToe" native="1" name="tictactoe" >
       <property name="geometry" >
        <rect>
         <x>10</x>
@@ -5203,12 +5219,9 @@ p, li { white-space: pre-wrap; }
         <height>200</height>
        </rect>
       </property>
-      <property name="state" >
-       <string>---------</string>
-      </property>
      </widget>
     </widget>
-    <widget class="AnalogClock" name="analogClock" >
+    <widget class="AnalogClock" native="1" name="analogClock" >
      <property name="geometry" >
       <rect>
        <x>280</x>
@@ -5395,7 +5408,7 @@ p, li { white-space: pre-wrap; }
   <tabstop>chickenview</tabstop>
  </tabstops>
  <resources>
-  <include location="landuseanalyst.qrc" />
+  <include location="../resources/resources.qrc" />
  </resources>
  <connections>
   <connection>
