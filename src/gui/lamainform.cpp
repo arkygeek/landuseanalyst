@@ -79,9 +79,27 @@ dailycalories
 
 void LaMainForm::on_meatslider_valueChanged(int theValue)
 {
-qDebug("Some plonker moved the slider! New value:" + QString::number(theValue).toLocal8Bit());
-	QString myMinString = QString::number(theValue);
-	QString myMaxString = QString::number(100-theValue);
+qDebug("Some plonker moved the meat slider! New value:" + QString::number(theValue).toLocal8Bit());
+	QString myMinString = QString::number(100-theValue);
+	QString myMaxString = QString::number(theValue);
 	meatwildpercent->setText(myMinString);
 	meattamepercent->setText(myMaxString);
+}
+
+void LaMainForm::on_dietslider_valueChanged(int theValue)
+{
+qDebug("Some plonker moved the diet slider! New value:" + QString::number(theValue).toLocal8Bit());
+	QString myMinString = QString::number(theValue);
+	QString myMaxString = QString::number(100-theValue);
+	meatpercent->setText(myMinString);
+	plantpercent->setText(myMaxString);
+}
+
+void LaMainForm::on_plantslider_valueChanged(int theValue)
+{
+qDebug("Some plonker moved the plant slider! New value:" + QString::number(theValue).toLocal8Bit());
+	QString myMinString = QString::number(100-theValue);
+	QString myMaxString = QString::number(theValue);
+	plantwildpercent->setText(myMinString);
+	planttamepercent->setText(myMaxString);
 }
