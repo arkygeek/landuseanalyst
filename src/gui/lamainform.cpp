@@ -80,4 +80,8 @@ dailycalories
 void LaMainForm::on_meatslider_valueChanged(int theValue)
 {
 qDebug("Some plonker moved the slider! New value:" + QString::number(theValue).toLocal8Bit());
+	QString myMinString = QString::number(theValue);
+	QString myMaxString = QString::number(100-theValue);
+	meatwildpercent->setText(myMinString);
+	meattamepercent->setText(myMaxString);
 }
