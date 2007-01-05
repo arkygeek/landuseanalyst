@@ -79,5 +79,5 @@ dailycalories
 
 void LaMainForm::on_meatslider_valueChanged(int theValue)
 {
-qDebug("Some plonker moved the slider! New value:" + QString::number(theNumber).toLocal8Bit());
+qDebug("Some plonker moved the slider! New value:" + QString::number(theValue).toLocal8Bit());
 }

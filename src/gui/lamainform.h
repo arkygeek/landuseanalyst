@@ -36,7 +36,7 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
   public slots:
 	void on_calculate_button_clicked();
 	void on_pigview_clicked();
-	void on_meatslider_vaueChanged(int theValue);
+	void on_meatslider_valueChanged(int theValue);
   private slots:
 	private:
 		void readSettings();
