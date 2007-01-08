@@ -19,12 +19,23 @@
  ***************************************************************************/
 #include "lamainform.h"
 #include <QSettings>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
+#include <QFile>
+#include <QTextStream>
   LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
 : QDialog(parent,fl)
 {
   //required by Qt4 to initialise the ui
   setupUi(this);
   readSettings();
+  /** See the qtdocs on signals and slots to understand below.
+   * we connect the currentItemChanged signal that a tree view emits when you 
+   * click on an item to a little method that sets the help viewer contents
+   * appropriately. TS
+   */
+  connect(treeHelp, SIGNAL(currentItemChanged(QTreeWidgetItem * ,QTreeWidgetItem *)), 
+               this, SLOT(helpItemClicked(QTreeWidgetItem * ,QTreeWidgetItem *)));
 }
 
 LaMainForm::~LaMainForm()
@@ -189,3 +200,21 @@ void LaMainForm::on_plantslider_valueChanged(int theValue)
 	plantwildpercent->setText(myMinString);
 	planttamepercent->setText(myMaxString);
 }
+
+void LaMainForm::helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetItem * thepOldItem)
+{
+  qDebug("Item clicked in help browser: " + thepCurrentItem->text(0).toLocal8Bit());
+  QFile myQFile( ":/" + thepCurrentItem->text(0)  + ".html" );
+  if ( myQFile.open( QIODevice::ReadOnly ) ) 
+  {
+    //now we parse the loc file, checking each line for its taxon
+    QTextStream myStream( &myQFile );
+    textHelp->setHtml(myStream.readAll());
+    myQFile.close();
+  }
+  else
+  {
+    qDebug("Help resource for : " + thepCurrentItem->text(0).toLocal8Bit() + " not found!");
+  }
+}
+

@@ -24,6 +24,7 @@
 #include <QDialog>
 //Local Includes
 #include <ui_lamainformbase.h>
+class QTreeWidgetItem;
 /**
 @author Tim Sutton
 */
@@ -41,6 +42,7 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
 	void on_pigview_clicked();
 	void on_wheatview_clicked();
   private slots:
+  void helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetItem * thepOldItem);
 	private:
 		void readSettings();
 		void writeSettings();
