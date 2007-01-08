@@ -34,11 +34,12 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
 		LaMainForm(QWidget* parent = 0, Qt::WFlags fl = 0 );
 		~LaMainForm();
   public slots:
-	void on_calculate_button_clicked();
-	void on_pigview_clicked();
 	void on_meatslider_valueChanged(int theValue);
 	void on_dietslider_valueChanged(int theValue);
 	void on_plantslider_valueChanged(int theValue);
+	void on_calculate_button_clicked();
+	void on_pigview_clicked();
+	void on_wheatview_clicked();
   private slots:
 	private:
 		void readSettings();
