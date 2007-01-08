@@ -60,7 +60,7 @@ void LaMainForm::on_wheatview_clicked()
 	int wp = wheat_percent->value(); //grab value from form for percentage of wheat in plant portion of diet
 	int wy = wheat_yield->value();
 	double wfr = wheat_fallow_ratio->value();
-	double wcr = wheat_crop_ratio->value();
+	//double wcr = wheat_crop_ratio->value();
 	int cal = dailycalories->value();
 	int popn = population->value();
 
