@@ -4189,8 +4189,8 @@ p, li { white-space: pre-wrap; }
       <widget class="QLabel" name="important_notes" >
        <property name="geometry" >
         <rect>
-         <x>540</x>
-         <y>30</y>
+         <x>660</x>
+         <y>50</y>
          <width>178</width>
          <height>348</height>
         </rect>
@@ -4229,20 +4229,30 @@ p, li { white-space: pre-wrap; }
         <set>Qt::AlignCenter</set>
        </property>
       </widget>
-      <widget class="QTextBrowser" name="textBrowser" >
+      <widget class="QStackedWidget" name="helpstack" >
        <property name="geometry" >
         <rect>
-         <x>10</x>
-         <y>20</y>
-         <width>101</width>
+         <x>200</x>
+         <y>10</y>
+         <width>401</width>
          <height>451</height>
         </rect>
        </property>
-       <property name="styleSheet" >
-        <string>&lt;CENTER></string>
-       </property>
-       <property name="html" >
-        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+       <widget class="QWidget" name="files" >
+        <widget class="QTextBrowser" name="textBrowser" >
+         <property name="geometry" >
+          <rect>
+           <x>10</x>
+           <y>20</y>
+           <width>371</width>
+           <height>441</height>
+          </rect>
+         </property>
+         <property name="styleSheet" >
+          <string>&lt;CENTER></string>
+         </property>
+         <property name="html" >
+          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Several pre-requisites exist for successful execution of a model scenario.  They are:&lt;/p>
@@ -4273,50 +4283,170 @@ p, li { white-space: pre-wrap; }
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-style:italic;">&lt;span style=" font-weight:600; text-decoration: underline;">* NOTE *&lt;/span>&lt;/p>
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">It is extremely important that the raster mask files are binary only! (just 1 or void as cell values)&lt;/p>
 &lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>&lt;/body>&lt;/html></string>
-       </property>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="page_2" />
       </widget>
-      <widget class="QLabel" name="label_17" >
+      <widget class="QTreeWidget" name="treeWidget" >
        <property name="geometry" >
         <rect>
-         <x>190</x>
-         <y>50</y>
-         <width>579</width>
-         <height>480</height>
+         <x>10</x>
+         <y>30</y>
+         <width>181</width>
+         <height>431</height>
         </rect>
        </property>
-       <property name="text" >
-        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Several pre-requisites exist for successful execution of a model scenario.  They are:&lt;/p>
-&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:12pt; font-weight:600; text-decoration: underline;">File Preparation&lt;/span>&lt;/p>
-&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600; text-decoration: underline;">&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;">Binary Rasters&lt;/p>
-&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600; text-decoration: underline;">&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600; text-decoration: underline;">&lt;span style=" font-weight:400; text-decoration:none;">	&lt;/span>&lt;span style=" font-weight:400; font-style:italic; text-decoration:none;">cropmask&lt;/span>&lt;/p>
-&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-style:italic;">&lt;span style=" font-style:normal;">If Unique Raster is checked, these files must exist:&lt;/span>&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">	&lt;span style=" font-style:italic;">wheatmask&lt;/span>&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-style:italic;">	barleymask&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-style:italic;">	lentilmask&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-style:italic;">	olivemask&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-style:italic;">	grapemask&lt;/p>
-&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-style:italic;">&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-style:italic;">&lt;span style=" font-style:normal;">If use raster is selected for the animal, these must exist:&lt;/span>&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">	&lt;span style=" font-style:italic;">sheepmask&lt;/span>&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-style:italic;">	goatmask&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-style:italic;">	pigmask&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-style:italic;">	cowmask&lt;/p>
-&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-weight:600; text-decoration: underline;">Digital Elevation Model (DEM)&lt;/span>&lt;/p>
-&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">	&lt;span style=" font-style:italic;">modeldem&lt;/span>&lt;/p>
-&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-style:italic;">&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-style:italic;">&lt;span style=" font-weight:600; text-decoration: underline;">* NOTE *&lt;/span>&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">It is extremely important that the raster mask files are binary only! (just 1 or void as cell values)&lt;/p>
-&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>&lt;/body>&lt;/html></string>
-       </property>
+       <column>
+        <property name="text" >
+         <string>Help</string>
+        </property>
+       </column>
+       <item>
+        <property name="text" >
+         <string>Requirements</string>
+        </property>
+        <item>
+         <property name="text" >
+          <string>Files</string>
+         </property>
+         <item>
+          <property name="text" >
+           <string>DEM</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Masks</string>
+          </property>
+         </item>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Numbers</string>
+         </property>
+        </item>
+       </item>
+       <item>
+        <property name="text" >
+         <string>Model</string>
+        </property>
+        <item>
+         <property name="text" >
+          <string>Precision</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Hints</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Quirks</string>
+         </property>
+        </item>
+       </item>
+       <item>
+        <property name="text" >
+         <string>Animals</string>
+        </property>
+        <item>
+         <property name="text" >
+          <string>Sheep</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Goats</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Pigs</string>
+         </property>
+         <item>
+          <property name="text" >
+           <string>Growing Time</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Kill Weight</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Litter Size</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Food Value</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Fodder</string>
+          </property>
+         </item>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Cattle</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Chickens</string>
+         </property>
+        </item>
+       </item>
+       <item>
+        <property name="text" >
+         <string>Plants</string>
+        </property>
+        <item>
+         <property name="text" >
+          <string>Wheat</string>
+         </property>
+         <item>
+          <property name="text" >
+           <string>Food Value</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Yield</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Fallow</string>
+          </property>
+         </item>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Barley</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Lentils</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Olives</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Grapes</string>
+         </property>
+        </item>
+       </item>
       </widget>
      </widget>
     </widget>
@@ -4438,12 +4568,12 @@ p, li { white-space: pre-wrap; }
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>81</x>
-     <y>107</y>
+     <x>92</x>
+     <y>63</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>102</x>
-     <y>105</y>
+     <x>110</x>
+     <y>63</y>
     </hint>
    </hints>
   </connection>
@@ -4454,12 +4584,12 @@ p, li { white-space: pre-wrap; }
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>218</x>
-     <y>105</y>
+     <x>110</x>
+     <y>63</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>244</x>
-     <y>104</y>
+     <x>110</x>
+     <y>63</y>
     </hint>
    </hints>
   </connection>
@@ -4470,12 +4600,12 @@ p, li { white-space: pre-wrap; }
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>79</x>
-     <y>94</y>
+     <x>90</x>
+     <y>63</y>
     </hint>
     <hint type="destinationlabel" >
      <x>110</x>
-     <y>92</y>
+     <y>63</y>
     </hint>
    </hints>
   </connection>
@@ -4486,12 +4616,12 @@ p, li { white-space: pre-wrap; }
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>200</x>
-     <y>92</y>
+     <x>110</x>
+     <y>63</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>253</x>
-     <y>94</y>
+     <x>110</x>
+     <y>63</y>
     </hint>
    </hints>
   </connection>
@@ -4502,12 +4632,12 @@ p, li { white-space: pre-wrap; }
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>369</x>
-     <y>93</y>
+     <x>110</x>
+     <y>63</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>434</x>
-     <y>93</y>
+     <x>110</x>
+     <y>63</y>
     </hint>
    </hints>
   </connection>
@@ -4518,12 +4648,12 @@ p, li { white-space: pre-wrap; }
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>529</x>
-     <y>103</y>
+     <x>110</x>
+     <y>63</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>559</x>
-     <y>93</y>
+     <x>110</x>
+     <y>63</y>
     </hint>
    </hints>
   </connection>
@@ -4534,12 +4664,12 @@ p, li { white-space: pre-wrap; }
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>678</x>
-     <y>103</y>
+     <x>110</x>
+     <y>63</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>699</x>
-     <y>95</y>
+     <x>110</x>
+     <y>63</y>
     </hint>
    </hints>
   </connection>
@@ -4550,12 +4680,12 @@ p, li { white-space: pre-wrap; }
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>659</x>
-     <y>106</y>
+     <x>110</x>
+     <y>63</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>692</x>
-     <y>107</y>
+     <x>110</x>
+     <y>63</y>
     </hint>
    </hints>
   </connection>
