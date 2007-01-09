@@ -66,69 +66,133 @@ void LaMainForm::on_calculate_button_clicked()
 
 void LaMainForm::on_wheatview_clicked()
 {
-	int pdp = (100-(dietslider->value())); //grab value from slider for overall meat percentage
-	int ptp = meatslider->value(); //grab value from slider for tame plant percentage
-	int wp = wheat_percent->value(); //grab value from form for percentage of wheat in plant portion of diet
-	int wy = wheat_yield->value();
-	double wfr = wheat_fallow_ratio->value();
-	//double wcr = wheat_crop_ratio->value();
+	int pdp = (100-(dietslider->value())); 		// OVERALL PLANT PERCENTAGE
+	int ptp = meatslider->value(); 			// TAME PLANT percentage
+	int wp = wheat_percent->value(); 		// PERCENTAGE OF WHEAT in plant portion of diet
+	int wy = wheat_yield->value();			// expected average WHEAT YIELD
+	int wcal = wheatcals->value();			// FALLOW RATIO for WHEAT
+	float wfr = wheat_fallow_ratio->value();	// 
 	int cal = dailycalories->value();
 	int popn = population->value();
 
-/*
-cropcalc () {			# =-FUNCTION-= to determine land required for CROPS
-
-	if [ $GIS_FLAG_A -eq 1 ] 		# Calculate area required for Crop 1
-		then		# Flag was Selected
-			crop1area=`echo "scale=3; (((${GIS_OPT_POPN} * ${GIS_OPT_CROP1REQ}) / ${GIS_OPT_CROP1YIELD}) * 1000)" | bc`
-			crop1fallow=`echo "scale=3; ${crop1area} * ${GIS_OPT_CROP1RATIO})" | bc`
-		else		#Flag NOT Selected
-			crop1area=0
-			crop1fallow=0
-	fi
-
-	if [ $GIS_FLAG_B -eq 1 ] 		# Calculate area required for Crop 2
-		then
-			crop2area=`echo "scale=3; (((${GIS_OPT_POPN} * ${GIS_OPT_CROP2REQ}) / ${GIS_OPT_CROP2YIELD}) * 1000)" | bc`
-			crop2fallow=`echo "scale=3; ${crop2area} * ${GIS_OPT_CROP2RATIO})" | bc`
-		else
-			crop2area=0
-			crop2fallow=0
-	fi
-
-	if [ $GIS_FLAG_C -eq 1 ] 		# Calculate area required for Crop 3
-		then
-			crop3area=`echo "scale=3; (((${GIS_OPT_POPN} * ${GIS_OPT_CROP3REQ}) / ${GIS_OPT_CROP3YIELD}) * 1000)" | bc`
-			crop3fallow=`echo "scale=3; ${crop3area} * ${GIS_OPT_CROP3RATIO})" | bc`
-		else
-			crop3area=0
-			crop3fallow=0
-	fi
-
-	if [ $GIS_FLAG_D -eq 1 ] 		# Calculate area required for Crop 4
-		then
-			crop4area=`echo "scale=3; (((${GIS_OPT_POPN} * ${GIS_OPT_CROP4REQ}) / ${GIS_OPT_CROP4YIELD}) * 1000)" | bc`
-			crop4fallow=`echo "scale=3; ${crop4area} * ${GIS_OPT_CROP4RATIO})" | bc`
-		else
-			crop4area=0
-			crop4fallow=0
-	fi
-
-	if [ $GIS_FLAG_E -eq 1 ] 		# Calculate area required for Crop 5
-		then
-			crop5area=`echo "scale=3; (((${GIS_OPT_POPN} * ${GIS_OPT_CROP5REQ}) / ${GIS_OPT_CROP5YIELD}) * 1000)" | bc`
-			crop5fallow=`echo "scale=3; ${crop5area} * ${GIS_OPT_CROP5RATIO})" | bc`
-		else
-			crop5area=0
-			crop5fallow=0
-	fi
-}
+// calculate area required for wheat
+	float wa;	// wheat area 
+	float wfa;	// wheat fallow area
+	float wta;	// wheat total area
+	wa = ((((((((pdp*ptp)/100.)*(wp/100.))*cal*365.)/wcal)*popn)/wy)*1000.);
+	wfa = ((((((((pdp*ptp)/100.)*(wp/100.))*cal*365.)/wcal)*popn)/wy)*1000.)*(wfr);
+	wta = wa + wfa;
+	qDebug("Wheat area: " + QString::number(wa).toLocal8Bit());
+	qDebug("Wheat fallow area: " + QString::number(wfa).toLocal8Bit());
+	qDebug("Wheat total area: " + QString::number(wta).toLocal8Bit());
 
 
-*/
 
 }
 
+void LaMainForm::on_barleyview_clicked()
+{
+	int pdp = (100-(dietslider->value())); 		// OVERALL PLANT PERCENTAGE
+	int ptp = meatslider->value(); 			// TAME PLANT percentage
+	int bp = barley_percent->value(); 		// PERCENTAGE OF BARLEY in plant portion of diet
+	int by = barley_yield->value();			// expected average BARLEY YIELD
+	int bcal = barleycals->value();			// FALLOW RATIO for BARLEY
+	float bfr = barley_fallow_ratio->value();	// 
+	int cal = dailycalories->value();
+	int popn = population->value();
+
+// calculate area required for wheat
+	float ba;	// wheat area 
+	float bfa;	// wheat fallow area
+	float bta;	// wheat total area
+	ba = ((((((((pdp*ptp)/100.)*(bp/100.))*cal*365.)/bcal)*popn)/by)*1000.);
+	bfa = ((((((((pdp*ptp)/100.)*(bp/100.))*cal*365.)/bcal)*popn)/by)*1000.)*(bfr);
+	bta = ba + bfa;
+	qDebug("Barley area: " + QString::number(ba).toLocal8Bit());
+	qDebug("Barley fallow area: " + QString::number(bfa).toLocal8Bit());
+	qDebug("Barley total area: " + QString::number(bta).toLocal8Bit());
+
+
+
+}
+
+void LaMainForm::on_lentilview_clicked()
+{
+	int pdp = (100-(dietslider->value())); 		// OVERALL PLANT PERCENTAGE
+	int ptp = meatslider->value(); 			// TAME PLANT percentage
+	int lp = lentil_percent->value(); 		// PERCENTAGE OF LENTIL in plant portion of diet
+	int ly = lentil_yield->value();			// expected average LENTIL YIELD
+	int lcal = lentilcals->value();			// FALLOW RATIO for LENTIL
+	float lfr = lentil_fallow_ratio->value();	// 
+	int cal = dailycalories->value();
+	int popn = population->value();
+
+// calculate area required for LENTIL
+	float la;	// wheat area 
+	float lfa;	// wheat fallow area
+	float lta;	// wheat total area
+	la = ((((((((pdp*ptp)/100.)*(lp/100.))*cal*365.)/lcal)*popn)/ly)*1000.);
+	lfa = ((((((((pdp*ptp)/100.)*(lp/100.))*cal*365.)/lcal)*popn)/ly)*1000.)*(lfr);
+	lta = la + lfa;
+	qDebug("Lentil area: " + QString::number(la).toLocal8Bit());
+	qDebug("Lentil fallow area: " + QString::number(lfa).toLocal8Bit());
+	qDebug("Lentil total area: " + QString::number(lta).toLocal8Bit());
+
+
+
+}
+
+void LaMainForm::on_oliveview_clicked()
+{
+	int pdp = (100-(dietslider->value())); 		// OVERALL PLANT PERCENTAGE
+	int ptp = meatslider->value(); 			// TAME PLANT percentage
+	int op = olive_percent->value(); 		// PERCENTAGE OF OLIVE in plant portion of diet
+	int oy = olive_yield->value();			// expected average OLIVE YIELD
+	int ocal = olivecals->value();			// FALLOW RATIO for OLIVE
+	float ofr = olive_fallow_ratio->value();	// 
+	int cal = dailycalories->value();
+	int popn = population->value();
+
+// calculate area required for OLIVE
+	float oa;	// olive area 
+	float ofa;	// olive fallow area
+	float ota;	// olive total area
+	oa = ((((((((pdp*ptp)/100.)*(op/100.))*cal*365.)/ocal)*popn)/oy)*1000.);
+	ofa = ((((((((pdp*ptp)/100.)*(op/100.))*cal*365.)/ocal)*popn)/oy)*1000.)*(ofr);
+	ota = oa + ofa;
+	qDebug("olive area: " + QString::number(oa).toLocal8Bit());
+	qDebug("olive fallow area: " + QString::number(ofa).toLocal8Bit());
+	qDebug("olive total area: " + QString::number(ota).toLocal8Bit());
+
+
+
+}
+
+void LaMainForm::on_grapeview_clicked()
+{
+	int pdp = (100-(dietslider->value())); 		// OVERALL PLANT PERCENTAGE
+	int ptp = meatslider->value(); 			// TAME PLANT percentage
+	int gp = grape_percent->value(); 		// PERCENTAGE OF GRAPE in plant portion of diet
+	int gy = grape_yield->value();			// expected average GRAPE YIELD
+	int gcal = grapecals->value();			// FALLOW RATIO for GRAPE
+	float gfr = grape_fallow_ratio->value();	// 
+	int cal = dailycalories->value();
+	int popn = population->value();
+
+// calculate area required for grape
+	float ga;	// grape area 
+	float gfa;	// grape fallow area
+	float gta;	// grape total area
+	ga = ((((((((pdp*ptp)/100.)*(gp/100.))*cal*365.)/gcal)*popn)/gy)*1000.);
+	gfa = ((((((((pdp*ptp)/100.)*(gp/100.))*cal*365.)/gcal)*popn)/gy)*1000.)*(gfr);
+	gta = ga + gfa;
+	qDebug("grape area: " + QString::number(ga).toLocal8Bit());
+	qDebug("grape fallow area: " + QString::number(gfa).toLocal8Bit());
+	qDebug("grape total area: " + QString::number(gta).toLocal8Bit());
+
+
+
+}
 
 void LaMainForm::on_pigview_clicked()
 {

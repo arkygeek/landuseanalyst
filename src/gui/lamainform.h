@@ -41,6 +41,11 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
 	void on_calculate_button_clicked();
 	void on_pigview_clicked();
 	void on_wheatview_clicked();
+	void on_barleyview_clicked();
+	void on_lentilview_clicked();
+	void on_oliveview_clicked();
+	void on_grapeview_clicked();
+
   private slots:
   void helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetItem * thepOldItem);
 	private:

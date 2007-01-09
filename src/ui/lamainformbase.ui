@@ -1356,7 +1356,11 @@ p, li { white-space: pre-wrap; }
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="grapecals" />
+             <widget class="QSpinBox" name="grapecals" >
+              <property name="maximum" >
+               <number>5000</number>
+              </property>
+             </widget>
             </item>
             <item>
              <spacer>
@@ -1862,7 +1866,11 @@ p, li { white-space: pre-wrap; }
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="olivecals" />
+             <widget class="QSpinBox" name="olivecals" >
+              <property name="maximum" >
+               <number>5000</number>
+              </property>
+             </widget>
             </item>
             <item>
              <spacer>
@@ -1969,7 +1977,11 @@ p, li { white-space: pre-wrap; }
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="lentilcals" />
+             <widget class="QSpinBox" name="lentilcals" >
+              <property name="maximum" >
+               <number>5000</number>
+              </property>
+             </widget>
             </item>
             <item>
              <spacer>
@@ -2745,7 +2757,11 @@ p, li { white-space: pre-wrap; }
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="wheatcals" />
+             <widget class="QSpinBox" name="wheatcals" >
+              <property name="maximum" >
+               <number>5000</number>
+              </property>
+             </widget>
             </item>
             <item>
              <spacer>
@@ -3034,7 +3050,11 @@ p, li { white-space: pre-wrap; }
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="barleycals" />
+             <widget class="QSpinBox" name="barleycals" >
+              <property name="maximum" >
+               <number>5000</number>
+              </property>
+             </widget>
             </item>
             <item>
              <spacer>
