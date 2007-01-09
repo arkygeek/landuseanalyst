@@ -248,7 +248,7 @@ void LaMainForm::on_run_button_clicked()
 	/*
 		if the wheat button is checked then
 			if NOT a unique raster then
-				get the area required for wheat and add it to total area
+				get the area required for wheat and add it to total area 
 			else run a seperate loop for wheat
 		else add nothing to total area
 
