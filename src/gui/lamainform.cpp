@@ -241,6 +241,54 @@ void LaMainForm::on_pigview_clicked()
 	qDebug("Total pigs: " + QString::number(total).toLocal8Bit());
 }
 
+void LaMainForm::on_run_button_clicked()
+{
+	qDebug("running...");
+
+	/*
+		if the wheat button is checked then
+			if NOT a unique raster then
+				get the area required for wheat and add it to total area
+			else run a seperate loop for wheat
+		else add nothing to total area
+
+		repeat for all crops
+
+	bash code for the loop looks like this:
+
+	euclidean () { 	# =-FUNCTION-= to create raster using EUCLIDEAN DISTANCE
+		area=0
+		while [ ${area} -le ${land_reqrd_total} ]
+			do #the magic loop
+				(( radius = ${radius} + 30)) # <---- model precision value used HERE!
+				r.circle -b output=circle coordinate=744800,3611100 max=${radius} --overwrite 
+				g.remove rast=catchment
+				r.mapcalc catchment="${src}"*circle
+				echo a catchment area with a radius of ${radius} meters contains
+				area=`r.stats -an input=catchment | awk '{printf("%d\n", $2);}'`
+				echo ${area} square meters of land and our target is 
+				echo ${land_reqrd_total} square meters of land
+			done
+		
+	# write info to history section of raster map
+		r.support map=catchment history="Radius was ${radius}"
+		r.support map=catchment history="This results in ${area} sq meters and the target was ${land_reqrd_total}"
+		r.support map=catchment history="Population was: ${popn}"
+		r.support map=catchment history="Expected avg BARLEY yield: ${barley_yield}"
+		r.support map=catchment history="Expected avg WHEAT yield: ${wheat_yield}"
+		r.support map=catchment history="Expected avg LENTIL yield: ${lentil_yield}"
+		r.support map=catchment history="BARLEY required per year per person (kg): ${barley_reqrd}"
+		r.support map=catchment history="WHEAT required per year per person (kg): ${wheat_reqrd}"
+		r.support map=catchment history="LENTILS required per year per person (kg): ${lentil_reqrd}"
+	# open a display and show results
+		d.mon x0
+		d.rast aster_band01@PERMANENT
+		d.rast -o catchment
+	}
+
+	*/
+}
+
 void LaMainForm::on_meatslider_valueChanged(int theValue)
 {
 	QString myMinString = QString::number(100-theValue);

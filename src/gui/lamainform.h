@@ -45,6 +45,7 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
 	void on_lentilview_clicked();
 	void on_oliveview_clicked();
 	void on_grapeview_clicked();
+	void on_run_button_clicked();
 
   private slots:
   void helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetItem * thepOldItem);

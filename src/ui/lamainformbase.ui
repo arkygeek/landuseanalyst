@@ -22,7 +22,7 @@
    <item row="0" column="0" colspan="6" >
     <widget class="QTabWidget" name="MainTabs" >
      <property name="currentIndex" >
-      <number>1</number>
+      <number>5</number>
      </property>
      <widget class="QWidget" name="TabPage" >
       <attribute name="title" >
@@ -5054,20 +5054,194 @@ p, li { white-space: pre-wrap; }
       <attribute name="title" >
        <string>Help</string>
       </attribute>
-      <widget class="QTextBrowser" name="textHelp" >
-       <property name="geometry" >
-        <rect>
-         <x>320</x>
-         <y>10</y>
-         <width>431</width>
-         <height>251</height>
-        </rect>
+      <layout class="QGridLayout" >
+       <property name="margin" >
+        <number>9</number>
        </property>
-       <property name="styleSheet" >
-        <string>&lt;CENTER></string>
+       <property name="spacing" >
+        <number>6</number>
        </property>
-       <property name="html" >
-        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+       <item rowspan="2" row="0" column="0" >
+        <widget class="QTreeWidget" name="treeHelp" >
+         <column>
+          <property name="text" >
+           <string>Help</string>
+          </property>
+         </column>
+         <item>
+          <property name="text" >
+           <string>Requirements</string>
+          </property>
+          <item>
+           <property name="text" >
+            <string>Files</string>
+           </property>
+           <item>
+            <property name="text" >
+             <string>DEM</string>
+            </property>
+           </item>
+           <item>
+            <property name="text" >
+             <string>Masks</string>
+            </property>
+           </item>
+          </item>
+          <item>
+           <property name="text" >
+            <string>Numbers</string>
+           </property>
+          </item>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Model</string>
+          </property>
+          <item>
+           <property name="text" >
+            <string>Precision</string>
+           </property>
+          </item>
+          <item>
+           <property name="text" >
+            <string>Hints</string>
+           </property>
+          </item>
+          <item>
+           <property name="text" >
+            <string>Quirks</string>
+           </property>
+          </item>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Animals</string>
+          </property>
+          <item>
+           <property name="text" >
+            <string>Sheep</string>
+           </property>
+          </item>
+          <item>
+           <property name="text" >
+            <string>Goats</string>
+           </property>
+          </item>
+          <item>
+           <property name="text" >
+            <string>Pigs</string>
+           </property>
+           <item>
+            <property name="text" >
+             <string>Growing Time</string>
+            </property>
+           </item>
+           <item>
+            <property name="text" >
+             <string>Kill Weight</string>
+            </property>
+           </item>
+           <item>
+            <property name="text" >
+             <string>Litter Size</string>
+            </property>
+           </item>
+           <item>
+            <property name="text" >
+             <string>Food Value</string>
+            </property>
+           </item>
+           <item>
+            <property name="text" >
+             <string>Fodder</string>
+            </property>
+           </item>
+          </item>
+          <item>
+           <property name="text" >
+            <string>Cattle</string>
+           </property>
+          </item>
+          <item>
+           <property name="text" >
+            <string>Chickens</string>
+           </property>
+          </item>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Plants</string>
+          </property>
+          <item>
+           <property name="text" >
+            <string>Wheat</string>
+           </property>
+           <item>
+            <property name="text" >
+             <string>Food Value</string>
+            </property>
+           </item>
+           <item>
+            <property name="text" >
+             <string>Yield</string>
+            </property>
+           </item>
+           <item>
+            <property name="text" >
+             <string>Fallow</string>
+            </property>
+           </item>
+          </item>
+          <item>
+           <property name="text" >
+            <string>Barley</string>
+           </property>
+          </item>
+          <item>
+           <property name="text" >
+            <string>Lentils</string>
+           </property>
+          </item>
+          <item>
+           <property name="text" >
+            <string>Olives</string>
+           </property>
+          </item>
+          <item>
+           <property name="text" >
+            <string>Grapes</string>
+           </property>
+          </item>
+         </item>
+        </widget>
+       </item>
+       <item row="1" column="1" >
+        <widget class="QTextBrowser" name="textBrowser" >
+         <property name="html" >
+          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt;">&lt;span style=" font-size:14pt;">Important Notes!&lt;/span>&lt;/p>
+&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt;">&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt;">All raster maps must properly named for this program to run correctly.  Names are:&lt;/p>
+&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt;">&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt; font-style:italic;">landuse_dem&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt; font-style:italic;">crop_mask&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt; font-style:italic;">animal_mask&lt;/p>
+&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt; font-style:italic;">&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt; font-style:italic;">&lt;span style=" font-style:normal;">Also, many features have yet to be implemented. Any comments, bugs, or suggestions can be sent to:&lt;/span>&lt;/p>
+&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt;">&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt;">arkygeek@gmail.com &lt;/p>&lt;/body>&lt;/html></string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1" >
+        <widget class="QTextBrowser" name="textHelp" >
+         <property name="styleSheet" >
+          <string>&lt;CENTER></string>
+         </property>
+         <property name="html" >
+          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Several pre-requisites exist for successful execution of a model scenario.  They are:&lt;/p>
@@ -5098,194 +5272,10 @@ p, li { white-space: pre-wrap; }
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-style:italic;">&lt;span style=" font-weight:600; text-decoration: underline;">* NOTE *&lt;/span>&lt;/p>
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">It is extremely important that the raster mask files are binary only! (just 1 or void as cell values)&lt;/p>
 &lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>&lt;/body>&lt;/html></string>
-       </property>
-      </widget>
-      <widget class="QTextBrowser" name="textBrowser" >
-       <property name="geometry" >
-        <rect>
-         <x>320</x>
-         <y>270</y>
-         <width>431</width>
-         <height>101</height>
-        </rect>
-       </property>
-       <property name="html" >
-        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt;">&lt;span style=" font-size:14pt;">Important Notes!&lt;/span>&lt;/p>
-&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt;">&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt;">All raster maps must properly named for this program to run correctly.  Names are:&lt;/p>
-&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt;">&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt; font-style:italic;">landuse_dem&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt; font-style:italic;">crop_mask&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt; font-style:italic;">animal_mask&lt;/p>
-&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt; font-style:italic;">&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt; font-style:italic;">&lt;span style=" font-style:normal;">Also, many features have yet to be implemented. Any comments, bugs, or suggestions can be sent to:&lt;/span>&lt;/p>
-&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt;">&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt;">arkygeek@gmail.com &lt;/p>&lt;/body>&lt;/html></string>
-       </property>
-      </widget>
-      <widget class="QTreeWidget" name="treeHelp" >
-       <property name="geometry" >
-        <rect>
-         <x>9</x>
-         <y>9</y>
-         <width>301</width>
-         <height>361</height>
-        </rect>
-       </property>
-       <column>
-        <property name="text" >
-         <string>Help</string>
-        </property>
-       </column>
-       <item>
-        <property name="text" >
-         <string>Requirements</string>
-        </property>
-        <item>
-         <property name="text" >
-          <string>Files</string>
          </property>
-         <item>
-          <property name="text" >
-           <string>DEM</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>Masks</string>
-          </property>
-         </item>
-        </item>
-        <item>
-         <property name="text" >
-          <string>Numbers</string>
-         </property>
-        </item>
+        </widget>
        </item>
-       <item>
-        <property name="text" >
-         <string>Model</string>
-        </property>
-        <item>
-         <property name="text" >
-          <string>Precision</string>
-         </property>
-        </item>
-        <item>
-         <property name="text" >
-          <string>Hints</string>
-         </property>
-        </item>
-        <item>
-         <property name="text" >
-          <string>Quirks</string>
-         </property>
-        </item>
-       </item>
-       <item>
-        <property name="text" >
-         <string>Animals</string>
-        </property>
-        <item>
-         <property name="text" >
-          <string>Sheep</string>
-         </property>
-        </item>
-        <item>
-         <property name="text" >
-          <string>Goats</string>
-         </property>
-        </item>
-        <item>
-         <property name="text" >
-          <string>Pigs</string>
-         </property>
-         <item>
-          <property name="text" >
-           <string>Growing Time</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>Kill Weight</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>Litter Size</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>Food Value</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>Fodder</string>
-          </property>
-         </item>
-        </item>
-        <item>
-         <property name="text" >
-          <string>Cattle</string>
-         </property>
-        </item>
-        <item>
-         <property name="text" >
-          <string>Chickens</string>
-         </property>
-        </item>
-       </item>
-       <item>
-        <property name="text" >
-         <string>Plants</string>
-        </property>
-        <item>
-         <property name="text" >
-          <string>Wheat</string>
-         </property>
-         <item>
-          <property name="text" >
-           <string>Food Value</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>Yield</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>Fallow</string>
-          </property>
-         </item>
-        </item>
-        <item>
-         <property name="text" >
-          <string>Barley</string>
-         </property>
-        </item>
-        <item>
-         <property name="text" >
-          <string>Lentils</string>
-         </property>
-        </item>
-        <item>
-         <property name="text" >
-          <string>Olives</string>
-         </property>
-        </item>
-        <item>
-         <property name="text" >
-          <string>Grapes</string>
-         </property>
-        </item>
-       </item>
-      </widget>
+      </layout>
      </widget>
     </widget>
    </item>
@@ -5361,7 +5351,7 @@ p, li { white-space: pre-wrap; }
     </spacer>
    </item>
    <item row="1" column="2" >
-    <widget class="QPushButton" name="calculate_button" >
+    <widget class="QPushButton" name="run_button" >
      <property name="sizePolicy" >
       <sizepolicy>
        <hsizetype>3</hsizetype>
@@ -5401,7 +5391,7 @@ p, li { white-space: pre-wrap; }
   <tabstop>load_button</tabstop>
   <tabstop>save_button</tabstop>
   <tabstop>exit_button</tabstop>
-  <tabstop>calculate_button</tabstop>
+  <tabstop>run_button</tabstop>
   <tabstop>wheat_percent</tabstop>
   <tabstop>wheat_yield</tabstop>
   <tabstop>wheat_yield_units</tabstop>
