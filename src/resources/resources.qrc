@@ -1,15 +1,21 @@
 <RCC>
     <qresource prefix="/" >
         <file>DEM.html</file>
+        <file>barley.png</file>
         <file>chicken.png</file>
         <file>cow.png</file>
         <file>eggs.png</file>
         <file>errordunums.png</file>
         <file>errorpercent.png</file>
         <file>goat_icon.png</file>
+        <file>grape_icon.png</file>
+        <file>kidscorner_infopage_cowpigchick.jpg</file>
         <file>la_icon.png</file>
+        <file>lentil.png</file>
         <file>liverpool_uni_logo.png</file>
+        <file>olive.png</file>
         <file>pig.png</file>
         <file>sheep.png</file>
+        <file>wheatclricon.png</file>
     </qresource>
 </RCC>
