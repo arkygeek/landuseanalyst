@@ -59,15 +59,16 @@ void LaMainForm::writeSettings()
   mySettings.setValue("mainwindow/size", size());
 }
 
-void LaMainForm::on_calculate_button_clicked()
+/*void LaMainForm::on_calculate_button_clicked()
 {
 	writeMessage("QGIS Rocks");
 }
+*/
 
 void LaMainForm::on_wheatview_clicked()
 {
 	int pdp = (100-(dietslider->value())); 		// OVERALL PLANT PERCENTAGE
-	int ptp = meatslider->value(); 			// TAME PLANT percentage
+	int ptp = plantslider->value(); 			// TAME PLANT percentage
 	int wp = wheat_percent->value(); 		// PERCENTAGE OF WHEAT in plant portion of diet
 	int wy = wheat_yield->value();			// expected average WHEAT YIELD
 	int wcal = wheatcals->value();			// FALLOW RATIO for WHEAT
@@ -93,7 +94,7 @@ void LaMainForm::on_wheatview_clicked()
 void LaMainForm::on_barleyview_clicked()
 {
 	int pdp = (100-(dietslider->value())); 		// OVERALL PLANT PERCENTAGE
-	int ptp = meatslider->value(); 			// TAME PLANT percentage
+	int ptp = plantslider->value(); 			// TAME PLANT percentage
 	int bp = barley_percent->value(); 		// PERCENTAGE OF BARLEY in plant portion of diet
 	int by = barley_yield->value();			// expected average BARLEY YIELD
 	int bcal = barleycals->value();			// FALLOW RATIO for BARLEY
@@ -119,7 +120,7 @@ void LaMainForm::on_barleyview_clicked()
 void LaMainForm::on_lentilview_clicked()
 {
 	int pdp = (100-(dietslider->value())); 		// OVERALL PLANT PERCENTAGE
-	int ptp = meatslider->value(); 			// TAME PLANT percentage
+	int ptp = plantslider->value(); 			// TAME PLANT percentage
 	int lp = lentil_percent->value(); 		// PERCENTAGE OF LENTIL in plant portion of diet
 	int ly = lentil_yield->value();			// expected average LENTIL YIELD
 	int lcal = lentilcals->value();			// FALLOW RATIO for LENTIL
@@ -142,7 +143,7 @@ void LaMainForm::on_lentilview_clicked()
 void LaMainForm::on_oliveview_clicked()
 {
 	int pdp = (100-(dietslider->value())); 		// OVERALL PLANT PERCENTAGE
-	int ptp = meatslider->value(); 			// TAME PLANT percentage
+	int ptp = plantslider->value(); 			// TAME PLANT percentage
 	int op = olive_percent->value(); 		// PERCENTAGE OF OLIVE in plant portion of diet
 	int oy = olive_yield->value();			// expected average OLIVE YIELD
 	int ocal = olivecals->value();			// FALLOW RATIO for OLIVE
@@ -168,7 +169,7 @@ void LaMainForm::on_oliveview_clicked()
 void LaMainForm::on_grapeview_clicked()
 {
 	int pdp = (100-(dietslider->value())); 		// OVERALL PLANT PERCENTAGE
-	int ptp = meatslider->value(); 			// TAME PLANT percentage
+	int ptp = plantslider->value(); 			// TAME PLANT percentage
 	int gp = grape_percent->value(); 		// PERCENTAGE OF GRAPE in plant portion of diet
 	int gy = grape_yield->value();			// expected average GRAPE YIELD
 	int gcal = grapecals->value();			// FALLOW RATIO for GRAPE
@@ -194,7 +195,7 @@ void LaMainForm::on_grapeview_clicked()
 void LaMainForm::on_pigview_clicked()
 {
 	int mdp = dietslider->value(); //grab value from slider for overall meat percentage
-	int mtp = meatslider->value(); //grab value from slider for tame meat percentage
+	int mtp = (100 - (meatslider->value())); //grab value from slider for tame meat percentage
 	int pp = pigpercent->value(); //grab value from form for percentage of pigmeat of meat portion of diet
 	int pls = piglittersize->value(); //grab value from form for pig litter size
 	int pw = pigweight->value(); //grab value from form for for pig kill weight
@@ -243,7 +244,7 @@ void LaMainForm::on_run_button_clicked()
 	writeMessage("running...");
 
 		int pdp = (100-(dietslider->value())); 		// OVERALL PLANT PERCENTAGE
-		int ptp = meatslider->value(); 			// TAME PLANT percentage
+		int ptp = plantslider->value(); 			// TAME PLANT percentage
 		int cal = dailycalories->value();
 		int popn = population->value();
 
