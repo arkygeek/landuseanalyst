@@ -27,7 +27,7 @@ linux-g++:DESTDIR=$${BINDIR}
 # for icon file under windows
 # see http://www.qiliang.net/qt/appicon.html
 #1
-win32: RC_FILE = landuseanalyst.rc
+win32: RC_FILE = ../../win/landuseanalyst.rc
 macx:  ICON = ../../mac/Resources/landuseanalyst.icns
 message("Building $${TARGET} (exe) into $${DESTDIR}")
 
