@@ -61,7 +61,7 @@ void LaMainForm::writeSettings()
 
 void LaMainForm::on_calculate_button_clicked()
 {
-	qDebug("QGIS Rocks");
+	writeMessage("QGIS Rocks");
 }
 
 void LaMainForm::on_wheatview_clicked()
@@ -82,9 +82,9 @@ void LaMainForm::on_wheatview_clicked()
 	wa = ((((((((pdp*ptp)/100.)*(wp/100.))*cal*365.)/wcal)*popn)/wy)*1000.);
 	wfa = ((((((((pdp*ptp)/100.)*(wp/100.))*cal*365.)/wcal)*popn)/wy)*1000.)*(wfr);
 	wta = wa + wfa;
-	qDebug("Wheat area: " + QString::number(wa).toLocal8Bit());
-	qDebug("Wheat fallow area: " + QString::number(wfa).toLocal8Bit());
-	qDebug("Wheat total area: " + QString::number(wta).toLocal8Bit());
+	writeMessage("Wheat area: " + QString::number(wa).toLocal8Bit());
+	writeMessage("Wheat fallow area: " + QString::number(wfa).toLocal8Bit());
+	writeMessage("Wheat total area: " + QString::number(wta).toLocal8Bit());
 
 
 
@@ -108,9 +108,9 @@ void LaMainForm::on_barleyview_clicked()
 	ba = ((((((((pdp*ptp)/100.)*(bp/100.))*cal*365.)/bcal)*popn)/by)*1000.);
 	bfa = ((((((((pdp*ptp)/100.)*(bp/100.))*cal*365.)/bcal)*popn)/by)*1000.)*(bfr);
 	bta = ba + bfa;
-	qDebug("Barley area: " + QString::number(ba).toLocal8Bit());
-	qDebug("Barley fallow area: " + QString::number(bfa).toLocal8Bit());
-	qDebug("Barley total area: " + QString::number(bta).toLocal8Bit());
+	writeMessage("Barley area: " + QString::number(ba).toLocal8Bit());
+	writeMessage("Barley fallow area: " + QString::number(bfa).toLocal8Bit());
+	writeMessage("Barley total area: " + QString::number(bta).toLocal8Bit());
 
 
 
@@ -134,9 +134,9 @@ void LaMainForm::on_lentilview_clicked()
 	la = ((((((((pdp*ptp)/100.)*(lp/100.))*cal*365.)/lcal)*popn)/ly)*1000.);
 	lfa = ((((((((pdp*ptp)/100.)*(lp/100.))*cal*365.)/lcal)*popn)/ly)*1000.)*(lfr);
 	lta = la + lfa;
-	qDebug("Lentil area: " + QString::number(la).toLocal8Bit());
-	qDebug("Lentil fallow area: " + QString::number(lfa).toLocal8Bit());
-	qDebug("Lentil total area: " + QString::number(lta).toLocal8Bit());
+	writeMessage("Lentil area: " + QString::number(la).toLocal8Bit());
+	writeMessage("Lentil fallow area: " + QString::number(lfa).toLocal8Bit());
+	writeMessage("Lentil total area: " + QString::number(lta).toLocal8Bit());
 
 
 
@@ -160,9 +160,9 @@ void LaMainForm::on_oliveview_clicked()
 	oa = ((((((((pdp*ptp)/100.)*(op/100.))*cal*365.)/ocal)*popn)/oy)*1000.);
 	ofa = ((((((((pdp*ptp)/100.)*(op/100.))*cal*365.)/ocal)*popn)/oy)*1000.)*(ofr);
 	ota = oa + ofa;
-	qDebug("olive area: " + QString::number(oa).toLocal8Bit());
-	qDebug("olive fallow area: " + QString::number(ofa).toLocal8Bit());
-	qDebug("olive total area: " + QString::number(ota).toLocal8Bit());
+	writeMessage("olive area: " + QString::number(oa).toLocal8Bit());
+	writeMessage("olive fallow area: " + QString::number(ofa).toLocal8Bit());
+	writeMessage("olive total area: " + QString::number(ota).toLocal8Bit());
 
 
 
@@ -186,9 +186,9 @@ void LaMainForm::on_grapeview_clicked()
 	ga = ((((((((pdp*ptp)/100.)*(gp/100.))*cal*365.)/gcal)*popn)/gy)*1000.);
 	gfa = ((((((((pdp*ptp)/100.)*(gp/100.))*cal*365.)/gcal)*popn)/gy)*1000.)*(gfr);
 	gta = ga + gfa;
-	qDebug("grape area: " + QString::number(ga).toLocal8Bit());
-	qDebug("grape fallow area: " + QString::number(gfa).toLocal8Bit());
-	qDebug("grape total area: " + QString::number(gta).toLocal8Bit());
+	writeMessage("grape area: " + QString::number(ga).toLocal8Bit());
+	writeMessage("grape fallow area: " + QString::number(gfa).toLocal8Bit());
+	writeMessage("grape total area: " + QString::number(gta).toLocal8Bit());
 
 
 
@@ -219,31 +219,31 @@ void LaMainForm::on_pigview_clicked()
 	float npigs = ((((sows*420.10)/249.70)/10.)*pls);
 	float gpigs = ((((sows*1414.70)/249.70)/10.)*pls);
 	float total = (sows+spigs+npigs+gpigs);
-	qDebug("fodder flag value: " + QString::number(pfflag).toLocal8Bit());
-	qDebug("You supplied me with this information:");
-	qDebug("Population of Settlement: " + QString::number(popn).toLocal8Bit());
-	qDebug("Calories/person per day: " + QString::number(cal).toLocal8Bit());
-	qDebug("Percentage of Calories in the diet from MEAT: " + QString::number(mdp).toLocal8Bit());
-	qDebug("Percentage of MEAT that is from domesticated animals: " + QString::number(mtp).toLocal8Bit());
-	qDebug("Percentage of DOMESTICATED MEAT that is from PIGS: " + QString::number(pp).toLocal8Bit());
-	qDebug("Calories per kg in PIG MEAT: 3000 assumed");
-	qDebug("Average Litter Size: " + QString::number(pls).toLocal8Bit());
-	qDebug("kg of meat per year: " + QString::number(meat).toLocal8Bit());
-	qDebug("Number of 100kg pigs: " + QString::number(animals).toLocal8Bit());
-	qDebug("Sows required to produce this much meat: " + QString::number(sows).toLocal8Bit());
-	qDebug("Non-Pregnant sows and gilts: " + QString::number(drysows).toLocal8Bit());
-	qDebug("Gestating Sows: " + QString::number(gsows).toLocal8Bit());
-	qDebug("Lactating Sows: " + QString::number(lsows).toLocal8Bit());
-	qDebug("Total Adult Females: " + QString::number(sows).toLocal8Bit());
-	qDebug("Suckling Pigs: " + QString::number(spigs).toLocal8Bit());
-	qDebug("Nursery Pigs: " + QString::number(npigs).toLocal8Bit());
-	qDebug("Growing and finishing pigs: " + QString::number(gpigs).toLocal8Bit());
-	qDebug("Total pigs: " + QString::number(total).toLocal8Bit());
+	writeMessage("fodder flag value: " + QString::number(pfflag).toLocal8Bit());
+	writeMessage("You supplied me with this information:");
+	writeMessage("Population of Settlement: " + QString::number(popn).toLocal8Bit());
+	writeMessage("Calories/person per day: " + QString::number(cal).toLocal8Bit());
+	writeMessage("Percentage of Calories in the diet from MEAT: " + QString::number(mdp).toLocal8Bit());
+	writeMessage("Percentage of MEAT that is from domesticated animals: " + QString::number(mtp).toLocal8Bit());
+	writeMessage("Percentage of DOMESTICATED MEAT that is from PIGS: " + QString::number(pp).toLocal8Bit());
+	writeMessage("Calories per kg in PIG MEAT: 3000 assumed");
+	writeMessage("Average Litter Size: " + QString::number(pls).toLocal8Bit());
+	writeMessage("kg of meat per year: " + QString::number(meat).toLocal8Bit());
+	writeMessage("Number of 100kg pigs: " + QString::number(animals).toLocal8Bit());
+	writeMessage("Sows required to produce this much meat: " + QString::number(sows).toLocal8Bit());
+	writeMessage("Non-Pregnant sows and gilts: " + QString::number(drysows).toLocal8Bit());
+	writeMessage("Gestating Sows: " + QString::number(gsows).toLocal8Bit());
+	writeMessage("Lactating Sows: " + QString::number(lsows).toLocal8Bit());
+	writeMessage("Total Adult Females: " + QString::number(sows).toLocal8Bit());
+	writeMessage("Suckling Pigs: " + QString::number(spigs).toLocal8Bit());
+	writeMessage("Nursery Pigs: " + QString::number(npigs).toLocal8Bit());
+	writeMessage("Growing and finishing pigs: " + QString::number(gpigs).toLocal8Bit());
+	writeMessage("Total pigs: " + QString::number(total).toLocal8Bit());
 }
 
 void LaMainForm::on_run_button_clicked()
 {
-	qDebug("running...");
+	writeMessage("running...");
 
 	/*
 		if the wheat button is checked then
@@ -315,7 +315,7 @@ void LaMainForm::on_plantslider_valueChanged(int theValue)
 
 void LaMainForm::helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetItem * thepOldItem)
 {
-  qDebug("Item clicked in help browser: " + thepCurrentItem->text(0).toLocal8Bit());
+  writeMessage("Item clicked in help browser: " + thepCurrentItem->text(0).toLocal8Bit());
   QFile myQFile( ":/" + thepCurrentItem->text(0)  + ".html" );
   if ( myQFile.open( QIODevice::ReadOnly ) ) 
   {
@@ -326,7 +326,11 @@ void LaMainForm::helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetI
   }
   else
   {
-    qDebug("Help resource for : " + thepCurrentItem->text(0).toLocal8Bit() + " not found!");
+    writeMessage("Help resource for : " + thepCurrentItem->text(0).toLocal8Bit() + " not found!");
   }
 }
 
+void LaMainForm::writeMessage(QString theText)
+{
+  textBrowserResults->append(theText);
+}

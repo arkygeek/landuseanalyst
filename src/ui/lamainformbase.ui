@@ -5039,19 +5039,17 @@ p, li { white-space: pre-wrap; }
       <attribute name="title" >
        <string>Results</string>
       </attribute>
-      <widget class="QLabel" name="label_15" >
-       <property name="geometry" >
-        <rect>
-         <x>20</x>
-         <y>20</y>
-         <width>223</width>
-         <height>17</height>
-        </rect>
+      <layout class="QGridLayout" >
+       <property name="margin" >
+        <number>9</number>
        </property>
-       <property name="text" >
-        <string>Future Feature not yet implemented.</string>
+       <property name="spacing" >
+        <number>6</number>
        </property>
-      </widget>
+       <item row="0" column="0" >
+        <widget class="QTextBrowser" name="textBrowserResults" />
+       </item>
+      </layout>
      </widget>
      <widget class="QWidget" name="tab" >
       <attribute name="title" >

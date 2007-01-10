@@ -49,6 +49,7 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
 
   private slots:
   void helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetItem * thepOldItem);
+  void writeMessage(QString theText);
 	private:
 		void readSettings();
 		void writeSettings();
