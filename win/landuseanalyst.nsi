@@ -78,7 +78,7 @@ FunctionEnd
 ; MUI end ------
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "openModellerDesktopSetup.exe"
+OutFile "LanduseAnalystSetup.exe"
 InstallDir "$PROGRAMFILES\Landuse Analyst"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
