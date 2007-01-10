@@ -21,6 +21,7 @@
 #include <QSettings>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
+#include <QTableWidgetItem>
 #include <QFile>
 #include <QTextStream>
   LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
@@ -287,6 +288,7 @@ void LaMainForm::on_run_button_clicked()
 		wfa = wa * wfr;
 		wta = wa + wfa;
 		writeMessage("Wheat area: " + QString::number(wa).toLocal8Bit());
+    writePlantCellValue(1,1,QString::number(wa));
 		writeMessage("Wheat fallow area: " + QString::number(wfa).toLocal8Bit());
 		writeMessage("Wheat total area: " + QString::number(wta).toLocal8Bit());
 	
@@ -486,4 +488,10 @@ void LaMainForm::helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetI
 void LaMainForm::writeMessage(QString theText)
 {
   textBrowserResults->append(theText);
+}
+
+void LaMainForm::writePlantCellValue(int theRow, int theCol, QString theValue)
+{
+    QTableWidgetItem *mypItem = new QTableWidgetItem(theValue);
+    plant_table->setItem(theRow, theCol, mypItem);
 }
