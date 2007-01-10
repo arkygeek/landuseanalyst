@@ -101,10 +101,10 @@ void LaMainForm::on_barleyview_clicked()
 	int cal = dailycalories->value();
 	int popn = population->value();
 
-// calculate area required for wheat
-	float ba;	// wheat area 
-	float bfa;	// wheat fallow area
-	float bta;	// wheat total area
+// calculate area required for barley
+	float ba;	// barley area 
+	float bfa;	// barley fallow area
+	float bta;	// barley total area
 	ba = ((((((((pdp*ptp)/100.)*(bp/100.))*cal*365.)/bcal)*popn)/by)*1000.);
 	bfa = ((((((((pdp*ptp)/100.)*(bp/100.))*cal*365.)/bcal)*popn)/by)*1000.)*(bfr);
 	bta = ba + bfa;
@@ -137,9 +137,6 @@ void LaMainForm::on_lentilview_clicked()
 	writeMessage("Lentil area: " + QString::number(la).toLocal8Bit());
 	writeMessage("Lentil fallow area: " + QString::number(lfa).toLocal8Bit());
 	writeMessage("Lentil total area: " + QString::number(lta).toLocal8Bit());
-
-
-
 }
 
 void LaMainForm::on_oliveview_clicked()
@@ -244,6 +241,111 @@ void LaMainForm::on_pigview_clicked()
 void LaMainForm::on_run_button_clicked()
 {
 	writeMessage("running...");
+
+		int pdp = (100-(dietslider->value())); 		// OVERALL PLANT PERCENTAGE
+		int ptp = meatslider->value(); 			// TAME PLANT percentage
+		int cal = dailycalories->value();
+		int popn = population->value();
+		/* will condense following once it is all working to
+		float wfa,bfa,lfa,ofa,gfa; 	// fallow areas
+		float wta,bta,lta,ota,gta; 	// crop areas */
+		float wfa;		// WHEAT fallow area
+		float wta;		// WHEAT total area
+		float bfa;		// BARLEY fallow area
+		float bta;		// BARLEY total area
+		float lfa;		// LENTIL fallow area
+		float lta;		// LENTIL total area
+		float ofa;		// OLIVE fallow area
+		float ota;		// OLIVE total area
+		float gfa;		// grape fallow area
+		float gta;		// grape total area
+
+		float stdtotalarea;		// total area required for crops using the standard mask
+		float stdcroptotalarea;		// total area of sown land
+		float stdfallowtotalarea;	// total area of fallow
+
+	/* Calculate area for crops for use with standard raster mask */
+
+	// if WHEAT is checked then
+
+		int wp = wheat_percent->value(); 		// PERCENTAGE OF WHEAT in plant portion of diet
+		int wy = wheat_yield->value();			// expected average WHEAT YIELD
+		int wcal = wheatcals->value();			// calories in 1 kg of WHEAT
+		float wfr = wheat_fallow_ratio->value();	// FALLOW RATIO for WHEAT
+		float wa;					// WHEAT area 
+		wa = ((((((((pdp*ptp)/100.)*(wp/100.))*cal*365.)/wcal)*popn)/wy)*1000.);
+		wfa = ((((((((pdp*ptp)/100.)*(wp/100.))*cal*365.)/wcal)*popn)/wy)*1000.)*(wfr);
+		wta = wa + wfa;
+		writeMessage("Wheat area: " + QString::number(wa).toLocal8Bit());
+		writeMessage("Wheat fallow area: " + QString::number(wfa).toLocal8Bit());
+		writeMessage("Wheat total area: " + QString::number(wta).toLocal8Bit());
+	
+	// else wta = 0 and wfa = 0
+
+	// if BARLEY is checked then
+
+		int bp = barley_percent->value(); 		// PERCENTAGE OF BARLEY in plant portion of diet
+		int by = barley_yield->value();			// expected average BARLEY YIELD
+		int bcal = barleycals->value();			// calories in 1 kg of BARLEY
+		float bfr = barley_fallow_ratio->value();	// FALLOW RATIO for BARLEY
+		float ba;	// barley area 
+		ba = ((((((((pdp*ptp)/100.)*(bp/100.))*cal*365.)/bcal)*popn)/by)*1000.);
+		bfa = ((((((((pdp*ptp)/100.)*(bp/100.))*cal*365.)/bcal)*popn)/by)*1000.)*(bfr);
+		bta = ba + bfa;
+		writeMessage("Barley area: " + QString::number(ba).toLocal8Bit());
+		writeMessage("Barley fallow area: " + QString::number(bfa).toLocal8Bit());
+		writeMessage("Barley total area: " + QString::number(bta).toLocal8Bit());
+	// else bta=0 and bfa=0
+
+	// if LENTIL is checked then	
+		int lp = lentil_percent->value(); 		// PERCENTAGE OF LENTIL in plant portion of diet
+		int ly = lentil_yield->value();			// expected average LENTIL YIELD
+		int lcal = lentilcals->value();			// calories in 1 kg of LENTILS
+		float lfr = lentil_fallow_ratio->value();	// FALLOW RATIO for LENTIL
+		float la;	// wheat area 
+		la = ((((((((pdp*ptp)/100.)*(lp/100.))*cal*365.)/lcal)*popn)/ly)*1000.);
+		lfa = ((((((((pdp*ptp)/100.)*(lp/100.))*cal*365.)/lcal)*popn)/ly)*1000.)*(lfr);
+		lta = la + lfa;
+		writeMessage("Lentil area: " + QString::number(la).toLocal8Bit());
+		writeMessage("Lentil fallow area: " + QString::number(lfa).toLocal8Bit());
+		writeMessage("Lentil total area: " + QString::number(lta).toLocal8Bit());
+	// else lta = 0 and lfa = 0
+
+	// if OLIVE is checked then
+		int op = olive_percent->value(); 		// PERCENTAGE OF OLIVE in plant portion of diet
+		int oy = olive_yield->value();			// expected average OLIVE YIELD
+		int ocal = olivecals->value();			// calories in 1 kg of OLIVES
+		float ofr = olive_fallow_ratio->value();	// FALLOW RATIO for OLIVE
+		float oa;					// olive area 
+		oa = ((((((((pdp*ptp)/100.)*(op/100.))*cal*365.)/ocal)*popn)/oy)*1000.);
+		ofa = ((((((((pdp*ptp)/100.)*(op/100.))*cal*365.)/ocal)*popn)/oy)*1000.)*(ofr);
+		ota = oa + ofa;
+		writeMessage("olive area: " + QString::number(oa).toLocal8Bit());
+		writeMessage("olive fallow area: " + QString::number(ofa).toLocal8Bit());
+		writeMessage("olive total area: " + QString::number(ota).toLocal8Bit());
+	// else ota = 0 and ofa = 0
+
+	// if GRAPE is checked then
+		int gp = grape_percent->value(); 		// PERCENTAGE OF GRAPE in plant portion of diet
+		int gy = grape_yield->value();			// expected average GRAPE YIELD
+		int gcal = grapecals->value();			// FALLOW RATIO for GRAPE
+		float gfr = grape_fallow_ratio->value();	// calories in 1 kg of GRAPES
+		float ga;					// grape area 
+		ga = ((((((((pdp*ptp)/100.)*(gp/100.))*cal*365.)/gcal)*popn)/gy)*1000.);
+		gfa = ((((((((pdp*ptp)/100.)*(gp/100.))*cal*365.)/gcal)*popn)/gy)*1000.)*(gfr);
+		gta = ga + gfa;
+		writeMessage("grape area: " + QString::number(ga).toLocal8Bit());
+		writeMessage("grape fallow area: " + QString::number(gfa).toLocal8Bit());
+		writeMessage("grape total area: " + QString::number(gta).toLocal8Bit());
+	// else gta = 0 and gfa = 0
+
+	stdfallowtotalarea = wfa+bfa+lfa+ofa+gfa;
+	stdcroptotalarea = wta+bta+lta+ota+gta;
+	stdtotalarea = stdfallowtotalarea + stdcroptotalarea;
+		writeMessage("Total Sown Land required: " + QString::number(stdfallowtotalarea).toLocal8Bit());
+		writeMessage("Total area of fallow land: " + QString::number(stdcroptotalarea).toLocal8Bit());
+		writeMessage("Total area required for crops: " + QString::number(stdtotalarea).toLocal8Bit());
+
 
 	/*
 		if the wheat button is checked then
