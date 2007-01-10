@@ -25,7 +25,7 @@
    <item row="0" column="0" colspan="6" >
     <widget class="QTabWidget" name="MainTabs" >
      <property name="currentIndex" >
-      <number>2</number>
+      <number>4</number>
      </property>
      <widget class="QWidget" name="TabPage" >
       <attribute name="title" >
@@ -493,19 +493,6 @@ p, li { white-space: pre-wrap; }
          </property>
         </spacer>
        </item>
-       <item row="1" column="0" >
-        <spacer>
-         <property name="orientation" >
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" >
-          <size>
-           <width>20</width>
-           <height>151</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
        <item row="0" column="0" >
         <widget class="QGroupBox" name="diet_comp_box" >
          <property name="title" >
@@ -716,7 +703,13 @@ p, li { white-space: pre-wrap; }
              </spacer>
             </item>
             <item>
-             <widget class="QPushButton" name="pushButton" >
+             <widget class="QPushButton" name="breakdown_button" >
+              <property name="toolTip" >
+               <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Press to refresh details in window below&lt;/p>&lt;/body>&lt;/html></string>
+              </property>
               <property name="text" >
                <string>Breakdown</string>
               </property>
@@ -951,6 +944,44 @@ p, li { white-space: pre-wrap; }
              </widget>
             </item>
            </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="3" column="0" >
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>20</width>
+           <height>151</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="2" column="0" >
+        <widget class="QGroupBox" name="groupBox_2" >
+         <property name="title" >
+          <string>Breakdown of Diet</string>
+         </property>
+         <layout class="QGridLayout" >
+          <property name="margin" >
+           <number>9</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item row="0" column="0" >
+           <widget class="QTextBrowser" name="breakdown_display" >
+            <property name="toolTip" >
+             <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Press Breakdown Button to refresh&lt;/p>&lt;/body>&lt;/html></string>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -1358,6 +1389,12 @@ p, li { white-space: pre-wrap; }
              <widget class="QSpinBox" name="grapecals" >
               <property name="maximum" >
                <number>5000</number>
+              </property>
+              <property name="minimum" >
+               <number>1</number>
+              </property>
+              <property name="value" >
+               <number>3000</number>
               </property>
              </widget>
             </item>
@@ -1869,6 +1906,12 @@ p, li { white-space: pre-wrap; }
               <property name="maximum" >
                <number>5000</number>
               </property>
+              <property name="minimum" >
+               <number>1</number>
+              </property>
+              <property name="value" >
+               <number>3000</number>
+              </property>
              </widget>
             </item>
             <item>
@@ -1979,6 +2022,12 @@ p, li { white-space: pre-wrap; }
              <widget class="QSpinBox" name="lentilcals" >
               <property name="maximum" >
                <number>5000</number>
+              </property>
+              <property name="minimum" >
+               <number>1</number>
+              </property>
+              <property name="value" >
+               <number>3000</number>
               </property>
              </widget>
             </item>
@@ -2727,6 +2776,9 @@ p, li { white-space: pre-wrap; }
             </item>
             <item>
              <widget class="QSpinBox" name="wheat_percent" >
+              <property name="windowModality" >
+               <enum>Qt::NonModal</enum>
+              </property>
               <property name="toolTip" >
                <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
@@ -2759,6 +2811,12 @@ p, li { white-space: pre-wrap; }
              <widget class="QSpinBox" name="wheatcals" >
               <property name="maximum" >
                <number>5000</number>
+              </property>
+              <property name="minimum" >
+               <number>1</number>
+              </property>
+              <property name="value" >
+               <number>3000</number>
               </property>
              </widget>
             </item>
@@ -3052,6 +3110,12 @@ p, li { white-space: pre-wrap; }
              <widget class="QSpinBox" name="barleycals" >
               <property name="maximum" >
                <number>5000</number>
+              </property>
+              <property name="minimum" >
+               <number>1</number>
+              </property>
+              <property name="value" >
+               <number>3000</number>
               </property>
              </widget>
             </item>
@@ -5042,7 +5106,167 @@ p, li { white-space: pre-wrap; }
        <property name="spacing" >
         <number>6</number>
        </property>
+       <item row="1" column="0" >
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>20</width>
+           <height>340</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
        <item row="0" column="0" >
+        <widget class="QGroupBox" name="groupBox_3" >
+         <property name="minimumSize" >
+          <size>
+           <width>0</width>
+           <height>350</height>
+          </size>
+         </property>
+         <property name="maximumSize" >
+          <size>
+           <width>123</width>
+           <height>303</height>
+          </size>
+         </property>
+         <property name="title" >
+          <string>In Model</string>
+         </property>
+         <layout class="QVBoxLayout" >
+          <property name="margin" >
+           <number>9</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item>
+           <widget class="QListWidget" name="listplants" >
+            <property name="toolTip" >
+             <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">These are the plants you have included in your analysis&lt;/p>&lt;/body>&lt;/html></string>
+            </property>
+            <property name="spacing" >
+             <number>2</number>
+            </property>
+            <item>
+             <property name="text" >
+              <string>Wheat</string>
+             </property>
+             <property name="icon" >
+              <iconset resource="../resources/resources.qrc" >:/wheatclricon.png</iconset>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Barley</string>
+             </property>
+             <property name="icon" >
+              <iconset resource="../resources/resources.qrc" >:/barley.png</iconset>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Lentils</string>
+             </property>
+             <property name="icon" >
+              <iconset resource="../resources/resources.qrc" >:/lentil.png</iconset>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Olives</string>
+             </property>
+             <property name="icon" >
+              <iconset resource="../resources/resources.qrc" >:/olive.png</iconset>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Grapes</string>
+             </property>
+             <property name="icon" >
+              <iconset resource="../resources/resources.qrc" >:/grape_icon.png</iconset>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <widget class="QListWidget" name="listanimals" >
+            <property name="toolTip" >
+             <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">These are the animals you have included in your analysis&lt;/p>&lt;/body>&lt;/html></string>
+            </property>
+            <property name="spacing" >
+             <number>2</number>
+            </property>
+            <item>
+             <property name="text" >
+              <string>Sheep</string>
+             </property>
+             <property name="icon" >
+              <iconset resource="../resources/resources.qrc" >:/sheep.png</iconset>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Goats</string>
+             </property>
+             <property name="icon" >
+              <iconset resource="../resources/resources.qrc" >:/goat_icon.png</iconset>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Pigs</string>
+             </property>
+             <property name="icon" >
+              <iconset resource="../resources/resources.qrc" >:/pig.png</iconset>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Cows</string>
+             </property>
+             <property name="icon" >
+              <iconset resource="../resources/resources.qrc" >:/cow.png</iconset>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Chickens</string>
+             </property>
+             <property name="icon" >
+              <iconset resource="../resources/resources.qrc" >:/chicken.png</iconset>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="clear_results" >
+            <property name="text" >
+             <string>Clear</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="print_results" >
+            <property name="text" >
+             <string>Print</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item rowspan="2" row="0" column="1" >
         <widget class="QTextBrowser" name="textBrowserResults" />
        </item>
       </layout>
@@ -5495,6 +5719,22 @@ p, li { white-space: pre-wrap; }
     <hint type="destinationlabel" >
      <x>342</x>
      <y>256</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>breakdown_button</sender>
+   <signal>clicked()</signal>
+   <receiver>breakdown_display</receiver>
+   <slot>reload()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>259</x>
+     <y>174</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>204</x>
+     <y>366</y>
     </hint>
    </hints>
   </connection>

@@ -269,7 +269,7 @@ void LaMainForm::on_run_button_clicked()
 
 		float totalcals = popn*cal*365.;
 		float plantcals = (pdp/100.)*popn*cal*365.;
-		float tameplantcals = ((pdp*ptp)/100.)*popn*cal*365.;
+		float tameplantcals = ((pdp/100.)*(ptp/100.))*popn*cal*365.;
 
 	/* Calculate area for crops for use with standard raster mask */
 
@@ -280,10 +280,10 @@ void LaMainForm::on_run_button_clicked()
 		int wcal = wheatcals->value();			// calories in 1 kg of WHEAT
 		float wfr = wheat_fallow_ratio->value();	// FALLOW RATIO for WHEAT
 		float wa;					// WHEAT area 
-		wheatcaltot = (((pdp*ptp)/100.)*(wp/100.))*cal*365.;
+		wheatcaltot = tameplantcals*(wp/100.);
 		wheatkg = wheatcaltot/wcal;
-		wa = (((wheatkg*popn)/wy)*1000.)/10000.;
-		wfa = (((((((((pdp*ptp)/100.)*(wp/100.))*cal*365.)/wcal)*popn)/wy)*1000.)*(wfr))/10000.;
+		wa = (((wheatkg)/wy)*1000.)/10000.;
+		wfa = wa * wfr;
 		wta = wa + wfa;
 		writeMessage("Wheat area: " + QString::number(wa).toLocal8Bit());
 		writeMessage("Wheat fallow area: " + QString::number(wfa).toLocal8Bit());
@@ -298,10 +298,10 @@ void LaMainForm::on_run_button_clicked()
 		int bcal = barleycals->value();			// calories in 1 kg of BARLEY
 		float bfr = barley_fallow_ratio->value();	// FALLOW RATIO for BARLEY
 		float ba;	// barley area 
-		barleycaltot = (((pdp*ptp)/100.)*(bp/100.))*cal*365.;
+		barleycaltot = tameplantcals*(bp/100.);
 		barleykg = barleycaltot/bcal;
-		ba = (((barleykg*popn)/by)*1000.)/10000.;
-		bfa = (((((((((pdp*ptp)/100.)*(bp/100.))*cal*365.)/bcal)*popn)/by)*1000.)*(bfr))/10000.;
+		ba = (((barleykg)/by)*1000.)/10000.;
+		bfa = ba * bfr;
 		bta = ba + bfa;
 		writeMessage("Barley area: " + QString::number(ba).toLocal8Bit());
 		writeMessage("Barley fallow area: " + QString::number(bfa).toLocal8Bit());
@@ -314,10 +314,10 @@ void LaMainForm::on_run_button_clicked()
 		int lcal = lentilcals->value();			// calories in 1 kg of LENTILS
 		float lfr = lentil_fallow_ratio->value();	// FALLOW RATIO for LENTIL
 		float la;	// wheat area 
-		lentilcaltot = (((pdp*ptp)/100.)*(lp/100.))*cal*365.;
+		lentilcaltot = tameplantcals*(lp/100.);
 		lentilkg = lentilcaltot/lcal;
-		la = (((lentilkg*popn)/ly)*1000.)/10000.;
-		lfa = (((((((((pdp*ptp)/100.)*(lp/100.))*cal*365.)/lcal)*popn)/ly)*1000.)*(lfr))/10000.;
+		la = (((lentilkg)/ly)*1000.)/10000.;
+		lfa = la * lfr;
 		lta = la + lfa;
 		writeMessage("Lentil area: " + QString::number(la).toLocal8Bit());
 		writeMessage("Lentil fallow area: " + QString::number(lfa).toLocal8Bit());
@@ -330,10 +330,10 @@ void LaMainForm::on_run_button_clicked()
 		int ocal = olivecals->value();			// calories in 1 kg of OLIVES
 		float ofr = olive_fallow_ratio->value();	// FALLOW RATIO for OLIVE
 		float oa;					// olive area 
-		olivecaltot = (((pdp*ptp)/100.)*(op/100.))*cal*365.;
+		olivecaltot = tameplantcals*(op/100.);
 		olivekg = olivecaltot/ocal;
-		oa = (((olivekg*popn)/oy)*1000.)/10000.;
-		ofa = (((((((((pdp*ptp)/100.)*(op/100.))*cal*365.)/ocal)*popn)/oy)*1000.)*(ofr))/10000.;
+		oa = (((olivekg)/oy)*1000.)/10000.;
+		ofa = oa * ofr;
 		ota = oa + ofa;
 		writeMessage("olive area: " + QString::number(oa).toLocal8Bit());
 		writeMessage("olive fallow area: " + QString::number(ofa).toLocal8Bit());
@@ -346,10 +346,10 @@ void LaMainForm::on_run_button_clicked()
 		int gcal = grapecals->value();			// FALLOW RATIO for GRAPE
 		float gfr = grape_fallow_ratio->value();	// calories in 1 kg of GRAPES
 		float ga;					// grape area 
-		grapecaltot = (((pdp*ptp)/100.)*(gp/100.))*cal*365.;
+		grapecaltot = tameplantcals*(gp/100.);
 		grapekg = grapecaltot/gcal;
-		ga = (((grapekg*popn)/gy)*1000.)/10000.;
-		gfa = (((((((((pdp*ptp)/100.)*(gp/100.))*cal*365.)/gcal)*popn)/gy)*1000.)*(gfr))/10000.;
+		ga = (((grapekg)/gy)*1000.)/10000.;
+		gfa = ga * gfr;
 		gta = ga + gfa;
 		writeMessage("grape area: " + QString::number(ga).toLocal8Bit());
 		writeMessage("grape fallow area: " + QString::number(gfa).toLocal8Bit());
@@ -361,29 +361,37 @@ void LaMainForm::on_run_button_clicked()
 		stdtotalarea = stdfallowtotalarea + stdcroptotalarea;
 		totalcals = wheatcaltot+barleycaltot+lentilcaltot+olivecaltot+grapecaltot;
 
-		writeMessage("Total calories required for population are: " + QString::number(totalcals).toLocal8Bit());
-		writeMessage("Plants contribute this percentage to diet: " + QString::number(pdp).toLocal8Bit());
-		writeMessage("Tame Plants account for this percentage of overall plant contribution to diet: " + QString::number(ptp).toLocal8Bit());
-		writeMessage("Total calories supplied by plants: " + QString::number(plantcals).toLocal8Bit());
-		writeMessage("Total calories supplied by tame plants: " + QString::number(tameplantcals).toLocal8Bit());
+		writeMessage("----------==========   RESULTS   ==========----------");
 
-		writeMessage("Total calories supplied by wheat: " + QString::number(wheatcaltot).toLocal8Bit());
+		writeMessage("Total calories required for population are: " + QString::number(totalcals).toLocal8Bit());
+
+		writeMessage("Plants contribute this percentage to diet: " + QString::number(pdp).toLocal8Bit());
+		writeMessage("Total calories supplied by plants (kcal): " + QString::number(plantcals/1000.).toLocal8Bit());
+
+		writeMessage("Tame Plants account for this percentage of overall plant contribution to diet: " + QString::number(ptp).toLocal8Bit());
+		writeMessage("Total calories supplied by tame plants (kcal): " + QString::number(tameplantcals/1000.).toLocal8Bit());
+
+		writeMessage(" * * *   WHEAT   * * *");
+		writeMessage("Total calories supplied by wheat (kcal) : " + QString::number(wheatcaltot/1000.).toLocal8Bit());
 		writeMessage("kg of wheat to produce this many calories is: " + QString::number(wheatkg).toLocal8Bit());
 
-		writeMessage("Total calories supplied by barley: " + QString::number(barleycaltot).toLocal8Bit());
+		writeMessage(" * * *   BARLEY   * * *");
+		writeMessage("Total calories supplied by barley (kcal): " + QString::number(barleycaltot/1000.).toLocal8Bit());
 		writeMessage("kg of barley to produce this many calories is: " + QString::number(barleykg).toLocal8Bit());
 
-		writeMessage("Total calories supplied by lentils: " + QString::number(lentilcaltot).toLocal8Bit());
+		writeMessage(" * * *   LENTILS   * * *");
+		writeMessage("Total calories supplied by lentils (kcal): " + QString::number(lentilcaltot/1000.).toLocal8Bit());
 		writeMessage("kg of lentil to produce this many calories is: " + QString::number(lentilkg).toLocal8Bit());
 
-		writeMessage("Total calories supplied by olives: " + QString::number(olivecaltot).toLocal8Bit());
+		writeMessage(" * * *   OLIVES   * * *");
+		writeMessage("Total calories supplied by olives m(kcal): " + QString::number(olivecaltot/1000.).toLocal8Bit());
 		writeMessage("kg of olive to produce this many calories is: " + QString::number(olivekg).toLocal8Bit());
 
-		writeMessage("Total calories supplied by grapes: " + QString::number(grapecaltot).toLocal8Bit());
+		writeMessage(" * * *   GRAPES   * * *");
+		writeMessage("Total calories supplied by grapes (kcal): " + QString::number(grapecaltot/1000.).toLocal8Bit());
 		writeMessage("kg of grape to produce this many calories is: " + QString::number(grapekg).toLocal8Bit());
 
-		writeMessage("Total calories supplied by plants: " + QString::number(totalcals).toLocal8Bit());
-
+		writeMessage(" * * *   LAND REQUIREMENTS   * * *");
 		writeMessage("Total Sown Land required (ha): " + QString::number(stdcroptotalarea).toLocal8Bit());
 		writeMessage("Total area of fallow land (ha): " + QString::number(stdfallowtotalarea).toLocal8Bit());
 		writeMessage("Total area required for crops (ha): " + QString::number(stdtotalarea).toLocal8Bit());
