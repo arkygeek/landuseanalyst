@@ -27,8 +27,6 @@
 #include <QProcess>
 #include <QStringList>
 
-#include <iostream>
-
   LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
 : QDialog(parent,fl)
 {
@@ -612,17 +610,17 @@ void LaMainForm::makeCircle(int theX, int theY)
   while (myProcess.waitForReadyRead(-1))
   {
   }
-    QString myString;
-    myString+=("--------- Output ----------");
-    myProcess.setReadChannel(QProcess::StandardOutput);
-    QByteArray myArray = myProcess.readAll();
-    myString.append(myArray);
-    myString+=("--------- Errors ----------");
-    myProcess.setReadChannel(QProcess::StandardError);
-    myArray = myProcess.readAll();
-    myString.append(myArray);
+  QString myString;
+  myString+=("--------- Output ----------\n");
+  myProcess.setReadChannel(QProcess::StandardOutput);
+  QByteArray myArray = myProcess.readAll();
+  myString.append(myArray);
+  myString+=("--------- Errors ----------\n");
+  myProcess.setReadChannel(QProcess::StandardError);
+  myArray = myProcess.readAll();
+  myString.append(myArray);
 
-    qDebug(myString.toLocal8Bit());
+  qDebug(myString.toLocal8Bit());
 
   qDebug("The process completed");
 }
