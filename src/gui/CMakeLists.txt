@@ -43,6 +43,7 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 # create an executable file named "landuseanalyst" from the source 
 # files in the variable "landuseanalyst_SRCS".
 add_executable(landuseanalyst 
+               MACOSX_BUNDLE
                ${landuseanalyst_SRCS} 
                ${landuseanalyst_UIS_H} 
                ${landuseanalyst_MOC_SRCS}
