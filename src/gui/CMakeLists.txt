@@ -20,6 +20,17 @@ SET(landuseanalyst_MOC_HDRS
 SET(landuseanalyst_RCCS 
     ../resources/resources.qrc
     )
+
+IF( APPLE )
+   SET( PROGNAME Landuse Analyst )
+   SET( MACOSX_BUNDLE_ICON_FILE landuseanalyst.icns)
+   SET( MACOSX_BUNDLE_SHORT_VERSION_STRING 0.0.1 )
+   SET( MACOSX_BUNDLE_VERSION 0.0.1 )
+   SET( MACOSX_BUNDLE_LONG_VERSION_STRING Version 0.0.1 )
+   SET( CMAKE_OSX_ARCHITECTURES ppc;i386 ) #Comment out if not universal binary
+ELSE( NOT APPLE )
+   SET( PROGNAME speedcrunch )
+ENDIF( APPLE )
 # tell cmake to create .moc files for all files in the variable landuseanalyst_SRCS that require such a file.
 # note: this assumes that you use #include "header.moc" in your files
 qt4_automoc(${landuseanalyst_SRCS})
@@ -42,13 +53,28 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 # ditto for moc, rc etc files
 # create an executable file named "landuseanalyst" from the source 
 # files in the variable "landuseanalyst_SRCS".
-add_executable(landuseanalyst 
+IF( APPLE )
+  add_executable(landuseanalyst 
                MACOSX_BUNDLE
                ${landuseanalyst_SRCS} 
                ${landuseanalyst_UIS_H} 
                ${landuseanalyst_MOC_SRCS}
                ${landuseanalyst_RCC_SRCS}
                )
+  ADD_CUSTOM_COMMAND( TARGET ${PROGNAME} POST_BUILD 
+    COMMAND mkdir ARGS ${CMAKE_CURRENT_BINARY_DIR}/${PROGNAME}.app/Contents/Resources
+    COMMAND cp ARGS ../../mac/${MACOSX_BUNDLE_ICON_FILE} ${CMAKE_CURRENT_BINARY_DIR}/${PROGNAME}.app/Contents/Resources
+    )
+ELSE( NOT APPLE )
+  add_executable(landuseanalyst 
+               ${landuseanalyst_SRCS} 
+               ${landuseanalyst_UIS_H} 
+               ${landuseanalyst_MOC_SRCS}
+               ${landuseanalyst_RCC_SRCS}
+               )
+ENDIF( APPLE )
+
+                                    
 
 # link the "landuseanalyst" target against the Qt libraries. which libraries 
 # exactly, is defined by the "include(${QT_USE_FILE})" line above, which sets up this variable.
