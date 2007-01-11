@@ -364,40 +364,98 @@ void LaMainForm::on_run_button_clicked()
 		stdtotalarea = stdfallowtotalarea + stdcroptotalarea;
 		totalcals = wheatcaltot+barleycaltot+lentilcaltot+olivecaltot+grapecaltot;
 
-    writePlantCellValue(1,0,QString::number((pdp/100.)*(ptp/100.)*(wp/100.)));
+    writePlantCellValue(1,0,QString::number((pdp/100.)*(ptp/100.)*(wp/100.)*100.));
     writePlantCellValue(1,1,QString::number(wheatkg));
     writePlantCellValue(1,2,QString::number(wheatcaltot/1000.));
     writePlantCellValue(1,3,QString::number(wa));
     writePlantCellValue(1,4,QString::number(wfa));
     writePlantCellValue(1,5,QString::number(wta));
 
-    writePlantCellValue(2,0,QString::number((pdp/100.)*(ptp/100.)*(bp/100.)));
+    writePlantCellValue(2,0,QString::number((pdp/100.)*(ptp/100.)*(bp/100.)*100.));
     writePlantCellValue(2,1,QString::number(barleykg));
     writePlantCellValue(2,2,QString::number(barleycaltot/1000.));
     writePlantCellValue(2,3,QString::number(ba));
     writePlantCellValue(2,4,QString::number(bfa));
     writePlantCellValue(2,5,QString::number(bta));
 
-    writePlantCellValue(3,0,QString::number((pdp/100.)*(ptp/100.)*(lp/100.)));
+    writePlantCellValue(3,0,QString::number((pdp/100.)*(ptp/100.)*(lp/100.)*100.));
     writePlantCellValue(3,1,QString::number(lentilkg));
     writePlantCellValue(3,2,QString::number(lentilcaltot/1000.));
     writePlantCellValue(3,3,QString::number(la));
     writePlantCellValue(3,4,QString::number(lfa));
     writePlantCellValue(3,5,QString::number(lta));
 
-    writePlantCellValue(4,0,QString::number((pdp/100.)*(ptp/100.)*(op/100.)));
+    writePlantCellValue(4,0,QString::number((pdp/100.)*(ptp/100.)*(op/100.)*100.));
     writePlantCellValue(4,1,QString::number(olivekg));
     writePlantCellValue(4,2,QString::number(olivecaltot/1000.));
     writePlantCellValue(4,3,QString::number(oa));
     writePlantCellValue(4,4,QString::number(ofa));
     writePlantCellValue(4,5,QString::number(ota));
 
-    writePlantCellValue(5,0,QString::number((pdp/100.)*(ptp/100.)*(gp/100.)));
+    writePlantCellValue(5,0,QString::number((pdp/100.)*(ptp/100.)*(gp/100.)*100.));
     writePlantCellValue(5,1,QString::number(grapekg));
     writePlantCellValue(5,2,QString::number(grapecaltot/1000.));
     writePlantCellValue(5,3,QString::number(ga));
     writePlantCellValue(5,4,QString::number(gfa));
     writePlantCellValue(5,5,QString::number(gta));
+
+    writePlantCellValue(7,0,QString::number((pdp/100.)*(ptp/100.)*(wp/100.)*100.));
+    writePlantCellValue(7,1,QString::number(wheatkg));
+    writePlantCellValue(7,2,QString::number(wheatcaltot/1000.));
+    writePlantCellValue(7,4,QString::number(wa));
+    writePlantCellValue(7,5,QString::number(wfa));
+    writePlantCellValue(7,6,QString::number(wta));
+    writePlantCellValue(7,7,QString::number(wta));
+
+    writePlantCellValue(8,0,QString::number((pdp/100.)*(ptp/100.)*(bp/100.)*100.));
+    writePlantCellValue(8,1,QString::number(barleykg));
+    writePlantCellValue(8,2,QString::number(barleycaltot/1000.));
+    writePlantCellValue(8,4,QString::number(ba));
+    writePlantCellValue(8,5,QString::number(bfa));
+    writePlantCellValue(8,6,QString::number(bta));
+    writePlantCellValue(8,7,QString::number(bta));
+
+    writePlantCellValue(9,0,QString::number((pdp/100.)*(ptp/100.)*(lp/100.)*100.));
+    writePlantCellValue(9,1,QString::number(lentilkg));
+    writePlantCellValue(9,2,QString::number(lentilcaltot/1000.));
+    writePlantCellValue(9,4,QString::number(la));
+    writePlantCellValue(9,5,QString::number(lfa));
+    writePlantCellValue(9,6,QString::number(lta));
+    writePlantCellValue(9,7,QString::number(lta));
+
+    writePlantCellValue(10,0,QString::number((pdp/100.)*(ptp/100.)*(op/100.)*100.));
+    writePlantCellValue(10,1,QString::number(olivekg));
+    writePlantCellValue(10,2,QString::number(olivecaltot/1000.));
+    writePlantCellValue(10,4,QString::number(oa));
+    writePlantCellValue(10,5,QString::number(ofa));
+    writePlantCellValue(10,6,QString::number(ota));
+    writePlantCellValue(10,7,QString::number(lta));
+
+    writePlantCellValue(11,0,QString::number((pdp/100.)*(ptp/100.)*(gp/100.)*100.));
+    writePlantCellValue(11,1,QString::number(grapekg));
+    writePlantCellValue(11,2,QString::number(grapecaltot/1000.));
+    writePlantCellValue(11,4,QString::number(ga));
+    writePlantCellValue(11,5,QString::number(gfa));
+    writePlantCellValue(11,6,QString::number(gta));
+    writePlantCellValue(11,7,QString::number(lta));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
