@@ -30,22 +30,22 @@ class QTreeWidgetItem;
 */
 class LaMainForm : public QDialog, private Ui::LaMainFormBase
 {
-	Q_OBJECT
-	public:
-		LaMainForm(QWidget* parent = 0, Qt::WFlags fl = 0 );
-		~LaMainForm();
+  Q_OBJECT
+  public:
+    LaMainForm(QWidget* parent = 0, Qt::WFlags fl = 0 );
+    ~LaMainForm();
   public slots:
-	void on_meatslider_valueChanged(int theValue);
-	void on_dietslider_valueChanged(int theValue);
-	void on_plantslider_valueChanged(int theValue);
-	void on_pigview_clicked();
-	void on_wheatview_clicked();
-	void on_barleyview_clicked();
-	void on_lentilview_clicked();
-	void on_oliveview_clicked();
-	void on_grapeview_clicked();
-	void on_run_button_clicked();
-	void on_diet_breakdown_button_clicked();
+  void on_meatslider_valueChanged(int theValue);
+  void on_dietslider_valueChanged(int theValue);
+  void on_plantslider_valueChanged(int theValue);
+  void on_pigview_clicked();
+  void on_wheatview_clicked();
+  void on_barleyview_clicked();
+  void on_lentilview_clicked();
+  void on_oliveview_clicked();
+  void on_grapeview_clicked();
+  void on_run_button_clicked();
+  void on_diet_breakdown_button_clicked();
 
   private slots:
   void helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetItem * thepOldItem);
@@ -53,9 +53,9 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
   void writeDiet(QString theText);
   void writePlantCellValue(int theRow, int theCol, QString theValue);
   void makeCircle(int theX, int theY);
-	private:
-		void readSettings();
-		void writeSettings();
+  private:
+    void readSettings();
+    void writeSettings();
 };
 
 #endif //LAMAINFORM_H
