@@ -27,6 +27,8 @@
 #include <QProcess>
 #include <QStringList>
 
+#include <iostream>
+
   LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
 : QDialog(parent,fl)
 {
@@ -582,7 +584,13 @@ void LaMainForm::writePlantCellValue(int theRow, int theCol, QString theValue)
 
 void LaMainForm::makeCircle(int theX, int theY)
 {
+  // to verify this worked do
+  //    d.rast
+  //    and check in the pull downlist (if your eyes dont fall out looking at those fonts)
+  //    to remove teh file again do:
+  //    g.remove rast=circle
 
+  /*
   qDebug("Making crop circle...tweeedee treedee");
   QString myProgram = "/usr/lib/grass/bin/r.circle";
   QStringList myArgs;
@@ -591,6 +599,10 @@ void LaMainForm::makeCircle(int theX, int theY)
          <<  "coordinate=744800,3611100" 
          << "max=500" 
          << "--overwrite";
+  */
+  QString myProgram = "/usr/lib/grass/bin/r.stats";
+  QStringList myArgs;
+  myArgs << "aspect";
   QProcess myProcess;
   myProcess.start(myProgram, myArgs);
   if (!myProcess.waitForStarted())
@@ -599,7 +611,18 @@ void LaMainForm::makeCircle(int theX, int theY)
   }
   while (myProcess.waitForReadyRead(-1))
   {
-          qDebug(myProcess.readAll());
   }
+    QString myString;
+    myString+=("--------- Output ----------");
+    myProcess.setReadChannel(QProcess::StandardOutput);
+    QByteArray myArray = myProcess.readAll();
+    myString.append(myArray);
+    myString+=("--------- Errors ----------");
+    myProcess.setReadChannel(QProcess::StandardError);
+    myArray = myProcess.readAll();
+    myString.append(myArray);
+
+    qDebug(myString.toLocal8Bit());
+
   qDebug("The process completed");
 }
