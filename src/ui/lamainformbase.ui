@@ -6290,18 +6290,18 @@ p, li { white-space: pre-wrap; }
    </hints>
   </connection>
   <connection>
-   <sender>save_button</sender>
+   <sender>exit_button</sender>
    <signal>clicked()</signal>
    <receiver>LaMainFormBase</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>846</x>
-     <y>597</y>
+     <x>894</x>
+     <y>600</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>456</x>
-     <y>591</y>
+     <x>453</x>
+     <y>612</y>
     </hint>
    </hints>
   </connection>
