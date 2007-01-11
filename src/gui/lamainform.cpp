@@ -588,8 +588,8 @@ void LaMainForm::makeCircle(int theX, int theY)
   QStringList myArgs;
   myArgs << "-b" 
          << "output=circle" 
-         <<  "coordinate=50,50" 
-         << "max=50" 
+         <<  "coordinate=744800,3611100" 
+         << "max=500" 
          << "--overwrite";
   QProcess myProcess;
   myProcess.start(myProgram, myArgs);
