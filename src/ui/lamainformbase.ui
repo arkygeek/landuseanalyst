@@ -6232,12 +6232,12 @@ p, li { white-space: pre-wrap; }
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>244</x>
-     <y>255</y>
+     <x>110</x>
+     <y>63</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>342</x>
-     <y>256</y>
+     <x>110</x>
+     <y>63</y>
     </hint>
    </hints>
   </connection>
@@ -6248,12 +6248,12 @@ p, li { white-space: pre-wrap; }
    <slot>reload()</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>259</x>
-     <y>148</y>
+     <x>110</x>
+     <y>63</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>204</x>
-     <y>366</y>
+     <x>110</x>
+     <y>63</y>
     </hint>
    </hints>
   </connection>
@@ -6264,12 +6264,12 @@ p, li { white-space: pre-wrap; }
    <slot>clear()</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>858</x>
-     <y>471</y>
+     <x>110</x>
+     <y>63</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>725</x>
-     <y>482</y>
+     <x>110</x>
+     <y>63</y>
     </hint>
    </hints>
   </connection>
@@ -6280,12 +6280,28 @@ p, li { white-space: pre-wrap; }
    <slot>clear()</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>279</x>
-     <y>203</y>
+     <x>110</x>
+     <y>63</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>291</x>
-     <y>317</y>
+     <x>110</x>
+     <y>63</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>save_button</sender>
+   <signal>clicked()</signal>
+   <receiver>LaMainFormBase</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>846</x>
+     <y>597</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>456</x>
+     <y>591</y>
     </hint>
    </hints>
   </connection>
