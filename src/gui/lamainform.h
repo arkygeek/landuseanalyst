@@ -52,6 +52,7 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
   void writeMessage(QString theText);
   void writeDiet(QString theText);
   void writePlantCellValue(int theRow, int theCol, QString theValue);
+  void makeCircle(int theX, int theY);
 	private:
 		void readSettings();
 		void writeSettings();

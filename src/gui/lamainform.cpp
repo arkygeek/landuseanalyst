@@ -24,6 +24,9 @@
 #include <QTableWidgetItem>
 #include <QFile>
 #include <QTextStream>
+#include <QProcess>
+#include <QStringList>
+
   LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
 : QDialog(parent,fl)
 {
@@ -37,6 +40,7 @@
    */
   connect(treeHelp, SIGNAL(currentItemChanged(QTreeWidgetItem * ,QTreeWidgetItem *)), 
                this, SLOT(helpItemClicked(QTreeWidgetItem * ,QTreeWidgetItem *)));
+  makeCircle(0,0);
 }
 
 LaMainForm::~LaMainForm()
@@ -574,4 +578,28 @@ void LaMainForm::writePlantCellValue(int theRow, int theCol, QString theValue)
 {
     QTableWidgetItem *mypItem = new QTableWidgetItem(theValue);
     plant_table->setItem(theRow, theCol, mypItem);
+}
+
+void LaMainForm::makeCircle(int theX, int theY)
+{
+
+  qDebug("Making crop circle...tweeedee treedee");
+  QString myProgram = "/usr/lib/grass/bin/r.circle";
+  QStringList myArgs;
+  myArgs << "-b" 
+         << "output=circle" 
+         <<  "coordinate=50,50" 
+         << "max=50" 
+         << "--overwrite";
+  QProcess myProcess;
+  myProcess.start(myProgram, myArgs);
+  if (!myProcess.waitForStarted())
+  {
+    qDebug("The process never started.....aaargh");
+  }
+  while (myProcess.waitForReadyRead(-1))
+  {
+          qDebug(myProcess.readAll());
+  }
+  qDebug("The process completed");
 }
