@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>954</width>
-    <height>644</height>
+    <width>946</width>
+    <height>619</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -25,9 +25,9 @@
    <item row="0" column="0" colspan="6" >
     <widget class="QTabWidget" name="MainTabs" >
      <property name="currentIndex" >
-      <number>4</number>
+      <number>0</number>
      </property>
-     <widget class="QWidget" name="TabPage" >
+     <widget class="QWidget" name="main_tab" >
       <attribute name="title" >
        <string>Main</string>
       </attribute>
@@ -469,7 +469,7 @@ p, li { white-space: pre-wrap; }
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_3" >
+     <widget class="QWidget" name="diet_tab" >
       <attribute name="title" >
        <string>Diet</string>
       </attribute>
@@ -994,7 +994,7 @@ p, li { white-space: pre-wrap; }
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="Plant_page" >
+     <widget class="QWidget" name="plants_tab" >
       <attribute name="title" >
        <string>Plants</string>
       </attribute>
@@ -3443,7 +3443,7 @@ p, li { white-space: pre-wrap; }
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="animals_page" >
+     <widget class="QWidget" name="animals_tab" >
       <attribute name="title" >
        <string>Animals</string>
       </attribute>
@@ -5282,7 +5282,7 @@ p, li { white-space: pre-wrap; }
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_4" >
+     <widget class="QWidget" name="maps_tab" >
       <attribute name="title" >
        <string>Maps</string>
       </attribute>
@@ -5293,101 +5293,243 @@ p, li { white-space: pre-wrap; }
        <property name="spacing" >
         <number>6</number>
        </property>
-       <item row="1" column="0" >
-        <widget class="QPushButton" name="pushButton" >
-         <property name="text" >
-          <string>Display</string>
+       <item row="0" column="0" >
+        <widget class="QGroupBox" name="raster_select_groupBox" >
+         <property name="sizePolicy" >
+          <sizepolicy>
+           <hsizetype>4</hsizetype>
+           <vsizetype>5</vsizetype>
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
-        </widget>
-       </item>
-       <item row="2" column="0" >
-        <spacer>
-         <property name="orientation" >
-          <enum>Qt::Vertical</enum>
+         <property name="title" >
+          <string>Select Raster</string>
          </property>
-         <property name="sizeHint" >
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item rowspan="3" row="0" column="1" >
-        <layout class="QVBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
-         </property>
-         <property name="spacing" >
-          <number>6</number>
-         </property>
-         <item>
-          <widget class="QGraphicsView" name="graphicsView" />
-         </item>
-         <item>
-          <widget class="QFrame" name="frame_3" >
-           <property name="frameShape" >
-            <enum>QFrame::StyledPanel</enum>
-           </property>
-           <property name="frameShadow" >
-            <enum>QFrame::Raised</enum>
-           </property>
+         <layout class="QGridLayout" >
+          <property name="margin" >
+           <number>5</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item row="0" column="0" >
            <layout class="QGridLayout" >
             <property name="margin" >
-             <number>9</number>
+             <number>0</number>
             </property>
             <property name="spacing" >
              <number>6</number>
             </property>
-            <item row="0" column="0" >
-             <layout class="QHBoxLayout" >
-              <property name="margin" >
-               <number>0</number>
+            <item row="1" column="1" >
+             <widget class="QPushButton" name="raster_display_clearButton" >
+              <property name="sizePolicy" >
+               <sizepolicy>
+                <hsizetype>4</hsizetype>
+                <vsizetype>0</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text" >
+               <string>Clear</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0" colspan="2" >
+             <widget class="QListWidget" name="raster_display_list" >
+              <property name="sizePolicy" >
+               <sizepolicy>
+                <hsizetype>4</hsizetype>
+                <vsizetype>7</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize" >
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize" >
+               <size>
+                <width>16777215</width>
+                <height>16777215</height>
+               </size>
               </property>
               <property name="spacing" >
-               <number>6</number>
+               <number>2</number>
               </property>
               <item>
-               <widget class="QLabel" name="label_49" >
-                <property name="text" >
-                 <string>Select Grass Mapset</string>
-                </property>
-               </widget>
+               <property name="text" >
+                <string>DEM Raster</string>
+               </property>
               </item>
               <item>
-               <widget class="QLineEdit" name="lineEdit" />
+               <property name="text" >
+                <string>Crop Mask</string>
+               </property>
               </item>
               <item>
-               <widget class="QToolButton" name="toolButton" >
-                <property name="text" >
-                 <string>...</string>
-                </property>
-               </widget>
+               <property name="text" >
+                <string>Wheat Mask</string>
+               </property>
               </item>
-             </layout>
+              <item>
+               <property name="text" >
+                <string>Barley Mask</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Lentil Mask</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Olive Mask</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Grape Mask</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Animal Mask</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Sheep Mask</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Goat Mask</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Pig Mask</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Cow Mask</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Chicken Mask</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="1" column="0" >
+             <widget class="QPushButton" name="raster_display_pushButton" >
+              <property name="sizePolicy" >
+               <sizepolicy>
+                <hsizetype>4</hsizetype>
+                <vsizetype>0</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text" >
+               <string>Display</string>
+              </property>
+             </widget>
             </item>
            </layout>
-          </widget>
-         </item>
-        </layout>
+          </item>
+         </layout>
+        </widget>
        </item>
-       <item row="0" column="2" >
-        <spacer>
-         <property name="orientation" >
-          <enum>Qt::Horizontal</enum>
+       <item row="0" column="1" colspan="2" >
+        <widget class="QGroupBox" name="raster_display_groupBox" >
+         <property name="sizePolicy" >
+          <sizepolicy>
+           <hsizetype>1</hsizetype>
+           <vsizetype>5</vsizetype>
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
-         <property name="sizeType" >
-          <enum>QSizePolicy::Minimum</enum>
+         <property name="title" >
+          <string>Display Area</string>
          </property>
-         <property name="sizeHint" >
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
+         <layout class="QGridLayout" >
+          <property name="margin" >
+           <number>9</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item row="0" column="0" >
+           <layout class="QVBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QGraphicsView" name="raster_graphicsView" />
+            </item>
+            <item>
+             <widget class="QFrame" name="frame_3" >
+              <property name="frameShape" >
+               <enum>QFrame::StyledPanel</enum>
+              </property>
+              <property name="frameShadow" >
+               <enum>QFrame::Raised</enum>
+              </property>
+              <layout class="QGridLayout" >
+               <property name="margin" >
+                <number>9</number>
+               </property>
+               <property name="spacing" >
+                <number>6</number>
+               </property>
+               <item row="0" column="0" >
+                <layout class="QHBoxLayout" >
+                 <property name="margin" >
+                  <number>0</number>
+                 </property>
+                 <property name="spacing" >
+                  <number>6</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="label_49" >
+                   <property name="text" >
+                    <string>Select Grass Mapset</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLineEdit" name="grass_mapset_lineEdit" />
+                 </item>
+                 <item>
+                  <widget class="QToolButton" name="grass_mapset_toolButton" >
+                   <property name="text" >
+                    <string>...</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
        </item>
-       <item row="3" column="1" >
+       <item row="1" column="1" >
         <spacer>
          <property name="orientation" >
           <enum>Qt::Vertical</enum>
@@ -5398,106 +5540,30 @@ p, li { white-space: pre-wrap; }
          <property name="sizeHint" >
           <size>
            <width>20</width>
-           <height>41</height>
+           <height>40</height>
           </size>
          </property>
         </spacer>
        </item>
-       <item row="0" column="0" >
-        <widget class="QListWidget" name="listWidget" >
-         <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>1</hsizetype>
-           <vsizetype>1</vsizetype>
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
+       <item row="0" column="3" >
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
          </property>
-         <property name="minimumSize" >
+         <property name="sizeType" >
+          <enum>QSizePolicy::Maximum</enum>
+         </property>
+         <property name="sizeHint" >
           <size>
-           <width>100</width>
-           <height>220</height>
+           <width>40</width>
+           <height>20</height>
           </size>
          </property>
-         <property name="maximumSize" >
-          <size>
-           <width>100</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="spacing" >
-          <number>2</number>
-         </property>
-         <item>
-          <property name="text" >
-           <string>DEM Raster</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>Crop Mask</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>Wheat Mask</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>Barley Mask</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>Lentil Mask</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>Olive Mask</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>Grape Mask</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>Animal Mask</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>Sheep Mask</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>Goat Mask</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>Pig Mask</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>Cow Mask</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>Chicken Mask</string>
-          </property>
-         </item>
-        </widget>
+        </spacer>
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_2" >
+     <widget class="QWidget" name="results_tab" >
       <attribute name="title" >
        <string>Results</string>
       </attribute>
@@ -5717,7 +5783,7 @@ p, li { white-space: pre-wrap; }
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab" >
+     <widget class="QWidget" name="help_tab" >
       <attribute name="title" >
        <string>Help</string>
       </attribute>
@@ -5946,6 +6012,77 @@ p, li { white-space: pre-wrap; }
      </widget>
     </widget>
    </item>
+   <item row="1" column="0" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>511</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="1" column="5" >
+    <widget class="QPushButton" name="exit_button" >
+     <property name="toolTip" >
+      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Exit Program&lt;/p>&lt;/body>&lt;/html></string>
+     </property>
+     <property name="text" >
+      <string>Exit</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="4" >
+    <widget class="QPushButton" name="save_button" >
+     <property name="toolTip" >
+      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Save all parameters of this model to a file&lt;/p>&lt;/body>&lt;/html></string>
+     </property>
+     <property name="text" >
+      <string>Save</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="3" >
+    <widget class="QPushButton" name="load_button" >
+     <property name="minimumSize" >
+      <size>
+       <width>39</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="toolTip" >
+      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Load previously saved model parameters.&lt;/p>&lt;/body>&lt;/html></string>
+     </property>
+     <property name="text" >
+      <string>Load</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>20</width>
+       <height>31</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
    <item row="1" column="2" >
     <widget class="QPushButton" name="run_button" >
      <property name="sizePolicy" >
@@ -5978,77 +6115,6 @@ p, li { white-space: pre-wrap; }
       <string>Run</string>
      </property>
     </widget>
-   </item>
-   <item row="1" column="1" >
-    <spacer>
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" >
-      <size>
-       <width>20</width>
-       <height>31</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="1" column="3" >
-    <widget class="QPushButton" name="load_button" >
-     <property name="minimumSize" >
-      <size>
-       <width>39</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="toolTip" >
-      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Load previously saved model parameters.&lt;/p>&lt;/body>&lt;/html></string>
-     </property>
-     <property name="text" >
-      <string>Load</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="4" >
-    <widget class="QPushButton" name="save_button" >
-     <property name="toolTip" >
-      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Save all parameters of this model to a file&lt;/p>&lt;/body>&lt;/html></string>
-     </property>
-     <property name="text" >
-      <string>Save</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="5" >
-    <widget class="QPushButton" name="exit_button" >
-     <property name="toolTip" >
-      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Exit Program&lt;/p>&lt;/body>&lt;/html></string>
-     </property>
-     <property name="text" >
-      <string>Exit</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0" >
-    <spacer>
-     <property name="orientation" >
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" >
-      <size>
-       <width>511</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
    </item>
   </layout>
  </widget>
