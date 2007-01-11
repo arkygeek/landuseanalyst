@@ -87,9 +87,6 @@ void LaMainForm::on_wheatview_clicked()
 	writeMessage("Wheat area: " + QString::number(wa).toLocal8Bit());
 	writeMessage("Wheat fallow area: " + QString::number(wfa).toLocal8Bit());
 	writeMessage("Wheat total area: " + QString::number(wta).toLocal8Bit());
-
-
-
 }
 
 void LaMainForm::on_barleyview_clicked()
@@ -113,9 +110,6 @@ void LaMainForm::on_barleyview_clicked()
 	writeMessage("Barley area: " + QString::number(ba).toLocal8Bit());
 	writeMessage("Barley fallow area: " + QString::number(bfa).toLocal8Bit());
 	writeMessage("Barley total area: " + QString::number(bta).toLocal8Bit());
-
-
-
 }
 
 void LaMainForm::on_lentilview_clicked()
@@ -162,9 +156,6 @@ void LaMainForm::on_oliveview_clicked()
 	writeMessage("olive area: " + QString::number(oa).toLocal8Bit());
 	writeMessage("olive fallow area: " + QString::number(ofa).toLocal8Bit());
 	writeMessage("olive total area: " + QString::number(ota).toLocal8Bit());
-
-
-
 }
 
 void LaMainForm::on_grapeview_clicked()
@@ -188,9 +179,6 @@ void LaMainForm::on_grapeview_clicked()
 	writeMessage("grape area: " + QString::number(ga).toLocal8Bit());
 	writeMessage("grape fallow area: " + QString::number(gfa).toLocal8Bit());
 	writeMessage("grape total area: " + QString::number(gta).toLocal8Bit());
-
-
-
 }
 
 void LaMainForm::on_pigview_clicked()
@@ -440,25 +428,6 @@ void LaMainForm::on_run_button_clicked()
     writePlantCellValue(11,7,QString::number(lta));
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 		writeMessage("----------==========   RESULTS   ==========----------");
 
 		writeMessage("Total calories required for population are: " + QString::number(totalcals).toLocal8Bit());
@@ -580,9 +549,25 @@ void LaMainForm::helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetI
   }
 }
 
+void LaMainForm::on_diet_breakdown_button_clicked()
+{
+
+	int pdp = (100-(dietslider->value())); 		// OVERALL PLANT PERCENTAGE
+	int ptp = plantslider->value(); 			// TAME PLANT percentage
+	int cal = dailycalories->value();
+	int popn = population->value();
+	
+writeDiet("Diet Breakdown");
+}
+
 void LaMainForm::writeMessage(QString theText)
 {
   textBrowserResults->append(theText);
+}
+
+void LaMainForm::writeDiet(QString theText)
+{
+  breakdown_display->append(theText);
 }
 
 void LaMainForm::writePlantCellValue(int theRow, int theCol, QString theValue)

@@ -45,10 +45,12 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
 	void on_oliveview_clicked();
 	void on_grapeview_clicked();
 	void on_run_button_clicked();
+	void on_diet_breakdown_button_clicked();
 
   private slots:
   void helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetItem * thepOldItem);
   void writeMessage(QString theText);
+  void writeDiet(QString theText);
   void writePlantCellValue(int theRow, int theCol, QString theValue);
 	private:
 		void readSettings();
