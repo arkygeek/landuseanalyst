@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>897</width>
-    <height>600</height>
+    <width>926</width>
+    <height>644</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -963,6 +963,12 @@ p, li { white-space: pre-wrap; }
        </item>
        <item row="2" column="0" >
         <widget class="QGroupBox" name="groupBox_2" >
+         <property name="minimumSize" >
+          <size>
+           <width>0</width>
+           <height>200</height>
+          </size>
+         </property>
          <property name="title" >
           <string>Breakdown of Diet</string>
          </property>
@@ -5187,40 +5193,165 @@ p, li { white-space: pre-wrap; }
        <property name="spacing" >
         <number>6</number>
        </property>
-       <item row="4" column="0" >
-        <spacer>
-         <property name="orientation" >
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" >
+       <item row="0" column="0" colspan="2" >
+        <widget class="QTableWidget" name="plant_table" >
+         <property name="minimumSize" >
           <size>
-           <width>20</width>
-           <height>20</height>
+           <width>800</width>
+           <height>411</height>
           </size>
          </property>
-        </spacer>
-       </item>
-       <item row="3" column="0" >
-        <widget class="QPushButton" name="print_results" >
-         <property name="text" >
-          <string>Print</string>
+         <property name="alternatingRowColors" >
+          <bool>true</bool>
          </property>
+         <property name="iconSize" >
+          <size>
+           <width>16</width>
+           <height>16</height>
+          </size>
+         </property>
+         <property name="textElideMode" >
+          <enum>Qt::ElideMiddle</enum>
+         </property>
+         <row>
+          <property name="text" >
+           <string>CROPS</string>
+          </property>
+         </row>
+         <row>
+          <property name="text" >
+           <string>Wheat</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../resources/resources.qrc" >:/wheatclricon.png</iconset>
+          </property>
+         </row>
+         <row>
+          <property name="text" >
+           <string>Barley</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../resources/resources.qrc" >:/barley.png</iconset>
+          </property>
+         </row>
+         <row>
+          <property name="text" >
+           <string>Lentils</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../resources/resources.qrc" >:/lentil.png</iconset>
+          </property>
+         </row>
+         <row>
+          <property name="text" >
+           <string>Olives</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../resources/resources.qrc" >:/olive.png</iconset>
+          </property>
+         </row>
+         <row>
+          <property name="text" >
+           <string>Grapes</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../resources/resources.qrc" >:/grape_icon.png</iconset>
+          </property>
+         </row>
+         <row>
+          <property name="text" >
+           <string>ANIMALS</string>
+          </property>
+         </row>
+         <row>
+          <property name="text" >
+           <string>Sheep</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../resources/resources.qrc" >:/sheep.png</iconset>
+          </property>
+         </row>
+         <row>
+          <property name="text" >
+           <string>Goats</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../resources/resources.qrc" >:/goat_icon.png</iconset>
+          </property>
+         </row>
+         <row>
+          <property name="text" >
+           <string>Pigs</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../resources/resources.qrc" >:/pig.png</iconset>
+          </property>
+         </row>
+         <row>
+          <property name="text" >
+           <string>Cows</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../resources/resources.qrc" >:/cow.png</iconset>
+          </property>
+         </row>
+         <row>
+          <property name="text" >
+           <string>Chickens</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../resources/resources.qrc" >:/chicken.png</iconset>
+          </property>
+         </row>
+         <column>
+          <property name="text" >
+           <string>% Diet</string>
+          </property>
+         </column>
+         <column>
+          <property name="text" >
+           <string>Kg Req'd</string>
+          </property>
+         </column>
+         <column>
+          <property name="text" >
+           <string>kCals supplied</string>
+          </property>
+         </column>
+         <column>
+          <property name="text" >
+           <string>Crop land</string>
+          </property>
+         </column>
+         <column>
+          <property name="text" >
+           <string>Fallow land</string>
+          </property>
+         </column>
+         <column>
+          <property name="text" >
+           <string>Total Land Req'd</string>
+          </property>
+         </column>
+         <column>
+          <property name="text" >
+           <string>Meat Animals</string>
+          </property>
+         </column>
+         <column>
+          <property name="text" >
+           <string>Breeding Herd</string>
+          </property>
+         </column>
         </widget>
        </item>
-       <item row="2" column="0" >
-        <widget class="QPushButton" name="clear_results" >
-         <property name="text" >
-          <string>Clear</string>
-         </property>
-        </widget>
-       </item>
-       <item rowspan="2" row="0" column="0" >
-        <widget class="QTextBrowser" name="textBrowserResults" />
-       </item>
-       <item row="1" column="2" >
+       <item row="0" column="2" >
         <spacer>
          <property name="orientation" >
           <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType" >
+          <enum>QSizePolicy::Expanding</enum>
          </property>
          <property name="sizeHint" >
           <size>
@@ -5230,175 +5361,35 @@ p, li { white-space: pre-wrap; }
          </property>
         </spacer>
        </item>
-       <item rowspan="2" row="1" column="1" >
-        <widget class="QTableWidget" name="animal_table" >
-         <property name="minimumSize" >
+       <item row="3" column="0" >
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" >
           <size>
-           <width>680</width>
-           <height>270</height>
+           <width>20</width>
+           <height>21</height>
           </size>
          </property>
-         <row>
-          <property name="text" >
-           <string>Percent of diet</string>
-          </property>
-         </row>
-         <row>
-          <property name="text" >
-           <string>Kg Required</string>
-          </property>
-         </row>
-         <row>
-          <property name="text" >
-           <string>Calories Supplied</string>
-          </property>
-         </row>
-         <row>
-          <property name="text" >
-           <string>Kill Weight</string>
-          </property>
-         </row>
-         <row>
-          <property name="text" >
-           <string>Breeding Herd numbers</string>
-          </property>
-         </row>
-         <row>
-          <property name="text" >
-           <string>Meat animals required</string>
-          </property>
-         </row>
-         <row>
-          <property name="text" >
-           <string>Land required</string>
-          </property>
-         </row>
-         <row>
-          <property name="text" >
-           <string>Fallow land used</string>
-          </property>
-         </row>
-         <column>
-          <property name="text" >
-           <string>Sheep</string>
-          </property>
-          <property name="icon" >
-           <iconset resource="../resources/resources.qrc" >:/sheep.png</iconset>
-          </property>
-         </column>
-         <column>
-          <property name="text" >
-           <string>Goat</string>
-          </property>
-          <property name="icon" >
-           <iconset resource="../resources/resources.qrc" >:/goat_icon.png</iconset>
-          </property>
-         </column>
-         <column>
-          <property name="text" >
-           <string>Pig</string>
-          </property>
-          <property name="icon" >
-           <iconset resource="../resources/resources.qrc" >:/pig.png</iconset>
-          </property>
-         </column>
-         <column>
-          <property name="text" >
-           <string>Cow</string>
-          </property>
-          <property name="icon" >
-           <iconset resource="../resources/resources.qrc" >:/cow.png</iconset>
-          </property>
-         </column>
-         <column>
-          <property name="text" >
-           <string>Chicken</string>
-          </property>
-          <property name="icon" >
-           <iconset resource="../resources/resources.qrc" >:/chicken.png</iconset>
-          </property>
-         </column>
+        </spacer>
+       </item>
+       <item row="1" column="1" >
+        <widget class="QPushButton" name="clear_results" >
+         <property name="text" >
+          <string>Clear</string>
+         </property>
         </widget>
        </item>
-       <item row="0" column="1" >
-        <widget class="QTableWidget" name="plant_table" >
-         <property name="minimumSize" >
-          <size>
-           <width>680</width>
-           <height>211</height>
-          </size>
+       <item row="2" column="1" >
+        <widget class="QPushButton" name="print_results" >
+         <property name="text" >
+          <string>Print</string>
          </property>
-         <row>
-          <property name="text" >
-           <string>Percent of diet</string>
-          </property>
-         </row>
-         <row>
-          <property name="text" >
-           <string>Kg Required</string>
-          </property>
-         </row>
-         <row>
-          <property name="text" >
-           <string>Calories supplied</string>
-          </property>
-         </row>
-         <row>
-          <property name="text" >
-           <string>Land Sown</string>
-          </property>
-         </row>
-         <row>
-          <property name="text" >
-           <string>Fallow</string>
-          </property>
-         </row>
-         <row>
-          <property name="text" >
-           <string>Total</string>
-          </property>
-         </row>
-         <column>
-          <property name="text" >
-           <string>Wheat</string>
-          </property>
-          <property name="icon" >
-           <iconset resource="../resources/resources.qrc" >:/wheatclricon.png</iconset>
-          </property>
-         </column>
-         <column>
-          <property name="text" >
-           <string>Barley</string>
-          </property>
-          <property name="icon" >
-           <iconset resource="../resources/resources.qrc" >:/barley.png</iconset>
-          </property>
-         </column>
-         <column>
-          <property name="text" >
-           <string>Lentils</string>
-          </property>
-          <property name="icon" >
-           <iconset resource="../resources/resources.qrc" >:/lentil.png</iconset>
-          </property>
-         </column>
-         <column>
-          <property name="text" >
-           <string>Olives</string>
-          </property>
-          <property name="icon" >
-           <iconset resource="../resources/resources.qrc" >:/olive.png</iconset>
-          </property>
-         </column>
-         <column>
-          <property name="text" >
-           <string>Grapes</string>
-          </property>
-          <property name="icon" >
-           <iconset resource="../resources/resources.qrc" >:/grape_icon.png</iconset>
-          </property>
-         </column>
         </widget>
+       </item>
+       <item rowspan="2" row="1" column="0" >
+        <widget class="QTextBrowser" name="textBrowserResults" />
        </item>
       </layout>
      </widget>
@@ -5866,6 +5857,22 @@ p, li { white-space: pre-wrap; }
     <hint type="destinationlabel" >
      <x>204</x>
      <y>366</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>clear_results</sender>
+   <signal>clicked()</signal>
+   <receiver>textBrowserResults</receiver>
+   <slot>clear()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>779</x>
+     <y>485</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>725</x>
+     <y>482</y>
     </hint>
    </hints>
   </connection>
