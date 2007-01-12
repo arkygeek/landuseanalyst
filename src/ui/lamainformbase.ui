@@ -129,7 +129,7 @@ p, li { white-space: pre-wrap; }
    <item row="0" column="0" colspan="6" >
     <widget class="QTabWidget" name="MainTabs" >
      <property name="currentIndex" >
-      <number>5</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="main_tab" >
       <attribute name="title" >
@@ -3566,7 +3566,7 @@ p, li { white-space: pre-wrap; }
         <number>6</number>
        </property>
        <item row="0" column="4" >
-        <widget class="QGroupBox" name="chickendetails" >
+        <widget class="QGroupBox" name="chicken" >
          <property name="title" >
           <string>Chicken Details</string>
          </property>
@@ -3921,7 +3921,7 @@ p, li { white-space: pre-wrap; }
         </widget>
        </item>
        <item row="0" column="3" >
-        <widget class="QGroupBox" name="cowdetails" >
+        <widget class="QGroupBox" name="cow" >
          <property name="title" >
           <string>Cow Details</string>
          </property>
@@ -4263,7 +4263,7 @@ p, li { white-space: pre-wrap; }
         </widget>
        </item>
        <item row="0" column="2" >
-        <widget class="QGroupBox" name="pigdetails" >
+        <widget class="QGroupBox" name="pig" >
          <property name="title" >
           <string>Pig Details</string>
          </property>
@@ -4638,7 +4638,7 @@ p, li { white-space: pre-wrap; }
         </widget>
        </item>
        <item row="0" column="0" >
-        <widget class="QGroupBox" name="sheepdetails" >
+        <widget class="QGroupBox" name="sheep" >
          <property name="title" >
           <string>Sheep Details</string>
          </property>
@@ -5006,7 +5006,7 @@ p, li { white-space: pre-wrap; }
         </widget>
        </item>
        <item row="0" column="1" >
-        <widget class="QGroupBox" name="goatdetails" >
+        <widget class="QGroupBox" name="goat" >
          <property name="title" >
           <string>Goat Details</string>
          </property>
