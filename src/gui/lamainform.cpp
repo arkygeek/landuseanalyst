@@ -260,9 +260,11 @@ void LaMainForm::on_run_button_clicked()
   float tameplantcals = ((pdp/100.)*(ptp/100.))*popn*cal*365.;
 
 
-  if ( calculations->isChecked() ) {
+  if ( calculations->isChecked() )
+  {
 
-    if (wheat->isChecked() ) {
+    if (wheat->isChecked() ) 
+    {
       int wp = wheat_percent->value();     // PERCENTAGE OF WHEAT in plant portion of diet
       int wy = wheat_yield->value();      // expected average WHEAT YIELD
       int wcal = wheatcals->value();      // calories in 1 kg of WHEAT
@@ -284,13 +286,15 @@ void LaMainForm::on_run_button_clicked()
       writePlantCellValue(1,4,QString::number(wfa));
       writePlantCellValue(1,5,QString::number(wta));
     }
-    else {
+    else
+    {
       wta = 0;
       wfa = 0;
       wheatkg = 0;
     }
 
-    if (barley->isChecked() ) {
+    if (barley->isChecked() )
+    {
       int bp = barley_percent->value();     // PERCENTAGE OF BARLEY in plant portion of diet
       int by = barley_yield->value();      // expected average BARLEY YIELD
       int bcal = barleycals->value();      // calories in 1 kg of BARLEY
@@ -312,13 +316,15 @@ void LaMainForm::on_run_button_clicked()
       writePlantCellValue(2,4,QString::number(bfa));
       writePlantCellValue(2,5,QString::number(bta));
     }
-    else {
+    else
+    {
       bta=0;
       bfa=0;
       barleykg=0;
     }
 
-    if (lentils->isChecked() ) {
+    if (lentils->isChecked() )
+    {
       int lp = lentil_percent->value();     // PERCENTAGE OF LENTIL in plant portion of diet
       int ly = lentil_yield->value();      // expected average LENTIL YIELD
       int lcal = lentilcals->value();      // calories in 1 kg of LENTILS
@@ -340,13 +346,15 @@ void LaMainForm::on_run_button_clicked()
       writePlantCellValue(3,4,QString::number(lfa));
       writePlantCellValue(3,5,QString::number(lta));
     }
-    else {
+    else
+    {
       lta = 0;
       lfa = 0;
       lentilkg=0;
     }
 
-    if (olives->isChecked() ) {
+    if (olives->isChecked() )
+    {
       int op = olive_percent->value();     // PERCENTAGE OF OLIVE in plant portion of diet
       int oy = olive_yield->value();      // expected average OLIVE YIELD
       int ocal = olivecals->value();      // calories in 1 kg of OLIVES
@@ -368,13 +376,15 @@ void LaMainForm::on_run_button_clicked()
       writePlantCellValue(4,4,QString::number(ofa));
       writePlantCellValue(4,5,QString::number(ota));
     }
-    else {
+    else
+    {
       ota = 0;
       ofa = 0;
       olivekg=0;
     }
 
-    if (grapes->isChecked() ) {
+    if (grapes->isChecked() )
+    {
       int gp = grape_percent->value();     // PERCENTAGE OF GRAPE in plant portion of diet
       int gy = grape_yield->value();      // expected average GRAPE YIELD
       int gcal = grapecals->value();      // FALLOW RATIO for GRAPE
@@ -396,13 +406,15 @@ void LaMainForm::on_run_button_clicked()
       writePlantCellValue(5,4,QString::number(gfa));
       writePlantCellValue(5,5,QString::number(gta));
     }
-    else {
+    else
+    {
       gta = 0;
       gfa = 0;
       grapekg = 0;
     }
 
-    if (sheep->isChecked() ) {
+    if (sheep->isChecked() )
+    {
       writeMessage("sheep is checked.");
       /* fill table
          writePlantCellValue(7,0,QString::number((pdp/100.)*(ptp/100.)*(wp/100.)*100.));
@@ -414,10 +426,12 @@ void LaMainForm::on_run_button_clicked()
          writePlantCellValue(7,7,QString::number(wta));
          */
     }
-    else {
+    else
+    {
     }
 
-    if (goat->isChecked() ) {
+    if (goat->isChecked() )
+    {
       writeMessage("goat is checked.");
       /* fill table
          writePlantCellValue(8,0,QString::number((pdp/100.)*(ptp/100.)*(bp/100.)*100.));
@@ -429,10 +443,12 @@ void LaMainForm::on_run_button_clicked()
          writePlantCellValue(8,7,QString::number(bta));
          */
     }
-    else {
+    else
+    {
     }
 
-    if (pig->isChecked() ) {
+    if (pig->isChecked() )
+    {
       writeMessage("pig is checked.");
       /* fill table
          writePlantCellValue(9,0,QString::number((pdp/100.)*(ptp/100.)*(lp/100.)*100.));
@@ -444,10 +460,12 @@ void LaMainForm::on_run_button_clicked()
          writePlantCellValue(9,7,QString::number(lta));
          */
     }
-    else {
+    else
+    {
     }
 
-    if (cow->isChecked() ) {
+    if (cow->isChecked() )
+    {
       writeMessage("cow is checked.");
       /* fill table
          writePlantCellValue(10,0,QString::number((pdp/100.)*(ptp/100.)*(op/100.)*100.));
@@ -459,10 +477,12 @@ void LaMainForm::on_run_button_clicked()
          writePlantCellValue(10,7,QString::number(lta));
          */
     }
-    else {
+    else
+    {
     }
 
-    if (chicken->isChecked() ) {
+    if (chicken->isChecked() )
+    {
       writeMessage("chicken is checked.");
       /* fill table
          writePlantCellValue(11,0,QString::number((pdp/100.)*(ptp/100.)*(gp/100.)*100.));
@@ -474,7 +494,8 @@ void LaMainForm::on_run_button_clicked()
          writePlantCellValue(11,7,QString::number(lta));
          */
     }
-    else {
+    else
+    {
     }
 
     stdfallowtotalarea = (wfa+bfa+lfa+ofa+gfa);
@@ -524,13 +545,16 @@ void LaMainForm::on_run_button_clicked()
        writeMessage("Total area required for crops (ha): " + QString::number(stdtotalarea).toLocal8Bit());
        */
   }
-  if (euclidean->isChecked() ) {
+  if (euclidean->isChecked() )
+  {
     writeMessage("Euclidean is checked.");
   }
-  if (walking->isChecked() ) {
+  if (walking->isChecked() )
+  {
     writeMessage("Walking Distance is checked");
   }
-  if (pathdistance->isChecked() ) {
+  if (pathdistance->isChecked() )
+  {
     writeMessage("Path Distance is checked.");
   }
 }
@@ -623,11 +647,13 @@ void LaMainForm::getArea(float theArea)
   QProcess myProcess;
   myProcess.start(myProgram, myArgs);
 
-  if (!myProcess.waitForStarted()) {
+  if (!myProcess.waitForStarted()) 
+  {
     qDebug("The process never started.....aaargh");
   }
 
-  while (myProcess.waitForReadyRead(-1)) {
+  while (myProcess.waitForReadyRead(-1))
+  {
   }
 
   QString myString;
@@ -659,7 +685,6 @@ void LaMainForm::makePathDistanceCost(int theX, int theY)
 
 void LaMainForm::writeMetaData(QString theValue) 
 {
-  
 }
 
 void LaMainForm::makeCircle(int theX, int theY) 
