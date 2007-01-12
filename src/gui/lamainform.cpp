@@ -239,11 +239,65 @@ void LaMainForm::on_run_button_clicked()
   doBaseCalculations();
   if ( calculations->isChecked() )
   {
+    // this can just stay empty now, I guess.
+    // I guess it could do the filling of
+    // the table, or pop up a report window
+    // as an alternative
   }
   else if (euclidean->isChecked() )
   {
     writeMessage("Euclidean is checked.");
-  }
+    // so, we start with a land suitability layer, which I call a binary mask
+    // The possibilites are
+    //    1.  cropsuitability (for all crops not using unique)
+    //      2.  wheatsuitability if unique raster selected
+    //      3.  barleysuitability if unique raster selected
+    //      4.  lentilsuitability if unique raster selected
+    //      5.  olivesuitability if unique raster selected
+    //      6.  grapesuitability if unique raster selected
+    //    7.  animalsuitability if unique raster selected (for all animals not using unique)
+    //      8.  sheepsuitability if unique raster selected
+    //      9.  goatsuitability if unique raster selected
+    //     10.  pigsuitability if unique raster selected
+    //     11.  cowsuitability if unique raster selected
+    //     12.  chickensuitability if unique raster selected
+    //
+    //  the loop works like this:
+    //    [+] create a mask for suitability layer
+    //      [-] create maximum extent raster based on cost surface
+    //          (in this case distance from a point) which is smaller
+    //          than the target area (for euclidean method I think a
+    //          good start is simply radius of a circle giving the
+    //          area equal to the target)
+    //      [-] multiply this max extent raster by each land suitability raster
+
+    //  potentially 12 seperate loops need to be run to calculate this,
+    //  although the following might work.
+    // 
+    // lets say we are using ony plants, and that all but olives are using cropmask
+    //  olives only grow on the hilltops, and the area required for the rest of the
+    //  crops (cropmask) has been satisfied.  we need to:
+    //    [+] write the results of the last loop that solved for cropmask TO cropmask
+    //      so that no more growth can occur in that layer.
+    //    [+] continue the loop repeating above logic until all unique rasters are satisfied.
+    //    [+] multiply each resultant raster by an index number
+    //      (ex. cropmask=1, wheatmask=2, barleymask=3 etc)
+    //    [+] add all resultant, numerically modified raster together
+    //      which should result in an indexed raster showing each category
+    //
+    //  One complication here is fallow that the animals can use for grazing
+    //    My initial thoughts are to simply calculate the required area for
+    //    animals like this.
+    //      [+] target area = (required area) - ((total fallow available) / (number of animals grazing fallow))
+    //    once comletely done the loop, one would have to indicate somehow/somewhere the amount of fallow utilized
+    //    because this needs to be shown, the value of total grazed fallow should be subtracted from the target of
+    //    each crop giving fallow.  once THAT target is reached, the raster should be written, but then continue
+    //    writing a new 'grazed fallow' value until satisfied.
+
+
+
+
+}
   else if (walking->isChecked() )
   {
     writeMessage("Walking Distance is checked");
