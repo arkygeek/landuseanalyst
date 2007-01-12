@@ -236,39 +236,40 @@ void LaMainForm::on_run_button_clicked()
 {
   writeMessage("running...");
 
-    int pdp = (100-(dietslider->value()));     // OVERALL PLANT PERCENTAGE
-    int ptp = plantslider->value();       // TAME PLANT percentage
-    int cal = dailycalories->value();
-    int popn = population->value();
+  int pdp = (100-(dietslider->value()));     // OVERALL PLANT PERCENTAGE
+  int ptp = plantslider->value();       // TAME PLANT percentage
+  int cal = dailycalories->value();
+  int popn = population->value();
+ 
+   /* will condense following once it is all working to
+  float wfa,bfa,lfa,ofa,gfa;   // fallow areas
+  float wta,bta,lta,ota,gta;   // crop areas */
+  float wfa;    // WHEAT fallow area
+  float wta;    // WHEAT total area
+  float bfa;    // BARLEY fallow area
+  float bta;    // BARLEY total area
+  float lfa;    // LENTIL fallow area
+  float lta;    // LENTIL total area
+  float ofa;    // OLIVE fallow area
+  float ota;    // OLIVE total area
+  float gfa;    // grape fallow area
+  float gta;    // grape total area
 
-    /* will condense following once it is all working to
-    float wfa,bfa,lfa,ofa,gfa;   // fallow areas
-    float wta,bta,lta,ota,gta;   // crop areas */
-    float wfa;    // WHEAT fallow area
-    float wta;    // WHEAT total area
-    float bfa;    // BARLEY fallow area
-    float bta;    // BARLEY total area
-    float lfa;    // LENTIL fallow area
-    float lta;    // LENTIL total area
-    float ofa;    // OLIVE fallow area
-    float ota;    // OLIVE total area
-    float gfa;    // grape fallow area
-    float gta;    // grape total area
+  float stdtotalarea;    // total area required for crops using the standard mask
+  float stdcroptotalarea;    // total area of sown land
+  float stdfallowtotalarea;  // total area of fallow
+  float wheatkg, barleykg, lentilkg, olivekg, grapekg;
+  float wheatcaltot, barleycaltot, lentilcaltot, olivecaltot, grapecaltot;
 
-    float stdtotalarea;    // total area required for crops using the standard mask
-    float stdcroptotalarea;    // total area of sown land
-    float stdfallowtotalarea;  // total area of fallow
-    float wheatkg, barleykg, lentilkg, olivekg, grapekg;
-    float wheatcaltot, barleycaltot, lentilcaltot, olivecaltot, grapecaltot;
+  float totalcals = popn*cal*365.;
+  float plantcals = (pdp/100.)*popn*cal*365.;
+  float tameplantcals = ((pdp/100.)*(ptp/100.))*popn*cal*365.;
 
-    float totalcals = popn*cal*365.;
-    float plantcals = (pdp/100.)*popn*cal*365.;
-    float tameplantcals = ((pdp/100.)*(ptp/100.))*popn*cal*365.;
 
-  /* Calculate area for crops for use with standard raster mask */
-
-  // if WHEAT is checked then
-
+  if ( calculations->isChecked() ) 
+  {
+  if (wheat->isChecked() )
+  {
     int wp = wheat_percent->value();     // PERCENTAGE OF WHEAT in plant portion of diet
     int wy = wheat_yield->value();      // expected average WHEAT YIELD
     int wcal = wheatcals->value();      // calories in 1 kg of WHEAT
@@ -280,14 +281,26 @@ void LaMainForm::on_run_button_clicked()
     wfa = wa * wfr;
     wta = wa + wfa;
     writeMessage("Wheat area: " + QString::number(wa).toLocal8Bit());
-
     writeMessage("Wheat fallow area: " + QString::number(wfa).toLocal8Bit());
     writeMessage("Wheat total area: " + QString::number(wta).toLocal8Bit());
-  
-  // else wta = 0 and wfa = 0 and wheatkg = 0
 
+    writePlantCellValue(1,0,QString::number((pdp/100.)*(ptp/100.)*(wp/100.)*100.));
+    writePlantCellValue(1,1,QString::number(wheatkg));
+    writePlantCellValue(1,2,QString::number(wheatcaltot/1000.));
+    writePlantCellValue(1,3,QString::number(wa));
+    writePlantCellValue(1,4,QString::number(wfa));
+    writePlantCellValue(1,5,QString::number(wta));
+
+  }
+  else
+  {
+    wta = 0;
+    wfa = 0;
+    wheatkg = 0;
+  }
   // if BARLEY is checked then
-
+  if (barley->isChecked() )
+  {
     int bp = barley_percent->value();     // PERCENTAGE OF BARLEY in plant portion of diet
     int by = barley_yield->value();      // expected average BARLEY YIELD
     int bcal = barleycals->value();      // calories in 1 kg of BARLEY
@@ -301,9 +314,23 @@ void LaMainForm::on_run_button_clicked()
     writeMessage("Barley area: " + QString::number(ba).toLocal8Bit());
     writeMessage("Barley fallow area: " + QString::number(bfa).toLocal8Bit());
     writeMessage("Barley total area: " + QString::number(bta).toLocal8Bit());
-  // else bta=0 and bfa=0 and barleykg = 0
 
-  // if LENTIL is checked then  
+    writePlantCellValue(2,0,QString::number((pdp/100.)*(ptp/100.)*(bp/100.)*100.));
+    writePlantCellValue(2,1,QString::number(barleykg));
+    writePlantCellValue(2,2,QString::number(barleycaltot/1000.));
+    writePlantCellValue(2,3,QString::number(ba));
+    writePlantCellValue(2,4,QString::number(bfa));
+    writePlantCellValue(2,5,QString::number(bta));
+
+  }
+  else
+  {
+    bta=0;
+    bfa=0;
+    barleykg=0;
+  }
+  if (lentils->isChecked() )
+  {
     int lp = lentil_percent->value();     // PERCENTAGE OF LENTIL in plant portion of diet
     int ly = lentil_yield->value();      // expected average LENTIL YIELD
     int lcal = lentilcals->value();      // calories in 1 kg of LENTILS
@@ -317,9 +344,24 @@ void LaMainForm::on_run_button_clicked()
     writeMessage("Lentil area: " + QString::number(la).toLocal8Bit());
     writeMessage("Lentil fallow area: " + QString::number(lfa).toLocal8Bit());
     writeMessage("Lentil total area: " + QString::number(lta).toLocal8Bit());
-  // else lta = 0 and lfa = 0
 
-  // if OLIVE is checked then
+    writePlantCellValue(3,0,QString::number((pdp/100.)*(ptp/100.)*(lp/100.)*100.));
+    writePlantCellValue(3,1,QString::number(lentilkg));
+    writePlantCellValue(3,2,QString::number(lentilcaltot/1000.));
+    writePlantCellValue(3,3,QString::number(la));
+    writePlantCellValue(3,4,QString::number(lfa));
+    writePlantCellValue(3,5,QString::number(lta));
+
+  }
+  else
+  {
+    lta = 0;
+    lfa = 0;
+    lentilkg=0;
+  }
+
+  if (olives->isChecked() )
+  {
     int op = olive_percent->value();     // PERCENTAGE OF OLIVE in plant portion of diet
     int oy = olive_yield->value();      // expected average OLIVE YIELD
     int ocal = olivecals->value();      // calories in 1 kg of OLIVES
@@ -333,9 +375,23 @@ void LaMainForm::on_run_button_clicked()
     writeMessage("olive area: " + QString::number(oa).toLocal8Bit());
     writeMessage("olive fallow area: " + QString::number(ofa).toLocal8Bit());
     writeMessage("olive total area: " + QString::number(ota).toLocal8Bit());
-  // else ota = 0 and ofa = 0
 
-  // if GRAPE is checked then
+    writePlantCellValue(4,0,QString::number((pdp/100.)*(ptp/100.)*(op/100.)*100.));
+    writePlantCellValue(4,1,QString::number(olivekg));
+    writePlantCellValue(4,2,QString::number(olivecaltot/1000.));
+    writePlantCellValue(4,3,QString::number(oa));
+    writePlantCellValue(4,4,QString::number(ofa));
+    writePlantCellValue(4,5,QString::number(ota));
+  }
+  else
+  {
+    ota = 0;
+    ofa = 0;
+    olivekg=0;
+  }
+
+  if (grapes->isChecked() )
+  {
     int gp = grape_percent->value();     // PERCENTAGE OF GRAPE in plant portion of diet
     int gy = grape_yield->value();      // expected average GRAPE YIELD
     int gcal = grapecals->value();      // FALLOW RATIO for GRAPE
@@ -349,40 +405,6 @@ void LaMainForm::on_run_button_clicked()
     writeMessage("grape area: " + QString::number(ga).toLocal8Bit());
     writeMessage("grape fallow area: " + QString::number(gfa).toLocal8Bit());
     writeMessage("grape total area: " + QString::number(gta).toLocal8Bit());
-  // else gta = 0 and gfa = 0
-
-    stdfallowtotalarea = (wfa+bfa+lfa+ofa+gfa);
-    stdcroptotalarea = (wta+bta+lta+ota+gta)-stdfallowtotalarea;
-    stdtotalarea = stdfallowtotalarea + stdcroptotalarea;
-    totalcals = wheatcaltot+barleycaltot+lentilcaltot+olivecaltot+grapecaltot;
-
-    writePlantCellValue(1,0,QString::number((pdp/100.)*(ptp/100.)*(wp/100.)*100.));
-    writePlantCellValue(1,1,QString::number(wheatkg));
-    writePlantCellValue(1,2,QString::number(wheatcaltot/1000.));
-    writePlantCellValue(1,3,QString::number(wa));
-    writePlantCellValue(1,4,QString::number(wfa));
-    writePlantCellValue(1,5,QString::number(wta));
-
-    writePlantCellValue(2,0,QString::number((pdp/100.)*(ptp/100.)*(bp/100.)*100.));
-    writePlantCellValue(2,1,QString::number(barleykg));
-    writePlantCellValue(2,2,QString::number(barleycaltot/1000.));
-    writePlantCellValue(2,3,QString::number(ba));
-    writePlantCellValue(2,4,QString::number(bfa));
-    writePlantCellValue(2,5,QString::number(bta));
-
-    writePlantCellValue(3,0,QString::number((pdp/100.)*(ptp/100.)*(lp/100.)*100.));
-    writePlantCellValue(3,1,QString::number(lentilkg));
-    writePlantCellValue(3,2,QString::number(lentilcaltot/1000.));
-    writePlantCellValue(3,3,QString::number(la));
-    writePlantCellValue(3,4,QString::number(lfa));
-    writePlantCellValue(3,5,QString::number(lta));
-
-    writePlantCellValue(4,0,QString::number((pdp/100.)*(ptp/100.)*(op/100.)*100.));
-    writePlantCellValue(4,1,QString::number(olivekg));
-    writePlantCellValue(4,2,QString::number(olivecaltot/1000.));
-    writePlantCellValue(4,3,QString::number(oa));
-    writePlantCellValue(4,4,QString::number(ofa));
-    writePlantCellValue(4,5,QString::number(ota));
 
     writePlantCellValue(5,0,QString::number((pdp/100.)*(ptp/100.)*(gp/100.)*100.));
     writePlantCellValue(5,1,QString::number(grapekg));
@@ -390,7 +412,47 @@ void LaMainForm::on_run_button_clicked()
     writePlantCellValue(5,3,QString::number(ga));
     writePlantCellValue(5,4,QString::number(gfa));
     writePlantCellValue(5,5,QString::number(gta));
+  }
+  else
+  {
+    gta = 0;
+    gfa = 0;
+    grapekg = 0;
+  }
 
+    stdfallowtotalarea = (wfa+bfa+lfa+ofa+gfa);
+    stdcroptotalarea = (wta+bta+lta+ota+gta)-stdfallowtotalarea;
+    stdtotalarea = stdfallowtotalarea + stdcroptotalarea;
+    totalcals = wheatcaltot+barleycaltot+lentilcaltot+olivecaltot+grapecaltot;
+
+
+  }
+  
+  if (euclidean->isChecked() )
+  {
+    writeMessage("Euclidean is checked.");
+  }
+
+  if (walking->isChecked() )
+  {
+    writeMessage("Walking Distance is checked");
+  }
+
+  if (pathdistance->isChecked() )
+  {
+    writeMessage("Path Distance is checked.");
+  }
+
+
+
+
+
+
+  /* Calculate area for crops for use with standard raster mask */
+
+
+
+/* Animals
     writePlantCellValue(7,0,QString::number((pdp/100.)*(ptp/100.)*(wp/100.)*100.));
     writePlantCellValue(7,1,QString::number(wheatkg));
     writePlantCellValue(7,2,QString::number(wheatcaltot/1000.));
@@ -430,7 +492,7 @@ void LaMainForm::on_run_button_clicked()
     writePlantCellValue(11,5,QString::number(gfa));
     writePlantCellValue(11,6,QString::number(gta));
     writePlantCellValue(11,7,QString::number(lta));
-
+*/
 
     writeMessage("----------==========   RESULTS   ==========----------");
 
@@ -556,12 +618,13 @@ void LaMainForm::helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetI
 void LaMainForm::on_diet_breakdown_button_clicked()
 {
 
-    int pdp = (100-(dietslider->value()));     // OVERALL PLANT PERCENTAGE
-int ptp = plantslider->value();       // TAME PLANT percentage
+  int pdp = (100-(dietslider->value()));     // OVERALL PLANT PERCENTAGE
+  int ptp = plantslider->value();       // TAME PLANT percentage
   int cal = dailycalories->value();
   int popn = population->value();
-  
-writeDiet("Diet Breakdown");
+
+  writeDiet("Diet Breakdown");
+  writeDiet("Calories per person per year: " + QString::number(cal*365).toLocal8Bit());
 }
 
 void LaMainForm::writeMessage(QString theText)
@@ -579,28 +642,18 @@ void LaMainForm::writePlantCellValue(int theRow, int theCol, QString theValue)
     QTableWidgetItem *mypItem = new QTableWidgetItem(theValue);
     plant_table->setItem(theRow, theCol, mypItem);
 }
-
-void LaMainForm::makeCircle(int theX, int theY)
+/*
+  void getArea(float theArea);
+  void makeWalkCost(int theX, int theY);
+  void makeEuclideanCost(int theX, int theY);
+  void makePathDistanceCost(int theX, int theY);
+  void writeMetaData(QString theValue);
+*/
+void LaMainForm::getArea(float theArea)
 {
-  // to verify this worked do
-  //    d.rast
-  //    and check in the pull downlist (if your eyes dont fall out looking at those fonts)
-  //    to remove teh file again do:
-  //    g.remove rast=circle
-
-  /*
-  qDebug("Making crop circle...tweeedee treedee");
-  QString myProgram = "/usr/lib/grass/bin/r.circle";
-  QStringList myArgs;
-  myArgs << "-b" 
-         << "output=circle" 
-         <<  "coordinate=744800,3611100" 
-         << "max=500" 
-         << "--overwrite";
-  */
   QString myProgram = "/usr/lib/grass/bin/r.stats";
   QStringList myArgs;
-  myArgs << "aspect";
+  myArgs << "tempraster";
   QProcess myProcess;
   myProcess.start(myProgram, myArgs);
   if (!myProcess.waitForStarted())
@@ -624,3 +677,89 @@ void LaMainForm::makeCircle(int theX, int theY)
 
   qDebug("The process completed");
 }
+void LaMainForm::makeWalkCost(int theX, int theY)
+{
+}
+void LaMainForm::makeEuclideanCost(int theX, int theY)
+{
+}
+void LaMainForm::makePathDistanceCost(int theX, int theY)
+{
+}
+void LaMainForm::writeMetaData(QString theValue)
+{
+}
+
+void LaMainForm::makeCircle(int theX, int theY)
+{
+  // to verify this worked do
+  //    d.rast
+  //    and check in the pull downlist (if your eyes dont fall out looking at those fonts)
+  //    to remove teh file again do:
+  //    g.remove rast=circle
+
+  /*
+  qDebug("Making crop circle...tweeedee treedee");
+  QString myProgram = "/usr/lib/grass/bin/r.circle";
+  QStringList myArgs;
+  myArgs << "-b" 
+         << "output=circle" 
+         <<  "coordinate=744800,3611100" 
+         << "max=500" 
+         << "--overwrite";
+  */
+  QString myProgram = "/usr/lib/grass/bin/r.stats";
+  QStringList myArgs;
+  myArgs << "landuse";
+  QProcess myProcess;
+  myProcess.start(myProgram, myArgs);
+  if (!myProcess.waitForStarted())
+  {
+    qDebug("The process never started.....aaargh");
+  }
+  while (myProcess.waitForReadyRead(-1))
+  {
+  }
+  QString myString;
+  myString+=("--------- Output ----------\n");
+  myProcess.setReadChannel(QProcess::StandardOutput);
+  QByteArray myArray = myProcess.readAll();
+  myString.append(myArray);
+  myString+=("--------- Errors ----------\n");
+  myProcess.setReadChannel(QProcess::StandardError);
+  myArray = myProcess.readAll();
+  myString.append(myArray);
+
+  qDebug(myString.toLocal8Bit());
+
+  qDebug("The process completed");
+}
+
+/*  int binarySearch(int sortedArray[], int first, int last, int key) {
+  // function:
+  //   Searches sortedArray[first]..sortedArray[last] for key.  
+  // returns: index of the matching element if it finds key, 
+  //         otherwise  -(index where it could be inserted)-1.
+  // parameters:
+  //   sortedArray in  array of sorted (ascending) values.
+  //   first, last in  lower and upper subscript bounds
+  //   key         in  value to search for.
+  // returns:
+  //   index of key, or -insertion_position -1 if key is not 
+  //                 in the array. This value can easily be
+  //                 transformed into the position to insert it.
+  
+  while (first <= last)
+  {
+    int mid = (first + last) / 2;  // compute mid point.
+    if (key > sortedArray[mid]) 
+      first = mid + 1;  // repeat search in top half.
+    else if (key < sortedArray[mid]) 
+      last = mid - 1; // repeat search in bottom half.
+    else
+      return mid;     // found it. return position /////
+  }
+  return -(first + 1);    // failed to find key
+}
+
+*/

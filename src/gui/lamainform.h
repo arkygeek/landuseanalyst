@@ -53,6 +53,13 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
   void writeDiet(QString theText);
   void writePlantCellValue(int theRow, int theCol, QString theValue);
   void makeCircle(int theX, int theY);
+// here down is highly suspect code - not too sure if I am doing this right or not! -- Jas
+  void getArea(float theArea);
+  void makeWalkCost(int theX, int theY);
+  void makeEuclideanCost(int theX, int theY);
+  void makePathDistanceCost(int theX, int theY);
+  void writeMetaData(QString theValue);
+
   private:
     void readSettings();
     void writeSettings();

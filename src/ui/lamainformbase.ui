@@ -129,7 +129,7 @@ p, li { white-space: pre-wrap; }
    <item row="0" column="0" colspan="6" >
     <widget class="QTabWidget" name="MainTabs" >
      <property name="currentIndex" >
-      <number>0</number>
+      <number>5</number>
      </property>
      <widget class="QWidget" name="main_tab" >
       <attribute name="title" >
@@ -1117,7 +1117,7 @@ p, li { white-space: pre-wrap; }
         <number>6</number>
        </property>
        <item row="0" column="4" >
-        <widget class="QGroupBox" name="Grape_Details" >
+        <widget class="QGroupBox" name="grapes" >
          <property name="toolTip" >
           <string/>
          </property>
@@ -1592,7 +1592,7 @@ p, li { white-space: pre-wrap; }
         </widget>
        </item>
        <item row="0" column="3" >
-        <widget class="QGroupBox" name="Olive_Details" >
+        <widget class="QGroupBox" name="olives" >
          <property name="toolTip" >
           <string/>
          </property>
@@ -2096,7 +2096,7 @@ p, li { white-space: pre-wrap; }
         </spacer>
        </item>
        <item row="0" column="2" >
-        <widget class="QGroupBox" name="Lentil_Details" >
+        <widget class="QGroupBox" name="lentils" >
          <property name="toolTip" >
           <string/>
          </property>
@@ -2574,7 +2574,7 @@ p, li { white-space: pre-wrap; }
         </widget>
        </item>
        <item row="0" column="0" >
-        <widget class="QGroupBox" name="Wheat_Details" >
+        <widget class="QGroupBox" name="wheat" >
          <property name="sizePolicy" >
           <sizepolicy>
            <hsizetype>1</hsizetype>
@@ -3069,7 +3069,7 @@ p, li { white-space: pre-wrap; }
         </widget>
        </item>
        <item row="0" column="1" >
-        <widget class="QGroupBox" name="Barley_Details" >
+        <widget class="QGroupBox" name="barley" >
          <property name="minimumSize" >
           <size>
            <width>133</width>
@@ -6232,12 +6232,12 @@ p, li { white-space: pre-wrap; }
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>110</x>
-     <y>63</y>
+     <x>244</x>
+     <y>255</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>110</x>
-     <y>63</y>
+     <x>342</x>
+     <y>256</y>
     </hint>
    </hints>
   </connection>
@@ -6248,12 +6248,12 @@ p, li { white-space: pre-wrap; }
    <slot>reload()</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>110</x>
-     <y>63</y>
+     <x>259</x>
+     <y>148</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>110</x>
-     <y>63</y>
+     <x>204</x>
+     <y>366</y>
     </hint>
    </hints>
   </connection>
@@ -6264,12 +6264,12 @@ p, li { white-space: pre-wrap; }
    <slot>clear()</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>110</x>
-     <y>63</y>
+     <x>858</x>
+     <y>471</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>110</x>
-     <y>63</y>
+     <x>725</x>
+     <y>482</y>
     </hint>
    </hints>
   </connection>
@@ -6280,28 +6280,28 @@ p, li { white-space: pre-wrap; }
    <slot>clear()</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>110</x>
-     <y>63</y>
+     <x>279</x>
+     <y>203</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>110</x>
-     <y>63</y>
+     <x>291</x>
+     <y>317</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>exit_button</sender>
-   <signal>clicked()</signal>
-   <receiver>LaMainFormBase</receiver>
-   <slot>reject()</slot>
+   <sender>clear_results</sender>
+   <signal>pressed()</signal>
+   <receiver>plant_table</receiver>
+   <slot>clearContents()</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>894</x>
-     <y>600</y>
+     <x>856</x>
+     <y>464</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>453</x>
-     <y>612</y>
+     <x>858</x>
+     <y>427</y>
     </hint>
    </hints>
   </connection>
