@@ -59,6 +59,7 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
   void makeEuclideanCost(int theX, int theY);
   void makePathDistanceCost(int theX, int theY);
   void writeMetaData(QString theValue);
+  void doBaseCalculations();
 
   private:
     void readSettings();
