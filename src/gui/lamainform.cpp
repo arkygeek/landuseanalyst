@@ -442,16 +442,6 @@ void LaMainForm::on_run_button_clicked()
   {
     writeMessage("Path Distance is checked.");
   }
-
-
-
-
-
-
-  /* Calculate area for crops for use with standard raster mask */
-
-
-
 /* Animals
     writePlantCellValue(7,0,QString::number((pdp/100.)*(ptp/100.)*(wp/100.)*100.));
     writePlantCellValue(7,1,QString::number(wheatkg));
@@ -492,7 +482,7 @@ void LaMainForm::on_run_button_clicked()
     writePlantCellValue(11,5,QString::number(gfa));
     writePlantCellValue(11,6,QString::number(gta));
     writePlantCellValue(11,7,QString::number(lta));
-*/
+
 
     writeMessage("----------==========   RESULTS   ==========----------");
 
@@ -528,7 +518,7 @@ void LaMainForm::on_run_button_clicked()
     writeMessage("Total Sown Land required (ha): " + QString::number(stdcroptotalarea).toLocal8Bit());
     writeMessage("Total area of fallow land (ha): " + QString::number(stdfallowtotalarea).toLocal8Bit());
     writeMessage("Total area required for crops (ha): " + QString::number(stdtotalarea).toLocal8Bit());
-
+*/
 
   /*
     if the wheat button is checked then
