@@ -301,10 +301,26 @@ void LaMainForm::on_run_button_clicked()
   else if (walking->isChecked() )
   {
     writeMessage("Walking Distance is checked");
+    //
+    // the only difference for this routine is in how we make the cost surface map,
+    //  and the value we start the loop at.  I think the best solution is to make
+    //  r.walk calculate the cost surface for 5 hours, or 300 minutes.  Anything
+    //  further away than that is going to be dubious anyway.  And, instead of starting
+    //  on the 'inside' we start on the outside, and work in.  Binary search again, I
+    //  think, would be fastest.
+
+
   }
   else if (pathdistance->isChecked() )
   {
     writeMessage("Path Distance is checked.");
+    //
+    // the difference for this routine is, again, in how we make the cost surface map,
+    //  and the value we start the loop at.  I think the best solution is to make
+    //  r.path calculate the cost surface for like 15km.  Anything
+    //  further away than that is going to be dubious anyway.  And, instead of starting
+    //  on the 'inside' we start on the outside, and work in.  Binary search again, I
+    //  think, would be fastest.
   }
 }
 
