@@ -462,7 +462,7 @@ p, li { white-space: pre-wrap; }
            <property name="title" >
             <string>Model Precision</string>
            </property>
-           <widget class="QSpinBox" name="spinBox58" >
+           <widget class="QSpinBox" name="precision" >
             <property name="geometry" >
              <rect>
               <x>30</x>
@@ -6137,7 +6137,7 @@ p, li { white-space: pre-wrap; }
  </widget>
  <tabstops>
   <tabstop>MainTabs</tabstop>
-  <tabstop>spinBox58</tabstop>
+  <tabstop>precision</tabstop>
   <tabstop>load_button</tabstop>
   <tabstop>save_button</tabstop>
   <tabstop>exit_button</tabstop>
