@@ -42,7 +42,8 @@ LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
   connect(treeHelp, SIGNAL(currentItemChanged(QTreeWidgetItem * ,QTreeWidgetItem *)), 
       this, SLOT(helpItemClicked(QTreeWidgetItem * ,QTreeWidgetItem *)));
   // makeCircle(0,0);
-  lblVersion->setText("Version: " + VERSION);
+  // lblVersion->setText("Version: " + VERSION);
+  lblVersion->setText(QString("Version: %1").arg(VERSION));
 }
 
 LaMainForm::~LaMainForm() 
