@@ -28,6 +28,7 @@
 #include <QProcess>
 #include <QStringList>
 
+
 LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
   : QDialog(parent,fl) 
 {
@@ -45,11 +46,7 @@ LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
   lblVersion->setText(QString("Version: %1").arg(VERSION) + " " + QString("$Revision$").replace("$",""));
 }
 
-
-
-
-
-LaMainForm::~LaMainForm() 
+LaMainForm::~LaMainForm()
 {
   writeSettings();
 }
@@ -70,13 +67,7 @@ void LaMainForm::writeSettings()
   mySettings.setValue("mainwindow/size", size());
 }
 
-/*void LaMainForm::on_calculate_button_clicked()
-  {
-  writeMessage("QGIS Rocks");
-  }
-  */
-
-void LaMainForm::on_wheatview_clicked() 
+void LaMainForm::on_wheatview_clicked()
 {
   int pdp = (100-(dietslider->value()));     // OVERALL PLANT PERCENTAGE
   int ptp = plantslider->value();       // TAME PLANT percentage
@@ -268,7 +259,7 @@ void LaMainForm::on_run_button_clicked()
     //     11.  cowsuitability if unique raster selected
     //     12.  chickensuitability if unique raster selected
     //
-    //  the loop works like this:
+    //  Preparation for the loop:
     //    [+] create a mask for suitability layer
     //      [-] create maximum extent raster based on cost surface
     //          (in this case distance from a point) which is smaller
