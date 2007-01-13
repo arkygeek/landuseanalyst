@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>lblVersion</class>
- <widget class="QDialog" name="lblVersion" >
+ <class>LaMainFormBase</class>
+ <widget class="QDialog" name="LaMainFormBase" >
   <property name="geometry" >
    <rect>
     <x>0</x>
@@ -514,7 +514,7 @@ p, li { white-space: pre-wrap; }
            </widget>
           </item>
           <item row="1" column="0" >
-           <widget class="QLabel" name="label_50" >
+           <widget class="QLabel" name="lblVersion" >
             <property name="text" >
              <string>Version: 99.99</string>
             </property>
