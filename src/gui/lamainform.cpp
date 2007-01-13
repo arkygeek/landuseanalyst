@@ -30,7 +30,7 @@
 
 static QString revision()
 {
-   QString rev("$Revision: 1152 $");
+   QString rev("$Revision$");
    rev.remove(QChar('$'));
    return rev.simplified();
 }
