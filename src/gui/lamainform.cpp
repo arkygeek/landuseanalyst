@@ -28,6 +28,12 @@
 #include <QProcess>
 #include <QStringList>
 
+static QString revision()
+{
+   QString rev("$Revision: 1152 $");
+   rev.remove(QChar('$'));
+   return rev.simplified();
+}
 LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
   : QDialog(parent,fl) 
 {
@@ -43,8 +49,12 @@ LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
       this, SLOT(helpItemClicked(QTreeWidgetItem * ,QTreeWidgetItem *)));
   // makeCircle(0,0);
   // lblVersion->setText("Version: " + VERSION);
-  lblVersion->setText(QString("Version: %1").arg(VERSION));
+  lblVersion->setText(QString("Version: %1").arg(VERSION) + " " + revision());
 }
+
+
+
+
 
 LaMainForm::~LaMainForm() 
 {
