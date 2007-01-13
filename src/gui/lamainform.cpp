@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "lamainform.h"
+#include "version.h"
 #include <QSettings>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
@@ -40,7 +41,8 @@ LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
    */
   connect(treeHelp, SIGNAL(currentItemChanged(QTreeWidgetItem * ,QTreeWidgetItem *)), 
       this, SLOT(helpItemClicked(QTreeWidgetItem * ,QTreeWidgetItem *)));
-  makeCircle(0,0);
+  // makeCircle(0,0);
+  lblVersion->setText("Version: " + VERSION);
 }
 
 LaMainForm::~LaMainForm() 
