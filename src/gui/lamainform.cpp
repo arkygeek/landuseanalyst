@@ -28,12 +28,6 @@
 #include <QProcess>
 #include <QStringList>
 
-static QString revision()
-{
-   QString rev("$Revision$");
-   rev.remove(QChar('$'));
-   return rev.simplified();
-}
 LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
   : QDialog(parent,fl) 
 {
@@ -48,7 +42,7 @@ LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
   connect(treeHelp, SIGNAL(currentItemChanged(QTreeWidgetItem * ,QTreeWidgetItem *)), 
       this, SLOT(helpItemClicked(QTreeWidgetItem * ,QTreeWidgetItem *)));
   // makeCircle(0,0);
-  lblVersion->setText(QString("Version: %1").arg(VERSION) + " " + revision());
+  lblVersion->setText(QString("Version: %1").arg(VERSION) + " " + QString("$Revision$").replace("$",""));
 }
 
 
