@@ -438,7 +438,10 @@ p, li { white-space: pre-wrap; }
                <string>Calculate catchment by growing distance based on walking time</string>
               </property>
               <property name="whatsThis" >
-               <string>When Walking Time is selected, a cost map for the area is created that predicts how long it takes to get any area on the map.  The program then calculates area contained within the time it takes to walk.  If the derived area is insufficient to support the population, the walking time is increased, and it tries again.  This repeats until the required area is contained.</string>
+               <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">When Walking Time is selected, a cost map for the area is created that predicts how long it takes to get to any area on the map from the settlement.  The program then calculates the suitable area contained within the time it takes to walk.  If the derived area is insufficient to support the population, the walking time is increased, and it tries again.  This repeats until the required area is contained.&lt;/p>&lt;/body>&lt;/html></string>
               </property>
               <property name="text" >
                <string>Walking Time</string>
@@ -675,7 +678,7 @@ territorial boundaries.</string>
                <item row="1" column="2" >
                 <widget class="QLabel" name="meatwildpercent" >
                  <property name="text" >
-                  <string>90</string>
+                  <string>10</string>
                  </property>
                  <property name="alignment" >
                   <set>Qt::AlignCenter</set>
@@ -698,7 +701,7 @@ territorial boundaries.</string>
                   <enum>Qt::LeftToRight</enum>
                  </property>
                  <property name="text" >
-                  <string>10</string>
+                  <string>90</string>
                  </property>
                  <property name="alignment" >
                   <set>Qt::AlignCenter</set>
@@ -4392,8 +4395,11 @@ p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Average weight of animal when butchered.&lt;/p>&lt;/body>&lt;/html></string>
                 </property>
+                <property name="maximum" >
+                 <number>999</number>
+                </property>
                 <property name="value" >
-                 <number>99</number>
+                 <number>100</number>
                 </property>
                </widget>
               </item>
