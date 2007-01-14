@@ -241,193 +241,35 @@ void LaMainForm::on_run_button_clicked()
     // the table, or pop up a report window
     // as an alternative
   }
-  else if (euclidean->isChecked() )
-  {
-    writeMessage("Euclidean is checked.");
-    // so, we start with a land suitability layer, which I call a binary mask
-    // The possibilites are
-    //    1.  cropsuitability (for all crops not using unique)
-    //      2.  wheatsuitability if unique raster selected
-    //      3.  barleysuitability if unique raster selected
-    //      4.  lentilsuitability if unique raster selected
-    //      5.  olivesuitability if unique raster selected
-    //      6.  grapesuitability if unique raster selected
-    //    7.  animalsuitability if unique raster selected (for all animals not using unique)
-    //      8.  sheepsuitability if unique raster selected
-    //      9.  goatsuitability if unique raster selected
-    //     10.  pigsuitability if unique raster selected
-    //     11.  cowsuitability if unique raster selected
-    //     12.  chickensuitability if unique raster selected
-    //
-    //  Preparation for the loop:
-    //    [+] create a mask for suitability layer
-    //      [-] create maximum extent raster based on cost surface
-    //          (in this case distance from a point) which is smaller
-    //          than the target area (for euclidean method I think a
-    //          good start is simply radius of a circle giving the
-    //          area equal to the target)
-    //      [-] multiply this max extent raster by each land suitability raster
-
-    //  potentially 12 seperate loops need to be run to calculate this,
-    //  although the following might work.
-    // 
-    // lets say we are using ony plants, and that all but olives are using cropmask
-    //  olives only grow on the hilltops, and the area required for the rest of the
-    //  crops (cropmask) has been satisfied.  we need to:
-    //    [+] write the results of the last loop that solved for cropmask TO cropmask
-    //      so that no more growth can occur in that layer.
-    //    [+] continue the loop repeating above logic until all unique rasters are satisfied.
-    //    [+] multiply each resultant raster by an index number
-    //      (ex. cropmask=1, wheatmask=2, barleymask=3 etc)
-    //    [+] add all resultant, numerically modified raster together
-    //      which should result in an indexed raster showing each category
-    //
-    //  One complication here is fallow that the animals can use for grazing
-    //    My initial thoughts are to simply calculate the required area for
-    //    animals like this.
-    //      [+] target area = (required area) - ((total fallow available) / (number of animals grazing fallow))
-    //    once comletely done the loop, one would have to indicate somehow/somewhere the amount of fallow utilized
-    //    because this needs to be shown, the value of total grazed fallow should be subtracted from the target of
-    //    each crop giving fallow.  once THAT target is reached, the raster should be written, but then continue
-    //    writing a new 'grazed fallow' value until satisfied.
-
-/*
-pre-requisites for loop are:
-
-[+]  Rasters that define landuse.  (suitability layers)
-     possibilities are:
-          1.  cropsuitability (for all crops not using unique)
-            2.  wheatsuitability if unique raster selected
-            3.  barleysuitability if unique raster selected
-            4.  lentilsuitability if unique raster selected
-            5.  olivesuitability if unique raster selected
-            6.  grapesuitability if unique raster selected
-          7.  animalsuitability if unique raster selected (for all animals not using unique)
-            8.  sheepsuitability if unique raster selected
-            9.  goatsuitability if unique raster selected
-          10.  pigsuitability if unique raster selected
-          11.  cowsuitability if unique raster selected
-          12.  chickensuitability if unique raster selected
-
-     these rasters are binary rasters that tell us what areas are suitable for each item
-
-    ** it is important to note that these areas MUST be unique, and NOT OVERLAP
 
   else if (euclidean->isChecked() )
   {
-    writeMessage("Euclidean is checked.");
-    // so, we start with a land suitability layer, which I call a binary mask
-    // The possibilites are
-    //    1.  cropsuitability (for all crops not using unique)
-    //      2.  wheatsuitability if unique raster selected
-    //      3.  barleysuitability if unique raster selected
-    //      4.  lentilsuitability if unique raster selected
-    //      5.  olivesuitability if unique raster selected
-    //      6.  grapesuitability if unique raster selected
-    //    7.  animalsuitability if unique raster selected (for all animals not using unique)
-    //      8.  sheepsuitability if unique raster selected
-    //      9.  goatsuitability if unique raster selected
-    //     10.  pigsuitability if unique raster selected
-    //     11.  cowsuitability if unique raster selected
-    //     12.  chickensuitability if unique raster selected
-    //
-    //  Preparation for the loop:
-    //    [+] create a mask for suitability layer
-    //      [-] create maximum extent raster based on cost surface
-    //          (in this case distance from a point) which is smaller
-    //          than the target area (for euclidean method I think a
-    //          good start is simply radius of a circle giving the
-    //          area equal to the target)
-    //      [-] multiply this max extent raster by each land suitability raster
-
-    //  potentially 12 seperate loops need to be run to calculate this,
-    //  although the following might work.
-    //
-    // lets say we are using ony plants, and that all but olives are using cropmask
-    //  olives only grow on the hilltops, and the area required for the rest of the
-    //  crops (cropmask) has been satisfied.  we need to:
-    //    [+] write the results of the last loop that solved for cropmask TO cropmask
-    //      so that no more growth can occur in that layer.
-    //    [+] continue the loop repeating above logic until all unique rasters are satisfied.
-    //    [+] multiply each resultant raster by an index number
-    //      (ex. cropmask=1, wheatmask=2, barleymask=3 etc)
-    //    [+] add all resultant, numerically modified raster together
-    //      which should result in an indexed raster showing each category
-    //
-    //  One complication here is fallow that the animals can use for grazing
-    //    My initial thoughts are to simply calculate the required area for
-    //    animals like this.
-    //      [+] target area = (required area) - ((total fallow available) / (number of animals grazing fallow))
-    //    once comletely done the loop, one would have to indicate somehow/somewhere the amount of fallow utilized
-    //    because this needs to be shown, the value of total grazed fallow should be subtracted from the target of
-    //    each crop giving fallow.  once THAT target is reached, the raster should be written, but then continue
-    //    writing a new 'grazed fallow' value until satisfied.
-
-/*
-pre-requisites for loop are:
-
-[+]  Rasters that define landuse.  (suitability layers)
-     possibilities are:
-          1.  cropsuitability (for all crops not using unique)
-            2.  wheatsuitability if unique raster selected
-            3.  barleysuitability if unique raster selected
-            4.  lentilsuitability if unique raster selected
-            5.  olivesuitability if unique raster selected
-            6.  grapesuitability if unique raster selected
-          7.  animalsuitability if unique raster selected (for all animals not using unique)
-            8.  sheepsuitability if unique raster selected
-            9.  goatsuitability if unique raster selected
-          10.  pigsuitability if unique raster selected
-          11.  cowsuitability if unique raster selected
-          12.  chickensuitability if unique raster selected
-
-     these rasters are binary rasters that tell us what areas are suitable for each item
-
-    ** it is important to note that these areas MUST be unique, and NOT OVERLAP
-
-[+]   Target areas for each raster being analyzed.
-    [-] PLANTS TARGET AREA = sown land + fallow land
-          this target is applied to the cropsuitability binary raster
-    [-] WHEAT TARGET AREA = sown land + fallow land
-          this target is applied to the wheatsuitability binary raster
-    [-] BARLEY TARGET AREA = sown land + fallow land
-          this target is applied to the barleysuitability binary raster
-    [-] LENTIL TARGET AREA = sown land + fallow land
-          this target is applied to the lentilsuitability binary raster
-    [-] OLIVE TARGET AREA = sown land + fallow land
-          this target is applied to the olivesuitability binary raster
-    [-] GRAPE TARGET AREA = sown land + fallow land
-          this target is applied to the grapesuitability binary raster
-
-      Each plant or animal will have a target area.  this is the amount of land
-      that would be required to satisfy the dietary requirements of the population
-      as determined by the settings made in the interface.  Plants are easy.  Animals
-      are not easy.  The target area for each plant is composed of two separate areas:
-      (1) sown land   and (2) fallow land.   Fallow might be 0, for example olive clops
-      are tree crops, and there will not be fallow there.  The reason we seperate fallow
-      out is because animals can potentially graze this land, and has to be considered
-      when determining the target areas for them.
-
-      To accomplish this, we need to know how many animals are grazing fallow
-*/
-/*
-{        // determine how many animals use fallow, and how many use unique rasters, and set targets to 0 if not using unique raster
-  int numberofanimals = 0;
-  int common_animal_target_area = 0;
-  int animals_grazing_fallow_and_using_common_animal_raster = 0;
-  int precision = precision->value();
-
-  //create animalcost raster (cost surface)
+  // create animalcost raster (cost surface)
   // for euclidean, distance from point (the coordinates of the site)
   // for walk time, r.walk with 18000 seconds as max cost
   // for path dist, use _______ with 15km as max cost
+  // (this is done with grass.)
+      
+      writeMessage("Euclidean is checked.");
+
+  //  determine how many animals use fallow,
+  //  how many use unique rasters, and
+  //  set targets to 0 if not using unique raster after
+  //  adding to common target.
+
+  int numberofanimals = 0;
+  int common_animal_target = 0;
+  int animals_grazing_fallow_and_using_common_animal_raster = 0;
+  float sheep_target, goat_target, pig_target, cow_target, chicken_target,
+        animal_target, crop_target, wheat_target, barley_target, lentil_target,
+        olive_target, grape_target, stdfallowtotalarea; // these will be passed here from base calculations
 
   if (sheep->isChecked())
   {
     if (sheepgrazefallow->isChecked())    numberofanimals++;
     if (!sheepraster->isChecked())
     {
-      common_animal_target=common_animal_target+sheepareatarget;
+      common_animal_target=common_animal_target+sheep_target;
       sheep_target=0;
       animals_grazing_fallow_and_using_common_animal_raster++;
     }
@@ -438,7 +280,7 @@ pre-requisites for loop are:
     if (goatgrazefallow->isChecked())     numberofanimals++;
     if (!goatraster->isChecked())
       {
-      common_animal_target=common_animal_target+goatareatarget;
+      common_animal_target=common_animal_target+goat_target;
       goat_target=0;
       animals_grazing_fallow_and_using_common_animal_raster++;
     }
@@ -449,7 +291,7 @@ pre-requisites for loop are:
     if (piggrazefallow->isChecked())      numberofanimals++;
     if (!pigraster->isChecked())
     {
-      common_animal_target=common_animal_target+pigareatarget;
+      common_animal_target=common_animal_target+pig_target;
       pig_target=0;
       animals_grazing_fallow_and_using_common_animal_raster++;
     }
@@ -460,31 +302,38 @@ pre-requisites for loop are:
     if (cowgrazefallow->isChecked())      numberofanimals++;
     if (!cowraster->isChecked())
     {
-      common_animal_target=common_animal_target+cowareatarget;
+      common_animal_target=common_animal_target+cow_target;
       cow_target=0;
       animals_grazing_fallow_and_using_common_animal_raster++;
     }
   }
-
+/*
   if (chicken->isChecked())
   {
     if (chickengrazefallow->isChecked())  numberofanimals++;
     if (!chickenraster->isChecked())
     {
-      common_animal_target=common_animal_target+chickenareatarget;
+      common_animal_target=common_animal_target+chicken_target;
       chicken_target=0;
       animals_grazing_fallow_and_using_common_animal_raster++;
     }
   }
-}
-  // --------------------------------------------------------------------------------------------
+*/
 
     float available_fallow_per_animal = (stdfallowtotalarea) / (animals_grazing_fallow_and_using_common_animal_raster);
+    float extra_fallow=0.;
+
   // in the following, we determine the target areas for each animal
   // as well as create the cost surfaces for each as required
+
     if (animals_grazing_fallow_and_using_common_animal_raster > 0)
     {
       common_animal_target = common_animal_target - (animals_grazing_fallow_and_using_common_animal_raster *  available_fallow_per_animal);
+      if (common_animal_target < 0)
+      {
+        extra_fallow = (common_animal_target * (-1.));
+        common_animal_target = 0;
+      }
       //create animalcost raster (cost surface)
       // for euclidean, distance from point (the coordinates of the site)
       // for walk time, r.walk with 18000 seconds as max cost
@@ -504,7 +353,12 @@ pre-requisites for loop are:
       {
         if (sheepgrazefallow->isChecked())
         {
-          sheep_target = sheep_target - available_fallow_per_animal;
+          sheep_target = sheep_target - (available_fallow_per_animal + extra_fallow);
+          if (sheep_target < 0)
+          {
+            extra_fallow = (sheep_target * (-1.));
+            sheep_target = 0;
+          }
         }
       }
     }
@@ -515,7 +369,12 @@ pre-requisites for loop are:
       {
         if (goatgrazefallow->isChecked())
         {
-          goat_target = goat_target - available_fallow_per_animal;
+          goat_target = goat_target - (available_fallow_per_animal + extra_fallow);
+          if (goat_target < 0)
+          {
+            extra_fallow = (goat_target * (-1.));
+            goat_target = 0;
+          }
         }
       }
     }
@@ -526,7 +385,12 @@ pre-requisites for loop are:
       {
         if (piggrazefallow->isChecked())
         {
-          pig_target = pig_target - available_fallow_per_animal;
+          pig_target = pig_target - (available_fallow_per_animal + extra_fallow);
+          if (pig_target < 0)
+          {
+            extra_fallow = (pig_target * (-1.));
+            pig_target = 0;
+          }
         }
       }
     }
@@ -537,49 +401,55 @@ pre-requisites for loop are:
       {
         if (cowgrazefallow->isChecked())
         {
-          cow_target = cow_target - available_fallow_per_animal;
+          cow_target = cow_target - (available_fallow_per_animal + extra_fallow);
+          if (cow_target < 0)
+          {
+            extra_fallow = (cow_target * (-1.));
+            cow_target = 0;
+          }
         }
       }
     }
 
+/*
     if (chicken->isChecked())
     {
       if (chickenraster->isChecked())
       {
         if (chickengrazefallow->isChecked())
         {
-          chicken_target = chicken_target - available_fallow_per_animal;
+          chicken_target = chicken_target - (available_fallow_per_animal + extra_fallow);
+          if (chicken_target < 0)
+          {
+            extra_fallow = (chicken_target * (-1.));
+            chicken_target = 0;
+          }
         }
       }
     }
+*/
 
-float total_required_area = crop_target + animal_target + wheat_target + barley_target
-      + lentil_target + olive_target + grape_target + sheep_target + goat_target
-      + pig_target + cow_target + chicken;
-int increment = precision->value();
-bool solution=false;
-int radius=sqrt(total_required_area/3.14); // minimum size possible
+  float total_required_area = crop_target + animal_target + wheat_target + barley_target
+        + lentil_target + olive_target + grape_target + sheep_target + goat_target
+        + pig_target + cow_target;
+  int increment = precision->value();
+  bool solution=false;
+  int radius; // =sqrt(total_required_area/3.14); // minimum size possible
 
-while (solution==false)
-{
-  // create the temp_cost_surface raster, with all values > radius set to void
-  //  make all temp rasters originalraster_temp maybe?
-  // multiply each suitability layer by the temp_cost_surface
-  // check each resultant new raster to see if target has been met. if so, solution=true
-  radius = radius + increment;
-  //query each
-}
-
-
-
-
-
-
-}
-
+/*
+  while (solution==false)
+  {
+    // create the temp_cost_surface raster, with all values > radius set to void
+    //  make all temp rasters originalraster_temp maybe?
+    // multiply each suitability layer by the temp_cost_surface
+    // check each resultant new raster to see if target has been met. if so, solution=true
+    radius = radius + increment;
+    //query each
+  }
 */
 
 }
+
   else if (walking->isChecked() )
   {
     writeMessage("Walking Distance is checked");
@@ -590,8 +460,6 @@ while (solution==false)
     //  further away than that is going to be dubious anyway.  And, instead of starting
     //  on the 'inside' we start on the outside, and work in.  Binary search again, I
     //  think, would be fastest.
-
-
   }
   else if (pathdistance->isChecked() )
   {
