@@ -69,10 +69,10 @@ void LaMainForm::writeSettings()
 
 void LaMainForm::on_wheatview_clicked()
 {
-  int pdp = (100-(dietslider->value()));     // OVERALL PLANT PERCENTAGE
-  int ptp = plantslider->value();       // TAME PLANT percentage
-  int wp = wheat_percent->value();     // PERCENTAGE OF WHEAT in plant portion of diet
-  int wy = wheat_yield->value();      // expected average WHEAT YIELD
+  int myOverallPercentage = (100-(dietslider->value()));     // OVERALL PLANT PERCENTAGE
+  int myTamePlantPercentage = plantslider->value();       // TAME PLANT percentage
+  int myWheatPercentage = wheat_percent->value();     // PERCENTAGE OF WHEAT in plant portion of diet
+  int myWheatYield = wheat_yield->value();      // expected average WHEAT YIELD
   int wcal = wheatcals->value();      // FALLOW RATIO for WHEAT
   float wfr = wheat_fallow_ratio->value();  // 
   int cal = dailycalories->value();
@@ -82,8 +82,8 @@ void LaMainForm::on_wheatview_clicked()
   float wa;  // wheat area 
   float wfa;  // wheat fallow area
   float wta;  // wheat total area
-  wa = ((((((((pdp*ptp)/100.)*(wp/100.))*cal*365.)/wcal)*popn)/wy)*1000.);
-  wfa = ((((((((pdp*ptp)/100.)*(wp/100.))*cal*365.)/wcal)*popn)/wy)*1000.)*(wfr);
+  wa = ((((((((myOverallPercentage*myTamePlantPercentage)/100.)*(myWheatPercentage/100.))*cal*365.)/wcal)*popn)/myWheatYield)*1000.);
+  wfa = ((((((((myOverallPercentage*myTamePlantPercentage)/100.)*(myWheatPercentage/100.))*cal*365.)/wcal)*popn)/myWheatYield)*1000.)*(wfr);
   wta = wa + wfa;
   writeMessage("Wheat area: " + QString::number(wa).toLocal8Bit());
   writeMessage("Wheat fallow area: " + QString::number(wfa).toLocal8Bit());
@@ -92,8 +92,8 @@ void LaMainForm::on_wheatview_clicked()
 
 void LaMainForm::on_barleyview_clicked() 
 {
-  int pdp = (100-(dietslider->value()));     // OVERALL PLANT PERCENTAGE
-  int ptp = plantslider->value();       // TAME PLANT percentage
+  int myOverallPercentage = (100-(dietslider->value()));     // OVERALL PLANT PERCENTAGE
+  int myTamePlantPercentage = plantslider->value();       // TAME PLANT percentage
   int bp = barley_percent->value();     // PERCENTAGE OF BARLEY in plant portion of diet
   int by = barley_yield->value();      // expected average BARLEY YIELD
   int bcal = barleycals->value();      // FALLOW RATIO for BARLEY
@@ -105,8 +105,8 @@ void LaMainForm::on_barleyview_clicked()
   float ba;  // barley area 
   float bfa;  // barley fallow area
   float bta;  // barley total area
-  ba = ((((((((pdp*ptp)/100.)*(bp/100.))*cal*365.)/bcal)*popn)/by)*1000.);
-  bfa = ((((((((pdp*ptp)/100.)*(bp/100.))*cal*365.)/bcal)*popn)/by)*1000.)*(bfr);
+  ba = ((((((((myOverallPercentage*myTamePlantPercentage)/100.)*(bp/100.))*cal*365.)/bcal)*popn)/by)*1000.);
+  bfa = ((((((((myOverallPercentage*myTamePlantPercentage)/100.)*(bp/100.))*cal*365.)/bcal)*popn)/by)*1000.)*(bfr);
   bta = ba + bfa;
   writeMessage("Barley area: " + QString::number(ba).toLocal8Bit());
   writeMessage("Barley fallow area: " + QString::number(bfa).toLocal8Bit());
@@ -115,8 +115,8 @@ void LaMainForm::on_barleyview_clicked()
 
 void LaMainForm::on_lentilview_clicked() 
 {
-  int pdp = (100-(dietslider->value()));     // OVERALL PLANT PERCENTAGE
-  int ptp = plantslider->value();       // TAME PLANT percentage
+  int myOverallPercentage = (100-(dietslider->value()));     // OVERALL PLANT PERCENTAGE
+  int myTamePlantPercentage = plantslider->value();       // TAME PLANT percentage
   int lp = lentil_percent->value();     // PERCENTAGE OF LENTIL in plant portion of diet
   int ly = lentil_yield->value();      // expected average LENTIL YIELD
   int lcal = lentilcals->value();      // FALLOW RATIO for LENTIL
@@ -128,8 +128,8 @@ void LaMainForm::on_lentilview_clicked()
   float la;  // wheat area 
   float lfa;  // wheat fallow area
   float lta;  // wheat total area
-  la = ((((((((pdp*ptp)/100.)*(lp/100.))*cal*365.)/lcal)*popn)/ly)*1000.);
-  lfa = ((((((((pdp*ptp)/100.)*(lp/100.))*cal*365.)/lcal)*popn)/ly)*1000.)*(lfr);
+  la = ((((((((myOverallPercentage*myTamePlantPercentage)/100.)*(lp/100.))*cal*365.)/lcal)*popn)/ly)*1000.);
+  lfa = ((((((((myOverallPercentage*myTamePlantPercentage)/100.)*(lp/100.))*cal*365.)/lcal)*popn)/ly)*1000.)*(lfr);
   lta = la + lfa;
   writeMessage("Lentil area: " + QString::number(la).toLocal8Bit());
   writeMessage("Lentil fallow area: " + QString::number(lfa).toLocal8Bit());
@@ -138,8 +138,8 @@ void LaMainForm::on_lentilview_clicked()
 
 void LaMainForm::on_oliveview_clicked() 
 {
-  int pdp = (100-(dietslider->value()));     // OVERALL PLANT PERCENTAGE
-  int ptp = plantslider->value();       // TAME PLANT percentage
+  int myOverallPercentage = (100-(dietslider->value()));     // OVERALL PLANT PERCENTAGE
+  int myTamePlantPercentage = plantslider->value();       // TAME PLANT percentage
   int op = olive_percent->value();     // PERCENTAGE OF OLIVE in plant portion of diet
   int oy = olive_yield->value();      // expected average OLIVE YIELD
   int ocal = olivecals->value();      // FALLOW RATIO for OLIVE
@@ -151,8 +151,8 @@ void LaMainForm::on_oliveview_clicked()
   float oa;  // olive area 
   float ofa;  // olive fallow area
   float ota;  // olive total area
-  oa = ((((((((pdp*ptp)/100.)*(op/100.))*cal*365.)/ocal)*popn)/oy)*1000.);
-  ofa = ((((((((pdp*ptp)/100.)*(op/100.))*cal*365.)/ocal)*popn)/oy)*1000.)*(ofr);
+  oa = ((((((((myOverallPercentage*myTamePlantPercentage)/100.)*(op/100.))*cal*365.)/ocal)*popn)/oy)*1000.);
+  ofa = ((((((((myOverallPercentage*myTamePlantPercentage)/100.)*(op/100.))*cal*365.)/ocal)*popn)/oy)*1000.)*(ofr);
   ota = oa + ofa;
   writeMessage("olive area: " + QString::number(oa).toLocal8Bit());
   writeMessage("olive fallow area: " + QString::number(ofa).toLocal8Bit());
@@ -161,9 +161,9 @@ void LaMainForm::on_oliveview_clicked()
 
 void LaMainForm::on_grapeview_clicked() 
 {
-  int pdp = (100-(dietslider->value()));     // OVERALL PLANT PERCENTAGE
-  int ptp = plantslider->value();       // TAME PLANT percentage
-  int gp = grape_percent->value();     // PERCENTAGE OF GRAPE in plant portion of diet
+  int myOverallPercentage = (100-(dietslider->value()));     // OVERALL PLANT PERCENTAGE
+  int myTamePlantPercentage = plantslider->value();       // TAME PLANT percentage
+  int myGrapePercent = grape_percent->value();     // PERCENTAGE OF GRAPE in plant portion of diet
   int gy = grape_yield->value();      // expected average GRAPE YIELD
   int gcal = grapecals->value();      // FALLOW RATIO for GRAPE
   float gfr = grape_fallow_ratio->value();  // 
@@ -174,8 +174,8 @@ void LaMainForm::on_grapeview_clicked()
   float ga;  // grape area 
   float gfa;  // grape fallow area
   float gta;  // grape total area
-  ga = ((((((((pdp*ptp)/100.)*(gp/100.))*cal*365.)/gcal)*popn)/gy)*1000.);
-  gfa = ((((((((pdp*ptp)/100.)*(gp/100.))*cal*365.)/gcal)*popn)/gy)*1000.)*(gfr);
+  ga = ((((((((myOverallPercentage*myTamePlantPercentage)/100.)*(myGrapePercent/100.))*cal*365.)/gcal)*popn)/gy)*1000.);
+  gfa = ((((((((myOverallPercentage*myTamePlantPercentage)/100.)*(myGrapePercent/100.))*cal*365.)/gcal)*popn)/gy)*1000.)*(gfr);
   gta = ga + gfa;
   writeMessage("grape area: " + QString::number(ga).toLocal8Bit());
   writeMessage("grape fallow area: " + QString::number(gfa).toLocal8Bit());
@@ -186,7 +186,7 @@ void LaMainForm::on_pigview_clicked()
 {
   int mdp = dietslider->value(); //grab value from slider for overall meat percentage
   int mtp = (100 - (meatslider->value())); //grab value from slider for tame meat percentage
-  int pp = pigpercent->value(); //grab value from form for percentage of pigmeat of meat portion of diet
+  int pp = pimyGrapePercentercent->value(); //grab value from form for percentage of pigmeat of meat portion of diet
   int pls = piglittersize->value(); //grab value from form for pig litter size
   int pw = pigweight->value(); //grab value from form for for pig kill weight
   int pgt = piggrowtime->value(); //grab value from form for pig grow time
@@ -205,8 +205,8 @@ void LaMainForm::on_pigview_clicked()
   float lsows = ((sows*177.20)/249.70);
   float spigs = (((355.10/41.60)/10.)*pls*lsows);
   float npigs = ((((sows*420.10)/249.70)/10.)*pls);
-  float gpigs = ((((sows*1414.70)/249.70)/10.)*pls);
-  float total = (sows+spigs+npigs+gpigs);
+  float myGrapePercentigs = ((((sows*1414.70)/249.70)/10.)*pls);
+  float total = (sows+spigs+npigs+myGrapePercentigs);
   writeMessage("fodder flag value: " + QString::number(pfflag).toLocal8Bit());
   writeMessage("You supplied me with this information:");
   writeMessage("Population of Settlement: " + QString::number(popn).toLocal8Bit());
@@ -225,7 +225,7 @@ void LaMainForm::on_pigview_clicked()
   writeMessage("Total Adult Females: " + QString::number(sows).toLocal8Bit());
   writeMessage("Suckling Pigs: " + QString::number(spigs).toLocal8Bit());
   writeMessage("Nursery Pigs: " + QString::number(npigs).toLocal8Bit());
-  writeMessage("Growing and finishing pigs: " + QString::number(gpigs).toLocal8Bit());
+  writeMessage("Growing and finishing pigs: " + QString::number(myGrapePercentigs).toLocal8Bit());
   writeMessage("Total pigs: " + QString::number(total).toLocal8Bit());
 }
 
@@ -241,98 +241,100 @@ void LaMainForm::on_run_button_clicked()
     // the table, or pop up a report window
     // as an alternative
   }
-
   else if (euclidean->isChecked() )
   {
-  // create animalcost raster (cost surface)
-  // for euclidean, distance from point (the coordinates of the site)
-  // for walk time, r.walk with 18000 seconds as max cost
-  // for path dist, use _______ with 15km as max cost
-  // (this is done with grass.)
-      
-      writeMessage("Euclidean is checked.");
+    // create animalcost raster (cost surface)
+    // for euclidean, distance from point (the coordinates of the site)
+    // for walk time, r.walk with 18000 seconds as max cost
+    // for path dist, use _______ with 15km as max cost
+    // (this is done with grass.)
 
-  //  determine how many animals use fallow,
-  //  how many use unique rasters, and
-  //  set targets to 0 if not using unique raster after
-  //  adding to common target.
+    writeMessage("Euclidean is checked.");
 
-  int numberofanimals = 0;
-  int common_animal_target = 0;
-  int animals_grazing_fallow_and_using_common_animal_raster = 0;
-  float sheep_target, goat_target, pig_target, cow_target, chicken_target,
-        animal_target, crop_target, wheat_target, barley_target, lentil_target,
-        olive_target, grape_target, stdfallowtotalarea; // these will be passed here from base calculations
+    //  determine how many animals use fallow,
+    //  how many use unique rasters, and
+    //  set targets to 0 if not using unique raster after
+    //  adding to common target.
 
-  if (sheep->isChecked())
-  {
-    if (sheepgrazefallow->isChecked())    numberofanimals++;
-    if (!sheepraster->isChecked())
+    int myAnimalCount = 0;
+    int myCommonAnimalTarget = 0;
+    int animals_grazing_fallow_and_using_common_animal_raster = 0;
+    float mySheepTarget, myGoatTarget, pig_target, cow_target, chicken_target,
+    myAnimalTarget, myCropTarget, myWheatTarget, myBarleyTarget, myLentilTarget,
+    myOliveTarget, myGrapeTarget, stdfallowtotalarea; // these will be passed here from base calculations
+
+    if (sheep->isChecked())
     {
-      common_animal_target=common_animal_target+sheep_target;
-      sheep_target=0;
-      animals_grazing_fallow_and_using_common_animal_raster++;
-    }
-  }
-
-  if (goat->isChecked())
-  {
-    if (goatgrazefallow->isChecked())     numberofanimals++;
-    if (!goatraster->isChecked())
+      if (sheepgrazefallow->isChecked())
       {
-      common_animal_target=common_animal_target+goat_target;
-      goat_target=0;
-      animals_grazing_fallow_and_using_common_animal_raster++;
+        myAnimalCount++;
+      }
+      if (!sheepraster->isChecked())
+      {
+        myCommonAnimalTarget=myCommonAnimalTarget+mySheepTarget;
+        mySheepTarget=0;
+        animals_grazing_fallow_and_using_common_animal_raster++;
+      }
     }
-  }
 
-  if (pig->isChecked())
-  {
-    if (piggrazefallow->isChecked())      numberofanimals++;
-    if (!pigraster->isChecked())
+    if (goat->isChecked())
     {
-      common_animal_target=common_animal_target+pig_target;
-      pig_target=0;
-      animals_grazing_fallow_and_using_common_animal_raster++;
+      if (goatgrazefallow->isChecked())     myAnimalCount++;
+      if (!goatraster->isChecked())
+      {
+        myCommonAnimalTarget=myCommonAnimalTarget+myGoatTarget;
+        myGoatTarget=0;
+        animals_grazing_fallow_and_using_common_animal_raster++;
+      }
     }
-  }
 
-  if (cow->isChecked())
-  {
-    if (cowgrazefallow->isChecked())      numberofanimals++;
-    if (!cowraster->isChecked())
+    if (pig->isChecked())
     {
-      common_animal_target=common_animal_target+cow_target;
-      cow_target=0;
-      animals_grazing_fallow_and_using_common_animal_raster++;
+      if (piggrazefallow->isChecked())      myAnimalCount++;
+      if (!pigraster->isChecked())
+      {
+        myCommonAnimalTarget=myCommonAnimalTarget+pig_target;
+        pig_target=0;
+        animals_grazing_fallow_and_using_common_animal_raster++;
+      }
     }
-  }
-/*
-  if (chicken->isChecked())
-  {
-    if (chickengrazefallow->isChecked())  numberofanimals++;
-    if (!chickenraster->isChecked())
+
+    if (cow->isChecked())
     {
-      common_animal_target=common_animal_target+chicken_target;
-      chicken_target=0;
-      animals_grazing_fallow_and_using_common_animal_raster++;
+      if (cowgrazefallow->isChecked())      myAnimalCount++;
+      if (!cowraster->isChecked())
+      {
+        myCommonAnimalTarget=myCommonAnimalTarget+cow_target;
+        cow_target=0;
+        animals_grazing_fallow_and_using_common_animal_raster++;
+      }
     }
-  }
-*/
+    /*
+       if (chicken->isChecked())
+       {
+       if (chickengrazefallow->isChecked())  myAnimalCount++;
+       if (!chickenraster->isChecked())
+       {
+       myCommonAnimalTarget=myCommonAnimalTarget+chicken_target;
+       chicken_target=0;
+       animals_grazing_fallow_and_using_common_animal_raster++;
+       }
+       }
+       */
 
     float available_fallow_per_animal = (stdfallowtotalarea) / (animals_grazing_fallow_and_using_common_animal_raster);
     float extra_fallow=0.;
 
-  // in the following, we determine the target areas for each animal
-  // as well as create the cost surfaces for each as required
+    // in the following, we determine the target areas for each animal
+    // as well as create the cost surfaces for each as required
 
     if (animals_grazing_fallow_and_using_common_animal_raster > 0)
     {
-      common_animal_target = common_animal_target - (animals_grazing_fallow_and_using_common_animal_raster *  available_fallow_per_animal);
-      if (common_animal_target < 0)
+      myCommonAnimalTarget = myCommonAnimalTarget - (animals_grazing_fallow_and_using_common_animal_raster *  available_fallow_per_animal);
+      if (myCommonAnimalTarget < 0)
       {
-        extra_fallow = (common_animal_target * (-1.));
-        common_animal_target = 0;
+        extra_fallow = (myCommonAnimalTarget * (-1.));
+        myCommonAnimalTarget = 0;
       }
       //create animalcost raster (cost surface)
       // for euclidean, distance from point (the coordinates of the site)
@@ -341,11 +343,11 @@ void LaMainForm::on_run_button_clicked()
     }
     else
     {
-      common_animal_target=0;
+      myCommonAnimalTarget=0;
     }
 
-// note.  this can all be replaced with if (foo_target > 0) foo_target=foo_target - available_fallow_per_animal;
-//        I did like this to show logic more clearly (???)
+    // note.  this can all be replaced with if (foo_target > 0) foo_target=foo_target - available_fallow_per_animal;
+    //        I did like this to show logic more clearly (???)
 
     if (sheep->isChecked())
     {
@@ -353,11 +355,11 @@ void LaMainForm::on_run_button_clicked()
       {
         if (sheepgrazefallow->isChecked())
         {
-          sheep_target = sheep_target - (available_fallow_per_animal + extra_fallow);
-          if (sheep_target < 0)
+          mySheepTarget = mySheepTarget - (available_fallow_per_animal + extra_fallow);
+          if (mySheepTarget < 0)
           {
-            extra_fallow = (sheep_target * (-1.));
-            sheep_target = 0;
+            extra_fallow = (mySheepTarget * (-1.));
+            mySheepTarget = 0;
           }
         }
       }
@@ -369,11 +371,11 @@ void LaMainForm::on_run_button_clicked()
       {
         if (goatgrazefallow->isChecked())
         {
-          goat_target = goat_target - (available_fallow_per_animal + extra_fallow);
-          if (goat_target < 0)
+          myGoatTarget = myGoatTarget - (available_fallow_per_animal + extra_fallow);
+          if (myGoatTarget < 0)
           {
-            extra_fallow = (goat_target * (-1.));
-            goat_target = 0;
+            extra_fallow = (myGoatTarget * (-1.));
+            myGoatTarget = 0;
           }
         }
       }
@@ -411,44 +413,44 @@ void LaMainForm::on_run_button_clicked()
       }
     }
 
-/*
-    if (chicken->isChecked())
-    {
-      if (chickenraster->isChecked())
-      {
-        if (chickengrazefallow->isChecked())
-        {
-          chicken_target = chicken_target - (available_fallow_per_animal + extra_fallow);
-          if (chicken_target < 0)
-          {
-            extra_fallow = (chicken_target * (-1.));
-            chicken_target = 0;
-          }
-        }
-      }
-    }
-*/
+    /*
+       if (chicken->isChecked())
+       {
+       if (chickenraster->isChecked())
+       {
+       if (chickengrazefallow->isChecked())
+       {
+       chicken_target = chicken_target - (available_fallow_per_animal + extra_fallow);
+       if (chicken_target < 0)
+       {
+       extra_fallow = (chicken_target * (-1.));
+       chicken_target = 0;
+       }
+       }
+       }
+       }
+       */
 
-  float total_required_area = crop_target + animal_target + wheat_target + barley_target
-        + lentil_target + olive_target + grape_target + sheep_target + goat_target
-        + pig_target + cow_target;
-  int increment = precision->value();
-  bool solution=false;
-  int radius; // =sqrt(total_required_area/3.14); // minimum size possible
+    float myTotalAreaRequired = myCropTarget + myAnimalTarget + myWheatTarget + myBarleyTarget
+      + myLentilTarget + myOliveTarget + myGrapeTarget + mySheepTarget + myGoatTarget
+      + pig_target + cow_target;
+    int increment = precision->value();
+    bool solution=false;
+    int myRadius; // =sqrt(myTotalAreaRequired/3.14); // minimum size possible
 
-/*
-  while (solution==false)
-  {
+    /*
+       while (solution==false)
+       {
     // create the temp_cost_surface raster, with all values > radius set to void
     //  make all temp rasters originalraster_temp maybe?
     // multiply each suitability layer by the temp_cost_surface
     // check each resultant new raster to see if target has been met. if so, solution=true
-    radius = radius + increment;
+    myRadius = myRadius + increment;
     //query each
-  }
-*/
+    }
+    */
 
-}
+  }
 
   else if (walking->isChecked() )
   {
@@ -515,26 +517,26 @@ void LaMainForm::helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetI
 
 void LaMainForm::on_diet_breakdown_button_clicked() 
 {
-  int pdp = (100-(dietslider->value()));     // OVERALL PLANT PERCENTAGE
-  int ptp = plantslider->value();       // TAME PLANT percentage
+  int myOverallPercentage = (100-(dietslider->value()));     // OVERALL PLANT PERCENTAGE
+  int myTamePlantPercentage = plantslider->value();       // TAME PLANT percentage
   int pdm = dietslider->value();
   int ptm = meatslider->value();
   int cal = dailycalories->value();
   int popn = population->value();
 
   float totalcals = popn*cal*365.;
-  float plantcals = (pdp/100.)*totalcals;
-  float tameplantcals = ((pdp/100.)*(ptp/100.))*totalcals;
+  float plantcals = (myOverallPercentage/100.)*totalcals;
+  float tameplantcals = ((myOverallPercentage/100.)*(myTamePlantPercentage/100.))*totalcals;
   float animalcals = (pdm/100.)*totalcals;
   float tameanimalcals = ((pdm/100.)*(ptm/100.))*totalcals;
 
   writeDiet("Calories per person per year: " + QString::number((cal*365.)/1000.).toLocal8Bit() + "kcal");
   writeDiet("Calories required for population are: " + QString::number(totalcals/1000.).toLocal8Bit() + "kcal");
   writeDiet(" ");
-  writeDiet("Plants contribute " + QString::number(pdp).toLocal8Bit() + "% to diet, or " + QString::number(plantcals/1000.).toLocal8Bit() + " kcal");
+  writeDiet("Plants contribute " + QString::number(myOverallPercentage).toLocal8Bit() + "% to diet, or " + QString::number(plantcals/1000.).toLocal8Bit() + " kcal");
   writeDiet("Meat contributes " + QString::number(pdm).toLocal8Bit() + "% to diet, or  " + QString::number(animalcals/1000.).toLocal8Bit() + " kcal");
   writeDiet(" ");
-  writeDiet("Tame Plants account for " + QString::number((pdp/100.)*(ptp/100.)*100.).toLocal8Bit() + "% of the diet, or " + QString::number(plantcals/1000.).toLocal8Bit() + " kcal");
+  writeDiet("Tame Plants account for " + QString::number((myOverallPercentage/100.)*(myTamePlantPercentage/100.)*100.).toLocal8Bit() + "% of the diet, or " + QString::number(plantcals/1000.).toLocal8Bit() + " kcal");
   writeDiet("Tame Animals account for " + QString::number((pdm/100.)*(ptm/100.)*100.).toLocal8Bit() + "% of the diet, or " + QString::number(animalcals/1000.).toLocal8Bit() + " kcal");
 }
 
@@ -649,8 +651,8 @@ void LaMainForm::makeCircle(int theX, int theY)
 
 void LaMainForm::doBaseCalculations()
 {
-  int pdp = (100-(dietslider->value()));     // OVERALL PLANT PERCENTAGE
-  int ptp = plantslider->value();       // TAME PLANT percentage
+  int myOverallPercentage = (100-(dietslider->value()));     // OVERALL PLANT PERCENTAGE
+  int myTamePlantPercentage = plantslider->value();       // TAME PLANT percentage
   int cal = dailycalories->value();
   int popn = population->value();
   float wfa;    // WHEAT fallow area
@@ -670,8 +672,8 @@ void LaMainForm::doBaseCalculations()
   float wheatcaltot, barleycaltot, lentilcaltot, olivecaltot, grapecaltot;
 
   float totalcals = popn*cal*365.;
-  float plantcals = (pdp/100.)*popn*cal*365.;
-  float tameplantcals = ((pdp/100.)*(ptp/100.))*popn*cal*365.;
+  float plantcals = (myOverallPercentage/100.)*popn*cal*365.;
+  float tameplantcals = ((myOverallPercentage/100.)*(myTamePlantPercentage/100.))*popn*cal*365.;
   if (wheat->isChecked() ) 
   {
     int wp = wheat_percent->value();     // PERCENTAGE OF WHEAT in plant portion of diet
@@ -688,7 +690,7 @@ void LaMainForm::doBaseCalculations()
     writeMessage("Wheat fallow area: " + QString::number(wfa).toLocal8Bit());
     writeMessage("Wheat total area: " + QString::number(wta).toLocal8Bit());
 
-    writePlantCellValue(1,0,QString::number((pdp/100.)*(ptp/100.)*(wp/100.)*100.));
+    writePlantCellValue(1,0,QString::number((myOverallPercentage/100.)*(myTamePlantPercentage/100.)*(wp/100.)*100.));
     writePlantCellValue(1,1,QString::number(wheatkg));
     writePlantCellValue(1,2,QString::number(wheatcaltot/1000.));
     writePlantCellValue(1,3,QString::number(wa));
@@ -718,7 +720,7 @@ void LaMainForm::doBaseCalculations()
     writeMessage("Barley fallow area: " + QString::number(bfa).toLocal8Bit());
     writeMessage("Barley total area: " + QString::number(bta).toLocal8Bit());
 
-    writePlantCellValue(2,0,QString::number((pdp/100.)*(ptp/100.)*(bp/100.)*100.));
+    writePlantCellValue(2,0,QString::number((myOverallPercentage/100.)*(myTamePlantPercentage/100.)*(bp/100.)*100.));
     writePlantCellValue(2,1,QString::number(barleykg));
     writePlantCellValue(2,2,QString::number(barleycaltot/1000.));
     writePlantCellValue(2,3,QString::number(ba));
@@ -748,7 +750,7 @@ void LaMainForm::doBaseCalculations()
     writeMessage("Lentil fallow area: " + QString::number(lfa).toLocal8Bit());
     writeMessage("Lentil total area: " + QString::number(lta).toLocal8Bit());
 
-    writePlantCellValue(3,0,QString::number((pdp/100.)*(ptp/100.)*(lp/100.)*100.));
+    writePlantCellValue(3,0,QString::number((myOverallPercentage/100.)*(myTamePlantPercentage/100.)*(lp/100.)*100.));
     writePlantCellValue(3,1,QString::number(lentilkg));
     writePlantCellValue(3,2,QString::number(lentilcaltot/1000.));
     writePlantCellValue(3,3,QString::number(la));
@@ -778,7 +780,7 @@ void LaMainForm::doBaseCalculations()
     writeMessage("olive fallow area: " + QString::number(ofa).toLocal8Bit());
     writeMessage("olive total area: " + QString::number(ota).toLocal8Bit());
 
-    writePlantCellValue(4,0,QString::number((pdp/100.)*(ptp/100.)*(op/100.)*100.));
+    writePlantCellValue(4,0,QString::number((myOverallPercentage/100.)*(myTamePlantPercentage/100.)*(op/100.)*100.));
     writePlantCellValue(4,1,QString::number(olivekg));
     writePlantCellValue(4,2,QString::number(olivecaltot/1000.));
     writePlantCellValue(4,3,QString::number(oa));
@@ -794,12 +796,12 @@ void LaMainForm::doBaseCalculations()
 
   if (grapes->isChecked() )
   {
-    int gp = grape_percent->value();     // PERCENTAGE OF GRAPE in plant portion of diet
+    int myGrapePercent = grape_percent->value();     // PERCENTAGE OF GRAPE in plant portion of diet
     int gy = grape_yield->value();      // expected average GRAPE YIELD
     int gcal = grapecals->value();      // FALLOW RATIO for GRAPE
     float gfr = grape_fallow_ratio->value();  // calories in 1 kg of GRAPES
     float ga;          // grape area 
-    grapecaltot = tameplantcals*(gp/100.);
+    grapecaltot = tameplantcals*(myGrapePercent/100.);
     grapekg = grapecaltot/gcal;
     ga = (((grapekg)/gy)*1000.)/10000.;
     gfa = ga * gfr;
@@ -808,7 +810,7 @@ void LaMainForm::doBaseCalculations()
     writeMessage("grape fallow area: " + QString::number(gfa).toLocal8Bit());
     writeMessage("grape total area: " + QString::number(gta).toLocal8Bit());
 
-    writePlantCellValue(5,0,QString::number((pdp/100.)*(ptp/100.)*(gp/100.)*100.));
+    writePlantCellValue(5,0,QString::number((myOverallPercentage/100.)*(myTamePlantPercentage/100.)*(myGrapePercent/100.)*100.));
     writePlantCellValue(5,1,QString::number(grapekg));
     writePlantCellValue(5,2,QString::number(grapecaltot/1000.));
     writePlantCellValue(5,3,QString::number(ga));
@@ -826,7 +828,7 @@ void LaMainForm::doBaseCalculations()
   {
     writeMessage("sheep is checked.");
     /* fill table
-       writePlantCellValue(7,0,QString::number((pdp/100.)*(ptp/100.)*(wp/100.)*100.));
+       writePlantCellValue(7,0,QString::number((myOverallPercentage/100.)*(myTamePlantPercentage/100.)*(wp/100.)*100.));
        writePlantCellValue(7,1,QString::number(wheatkg));
        writePlantCellValue(7,2,QString::number(wheatcaltot/1000.));
        writePlantCellValue(7,4,QString::number(wa));
@@ -843,7 +845,7 @@ void LaMainForm::doBaseCalculations()
   {
     writeMessage("goat is checked.");
     /* fill table
-       writePlantCellValue(8,0,QString::number((pdp/100.)*(ptp/100.)*(bp/100.)*100.));
+       writePlantCellValue(8,0,QString::number((myOverallPercentage/100.)*(myTamePlantPercentage/100.)*(bp/100.)*100.));
        writePlantCellValue(8,1,QString::number(barleykg));
        writePlantCellValue(8,2,QString::number(barleycaltot/1000.));
        writePlantCellValue(8,4,QString::number(ba));
@@ -860,7 +862,7 @@ void LaMainForm::doBaseCalculations()
   {
     writeMessage("pig is checked.");
     /* fill table
-       writePlantCellValue(9,0,QString::number((pdp/100.)*(ptp/100.)*(lp/100.)*100.));
+       writePlantCellValue(9,0,QString::number((myOverallPercentage/100.)*(myTamePlantPercentage/100.)*(lp/100.)*100.));
        writePlantCellValue(9,1,QString::number(lentilkg));
        writePlantCellValue(9,2,QString::number(lentilcaltot/1000.));
        writePlantCellValue(9,4,QString::number(la));
@@ -877,7 +879,7 @@ void LaMainForm::doBaseCalculations()
   {
     writeMessage("cow is checked.");
     /* fill table
-       writePlantCellValue(10,0,QString::number((pdp/100.)*(ptp/100.)*(op/100.)*100.));
+       writePlantCellValue(10,0,QString::number((myOverallPercentage/100.)*(myTamePlantPercentage/100.)*(op/100.)*100.));
        writePlantCellValue(10,1,QString::number(olivekg));
        writePlantCellValue(10,2,QString::number(olivecaltot/1000.));
        writePlantCellValue(10,4,QString::number(oa));
@@ -894,7 +896,7 @@ void LaMainForm::doBaseCalculations()
   {
     writeMessage("chicken is checked.");
     /* fill table
-       writePlantCellValue(11,0,QString::number((pdp/100.)*(ptp/100.)*(gp/100.)*100.));
+       writePlantCellValue(11,0,QString::number((myOverallPercentage/100.)*(myTamePlantPercentage/100.)*(myGrapePercent/100.)*100.));
        writePlantCellValue(11,1,QString::number(grapekg));
        writePlantCellValue(11,2,QString::number(grapecaltot/1000.));
        writePlantCellValue(11,4,QString::number(ga));
@@ -972,11 +974,11 @@ void LaMainForm::doBaseCalculations()
      area=0
      while [ ${area} -le ${land_reqrd_total} ]
      do #the magic loop
-       (( radius = ${radius} + 30)) # <---- model precision value used HERE!
-       r.circle -b output=circle coordinate=744800,3611100 max=${radius} --overwrite 
+       (( myRadius = ${myRadius} + 30)) # <---- model precision value used HERE!
+       r.circle -b output=circle coordinate=744800,3611100 max=${myRadius} --overwrite 
        g.remove rast=catchment
        r.mapcalc catchment="${src}"*circle
-       echo a catchment area with a radius of ${radius} meters contains
+       echo a catchment area with a myRadius of ${myRadius} meters contains
        area=`r.stats -an input=catchment | awk '{printf("%d\n", $2);}'`
        echo ${area} square meters of land and our target is 
        echo ${land_reqrd_total} square meters of land
