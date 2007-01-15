@@ -9,3 +9,6 @@ find_package(Qt4 REQUIRED) # find and setup Qt4 for this project
 #add_subdirectory(ui)
 add_subdirectory(gui)
 
+IF (APPLE)
+  add_subdirectory(mac)
+ENDIF(APPLE)
