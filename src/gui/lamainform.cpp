@@ -186,7 +186,7 @@ void LaMainForm::on_pigview_clicked()
 {
   int mdp = dietslider->value(); //grab value from slider for overall meat percentage
   int mtp = (100 - (meatslider->value())); //grab value from slider for tame meat percentage
-  int pp = pimyGrapePercentercent->value(); //grab value from form for percentage of pigmeat of meat portion of diet
+  int pp = pigpercent->value(); //grab value from form for percentage of pigmeat of meat portion of diet
   int pls = piglittersize->value(); //grab value from form for pig litter size
   int pw = pigweight->value(); //grab value from form for for pig kill weight
   int pgt = piggrowtime->value(); //grab value from form for pig grow time
