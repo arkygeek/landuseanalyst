@@ -185,15 +185,15 @@ void LaMainForm::on_grapeview_clicked()
 void LaMainForm::on_pigview_clicked() 
 {
   int mdp = dietslider->value(); //grab value from slider for overall meat percentage
-  int mtp = (100 - (meatslider->value())); //grab value from slider for tame meat percentage
+  int mtp = (meatslider->value()); //grab value from slider for tame meat percentage
   int pp = pigpercent->value(); //grab value from form for percentage of pigmeat of meat portion of diet
   int pls = piglittersize->value(); //grab value from form for pig litter size
   int pw = pigweight->value(); //grab value from form for for pig kill weight
   int pgt = piggrowtime->value(); //grab value from form for pig grow time
   int myCalories = dailycalories->value();
   int myPopulation = population->value();
-  bool pfflag = pigfodderuse->isCheckable(); //grab value from form for fodder use flag
-  int pfa = pigfodderamount->value(); //grab value from form for amount of fodder
+  bool pfflag = pigfodderuse->isChecked(); //grab value from form for fodder use flag
+  //int pfa = pigfodderamount->value(); //grab value from form for amount of fodder
   //int pfc = pigfoddercrop->currentindex(); //grab value from form for type of fodder
   //int pft = pigfoddertime->currentindex(); //grab value from form for time measurement of fodder rate
   //int pgrflag = piggrazefallow->checked(); //grab value from form for fallow grazing flag
@@ -205,8 +205,9 @@ void LaMainForm::on_pigview_clicked()
   float myLactatingSows = ((mySows*177.20)/249.70);
   float mySucklingPigs = (((355.10/41.60)/10.)*pls*myLactatingSows);
   float myNursingPigs = ((((mySows*420.10)/249.70)/10.)*pls);
-  float myGrapePercentigs = ((((mySows*1414.70)/249.70)/10.)*pls);
-  float total = (mySows+mySucklingPigs+myNursingPigs+myGrapePercentigs);
+  // float myGrapePercentigs = ((((mySows*1414.70)/249.70)/10.)*pls);
+  float myGrowingPigs = ((((mySows*1414.70)/249.70)/10.)*pls);
+  float total = (mySows+mySucklingPigs+myNursingPigs+myGrowingPigs);
   writeMessage("fodder flag value: " + QString::number(pfflag).toLocal8Bit());
   writeMessage("You supplied me with this information:");
   writeMessage("Population of Settlement: " + QString::number(myPopulation).toLocal8Bit());
@@ -216,7 +217,7 @@ void LaMainForm::on_pigview_clicked()
   writeMessage("Percentage of DOMESTICATED MEAT that is from PIGS: " + QString::number(pp).toLocal8Bit());
   writeMessage("Calories per kg in PIG MEAT: 3000 assumed");
   writeMessage("Average Litter Size: " + QString::number(pls).toLocal8Bit());
-  writeMessage("kg of meat per year: " + QString::number(meat).toLocal8Bit());
+  writeMessage("kg of meat per year: " + QString::number(meat/2.).toLocal8Bit());
   writeMessage("Number of 100kg pigs: " + QString::number(animals).toLocal8Bit());
   writeMessage("mySows required to produce this much meat: " + QString::number(mySows).toLocal8Bit());
   writeMessage("Non-Pregnant sows and gilts: " + QString::number(myDrySows).toLocal8Bit());
@@ -225,7 +226,8 @@ void LaMainForm::on_pigview_clicked()
   writeMessage("Total Adult Females: " + QString::number(mySows).toLocal8Bit());
   writeMessage("Suckling Pigs: " + QString::number(mySucklingPigs).toLocal8Bit());
   writeMessage("Nursery Pigs: " + QString::number(myNursingPigs).toLocal8Bit());
-  writeMessage("Growing and finishing pigs: " + QString::number(myGrapePercentigs).toLocal8Bit());
+  //  writeMessage("Growing and finishing pigs: " + QString::number(myGrapePercentigs).toLocal8Bit());
+  writeMessage("Growing and finishing pigs: " + QString::number(myGrowingPigs).toLocal8Bit());
   writeMessage("Total pigs: " + QString::number(total).toLocal8Bit());
 }
 
@@ -655,9 +657,9 @@ void LaMainForm::doBaseCalculations()
     //do nothing
   }
 
-  if (chicken->isChecked() )
+  if (donkey->isChecked() )
   {
-    writeMessage("chicken is checked.");
+    writeMessage("donkey is checked.");
     /* fill table
        writePlantCellValue(11,0,QString::number((myOverallPercentage/100.)*(myTamePlantPercentage/100.)*(myGrapePercent/100.)*100.));
        writePlantCellValue(11,1,QString::number(myGrapeKilograms));
@@ -743,7 +745,7 @@ void LaMainForm::on_run_button_clicked()
     float myGoatTarget = 0;
     float myPigTarget = 0;
     float myCowTargetArea = 0;
-    float myChickenTarget = 0;
+    float myDonkeyTarget = 0;
     float myAnimalTarget = 0;
     float myCropTarget = 0;
     float myWheatTarget = 0;
@@ -800,13 +802,13 @@ void LaMainForm::on_run_button_clicked()
       }
     }
     /*
-       if (chicken->isChecked())
+       if (donkey->isChecked())
        {
-       if (chickengrazefallow->isChecked())  myAnimalCount++;
-       if (!chickenraster->isChecked())
+       if (donkeygrazefallow->isChecked())  myAnimalCount++;
+       if (!donkeyraster->isChecked())
        {
-       myCommonAnimalTarget=myCommonAnimalTarget+myChickenTarget;
-       myChickenTarget=0;
+       myCommonAnimalTarget=myCommonAnimalTarget+myDonkeyTarget;
+       myDonkeyTarget=0;
        myFallowGrazingAnimalsCount++;
        }
        }
@@ -904,17 +906,17 @@ void LaMainForm::on_run_button_clicked()
     }
 
     /*
-       if (chicken->isChecked())
+       if (donkey->isChecked())
        {
-       if (chickenraster->isChecked())
+       if (donkeyraster->isChecked())
        {
-       if (chickengrazefallow->isChecked())
+       if (donkeygrazefallow->isChecked())
        {
-       myChickenTarget = myChickenTarget - (myAnimalFallowQuota + extra_fallow);
-       if (myChickenTarget < 0)
+       myDonkeyTarget = myDonkeyTarget - (myAnimalFallowQuota + extra_fallow);
+       if (myDonkeyTarget < 0)
        {
-       extra_fallow = (myChickenTarget * (-1.));
-       myChickenTarget = 0;
+       extra_fallow = (myDonkeyTarget * (-1.));
+       myDonkeyTarget = 0;
        }
        }
        }
