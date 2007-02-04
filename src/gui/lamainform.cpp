@@ -801,7 +801,6 @@ void LaMainForm::on_run_button_clicked()
         myFallowGrazingAnimalsCount++;
       }
     }
-    /*
        if (donkey->isChecked())
        {
        if (donkeygrazefallow->isChecked())  myAnimalCount++;
@@ -812,7 +811,6 @@ void LaMainForm::on_run_button_clicked()
        myFallowGrazingAnimalsCount++;
        }
        }
-       */
 
     float myAnimalFallowQuota = (myStandardFallowAreaTotal) / (myFallowGrazingAnimalsCount);
     float extra_fallow = 0;
