@@ -26,7 +26,7 @@
    <item row="0" column="0" colspan="6" >
     <widget class="QTabWidget" name="MainTabs" >
      <property name="currentIndex" >
-      <number>3</number>
+      <number>5</number>
      </property>
      <widget class="QWidget" name="main_tab" >
       <attribute name="title" >
@@ -5985,10 +5985,10 @@ p, li { white-space: pre-wrap; }
          </row>
          <row>
           <property name="text" >
-           <string>Chickens</string>
+           <string>Donkeys</string>
           </property>
           <property name="icon" >
-           <iconset resource="../resources/resources.qrc" >:/chicken.png</iconset>
+           <iconset resource="../resources/resources.qrc" >:/emule_icon_emule.org_01.png</iconset>
           </property>
          </row>
          <column>
