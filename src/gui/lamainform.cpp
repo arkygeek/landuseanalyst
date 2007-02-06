@@ -648,7 +648,11 @@ void LaMainForm::on_run_button_clicked()
     float myGrapeTarget = 0;
     float myAvailableFallow = 0;
     float myEqualFallow = 0;
-    float mySheepLeftoverFallow = 0;
+    float mySheepLeftover = 0;
+    float myGoatLeftover = 0;
+    float myPigLeftover = 0;
+    float myCowLeftover = 0;
+    float myDonkeyLeftover = 0;
 
     if (sheep->isChecked())
     {
@@ -753,34 +757,9 @@ void LaMainForm::on_run_button_clicked()
       }
     }
 
-/*  This needs to happen *AFTER* adjusting animalTargets for fallow
 
-    myEqualFallow = (myAvailableFallow) / (myFallowGrazingAnimalsCount);
-
-    // in the following, we determine the target areas for each animal
-    // as well as create the cost surfaces for each as required
-
-    if (myFallowGrazingAnimalsCount > 0)
-    {
-      myCommonAnimalTarget = myCommonAnimalTarget - (myFallowGrazingAnimalsCount * myEqualFallow);
-      if (myCommonAnimalTarget < 0)
-      {
-        extra_fallow = (myCommonAnimalTarget * (-1.));
-        myCommonAnimalTarget = 0;
-      }
-      //create animalcost raster (cost surface)
-      // for euclidean, distance from point (the coordinates of the site)
-      // for walk time, r.walk with 18000 seconds as max cost
-      // for path dist, use _______ with 15km as max cost
-    }
-    else
-    {
-      myCommonAnimalTarget=0;
-    }
-
-    // note.  this can all be replaced with if (foo_target > 0) foo_target=foo_target - myAnimalFallowQuota;
-    //        I did like this to show logic more clearly (???)
-*/
+  while (!myHIGH==0)
+  {
 
     myEqualFallow = myAvailableFallow/myHIGH;
 
@@ -788,14 +767,23 @@ void LaMainForm::on_run_button_clicked()
     {
       if (sheepgrazefallow->isChecked())
       {
-        if (mySheepFallow=1)
+        if (mySheepFallow=1)  // if it is useHIGH
         {
           if (mySheepTarget < myEqualFallow)
           {
+            mySheepLeftover = myEqualFallow - mySheepTarget;
+            mySheepFallow = 0;
+            mySheepTarget = 0;
+            myHIGH--;
+          }
+          else 
+          {
+            mySheepTarget = mySheepTarget - myEqualFallow;
           }
         }
       }
     }
+
     if (goat->isChecked())
     {
       if (goatgrazefallow->isChecked())
@@ -804,10 +792,20 @@ void LaMainForm::on_run_button_clicked()
         {
           if (myGoatTarget < myEqualFallow)
           {
+            myGoatLeftover = myEqualFallow - mySheepTarget;
+            myGoatFallow = 0;
+            myGoatTarget = 0;
+            myHIGH--;
+          }
+          else 
+          {
+            myGoatTarget = myGoatTarget - myEqualFallow;
           }
         }
       }
-    }    if (pig->isChecked())
+    }
+
+    if (pig->isChecked())
     {
       if (piggrazefallow->isChecked())
       {
@@ -815,10 +813,20 @@ void LaMainForm::on_run_button_clicked()
         {
           if (myPigTarget < myEqualFallow)
           {
+            myPigLeftover = myEqualFallow - mySheepTarget;
+            myPigFallow = 0;
+            myPigTarget = 0;
+            myHIGH--;
+          }
+          else 
+          {
+            myPigTarget = myPigTarget - myEqualFallow;
           }
         }
       }
-    }    if (cow->isChecked())
+    }
+
+    if (cow->isChecked())
     {
       if (cowgrazefallow->isChecked())
       {
@@ -826,10 +834,20 @@ void LaMainForm::on_run_button_clicked()
         {
           if (myCowTarget < myEqualFallow)
           {
+            myCowLeftover = myEqualFallow - mySheepTarget;
+            myCowFallow = 0;
+            myCowTarget = 0;
+            myHIGH--;
+          }
+          else 
+          {
+            myCowTarget = myCowTarget - myEqualFallow;
           }
         }
       }
-    }    if (donkey->isChecked())
+    }
+
+    if (donkey->isChecked())
     {
       if (donkeygrazefallow->isChecked())
       {
@@ -837,10 +855,244 @@ void LaMainForm::on_run_button_clicked()
         {
           if (myDonkeyTarget < myEqualFallow)
           {
+            myDonkeyLeftover = myEqualFallow - mySheepTarget;
+            myDonkeyFallow = 0;
+            myDonkeyTarget = 0;
+            myHIGH--;
+          }
+          else 
+          {
+            myDonkeyTarget = myDonkeyTarget - myEqualFallow;
           }
         }
       }
     }
+  myAvailableFallow = mySheepLeftover+myGoatLeftover+myPigLeftover+myCowLeftover+myDonkeyLeftover;
+  } // end of do while
+
+  
+  while (!myMED==0)
+  {
+    myEqualFallow = myAvailableFallow/myMED;
+
+    if (sheep->isChecked())
+    {
+      if (sheepgrazefallow->isChecked())
+      {
+        if (mySheepFallow=2)  // if it is useMED
+        {
+          if (mySheepTarget < myEqualFallow)
+          {
+            mySheepLeftover = myEqualFallow - mySheepTarget;
+            mySheepFallow = 0;
+            mySheepTarget = 0;
+            myMED--;
+          }
+          else 
+          {
+            mySheepTarget = mySheepTarget - myEqualFallow;
+          }
+        }
+      }
+    }
+
+    if (goat->isChecked())
+    {
+      if (goatgrazefallow->isChecked())
+      {
+        if (myGoatFallow=2)  // if it is useMED
+        {
+          if (myGoatTarget < myEqualFallow)
+          {
+            myGoatLeftover = myEqualFallow - mySheepTarget;
+            myGoatFallow = 0;
+            myGoatTarget = 0;
+            myMED--;
+          }
+          else 
+          {
+            myGoatTarget = myGoatTarget - myEqualFallow;
+          }
+        }
+      }
+    }
+
+    if (pig->isChecked())
+    {
+      if (piggrazefallow->isChecked())
+      {
+        if (myPigFallow=2)  // if it is useMED
+        {
+          if (myPigTarget < myEqualFallow)
+          {
+            myPigLeftover = myEqualFallow - mySheepTarget;
+            myPigFallow = 0;
+            myPigTarget = 0;
+            myMED--;
+          }
+          else 
+          {
+            myPigTarget = myPigTarget - myEqualFallow;
+          }
+        }
+      }
+    }
+
+    if (cow->isChecked())
+    {
+      if (cowgrazefallow->isChecked())
+      {
+        if (myCowFallow=2)  // if it is useMED
+        {
+          if (myCowTarget < myEqualFallow)
+          {
+            myCowLeftover = myEqualFallow - mySheepTarget;
+            myCowFallow = 0;
+            myCowTarget = 0;
+            myMED--;
+          }
+          else 
+          {
+            myCowTarget = myCowTarget - myEqualFallow;
+          }
+        }
+      }
+    }
+
+    if (donkey->isChecked())
+    {
+      if (donkeygrazefallow->isChecked())
+      {
+        if (myDonkeyFallow=2)  // if it is useMED
+        {
+          if (myDonkeyTarget < myEqualFallow)
+          {
+            myDonkeyLeftover = myEqualFallow - mySheepTarget;
+            myDonkeyFallow = 0;
+            myDonkeyTarget = 0;
+            myMED--;
+          }
+          else 
+          {
+            myDonkeyTarget = myDonkeyTarget - myEqualFallow;
+          }
+        }
+      }
+    }
+  myAvailableFallow = mySheepLeftover+myGoatLeftover+myPigLeftover+myCowLeftover+myDonkeyLeftover;
+  } // end of do while
+
+  while (!myLOW==0)
+  {
+
+    myEqualFallow = myAvailableFallow/myLOW;
+
+    if (sheep->isChecked())
+    {
+      if (sheepgrazefallow->isChecked())
+      {
+        if (mySheepFallow=3)  // if it is useLOW
+        {
+          if (mySheepTarget < myEqualFallow)
+          {
+            mySheepLeftover = myEqualFallow - mySheepTarget;
+            mySheepFallow = 0;
+            mySheepTarget = 0;
+            myLOW--;
+          }
+          else 
+          {
+            mySheepTarget = mySheepTarget - myEqualFallow;
+          }
+        }
+      }
+    }
+
+    if (goat->isChecked())
+    {
+      if (goatgrazefallow->isChecked())
+      {
+        if (myGoatFallow=3)  // if it is useLOW
+        {
+          if (myGoatTarget < myEqualFallow)
+          {
+            myGoatLeftover = myEqualFallow - mySheepTarget;
+            myGoatFallow = 0;
+            myGoatTarget = 0;
+            myLOW--;
+          }
+          else 
+          {
+            myGoatTarget = myGoatTarget - myEqualFallow;
+          }
+        }
+      }
+    }
+
+    if (pig->isChecked())
+    {
+      if (piggrazefallow->isChecked())
+      {
+        if (myPigFallow=3)  // if it is useLOW
+        {
+          if (myPigTarget < myEqualFallow)
+          {
+            myPigLeftover = myEqualFallow - mySheepTarget;
+            myPigFallow = 0;
+            myPigTarget = 0;
+            myLOW--;
+          }
+          else 
+          {
+            myPigTarget = myPigTarget - myEqualFallow;
+          }
+        }
+      }
+    }
+
+    if (cow->isChecked())
+    {
+      if (cowgrazefallow->isChecked())
+      {
+        if (myCowFallow=3)  // if it is useLOW
+        {
+          if (myCowTarget < myEqualFallow)
+          {
+            myCowLeftover = myEqualFallow - mySheepTarget;
+            myCowFallow = 0;
+            myCowTarget = 0;
+            myLOW--;
+          }
+          else 
+          {
+            myCowTarget = myCowTarget - myEqualFallow;
+          }
+        }
+      }
+    }
+
+    if (donkey->isChecked())
+    {
+      if (donkeygrazefallow->isChecked())
+      {
+        if (myDonkeyFallow=3)  // if it is useLOW
+        {
+          if (myDonkeyTarget < myEqualFallow)
+          {
+            myDonkeyLeftover = myEqualFallow - mySheepTarget;
+            myDonkeyFallow = 0;
+            myDonkeyTarget = 0;
+            myLOW--;
+          }
+          else 
+          {
+            myDonkeyTarget = myDonkeyTarget - myEqualFallow;
+          }
+        }
+      }
+    }
+  myAvailableFallow = mySheepLeftover+myGoatLeftover+myPigLeftover+myCowLeftover+myDonkeyLeftover;
+  } // end of do while
 
     if (!sheepraster->isChecked())
     {
