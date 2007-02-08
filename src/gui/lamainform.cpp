@@ -184,41 +184,51 @@ void LaMainForm::on_grapeview_clicked()
 
 void LaMainForm::on_pigview_clicked() 
 {
-  int mdp = dietslider->value(); //grab value from slider for overall meat percentage
-  int mtp = (meatslider->value()); //grab value from slider for tame meat percentage
-  int pp = pigpercent->value(); //grab value from form for percentage of pigmeat of meat portion of diet
-  int pls = piglittersize->value(); //grab value from form for pig litter size
-  int pw = pigweight->value(); //grab value from form for for pig kill weight
-  int pgt = piggrowtime->value(); //grab value from form for pig grow time
+  int meatDietPercent = dietslider->value(); 
+  int meatTamePercent = (meatslider->value()); 
+  int pigPortionTameMeat = pigpercent->value(); 
+  int pigLitterSize = piglittersize->value(); 
+  int pigKillWeight = pigweight->value(); 
+  int pigGrowTime = piggrowtime->value(); 
   int myCals = dailycalories->value();
   int myPopulation = population->value();
-  bool pfflag = pigfodderuse->isChecked(); //grab value from form for fodder use flag
-  //int pfa = pigfodderamount->value(); //grab value from form for amount of fodder
-  //int pfc = pigfoddercrop->currentindex(); //grab value from form for type of fodder
-  //int pft = pigfoddertime->currentindex(); //grab value from form for time measurement of fodder rate
-  //int pgrflag = piggrazefallow->checked(); //grab value from form for fallow grazing flag
-  float meat = (((((mdp/100.)*(mtp/100.)*(pp/100.))*myCals*myPopulation)/3000.)*365.*2.); // 3000 is calories/kg of pork
-  float animals = (meat/100.);
-  float mySows = ((10.*meat)/(1760.53*pls));
+  bool pigUseFodder = pigfodderuse->isChecked(); 
+  float myPigProdnTgt = 
+    (
+      (
+        (
+          (
+            (meatDietPercent/100.)*
+            (meatTamePercent/100.)*
+            (pigPortionTameMeat/100.)
+          )
+          *myCals
+          *myPopulation
+        )
+        /3000.
+      )
+      *365.*2.
+    ); 
+  float myPigButcherNumbersRqd = (myPigProdnTgt/100.);
+  float mySows = ((10.*myPigProdnTgt)/(1760.53*pigLitterSize));
   float myDrySows = ((mySows*30.80)/249.70);
   float gmySows = ((mySows*41.6)/249.70);
   float myLactatingSows = ((mySows*177.20)/249.70);
-  float mySucklingPigs = (((355.10/41.60)/10.)*pls*myLactatingSows);
-  float myNursingPigs = ((((mySows*420.10)/249.70)/10.)*pls);
-  // float myGrapePercentigs = ((((mySows*1414.70)/249.70)/10.)*pls);
-  float myGrowingPigs = ((((mySows*1414.70)/249.70)/10.)*pls);
+  float mySucklingPigs = (((355.10/41.60)/10.)*pigLitterSize*myLactatingSows);
+  float myNursingPigs = ((((mySows*420.10)/249.70)/10.)*pigLitterSize);
+  float myGrowingPigs = ((((mySows*1414.70)/249.70)/10.)*pigLitterSize);
   float total = (mySows+mySucklingPigs+myNursingPigs+myGrowingPigs);
-  writeMessage("fodder flag value: " + QString::number(pfflag).toLocal8Bit());
+  writeMessage("fodder flag value: " + QString::number(pigUseFodder).toLocal8Bit());
   writeMessage("You supplied me with this information:");
   writeMessage("Population of Settlement: " + QString::number(myPopulation).toLocal8Bit());
   writeMessage("Calories/person per day: " + QString::number(myCals).toLocal8Bit());
-  writeMessage("Percentage of Calories in the diet from MEAT: " + QString::number(mdp).toLocal8Bit());
-  writeMessage("Percentage of MEAT that is from domesticated animals: " + QString::number(mtp).toLocal8Bit());
-  writeMessage("Percentage of DOMESTICATED MEAT that is from PIGS: " + QString::number(pp).toLocal8Bit());
+  writeMessage("Percentage of Calories in the diet from MEAT: " + QString::number(meatDietPercent).toLocal8Bit());
+  writeMessage("Percentage of MEAT that is from domesticated animals: " + QString::number(meatTamePercent).toLocal8Bit());
+  writeMessage("Percentage of DOMESTICATED MEAT that is from PIGS: " + QString::number(pigPortionTameMeat).toLocal8Bit());
   writeMessage("Calories per kg in PIG MEAT: 3000 assumed");
-  writeMessage("Average Litter Size: " + QString::number(pls).toLocal8Bit());
-  writeMessage("kg of meat per year: " + QString::number(meat/2.).toLocal8Bit());
-  writeMessage("Number of 100kg pigs: " + QString::number(animals).toLocal8Bit());
+  writeMessage("Average Litter Size: " + QString::number(pigLitterSize).toLocal8Bit());
+  writeMessage("kg of meat per year: " + QString::number(myPigProdnTgt/2.).toLocal8Bit());
+  writeMessage("Number of 100kg pigs: " + QString::number(myPigButcherNumbersRqd).toLocal8Bit());
   writeMessage("mySows required to produce this much meat: " + QString::number(mySows).toLocal8Bit());
   writeMessage("Non-Pregnant sows and gilts: " + QString::number(myDrySows).toLocal8Bit());
   writeMessage("Gestating sows: " + QString::number(gmySows).toLocal8Bit());
@@ -226,7 +236,6 @@ void LaMainForm::on_pigview_clicked()
   writeMessage("Total Adult Females: " + QString::number(mySows).toLocal8Bit());
   writeMessage("Suckling Pigs: " + QString::number(mySucklingPigs).toLocal8Bit());
   writeMessage("Nursery Pigs: " + QString::number(myNursingPigs).toLocal8Bit());
-  //  writeMessage("Growing and finishing pigs: " + QString::number(myGrapePercentigs).toLocal8Bit());
   writeMessage("Growing and finishing pigs: " + QString::number(myGrowingPigs).toLocal8Bit());
   writeMessage("Total pigs: " + QString::number(total).toLocal8Bit());
 }
@@ -653,7 +662,71 @@ void LaMainForm::on_run_button_clicked()
     float myPigLeftover = 0;
     float myCowLeftover = 0;
     float myDonkeyLeftover = 0;
+/********************************************************************
+Animal Modelling to determine target areas
+*********************************************************************/
+  int meatDietPercent = dietslider->value(); 
+  int meatTamePercent = (meatslider->value()); 
 
+  if (pig->isChecked() )
+  {
+    int pigPortionTameMeat = pigpercent->value(); 
+    int pigLitterSize = piglittersize->value(); 
+    int pigKillWeight = pigweight->value(); 
+    int pigGrowTime = piggrowtime->value(); 
+    int myCals = dailycalories->value();
+    int myPopulation = population->value();
+    bool pigUseFodder = pigfodderuse->isChecked(); 
+    float myPigProdnTgt = 
+      (
+        (
+          (
+            (
+              (meatDietPercent/100.)*
+              (meatTamePercent/100.)*
+              (pigPortionTameMeat/100.)
+            )
+            *myCals
+            *myPopulation
+          )
+          /3000.
+        )
+        *365.*2.
+      ); 
+    float myPigButcherNumbersRqd = (myPigProdnTgt/100.);
+    float mySows = ((10.*myPigProdnTgt)/(1760.53*pigLitterSize));
+    float myDrySows = ((mySows*30.80)/249.70);
+    float gmySows = ((mySows*41.6)/249.70);
+    float myLactatingSows = ((mySows*177.20)/249.70);
+    float mySucklingPigs = (((355.10/41.60)/10.)*pigLitterSize*myLactatingSows);
+    float myNursingPigs = ((((mySows*420.10)/249.70)/10.)*pigLitterSize);
+    float myGrowingPigs = ((((mySows*1414.70)/249.70)/10.)*pigLitterSize);
+    float total = (mySows+mySucklingPigs+myNursingPigs+myGrowingPigs);
+    writeMessage("fodder flag value: " + QString::number(pigUseFodder).toLocal8Bit());
+    writeMessage("You supplied me with this information:");
+    writeMessage("Population of Settlement: " + QString::number(myPopulation).toLocal8Bit());
+    writeMessage("Calories/person per day: " + QString::number(myCals).toLocal8Bit());
+    writeMessage("Percentage of Calories in the diet from MEAT: " + QString::number(meatDietPercent).toLocal8Bit());
+    writeMessage("Percentage of MEAT that is from domesticated animals: " + QString::number(meatTamePercent).toLocal8Bit());
+    writeMessage("Percentage of DOMESTICATED MEAT that is from PIGS: " + QString::number(pigPortionTameMeat).toLocal8Bit());
+    writeMessage("Calories per kg in PIG MEAT: 3000 assumed");
+    writeMessage("Average Litter Size: " + QString::number(pigLitterSize).toLocal8Bit());
+    writeMessage("kg of meat per year: " + QString::number(myPigProdnTgt/2.).toLocal8Bit());
+    writeMessage("Number of 100kg pigs: " + QString::number(myPigButcherNumbersRqd).toLocal8Bit());
+    writeMessage("mySows required to produce this much meat: " + QString::number(mySows).toLocal8Bit());
+    writeMessage("Non-Pregnant sows and gilts: " + QString::number(myDrySows).toLocal8Bit());
+    writeMessage("Gestating sows: " + QString::number(gmySows).toLocal8Bit());
+    writeMessage("Lactating sows: " + QString::number(myLactatingSows).toLocal8Bit());
+    writeMessage("Total Adult Females: " + QString::number(mySows).toLocal8Bit());
+    writeMessage("Suckling Pigs: " + QString::number(mySucklingPigs).toLocal8Bit());
+    writeMessage("Nursery Pigs: " + QString::number(myNursingPigs).toLocal8Bit());
+    writeMessage("Growing and finishing pigs: " + QString::number(myGrowingPigs).toLocal8Bit());
+    writeMessage("Total pigs: " + QString::number(total).toLocal8Bit());
+}
+
+/********************************************************************
+Adjusting Animal Targets to account for grazing of fallow crop land
+*********************************************************************/
     if (sheep->isChecked())
     {
       if (sheepgrazefallow->isChecked())
@@ -705,14 +778,17 @@ void LaMainForm::on_run_button_clicked()
         if (fallowPigPriority->currentIndex()==0)  // 0 == HIGH
         {
           int myPigFallow=1; // item 1, or HIGH
+          writeMessage("Pig Priority: " + QString::number(myPigFallow).toLocal8Bit());
         }
         else if (fallowPigPriority->currentIndex()==1)  // 1 == MED
           {
             int myPigFallow=2; // item 2, or MED
+            writeMessage("Pig Priority: " + QString::number(myPigFallow).toLocal8Bit());
           }
         else if (fallowPigPriority->currentIndex()==2)  // 2 == LOW
           {
             int myPigFallow=3; // item 3, or LOW
+            writeMessage("Pig Priority: " + QString::number(myPigFallow).toLocal8Bit());
           }
       }
     }
@@ -1128,6 +1204,14 @@ void LaMainForm::on_run_button_clicked()
     }
 
     writeMessage("Sheep Priority: " + QString::number(mySheepFallow).toLocal8Bit());
+    writeMessage("Goat Priority: " + QString::number(myGoatFallow).toLocal8Bit());
+
+    writeMessage("Pig Priority: " + QString::number(myPigFallow).toLocal8Bit());
+
+    writeMessage("Cow Priority: " + QString::number(myCowFallow).toLocal8Bit());
+
+    writeMessage("Donkey Priority: " + QString::number(myDonkeyFallow).toLocal8Bit());
+
 
 
     float myTotalAreaRequired = myCropTarget + myAnimalTarget + myWheatTarget + myBarleyTarget
