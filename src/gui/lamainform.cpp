@@ -669,7 +669,7 @@ void LaMainForm::on_run_button_clicked()
             int mySheepFallow=2; // item 2, or MED
             myMED++;
           }
-        else if (fallowSheepPriority->currentIndex()==2)  // 1 == MED
+        else if (fallowSheepPriority->currentIndex()==2)  // 2 == LOW
           {
             int mySheepFallow=3; // item 3, or LOW
             myLOW++;
@@ -690,7 +690,7 @@ void LaMainForm::on_run_button_clicked()
           {
             int myGoatFallow=2; // item 2, or MED
           }
-        else if (fallowGoatPriority->currentIndex()==2)  // 1 == MED
+        else if (fallowGoatPriority->currentIndex()==2)  // 2 == LOW
           {
             int myGoatFallow=3; // item 3, or LOW
           }
@@ -710,7 +710,7 @@ void LaMainForm::on_run_button_clicked()
           {
             int myPigFallow=2; // item 2, or MED
           }
-        else if (fallowPigPriority->currentIndex()==2)  // 1 == MED
+        else if (fallowPigPriority->currentIndex()==2)  // 2 == LOW
           {
             int myPigFallow=3; // item 3, or LOW
           }
@@ -730,7 +730,7 @@ void LaMainForm::on_run_button_clicked()
           {
             int myCowFallow=2; // item 2, or MED
           }
-        else if (fallowCowPriority->currentIndex()==1)  // 1 == MED
+        else if (fallowCowPriority->currentIndex()==1)  // 2 == LOW
           {
             int myCowFallow=3; // item 3, or LOW
           }
@@ -750,7 +750,7 @@ void LaMainForm::on_run_button_clicked()
           {
             int myDonkeyFallow=2; // item 2, or MED
           }
-        else if (fallowDonkeyPriority->currentIndex()==1)  // 1 == MED
+        else if (fallowDonkeyPriority->currentIndex()==1)  // 2 == LOW
           {
             int myDonkeyFallow=3; // item 3, or LOW
           }
@@ -767,7 +767,7 @@ void LaMainForm::on_run_button_clicked()
     {
       if (sheepgrazefallow->isChecked())
       {
-        if (mySheepFallow=1)  // if it is useHIGH
+        if (mySheepFallow==1)  // if it is useHIGH
         {
           if (mySheepTarget < myEqualFallow)
           {
@@ -788,7 +788,7 @@ void LaMainForm::on_run_button_clicked()
     {
       if (goatgrazefallow->isChecked())
       {
-        if (myGoatFallow=1)
+        if (myGoatFallow==1)
         {
           if (myGoatTarget < myEqualFallow)
           {
@@ -809,7 +809,7 @@ void LaMainForm::on_run_button_clicked()
     {
       if (piggrazefallow->isChecked())
       {
-        if (myPigFallow=1)
+        if (myPigFallow==1)
         {
           if (myPigTarget < myEqualFallow)
           {
@@ -830,7 +830,7 @@ void LaMainForm::on_run_button_clicked()
     {
       if (cowgrazefallow->isChecked())
       {
-        if (myCowFallow=1)
+        if (myCowFallow==1)
         {
           if (myCowTarget < myEqualFallow)
           {
@@ -851,7 +851,7 @@ void LaMainForm::on_run_button_clicked()
     {
       if (donkeygrazefallow->isChecked())
       {
-        if (myDonkeyFallow=1)
+        if (myDonkeyFallow==1)
         {
           if (myDonkeyTarget < myEqualFallow)
           {
@@ -879,7 +879,7 @@ void LaMainForm::on_run_button_clicked()
     {
       if (sheepgrazefallow->isChecked())
       {
-        if (mySheepFallow=2)  // if it is useMED
+        if (mySheepFallow==2)  // if it is useMED
         {
           if (mySheepTarget < myEqualFallow)
           {
@@ -900,7 +900,7 @@ void LaMainForm::on_run_button_clicked()
     {
       if (goatgrazefallow->isChecked())
       {
-        if (myGoatFallow=2)  // if it is useMED
+        if (myGoatFallow==2)  // if it is useMED
         {
           if (myGoatTarget < myEqualFallow)
           {
@@ -921,7 +921,7 @@ void LaMainForm::on_run_button_clicked()
     {
       if (piggrazefallow->isChecked())
       {
-        if (myPigFallow=2)  // if it is useMED
+        if (myPigFallow==2)  // if it is useMED
         {
           if (myPigTarget < myEqualFallow)
           {
@@ -942,7 +942,7 @@ void LaMainForm::on_run_button_clicked()
     {
       if (cowgrazefallow->isChecked())
       {
-        if (myCowFallow=2)  // if it is useMED
+        if (myCowFallow==2)  // if it is useMED
         {
           if (myCowTarget < myEqualFallow)
           {
@@ -963,7 +963,7 @@ void LaMainForm::on_run_button_clicked()
     {
       if (donkeygrazefallow->isChecked())
       {
-        if (myDonkeyFallow=2)  // if it is useMED
+        if (myDonkeyFallow==2)  // if it is useMED
         {
           if (myDonkeyTarget < myEqualFallow)
           {
@@ -991,7 +991,7 @@ void LaMainForm::on_run_button_clicked()
     {
       if (sheepgrazefallow->isChecked())
       {
-        if (mySheepFallow=3)  // if it is useLOW
+        if (mySheepFallow==3)  // if it is useLOW
         {
           if (mySheepTarget < myEqualFallow)
           {
@@ -1012,7 +1012,7 @@ void LaMainForm::on_run_button_clicked()
     {
       if (goatgrazefallow->isChecked())
       {
-        if (myGoatFallow=3)  // if it is useLOW
+        if (myGoatFallow==3)  // if it is useLOW
         {
           if (myGoatTarget < myEqualFallow)
           {
@@ -1033,7 +1033,7 @@ void LaMainForm::on_run_button_clicked()
     {
       if (piggrazefallow->isChecked())
       {
-        if (myPigFallow=3)  // if it is useLOW
+        if (myPigFallow==3)  // if it is useLOW
         {
           if (myPigTarget < myEqualFallow)
           {
@@ -1054,7 +1054,7 @@ void LaMainForm::on_run_button_clicked()
     {
       if (cowgrazefallow->isChecked())
       {
-        if (myCowFallow=3)  // if it is useLOW
+        if (myCowFallow==3)  // if it is useLOW
         {
           if (myCowTarget < myEqualFallow)
           {
@@ -1075,7 +1075,7 @@ void LaMainForm::on_run_button_clicked()
     {
       if (donkeygrazefallow->isChecked())
       {
-        if (myDonkeyFallow=3)  // if it is useLOW
+        if (myDonkeyFallow==3)  // if it is useLOW
         {
           if (myDonkeyTarget < myEqualFallow)
           {
@@ -1091,7 +1091,9 @@ void LaMainForm::on_run_button_clicked()
         }
       }
     }
+
   myAvailableFallow = mySheepLeftover+myGoatLeftover+myPigLeftover+myCowLeftover+myDonkeyLeftover;
+
   } // end of do while
 
     if (!sheepraster->isChecked())
@@ -1124,6 +1126,9 @@ void LaMainForm::on_run_button_clicked()
       myDonkeyTarget=0;
       myFallowGrazingAnimalsCount++;
     }
+
+    writeMessage("Sheep Priority: " + QString::number(mySheepFallow).toLocal8Bit());
+
 
     float myTotalAreaRequired = myCropTarget + myAnimalTarget + myWheatTarget + myBarleyTarget
       + myLentilTarget + myOliveTarget + myGrapeTarget + mySheepTarget + myGoatTarget
