@@ -669,6 +669,7 @@ void LaMainForm::on_buttonRun_clicked()
         int myPigFallow = 0;
         int myCowFallow = 0;
         int myDonkeyFallow = 0;
+        int myAvailableFallow = 0;
     
         float mySheepTarget = 0;
         float myGoatTarget = 0;
@@ -682,7 +683,6 @@ void LaMainForm::on_buttonRun_clicked()
         float myLentilTarget = 0;
         float myOliveTarget = 0;
         float myGrapeTarget = 0;
-        float myAvailableFallow = 0;
         float myEqualFallow = 0;
         float mySheepLeftover = 0;
         float myGoatLeftover = 0;
@@ -693,7 +693,7 @@ void LaMainForm::on_buttonRun_clicked()
     Animal Modelling to determine target areas
     *********************************************************************/
       int myMeatDietPercent = dietSlider->value(); 
-      int myMeatTamePercent = (meatSlider->value()); 
+      int myMeatTamePercent = meatSlider->value(); 
     
         if (pig->isChecked() )
         {
@@ -1193,7 +1193,7 @@ void LaMainForm::on_buttonRun_clicked()
             }
           }
         }
-    
+     
       myAvailableFallow = mySheepLeftover+myGoatLeftover+myPigLeftover+myCowLeftover+myDonkeyLeftover;
     
       } // end of do while
