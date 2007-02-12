@@ -39,14 +39,14 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
   void on_meatSlider_valueChanged(int theValue);
   void on_dietSlider_valueChanged(int theValue);
   void on_plantSlider_valueChanged(int theValue);
-  void on_pigview_clicked();
-  void on_wheatview_clicked();
-  void on_barleyview_clicked();
-  void on_lentilview_clicked();
-  void on_oliveview_clicked();
-  void on_grapeview_clicked();
-  void on_run_button_clicked();
-  void on_diet_breakdown_button_clicked();
+  void on_buttonPigView_clicked();
+  void on_buttonWheatView_clicked();
+  void on_buttonBarleyView_clicked();
+  void on_buttonLentilView_clicked();
+  void on_buttonOliveView_clicked();
+  void on_buttonGrapeView_clicked();
+  void on_buttonRun_clicked();
+  void on_buttonDietBreakdown_clicked();
 
   private slots:
   void helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetItem * thepOldItem);

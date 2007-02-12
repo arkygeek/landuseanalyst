@@ -67,7 +67,7 @@ void LaMainForm::writeSettings()
   mySettings.setValue("mainwindow/size", size());
 }
 
-void LaMainForm::on_wheatview_clicked()
+void LaMainForm::on_buttonWheatView_clicked()
 {
   int myOverallPercentage = (100-(dietSlider->value()));     // OVERALL PLANT PERCENTAGE
   int myTamePlantPercentage = plantSlider->value();       // TAME PLANT percentage
@@ -90,7 +90,7 @@ void LaMainForm::on_wheatview_clicked()
   writeMessage("Wheat total area: " + QString::number(myWheatTotalArea).toLocal8Bit());
 }
 
-void LaMainForm::on_barleyview_clicked() 
+void LaMainForm::on_buttonBarleyView_clicked() 
 {
   int myOverallPercentage = (100-(dietSlider->value()));     // OVERALL PLANT PERCENTAGE
   int myTamePlantPercentage = plantSlider->value();       // TAME PLANT percentage
@@ -113,7 +113,7 @@ void LaMainForm::on_barleyview_clicked()
   writeMessage("Barley total area: " + QString::number(myBarleyTotalArea).toLocal8Bit());
 }
 
-void LaMainForm::on_lentilview_clicked() 
+void LaMainForm::on_buttonLentilView_clicked() 
 {
   int myOverallPercentage = (100-(dietSlider->value()));     // OVERALL PLANT PERCENTAGE
   int myTamePlantPercentage = plantSlider->value();       // TAME PLANT percentage
@@ -136,7 +136,7 @@ void LaMainForm::on_lentilview_clicked()
   writeMessage("Lentil total area: " + QString::number(myLentilTotalArea).toLocal8Bit());
 }
 
-void LaMainForm::on_oliveview_clicked() 
+void LaMainForm::on_buttonOliveView_clicked() 
 {
   int myOverallPercentage = (100-(dietSlider->value()));     // OVERALL PLANT PERCENTAGE
   int myTamePlantPercentage = plantSlider->value();       // TAME PLANT percentage
@@ -159,7 +159,7 @@ void LaMainForm::on_oliveview_clicked()
   writeMessage("olive total area: " + QString::number(myOliveTotalArea).toLocal8Bit());
 }
 
-void LaMainForm::on_grapeview_clicked() 
+void LaMainForm::on_buttonGrapeView_clicked() 
 {
   int myOverallPercentage = (100-(dietSlider->value()));     // OVERALL PLANT PERCENTAGE
   int myTamePlantPercentage = plantSlider->value();       // TAME PLANT percentage
@@ -182,7 +182,7 @@ void LaMainForm::on_grapeview_clicked()
   writeMessage("grape total area: " + QString::number(myGrapeTotalArea).toLocal8Bit());
 }
 
-void LaMainForm::on_pigview_clicked() 
+void LaMainForm::on_buttonPigView_clicked() 
 {
   int myMeatDietPercent = dietSlider->value(); 
   int myMeatTamePercent = meatSlider->value(); 
@@ -280,7 +280,7 @@ void LaMainForm::helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetI
   }
 }
 
-void LaMainForm::on_diet_breakdown_button_clicked() 
+void LaMainForm::on_buttonDietBreakdown_clicked() 
 {
   int myOverallPercentage = (100-(dietSlider->value()));     // OVERALL PLANT PERCENTAGE
   int myTamePlantPercentage = plantSlider->value();       // TAME PLANT percentage
@@ -419,7 +419,7 @@ void LaMainForm::doBaseCalculations()
 
 }
 
-void LaMainForm::on_run_button_clicked() 
+void LaMainForm::on_buttonRun_clicked() 
 {
   // OVERALL PLANT PERCENTAGE
   int myOverallPercentage = (100-(dietSlider->value()));
