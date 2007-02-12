@@ -457,9 +457,9 @@ void LaMainForm::on_buttonRun_clicked()
   int myAnimalCheck = mySheepPercent+myGoatPercent+myPigPercent+myCowPercent+myDonkeyPercent;
   writeMessage("animal total: " + QString::number(myAnimalCheck).toLocal8Bit());
 
-  if (myCropCheck=100) 
+  if (myCropCheck==100) 
   {
-    if (myAnimalCheck=100)
+    if (myAnimalCheck==100)
     {
       float myWheatFallowArea = 0.;    
       float myWheatTotalArea = 0.;   
@@ -662,14 +662,14 @@ void LaMainForm::on_buttonRun_clicked()
         int myMED = 0;
         int myLOW = 0;
         int myAnimalCount = 0;
-        int myCommonAnimalTarget = 0;
+        float myCommonAnimalTarget = 0;
         int myFallowGrazingAnimalsCount = 0;
-        int mySheepFallow = 0;
-        int myGoatFallow = 0;
-        int myPigFallow = 0;
-        int myCowFallow = 0;
-        int myDonkeyFallow = 0;
-        int myAvailableFallow = 0;
+        float mySheepFallow = 0;
+        float myGoatFallow = 0;
+        float myPigFallow = 0;
+        float myCowFallow = 0;
+        float myDonkeyFallow = 0;
+        float myAvailableFallow = 0;
     
         float mySheepTarget = 0;
         float myGoatTarget = 0;
@@ -874,8 +874,8 @@ void LaMainForm::on_buttonRun_clicked()
               if (mySheepTarget < myEqualFallow)
               {
                 mySheepLeftover = myEqualFallow - mySheepTarget;
-                mySheepFallow = 0;
-                mySheepTarget = 0;
+                mySheepFallow = 0.;
+                mySheepTarget = 0.;
                 myHIGH--;
               }
               else 
@@ -895,8 +895,8 @@ void LaMainForm::on_buttonRun_clicked()
               if (myGoatTarget < myEqualFallow)
               {
                 myGoatLeftover = myEqualFallow - mySheepTarget;
-                myGoatFallow = 0;
-                myGoatTarget = 0;
+                myGoatFallow = 0.;
+                myGoatTarget = 0.;
                 myHIGH--;
               }
               else 
@@ -916,8 +916,8 @@ void LaMainForm::on_buttonRun_clicked()
               if (myPigTarget < myEqualFallow)
               {
                 myPigLeftover = myEqualFallow - mySheepTarget;
-                myPigFallow = 0;
-                myPigTarget = 0;
+                myPigFallow = 0.;
+                myPigTarget = 0.;
                 myHIGH--;
               }
               else 
@@ -937,8 +937,8 @@ void LaMainForm::on_buttonRun_clicked()
               if (myCowTarget < myEqualFallow)
               {
                 myCowLeftover = myEqualFallow - mySheepTarget;
-                myCowFallow = 0;
-                myCowTarget = 0;
+                myCowFallow = 0.;
+                myCowTarget = 0.;
                 myHIGH--;
               }
               else 
@@ -958,8 +958,8 @@ void LaMainForm::on_buttonRun_clicked()
               if (myDonkeyTarget < myEqualFallow)
               {
                 myDonkeyLeftover = myEqualFallow - mySheepTarget;
-                myDonkeyFallow = 0;
-                myDonkeyTarget = 0;
+                myDonkeyFallow = 0.;
+                myDonkeyTarget = 0.;
                 myHIGH--;
               }
               else 
@@ -986,8 +986,8 @@ void LaMainForm::on_buttonRun_clicked()
               if (mySheepTarget < myEqualFallow)
               {
                 mySheepLeftover = myEqualFallow - mySheepTarget;
-                mySheepFallow = 0;
-                mySheepTarget = 0;
+                mySheepFallow = 0.;
+                mySheepTarget = 0.;
                 myMED--;
               }
               else 
@@ -1007,8 +1007,8 @@ void LaMainForm::on_buttonRun_clicked()
               if (myGoatTarget < myEqualFallow)
               {
                 myGoatLeftover = myEqualFallow - mySheepTarget;
-                myGoatFallow = 0;
-                myGoatTarget = 0;
+                myGoatFallow = 0.;
+                myGoatTarget = 0.;
                 myMED--;
               }
               else 
@@ -1028,8 +1028,8 @@ void LaMainForm::on_buttonRun_clicked()
               if (myPigTarget < myEqualFallow)
               {
                 myPigLeftover = myEqualFallow - mySheepTarget;
-                myPigFallow = 0;
-                myPigTarget = 0;
+                myPigFallow = 0.;
+                myPigTarget = 0.;
                 myMED--;
               }
               else 
@@ -1049,8 +1049,8 @@ void LaMainForm::on_buttonRun_clicked()
               if (myCowTarget < myEqualFallow)
               {
                 myCowLeftover = myEqualFallow - mySheepTarget;
-                myCowFallow = 0;
-                myCowTarget = 0;
+                myCowFallow = 0.;
+                myCowTarget = 0.;
                 myMED--;
               }
               else 
@@ -1070,8 +1070,8 @@ void LaMainForm::on_buttonRun_clicked()
               if (myDonkeyTarget < myEqualFallow)
               {
                 myDonkeyLeftover = myEqualFallow - mySheepTarget;
-                myDonkeyFallow = 0;
-                myDonkeyTarget = 0;
+                myDonkeyFallow = 0.;
+                myDonkeyTarget = 0.;
                 myMED--;
               }
               else 
@@ -1284,6 +1284,7 @@ void LaMainForm::on_buttonRun_clicked()
         //  think, would be fastest.
       }
     }
+    else writeMessage("You wanker!  make sure that everything adds up to 100! ");
   }
   else writeMessage("You wanker!  make sure that everything adds up to 100! ");
 }

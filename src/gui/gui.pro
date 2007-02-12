@@ -6,14 +6,14 @@
 #
 #################################################################
 # include global settings from the top level dir
-include (../../settings.pro)
+include(../../settings.pro)
 TEMPLATE = app
 TARGET = landuseanalyst
 CONFIG(debug, debug|release){
-  TARGET = $$member(TARGET, 0)-debug
+    TARGET = $$member(TARGET, 0)-debug
 }else{
-  #needed for mac maybe make this macx: only?
-  TARGET = $$member(TARGET,0)-release
+    #needed for mac maybe make this macx: only?
+    TARGET = $$member(TARGET,0)-release
 }
 #LIBS += $${OMGLIBADD} 
 #LIBS += $${OMGWIDGETSLIBADD}
@@ -23,12 +23,12 @@ CONFIG(debug, debug|release){
 #LIBS +=$${QGISLIBADD}
 
 #We dont specify the bin dirfor the mac since the application bundle is made for us
-linux-g++:DESTDIR=$${BINDIR}
+linux-g: DESTDIR = $${BINDIR}
 # for icon file under windows
 # see http://www.qiliang.net/qt/appicon.html
 #1
 win32: RC_FILE = ../../win/landuseanalyst.rc
-macx:  ICON = ../../mac/Resources/landuseanalyst.icns
+macx: ICON = ../../mac/Resources/landuseanalyst.icns
 message("Building $${TARGET} (exe) into $${DESTDIR}")
 
 RESOURCES = ../resources/resources.qrc 
@@ -37,8 +37,6 @@ RESOURCES = ../resources/resources.qrc
 QT += gui core
 
 #INCLUDEPATH += ../lib 
-INCLUDEPATH += ../ui/
-
 #################################################################
 
 FORMS += ../ui/lamainformbase.ui 
@@ -47,3 +45,7 @@ HEADERS += lamainform.h
 
 SOURCES += main.cpp \
            lamainform.cpp
+CONFIG += warn_on
+
+INCLUDEPATH += ../ui/
+
