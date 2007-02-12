@@ -284,25 +284,25 @@ void LaMainForm::on_buttonDietBreakdown_clicked()
 {
   int myOverallPercentage = (100-(dietSlider->value()));     // OVERALL PLANT PERCENTAGE
   int myTamePlantPercentage = plantSlider->value();       // TAME PLANT percentage
-  int pdm = dietSlider->value();
-  int ptm = meatSlider->value();
+  int myDietPercentMeat = dietSlider->value();
+  int myDietPercentTameMeat = meatSlider->value();
   int myCals = dailyCalories->value();
   int myPopulation = population->value();
 
   float myTotalCals = myPopulation*myCals*365.;
   float myPlantCals = (myOverallPercentage/100.)*myTotalCals;
   float myTamePlantCals = ((myOverallPercentage/100.)*(myTamePlantPercentage/100.))*myTotalCals;
-  float animalcals = (pdm/100.)*myTotalCals;
-  float tameanimalcals = ((pdm/100.)*(ptm/100.))*myTotalCals;
+  float myAnimalCals = (myDietPercentMeat/100.)*myTotalCals;
+  float myTameAnimalCals = ((myDietPercentMeat/100.)*(myDietPercentTameMeat/100.))*myTotalCals;
 
   writeDiet("Calories per person per year: " + QString::number((myCals*365.)/1000.).toLocal8Bit() + "kcal");
   writeDiet("Calories required for population are: " + QString::number(myTotalCals/1000.).toLocal8Bit() + "kcal");
   writeDiet(" ");
   writeDiet("Plants contribute " + QString::number(myOverallPercentage).toLocal8Bit() + "% to diet, or " + QString::number(myPlantCals/1000.).toLocal8Bit() + " kcal");
-  writeDiet("Meat contributes " + QString::number(pdm).toLocal8Bit() + "% to diet, or  " + QString::number(animalcals/1000.).toLocal8Bit() + " kcal");
+  writeDiet("Meat contributes " + QString::number(myDietPercentMeat).toLocal8Bit() + "% to diet, or  " + QString::number(myAnimalCals/1000.).toLocal8Bit() + " kcal");
   writeDiet(" ");
   writeDiet("Tame Plants account for " + QString::number((myOverallPercentage/100.)*(myTamePlantPercentage/100.)*100.).toLocal8Bit() + "% of the diet, or " + QString::number(myPlantCals/1000.).toLocal8Bit() + " kcal");
-  writeDiet("Tame Animals account for " + QString::number((pdm/100.)*(ptm/100.)*100.).toLocal8Bit() + "% of the diet, or " + QString::number(animalcals/1000.).toLocal8Bit() + " kcal");
+  writeDiet("Tame Animals account for " + QString::number((myDietPercentMeat/100.)*(myDietPercentTameMeat/100.)*100.).toLocal8Bit() + "% of the diet, or " + QString::number(myAnimalCals/1000.).toLocal8Bit() + " kcal");
 }
 
 void LaMainForm::writeMessage(QString theText) 
