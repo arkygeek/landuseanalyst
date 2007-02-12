@@ -36,9 +36,9 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
     LaMainForm(QWidget* parent = 0, Qt::WFlags fl = 0 );
     ~LaMainForm();
   public slots:
-  void on_meatslider_valueChanged(int theValue);
-  void on_dietslider_valueChanged(int theValue);
-  void on_plantslider_valueChanged(int theValue);
+  void on_meatSlider_valueChanged(int theValue);
+  void on_dietSlider_valueChanged(int theValue);
+  void on_plantSlider_valueChanged(int theValue);
   void on_pigview_clicked();
   void on_wheatview_clicked();
   void on_barleyview_clicked();
@@ -52,7 +52,7 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
   void helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetItem * thepOldItem);
   void writeMessage(QString theText);
   void writeDiet(QString theText);
-  void writePlantCellValue(int theRow, int theCol, QString theValue);
+  void writeResultsCellValue(int theRow, int theCol, QString theValue);
   void makeCircle(int theX, int theY);
   void getArea(float theArea);
   void makeWalkCost(int theX, int theY);
