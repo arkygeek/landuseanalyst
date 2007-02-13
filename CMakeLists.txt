@@ -40,3 +40,12 @@ find_package(Qt4 REQUIRED) # find and setup Qt4 for this project
 # tell cmake to process CMakeLists.txt in that subdirectory
 add_subdirectory(src)
 
+#############################################################
+# Uninstall stuff see: http://www.vtk.org/Wiki/CMake_FAQ
+CONFIGURE_FILE(
+  "${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
+  IMMEDIATE @ONLY)
+
+ADD_CUSTOM_TARGET(uninstall
+  "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
