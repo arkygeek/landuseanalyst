@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>962</width>
-    <height>685</height>
+    <width>1070</width>
+    <height>686</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -26,7 +26,7 @@
    <item row="0" column="0" colspan="6" >
     <widget class="QTabWidget" name="MainTabs" >
      <property name="currentIndex" >
-      <number>3</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="main_tab" >
       <attribute name="title" >
@@ -573,7 +573,7 @@ territorial boundaries.</string>
                 </spacer>
                </item>
                <item row="1" column="2" >
-                <widget class="QLabel" name="meatwildpercent" >
+                <widget class="QLabel" name="meatWildPercent" >
                  <property name="text" >
                   <string>10</string>
                  </property>
@@ -593,7 +593,7 @@ territorial boundaries.</string>
                 </widget>
                </item>
                <item row="1" column="0" >
-                <widget class="QLabel" name="meattamepercent" >
+                <widget class="QLabel" name="meatTamePercent" >
                  <property name="layoutDirection" >
                   <enum>Qt::LeftToRight</enum>
                  </property>
@@ -700,7 +700,7 @@ p, li { white-space: pre-wrap; }
                 </spacer>
                </item>
                <item row="1" column="2" >
-                <widget class="QLabel" name="planttamepercent" >
+                <widget class="QLabel" name="plantTamePercent" >
                  <property name="text" >
                   <string>90</string>
                  </property>
@@ -747,7 +747,7 @@ p, li { white-space: pre-wrap; }
                 </widget>
                </item>
                <item row="1" column="0" >
-                <widget class="QLabel" name="plantwildpercent" >
+                <widget class="QLabel" name="plantWildPercent" >
                  <property name="text" >
                   <string>10</string>
                  </property>
@@ -920,7 +920,7 @@ p, li { white-space: pre-wrap; }
              <number>6</number>
             </property>
             <item>
-             <widget class="QLabel" name="plantpercent" >
+             <widget class="QLabel" name="plantPercent" >
               <property name="text" >
                <string>50</string>
               </property>
@@ -964,7 +964,7 @@ p, li { white-space: pre-wrap; }
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="meatpercent" >
+             <widget class="QLabel" name="meatPercent" >
               <property name="text" >
                <string>50</string>
               </property>
@@ -1293,7 +1293,7 @@ p, li { white-space: pre-wrap; }
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="wheatFodderCals" >
+             <widget class="QSpinBox" name="wheatFodderCalories" >
               <property name="toolTip" >
                <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
@@ -1409,7 +1409,7 @@ p, li { white-space: pre-wrap; }
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="wheatCals" >
+             <widget class="QSpinBox" name="wheatCalories" >
               <property name="maximum" >
                <number>5000</number>
               </property>
@@ -1784,7 +1784,7 @@ p, li { white-space: pre-wrap; }
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="barleyFodderCals" >
+             <widget class="QSpinBox" name="barleyFodderCalories" >
               <property name="toolTip" >
                <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
@@ -1900,7 +1900,7 @@ p, li { white-space: pre-wrap; }
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="barleyCals" >
+             <widget class="QSpinBox" name="barleyCalories" >
               <property name="maximum" >
                <number>5000</number>
               </property>
@@ -2358,7 +2358,7 @@ p, li { white-space: pre-wrap; }
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="lentilCals" >
+             <widget class="QSpinBox" name="lentilCalories" >
               <property name="maximum" >
                <number>5000</number>
               </property>
@@ -2461,7 +2461,7 @@ p, li { white-space: pre-wrap; }
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="lentilFodderCals" >
+             <widget class="QSpinBox" name="lentilFodderCalories" >
               <property name="toolTip" >
                <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
@@ -3000,7 +3000,7 @@ p, li { white-space: pre-wrap; }
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="oliveCals" >
+             <widget class="QSpinBox" name="oliveCalories" >
               <property name="maximum" >
                <number>5000</number>
               </property>
@@ -3224,7 +3224,7 @@ p, li { white-space: pre-wrap; }
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="oliveFodderCals" >
+             <widget class="QSpinBox" name="oliveFodderCalories" >
               <property name="toolTip" >
                <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
@@ -3563,7 +3563,7 @@ p, li { white-space: pre-wrap; }
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="grapeFodderCals" >
+             <widget class="QSpinBox" name="grapeFodderCalories" >
               <property name="toolTip" >
                <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
@@ -3816,7 +3816,7 @@ p, li { white-space: pre-wrap; }
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="grapeCals" >
+             <widget class="QSpinBox" name="grapeCalories" >
               <property name="maximum" >
                <number>5000</number>
               </property>
@@ -6239,7 +6239,7 @@ p, li { white-space: pre-wrap; }
                <item>
                 <widget class="QLabel" name="label" >
                  <property name="text" >
-                  <string> </string>
+                  <string/>
                  </property>
                 </widget>
                </item>
