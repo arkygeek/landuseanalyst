@@ -28,7 +28,6 @@
 #include <QProcess>
 #include <QStringList>
 
-
 LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
   : QDialog(parent,fl) 
 {
@@ -239,7 +238,6 @@ void LaMainForm::on_buttonPigView_clicked()
   writeMessage("Growing and finishing pigs: " + QString::number(myGrowingPigs).toLocal8Bit());
   writeMessage("Total pigs: " + QString::number(total).toLocal8Bit());
 }
-
 
 void LaMainForm::on_meatSlider_valueChanged(int theValue) 
 {
