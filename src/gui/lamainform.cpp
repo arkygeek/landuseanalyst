@@ -187,7 +187,7 @@ void LaMainForm::on_buttonPigView_clicked()
   int myMeatTamePercent = meatSlider->value(); 
   int myPigPercent = pigPercent->value(); 
   int myPigLitterSize = pigLitterSize->value(); 
-  int myPigKillWeight = pigWeight->value(); 
+  int myPigKillWeight = pigKillWeight->value(); 
   int myPigGrowTime = pigGrowTime->value(); 
   int myCalories = dailyCalories->value();
   int myPopulation = population->value();
@@ -695,7 +695,7 @@ void LaMainForm::on_buttonRun_clicked()
         if (pig->isChecked() )
         {
           int myPigLitterSize = pigLitterSize->value(); 
-          int myPigKillWeight = pigWeight->value(); 
+          int myPigKillWeight = pigKillWeight->value(); 
           int myPigGrowTime = pigGrowTime->value(); 
           int myCalories = dailyCalories->value();
           int myPopulation = population->value();
@@ -1201,7 +1201,7 @@ void LaMainForm::on_buttonRun_clicked()
           mySheepTarget=0;
           myFallowGrazingAnimalsCount++;
         }
-        if (!goatraster->isChecked())
+        if (!goatRaster->isChecked())
         {
           myCommonAnimalTarget=myCommonAnimalTarget+myGoatTarget;
           myGoatTarget=0;
