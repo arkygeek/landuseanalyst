@@ -164,7 +164,7 @@ p, li { white-space: pre-wrap; }
         <string>Select Fodder if you believe the animals were fed grain to supplement their grazing.  You will then have to select how many kg of the selected grain you believe they fed each animal either every day, week, or month.</string>
        </property>
        <property name="title" >
-        <string>Fallow</string>
+        <string>Crop Rotation</string>
        </property>
        <property name="checkable" >
         <bool>true</bool>
