@@ -26,7 +26,7 @@
 #include <ui_lamainformbase.h>
 class QTreeWidgetItem;
 /**
-  This is the man gui class
+  This is the main gui class
   @author Tim Sutton
 */
 class LaMainForm : public QDialog, private Ui::LaMainFormBase

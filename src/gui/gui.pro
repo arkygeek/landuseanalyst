@@ -1,8 +1,9 @@
 #################################################################
 #
-#         QMAKE Project File for openModeller Gui
+#         QMAKE Project File for LandUse Analyst Gui
 # 
 #                      Tim Sutton 2005
+#                   Jason Jorgenson 2007
 #
 #################################################################
 # include global settings from the top level dir
@@ -22,7 +23,8 @@ CONFIG(debug, debug|release){
 #macx:LIBS += $${GDALLIBADD}
 #LIBS +=$${QGISLIBADD}
 
-#We dont specify the bin dirfor the mac since the application bundle is made for us
+# We dont specify the bin dir for the mac since
+# the application bundle is made for us
 linux-g: DESTDIR = $${BINDIR}
 # for icon file under windows
 # see http://www.qiliang.net/qt/appicon.html
@@ -39,12 +41,25 @@ QT += gui core
 #INCLUDEPATH += ../lib 
 #################################################################
 
-FORMS += ../ui/lamainformbase.ui 
+FORMS += ../ui/lamainformbase.ui \
+         ../ui/laanimalformmainbase.ui \
+         ../ui/laanimalformdetailsbase.ui \
+         ../ui/laplantformmainbase.ui \
+         ../ui/laplantformdetailsbase.ui
 
-HEADERS += lamainform.h
+HEADERS += lamainform.h \
+           laanimalmain.h \
+           laanimaldetails.h \
+           laplantmain.h \
+           laplantdetails.h
 
 SOURCES += main.cpp \
-           lamainform.cpp
+           lamainform.cpp \
+           laanimalmain.cpp \
+           laanimaldetails.cpp \
+           laplantmain.cpp \
+           laplantdetails.cpp
+
 CONFIG += warn_on
 
 INCLUDEPATH += ../ui/
