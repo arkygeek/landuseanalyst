@@ -39,7 +39,6 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
   void on_meatSlider_valueChanged(int theValue);
   void on_dietSlider_valueChanged(int theValue);
   void on_plantSlider_valueChanged(int theValue);
-  void on_buttonRun_clicked();
   void on_buttonDietBreakdown_clicked();
 
   private slots:
