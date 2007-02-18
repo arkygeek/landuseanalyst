@@ -40,7 +40,10 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
   void on_horizontalSliderDiet_valueChanged(int theValue);
   void on_horizontalSliderPlant_valueChanged(int theValue);
   void on_pushButtonDietBreakdown_clicked();
-  void on_pushButtonExit_clicked();
+  void on_pushButtonRun_clicked();
+  void on_pushButtonLoad_clicked();
+  void on_pushButtonSave_clicked();
+
 
   private slots:
   void helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetItem * thepOldItem);

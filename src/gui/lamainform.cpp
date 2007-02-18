@@ -42,10 +42,7 @@ LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
   connect(treeHelp, SIGNAL(currentItemChanged(QTreeWidgetItem * ,QTreeWidgetItem *)),
       this, SLOT(helpItemClicked(QTreeWidgetItem * ,QTreeWidgetItem *)));
   connect(pushButtonExit, SIGNAL(clicked()), qApp, SLOT(quit()));
- //connect(pushButtonExit, SIGNAL(clicked()),
-    //  this, SLOT(on_pushButtonExit_clicked()));
-// connect the clicked() signal to QCoreApplication::quit()
-  // makeCircle(0,0);
+
   lblVersion->setText(QString("Version: %1").arg(VERSION) + " " + QString("$Revision$").replace("$",""));
 }
 
@@ -92,6 +89,18 @@ void LaMainForm::on_horizontalSliderPlant_valueChanged(int theValue)
   QString myMaxString = QString::number(theValue);
   labelPlantWildPercent->setText(myMinString);
   labelPlantTamePercent->setText(myMaxString);
+}
+void LaMainForm::on_pushButtonRun_clicked()
+{
+  //  implement me!
+}
+void LaMainForm::on_pushButtonLoad_clicked()
+{
+  //  implement me!
+}
+void LaMainForm::on_pushButtonSave_clicked()
+{
+  //  implement me!
 }
 
 void LaMainForm::helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetItem * thepOldItem) 
@@ -242,8 +251,4 @@ void LaMainForm::doBaseCalculations()
 
 }
 
-void LaMainForm::on_pushButtonExit_clicked()
-{
-  // connect the clicked() signal to QCoreApplication::quit()
-  
-}
+
