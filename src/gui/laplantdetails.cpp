@@ -69,3 +69,10 @@ void LaPlantDetails::on_pushButtonSave_clicked()
 {
   //
 }
+
+
+void LaPlantDetails::writeMessage(QString theText)
+{
+  //implement me!!!;
+
+}
