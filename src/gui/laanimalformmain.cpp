@@ -1,6 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2007 by: Tim Sutton        tim@linfiniti.com            *
- *                          Jason Jorgenson   arkygeek@gmail.com           *
+ *   Copyright (C) 2007 by: Jason Jorgenson   arkygeek@gmail.com           *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,46 +16,56 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef LAMAINFORMFORM_H
-#define LAMAINFORMFORM_H
+#include "laanimalformmain.h"
+#include <QSettings>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
+#include <QTableWidgetItem>
+#include <QFile>
+#include <QTextStream>
+#include <QProcess>
+#include <QStringList>
 
-//QT Includes
-#include <QDialog>
-//Local Includes
-#include <ui_lamainformbase.h>
-class QTreeWidgetItem;
-/**
-  This is the man gui class
-  @author Tim Sutton
-*/
-class LaMainForm : public QDialog, private Ui::LaMainFormBase
+LaAnimalFormMain::LaAnimalFormMain(QWidget* parent, Qt::WFlags fl)
+  : QDialog(parent,fl) 
 {
-  Q_OBJECT
-  public:
-    LaMainForm(QWidget* parent = 0, Qt::WFlags fl = 0 );
-    ~LaMainForm();
-  public slots:
-  void on_meatSlider_valueChanged(int theValue);
-  void on_dietSlider_valueChanged(int theValue);
-  void on_plantSlider_valueChanged(int theValue);
-  void on_buttonRun_clicked();
-  void on_buttonDietBreakdown_clicked();
+  //required by Qt4 to initialise the ui
+  setupUi(this);
+  readSettings();
+  /** See the qtdocs on signals and slots to understand below.
+   * we connect the currentItemChanged signal that a tree view emits when you 
+   * click on an item to a little method that sets the help viewer contents
+   * appropriately. TS
+   */
+}
 
-  private slots:
-  void helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetItem * thepOldItem);
-  void writeMessage(QString theText);
-  void writeDiet(QString theText);
-  void makeCircle(int theX, int theY);
-  void getArea(float theArea);
-  void makeWalkCost(int theX, int theY);
-  void makeEuclideanCost(int theX, int theY);
-  void makePathDistanceCost(int theX, int theY);
-  void writeMetaData(QString theValue);
-  void doBaseCalculations();
+LaAnimalFormMain::~LaAnimalFormMain()
+{
+  writeSettings();
+}
 
-  private:
-    void readSettings();
-    void writeSettings();
-};
+void LaAnimalFormMain::readSettings()
+{
+  QSettings mySettings;
+  QPoint pos = mySettings.value("mainwindow/pos", QPoint(200, 200)).toPoint();
+  QSize size = mySettings.value("mainwindow/size", QSize(400, 400)).toSize();
+  resize(size);
+  move(pos);
+}
 
-#endif //LAMAINFORM_H
+void LaAnimalFormMain::writeSettings()
+{
+  QSettings mySettings;
+  mySettings.setValue("mainwindow/pos", pos());
+  mySettings.setValue("mainwindow/size", size());
+}
+
+void LaAnimalFormMain::on_pushButtonLoad_clicked()
+{
+  //
+}
+
+void LaAnimalFormMain::on_pushButtonSave_clicked()
+{
+  //
+}

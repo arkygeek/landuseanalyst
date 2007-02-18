@@ -17,46 +17,34 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef LAMAINFORMFORM_H
-#define LAMAINFORMFORM_H
+#ifndef LAANIMALFORMDETAILSFORM_H
+#define LAANIMALFORMDETAILSFORM_H
 
 //QT Includes
 #include <QDialog>
 //Local Includes
-#include <ui_lamainformbase.h>
+#include <ui_laanimalformdetails.h>
 class QTreeWidgetItem;
 /**
   This is the man gui class
-  @author Tim Sutton
+  @author Tim Sutton, Jason Jorgenson
 */
-class LaMainForm : public QDialog, private Ui::LaMainFormBase
+class LaAnimalFormDetails : public QDialog, private Ui::LaAnimalFormDetails
 {
   Q_OBJECT
   public:
-    LaMainForm(QWidget* parent = 0, Qt::WFlags fl = 0 );
-    ~LaMainForm();
+    LaAnimalFormDetails(QWidget* parent = 0, Qt::WFlags fl = 0 );
+    ~LaAnimalFormDetails();
+
   public slots:
-  void on_meatSlider_valueChanged(int theValue);
-  void on_dietSlider_valueChanged(int theValue);
-  void on_plantSlider_valueChanged(int theValue);
-  void on_buttonRun_clicked();
-  void on_buttonDietBreakdown_clicked();
+  void on_pushButtonLoad_clicked();
+  void on_pushButtonSave_clicked();
 
   private slots:
-  void helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetItem * thepOldItem);
-  void writeMessage(QString theText);
-  void writeDiet(QString theText);
-  void makeCircle(int theX, int theY);
-  void getArea(float theArea);
-  void makeWalkCost(int theX, int theY);
-  void makeEuclideanCost(int theX, int theY);
-  void makePathDistanceCost(int theX, int theY);
-  void writeMetaData(QString theValue);
-  void doBaseCalculations();
 
   private:
     void readSettings();
     void writeSettings();
 };
 
-#endif //LAMAINFORM_H
+#endif //LAANIMALFORMDETAILS_H
