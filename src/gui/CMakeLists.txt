@@ -10,12 +10,24 @@ include(${QT_USE_FILE})
 set(landuseanalyst_SRCS
     main.cpp
     lamainform.cpp
+    laplantmain.cpp
+    laplantdetails.cpp
+    laanimalmain.cpp
+    laanimaldetails.cpp
    )
 SET(landuseanalyst_UIS
     ../ui/lamainformbase.ui
+    ../ui/laplantformmainbase.ui
+    ../ui/laplantformdetailsbase.ui
+    ../ui/laanimalformmainbase.ui 
+    ../ui/laanimalformdetailsbase.ui
     )
 SET(landuseanalyst_MOC_HDRS
     lamainform.h
+    laplantmain.h
+    laplantdetails.h
+    laanimalmain.h
+    laanimaldetails.h
     )
 SET(landuseanalyst_RCCS 
     ../resources/resources.qrc
