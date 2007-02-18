@@ -55,7 +55,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="label_" >
+        <widget class="QLabel" name="labelPlantCheck" >
          <property name="toolTip" >
           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
@@ -108,7 +108,7 @@ p, li { white-space: pre-wrap; }
     </layout>
    </item>
    <item row="1" column="4" >
-    <widget class="QPushButton" name="buttonLoad" >
+    <widget class="QPushButton" name="pushButtonLoad" >
      <property name="sizePolicy" >
       <sizepolicy>
        <hsizetype>0</hsizetype>
@@ -135,7 +135,7 @@ p, li { white-space: pre-wrap; }
     </widget>
    </item>
    <item row="1" column="2" >
-    <widget class="QPushButton" name="buttonRun" >
+    <widget class="QPushButton" name="pushButtonRun" >
      <property name="sizePolicy" >
       <sizepolicy>
        <hsizetype>0</hsizetype>
@@ -168,7 +168,7 @@ p, li { white-space: pre-wrap; }
     </widget>
    </item>
    <item row="1" column="3" >
-    <widget class="QPushButton" name="buttonRun_2" >
+    <widget class="QPushButton" name="pushButtonClear" >
      <property name="sizePolicy" >
       <sizepolicy>
        <hsizetype>0</hsizetype>
@@ -201,7 +201,7 @@ p, li { white-space: pre-wrap; }
     </widget>
    </item>
    <item row="1" column="5" >
-    <widget class="QPushButton" name="buttonSave" >
+    <widget class="QPushButton" name="pushButtonSave" >
      <property name="sizePolicy" >
       <sizepolicy>
        <hsizetype>0</hsizetype>
@@ -222,7 +222,7 @@ p, li { white-space: pre-wrap; }
     </widget>
    </item>
    <item row="1" column="6" >
-    <widget class="QPushButton" name="buttonExit" >
+    <widget class="QPushButton" name="pushButtonExit" >
      <property name="sizePolicy" >
       <sizepolicy>
        <hsizetype>0</hsizetype>
@@ -265,7 +265,7 @@ p, li { white-space: pre-wrap; }
       </size>
      </property>
      <property name="currentIndex" >
-      <number>3</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="main_tab" >
       <attribute name="title" >
@@ -386,7 +386,7 @@ p, li { white-space: pre-wrap; }
            <number>6</number>
           </property>
           <item row="0" column="0" >
-           <widget class="QPushButton" name="buttonJadis" >
+           <widget class="QPushButton" name="pushButtonJadis" >
             <property name="toolTip" >
              <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
@@ -399,7 +399,7 @@ p, li { white-space: pre-wrap; }
            </widget>
           </item>
           <item row="1" column="0" >
-           <widget class="QGroupBox" name="manualSiteEntryBox" >
+           <widget class="QGroupBox" name="groupBoxManualSiteEntry" >
             <property name="toolTip" >
              <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
@@ -423,14 +423,14 @@ p, li { white-space: pre-wrap; }
               <number>6</number>
              </property>
              <item row="0" column="1" >
-              <widget class="QLineEdit" name="sitename" />
+              <widget class="QLineEdit" name="lineEditSiteName" />
              </item>
              <item row="2" column="0" colspan="2" >
               <widget class="QSplitter" name="splitter_3" >
                <property name="orientation" >
                 <enum>Qt::Horizontal</enum>
                </property>
-               <widget class="QComboBox" name="projection" >
+               <widget class="QComboBox" name="comboBoxProjection" >
                 <item>
                  <property name="text" >
                   <string>UTM 36</string>
@@ -456,7 +456,7 @@ p, li { white-space: pre-wrap; }
                   <number>6</number>
                  </property>
                  <item>
-                  <widget class="QLineEdit" name="easting" >
+                  <widget class="QLineEdit" name="lineEditEasting" >
                    <property name="toolTip" >
                     <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
@@ -486,7 +486,7 @@ p, li { white-space: pre-wrap; }
                   <number>6</number>
                  </property>
                  <item>
-                  <widget class="QLineEdit" name="northing" >
+                  <widget class="QLineEdit" name="lineEditNorthing" >
                    <property name="toolTip" >
                     <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
@@ -532,7 +532,7 @@ p, li { white-space: pre-wrap; }
                  <bool>false</bool>
                 </property>
                </widget>
-               <widget class="QSpinBox" name="population" >
+               <widget class="QSpinBox" name="spinBoxPopulation" >
                 <property name="toolTip" >
                  <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
@@ -552,7 +552,7 @@ p, li { white-space: pre-wrap; }
                  <number>500</number>
                 </property>
                </widget>
-               <widget class="QComboBox" name="siteperiod" >
+               <widget class="QComboBox" name="comboBoxSitePeriod" >
                 <item>
                  <property name="text" >
                   <string>Select Period</string>
@@ -681,14 +681,14 @@ p, li { white-space: pre-wrap; }
                <number>6</number>
               </property>
               <item>
-               <widget class="QLabel" name="plantPercent" >
+               <widget class="QLabel" name="labelPlantPercent" >
                 <property name="text" >
                  <string>50</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QSlider" name="dietSlider" >
+               <widget class="QSlider" name="horizontalSliderDiet" >
                 <property name="cursor" >
                  <cursor>6</cursor>
                 </property>
@@ -725,7 +725,7 @@ p, li { white-space: pre-wrap; }
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="meatPercent" >
+               <widget class="QLabel" name="labelMeatPercent" >
                 <property name="text" >
                  <string>50</string>
                 </property>
@@ -762,7 +762,7 @@ p, li { white-space: pre-wrap; }
                 </spacer>
                </item>
                <item row="1" column="2" >
-                <widget class="QLabel" name="plantTamePercent" >
+                <widget class="QLabel" name="labelPlantTamePercent" >
                  <property name="text" >
                   <string>90</string>
                  </property>
@@ -772,7 +772,7 @@ p, li { white-space: pre-wrap; }
                 </widget>
                </item>
                <item row="2" column="0" colspan="3" >
-                <widget class="QSlider" name="plantSlider" >
+                <widget class="QSlider" name="horizontalSliderPlant" >
                  <property name="cursor" >
                   <cursor>6</cursor>
                  </property>
@@ -809,7 +809,7 @@ p, li { white-space: pre-wrap; }
                 </widget>
                </item>
                <item row="1" column="0" >
-                <widget class="QLabel" name="plantWildPercent" >
+                <widget class="QLabel" name="labelPlantWildPercent" >
                  <property name="text" >
                   <string>10</string>
                  </property>
@@ -893,7 +893,7 @@ p, li { white-space: pre-wrap; }
                 </spacer>
                </item>
                <item row="1" column="2" >
-                <widget class="QLabel" name="meatWildPercent" >
+                <widget class="QLabel" name="labelMeatWildPercent" >
                  <property name="text" >
                   <string>10</string>
                  </property>
@@ -913,7 +913,7 @@ p, li { white-space: pre-wrap; }
                 </widget>
                </item>
                <item row="1" column="0" >
-                <widget class="QLabel" name="meatTamePercent" >
+                <widget class="QLabel" name="labelMeatTamePercent" >
                  <property name="layoutDirection" >
                   <enum>Qt::LeftToRight</enum>
                  </property>
@@ -926,7 +926,7 @@ p, li { white-space: pre-wrap; }
                 </widget>
                </item>
                <item row="2" column="0" colspan="3" >
-                <widget class="QSlider" name="meatSlider" >
+                <widget class="QSlider" name="horizontalSliderMeat" >
                  <property name="cursor" >
                   <cursor>6</cursor>
                  </property>
@@ -1029,7 +1029,7 @@ Person per Day</string>
             </widget>
            </item>
            <item>
-            <widget class="QSpinBox" name="dailyCalories" >
+            <widget class="QSpinBox" name="spinBoxDailyCalories" >
              <property name="toolTip" >
               <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
@@ -1057,14 +1057,14 @@ p, li { white-space: pre-wrap; }
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="buttonDietClear" >
+            <widget class="QPushButton" name="pushButtonDietClear" >
              <property name="text" >
               <string>Clear</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="buttonDietBreakdown" >
+            <widget class="QPushButton" name="pushButtonDietBreakdown" >
              <property name="toolTip" >
               <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
@@ -1095,9 +1095,9 @@ p, li { white-space: pre-wrap; }
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="plants_tab" >
+     <widget class="QWidget" name="crops_tab" >
       <attribute name="title" >
-       <string>Plants</string>
+       <string>Crops</string>
       </attribute>
       <layout class="QGridLayout" >
        <property name="margin" >
@@ -1123,7 +1123,7 @@ p, li { white-space: pre-wrap; }
             <number>6</number>
            </property>
            <item>
-            <widget class="QTextBrowser" name="textBrowserResults_3" >
+            <widget class="QTextBrowser" name="textBrowserCropDefinition" >
              <property name="sizePolicy" >
               <sizepolicy>
                <hsizetype>7</hsizetype>
@@ -1155,7 +1155,7 @@ p, li { white-space: pre-wrap; }
             <number>6</number>
            </property>
            <item>
-            <widget class="QTextBrowser" name="textBrowserResults_2" >
+            <widget class="QTextBrowser" name="textBrowserCropParameters" >
              <property name="sizePolicy" >
               <sizepolicy>
                <hsizetype>7</hsizetype>
@@ -1241,7 +1241,7 @@ p, li { white-space: pre-wrap; }
           </widget>
          </item>
          <item row="2" column="0" colspan="2" >
-          <widget class="QGroupBox" name="groupBox" >
+          <widget class="QGroupBox" name="groupBoxCustomCrop" >
            <property name="sizePolicy" >
             <sizepolicy>
              <hsizetype>5</hsizetype>
@@ -1267,7 +1267,7 @@ p, li { white-space: pre-wrap; }
              <number>6</number>
             </property>
             <item row="1" column="1" >
-             <widget class="QPushButton" name="pushButton" >
+             <widget class="QPushButton" name="pushButtonCropLoad" >
               <property name="sizePolicy" >
                <sizepolicy>
                 <hsizetype>4</hsizetype>
@@ -1320,7 +1320,7 @@ p, li { white-space: pre-wrap; }
                </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="lineEditCrop" >
+               <widget class="QLineEdit" name="lineEditCropName" >
                 <property name="sizePolicy" >
                  <sizepolicy>
                   <hsizetype>7</hsizetype>
@@ -1343,7 +1343,7 @@ p, li { white-space: pre-wrap; }
           </widget>
          </item>
          <item row="0" column="0" colspan="2" >
-          <widget class="QListWidget" name="listWidget" >
+          <widget class="QListWidget" name="listWidgetCrops" >
            <property name="sizePolicy" >
             <sizepolicy>
              <hsizetype>4</hsizetype>
@@ -1446,7 +1446,7 @@ p, li { white-space: pre-wrap; }
           <number>6</number>
          </property>
          <item row="1" column="0" colspan="2" >
-          <widget class="QComboBox" name="comboBoxCrop_8" >
+          <widget class="QComboBox" name="comboBoxAnimals" >
            <item>
             <property name="text" >
              <string>None</string>
@@ -1485,7 +1485,7 @@ p, li { white-space: pre-wrap; }
           </widget>
          </item>
          <item row="2" column="0" colspan="2" >
-          <widget class="QGroupBox" name="groupBox_3" >
+          <widget class="QGroupBox" name="groupBoxCustomAnimal" >
            <property name="sizePolicy" >
             <sizepolicy>
              <hsizetype>5</hsizetype>
@@ -1495,7 +1495,7 @@ p, li { white-space: pre-wrap; }
             </sizepolicy>
            </property>
            <property name="title" >
-            <string>Custom Crop</string>
+            <string>Custom Animal</string>
            </property>
            <property name="checkable" >
             <bool>true</bool>
@@ -1511,7 +1511,7 @@ p, li { white-space: pre-wrap; }
              <number>6</number>
             </property>
             <item row="1" column="1" >
-             <widget class="QPushButton" name="pushButton_2" >
+             <widget class="QPushButton" name="pushButtonAnimalLoad" >
               <property name="sizePolicy" >
                <sizepolicy>
                 <hsizetype>4</hsizetype>
@@ -1526,7 +1526,7 @@ p, li { white-space: pre-wrap; }
              </widget>
             </item>
             <item row="1" column="0" >
-             <widget class="QPushButton" name="pushButtonCropMake_8" >
+             <widget class="QPushButton" name="pushButtonAnimalMake" >
               <property name="sizePolicy" >
                <sizepolicy>
                 <hsizetype>4</hsizetype>
@@ -1564,7 +1564,7 @@ p, li { white-space: pre-wrap; }
                </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="lineEditCrop_8" >
+               <widget class="QLineEdit" name="lineEditAnimalName" >
                 <property name="sizePolicy" >
                  <sizepolicy>
                   <hsizetype>7</hsizetype>
@@ -1587,7 +1587,7 @@ p, li { white-space: pre-wrap; }
           </widget>
          </item>
          <item row="0" column="0" colspan="2" >
-          <widget class="QListWidget" name="listWidget_2" >
+          <widget class="QListWidget" name="listWidgetAnimals" >
            <property name="sizePolicy" >
             <sizepolicy>
              <hsizetype>4</hsizetype>
@@ -1624,7 +1624,7 @@ p, li { white-space: pre-wrap; }
           </widget>
          </item>
          <item row="3" column="1" >
-          <widget class="QPushButton" name="pushButtonCropView_8" >
+          <widget class="QPushButton" name="pushButtonAnimalView" >
            <property name="sizePolicy" >
             <sizepolicy>
              <hsizetype>4</hsizetype>
@@ -1639,7 +1639,7 @@ p, li { white-space: pre-wrap; }
           </widget>
          </item>
          <item row="3" column="0" >
-          <widget class="QPushButton" name="pushButtonCropParameters_8" >
+          <widget class="QPushButton" name="pushButtonAnimalParameters" >
            <property name="sizePolicy" >
             <sizepolicy>
              <hsizetype>0</hsizetype>
@@ -1672,7 +1672,7 @@ p, li { white-space: pre-wrap; }
             <number>6</number>
            </property>
            <item>
-            <widget class="QTextBrowser" name="textBrowserResults_4" >
+            <widget class="QTextBrowser" name="textBrowserAnimalDefinition" >
              <property name="sizePolicy" >
               <sizepolicy>
                <hsizetype>7</hsizetype>
@@ -1704,7 +1704,7 @@ p, li { white-space: pre-wrap; }
             <number>6</number>
            </property>
            <item>
-            <widget class="QTextBrowser" name="textBrowserResults_5" >
+            <widget class="QTextBrowser" name="textBrowserAnimalParameters" >
              <property name="sizePolicy" >
               <sizepolicy>
                <hsizetype>7</hsizetype>
@@ -1756,7 +1756,7 @@ p, li { white-space: pre-wrap; }
         <number>6</number>
        </property>
        <item row="0" column="1" >
-        <widget class="QTextBrowser" name="textBrowserResults_6" >
+        <widget class="QTextBrowser" name="textBrowserResultsRight" >
          <property name="sizePolicy" >
           <sizepolicy>
            <hsizetype>5</hsizetype>
@@ -1768,7 +1768,7 @@ p, li { white-space: pre-wrap; }
         </widget>
        </item>
        <item row="0" column="0" >
-        <widget class="QTextBrowser" name="textBrowserResults" >
+        <widget class="QTextBrowser" name="textBrowserResultsLeft" >
          <property name="sizePolicy" >
           <sizepolicy>
            <hsizetype>5</hsizetype>
@@ -1800,7 +1800,7 @@ p, li { white-space: pre-wrap; }
            <number>6</number>
           </property>
           <item>
-           <widget class="QRadioButton" name="calculations" >
+           <widget class="QRadioButton" name="radioButtonCalculations" >
             <property name="toolTip" >
              <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
@@ -1813,7 +1813,7 @@ p, li { white-space: pre-wrap; }
            </widget>
           </item>
           <item>
-           <widget class="QRadioButton" name="euclidean" >
+           <widget class="QRadioButton" name="radioButtonEuclidean" >
             <property name="toolTip" >
              <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
@@ -1832,7 +1832,7 @@ p, li { white-space: pre-wrap; }
            </widget>
           </item>
           <item>
-           <widget class="QRadioButton" name="walking" >
+           <widget class="QRadioButton" name="radioButtonWalkingTime" >
             <property name="toolTip" >
              <string>Calculate catchment by growing distance based on walking time</string>
             </property>
@@ -1851,7 +1851,7 @@ p, li { white-space: pre-wrap; }
            </widget>
           </item>
           <item>
-           <widget class="QRadioButton" name="pathdistance" >
+           <widget class="QRadioButton" name="radioButtonPathDistance" >
             <property name="toolTip" >
              <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
@@ -1888,7 +1888,7 @@ p, li { white-space: pre-wrap; }
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="precision" >
+             <widget class="QSpinBox" name="spinBoxModelPrecision" >
               <property name="sizePolicy" >
                <sizepolicy>
                 <hsizetype>0</hsizetype>
@@ -1937,7 +1937,7 @@ p, li { white-space: pre-wrap; }
          <widget class="QTreeWidget" name="treeHelp" >
           <property name="sizePolicy" >
            <sizepolicy>
-            <hsizetype>4</hsizetype>
+            <hsizetype>7</hsizetype>
             <vsizetype>7</vsizetype>
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
@@ -2107,7 +2107,7 @@ p, li { white-space: pre-wrap; }
           <widget class="QTextBrowser" name="textHelp" >
            <property name="sizePolicy" >
             <sizepolicy>
-             <hsizetype>3</hsizetype>
+             <hsizetype>7</hsizetype>
              <vsizetype>7</vsizetype>
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
@@ -2174,28 +2174,44 @@ p, li { white-space: pre-wrap; }
  </widget>
  <tabstops>
   <tabstop>MainTabs</tabstop>
-  <tabstop>buttonLoad</tabstop>
-  <tabstop>buttonSave</tabstop>
-  <tabstop>buttonExit</tabstop>
-  <tabstop>buttonRun</tabstop>
+  <tabstop>pushButtonLoad</tabstop>
+  <tabstop>pushButtonSave</tabstop>
+  <tabstop>pushButtonExit</tabstop>
+  <tabstop>pushButtonRun</tabstop>
  </tabstops>
  <resources>
   <include location="../resources/resources.qrc" />
  </resources>
  <connections>
   <connection>
-   <sender>buttonRun_2</sender>
+   <sender>pushButtonClear</sender>
    <signal>clicked()</signal>
-   <receiver>textBrowserResults</receiver>
+   <receiver>textBrowserResultsLeft</receiver>
    <slot>clear()</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>358</x>
-     <y>340</y>
+     <x>385</x>
+     <y>327</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>360</x>
-     <y>205</y>
+     <x>110</x>
+     <y>63</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButtonDietClear</sender>
+   <signal>clicked()</signal>
+   <receiver>breakdownDisplay</receiver>
+   <slot>clear()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>242</x>
+     <y>245</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>375</x>
+     <y>227</y>
     </hint>
    </hints>
   </connection>

@@ -66,28 +66,28 @@ void LaMainForm::writeSettings()
   mySettings.setValue("mainwindow/size", size());
 }
 
-void LaMainForm::on_meatSlider_valueChanged(int theValue) 
+void LaMainForm::on_horizontalSliderMeat_valueChanged(int theValue)
 {
   QString myMinString = QString::number(100-theValue);
   QString myMaxString = QString::number(theValue);
-  meatWildPercent->setText(myMinString);
-  meatTamePercent->setText(myMaxString);
+  labelMeatWildPercent->setText(myMinString);
+  labelMeatTamePercent->setText(myMaxString);
 }
 
-void LaMainForm::on_dietSlider_valueChanged(int theValue) 
+void LaMainForm::on_horizontalSliderDiet_valueChanged(int theValue)
 {
   QString myMinString = QString::number(theValue);
   QString myMaxString = QString::number(100-theValue);
-  meatPercent->setText(myMinString);
-  plantPercent->setText(myMaxString);
+  labelMeatPercent->setText(myMinString);
+  labelPlantPercent->setText(myMaxString);
 }
 
-void LaMainForm::on_plantSlider_valueChanged(int theValue) 
+void LaMainForm::on_horizontalSliderPlant_valueChanged(int theValue)
 {
   QString myMinString = QString::number(100-theValue);
   QString myMaxString = QString::number(theValue);
-  plantWildPercent->setText(myMinString);
-  plantTamePercent->setText(myMaxString);
+  labelPlantWildPercent->setText(myMinString);
+  labelPlantTamePercent->setText(myMaxString);
 }
 
 void LaMainForm::helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetItem * thepOldItem) 
@@ -105,14 +105,14 @@ void LaMainForm::helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetI
   }
 }
 
-void LaMainForm::on_buttonDietBreakdown_clicked() 
+void LaMainForm::on_pushButtonDietBreakdown_clicked()
 {
-  int myOverallPercentage = (100-(dietSlider->value()));     // OVERALL PLANT PERCENTAGE
-  int myTamePlantPercentage = plantSlider->value();       // TAME PLANT percentage
-  int myDietPercentMeat = dietSlider->value();
-  int myDietPercentTameMeat = meatSlider->value();
-  int myCalories = dailyCalories->value();
-  int myPopulation = population->value();
+  int myOverallPercentage = (100-(horizontalSliderDiet->value()));
+  int myTamePlantPercentage = horizontalSliderPlant->value();
+  int myDietPercentMeat = horizontalSliderDiet->value();
+  int myDietPercentTameMeat = horizontalSliderMeat->value();
+  int myCalories = spinBoxDailyCalories->value();
+  int myPopulation = spinBoxPopulation->value();
 
   float myTotalCalories = myPopulation*myCalories*365.;
   float myPlantCalories = (myOverallPercentage/100.)*myTotalCalories;
@@ -132,7 +132,7 @@ void LaMainForm::on_buttonDietBreakdown_clicked()
 
 void LaMainForm::writeMessage(QString theText) 
 {
-  textBrowserResults->append(theText);
+  textBrowserResultsLeft->append(theText);
 }
 
 void LaMainForm::writeDiet(QString theText) 

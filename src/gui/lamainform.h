@@ -36,10 +36,10 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
     LaMainForm(QWidget* parent = 0, Qt::WFlags fl = 0 );
     ~LaMainForm();
   public slots:
-  void on_meatSlider_valueChanged(int theValue);
-  void on_dietSlider_valueChanged(int theValue);
-  void on_plantSlider_valueChanged(int theValue);
-  void on_buttonDietBreakdown_clicked();
+  void on_horizontalSliderMeat_valueChanged(int theValue);
+  void on_horizontalSliderDiet_valueChanged(int theValue);
+  void on_horizontalSliderPlant_valueChanged(int theValue);
+  void on_pushButtonDietBreakdown_clicked();
 
   private slots:
   void helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetItem * thepOldItem);
