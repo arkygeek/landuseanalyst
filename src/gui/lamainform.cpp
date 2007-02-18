@@ -39,8 +39,12 @@ LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
    * click on an item to a little method that sets the help viewer contents
    * appropriately. TS
    */
-  connect(treeHelp, SIGNAL(currentItemChanged(QTreeWidgetItem * ,QTreeWidgetItem *)), 
+  connect(treeHelp, SIGNAL(currentItemChanged(QTreeWidgetItem * ,QTreeWidgetItem *)),
       this, SLOT(helpItemClicked(QTreeWidgetItem * ,QTreeWidgetItem *)));
+  connect(pushButtonExit, SIGNAL(clicked()), qApp, SLOT(quit()));
+ //connect(pushButtonExit, SIGNAL(clicked()),
+    //  this, SLOT(on_pushButtonExit_clicked()));
+// connect the clicked() signal to QCoreApplication::quit()
   // makeCircle(0,0);
   lblVersion->setText(QString("Version: %1").arg(VERSION) + " " + QString("$Revision$").replace("$",""));
 }
@@ -236,4 +240,10 @@ void LaMainForm::makeCircle(int theX, int theY)
 void LaMainForm::doBaseCalculations()
 {
 
+}
+
+void LaMainForm::on_pushButtonExit_clicked()
+{
+  // connect the clicked() signal to QCoreApplication::quit()
+  
 }

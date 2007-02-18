@@ -62,10 +62,17 @@ void LaPlantMain::writeSettings()
 
 void LaPlantMain::on_pushButtonLoad_clicked()
 {
-  //
+  // fill all fields on form from a saved
+  // plant profile, which includes those
+  // of the 5 default crop varieties
 }
 
 void LaPlantMain::on_pushButtonSave_clicked()
 {
-  //
+  // if all fields have been completed,
+  // save contents of all fields to disk,
+  // and return info to lamainform.
+  // If the name field is missing,
+  // prompt user for name.  File might
+  // get stored as cropname.lac
 }
