@@ -44,6 +44,7 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
   void on_pushButtonLoad_clicked();
   void on_pushButtonSave_clicked();
 
+  void on_pbnNewAnimal_clicked();
 
   private slots:
   void helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetItem * thepOldItem);

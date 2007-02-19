@@ -17,8 +17,11 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+//app includes
 #include "lamainform.h"
 #include "version.h"
+#include "laanimalmain.h"
+//qt includes
 #include <QSettings>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
@@ -251,4 +254,8 @@ void LaMainForm::doBaseCalculations()
 
 }
 
-
+void LaMainForm::on_pbnNewAnimal_clicked()
+{
+  LaAnimalMain myAnimalForm;
+  myAnimalForm.exec();
+}
