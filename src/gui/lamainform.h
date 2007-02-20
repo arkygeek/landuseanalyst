@@ -43,7 +43,7 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
   void on_pushButtonRun_clicked();
   void on_pushButtonLoad_clicked();
   void on_pushButtonSave_clicked();
-
+  void on_pbnNewCrop_clicked();
   void on_pbnNewAnimal_clicked();
 
   private slots:

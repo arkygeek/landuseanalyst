@@ -21,6 +21,7 @@
 #include "lamainform.h"
 #include "version.h"
 #include "laanimalmain.h"
+#include "laplantmain.h"
 //qt includes
 #include <QSettings>
 #include <QTreeWidget>
@@ -93,14 +94,30 @@ void LaMainForm::on_horizontalSliderPlant_valueChanged(int theValue)
   labelPlantWildPercent->setText(myMinString);
   labelPlantTamePercent->setText(myMaxString);
 }
+
+void LaMainForm::on_pbnNewAnimal_clicked()
+{
+  LaAnimalMain myAnimalForm;
+  myAnimalForm.exec();
+}
+
+void LaMainForm::on_pbnNewCrop_clicked()
+{
+  LaPlantMain myCropForm;
+  myCropForm.exec();
+}
+
+
 void LaMainForm::on_pushButtonRun_clicked()
 {
   //  implement me!
 }
+
 void LaMainForm::on_pushButtonLoad_clicked()
 {
   //  implement me!
 }
+
 void LaMainForm::on_pushButtonSave_clicked()
 {
   //  implement me!
@@ -254,8 +271,3 @@ void LaMainForm::doBaseCalculations()
 
 }
 
-void LaMainForm::on_pbnNewAnimal_clicked()
-{
-  LaAnimalMain myAnimalForm;
-  myAnimalForm.exec();
-}
