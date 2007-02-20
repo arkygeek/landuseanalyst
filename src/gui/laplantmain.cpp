@@ -76,3 +76,21 @@ void LaPlantMain::on_pushButtonSave_clicked()
   // prompt user for name.  File might
   // get stored as cropname.lac
 }
+QString LaPlantMain::on_pushButtonSave_clicked()
+{
+  mPlant.setName(lineEditPlantName->text());
+  mPlant.setUsableMeat(spinBoxUsableMeatPercent->value());
+  mPlant.setKillWeight(spinBoxKillWeight->value());
+  mPlant.setGrowTime(spinBoxGrowTime->value());
+  mPlant.setDeathRate(spinBoxDeathRate->value());
+  mPlant.setGestating(spinBoxCaloriesForGestating->value());
+  mPlant.setLactating(spinBoxCaloriesForLactating->value());
+  mPlant.setJuvenile(spinBoxCaloriesForJuvenile->value());
+  mPlant.setLifeExpectancy(spinBoxLifeExpectancy->value());
+  mPlant.setBreedingExpectancy(spinBoxBreedingLife->value());
+  mPlant.setYoungPerBirth(spinBoxYoungPerBirth->value());
+  mPlant.setWeaningAge(spinBoxWeaningAge->value());
+  mPlant.setGestationTime(spinBoxGestationTime->value());
+  mPlant.setEstrousCycle(spinBoxEstrousCycleTime->value());
+//  mPlant.toXml("/tmp/animal" + mPlant.name() + ".xml");
+}

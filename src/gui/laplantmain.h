@@ -43,6 +43,7 @@ class LaPlantMain : public QDialog, private Ui::LaPlantFormMainBase
   private slots:
 
   private:
+    LaPlant mPlant;
     void readSettings();
     void writeSettings();
 };
