@@ -73,15 +73,15 @@ QString LaAnimalMain::on_pushButtonSave_clicked()
   mAnimal.setKillWeight(spinBoxKillWeight->value());
   mAnimal.setGrowTime(spinBoxGrowTime->value());
   mAnimal.setDeathRate(spinBoxDeathRate->value());
-  mAnimal.setGestating(spinBoxGestating->value());
-  mAnimal.setLactating(spinBoxLactating->value());
-  mAnimal.setJuvenile(spinBoxJuvenile->value());
+  mAnimal.setGestating(spinBoxCaloriesForGestating->value());
+  mAnimal.setLactating(spinBoxCaloriesForLactating->value());
+  mAnimal.setJuvenile(spinBoxCaloriesForJuvenile->value());
   mAnimal.setLifeExpectancy(spinBoxLifeExpectancy->value());
-  mAnimal.setBreedingExpectancy(spinBoxBreedingLifeExpectancy->value());
+  mAnimal.setBreedingExpectancy(spinBoxBreedingLife->value());
   mAnimal.setYoungPerBirth(spinBoxYoungPerBirth->value());
   mAnimal.setWeaningAge(spinBoxWeaningAge->value());
   mAnimal.setGestationTime(spinBoxGestationTime->value());
-  mAnimal.setEstrousCycle(spinBoxEstrousCycle->value());
+  mAnimal.setEstrousCycle(spinBoxEstrousCycleTime->value());
 
   mAnimal.toXml("/tmp/animal" + mAnimal.name() + ".xml");
 

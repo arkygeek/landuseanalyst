@@ -134,53 +134,53 @@ void LaAnimal::setUsableMeat(int thePercentage)
   mUsableMeat=thePercentage;
 }
 
-void LaAnimal::setKillWeight(QString theName)
+void LaAnimal::setKillWeight(int theKg)
 {
-  mKillWeight=theName;
+  mKillWeight=theKg;
 }
-void LaAnimal::setGrowTime(QString theName)
+void LaAnimal::setGrowTime(int theWeeks)
 {
-  mGrowTime=theName;
+  mGrowTime=theWeeks;
 }
-void LaAnimal::setDeathRate(QString theName)
+void LaAnimal::setDeathRate(int thePercentage)
 {
-  mDeathRate=theName;
+  mDeathRate=thePercentage;
 }
-void LaAnimal::setGestating(QString theName)
+void LaAnimal::setGestating(int theCalories)
 {
-  mGestating=theName;
+  mGestating=theCalories;
 }
-void LaAnimal::setLactating(QString theName)
+void LaAnimal::setLactating(int theCalories)
 {
-  mLactating=theName;
+  mLactating=theCalories;
 }
-void LaAnimal::setJuvenile(QString theName)
+void LaAnimal::setJuvenile(int theCalories)
 {
-  mJuvenile=theName;
+  mJuvenile=theCalories;
 }
-void LaAnimal::setLifeExpectancy(QString theName)
+void LaAnimal::setLifeExpectancy(int theYears)
 {
-  mLifeExpectancy=theName;
+  mLifeExpectancy=theYears;
 }
-void LaAnimal::setBreedingExpectancy(QString theName)
+void LaAnimal::setBreedingExpectancy(int theYears)
 {
   mBreedingExpectancy=theName;
 }
-void LaAnimal::setYoungPerBirth(QString theName)
+void LaAnimal::setYoungPerBirth(int theInteger)
 {
-  mYoungPerBirth=theName;
+  mYoungPerBirth=theInteger;
 }
-void LaAnimal::setWeaningAge(QString theName)
+void LaAnimal::setWeaningAge(int theWeeks)
 {
-  mWeaningAge=theName;
+  mWeaningAge=theWeeks;
 }
-void LaAnimal::setGestationTime(QString theName)
+void LaAnimal::setGestationTime(int theDays)
 {
-  mGestationTime=theName;
+  mGestationTime=theDays;
 }
-void LaAnimal::setEstrousCycle(QString theName)
+void LaAnimal::setEstrousCycle(int theDays)
 {
-  mEstrousCycle=theName;
+  mEstrousCycle=theDays;
 }
 
 

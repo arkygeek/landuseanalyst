@@ -43,9 +43,8 @@ class LaAnimal : public LaSerialisable
 
     /** The name of this animal */
     QString name() const;
-
     /** Percentage of animals live weight that can be utilized for meat */
-    int mUsableMeat() const;
+    int usableMeat() const;
     /** The weight in kg at which the animals are slaughtered */
     int killWeight() const;
     /** The number of weeks from birth it takes to attain slaughtering weight */
@@ -75,63 +74,75 @@ class LaAnimal : public LaSerialisable
     // Mutators
     //
 
-    /** Set the layerName
+    /** Set the animalName
      * @see name()
      */
     void setName(QString theName);
 
-    /** Set the useable meat as a percentage
-     * @see UsableMeat()
+    /** Set useableMeat as a percentage
+     * @see usableMeat()
      */
     void setUsableMeat(int thePercentage);
-    /** Set the useable meat as a percentage
+
+    /** Set killWeight as kg 
+     * @see killWeight()
+     */
+    void setKillWeight(int theKg);
+
+    /** Set the growTime in weeks
+     * @see growTime()
+     */
+    void setGrowTime(int theWeeks);
+
+    /** Set the deathRate as a percentage
+     * @see deathRate()
+     */
+    void setDeathRate(int thePercentage);
+
+    /** Set the daily calories required for a gestating female
+     * @see gestating()
+     */
+    void setGestating(int theCalories);
+
+    /** Set the daily calories required for a lactating female
      * @see UsableMeat()
      */
-    void setKillWeight(QString theName);
-    /** Set the useable meat as a percentage
+    void setLactating(int theCalories);
+
+    /** Set the daily calories required for a juvenile
      * @see UsableMeat()
      */
-    void setGrowTime(QString theName);
-    /** Set the useable meat as a percentage
-     * @see UsableMeat()
+    void setJuvenile(int theCalories);
+
+    /** Set the average lifeExpectancy in years
+     * @see lifeExpectancy()
      */
-    void setDeathRate(QString theName);
-    /** Set the useable meat as a percentage
-     * @see UsableMeat()
+    void setLifeExpectancy(int theYears);
+
+    /** Set the average breedingLifeExpectancy in years
+     * @see breedingExpectancy()
      */
-    void setGestating(QString theName);
-    /** Set the useable meat as a percentage
-     * @see UsableMeat()
+    void setBreedingExpectancy(int theYears);
+
+    /** Set the average number of youngPerBirth
+     * @see youngPerBirth()
      */
-    void setLactating(QString theName);
-    /** Set the useable meat as a percentage
-     * @see UsableMeat()
+    void setYoungPerBirth(int theInteger);
+
+    /** Set the weaningAge in weeks
+     * @see weaningAge()
      */
-    void setJuvenile(QString theName);
-    /** Set the useable meat as a percentage
-     * @see UsableMeat()
+    void setWeaningAge(int theWeeks);
+
+    /** Set the gestationTime in Days
+     * @see gestationTime()
      */
-    void setLifeExpectancy(QString theName);
-    /** Set the useable meat as a percentage
-     * @see UsableMeat()
+    void setGestationTime(int theDays);
+
+    /** Set the estrousCycle in days
+     * @see estrousCycle()
      */
-    void setBreedingExpectancy(QString theName);
-    /** Set the useable meat as a percentage
-     * @see UsableMeat()
-     */
-    void setYoungPerBirth(QString theName);
-    /** Set the useable meat as a percentage
-     * @see UsableMeat()
-     */
-    void setWeaningAge(QString theName);
-    /** Set the useable meat as a percentage
-     * @see UsableMeat()
-     */
-    void setGestationTime(QString theName);
-    /** Set the useable meat as a percentage
-     * @see UsableMeat()
-     */
-    void setEstrousCycle(QString theName);
+    void setEstrousCycle(int theDays);
 
     /** Return an xml representation of this layer
      * @NOTE this class inherits the serialisable interface so
@@ -148,7 +159,7 @@ class LaAnimal : public LaSerialisable
     /** The name for this animal */
     QString mName;
     /** Percentage of animals live weight that can be utilized for meat */
-    int mUsableMeat;
+    int mUsableMeat;
     /** The weight in kg at which the animals are slaughtered */
     int mKillWeight;
     /** The number of weeks from birth it takes to attain slaughtering weight */
