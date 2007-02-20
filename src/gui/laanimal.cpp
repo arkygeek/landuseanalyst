@@ -127,10 +127,13 @@ void LaAnimal::setName(QString theName)
 {
   mName=theName;
 }
-void LaAnimal::setUsableMeat(QString theName)
+void LaAnimal::setUsableMeat(int thePercentage)
 {
-  mUsableMeat=theName;
+  if (thePercentage > 100) {thePercentage=100;}
+  if (thePercentage < 0) {thePercentage=100;}
+  mUsableMeat=thePercentage;
 }
+
 void LaAnimal::setKillWeight(QString theName)
 {
   mKillWeight=theName;

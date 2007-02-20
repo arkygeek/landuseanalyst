@@ -65,7 +65,10 @@ class LaAnimal : public LaSerialisable
      * @see name()
      */
     void setName(QString theName);
-    void setUsableMeat(QString theName);
+    /** Set the useable meat as a percentage
+     * @see UsableMeat()
+     */
+    void setUsableMeat(int thePercentage);
     void setKillWeight(QString theName);
     void setGrowTime(QString theName);
     void setDeathRate(QString theName);
