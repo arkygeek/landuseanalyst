@@ -43,6 +43,19 @@ class LaAnimal : public LaSerialisable
 
     /** The name of this animal */
     QString name() const;
+    int usableMeat() const;
+    int killWeight() const;
+    int growTime() const;
+    int deathRate() const;
+    int gestating() const;
+    int lactating() const;
+    int juvenile() const;
+    int lifeExpectancy() const;
+    int breedingExpectancy() const;
+    int youngPerBirth() const;
+    int weaningAge() const;
+    int gestationTime() const;
+    int estrousCycle() const;
 
     //
     // Mutators
@@ -52,7 +65,20 @@ class LaAnimal : public LaSerialisable
      * @see name()
      */
     void setName(QString theName);
-    
+    void setUsableMeat(QString theName);
+    void setKillWeight(QString theName);
+    void setGrowTime(QString theName);
+    void setDeathRate(QString theName);
+    void setGestating(QString theName);
+    void setLactating(QString theName);
+    void setJuvenile(QString theName);
+    void setLifeExpectancy(QString theName);
+    void setBreedingExpectancy(QString theName);
+    void setYoungPerBirth(QString theName);
+    void setWeaningAge(QString theName);
+    void setGestationTime(QString theName);
+    void setEstrousCycle(QString theName);
+
     /** Return an xml representation of this layer
      * @NOTE this class inherits the serialisable interface so
      * it MUST implement this

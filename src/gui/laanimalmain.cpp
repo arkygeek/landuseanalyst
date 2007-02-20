@@ -68,9 +68,21 @@ void LaAnimalMain::on_pushButtonLoad_clicked()
 QString LaAnimalMain::on_pushButtonSave_clicked()
 {
   mAnimal.setName(lineEditAnimalName->text());
-  //..
-  //.. more like above ..
-  //
+
+  mAnimal.setUsableMeat(spinBoxUsableMeatPercent->value());
+  mAnimal.setKillWeight(spinBoxKillWeight->value());
+  mAnimal.setGrowTime(spinBoxGrowTime->value());
+  mAnimal.setDeathRate(spinBoxDeathRate->value());
+  mAnimal.setGestating(spinBoxGestating->value());
+  mAnimal.setLactating(spinBoxLactating->value());
+  mAnimal.setJuvenile(spinBoxJuvenile->value());
+  mAnimal.setLifeExpectancy(spinBoxLifeExpectancy->value());
+  mAnimal.setBreedingExpectancy(spinBoxBreedingLifeExpectancy->value());
+  mAnimal.setYoungPerBirth(spinBoxYoungPerBirth->value());
+  mAnimal.setWeaningAge(spinBoxWeaningAge->value());
+  mAnimal.setGestationTime(spinBoxGestationTime->value());
+  mAnimal.setEstrousCycle(spinBoxEstrousCycle->value());
+
   mAnimal.toXml("/tmp/animal" + mAnimal.name() + ".xml");
 
 //  QString myString = QString("<animal>\n");
