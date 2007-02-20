@@ -17,11 +17,13 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+
 //app includes
 #include "lamainform.h"
 #include "version.h"
 #include "laanimalmain.h"
 #include "laplantmain.h"
+
 //qt includes
 #include <QSettings>
 #include <QTreeWidget>

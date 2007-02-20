@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>661</width>
-    <height>356</height>
+    <height>0</height>
    </rect>
   </property>
   <property name="sizePolicy" >
@@ -54,7 +54,7 @@
       </size>
      </property>
      <property name="currentIndex" >
-      <number>0</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="main_tab" >
       <attribute name="title" >
@@ -1823,12 +1823,12 @@ p, li { white-space: pre-wrap; }
    <slot>clear()</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>385</x>
-     <y>327</y>
+     <x>1407</x>
+     <y>1312</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>110</x>
-     <y>63</y>
+     <x>1110</x>
+     <y>1063</y>
     </hint>
    </hints>
   </connection>
@@ -1839,12 +1839,12 @@ p, li { white-space: pre-wrap; }
    <slot>clear()</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>110</x>
-     <y>63</y>
+     <x>1110</x>
+     <y>1063</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>110</x>
-     <y>63</y>
+     <x>1110</x>
+     <y>1063</y>
     </hint>
    </hints>
   </connection>
