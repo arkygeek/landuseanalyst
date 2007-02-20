@@ -51,14 +51,16 @@ HEADERS += lamainform.h \
            laanimalmain.h \
            laanimaldetails.h \
            laplantmain.h \
-           laplantdetails.h
+           laplantdetails.h \
+           laserialisable.h
 
 SOURCES += main.cpp \
            lamainform.cpp \
            laanimalmain.cpp \
            laanimaldetails.cpp \
            laplantmain.cpp \
-           laplantdetails.cpp
+           laplantdetails.cpp \
+           laserialisable.cpp 
 
 CONFIG += warn_on
 

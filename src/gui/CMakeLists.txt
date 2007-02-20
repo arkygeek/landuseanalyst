@@ -14,6 +14,7 @@ set(landuseanalyst_SRCS
     laplantdetails.cpp
     laanimalmain.cpp
     laanimaldetails.cpp
+    laserialisable.cpp
    )
 SET(landuseanalyst_UIS
     ../ui/lamainformbase.ui
