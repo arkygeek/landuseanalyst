@@ -67,8 +67,14 @@ void LaAnimalMain::on_pushButtonLoad_clicked()
 
 QString LaAnimalMain::on_pushButtonSave_clicked()
 {
-  QString myString = QString("<animal>\n");
-    myString+=QString("  <name>" + lineEditAnimalName->text() + "</name>\n");
+  mAnimal.setName(lineEditAnimalName->text());
+  //..
+  //.. more like above ..
+  //
+  mAnimal.toXml("/tmp/animal" + mAnimal.name() + ".xml");
+
+//  QString myString = QString("<animal>\n");
+//    myString+=QString("  <name>" + lineEditAnimalName->text() + "</name>\n");
 //    myString+=QString("  <usablemeat>" + spinBoxUsableMeatPercent->value() + "</usablemeat>\n");
 //    myString+=QString("  <killweight>" + spinBoxKillWeight->value() + "</killweight>\n");
 //    myString+=QString("  <growtime>" + spinBox->value() + "</growtime>\n");
@@ -82,7 +88,7 @@ QString LaAnimalMain::on_pushButtonSave_clicked()
 //    myString+=QString("  <weaningage>" + spinBox->value() + "</weaningage>\n");
 //    myString+=QString("  <gestationtime>" + spinBox->value() + "</gestationtime>\n");
 //    myString+=QString("  <estrouscycle>" + spinBox->value() + "</estrouscycle>\n");
-  myString+=QString("</animal>\n");
+//  myString+=QString("</animal>\n");
 
   return myString;
 }

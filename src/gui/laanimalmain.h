@@ -24,6 +24,7 @@
 #include <QDialog>
 //Local Includes
 #include <ui_laanimalformmainbase.h>
+#include <laanimal.h>
 class QTreeWidgetItem;
 /**
   This is the main gui class
@@ -43,6 +44,7 @@ class LaAnimalMain : public QDialog, private Ui::LaAnimalFormMainBase
   private slots:
 
   private:
+    LaAnimal mAnimal;
     void readSettings();
     void writeSettings();
 };

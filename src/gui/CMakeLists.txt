@@ -50,7 +50,10 @@ QT4_ADD_RESOURCES(landuseanalyst_RCC_SRCS ${landuseanalyst_RCCS})
 
 # Don't forget to include output directory, otherwise
 # the UI file won't be wrapped!
-include_directories(${CMAKE_CURRENT_BINARY_DIR})
+include_directories(
+    ${CMAKE_CURRENT_BINARY_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    )
 
 #Now add these generated files to the ADD_EXECUTABLE step
 # If this is NOT done, then the ui_*.h files will not be generated
