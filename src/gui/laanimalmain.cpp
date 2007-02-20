@@ -25,6 +25,7 @@
 #include <QTextStream>
 #include <QProcess>
 #include <QStringList>
+#include <QString>
 
 LaAnimalMain::LaAnimalMain(QWidget* parent, Qt::WFlags fl)
   : QDialog(parent,fl) 
@@ -68,7 +69,6 @@ void LaAnimalMain::on_pushButtonLoad_clicked()
 QString LaAnimalMain::on_pushButtonSave_clicked()
 {
   mAnimal.setName(lineEditAnimalName->text());
-
   mAnimal.setUsableMeat(spinBoxUsableMeatPercent->value());
   mAnimal.setKillWeight(spinBoxKillWeight->value());
   mAnimal.setGrowTime(spinBoxGrowTime->value());
@@ -82,26 +82,6 @@ QString LaAnimalMain::on_pushButtonSave_clicked()
   mAnimal.setWeaningAge(spinBoxWeaningAge->value());
   mAnimal.setGestationTime(spinBoxGestationTime->value());
   mAnimal.setEstrousCycle(spinBoxEstrousCycleTime->value());
-
-  mAnimal.toXml("/tmp/animal" + mAnimal.name() + ".xml");
-
-//  QString myString = QString("<animal>\n");
-//    myString+=QString("  <name>" + lineEditAnimalName->text() + "</name>\n");
-//    myString+=QString("  <usablemeat>" + spinBoxUsableMeatPercent->value() + "</usablemeat>\n");
-//    myString+=QString("  <killweight>" + spinBoxKillWeight->value() + "</killweight>\n");
-//    myString+=QString("  <growtime>" + spinBox->value() + "</growtime>\n");
-//    myString+=QString("  <deathrate>" + spinBox->value() + "</deathrate>\n");
-//    myString+=QString("  <gestating>" + spinBox->value() + "</gestating>\n");
-//   myString+=QString("  <lactating>" + spinBox->value() + "</lactating>\n");
-//    myString+=QString("  <juvenile>" + spinBox->value() + "</juvenile>\n");
-//    myString+=QString("  <lifeexpectancy>" + spinBox->value() + "</lifeexpectancy>\n");
-//    myString+=QString("  <breedinglife>" + spinBox->value() + "</breedinglife>\n");
-//    myString+=QString("  <youngperbirth>" + spinBox->value() + "</youngperbirth>\n");
-//    myString+=QString("  <weaningage>" + spinBox->value() + "</weaningage>\n");
-//    myString+=QString("  <gestationtime>" + spinBox->value() + "</gestationtime>\n");
-//    myString+=QString("  <estrouscycle>" + spinBox->value() + "</estrouscycle>\n");
-//  myString+=QString("</animal>\n");
-
-  return myString;
+//  mAnimal.toXml("/tmp/animal" + mAnimal.name() + ".xml");
 }
 

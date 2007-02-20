@@ -14,7 +14,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-
+#include <QString>
 #include "laanimal.h"
 
 LaAnimal::LaAnimal() : LaSerialisable()
@@ -70,59 +70,58 @@ QString LaAnimal::name() const
 {
   return mName;
 }
-QString LaAnimal::usableMeat() const
+int LaAnimal::usableMeat() const
 {
   return mUsableMeat;
 }
-QString LaAnimal::killWeight() const
+int LaAnimal::killWeight() const
 {
   return mKillWeight;
 }
-QString LaAnimal::growTime() const
+int LaAnimal::growTime() const
 {
   return mGrowTime;
 }
-QString LaAnimal::deathRate() const
+int LaAnimal::deathRate() const
 {
   return mDeathRate;
 }
-QString LaAnimal::gestating() const
+int LaAnimal::gestating() const
 {
   return mGestating;
 }
-QString LaAnimal::lactating() const
+int LaAnimal::lactating() const
 {
   return mLactating;
 }
-QString LaAnimal::juvenile() const
+int LaAnimal::juvenile() const
 {
   return mJuvenile;
 }
-QString LaAnimal::lifeExpectancy() const
+int LaAnimal::lifeExpectancy() const
 {
   return mLifeExpectancy;
 }
-QString LaAnimal::breedingExpectancy() const
+int LaAnimal::breedingExpectancy() const
 {
   return mBreedingExpectancy;
 }
-QString LaAnimal::youngPerBirth() const
+int LaAnimal::youngPerBirth() const
 {
-  return mYoungperBirth;
+  return mYoungPerBirth;
 }
-QString LaAnimal::weaningAge() const
+int LaAnimal::weaningAge() const
 {
   return mWeaningAge;
 }
-QString LaAnimal::gestationTime() const
+int LaAnimal::gestationTime() const
 {
   return mGestationTime;
 }
-QString LaAnimal::estrousCycle() const
+int LaAnimal::estrousCycle() const
 {
   return mEstrousCycle;
 }
-
 void LaAnimal::setName(QString theName)
 {
   mName=theName;
@@ -130,7 +129,7 @@ void LaAnimal::setName(QString theName)
 void LaAnimal::setUsableMeat(int thePercentage)
 {
   if (thePercentage > 100) {thePercentage=100;}
-  if (thePercentage < 0) {thePercentage=100;}
+  if (thePercentage < 0) {thePercentage=100;}
   mUsableMeat=thePercentage;
 }
 
@@ -164,7 +163,7 @@ void LaAnimal::setLifeExpectancy(int theYears)
 }
 void LaAnimal::setBreedingExpectancy(int theYears)
 {
-  mBreedingExpectancy=theName;
+  mBreedingExpectancy=theYears;
 }
 void LaAnimal::setYoungPerBirth(int theInteger)
 {
@@ -187,22 +186,22 @@ void LaAnimal::setEstrousCycle(int theDays)
 
 QString LaAnimal::toXml()
 {
-  QString myString = QString("<Animal Id=\"" + mName.toLocal8Bit() + "\"/>\n");
+  QString myString = QString("<Animal Id=\"" + mName + "\"/>\n");
           myString+=QString("<animal>\n");
-            myString+=QString("  <name>" + mName.toLocal8Bit() + "</name>\n");
-            myString+=QString("  <usableMeat>" + mUsableMeat.toLocal8Bit() + "</usableMeat>\n");
-            myString+=QString("  <killWeight>" + mKillWeight.toLocal8Bit() + "</killWeight>\n");
-            myString+=QString("  <growTime>" + mGrowTime.toLocal8Bit() + "</growTime>\n");
-            myString+=QString("  <deathRate>" + mDeathRate.toLocal8Bit() + "</deathRate>\n");
-            myString+=QString("  <gestating>" + mGestating.toLocal8Bit() + "</gestating>\n");
-            myString+=QString("  <lactating>" + mLactating.toLocal8Bit() + "</lactating>\n");
-            myString+=QString("  <juvenile>" + mJuvenile.toLocal8Bit() + "</juvenile>\n");
-            myString+=QString("  <lifeExpectancy>" + mLifeExpectancy.toLocal8Bit() + "</lifeExpectancy>\n");
-            myString+=QString("  <breedingLife>" + mBreedingExpectancy.toLocal8Bit() + "</breedingLife>\n");
-            myString+=QString("  <youngPerBirth>" + mYoungPerBirth.toLocal8Bit() + "</youngPerBirth>\n");
-            myString+=QString("  <weaningAge>" + mWeaningAge.toLocal8Bit() + "</weaningAge>\n");
-            myString+=QString("  <gestationTime>" + mGestationTime.toLocal8Bit() + "</gestationTime>\n");
-            myString+=QString("  <estrousCycle>" + mEstrousCycle.toLocal8Bit() + "</estrousCycle>\n");
+            myString+=QString("  <name>" + mName + "</name>\n");
+            myString+=QString("  <usableMeat>" + QString::number(mUsableMeat) + "</usableMeat>\n");
+            myString+=QString("  <killWeight>" + QString::number(mKillWeight) + "</killWeight>\n");
+            myString+=QString("  <growTime>" + QString::number(mGrowTime) + "</growTime>\n");
+            myString+=QString("  <deathRate>" + QString::number(mDeathRate) + "</deathRate>\n");
+            myString+=QString("  <gestating>" + QString::number(mGestating) + "</gestating>\n");
+            myString+=QString("  <lactating>" + QString::number(mLactating) + "</lactating>\n");
+            myString+=QString("  <juvenile>" + QString::number(mJuvenile) + "</juvenile>\n");
+            myString+=QString("  <lifeExpectancy>" + QString::number(mLifeExpectancy) + "</lifeExpectancy>\n");
+            myString+=QString("  <breedingLife>" + QString::number(mBreedingExpectancy) + "</breedingLife>\n");
+            myString+=QString("  <youngPerBirth>" + QString::number(mYoungPerBirth) + "</youngPerBirth>\n");
+            myString+=QString("  <weaningAge>" + QString::number(mWeaningAge) + "</weaningAge>\n");
+            myString+=QString("  <gestationTime>" + QString::number(mGestationTime) + "</gestationTime>\n");
+            myString+=QString("  <estrousCycle>" + QString::number(mEstrousCycle) + "</estrousCycle>\n");
           myString+=QString("</animal>\n");
   return myString;
 }

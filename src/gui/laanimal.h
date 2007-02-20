@@ -20,6 +20,7 @@
 
 class QString;
 #include "laserialisable.h"
+#include <QString>
 /** 
   * An class to represent an animal
   * @author Tim Sutton
@@ -149,6 +150,7 @@ class LaAnimal : public LaSerialisable
      * it MUST implement this
      */
     QString toXml();
+
     /** Read this object from xml and return result as true for success, false for failure.
      * @see LaSerialisable
      * @NOTE this class inherits the serialisable interface so
