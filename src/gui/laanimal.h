@@ -19,23 +19,23 @@
 #define LAANIMAL_H
 
 class QString;
-#include "omgserialisable.h"
+#include "laserialisable.h"
 /** 
   * An class to represent an animal
   * @author Tim Sutton
   */
 
-class CORE_EXPORT LaLayer : public LaSerialisable 
+class LaAnimal : public LaSerialisable 
 {
   public:
     /** Constructor . */
-    LaLayer();
+    LaAnimal();
     /** Desctructor . */
-    ~LaLayer();
+    ~LaAnimal();
     /** copy constructor */
-    LaLayer(const LaLayer& theLayer); 
+    LaAnimal(const LaAnimal& theAnimal); 
     /** Assignement operator */
-    LaLayer& operator= (const LaLayer& theLayer);
+    LaAnimal& operator= (const LaAnimal& theAnimal);
     
     //
     // Accessors

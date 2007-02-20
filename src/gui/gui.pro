@@ -50,6 +50,7 @@ FORMS += ../ui/lamainformbase.ui \
 HEADERS += lamainform.h \
            laanimalmain.h \
            laanimaldetails.h \
+           laanimal.h \
            laplantmain.h \
            laplantdetails.h \
            laserialisable.h
@@ -57,6 +58,7 @@ HEADERS += lamainform.h \
 SOURCES += main.cpp \
            lamainform.cpp \
            laanimalmain.cpp \
+           laanimal.cpp \
            laanimaldetails.cpp \
            laplantmain.cpp \
            laplantdetails.cpp \

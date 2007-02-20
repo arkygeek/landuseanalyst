@@ -25,7 +25,7 @@ class QString;
   * @author Tim Sutton
   */
 
-class CORE_EXPORT LaSerialisable 
+class LaSerialisable 
 {
 public:
     /** Constructor . */

@@ -15,7 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "omglayer.h"
+#include "laanimal.h"
 
 LaAnimal::LaAnimal() : LaSerialisable()
 {

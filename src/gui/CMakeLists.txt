@@ -13,6 +13,7 @@ set(landuseanalyst_SRCS
     laplantmain.cpp
     laplantdetails.cpp
     laanimalmain.cpp
+    laanimal.cpp
     laanimaldetails.cpp
     laserialisable.cpp
    )
