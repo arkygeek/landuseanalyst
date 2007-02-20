@@ -150,29 +150,29 @@ class LaAnimal : public LaSerialisable
     /** Percentage of animals live weight that can be utilized for meat */
     int mUsableMeat;
     /** The weight in kg at which the animals are slaughtered */
-    int killWeight;
+    int mKillWeight;
     /** The number of weeks from birth it takes to attain slaughtering weight */
-    int growTime;
+    int mGrowTime;
     /** The percentage of babies that die before being usable as either meat or breeding */
-    int deathRate;
+    int mDeathRate;
     /** The number of calories a gestating female requires per day */
-    int gestating;
+    int mGestating;
     /** The number of calories a lactating female requires per day */
-    int lactating;
+    int mLactating;
     /** The number of calories a juvenile requires per day */
-    int juvenile;
+    int mJuvenile;
     /** The life expectancy in years of the animal */
-    int lifeExpectancy;
+    int mLifeExpectancy;
     /** The number of years a female will reliably produce offspring */
-    int breedingExpectancy;
+    int mBreedingExpectancy;
     /** The average number of young produced per pregnancy */
-    int youngPerBirth;
+    int mYoungPerBirth;
     /** The age in weeks at which babies stop suckling */
-    int weaningAge;
+    int mWeaningAge;
     /** The number of days required for gestation */
-    int gestationTime;
+    int mGestationTime;
     /** The number of days in the female estrous cycle */
-    int estrousCycle;
+    int mEstrousCycle;
 };
 
 #endif //LAANIMAL_H
