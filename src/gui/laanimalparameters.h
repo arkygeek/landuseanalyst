@@ -42,7 +42,8 @@ class LaAnimalParameters : public LaSerialisable, public LaGuid
     //
     // Accessors
     //
-
+    /** Get the name for this set of animal model parameters */
+    QString name() const;
     /** Portion of the Tame Meat Diet (Percentage) */
     int percentTameMeat() const;
     /** Food value of specific (or unique) grazing land as calories per dunum/hectare */
@@ -66,6 +67,8 @@ class LaAnimalParameters : public LaSerialisable, public LaGuid
     // Mutators
     //
 
+    /** Set the name for this set of animal model parameters */
+    void setName(QString theName);
     /** Portion of the Tame Meat Diet (Percentage) */
     void setPercentTameMeat(int thePercentage);
     /** Food value of specific (or unique) grazing land as calories per dunum/hectare */

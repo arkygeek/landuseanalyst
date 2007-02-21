@@ -53,6 +53,11 @@ LaAnimalParameters& LaAnimalParameters::operator=(const LaAnimalParameters& theA
   return *this;
 }
 
+QString LaAnimalParameters::name() const
+{
+  return mName;
+}
+
 int LaAnimalParameters::percentMeat() const
 {
   return mPercentTameMeat;
@@ -101,6 +106,12 @@ void LaAnimalParameters::useCommonGrazingLand(bool theFlag)
 void LaAnimalParameters::fallowUsage(int theIndexValue)
 {
   mFallowUsage=theIndexValue;
+}
+
+
+void LaAnimalParameters::setName(QString theName) const
+{
+  mName = theName;
 }
 
 bool LaAnimalParameters::fromXml(QString theXml)
