@@ -51,6 +51,7 @@ LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
   connect(pushButtonExit, SIGNAL(clicked()), qApp, SLOT(quit()));
 
   lblVersion->setText(QString("Version: %1").arg(VERSION) + " " + QString("$Revision$").replace("$",""));
+  loadAnimals();
 }
 
 LaMainForm::~LaMainForm()
