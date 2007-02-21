@@ -20,13 +20,14 @@
 
 class QString;
 #include "laserialisable.h"
+#include "laguid.h"
 #include <QString>
 /** 
   * An class to represent an animal
   * @author Tim Sutton
   */
 
-class LaAnimal : public LaSerialisable 
+class LaAnimal : public LaSerialisable, public LaGuid 
 {
   public:
     /** Constructor . */
@@ -156,7 +157,7 @@ class LaAnimal : public LaSerialisable
      * @NOTE this class inherits the serialisable interface so
      * it MUST implement this
      */
-    bool fromXml(const QString theXml){ return false; };
+    bool fromXml(const QString theXml);
   private:
     /** The name for this animal */
     QString mName;

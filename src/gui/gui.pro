@@ -49,6 +49,7 @@ FORMS += ../ui/lamainformbase.ui \
 
 HEADERS += lamainform.h \
            lautils.h \
+           laguid.h \
            laanimalmain.h \
            laanimaldetails.h \
            laanimal.h \
@@ -59,6 +60,7 @@ HEADERS += lamainform.h \
 
 SOURCES += main.cpp \
            lautils.cpp \
+           laguid.cpp \
            lamainform.cpp \
            laanimalmain.cpp \
            laanimal.cpp \

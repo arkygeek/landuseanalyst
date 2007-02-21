@@ -15,10 +15,14 @@
  *                                                                         *
  ***************************************************************************/
 #include <QString>
+#include <QDomDocument>
+#include <QDomElement>
 #include "laanimal.h"
+#include "lautils.h"
 
-LaAnimal::LaAnimal() : LaSerialisable()
+LaAnimal::LaAnimal() : LaSerialisable(), LaGuid()
 {
+  setGuid();
 
 }
 LaAnimal::~LaAnimal()
@@ -182,13 +186,30 @@ void LaAnimal::setEstrousCycle(int theDays)
   mEstrousCycle=theDays;
 }
 
+bool LaAnimal::fromXml(QString theXml)
+{
+  qDebug("Loading animal from xml");
+  QDomDocument myDocument("mydocument");
+  myDocument.setContent(theXml);
+  QDomElement myTopElement = myDocument.firstChildElement("animal");
+  if (myTopElement.isNull())
+  {
+    //TODO - just make this a warning
+    qDebug("top element could not be found!");
+  }
+  setGuid(myTopElement.attribute("guid"));
+  mName=LaUtils::xmlDecode(myTopElement.firstChildElement("name").text());
+  //etc...Jason complete here
 
+
+  return true;
+}
 
 QString LaAnimal::toXml()
 {
   QString myString;
-  myString+=QString("<animal>\n");
-  myString+=QString("  <name>" + mName + "</name>\n");
+  myString+=QString("<animal guid=\"" + guid() + "\">\n");
+  myString+=QString("  <name>" + LaUtils::xmlEncode(mName) + "</name>\n");
   myString+=QString("  <usableMeat>" + QString::number(mUsableMeat) + "</usableMeat>\n");
   myString+=QString("  <killWeight>" + QString::number(mKillWeight) + "</killWeight>\n");
   myString+=QString("  <growTime>" + QString::number(mGrowTime) + "</growTime>\n");

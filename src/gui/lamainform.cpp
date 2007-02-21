@@ -33,6 +33,7 @@
 #include <QTextStream>
 #include <QProcess>
 #include <QStringList>
+#include <QListWidget>
 
 LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
   : QDialog(parent,fl) 
@@ -101,6 +102,27 @@ void LaMainForm::on_pbnNewAnimal_clicked()
 {
   LaAnimalMain myAnimalForm;
   myAnimalForm.exec();
+  loadAnimals();
+}
+
+void LaMainForm::loadAnimals()
+{
+  listWidgetAnimals->clear();
+  mAnimalsMap = LaUtils::getAvailableAnimals();
+  QMapIterator<QString, LaAnimal> myIterator(mAnimalsMap);
+  while (myIterator.hasNext()) 
+  {
+    myIterator.next();
+    LaAnimal myAnimal = myIterator.value();
+    QString myGuid = myAnimal.guid();
+    QString myName = myAnimal.name();
+    //display an icon indicating if the user defined or system supplied
+    QIcon myIcon;
+    myIcon.addFile(":/localdata.png");
+    QListWidgetItem * mypItem = new QListWidgetItem(myIcon,myName);
+    mypItem->setData(Qt::UserRole,myGuid);
+    listWidgetAnimals->addItem(mypItem);
+  }
 }
 
 void LaMainForm::on_pbnNewCrop_clicked()

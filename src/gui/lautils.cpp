@@ -66,8 +66,10 @@ LaUtils::AnimalMap LaUtils::getAvailableAnimals()
       myAnimal.fromXmlFile(myFileInfo.absoluteFilePath());
       if (myAnimal.name().isEmpty())
       {
+        qDebug("Animal name was empty!");
         continue;
       }
+      qDebug("Adding " + myAnimal.name());
       myMap[myAnimal.name()]=myAnimal;
     }
   }

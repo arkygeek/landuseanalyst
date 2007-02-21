@@ -10,6 +10,7 @@ include(${QT_USE_FILE})
 set(landuseanalyst_SRCS
     main.cpp
     lautils.cpp
+    laguid.cpp
     lamainform.cpp
     laplantmain.cpp
     laplant.cpp

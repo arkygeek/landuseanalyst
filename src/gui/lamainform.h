@@ -22,8 +22,10 @@
 
 //QT Includes
 #include <QDialog>
+#include <QHash>
 //Local Includes
 #include <ui_lamainformbase.h>
+#include <lautils.h>
 class QTreeWidgetItem;
 /**
   This is the main gui class
@@ -45,6 +47,9 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
   void on_pushButtonSave_clicked();
   void on_pbnNewCrop_clicked();
   void on_pbnNewAnimal_clicked();
+  /** Refresh the animals list, remembering which were checked
+   * from before */
+  void loadAnimals();
 
   private slots:
   void helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetItem * thepOldItem);
@@ -61,6 +66,7 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
   private:
     void readSettings();
     void writeSettings();
+    LaUtils::AnimalMap mAnimalsMap;
 };
 
 #endif //LAMAINFORM_H
