@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>661</width>
-    <height>0</height>
+    <height>346</height>
    </rect>
   </property>
   <property name="sizePolicy" >
@@ -54,7 +54,7 @@
       </size>
      </property>
      <property name="currentIndex" >
-      <number>3</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="main_tab" >
       <attribute name="title" >
@@ -851,163 +851,140 @@ p, li { white-space: pre-wrap; }
         <number>6</number>
        </property>
        <item row="0" column="0" >
-        <layout class="QVBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
+        <widget class="QSplitter" name="splitter_4" >
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
          </property>
-         <property name="spacing" >
-          <number>6</number>
-         </property>
-         <item>
-          <widget class="QListWidget" name="listWidgetCrops" >
-           <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>4</hsizetype>
-             <vsizetype>7</vsizetype>
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
+         <widget class="QWidget" name="" >
+          <layout class="QVBoxLayout" >
+           <property name="margin" >
+            <number>0</number>
+           </property>
+           <property name="spacing" >
+            <number>6</number>
            </property>
            <item>
-            <property name="text" >
-             <string>Crop 1</string>
-            </property>
+            <widget class="QListWidget" name="listWidgetCrops" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>13</hsizetype>
+               <vsizetype>7</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <item>
+              <property name="text" >
+               <string>Crop 1</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Crop 2</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Crop 3</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Crop 4</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Crop 5</string>
+              </property>
+             </item>
+            </widget>
            </item>
            <item>
-            <property name="text" >
-             <string>Crop 2</string>
-            </property>
+            <widget class="QPushButton" name="pbnNewCrop" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>5</hsizetype>
+               <vsizetype>0</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text" >
+              <string>New</string>
+             </property>
+            </widget>
            </item>
-           <item>
-            <property name="text" >
-             <string>Crop 3</string>
-            </property>
-           </item>
-           <item>
-            <property name="text" >
-             <string>Crop 4</string>
-            </property>
-           </item>
-           <item>
-            <property name="text" >
-             <string>Crop 5</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="comboBoxCrop" >
-           <item>
-            <property name="text" >
-             <string>None</string>
-            </property>
-           </item>
-           <item>
-            <property name="text" >
-             <string>Wheat</string>
-            </property>
-           </item>
-           <item>
-            <property name="text" >
-             <string>Barley</string>
-            </property>
-           </item>
-           <item>
-            <property name="text" >
-             <string>Lentils</string>
-            </property>
-           </item>
-           <item>
-            <property name="text" >
-             <string>Olives</string>
-            </property>
-           </item>
-           <item>
-            <property name="text" >
-             <string>Grapes</string>
-            </property>
-           </item>
-           <item>
-            <property name="text" >
-             <string>Custom</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pbnNewCrop" >
-           <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>5</hsizetype>
-             <vsizetype>0</vsizetype>
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="" >
+          <layout class="QHBoxLayout" >
+           <property name="margin" >
+            <number>0</number>
            </property>
-           <property name="text" >
-            <string>New</string>
+           <property name="spacing" >
+            <number>6</number>
            </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pbnEditCrop" >
-           <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>0</hsizetype>
-             <vsizetype>0</vsizetype>
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text" >
-            <string>Edit Selected</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item row="0" column="1" >
-        <widget class="QTextBrowser" name="textBrowserCropDefinition" >
-         <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>7</hsizetype>
-           <vsizetype>3</vsizetype>
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="2" >
-        <widget class="QTextBrowser" name="textBrowserCropParameters" >
-         <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>7</hsizetype>
-           <vsizetype>3</vsizetype>
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1" >
-        <widget class="QLabel" name="label_2" >
-         <property name="text" >
-          <string>Crop Definition</string>
-         </property>
-         <property name="alignment" >
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="2" >
-        <widget class="QLabel" name="label_7" >
-         <property name="text" >
-          <string>Model Parameters</string>
-         </property>
-         <property name="alignment" >
-          <set>Qt::AlignCenter</set>
-         </property>
+           <item>
+            <layout class="QVBoxLayout" >
+             <property name="margin" >
+              <number>0</number>
+             </property>
+             <property name="spacing" >
+              <number>6</number>
+             </property>
+             <item>
+              <widget class="QTextBrowser" name="textBrowserCropDefinition" >
+               <property name="sizePolicy" >
+                <sizepolicy>
+                 <hsizetype>7</hsizetype>
+                 <vsizetype>3</vsizetype>
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushButtonCropDefinitionEdit" >
+               <property name="text" >
+                <string>Edit Crop Definition</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QVBoxLayout" >
+             <property name="margin" >
+              <number>0</number>
+             </property>
+             <property name="spacing" >
+              <number>6</number>
+             </property>
+             <item>
+              <widget class="QTextBrowser" name="textBrowserCropParameters" >
+               <property name="sizePolicy" >
+                <sizepolicy>
+                 <hsizetype>7</hsizetype>
+                 <vsizetype>3</vsizetype>
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushButtonCropParametersEdit" >
+               <property name="text" >
+                <string>Edit Model Parameters</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
         </widget>
        </item>
       </layout>
@@ -1023,184 +1000,148 @@ p, li { white-space: pre-wrap; }
        <property name="spacing" >
         <number>6</number>
        </property>
-       <item row="1" column="1" >
-        <widget class="QLabel" name="label_8" >
-         <property name="text" >
-          <string>Animal Definition</string>
-         </property>
-         <property name="alignment" >
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1" >
-        <widget class="QTextBrowser" name="textBrowserAnimalDefinition" >
-         <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>7</hsizetype>
-           <vsizetype>3</vsizetype>
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="2" >
-        <widget class="QTextBrowser" name="textBrowserAnimalParameters" >
-         <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>7</hsizetype>
-           <vsizetype>3</vsizetype>
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
        <item row="0" column="0" >
-        <layout class="QVBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
+        <widget class="QSplitter" name="splitter_3" >
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
          </property>
-         <property name="spacing" >
-          <number>6</number>
-         </property>
-         <item>
-          <widget class="QListWidget" name="listWidgetAnimals" >
-           <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>5</hsizetype>
-             <vsizetype>7</vsizetype>
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
+         <widget class="QWidget" name="" >
+          <layout class="QVBoxLayout" >
+           <property name="margin" >
+            <number>0</number>
+           </property>
+           <property name="spacing" >
+            <number>6</number>
            </property>
            <item>
-            <property name="text" >
-             <string>Animal 1</string>
-            </property>
+            <widget class="QListWidget" name="listWidgetAnimals" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>13</hsizetype>
+               <vsizetype>7</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <item>
+              <property name="text" >
+               <string>Animal 1</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Animal 2</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Animal 3</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Animal 4</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Animal 5</string>
+              </property>
+             </item>
+            </widget>
            </item>
            <item>
-            <property name="text" >
-             <string>Animal 2</string>
-            </property>
+            <widget class="QPushButton" name="pbnNewAnimal" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>0</hsizetype>
+               <vsizetype>0</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text" >
+              <string>New</string>
+             </property>
+            </widget>
            </item>
-           <item>
-            <property name="text" >
-             <string>Animal 3</string>
-            </property>
-           </item>
-           <item>
-            <property name="text" >
-             <string>Animal 4</string>
-            </property>
-           </item>
-           <item>
-            <property name="text" >
-             <string>Animal 5</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="comboBoxAnimals" >
-           <item>
-            <property name="text" >
-             <string>None</string>
-            </property>
-           </item>
-           <item>
-            <property name="text" >
-             <string>Sheep</string>
-            </property>
-           </item>
-           <item>
-            <property name="text" >
-             <string>Goat</string>
-            </property>
-           </item>
-           <item>
-            <property name="text" >
-             <string>Pig</string>
-            </property>
-           </item>
-           <item>
-            <property name="text" >
-             <string>Cow</string>
-            </property>
-           </item>
-           <item>
-            <property name="text" >
-             <string>Donkey</string>
-            </property>
-           </item>
-           <item>
-            <property name="text" >
-             <string>Custom</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pbnNewAnimal" >
-           <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>5</hsizetype>
-             <vsizetype>0</vsizetype>
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="" >
+          <layout class="QHBoxLayout" >
+           <property name="margin" >
+            <number>0</number>
            </property>
-           <property name="text" >
-            <string>New</string>
+           <property name="spacing" >
+            <number>6</number>
            </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pbnEditAnimal" >
-           <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>0</hsizetype>
-             <vsizetype>0</vsizetype>
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text" >
-            <string>Edit Selected</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item row="1" column="2" >
-        <widget class="QLabel" name="label_10" >
-         <property name="text" >
-          <string>Model Parameters</string>
-         </property>
-         <property name="alignment" >
-          <set>Qt::AlignCenter</set>
-         </property>
+           <item>
+            <layout class="QVBoxLayout" >
+             <property name="margin" >
+              <number>0</number>
+             </property>
+             <property name="spacing" >
+              <number>6</number>
+             </property>
+             <item>
+              <widget class="QTextBrowser" name="textBrowserAnimalDefinition" >
+               <property name="sizePolicy" >
+                <sizepolicy>
+                 <hsizetype>7</hsizetype>
+                 <vsizetype>3</vsizetype>
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushButtonAnimalDefinitionEdit" >
+               <property name="text" >
+                <string>Edit Animal Definition</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QVBoxLayout" >
+             <property name="margin" >
+              <number>0</number>
+             </property>
+             <property name="spacing" >
+              <number>6</number>
+             </property>
+             <item>
+              <widget class="QTextBrowser" name="textBrowserAnimalParameters" >
+               <property name="sizePolicy" >
+                <sizepolicy>
+                 <hsizetype>7</hsizetype>
+                 <vsizetype>3</vsizetype>
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushButtonAnimalParametersEdit" >
+               <property name="text" >
+                <string>Edit Model Parameters</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
         </widget>
        </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="maps_tab" >
-      <attribute name="title" >
-       <string>Maps</string>
-      </attribute>
-      <layout class="QGridLayout" >
-       <property name="margin" >
-        <number>9</number>
-       </property>
-       <property name="spacing" >
-        <number>6</number>
-       </property>
       </layout>
      </widget>
      <widget class="QWidget" name="results_tab" >
       <attribute name="title" >
-       <string>Results</string>
+       <string>Calculations</string>
       </attribute>
       <layout class="QGridLayout" >
        <property name="margin" >
@@ -1209,6 +1150,148 @@ p, li { white-space: pre-wrap; }
        <property name="spacing" >
         <number>6</number>
        </property>
+       <item row="0" column="1" >
+        <widget class="QSplitter" name="splitter_6" >
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <widget class="QWidget" name="" >
+          <layout class="QVBoxLayout" >
+           <property name="margin" >
+            <number>0</number>
+           </property>
+           <property name="spacing" >
+            <number>6</number>
+           </property>
+           <item>
+            <widget class="QListWidget" name="listWidgetAnimals_2" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>13</hsizetype>
+               <vsizetype>7</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <item>
+              <property name="text" >
+               <string>Animal 1</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Animal 2</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Animal 3</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Animal 4</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Animal 5</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton_2" >
+             <property name="text" >
+              <string>Clear</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QTextBrowser" name="textBrowserResultsAnimals" >
+          <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>5</hsizetype>
+            <vsizetype>5</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </widget>
+       </item>
+       <item row="0" column="0" >
+        <widget class="QSplitter" name="splitter_5" >
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <widget class="QWidget" name="" >
+          <layout class="QVBoxLayout" >
+           <property name="margin" >
+            <number>0</number>
+           </property>
+           <property name="spacing" >
+            <number>6</number>
+           </property>
+           <item>
+            <widget class="QListWidget" name="listWidgetCropsResults" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>13</hsizetype>
+               <vsizetype>7</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <item>
+              <property name="text" >
+               <string>Crop 1</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Crop 2</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Crop 3</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Crop 4</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Crop 5</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton" >
+             <property name="text" >
+              <string>Clear</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QTextBrowser" name="textBrowserResultsCrop" >
+          <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>7</hsizetype>
+            <vsizetype>7</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </widget>
+       </item>
        <item row="1" column="0" colspan="2" >
         <widget class="QGroupBox" name="model_method_box" >
          <property name="sizePolicy" >
@@ -1222,125 +1305,166 @@ p, li { white-space: pre-wrap; }
          <property name="title" >
           <string>Modelling Method</string>
          </property>
-         <layout class="QGridLayout" >
-          <property name="margin" >
-           <number>9</number>
+         <widget class="QSpinBox" name="spinBoxModelPrecision" >
+          <property name="geometry" >
+           <rect>
+            <x>560</x>
+            <y>30</y>
+            <width>38</width>
+            <height>21</height>
+           </rect>
           </property>
-          <property name="spacing" >
-           <number>6</number>
+          <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>0</hsizetype>
+            <vsizetype>0</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
           </property>
-          <item row="0" column="5" >
-           <widget class="QSpinBox" name="spinBoxModelPrecision" >
-            <property name="sizePolicy" >
-             <sizepolicy>
-              <hsizetype>0</hsizetype>
-              <vsizetype>0</vsizetype>
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="toolTip" >
-             <string>The smaller the value, the longer it will take to calculate the results!</string>
-            </property>
-            <property name="maximum" >
-             <number>50</number>
-            </property>
-            <property name="minimum" >
-             <number>1</number>
-            </property>
-            <property name="value" >
-             <number>5</number>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="4" >
-           <widget class="QLabel" name="label" >
-            <property name="text" >
-             <string>Precision: </string>
-            </property>
-            <property name="alignment" >
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="3" >
-           <widget class="QRadioButton" name="radioButtonPathDistance" >
-            <property name="toolTip" >
-             <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+          <property name="toolTip" >
+           <string>The smaller the value, the longer it will take to calculate the results!</string>
+          </property>
+          <property name="maximum" >
+           <number>50</number>
+          </property>
+          <property name="minimum" >
+           <number>1</number>
+          </property>
+          <property name="value" >
+           <number>5</number>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label" >
+          <property name="geometry" >
+           <rect>
+            <x>451</x>
+            <y>28</y>
+            <width>103</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="text" >
+           <string>Precision: </string>
+          </property>
+          <property name="alignment" >
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+         <widget class="QRadioButton" name="radioButtonPathDistance" >
+          <property name="geometry" >
+           <rect>
+            <x>339</x>
+            <y>29</y>
+            <width>106</width>
+            <height>23</height>
+           </rect>
+          </property>
+          <property name="toolTip" >
+           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Calculate catchment by growing distance based on path distance (considers topography)&lt;/p>&lt;/body>&lt;/html></string>
-            </property>
-            <property name="whatsThis" >
-             <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+          </property>
+          <property name="whatsThis" >
+           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">When Path Distance is selected, a cost map for the area is created that calculates how far it is  to all areas of the map from the site.  This distance considers topography.  The program then calculates area contained within a certain distance of the site.  If the derived area is insufficient to support the population, the distance is increased, and it tries again.  This repeats until the required area is contained.&lt;/p>&lt;/body>&lt;/html></string>
-            </property>
-            <property name="text" >
-             <string>Path Distance</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2" >
-           <widget class="QRadioButton" name="radioButtonWalkingTime" >
-            <property name="toolTip" >
-             <string>Calculate catchment by growing distance based on walking time</string>
-            </property>
-            <property name="whatsThis" >
-             <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+          </property>
+          <property name="text" >
+           <string>Path Distance</string>
+          </property>
+         </widget>
+         <widget class="QRadioButton" name="radioButtonWalkingTime" >
+          <property name="geometry" >
+           <rect>
+            <x>229</x>
+            <y>29</y>
+            <width>104</width>
+            <height>23</height>
+           </rect>
+          </property>
+          <property name="toolTip" >
+           <string>Calculate catchment by growing distance based on walking time</string>
+          </property>
+          <property name="whatsThis" >
+           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">When Walking Time is selected, a cost map for the area is created that predicts how long it takes to get to any area on the map from the settlement.  The program then calculates the suitable area contained within the time it takes to walk.  If the derived area is insufficient to support the population, the walking time is increased, and it tries again.  This repeats until the required area is contained.&lt;/p>&lt;/body>&lt;/html></string>
-            </property>
-            <property name="text" >
-             <string>Walking Time</string>
-            </property>
-            <property name="checked" >
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1" >
-           <widget class="QRadioButton" name="radioButtonEuclidean" >
-            <property name="toolTip" >
-             <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+          </property>
+          <property name="text" >
+           <string>Walking Time</string>
+          </property>
+          <property name="checked" >
+           <bool>false</bool>
+          </property>
+         </widget>
+         <widget class="QRadioButton" name="radioButtonEuclidean" >
+          <property name="geometry" >
+           <rect>
+            <x>120</x>
+            <y>29</y>
+            <width>103</width>
+            <height>23</height>
+           </rect>
+          </property>
+          <property name="toolTip" >
+           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Calculate catchment by growing distance based on distance from the site ('as the crow flies')&lt;/p>&lt;/body>&lt;/html></string>
-            </property>
-            <property name="whatsThis" >
-             <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+          </property>
+          <property name="whatsThis" >
+           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">When Euclidean is selected, a cost map for the area is created that calculates how far it is  to all areas of the map from the site.  This distance does NOT consider topography.  In other words, it is simply as the crow flies.  The program then calculates area contained within a certain distance of the site.  If the derived area is insufficient to support the population, the distance is increased, and it tries again.  This repeats until the required area is contained.&lt;/p>&lt;/body>&lt;/html></string>
-            </property>
-            <property name="text" >
-             <string>Euclidean</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0" >
-           <widget class="QRadioButton" name="radioButtonCalculations" >
-            <property name="toolTip" >
-             <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+          </property>
+          <property name="text" >
+           <string>Euclidean</string>
+          </property>
+         </widget>
+         <widget class="QRadioButton" name="radioButtonCalculations" >
+          <property name="geometry" >
+           <rect>
+            <x>11</x>
+            <y>29</y>
+            <width>103</width>
+            <height>23</height>
+           </rect>
+          </property>
+          <property name="toolTip" >
+           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Produces a report of all calculated landuse area requirements, but draws no maps.&lt;/p>&lt;/body>&lt;/html></string>
-            </property>
-            <property name="text" >
-             <string>Calculations</string>
-            </property>
-            <property name="checked" >
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-         </layout>
+          </property>
+          <property name="text" >
+           <string>Calculations</string>
+          </property>
+          <property name="checked" >
+           <bool>true</bool>
+          </property>
+         </widget>
         </widget>
        </item>
-       <item row="0" column="0" >
-        <widget class="QTextBrowser" name="textBrowserResultsLeft" >
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab" >
+      <attribute name="title" >
+       <string>Results</string>
+      </attribute>
+      <layout class="QGridLayout" >
+       <property name="margin" >
+        <number>9</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item row="0" column="1" >
+        <widget class="QTextBrowser" name="textBrowserResultsRight" >
          <property name="sizePolicy" >
           <sizepolicy>
            <hsizetype>5</hsizetype>
@@ -1351,8 +1475,8 @@ p, li { white-space: pre-wrap; }
          </property>
         </widget>
        </item>
-       <item row="0" column="1" >
-        <widget class="QTextBrowser" name="textBrowserResultsRight" >
+       <item row="0" column="0" >
+        <widget class="QTextBrowser" name="textBrowserResultsLeft" >
          <property name="sizePolicy" >
           <sizepolicy>
            <hsizetype>5</hsizetype>
@@ -1817,34 +1941,50 @@ p, li { white-space: pre-wrap; }
  </resources>
  <connections>
   <connection>
-   <sender>pushButtonClear</sender>
-   <signal>clicked()</signal>
-   <receiver>textBrowserResultsLeft</receiver>
-   <slot>clear()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>1407</x>
-     <y>1312</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>1110</x>
-     <y>1063</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>pushButtonDietClear</sender>
    <signal>clicked()</signal>
    <receiver>breakdownDisplay</receiver>
    <slot>clear()</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>1110</x>
-     <y>1063</y>
+     <x>252</x>
+     <y>272</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>1110</x>
-     <y>1063</y>
+     <x>629</x>
+     <y>266</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>textBrowserResultsCrop</receiver>
+   <slot>clear()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>72</x>
+     <y>236</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>141</x>
+     <y>209</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_2</sender>
+   <signal>clicked()</signal>
+   <receiver>textBrowserResultsAnimals</receiver>
+   <slot>clear()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>390</x>
+     <y>241</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>449</x>
+     <y>214</y>
     </hint>
    </hints>
   </connection>

@@ -1,9 +1,9 @@
 /***************************************************************************
-                          laplant.h  -  An plant class
+                          laplant.h  -  A plant class
                              -------------------
     begin                : March 2006
-    copyright            : (C) 2003 by Tim Sutton
-    email                : tim@linfiniti.com
+    copyright            : (C) 2003 by Tim Sutton  tim@linfiniti.com
+                         :     2007 by Jason Jorgenson  arkygeek@gmail.com
  ***************************************************************************/
 
 /***************************************************************************
@@ -24,7 +24,7 @@ class QString;
 #include <QString>
 /** 
   * An class to represent an plant
-  * @author Tim Sutton
+  * @author Tim Sutton, Jason Jorgenson
   */
 
 class LaPlant : public LaSerialisable, public LaGuid 
