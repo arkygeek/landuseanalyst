@@ -48,20 +48,24 @@ FORMS += ../ui/lamainformbase.ui \
          ../ui/laplantformdetailsbase.ui
 
 HEADERS += lamainform.h \
+           lautils.h \
            laanimalmain.h \
            laanimaldetails.h \
            laanimal.h \
            laplantmain.h \
            laplantdetails.h \
+           laplant.h \
            laserialisable.h
 
 SOURCES += main.cpp \
+           lautils.cpp \
            lamainform.cpp \
            laanimalmain.cpp \
            laanimal.cpp \
            laanimaldetails.cpp \
            laplantmain.cpp \
            laplantdetails.cpp \
+           laplant.cpp \
            laserialisable.cpp 
 
 CONFIG += warn_on

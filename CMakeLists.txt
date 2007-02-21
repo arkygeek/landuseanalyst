@@ -35,7 +35,23 @@ ELSE (WIN32)
 
 ENDIF (WIN32)
 
+#############################################################
+# search for Qt4
+
 find_package(Qt4 REQUIRED) # find and setup Qt4 for this project
+SET( QT_USE_QT3SUPPORT TRUE)
+SET( QT_USE_QTXML      TRUE )
+SET( QT_USE_QTNETWORK  TRUE )
+SET( QT_USE_QTSVG      TRUE )
+# TODO: should not be needed, report it to CMake devs
+IF (APPLE AND QT_USE_QT3SUPPORT)
+  SET( QT_USE_QTSQL    TRUE )
+ENDIF (APPLE AND QT_USE_QT3SUPPORT)
+
+#############################################################
+# enable warnings
+
+ADD_DEFINITIONS( -Wall -Werror )
 
 # tell cmake to process CMakeLists.txt in that subdirectory
 add_subdirectory(src)

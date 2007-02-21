@@ -9,6 +9,7 @@ include(${QT_USE_FILE})
 # the variable "landuseanalyst_SRCS" contains all .cpp files of this project
 set(landuseanalyst_SRCS
     main.cpp
+    lautils.cpp
     lamainform.cpp
     laplantmain.cpp
     laplant.cpp

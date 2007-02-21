@@ -39,7 +39,7 @@ class LaAnimalMain : public QDialog, private Ui::LaAnimalFormMainBase
 
   public slots:
   void on_pushButtonLoad_clicked();
-  QString on_pushButtonSave_clicked();
+  void on_pushButtonSave_clicked();
 
   private slots:
 

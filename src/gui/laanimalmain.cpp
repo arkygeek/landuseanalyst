@@ -67,7 +67,7 @@ void LaAnimalMain::on_pushButtonLoad_clicked()
   mAnimal.fromXmlFile("/tmp/animal.xml");
 }
 
-QString LaAnimalMain::on_pushButtonSave_clicked()
+void LaAnimalMain::on_pushButtonSave_clicked()
 {
   mAnimal.setName(lineEditAnimalName->text());
   mAnimal.setUsableMeat(spinBoxUsableMeatPercent->value());

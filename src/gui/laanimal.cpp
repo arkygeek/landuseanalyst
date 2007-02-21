@@ -186,7 +186,7 @@ void LaAnimal::setEstrousCycle(int theDays)
 
 QString LaAnimal::toXml()
 {
-  QString myString = QString("<Animal Id=\"" + mName + "\"/>\n");
+  QString myString;
   myString+=QString("<animal>\n");
   myString+=QString("  <name>" + mName + "</name>\n");
   myString+=QString("  <usableMeat>" + QString::number(mUsableMeat) + "</usableMeat>\n");

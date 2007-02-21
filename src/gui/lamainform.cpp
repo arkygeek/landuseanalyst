@@ -151,9 +151,11 @@ void LaMainForm::on_pushButtonDietBreakdown_clicked()
 
   float myTotalCalories = myPopulation*myCalories*365.;
   float myPlantCalories = (myOverallPercentage/100.)*myTotalCalories;
-  float myTamePlantCalories = ((myOverallPercentage/100.)*(myTamePlantPercentage/100.))*myTotalCalories;
+  //not used!
+  //float myTamePlantCalories = ((myOverallPercentage/100.)*(myTamePlantPercentage/100.))*myTotalCalories;
   float myAnimalCalories = (myDietPercentMeat/100.)*myTotalCalories;
-  float myTameAnimalCalories = ((myDietPercentMeat/100.)*(myDietPercentTameMeat/100.))*myTotalCalories;
+  //not used!
+  //float myTameAnimalCalories = ((myDietPercentMeat/100.)*(myDietPercentTameMeat/100.))*myTotalCalories;
 
   writeDiet("Calories per person per year: " + QString::number((myCalories*365.)/1000.).toLocal8Bit() + "kcal");
   writeDiet("Calories required for population are: " + QString::number(myTotalCalories/1000.).toLocal8Bit() + "kcal");
