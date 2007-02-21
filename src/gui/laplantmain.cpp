@@ -17,14 +17,17 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "laplantmain.h"
+#include "lautils.h"
 #include <QSettings>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QTableWidgetItem>
+#include <QDir>
 #include <QFile>
 #include <QTextStream>
 #include <QProcess>
 #include <QStringList>
+#include <QString>
 
 LaPlantMain::LaPlantMain(QWidget* parent, Qt::WFlags fl)
   : QDialog(parent,fl) 
@@ -62,9 +65,7 @@ void LaPlantMain::writeSettings()
 
 void LaPlantMain::on_pushButtonLoad_clicked()
 {
-  // fill all fields on form from a saved
-  // plant profile, which includes those
-  // of the 5 default crop varieties
+  mPlant.fromXmlFile("/tmp/plant.xml");
 }
 
 //void LaPlantMain::on_pushButtonSave_clicked()
@@ -79,11 +80,12 @@ void LaPlantMain::on_pushButtonLoad_clicked()
 void LaPlantMain::on_pushButtonSave_clicked()
 {
   mPlant.setName(lineEditPlantName->text());
-  mPlant.setCropYield(spinBoxCropYield->value());
-  mPlant.setCropCalories(spinBoxCropCalories->value());
+  mPlant.setCropYield(spinBoxPlantYield->value());
+  mPlant.setCropCalories(spinBoxPlantCalories->value());
   mPlant.setFodderProduction(spinBoxFodderProduction->value());
   mPlant.setFodderCalories(spinBoxFodderCalories->value());
   mPlant.setYieldUnits(comboBoxYieldUnits->currentIndex());
+  mPlant.toXmlFile( LaUtils::userPlantProfilesDirPath() + 
+      QDir::separator() + mPlant.name() + ".xml");
 
-//  mPlant.toXml("/tmp/plant" + mPlant.name() + ".xml");
 }

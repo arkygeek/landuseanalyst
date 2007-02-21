@@ -24,6 +24,7 @@ class QStringList;
 #include <QHash>
 #include <QMap>
 #include "laanimal.h"
+#include "laplant.h"
 
 /** This is a helper class with mainly static methods for easily
  * obtaining the directories and paths relating to the application
@@ -56,6 +57,26 @@ class LaUtils
      * the default.
      */
     static const QString getModelOutputDir();
+    /**
+     * Find the place on the filesystem where user defined plant
+     * profiles are stored. 
+     *
+     * Typically this will be ~/.landuseAnalyst/plants
+     *
+     * @return QString containing the relevant directory name
+     */
+    static const QString userPlantProfilesDirPath();
+
+    /** This typedef is used to refer to a collection of layersets.
+     * the key is the layerset name
+     * the value is the layerset itself
+     */
+    typedef QMap<QString,LaPlant> PlantMap;
+
+    /** Get a QMap of the avaliable layersets in the users layersets directory
+     * @return a QMap<QString,OmgLayerSet> where the QString key is the layerset name 
+     **/
+    static LaUtils::PlantMap getAvailablePlants();
 
     /** This typedef is used to refer to a collection of layersets.
      * the key is the layerset name

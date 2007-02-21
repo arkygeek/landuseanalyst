@@ -105,7 +105,12 @@ void LaMainForm::on_pbnNewAnimal_clicked()
   myAnimalForm.exec();
   loadAnimals();
 }
-
+void LaMainForm::on_pbnNewPlant_clicked()
+{
+  LaPlantMain myPlantForm;
+  myPlantForm.exec();
+  loadPlants();
+}
 void LaMainForm::loadAnimals()
 {
   listWidgetAnimals->clear();
@@ -125,13 +130,25 @@ void LaMainForm::loadAnimals()
     listWidgetAnimals->addItem(mypItem);
   }
 }
-
-void LaMainForm::on_pbnNewCrop_clicked()
+void LaMainForm::loadPlants()
 {
-  LaPlantMain myCropForm;
-  myCropForm.exec();
+  listWidgetPlants->clear();
+  mPlantsMap = LaUtils::getAvailablePlants();
+  QMapIterator<QString, LaPlant> myIterator(mPlantsMap);
+  while (myIterator.hasNext()) 
+  {
+    myIterator.next();
+    LaPlant myPlant = myIterator.value();
+    QString myGuid = myPlant.guid();
+    QString myName = myPlant.name();
+    //display an icon indicating if the user defined or system supplied
+    QIcon myIcon;
+    myIcon.addFile(":/localdata.png");
+    QListWidgetItem * mypItem = new QListWidgetItem(myIcon,myName);
+    mypItem->setData(Qt::UserRole,myGuid);
+    listWidgetAnimals->addItem(mypItem);
+  }
 }
-
 
 void LaMainForm::on_pushButtonRun_clicked()
 {

@@ -76,7 +76,46 @@ LaUtils::AnimalMap LaUtils::getAvailableAnimals()
   }
   return myMap;
 }
+const QString LaUtils::userPlantProfilesDirPath()
+{
+  //alg profiles are always saved in the users home dir under .landuseAnalyst/
+  QString myPath = QDir::homePath() + QString("/.landuseAnalyst/") + 
+    QDir::separator()+"plantProfiles"+QDir::separator();
+  QDir().mkpath(myPath);
+  return myPath;
+}
 
+LaUtils::PlantMap LaUtils::getAvailablePlants()
+{
+  LaUtils::PlantMap myMap;
+  QDir myDirectory(userPlantProfilesDirPath());
+  myDirectory.setFilter(QDir::Dirs | QDir::Files | QDir::NoSymLinks );
+  QFileInfoList myList = myDirectory.entryInfoList();
+  for (unsigned int i = 0; i < static_cast<unsigned int>(myList.size()); ++i) 
+  {
+    QFileInfo myFileInfo = myList.at(i);
+    //Ignore directories
+    if(myFileInfo.fileName() == "." ||myFileInfo.fileName() == ".." ) 
+    {
+      continue;
+    }
+    //if the filename ends in .xml try to load it into our layerSets listing
+    if(myFileInfo.completeSuffix()=="xml")
+    {
+      qDebug("Loading plant: " + myList.at(i).absoluteFilePath().toLocal8Bit());
+      LaPlant myPlant;
+      myPlant.fromXmlFile(myFileInfo.absoluteFilePath());
+      if (myPlant.name().isEmpty())
+      {
+        qDebug("Plant name was empty!");
+        continue;
+      }
+      qDebug("Adding " + myPlant.name());
+      myMap[myPlant.name()]=myPlant;
+    }
+  }
+  return myMap;
+}
 QStringList LaUtils::sortList(QStringList theList)
 {
     //sort the taxon list alpabetically descending order

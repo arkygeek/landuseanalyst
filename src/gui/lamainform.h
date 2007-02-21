@@ -45,11 +45,14 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
   void on_pushButtonRun_clicked();
   void on_pushButtonLoad_clicked();
   void on_pushButtonSave_clicked();
-  void on_pbnNewCrop_clicked();
+  void on_pbnNewPlant_clicked();
   void on_pbnNewAnimal_clicked();
   /** Refresh the animals list, remembering which were checked
    * from before */
   void loadAnimals();
+  /** Refresh the plants list, remembering which were checked
+   * from before */
+  void loadPlants();
 
   private slots:
   void helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetItem * thepOldItem);
@@ -67,6 +70,7 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
     void readSettings();
     void writeSettings();
     LaUtils::AnimalMap mAnimalsMap;
+    LaUtils::PlantMap mPlantsMap;
 };
 
 #endif //LAMAINFORM_H

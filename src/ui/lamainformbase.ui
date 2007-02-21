@@ -864,7 +864,7 @@ p, li { white-space: pre-wrap; }
             <number>6</number>
            </property>
            <item>
-            <widget class="QListWidget" name="listWidgetCrops" >
+            <widget class="QListWidget" name="listWidgetPlants" >
              <property name="sizePolicy" >
               <sizepolicy>
                <hsizetype>13</hsizetype>
@@ -901,7 +901,7 @@ p, li { white-space: pre-wrap; }
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="pbnNewCrop" >
+            <widget class="QPushButton" name="pbnNewPlant" >
              <property name="sizePolicy" >
               <sizepolicy>
                <hsizetype>5</hsizetype>
@@ -934,7 +934,7 @@ p, li { white-space: pre-wrap; }
               <number>6</number>
              </property>
              <item>
-              <widget class="QTextBrowser" name="textBrowserCropDefinition" >
+              <widget class="QTextBrowser" name="textBrowserPlantDefinition" >
                <property name="sizePolicy" >
                 <sizepolicy>
                  <hsizetype>7</hsizetype>
@@ -946,7 +946,7 @@ p, li { white-space: pre-wrap; }
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="pushButtonCropDefinitionEdit" >
+              <widget class="QPushButton" name="pushButtonPlantDefinitionEdit" >
                <property name="text" >
                 <string>Edit Crop Definition</string>
                </property>
@@ -963,7 +963,7 @@ p, li { white-space: pre-wrap; }
               <number>6</number>
              </property>
              <item>
-              <widget class="QTextBrowser" name="textBrowserCropParameters" >
+              <widget class="QTextBrowser" name="textBrowserPlantParameters" >
                <property name="sizePolicy" >
                 <sizepolicy>
                  <hsizetype>7</hsizetype>
