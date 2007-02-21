@@ -199,9 +199,19 @@ bool LaAnimal::fromXml(QString theXml)
   }
   setGuid(myTopElement.attribute("guid"));
   mName=LaUtils::xmlDecode(myTopElement.firstChildElement("name").text());
-  //etc...Jason complete here
-
-
+  mUsableMeat=QString(myTopElement.firstChildElement("usableMeat").text()).toInt();
+  mKillWeight=QString(myTopElement.firstChildElement("killWeight").text()).toInt();
+  mGrowTime=QString(myTopElement.firstChildElement("growTime").text()).toInt();
+  mDeathRate=QString(myTopElement.firstChildElement("deathRate").text()).toInt();
+  mGestating=QString(myTopElement.firstChildElement("gestating").text()).toInt();
+  mLactating=QString(myTopElement.firstChildElement("lactating").text()).toInt();
+  mJuvenile=QString(myTopElement.firstChildElement("juvenile").text()).toInt();
+  mLifeExpectancy=QString(myTopElement.firstChildElement("lifeExpectancy").text()).toInt();
+  mBreedingExpectancy=QString(myTopElement.firstChildElement("breedingExpectancy").text()).toInt();
+  mYoungPerBirth=QString(myTopElement.firstChildElement("youngPerBirth").text()).toInt();
+  mWeaningAge=QString(myTopElement.firstChildElement("weaningAge").text()).toInt();
+  mGestationTime=QString(myTopElement.firstChildElement("gestationTime").text()).toInt();
+  mEstrousCycle=QString(myTopElement.firstChildElement("estrousCycle").text()).toInt();
   return true;
 }
 
