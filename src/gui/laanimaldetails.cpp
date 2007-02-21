@@ -17,17 +17,20 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "laanimaldetails.h"
+#include "lautils.h"
 #include <QSettings>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QTableWidgetItem>
+#include <QDir>
 #include <QFile>
 #include <QTextStream>
 #include <QProcess>
 #include <QStringList>
+#include <QString>
 
-LaAnimalDetails::LaAnimalDetails(QWidget* parent, Qt::WFlags fl)
-  : QDialog(parent,fl) 
+  LaAnimalDetails::LaAnimalDetails(QWidget* parent, Qt::WFlags fl)
+: QDialog(parent,fl) 
 {
   //required by Qt4 to initialise the ui
   setupUi(this);
@@ -63,9 +66,17 @@ void LaAnimalDetails::writeSettings()
 void LaAnimalDetails::on_pushButtonLoad_clicked()
 {
   //
+  mAnimalDetails.fromXmlFile("/tmp/animalDetails.xml");
 }
 
 void LaAnimalDetails::on_pushButtonSave_clicked()
 {
-  //
+  mAnimalDetails.setPercentMeat(spinBoxPercentOfTameMeat->value());
+  mAnimalDetails.setFoodValueOfSpecificGrazingLand(spinBoxUniqueRasterCalories->value());
+  mAnimalDetails.setFoodValueOfCommonGrazingLand(spinBoxCommonRasterCalories->value());
+  mAnimalDetails.setUseSpecificGrazingLand(checkBoxUniqueRaster->isChecked());
+  mAnimalDetails.setUseCommonGrazingLand(checkBoxCommonRaster->isChecked());
+  mAnimalDetails.setFallowUsage(spinBoxCaloriesForGestating->currentIndex());
+  mAnimalDetails.toXmlFile( LaUtils::userAnimalProfilesDirPath() +
+      QDir::separator() + mAnimalDetails.name() + ".xml");
 }

@@ -17,19 +17,19 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef LAANIMALFORMDETAILSFORM_H
-#define LAANIMALFORMDETAILSFORM_H
+#ifndef LAANIMALDETAILSFORM_H
+#define LAANIMALDETAILSFORM_H
 
 //QT Includes
 #include <QDialog>
 //Local Includes
 #include <ui_laanimalformdetailsbase.h>
+#include <laanimalparameters.h>
 class QTreeWidgetItem;
 /**
   This is the main gui class
   @author Tim Sutton, Jason Jorgenson
 */
-
 class LaAnimalDetails : public QDialog, private Ui::LaAnimalFormDetailsBase
 {
   Q_OBJECT
@@ -44,6 +44,7 @@ class LaAnimalDetails : public QDialog, private Ui::LaAnimalFormDetailsBase
   private slots:
 
   private:
+    LaAnimalDetails mAnimalDetails;
     void readSettings();
     void writeSettings();
 };

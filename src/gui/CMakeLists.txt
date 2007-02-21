@@ -18,6 +18,7 @@ set(landuseanalyst_SRCS
     laanimalmain.cpp
     laanimal.cpp
     laanimaldetails.cpp
+    laanimalparameters.cpp
     laserialisable.cpp
    )
 SET(landuseanalyst_UIS
@@ -33,6 +34,7 @@ SET(landuseanalyst_MOC_HDRS
     laplantdetails.h
     laanimalmain.h
     laanimaldetails.h
+    laanimalparameters.h
     )
 SET(landuseanalyst_RCCS 
     ../resources/resources.qrc
