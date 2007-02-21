@@ -17,10 +17,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "laanimalmain.h"
+#include "lautils.h"
 #include <QSettings>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QTableWidgetItem>
+#include <QDir>
 #include <QFile>
 #include <QTextStream>
 #include <QProcess>
@@ -83,6 +85,7 @@ void LaAnimalMain::on_pushButtonSave_clicked()
   mAnimal.setWeaningAge(spinBoxWeaningAge->value());
   mAnimal.setGestationTime(spinBoxGestationTime->value());
   mAnimal.setEstrousCycle(spinBoxEstrousCycleTime->value());
-  mAnimal.toXmlFile("/tmp/animal" + mAnimal.name() + ".xml");
+  mAnimal.toXmlFile( LaUtils::userAnimalProfilesDirPath() + 
+      QDir::separator() + mAnimal.name() + ".xml");
 }
 

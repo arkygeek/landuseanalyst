@@ -23,7 +23,7 @@ const QString LaUtils::userSettingsDirPath()
 {
   QSettings mySettings;
   QString myPath=
-      mySettings.value("dataDirs/dataDir", QDir::homePath() + QString("/.omgui/") ).toString();
+      mySettings.value("dataDirs/dataDir", QDir::homePath() + QString("/.landuseAnalyst/") ).toString();
   //  Make sure the users settings dir actually exists
   //qDebug("LaUtils::userSettingsDirPath() = " + myPath.toLocal8Bit());
   QDir().mkpath(myPath);
@@ -37,9 +37,9 @@ const QString LaUtils::getModelOutputDir()
 }
 const QString LaUtils::userAnimalProfilesDirPath()
 {
-  //alg profiles are always saved in the users home dir under .omgui/
-  QString myPath = QDir::homePath() + QString("/.omgui/") + 
-    QDir::separator()+"algorithmProfiles"+QDir::separator();
+  //alg profiles are always saved in the users home dir under .landuseAnalyst/
+  QString myPath = QDir::homePath() + QString("/.landuseAnalyst/") + 
+    QDir::separator()+"animalProfiles"+QDir::separator();
   QDir().mkpath(myPath);
   return myPath;
 }
@@ -113,7 +113,7 @@ QStringList LaUtils::getExperimentsList()
 {
   QStringList myExperimentList;
   QSettings mySettings;
-  QString myWorkDir = mySettings.value("dataDirs/dataDir",QDir::homePath()+QDir::separator()+".omgui1").toString()+
+  QString myWorkDir = mySettings.value("dataDirs/dataDir",QDir::homePath()+QDir::separator()+".landuseAnalyst").toString()+
                       QString("/modelOutputs/");
   QDir myDirectory(myWorkDir);
   myDirectory.setFilter(QDir::Dirs | QDir::Files | QDir::NoSymLinks );
