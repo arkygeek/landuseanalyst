@@ -44,32 +44,18 @@ class LaPlant : public LaSerialisable
 
     /** The name of this plant */
     QString name() const;
-    /** Percentage of plants live weight that can be utilized for meat */
-    int usableMeat() const;
-    /** The weight in kg at which the plants are slaughtered */
-    int killWeight() const;
-    /** The number of weeks from birth it takes to attain slaughtering weight */
-    int growTime() const;
-    /** The percentage of babies that die before being usable as either meat or breeding */
-    int deathRate() const;
-    /** The number of calories a gestating female requires per day */
-    int gestating() const;
-    /** The number of calories a lactating female requires per day */
-    int lactating() const;
-    /** The number of calories a juvenile requires per day */
-    int juvenile() const;
-    /** The life expectancy in years of the plant */
-    int lifeExpectancy() const;
-    /** The number of years a female will reliably produce offspring */
-    int breedingExpectancy() const;
-    /** The average number of young produced per pregnancy */
-    int youngPerBirth() const;
-    /** The age in weeks at which babies stop suckling */
-    int weaningAge() const;
-    /** The number of days required for gestation */
-    int gestationTime() const;
-    /** The number of days in the female estrous cycle */
-    int estrousCycle() const;
+    /** Average amount in Kg of production per hectare or dunum */
+    int cropYield() const;
+    /** The food value in calories of 1 kg of crop product (ie/ grain/fruit) */
+    int cropCalories() const;
+    /** How many Kg of fodder is left for animal feed after harvesting */
+    int fodderProduction() const;
+    /** The food value in calories of 1 Kg of fodder */
+    int fodderCalories() const;
+    /** All production levels based on either Kg/Dunum or Kg/Hectare
+     *  0==Dunum 1==Hectare
+     */
+    int yieldUnits() const;
 
     //
     // Mutators
@@ -79,71 +65,26 @@ class LaPlant : public LaSerialisable
      * @see name()
      */
     void setName(QString theName);
-
-    /** Set useableMeat as a percentage
-     * @see usableMeat()
+    /** Set cropYield as Kg/area
+     * @see cropYield()
      */
-    void setUsableMeat(int thePercentage);
-
-    /** Set killWeight as kg 
-     * @see killWeight()
+    void setCropYield(int theKg);
+    /** Set cropCalories as kg 
+     * @see cropCalories()
      */
-    void setKillWeight(int theKg);
-
-    /** Set the growTime in weeks
-     * @see growTime()
+    void setCropCalories(int theCalories);
+    /** Set the fodderProduction as Kg/area
+     * @see fodderProduction()
      */
-    void setGrowTime(int theWeeks);
-
-    /** Set the deathRate as a percentage
-     * @see deathRate()
+    void setFodderProduction(int theKg);
+    /** Set the fodderCalories with an integer
+     * @see fodderCalories()
      */
-    void setDeathRate(int thePercentage);
-
-    /** Set the daily calories required for a gestating female
-     * @see gestating()
+    void setFodderCalories(int theCalories);
+    /** Set the yieldUnits for area from index
+     * @see yieldUnits()
      */
-    void setGestating(int theCalories);
-
-    /** Set the daily calories required for a lactating female
-     * @see UsableMeat()
-     */
-    void setLactating(int theCalories);
-
-    /** Set the daily calories required for a juvenile
-     * @see UsableMeat()
-     */
-    void setJuvenile(int theCalories);
-
-    /** Set the average lifeExpectancy in years
-     * @see lifeExpectancy()
-     */
-    void setLifeExpectancy(int theYears);
-
-    /** Set the average breedingLifeExpectancy in years
-     * @see breedingExpectancy()
-     */
-    void setBreedingExpectancy(int theYears);
-
-    /** Set the average number of youngPerBirth
-     * @see youngPerBirth()
-     */
-    void setYoungPerBirth(int theInteger);
-
-    /** Set the weaningAge in weeks
-     * @see weaningAge()
-     */
-    void setWeaningAge(int theWeeks);
-
-    /** Set the gestationTime in Days
-     * @see gestationTime()
-     */
-    void setGestationTime(int theDays);
-
-    /** Set the estrousCycle in days
-     * @see estrousCycle()
-     */
-    void setEstrousCycle(int theDays);
+    void setYieldUnits(int theIndex);
 
     /** Return an xml representation of this layer
      * @NOTE this class inherits the serialisable interface so
@@ -160,32 +101,27 @@ class LaPlant : public LaSerialisable
   private:
     /** The name for this plant */
     QString mName;
-    /** Percentage of plants live weight that can be utilized for meat */
-    int mUsableMeat;
-    /** The weight in kg at which the plants are slaughtered */
-    int mKillWeight;
-    /** The number of weeks from birth it takes to attain slaughtering weight */
-    int mGrowTime;
-    /** The percentage of babies that die before being usable as either meat or breeding */
-    int mDeathRate;
-    /** The number of calories a gestating female requires per day */
-    int mGestating;
-    /** The number of calories a lactating female requires per day */
-    int mLactating;
-    /** The number of calories a juvenile requires per day */
-    int mJuvenile;
-    /** The life expectancy in years of the plant */
-    int mLifeExpectancy;
-    /** The number of years a female will reliably produce offspring */
-    int mBreedingExpectancy;
-    /** The average number of young produced per pregnancy */
-    int mYoungPerBirth;
-    /** The age in weeks at which babies stop suckling */
-    int mWeaningAge;
-    /** The number of days required for gestation */
-    int mGestationTime;
-    /** The number of days in the female estrous cycle */
-    int mEstrousCycle;
+    /** Set cropYield as Kg/area
+     * @see cropYield()
+     */
+    int mCropYield;
+    /** Set cropCalories as kg 
+     * @see cropCalories()
+     */
+    int mCropCalories;
+    /** Set the fodderProduction as Kg/area
+     * @see fodderProduction()
+     */
+    int mCropFodderProduction;
+    /** Set the fodderCalories with an integer
+     * @see fodderCalories()
+     */
+    int mCropFodderCalories;
+    /** Set the yieldUnits for area from index
+     * @see yieldUnits()
+     */
+    int mYieldUnits;
+
 };
 
 #endif //LAPLANT_H
