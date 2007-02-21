@@ -67,17 +67,18 @@ void LaPlantMain::on_pushButtonLoad_clicked()
   // of the 5 default crop varieties
 }
 
-void LaPlantMain::on_pushButtonSave_clicked()
-{
+//void LaPlantMain::on_pushButtonSave_clicked()
+//{
   // if all fields have been completed,
   // save contents of all fields to disk,
   // and return info to lamainform.
   // If the name field is missing,
   // prompt user for name.  File might
   // get stored as cropname.lac
-}
-QString LaPlantMain::on_pushButtonSave_clicked()
+//}
+void LaPlantMain::on_pushButtonSave_clicked()
 {
+/*
   mPlant.setName(lineEditPlantName->text());
   mPlant.setUsableMeat(spinBoxUsableMeatPercent->value());
   mPlant.setKillWeight(spinBoxKillWeight->value());
@@ -92,5 +93,6 @@ QString LaPlantMain::on_pushButtonSave_clicked()
   mPlant.setWeaningAge(spinBoxWeaningAge->value());
   mPlant.setGestationTime(spinBoxGestationTime->value());
   mPlant.setEstrousCycle(spinBoxEstrousCycleTime->value());
-//  mPlant.toXml("/tmp/animal" + mPlant.name() + ".xml");
+*/
+  //  mPlant.toXml("/tmp/animal" + mPlant.name() + ".xml");
 }

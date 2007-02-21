@@ -39,7 +39,7 @@ public:
      *  we will write the serialised xml to that file.
      * Internally it uses toXml() method above so that must be properly implemented.
      */
-    virtual bool toXml(QString theFileName);
+    virtual bool toXmlFile(const QString theFileName);
     /** Read this object from xml and return result as true for success, false for failure (virtual). */
     virtual bool fromXml(const QString theXml)=0;
     /** Read this object from xml in a file and return result as true for success, false for failure.

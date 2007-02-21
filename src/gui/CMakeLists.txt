@@ -11,6 +11,7 @@ set(landuseanalyst_SRCS
     main.cpp
     lamainform.cpp
     laplantmain.cpp
+    laplant.cpp
     laplantdetails.cpp
     laanimalmain.cpp
     laanimal.cpp

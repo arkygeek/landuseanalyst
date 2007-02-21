@@ -27,8 +27,8 @@
 #include <QStringList>
 #include <QString>
 
-LaAnimalMain::LaAnimalMain(QWidget* parent, Qt::WFlags fl)
-  : QDialog(parent,fl) 
+  LaAnimalMain::LaAnimalMain(QWidget* parent, Qt::WFlags fl)
+: QDialog(parent,fl) 
 {
   //required by Qt4 to initialise the ui
   setupUi(this);
@@ -64,6 +64,7 @@ void LaAnimalMain::writeSettings()
 void LaAnimalMain::on_pushButtonLoad_clicked()
 {
   //
+  mAnimal.fromXmlFile("/tmp/animal.xml");
 }
 
 QString LaAnimalMain::on_pushButtonSave_clicked()
@@ -82,6 +83,6 @@ QString LaAnimalMain::on_pushButtonSave_clicked()
   mAnimal.setWeaningAge(spinBoxWeaningAge->value());
   mAnimal.setGestationTime(spinBoxGestationTime->value());
   mAnimal.setEstrousCycle(spinBoxEstrousCycleTime->value());
-//  mAnimal.toXml("/tmp/animal" + mAnimal.name() + ".xml");
+  mAnimal.toXmlFile("/tmp/animal" + mAnimal.name() + ".xml");
 }
 

@@ -1,5 +1,5 @@
 /***************************************************************************
-                          omgserialisable.cpp  -  description
+                          laanimal.cpp  -  The animal class
                              -------------------
     begin                : March 2006
     copyright            : (C) 2003 by Tim Sutton
@@ -187,21 +187,21 @@ void LaAnimal::setEstrousCycle(int theDays)
 QString LaAnimal::toXml()
 {
   QString myString = QString("<Animal Id=\"" + mName + "\"/>\n");
-          myString+=QString("<animal>\n");
-            myString+=QString("  <name>" + mName + "</name>\n");
-            myString+=QString("  <usableMeat>" + QString::number(mUsableMeat) + "</usableMeat>\n");
-            myString+=QString("  <killWeight>" + QString::number(mKillWeight) + "</killWeight>\n");
-            myString+=QString("  <growTime>" + QString::number(mGrowTime) + "</growTime>\n");
-            myString+=QString("  <deathRate>" + QString::number(mDeathRate) + "</deathRate>\n");
-            myString+=QString("  <gestating>" + QString::number(mGestating) + "</gestating>\n");
-            myString+=QString("  <lactating>" + QString::number(mLactating) + "</lactating>\n");
-            myString+=QString("  <juvenile>" + QString::number(mJuvenile) + "</juvenile>\n");
-            myString+=QString("  <lifeExpectancy>" + QString::number(mLifeExpectancy) + "</lifeExpectancy>\n");
-            myString+=QString("  <breedingLife>" + QString::number(mBreedingExpectancy) + "</breedingLife>\n");
-            myString+=QString("  <youngPerBirth>" + QString::number(mYoungPerBirth) + "</youngPerBirth>\n");
-            myString+=QString("  <weaningAge>" + QString::number(mWeaningAge) + "</weaningAge>\n");
-            myString+=QString("  <gestationTime>" + QString::number(mGestationTime) + "</gestationTime>\n");
-            myString+=QString("  <estrousCycle>" + QString::number(mEstrousCycle) + "</estrousCycle>\n");
-          myString+=QString("</animal>\n");
+  myString+=QString("<animal>\n");
+  myString+=QString("  <name>" + mName + "</name>\n");
+  myString+=QString("  <usableMeat>" + QString::number(mUsableMeat) + "</usableMeat>\n");
+  myString+=QString("  <killWeight>" + QString::number(mKillWeight) + "</killWeight>\n");
+  myString+=QString("  <growTime>" + QString::number(mGrowTime) + "</growTime>\n");
+  myString+=QString("  <deathRate>" + QString::number(mDeathRate) + "</deathRate>\n");
+  myString+=QString("  <gestating>" + QString::number(mGestating) + "</gestating>\n");
+  myString+=QString("  <lactating>" + QString::number(mLactating) + "</lactating>\n");
+  myString+=QString("  <juvenile>" + QString::number(mJuvenile) + "</juvenile>\n");
+  myString+=QString("  <lifeExpectancy>" + QString::number(mLifeExpectancy) + "</lifeExpectancy>\n");
+  myString+=QString("  <breedingLife>" + QString::number(mBreedingExpectancy) + "</breedingLife>\n");
+  myString+=QString("  <youngPerBirth>" + QString::number(mYoungPerBirth) + "</youngPerBirth>\n");
+  myString+=QString("  <weaningAge>" + QString::number(mWeaningAge) + "</weaningAge>\n");
+  myString+=QString("  <gestationTime>" + QString::number(mGestationTime) + "</gestationTime>\n");
+  myString+=QString("  <estrousCycle>" + QString::number(mEstrousCycle) + "</estrousCycle>\n");
+  myString+=QString("</animal>\n");
   return myString;
 }

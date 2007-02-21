@@ -24,6 +24,7 @@
 #include <QDialog>
 //Local Includes
 #include <ui_laplantformmainbase.h>
+#include "laplant.h"
 class QTreeWidgetItem;
 /**
   This is the main gui class

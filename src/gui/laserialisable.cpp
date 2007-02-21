@@ -26,7 +26,7 @@ LaSerialisable::LaSerialisable()
 LaSerialisable::~LaSerialisable()
 {
 }
-bool LaSerialisable::toXml(QString theFileName)
+bool LaSerialisable::toXmlFile(const QString theFileName)
 {
   bool myResult = false;
   QFile myFile( theFileName );
@@ -46,7 +46,7 @@ bool LaSerialisable::toXml(QString theFileName)
 
 }
 
-bool LaSerialisable::fromXmlFile(QString theFileName)
+bool LaSerialisable::fromXmlFile(const QString theFileName)
 {
   bool myResult = false;
   QFile myFile( theFileName );

@@ -29,24 +29,24 @@ LaPlant::~LaPlant()
 //copy constructor
 LaPlant::LaPlant(const LaPlant& thePlant)
 {
-  mName=thePlant.name();
-  mCropYield=thePlant.cropYield();
-  mCropCalories=thePlant.cropCalories();
-  mCropFodderProduction=thePlant.fodderProduction();
-  mCropFodderCalories=thePlant.fodderCalories();
-  mYie;=thePlant.yieldUnits();
+  //mName=thePlant.name();
+  //mCropYield=thePlant.cropYield();
+  //mCropCalories=thePlant.cropCalories();
+  //mCropFodderProduction=thePlant.fodderProduction();
+  //mCropFodderCalories=thePlant.fodderCalories();
+  //mYield=thePlant.yieldUnits();
 }
 
 LaPlant& LaPlant::operator=(const LaPlant& thePlant)
 {
   if (this == &thePlant) return *this;   // Gracefully handle self assignment
 
-  mName=thePlant.name();
-  m=thePlant.(cropYield);
-  m=thePlant.(cropCalories);
-  m=thePlant.(fodderProduction);
-  m=thePlant.(fodderCalories);
-  m=thePlant.(yieldUnits);
+  //mName=thePlant.name();
+ // mCropYield=thePlant.cropYield();
+ // mCropCalories=thePlant.cropCalories();
+ // mCropFodderProduction=thePlant.fodderProduction();
+ // mCropFodderCalories=thePlant.fodderCalories();
+ // mYield=thePlant.yieldUnits();
   return *this;
 }
 
