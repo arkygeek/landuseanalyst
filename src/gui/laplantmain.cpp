@@ -80,8 +80,8 @@ void LaPlantMain::on_pushButtonLoad_clicked()
 void LaPlantMain::on_pushButtonSave_clicked()
 {
   mPlant.setName(lineEditPlantName->text());
-  mPlant.setCropYield(spinBoxPlantYield->value());
-  mPlant.setCropCalories(spinBoxPlantCalories->value());
+  mPlant.setCropYield(spinBoxCropYield->value());
+  mPlant.setCropCalories(spinBoxCropCalories->value());
   mPlant.setFodderProduction(spinBoxFodderProduction->value());
   mPlant.setFodderCalories(spinBoxFodderCalories->value());
   mPlant.setYieldUnits(comboBoxYieldUnits->currentIndex());
