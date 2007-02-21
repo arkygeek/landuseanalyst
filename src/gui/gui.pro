@@ -53,6 +53,7 @@ HEADERS += lamainform.h \
            laanimalmain.h \
            laanimaldetails.h \
            laanimal.h \
+           laanimaldetails.h \
            laplantmain.h \
            laplantdetails.h \
            laplant.h \
@@ -65,6 +66,7 @@ SOURCES += main.cpp \
            laanimalmain.cpp \
            laanimal.cpp \
            laanimaldetails.cpp \
+           laanimalparameters.cpp \
            laplantmain.cpp \
            laplantdetails.cpp \
            laplant.cpp \

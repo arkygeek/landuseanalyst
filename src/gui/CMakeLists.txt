@@ -34,7 +34,6 @@ SET(landuseanalyst_MOC_HDRS
     laplantdetails.h
     laanimalmain.h
     laanimaldetails.h
-    laanimalparameters.h
     )
 SET(landuseanalyst_RCCS 
     ../resources/resources.qrc
