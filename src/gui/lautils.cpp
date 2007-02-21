@@ -1,5 +1,6 @@
 #include "lautils.h"
 #include "laanimal.h"
+#include "laplant.h"
 
 #include <QApplication>
 #include <QDir>

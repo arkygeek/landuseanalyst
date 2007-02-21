@@ -20,13 +20,14 @@
 
 class QString;
 #include "laserialisable.h"
+#include "laguid.h"
 #include <QString>
 /** 
   * An class to represent an plant
   * @author Tim Sutton
   */
 
-class LaPlant : public LaSerialisable 
+class LaPlant : public LaSerialisable, public LaGuid 
 {
   public:
     /** Constructor . */
@@ -97,7 +98,7 @@ class LaPlant : public LaSerialisable
      * @NOTE this class inherits the serialisable interface so
      * it MUST implement this
      */
-    bool fromXml(const QString theXml){ return false; };
+    bool fromXml(const QString theXml);
   private:
     /** The name for this plant */
     QString mName;

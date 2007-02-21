@@ -15,11 +15,14 @@
  *                                                                         *
  ***************************************************************************/
 #include <QString>
+#include <QDomDocument>
+#include <QDomElement>
 #include "laplant.h"
+#include "lautils.h"
 
-LaPlant::LaPlant() : LaSerialisable()
+LaPlant::LaPlant() : LaSerialisable(), LaGuid()
 {
-
+  setGuid();
 }
 LaPlant::~LaPlant()
 {
@@ -98,6 +101,29 @@ void LaPlant::setFodderCalories(int theCalories)
 void LaPlant::setYieldUnits(int theIndex)
 {
   mYieldUnits=theIndex;
+}
+
+bool LaPlant::fromXml(QString theXml)
+{
+  qDebug("Loading Plant from xml");
+  QDomDocument myDocument("mydocument");
+  myDocument.setContent(theXml);
+  QDomElement myTopElement = myDocument.firstChildElement("Plant");
+  if (myTopElement.isNull())
+  {
+    //TODO - just make this a warning
+    qDebug("top element could not be found!");
+  }
+  setGuid(myTopElement.attribute("guid"));
+  mName=LaUtils::xmlDecode(myTopElement.firstChildElement("name").text());
+  mCropYield=QString(myTopElement.firstChildElement("cropYield").text()).toInt();
+  mCropCalories=QString(myTopElement.firstChildElement("cropCalories").text()).toInt();
+  mCropFodderProduction=QString(myTopElement.firstChildElement("fodderProduction").text()).toInt();
+  mCropFodderCalories=QString(myTopElement.firstChildElement("fodderCalories").text()).toInt();
+  mYieldUnits=QString(myTopElement.firstChildElement("yieldUnits").text()).toInt();
+
+    
+  return true;
 }
 
 QString LaPlant::toXml()

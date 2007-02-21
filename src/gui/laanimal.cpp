@@ -23,7 +23,6 @@
 LaAnimal::LaAnimal() : LaSerialisable(), LaGuid()
 {
   setGuid();
-
 }
 LaAnimal::~LaAnimal()
 {
