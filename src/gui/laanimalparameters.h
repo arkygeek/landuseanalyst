@@ -98,7 +98,8 @@ class LaAnimalParameters : public LaSerialisable, public LaGuid
      */
     bool fromXml(const QString theXml);
   private:
-
+    /** A name for this set of animal paremeters */
+    QString mName;
     /** Portion of the Tame Meat Diet (Percentage) */
     int mPercentTameMeat;
     /** Food value of specific (or unique) grazing land as calories per dunum/hectare */

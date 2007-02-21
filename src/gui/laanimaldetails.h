@@ -44,7 +44,7 @@ class LaAnimalDetails : public QDialog, private Ui::LaAnimalFormDetailsBase
   private slots:
 
   private:
-    LaAnimalDetails mAnimalDetails;
+    LaAnimalParameters mAnimalParameters;
     void readSettings();
     void writeSettings();
 };

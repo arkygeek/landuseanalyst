@@ -46,11 +46,20 @@ class LaUtils
      * Find the place on the filesystem where user defined animal
      * profiles are stored. 
      *
-     * Typically this will be ~/.landuseAnalyst/animals
+     * Typically this will be ~/.landuseAnalyst/animalProfiles
      *
      * @return QString containing the relevant directory name
      */
     static const QString userAnimalProfilesDirPath();
+    /**
+     * Find the place on the filesystem where user defined animal
+     * model parameter profiles are stored. 
+     *
+     * Typically this will be ~/.landuseAnalyst/animalParameters
+     *
+     * @return QString containing the relevant directory name
+     */
+    static const QString userAnimalParametersDirPath();
     /** Get the place where model outputs are to be stored.
      * By default this is in ~/.landuseAnalyst/modelOutputs
      * But if modelOutputsDir is specified in QSettings, it will override

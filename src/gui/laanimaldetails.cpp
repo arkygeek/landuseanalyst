@@ -66,17 +66,17 @@ void LaAnimalDetails::writeSettings()
 void LaAnimalDetails::on_pushButtonLoad_clicked()
 {
   //
-  mAnimalDetails.fromXmlFile("/tmp/animalDetails.xml");
+  mAnimalParameters.fromXmlFile("/tmp/animalDetails.xml");
 }
 
 void LaAnimalDetails::on_pushButtonSave_clicked()
 {
-  mAnimalDetails.setPercentMeat(spinBoxPercentOfTameMeat->value());
-  mAnimalDetails.setFoodValueOfSpecificGrazingLand(spinBoxUniqueRasterCalories->value());
-  mAnimalDetails.setFoodValueOfCommonGrazingLand(spinBoxCommonRasterCalories->value());
-  mAnimalDetails.setUseSpecificGrazingLand(checkBoxUniqueRaster->isChecked());
-  mAnimalDetails.setUseCommonGrazingLand(checkBoxCommonRaster->isChecked());
-  mAnimalDetails.setFallowUsage(spinBoxCaloriesForGestating->currentIndex());
-  mAnimalDetails.toXmlFile( LaUtils::userAnimalProfilesDirPath() +
-      QDir::separator() + mAnimalDetails.name() + ".xml");
+  mAnimalParameters.setPercentTameMeat(spinBoxPercentOfTameMeat->value());
+  mAnimalParameters.setFoodValueOfSpecificGrazingLand(spinBoxUniqueRasterCalories->value());
+  mAnimalParameters.setFoodValueOfCommonGrazingLand(spinBoxCommonRasterCalories->value());
+  mAnimalParameters.setUseSpecificGrazingLand(checkBoxUniqueRaster->isChecked());
+  mAnimalParameters.setUseCommonGrazingLand(checkBoxCommonRaster->isChecked());
+  mAnimalParameters.setFallowUsage(comboBoxFallowUsage->currentIndex());
+  mAnimalParameters.toXmlFile( LaUtils::userAnimalParametersDirPath() +
+      QDir::separator() + mAnimalParameters.name() + ".xml");
 }

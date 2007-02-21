@@ -45,6 +45,15 @@ const QString LaUtils::userAnimalProfilesDirPath()
   return myPath;
 }
 
+const QString LaUtils::userAnimalParametersDirPath()
+{
+  //alg profiles are always saved in the users home dir under .landuseAnalyst/
+  QString myPath = QDir::homePath() + QString("/.landuseAnalyst/") + 
+    QDir::separator()+"animalParameters"+QDir::separator();
+  QDir().mkpath(myPath);
+  return myPath;
+}
+
 LaUtils::AnimalMap LaUtils::getAvailableAnimals()
 {
   LaUtils::AnimalMap myMap;
