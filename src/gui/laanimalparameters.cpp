@@ -83,27 +83,27 @@ int LaAnimalParameters::fallowUsage() const
   return mFallowUsage;
 }
 
-void LaAnimalParameters::percentTameMeat(int thePercent)
+void setLaAnimalParameters::setPercentTameMeat(int thePercent)
 {
   mPercentTameMeat=thePercent;
 }
-void LaAnimalParameters::foodValueOfSpecificGrazingLand(int theCalories)
+void setLaAnimalParameters::setFoodValueOfSpecificGrazingLand(int theCalories)
 {
   mFoodValueOfSpecificGrazingLand=theCalories;
 }
-void LaAnimalParameters::foodValueOfCommonGrazingLand(int theCalories)
+void setLaAnimalParameters::setFoodValueOfCommonGrazingLand(int theCalories)
 {
   mFoodValueOfCommonGrazingLand=theCalories;
 }
-void LaAnimalParameters::useSpecificGrazingLand(bool theFlag)
+void setLaAnimalParameters::setUseSpecificGrazingLand(bool theFlag)
 {
   mUseSpecificGrazingLand=theFlag;
 }
-void LaAnimalParameters::useCommonGrazingLand(bool theFlag)
+void setLaAnimalParameters::setUseCommonGrazingLand(bool theFlag)
 {
   mUseCommonGrazingLand=theFlag;
 }
-void LaAnimalParameters::fallowUsage(int theIndexValue)
+void setLaAnimalParameters::setFallowUsage(int theIndexValue)
 {
   mFallowUsage=theIndexValue;
 }

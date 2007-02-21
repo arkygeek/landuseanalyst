@@ -71,6 +71,16 @@ void LaAnimalDetails::on_pushButtonLoad_clicked()
 
 void LaAnimalDetails::on_pushButtonSave_clicked()
 {
+<<<<<<< .mine
+  mAnimalParameters.setPercentTameMeat(spinBoxPercentOfTameMeat->value());
+  mAnimalParameters.setFoodValueOfSpecificGrazingLand(spinBoxUniqueRasterCalories->value());
+  mAnimalParameters.setFoodValueOfCommonGrazingLand(spinBoxCommonRasterCalories->value());
+  mAnimalParameters.setUseSpecificGrazingLand(checkBoxUniqueRaster->isChecked());
+  mAnimalParameters.setUseCommonGrazingLand(checkBoxCommonRaster->isChecked());
+  mAnimalParameters.setFallowUsage(comboBoxFallowUsage->currentIndex());
+  mAnimalParameters.toXmlFile( LaUtils::userAnimalProfilesDirPath() +
+      QDir::separator() + mAnimalDetails.name() + ".xml");
+=======
   mAnimalParameters.setPercentTameMeat(spinBoxPercentOfTameMeat->value());
   mAnimalParameters.setFoodValueOfSpecificGrazingLand(spinBoxUniqueRasterCalories->value());
   mAnimalParameters.setFoodValueOfCommonGrazingLand(spinBoxCommonRasterCalories->value());
@@ -79,4 +89,5 @@ void LaAnimalDetails::on_pushButtonSave_clicked()
   mAnimalParameters.setFallowUsage(comboBoxFallowUsage->currentIndex());
   mAnimalParameters.toXmlFile( LaUtils::userAnimalParametersDirPath() +
       QDir::separator() + mAnimalParameters.name() + ".xml");
+>>>>>>> .r170
 }
