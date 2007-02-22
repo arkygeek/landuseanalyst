@@ -154,6 +154,11 @@ class LaAnimal : public LaSerialisable, public LaGuid
     /** Return a plain text representation of this layer
      */
     QString toText();
+    /** Return an xml representation of this layer
+     * @NOTE this class inherits the serialisable interface so
+     * it MUST implement this
+     */
+    QString toHtml();
 
     /** Read this object from xml and return result as true for success, false for failure.
      * @see LaSerialisable
