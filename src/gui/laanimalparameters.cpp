@@ -32,24 +32,24 @@ LaAnimalParameters::~LaAnimalParameters()
 //copy constructor
 LaAnimalParameters::LaAnimalParameters(const LaAnimalParameters& theAnimalParameters)
 {
-  mPercentTameMeat=theAnimalParameters.percentTameMeat;
-  mFoodValueOfSpecificGrazingLand = theAnimalParameters.foodValueOfSpecificGrazingLand;
-  mFoodValueOfCommonGrazingLand = theAnimalParameters.foodValueOfCommonGrazingLand;
-  mUseSpecificGrazingLand = theAnimalParameters.useSpecificGrazingLand;
-  mUseCommonGrazingLand = theAnimalParameters.useCommonGrazingLand;
-  mFallowUsage = theAnimalParameters.fallowUsage;
+  mPercentTameMeat=theAnimalParameters.percentTameMeat();
+  mFoodValueOfSpecificGrazingLand = theAnimalParameters.foodValueOfSpecificGrazingLand();
+  mFoodValueOfCommonGrazingLand = theAnimalParameters.foodValueOfCommonGrazingLand();
+  mUseSpecificGrazingLand = theAnimalParameters.useSpecificGrazingLand();
+  mUseCommonGrazingLand = theAnimalParameters.useCommonGrazingLand();
+  mFallowUsage = theAnimalParameters.fallowUsage();
 }
 
-LaAnimalParameters& LaAnimalParameters::operator=(const LaAnimalParameters& theAnimal)
+LaAnimalParameters& LaAnimalParameters::operator=(const LaAnimalParameters& theAnimalParameters)
 {
   if (this == &theAnimalParameters) return *this;   // Gracefully handle self assignment
 
-  mPercentTameMeat=theAnimalParameters.percentMeat;
-  mFoodValueOfSpecificGrazingLand = theAnimalParameters.foodValueOfSpecificGrazingLand;
-  mFoodValueOfCommonGrazingLand = theAnimalParameters.foodValueOfCommonGrazingLand;
-  mUseSpecificGrazingLand = theAnimalParameters.useSpecificGrazingLand;
-  mUseCommonGrazingLand = theAnimalParameters.useCommonGrazingLand;
-  mFallowUsage = theAnimalParameters.fallowUsage;
+  mPercentTameMeat=theAnimalParameters.percentTameMeat();
+  mFoodValueOfSpecificGrazingLand = theAnimalParameters.foodValueOfSpecificGrazingLand();
+  mFoodValueOfCommonGrazingLand = theAnimalParameters.foodValueOfCommonGrazingLand();
+  mUseSpecificGrazingLand = theAnimalParameters.useSpecificGrazingLand();
+  mUseCommonGrazingLand = theAnimalParameters.useCommonGrazingLand();
+  mFallowUsage = theAnimalParameters.fallowUsage();
   return *this;
 }
 
@@ -58,7 +58,7 @@ QString LaAnimalParameters::name() const
   return mName;
 }
 
-int LaAnimalParameters::percentMeat() const
+int LaAnimalParameters::percentTameMeat() const
 {
   return mPercentTameMeat;
 }
