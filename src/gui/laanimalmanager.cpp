@@ -73,7 +73,7 @@ void LaAnimalManager::writeSettings()
 void LaAnimalManager::refreshAnimalTable(QString theGuid)
 {
 
-  //mAnimalMap.clear();
+  mAnimalMap.clear();
   tblAnimals->clear();
   tblAnimals->setRowCount(0);
   tblAnimals->setColumnCount(2);
@@ -82,7 +82,7 @@ void LaAnimalManager::refreshAnimalTable(QString theGuid)
   //we do this in two passes
   //in the first pass we populate a qmap with all the layersets
   //we find....
-  //mAnimalMap = LaUtils::getAvailableAnimals();
+  mAnimalMap = LaUtils::getAvailableAnimals();
 
   //the second pass populates the table
   //doing it from the map ensures that the rows
