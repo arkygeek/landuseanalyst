@@ -83,33 +83,33 @@ int LaAnimalParameters::fallowUsage() const
   return mFallowUsage;
 }
 
-void setLaAnimalParameters::setPercentTameMeat(int thePercent)
+void LaAnimalParameters::setPercentTameMeat(int thePercent)
 {
   mPercentTameMeat=thePercent;
 }
-void setLaAnimalParameters::setFoodValueOfSpecificGrazingLand(int theCalories)
+void LaAnimalParameters::setFoodValueOfSpecificGrazingLand(int theCalories)
 {
   mFoodValueOfSpecificGrazingLand=theCalories;
 }
-void setLaAnimalParameters::setFoodValueOfCommonGrazingLand(int theCalories)
+void LaAnimalParameters::setFoodValueOfCommonGrazingLand(int theCalories)
 {
   mFoodValueOfCommonGrazingLand=theCalories;
 }
-void setLaAnimalParameters::setUseSpecificGrazingLand(bool theFlag)
+void LaAnimalParameters::setUseSpecificGrazingLand(bool theFlag)
 {
   mUseSpecificGrazingLand=theFlag;
 }
-void setLaAnimalParameters::setUseCommonGrazingLand(bool theFlag)
+void LaAnimalParameters::setUseCommonGrazingLand(bool theFlag)
 {
   mUseCommonGrazingLand=theFlag;
 }
-void setLaAnimalParameters::setFallowUsage(int theIndexValue)
+void LaAnimalParameters::setFallowUsage(int theIndexValue)
 {
   mFallowUsage=theIndexValue;
 }
 
 
-void LaAnimalParameters::setName(QString theName) const
+void LaAnimalParameters::setName(QString theName)
 {
   mName = theName;
 }
@@ -126,19 +126,7 @@ bool LaAnimalParameters::fromXml(QString theXml)
     qDebug("top element could not be found!");
   }
   setGuid(myTopElement.attribute("guid"));
-  mUsableMeat=QString(myTopElement.firstChildElement("usableMeat").text()).toInt();
-  mKillWeight=QString(myTopElement.firstChildElement("killWeight").text()).toInt();
-  mGrowTime=QString(myTopElement.firstChildElement("growTime").text()).toInt();
-  mDeathRate=QString(myTopElement.firstChildElement("deathRate").text()).toInt();
-  mGestating=QString(myTopElement.firstChildElement("gestating").text()).toInt();
-  mLactating=QString(myTopElement.firstChildElement("lactating").text()).toInt();
-  mJuvenile=QString(myTopElement.firstChildElement("juvenile").text()).toInt();
-  mLifeExpectancy=QString(myTopElement.firstChildElement("lifeExpectancy").text()).toInt();
-  mBreedingExpectancy=QString(myTopElement.firstChildElement("breedingExpectancy").text()).toInt();
-  mYoungPerBirth=QString(myTopElement.firstChildElement("youngPerBirth").text()).toInt();
-  mWeaningAge=QString(myTopElement.firstChildElement("weaningAge").text()).toInt();
-  mGestationTime=QString(myTopElement.firstChildElement("gestationTime").text()).toInt();
-  mEstrousCycle=QString(myTopElement.firstChildElement("estrousCycle").text()).toInt();
+  //mUsableMeat=QString(myTopElement.firstChildElement("usableMeat").text()).toInt();
   return true;
 }
 
