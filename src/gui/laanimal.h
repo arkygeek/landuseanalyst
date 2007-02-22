@@ -151,6 +151,9 @@ class LaAnimal : public LaSerialisable, public LaGuid
      * it MUST implement this
      */
     QString toXml();
+    /** Return a plain text representation of this layer
+     */
+    QString toText();
 
     /** Read this object from xml and return result as true for success, false for failure.
      * @see LaSerialisable

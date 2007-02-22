@@ -43,10 +43,10 @@ class LaAnimalManager : public QDialog, private Ui::LaAnimalManagerBase
     void on_pushButtonSave_clicked();
 
   private slots:
+      void cellClicked(int theRow, int theColumn);
 
   private:
       void refreshAnimalTable(QString theGuid=0);
-      void cellClicked(int theRow, int theColumn);
       void selectAnimal(QString theFileName);
 
       LaUtils::AnimalMap mAnimalMap;

@@ -1,5 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2007 by: Jason Jorgenson   arkygeek@gmail.com           *
+ *             (c) 2007 by: Tim Sutton tim@linfiniti.com
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -106,6 +107,7 @@ void LaAnimalManager::refreshAnimalTable(QString theGuid)
     // Insert new row ready to fill with details
     tblAnimals->insertRow(myCurrentRow); 
     QString myGuid = myAnimal.guid();
+    qDebug ("Inserting animal with guid: " + myGuid);
     // Add details to the new row
     QTableWidgetItem *mypFileNameItem= new QTableWidgetItem(myGuid);
     tblAnimals->setItem(myCurrentRow, 0, mypFileNameItem);
@@ -158,14 +160,27 @@ void LaAnimalManager::cellClicked(int theRow, int theColumn)
 }
 void LaAnimalManager::selectAnimal(QString theFileName)
 {
+  qDebug("selectAnimal Called : " + theFileName);
   QString myAnimalDir = LaUtils::userAnimalProfilesDirPath();
   LaAnimal myAnimal;
   myAnimal.fromXmlFile(myAnimalDir + QDir::separator() + theFileName);
   leName->setText(myAnimal.name());
-  //leDescription->setText(myAnimal.description());
-  qDebug("Clearing Layers and mask");
-  qDebug("Layers and mask cleared");
   mAnimal=myAnimal;
+  leName->setText(mAnimal.name());
+  //leDescription->setText(myAnimal.description());
+  spinBoxUsableMeatPercent->setValue(mAnimal.usableMeat());
+  spinBoxKillWeight->setValue(mAnimal.killWeight());
+  spinBoxGrowTime->setValue(mAnimal.growTime());
+  spinBoxDeathRate->setValue(mAnimal.deathRate());
+  spinBoxCaloriesForGestating->setValue(mAnimal.gestating());
+  spinBoxCaloriesForLactating->setValue(mAnimal.lactating());
+  spinBoxCaloriesForJuvenile->setValue(mAnimal.juvenile());
+  spinBoxLifeExpectancy->setValue(mAnimal.lifeExpectancy());
+  spinBoxBreedingLife->setValue(mAnimal.breedingExpectancy());
+  spinBoxYoungPerBirth->setValue(mAnimal.youngPerBirth());
+  spinBoxWeaningAge->setValue(mAnimal.weaningAge());
+  spinBoxGestationTime->setValue(mAnimal.gestationTime());
+  spinBoxEstrousCycleTime->setValue(mAnimal.estrousCycle());
 }
 
 void LaAnimalManager::on_pushButtonLoad_clicked()

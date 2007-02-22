@@ -235,3 +235,24 @@ QString LaAnimal::toXml()
   myString+=QString("</animal>\n");
   return myString;
 }
+
+QString LaAnimal::toText()
+{
+  QString myString;
+  myString+=QString("guid=>" + guid() + "\n");
+  myString+=QString("name=>" + LaUtils::xmlEncode(mName) + "\n");
+  myString+=QString("usableMeat=>" + QString::number(mUsableMeat) + "\n");
+  myString+=QString("killWeight=>" + QString::number(mKillWeight) + "\n");
+  myString+=QString("growTime=>" + QString::number(mGrowTime) + "\n");
+  myString+=QString("deathRate=>" + QString::number(mDeathRate) + "\n");
+  myString+=QString("gestating=>" + QString::number(mGestating) + "\n");
+  myString+=QString("lactating=>" + QString::number(mLactating) + "\n");
+  myString+=QString("juvenile=>" + QString::number(mJuvenile) + "\n");
+  myString+=QString("lifeExpectancy=>" + QString::number(mLifeExpectancy) + "\n");
+  myString+=QString("breedingLife=>" + QString::number(mBreedingExpectancy) + "\n");
+  myString+=QString("youngPerBirth=>" + QString::number(mYoungPerBirth) + "\n");
+  myString+=QString("weaningAge=>" + QString::number(mWeaningAge) + "\n");
+  myString+=QString("gestationTime=>" + QString::number(mGestationTime)+"\n");
+  myString+=QString("estrousCycle=>" + QString::number(mEstrousCycle)+"\n");
+  return myString;
+}
