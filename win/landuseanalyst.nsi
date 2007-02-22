@@ -5,7 +5,7 @@
 !define PRODUCT_VERSION "0.0.1"
 !define PRODUCT_PUBLISHER "http://code.google.com/p/landuseanalyst/"
 !define PRODUCT_WEB_SITE "http://code.google.com/p/landuseanalyst/"
-!define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\landuseanalyst-release.exe"
+!define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\landuseanalyst.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
 !define PRODUCT_STARTMENU_REGVAL "NSIS:StartMenuDir"
@@ -43,7 +43,7 @@ var ICONS_GROUP
 ; Instfiles page
 !insertmacro MUI_PAGE_INSTFILES
 ; Finish page
-!define MUI_FINISHPAGE_RUN "$INSTDIR\landuseanalyst-release.exe"
+!define MUI_FINISHPAGE_RUN "$INSTDIR\landuseanalyst.exe"
 !insertmacro MUI_PAGE_FINISH
 
 ; Uninstaller pages
@@ -89,14 +89,14 @@ Section "Application" SEC01
   
   SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
-  File "c:\dev\cpp\landuseanalyst\landuseanalyst-release\landuseanalyst-release.exe"
+  File "c:\Program Files\landuseanalyst\landuseanalyst.exe"
   SetOverwrite try
 ;------- Qt 
-  File "c:\dev\cpp\landuseanalyst\landuseanalyst-release\QtCore4.dll"
-  File "c:\dev\cpp\landuseanalyst\landuseanalyst-release\QtGui4.dll"
-  ;File "c:\dev\cpp\landuseanalyst\landuseanalyst-release\QtNetwork4.dll"
-  ;File "c:\dev\cpp\landuseanalyst\landuseanalyst-release\QtXml4.dll"
-  File "c:\dev\cpp\landuseanalyst\landuseanalyst-release\mingwm10.dll"
+  File "c:\Program Files\landuseanalyst\QtCore4.dll"
+  File "c:\Program Files\landuseanalyst\QtGui4.dll"
+  ;File "c:\Program Files\landuseanalyst\QtNetwork4.dll"
+  File "c:\Program Files\landuseanalyst\QtXml4.dll"
+  File "c:\Program Files\landuseanalyst\mingwm10.dll"
 ; Shortcuts
 ; Next line is important - added by Tim
 ; if its not there the application working dir will be the last used
@@ -104,8 +104,8 @@ Section "Application" SEC01
   SetOutPath "$INSTDIR"
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
   CreateDirectory "$SMPROGRAMS\$ICONS_GROUP"
-  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Landuse Analyst.lnk" "$INSTDIR\landuseanalyst-release.exe"
-  CreateShortCut "$DESKTOP\Landuse Analyst.lnk" "$INSTDIR\landuseanalyst-release.exe"
+  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Landuse Analyst.lnk" "$INSTDIR\landuseanalyst.exe"
+  CreateShortCut "$DESKTOP\Landuse Analyst.lnk" "$INSTDIR\landuseanalyst.exe"
   !insertmacro MUI_STARTMENU_WRITE_END
 
 SectionEnd
@@ -117,16 +117,16 @@ Section -AdditionalIcons
   WriteIniStr "$INSTDIR\${PRODUCT_NAME}.url" "InternetShortcut" "URL" "${PRODUCT_WEB_SITE}"
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Website.lnk" "$INSTDIR\${PRODUCT_NAME}.url"
   ; its more consistant to let user remove the app from add/remove progs in control panel
-  ;CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Uninstall.lnk" "$INSTDIR\uninst-release.exe"
+  ;CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Uninstall.lnk" "$INSTDIR\uninst.exe"
   !insertmacro MUI_STARTMENU_WRITE_END
 SectionEnd
 
 Section -Post
-  WriteUninstaller "$INSTDIR\uninst-release.exe"
-  WriteRegStr HKLM "${PRODUCT_DIR_REGKEY}" "" "$INSTDIR\landuseanalyst-release.exe"
+  WriteUninstaller "$INSTDIR\uninst.exe"
+  WriteRegStr HKLM "${PRODUCT_DIR_REGKEY}" "" "$INSTDIR\landuseanalyst.exe"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayName" "$(^Name)"
-  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "UninstallString" "$INSTDIR\uninst-release.exe"
-  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$INSTDIR\landuseanalyst-release.exe"
+  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "UninstallString" "$INSTDIR\uninst.exe"
+  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$INSTDIR\landuseanalyst.exe"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "Publisher" "${PRODUCT_PUBLISHER}"
@@ -155,16 +155,16 @@ Section Uninstall
 
   !insertmacro MUI_STARTMENU_GETFOLDER "Application" $ICONS_GROUP
   Delete "$INSTDIR\${PRODUCT_NAME}.url"
-  Delete "$INSTDIR\uninst-release.exe"
+  Delete "$INSTDIR\uninst.exe"
 ;---------- Qt Requirements
   ;Delete "$INSTDIR\QtNetwork4.dll"
   Delete "$INSTDIR\QtGui4.dll"
   Delete "$INSTDIR\QtCore4.dll"
-  ;Delete "$INSTDIR\QtXml4.dll"
+  Delete "$INSTDIR\QtXml4.dll"
   Delete "$INSTDIR\mingwm10.dll"
   ;Delete "$INSTDIR\*.qm"
 ;---------------- app related
-  Delete "$INSTDIR\landuseanalyst-release.exe"
+  Delete "$INSTDIR\landuseanalyst.exe"
 
 ;----------------- icons and shortcuts
   ;Delete "$SMPROGRAMS\$ICONS_GROUP\Uninstall.lnk"
