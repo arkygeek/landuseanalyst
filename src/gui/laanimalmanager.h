@@ -25,6 +25,7 @@
 //Local Includes
 #include <ui_laanimalmanagerbase.h>
 #include <laanimal.h>
+#include <lautils.h>
 class QTreeWidgetItem;
 /**
   This is the main gui class
@@ -38,15 +39,20 @@ class LaAnimalManager : public QDialog, private Ui::LaAnimalManagerBase
     ~LaAnimalManager();
 
   public slots:
-  void on_pushButtonLoad_clicked();
-  void on_pushButtonSave_clicked();
+    void on_pushButtonLoad_clicked();
+    void on_pushButtonSave_clicked();
 
   private slots:
 
   private:
-    LaAnimal mAnimal;
-    void readSettings();
-    void writeSettings();
+      void refreshAnimalTable(QString theGuid=0);
+      void cellClicked(int theRow, int theColumn);
+      void selectAnimal(QString theFileName);
+
+      LaUtils::AnimalMap mAnimalMap;
+      LaAnimal mAnimal;
+      void readSettings();
+      void writeSettings();
 };
 
 #endif //LAANIMALFORMMAIN_H

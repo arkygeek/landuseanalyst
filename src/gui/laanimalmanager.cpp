@@ -28,6 +28,12 @@
 #include <QProcess>
 #include <QStringList>
 #include <QString>
+#include <QMessageBox>
+#include <QHeaderView>
+#include <QTableWidget>
+#include <QTableWidgetItem>
+#include <QFileDialog>
+#include <QListWidgetItem>
 
   LaAnimalManager::LaAnimalManager(QWidget* parent, Qt::WFlags fl)
 : QDialog(parent,fl) 
@@ -35,11 +41,12 @@
   //required by Qt4 to initialise the ui
   setupUi(this);
   readSettings();
-  /** See the qtdocs on signals and slots to understand below.
-   * we connect the currentItemChanged signal that a tree view emits when you 
-   * click on an item to a little method that sets the help viewer contents
-   * appropriately. TS
-   */
+  connect(tblAnimals, SIGNAL(cellClicked( int,int)), 
+      this, SLOT(cellClicked( int,int)));
+  refreshAnimalTable();
+  //disable these buttons unless experimental is allowed
+  pbnImport->setVisible(false);
+  pbnExport->setVisible(false);
 }
 
 LaAnimalManager::~LaAnimalManager()
@@ -61,6 +68,104 @@ void LaAnimalManager::writeSettings()
   QSettings mySettings;
   mySettings.setValue("mainwindow/pos", pos());
   mySettings.setValue("mainwindow/size", size());
+}
+
+void LaAnimalManager::refreshAnimalTable(QString theGuid)
+{
+
+  //mAnimalMap.clear();
+  tblAnimals->clear();
+  tblAnimals->setRowCount(0);
+  tblAnimals->setColumnCount(2);
+
+
+  //we do this in two passes
+  //in the first pass we populate a qmap with all the layersets
+  //we find....
+  //mAnimalMap = LaUtils::getAvailableAnimals();
+
+  //the second pass populates the table
+  //doing it from the map ensures that the rows
+  //are sorted by layerset name
+
+  int mySelectedRow=0;
+  int myCurrentRow=0;
+  QMapIterator<QString, LaAnimal> myIterator(mAnimalMap);
+  while (myIterator.hasNext()) 
+  {
+    myIterator.next();
+    LaAnimal myAnimal = myIterator.value();
+    if (theGuid.isEmpty())
+    {
+      theGuid=myAnimal.guid();
+    }
+    if (myAnimal.guid()==theGuid)
+    {
+      mySelectedRow=myCurrentRow;
+    }
+    // Insert new row ready to fill with details
+    tblAnimals->insertRow(myCurrentRow); 
+    QString myGuid = myAnimal.guid();
+    // Add details to the new row
+    QTableWidgetItem *mypFileNameItem= new QTableWidgetItem(myGuid);
+    tblAnimals->setItem(myCurrentRow, 0, mypFileNameItem);
+    QTableWidgetItem *mypNameItem = new QTableWidgetItem(myAnimal.name());
+    tblAnimals->setItem(myCurrentRow, 1, mypNameItem);
+    //display an icon indicating if the layerset is local or remote (e.g. terralib)
+    //LaAnimal::Origin myOrigin = myAnimal.origin();
+    //if (myOrigin==LaAnimal::USERPROFILE)
+    //{
+    QIcon myIcon;
+    myIcon.addFile(":/localdata.png");
+    mypNameItem->setIcon(myIcon);
+    //}
+    //else if (myOrigin==LaAnimal::ADAPTERPROFILE)
+    //{
+    //QIcon myIcon;
+    //myIcon.addFile(":/remotedata.png");
+    //mypNameItem->setIcon(myIcon);
+    //}
+    //else if (myOrigin==LaAnimal::UNDEFINED)
+    //{
+    //  mypNameItem->setTextColor(Qt::yellow);
+    //}
+    myCurrentRow++;
+  }
+
+  if (myCurrentRow>0)
+  {
+    tblAnimals->setCurrentCell(mySelectedRow,1);
+    cellClicked(mySelectedRow,1);
+  }
+  QStringList headerLabels;
+  headerLabels << "File Name" << "Name";
+  tblAnimals->setHorizontalHeaderLabels(headerLabels);
+  tblAnimals->setColumnWidth(0,0);
+  tblAnimals->setColumnWidth(1,tblAnimals->width());
+  tblAnimals->horizontalHeader()->hide();
+  tblAnimals->verticalHeader()->hide();
+  tblAnimals->horizontalHeader()->setResizeMode(1,QHeaderView::Stretch);
+}
+
+void LaAnimalManager::cellClicked(int theRow, int theColumn)
+{
+  //note we use the alg name not the id becuase user may have customised params
+  qDebug("LaAnimalManager::cellClicked");
+  QString myGuid = tblAnimals->item(tblAnimals->currentRow(),0)->text();
+  qDebug("Guid is: " + myGuid.toLocal8Bit());
+  QString myFileName = myGuid + ".xml";
+  selectAnimal(myFileName);
+}
+void LaAnimalManager::selectAnimal(QString theFileName)
+{
+  QString myAnimalDir = LaUtils::userAnimalProfilesDirPath();
+  LaAnimal myAnimal;
+  myAnimal.fromXmlFile(myAnimalDir + QDir::separator() + theFileName);
+  leName->setText(myAnimal.name());
+  //leDescription->setText(myAnimal.description());
+  qDebug("Clearing Layers and mask");
+  qDebug("Layers and mask cleared");
+  mAnimal=myAnimal;
 }
 
 void LaAnimalManager::on_pushButtonLoad_clicked()
