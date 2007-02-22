@@ -126,7 +126,14 @@ bool LaAnimalParameters::fromXml(QString theXml)
     qDebug("top element could not be found!");
   }
   setGuid(myTopElement.attribute("guid"));
-  //mUsableMeat=QString(myTopElement.firstChildElement("usableMeat").text()).toInt();
+  mPercentTameMeat=QString(myTopElement.firstChildElement("percentTameMeat").text()).toInt();
+  mFoodValueOfSpecificGrazingLand=QString(myTopElement.firstChildElement("foodValueOfSpecificGrazingLand").text()).toInt();
+  mFoodValueOfCommonGrazingLand=QString(myTopElement.firstChildElement("foodValueOfCommonGrazingLand").text()).toInt();
+  mUseSpecificGrazingLand=QString(myTopElement.firstChildElement("useSpecificGrazingLand").text()).toInt();
+  mUseCommonGrazingLand=QString(myTopElement.firstChildElement("useCommonGrazingLand").text()).toInt();
+  mFallowUsage=QString(myTopElement.firstChildElement("fallowUsage").text()).toInt();
+
+
   return true;
 }
 
