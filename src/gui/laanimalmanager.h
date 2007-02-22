@@ -17,25 +17,25 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef LAANIMALMAINFORM_H
-#define LAANIMALMAINFORM_H
+#ifndef LAANIMALMANAGER_H
+#define LAANIMALMANAGER_H
 
 //QT Includes
 #include <QDialog>
 //Local Includes
-#include <ui_laanimalformmainbase.h>
+#include <ui_laanimalmanagerbase.h>
 #include <laanimal.h>
 class QTreeWidgetItem;
 /**
   This is the main gui class
   @author Tim Sutton, Jason Jorgenson
 */
-class LaAnimalMain : public QDialog, private Ui::LaAnimalFormMainBase
+class LaAnimalManager : public QDialog, private Ui::LaAnimalManagerBase
 {
   Q_OBJECT
   public:
-    LaAnimalMain(QWidget* parent = 0, Qt::WFlags fl = 0 );
-    ~LaAnimalMain();
+    LaAnimalManager(QWidget* parent = 0, Qt::WFlags fl = 0 );
+    ~LaAnimalManager();
 
   public slots:
   void on_pushButtonLoad_clicked();

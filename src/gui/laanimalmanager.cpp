@@ -16,7 +16,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#include "laanimalmain.h"
+#include "laanimalmanager.h"
 #include "lautils.h"
 #include <QSettings>
 #include <QTreeWidget>
@@ -29,7 +29,7 @@
 #include <QStringList>
 #include <QString>
 
-  LaAnimalMain::LaAnimalMain(QWidget* parent, Qt::WFlags fl)
+  LaAnimalManager::LaAnimalManager(QWidget* parent, Qt::WFlags fl)
 : QDialog(parent,fl) 
 {
   //required by Qt4 to initialise the ui
@@ -42,12 +42,12 @@
    */
 }
 
-LaAnimalMain::~LaAnimalMain()
+LaAnimalManager::~LaAnimalManager()
 {
   writeSettings();
 }
 
-void LaAnimalMain::readSettings()
+void LaAnimalManager::readSettings()
 {
   QSettings mySettings;
   QPoint pos = mySettings.value("mainwindow/pos", QPoint(200, 200)).toPoint();
@@ -56,22 +56,22 @@ void LaAnimalMain::readSettings()
   move(pos);
 }
 
-void LaAnimalMain::writeSettings()
+void LaAnimalManager::writeSettings()
 {
   QSettings mySettings;
   mySettings.setValue("mainwindow/pos", pos());
   mySettings.setValue("mainwindow/size", size());
 }
 
-void LaAnimalMain::on_pushButtonLoad_clicked()
+void LaAnimalManager::on_pushButtonLoad_clicked()
 {
   //
   mAnimal.fromXmlFile("/tmp/animal.xml");
 }
 
-void LaAnimalMain::on_pushButtonSave_clicked()
+void LaAnimalManager::on_pushButtonSave_clicked()
 {
-  mAnimal.setName(lineEditAnimalName->text());
+  mAnimal.setName(leName->text());
   mAnimal.setUsableMeat(spinBoxUsableMeatPercent->value());
   mAnimal.setKillWeight(spinBoxKillWeight->value());
   mAnimal.setGrowTime(spinBoxGrowTime->value());

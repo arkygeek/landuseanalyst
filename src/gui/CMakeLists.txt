@@ -15,7 +15,7 @@ set(landuseanalyst_SRCS
     laplantmain.cpp
     laplant.cpp
     laplantdetails.cpp
-    laanimalmain.cpp
+    laanimalmanager.cpp
     laanimal.cpp
     laanimaldetails.cpp
     laanimalparameters.cpp
@@ -25,14 +25,14 @@ SET(landuseanalyst_UIS
     ../ui/lamainformbase.ui
     ../ui/laplantformmainbase.ui
     ../ui/laplantformdetailsbase.ui
-    ../ui/laanimalformmainbase.ui 
+    ../ui/laanimalmanagerbase.ui 
     ../ui/laanimalformdetailsbase.ui
     )
 SET(landuseanalyst_MOC_HDRS
     lamainform.h
     laplantmain.h
     laplantdetails.h
-    laanimalmain.h
+    laanimalmanager.h
     laanimaldetails.h
     )
 SET(landuseanalyst_RCCS 

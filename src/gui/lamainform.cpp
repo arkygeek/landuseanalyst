@@ -21,7 +21,7 @@
 //app includes
 #include "lamainform.h"
 #include "version.h"
-#include "laanimalmain.h"
+#include "laanimalmanager.h"
 #include "laplantmain.h"
 
 //qt includes
@@ -101,8 +101,8 @@ void LaMainForm::on_horizontalSliderPlant_valueChanged(int theValue)
 
 void LaMainForm::on_pbnNewAnimal_clicked()
 {
-  LaAnimalMain myAnimalForm;
-  myAnimalForm.exec();
+  LaAnimalManager myAnimalManager;
+  myAnimalManager.exec();
   loadAnimals();
 }
 void LaMainForm::on_pbnNewPlant_clicked()
