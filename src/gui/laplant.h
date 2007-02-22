@@ -93,6 +93,10 @@ class LaPlant : public LaSerialisable, public LaGuid
      */
     QString toXml();
 
+    /** Return a plain text representation of this layer
+     */
+    QString toText();
+
     /** Read this object from xml and return result as true for success, false for failure.
      * @see LaSerialisable
      * @NOTE this class inherits the serialisable interface so

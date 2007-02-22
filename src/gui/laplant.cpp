@@ -139,3 +139,16 @@ QString LaPlant::toXml()
           myString+=QString("</plant>\n");
   return myString;
 }
+
+QString LaPlant::toText()
+{
+  QString myString;
+  myString+=QString("guid=>" + guid() + "\n");
+  myString+=QString("name=>" + LaUtils::xmlEncode(mName) + "\n");
+  myString+=QString("cropYield=>" + QString::number(mCropYield) + "\n");
+  myString+=QString("cropCalories=>" + QString::number(mCropCalories) + "\n");
+  myString+=QString("fodderProduction=>" + QString::number(mCropFodderProduction) + "\n");
+  myString+=QString("fodderCalories=>" + QString::number(mCropFodderCalories) + "\n");
+  myString+=QString("yieldUnits=>" + QString::number(mYieldUnits) + "\n");
+  return myString;
+}
