@@ -211,31 +211,40 @@
       </item>
       <item row="1" column="3" >
        <widget class="QToolButton" name="toolNew" >
+        <property name="toolTip" >
+         <string>New</string>
+        </property>
         <property name="text" >
          <string>...</string>
         </property>
         <property name="icon" >
-         <iconset resource="../../../openModellerDesktop/src/resources/resources.qrc" >:/filenew.png</iconset>
+         <iconset resource="../resources/resources.qrc" >:/new.png</iconset>
         </property>
        </widget>
       </item>
       <item row="1" column="4" >
        <widget class="QToolButton" name="toolCopy" >
+        <property name="toolTip" >
+         <string>Clone</string>
+        </property>
         <property name="text" >
          <string>...</string>
         </property>
         <property name="icon" >
-         <iconset resource="../../../openModellerDesktop/src/resources/resources.qrc" >:/editcopy.png</iconset>
+         <iconset resource="../resources/resources.qrc" >:/copy.png</iconset>
         </property>
        </widget>
       </item>
       <item row="1" column="5" >
        <widget class="QToolButton" name="toolDelete" >
+        <property name="toolTip" >
+         <string>Delete</string>
+        </property>
         <property name="text" >
          <string>...</string>
         </property>
         <property name="icon" >
-         <iconset resource="../../../openModellerDesktop/src/resources/resources.qrc" >:/edittrash.png</iconset>
+         <iconset resource="../resources/resources.qrc" >:/delete.png</iconset>
         </property>
        </widget>
       </item>
@@ -797,6 +806,7 @@ p, li { white-space: pre-wrap; }
  </widget>
  <resources>
   <include location="../../../openModellerDesktop/src/resources/resources.qrc" />
+  <include location="../resources/resources.qrc" />
  </resources>
  <connections>
   <connection>
