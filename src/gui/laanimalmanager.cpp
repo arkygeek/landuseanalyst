@@ -141,6 +141,10 @@ void LaAnimalManager::refreshAnimalTable(QString theGuid)
     tblAnimals->setCurrentCell(mySelectedRow,1);
     cellClicked(mySelectedRow,1);
   }
+  else
+  {
+    on_toolNew_clicked();
+  }
   QStringList headerLabels;
   headerLabels << "File Name" << "Name";
   tblAnimals->setHorizontalHeaderLabels(headerLabels);
@@ -199,26 +203,11 @@ void LaAnimalManager::on_pushButtonLoad_clicked()
 
 void LaAnimalManager::on_pushButtonSave_clicked()
 {
-  mAnimal.setName(leName->text());
-  mAnimal.setUsableMeat(spinBoxUsableMeatPercent->value());
-  mAnimal.setKillWeight(spinBoxKillWeight->value());
-  mAnimal.setGrowTime(spinBoxGrowTime->value());
-  mAnimal.setDeathRate(spinBoxDeathRate->value());
-  mAnimal.setGestating(spinBoxCaloriesForGestating->value());
-  mAnimal.setLactating(spinBoxCaloriesForLactating->value());
-  mAnimal.setJuvenile(spinBoxCaloriesForJuvenile->value());
-  mAnimal.setLifeExpectancy(spinBoxLifeExpectancy->value());
-  mAnimal.setBreedingExpectancy(spinBoxBreedingLife->value());
-  mAnimal.setYoungPerBirth(spinBoxYoungPerBirth->value());
-  mAnimal.setWeaningAge(spinBoxWeaningAge->value());
-  mAnimal.setGestationTime(spinBoxGestationTime->value());
-  mAnimal.setEstrousCycle(spinBoxEstrousCycleTime->value());
-  mAnimal.toXmlFile( LaUtils::userAnimalProfilesDirPath() + 
-      QDir::separator() + mAnimal.guid() + ".xml");
-}
 
+}
 void LaAnimalManager::on_toolNew_clicked()
 {
+  qDebug("New toolbutton clicked");
   LaAnimal myAnimal;
   myAnimal.setGuid();
   mAnimal = myAnimal;
@@ -234,6 +223,7 @@ void LaAnimalManager::resizeEvent ( QResizeEvent * theEvent )
 
 void LaAnimalManager::on_toolCopy_clicked()
 {
+  qDebug("Copy toolbutton clicked");
   if (tblAnimals->currentRow() < 0) 
   {
     return;
@@ -263,6 +253,7 @@ void LaAnimalManager::on_toolCopy_clicked()
 }
 void LaAnimalManager::on_toolDelete_clicked()
 {
+  qDebug("Delete toolbutton clicked");
   if (tblAnimals->currentRow() < 0) 
   {
     return;
@@ -281,9 +272,21 @@ void LaAnimalManager::on_toolDelete_clicked()
 }
 void LaAnimalManager::on_pbnApply_clicked()
 {
-  LaAnimal myAnimal;
+  mAnimal.setName(leName->text());
+  mAnimal.setUsableMeat(spinBoxUsableMeatPercent->value());
+  mAnimal.setKillWeight(spinBoxKillWeight->value());
+  mAnimal.setGrowTime(spinBoxGrowTime->value());
+  mAnimal.setDeathRate(spinBoxDeathRate->value());
+  mAnimal.setGestating(spinBoxCaloriesForGestating->value());
+  mAnimal.setLactating(spinBoxCaloriesForLactating->value());
+  mAnimal.setJuvenile(spinBoxCaloriesForJuvenile->value());
+  mAnimal.setLifeExpectancy(spinBoxLifeExpectancy->value());
+  mAnimal.setBreedingExpectancy(spinBoxBreedingLife->value());
+  mAnimal.setYoungPerBirth(spinBoxYoungPerBirth->value());
+  mAnimal.setWeaningAge(spinBoxWeaningAge->value());
+  mAnimal.setGestationTime(spinBoxGestationTime->value());
+  mAnimal.setEstrousCycle(spinBoxEstrousCycleTime->value());
   mAnimal.toXmlFile( LaUtils::userAnimalProfilesDirPath() + 
       QDir::separator() + mAnimal.guid() + ".xml");
-  mAnimal=myAnimal;
   refreshAnimalTable(mAnimal.guid());
 }
