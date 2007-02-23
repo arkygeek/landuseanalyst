@@ -21,5 +21,8 @@
         <file>pig.png</file>
         <file>sheep.png</file>
         <file>wheatclricon.png</file>
+        <file>new.png</file>
+        <file>copy.png</file>
+        <file>delete.png</file>
     </qresource>
 </RCC>
