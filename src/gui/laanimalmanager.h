@@ -44,6 +44,14 @@ class LaAnimalManager : public QDialog, private Ui::LaAnimalManagerBase
 
   private slots:
       void cellClicked(int theRow, int theColumn);
+      void showAnimal();
+      void on_toolCopy_clicked();
+      void on_toolNew_clicked();
+      void on_toolDelete_clicked();
+      void on_pbnApply_clicked();
+      void resizeEvent(QResizeEvent*);
+
+
 
   private:
       void refreshAnimalTable(QString theGuid=0);

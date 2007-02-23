@@ -23,6 +23,20 @@
 LaAnimal::LaAnimal() : LaSerialisable(), LaGuid()
 {
   setGuid();
+  mName="No Name Set";
+  mUsableMeat=0;
+  mKillWeight=0;
+  mGrowTime=0;
+  mDeathRate=0;
+  mGestating=0;
+  mLactating=0;
+  mJuvenile=0;
+  mLifeExpectancy=0;
+  mBreedingExpectancy=0;
+  mYoungPerBirth=0;
+  mWeaningAge=0;
+  mGestationTime=0;
+  mEstrousCycle=0;
 }
 LaAnimal::~LaAnimal()
 {

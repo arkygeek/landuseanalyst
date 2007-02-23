@@ -96,8 +96,10 @@ void LaAnimalManager::refreshAnimalTable(QString theGuid)
   {
     myIterator.next();
     LaAnimal myAnimal = myIterator.value();
+    qDebug(myAnimal.toText().toLocal8Bit());
     if (theGuid.isEmpty())
     {
+      qDebug("The animal you just loaded has an empty guid!!! Self assigning!");;
       theGuid=myAnimal.guid();
     }
     if (myAnimal.guid()==theGuid)
@@ -166,6 +168,11 @@ void LaAnimalManager::selectAnimal(QString theFileName)
   myAnimal.fromXmlFile(myAnimalDir + QDir::separator() + theFileName);
   leName->setText(myAnimal.name());
   mAnimal=myAnimal;
+  showAnimal();
+}
+
+void LaAnimalManager::showAnimal()
+{
   leName->setText(mAnimal.name());
   //leDescription->setText(myAnimal.description());
   spinBoxUsableMeatPercent->setValue(mAnimal.usableMeat());
@@ -187,6 +194,7 @@ void LaAnimalManager::on_pushButtonLoad_clicked()
 {
   //
   mAnimal.fromXmlFile("/tmp/animal.xml");
+  showAnimal();
 }
 
 void LaAnimalManager::on_pushButtonSave_clicked()
@@ -206,6 +214,76 @@ void LaAnimalManager::on_pushButtonSave_clicked()
   mAnimal.setGestationTime(spinBoxGestationTime->value());
   mAnimal.setEstrousCycle(spinBoxEstrousCycleTime->value());
   mAnimal.toXmlFile( LaUtils::userAnimalProfilesDirPath() + 
-      QDir::separator() + mAnimal.name() + ".xml");
+      QDir::separator() + mAnimal.guid() + ".xml");
 }
 
+void LaAnimalManager::on_toolNew_clicked()
+{
+  LaAnimal myAnimal;
+  myAnimal.setGuid();
+  mAnimal = myAnimal;
+  showAnimal();
+}
+
+void LaAnimalManager::resizeEvent ( QResizeEvent * theEvent )
+{
+  tblAnimals->setColumnWidth(0,0);
+  tblAnimals->setColumnWidth(1,tblAnimals->width());
+  tblAnimals->horizontalHeader()->setResizeMode(1,QHeaderView::Stretch);
+}
+
+void LaAnimalManager::on_toolCopy_clicked()
+{
+  if (tblAnimals->currentRow() < 0) 
+  {
+    return;
+  }
+  //to clone, we get the algorithm guid that is currently selected
+  QString myGuid = tblAnimals->item(tblAnimals->currentRow(),0)->text();
+  if (myGuid.isEmpty())
+  {
+    return;
+  }
+  QString myOriginalFileName = LaUtils::userAnimalProfilesDirPath() + QDir::separator() + myGuid + ".xml";
+  LaAnimal myAnimal;
+  myAnimal.fromXmlFile(myOriginalFileName);
+  /*
+  int myCount = 1;
+  while (mAnimal.contains(myProfileName))
+  {
+    myProfileName = tr("Copy ") + QString::number(myCount++) + " of " + myAnimal.name();
+  }
+  */
+  //assign this layerset its own guid
+  myAnimal.setGuid();
+  QString myNewFileName = LaUtils::userAnimalProfilesDirPath() + QDir::separator() + myGuid + ".xml";
+  myAnimal.setName(tr("Copy of ") + myAnimal.name());
+  myAnimal.toXmlFile(myNewFileName);
+  refreshAnimalTable(myAnimal.guid());
+}
+void LaAnimalManager::on_toolDelete_clicked()
+{
+  if (tblAnimals->currentRow() < 0) 
+  {
+    return;
+  }
+  QString myGuid = tblAnimals->item(tblAnimals->currentRow(),0)->text();
+  if (!myGuid.isEmpty())
+  {
+    QFile myFile(LaUtils::userAnimalProfilesDirPath() + QDir::separator() + myGuid + ".xml");
+    if (!myFile.remove())
+    {
+      QMessageBox::warning(this, tr("Landuse Analyst"),
+      tr("Unable to delete file \n") + myFile.fileName());
+    }
+    refreshAnimalTable();
+  }
+}
+void LaAnimalManager::on_pbnApply_clicked()
+{
+  LaAnimal myAnimal;
+  mAnimal.toXmlFile( LaUtils::userAnimalProfilesDirPath() + 
+      QDir::separator() + mAnimal.guid() + ".xml");
+  mAnimal=myAnimal;
+  refreshAnimalTable(mAnimal.guid());
+}
