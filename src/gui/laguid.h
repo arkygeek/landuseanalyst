@@ -33,7 +33,7 @@ public:
   /** Desctructor . */
   virtual ~LaGuid();
   /** Retrieve the globally unique identifier */
-  const QString guid();
+  QString guid() const;
   /** Set the globally unique identifier for this object.
    *  If no Parameter is passed a guid will be self assigned
    *  @param theGuid - a guid for this model

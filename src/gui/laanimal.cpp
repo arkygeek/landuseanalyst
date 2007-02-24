@@ -47,6 +47,7 @@ LaAnimal::~LaAnimal()
 LaAnimal::LaAnimal(const LaAnimal& theAnimal)
 {
   mName=theAnimal.name();
+  setGuid(theAnimal.guid());
   mUsableMeat=theAnimal.usableMeat();
   mKillWeight=theAnimal.killWeight();
   mGrowTime=theAnimal.growTime();
@@ -67,6 +68,7 @@ LaAnimal& LaAnimal::operator=(const LaAnimal& theAnimal)
   if (this == &theAnimal) return *this;   // Gracefully handle self assignment
 
   mName=theAnimal.name();
+  setGuid(theAnimal.guid());
   mUsableMeat=theAnimal.usableMeat();
   mKillWeight=theAnimal.killWeight();
   mGrowTime=theAnimal.growTime();
@@ -210,7 +212,9 @@ bool LaAnimal::fromXml(QString theXml)
     //TODO - just make this a warning
     qDebug("top element could not be found!");
   }
+  qDebug("Animal::fromXml - guid found : " + myTopElement.attribute("guid").toLocal8Bit());
   setGuid(myTopElement.attribute("guid"));
+  qDebug("Animal::fromXml - guid set to : " + guid().toLocal8Bit());
   mName=LaUtils::xmlDecode(myTopElement.firstChildElement("name").text());
   mUsableMeat=QString(myTopElement.firstChildElement("usableMeat").text()).toInt();
   mKillWeight=QString(myTopElement.firstChildElement("killWeight").text()).toInt();

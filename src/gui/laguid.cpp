@@ -24,7 +24,7 @@ LaGuid::LaGuid()
 LaGuid::~LaGuid()
 {
 }
-const QString LaGuid::guid()
+QString LaGuid::guid() const
 {
   return mGuid;
 }

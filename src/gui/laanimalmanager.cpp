@@ -99,7 +99,7 @@ void LaAnimalManager::refreshAnimalTable(QString theGuid)
     qDebug(myAnimal.toText().toLocal8Bit());
     if (theGuid.isEmpty())
     {
-      qDebug("The animal you just loaded has an empty guid!!! Self assigning!");;
+      qDebug("No default active row was requested.Assigning to myAnimal.guid()!");;
       theGuid=myAnimal.guid();
     }
     if (myAnimal.guid()==theGuid)
@@ -109,7 +109,7 @@ void LaAnimalManager::refreshAnimalTable(QString theGuid)
     // Insert new row ready to fill with details
     tblAnimals->insertRow(myCurrentRow); 
     QString myGuid = myAnimal.guid();
-    qDebug ("Inserting animal with guid: " + myGuid);
+    qDebug ("Inserting animal with guid: " + myGuid.toLocal8Bit());
     // Add details to the new row
     QTableWidgetItem *mypFileNameItem= new QTableWidgetItem(myGuid);
     tblAnimals->setItem(myCurrentRow, 0, mypFileNameItem);
