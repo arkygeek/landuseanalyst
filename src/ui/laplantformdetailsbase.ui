@@ -331,7 +331,7 @@ p, li { white-space: pre-wrap; }
        </layout>
       </item>
       <item row="1" column="3" >
-       <widget class="QComboBox" name="comboBoxYieldUnits" >
+       <widget class="QComboBox" name="comboBoxAreaUnits" >
         <property name="sizePolicy" >
          <sizepolicy>
           <hsizetype>4</hsizetype>

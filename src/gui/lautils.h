@@ -60,6 +60,15 @@ class LaUtils
      * @return QString containing the relevant directory name
      */
     static const QString userAnimalParametersDirPath();
+    /**
+     * Find the place on the filesystem where user defined plant
+     * model parameter profiles are stored. 
+     *
+     * Typically this will be ~/.landuseAnalyst/plantParameters
+     *
+     * @return QString containing the relevant directory name
+     */
+    static const QString userPlantParametersDirPath();
     /** Get the place where model outputs are to be stored.
      * By default this is in ~/.landuseAnalyst/modelOutputs
      * But if modelOutputsDir is specified in QSettings, it will override

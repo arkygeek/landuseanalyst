@@ -95,6 +95,15 @@ const QString LaUtils::userPlantProfilesDirPath()
   return myPath;
 }
 
+const QString LaUtils::userPlantParametersDirPath()
+{
+  //alg profiles are always saved in the users home dir under .landuseAnalyst/
+  QString myPath = QDir::homePath() + QString("/.landuseAnalyst/") + 
+    QDir::separator()+"plantParameters"+QDir::separator();
+  QDir().mkpath(myPath);
+  return myPath;
+}
+
 LaUtils::PlantMap LaUtils::getAvailablePlants()
 {
   LaUtils::PlantMap myMap;
