@@ -82,8 +82,9 @@ class LaAnimal : public LaSerialisable, public LaGuid
      * @see name()
      */
     void setName(QString theName);
+
     /** Set the animal description
-     * @see descrition()
+     * @see description()
      */
     void setDescription(QString theDescription);
 

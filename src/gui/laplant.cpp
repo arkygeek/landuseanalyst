@@ -23,6 +23,13 @@
 LaPlant::LaPlant() : LaSerialisable(), LaGuid()
 {
   setGuid();
+  mName="No Name Set";
+  mDescription="Not Set";
+  mCropYield=0;
+  mCropCalories=0;
+  mCropFodderProduction=0;
+  mCropFodderCalories=0;
+  mYieldUnits=0;
 }
 LaPlant::~LaPlant()
 {
@@ -57,6 +64,12 @@ QString LaPlant::name() const
 {
   return mName;
 }
+
+QString LaPlant::description() const
+{
+  return mDescription;
+}
+
 int LaPlant::cropYield() const
 {
   return mCropYield;
@@ -82,6 +95,12 @@ void LaPlant::setName(QString theName)
 {
   mName=theName;
 }
+
+void LaPlant::setDescription(QString theDescription)
+{
+  mDescription=theDescription;
+}
+
 void LaPlant::setCropYield(int theKg)
 {
   mCropYield=theKg;
@@ -108,35 +127,37 @@ bool LaPlant::fromXml(QString theXml)
   qDebug("Loading Plant from xml");
   QDomDocument myDocument("mydocument");
   myDocument.setContent(theXml);
-  QDomElement myTopElement = myDocument.firstChildElement("Plant");
+  QDomElement myTopElement = myDocument.firstChildElement("plant");
   if (myTopElement.isNull())
   {
     //TODO - just make this a warning
     qDebug("top element could not be found!");
   }
+  qDebug("Plant::fromXml - guid found : " + myTopElement.attribute("guid").toLocal8Bit());
   setGuid(myTopElement.attribute("guid"));
+  qDebug("Plant::fromXml - guid set to : " + guid().toLocal8Bit());
   mName=LaUtils::xmlDecode(myTopElement.firstChildElement("name").text());
-  mCropYield=QString(myTopElement.firstChildElement("cropYield").text()).toInt();
+  mDescription=LaUtils::xmlDecode(myTopElement.firstChildElement("description").text());
+mCropYield=QString(myTopElement.firstChildElement("cropYield").text()).toInt();
   mCropCalories=QString(myTopElement.firstChildElement("cropCalories").text()).toInt();
   mCropFodderProduction=QString(myTopElement.firstChildElement("fodderProduction").text()).toInt();
   mCropFodderCalories=QString(myTopElement.firstChildElement("fodderCalories").text()).toInt();
   mYieldUnits=QString(myTopElement.firstChildElement("yieldUnits").text()).toInt();
-
-    
   return true;
 }
 
 QString LaPlant::toXml()
 {
-  QString myString = QString("<Plant Id=\"" + mName + "\"/>\n");
-          myString+=QString("<plant>\n");
-            myString+=QString("  <name>" + mName + "</name>\n");
-            myString+=QString("  <yield>" + QString::number(mCropYield) + "</yield>\n");
-            myString+=QString("  <cropCalories>" + QString::number(mCropCalories) + "</cropCalories>\n");
-            myString+=QString("  <fodderProduction>" + QString::number(mCropFodderProduction) + "</fodderProduction>\n");
-            myString+=QString("  <fodderCalories>" + QString::number(mCropFodderCalories) + "</fodderCalories>\n");
-            myString+=QString("  <yieldUnits>" + QString::number(mYieldUnits) + "</yieldUnits>\n");
-          myString+=QString("</plant>\n");
+  QString myString;
+  myString+=QString("<plant guid=\"" + guid() + "\">\n");
+    myString+=QString("  <name>" + LaUtils::xmlEncode(mName) + "</name>\n");
+  myString+=QString("  <description>" + LaUtils::xmlEncode(mDescription) + "</description>\n");
+  myString+=QString("  <yield>" + QString::number(mCropYield) + "</yield>\n");
+  myString+=QString("  <cropCalories>" + QString::number(mCropCalories) + "</cropCalories>\n");
+  myString+=QString("  <fodderProduction>" + QString::number(mCropFodderProduction) + "</fodderProduction>\n");
+  myString+=QString("  <fodderCalories>" + QString::number(mCropFodderCalories) + "</fodderCalories>\n");
+  myString+=QString("  <yieldUnits>" + QString::number(mYieldUnits) + "</yieldUnits>\n");
+  myString+=QString("</plant>\n");
   return myString;
 }
 
@@ -145,6 +166,7 @@ QString LaPlant::toText()
   QString myString;
   myString+=QString("guid=>" + guid() + "\n");
   myString+=QString("name=>" + LaUtils::xmlEncode(mName) + "\n");
+  myString+=QString("description=>" + LaUtils::xmlEncode(mDescription) + "\n");
   myString+=QString("cropYield=>" + QString::number(mCropYield) + "\n");
   myString+=QString("cropCalories=>" + QString::number(mCropCalories) + "\n");
   myString+=QString("fodderProduction=>" + QString::number(mCropFodderProduction) + "\n");
@@ -155,35 +177,23 @@ QString LaPlant::toText()
 QString LaPlant::toHtml()
 {
   QString myString;
-  myString+=QString("<BODY>") + "\n";
-  myString+=QString("<P><B><U><I>Details for "
-                     + LaUtils::xmlEncode(mName)
-                     + " </I></U></B>" + "\n");
-  myString+=QString("</P>") + "\n";
-  myString+=QString("<P>" + guid() + "\n");
-  myString+=QString("</P>") + "\n";
-  myString+=QString("<P>(Global Unique Identifier)") + "\n";
-  myString+=QString("</P>") + "\n";
-  myString+=QString("<P><B>Average Crop Yield: </B>"
-                    +QString::number(mCropYield)
-                    + "\n");
-  myString+=QString("</P>") + "\n";
-  myString+=QString("<P><B>Calories per Kg: </B>"
+  myString+="<p align=\"center\"><h1>Details for " + LaUtils::xmlEncode(mName) + "</h1></p>";
+  myString+="<p>GUID:" + guid() + "</p>";
+  myString+="<p>Description:" + mDescription + "</p>";
+   myString+="<p>Average Crop Yield: "
+                    + QString::number(mCropYield)
+                    + "</p>";
+  myString+="<p>Calories per Kg: "
                     + QString::number(mCropCalories)
-                    + "\n");
-  myString+=QString("</P>");
-  myString+=QString("<P><B>Kg of Fodder produced: </B>"
+                    + "</p>";
+  myString+="<p>Kg of Fodder produced: "
                     +QString::number(mCropFodderProduction)
-                    + "\n");
-  myString+=QString("</P>");
-  myString+=QString("<P><B>Calories per Kg in fodder: </B>"
+                    + "</p>";
+  myString+="<p>Calories per Kg in fodder: "
                     + QString::number(mCropFodderCalories)
-                    + "\n");
-  myString+=QString("</P>");
-  myString+=QString("<P><B>AreaUnits(0=Dunum, 2=Hectare): </B>"
+                    + "</p>";
+  myString+=("<p>AreaUnits(0=Dunum, 2=Hectare): "
                     + QString::number(mYieldUnits)
-                    + "\n");
-  myString+=QString("</P>") + "\n";
-  myString+=QString("</BODY>") + "\n";
+                    + "</p>");
   return myString;
 }

@@ -45,6 +45,8 @@ class LaPlant : public LaSerialisable, public LaGuid
 
     /** The name of this plant */
     QString name() const;
+    /** The description of this plant */
+    QString description() const;
     /** Average amount in Kg of production per hectare or dunum */
     int cropYield() const;
     /** The food value in calories of 1 kg of crop product (ie/ grain/fruit) */
@@ -66,6 +68,12 @@ class LaPlant : public LaSerialisable, public LaGuid
      * @see name()
      */
     void setName(QString theName);
+
+    /** Set the animal description
+     * @see description()
+     */
+    void setDescription(QString theDescription);
+
     /** Set cropYield as Kg/area
      * @see cropYield()
      */
@@ -108,6 +116,8 @@ class LaPlant : public LaSerialisable, public LaGuid
   private:
     /** The name for this plant */
     QString mName;
+    /** The description for this animal */
+    QString mDescription;
     /** Set cropYield as Kg/area
      * @see cropYield()
      */

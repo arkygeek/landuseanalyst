@@ -292,21 +292,21 @@ QString LaAnimal::toText()
 QString LaAnimal::toHtml()
 {
   QString myString;
-  myString+="<p align=\"center\"><h1>Details for " + LaUtils::xmlEncode(mName) + "</h1></p>\n";
-  myString+="<p>GUID:" + guid() + "</p>\n";
-  myString+="<p>Description:"+ mDescription + "</p>\n";
-  myString+="<p>Percentage Usable Meat: " + QString::number(mUsableMeat) + "</p>\n";
-  myString+="<p>Kill Weight: "+ QString::number(mKillWeight) + "</p>\n";
-  myString+="<p>Grow Time: "+QString::number(mGrowTime) + "</p>\n";
-  myString+="<p>Death Rate: "+ QString::number(mDeathRate) + "</p>\n";
-  myString+="<p>Calories fostating female: "+ QString::number(mGestating) + "</p>\n";
-  myString+="<p>Calories foctating female: "+ QString::number(mLactating) + "</p>\n";
-  myString+="<p>Calories fovenile: "+ QString::number(mJuvenile) + "</p>\n";
-  myString+="<p>Life Expectancy: "+ QString::number(mLifeExpectancy) + "</p>\n";
-  myString+="<p>Breeding Expectancy"+ QString::number(mBreedingExpectancy) + "</p>\n";
-  myString+="<p>Young Per Birth: "+ QString::number(mYoungPerBirth) + "</p>\n";
-  myString+="<p>Weaning Age: "+ QString::number(mWeaningAge) + "</p>\n";
-  myString+="<p>Gestation Time: "+ QString::number(mGestationTime) + "</p>\n";
-  myString+="<p>Estrous Cycle: "+ QString::number(mEstrousCycle) + "</p>\n";
+  myString+="<p align=\"center\"><h1>Details for " + LaUtils::xmlEncode(mName) + "</h1></p>";
+  myString+="<p>GUID:" + guid() + "</p>";
+  myString+="<p>Description:" + mDescription + "</p>";
+  myString+="<p>Percentage Usable Meat: " + QString::number(mUsableMeat) + "</p>";
+  myString+="<p>Kill Weight: " + QString::number(mKillWeight) + "</p>";
+  myString+="<p>Grow Time: " + QString::number(mGrowTime) + "</p>";
+  myString+="<p>Death Rate: " + QString::number(mDeathRate) + "</p>";
+  myString+="<p>Calories fostating female: " + QString::number(mGestating) + "</p>";
+  myString+="<p>Calories foctating female: " + QString::number(mLactating) + "</p>";
+  myString+="<p>Calories fovenile: " + QString::number(mJuvenile) + "</p>";
+  myString+="<p>Life Expectancy: " + QString::number(mLifeExpectancy) + "</p>";
+  myString+="<p>Breeding Expectancy" + QString::number(mBreedingExpectancy) + "</p>";
+  myString+="<p>Young Per Birth: " + QString::number(mYoungPerBirth) + "</p>";
+  myString+="<p>Weaning Age: " + QString::number(mWeaningAge) + "</p>";
+  myString+="<p>Gestation Time: " + QString::number(mGestationTime) + "</p>";
+  myString+="<p>Estrous Cycle: " + QString::number(mEstrousCycle) + "</p>";
   return myString;
 }

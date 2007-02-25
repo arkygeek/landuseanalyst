@@ -42,9 +42,9 @@ QT += gui core
 #################################################################
 
 FORMS += ../ui/lamainformbase.ui \
-         ../ui/laanimalformmainbase.ui \
+         ../ui/laanimalmanagerbase.ui \
          ../ui/laanimalformdetailsbase.ui \
-         ../ui/laplantformmainbase.ui \
+         ../ui/laplantmanagerbase.ui \
          ../ui/laplantformdetailsbase.ui
 
 HEADERS += lamainform.h \
@@ -53,8 +53,8 @@ HEADERS += lamainform.h \
            laanimalmain.h \
            laanimaldetails.h \
            laanimal.h \
-           laanimaldetails.h \
-           laplantmain.h \
+           laanimalmanager.h \
+           laplantmanager.h \
            laplantdetails.h \
            laplant.h \
            laserialisable.h
@@ -63,11 +63,11 @@ SOURCES += main.cpp \
            lautils.cpp \
            laguid.cpp \
            lamainform.cpp \
-           laanimalmain.cpp \
+           laanimalmanager.cpp \
            laanimal.cpp \
            laanimaldetails.cpp \
            laanimalparameters.cpp \
-           laplantmain.cpp \
+           laplantmanager.cpp \
            laplantdetails.cpp \
            laplant.cpp \
            laserialisable.cpp 

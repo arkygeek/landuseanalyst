@@ -22,7 +22,7 @@
 #include "lamainform.h"
 #include "version.h"
 #include "laanimalmanager.h"
-#include "laplantmain.h"
+#include "laplantmanager.h"
 
 //qt includes
 #include <QSettings>
@@ -52,6 +52,7 @@ LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
 
   lblVersion->setText(QString("Version: %1").arg(VERSION) + " " + QString("$Revision$").replace("$",""));
   loadAnimals();
+  loadPlants();
 }
 
 LaMainForm::~LaMainForm()
@@ -107,8 +108,8 @@ void LaMainForm::on_pbnNewAnimal_clicked()
 }
 void LaMainForm::on_pbnNewPlant_clicked()
 {
-  LaPlantMain myPlantForm;
-  myPlantForm.exec();
+  LaPlantManager myPlantManager;
+  myPlantManager.exec();
   loadPlants();
 }
 void LaMainForm::loadAnimals()
@@ -130,7 +131,12 @@ void LaMainForm::loadAnimals()
     listWidgetAnimals->addItem(mypItem);
   }
 }
-
+void LaMainForm::on_listWidgetPlants_itemClicked(QListWidgetItem * theItem)
+{
+  QString myGuid = theItem->data(Qt::UserRole).toString();
+  LaPlant myPlant = mPlantsMap[myGuid];
+  textBrowserPlantDefinition->setHtml(myPlant.toHtml());
+}
 void LaMainForm::on_listWidgetAnimals_itemClicked(QListWidgetItem * theItem)
 {
   QString myGuid = theItem->data(Qt::UserRole).toString();
@@ -153,7 +159,7 @@ void LaMainForm::loadPlants()
     myIcon.addFile(":/localdata.png");
     QListWidgetItem * mypItem = new QListWidgetItem(myIcon,myName);
     mypItem->setData(Qt::UserRole,myGuid);
-    listWidgetAnimals->addItem(mypItem);
+    listWidgetPlants->addItem(mypItem);
   }
 }
 
