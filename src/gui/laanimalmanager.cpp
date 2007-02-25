@@ -178,7 +178,7 @@ void LaAnimalManager::selectAnimal(QString theFileName)
 void LaAnimalManager::showAnimal()
 {
   leName->setText(mAnimal.name());
-  //leDescription->setText(myAnimal.description());
+  leDescription->setText(mAnimal.description());
   spinBoxUsableMeatPercent->setValue(mAnimal.usableMeat());
   spinBoxKillWeight->setValue(mAnimal.killWeight());
   spinBoxGrowTime->setValue(mAnimal.growTime());

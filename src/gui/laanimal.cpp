@@ -24,6 +24,7 @@ LaAnimal::LaAnimal() : LaSerialisable(), LaGuid()
 {
   setGuid();
   mName="No Name Set";
+  mDescription="Not Set";
   mUsableMeat=0;
   mKillWeight=0;
   mGrowTime=0;
@@ -47,6 +48,7 @@ LaAnimal::~LaAnimal()
 LaAnimal::LaAnimal(const LaAnimal& theAnimal)
 {
   mName=theAnimal.name();
+  mDescription=theAnimal.description();
   setGuid(theAnimal.guid());
   mUsableMeat=theAnimal.usableMeat();
   mKillWeight=theAnimal.killWeight();
@@ -68,6 +70,7 @@ LaAnimal& LaAnimal::operator=(const LaAnimal& theAnimal)
   if (this == &theAnimal) return *this;   // Gracefully handle self assignment
 
   mName=theAnimal.name();
+  mDescription=theAnimal.description();
   setGuid(theAnimal.guid());
   mUsableMeat=theAnimal.usableMeat();
   mKillWeight=theAnimal.killWeight();
@@ -88,6 +91,10 @@ LaAnimal& LaAnimal::operator=(const LaAnimal& theAnimal)
 QString LaAnimal::name() const
 {
   return mName;
+}
+QString LaAnimal::description() const
+{
+  return mDescription;
 }
 int LaAnimal::usableMeat() const
 {
@@ -144,6 +151,10 @@ int LaAnimal::estrousCycle() const
 void LaAnimal::setName(QString theName)
 {
   mName=theName;
+}
+void LaAnimal::setDescription(QString theDescription)
+{
+  mDescription=theDescription;
 }
 void LaAnimal::setUsableMeat(int thePercentage)
 {
@@ -216,6 +227,7 @@ bool LaAnimal::fromXml(QString theXml)
   setGuid(myTopElement.attribute("guid"));
   qDebug("Animal::fromXml - guid set to : " + guid().toLocal8Bit());
   mName=LaUtils::xmlDecode(myTopElement.firstChildElement("name").text());
+  mDescription=LaUtils::xmlDecode(myTopElement.firstChildElement("description").text());
   mUsableMeat=QString(myTopElement.firstChildElement("usableMeat").text()).toInt();
   mKillWeight=QString(myTopElement.firstChildElement("killWeight").text()).toInt();
   mGrowTime=QString(myTopElement.firstChildElement("growTime").text()).toInt();
@@ -237,6 +249,7 @@ QString LaAnimal::toXml()
   QString myString;
   myString+=QString("<animal guid=\"" + guid() + "\">\n");
   myString+=QString("  <name>" + LaUtils::xmlEncode(mName) + "</name>\n");
+  myString+=QString("  <description>" + LaUtils::xmlEncode(mDescription) + "</description>\n");
   myString+=QString("  <usableMeat>" + QString::number(mUsableMeat) + "</usableMeat>\n");
   myString+=QString("  <killWeight>" + QString::number(mKillWeight) + "</killWeight>\n");
   myString+=QString("  <growTime>" + QString::number(mGrowTime) + "</growTime>\n");
@@ -259,6 +272,7 @@ QString LaAnimal::toText()
   QString myString;
   myString+=QString("guid=>" + guid() + "\n");
   myString+=QString("name=>" + LaUtils::xmlEncode(mName) + "\n");
+  myString+=QString("description=>" + LaUtils::xmlEncode(mDescription) + "\n");
   myString+=QString("usableMeat=>" + QString::number(mUsableMeat) + "\n");
   myString+=QString("killWeight=>" + QString::number(mKillWeight) + "\n");
   myString+=QString("growTime=>" + QString::number(mGrowTime) + "\n");
@@ -278,88 +292,21 @@ QString LaAnimal::toText()
 QString LaAnimal::toHtml()
 {
   QString myString;
-  myString+=QString("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">") + "\n";
-  myString+=QString("<HTML>") + "\n";
-  myString+=QString("<HEAD>") + "\n";
-  myString+=QString("<META HTTP-EQUIV=\"CONTENT-TYPE\" CONTENT=\"text/html; charset=utf-8\">") + "\n";
-  myString+=QString("<TITLE></TITLE>") + "\n";
-  myString+=QString("<META NAME=\"GENERATOR\" CONTENT=\"OpenOffice.org 2.0  (Linux)\">") + "\n";
-  myString+=QString("<META NAME=\"CREATED\" CONTENT=\"20070222;14254000\">") + "\n";
-  myString+=QString("<META NAME=\"CHANGED\" CONTENT=\"20070222;14332600\">") + "\n";
-  myString+=QString("<STYLE TYPE=\"text/css\">") + "\n";
-  myString+=QString("<!--") + "\n";
-  myString+=QString("@page { margin: 2cm }") + "\n";
-  myString+=QString("P { margin-bottom: 0cm }") + "\n";
-  myString+=QString("P.western { so-language: en-GB }") + "\n";
-  myString+=QString("A:link { color: #000000; text-decoration: none }") + "\n";
-  myString+=QString("A:visited { color: #000000; text-decoration: none }") + "\n";
-  myString+=QString("-->") + "\n";
-  myString+=QString("</STYLE>") + "\n";
-  myString+=QString("</HEAD>") + "\n";
-  myString+=QString("<BODY LANG=\"en-GB\" LINK=\"#000000\" VLINK=\"#000000\" DIR=\"LTR\">") + "\n";
-  myString+=QString("<P CLASS=\"western\" ALIGN=CENTER><FONT SIZE=4 STYLE=\"font-size: 16pt\"><B><U><I>Details for "
-                     + LaUtils::xmlEncode(mName)
-                     + " </I></U></B></FONT>") + "\n";
-  myString+=QString("</P>") + "\n";
-  myString+=QString("<P CLASS=\"western\" ALIGN=CENTER><FONT COLOR=\"#008000\">"
-                    + guid()
-                    + "</FONT>") + "\n";
-  myString+=QString("</P>") + "\n";
-  myString+=QString("<P CLASS=\"western\" ALIGN=CENTER><FONT COLOR=\"#008000\">(Global Unique Identifier) </FONT>") + "\n";
-  myString+=QString("</P>") + "\n";
-  myString+=QString("<P CLASS=\"western\" ALIGN=RIGHT><FONT SIZE=3 STYLE=\"font-size: 13pt\"><B>Percentage Usable Meat: </B>"
-                    +QString::number(mUsableMeat)
-                    + "</FONT>") + "\n";
-  myString+=QString("</P>") + "\n";
-  myString+=QString("<P CLASS=\"western\" ALIGN=RIGHT><FONT SIZE=3 STYLE=\"font-size: 13pt\"><B>Kill Weight: </B>"
-                    + QString::number(mKillWeight)
-                    + "</FONT>") + "\n";
-  myString+=QString("</P>");
-  myString+=QString("<P CLASS=\"western\" ALIGN=RIGHT><FONT SIZE=3 STYLE=\"font-size: 13pt\"><B>Grow Time: </B>"
-                    +QString::number(mGrowTime)
-                    + "</FONT>") + "\n";
-  myString+=QString("</P>");
-  myString+=QString("<P CLASS=\"western\" ALIGN=RIGHT><FONT SIZE=3 STYLE=\"font-size: 13pt\"><B>Death Rate: </B>"
-                    + QString::number(mDeathRate)
-                    + "</FONT>") + "\n";
-  myString+=QString("</P>");
-  myString+=QString("<P CLASS=\"western\" ALIGN=RIGHT><FONT SIZE=3 STYLE=\"font-size: 13pt\"><B>Calories for Gestating female: </B>"
-                    + QString::number(mGestating)
-                    + "</FONT>") + "\n";
-  myString+=QString("</P>") + "\n";
-  myString+=QString("<P CLASS=\"western\" ALIGN=RIGHT><FONT SIZE=3 STYLE=\"font-size: 13pt\"><B>Calories for Lactating female: </B>"
-                    + QString::number(mLactating)
-                    + "</FONT>") + "\n";
-  myString+=QString("</P>") + "\n";
-  myString+=QString("<P CLASS=\"western\" ALIGN=RIGHT><FONT SIZE=3 STYLE=\"font-size: 13pt\"><B>Calories for Juvenile: </B>"
-                    + QString::number(mJuvenile)
-                    + "</FONT>") + "\n";
-  myString+=QString("</P>") + "\n";
-  myString+=QString("<P CLASS=\"western\" ALIGN=RIGHT><FONT SIZE=3 STYLE=\"font-size: 13pt\"><B>Life Expectancy: </B>"
-                    + QString::number(mLifeExpectancy)
-                    + "</FONT>") + "\n";
-  myString+=QString("</P>") + "\n";
-  myString+=QString("<P CLASS=\"western\" ALIGN=RIGHT><FONT SIZE=3 STYLE=\"font-size: 13pt\"><B>Breeding Life: </B>"
-                    + QString::number(mBreedingExpectancy)
-                    + "</FONT>") + "\n";
-  myString+=QString("</P>") + "\n";
-  myString+=QString("<P CLASS=\"western\" ALIGN=RIGHT><FONT SIZE=3 STYLE=\"font-size: 13pt\"><B>Young Per Birth: </B>"
-                    + QString::number(mYoungPerBirth)
-                    + "</FONT>") + "\n";
-  myString+=QString("</P>") + "\n";
-  myString+=QString("<P CLASS=\"western\" ALIGN=RIGHT><FONT SIZE=3 STYLE=\"font-size: 13pt\"><B>Weaning Age: </B>"
-                    + QString::number(mWeaningAge)
-                    + "</FONT>") + "\n";
-  myString+=QString("</P>") + "\n";
-  myString+=QString("<P CLASS=\"western\" ALIGN=RIGHT><FONT SIZE=3 STYLE=\"font-size: 13pt\"><B>Gestation Time: </B>"
-                    + QString::number(mGestationTime)
-                    + "</FONT>") + "\n";
-  myString+=QString("</P>") + "\n";
-  myString+=QString("<P CLASS=\"western\" ALIGN=RIGHT><FONT SIZE=3 STYLE=\"font-size: 13pt\"><B>Estrous Cycle: </B>"
-                    + QString::number(mEstrousCycle)
-                    + "</FONT>") + "\n";
-  myString+=QString("</P>") + "\n";
-  myString+=QString("</BODY>") + "\n";
-  myString+=QString("</HTML>") + "\n";
+  myString+="<p align=\"center\"><h1>Details for " + LaUtils::xmlEncode(mName) + "</h1></p>\n";
+  myString+="<p>GUID:" + guid() + "</p>\n";
+  myString+="<p>Description:"+ mDescription + "</p>\n";
+  myString+="<p>Percentage Usable Meat: " + QString::number(mUsableMeat) + "</p>\n";
+  myString+="<p>Kill Weight: "+ QString::number(mKillWeight) + "</p>\n";
+  myString+="<p>Grow Time: "+QString::number(mGrowTime) + "</p>\n";
+  myString+="<p>Death Rate: "+ QString::number(mDeathRate) + "</p>\n";
+  myString+="<p>Calories fostating female: "+ QString::number(mGestating) + "</p>\n";
+  myString+="<p>Calories foctating female: "+ QString::number(mLactating) + "</p>\n";
+  myString+="<p>Calories fovenile: "+ QString::number(mJuvenile) + "</p>\n";
+  myString+="<p>Life Expectancy: "+ QString::number(mLifeExpectancy) + "</p>\n";
+  myString+="<p>Breeding Expectancy"+ QString::number(mBreedingExpectancy) + "</p>\n";
+  myString+="<p>Young Per Birth: "+ QString::number(mYoungPerBirth) + "</p>\n";
+  myString+="<p>Weaning Age: "+ QString::number(mWeaningAge) + "</p>\n";
+  myString+="<p>Gestation Time: "+ QString::number(mGestationTime) + "</p>\n";
+  myString+="<p>Estrous Cycle: "+ QString::number(mEstrousCycle) + "</p>\n";
   return myString;
 }
