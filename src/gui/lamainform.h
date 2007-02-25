@@ -47,6 +47,7 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
   void on_pushButtonSave_clicked();
   void on_pbnNewPlant_clicked();
   void on_pbnNewAnimal_clicked();
+  void on_listWidgetAnimals_itemClicked(QListWidgetItem * theItem);
   /** Refresh the animals list, remembering which were checked
    * from before */
   void loadAnimals();

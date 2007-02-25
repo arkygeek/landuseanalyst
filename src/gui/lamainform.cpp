@@ -130,6 +130,13 @@ void LaMainForm::loadAnimals()
     listWidgetAnimals->addItem(mypItem);
   }
 }
+
+void LaMainForm::on_listWidgetAnimals_itemClicked(QListWidgetItem * theItem)
+{
+  QString myGuid = theItem->data(Qt::UserRole).toString();
+  LaAnimal myAnimal = mAnimalsMap[myGuid];
+  textBrowserAnimalDefinition->setHtml(myAnimal.toHtml());
+}
 void LaMainForm::loadPlants()
 {
   listWidgetPlants->clear();
