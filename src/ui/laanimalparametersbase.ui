@@ -1,0 +1,510 @@
+<ui version="4.0" >
+ <class>LaAnimaParametersBase</class>
+ <widget class="QWidget" name="LaAnimaParametersBase" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>256</width>
+    <height>320</height>
+   </rect>
+  </property>
+  <property name="minimumSize" >
+   <size>
+    <width>0</width>
+    <height>0</height>
+   </size>
+  </property>
+  <property name="windowTitle" >
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>9</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item row="2" column="2" >
+    <widget class="QSpinBox" name="spinBoxCommonRasterCalories" />
+   </item>
+   <item row="1" column="2" >
+    <widget class="QSpinBox" name="spinBoxUniqueRasterCalories" />
+   </item>
+   <item row="6" column="0" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="6" column="1" >
+    <widget class="QPushButton" name="pushButtonSave" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>0</hsizetype>
+       <vsizetype>0</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text" >
+      <string>Save</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0" colspan="3" >
+    <widget class="QGroupBox" name="groupBoxFodderUse" >
+     <property name="cursor" >
+      <cursor>0</cursor>
+     </property>
+     <property name="whatsThis" >
+      <string>Select Fodder if you believe the animals were fed grain to supplement their grazing.  You will then have to select how many kg of the selected grain you believe they fed each animal either every day, week, or month.</string>
+     </property>
+     <property name="title" >
+      <string>Fodder</string>
+     </property>
+     <property name="checkable" >
+      <bool>true</bool>
+     </property>
+     <property name="checked" >
+      <bool>false</bool>
+     </property>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>2</number>
+      </property>
+      <property name="spacing" >
+       <number>0</number>
+      </property>
+      <item row="0" column="1" colspan="2" >
+       <widget class="QLabel" name="labelFodderFodder" >
+        <property name="toolTip" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of animals diet provided by &lt;span style=" font-weight:600;">FODDER&lt;/span>.&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" color:#0000ff;">To use &lt;/span>&lt;span style=" font-style:italic; color:#0000ff;">all&lt;/span>&lt;span style=" color:#0000ff;"> that is available use a &lt;/span>&lt;span style=" font-weight:600; color:#0000ff;">negative number:&lt;/span>&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-weight:600;">-1&lt;/span> for HIGH priority total utilization&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-weight:600;">-2&lt;/span> for MED priority total utilization&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-weight:600;">-3&lt;/span> for LOW priority total utilization&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="layoutDirection" >
+         <enum>Qt::LeftToRight</enum>
+        </property>
+        <property name="text" >
+         <string>Fodder</string>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3" >
+       <widget class="QLabel" name="labelFodderGrain" >
+        <property name="layoutDirection" >
+         <enum>Qt::RightToLeft</enum>
+        </property>
+        <property name="text" >
+         <string>Grain</string>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0" >
+       <spacer>
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" >
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="3" column="3" >
+       <widget class="QSpinBox" name="spinBoxFodderLentilsGrain" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>4</hsizetype>
+          <vsizetype>0</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="toolTip" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of animals diet provided by LENTILS&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="suffix" >
+         <string/>
+        </property>
+        <property name="maximum" >
+         <number>100</number>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2" >
+       <widget class="QSpinBox" name="spinBoxFodderLentils" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>4</hsizetype>
+          <vsizetype>0</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="toolTip" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of animals diet provided by &lt;span style=" color:#0000ff;">LENTIL FODDER&lt;/span>.&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="suffix" >
+         <string/>
+        </property>
+        <property name="maximum" >
+         <number>100</number>
+        </property>
+        <property name="minimum" >
+         <number>-3</number>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0" colspan="2" >
+       <widget class="QLabel" name="labelFodderLentils" >
+        <property name="toolTip" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of animals diet provided by LENTILS&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="text" >
+         <string>Lentils</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="3" >
+       <widget class="QSpinBox" name="spinBoxFodderBarleyGrain" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>4</hsizetype>
+          <vsizetype>0</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="toolTip" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of animals diet provided by BARLEY&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="suffix" >
+         <string/>
+        </property>
+        <property name="maximum" >
+         <number>100</number>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2" >
+       <widget class="QSpinBox" name="spinBoxFodderBarley" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>0</hsizetype>
+          <vsizetype>0</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="toolTip" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of animals diet provided by &lt;span style=" color:#0000ff;">BARLEY FODDER&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="suffix" >
+         <string/>
+        </property>
+        <property name="maximum" >
+         <number>100</number>
+        </property>
+        <property name="minimum" >
+         <number>-3</number>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" colspan="2" >
+       <widget class="QLabel" name="labelFodderBarley" >
+        <property name="toolTip" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of animals diet provided by BARLEY&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="text" >
+         <string>Barley</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3" >
+       <widget class="QSpinBox" name="spinBoxFodderWheatGrain" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>0</hsizetype>
+          <vsizetype>0</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="toolTip" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of animals diet provided by WHEAT&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="suffix" >
+         <string/>
+        </property>
+        <property name="maximum" >
+         <number>100</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2" >
+       <widget class="QSpinBox" name="spinBoxFodderWheat" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>0</hsizetype>
+          <vsizetype>0</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="toolTip" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of animals diet provided by &lt;span style=" color:#0000ff;">WHEAT FODDER.&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="suffix" >
+         <string/>
+        </property>
+        <property name="maximum" >
+         <number>100</number>
+        </property>
+        <property name="minimum" >
+         <number>-3</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" colspan="2" >
+       <widget class="QLabel" name="labelFodderWheat" >
+        <property name="toolTip" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of animals diet provided by WHEAT&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="text" >
+         <string>Wheat</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="3" >
+    <widget class="QComboBox" name="comboBoxGrazingUnits" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>5</hsizetype>
+       <vsizetype>0</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="cursor" >
+      <cursor>13</cursor>
+     </property>
+     <property name="toolTip" >
+      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">1 dunum = 1000 square meters&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">1 hectare = 10,000 square meters&lt;/p>&lt;/body>&lt;/html></string>
+     </property>
+     <item>
+      <property name="text" >
+       <string>* KCal per Dunum per Year</string>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>* KCal per Hectare per Year</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="5" column="0" colspan="3" >
+    <widget class="QComboBox" name="comboBoxFallowUsage" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>5</hsizetype>
+       <vsizetype>0</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="cursor" >
+      <cursor>13</cursor>
+     </property>
+     <property name="toolTip" >
+      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">If your animal is to be allowed to graze fallow land resulting from crop rotation, set the priority of their access to this fallow land here.&lt;/p>&lt;/body>&lt;/html></string>
+     </property>
+     <item>
+      <property name="text" >
+       <string>Do Not Graze Fallow</string>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>HIGH Fallow Priority</string>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>MED Fallow Priority</string>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>LOW Fallow Priority</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="2" >
+    <widget class="QCheckBox" name="checkBoxCommonRaster" >
+     <property name="toolTip" >
+      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">binary raster named common.grazing.mask which more than one animal can graze from&lt;/p>&lt;/body>&lt;/html></string>
+     </property>
+     <property name="text" >
+      <string>Common Grazing Land</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="2" >
+    <widget class="QCheckBox" name="checkBoxUniqueRaster" >
+     <property name="toolTip" >
+      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">binary raster named: animalName.mask  where animalName is the name of the animal you are setting these parameters for.&lt;/p>&lt;/body>&lt;/html></string>
+     </property>
+     <property name="text" >
+      <string>Specific Grazing Land</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2" >
+    <widget class="QSpinBox" name="spinBoxPercentOfTameMeat" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>5</hsizetype>
+       <vsizetype>0</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="toolTip" >
+      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">This animal contiributes this percent towards the tame meat portion of the diet&lt;/p>&lt;/body>&lt;/html></string>
+     </property>
+     <property name="maximum" >
+      <number>100</number>
+     </property>
+     <property name="value" >
+      <number>50</number>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" colspan="2" >
+    <widget class="QLabel" name="labelPortionDiet" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>1</hsizetype>
+       <vsizetype>4</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="frameShape" >
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="text" >
+      <string>Portion of Tame Meat Diet</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="2" >
+    <widget class="QPushButton" name="pushButtonCancel" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>5</hsizetype>
+       <vsizetype>0</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text" >
+      <string>Cancel</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>pushButtonCancel</sender>
+   <signal>clicked()</signal>
+   <receiver>LaAnimaParametersBase</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>210</x>
+     <y>309</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>246</x>
+     <y>306</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
