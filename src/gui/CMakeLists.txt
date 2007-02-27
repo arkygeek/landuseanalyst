@@ -73,6 +73,7 @@ IF (WIN32)
   ENDIF( MINGW )
 ENDIF (WIN32)
 
+
 #Now add these generated files to the ADD_EXECUTABLE step
 # If this is NOT done, then the ui_*.h files will not be generated
 # ditto for moc, rc etc files
@@ -89,12 +90,33 @@ IF( APPLE )
   # For Mac OS X, the executable must be at the root of the bundle's executable folder
   INSTALL(TARGETS landuseanalyst RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX})
 ELSE( NOT APPLE )
-  add_executable(landuseanalyst 
-               ${landuseanalyst_SRCS} 
-               ${landuseanalyst_UIS_H} 
-               ${landuseanalyst_MOC_SRCS}
-               ${landuseanalyst_RCC_SRCS}
-               )
+  # Remove console if on WIN32 and not Debug.
+  IF (WIN32)
+    IF (CMAKE_BUILD_TYPE MATCHES Debug)
+      add_executable(landuseanalyst 
+        ${landuseanalyst_SRCS} 
+        ${landuseanalyst_UIS_H} 
+        ${landuseanalyst_MOC_SRCS}
+        ${landuseanalyst_RCC_SRCS}
+        )
+    ELSE (CMAKE_BUILD_TYPE MATCHES Debug)
+      #adding win32 below indicates no console display should be done
+      add_executable(landuseanalyst WIN32 
+        ${landuseanalyst_SRCS} 
+        ${landuseanalyst_UIS_H} 
+        ${landuseanalyst_MOC_SRCS}
+        ${landuseanalyst_RCC_SRCS}
+        )
+      ADD_EXECUTABLE(landuseanalyst WIN32 ${landuseanalyst_SRCS})
+    ENDIF (CMAKE_BUILD_TYPE MATCHES Debug)
+  ELSE (WIN32)
+    add_executable(landuseanalyst 
+      ${landuseanalyst_SRCS} 
+      ${landuseanalyst_UIS_H} 
+      ${landuseanalyst_MOC_SRCS}
+      ${landuseanalyst_RCC_SRCS}
+      )
+  ENDIF (WIN32)
   INSTALL(TARGETS landuseanalyst RUNTIME DESTINATION ${BIN_DIR})
 ENDIF( APPLE )
 
