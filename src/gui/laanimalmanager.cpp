@@ -37,12 +37,12 @@
 #include <QListWidgetItem>
 
   LaAnimalManager::LaAnimalManager(QWidget* parent, Qt::WFlags fl)
-: QDialog(parent,fl) 
+: QDialog(parent,fl)
 {
   //required by Qt4 to initialise the ui
   setupUi(this);
   readSettings();
-  connect(tblAnimals, SIGNAL(cellClicked( int,int)), 
+  connect(tblAnimals, SIGNAL(cellClicked( int,int)),
       this, SLOT(cellClicked( int,int)));
   refreshAnimalTable();
   //disable these buttons unless experimental is allowed
@@ -92,7 +92,7 @@ void LaAnimalManager::refreshAnimalTable(QString theGuid)
   int mySelectedRow=0;
   int myCurrentRow=0;
   QMapIterator<QString, LaAnimal> myIterator(mAnimalMap);
-  while (myIterator.hasNext()) 
+  while (myIterator.hasNext())
   {
     myIterator.next();
     LaAnimal myAnimal = myIterator.value();
@@ -107,7 +107,7 @@ void LaAnimalManager::refreshAnimalTable(QString theGuid)
       mySelectedRow=myCurrentRow;
     }
     // Insert new row ready to fill with details
-    tblAnimals->insertRow(myCurrentRow); 
+    tblAnimals->insertRow(myCurrentRow);
     QString myGuid = myAnimal.guid();
     qDebug ("Inserting animal with guid: " + myGuid.toLocal8Bit());
     // Add details to the new row
@@ -223,7 +223,7 @@ void LaAnimalManager::resizeEvent ( QResizeEvent * theEvent )
 void LaAnimalManager::on_toolCopy_clicked()
 {
   qDebug("Copy toolbutton clicked");
-  if (tblAnimals->currentRow() < 0) 
+  if (tblAnimals->currentRow() < 0)
   {
     return;
   }
@@ -253,7 +253,7 @@ void LaAnimalManager::on_toolCopy_clicked()
 void LaAnimalManager::on_toolDelete_clicked()
 {
   qDebug("Delete toolbutton clicked");
-  if (tblAnimals->currentRow() < 0) 
+  if (tblAnimals->currentRow() < 0)
   {
     return;
   }
@@ -286,7 +286,7 @@ void LaAnimalManager::on_pbnApply_clicked()
   mAnimal.setWeaningAge(spinBoxWeaningAge->value());
   mAnimal.setGestationTime(spinBoxGestationTime->value());
   mAnimal.setEstrousCycle(spinBoxEstrousCycleTime->value());
-  mAnimal.toXmlFile( LaUtils::userAnimalProfilesDirPath() + 
+  mAnimal.toXmlFile( LaUtils::userAnimalProfilesDirPath() +
       QDir::separator() + mAnimal.guid() + ".xml");
   refreshAnimalTable(mAnimal.guid());
 }

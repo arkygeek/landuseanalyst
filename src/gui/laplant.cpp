@@ -25,10 +25,10 @@ LaPlant::LaPlant() : LaSerialisable(), LaGuid()
   setGuid();
   mName="No Name Set";
   mDescription="Not Set";
-  mCropYield=0;
-  mCropCalories=0;
-  mCropFodderProduction=0;
-  mCropFodderCalories=0;
+  mCropYield=60;
+  mCropCalories=3000;
+  mCropFodderProduction=50;
+  mCropFodderCalories=1000;
   mYieldUnits=0;
 }
 LaPlant::~LaPlant()
@@ -39,9 +39,9 @@ LaPlant::~LaPlant()
 //copy constructor
 LaPlant::LaPlant(const LaPlant& thePlant)
 {
-  setGuid(thePlant.guid());
   mName=thePlant.name();
   mDescription=thePlant.description();
+  setGuid(thePlant.guid());
   mCropYield=thePlant.cropYield();
   mCropCalories=thePlant.cropCalories();
   mCropFodderProduction=thePlant.fodderProduction();
@@ -53,9 +53,9 @@ LaPlant& LaPlant::operator=(const LaPlant& thePlant)
 {
   if (this == &thePlant) return *this;   // Gracefully handle self assignment
 
-  setGuid(thePlant.guid());
   mName=thePlant.name();
   mDescription=thePlant.description();
+  setGuid(thePlant.guid());
   mCropYield=thePlant.cropYield();
   mCropCalories=thePlant.cropCalories();
   mCropFodderProduction=thePlant.fodderProduction();

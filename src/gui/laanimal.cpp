@@ -1,6 +1,6 @@
 /***************************************************************************
                           laanimal.cpp  -  The animal class
-                             ------------------- 
+                             -------------------
     begin                : March 2006
     copyright            : (C) 2003 by Tim Sutton
     email                : tim@linfiniti.com
@@ -25,19 +25,19 @@ LaAnimal::LaAnimal() : LaSerialisable(), LaGuid()
   setGuid();
   mName="No Name Set";
   mDescription="Not Set";
-  mUsableMeat=0;
-  mKillWeight=0;
-  mGrowTime=0;
-  mDeathRate=0;
-  mGestating=0;
-  mLactating=0;
-  mJuvenile=0;
-  mLifeExpectancy=0;
-  mBreedingExpectancy=0;
-  mYoungPerBirth=0;
-  mWeaningAge=0;
-  mGestationTime=0;
-  mEstrousCycle=0;
+  mUsableMeat=50;
+  mKillWeight=100;
+  mGrowTime=10;
+  mDeathRate=10;
+  mGestating=5000;
+  mLactating=5000;
+  mJuvenile=3500;
+  mLifeExpectancy=7;
+  mBreedingExpectancy=5;
+  mYoungPerBirth=1;
+  mWeaningAge=12;
+  mGestationTime=120;
+  mEstrousCycle=21;
 }
 LaAnimal::~LaAnimal()
 {

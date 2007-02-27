@@ -238,7 +238,7 @@ void LaPlantManager::on_toolCopy_clicked()
   */
   //assign this layerset its own guid
   myPlant.setGuid();
-  QString myNewFileName = LaUtils::userPlantProfilesDirPath() + QDir::separator() + myGuid + ".xml";
+  QString myNewFileName = LaUtils::userPlantProfilesDirPath() + QDir::separator() + myPlant.guid() + ".xml";
   myPlant.setName(tr("Copy of ") + myPlant.name());
   myPlant.toXmlFile(myNewFileName);
   refreshPlantTable(myPlant.guid());
