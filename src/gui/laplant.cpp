@@ -39,7 +39,9 @@ LaPlant::~LaPlant()
 //copy constructor
 LaPlant::LaPlant(const LaPlant& thePlant)
 {
+  setGuid(thePlant.guid());
   mName=thePlant.name();
+  mDescription=thePlant.description();
   mCropYield=thePlant.cropYield();
   mCropCalories=thePlant.cropCalories();
   mCropFodderProduction=thePlant.fodderProduction();
@@ -51,7 +53,9 @@ LaPlant& LaPlant::operator=(const LaPlant& thePlant)
 {
   if (this == &thePlant) return *this;   // Gracefully handle self assignment
 
+  setGuid(thePlant.guid());
   mName=thePlant.name();
+  mDescription=thePlant.description();
   mCropYield=thePlant.cropYield();
   mCropCalories=thePlant.cropCalories();
   mCropFodderProduction=thePlant.fodderProduction();

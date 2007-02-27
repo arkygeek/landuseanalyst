@@ -131,6 +131,7 @@ LaUtils::PlantMap LaUtils::getAvailablePlants()
       }
       qDebug("Adding " + myPlant.name());
       myMap[myPlant.guid()]=myPlant;
+      //qDebug(myPlant.toText().toLocal8Bit());
     }
   }
   return myMap;
