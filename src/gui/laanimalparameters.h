@@ -22,12 +22,12 @@ class QString;
 #include "laserialisable.h"
 #include "laguid.h"
 #include <QString>
-/** 
+/**
   * A class to represent animal parameters
   * @author Tim Sutton, Jason Jorgenson
   */
 
-class LaAnimalParameters : public LaSerialisable, public LaGuid 
+class LaAnimalParameters : public LaSerialisable, public LaGuid
 {
   public:
     /** Constructor . */
@@ -35,10 +35,10 @@ class LaAnimalParameters : public LaSerialisable, public LaGuid
     /** Desctructor . */
     ~LaAnimalParameters();
     /** copy constructor */
-    LaAnimalParameters(const LaAnimalParameters& theAnimalParameters); 
-    /** Assignement operator */
+    LaAnimalParameters(const LaAnimalParameters& theAnimalParameters);
+    /** Assignment operator */
     LaAnimalParameters& operator= (const LaAnimalParameters& theAnimalParameters);
-    
+
     //
     // Accessors
     //

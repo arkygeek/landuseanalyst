@@ -22,8 +22,8 @@ class QString;
 #include "laserialisable.h"
 #include "laguid.h"
 #include <QString>
-/** 
-  * A class to represent animal parameters
+/**
+  * A class to represent plant parameters
   * @author Tim Sutton, Jason Jorgenson
   */
 
@@ -36,34 +36,32 @@ class LaPlantParameters : public LaSerialisable, public LaGuid
     ~LaPlantParameters();
     /** copy constructor */
     LaPlantParameters(const LaPlantParameters& thePlantParameters);
-    /** Assignement operator */
+    /** Assignment operator */
     LaPlantParameters& operator= (const LaPlantParameters& thePlantParameters);
-    
+
     //
     // Accessors
     //
-    /** Get the name for this set of animal model parameters */
+    /** Get the name for this set of plant model parameters */
     QString name() const;
-    /** Portion of the Tame Meat Diet (Percentage) */
+    /** Portion of the Tame Plant  Diet (Percentage) */
     int percentTamePlant() const;
-    /** Food value of specific (or unique) grazing land as calories per dunum/hectare */
+    /** Flag for determining use of crop rotation */
     bool cropRotation() const;
-    /** Food value of common (or shared) grazing land as calories per dunum/hectare
-      * NOTE that changing this value for any animal changes it for all!
-      */
+    /**The ratio of crop to fallow land */
     float fallowRatio() const;
-    /** A flag for whether the animal has it's own specific
-      * land designated to it for grazing
+    /** The food value, in calories, of a dunum/hectare
+      * of fallow land
       */
     int fallowCalories() const;
-    /** A flag indicating that the animal grazes land shared with other animals */
+    /** Selects 0==dunums 1==hectares as units for area */
     int areaUnits() const;
-    /** If fallow is to be grazed, and if so, at either a
-      * HIGH MED or LOW priority to it's access
+    /** A flag indicating that the crop can be grown on
+      * land that is also suitable for other crops
       */
     bool useCommonLand() const;
-    /** If fallow is to be grazed, and if so, at either a
-      * HIGH MED or LOW priority to it's access
+    /** A flag indicating that the crop requires specific
+      * land apart from common agricultural land
       */
     bool useSpecificLand() const;
 
@@ -73,25 +71,26 @@ class LaPlantParameters : public LaSerialisable, public LaGuid
 
     /** Set the name for this set of animal model parameters */
     void setName(QString theName);
-    /** Portion of the Tame Meat Diet (Percentage) */
+    /** Portion of the Tame Plant  Diet (Percentage) */
     void setPercentTamePlant(int thePercentage);
-    /** Food value of specific (or unique) grazing land as calories per dunum/hectare */
+    /** Flag for determining use of crop rotation */
     void setCropRotation(bool theFlag);
-    /** The crop to fallow ratio */
+    /**The ratio of crop to fallow land */
     void setFallowRatio(float theRatio);
-    /** Food value of common (or shared) grazing land as calories per dunum/hectare
-      * NOTE that changing this value for any animal changes it for all!
+    /** The food value, in calories, of a dunum/hectare
+      * of fallow land
       */
     void setFallowCalories(int theCalories);
-    /** The index Value for selecting working area units (0==Dunum, 1==Hectare
-      */
+    /** Selects 0==dunums 1==hectares as units for area */
     void setAreaUnits(int theIndexValue);
-    /** A flag for whether the animal has it's own specific
-      * land designated to it for grazing
+    /** A flag indicating that the crop can be grown on
+      * land that is also suitable for other crops
+      */
+    void setUseCommonLand(bool theBool);
+    /** A flag indicating that the crop requires specific
+      * land apart from common agricultural land
       */
     void setUseSpecificLand(bool theBool);
-    /** A flag indicating that the animal grazes land shared with other animals */
-    void setUseCommonLand(bool theBool);
 
     /** Return an xml representation of this layer
      * @NOTE this class inherits the serialisable interface so
@@ -106,28 +105,29 @@ class LaPlantParameters : public LaSerialisable, public LaGuid
      */
     bool fromXml(const QString theXml);
   private:
-    /** A name for this set of animal paremeters */
+    /** A name for this set of plant paremeters */
     QString mName;
-    /** Portion of the Tame Meat Diet (Percentage) */
+    /** Portion of the Tame Plant Diet (Percentage) */
     int mPercentTamePlant;
-    /** Food value of specific (or unique) grazing land as calories per dunum/hectare */
+    /** Food value of specific (or unique) land as calories per dunum/hectare */
     bool mCropRotation;
-    /** Food value of common (or shared) grazing land as calories per dunum/hectare
-      * NOTE that changing this value for any animal changes it for all!
-      */
+    /**The ratio of crop to fallow land */
     float mFallowRatio;
-    /** A flag for whether the animal has it's own specific
-      * land designated to it for grazing
+    /** The food value, in calories, of a dunum/hectare
+      * of fallow land
       */
     int mFallowCalories;
-    /** A flag indicating that the animal grazes land shared with other animals */
-    bool mUseCommonLand;
-    /** A flag indicating that the animal grazes land shared with other animals */
-    bool mUseSpecificLand;
-    /** If fallow is to be grazed, and if so, at either a
-      * HIGH MED or LOW priority to it's access
-      */
+    /** Selects 0==dunums 1==hectares as units for area */
     int mAreaUnits;
+    /** A flag indicating that the crop can be grown on
+      * land that is also suitable for other crops
+      */
+    bool mUseCommonLand;
+    /** A flag indicating that the crop requires specific
+      * land apart from common agricultural land
+      */
+    bool mUseSpecificLand;
+
 };
 
 #endif //LaPlantParameters_H

@@ -109,7 +109,7 @@ void LaPlantManager::refreshPlantTable(QString theGuid)
     // Insert new row ready to fill with details
     tblPlants->insertRow(myCurrentRow);
     QString myGuid = myPlant.guid();
-    qDebug ("Inserting animal with guid: " + myGuid.toLocal8Bit());
+    qDebug ("Inserting plant with guid: " + myGuid.toLocal8Bit());
     // Add details to the new row
     QTableWidgetItem *mypFileNameItem= new QTableWidgetItem(myGuid);
     tblPlants->setItem(myCurrentRow, 0, mypFileNameItem);
