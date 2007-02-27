@@ -36,13 +36,13 @@
 #include <QListWidget>
 
 LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
-  : QDialog(parent,fl) 
+  : QDialog(parent,fl)
 {
   //required by Qt4 to initialise the ui
   setupUi(this);
   readSettings();
   /** See the qtdocs on signals and slots to understand below.
-   * we connect the currentItemChanged signal that a tree view emits when you 
+   * we connect the currentItemChanged signal that a tree view emits when you
    * click on an item to a little method that sets the help viewer contents
    * appropriately. TS
    */
@@ -60,7 +60,7 @@ LaMainForm::~LaMainForm()
   writeSettings();
 }
 
-void LaMainForm::readSettings() 
+void LaMainForm::readSettings()
 {
   QSettings mySettings;
   QPoint pos = mySettings.value("mainwindow/pos", QPoint(200, 200)).toPoint();
@@ -69,7 +69,7 @@ void LaMainForm::readSettings()
   move(pos);
 }
 
-void LaMainForm::writeSettings() 
+void LaMainForm::writeSettings()
 {
   QSettings mySettings;
   mySettings.setValue("mainwindow/pos", pos());
@@ -117,7 +117,7 @@ void LaMainForm::loadAnimals()
   listWidgetAnimals->clear();
   mAnimalsMap = LaUtils::getAvailableAnimals();
   QMapIterator<QString, LaAnimal> myIterator(mAnimalsMap);
-  while (myIterator.hasNext()) 
+  while (myIterator.hasNext())
   {
     myIterator.next();
     LaAnimal myAnimal = myIterator.value();
@@ -141,15 +141,15 @@ void LaMainForm::on_listWidgetAnimals_itemClicked(QListWidgetItem * theItem)
 {
   QString myGuid = theItem->data(Qt::UserRole).toString();
   LaAnimal myAnimal = mAnimalsMap[myGuid];
-  //textBrowserAnimalDefinition->setHtml(myAnimal.toHtml());
-  textBrowserAnimalDefinition->setPlainText(myAnimal.toText());
+  textBrowserAnimalDefinition->setHtml(myAnimal.toHtml());
+  //textBrowserAnimalDefinition->setPlainText(myAnimal.toText());
 }
 void LaMainForm::loadPlants()
 {
   listWidgetPlants->clear();
   mPlantsMap = LaUtils::getAvailablePlants();
   QMapIterator<QString, LaPlant> myIterator(mPlantsMap);
-  while (myIterator.hasNext()) 
+  while (myIterator.hasNext())
   {
     myIterator.next();
     LaPlant myPlant = myIterator.value();
@@ -179,7 +179,7 @@ void LaMainForm::on_pushButtonSave_clicked()
   //  implement me!
 }
 
-void LaMainForm::helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetItem * thepOldItem) 
+void LaMainForm::helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetItem * thepOldItem)
 {
   writeMessage("Item clicked in help browser: " + thepCurrentItem->text(0).toLocal8Bit());
   QFile myQFile( ":/" + thepCurrentItem->text(0)  + ".html" );
@@ -221,17 +221,17 @@ void LaMainForm::on_pushButtonDietBreakdown_clicked()
   writeDiet("Tame Animals account for " + QString::number((myDietPercentMeat/100.)*(myDietPercentTameMeat/100.)*100.).toLocal8Bit() + "% of the diet, or " + QString::number(myAnimalCalories/1000.).toLocal8Bit() + " kcal");
 }
 
-void LaMainForm::writeMessage(QString theText) 
+void LaMainForm::writeMessage(QString theText)
 {
   textBrowserResultsLeft->append(theText);
 }
 
-void LaMainForm::writeDiet(QString theText) 
+void LaMainForm::writeDiet(QString theText)
 {
   breakdownDisplay->append(theText);
 }
 
-void LaMainForm::getArea(float theArea) 
+void LaMainForm::getArea(float theArea)
 {
   QString myProgram = "/usr/lib/grass/bin/r.stats";
   QStringList myArgs;
@@ -239,7 +239,7 @@ void LaMainForm::getArea(float theArea)
   QProcess myProcess;
   myProcess.start(myProgram, myArgs);
 
-  if (!myProcess.waitForStarted()) 
+  if (!myProcess.waitForStarted())
   {
     qDebug("The process never started.....aaargh");
   }
@@ -263,23 +263,23 @@ void LaMainForm::getArea(float theArea)
   qDebug("The process completed");
 }
 
-void LaMainForm::makeWalkCost(int theX, int theY) 
+void LaMainForm::makeWalkCost(int theX, int theY)
 {
 }
 
-void LaMainForm::makeEuclideanCost(int theX, int theY) 
+void LaMainForm::makeEuclideanCost(int theX, int theY)
 {
 }
 
-void LaMainForm::makePathDistanceCost(int theX, int theY) 
+void LaMainForm::makePathDistanceCost(int theX, int theY)
 {
 }
 
-void LaMainForm::writeMetaData(QString theValue) 
+void LaMainForm::writeMetaData(QString theValue)
 {
 }
 
-void LaMainForm::makeCircle(int theX, int theY) 
+void LaMainForm::makeCircle(int theX, int theY)
 {
   // to verify this worked do
   //    d.rast
@@ -291,10 +291,10 @@ void LaMainForm::makeCircle(int theX, int theY)
      qDebug("Making crop circle...tweeedee treedee");
      QString myProgram = "/usr/lib/grass/bin/r.circle";
      QStringList myArgs;
-     myArgs << "-b" 
-     << "output=circle" 
-     <<  "coordinate=744800,3611100" 
-     << "max=500" 
+     myArgs << "-b"
+     << "output=circle"
+     <<  "coordinate=744800,3611100"
+     << "max=500"
      << "--overwrite";
      */
   QString myProgram = "/usr/lib/grass/bin/r.stats";
