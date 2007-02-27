@@ -170,7 +170,6 @@ void LaAnimalManager::selectAnimal(QString theFileName)
   QString myAnimalDir = LaUtils::userAnimalProfilesDirPath();
   LaAnimal myAnimal;
   myAnimal.fromXmlFile(myAnimalDir + QDir::separator() + theFileName);
-  leName->setText(myAnimal.name());
   mAnimal=myAnimal;
   showAnimal();
 }
@@ -246,7 +245,7 @@ void LaAnimalManager::on_toolCopy_clicked()
   */
   //assign this layerset its own guid
   myAnimal.setGuid();
-  QString myNewFileName = LaUtils::userAnimalProfilesDirPath() + QDir::separator() + myGuid + ".xml";
+  QString myNewFileName = LaUtils::userAnimalProfilesDirPath() + QDir::separator() + myAnimal.guid() + ".xml";
   myAnimal.setName(tr("Copy of ") + myAnimal.name());
   myAnimal.toXmlFile(myNewFileName);
   refreshAnimalTable(myAnimal.guid());

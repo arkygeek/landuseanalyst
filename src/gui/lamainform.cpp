@@ -141,7 +141,8 @@ void LaMainForm::on_listWidgetAnimals_itemClicked(QListWidgetItem * theItem)
 {
   QString myGuid = theItem->data(Qt::UserRole).toString();
   LaAnimal myAnimal = mAnimalsMap[myGuid];
-  textBrowserAnimalDefinition->setHtml(myAnimal.toHtml());
+  //textBrowserAnimalDefinition->setHtml(myAnimal.toHtml());
+  textBrowserAnimalDefinition->setPlainText(myAnimal.toText());
 }
 void LaMainForm::loadPlants()
 {
