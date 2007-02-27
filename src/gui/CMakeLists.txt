@@ -60,6 +60,19 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
     )
 
+# application icon
+IF (WIN32)
+  IF( MINGW )
+    # resource compilation for MinGW
+    ADD_CUSTOM_COMMAND( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/icon.o
+      COMMAND windres.exe -I${CMAKE_CURRENT_SOURCE_DIR} -i${CMAKE_CURRENT_SOURCE_DIR}/landuseanalyst.rc 
+      -o ${CMAKE_CURRENT_BINARY_DIR}/icon.o )
+    SET(landuseanalyst_SRCS ${landuseanalyst_SRCS} ${CMAKE_CURRENT_BINARY_DIR}/icon.o)
+  ELSE( MINGW )
+    SET(landuseanalyst_SRCS ${landuseanalyst_SRCS} landuseanalyst.rc)
+  ENDIF( MINGW )
+ENDIF (WIN32)
+
 #Now add these generated files to the ADD_EXECUTABLE step
 # If this is NOT done, then the ui_*.h files will not be generated
 # ditto for moc, rc etc files
@@ -84,6 +97,7 @@ ELSE( NOT APPLE )
                )
   INSTALL(TARGETS landuseanalyst RUNTIME DESTINATION ${BIN_DIR})
 ENDIF( APPLE )
+
 
 # link the "landuseanalyst" target against the Qt libraries. which libraries 
 # exactly, is defined by the "include(${QT_USE_FILE})" line above, which sets up this variable.
