@@ -1,6 +1,6 @@
 /***************************************************************************
                           laanimal.cpp  -  The animal class
-                             -------------------
+                             ------------------- 
     begin                : March 2006
     copyright            : (C) 2003 by Tim Sutton
     email                : tim@linfiniti.com

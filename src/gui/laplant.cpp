@@ -46,7 +46,7 @@ LaPlant::LaPlant(const LaPlant& thePlant)
   mCropCalories=thePlant.cropCalories();
   mCropFodderProduction=thePlant.fodderProduction();
   mCropFodderCalories=thePlant.fodderCalories();
-  mCropYield=thePlant.yieldUnits();
+  mYieldUnits=thePlant.yieldUnits();
 }
 
 LaPlant& LaPlant::operator=(const LaPlant& thePlant)
@@ -60,7 +60,7 @@ LaPlant& LaPlant::operator=(const LaPlant& thePlant)
   mCropCalories=thePlant.cropCalories();
   mCropFodderProduction=thePlant.fodderProduction();
   mCropFodderCalories=thePlant.fodderCalories();
-  mCropYield=thePlant.yieldUnits();
+  mYieldUnits=thePlant.yieldUnits();
   return *this;
 }
 
@@ -142,7 +142,7 @@ bool LaPlant::fromXml(QString theXml)
   qDebug("Plant::fromXml - guid set to : " + guid().toLocal8Bit());
   mName=LaUtils::xmlDecode(myTopElement.firstChildElement("name").text());
   mDescription=LaUtils::xmlDecode(myTopElement.firstChildElement("description").text());
-mCropYield=QString(myTopElement.firstChildElement("cropYield").text()).toInt();
+  mCropYield=QString(myTopElement.firstChildElement("cropYield").text()).toInt();
   mCropCalories=QString(myTopElement.firstChildElement("cropCalories").text()).toInt();
   mCropFodderProduction=QString(myTopElement.firstChildElement("fodderProduction").text()).toInt();
   mCropFodderCalories=QString(myTopElement.firstChildElement("fodderCalories").text()).toInt();
@@ -156,7 +156,7 @@ QString LaPlant::toXml()
   myString+=QString("<plant guid=\"" + guid() + "\">\n");
     myString+=QString("  <name>" + LaUtils::xmlEncode(mName) + "</name>\n");
   myString+=QString("  <description>" + LaUtils::xmlEncode(mDescription) + "</description>\n");
-  myString+=QString("  <yield>" + QString::number(mCropYield) + "</yield>\n");
+  myString+=QString("  <cropYield>" + QString::number(mCropYield) + "</cropYield>\n");
   myString+=QString("  <cropCalories>" + QString::number(mCropCalories) + "</cropCalories>\n");
   myString+=QString("  <fodderProduction>" + QString::number(mCropFodderProduction) + "</fodderProduction>\n");
   myString+=QString("  <fodderCalories>" + QString::number(mCropFodderCalories) + "</fodderCalories>\n");
