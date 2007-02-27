@@ -17,7 +17,7 @@
 #endif
 
 
-/* 
+/*
  * Returns the path to the settings directory in user's home dir
  */
 const QString LaUtils::userSettingsDirPath()
@@ -39,7 +39,7 @@ const QString LaUtils::getModelOutputDir()
 const QString LaUtils::userAnimalProfilesDirPath()
 {
   //alg profiles are always saved in the users home dir under .landuseAnalyst/
-  QString myPath = QDir::homePath() + QString("/.landuseAnalyst/") + 
+  QString myPath = QDir::homePath() + QString("/.landuseAnalyst/") +
     QDir::separator()+"animalProfiles"+QDir::separator();
   QDir().mkpath(myPath);
   return myPath;
@@ -48,7 +48,7 @@ const QString LaUtils::userAnimalProfilesDirPath()
 const QString LaUtils::userAnimalParametersDirPath()
 {
   //alg profiles are always saved in the users home dir under .landuseAnalyst/
-  QString myPath = QDir::homePath() + QString("/.landuseAnalyst/") + 
+  QString myPath = QDir::homePath() + QString("/.landuseAnalyst/") +
     QDir::separator()+"animalParameters"+QDir::separator();
   QDir().mkpath(myPath);
   return myPath;
@@ -60,11 +60,11 @@ LaUtils::AnimalMap LaUtils::getAvailableAnimals()
   QDir myDirectory(userAnimalProfilesDirPath());
   myDirectory.setFilter(QDir::Dirs | QDir::Files | QDir::NoSymLinks );
   QFileInfoList myList = myDirectory.entryInfoList();
-  for (unsigned int i = 0; i < static_cast<unsigned int>(myList.size()); ++i) 
+  for (unsigned int i = 0; i < static_cast<unsigned int>(myList.size()); ++i)
   {
     QFileInfo myFileInfo = myList.at(i);
     //Ignore directories
-    if(myFileInfo.fileName() == "." ||myFileInfo.fileName() == ".." ) 
+    if(myFileInfo.fileName() == "." ||myFileInfo.fileName() == ".." )
     {
       continue;
     }
@@ -89,7 +89,7 @@ LaUtils::AnimalMap LaUtils::getAvailableAnimals()
 const QString LaUtils::userPlantProfilesDirPath()
 {
   //alg profiles are always saved in the users home dir under .landuseAnalyst/
-  QString myPath = QDir::homePath() + QString("/.landuseAnalyst/") + 
+  QString myPath = QDir::homePath() + QString("/.landuseAnalyst/") +
     QDir::separator()+"plantProfiles"+QDir::separator();
   QDir().mkpath(myPath);
   return myPath;
@@ -98,7 +98,7 @@ const QString LaUtils::userPlantProfilesDirPath()
 const QString LaUtils::userPlantParametersDirPath()
 {
   //alg profiles are always saved in the users home dir under .landuseAnalyst/
-  QString myPath = QDir::homePath() + QString("/.landuseAnalyst/") + 
+  QString myPath = QDir::homePath() + QString("/.landuseAnalyst/") +
     QDir::separator()+"plantParameters"+QDir::separator();
   QDir().mkpath(myPath);
   return myPath;
@@ -110,11 +110,11 @@ LaUtils::PlantMap LaUtils::getAvailablePlants()
   QDir myDirectory(userPlantProfilesDirPath());
   myDirectory.setFilter(QDir::Dirs | QDir::Files | QDir::NoSymLinks );
   QFileInfoList myList = myDirectory.entryInfoList();
-  for (unsigned int i = 0; i < static_cast<unsigned int>(myList.size()); ++i) 
+  for (unsigned int i = 0; i < static_cast<unsigned int>(myList.size()); ++i)
   {
     QFileInfo myFileInfo = myList.at(i);
     //Ignore directories
-    if(myFileInfo.fileName() == "." ||myFileInfo.fileName() == ".." ) 
+    if(myFileInfo.fileName() == "." ||myFileInfo.fileName() == ".." )
     {
       continue;
     }
@@ -130,7 +130,7 @@ LaUtils::PlantMap LaUtils::getAvailablePlants()
         continue;
       }
       qDebug("Adding " + myPlant.name());
-      myMap[myPlant.name()]=myPlant;
+      myMap[myPlant.guid()]=myPlant;
     }
   }
   return myMap;
@@ -180,11 +180,11 @@ QStringList LaUtils::getExperimentsList()
   myDirectory.setFilter(QDir::Dirs | QDir::Files | QDir::NoSymLinks );
   //qDebug ("Current directory is: " +  myWorkDir.toAscii());
   QFileInfoList myList = myDirectory.entryInfoList();
-  for (unsigned int i = 0; i < static_cast<unsigned int>(myList.size()); ++i) 
+  for (unsigned int i = 0; i < static_cast<unsigned int>(myList.size()); ++i)
   {
     QFileInfo myFileInfo = myList.at(i);
     //qDebug("Get ExperimentsList Scanning : " + myFileInfo.fileName().toLocal8Bit());
-    if(myFileInfo.fileName() == "." ||myFileInfo.fileName() == ".." ) 
+    if(myFileInfo.fileName() == "." ||myFileInfo.fileName() == ".." )
     {
       continue;
     }
@@ -197,8 +197,8 @@ QStringList LaUtils::getExperimentsList()
 
     //Now look in each dir under the workdir for the xml experiment file
     //the experiment file should be named <dir name>.xml
-    QString myFile = myFileInfo.absolutePath() + QDir::separator() 
-                                 + myFileInfo.fileName() + QDir::separator() 
+    QString myFile = myFileInfo.absolutePath() + QDir::separator()
+                                 + myFileInfo.fileName() + QDir::separator()
                                  + myFileInfo.fileName() + ".xml";
     //qDebug("Get ExperimentsList Checking: " + myFile.toLocal8Bit());
     if (QFile::exists(myFile))

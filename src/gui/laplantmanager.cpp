@@ -37,7 +37,7 @@
 #include <QListWidgetItem>
 
   LaPlantManager::LaPlantManager(QWidget* parent, Qt::WFlags fl)
-: QDialog(parent,fl) 
+: QDialog(parent,fl)
 {
   //required by Qt4 to initialise the ui
   setupUi(this);
@@ -92,7 +92,7 @@ void LaPlantManager::refreshPlantTable(QString theGuid)
   int mySelectedRow=0;
   int myCurrentRow=0;
   QMapIterator<QString, LaPlant> myIterator(mPlantMap);
-  while (myIterator.hasNext()) 
+  while (myIterator.hasNext())
   {
     myIterator.next();
     LaPlant myPlant = myIterator.value();
@@ -265,6 +265,7 @@ void LaPlantManager::on_toolDelete_clicked()
 void LaPlantManager::on_pbnApply_clicked()
 {
   mPlant.setName(leName->text());
+  mPlant.setDescription(leDescription->text());
   mPlant.setCropYield(spinBoxCropYield->value());
   mPlant.setCropCalories(spinBoxCropCalories->value());
   mPlant.setFodderProduction(spinBoxCropFodderProduction->value());
