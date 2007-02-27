@@ -272,6 +272,7 @@ void LaAnimalManager::on_toolDelete_clicked()
 void LaAnimalManager::on_pbnApply_clicked()
 {
   mAnimal.setName(leName->text());
+  mAnimal.setDescription(leDescription->text());
   mAnimal.setUsableMeat(spinBoxUsableMeatPercent->value());
   mAnimal.setKillWeight(spinBoxKillWeight->value());
   mAnimal.setGrowTime(spinBoxGrowTime->value());
