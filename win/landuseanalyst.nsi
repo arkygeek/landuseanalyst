@@ -19,15 +19,15 @@ SetCompressor zlib
 
 ; MUI Settings
 !define MUI_ABORTWARNING
-!define MUI_ICON "C:\dev\cpp\landuseanalyst\win\la64x64.ico"
-!define MUI_UNICON "C:\dev\cpp\landuseanalyst\win\la64x64.ico"
+!define MUI_ICON "..\src\gui\la64x64.ico"
+!define MUI_UNICON "..\src\gui\la64x64.ico"
 ; Added by Tim for side image
-!define MUI_WELCOMEFINISHPAGE_BITMAP "C:\dev\cpp\landuseanalyst\win\la_logo.bmp"
+!define MUI_WELCOMEFINISHPAGE_BITMAP "la_logo.bmp"
 ; Welcome page
 !insertmacro MUI_PAGE_WELCOME
 ; License page
 !define MUI_LICENSEPAGE_RADIOBUTTONS
-!insertmacro MUI_PAGE_LICENSE "C:\dev\cpp\landuseanalyst\LICENSE.txt"
+!insertmacro MUI_PAGE_LICENSE "..\LICENSE.txt"
 ; Components page
 !insertmacro MUI_PAGE_COMPONENTS
 ; Directory page
@@ -78,7 +78,7 @@ FunctionEnd
 ; MUI end ------
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "LanduseAnalystSetup.exe"
+OutFile "LanduseAnalystSetup${PRODUCT_VERSION}.exe"
 InstallDir "$PROGRAMFILES\Landuse Analyst"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
@@ -86,6 +86,11 @@ ShowUnInstDetails show
 
 
 Section "Application" SEC01
+  ;this section is mandatory
+  SectionIn RO
+  ;Added by Tim to install for all users not just the logged in user..
+  ;make sure this is at the top of the section
+  SetShellVarContext all
   
   SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
@@ -149,6 +154,9 @@ Function un.onInit
 FunctionEnd
 
 Section Uninstall
+  ;Added by Tim to install for all users not just the logged in user..
+  ;make sure this is at the top of the section
+  SetShellVarContext all
   # remove the variable
   Push PROJ_LIB
   Call un.DeleteEnvStr
