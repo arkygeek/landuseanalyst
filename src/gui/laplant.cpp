@@ -196,7 +196,7 @@ QString LaPlant::toHtml()
   myString+="<p>Calories per Kg in fodder: "
                     + QString::number(mCropFodderCalories)
                     + "</p>";
-  myString+=("<p>AreaUnits(0=Dunum, 2=Hectare): "
+  myString+=("<p>AreaUnits(0=Dunum, 1=Hectare): "
                     + QString::number(mYieldUnits)
                     + "</p>");
   return myString;

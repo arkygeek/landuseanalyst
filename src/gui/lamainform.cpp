@@ -112,6 +112,7 @@ void LaMainForm::on_pbnNewPlant_clicked()
   myPlantManager.exec();
   loadPlants();
 }
+
 void LaMainForm::loadAnimals()
 {
   listWidgetAnimals->clear();
@@ -130,19 +131,6 @@ void LaMainForm::loadAnimals()
     mypItem->setData(Qt::UserRole,myGuid);
     listWidgetAnimals->addItem(mypItem);
   }
-}
-void LaMainForm::on_listWidgetPlants_itemClicked(QListWidgetItem * theItem)
-{
-  QString myGuid = theItem->data(Qt::UserRole).toString();
-  LaPlant myPlant = mPlantsMap[myGuid];
-  textBrowserPlantDefinition->setHtml(myPlant.toHtml());
-}
-void LaMainForm::on_listWidgetAnimals_itemClicked(QListWidgetItem * theItem)
-{
-  QString myGuid = theItem->data(Qt::UserRole).toString();
-  LaAnimal myAnimal = mAnimalsMap[myGuid];
-  textBrowserAnimalDefinition->setHtml(myAnimal.toHtml());
-  //textBrowserAnimalDefinition->setPlainText(myAnimal.toText());
 }
 void LaMainForm::loadPlants()
 {
@@ -164,16 +152,28 @@ void LaMainForm::loadPlants()
   }
 }
 
+void LaMainForm::on_listWidgetAnimals_itemClicked(QListWidgetItem * theItem)
+{
+  QString myGuid = theItem->data(Qt::UserRole).toString();
+  LaAnimal myAnimal = mAnimalsMap[myGuid];
+  textBrowserAnimalDefinition->setHtml(myAnimal.toHtml());
+  //textBrowserAnimalDefinition->setPlainText(myAnimal.toText());
+}
+void LaMainForm::on_listWidgetPlants_itemClicked(QListWidgetItem * theItem)
+{
+  QString myGuid = theItem->data(Qt::UserRole).toString();
+  LaPlant myPlant = mPlantsMap[myGuid];
+  textBrowserPlantDefinition->setHtml(myPlant.toHtml());
+}
+
 void LaMainForm::on_pushButtonRun_clicked()
 {
   //  implement me!
 }
-
 void LaMainForm::on_pushButtonLoad_clicked()
 {
   //  implement me!
 }
-
 void LaMainForm::on_pushButtonSave_clicked()
 {
   //  implement me!
