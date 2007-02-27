@@ -81,7 +81,7 @@ LaUtils::AnimalMap LaUtils::getAvailableAnimals()
       }
       qDebug("Adding " + myAnimal.name());
       //qDebug(myAnimal.toText().toLocal8Bit());
-      myMap[myAnimal.name()]=myAnimal;
+      myMap[myAnimal.guid()]=myAnimal;
     }
   }
   return myMap;
