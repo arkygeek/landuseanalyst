@@ -28,12 +28,14 @@
 #include "lamainform.h"
 //qt includes
 #include <QApplication>
-#include <QSplashScreen>
-#include <QSettings>
-#include <QString>
-#include <QPixmap>
 #include <QBitmap>
 #include <QFile>
+#include <QPixmap>
+#include <QPlastiqueStyle>
+#include <QSettings>
+#include <QSplashScreen>
+#include <QString>
+#include <QStyle>
 //std includes
 #ifdef Q_OS_MACX
 #include <ApplicationServices/ApplicationServices.h>
@@ -47,6 +49,11 @@ int main(int argc, char *argv[])
   QCoreApplication::setOrganizationName("linfiniti.com");
   QCoreApplication::setOrganizationDomain("landuseanalyst.linfiniti.com");
   QCoreApplication::setApplicationName("LanduseAnalyst");
+
+#ifdef Q_WS_WIN
+  //for windows lets use plastique syle!
+  QApplication::setStyle(new QPlastiqueStyle);
+#endif
 	
 #ifdef Q_OS_MACX
   // Install OpenDocuments AppleEvent handler after application object is initialized
