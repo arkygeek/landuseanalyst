@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>655</width>
-    <height>504</height>
+    <width>573</width>
+    <height>473</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -621,7 +621,13 @@ p, li { white-space: pre-wrap; }
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Number of young born per birth (average)&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="maximum" >
-         <number>999</number>
+         <number>20</number>
+        </property>
+        <property name="minimum" >
+         <number>1</number>
+        </property>
+        <property name="value" >
+         <number>1</number>
         </property>
        </widget>
       </item>
@@ -665,7 +671,7 @@ p, li { white-space: pre-wrap; }
          <number>120</number>
         </property>
         <property name="value" >
-         <number>80</number>
+         <number>4</number>
         </property>
        </widget>
       </item>
@@ -678,7 +684,7 @@ p, li { white-space: pre-wrap; }
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Weeks from birth to kill weight&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="text" >
-         <string>Life Expectancy</string>
+         <string>Sexual Maturity</string>
         </property>
         <property name="textFormat" >
          <enum>Qt::AutoText</enum>
@@ -689,7 +695,7 @@ p, li { white-space: pre-wrap; }
        </widget>
       </item>
       <item row="0" column="1" >
-       <widget class="QSpinBox" name="spinBoxLifeExpectancy" >
+       <widget class="QSpinBox" name="spinBoxSexualMaturity" >
         <property name="sizePolicy" >
          <sizepolicy>
           <hsizetype>7</hsizetype>
@@ -705,10 +711,10 @@ p, li { white-space: pre-wrap; }
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Number of years females are useful for breeding&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="maximum" >
-         <number>120</number>
+         <number>240</number>
         </property>
         <property name="value" >
-         <number>80</number>
+         <number>18</number>
         </property>
        </widget>
       </item>
@@ -748,10 +754,13 @@ p, li { white-space: pre-wrap; }
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Gestation time in days&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="maximum" >
-         <number>120</number>
+         <number>365</number>
+        </property>
+        <property name="minimum" >
+         <number>1</number>
         </property>
         <property name="value" >
-         <number>80</number>
+         <number>120</number>
         </property>
        </widget>
       </item>

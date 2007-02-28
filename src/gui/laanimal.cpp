@@ -32,7 +32,7 @@ LaAnimal::LaAnimal() : LaSerialisable(), LaGuid()
   mGestating=5000;
   mLactating=5000;
   mJuvenile=3500;
-  mLifeExpectancy=7;
+  mSexualMaturity=18;
   mBreedingExpectancy=5;
   mYoungPerBirth=1;
   mWeaningAge=12;
@@ -57,7 +57,7 @@ LaAnimal::LaAnimal(const LaAnimal& theAnimal)
   mGestating=theAnimal.gestating();
   mLactating=theAnimal.lactating();
   mJuvenile=theAnimal.juvenile();
-  mLifeExpectancy=theAnimal.lifeExpectancy();
+  mSexualMaturity=theAnimal.sexualMaturity();
   mBreedingExpectancy=theAnimal.breedingExpectancy();
   mYoungPerBirth=theAnimal.youngPerBirth();
   mWeaningAge=theAnimal.weaningAge();
@@ -79,7 +79,7 @@ LaAnimal& LaAnimal::operator=(const LaAnimal& theAnimal)
   mGestating=theAnimal.gestating();
   mLactating=theAnimal.lactating();
   mJuvenile=theAnimal.juvenile();
-  mLifeExpectancy=theAnimal.lifeExpectancy();
+  mSexualMaturity=theAnimal.sexualMaturity();
   mBreedingExpectancy=theAnimal.breedingExpectancy();
   mYoungPerBirth=theAnimal.youngPerBirth();
   mWeaningAge=theAnimal.weaningAge();
@@ -124,9 +124,9 @@ int LaAnimal::juvenile() const
 {
   return mJuvenile;
 }
-int LaAnimal::lifeExpectancy() const
+int LaAnimal::sexualMaturity() const
 {
-  return mLifeExpectancy;
+  return mSexualMaturity;
 }
 int LaAnimal::breedingExpectancy() const
 {
@@ -187,9 +187,9 @@ void LaAnimal::setJuvenile(int theCalories)
 {
   mJuvenile=theCalories;
 }
-void LaAnimal::setLifeExpectancy(int theYears)
+void LaAnimal::setSexualMaturity(int theMonths)
 {
-  mLifeExpectancy=theYears;
+  mSexualMaturity=theMonths;
 }
 void LaAnimal::setBreedingExpectancy(int theYears)
 {
@@ -235,7 +235,7 @@ bool LaAnimal::fromXml(QString theXml)
   mGestating=QString(myTopElement.firstChildElement("gestating").text()).toInt();
   mLactating=QString(myTopElement.firstChildElement("lactating").text()).toInt();
   mJuvenile=QString(myTopElement.firstChildElement("juvenile").text()).toInt();
-  mLifeExpectancy=QString(myTopElement.firstChildElement("lifeExpectancy").text()).toInt();
+  mSexualMaturity=QString(myTopElement.firstChildElement("sexualMaturity").text()).toInt();
   mBreedingExpectancy=QString(myTopElement.firstChildElement("breedingExpectancy").text()).toInt();
   mYoungPerBirth=QString(myTopElement.firstChildElement("youngPerBirth").text()).toInt();
   mWeaningAge=QString(myTopElement.firstChildElement("weaningAge").text()).toInt();
@@ -257,7 +257,7 @@ QString LaAnimal::toXml()
   myString+=QString("  <gestating>" + QString::number(mGestating) + "</gestating>\n");
   myString+=QString("  <lactating>" + QString::number(mLactating) + "</lactating>\n");
   myString+=QString("  <juvenile>" + QString::number(mJuvenile) + "</juvenile>\n");
-  myString+=QString("  <lifeExpectancy>" + QString::number(mLifeExpectancy) + "</lifeExpectancy>\n");
+  myString+=QString("  <sexualMaturity>" + QString::number(mSexualMaturity) + "</sexualMaturity>\n");
   myString+=QString("  <breedingLife>" + QString::number(mBreedingExpectancy) + "</breedingLife>\n");
   myString+=QString("  <youngPerBirth>" + QString::number(mYoungPerBirth) + "</youngPerBirth>\n");
   myString+=QString("  <weaningAge>" + QString::number(mWeaningAge) + "</weaningAge>\n");
@@ -280,7 +280,7 @@ QString LaAnimal::toText()
   myString+=QString("gestating=>" + QString::number(mGestating) + "\n");
   myString+=QString("lactating=>" + QString::number(mLactating) + "\n");
   myString+=QString("juvenile=>" + QString::number(mJuvenile) + "\n");
-  myString+=QString("lifeExpectancy=>" + QString::number(mLifeExpectancy) + "\n");
+  myString+=QString("sexualMaturity=>" + QString::number(mSexualMaturity) + "\n");
   myString+=QString("breedingLife=>" + QString::number(mBreedingExpectancy) + "\n");
   myString+=QString("youngPerBirth=>" + QString::number(mYoungPerBirth) + "\n");
   myString+=QString("weaningAge=>" + QString::number(mWeaningAge) + "\n");
@@ -302,7 +302,7 @@ QString LaAnimal::toHtml()
   myString+="<p>Calories fostating female: " + QString::number(mGestating) + "</p>";
   myString+="<p>Calories foctating female: " + QString::number(mLactating) + "</p>";
   myString+="<p>Calories fovenile: " + QString::number(mJuvenile) + "</p>";
-  myString+="<p>Life Expectancy: " + QString::number(mLifeExpectancy) + "</p>";
+  myString+="<p>Sexual Maturity: " + QString::number(mSexualMaturity) + "</p>";
   myString+="<p>Breeding Expectancy" + QString::number(mBreedingExpectancy) + "</p>";
   myString+="<p>Young Per Birth: " + QString::number(mYoungPerBirth) + "</p>";
   myString+="<p>Weaning Age: " + QString::number(mWeaningAge) + "</p>";

@@ -185,7 +185,7 @@ void LaAnimalManager::showAnimal()
   spinBoxCaloriesForGestating->setValue(mAnimal.gestating());
   spinBoxCaloriesForLactating->setValue(mAnimal.lactating());
   spinBoxCaloriesForJuvenile->setValue(mAnimal.juvenile());
-  spinBoxLifeExpectancy->setValue(mAnimal.lifeExpectancy());
+  spinBoxSexualMaturity->setValue(mAnimal.sexualMaturity());
   spinBoxBreedingLife->setValue(mAnimal.breedingExpectancy());
   spinBoxYoungPerBirth->setValue(mAnimal.youngPerBirth());
   spinBoxWeaningAge->setValue(mAnimal.weaningAge());
@@ -280,7 +280,7 @@ void LaAnimalManager::on_pbnApply_clicked()
   mAnimal.setGestating(spinBoxCaloriesForGestating->value());
   mAnimal.setLactating(spinBoxCaloriesForLactating->value());
   mAnimal.setJuvenile(spinBoxCaloriesForJuvenile->value());
-  mAnimal.setLifeExpectancy(spinBoxLifeExpectancy->value());
+  mAnimal.setSexualMaturity(spinBoxSexualMaturity->value());
   mAnimal.setBreedingExpectancy(spinBoxBreedingLife->value());
   mAnimal.setYoungPerBirth(spinBoxYoungPerBirth->value());
   mAnimal.setWeaningAge(spinBoxWeaningAge->value());

@@ -22,12 +22,12 @@ class QString;
 #include "laserialisable.h"
 #include "laguid.h"
 #include <QString>
-/** 
+/**
   * An class to represent an animal
   * @author Tim Sutton
   */
 
-class LaAnimal : public LaSerialisable, public LaGuid 
+class LaAnimal : public LaSerialisable, public LaGuid
 {
   public:
     /** Constructor . */
@@ -35,10 +35,10 @@ class LaAnimal : public LaSerialisable, public LaGuid
     /** Desctructor . */
     ~LaAnimal();
     /** copy constructor */
-    LaAnimal(const LaAnimal& theAnimal); 
+    LaAnimal(const LaAnimal& theAnimal);
     /** Assignement operator */
     LaAnimal& operator= (const LaAnimal& theAnimal);
-    
+
     //
     // Accessors
     //
@@ -62,7 +62,7 @@ class LaAnimal : public LaSerialisable, public LaGuid
     /** The number of calories a juvenile requires per day */
     int juvenile() const;
     /** The life expectancy in years of the animal */
-    int lifeExpectancy() const;
+    int sexualMaturity() const;
     /** The number of years a female will reliably produce offspring */
     int breedingExpectancy() const;
     /** The average number of young produced per pregnancy */
@@ -93,7 +93,7 @@ class LaAnimal : public LaSerialisable, public LaGuid
      */
     void setUsableMeat(int thePercentage);
 
-    /** Set killWeight as kg 
+    /** Set killWeight as kg
      * @see killWeight()
      */
     void setKillWeight(int theKg);
@@ -126,7 +126,7 @@ class LaAnimal : public LaSerialisable, public LaGuid
     /** Set the average lifeExpectancy in years
      * @see lifeExpectancy()
      */
-    void setLifeExpectancy(int theYears);
+    void setSexualMaturity(int theMonths);
 
     /** Set the average breedingLifeExpectancy in years
      * @see breedingExpectancy()
@@ -193,7 +193,7 @@ class LaAnimal : public LaSerialisable, public LaGuid
     /** The number of calories a juvenile requires per day */
     int mJuvenile;
     /** The life expectancy in years of the animal */
-    int mLifeExpectancy;
+    int mSexualMaturity;
     /** The number of years a female will reliably produce offspring */
     int mBreedingExpectancy;
     /** The average number of young produced per pregnancy */
