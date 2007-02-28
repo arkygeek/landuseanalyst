@@ -23,6 +23,8 @@
 #include "version.h"
 #include "laanimalmanager.h"
 #include "laplantmanager.h"
+#include "laplantdetails.h"
+#include "laanimaldetails.h"
 
 //qt includes
 #include <QSettings>
@@ -106,13 +108,26 @@ void LaMainForm::on_pbnNewAnimal_clicked()
   myAnimalManager.exec();
   loadAnimals();
 }
+
+
 void LaMainForm::on_pbnNewPlant_clicked()
 {
   LaPlantManager myPlantManager;
   myPlantManager.exec();
   loadPlants();
 }
-
+void LaMainForm::on_pbnPlantParameters_clicked()
+{
+  //LaPlantDetails myPlantParameters;
+  //myPlantParameter.exec();
+  //loadPlantParameters();
+}
+void LaMainForm::on_pbnAnimalParameters_clicked()
+{
+  //LaAnimalDetails myAnimalParameters;
+  //myAnimalParameter.exec();
+  //loadAnimalParameters();
+}
 void LaMainForm::loadAnimals()
 {
   listWidgetAnimals->clear();
