@@ -38,8 +38,8 @@ class LaPlantDetails : public QDialog, private Ui::LaPlantParametersBase
     ~LaPlantDetails();
 
   public slots:
-  void on_pushButtonLoad_clicked();
-  void on_pushButtonSave_clicked();
+  //void on_pushButtonLoad_clicked();
+  void on_pushButtonApply_clicked();
 
   private slots:
   void writeMessage(QString theText);

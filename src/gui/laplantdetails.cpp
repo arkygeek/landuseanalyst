@@ -63,13 +63,13 @@ void LaPlantDetails::writeSettings()
   mySettings.setValue("mainwindow/size", size());
 }
 
-void LaPlantDetails::on_pushButtonLoad_clicked()
+/*void LaPlantDetails::on_pushButtonLoad_clicked()
 {
   // fill all fields on form from a saved
   // plant parameter profile
-}
+}*/
 
-void LaPlantDetails::on_pushButtonSave_clicked()
+void LaPlantDetails::on_pushButtonApply_clicked()
 {
   mPlantParameters.setPercentTamePlant(spinBoxPercentOfTamePlant->value());
   mPlantParameters.setCropRotation(groupBoxFallowUse->isChecked());
