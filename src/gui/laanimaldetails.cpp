@@ -30,13 +30,13 @@
 #include <QString>
 
   LaAnimalDetails::LaAnimalDetails(QWidget* parent, Qt::WFlags fl)
-: QDialog(parent,fl) 
+: QDialog(parent,fl)
 {
   //required by Qt4 to initialise the ui
   setupUi(this);
   readSettings();
   /** See the qtdocs on signals and slots to understand below.
-   * we connect the currentItemChanged signal that a tree view emits when you 
+   * we connect the currentItemChanged signal that a tree view emits when you
    * click on an item to a little method that sets the help viewer contents
    * appropriately. TS
    */
@@ -63,13 +63,13 @@ void LaAnimalDetails::writeSettings()
   mySettings.setValue("mainwindow/size", size());
 }
 
-void LaAnimalDetails::on_pushButtonLoad_clicked()
+/*void LaAnimalDetails::on_pushButtonLoad_clicked()
 {
   //
-  mAnimalParameters.fromXmlFile("/tmp/animalDetails.xml");
+  mAnimalParameters.fromXmlFile("/tmp/animalParameters.xml");
 }
-
-void LaAnimalDetails::on_pushButtonSave_clicked()
+*/
+void LaAnimalDetails::on_pushButtonApply_clicked()
 {
   mAnimalParameters.setPercentTameMeat(spinBoxPercentOfTameMeat->value());
   mAnimalParameters.setFoodValueOfSpecificGrazingLand(spinBoxUniqueRasterCalories->value());

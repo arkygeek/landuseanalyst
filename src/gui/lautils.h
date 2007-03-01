@@ -25,6 +25,8 @@ class QStringList;
 #include <QMap>
 #include "laanimal.h"
 #include "laplant.h"
+#include "laanimaldetails.h"
+#include "laplantdetails.h"
 
 /** This is a helper class with mainly static methods for easily
  * obtaining the directories and paths relating to the application
@@ -32,10 +34,10 @@ class QStringList;
  */
 class LaUtils
 {
-  public: 
+  public:
     /**
      * Find the place on the filesystem where user data
-     * are stored. 
+     * are stored.
      *
      * Typically this will be ~/.landuseAnalyst
      *
@@ -44,7 +46,7 @@ class LaUtils
     static const QString userSettingsDirPath();
     /**
      * Find the place on the filesystem where user defined animal
-     * profiles are stored. 
+     * profiles are stored.
      *
      * Typically this will be ~/.landuseAnalyst/animalProfiles
      *
@@ -53,7 +55,7 @@ class LaUtils
     static const QString userAnimalProfilesDirPath();
     /**
      * Find the place on the filesystem where user defined animal
-     * model parameter profiles are stored. 
+     * model parameter profiles are stored.
      *
      * Typically this will be ~/.landuseAnalyst/animalParameters
      *
@@ -62,7 +64,7 @@ class LaUtils
     static const QString userAnimalParametersDirPath();
     /**
      * Find the place on the filesystem where user defined plant
-     * model parameter profiles are stored. 
+     * model parameter profiles are stored.
      *
      * Typically this will be ~/.landuseAnalyst/plantParameters
      *
@@ -77,7 +79,7 @@ class LaUtils
     static const QString getModelOutputDir();
     /**
      * Find the place on the filesystem where user defined plant
-     * profiles are stored. 
+     * profiles are stored.
      *
      * Typically this will be ~/.landuseAnalyst/plants
      *
@@ -92,7 +94,7 @@ class LaUtils
     typedef QMap<QString,LaPlant> PlantMap;
 
     /** Get a QMap of the avaliable layersets in the users layersets directory
-     * @return a QMap<QString,OmgLayerSet> where the QString key is the layerset name 
+     * @return a QMap<QString,OmgLayerSet> where the QString key is the layerset name
      **/
     static LaUtils::PlantMap getAvailablePlants();
 
@@ -102,7 +104,7 @@ class LaUtils
      */
     typedef QMap<QString,LaAnimal> AnimalMap;
     /** Get a QMap of the avaliable layersets in the users layersets directory
-     * @return a QMap<QString,OmgLayerSet> where the QString key is the layerset name 
+     * @return a QMap<QString,OmgLayerSet> where the QString key is the layerset name
      **/
     static LaUtils::AnimalMap getAvailableAnimals();
 
@@ -149,6 +151,6 @@ class LaUtils
   private:
 
 };
-  
+
 
 #endif

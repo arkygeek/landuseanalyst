@@ -38,8 +38,8 @@ class LaAnimalDetails : public QDialog, private Ui::LaAnimalParametersBase
     ~LaAnimalDetails();
 
   public slots:
-  void on_pushButtonLoad_clicked();
-  void on_pushButtonSave_clicked();
+  //void on_pushButtonClose_clicked();
+  void on_pushButtonApply_clicked();
 
   private slots:
 
