@@ -1,6 +1,8 @@
 #include "lautils.h"
 #include "laanimal.h"
 #include "laplant.h"
+//#include "laanimalparameter.h"
+//#include "laplantparameter.h"
 
 #include <QApplication>
 #include <QDir>
@@ -54,6 +56,24 @@ const QString LaUtils::userAnimalParametersDirPath()
   return myPath;
 }
 
+const QString LaUtils::userPlantProfilesDirPath()
+{
+  //alg profiles are always saved in the users home dir under .landuseAnalyst/
+  QString myPath = QDir::homePath() + QString("/.landuseAnalyst/") +
+    QDir::separator()+"plantProfiles"+QDir::separator();
+  QDir().mkpath(myPath);
+  return myPath;
+}
+
+const QString LaUtils::userPlantParametersDirPath()
+{
+  //alg profiles are always saved in the users home dir under .landuseAnalyst/
+  QString myPath = QDir::homePath() + QString("/.landuseAnalyst/") +
+    QDir::separator()+"plantParameters"+QDir::separator();
+  QDir().mkpath(myPath);
+  return myPath;
+}
+
 LaUtils::AnimalMap LaUtils::getAvailableAnimals()
 {
   LaUtils::AnimalMap myMap;
@@ -85,23 +105,6 @@ LaUtils::AnimalMap LaUtils::getAvailableAnimals()
     }
   }
   return myMap;
-}
-const QString LaUtils::userPlantProfilesDirPath()
-{
-  //alg profiles are always saved in the users home dir under .landuseAnalyst/
-  QString myPath = QDir::homePath() + QString("/.landuseAnalyst/") +
-    QDir::separator()+"plantProfiles"+QDir::separator();
-  QDir().mkpath(myPath);
-  return myPath;
-}
-
-const QString LaUtils::userPlantParametersDirPath()
-{
-  //alg profiles are always saved in the users home dir under .landuseAnalyst/
-  QString myPath = QDir::homePath() + QString("/.landuseAnalyst/") +
-    QDir::separator()+"plantParameters"+QDir::separator();
-  QDir().mkpath(myPath);
-  return myPath;
 }
 
 LaUtils::PlantMap LaUtils::getAvailablePlants()
@@ -136,6 +139,7 @@ LaUtils::PlantMap LaUtils::getAvailablePlants()
   }
   return myMap;
 }
+
 QStringList LaUtils::sortList(QStringList theList)
 {
     //sort the taxon list alpabetically descending order
@@ -168,7 +172,6 @@ QStringList LaUtils::uniqueList(QStringList theList)
     }
     return myUniqueList;
 }
-
 
 //return a string list of all the experiment files
 QStringList LaUtils::getExperimentsList()
@@ -210,7 +213,6 @@ QStringList LaUtils::getExperimentsList()
   }
   return myExperimentList;
 }
-
 
 bool LaUtils::createTextFile(QString theFileName, QString theData)
 {
