@@ -118,14 +118,14 @@ void LaMainForm::on_pbnNewPlant_clicked()
 }
 void LaMainForm::on_pbnPlantParameters_clicked()
 {
-  //LaPlantDetails myPlantParameters;
-  //myPlantParameter.exec();
+  LaPlantDetails myPlantParameters;
+  myPlantParameters.exec();
   //loadPlantParameters();
 }
 void LaMainForm::on_pbnAnimalParameters_clicked()
 {
-  //LaAnimalDetails myAnimalParameters;
-  //myAnimalParameter.exec();
+  LaAnimalDetails myAnimalParameters;
+  myAnimalParameters.exec();
   //loadAnimalParameters();
 }
 void LaMainForm::loadAnimals()
