@@ -17,23 +17,26 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "laplantdetails.h"
+#include "lautils.h"
 #include <QSettings>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QTableWidgetItem>
+#include <QDir>
 #include <QFile>
 #include <QTextStream>
 #include <QProcess>
 #include <QStringList>
+#include <QString>
 
 LaPlantDetails::LaPlantDetails(QWidget* parent, Qt::WFlags fl)
-  : QDialog(parent,fl) 
+  : QDialog(parent,fl)
 {
   //required by Qt4 to initialise the ui
   setupUi(this);
   readSettings();
   /** See the qtdocs on signals and slots to understand below.
-   * we connect the currentItemChanged signal that a tree view emits when you 
+   * we connect the currentItemChanged signal that a tree view emits when you
    * click on an item to a little method that sets the help viewer contents
    * appropriately. TS
    */
@@ -68,12 +71,13 @@ void LaPlantDetails::on_pushButtonLoad_clicked()
 
 void LaPlantDetails::on_pushButtonSave_clicked()
 {
-  // if all fields have been completed,
-  // save contents of all fields to disk,
-  // and return info to lamainform.
-  // If the name field is missing,
-  // prompt user for name.  File might
-  // get stored as cropname.lcp
+  mPlantParameters.setPercentTamePlant(spinBoxPercentOfTamePlant->value());
+  mPlantParameters.setCropRotation(groupBoxFallowUse->isChecked());
+  mPlantParameters.setFallowRatio(spinBoxFallowRatio->value());
+  mPlantParameters.setFallowCalories(spinBoxFallowFoodValueToGrazers->value());
+  mPlantParameters.setAreaUnits(groupBoxFallowUse->isChecked());
+  mPlantParameters.setUseCommonLand(groupBoxFallowUse->isChecked());
+  mPlantParameters.setUseSpecificLand(groupBoxFallowUse->isChecked());
 }
 
 void LaPlantDetails::writeMessage(QString theText)

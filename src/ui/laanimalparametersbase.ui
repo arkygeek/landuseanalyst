@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>LaAnimaParametersBase</class>
- <widget class="QWidget" name="LaAnimaParametersBase" >
+ <class>LaAnimalParametersBase</class>
+ <widget class="QWidget" name="LaAnimalParametersBase" >
   <property name="geometry" >
    <rect>
     <x>0</x>
@@ -493,7 +493,7 @@ p, li { white-space: pre-wrap; }
   <connection>
    <sender>pushButtonCancel</sender>
    <signal>clicked()</signal>
-   <receiver>LaAnimaParametersBase</receiver>
+   <receiver>LaAnimalParametersBase</receiver>
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel" >

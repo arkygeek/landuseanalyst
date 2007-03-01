@@ -123,5 +123,5 @@ class LaAnimalParameters : public LaSerialisable, public LaGuid
     int mFallowUsage;
 };
 
-#endif //LaAnimalParameters_H
+#endif //LAANIMALPARAMETERS_H
 

@@ -17,19 +17,20 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef LAPLANTDETAILSFORM_H
-#define LAPLANTDETAILSFORM_H
+#ifndef LAPLANTDETAILS_H
+#define LAPLANTDETAILS_H
 
 //QT Includes
 #include <QDialog>
 //Local Includes
-#include <ui_laplantformdetailsbase.h>
+#include <ui_laplantparametersbase.h>
+#include "laplantparameters.h"
 class QTreeWidgetItem;
 /**
   This is the main gui class
   @author Tim Sutton, Jason Jorgenson
 */
-class LaPlantDetails : public QDialog, private Ui::LaPlantFormDetailsBase
+class LaPlantDetails : public QDialog, private Ui::LaPlantParametersBase
 {
   Q_OBJECT
   public:
@@ -44,6 +45,7 @@ class LaPlantDetails : public QDialog, private Ui::LaPlantFormDetailsBase
   void writeMessage(QString theText);
 
   private:
+    LaPlantParameters mPlantParameters;
     void readSettings();
     void writeSettings();
 };
