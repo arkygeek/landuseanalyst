@@ -17,37 +17,50 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef LAPLANTDETAILS_H
-#define LAPLANTDETAILS_H
+#ifndef LAANIMALPARAMETERMANAGER_H
+#define LAANIMALPARAMETERMANAGER_H
 
 //QT Includes
 #include <QDialog>
 //Local Includes
-#include <ui_laplantparametersbase.h>
-#include "laplantparameters.h"
+#include <ui_laanimalparametermanagerbase.h>
+#include <laanimalparameter.h>
+#include <lautils.h>
 class QTreeWidgetItem;
 /**
   This is the main gui class
   @author Tim Sutton, Jason Jorgenson
 */
-class LaPlantDetails : public QDialog, private Ui::LaPlantParametersBase
+class LaAnimalParameterManager : public QDialog, private Ui::LaAnimalParameterManagerBase
 {
   Q_OBJECT
   public:
-    LaPlantDetails(QWidget* parent = 0, Qt::WFlags fl = 0 );
-    ~LaPlantDetails();
+    LaAnimalParameterManager(QWidget* parent = 0, Qt::WFlags fl = 0 );
+    ~LaAnimalParameterManager();
 
   public slots:
-  //void on_pushButtonLoad_clicked();
-  void on_pushButtonApply_clicked();
+    //void on_pushButtonLoad_clicked();
+    //void on_pushButtonSave_clicked();
 
   private slots:
-  void writeMessage(QString theText);
+      void cellClicked(int theRow, int theColumn);
+      void showAnimalParameter();
+      void on_toolCopy_clicked();
+      void on_toolNew_clicked();
+      void on_toolDelete_clicked();
+      void on_pbnApply_clicked();
+      void resizeEvent(QResizeEvent*);
+
+
 
   private:
-    LaPlantParameters mPlantParameters;
-    void readSettings();
-    void writeSettings();
+      void refreshAnimalParameterTable(QString theGuid=0);
+      void selectAnimalParameter(QString theFileName);
+
+      LaUtils::AnimalParameterMap mAnimalParameterMap;
+      LaAnimalParameter mAnimalParameter;
+      void readSettings();
+      void writeSettings();
 };
 
-#endif //LAPLANTLDETAILS_H
+#endif //LAANIMALPARAMETERMANAGER_H

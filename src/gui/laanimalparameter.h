@@ -1,5 +1,5 @@
 /***************************************************************************
-                          LaAnimalParameters.h  -  An animal class
+                          LaAnimalParameter.h  -  An animal class
                              -------------------
     begin                : March 2006
     copyright            : (C) 2003 by Tim Sutton
@@ -15,8 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef LAANIMALPARAMETERS_H
-#define LAANIMALPARAMETERS_H
+#ifndef LAANIMALPARAMETER_H
+#define LAANIMALPARAMETER_H
 
 class QString;
 #include "laserialisable.h"
@@ -27,23 +27,25 @@ class QString;
   * @author Tim Sutton, Jason Jorgenson
   */
 
-class LaAnimalParameters : public LaSerialisable, public LaGuid
+class LaAnimalParameter : public LaSerialisable, public LaGuid
 {
   public:
     /** Constructor . */
-    LaAnimalParameters();
+    LaAnimalParameter();
     /** Desctructor . */
-    ~LaAnimalParameters();
+    ~LaAnimalParameter();
     /** copy constructor */
-    LaAnimalParameters(const LaAnimalParameters& theAnimalParameters);
+    LaAnimalParameter(const LaAnimalParameter& theAnimalParameter);
     /** Assignment operator */
-    LaAnimalParameters& operator= (const LaAnimalParameters& theAnimalParameters);
+    LaAnimalParameter& operator= (const LaAnimalParameter& theAnimalParameter);
 
     //
     // Accessors
     //
     /** Get the name for this set of animal model parameters */
     QString name() const;
+    /** Get the name for this set of animal model parameters */
+    QString description() const;
     /** Portion of the Tame Meat Diet (Percentage) */
     int percentTameMeat() const;
     /** Food value of specific (or unique) grazing land as calories per dunum/hectare */
@@ -62,6 +64,7 @@ class LaAnimalParameters : public LaSerialisable, public LaGuid
       * HIGH MED or LOW priority to it's access
       */
     int fallowUsage() const;
+    int areaUnits() const;
 
     //
     // Mutators
@@ -69,6 +72,8 @@ class LaAnimalParameters : public LaSerialisable, public LaGuid
 
     /** Set the name for this set of animal model parameters */
     void setName(QString theName);
+    /** Set the name for this set of animal model parameters */
+    void setDescription(QString theDescription);
     /** Portion of the Tame Meat Diet (Percentage) */
     void setPercentTameMeat(int thePercentage);
     /** Food value of specific (or unique) grazing land as calories per dunum/hectare */
@@ -86,14 +91,15 @@ class LaAnimalParameters : public LaSerialisable, public LaGuid
     /** If fallow is to be grazed, and if so, at either a
       * HIGH MED or LOW priority to it's access
       */
-    void setFallowUsage(int theIndex);
-
+    void setFallowUsage(int theIndexValue);
+    void setAreaUnits(int theIndexValue);
     /** Return an xml representation of this layer
      * @NOTE this class inherits the serialisable interface so
      * it MUST implement this
      */
     QString toXml();
-
+    QString toText();
+    QString toHtml();
     /** Read this object from xml and return result as true for success, false for failure.
      * @see LaSerialisable
      * @NOTE this class inherits the serialisable interface so
@@ -103,6 +109,8 @@ class LaAnimalParameters : public LaSerialisable, public LaGuid
   private:
     /** A name for this set of animal paremeters */
     QString mName;
+    /** A name for this set of animal paremeters */
+    QString mDescription;
     /** Portion of the Tame Meat Diet (Percentage) */
     int mPercentTameMeat;
     /** Food value of specific (or unique) grazing land as calories per dunum/hectare */
@@ -121,7 +129,8 @@ class LaAnimalParameters : public LaSerialisable, public LaGuid
       * HIGH MED or LOW priority to it's access
       */
     int mFallowUsage;
+    int mAreaUnits;
 };
 
-#endif //LAANIMALPARAMETERS_H
+#endif //LAANIMALPARAMETER_H
 

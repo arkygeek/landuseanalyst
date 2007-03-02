@@ -17,36 +17,50 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef LAANIMALDETAILS_H
-#define LAANIMALDETAILS_H
+#ifndef LAPLANTPARAMETERMANAGER_H
+#define LAPLANTPARAMETERMANAGER_H
 
 //QT Includes
 #include <QDialog>
 //Local Includes
-#include <ui_laanimalparametersbase.h>
-#include "laanimalparameters.h"
+#include <ui_laplantparametermanagerbase.h>
+#include <laplantparameter.h>
+#include <lautils.h>
 class QTreeWidgetItem;
 /**
   This is the main gui class
   @author Tim Sutton, Jason Jorgenson
 */
-class LaAnimalDetails : public QDialog, private Ui::LaAnimalParametersBase
+class LaPlantParameterManager : public QDialog, private Ui::LaPlantParameterManagerBase
 {
   Q_OBJECT
   public:
-    LaAnimalDetails(QWidget* parent = 0, Qt::WFlags fl = 0 );
-    ~LaAnimalDetails();
+    LaPlantParameterManager(QWidget* parent = 0, Qt::WFlags fl = 0 );
+    ~LaPlantParameterManager();
 
   public slots:
-  //void on_pushButtonClose_clicked();
-  void on_pushButtonApply_clicked();
+    //void on_pushButtonLoad_clicked();
+    //void on_pushButtonSave_clicked();
 
   private slots:
+      void cellClicked(int theRow, int theColumn);
+      void showPlantParameter();
+      void on_toolCopy_clicked();
+      void on_toolNew_clicked();
+      void on_toolDelete_clicked();
+      void on_pbnApply_clicked();
+      void resizeEvent(QResizeEvent*);
+
+
 
   private:
-    LaAnimalParameters mAnimalParameters;
-    void readSettings();
-    void writeSettings();
+      void refreshPlantParameterTable(QString theGuid=0);
+      void selectPlantParameter(QString theFileName);
+
+      LaUtils::PlantParameterMap mPlantParameterMap;
+      LaPlantParameter mPlantParameter;
+      void readSettings();
+      void writeSettings();
 };
 
-#endif //LAANIMALDETAILS_H
+#endif //LAPLANTFORMMAIN_H

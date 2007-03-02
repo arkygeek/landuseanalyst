@@ -1,8 +1,8 @@
 #include "lautils.h"
 #include "laanimal.h"
 #include "laplant.h"
-//#include "laanimalparameter.h"
-//#include "laplantparameter.h"
+#include "laanimalparameter.h"
+#include "laplantparameter.h"
 
 #include <QApplication>
 #include <QDir>
@@ -47,14 +47,6 @@ const QString LaUtils::userAnimalProfilesDirPath()
   return myPath;
 }
 
-const QString LaUtils::userAnimalParametersDirPath()
-{
-  //alg profiles are always saved in the users home dir under .landuseAnalyst/
-  QString myPath = QDir::homePath() + QString("/.landuseAnalyst/") +
-    QDir::separator()+"animalParameters"+QDir::separator();
-  QDir().mkpath(myPath);
-  return myPath;
-}
 
 const QString LaUtils::userPlantProfilesDirPath()
 {
@@ -65,14 +57,6 @@ const QString LaUtils::userPlantProfilesDirPath()
   return myPath;
 }
 
-const QString LaUtils::userPlantParametersDirPath()
-{
-  //alg profiles are always saved in the users home dir under .landuseAnalyst/
-  QString myPath = QDir::homePath() + QString("/.landuseAnalyst/") +
-    QDir::separator()+"plantParameters"+QDir::separator();
-  QDir().mkpath(myPath);
-  return myPath;
-}
 
 LaUtils::AnimalMap LaUtils::getAvailableAnimals()
 {
@@ -139,6 +123,93 @@ LaUtils::PlantMap LaUtils::getAvailablePlants()
   }
   return myMap;
 }
+
+const QString LaUtils::userAnimalParameterProfilesDirPath()
+{
+  //alg profiles are always saved in the users home dir under .landuseAnalyst/
+  QString myPath = QDir::homePath() + QString("/.landuseAnalyst/") +
+    QDir::separator()+"animalParameterProfiles"+QDir::separator();
+  QDir().mkpath(myPath);
+  return myPath;
+}
+
+
+const QString LaUtils::userPlantParameterProfilesDirPath()
+{
+  //alg profiles are always saved in the users home dir under .landuseAnalyst/
+  QString myPath = QDir::homePath() + QString("/.landuseAnalyst/") +
+    QDir::separator()+"plantParameterProfiles"+QDir::separator();
+  QDir().mkpath(myPath);
+  return myPath;
+}
+
+
+LaUtils::AnimalParameterMap LaUtils::getAvailableAnimalParameters()
+{
+  LaUtils::AnimalParameterMap myMap;
+  QDir myDirectory(userAnimalParameterProfilesDirPath());
+  myDirectory.setFilter(QDir::Dirs | QDir::Files | QDir::NoSymLinks );
+  QFileInfoList myList = myDirectory.entryInfoList();
+  for (unsigned int i = 0; i < static_cast<unsigned int>(myList.size()); ++i)
+  {
+    QFileInfo myFileInfo = myList.at(i);
+    //Ignore directories
+    if(myFileInfo.fileName() == "." ||myFileInfo.fileName() == ".." )
+    {
+      continue;
+    }
+    //if the filename ends in .xml try to load it into our layerSets listing
+    if(myFileInfo.completeSuffix()=="xml")
+    {
+      qDebug("Loading animalParameter: " + myList.at(i).absoluteFilePath().toLocal8Bit());
+      LaAnimalParameter myAnimalParameter;
+      myAnimalParameter.fromXmlFile(myFileInfo.absoluteFilePath());
+      if (myAnimalParameter.name().isEmpty())
+      {
+        qDebug("AnimalParameter name was empty!");
+        continue;
+      }
+      qDebug("Adding " + myAnimalParameter.name());
+      //qDebug(myAnimalParameter.toText().toLocal8Bit());
+      myMap[myAnimalParameter.guid()]=myAnimalParameter;
+    }
+  }
+  return myMap;
+}
+
+LaUtils::PlantParameterMap LaUtils::getAvailablePlantParameters()
+{
+  LaUtils::PlantParameterMap myMap;
+  QDir myDirectory(userPlantParameterProfilesDirPath());
+  myDirectory.setFilter(QDir::Dirs | QDir::Files | QDir::NoSymLinks );
+  QFileInfoList myList = myDirectory.entryInfoList();
+  for (unsigned int i = 0; i < static_cast<unsigned int>(myList.size()); ++i)
+  {
+    QFileInfo myFileInfo = myList.at(i);
+    //Ignore directories
+    if(myFileInfo.fileName() == "." ||myFileInfo.fileName() == ".." )
+    {
+      continue;
+    }
+    //if the filename ends in .xml try to load it into our layerSets listing
+    if(myFileInfo.completeSuffix()=="xml")
+    {
+      qDebug("Loading plantParameter: " + myList.at(i).absoluteFilePath().toLocal8Bit());
+      LaPlantParameter myPlantParameter;
+      myPlantParameter.fromXmlFile(myFileInfo.absoluteFilePath());
+      if (myPlantParameter.name().isEmpty())
+      {
+        qDebug("PlantParameter name was empty!");
+        continue;
+      }
+      qDebug("Adding " + myPlantParameter.name());
+      myMap[myPlantParameter.guid()]=myPlantParameter;
+      //qDebug(myPlantParameter.toText().toLocal8Bit());
+    }
+  }
+  return myMap;
+}
+
 
 QStringList LaUtils::sortList(QStringList theList)
 {

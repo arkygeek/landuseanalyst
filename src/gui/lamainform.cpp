@@ -23,8 +23,8 @@
 #include "version.h"
 #include "laanimalmanager.h"
 #include "laplantmanager.h"
-#include "laplantdetails.h"
-#include "laanimaldetails.h"
+#include "laplantparametermanager.h"
+#include "laanimalparametermanager.h"
 
 //qt includes
 #include <QSettings>
@@ -116,17 +116,17 @@ void LaMainForm::on_pbnNewPlant_clicked()
   myPlantManager.exec();
   loadPlants();
 }
-void LaMainForm::on_pbnPlantParameters_clicked()
+void LaMainForm::on_pbnNewPlantParameter_clicked()
 {
-  LaPlantDetails myPlantParameters;
-  myPlantParameters.exec();
-  //loadPlantParameters();
+  LaPlantParameterManager myPlantParameterManager;
+  myPlantParameterManager.exec();
+  loadPlantParameters();
 }
-void LaMainForm::on_pbnAnimalParameters_clicked()
+void LaMainForm::on_pbnNewAnimalParameter_clicked()
 {
-  LaAnimalDetails myAnimalParameters;
-  myAnimalParameters.exec();
-  //loadAnimalParameters();
+  LaAnimalParameterManager myAnimalParameterManager;
+  myAnimalParameterManager.exec();
+  loadAnimalParameters();
 }
 void LaMainForm::loadAnimals()
 {
@@ -179,6 +179,59 @@ void LaMainForm::on_listWidgetPlants_itemClicked(QListWidgetItem * theItem)
   QString myGuid = theItem->data(Qt::UserRole).toString();
   LaPlant myPlant = mPlantsMap[myGuid];
   textBrowserPlantDefinition->setHtml(myPlant.toHtml());
+}
+
+void LaMainForm::loadAnimalParameters()
+{
+  listWidgetAnimalParameters->clear();
+  mAnimalParametersMap = LaUtils::getAvailableAnimalParameters();
+  QMapIterator<QString, LaAnimalParameter> myIterator(mAnimalParametersMap);
+  while (myIterator.hasNext())
+  {
+    myIterator.next();
+    LaAnimalParameter myAnimalParameter = myIterator.value();
+    QString myGuid = myAnimalParameter.guid();
+    QString myName = myAnimalParameter.name();
+    //display an icon indicating if the user defined or system supplied
+    QIcon myIcon;
+    myIcon.addFile(":/localdata.png");
+    QListWidgetItem * mypItem = new QListWidgetItem(myIcon,myName);
+    mypItem->setData(Qt::UserRole,myGuid);
+    listWidgetAnimalParameters->addItem(mypItem);
+  }
+}
+void LaMainForm::loadPlantParameters()
+{
+  listWidgetPlantParameters->clear();
+  mPlantParametersMap = LaUtils::getAvailablePlantParameters();
+  QMapIterator<QString, LaPlantParameter> myIterator(mPlantParametersMap);
+  while (myIterator.hasNext())
+  {
+    myIterator.next();
+    LaPlantParameter myPlantParameter = myIterator.value();
+    QString myGuid = myPlantParameter.guid();
+    QString myName = myPlantParameter.name();
+    //display an icon indicating if the user defined or system supplied
+    QIcon myIcon;
+    myIcon.addFile(":/localdata.png");
+    QListWidgetItem * mypItem = new QListWidgetItem(myIcon,myName);
+    mypItem->setData(Qt::UserRole,myGuid);
+    listWidgetPlantParameters->addItem(mypItem);
+  }
+}
+
+void LaMainForm::on_listWidgetAnimalParameters_itemClicked(QListWidgetItem * theItem)
+{
+  QString myGuid = theItem->data(Qt::UserRole).toString();
+  LaAnimalParameter myAnimalParameter = mAnimalParametersMap[myGuid];
+//  textBrowserAnimalParameterDefinition->setHtml(myAnimalParameter.toHtml());
+  //textBrowserAnimalParameterDefinition->setPlainText(myAnimalParameter.toText());
+}
+void LaMainForm::on_listWidgetPlantParameters_itemClicked(QListWidgetItem * theItem)
+{
+  QString myGuid = theItem->data(Qt::UserRole).toString();
+  LaPlantParameter myPlantParameter = mPlantParametersMap[myGuid];
+  textBrowserPlantParameterDefinition->setHtml(myPlantParameter.toHtml());
 }
 
 void LaMainForm::on_pushButtonRun_clicked()

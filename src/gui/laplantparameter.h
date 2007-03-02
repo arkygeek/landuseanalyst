@@ -1,9 +1,9 @@
 /***************************************************************************
-                          LaPlantParameters.h  -  An animal class
+                          laplant.h  -  A plant class
                              -------------------
     begin                : March 2006
-    copyright            : (C) 2003 by Tim Sutton
-    email                : tim@linfiniti.com
+    copyright            : (C) 2003 by Tim Sutton  tim@linfiniti.com
+                         :     2007 by Jason Jorgenson  arkygeek@gmail.com
  ***************************************************************************/
 
 /***************************************************************************
@@ -15,35 +15,38 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef LAPLANTPARAMETERS_H
-#define LAPLANTPARAMETERS_H
+#ifndef LAPLANTPARAMETER_H
+#define LAPLANTPARAMETER_H
 
 class QString;
 #include "laserialisable.h"
 #include "laguid.h"
 #include <QString>
-/**
-  * A class to represent plant parameters
+/** 
+  * A class to represent a plant
   * @author Tim Sutton, Jason Jorgenson
   */
 
-class LaPlantParameters : public LaSerialisable, public LaGuid
+class LaPlantParameter : public LaSerialisable, public LaGuid
 {
   public:
     /** Constructor . */
-    LaPlantParameters();
+    LaPlantParameter();
     /** Desctructor . */
-    ~LaPlantParameters();
+    ~LaPlantParameter();
     /** copy constructor */
-    LaPlantParameters(const LaPlantParameters& thePlantParameters);
-    /** Assignment operator */
-    LaPlantParameters& operator= (const LaPlantParameters& thePlantParameters);
-
+    LaPlantParameter(const LaPlantParameter& thePlantParameter);
+    /** Assignement operator */
+    LaPlantParameter& operator= (const LaPlantParameter& thePlantParameter);
+    
     //
     // Accessors
     //
+
     /** Get the name for this set of plant model parameters */
     QString name() const;
+    /** Set the description for this set of plant model parameters */
+    QString description() const;
     /** Portion of the Tame Plant  Diet (Percentage) */
     int percentTamePlant() const;
     /** Flag for determining use of crop rotation */
@@ -69,8 +72,10 @@ class LaPlantParameters : public LaSerialisable, public LaGuid
     // Mutators
     //
 
-    /** Set the name for this set of animal model parameters */
+    /** Set the name for this set of plant model parameters */
     void setName(QString theName);
+    /** Set the description for this set of plant model parameters */
+    void setDescription(QString theDescription);
     /** Portion of the Tame Plant  Diet (Percentage) */
     void setPercentTamePlant(int thePercentage);
     /** Flag for determining use of crop rotation */
@@ -92,12 +97,19 @@ class LaPlantParameters : public LaSerialisable, public LaGuid
       */
     void setUseSpecificLand(bool theBool);
 
+
     /** Return an xml representation of this layer
      * @NOTE this class inherits the serialisable interface so
      * it MUST implement this
      */
     QString toXml();
 
+    /** Return a plain text representation of this layer
+     */
+    QString toText();
+    /** Return a html text representation of this layer
+     */
+    QString toHtml();
     /** Read this object from xml and return result as true for success, false for failure.
      * @see LaSerialisable
      * @NOTE this class inherits the serialisable interface so
@@ -105,8 +117,10 @@ class LaPlantParameters : public LaSerialisable, public LaGuid
      */
     bool fromXml(const QString theXml);
   private:
-    /** A name for this set of plant paremeters */
+    /** The name for this plant paremeter */
     QString mName;
+    /** The description for this plant parameter */
+    QString mDescription;
     /** Portion of the Tame Plant Diet (Percentage) */
     int mPercentTamePlant;
     /** Food value of specific (or unique) land as calories per dunum/hectare */
@@ -130,5 +144,5 @@ class LaPlantParameters : public LaSerialisable, public LaGuid
 
 };
 
-#endif //LaPlantParameters_H
+#endif //LAPLANTPARAMETER_H
 

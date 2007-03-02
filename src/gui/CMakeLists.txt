@@ -14,27 +14,27 @@ set(landuseanalyst_SRCS
     lamainform.cpp
     laplantmanager.cpp
     laplant.cpp
-    laplantdetails.cpp
-    laplantparameters.cpp
+    laplantparametermanager.cpp
+    laplantparameter.cpp
     laanimalmanager.cpp
     laanimal.cpp
-    laanimaldetails.cpp
-    laanimalparameters.cpp
+    laanimalparametermanager.cpp
+    laanimalparameter.cpp
     laserialisable.cpp
    )
 SET(landuseanalyst_UIS
     ../ui/lamainformbase.ui
     ../ui/laplantmanagerbase.ui
-    ../ui/laplantparametersbase.ui
+    ../ui/laplantparametermanagerbase.ui
     ../ui/laanimalmanagerbase.ui
-    ../ui/laanimalparametersbase.ui
+    ../ui/laanimalparametermanagerbase.ui
     )
 SET(landuseanalyst_MOC_HDRS
     lamainform.h
     laplantmanager.h
-    laplantdetails.h
+    laplantparametermanager.h
     laanimalmanager.h
-    laanimaldetails.h
+    laanimalparametermanager.h
     )
 SET(landuseanalyst_RCCS
     ../resources/resources.qrc

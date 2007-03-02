@@ -25,8 +25,8 @@ class QStringList;
 #include <QMap>
 #include "laanimal.h"
 #include "laplant.h"
-#include "laanimaldetails.h"
-#include "laplantdetails.h"
+#include "laanimalparameter.h"
+#include "laplantparameter.h"
 
 /** This is a helper class with mainly static methods for easily
  * obtaining the directories and paths relating to the application
@@ -103,6 +103,47 @@ class LaUtils
      * the value is the layerset itself
      */
     typedef QMap<QString,LaAnimal> AnimalMap;
+
+   /**
+     * Find the place on the filesystem where user defined plantParameter
+     * profiles are stored.
+     *
+     * Typically this will be ~/.landuseAnalyst/plantParameters
+     *
+     * @return QString containing the relevant directory name
+     */
+    static const QString userPlantParameterProfilesDirPath();
+
+    /** This typedef is used to refer to a collection of layersets.
+     * the key is the layerset name
+     * the value is the layerset itself
+     */
+    typedef QMap<QString,LaPlantParameter> PlantParameterMap;
+
+    /** Get a QMap of the avaliable layersets in the users layersets directory
+     * @return a QMap<QString,OmgLayerSet> where the QString key is the layerset name
+     **/
+    static LaUtils::PlantParameterMap getAvailablePlantParameters();
+
+    /** This typedef is used to refer to a collection of layersets.
+     * the key is the layerset name
+     * the value is the layerset itself
+     */
+    typedef QMap<QString,LaAnimalParameter> AnimalParameterMap;
+    /** Get a QMap of the avaliable layersets in the users layersets directory
+     * @return a QMap<QString,OmgLayerSet> where the QString key is the layerset name
+     **/
+    static LaUtils::AnimalParameterMap getAvailableAnimalParameters();
+    /**
+     * Find the place on the filesystem where user defined animalParameter
+     * profiles are stored.
+     *
+     * Typically this will be ~/.landuseAnalyst/animalParameterProfiles
+     *
+     * @return QString containing the relevant directory name
+     */
+    static const QString userAnimalParameterProfilesDirPath();
+
     /** Get a QMap of the avaliable layersets in the users layersets directory
      * @return a QMap<QString,OmgLayerSet> where the QString key is the layerset name
      **/
