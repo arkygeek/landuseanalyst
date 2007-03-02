@@ -158,6 +158,8 @@ bool LaPlantParameter::fromXml(QString theXml)
   qDebug("PlantParameter::fromXml - guid found : " + myTopElement.attribute("guid").toLocal8Bit());
   setGuid(myTopElement.attribute("guid"));
   qDebug("PlantParameter::fromXml - guid set to : " + guid().toLocal8Bit());
+  mName=QString(myTopElement.firstChildElement("name").text());
+  mDescription=QString(myTopElement.firstChildElement("description").text());
   mPercentTamePlant=QString(myTopElement.firstChildElement("percentTamePlant").text()).toInt();
   mCropRotation=QString(myTopElement.firstChildElement("cropRotation").text()).toInt();
   mFallowRatio=QString(myTopElement.firstChildElement("fallowRatio").text()).toInt();
