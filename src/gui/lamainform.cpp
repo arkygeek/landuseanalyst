@@ -55,6 +55,8 @@ LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
   lblVersion->setText(QString("Version: %1").arg(VERSION) + " " + QString("$Revision$").replace("$",""));
   loadAnimals();
   loadPlants();
+  loadAnimalParameters();
+  loadPlantParameters();
 }
 
 LaMainForm::~LaMainForm()
@@ -102,14 +104,14 @@ void LaMainForm::on_horizontalSliderPlant_valueChanged(int theValue)
   labelPlantTamePercent->setText(myMaxString);
 }
 
+
+
 void LaMainForm::on_pbnNewAnimal_clicked()
 {
   LaAnimalManager myAnimalManager;
   myAnimalManager.exec();
   loadAnimals();
 }
-
-
 void LaMainForm::on_pbnNewPlant_clicked()
 {
   LaPlantManager myPlantManager;
@@ -128,6 +130,9 @@ void LaMainForm::on_pbnNewAnimalParameter_clicked()
   myAnimalParameterManager.exec();
   loadAnimalParameters();
 }
+
+
+
 void LaMainForm::loadAnimals()
 {
   listWidgetAnimals->clear();
@@ -166,21 +171,6 @@ void LaMainForm::loadPlants()
     listWidgetPlants->addItem(mypItem);
   }
 }
-
-void LaMainForm::on_listWidgetAnimals_itemClicked(QListWidgetItem * theItem)
-{
-  QString myGuid = theItem->data(Qt::UserRole).toString();
-  LaAnimal myAnimal = mAnimalsMap[myGuid];
-  textBrowserAnimalDefinition->setHtml(myAnimal.toHtml());
-  //textBrowserAnimalDefinition->setPlainText(myAnimal.toText());
-}
-void LaMainForm::on_listWidgetPlants_itemClicked(QListWidgetItem * theItem)
-{
-  QString myGuid = theItem->data(Qt::UserRole).toString();
-  LaPlant myPlant = mPlantsMap[myGuid];
-  textBrowserPlantDefinition->setHtml(myPlant.toHtml());
-}
-
 void LaMainForm::loadAnimalParameters()
 {
   listWidgetAnimalParameters->clear();
@@ -220,11 +210,26 @@ void LaMainForm::loadPlantParameters()
   }
 }
 
+
+
+void LaMainForm::on_listWidgetAnimals_itemClicked(QListWidgetItem * theItem)
+{
+  QString myGuid = theItem->data(Qt::UserRole).toString();
+  LaAnimal myAnimal = mAnimalsMap[myGuid];
+  textBrowserAnimalDefinition->setHtml(myAnimal.toHtml());
+  //textBrowserAnimalDefinition->setPlainText(myAnimal.toText());
+}
+void LaMainForm::on_listWidgetPlants_itemClicked(QListWidgetItem * theItem)
+{
+  QString myGuid = theItem->data(Qt::UserRole).toString();
+  LaPlant myPlant = mPlantsMap[myGuid];
+  textBrowserPlantDefinition->setHtml(myPlant.toHtml());
+}
 void LaMainForm::on_listWidgetAnimalParameters_itemClicked(QListWidgetItem * theItem)
 {
   QString myGuid = theItem->data(Qt::UserRole).toString();
   LaAnimalParameter myAnimalParameter = mAnimalParametersMap[myGuid];
-//  textBrowserAnimalParameterDefinition->setHtml(myAnimalParameter.toHtml());
+  textBrowserAnimalParameterDefinition->setHtml(myAnimalParameter.toHtml());
   //textBrowserAnimalParameterDefinition->setPlainText(myAnimalParameter.toText());
 }
 void LaMainForm::on_listWidgetPlantParameters_itemClicked(QListWidgetItem * theItem)
@@ -233,6 +238,8 @@ void LaMainForm::on_listWidgetPlantParameters_itemClicked(QListWidgetItem * theI
   LaPlantParameter myPlantParameter = mPlantParametersMap[myGuid];
   textBrowserPlantParameterDefinition->setHtml(myPlantParameter.toHtml());
 }
+
+
 
 void LaMainForm::on_pushButtonRun_clicked()
 {
@@ -246,22 +253,6 @@ void LaMainForm::on_pushButtonSave_clicked()
 {
   //  implement me!
 }
-
-void LaMainForm::helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetItem * thepOldItem)
-{
-  writeMessage("Item clicked in help browser: " + thepCurrentItem->text(0).toLocal8Bit());
-  QFile myQFile( ":/" + thepCurrentItem->text(0)  + ".html" );
-  if ( myQFile.open( QIODevice::ReadOnly ) ) {
-    //now we parse the loc file, checking each line for its taxon
-    QTextStream myStream( &myQFile );
-    textHelp->setHtml(myStream.readAll());
-    myQFile.close();
-  }
-  else {
-    writeMessage("Help resource for : " + thepCurrentItem->text(0).toLocal8Bit() + " not found!");
-  }
-}
-
 void LaMainForm::on_pushButtonDietBreakdown_clicked()
 {
   int myOverallPercentage = (100-(horizontalSliderDiet->value()));
@@ -288,6 +279,24 @@ void LaMainForm::on_pushButtonDietBreakdown_clicked()
   writeDiet("Tame Plants account for " + QString::number((myOverallPercentage/100.)*(myTamePlantPercentage/100.)*100.).toLocal8Bit() + "% of the diet, or " + QString::number(myPlantCalories/1000.).toLocal8Bit() + " kcal");
   writeDiet("Tame Animals account for " + QString::number((myDietPercentMeat/100.)*(myDietPercentTameMeat/100.)*100.).toLocal8Bit() + "% of the diet, or " + QString::number(myAnimalCalories/1000.).toLocal8Bit() + " kcal");
 }
+
+
+
+void LaMainForm::helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetItem * thepOldItem)
+{
+  writeMessage("Item clicked in help browser: " + thepCurrentItem->text(0).toLocal8Bit());
+  QFile myQFile( ":/" + thepCurrentItem->text(0)  + ".html" );
+  if ( myQFile.open( QIODevice::ReadOnly ) ) {
+    //now we parse the loc file, checking each line for its taxon
+    QTextStream myStream( &myQFile );
+    textHelp->setHtml(myStream.readAll());
+    myQFile.close();
+  }
+  else {
+    writeMessage("Help resource for : " + thepCurrentItem->text(0).toLocal8Bit() + " not found!");
+  }
+}
+
 
 void LaMainForm::writeMessage(QString theText)
 {
