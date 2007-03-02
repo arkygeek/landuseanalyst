@@ -183,7 +183,7 @@ p, li { white-space: pre-wrap; }
        </spacer>
       </item>
       <item row="3" column="3" >
-       <widget class="QSpinBox" name="spinBoxFodderLentilsGrain" >
+       <widget class="QSpinBox" name="sbFodderLentilsGrain" >
         <property name="sizePolicy" >
          <sizepolicy>
           <hsizetype>4</hsizetype>
@@ -207,7 +207,7 @@ p, li { white-space: pre-wrap; }
        </widget>
       </item>
       <item row="3" column="2" >
-       <widget class="QSpinBox" name="spinBoxFodderLentils" >
+       <widget class="QSpinBox" name="sbFodderLentils" >
         <property name="sizePolicy" >
          <sizepolicy>
           <hsizetype>4</hsizetype>
@@ -247,7 +247,7 @@ p, li { white-space: pre-wrap; }
        </widget>
       </item>
       <item row="2" column="3" >
-       <widget class="QSpinBox" name="spinBoxFodderBarleyGrain" >
+       <widget class="QSpinBox" name="sbFodderBarleyGrain" >
         <property name="sizePolicy" >
          <sizepolicy>
           <hsizetype>4</hsizetype>
@@ -271,7 +271,7 @@ p, li { white-space: pre-wrap; }
        </widget>
       </item>
       <item row="2" column="2" >
-       <widget class="QSpinBox" name="spinBoxFodderBarley" >
+       <widget class="QSpinBox" name="sbFodderBarley" >
         <property name="sizePolicy" >
          <sizepolicy>
           <hsizetype>0</hsizetype>
@@ -311,7 +311,7 @@ p, li { white-space: pre-wrap; }
        </widget>
       </item>
       <item row="1" column="3" >
-       <widget class="QSpinBox" name="spinBoxFodderWheatGrain" >
+       <widget class="QSpinBox" name="sbFodderWheatGrain" >
         <property name="sizePolicy" >
          <sizepolicy>
           <hsizetype>0</hsizetype>
@@ -335,7 +335,7 @@ p, li { white-space: pre-wrap; }
        </widget>
       </item>
       <item row="1" column="2" >
-       <widget class="QSpinBox" name="spinBoxFodderWheat" >
+       <widget class="QSpinBox" name="sbFodderWheat" >
         <property name="sizePolicy" >
          <sizepolicy>
           <hsizetype>0</hsizetype>
@@ -418,7 +418,7 @@ p, li { white-space: pre-wrap; }
        <number>6</number>
       </property>
       <item row="0" column="0" colspan="6" >
-       <widget class="QTableWidget" name="tblAnimalParameters" >
+       <widget class="QTableWidget" name="tblAnimalParameterProfiles" >
         <property name="whatsThis" >
          <string>Table of the currently available layersets</string>
         </property>
@@ -546,7 +546,7 @@ p, li { white-space: pre-wrap; }
     </widget>
    </item>
    <item row="3" column="2" >
-    <widget class="QSpinBox" name="spinBoxPercentOfTameMeat" >
+    <widget class="QSpinBox" name="sbPercentTameMeat" >
      <property name="sizePolicy" >
       <sizepolicy>
        <hsizetype>5</hsizetype>
@@ -596,10 +596,10 @@ p, li { white-space: pre-wrap; }
     </widget>
    </item>
    <item row="5" column="2" >
-    <widget class="QSpinBox" name="spinBoxCommonRasterCalories" />
+    <widget class="QSpinBox" name="sbCommonRasterCalories" />
    </item>
    <item row="6" column="0" colspan="3" >
-    <widget class="QComboBox" name="comboBoxGrazingUnits" >
+    <widget class="QComboBox" name="comboBoxAreaUnits" >
      <property name="sizePolicy" >
       <sizepolicy>
        <hsizetype>5</hsizetype>
@@ -631,7 +631,7 @@ p, li { white-space: pre-wrap; }
     </widget>
    </item>
    <item row="4" column="2" >
-    <widget class="QSpinBox" name="spinBoxUniqueRasterCalories" />
+    <widget class="QSpinBox" name="sbUniqueRasterCalories" />
    </item>
   </layout>
  </widget>

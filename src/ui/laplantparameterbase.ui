@@ -1,12 +1,12 @@
 <ui version="4.0" >
- <class>LaPlantParametersBase</class>
- <widget class="QWidget" name="LaPlantParametersBase" >
+ <class>LaPlantParameterManagerBase</class>
+ <widget class="QWidget" name="LaPlantParameterManagerBase" >
   <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>259</width>
-    <height>288</height>
+    <width>585</width>
+    <height>330</height>
    </rect>
   </property>
   <property name="minimumSize" >
@@ -16,7 +16,7 @@
    </size>
   </property>
   <property name="windowTitle" >
-   <string>Form</string>
+   <string>Plant Parameter Manager</string>
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >
@@ -25,50 +25,199 @@
    <property name="spacing" >
     <number>6</number>
    </property>
-   <item row="3" column="0" >
+   <item row="3" column="0" colspan="2" >
     <spacer>
      <property name="orientation" >
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="sizeHint" >
       <size>
-       <width>40</width>
-       <height>20</height>
+       <width>361</width>
+       <height>27</height>
       </size>
      </property>
     </spacer>
    </item>
-   <item row="3" column="1" >
-    <widget class="QPushButton" name="pushButtonApply" >
-     <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>5</hsizetype>
-       <vsizetype>0</vsizetype>
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
+   <item row="0" column="0" colspan="4" >
+    <widget class="QGroupBox" name="grpProfiles" >
+     <property name="title" >
+      <string>Available Plant Parameter Settings</string>
      </property>
-     <property name="text" >
-      <string>Apply</string>
-     </property>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>9</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item row="0" column="0" colspan="6" >
+       <widget class="QTableWidget" name="tblPlantParameterProfiles" >
+        <property name="whatsThis" >
+         <string>Table of the currently available layersets</string>
+        </property>
+        <property name="alternatingRowColors" >
+         <bool>true</bool>
+        </property>
+        <property name="selectionMode" >
+         <enum>QAbstractItemView::SingleSelection</enum>
+        </property>
+        <property name="selectionBehavior" >
+         <enum>QAbstractItemView::SelectRows</enum>
+        </property>
+        <column>
+         <property name="text" >
+          <string>FileName</string>
+         </property>
+        </column>
+        <column>
+         <property name="text" >
+          <string>Name</string>
+         </property>
+        </column>
+       </widget>
+      </item>
+      <item row="1" column="3" >
+       <widget class="QToolButton" name="toolNew" >
+        <property name="toolTip" >
+         <string>New</string>
+        </property>
+        <property name="text" >
+         <string>...</string>
+        </property>
+        <property name="icon" >
+         <iconset resource="../resources/resources.qrc" >:/new.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="4" >
+       <widget class="QToolButton" name="toolCopy" >
+        <property name="toolTip" >
+         <string>Clone</string>
+        </property>
+        <property name="text" >
+         <string>...</string>
+        </property>
+        <property name="icon" >
+         <iconset resource="../resources/resources.qrc" >:/copy.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="5" >
+       <widget class="QToolButton" name="toolDelete" >
+        <property name="toolTip" >
+         <string>Delete</string>
+        </property>
+        <property name="text" >
+         <string>...</string>
+        </property>
+        <property name="icon" >
+         <iconset resource="../resources/resources.qrc" >:/delete.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" >
+       <widget class="QPushButton" name="pbnImport" >
+        <property name="minimumSize" >
+         <size>
+          <width>80</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text" >
+         <string>Import</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" >
+       <widget class="QPushButton" name="pbnExport" >
+        <property name="minimumSize" >
+         <size>
+          <width>80</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text" >
+         <string>Export</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2" >
+       <spacer>
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" >
+         <size>
+          <width>71</width>
+          <height>27</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
     </widget>
    </item>
-   <item row="3" column="2" >
-    <widget class="QPushButton" name="pushButtonClose" >
-     <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>5</hsizetype>
-       <vsizetype>0</vsizetype>
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
+   <item row="1" column="0" >
+    <widget class="QGroupBox" name="groupBoxPortionOfDiet" >
+     <property name="title" >
+      <string>Portion of Diet</string>
      </property>
-     <property name="text" >
-      <string>Close</string>
-     </property>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>3</number>
+      </property>
+      <property name="spacing" >
+       <number>3</number>
+      </property>
+      <item row="0" column="0" >
+       <widget class="QLabel" name="labelPortionDiet" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>1</hsizetype>
+          <vsizetype>4</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="frameShape" >
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="text" >
+         <string>Portion of Tame Plant Diet</string>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" >
+       <widget class="QSpinBox" name="spinBoxPercentOfTamePlant" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>0</hsizetype>
+          <vsizetype>0</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="toolTip" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Pigs contiribute this percent towards the tame meat portion of the diet&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="maximum" >
+         <number>100</number>
+        </property>
+        <property name="value" >
+         <number>50</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
-   <item row="2" column="0" colspan="3" >
+   <item row="2" column="0" >
     <widget class="QGroupBox" name="groupBoxSuitableLand" >
      <property name="sizePolicy" >
       <sizepolicy>
@@ -133,7 +282,7 @@
      </layout>
     </widget>
    </item>
-   <item row="1" column="0" colspan="3" >
+   <item rowspan="2" row="1" column="1" colspan="3" >
     <widget class="QGroupBox" name="groupBoxFallowUse" >
      <property name="sizePolicy" >
       <sizepolicy>
@@ -399,64 +548,34 @@ p, li { white-space: pre-wrap; }
      </layout>
     </widget>
    </item>
-   <item row="0" column="0" colspan="3" >
-    <widget class="QGroupBox" name="groupBoxPortionOfDiet" >
-     <property name="title" >
-      <string>Portion of Diet</string>
+   <item row="3" column="3" >
+    <widget class="QPushButton" name="pbnClose" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>5</hsizetype>
+       <vsizetype>0</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
      </property>
-     <layout class="QGridLayout" >
-      <property name="margin" >
-       <number>3</number>
-      </property>
-      <property name="spacing" >
-       <number>3</number>
-      </property>
-      <item row="0" column="0" >
-       <widget class="QLabel" name="labelPortionDiet" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>1</hsizetype>
-          <vsizetype>4</vsizetype>
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="frameShape" >
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="text" >
-         <string>Portion of Tame Plant Diet</string>
-        </property>
-        <property name="alignment" >
-         <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1" >
-       <widget class="QSpinBox" name="spinBoxPercentOfTamePlant" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>0</hsizetype>
-          <vsizetype>0</vsizetype>
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="toolTip" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Pigs contiribute this percent towards the tame meat portion of the diet&lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="maximum" >
-         <number>100</number>
-        </property>
-        <property name="value" >
-         <number>50</number>
-        </property>
-       </widget>
-      </item>
-     </layout>
+     <property name="text" >
+      <string>Close</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="2" >
+    <widget class="QPushButton" name="pbnApply" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>5</hsizetype>
+       <vsizetype>0</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text" >
+      <string>Apply</string>
+     </property>
     </widget>
    </item>
   </layout>
@@ -464,9 +583,9 @@ p, li { white-space: pre-wrap; }
  <resources/>
  <connections>
   <connection>
-   <sender>pushButtonClose</sender>
+   <sender>pbnClose</sender>
    <signal>pressed()</signal>
-   <receiver>LaPlantParametersBase</receiver>
+   <receiver>LaPlantParameterManagerBase</receiver>
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel" >

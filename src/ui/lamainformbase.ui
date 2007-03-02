@@ -54,7 +54,7 @@
       </size>
      </property>
      <property name="currentIndex" >
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="main_tab" >
       <attribute name="title" >
@@ -1039,7 +1039,7 @@ p, li { white-space: pre-wrap; }
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="" >
+       <widget class="QWidget" name="layoutWidget" >
         <layout class="QVBoxLayout" >
          <property name="margin" >
           <number>0</number>
@@ -1074,7 +1074,7 @@ p, li { white-space: pre-wrap; }
        <property name="orientation" >
         <enum>Qt::Horizontal</enum>
        </property>
-       <widget class="QWidget" name="" >
+       <widget class="QWidget" name="layoutWidget" >
         <layout class="QVBoxLayout" >
          <property name="margin" >
           <number>0</number>
@@ -1130,7 +1130,7 @@ p, li { white-space: pre-wrap; }
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pbnCropParameters" >
+          <widget class="QPushButton" name="pbnNewPlantParameter" >
            <property name="text" >
             <string>Manage...</string>
            </property>
@@ -1138,7 +1138,7 @@ p, li { white-space: pre-wrap; }
          </item>
         </layout>
        </widget>
-       <widget class="QTextBrowser" name="textBrowserPlantParameters" >
+       <widget class="QTextBrowser" name="textBrowserPlantParameterDefinition" >
         <property name="sizePolicy" >
          <sizepolicy>
           <hsizetype>7</hsizetype>
@@ -1260,7 +1260,7 @@ p, li { white-space: pre-wrap; }
          <property name="orientation" >
           <enum>Qt::Horizontal</enum>
          </property>
-         <widget class="QWidget" name="" >
+         <widget class="QWidget" name="layoutWidget" >
           <layout class="QVBoxLayout" >
            <property name="margin" >
             <number>0</number>
@@ -1316,7 +1316,7 @@ p, li { white-space: pre-wrap; }
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="pbnAnimalParameters" >
+            <widget class="QPushButton" name="pbnNewAnimalParameter" >
              <property name="text" >
               <string>Manage...</string>
              </property>
@@ -1324,7 +1324,7 @@ p, li { white-space: pre-wrap; }
            </item>
           </layout>
          </widget>
-         <widget class="QTextBrowser" name="textBrowserAnimalParameters" >
+         <widget class="QTextBrowser" name="textBrowserAnimalParameterDefinition" >
           <property name="sizePolicy" >
            <sizepolicy>
             <hsizetype>7</hsizetype>
