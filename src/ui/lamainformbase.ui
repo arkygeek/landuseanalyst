@@ -54,7 +54,7 @@
       </size>
      </property>
      <property name="currentIndex" >
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="main_tab" >
       <attribute name="title" >
@@ -994,6 +994,9 @@ p, li { white-space: pre-wrap; }
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
+           </property>
+           <property name="editTriggers" >
+            <set>QAbstractItemView::CurrentChanged|QAbstractItemView::EditKeyPressed|QAbstractItemView::NoEditTriggers</set>
            </property>
            <item>
             <property name="text" >

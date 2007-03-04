@@ -162,10 +162,10 @@ bool LaPlantParameter::fromXml(QString theXml)
   mDescription=QString(myTopElement.firstChildElement("description").text());
   mPercentTamePlant=QString(myTopElement.firstChildElement("percentTamePlant").text()).toInt();
   mCropRotation=QString(myTopElement.firstChildElement("cropRotation").text()).toInt();
-  mFallowRatio=QString(myTopElement.firstChildElement("fallowRatio").text()).toInt();
+  mFallowRatio=QString(myTopElement.firstChildElement("fallowRatio").text()).toFloat();
   mFallowCalories=QString(myTopElement.firstChildElement("fallowCalories").text()).toInt();
   mAreaUnits=QString(myTopElement.firstChildElement("areaUnits").text()).toInt();
-  mUseCommonLand=QString(myTopElement.firstChildElement("useUniqueLand").text()).toInt();
+  mUseCommonLand=QString(myTopElement.firstChildElement("useCommonLand").text()).toInt();
   mUseSpecificLand=QString(myTopElement.firstChildElement("useSpecificLand").text()).toInt();
   return true;
 }

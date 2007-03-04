@@ -178,13 +178,21 @@ void LaAnimalParameterManager::showAnimalParameter()
 {
   leName->setText(mAnimalParameter.name());
   leDescription->setText(mAnimalParameter.description());
-  mAnimalParameter.setPercentTameMeat(sbPercentTameMeat->value());
-  mAnimalParameter.setFoodValueOfSpecificGrazingLand(sbUniqueRasterCalories->value());
-  mAnimalParameter.setFoodValueOfCommonGrazingLand(sbCommonRasterCalories->value());
-  mAnimalParameter.setUseSpecificGrazingLand(checkBoxUniqueRaster->isChecked());
-  mAnimalParameter.setUseCommonGrazingLand(checkBoxCommonRaster->isChecked());
-  mAnimalParameter.setAreaUnits(comboBoxAreaUnits->currentIndex());
-  mAnimalParameter.setFallowUsage(comboBoxFallowUsage->currentIndex());
+  sbPercentTameMeat->setValue(mAnimalParameter.percentTameMeat());
+  checkBoxCommonRaster->setChecked(mAnimalParameter.useCommonGrazingLand());
+  checkBoxSpecificRaster->setChecked(mAnimalParameter.useSpecificGrazingLand());
+  sbSpecificRasterCalories->setValue(mAnimalParameter.foodValueOfSpecificGrazingLand());
+  sbCommonRasterCalories->setValue(mAnimalParameter.foodValueOfCommonGrazingLand());
+  comboBoxAreaUnits->setCurrentIndex(mAnimalParameter.areaUnits());
+  grpFodderUse->setChecked(mAnimalParameter.fodderUse());
+  sbFodderWheat->setValue(mAnimalParameter.fodderWheat());
+  sbFodderWheatGrain->setValue(mAnimalParameter.fodderWheatGrain());
+  sbFodderBarley->setValue(mAnimalParameter.fodderBarley());
+  sbFodderBarleyGrain->setValue(mAnimalParameter.fodderBarleyGrain());
+  sbFodderLentils->setValue(mAnimalParameter.fodderLentils());
+  sbFodderLentilsGrain->setValue(mAnimalParameter.fodderLentilsGrain());
+
+  comboBoxFallowUsage->setCurrentIndex(mAnimalParameter.fallowUsage());
 }
 
 void LaAnimalParameterManager::on_toolNew_clicked()
@@ -257,10 +265,18 @@ void LaAnimalParameterManager::on_pbnApply_clicked()
   mAnimalParameter.setName(leName->text());
   mAnimalParameter.setDescription(leDescription->text());
   mAnimalParameter.setPercentTameMeat(sbPercentTameMeat->value());
-  mAnimalParameter.setFoodValueOfSpecificGrazingLand(sbUniqueRasterCalories->value());
-  mAnimalParameter.setFoodValueOfCommonGrazingLand(sbCommonRasterCalories->value());
-  mAnimalParameter.setUseSpecificGrazingLand(checkBoxUniqueRaster->isChecked());
   mAnimalParameter.setUseCommonGrazingLand(checkBoxCommonRaster->isChecked());
+  mAnimalParameter.setUseSpecificGrazingLand(checkBoxSpecificRaster->isChecked());
+  mAnimalParameter.setFoodValueOfCommonGrazingLand(sbCommonRasterCalories->value());
+  mAnimalParameter.setFoodValueOfSpecificGrazingLand(sbSpecificRasterCalories->value());
+  mAnimalParameter.setFodderUse(grpFodderUse->isChecked());
+  mAnimalParameter.setFodderWheat(sbFodderWheat->value());
+  mAnimalParameter.setFodderWheatGrain(sbFodderWheatGrain->value());
+  mAnimalParameter.setFodderBarley(sbFodderBarley->value());
+  mAnimalParameter.setFodderBarleyGrain(sbFodderBarleyGrain->value());
+  mAnimalParameter.setFodderLentils(sbFodderLentils->value());
+  mAnimalParameter.setFodderLentilsGrain(sbFodderLentilsGrain->value());
+
   mAnimalParameter.setAreaUnits(comboBoxAreaUnits->currentIndex());
   mAnimalParameter.setFallowUsage(comboBoxFallowUsage->currentIndex());
   mAnimalParameter.toXmlFile( LaUtils::userAnimalParameterProfilesDirPath() +

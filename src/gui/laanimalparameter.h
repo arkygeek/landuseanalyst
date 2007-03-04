@@ -48,23 +48,31 @@ class LaAnimalParameter : public LaSerialisable, public LaGuid
     QString description() const;
     /** Portion of the Tame Meat Diet (Percentage) */
     int percentTameMeat() const;
-    /** Food value of specific (or unique) grazing land as calories per dunum/hectare */
-    int foodValueOfSpecificGrazingLand() const;
-    /** Food value of common (or shared) grazing land as calories per dunum/hectare
-      * NOTE that changing this value for any animal changes it for all!
-      */
-    int foodValueOfCommonGrazingLand() const;
+
     /** A flag for whether the animal has it's own specific
       * land designated to it for grazing
       */
     bool useSpecificGrazingLand() const;
     /** A flag indicating that the animal grazes land shared with other animals */
     bool useCommonGrazingLand() const;
-    /** If fallow is to be grazed, and if so, at either a
+    /** Food value of specific (or unique) grazing land as calories per dunum/hectare */
+    int foodValueOfSpecificGrazingLand() const;
+    /** Food value of common (or shared) grazing land as calories per dunum/hectare
+      * NOTE that changing this value for any animal changes it for all!
+      */
+    int foodValueOfCommonGrazingLand() const;    /** If fallow is to be grazed, and if so, at either a
       * HIGH MED or LOW priority to it's access
       */
-    int fallowUsage() const;
     int areaUnits() const;
+    bool fodderUse() const;
+    int fodderWheat() const;
+    int fodderWheatGrain() const;
+    int fodderBarley() const;
+    int fodderBarleyGrain() const;
+    int fodderLentils() const;
+    int fodderLentilsGrain() const;
+    int fallowUsage() const;
+
 
     //
     // Mutators
@@ -76,18 +84,27 @@ class LaAnimalParameter : public LaSerialisable, public LaGuid
     void setDescription(QString theDescription);
     /** Portion of the Tame Meat Diet (Percentage) */
     void setPercentTameMeat(int thePercentage);
-    /** Food value of specific (or unique) grazing land as calories per dunum/hectare */
-    void setFoodValueOfSpecificGrazingLand(int theCalories);
-    /** Food value of common (or shared) grazing land as calories per dunum/hectare
-      * NOTE that changing this value for any animal changes it for all!
-      */
-    void setFoodValueOfCommonGrazingLand(int theCalories);
+
     /** A flag for whether the animal has it's own specific
       * land designated to it for grazing
       */
     void setUseSpecificGrazingLand(bool theBool);
     /** A flag indicating that the animal grazes land shared with other animals */
     void setUseCommonGrazingLand(bool theBool);
+    /** Food value of specific (or unique) grazing land as calories per dunum/hectare */
+    void setFoodValueOfSpecificGrazingLand(int theCalories);
+    /** Food value of common (or shared) grazing land as calories per dunum/hectare
+      * NOTE that changing this value for any animal changes it for all!
+      */
+    void setFoodValueOfCommonGrazingLand(int theCalories);
+    void setFodderUse(bool theBool);
+    void setFodderWheat(int theValue);
+    void setFodderWheatGrain(int theValue);
+    void setFodderBarley(int theValue);
+    void setFodderBarleyGrain(int theValue);
+    void setFodderLentils(int theValue);
+    void setFodderLentilsGrain(int theValue);
+
     /** If fallow is to be grazed, and if so, at either a
       * HIGH MED or LOW priority to it's access
       */
@@ -113,18 +130,26 @@ class LaAnimalParameter : public LaSerialisable, public LaGuid
     QString mDescription;
     /** Portion of the Tame Meat Diet (Percentage) */
     int mPercentTameMeat;
-    /** Food value of specific (or unique) grazing land as calories per dunum/hectare */
-    int mFoodValueOfSpecificGrazingLand;
-    /** Food value of common (or shared) grazing land as calories per dunum/hectare
-      * NOTE that changing this value for any animal changes it for all!
-      */
-    int mFoodValueOfCommonGrazingLand;
+
     /** A flag for whether the animal has it's own specific
       * land designated to it for grazing
       */
     bool mUseSpecificGrazingLand;
     /** A flag indicating that the animal grazes land shared with other animals */
     bool mUseCommonGrazingLand;
+    /** Food value of specific (or unique) grazing land as calories per dunum/hectare */
+    int mFoodValueOfSpecificGrazingLand;
+    /** Food value of common (or shared) grazing land as calories per dunum/hectare
+      * NOTE that changing this value for any animal changes it for all!
+      */
+    int mFoodValueOfCommonGrazingLand;
+    bool mFodderUse;
+    int mFodderWheat;
+    int mFodderWheatGrain;
+    int mFodderBarley;
+    int mFodderBarleyGrain;
+    int mFodderLentils;
+    int mFodderLentilsGrain;
     /** If fallow is to be grazed, and if so, at either a
       * HIGH MED or LOW priority to it's access
       */
