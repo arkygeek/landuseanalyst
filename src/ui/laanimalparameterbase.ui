@@ -16,7 +16,7 @@
    </size>
   </property>
   <property name="windowTitle" >
-   <string>Form</string>
+   <string>Animal Parameter Manager</string>
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >
@@ -115,7 +115,7 @@ p, li { white-space: pre-wrap; }
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of animals diet provided by LENTILS&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="suffix" >
-         <string/>
+         <string>%</string>
         </property>
         <property name="maximum" >
          <number>100</number>
@@ -139,7 +139,7 @@ p, li { white-space: pre-wrap; }
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of animals diet provided by &lt;span style=" color:#0000ff;">LENTIL FODDER&lt;/span>.&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="suffix" >
-         <string/>
+         <string>%</string>
         </property>
         <property name="maximum" >
          <number>100</number>
@@ -179,7 +179,7 @@ p, li { white-space: pre-wrap; }
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of animals diet provided by BARLEY&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="suffix" >
-         <string/>
+         <string>%</string>
         </property>
         <property name="maximum" >
          <number>100</number>
@@ -203,7 +203,7 @@ p, li { white-space: pre-wrap; }
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of animals diet provided by &lt;span style=" color:#0000ff;">BARLEY FODDER&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="suffix" >
-         <string/>
+         <string>%</string>
         </property>
         <property name="maximum" >
          <number>100</number>
@@ -243,7 +243,7 @@ p, li { white-space: pre-wrap; }
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of animals diet provided by WHEAT&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="suffix" >
-         <string/>
+         <string>%</string>
         </property>
         <property name="maximum" >
          <number>100</number>
@@ -267,7 +267,7 @@ p, li { white-space: pre-wrap; }
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of animals diet provided by &lt;span style=" color:#0000ff;">WHEAT FODDER.&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="suffix" >
-         <string/>
+         <string>%</string>
         </property>
         <property name="maximum" >
          <number>100</number>
@@ -335,7 +335,20 @@ p, li { white-space: pre-wrap; }
     </widget>
    </item>
    <item row="2" column="1" >
-    <widget class="QSpinBox" name="spinBoxUniqueRasterCalories" />
+    <widget class="QSpinBox" name="spinBoxUniqueRasterCalories" >
+     <property name="suffix" >
+      <string> KCal</string>
+     </property>
+     <property name="maximum" >
+      <number>99999999</number>
+     </property>
+     <property name="singleStep" >
+      <number>100</number>
+     </property>
+     <property name="value" >
+      <number>10000</number>
+     </property>
+    </widget>
    </item>
    <item row="4" column="0" colspan="2" >
     <widget class="QComboBox" name="comboBoxGrazingUnits" >
@@ -370,7 +383,20 @@ p, li { white-space: pre-wrap; }
     </widget>
    </item>
    <item row="3" column="1" >
-    <widget class="QSpinBox" name="spinBoxCommonRasterCalories" />
+    <widget class="QSpinBox" name="spinBoxCommonRasterCalories" >
+     <property name="suffix" >
+      <string> KCal</string>
+     </property>
+     <property name="maximum" >
+      <number>99999999</number>
+     </property>
+     <property name="singleStep" >
+      <number>100</number>
+     </property>
+     <property name="value" >
+      <number>10000</number>
+     </property>
+    </widget>
    </item>
    <item row="3" column="0" >
     <widget class="QCheckBox" name="checkBoxCommonRaster" >
@@ -413,6 +439,9 @@ p, li { white-space: pre-wrap; }
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">This animal contiributes this percent towards the tame meat portion of the diet&lt;/p>&lt;/body>&lt;/html></string>
+     </property>
+     <property name="suffix" >
+      <string> %</string>
      </property>
      <property name="maximum" >
       <number>100</number>
