@@ -104,7 +104,11 @@ void LaMainForm::on_horizontalSliderPlant_valueChanged(int theValue)
   labelPlantTamePercent->setText(myMaxString);
 }
 
-
+/**
+  * The stuff above is related to form function, like the
+  * sychronization of the sliders and display numbers,
+  * clearing of the listWidgets, and so forth.
+  */
 
 void LaMainForm::on_pbnNewAnimal_clicked()
 {
@@ -130,7 +134,9 @@ void LaMainForm::on_pbnNewAnimalParameter_clicked()
   myAnimalParameterManager.exec();
   loadAnimalParameters();
 }
-
+/**
+  * The above launches new forms for plants and animals
+  */
 
 
 void LaMainForm::loadAnimals()

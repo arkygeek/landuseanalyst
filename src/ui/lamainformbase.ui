@@ -955,102 +955,97 @@ p, li { white-space: pre-wrap; }
       <attribute name="title" >
        <string>Crops</string>
       </attribute>
-      <widget class="QSplitter" name="splitter_4" >
-       <property name="geometry" >
-        <rect>
-         <x>9</x>
-         <y>9</y>
-         <width>303</width>
-         <height>235</height>
-        </rect>
+      <layout class="QGridLayout" >
+       <property name="margin" >
+        <number>9</number>
        </property>
-       <property name="orientation" >
-        <enum>Qt::Horizontal</enum>
+       <property name="spacing" >
+        <number>6</number>
        </property>
-       <widget class="QWidget" name="layoutWidget" >
-        <layout class="QVBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
+       <item row="0" column="0" >
+        <widget class="QSplitter" name="splitter_10" >
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
          </property>
-         <property name="spacing" >
-          <number>6</number>
-         </property>
-         <item>
-          <widget class="QLabel" name="label_4" >
-           <property name="text" >
-            <string>Crops</string>
-           </property>
-           <property name="alignment" >
-            <set>Qt::AlignCenter</set>
-           </property>
+         <widget class="QSplitter" name="splitter_4" >
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <widget class="QWidget" name="layoutWidget" >
+           <layout class="QVBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_4" >
+              <property name="text" >
+               <string>Crops</string>
+              </property>
+              <property name="alignment" >
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QListWidget" name="listWidgetPlants" >
+              <property name="sizePolicy" >
+               <sizepolicy>
+                <hsizetype>13</hsizetype>
+                <vsizetype>7</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="editTriggers" >
+               <set>QAbstractItemView::CurrentChanged|QAbstractItemView::EditKeyPressed|QAbstractItemView::NoEditTriggers</set>
+              </property>
+              <item>
+               <property name="text" >
+                <string>Crop 1</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Crop 2</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Crop 3</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Crop 4</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Crop 5</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pbnNewPlant" >
+              <property name="sizePolicy" >
+               <sizepolicy>
+                <hsizetype>5</hsizetype>
+                <vsizetype>0</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text" >
+               <string>Manage...</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </widget>
-         </item>
-         <item>
-          <widget class="QListWidget" name="listWidgetPlants" >
-           <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>13</hsizetype>
-             <vsizetype>7</vsizetype>
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="editTriggers" >
-            <set>QAbstractItemView::CurrentChanged|QAbstractItemView::EditKeyPressed|QAbstractItemView::NoEditTriggers</set>
-           </property>
-           <item>
-            <property name="text" >
-             <string>Crop 1</string>
-            </property>
-           </item>
-           <item>
-            <property name="text" >
-             <string>Crop 2</string>
-            </property>
-           </item>
-           <item>
-            <property name="text" >
-             <string>Crop 3</string>
-            </property>
-           </item>
-           <item>
-            <property name="text" >
-             <string>Crop 4</string>
-            </property>
-           </item>
-           <item>
-            <property name="text" >
-             <string>Crop 5</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pbnNewPlant" >
-           <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>5</hsizetype>
-             <vsizetype>0</vsizetype>
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text" >
-            <string>Manage...</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QWidget" name="layoutWidget" >
-        <layout class="QVBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
-         </property>
-         <property name="spacing" >
-          <number>6</number>
-         </property>
-         <item>
           <widget class="QTextBrowser" name="textBrowserPlantDefinition" >
            <property name="sizePolicy" >
             <sizepolicy>
@@ -1061,97 +1056,96 @@ p, li { white-space: pre-wrap; }
             </sizepolicy>
            </property>
           </widget>
-         </item>
-        </layout>
-       </widget>
-      </widget>
-      <widget class="QSplitter" name="splitter_7" >
-       <property name="geometry" >
-        <rect>
-         <x>318</x>
-         <y>9</y>
-         <width>302</width>
-         <height>235</height>
-        </rect>
-       </property>
-       <property name="orientation" >
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <widget class="QWidget" name="layoutWidget" >
-        <layout class="QVBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
-         </property>
-         <property name="spacing" >
-          <number>6</number>
-         </property>
-         <item>
-          <widget class="QLabel" name="label" >
-           <property name="text" >
-            <string>Parameters</string>
-           </property>
-           <property name="alignment" >
-            <set>Qt::AlignCenter</set>
-           </property>
+         </widget>
+         <widget class="QSplitter" name="splitter_7" >
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <widget class="QWidget" name="layoutWidget" >
+           <layout class="QVBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label" >
+              <property name="text" >
+               <string>Parameters</string>
+              </property>
+              <property name="alignment" >
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QListWidget" name="listWidgetPlantParameters" >
+              <property name="sizePolicy" >
+               <sizepolicy>
+                <hsizetype>13</hsizetype>
+                <vsizetype>7</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <item>
+               <property name="text" >
+                <string>Setting 1</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Setting 2</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Setting 3</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Setting 4</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Setting 5</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pbnNewPlantParameter" >
+              <property name="text" >
+               <string>Manage...</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pbnLinkPlant" >
+              <property name="text" >
+               <string>Link</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </widget>
-         </item>
-         <item>
-          <widget class="QListWidget" name="listWidgetPlantParameters" >
+          <widget class="QTextBrowser" name="textBrowserPlantParameterDefinition" >
            <property name="sizePolicy" >
             <sizepolicy>
-             <hsizetype>13</hsizetype>
-             <vsizetype>7</vsizetype>
+             <hsizetype>7</hsizetype>
+             <vsizetype>3</vsizetype>
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
-           <item>
-            <property name="text" >
-             <string>Setting 1</string>
-            </property>
-           </item>
-           <item>
-            <property name="text" >
-             <string>Setting 2</string>
-            </property>
-           </item>
-           <item>
-            <property name="text" >
-             <string>Setting 3</string>
-            </property>
-           </item>
-           <item>
-            <property name="text" >
-             <string>Setting 4</string>
-            </property>
-           </item>
-           <item>
-            <property name="text" >
-             <string>Setting 5</string>
-            </property>
-           </item>
           </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pbnNewPlantParameter" >
-           <property name="text" >
-            <string>Manage...</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QTextBrowser" name="textBrowserPlantParameterDefinition" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>7</hsizetype>
-          <vsizetype>3</vsizetype>
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-       </widget>
-      </widget>
+         </widget>
+        </widget>
+       </item>
+      </layout>
      </widget>
      <widget class="QWidget" name="animals_tab" >
       <attribute name="title" >
@@ -1165,86 +1159,86 @@ p, li { white-space: pre-wrap; }
         <number>6</number>
        </property>
        <item row="0" column="0" >
-        <layout class="QVBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
+        <widget class="QSplitter" name="splitter_9" >
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
          </property>
-         <property name="spacing" >
-          <number>6</number>
-         </property>
-         <item>
-          <widget class="QLabel" name="label_8" >
-           <property name="text" >
-            <string>Animals</string>
-           </property>
-           <property name="alignment" >
-            <set>Qt::AlignCenter</set>
-           </property>
+         <widget class="QSplitter" name="splitter_8" >
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <widget class="QWidget" name="" >
+           <layout class="QVBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_8" >
+              <property name="text" >
+               <string>Animals</string>
+              </property>
+              <property name="alignment" >
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QListWidget" name="listWidgetAnimals" >
+              <property name="sizePolicy" >
+               <sizepolicy>
+                <hsizetype>13</hsizetype>
+                <vsizetype>7</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <item>
+               <property name="text" >
+                <string>Animal 1</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Animal 2</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Animal 3</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Animal 4</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Animal 5</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pbnNewAnimal" >
+              <property name="sizePolicy" >
+               <sizepolicy>
+                <hsizetype>0</hsizetype>
+                <vsizetype>0</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text" >
+               <string>Manage...</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </widget>
-         </item>
-         <item>
-          <widget class="QListWidget" name="listWidgetAnimals" >
-           <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>13</hsizetype>
-             <vsizetype>7</vsizetype>
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <item>
-            <property name="text" >
-             <string>Animal 1</string>
-            </property>
-           </item>
-           <item>
-            <property name="text" >
-             <string>Animal 2</string>
-            </property>
-           </item>
-           <item>
-            <property name="text" >
-             <string>Animal 3</string>
-            </property>
-           </item>
-           <item>
-            <property name="text" >
-             <string>Animal 4</string>
-            </property>
-           </item>
-           <item>
-            <property name="text" >
-             <string>Animal 5</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pbnNewAnimal" >
-           <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>0</hsizetype>
-             <vsizetype>0</vsizetype>
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text" >
-            <string>Manage...</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item row="0" column="1" >
-        <layout class="QVBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
-         </property>
-         <property name="spacing" >
-          <number>6</number>
-         </property>
-         <item>
           <widget class="QTextBrowser" name="textBrowserAnimalDefinition" >
            <property name="sizePolicy" >
             <sizepolicy>
@@ -1255,87 +1249,92 @@ p, li { white-space: pre-wrap; }
             </sizepolicy>
            </property>
           </widget>
-         </item>
-        </layout>
-       </item>
-       <item row="0" column="2" >
-        <widget class="QSplitter" name="splitter_3" >
-         <property name="orientation" >
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <widget class="QWidget" name="layoutWidget" >
-          <layout class="QVBoxLayout" >
-           <property name="margin" >
-            <number>0</number>
-           </property>
-           <property name="spacing" >
-            <number>6</number>
-           </property>
-           <item>
-            <widget class="QLabel" name="label_7" >
-             <property name="text" >
-              <string>Parameters</string>
-             </property>
-             <property name="alignment" >
-              <set>Qt::AlignCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QListWidget" name="listWidgetAnimalParameters" >
-             <property name="sizePolicy" >
-              <sizepolicy>
-               <hsizetype>13</hsizetype>
-               <vsizetype>7</vsizetype>
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <item>
-              <property name="text" >
-               <string>Setting 1</string>
-              </property>
-             </item>
-             <item>
-              <property name="text" >
-               <string>Setting 2</string>
-              </property>
-             </item>
-             <item>
-              <property name="text" >
-               <string>Setting 3</string>
-              </property>
-             </item>
-             <item>
-              <property name="text" >
-               <string>Setting 4</string>
-              </property>
-             </item>
-             <item>
-              <property name="text" >
-               <string>Setting 5</string>
-              </property>
-             </item>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="pbnNewAnimalParameter" >
-             <property name="text" >
-              <string>Manage...</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
          </widget>
-         <widget class="QTextBrowser" name="textBrowserAnimalParameterDefinition" >
-          <property name="sizePolicy" >
-           <sizepolicy>
-            <hsizetype>7</hsizetype>
-            <vsizetype>3</vsizetype>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
+         <widget class="QSplitter" name="splitter_3" >
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
           </property>
+          <widget class="QWidget" name="layoutWidget" >
+           <layout class="QVBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_7" >
+              <property name="text" >
+               <string>Parameters</string>
+              </property>
+              <property name="alignment" >
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QListWidget" name="listWidgetAnimalParameters" >
+              <property name="sizePolicy" >
+               <sizepolicy>
+                <hsizetype>13</hsizetype>
+                <vsizetype>7</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <item>
+               <property name="text" >
+                <string>Setting 1</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Setting 2</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Setting 3</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Setting 4</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Setting 5</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pbnNewAnimalParameter" >
+              <property name="text" >
+               <string>Manage...</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pbnLinkAnimal" >
+              <property name="text" >
+               <string>Link</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QTextBrowser" name="textBrowserAnimalParameterDefinition" >
+           <property name="sizePolicy" >
+            <sizepolicy>
+             <hsizetype>7</hsizetype>
+             <vsizetype>3</vsizetype>
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
          </widget>
         </widget>
        </item>
