@@ -54,7 +54,7 @@
       </size>
      </property>
      <property name="currentIndex" >
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="main_tab" >
       <attribute name="title" >
@@ -465,6 +465,9 @@ p, li { white-space: pre-wrap; }
             </property>
             <property name="text" >
              <string>Euclidean</string>
+            </property>
+            <property name="checked" >
+             <bool>true</bool>
             </property>
            </widget>
           </item>
