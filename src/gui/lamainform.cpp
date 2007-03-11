@@ -124,15 +124,31 @@ void LaMainForm::on_pbnNewPlant_clicked()
 }
 void LaMainForm::on_pbnNewPlantParameter_clicked()
 {
-  LaPlantParameterManager myPlantParameterManager;
-  myPlantParameterManager.exec();
-  loadPlantParameters();
+  int myCurrentPlant=listWidgetPlants->currentRow();
+  if (myCurrentPlant >= 0)
+  {
+    LaPlantParameterManager myPlantParameterManager;
+    myPlantParameterManager.exec();
+    loadPlantParameters();
+  }
+  else
+  {
+    //
+  }
 }
 void LaMainForm::on_pbnNewAnimalParameter_clicked()
 {
-  LaAnimalParameterManager myAnimalParameterManager;
-  myAnimalParameterManager.exec();
-  loadAnimalParameters();
+  int myCurrentAnimal=listWidgetAnimals->currentRow();
+  if (myCurrentAnimal >= 0)
+  {
+    LaAnimalParameterManager myAnimalParameterManager;
+    myAnimalParameterManager.exec();
+    loadAnimalParameters();
+  }
+  else
+  {
+    //
+  }
 }
 /**
   * The above launches new forms for plants and animals

@@ -1,4 +1,4 @@
-# Doxyfile 1.4.1-KDevelop
+# Doxyfile 1.5.1-KDevelop
 
 #---------------------------------------------------------------------------
 # Project related configuration options
@@ -32,11 +32,13 @@ JAVADOC_AUTOBRIEF      = NO
 MULTILINE_CPP_IS_BRIEF = NO
 DETAILS_AT_TOP         = NO
 INHERIT_DOCS           = YES
-DISTRIBUTE_GROUP_DOC   = NO
+SEPARATE_MEMBER_PAGES  = NO
 TAB_SIZE               = 8
 ALIASES                = 
 OPTIMIZE_OUTPUT_FOR_C  = NO
 OPTIMIZE_OUTPUT_JAVA   = NO
+BUILTIN_STL_SUPPORT    = NO
+DISTRIBUTE_GROUP_DOC   = NO
 SUBGROUPING            = YES
 #---------------------------------------------------------------------------
 # Build related configuration options
@@ -127,7 +129,7 @@ FILE_PATTERNS          = *.c \
                          *.moc \
                          *.xpm \
                          *.dox
-RECURSIVE              = yes
+RECURSIVE              = YES
 EXCLUDE                = 
 EXCLUDE_SYMLINKS       = NO
 EXCLUDE_PATTERNS       = 
@@ -146,6 +148,8 @@ INLINE_SOURCES         = NO
 STRIP_CODE_COMMENTS    = YES
 REFERENCED_BY_RELATION = YES
 REFERENCES_RELATION    = YES
+REFERENCES_LINK_SOURCE = YES
+USE_HTAGS              = NO
 VERBATIM_HEADERS       = YES
 #---------------------------------------------------------------------------
 # configuration options related to the alphabetical class index
@@ -207,7 +211,7 @@ MAN_LINKS              = NO
 #---------------------------------------------------------------------------
 # configuration options related to the XML output
 #---------------------------------------------------------------------------
-GENERATE_XML           = yes
+GENERATE_XML           = YES
 XML_OUTPUT             = xml
 XML_SCHEMA             = 
 XML_DTD                = 
@@ -248,15 +252,16 @@ PERL_PATH              = /usr/bin/perl
 #---------------------------------------------------------------------------
 CLASS_DIAGRAMS         = YES
 HIDE_UNDOC_RELATIONS   = YES
-HAVE_DOT               = NO
+HAVE_DOT               = YES
 CLASS_GRAPH            = YES
 COLLABORATION_GRAPH    = YES
 GROUP_GRAPHS           = YES
-UML_LOOK               = NO
-TEMPLATE_RELATIONS     = NO
+UML_LOOK               = YES
+TEMPLATE_RELATIONS     = YES
 INCLUDE_GRAPH          = YES
 INCLUDED_BY_GRAPH      = YES
-CALL_GRAPH             = NO
+CALL_GRAPH             = YES
+CALLER_GRAPH           = YES
 GRAPHICAL_HIERARCHY    = YES
 DIRECTORY_GRAPH        = YES
 DOT_IMAGE_FORMAT       = png
