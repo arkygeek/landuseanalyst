@@ -5,7 +5,7 @@
 #---------------------------------------------------------------------------
 PROJECT_NAME           = landuseanalyst.kdevelop
 PROJECT_NUMBER         = $VERSION$
-OUTPUT_DIRECTORY       = 
+OUTPUT_DIRECTORY       = docs
 CREATE_SUBDIRS         = NO
 OUTPUT_LANGUAGE        = English
 USE_WINDOWS_ENCODING   = NO
@@ -24,8 +24,8 @@ ABBREVIATE_BRIEF       = "The $name class" \
                          the
 ALWAYS_DETAILED_SEC    = NO
 INLINE_INHERITED_MEMB  = NO
-FULL_PATH_NAMES        = YES
-STRIP_FROM_PATH        = /home/arkygeek/
+FULL_PATH_NAMES        = NO
+STRIP_FROM_PATH        = 
 STRIP_FROM_INC_PATH    = 
 SHORT_NAMES            = NO
 JAVADOC_AUTOBRIEF      = NO
@@ -80,7 +80,7 @@ WARN_LOGFILE           =
 #---------------------------------------------------------------------------
 # configuration options related to the input files
 #---------------------------------------------------------------------------
-INPUT                  = /home/arkygeek/devel/landuseanalyst
+INPUT                  = .
 FILE_PATTERNS          = *.c \
                          *.cc \
                          *.cxx \
