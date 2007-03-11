@@ -49,7 +49,6 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
   void on_pbnNewAnimal_clicked();
   void on_pbnNewPlantParameter_clicked();
   void on_pbnNewAnimalParameter_clicked();
-  void on_listWidgetAnimals_itemClicked(QListWidgetItem * theItem);
   void on_listWidgetPlants_itemClicked(QListWidgetItem * theItem);
   void on_listWidgetAnimalParameters_itemClicked(QListWidgetItem * theItem);
   void on_listWidgetPlantParameters_itemClicked(QListWidgetItem * theItem);
@@ -77,6 +76,7 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
   void makePathDistanceCost(int theX, int theY);
   void writeMetaData(QString theValue);
   void doBaseCalculations();
+  void animalCellClicked(int theRow, int theColumn);
 
   private:
     void readSettings();

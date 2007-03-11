@@ -51,6 +51,8 @@ LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
   connect(treeHelp, SIGNAL(currentItemChanged(QTreeWidgetItem * ,QTreeWidgetItem *)),
       this, SLOT(helpItemClicked(QTreeWidgetItem * ,QTreeWidgetItem *)));
   connect(pushButtonExit, SIGNAL(clicked()), qApp, SLOT(quit()));
+  connect(tblAnimals, SIGNAL(cellClicked( int,int)),
+      this, SLOT(animalCellClicked( int,int)));
 
   lblVersion->setText(QString("Version: %1").arg(VERSION) + " " + QString("$Revision$").replace("$",""));
   loadAnimals();
@@ -138,17 +140,17 @@ void LaMainForm::on_pbnNewPlantParameter_clicked()
 }
 void LaMainForm::on_pbnNewAnimalParameter_clicked()
 {
-  int myCurrentAnimal=listWidgetAnimals->currentRow();
-  if (myCurrentAnimal >= 0)
-  {
+  //int myCurrentAnimal=listWidgetAnimals->currentRow();
+  //if (myCurrentAnimal >= 0)
+  //{
     LaAnimalParameterManager myAnimalParameterManager;
     myAnimalParameterManager.exec();
     loadAnimalParameters();
-  }
-  else
-  {
+  //}
+  //else
+  //{
     //
-  }
+  //}
 }
 /**
   * The above launches new forms for plants and animals
@@ -157,7 +159,14 @@ void LaMainForm::on_pbnNewAnimalParameter_clicked()
 
 void LaMainForm::loadAnimals()
 {
-  listWidgetAnimals->clear();
+  tblAnimals->clear();
+  tblAnimals->setRowCount(0);
+  tblAnimals->setColumnCount(3);
+  int myCurrentRow=0;
+  
+
+  
+  //listWidgetAnimals->clear();
   mAnimalsMap = LaUtils::getAvailableAnimals();
   QMapIterator<QString, LaAnimal> myIterator(mAnimalsMap);
   while (myIterator.hasNext())
@@ -166,12 +175,27 @@ void LaMainForm::loadAnimals()
     LaAnimal myAnimal = myIterator.value();
     QString myGuid = myAnimal.guid();
     QString myName = myAnimal.name();
-    //display an icon indicating if the user defined or system supplied
     QIcon myIcon;
     myIcon.addFile(":/localdata.png");
-    QListWidgetItem * mypItem = new QListWidgetItem(myIcon,myName);
-    mypItem->setData(Qt::UserRole,myGuid);
-    listWidgetAnimals->addItem(mypItem);
+    //
+    // old stuff for populating the list widget - to be removed
+    //
+    //display an icon indicating if the user defined or system supplied
+    //QListWidgetItem * mypItem = new QListWidgetItem(myIcon,myName);
+    //mypItem->setData(Qt::UserRole,myGuid);
+    //listWidgetAnimals->addItem(mypItem);
+
+    //
+    // New stuff for populating the table
+    //
+    tblAnimals->insertRow(myCurrentRow);
+    // Add details to the new row
+    QTableWidgetItem *mypFileNameItem= new QTableWidgetItem(myGuid);
+    tblAnimals->setItem(myCurrentRow, 0, mypFileNameItem);
+    QTableWidgetItem *mypNameItem = new QTableWidgetItem(myAnimal.name());
+    tblAnimals->setItem(myCurrentRow, 1, mypNameItem);
+    mypNameItem->setIcon(myIcon);
+    myCurrentRow++;
   }
 }
 void LaMainForm::loadPlants()
@@ -232,15 +256,14 @@ void LaMainForm::loadPlantParameters()
   }
 }
 
-
-
-void LaMainForm::on_listWidgetAnimals_itemClicked(QListWidgetItem * theItem)
+void LaMainForm::animalCellClicked(int theRow, int theColumn)
 {
-  QString myGuid = theItem->data(Qt::UserRole).toString();
+  qDebug("LaMainForm::animalCellClicked");
+  QString myGuid = tblAnimals->item(tblAnimals->currentRow(),0)->text();
   LaAnimal myAnimal = mAnimalsMap[myGuid];
   textBrowserAnimalDefinition->setHtml(myAnimal.toHtml());
-  //textBrowserAnimalDefinition->setPlainText(myAnimal.toText());
 }
+
 void LaMainForm::on_listWidgetPlants_itemClicked(QListWidgetItem * theItem)
 {
   QString myGuid = theItem->data(Qt::UserRole).toString();
