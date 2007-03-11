@@ -56,7 +56,7 @@ ELSE (APPLE)
   INSTALL(TARGETS la_core
     RUNTIME DESTINATION ${BIN_DIR}
     LIBRARY DESTINATION ${BIN_DIR})
-END (APPLE)
+ENDIF (APPLE)
 
 # expect that classes are being EXPORTED for the lib
 IF (WIN32)
