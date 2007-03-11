@@ -9,18 +9,11 @@ include(${QT_USE_FILE})
 # the variable "landuseanalyst_SRCS" contains all .cpp files of this project
 set(landuseanalyst_SRCS
     main.cpp
-    lautils.cpp
-    laguid.cpp
     lamainform.cpp
     laplantmanager.cpp
-    laplant.cpp
     laplantparametermanager.cpp
-    laplantparameter.cpp
     laanimalmanager.cpp
-    laanimal.cpp
     laanimalparametermanager.cpp
-    laanimalparameter.cpp
-    laserialisable.cpp
    )
 SET(landuseanalyst_UIS
     ../ui/lamainformbase.ui
@@ -58,6 +51,7 @@ QT4_ADD_RESOURCES(landuseanalyst_RCC_SRCS ${landuseanalyst_RCCS})
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/../lib
     )
 
 # application icon
@@ -123,5 +117,7 @@ ENDIF( APPLE )
 
 # link the "landuseanalyst" target against the Qt libraries. which libraries
 # exactly, is defined by the "include(${QT_USE_FILE})" line above, which sets up this variable.
-target_link_libraries(landuseanalyst ${QT_LIBRARIES})
-
+target_link_libraries(landuseanalyst 
+     ${QT_LIBRARIES}
+     la_core
+     )

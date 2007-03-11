@@ -7,6 +7,7 @@ find_package(Qt4 REQUIRED) # find and setup Qt4 for this project
 # tell cmake to process CMakeLists.txt in that subdirectory
 #add_subdirectory(resources)
 #add_subdirectory(ui)
+add_subdirectory(lib)
 add_subdirectory(gui)
 
 IF (APPLE)
