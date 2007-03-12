@@ -36,6 +36,7 @@
 #include <QProcess>
 #include <QStringList>
 #include <QListWidget>
+#include <QComboBox>
 
 LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
   : QDialog(parent,fl)
@@ -168,6 +169,7 @@ void LaMainForm::loadAnimals()
   
   //listWidgetAnimals->clear();
   mAnimalsMap = LaUtils::getAvailableAnimals();
+  mAnimalParametersMap = LaUtils::getAvailableAnimalParameters();
   QMapIterator<QString, LaAnimal> myIterator(mAnimalsMap);
   while (myIterator.hasNext())
   {
@@ -195,6 +197,19 @@ void LaMainForm::loadAnimals()
     QTableWidgetItem *mypNameItem = new QTableWidgetItem(myAnimal.name());
     tblAnimals->setItem(myCurrentRow, 1, mypNameItem);
     mypNameItem->setIcon(myIcon);
+    //add the animal parameters combo to the form
+    QComboBox * mypCombo = new QComboBox(this);
+    QMapIterator<QString, LaAnimalParameter> myIterator(mAnimalParametersMap);
+    while (myIterator.hasNext())
+    {
+      myIterator.next();
+      LaAnimalParameter myAnimalParameter = myIterator.value();
+      QString myGuid = myAnimalParameter.guid();
+      QString myName = myAnimalParameter.name();
+      //                icon, disp name, userdata
+      mypCombo->addItem(myIcon,myName,myGuid);
+    }
+    tblAnimals->setCellWidget ( myCurrentRow, 2, mypCombo);
     myCurrentRow++;
   }
 }
