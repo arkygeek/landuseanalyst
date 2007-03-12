@@ -192,9 +192,11 @@ void LaMainForm::loadAnimals()
     //
     tblAnimals->insertRow(myCurrentRow);
     // Add details to the new row
-    QTableWidgetItem *mypFileNameItem= new QTableWidgetItem(myGuid);
-    tblAnimals->setItem(myCurrentRow, 0, mypFileNameItem);
+    QTableWidgetItem *mypUsedItem= new QTableWidgetItem(tr("Used?"));
+    mypUsedItem->setCheckState(Qt::Checked);
+    tblAnimals->setItem(myCurrentRow, 0, mypUsedItem);
     QTableWidgetItem *mypNameItem = new QTableWidgetItem(myAnimal.name());
+    mypNameItem->setData(Qt::UserRole,myGuid);
     tblAnimals->setItem(myCurrentRow, 1, mypNameItem);
     mypNameItem->setIcon(myIcon);
     //add the animal parameters combo to the form
@@ -274,7 +276,7 @@ void LaMainForm::loadPlantParameters()
 void LaMainForm::animalCellClicked(int theRow, int theColumn)
 {
   qDebug("LaMainForm::animalCellClicked");
-  QString myGuid = tblAnimals->item(tblAnimals->currentRow(),0)->text();
+  QString myGuid = tblAnimals->item(tblAnimals->currentRow(),1)->data(Qt::UserRole).toString();
   LaAnimal myAnimal = mAnimalsMap[myGuid];
   textBrowserAnimalDefinition->setHtml(myAnimal.toHtml());
 }
