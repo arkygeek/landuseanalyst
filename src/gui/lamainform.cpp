@@ -58,7 +58,6 @@ LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
   lblVersion->setText(QString("Version: %1").arg(VERSION) + " " + QString("$Revision$").replace("$",""));
   loadAnimals();
   loadPlants();
-  loadAnimalParameters();
   loadPlantParameters();
 }
 
@@ -146,7 +145,6 @@ void LaMainForm::on_pbnNewAnimalParameter_clicked()
   //{
     LaAnimalParameterManager myAnimalParameterManager;
     myAnimalParameterManager.exec();
-    loadAnimalParameters();
   //}
   //else
   //{
@@ -234,25 +232,6 @@ void LaMainForm::loadPlants()
     listWidgetPlants->addItem(mypItem);
   }
 }
-void LaMainForm::loadAnimalParameters()
-{
-  listWidgetAnimalParameters->clear();
-  mAnimalParametersMap = LaUtils::getAvailableAnimalParameters();
-  QMapIterator<QString, LaAnimalParameter> myIterator(mAnimalParametersMap);
-  while (myIterator.hasNext())
-  {
-    myIterator.next();
-    LaAnimalParameter myAnimalParameter = myIterator.value();
-    QString myGuid = myAnimalParameter.guid();
-    QString myName = myAnimalParameter.name();
-    //display an icon indicating if the user defined or system supplied
-    QIcon myIcon;
-    myIcon.addFile(":/localdata.png");
-    QListWidgetItem * mypItem = new QListWidgetItem(myIcon,myName);
-    mypItem->setData(Qt::UserRole,myGuid);
-    listWidgetAnimalParameters->addItem(mypItem);
-  }
-}
 void LaMainForm::loadPlantParameters()
 {
   listWidgetPlantParameters->clear();
@@ -279,6 +258,10 @@ void LaMainForm::animalCellClicked(int theRow, int theColumn)
   QString myGuid = tblAnimals->item(tblAnimals->currentRow(),1)->data(Qt::UserRole).toString();
   LaAnimal myAnimal = mAnimalsMap[myGuid];
   textBrowserAnimalDefinition->setHtml(myAnimal.toHtml());
+  QComboBox * mypCombo=dynamic_cast<QComboBox *>(tblAnimals->cellWidget(tblAnimals->currentRow(),2));
+  myGuid = mypCombo->itemData(mypCombo->currentIndex(),Qt::UserRole).toString();
+  LaAnimalParameter myAnimalParameter = mAnimalParametersMap[myGuid];
+  textBrowserAnimalParameterDefinition->setHtml(myAnimalParameter.toHtml());
 }
 
 void LaMainForm::on_listWidgetPlants_itemClicked(QListWidgetItem * theItem)
@@ -287,13 +270,7 @@ void LaMainForm::on_listWidgetPlants_itemClicked(QListWidgetItem * theItem)
   LaPlant myPlant = mPlantsMap[myGuid];
   textBrowserPlantDefinition->setHtml(myPlant.toHtml());
 }
-void LaMainForm::on_listWidgetAnimalParameters_itemClicked(QListWidgetItem * theItem)
-{
-  QString myGuid = theItem->data(Qt::UserRole).toString();
-  LaAnimalParameter myAnimalParameter = mAnimalParametersMap[myGuid];
-  textBrowserAnimalParameterDefinition->setHtml(myAnimalParameter.toHtml());
-  //textBrowserAnimalParameterDefinition->setPlainText(myAnimalParameter.toText());
-}
+
 void LaMainForm::on_listWidgetPlantParameters_itemClicked(QListWidgetItem * theItem)
 {
   QString myGuid = theItem->data(Qt::UserRole).toString();

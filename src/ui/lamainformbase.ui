@@ -1173,66 +1173,14 @@ p, li { white-space: pre-wrap; }
          </property>
         </widget>
        </item>
-       <item row="2" column="0" >
-        <widget class="QPushButton" name="pbnNewAnimal" >
-         <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>0</hsizetype>
-           <vsizetype>0</vsizetype>
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text" >
-          <string>Manage...</string>
-         </property>
-        </widget>
-       </item>
        <item row="2" column="1" >
         <widget class="QPushButton" name="pbnNewAnimalParameter" >
          <property name="text" >
-          <string>Manage...</string>
+          <string>Manage Animal Parameters ...</string>
          </property>
         </widget>
        </item>
        <item row="1" column="1" >
-        <widget class="QListWidget" name="listWidgetAnimalParameters" >
-         <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>13</hsizetype>
-           <vsizetype>7</vsizetype>
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <item>
-          <property name="text" >
-           <string>Setting 1</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>Setting 2</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>Setting 3</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>Setting 4</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>Setting 5</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item rowspan="2" row="1" column="2" >
         <widget class="QTextBrowser" name="textBrowserAnimalParameterDefinition" >
          <property name="sizePolicy" >
           <sizepolicy>
@@ -1244,7 +1192,7 @@ p, li { white-space: pre-wrap; }
          </property>
         </widget>
        </item>
-       <item row="0" column="0" colspan="3" >
+       <item row="0" column="0" colspan="2" >
         <widget class="QTableWidget" name="tblAnimals" >
          <column>
           <property name="text" >
@@ -1261,6 +1209,21 @@ p, li { white-space: pre-wrap; }
            <string>Parameters</string>
           </property>
          </column>
+        </widget>
+       </item>
+       <item row="2" column="0" >
+        <widget class="QPushButton" name="pbnNewAnimal" >
+         <property name="sizePolicy" >
+          <sizepolicy>
+           <hsizetype>1</hsizetype>
+           <vsizetype>0</vsizetype>
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text" >
+          <string>Manage Animals ...</string>
+         </property>
         </widget>
        </item>
       </layout>

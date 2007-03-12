@@ -50,7 +50,6 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
   void on_pbnNewPlantParameter_clicked();
   void on_pbnNewAnimalParameter_clicked();
   void on_listWidgetPlants_itemClicked(QListWidgetItem * theItem);
-  void on_listWidgetAnimalParameters_itemClicked(QListWidgetItem * theItem);
   void on_listWidgetPlantParameters_itemClicked(QListWidgetItem * theItem);
   /** Refresh the animals list, remembering which were checked
    * from before */
@@ -58,9 +57,6 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
   /** Refresh the plants list, remembering which were checked
    * from before */
   void loadPlants();
-  /** Refresh the animals list, remembering which were checked
-   * from before */
-  void loadAnimalParameters();
   /** Refresh the plants list, remembering which were checked
    * from before */
   void loadPlantParameters();
