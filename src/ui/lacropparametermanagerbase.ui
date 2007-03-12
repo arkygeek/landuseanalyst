@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>LaPlantParameterManagerBase</class>
- <widget class="QWidget" name="LaPlantParameterManagerBase" >
+ <class>LaCropParameterManagerBase</class>
+ <widget class="QWidget" name="LaCropParameterManagerBase" >
   <property name="geometry" >
    <rect>
     <x>0</x>
@@ -626,7 +626,7 @@ p, li { white-space: pre-wrap; }
   <connection>
    <sender>pbnClose</sender>
    <signal>pressed()</signal>
-   <receiver>LaPlantParameterManagerBase</receiver>
+   <receiver>LaCropParameterManagerBase</receiver>
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel" >
