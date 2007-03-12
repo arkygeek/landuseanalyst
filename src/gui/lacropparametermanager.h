@@ -51,8 +51,6 @@ class LaCropParameterManager : public QDialog, private Ui::LaCropParameterManage
       void on_pbnApply_clicked();
       void resizeEvent(QResizeEvent*);
 
-
-
   private:
       void refreshCropParameterTable(QString theGuid=0);
       void selectCropParameter(QString theFileName);
