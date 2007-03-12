@@ -37,6 +37,7 @@
 #include <QStringList>
 #include <QListWidget>
 #include <QComboBox>
+#include <QHeaderView>
 
 LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
   : QDialog(parent,fl)
@@ -56,6 +57,9 @@ LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
       this, SLOT(animalCellClicked( int,int)));
 
   lblVersion->setText(QString("Version: %1").arg(VERSION) + " " + QString("$Revision$").replace("$",""));
+  tblAnimals->horizontalHeader()->hide();
+  tblAnimals->verticalHeader()->hide();
+  tblAnimals->horizontalHeader()->setResizeMode(1,QHeaderView::Stretch);
   loadAnimals();
   loadPlants();
   loadPlantParameters();

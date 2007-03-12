@@ -1161,57 +1161,77 @@ p, li { white-space: pre-wrap; }
        <property name="spacing" >
         <number>6</number>
        </property>
-       <item row="1" column="0" >
-        <widget class="QTextBrowser" name="textBrowserAnimalDefinition" >
-         <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>7</hsizetype>
-           <vsizetype>3</vsizetype>
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1" >
-        <widget class="QPushButton" name="pbnNewAnimalParameter" >
-         <property name="text" >
-          <string>Manage Animal Parameters ...</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1" >
-        <widget class="QTextBrowser" name="textBrowserAnimalParameterDefinition" >
-         <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>7</hsizetype>
-           <vsizetype>3</vsizetype>
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
        <item row="0" column="0" colspan="2" >
-        <widget class="QTableWidget" name="tblAnimals" >
-         <column>
-          <property name="text" >
-           <string>Use?</string>
+        <widget class="QSplitter" name="splitter_3" >
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <widget class="QTableWidget" name="tblAnimals" >
+          <property name="alternatingRowColors" >
+           <bool>true</bool>
           </property>
-         </column>
-         <column>
-          <property name="text" >
-           <string>Animal</string>
+          <property name="selectionMode" >
+           <enum>QAbstractItemView::SingleSelection</enum>
           </property>
-         </column>
-         <column>
-          <property name="text" >
-           <string>Parameters</string>
+          <property name="selectionBehavior" >
+           <enum>QAbstractItemView::SelectRows</enum>
           </property>
-         </column>
+          <property name="showGrid" >
+           <bool>false</bool>
+          </property>
+          <column>
+           <property name="text" >
+            <string>Use?</string>
+           </property>
+          </column>
+          <column>
+           <property name="text" >
+            <string>Animal</string>
+           </property>
+          </column>
+          <column>
+           <property name="text" >
+            <string>Parameters</string>
+           </property>
+          </column>
+         </widget>
+         <widget class="QWidget" name="" >
+          <layout class="QHBoxLayout" >
+           <property name="margin" >
+            <number>0</number>
+           </property>
+           <property name="spacing" >
+            <number>6</number>
+           </property>
+           <item>
+            <widget class="QTextBrowser" name="textBrowserAnimalDefinition" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>7</hsizetype>
+               <vsizetype>3</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTextBrowser" name="textBrowserAnimalParameterDefinition" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>7</hsizetype>
+               <vsizetype>3</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
         </widget>
        </item>
-       <item row="2" column="0" >
+       <item row="1" column="0" >
         <widget class="QPushButton" name="pbnNewAnimal" >
          <property name="sizePolicy" >
           <sizepolicy>
@@ -1223,6 +1243,13 @@ p, li { white-space: pre-wrap; }
          </property>
          <property name="text" >
           <string>Manage Animals ...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1" >
+        <widget class="QPushButton" name="pbnNewAnimalParameter" >
+         <property name="text" >
+          <string>Manage Animal Parameters ...</string>
          </property>
         </widget>
        </item>
