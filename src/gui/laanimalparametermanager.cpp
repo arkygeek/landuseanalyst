@@ -99,7 +99,7 @@ void LaAnimalParameterManager::refreshAnimalParameterTable(QString theGuid)
     //qDebug(myAnimalParameter.toText().toLocal8Bit());
     if (theGuid.isEmpty())
     {
-      qDebug("No default active row was requested.Assigning to myAnimalParameter.guid()!");;
+      qDebug("No default active row was requested.Assigning to myAnimalParameter.guid()!");
       theGuid=myAnimalParameter.guid();
     }
     if (myAnimalParameter.guid()==theGuid)

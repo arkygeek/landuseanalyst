@@ -40,26 +40,22 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
   public slots:
   void on_horizontalSliderMeat_valueChanged(int theValue);
   void on_horizontalSliderDiet_valueChanged(int theValue);
-  void on_horizontalSliderPlant_valueChanged(int theValue);
+  void on_horizontalSliderCrop_valueChanged(int theValue);
   void on_pushButtonDietBreakdown_clicked();
   void on_pushButtonRun_clicked();
   void on_pushButtonLoad_clicked();
   void on_pushButtonSave_clicked();
-  void on_pbnNewPlant_clicked();
+  void on_pbnNewCrop_clicked();
   void on_pbnNewAnimal_clicked();
-  void on_pbnNewPlantParameter_clicked();
+  void on_pbnNewCropParameter_clicked();
   void on_pbnNewAnimalParameter_clicked();
-  void on_listWidgetPlants_itemClicked(QListWidgetItem * theItem);
-  void on_listWidgetPlantParameters_itemClicked(QListWidgetItem * theItem);
+
   /** Refresh the animals list, remembering which were checked
    * from before */
   void loadAnimals();
-  /** Refresh the plants list, remembering which were checked
+  /** Refresh the crops list, remembering which were checked
    * from before */
-  void loadPlants();
-  /** Refresh the plants list, remembering which were checked
-   * from before */
-  void loadPlantParameters();
+  void loadCrops();
 
   private slots:
   void helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetItem * thepOldItem);
@@ -73,14 +69,14 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
   void writeMetaData(QString theValue);
   void doBaseCalculations();
   void animalCellClicked(int theRow, int theColumn);
-
+  void cropCellClicked(int theRow, int theColumn);
   private:
     void readSettings();
     void writeSettings();
     LaUtils::AnimalMap mAnimalsMap;
-    LaUtils::PlantMap mPlantsMap;
+    LaUtils::CropMap mCropsMap;
     LaUtils::AnimalParameterMap mAnimalParametersMap;
-    LaUtils::PlantParameterMap mPlantParametersMap;
+    LaUtils::CropParameterMap mCropParametersMap;
 };
 
 #endif //LAMAINFORM_H

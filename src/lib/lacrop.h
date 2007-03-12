@@ -1,5 +1,5 @@
 /***************************************************************************
-                          laplant.h  -  A plant class
+                          lacrop.h  -  A crop class
                              -------------------
     begin                : March 2006
     copyright            : (C) 2003 by Tim Sutton  tim@linfiniti.com
@@ -15,37 +15,37 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef LAPLANT_H
-#define LAPLANT_H
+#ifndef LACROP_H
+#define LACROP_H
 
 class QString;
 #include "laserialisable.h"
 #include "laguid.h"
 #include <QString>
 /** 
-  * An class to represent an plant
+  * An class to represent an crop
   * @author Tim Sutton, Jason Jorgenson
   */
 
-class LaPlant : public LaSerialisable, public LaGuid 
+class LaCrop : public LaSerialisable, public LaGuid 
 {
   public:
     /** Constructor . */
-    LaPlant();
+    LaCrop();
     /** Desctructor . */
-    ~LaPlant();
+    ~LaCrop();
     /** copy constructor */
-    LaPlant(const LaPlant& thePlant); 
+    LaCrop(const LaCrop& theCrop); 
     /** Assignement operator */
-    LaPlant& operator= (const LaPlant& thePlant);
+    LaCrop& operator= (const LaCrop& theCrop);
     
     //
     // Accessors
     //
 
-    /** The name of this plant */
+    /** The name of this crop */
     QString name() const;
-    /** The description of this plant */
+    /** The description of this crop */
     QString description() const;
     /** Average amount in Kg of production per hectare or dunum */
     int cropYield() const;
@@ -64,7 +64,7 @@ class LaPlant : public LaSerialisable, public LaGuid
     // Mutators
     //
 
-    /** Set the plantName
+    /** Set the cropName
      * @see name()
      */
     void setName(QString theName);
@@ -114,7 +114,7 @@ class LaPlant : public LaSerialisable, public LaGuid
      */
     bool fromXml(const QString theXml);
   private:
-    /** The name for this plant */
+    /** The name for this crop */
     QString mName;
     /** The description for this animal */
     QString mDescription;
@@ -141,5 +141,5 @@ class LaPlant : public LaSerialisable, public LaGuid
 
 };
 
-#endif //LAPLANT_H
+#endif //LACROP_H
 

@@ -5,8 +5,8 @@ SET(LA_CORE_SRCS
   laanimal.cpp
   laanimalparameter.cpp
   laguid.cpp
-  laplant.cpp
-  laplantparameter.cpp
+  lacrop.cpp
+  lacropparameter.cpp
   laserialisable.cpp
   lautils.cpp
   )
@@ -15,8 +15,8 @@ SET(LA_CORE_OTHER_HDRS
   laanimal.h
   laanimalparameter.h
   laguid.h
-  laplant.h
-  laplantparameter.h
+  lacrop.h
+  lacropparameter.h
   laserialisable.h
   version.h
   )
@@ -30,7 +30,7 @@ include(${QT_USE_FILE})
 
 QT4_WRAP_CPP(LA_CORE_MOC_SRCS ${LA_CORE_MOC_HDRS})
 
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} 
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}
   ${QT_INCLUDE_DIR}
 )
 

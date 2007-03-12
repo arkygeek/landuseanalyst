@@ -1,8 +1,8 @@
 #include "lautils.h"
 #include "laanimal.h"
-#include "laplant.h"
+#include "lacrop.h"
 #include "laanimalparameter.h"
-#include "laplantparameter.h"
+#include "lacropparameter.h"
 
 #include <QApplication>
 #include <QDir>
@@ -48,11 +48,11 @@ const QString LaUtils::userAnimalProfilesDirPath()
 }
 
 
-const QString LaUtils::userPlantProfilesDirPath()
+const QString LaUtils::userCropProfilesDirPath()
 {
   //alg profiles are always saved in the users home dir under .landuseAnalyst/
   QString myPath = QDir::homePath() + QString("/.landuseAnalyst/") +
-    QDir::separator()+"plantProfiles"+QDir::separator();
+    QDir::separator()+"cropProfiles"+QDir::separator();
   QDir().mkpath(myPath);
   return myPath;
 }
@@ -91,10 +91,10 @@ LaUtils::AnimalMap LaUtils::getAvailableAnimals()
   return myMap;
 }
 
-LaUtils::PlantMap LaUtils::getAvailablePlants()
+LaUtils::CropMap LaUtils::getAvailableCrops()
 {
-  LaUtils::PlantMap myMap;
-  QDir myDirectory(userPlantProfilesDirPath());
+  LaUtils::CropMap myMap;
+  QDir myDirectory(userCropProfilesDirPath());
   myDirectory.setFilter(QDir::Dirs | QDir::Files | QDir::NoSymLinks );
   QFileInfoList myList = myDirectory.entryInfoList();
   for (unsigned int i = 0; i < static_cast<unsigned int>(myList.size()); ++i)
@@ -108,17 +108,17 @@ LaUtils::PlantMap LaUtils::getAvailablePlants()
     //if the filename ends in .xml try to load it into our layerSets listing
     if(myFileInfo.completeSuffix()=="xml")
     {
-      qDebug("Loading plant: " + myList.at(i).absoluteFilePath().toLocal8Bit());
-      LaPlant myPlant;
-      myPlant.fromXmlFile(myFileInfo.absoluteFilePath());
-      if (myPlant.name().isEmpty())
+      qDebug("Loading crop: " + myList.at(i).absoluteFilePath().toLocal8Bit());
+      LaCrop myCrop;
+      myCrop.fromXmlFile(myFileInfo.absoluteFilePath());
+      if (myCrop.name().isEmpty())
       {
-        qDebug("Plant name was empty!");
+        qDebug("Crop name was empty!");
         continue;
       }
-      qDebug("Adding " + myPlant.name());
-      myMap[myPlant.guid()]=myPlant;
-      //qDebug(myPlant.toText().toLocal8Bit());
+      qDebug("Adding " + myCrop.name());
+      myMap[myCrop.guid()]=myCrop;
+      //qDebug(myCrop.toText().toLocal8Bit());
     }
   }
   return myMap;
@@ -134,11 +134,11 @@ const QString LaUtils::userAnimalParameterProfilesDirPath()
 }
 
 
-const QString LaUtils::userPlantParameterProfilesDirPath()
+const QString LaUtils::userCropParameterProfilesDirPath()
 {
   //alg profiles are always saved in the users home dir under .landuseAnalyst/
   QString myPath = QDir::homePath() + QString("/.landuseAnalyst/") +
-    QDir::separator()+"plantParameterProfiles"+QDir::separator();
+    QDir::separator()+"cropParameterProfiles"+QDir::separator();
   QDir().mkpath(myPath);
   return myPath;
 }
@@ -177,10 +177,10 @@ LaUtils::AnimalParameterMap LaUtils::getAvailableAnimalParameters()
   return myMap;
 }
 
-LaUtils::PlantParameterMap LaUtils::getAvailablePlantParameters()
+LaUtils::CropParameterMap LaUtils::getAvailableCropParameters()
 {
-  LaUtils::PlantParameterMap myMap;
-  QDir myDirectory(userPlantParameterProfilesDirPath());
+  LaUtils::CropParameterMap myMap;
+  QDir myDirectory(userCropParameterProfilesDirPath());
   myDirectory.setFilter(QDir::Dirs | QDir::Files | QDir::NoSymLinks );
   QFileInfoList myList = myDirectory.entryInfoList();
   for (unsigned int i = 0; i < static_cast<unsigned int>(myList.size()); ++i)
@@ -194,17 +194,17 @@ LaUtils::PlantParameterMap LaUtils::getAvailablePlantParameters()
     //if the filename ends in .xml try to load it into our layerSets listing
     if(myFileInfo.completeSuffix()=="xml")
     {
-      qDebug("Loading plantParameter: " + myList.at(i).absoluteFilePath().toLocal8Bit());
-      LaPlantParameter myPlantParameter;
-      myPlantParameter.fromXmlFile(myFileInfo.absoluteFilePath());
-      if (myPlantParameter.name().isEmpty())
+      qDebug("Loading cropParameter: " + myList.at(i).absoluteFilePath().toLocal8Bit());
+      LaCropParameter myCropParameter;
+      myCropParameter.fromXmlFile(myFileInfo.absoluteFilePath());
+      if (myCropParameter.name().isEmpty())
       {
-        qDebug("PlantParameter name was empty!");
+        qDebug("CropParameter name was empty!");
         continue;
       }
-      qDebug("Adding " + myPlantParameter.name());
-      myMap[myPlantParameter.guid()]=myPlantParameter;
-      //qDebug(myPlantParameter.toText().toLocal8Bit());
+      qDebug("Adding " + myCropParameter.name());
+      myMap[myCropParameter.guid()]=myCropParameter;
+      //qDebug(myCropParameter.toText().toLocal8Bit());
     }
   }
   return myMap;

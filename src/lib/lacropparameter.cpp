@@ -1,5 +1,5 @@
 /***************************************************************************
-                          laplantparameter.cpp  -  description
+                          lacropparameter.cpp  -  description
                              -------------------
     begin                : March 2006
     copyright            : (C) 2003 by Tim Sutton
@@ -17,10 +17,10 @@
 #include <QString>
 #include <QDomDocument>
 #include <QDomElement>
-#include "laplantparameter.h"
+#include "lacropparameter.h"
 #include "lautils.h"
 
-LaPlantParameter::LaPlantParameter() : LaSerialisable(), LaGuid()
+LaCropParameter::LaCropParameter() : LaSerialisable(), LaGuid()
 {
   setGuid();
   mName="No Name Set";
@@ -31,136 +31,136 @@ LaPlantParameter::LaPlantParameter() : LaSerialisable(), LaGuid()
   //mCropFodderCalories=1000;
   //mYieldUnits=0;
 }
-LaPlantParameter::~LaPlantParameter()
+LaCropParameter::~LaCropParameter()
 {
 
 }
 
 //copy constructor
-LaPlantParameter::LaPlantParameter(const LaPlantParameter& thePlantParameter)
+LaCropParameter::LaCropParameter(const LaCropParameter& theCropParameter)
 {
-  mName=thePlantParameter.name();
-  mDescription=thePlantParameter.description();
-  setGuid(thePlantParameter.guid());
-  mPercentTamePlant=thePlantParameter.percentTamePlant();
-  mCropRotation = thePlantParameter.cropRotation();
-  mFallowRatio = thePlantParameter.fallowRatio();
-  mFallowCalories = thePlantParameter.fallowCalories();
-  mAreaUnits = thePlantParameter.areaUnits();
-  mUseCommonLand = thePlantParameter.useCommonLand();
-  mUseSpecificLand = thePlantParameter.useSpecificLand();
+  mName=theCropParameter.name();
+  mDescription=theCropParameter.description();
+  setGuid(theCropParameter.guid());
+  mPercentTameCrop=theCropParameter.percentTameCrop();
+  mCropRotation = theCropParameter.cropRotation();
+  mFallowRatio = theCropParameter.fallowRatio();
+  mFallowCalories = theCropParameter.fallowCalories();
+  mAreaUnits = theCropParameter.areaUnits();
+  mUseCommonLand = theCropParameter.useCommonLand();
+  mUseSpecificLand = theCropParameter.useSpecificLand();
 }
 
-LaPlantParameter& LaPlantParameter::operator=(const LaPlantParameter& thePlantParameter)
+LaCropParameter& LaCropParameter::operator=(const LaCropParameter& theCropParameter)
 {
-  if (this == &thePlantParameter) return *this;   // Gracefully handle self assignment
+  if (this == &theCropParameter) return *this;   // Gracefully handle self assignment
 
-  mName=thePlantParameter.name();
-  mDescription=thePlantParameter.description();
-  setGuid(thePlantParameter.guid());
-  mPercentTamePlant=thePlantParameter.percentTamePlant();
-  mCropRotation = thePlantParameter.cropRotation();
-  mFallowRatio = thePlantParameter.fallowRatio();
-  mFallowCalories = thePlantParameter.fallowCalories();
-  mAreaUnits = thePlantParameter.areaUnits();
-  mUseCommonLand = thePlantParameter.useCommonLand();
-  mUseSpecificLand = thePlantParameter.useSpecificLand();
+  mName=theCropParameter.name();
+  mDescription=theCropParameter.description();
+  setGuid(theCropParameter.guid());
+  mPercentTameCrop=theCropParameter.percentTameCrop();
+  mCropRotation = theCropParameter.cropRotation();
+  mFallowRatio = theCropParameter.fallowRatio();
+  mFallowCalories = theCropParameter.fallowCalories();
+  mAreaUnits = theCropParameter.areaUnits();
+  mUseCommonLand = theCropParameter.useCommonLand();
+  mUseSpecificLand = theCropParameter.useSpecificLand();
   return *this;
 }
 
-QString LaPlantParameter::name() const
+QString LaCropParameter::name() const
 {
   return mName;
 }
 
-QString LaPlantParameter::description() const
+QString LaCropParameter::description() const
 {
   return mDescription;
 }
-int LaPlantParameter::percentTamePlant() const
+int LaCropParameter::percentTameCrop() const
 {
-  return mPercentTamePlant;
+  return mPercentTameCrop;
 }
-bool LaPlantParameter::cropRotation() const
+bool LaCropParameter::cropRotation() const
 {
   return mCropRotation;
 }
-float LaPlantParameter::fallowRatio() const
+float LaCropParameter::fallowRatio() const
 {
   return mFallowRatio;
 }
-int LaPlantParameter::fallowCalories() const
+int LaCropParameter::fallowCalories() const
 {
   return mFallowCalories;
 }
-int LaPlantParameter::areaUnits() const
+int LaCropParameter::areaUnits() const
 {
   return mAreaUnits;
 }
-bool LaPlantParameter::useCommonLand() const
+bool LaCropParameter::useCommonLand() const
 {
   return mUseCommonLand;
 }
-bool LaPlantParameter::useSpecificLand() const
+bool LaCropParameter::useSpecificLand() const
 {
   return mUseSpecificLand;
 }
 
-void LaPlantParameter::setName(QString theName)
+void LaCropParameter::setName(QString theName)
 {
   mName=theName;
 }
-void LaPlantParameter::setDescription(QString theDescription)
+void LaCropParameter::setDescription(QString theDescription)
 {
   mDescription=theDescription;
 }
 
-void LaPlantParameter::setPercentTamePlant(int thePercentage)
+void LaCropParameter::setPercentTameCrop(int thePercentage)
 {
-  mPercentTamePlant=thePercentage;
+  mPercentTameCrop=thePercentage;
 }
-void LaPlantParameter::setCropRotation(bool theFlag)
+void LaCropParameter::setCropRotation(bool theFlag)
 {
   mCropRotation=theFlag;
 }
-void LaPlantParameter::setFallowRatio(float theFallowRatio)
+void LaCropParameter::setFallowRatio(float theFallowRatio)
 {
   mFallowRatio=theFallowRatio;
 }
-void LaPlantParameter::setFallowCalories(int theCalories)
+void LaCropParameter::setFallowCalories(int theCalories)
 {
   mFallowCalories=theCalories;
 }
-void LaPlantParameter::setAreaUnits(int theIndexValue)
+void LaCropParameter::setAreaUnits(int theIndexValue)
 {
   mAreaUnits=theIndexValue;
 }
-void LaPlantParameter::setUseSpecificLand(bool theFlag)
+void LaCropParameter::setUseSpecificLand(bool theFlag)
 {
   mUseSpecificLand=theFlag;
 }
-void LaPlantParameter::setUseCommonLand(bool theFlag)
+void LaCropParameter::setUseCommonLand(bool theFlag)
 {
   mUseCommonLand=theFlag;
 }
 
-bool LaPlantParameter::fromXml(QString theXml)
+bool LaCropParameter::fromXml(QString theXml)
 {
-  qDebug("Loading PlantParameter from xml");
+  qDebug("Loading CropParameter from xml");
   QDomDocument myDocument("mydocument");
   myDocument.setContent(theXml);
-  QDomElement myTopElement = myDocument.firstChildElement("plantParameter");
+  QDomElement myTopElement = myDocument.firstChildElement("cropParameter");
   if (myTopElement.isNull())
   {
     //TODO - just make this a warning
     qDebug("top element could not be found!");
   }
-  qDebug("PlantParameter::fromXml - guid found : " + myTopElement.attribute("guid").toLocal8Bit());
+  qDebug("CropParameter::fromXml - guid found : " + myTopElement.attribute("guid").toLocal8Bit());
   setGuid(myTopElement.attribute("guid"));
-  qDebug("PlantParameter::fromXml - guid set to : " + guid().toLocal8Bit());
+  qDebug("CropParameter::fromXml - guid set to : " + guid().toLocal8Bit());
   mName=QString(myTopElement.firstChildElement("name").text());
   mDescription=QString(myTopElement.firstChildElement("description").text());
-  mPercentTamePlant=QString(myTopElement.firstChildElement("percentTamePlant").text()).toInt();
+  mPercentTameCrop=QString(myTopElement.firstChildElement("percentTameCrop").text()).toInt();
   mCropRotation=QString(myTopElement.firstChildElement("cropRotation").text()).toInt();
   mFallowRatio=QString(myTopElement.firstChildElement("fallowRatio").text()).toFloat();
   mFallowCalories=QString(myTopElement.firstChildElement("fallowCalories").text()).toInt();
@@ -170,30 +170,30 @@ bool LaPlantParameter::fromXml(QString theXml)
   return true;
 }
 
-QString LaPlantParameter::toXml()
+QString LaCropParameter::toXml()
 {
   QString myString;
-  myString+=QString("<plantParameter guid=\"" + guid() + "\">\n");
+  myString+=QString("<cropParameter guid=\"" + guid() + "\">\n");
     myString+=QString("  <name>" + LaUtils::xmlEncode(mName) + "</name>\n");
   myString+=QString("  <description>" + LaUtils::xmlEncode(mDescription) + "</description>\n");
-  myString+=QString("  <percentTamePlant>" + QString::number(mPercentTamePlant) + "</percentTamePlant>\n");
+  myString+=QString("  <percentTameCrop>" + QString::number(mPercentTameCrop) + "</percentTameCrop>\n");
   myString+=QString("  <cropRotation>" + QString::number(mCropRotation) + "</cropRotation>\n");
   myString+=QString("  <fallowRatio>" + QString::number(mFallowRatio) + "</fallowRatio>\n");
   myString+=QString("  <fallowCalories>" + QString::number(mFallowCalories) + "</fallowCalories>\n");
   myString+=QString("  <areaUnits>" + QString::number(mAreaUnits) + "</areaUnits>\n");
   myString+=QString("  <useCommonLand>" + QString::number(mUseCommonLand) + "</useCommonLand>\n");
   myString+=QString("  <useSpecificLand>" + QString::number(mUseSpecificLand) + "</useSpecificLand>\n");
-  myString+=QString("</plantParameter>\n");
+  myString+=QString("</cropParameter>\n");
   return myString;
 }
 
-QString LaPlantParameter::toText()
+QString LaCropParameter::toText()
 {
   QString myString;
   myString+=QString("guid=>" + guid() + "\n");
   myString+=QString("name=>" + LaUtils::xmlEncode(mName) + "\n");
   myString+=QString("description=>" + LaUtils::xmlEncode(mDescription) + "\n");
-  myString+=QString("percentTamePlant=>" + QString::number(mPercentTamePlant) + "\n");
+  myString+=QString("percentTameCrop=>" + QString::number(mPercentTameCrop) + "\n");
   myString+=QString("cropRotation=>" + QString::number(mCropRotation) + "\n");
   myString+=QString("fallowRatio=>" + QString::number(mFallowRatio) + "\n");
   myString+=QString("fallowCalories=>" + QString::number(mFallowCalories) + "\n");
@@ -202,14 +202,14 @@ QString LaPlantParameter::toText()
   myString+=QString("useSpecificLand=>" + QString::number(mUseSpecificLand) + "\n");
   return myString;
 }
-QString LaPlantParameter::toHtml()
+QString LaCropParameter::toHtml()
 {
   QString myString;
   myString+="<p align=\"center\"><h1>Details for " + LaUtils::xmlEncode(mName) + "</h1></p>";
   myString+="<p>GUID:" + guid() + "</p>";
   myString+="<p>Description:" + mDescription + "</p>";
-   myString+="<p>Percent Tame Plant Diet: "
-                    + QString::number(mPercentTamePlant)
+   myString+="<p>Percent Tame Crop Diet: "
+                    + QString::number(mPercentTameCrop)
                     + "</p>";
   myString+="<p>cropRotation: "
                     + QString::number(mCropRotation)

@@ -17,34 +17,34 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef LAPLANTPARAMETERMANAGER_H
-#define LAPLANTPARAMETERMANAGER_H
+#ifndef LACROPMANAGER_H
+#define LACROPMANAGER_H
 
 //QT Includes
 #include <QDialog>
 //Local Includes
-#include <ui_laplantparametermanagerbase.h>
-#include <laplantparameter.h>
+#include <ui_lacropmanagerbase.h>
+#include <lacrop.h>
 #include <lautils.h>
 class QTreeWidgetItem;
 /**
   This is the main gui class
   @author Tim Sutton, Jason Jorgenson
 */
-class LaPlantParameterManager : public QDialog, private Ui::LaPlantParameterManagerBase
+class LaCropManager : public QDialog, private Ui::LaCropManagerBase
 {
   Q_OBJECT
   public:
-    LaPlantParameterManager(QWidget* parent = 0, Qt::WFlags fl = 0 );
-    ~LaPlantParameterManager();
+    LaCropManager(QWidget* parent = 0, Qt::WFlags fl = 0 );
+    ~LaCropManager();
 
   public slots:
-    //void on_pushButtonLoad_clicked();
-    //void on_pushButtonSave_clicked();
+    void on_pushButtonLoad_clicked();
+    void on_pushButtonSave_clicked();
 
   private slots:
       void cellClicked(int theRow, int theColumn);
-      void showPlantParameter();
+      void showCrop();
       void on_toolCopy_clicked();
       void on_toolNew_clicked();
       void on_toolDelete_clicked();
@@ -54,13 +54,13 @@ class LaPlantParameterManager : public QDialog, private Ui::LaPlantParameterMana
 
 
   private:
-      void refreshPlantParameterTable(QString theGuid=0);
-      void selectPlantParameter(QString theFileName);
+      void refreshCropTable(QString theGuid=0);
+      void selectCrop(QString theFileName);
 
-      LaUtils::PlantParameterMap mPlantParameterMap;
-      LaPlantParameter mPlantParameter;
+      LaUtils::CropMap mCropMap;
+      LaCrop mCrop;
       void readSettings();
       void writeSettings();
 };
 
-#endif //LAPLANTFORMMAIN_H
+#endif //LACROPFORMMAIN_H

@@ -1,16 +1,16 @@
 <ui version="4.0" >
- <class>LaPlantManagerBase</class>
- <widget class="QDialog" name="LaPlantManagerBase" >
+ <class>LaCropManagerBase</class>
+ <widget class="QDialog" name="LaCropManagerBase" >
   <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>324</width>
+    <width>357</width>
     <height>471</height>
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>Plant Profile Manager</string>
+   <string>Crop Profile Manager</string>
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >
@@ -289,7 +289,7 @@ p, li { white-space: pre-wrap; }
    <item row="0" column="0" colspan="3" >
     <widget class="QGroupBox" name="grpProfiles" >
      <property name="title" >
-      <string>Available Plant Profiles</string>
+      <string>Available Crop Profiles</string>
      </property>
      <layout class="QGridLayout" >
       <property name="margin" >
@@ -299,7 +299,7 @@ p, li { white-space: pre-wrap; }
        <number>6</number>
       </property>
       <item row="0" column="0" colspan="6" >
-       <widget class="QTableWidget" name="tblPlants" >
+       <widget class="QTableWidget" name="tblCrops" >
         <property name="whatsThis" >
          <string>Table of the currently available layersets</string>
         </property>
@@ -458,7 +458,7 @@ p, li { white-space: pre-wrap; }
   <connection>
    <sender>pbnClose</sender>
    <signal>clicked()</signal>
-   <receiver>LaPlantManagerBase</receiver>
+   <receiver>LaCropManagerBase</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel" >

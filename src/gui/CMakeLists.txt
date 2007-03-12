@@ -10,22 +10,22 @@ include(${QT_USE_FILE})
 set(landuseanalyst_SRCS
     main.cpp
     lamainform.cpp
-    laplantmanager.cpp
-    laplantparametermanager.cpp
+    lacropmanager.cpp
+    lacropparametermanager.cpp
     laanimalmanager.cpp
     laanimalparametermanager.cpp
    )
 SET(landuseanalyst_UIS
     ../ui/lamainformbase.ui
-    ../ui/laplantmanagerbase.ui
-    ../ui/laplantparametermanagerbase.ui
+    ../ui/lacropmanagerbase.ui
+    ../ui/lacropparametermanagerbase.ui
     ../ui/laanimalmanagerbase.ui
     ../ui/laanimalparametermanagerbase.ui
     )
 SET(landuseanalyst_MOC_HDRS
     lamainform.h
-    laplantmanager.h
-    laplantparametermanager.h
+    lacropmanager.h
+    lacropparametermanager.h
     laanimalmanager.h
     laanimalparametermanager.h
     )

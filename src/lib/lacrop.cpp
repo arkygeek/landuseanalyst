@@ -17,10 +17,10 @@
 #include <QString>
 #include <QDomDocument>
 #include <QDomElement>
-#include "laplant.h"
+#include "lacrop.h"
 #include "lautils.h"
 
-LaPlant::LaPlant() : LaSerialisable(), LaGuid()
+LaCrop::LaCrop() : LaSerialisable(), LaGuid()
 {
   setGuid();
   mName="No Name Set";
@@ -31,115 +31,115 @@ LaPlant::LaPlant() : LaSerialisable(), LaGuid()
   mCropFodderCalories=1000;
   mYieldUnits=0;
 }
-LaPlant::~LaPlant()
+LaCrop::~LaCrop()
 {
 
 }
 
 //copy constructor
-LaPlant::LaPlant(const LaPlant& thePlant)
+LaCrop::LaCrop(const LaCrop& theCrop)
 {
-  mName=thePlant.name();
-  mDescription=thePlant.description();
-  setGuid(thePlant.guid());
-  mCropYield=thePlant.cropYield();
-  mCropCalories=thePlant.cropCalories();
-  mCropFodderProduction=thePlant.fodderProduction();
-  mCropFodderCalories=thePlant.fodderCalories();
-  mYieldUnits=thePlant.yieldUnits();
+  mName=theCrop.name();
+  mDescription=theCrop.description();
+  setGuid(theCrop.guid());
+  mCropYield=theCrop.cropYield();
+  mCropCalories=theCrop.cropCalories();
+  mCropFodderProduction=theCrop.fodderProduction();
+  mCropFodderCalories=theCrop.fodderCalories();
+  mYieldUnits=theCrop.yieldUnits();
 }
 
-LaPlant& LaPlant::operator=(const LaPlant& thePlant)
+LaCrop& LaCrop::operator=(const LaCrop& theCrop)
 {
-  if (this == &thePlant) return *this;   // Gracefully handle self assignment
+  if (this == &theCrop) return *this;   // Gracefully handle self assignment
 
-  mName=thePlant.name();
-  mDescription=thePlant.description();
-  setGuid(thePlant.guid());
-  mCropYield=thePlant.cropYield();
-  mCropCalories=thePlant.cropCalories();
-  mCropFodderProduction=thePlant.fodderProduction();
-  mCropFodderCalories=thePlant.fodderCalories();
-  mYieldUnits=thePlant.yieldUnits();
+  mName=theCrop.name();
+  mDescription=theCrop.description();
+  setGuid(theCrop.guid());
+  mCropYield=theCrop.cropYield();
+  mCropCalories=theCrop.cropCalories();
+  mCropFodderProduction=theCrop.fodderProduction();
+  mCropFodderCalories=theCrop.fodderCalories();
+  mYieldUnits=theCrop.yieldUnits();
   return *this;
 }
 
-QString LaPlant::name() const
+QString LaCrop::name() const
 {
   return mName;
 }
 
-QString LaPlant::description() const
+QString LaCrop::description() const
 {
   return mDescription;
 }
 
-int LaPlant::cropYield() const
+int LaCrop::cropYield() const
 {
   return mCropYield;
 }
-int LaPlant::cropCalories() const
+int LaCrop::cropCalories() const
 {
   return mCropCalories;
 }
-int LaPlant::fodderProduction() const
+int LaCrop::fodderProduction() const
 {
   return mCropFodderProduction;
 }
-int LaPlant::fodderCalories() const
+int LaCrop::fodderCalories() const
 {
   return mCropFodderCalories;
 }
-int LaPlant::yieldUnits() const
+int LaCrop::yieldUnits() const
 {
   return mYieldUnits;
 }
 
-void LaPlant::setName(QString theName)
+void LaCrop::setName(QString theName)
 {
   mName=theName;
 }
 
-void LaPlant::setDescription(QString theDescription)
+void LaCrop::setDescription(QString theDescription)
 {
   mDescription=theDescription;
 }
 
-void LaPlant::setCropYield(int theKg)
+void LaCrop::setCropYield(int theKg)
 {
   mCropYield=theKg;
 }
-void LaPlant::setCropCalories(int theInteger)
+void LaCrop::setCropCalories(int theInteger)
 {
   mCropCalories=theInteger;
 }
-void LaPlant::setFodderProduction(int theKg)
+void LaCrop::setFodderProduction(int theKg)
 {
   mCropFodderProduction=theKg;
 }
-void LaPlant::setFodderCalories(int theCalories)
+void LaCrop::setFodderCalories(int theCalories)
 {
   mCropFodderCalories=theCalories;
 }
-void LaPlant::setYieldUnits(int theIndex)
+void LaCrop::setYieldUnits(int theIndex)
 {
   mYieldUnits=theIndex;
 }
 
-bool LaPlant::fromXml(QString theXml)
+bool LaCrop::fromXml(QString theXml)
 {
-  qDebug("Loading Plant from xml");
+  qDebug("Loading Crop from xml");
   QDomDocument myDocument("mydocument");
   myDocument.setContent(theXml);
-  QDomElement myTopElement = myDocument.firstChildElement("plant");
+  QDomElement myTopElement = myDocument.firstChildElement("crop");
   if (myTopElement.isNull())
   {
     //TODO - just make this a warning
     qDebug("top element could not be found!");
   }
-  qDebug("Plant::fromXml - guid found : " + myTopElement.attribute("guid").toLocal8Bit());
+  qDebug("Crop::fromXml - guid found : " + myTopElement.attribute("guid").toLocal8Bit());
   setGuid(myTopElement.attribute("guid"));
-  qDebug("Plant::fromXml - guid set to : " + guid().toLocal8Bit());
+  qDebug("Crop::fromXml - guid set to : " + guid().toLocal8Bit());
   mName=LaUtils::xmlDecode(myTopElement.firstChildElement("name").text());
   mDescription=LaUtils::xmlDecode(myTopElement.firstChildElement("description").text());
   mCropYield=QString(myTopElement.firstChildElement("cropYield").text()).toInt();
@@ -150,10 +150,10 @@ bool LaPlant::fromXml(QString theXml)
   return true;
 }
 
-QString LaPlant::toXml()
+QString LaCrop::toXml()
 {
   QString myString;
-  myString+=QString("<plant guid=\"" + guid() + "\">\n");
+  myString+=QString("<crop guid=\"" + guid() + "\">\n");
     myString+=QString("  <name>" + LaUtils::xmlEncode(mName) + "</name>\n");
   myString+=QString("  <description>" + LaUtils::xmlEncode(mDescription) + "</description>\n");
   myString+=QString("  <cropYield>" + QString::number(mCropYield) + "</cropYield>\n");
@@ -161,11 +161,11 @@ QString LaPlant::toXml()
   myString+=QString("  <fodderProduction>" + QString::number(mCropFodderProduction) + "</fodderProduction>\n");
   myString+=QString("  <fodderCalories>" + QString::number(mCropFodderCalories) + "</fodderCalories>\n");
   myString+=QString("  <yieldUnits>" + QString::number(mYieldUnits) + "</yieldUnits>\n");
-  myString+=QString("</plant>\n");
+  myString+=QString("</crop>\n");
   return myString;
 }
 
-QString LaPlant::toText()
+QString LaCrop::toText()
 {
   QString myString;
   myString+=QString("guid=>" + guid() + "\n");
@@ -178,7 +178,7 @@ QString LaPlant::toText()
   myString+=QString("yieldUnits=>" + QString::number(mYieldUnits) + "\n");
   return myString;
 }
-QString LaPlant::toHtml()
+QString LaCrop::toHtml()
 {
   QString myString;
   myString+="<p align=\"center\"><h1>Details for " + LaUtils::xmlEncode(mName) + "</h1></p>";

@@ -24,9 +24,9 @@ class QStringList;
 #include <QHash>
 #include <QMap>
 #include "laanimal.h"
-#include "laplant.h"
+#include "lacrop.h"
 #include "laanimalparameter.h"
-#include "laplantparameter.h"
+#include "lacropparameter.h"
 
 /** This is a helper class with mainly static methods for easily
  * obtaining the directories and paths relating to the application
@@ -63,14 +63,14 @@ class LaUtils
      */
     static const QString userAnimalParametersDirPath();
     /**
-     * Find the place on the filesystem where user defined plant
+     * Find the place on the filesystem where user defined crop
      * model parameter profiles are stored.
      *
-     * Typically this will be ~/.landuseAnalyst/plantParameters
+     * Typically this will be ~/.landuseAnalyst/cropParameters
      *
      * @return QString containing the relevant directory name
      */
-    static const QString userPlantParametersDirPath();
+    static const QString userCropParametersDirPath();
     /** Get the place where model outputs are to be stored.
      * By default this is in ~/.landuseAnalyst/modelOutputs
      * But if modelOutputsDir is specified in QSettings, it will override
@@ -78,25 +78,25 @@ class LaUtils
      */
     static const QString getModelOutputDir();
     /**
-     * Find the place on the filesystem where user defined plant
+     * Find the place on the filesystem where user defined crop
      * profiles are stored.
      *
-     * Typically this will be ~/.landuseAnalyst/plants
+     * Typically this will be ~/.landuseAnalyst/crops
      *
      * @return QString containing the relevant directory name
      */
-    static const QString userPlantProfilesDirPath();
+    static const QString userCropProfilesDirPath();
 
     /** This typedef is used to refer to a collection of layersets.
      * the key is the layerset name
      * the value is the layerset itself
      */
-    typedef QMap<QString,LaPlant> PlantMap;
+    typedef QMap<QString,LaCrop> CropMap;
 
     /** Get a QMap of the avaliable layersets in the users layersets directory
      * @return a QMap<QString,OmgLayerSet> where the QString key is the layerset name
      **/
-    static LaUtils::PlantMap getAvailablePlants();
+    static LaUtils::CropMap getAvailableCrops();
 
     /** This typedef is used to refer to a collection of layersets.
      * the key is the layerset name
@@ -105,25 +105,25 @@ class LaUtils
     typedef QMap<QString,LaAnimal> AnimalMap;
 
    /**
-     * Find the place on the filesystem where user defined plantParameter
+     * Find the place on the filesystem where user defined cropParameter
      * profiles are stored.
      *
-     * Typically this will be ~/.landuseAnalyst/plantParameters
+     * Typically this will be ~/.landuseAnalyst/cropParameters
      *
      * @return QString containing the relevant directory name
      */
-    static const QString userPlantParameterProfilesDirPath();
+    static const QString userCropParameterProfilesDirPath();
 
     /** This typedef is used to refer to a collection of layersets.
      * the key is the layerset name
      * the value is the layerset itself
      */
-    typedef QMap<QString,LaPlantParameter> PlantParameterMap;
+    typedef QMap<QString,LaCropParameter> CropParameterMap;
 
     /** Get a QMap of the avaliable layersets in the users layersets directory
      * @return a QMap<QString,OmgLayerSet> where the QString key is the layerset name
      **/
-    static LaUtils::PlantParameterMap getAvailablePlantParameters();
+    static LaUtils::CropParameterMap getAvailableCropParameters();
 
     /** This typedef is used to refer to a collection of layersets.
      * the key is the layerset name

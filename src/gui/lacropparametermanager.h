@@ -17,34 +17,34 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef LAPLANTMANAGER_H
-#define LAPLANTMANAGER_H
+#ifndef LACROPPARAMETERMANAGER_H
+#define LACROPPARAMETERMANAGER_H
 
 //QT Includes
 #include <QDialog>
 //Local Includes
-#include <ui_laplantmanagerbase.h>
-#include <laplant.h>
+#include <ui_lacropparametermanagerbase.h>
+#include <lacropparameter.h>
 #include <lautils.h>
 class QTreeWidgetItem;
 /**
   This is the main gui class
   @author Tim Sutton, Jason Jorgenson
 */
-class LaPlantManager : public QDialog, private Ui::LaPlantManagerBase
+class LaCropParameterManager : public QDialog, private Ui::LaCropParameterManagerBase
 {
   Q_OBJECT
   public:
-    LaPlantManager(QWidget* parent = 0, Qt::WFlags fl = 0 );
-    ~LaPlantManager();
+    LaCropParameterManager(QWidget* parent = 0, Qt::WFlags fl = 0 );
+    ~LaCropParameterManager();
 
   public slots:
-    void on_pushButtonLoad_clicked();
-    void on_pushButtonSave_clicked();
+    //void on_pushButtonLoad_clicked();
+    //void on_pushButtonSave_clicked();
 
   private slots:
       void cellClicked(int theRow, int theColumn);
-      void showPlant();
+      void showCropParameter();
       void on_toolCopy_clicked();
       void on_toolNew_clicked();
       void on_toolDelete_clicked();
@@ -54,13 +54,13 @@ class LaPlantManager : public QDialog, private Ui::LaPlantManagerBase
 
 
   private:
-      void refreshPlantTable(QString theGuid=0);
-      void selectPlant(QString theFileName);
+      void refreshCropParameterTable(QString theGuid=0);
+      void selectCropParameter(QString theFileName);
 
-      LaUtils::PlantMap mPlantMap;
-      LaPlant mPlant;
+      LaUtils::CropParameterMap mCropParameterMap;
+      LaCropParameter mCropParameter;
       void readSettings();
       void writeSettings();
 };
 
-#endif //LAPLANTFORMMAIN_H
+#endif //LACROPFORMMAIN_H

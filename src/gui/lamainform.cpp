@@ -22,8 +22,8 @@
 #include "lamainform.h"
 #include "version.h"
 #include "laanimalmanager.h"
-#include "laplantmanager.h"
-#include "laplantparametermanager.h"
+#include "lacropmanager.h"
+#include "lacropparametermanager.h"
 #include "laanimalparametermanager.h"
 
 //qt includes
@@ -55,14 +55,18 @@ LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
   connect(pushButtonExit, SIGNAL(clicked()), qApp, SLOT(quit()));
   connect(tblAnimals, SIGNAL(cellClicked( int,int)),
       this, SLOT(animalCellClicked( int,int)));
+  connect(tblCrops, SIGNAL(cellClicked( int,int)),
+      this, SLOT(cropCellClicked( int,int)));
 
   lblVersion->setText(QString("Version: %1").arg(VERSION) + " " + QString("$Revision$").replace("$",""));
   tblAnimals->horizontalHeader()->hide();
   tblAnimals->verticalHeader()->hide();
   tblAnimals->horizontalHeader()->setResizeMode(1,QHeaderView::Stretch);
+  tblCrops->horizontalHeader()->hide();
+  tblCrops->verticalHeader()->hide();
+  tblCrops->horizontalHeader()->setResizeMode(1,QHeaderView::Stretch);
   loadAnimals();
-  loadPlants();
-  loadPlantParameters();
+  loadCrops();
 }
 
 LaMainForm::~LaMainForm()
@@ -99,15 +103,15 @@ void LaMainForm::on_horizontalSliderDiet_valueChanged(int theValue)
   QString myMinString = QString::number(theValue);
   QString myMaxString = QString::number(100-theValue);
   labelMeatPercent->setText(myMinString);
-  labelPlantPercent->setText(myMaxString);
+  labelCropPercent->setText(myMaxString);
 }
 
-void LaMainForm::on_horizontalSliderPlant_valueChanged(int theValue)
+void LaMainForm::on_horizontalSliderCrop_valueChanged(int theValue)
 {
   QString myMinString = QString::number(100-theValue);
   QString myMaxString = QString::number(theValue);
-  labelPlantWildPercent->setText(myMinString);
-  labelPlantTamePercent->setText(myMaxString);
+  labelCropWildPercent->setText(myMinString);
+  labelCropTamePercent->setText(myMaxString);
 }
 
 /**
@@ -122,43 +126,22 @@ void LaMainForm::on_pbnNewAnimal_clicked()
   myAnimalManager.exec();
   loadAnimals();
 }
-void LaMainForm::on_pbnNewPlant_clicked()
+void LaMainForm::on_pbnNewCrop_clicked()
 {
-  LaPlantManager myPlantManager;
-  myPlantManager.exec();
-  loadPlants();
+  LaCropManager myCropManager;
+  myCropManager.exec();
+  loadCrops();
 }
-void LaMainForm::on_pbnNewPlantParameter_clicked()
+void LaMainForm::on_pbnNewCropParameter_clicked()
 {
-  int myCurrentPlant=listWidgetPlants->currentRow();
-  if (myCurrentPlant >= 0)
-  {
-    LaPlantParameterManager myPlantParameterManager;
-    myPlantParameterManager.exec();
-    loadPlantParameters();
-  }
-  else
-  {
-    //
-  }
+    LaCropParameterManager myCropParameterManager;
+    myCropParameterManager.exec();
 }
 void LaMainForm::on_pbnNewAnimalParameter_clicked()
 {
-  //int myCurrentAnimal=listWidgetAnimals->currentRow();
-  //if (myCurrentAnimal >= 0)
-  //{
     LaAnimalParameterManager myAnimalParameterManager;
     myAnimalParameterManager.exec();
-  //}
-  //else
-  //{
-    //
-  //}
 }
-/**
-  * The above launches new forms for plants and animals
-  */
-
 
 void LaMainForm::loadAnimals()
 {
@@ -166,10 +149,7 @@ void LaMainForm::loadAnimals()
   tblAnimals->setRowCount(0);
   tblAnimals->setColumnCount(3);
   int myCurrentRow=0;
-  
 
-  
-  //listWidgetAnimals->clear();
   mAnimalsMap = LaUtils::getAvailableAnimals();
   mAnimalParametersMap = LaUtils::getAvailableAnimalParameters();
   QMapIterator<QString, LaAnimal> myIterator(mAnimalsMap);
@@ -181,17 +161,6 @@ void LaMainForm::loadAnimals()
     QString myName = myAnimal.name();
     QIcon myIcon;
     myIcon.addFile(":/localdata.png");
-    //
-    // old stuff for populating the list widget - to be removed
-    //
-    //display an icon indicating if the user defined or system supplied
-    //QListWidgetItem * mypItem = new QListWidgetItem(myIcon,myName);
-    //mypItem->setData(Qt::UserRole,myGuid);
-    //listWidgetAnimals->addItem(mypItem);
-
-    //
-    // New stuff for populating the table
-    //
     tblAnimals->insertRow(myCurrentRow);
     // Add details to the new row
     QTableWidgetItem *mypUsedItem= new QTableWidgetItem(tr("Used?"));
@@ -217,42 +186,47 @@ void LaMainForm::loadAnimals()
     myCurrentRow++;
   }
 }
-void LaMainForm::loadPlants()
+void LaMainForm::loadCrops()
 {
-  listWidgetPlants->clear();
-  mPlantsMap = LaUtils::getAvailablePlants();
-  QMapIterator<QString, LaPlant> myIterator(mPlantsMap);
+  tblCrops->clear();
+  tblCrops->setRowCount(0);
+  tblCrops->setColumnCount(3);
+  int myCurrentRow=0;
+
+  mCropsMap = LaUtils::getAvailableCrops();
+  mCropParametersMap = LaUtils::getAvailableCropParameters();
+  QMapIterator<QString, LaCrop> myIterator(mCropsMap);
   while (myIterator.hasNext())
   {
     myIterator.next();
-    LaPlant myPlant = myIterator.value();
-    QString myGuid = myPlant.guid();
-    QString myName = myPlant.name();
-    //display an icon indicating if the user defined or system supplied
+    LaCrop myCrop = myIterator.value();
+    QString myGuid = myCrop.guid();
+    QString myName = myCrop.name();
     QIcon myIcon;
     myIcon.addFile(":/localdata.png");
-    QListWidgetItem * mypItem = new QListWidgetItem(myIcon,myName);
-    mypItem->setData(Qt::UserRole,myGuid);
-    listWidgetPlants->addItem(mypItem);
-  }
-}
-void LaMainForm::loadPlantParameters()
-{
-  listWidgetPlantParameters->clear();
-  mPlantParametersMap = LaUtils::getAvailablePlantParameters();
-  QMapIterator<QString, LaPlantParameter> myIterator(mPlantParametersMap);
-  while (myIterator.hasNext())
-  {
-    myIterator.next();
-    LaPlantParameter myPlantParameter = myIterator.value();
-    QString myGuid = myPlantParameter.guid();
-    QString myName = myPlantParameter.name();
-    //display an icon indicating if the user defined or system supplied
-    QIcon myIcon;
-    myIcon.addFile(":/localdata.png");
-    QListWidgetItem * mypItem = new QListWidgetItem(myIcon,myName);
-    mypItem->setData(Qt::UserRole,myGuid);
-    listWidgetPlantParameters->addItem(mypItem);
+    tblCrops->insertRow(myCurrentRow);
+    // Add details to the new row
+    QTableWidgetItem *mypUsedItem= new QTableWidgetItem(tr("Used?"));
+    mypUsedItem->setCheckState(Qt::Checked);
+    tblCrops->setItem(myCurrentRow, 0, mypUsedItem);
+    QTableWidgetItem *mypNameItem = new QTableWidgetItem(myCrop.name());
+    mypNameItem->setData(Qt::UserRole,myGuid);
+    tblCrops->setItem(myCurrentRow, 1, mypNameItem);
+    mypNameItem->setIcon(myIcon);
+    //add the animal parameters combo to the form
+    QComboBox * mypCombo = new QComboBox(this);
+    QMapIterator<QString, LaCropParameter> myIterator(mCropParametersMap);
+    while (myIterator.hasNext())
+    {
+      myIterator.next();
+      LaCropParameter myCropParameter = myIterator.value();
+      QString myGuid = myCropParameter.guid();
+      QString myName = myCropParameter.name();
+      //                icon, disp name, userdata
+      mypCombo->addItem(myIcon,myName,myGuid);
+    }
+    tblCrops->setCellWidget ( myCurrentRow, 2, mypCombo);
+    myCurrentRow++;
   }
 }
 
@@ -268,21 +242,17 @@ void LaMainForm::animalCellClicked(int theRow, int theColumn)
   textBrowserAnimalParameterDefinition->setHtml(myAnimalParameter.toHtml());
 }
 
-void LaMainForm::on_listWidgetPlants_itemClicked(QListWidgetItem * theItem)
+void LaMainForm::cropCellClicked(int theRow, int theColumn)
 {
-  QString myGuid = theItem->data(Qt::UserRole).toString();
-  LaPlant myPlant = mPlantsMap[myGuid];
-  textBrowserPlantDefinition->setHtml(myPlant.toHtml());
+  qDebug("LaMainForm::cropCellClicked");
+  QString myGuid = tblCrops->item(tblCrops->currentRow(),1)->data(Qt::UserRole).toString();
+  LaCrop myCrop = mCropsMap[myGuid];
+  textBrowserCropDefinition->setHtml(myCrop.toHtml());
+  QComboBox * mypCombo=dynamic_cast<QComboBox *>(tblCrops->cellWidget(tblCrops->currentRow(),2));
+  myGuid = mypCombo->itemData(mypCombo->currentIndex(),Qt::UserRole).toString();
+  LaCropParameter myCropParameter = mCropParametersMap[myGuid];
+  textBrowserCropParameterDefinition->setHtml(myCropParameter.toHtml());
 }
-
-void LaMainForm::on_listWidgetPlantParameters_itemClicked(QListWidgetItem * theItem)
-{
-  QString myGuid = theItem->data(Qt::UserRole).toString();
-  LaPlantParameter myPlantParameter = mPlantParametersMap[myGuid];
-  textBrowserPlantParameterDefinition->setHtml(myPlantParameter.toHtml());
-}
-
-
 
 void LaMainForm::on_pushButtonRun_clicked()
 {
@@ -299,16 +269,16 @@ void LaMainForm::on_pushButtonSave_clicked()
 void LaMainForm::on_pushButtonDietBreakdown_clicked()
 {
   int myOverallPercentage = (100-(horizontalSliderDiet->value()));
-  int myTamePlantPercentage = horizontalSliderPlant->value();
+  int myTameCropPercentage = horizontalSliderCrop->value();
   int myDietPercentMeat = horizontalSliderDiet->value();
   int myDietPercentTameMeat = horizontalSliderMeat->value();
   int myCalories = spinBoxDailyCalories->value();
   int myPopulation = spinBoxPopulation->value();
 
   float myTotalCalories = myPopulation*myCalories*365.;
-  float myPlantCalories = (myOverallPercentage/100.)*myTotalCalories;
+  float myCropCalories = (myOverallPercentage/100.)*myTotalCalories;
   //not used!
-  //float myTamePlantCalories = ((myOverallPercentage/100.)*(myTamePlantPercentage/100.))*myTotalCalories;
+  //float myTameCropCalories = ((myOverallPercentage/100.)*(myTameCropPercentage/100.))*myTotalCalories;
   float myAnimalCalories = (myDietPercentMeat/100.)*myTotalCalories;
   //not used!
   //float myTameAnimalCalories = ((myDietPercentMeat/100.)*(myDietPercentTameMeat/100.))*myTotalCalories;
@@ -316,10 +286,10 @@ void LaMainForm::on_pushButtonDietBreakdown_clicked()
   writeDiet("Calories per person per year: " + QString::number((myCalories*365.)/1000.).toLocal8Bit() + "kcal");
   writeDiet("Calories required for population are: " + QString::number(myTotalCalories/1000.).toLocal8Bit() + "kcal");
   writeDiet(" ");
-  writeDiet("Plants contribute " + QString::number(myOverallPercentage).toLocal8Bit() + "% to diet, or " + QString::number(myPlantCalories/1000.).toLocal8Bit() + " kcal");
+  writeDiet("Crops contribute " + QString::number(myOverallPercentage).toLocal8Bit() + "% to diet, or " + QString::number(myCropCalories/1000.).toLocal8Bit() + " kcal");
   writeDiet("Meat contributes " + QString::number(myDietPercentMeat).toLocal8Bit() + "% to diet, or  " + QString::number(myAnimalCalories/1000.).toLocal8Bit() + " kcal");
   writeDiet(" ");
-  writeDiet("Tame Plants account for " + QString::number((myOverallPercentage/100.)*(myTamePlantPercentage/100.)*100.).toLocal8Bit() + "% of the diet, or " + QString::number(myPlantCalories/1000.).toLocal8Bit() + " kcal");
+  writeDiet("Tame Crops account for " + QString::number((myOverallPercentage/100.)*(myTameCropPercentage/100.)*100.).toLocal8Bit() + "% of the diet, or " + QString::number(myCropCalories/1000.).toLocal8Bit() + " kcal");
   writeDiet("Tame Animals account for " + QString::number((myDietPercentMeat/100.)*(myDietPercentTameMeat/100.)*100.).toLocal8Bit() + "% of the diet, or " + QString::number(myAnimalCalories/1000.).toLocal8Bit() + " kcal");
 }
 
