@@ -177,6 +177,11 @@ void LaMainForm::loadAnimals()
     {
       myIterator.next();
       LaAnimalParameter myAnimalParameter = myIterator.value();
+      //only add this entry if it is for the current animal
+      if (myGuid != myAnimalParameter.animalGuid())
+      {
+        continue;
+      }
       QString myGuid = myAnimalParameter.guid();
       QString myName = myAnimalParameter.name();
       //                icon, disp name, userdata
