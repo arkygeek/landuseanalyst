@@ -96,6 +96,7 @@ Section "Application" SEC01
   SetOverwrite ifnewer
   File "c:\Program Files\landuseanalyst\landuseanalyst.exe"
   SetOverwrite try
+  File "c:\Program Files\landuseanalyst\libla_core.dll"
 ;------- Qt 
   File "c:\Program Files\landuseanalyst\QtCore4.dll"
   File "c:\Program Files\landuseanalyst\QtGui4.dll"
@@ -164,6 +165,7 @@ Section Uninstall
   !insertmacro MUI_STARTMENU_GETFOLDER "Application" $ICONS_GROUP
   Delete "$INSTDIR\${PRODUCT_NAME}.url"
   Delete "$INSTDIR\uninst.exe"
+  Delete "$INSTDIR\libla_core.dll"
 ;---------- Qt Requirements
   ;Delete "$INSTDIR\QtNetwork4.dll"
   Delete "$INSTDIR\QtGui4.dll"
