@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>511</width>
-    <height>371</height>
+    <width>490</width>
+    <height>397</height>
    </rect>
   </property>
   <property name="minimumSize" >
@@ -25,20 +25,7 @@
    <property name="spacing" >
     <number>6</number>
    </property>
-   <item row="5" column="3" >
-    <spacer>
-     <property name="orientation" >
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" >
-      <size>
-       <width>51</width>
-       <height>27</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="5" column="5" >
+   <item row="7" column="3" >
     <widget class="QPushButton" name="pbnClose" >
      <property name="sizePolicy" >
       <sizepolicy>
@@ -53,41 +40,120 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="0" colspan="3" >
-    <widget class="QGroupBox" name="groupBoxPortionOfDiet" >
+   <item rowspan="2" row="5" column="3" >
+    <widget class="QPushButton" name="pbnApply" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>5</hsizetype>
+       <vsizetype>0</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text" >
+      <string>Apply</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="3" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>20</width>
+       <height>16</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item rowspan="2" row="4" column="0" colspan="3" >
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="labelPortionDiet" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>1</hsizetype>
+         <vsizetype>4</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="frameShape" >
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="text" >
+        <string>Portion of Tame Plant Diet</string>
+       </property>
+       <property name="alignment" >
+        <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="sbPercentTameCrop" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>5</hsizetype>
+         <vsizetype>0</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip" >
+        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Pigs contiribute this percent towards the tame meat portion of the diet&lt;/p>&lt;/body>&lt;/html></string>
+       </property>
+       <property name="suffix" >
+        <string> %</string>
+       </property>
+       <property name="maximum" >
+        <number>100</number>
+       </property>
+       <property name="value" >
+        <number>50</number>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item rowspan="2" row="6" column="0" colspan="3" >
+    <widget class="QGroupBox" name="groupBoxSuitableLand" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>5</hsizetype>
+       <vsizetype>5</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize" >
+      <size>
+       <width>115</width>
+       <height>0</height>
+      </size>
+     </property>
      <property name="title" >
-      <string>Portion of Diet</string>
+      <string>Suitability Masks</string>
      </property>
      <layout class="QGridLayout" >
       <property name="margin" >
-       <number>3</number>
+       <number>0</number>
       </property>
       <property name="spacing" >
-       <number>3</number>
+       <number>0</number>
       </property>
-      <item row="0" column="0" >
-       <widget class="QLabel" name="labelPortionDiet" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>1</hsizetype>
-          <vsizetype>4</vsizetype>
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="frameShape" >
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="text" >
-         <string>Portion of Tame Plant Diet</string>
-        </property>
-        <property name="alignment" >
-         <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="1" >
-       <widget class="QSpinBox" name="sbPercentTameCrop" >
+       <widget class="QCheckBox" name="checkBoxUseSpecificLand" >
         <property name="sizePolicy" >
          <sizepolicy>
           <hsizetype>0</hsizetype>
@@ -97,16 +163,28 @@
          </sizepolicy>
         </property>
         <property name="toolTip" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Pigs contiribute this percent towards the tame meat portion of the diet&lt;/p>&lt;/body>&lt;/html></string>
+         <string>binary raster named: pigmask</string>
         </property>
-        <property name="maximum" >
-         <number>100</number>
+        <property name="text" >
+         <string>Specific Land</string>
         </property>
-        <property name="value" >
-         <number>50</number>
+       </widget>
+      </item>
+      <item row="0" column="0" >
+       <widget class="QCheckBox" name="checkBoxUseCommonLand" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>0</hsizetype>
+          <vsizetype>0</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="toolTip" >
+         <string>binary raster named: pigmask</string>
+        </property>
+        <property name="text" >
+         <string>Common Land</string>
         </property>
        </widget>
       </item>
@@ -120,7 +198,7 @@ p, li { white-space: pre-wrap; }
      </property>
     </widget>
    </item>
-   <item row="0" column="0" colspan="6" >
+   <item row="0" column="0" colspan="4" >
     <widget class="QGroupBox" name="grpProfiles" >
      <property name="title" >
       <string>Available Plant Parameter Settings</string>
@@ -239,20 +317,6 @@ p, li { white-space: pre-wrap; }
      </layout>
     </widget>
    </item>
-   <item row="2" column="2" >
-    <widget class="QLineEdit" name="leDescription" >
-     <property name="whatsThis" >
-      <string>Description of the current layerset</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0" colspan="2" >
-    <widget class="QLabel" name="label_4" >
-     <property name="text" >
-      <string>Description:</string>
-     </property>
-    </widget>
-   </item>
    <item row="1" column="1" colspan="2" >
     <widget class="QLineEdit" name="leName" >
      <property name="whatsThis" >
@@ -260,72 +324,7 @@ p, li { white-space: pre-wrap; }
      </property>
     </widget>
    </item>
-   <item rowspan="2" row="4" column="0" colspan="3" >
-    <widget class="QGroupBox" name="groupBoxSuitableLand" >
-     <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>5</hsizetype>
-       <vsizetype>5</vsizetype>
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize" >
-      <size>
-       <width>115</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="title" >
-      <string>Suitability Masks</string>
-     </property>
-     <layout class="QGridLayout" >
-      <property name="margin" >
-       <number>9</number>
-      </property>
-      <property name="spacing" >
-       <number>6</number>
-      </property>
-      <item row="0" column="1" >
-       <widget class="QCheckBox" name="checkBoxUseSpecificLand" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>0</hsizetype>
-          <vsizetype>0</vsizetype>
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="toolTip" >
-         <string>binary raster named: pigmask</string>
-        </property>
-        <property name="text" >
-         <string>Specific Land</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0" >
-       <widget class="QCheckBox" name="checkBoxUseCommonLand" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>0</hsizetype>
-          <vsizetype>0</vsizetype>
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="toolTip" >
-         <string>binary raster named: pigmask</string>
-        </property>
-        <property name="text" >
-         <string>Common Land</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item rowspan="3" row="1" column="3" colspan="3" >
+   <item rowspan="3" row="1" column="3" >
     <widget class="QGroupBox" name="grpCropRotation" >
      <property name="sizePolicy" >
       <sizepolicy>
@@ -591,8 +590,71 @@ p, li { white-space: pre-wrap; }
      </layout>
     </widget>
    </item>
-   <item row="5" column="4" >
-    <widget class="QPushButton" name="pbnApply" >
+   <item row="3" column="0" colspan="3" >
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="label_2" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>0</hsizetype>
+         <vsizetype>5</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text" >
+        <string>Crop:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="cboCrop" >
+       <property name="minimumSize" >
+        <size>
+         <width>0</width>
+         <height>26</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="8" column="2" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="2" column="0" >
+    <widget class="QLabel" name="label_4" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>0</hsizetype>
+       <vsizetype>5</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text" >
+      <string>Notes:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1" colspan="2" >
+    <widget class="QLineEdit" name="leDescription" >
      <property name="sizePolicy" >
       <sizepolicy>
        <hsizetype>5</hsizetype>
@@ -601,23 +663,10 @@ p, li { white-space: pre-wrap; }
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="text" >
-      <string>Apply</string>
+     <property name="whatsThis" >
+      <string>Description of the current layerset</string>
      </property>
     </widget>
-   </item>
-   <item row="4" column="4" >
-    <spacer>
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" >
-      <size>
-       <width>20</width>
-       <height>16</height>
-      </size>
-     </property>
-    </spacer>
    </item>
   </layout>
  </widget>

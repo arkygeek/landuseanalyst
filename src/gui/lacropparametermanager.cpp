@@ -19,6 +19,7 @@
  ***************************************************************************/
 #include "lacropparametermanager.h"
 #include "lautils.h"
+#include "lacrop.h"
 #include <QSettings>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
@@ -48,6 +49,22 @@
   //disable these buttons unless experimental is allowed
   pbnImport->setVisible(false);
   pbnExport->setVisible(false);
+
+ //populate the plants combo
+  LaUtils::CropMap myCropsMap;
+  myCropsMap = LaUtils::getAvailableCrops();
+  QMapIterator<QString, LaCrop> myIterator(myCropsMap);
+  while (myIterator.hasNext())
+  {
+    myIterator.next();
+    LaCrop myCrop = myIterator.value();
+    QString myGuid = myCrop.guid();
+    QString myName = myCrop.name();
+    QIcon myIcon;
+    myIcon.addFile(":/localdata.png");
+    cboCrop->addItem(myName,myGuid);
+  }
+
 }
 
 LaCropParameterManager::~LaCropParameterManager()
@@ -179,6 +196,7 @@ void LaCropParameterManager::showCropParameter()
 {
   leName->setText(mCropParameter.name());
   leDescription->setText(mCropParameter.description());
+  setComboToDefault(cboCrop, mCropParameter.cropGuid());
   sbPercentTameCrop->setValue(mCropParameter.percentTameCrop());
   grpCropRotation->setChecked(mCropParameter.cropRotation());
   sbFallowRatio->setValue(mCropParameter.fallowRatio());
@@ -257,6 +275,7 @@ void LaCropParameterManager::on_pbnApply_clicked()
 {
   mCropParameter.setName(leName->text());
   mCropParameter.setDescription(leDescription->text());
+  mCropParameter.setCropGuid(cboCrop->itemData(cboCrop->currentIndex(),Qt::UserRole).toString());
   mCropParameter.setPercentTameCrop(sbPercentTameCrop->value());
   mCropParameter.setCropRotation(grpCropRotation->isChecked());
   mCropParameter.setFallowRatio(sbFallowRatio->value());
@@ -267,4 +286,24 @@ void LaCropParameterManager::on_pbnApply_clicked()
   mCropParameter.toXmlFile( LaUtils::userCropParameterProfilesDirPath() +
       QDir::separator() + mCropParameter.guid() + ".xml");
   refreshCropParameterTable(mCropParameter.guid());
+}
+bool LaCropParameterManager::setComboToDefault(QComboBox * thepCombo, QString theDefault)
+{
+  if (!theDefault.isEmpty())
+  {
+    //loop through list looking for a match
+    for ( int myCounter = 0; myCounter < thepCombo->count(); myCounter++ )
+    {
+      thepCombo->setCurrentIndex(myCounter);
+      if (thepCombo->itemData(myCounter,Qt::UserRole)==theDefault)
+      {
+        break;
+      }
+    }
+  }
+  else
+  {
+    return false;
+  }
+  return true;
 }

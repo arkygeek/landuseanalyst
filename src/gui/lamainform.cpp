@@ -218,13 +218,18 @@ void LaMainForm::loadCrops()
     mypNameItem->setData(Qt::UserRole,myGuid);
     tblCrops->setItem(myCurrentRow, 1, mypNameItem);
     mypNameItem->setIcon(myIcon);
-    //add the animal parameters combo to the form
+    //add the crop parameters combo to the form
     QComboBox * mypCombo = new QComboBox(this);
     QMapIterator<QString, LaCropParameter> myIterator(mCropParametersMap);
     while (myIterator.hasNext())
     {
       myIterator.next();
       LaCropParameter myCropParameter = myIterator.value();
+      //only add this entry if it is for the current crop
+      if (myGuid != myCropParameter.cropGuid())
+      {
+        continue;
+      }
       QString myGuid = myCropParameter.guid();
       QString myName = myCropParameter.name();
       //                icon, disp name, userdata

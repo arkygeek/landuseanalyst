@@ -59,6 +59,8 @@ class LaCropParameterManager : public QDialog, private Ui::LaCropParameterManage
       LaCropParameter mCropParameter;
       void readSettings();
       void writeSettings();
+      /** @TODO move this into LaGuiUtils - a gui subclass of LaUtils */
+      bool setComboToDefault(QComboBox * thepCombo, QString theDefault);
 };
 
 #endif //LACROPFORMMAIN_H

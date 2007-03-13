@@ -22,7 +22,7 @@ class QString;
 #include "laserialisable.h"
 #include "laguid.h"
 #include <QString>
-/** 
+/**
   * A class to represent a crop
   * @author Tim Sutton, Jason Jorgenson
   */
@@ -38,7 +38,7 @@ class LaCropParameter : public LaSerialisable, public LaGuid
     LaCropParameter(const LaCropParameter& theCropParameter);
     /** Assignement operator */
     LaCropParameter& operator= (const LaCropParameter& theCropParameter);
-    
+
     //
     // Accessors
     //
@@ -47,6 +47,8 @@ class LaCropParameter : public LaSerialisable, public LaGuid
     QString name() const;
     /** Set the description for this set of crop model parameters */
     QString description() const;
+    /** Get the guid of the crop this set of params is associated with */
+    QString cropGuid() const;
     /** Portion of the Tame Crop  Diet (Percentage) */
     int percentTameCrop() const;
     /** Flag for determining use of crop rotation */
@@ -76,6 +78,8 @@ class LaCropParameter : public LaSerialisable, public LaGuid
     void setName(QString theName);
     /** Set the description for this set of crop model parameters */
     void setDescription(QString theDescription);
+    /** Set the guid of the crop this set of params is associated with */
+    void setCropGuid(QString theGuid);
     /** Portion of the Tame Crop  Diet (Percentage) */
     void setPercentTameCrop(int thePercentage);
     /** Flag for determining use of crop rotation */
@@ -121,6 +125,8 @@ class LaCropParameter : public LaSerialisable, public LaGuid
     QString mName;
     /** The description for this crop parameter */
     QString mDescription;
+    /** The crop guid these parameters are associated with */
+    QString mCropGuid;
     /** Portion of the Tame Crop Diet (Percentage) */
     int mPercentTameCrop;
     /** Food value of specific (or unique) land as calories per dunum/hectare */
