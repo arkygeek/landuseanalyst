@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>386</width>
-    <height>387</height>
+    <width>534</width>
+    <height>460</height>
    </rect>
   </property>
   <property name="minimumSize" >
@@ -20,191 +20,11 @@
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >
-    <number>5</number>
+    <number>9</number>
    </property>
    <property name="spacing" >
-    <number>7</number>
+    <number>6</number>
    </property>
-   <item row="3" column="1" >
-    <widget class="QComboBox" name="comboBoxFallowUsage" >
-     <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>5</hsizetype>
-       <vsizetype>5</vsizetype>
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="cursor" >
-      <cursor>13</cursor>
-     </property>
-     <property name="toolTip" >
-      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">If your animal is to be allowed to graze fallow land resulting from crop rotation, set the priority of their access to this fallow land here.&lt;/p>&lt;/body>&lt;/html></string>
-     </property>
-     <item>
-      <property name="text" >
-       <string>Do Not Graze Fallow</string>
-      </property>
-     </item>
-     <item>
-      <property name="text" >
-       <string>HIGH Fallow Priority</string>
-      </property>
-     </item>
-     <item>
-      <property name="text" >
-       <string>MED Fallow Priority</string>
-      </property>
-     </item>
-     <item>
-      <property name="text" >
-       <string>LOW Fallow Priority</string>
-      </property>
-     </item>
-    </widget>
-   </item>
-   <item rowspan="4" row="2" column="0" >
-    <widget class="QGroupBox" name="groupBox_3" >
-     <property name="title" >
-      <string>Land Suitability Selection</string>
-     </property>
-     <layout class="QGridLayout" >
-      <property name="margin" >
-       <number>6</number>
-      </property>
-      <property name="spacing" >
-       <number>5</number>
-      </property>
-      <item row="0" column="0" >
-       <widget class="QCheckBox" name="checkBoxSpecificRaster" >
-        <property name="toolTip" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">binary raster named: animalName.mask  where animalName is the name of the animal you are setting these parameters for.&lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="text" >
-         <string>Specific Land</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0" >
-       <widget class="QSpinBox" name="sbSpecificRasterCalories" >
-        <property name="toolTip" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Food Value of grazing land in Kilo Calories&lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="suffix" >
-         <string> KCal</string>
-        </property>
-        <property name="maximum" >
-         <number>99999999</number>
-        </property>
-        <property name="singleStep" >
-         <number>100</number>
-        </property>
-        <property name="value" >
-         <number>10000</number>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2" >
-       <widget class="QCheckBox" name="checkBoxCommonRaster" >
-        <property name="toolTip" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">binary raster named common.grazing.mask which more than one animal can graze from&lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="text" >
-         <string>Common Land</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2" >
-       <widget class="QSpinBox" name="sbCommonRasterCalories" >
-        <property name="toolTip" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Food Value of grazing land in Kilo Calories&lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="suffix" >
-         <string> KCal</string>
-        </property>
-        <property name="maximum" >
-         <number>9999999</number>
-        </property>
-        <property name="singleStep" >
-         <number>100</number>
-        </property>
-        <property name="value" >
-         <number>10000</number>
-        </property>
-       </widget>
-      </item>
-      <item rowspan="2" row="0" column="1" >
-       <widget class="Line" name="line" >
-        <property name="orientation" >
-         <enum>Qt::Vertical</enum>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0" colspan="3" >
-       <widget class="QComboBox" name="comboBoxAreaUnits" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>5</hsizetype>
-          <vsizetype>5</vsizetype>
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="cursor" >
-         <cursor>13</cursor>
-        </property>
-        <property name="toolTip" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">1 dunum = 1000 square meters&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">1 hectare = 10,000 square meters&lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <item>
-         <property name="text" >
-          <string>per Dunum per Year</string>
-         </property>
-        </item>
-        <item>
-         <property name="text" >
-          <string>per Hectare per Year</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="5" column="1" >
-    <widget class="QPushButton" name="pbnClose" >
-     <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>5</hsizetype>
-       <vsizetype>0</vsizetype>
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text" >
-      <string>Close</string>
-     </property>
-    </widget>
-   </item>
    <item row="1" column="0" >
     <widget class="QGroupBox" name="groupBox" >
      <property name="title" >
@@ -212,12 +32,12 @@ p, li { white-space: pre-wrap; }
      </property>
      <layout class="QGridLayout" >
       <property name="margin" >
-       <number>3</number>
+       <number>9</number>
       </property>
       <property name="spacing" >
-       <number>3</number>
+       <number>6</number>
       </property>
-      <item row="1" column="0" colspan="2" >
+      <item row="2" column="0" colspan="2" >
        <layout class="QHBoxLayout" >
         <property name="margin" >
          <number>0</number>
@@ -226,67 +46,25 @@ p, li { white-space: pre-wrap; }
          <number>6</number>
         </property>
         <item>
-         <widget class="QLabel" name="label_4" >
+         <widget class="QLabel" name="label_2" >
           <property name="text" >
-           <string>Notes:</string>
+           <string>Animal:</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="leDescription" >
-          <property name="whatsThis" >
-           <string>Description of the current layerset</string>
+         <widget class="QComboBox" name="cboAnimal" >
+          <property name="minimumSize" >
+           <size>
+            <width>0</width>
+            <height>26</height>
+           </size>
           </property>
          </widget>
         </item>
        </layout>
       </item>
-      <item row="0" column="0" colspan="2" >
-       <layout class="QHBoxLayout" >
-        <property name="margin" >
-         <number>0</number>
-        </property>
-        <property name="spacing" >
-         <number>6</number>
-        </property>
-        <item>
-         <widget class="QLabel" name="label" >
-          <property name="text" >
-           <string>Name:</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLineEdit" name="leName" >
-          <property name="whatsThis" >
-           <string>Short name for the current layerset</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="2" column="0" >
-       <widget class="QLabel" name="labelPortionDiet" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>1</hsizetype>
-          <vsizetype>4</vsizetype>
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="frameShape" >
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="text" >
-         <string>Portion of Tame Meat Diet</string>
-        </property>
-        <property name="alignment" >
-         <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1" >
+      <item row="3" column="1" >
        <widget class="QSpinBox" name="sbPercentTameMeat" >
         <property name="sizePolicy" >
          <sizepolicy>
@@ -312,6 +90,75 @@ p, li { white-space: pre-wrap; }
          <number>50</number>
         </property>
        </widget>
+      </item>
+      <item row="3" column="0" >
+       <widget class="QLabel" name="labelPortionDiet" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>1</hsizetype>
+          <vsizetype>4</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="frameShape" >
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="text" >
+         <string>Portion of Tame Meat Diet</string>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0" colspan="2" >
+       <layout class="QHBoxLayout" >
+        <property name="margin" >
+         <number>0</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="label" >
+          <property name="text" >
+           <string>Name:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="leName" >
+          <property name="whatsThis" >
+           <string>Short name for the current layerset</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="1" column="0" colspan="2" >
+       <layout class="QHBoxLayout" >
+        <property name="margin" >
+         <number>0</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="label_4" >
+          <property name="text" >
+           <string>Notes:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="leDescription" >
+          <property name="whatsThis" >
+           <string>Description of the current layerset</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </widget>
@@ -433,21 +280,6 @@ p, li { white-space: pre-wrap; }
        </spacer>
       </item>
      </layout>
-    </widget>
-   </item>
-   <item row="4" column="1" >
-    <widget class="QPushButton" name="pbnApply" >
-     <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>5</hsizetype>
-       <vsizetype>0</vsizetype>
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text" >
-      <string>Apply</string>
-     </property>
     </widget>
    </item>
    <item rowspan="2" row="1" column="1" >
@@ -716,6 +548,201 @@ p, li { white-space: pre-wrap; }
        </widget>
       </item>
      </layout>
+    </widget>
+   </item>
+   <item row="4" column="1" >
+    <widget class="QPushButton" name="pbnApply" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>5</hsizetype>
+       <vsizetype>0</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text" >
+      <string>Apply</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1" >
+    <widget class="QPushButton" name="pbnClose" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>5</hsizetype>
+       <vsizetype>0</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text" >
+      <string>Close</string>
+     </property>
+    </widget>
+   </item>
+   <item rowspan="4" row="2" column="0" >
+    <widget class="QGroupBox" name="groupBox_3" >
+     <property name="title" >
+      <string>Land Suitability Selection</string>
+     </property>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>6</number>
+      </property>
+      <property name="spacing" >
+       <number>5</number>
+      </property>
+      <item row="0" column="0" >
+       <widget class="QCheckBox" name="checkBoxSpecificRaster" >
+        <property name="toolTip" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">binary raster named: animalName.mask  where animalName is the name of the animal you are setting these parameters for.&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="text" >
+         <string>Specific Land</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" >
+       <widget class="QSpinBox" name="sbSpecificRasterCalories" >
+        <property name="toolTip" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Food Value of grazing land in Kilo Calories&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="suffix" >
+         <string> KCal</string>
+        </property>
+        <property name="maximum" >
+         <number>99999999</number>
+        </property>
+        <property name="singleStep" >
+         <number>100</number>
+        </property>
+        <property name="value" >
+         <number>10000</number>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2" >
+       <widget class="QCheckBox" name="checkBoxCommonRaster" >
+        <property name="toolTip" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">binary raster named common.grazing.mask which more than one animal can graze from&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="text" >
+         <string>Common Land</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2" >
+       <widget class="QSpinBox" name="sbCommonRasterCalories" >
+        <property name="toolTip" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Food Value of grazing land in Kilo Calories&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="suffix" >
+         <string> KCal</string>
+        </property>
+        <property name="maximum" >
+         <number>9999999</number>
+        </property>
+        <property name="singleStep" >
+         <number>100</number>
+        </property>
+        <property name="value" >
+         <number>10000</number>
+        </property>
+       </widget>
+      </item>
+      <item rowspan="2" row="0" column="1" >
+       <widget class="Line" name="line" >
+        <property name="orientation" >
+         <enum>Qt::Vertical</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" colspan="3" >
+       <widget class="QComboBox" name="comboBoxAreaUnits" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>5</hsizetype>
+          <vsizetype>5</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="cursor" >
+         <cursor>13</cursor>
+        </property>
+        <property name="toolTip" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">1 dunum = 1000 square meters&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">1 hectare = 10,000 square meters&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <item>
+         <property name="text" >
+          <string>per Dunum per Year</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>per Hectare per Year</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="3" column="1" >
+    <widget class="QComboBox" name="comboBoxFallowUsage" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>5</hsizetype>
+       <vsizetype>5</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="cursor" >
+      <cursor>13</cursor>
+     </property>
+     <property name="toolTip" >
+      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">If your animal is to be allowed to graze fallow land resulting from crop rotation, set the priority of their access to this fallow land here.&lt;/p>&lt;/body>&lt;/html></string>
+     </property>
+     <item>
+      <property name="text" >
+       <string>Do Not Graze Fallow</string>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>HIGH Fallow Priority</string>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>MED Fallow Priority</string>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>LOW Fallow Priority</string>
+      </property>
+     </item>
     </widget>
    </item>
   </layout>

@@ -19,6 +19,7 @@
  ***************************************************************************/
 #include "laanimalparametermanager.h"
 #include "lautils.h"
+#include "laanimal.h"
 #include <QSettings>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
@@ -48,6 +49,20 @@
   //disable these buttons unless experimental is allowed
   pbnImport->setVisible(false);
   pbnExport->setVisible(false);
+  //populate the animals combo
+  LaUtils::AnimalMap myAnimalsMap;
+  myAnimalsMap = LaUtils::getAvailableAnimals();
+  QMapIterator<QString, LaAnimal> myIterator(myAnimalsMap);
+  while (myIterator.hasNext())
+  {
+    myIterator.next();
+    LaAnimal myAnimal = myIterator.value();
+    QString myGuid = myAnimal.guid();
+    QString myName = myAnimal.name();
+    QIcon myIcon;
+    myIcon.addFile(":/localdata.png");
+    cboAnimal->addItem(myName,myGuid);
+  }
 }
 
 LaAnimalParameterManager::~LaAnimalParameterManager()
@@ -178,6 +193,7 @@ void LaAnimalParameterManager::showAnimalParameter()
 {
   leName->setText(mAnimalParameter.name());
   leDescription->setText(mAnimalParameter.description());
+  setComboToDefault(cboAnimal, mAnimalParameter.animalGuid());
   sbPercentTameMeat->setValue(mAnimalParameter.percentTameMeat());
   checkBoxCommonRaster->setChecked(mAnimalParameter.useCommonGrazingLand());
   checkBoxSpecificRaster->setChecked(mAnimalParameter.useSpecificGrazingLand());
@@ -264,6 +280,7 @@ void LaAnimalParameterManager::on_pbnApply_clicked()
 {
   mAnimalParameter.setName(leName->text());
   mAnimalParameter.setDescription(leDescription->text());
+  mAnimalParameter.setAnimalGuid(cboAnimal->itemData(cboAnimal->currentIndex(),Qt::UserRole).toString());
   mAnimalParameter.setPercentTameMeat(sbPercentTameMeat->value());
   mAnimalParameter.setUseCommonGrazingLand(checkBoxCommonRaster->isChecked());
   mAnimalParameter.setUseSpecificGrazingLand(checkBoxSpecificRaster->isChecked());
@@ -282,4 +299,24 @@ void LaAnimalParameterManager::on_pbnApply_clicked()
   mAnimalParameter.toXmlFile( LaUtils::userAnimalParameterProfilesDirPath() +
       QDir::separator() + mAnimalParameter.guid() + ".xml");
   refreshAnimalParameterTable(mAnimalParameter.guid());
+}
+bool LaAnimalParameterManager::setComboToDefault(QComboBox * thepCombo, QString theDefault)
+{
+  if (!theDefault.isEmpty())
+  {
+    //loop through list looking for a match
+    for ( int myCounter = 0; myCounter < thepCombo->count(); myCounter++ )
+    {
+      thepCombo->setCurrentIndex(myCounter);
+      if (thepCombo->itemData(myCounter,Qt::UserRole)==theDefault)
+      {
+        break;
+      }
+    }
+  }
+  else
+  {
+    return false;
+  }
+  return true;
 }
