@@ -46,6 +46,8 @@ class LaAnimalParameter : public LaSerialisable, public LaGuid
     QString name() const;
     /** Get the name for this set of animal model parameters */
     QString description() const;
+    /** Get the guid of the animal this set of params is associated with */
+    QString animalGuid() const;
     /** Portion of the Tame Meat Diet (Percentage) */
     int percentTameMeat() const;
 
@@ -82,6 +84,8 @@ class LaAnimalParameter : public LaSerialisable, public LaGuid
     void setName(QString theName);
     /** Set the name for this set of animal model parameters */
     void setDescription(QString theDescription);
+    /** Set the guid of the animal this set of params is associated with */
+    void setAnimalGuid(QString theGuid);
     /** Portion of the Tame Meat Diet (Percentage) */
     void setPercentTameMeat(int thePercentage);
 
@@ -128,6 +132,8 @@ class LaAnimalParameter : public LaSerialisable, public LaGuid
     QString mName;
     /** A name for this set of animal paremeters */
     QString mDescription;
+    /** The animal guid these parameters are associated with */
+    QString mAnimalGuid;
     /** Portion of the Tame Meat Diet (Percentage) */
     int mPercentTameMeat;
 

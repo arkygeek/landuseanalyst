@@ -40,6 +40,7 @@ LaAnimalParameter::LaAnimalParameter(const LaAnimalParameter& theAnimalParameter
   mName=theAnimalParameter.name();
   mDescription=theAnimalParameter.description();
   setGuid(theAnimalParameter.guid());
+  setAnimalGuid(theAnimalParameter.animalGuid());
   mPercentTameMeat=theAnimalParameter.percentTameMeat();
   mFoodValueOfSpecificGrazingLand = theAnimalParameter.foodValueOfSpecificGrazingLand();
   mFoodValueOfCommonGrazingLand = theAnimalParameter.foodValueOfCommonGrazingLand();
@@ -63,6 +64,7 @@ LaAnimalParameter& LaAnimalParameter::operator=(const LaAnimalParameter& theAnim
   mName=theAnimalParameter.name();
   mDescription=theAnimalParameter.description();
   setGuid(theAnimalParameter.guid());
+  setAnimalGuid(theAnimalParameter.animalGuid());
   mPercentTameMeat = theAnimalParameter.percentTameMeat();
   mFoodValueOfSpecificGrazingLand = theAnimalParameter.foodValueOfSpecificGrazingLand();
   mAreaUnits = theAnimalParameter.areaUnits();
@@ -88,6 +90,10 @@ QString LaAnimalParameter::name() const
 QString LaAnimalParameter::description() const
 {
   return mDescription;
+}
+QString LaAnimalParameter::animalGuid() const
+{
+  return mAnimalGuid;
 }
 int LaAnimalParameter::percentTameMeat() const
 {
@@ -156,6 +162,10 @@ void LaAnimalParameter::setName(QString theName)
 void LaAnimalParameter::setDescription(QString theDescription)
 {
   mDescription=theDescription;
+}
+void LaAnimalParameter::setAnimalGuid(QString theGuid) 
+{
+  mAnimalGuid = theGuid;
 }
 void LaAnimalParameter::setPercentTameMeat(int thePercentage)
 {
@@ -232,6 +242,7 @@ bool LaAnimalParameter::fromXml(QString theXml)
   qDebug("AnimalParameter::fromXml - guid set to : " + guid().toLocal8Bit());
   mName=LaUtils::xmlDecode(myTopElement.firstChildElement("name").text());
   mDescription=LaUtils::xmlDecode(myTopElement.firstChildElement("description").text());
+  mAnimalGuid=LaUtils::xmlDecode(myTopElement.firstChildElement("animal").text());
   mPercentTameMeat=QString(myTopElement.firstChildElement("percentTameMeat").text()).toInt();
   mUseCommonGrazingLand=QString(myTopElement.firstChildElement("useCommonGrazingLand").text()).toInt();
   mUseSpecificGrazingLand=QString(myTopElement.firstChildElement("useSpecificGrazingLand").text()).toInt();
@@ -258,6 +269,7 @@ QString LaAnimalParameter::toXml()
   myString+=QString("<animalParameter guid=\"" + guid() + "\">\n");
   myString+=QString("  <name>" + LaUtils::xmlEncode(mName) + "</name>\n");
   myString+=QString("  <description>" + LaUtils::xmlEncode(mDescription) + "</description>\n");
+  myString+=QString("  <animal>" + LaUtils::xmlEncode(mAnimalGuid) + "</animal>\n");
   myString+=QString("  <percentTameMeat>" + QString::number(mPercentTameMeat) + "</percentTameMeat>\n");
   myString+=QString("  <useCommonGrazingLand>" + QString::number(mUseCommonGrazingLand) + "</useCommonGrazingLand>\n");
   myString+=QString("  <useSpecificGrazingLand>" + QString::number(mUseSpecificGrazingLand) + "</useSpecificGrazingLand>\n");  myString+=QString("  <foodValueOfCommonGrazingLand>" + QString::number(mFoodValueOfCommonGrazingLand) + "</foodValueOfCommonGrazingLand>\n");
@@ -281,6 +293,7 @@ QString LaAnimalParameter::toText()
   myString+=QString("guid=>" + guid() + "\n");
   myString+=QString("name=>" + LaUtils::xmlEncode(mName) + "\n");
   myString+=QString("description=>" + LaUtils::xmlEncode(mDescription) + "\n");
+  myString+=QString("animal=>" + mAnimalGuid + "\n");
   myString+=QString("percentTameMeat=>" + QString::number(mPercentTameMeat) + "\n");
   myString+=QString("useCommonGrazingLand=>" + QString::number(mUseCommonGrazingLand) + "\n");
   myString+=QString("useSpecificGrazingLand=>" + QString::number(mUseSpecificGrazingLand) + "\n");
@@ -304,6 +317,7 @@ QString LaAnimalParameter::toHtml()
   myString+="<p align=\"center\"><h1>Details for " + LaUtils::xmlEncode(mName) + "</h1></p>";
   myString+="<p>GUID:" + guid() + "</p>";
   myString+="<p>Description:" + mDescription + "</p>";
+  myString+="<p>Animal:" + mAnimalGuid + "</p>";
   myString+="<p>Percentage of Tame Meat: " + QString::number(mPercentTameMeat) + "</p>";
   myString+="<p>Use Common Grazing Land: " + QString::number(mUseCommonGrazingLand) + "</p>";
   myString+="<p>Use Specific Grazing Land: " + QString::number(mUseSpecificGrazingLand) + "</p>";
