@@ -136,11 +136,13 @@ void LaMainForm::on_pbnNewCropParameter_clicked()
 {
     LaCropParameterManager myCropParameterManager;
     myCropParameterManager.exec();
+    loadCrops();
 }
 void LaMainForm::on_pbnNewAnimalParameter_clicked()
 {
     LaAnimalParameterManager myAnimalParameterManager;
     myAnimalParameterManager.exec();
+    loadAnimals();
 }
 
 void LaMainForm::loadAnimals()
