@@ -9,6 +9,7 @@ SET(LA_CORE_SRCS
   lacropparameter.cpp
   laserialisable.cpp
   lautils.cpp
+  lamodel.cpp
   )
 #headers that dont need to be MOCs but that may be distributed etc later
 SET(LA_CORE_OTHER_HDRS
@@ -16,6 +17,7 @@ SET(LA_CORE_OTHER_HDRS
   laanimalparameter.h
   laguid.h
   lacrop.h
+  lamodel.h
   lacropparameter.h
   laserialisable.h
   version.h
