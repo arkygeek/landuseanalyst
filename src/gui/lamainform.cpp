@@ -149,29 +149,49 @@ void LaMainForm::loadAnimals()
 {
   tblAnimals->clear();
   tblAnimals->setRowCount(0);
-  tblAnimals->setColumnCount(3);
+  tblAnimals->setColumnCount(4);
   int myCurrentRow=0;
-
-  mAnimalsMap = LaUtils::getAvailableAnimals();
+  int myRunningPercentage=0;
+  QMap<QString,LaAnimal> myAnimalsMap = LaUtils::getAvailableAnimals();
   mAnimalParametersMap = LaUtils::getAvailableAnimalParameters();
-  QMapIterator<QString, LaAnimal> myIterator(mAnimalsMap);
+  QMapIterator<QString, LaAnimal> myIterator(myAnimalsMap);
   while (myIterator.hasNext())
   {
     myIterator.next();
     LaAnimal myAnimal = myIterator.value();
     QString myGuid = myAnimal.guid();
     QString myName = myAnimal.name();
+    QPair<bool,QString> myValue;
+    //check if this animal is in mAnimalsMap and if not add it
+    if (!mAnimalsMap.contains(myGuid))
+    {
+      myValue.first = false;
+      myValue.second = "";
+      mAnimalsMap.insert(myGuid,myValue);
+    }
+    else
+    {
+      myValue=mAnimalsMap[myGuid];
+    }
     QIcon myIcon;
     myIcon.addFile(":/localdata.png");
     tblAnimals->insertRow(myCurrentRow);
     // Add details to the new row
     QTableWidgetItem *mypUsedItem= new QTableWidgetItem(tr("Used?"));
-    mypUsedItem->setCheckState(Qt::Checked);
+    if (myValue.first)
+    {
+      mypUsedItem->setCheckState(Qt::Checked);
+    }
+    else
+    {
+      mypUsedItem->setCheckState(Qt::Unchecked);
+    }
     tblAnimals->setItem(myCurrentRow, 0, mypUsedItem);
     QTableWidgetItem *mypNameItem = new QTableWidgetItem(myAnimal.name());
     mypNameItem->setData(Qt::UserRole,myGuid);
     tblAnimals->setItem(myCurrentRow, 1, mypNameItem);
     mypNameItem->setIcon(myIcon);
+    //create a var to hold the percentage for each selected parameter
     //add the animal parameters combo to the form
     QComboBox * mypCombo = new QComboBox(this);
     QMapIterator<QString, LaAnimalParameter> myIterator(mAnimalParametersMap);
@@ -184,11 +204,21 @@ void LaMainForm::loadAnimals()
       {
         continue;
       }
-      QString myGuid = myAnimalParameter.guid();
-      QString myName = myAnimalParameter.name();
+      QString myParameterGuid = myAnimalParameter.guid();
+      QString myParameterName = myAnimalParameter.name();
+      //see if this animal parameter percentage can be added to our running tot
+      if (myValue.second == myAnimalParameter.guid())
+      {
+        myRunningPercentage += myAnimalParameter.percentTameMeat();
+        QTableWidgetItem *mypPercentItem = 
+          new QTableWidgetItem(QString::number(myAnimalParameter.percentTameMeat()));
+        qDebug(QString::number(myAnimalParameter.percentTameMeat()).toLocal8Bit());
+        tblAnimals->setItem(myCurrentRow, 3, mypPercentItem);
+      }
       //                icon, disp name, userdata
-      mypCombo->addItem(myIcon,myName,myGuid);
+      mypCombo->addItem(myIcon,myParameterName,myParameterGuid);
     }
+    setComboToDefault(mypCombo, myValue.second);
     tblAnimals->setCellWidget ( myCurrentRow, 2, mypCombo);
     myCurrentRow++;
   }
@@ -200,9 +230,9 @@ void LaMainForm::loadCrops()
   tblCrops->setColumnCount(3);
   int myCurrentRow=0;
 
-  mCropsMap = LaUtils::getAvailableCrops();
+  QMap<QString,LaCrop> myCropsMap = LaUtils::getAvailableCrops();
   mCropParametersMap = LaUtils::getAvailableCropParameters();
-  QMapIterator<QString, LaCrop> myIterator(mCropsMap);
+  QMapIterator<QString, LaCrop> myIterator(myCropsMap);
   while (myIterator.hasNext())
   {
     myIterator.next();
@@ -246,7 +276,8 @@ void LaMainForm::animalCellClicked(int theRow, int theColumn)
 {
   qDebug("LaMainForm::animalCellClicked");
   QString myGuid = tblAnimals->item(tblAnimals->currentRow(),1)->data(Qt::UserRole).toString();
-  LaAnimal myAnimal = mAnimalsMap[myGuid];
+  QMap<QString,LaAnimal> myAnimalsMap = LaUtils::getAvailableAnimals();
+  LaAnimal myAnimal = myAnimalsMap[myGuid];
   textBrowserAnimalDefinition->setHtml(myAnimal.toHtml());
   QComboBox * mypCombo=dynamic_cast<QComboBox *>(tblAnimals->cellWidget(tblAnimals->currentRow(),2));
   myGuid = mypCombo->itemData(mypCombo->currentIndex(),Qt::UserRole).toString();
@@ -258,7 +289,8 @@ void LaMainForm::cropCellClicked(int theRow, int theColumn)
 {
   qDebug("LaMainForm::cropCellClicked");
   QString myGuid = tblCrops->item(tblCrops->currentRow(),1)->data(Qt::UserRole).toString();
-  LaCrop myCrop = mCropsMap[myGuid];
+  QMap<QString,LaCrop> myCropsMap = LaUtils::getAvailableCrops();
+  LaCrop myCrop = myCropsMap[myGuid];
   textBrowserCropDefinition->setHtml(myCrop.toHtml());
   QComboBox * mypCombo=dynamic_cast<QComboBox *>(tblCrops->cellWidget(tblCrops->currentRow(),2));
   myGuid = mypCombo->itemData(mypCombo->currentIndex(),Qt::UserRole).toString();
@@ -431,3 +463,23 @@ void LaMainForm::doBaseCalculations()
 
 }
 
+bool LaMainForm::setComboToDefault(QComboBox * thepCombo, QString theDefault)
+{
+  if (!theDefault.isEmpty())
+  {
+    //loop through list looking for a match
+    for ( int myCounter = 0; myCounter < thepCombo->count(); myCounter++ )
+    {
+      thepCombo->setCurrentIndex(myCounter);
+      if (thepCombo->itemData(myCounter,Qt::UserRole)==theDefault)
+      {
+        break;
+      }
+    }
+  }
+  else
+  {
+    return false;
+  }
+  return true;
+}
