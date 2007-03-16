@@ -159,7 +159,7 @@ void LaCropParameter::setUseCommonLand(bool theFlag)
 
 bool LaCropParameter::fromXml(QString theXml)
 {
-  qDebug("Loading CropParameter from xml");
+  //qDebug("Loading CropParameter from xml");
   QDomDocument myDocument("mydocument");
   myDocument.setContent(theXml);
   QDomElement myTopElement = myDocument.firstChildElement("cropParameter");
@@ -168,9 +168,9 @@ bool LaCropParameter::fromXml(QString theXml)
     //TODO - just make this a warning
     qDebug("top element could not be found!");
   }
-  qDebug("CropParameter::fromXml - guid found : " + myTopElement.attribute("guid").toLocal8Bit());
+  //qDebug("CropParameter::fromXml - guid found : " + myTopElement.attribute("guid").toLocal8Bit());
   setGuid(myTopElement.attribute("guid"));
-  qDebug("CropParameter::fromXml - guid set to : " + guid().toLocal8Bit());
+  //qDebug("CropParameter::fromXml - guid set to : " + guid().toLocal8Bit());
   mName=LaUtils::xmlDecode(myTopElement.firstChildElement("name").text());
   mDescription=LaUtils::xmlDecode(myTopElement.firstChildElement("description").text());
   mCropGuid=LaUtils::xmlDecode(myTopElement.firstChildElement("crop").text());

@@ -228,7 +228,7 @@ void LaAnimalParameter::setFallowUsage(int theIndexValue)
 
 bool LaAnimalParameter::fromXml(QString theXml)
 {
-  qDebug("Loading animal parameter from xml");
+  //qDebug("Loading animal parameter from xml");
   QDomDocument myDocument("mydocument");
   myDocument.setContent(theXml);
   QDomElement myTopElement = myDocument.firstChildElement("animalParameter");
@@ -237,9 +237,9 @@ bool LaAnimalParameter::fromXml(QString theXml)
     //TODO - just make this a warning
     qDebug("top element could not be found!");
   }
-  qDebug("AnimalParameter::fromXml - guid found : " + myTopElement.attribute("guid").toLocal8Bit());
+  //qDebug("AnimalParameter::fromXml - guid found : " + myTopElement.attribute("guid").toLocal8Bit());
   setGuid(myTopElement.attribute("guid"));
-  qDebug("AnimalParameter::fromXml - guid set to : " + guid().toLocal8Bit());
+  //qDebug("AnimalParameter::fromXml - guid set to : " + guid().toLocal8Bit());
   mName=LaUtils::xmlDecode(myTopElement.firstChildElement("name").text());
   mDescription=LaUtils::xmlDecode(myTopElement.firstChildElement("description").text());
   mAnimalGuid=LaUtils::xmlDecode(myTopElement.firstChildElement("animal").text());
