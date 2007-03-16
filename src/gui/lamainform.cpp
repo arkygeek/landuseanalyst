@@ -249,13 +249,16 @@ void LaMainForm::loadAnimals()
   {
     myIcon.addFile(":/status_error.png");
   }
-  tblAnimals->insertRow(myCurrentRow);
-  QTableWidgetItem *mypLabelItem = new QTableWidgetItem(QString(tr("Total Diet %")));
-  tblAnimals->setItem(myCurrentRow, 1, mypLabelItem);
-  QTableWidgetItem *mypPercentItem =
-          new QTableWidgetItem(QString::number(myRunningPercentage));
-  mypPercentItem->setIcon(myIcon);
-  tblAnimals->setItem(myCurrentRow, 3, mypPercentItem);
+  QString myPercentItem = QString::number(myRunningPercentage);
+  labelAnimalCheck->setText(myPercentItem + "\%");
+  //QLabel::setPixmap(labelAnimalCheck->(myIcon));
+  //tblAnimals->insertRow(myCurrentRow);
+  //QTableWidgetItem *mypLabelItem = new QTableWidgetItem(QString(tr("Total Diet %")));
+  //tblAnimals->setItem(myCurrentRow, 1, mypLabelItem);
+  //QTableWidgetItem *mypPercentItem =
+  //        new QTableWidgetItem(QString::number(myRunningPercentage));
+  //mypPercentItem->setIcon(myIcon);
+  //tblAnimals->setItem(myCurrentRow, 3, mypPercentItem);
 }
 
 void LaMainForm::loadCrops()
@@ -268,7 +271,8 @@ void LaMainForm::loadCrops()
   //that everything tots up to 100%
   int myCurrentRow=0;
   int myRunningPercentage=0;
-  QMap<QString,LaCrop> myCropsMap = LaUtils::getAvailableCrops();
+  QMap<QString,LaCrop> myCropsMap;
+  myCropsMap = LaUtils::getAvailableCrops();
   //debug statemetn to print all crop keys
   //qDebug((static_cast<QStringList>(myCropsMap.keys())).join("\n").toLocal8Bit());
   mCropParametersMap = LaUtils::getAvailableCropParameters();
@@ -362,13 +366,17 @@ void LaMainForm::loadCrops()
   {
     myIcon.addFile(":/status_error.png");
   }
-  tblCrops->insertRow(myCurrentRow);
-  QTableWidgetItem *mypLabelItem = new QTableWidgetItem(QString(tr("Total Diet %")));
-  tblCrops->setItem(myCurrentRow, 1, mypLabelItem);
-  QTableWidgetItem *mypPercentItem =
-          new QTableWidgetItem(QString::number(myRunningPercentage));
-  mypPercentItem->setIcon(myIcon);
-  tblCrops->setItem(myCurrentRow, 3, mypPercentItem);
+
+  QString myPercentItem = QString::number(myRunningPercentage);
+  labelCropCheck->setText(myPercentItem + "\%");
+
+  //tblCrops->insertRow(myCurrentRow);
+  //QTableWidgetItem *mypLabelItem = new QTableWidgetItem(QString(tr("Total Diet %")));
+  //tblCrops->setItem(myCurrentRow, 1, mypLabelItem);
+  //QTableWidgetItem *mypPercentItem =
+  //        new QTableWidgetItem(QString::number(myRunningPercentage));
+  //mypPercentItem->setIcon(myIcon);
+  //tblCrops->setItem(myCurrentRow, 3, mypPercentItem);
 }
 void LaMainForm::animalCellClicked(int theRow, int theColumn)
 {
