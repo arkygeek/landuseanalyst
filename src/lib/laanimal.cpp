@@ -214,7 +214,7 @@ void LaAnimal::setEstrousCycle(int theDays)
 
 bool LaAnimal::fromXml(QString theXml)
 {
-  qDebug("Loading animal from xml");
+  //qDebug("Loading animal from xml");
   QDomDocument myDocument("mydocument");
   myDocument.setContent(theXml);
   QDomElement myTopElement = myDocument.firstChildElement("animal");
@@ -223,9 +223,9 @@ bool LaAnimal::fromXml(QString theXml)
     //TODO - just make this a warning
     qDebug("top element could not be found!");
   }
-  qDebug("Animal::fromXml - guid found : " + myTopElement.attribute("guid").toLocal8Bit());
+  //qDebug("Animal::fromXml - guid found : " + myTopElement.attribute("guid").toLocal8Bit());
   setGuid(myTopElement.attribute("guid"));
-  qDebug("Animal::fromXml - guid set to : " + guid().toLocal8Bit());
+  //qDebug("Animal::fromXml - guid set to : " + guid().toLocal8Bit());
   mName=LaUtils::xmlDecode(myTopElement.firstChildElement("name").text());
   mDescription=LaUtils::xmlDecode(myTopElement.firstChildElement("description").text());
   mUsableMeat=QString(myTopElement.firstChildElement("usableMeat").text()).toInt();

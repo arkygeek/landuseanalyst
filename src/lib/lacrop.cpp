@@ -128,7 +128,7 @@ void LaCrop::setYieldUnits(int theIndex)
 
 bool LaCrop::fromXml(QString theXml)
 {
-  qDebug("Loading Crop from xml");
+  //qDebug("Loading Crop from xml");
   QDomDocument myDocument("mydocument");
   myDocument.setContent(theXml);
   QDomElement myTopElement = myDocument.firstChildElement("crop");
@@ -137,9 +137,9 @@ bool LaCrop::fromXml(QString theXml)
     //TODO - just make this a warning
     qDebug("top element could not be found!");
   }
-  qDebug("Crop::fromXml - guid found : " + myTopElement.attribute("guid").toLocal8Bit());
+  //qDebug("Crop::fromXml - guid found : " + myTopElement.attribute("guid").toLocal8Bit());
   setGuid(myTopElement.attribute("guid"));
-  qDebug("Crop::fromXml - guid set to : " + guid().toLocal8Bit());
+  //qDebug("Crop::fromXml - guid set to : " + guid().toLocal8Bit());
   mName=LaUtils::xmlDecode(myTopElement.firstChildElement("name").text());
   mDescription=LaUtils::xmlDecode(myTopElement.firstChildElement("description").text());
   mCropYield=QString(myTopElement.firstChildElement("cropYield").text()).toInt();
