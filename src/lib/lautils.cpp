@@ -75,7 +75,7 @@ LaUtils::AnimalMap LaUtils::getAvailableAnimals()
     //if the filename ends in .xml try to load it into our layerSets listing
     if(myFileInfo.completeSuffix()=="xml")
     {
-      qDebug("Loading animal: " + myList.at(i).absoluteFilePath().toLocal8Bit());
+      //qDebug("Loading animal: " + myList.at(i).absoluteFilePath().toLocal8Bit());
       LaAnimal myAnimal;
       myAnimal.fromXmlFile(myFileInfo.absoluteFilePath());
       if (myAnimal.name().isEmpty())
@@ -83,7 +83,7 @@ LaUtils::AnimalMap LaUtils::getAvailableAnimals()
         qDebug("Animal name was empty!");
         continue;
       }
-      qDebug("Adding " + myAnimal.name());
+      //qDebug("Adding " + myAnimal.name());
       //qDebug(myAnimal.toText().toLocal8Bit());
       myMap[myAnimal.guid()]=myAnimal;
     }
@@ -108,7 +108,7 @@ LaUtils::CropMap LaUtils::getAvailableCrops()
     //if the filename ends in .xml try to load it into our layerSets listing
     if(myFileInfo.completeSuffix()=="xml")
     {
-      qDebug("Loading crop: " + myList.at(i).absoluteFilePath().toLocal8Bit());
+      //qDebug("Loading crop: " + myList.at(i).absoluteFilePath().toLocal8Bit());
       LaCrop myCrop;
       myCrop.fromXmlFile(myFileInfo.absoluteFilePath());
       if (myCrop.name().isEmpty())
@@ -116,7 +116,7 @@ LaUtils::CropMap LaUtils::getAvailableCrops()
         qDebug("Crop name was empty!");
         continue;
       }
-      qDebug("Adding " + myCrop.name());
+      //qDebug("Adding " + myCrop.name());
       myMap[myCrop.guid()]=myCrop;
       //qDebug(myCrop.toText().toLocal8Bit());
     }
@@ -161,7 +161,7 @@ LaUtils::AnimalParameterMap LaUtils::getAvailableAnimalParameters()
     //if the filename ends in .xml try to load it into our layerSets listing
     if(myFileInfo.completeSuffix()=="xml")
     {
-      qDebug("Loading animalParameter: " + myList.at(i).absoluteFilePath().toLocal8Bit());
+      //qDebug("Loading animalParameter: " + myList.at(i).absoluteFilePath().toLocal8Bit());
       LaAnimalParameter myAnimalParameter;
       myAnimalParameter.fromXmlFile(myFileInfo.absoluteFilePath());
       if (myAnimalParameter.name().isEmpty())
@@ -169,7 +169,7 @@ LaUtils::AnimalParameterMap LaUtils::getAvailableAnimalParameters()
         qDebug("AnimalParameter name was empty!");
         continue;
       }
-      qDebug("Adding " + myAnimalParameter.name());
+      //qDebug("Adding " + myAnimalParameter.name());
       //qDebug(myAnimalParameter.toText().toLocal8Bit());
       myMap[myAnimalParameter.guid()]=myAnimalParameter;
     }
@@ -194,15 +194,15 @@ LaUtils::CropParameterMap LaUtils::getAvailableCropParameters()
     //if the filename ends in .xml try to load it into our layerSets listing
     if(myFileInfo.completeSuffix()=="xml")
     {
-      qDebug("Loading cropParameter: " + myList.at(i).absoluteFilePath().toLocal8Bit());
+      //qDebug("Loading cropParameter: " + myList.at(i).absoluteFilePath().toLocal8Bit());
       LaCropParameter myCropParameter;
       myCropParameter.fromXmlFile(myFileInfo.absoluteFilePath());
       if (myCropParameter.name().isEmpty())
       {
-        qDebug("CropParameter name was empty!");
+        //qDebug("CropParameter name was empty!");
         continue;
       }
-      qDebug("Adding " + myCropParameter.name());
+      //qDebug("Adding " + myCropParameter.name());
       myMap[myCropParameter.guid()]=myCropParameter;
       //qDebug(myCropParameter.toText().toLocal8Bit());
     }
