@@ -150,9 +150,14 @@ void LaMainForm::loadAnimals()
   tblAnimals->clear();
   tblAnimals->setRowCount(0);
   tblAnimals->setColumnCount(4);
+  //compute percentages each animal parameter adds to the total and
+  //print the total perc. Its up to the user at this stage to ensure
+  //that everything tots up to 100%
   int myCurrentRow=0;
   int myRunningPercentage=0;
   QMap<QString,LaAnimal> myAnimalsMap = LaUtils::getAvailableAnimals();
+  //debug statemetn to print all animal keys
+  //qDebug((static_cast<QStringList>(myAnimalsMap.keys())).join("\n").toLocal8Bit());
   mAnimalParametersMap = LaUtils::getAvailableAnimalParameters();
   QMapIterator<QString, LaAnimal> myIterator(myAnimalsMap);
   while (myIterator.hasNext())
@@ -163,11 +168,14 @@ void LaMainForm::loadAnimals()
     QString myName = myAnimal.name();
     QPair<bool,QString> myValue;
     //check if this animal is in mAnimalsMap and if not add it
+    //with a blank pair for now
     if (!mAnimalsMap.contains(myGuid))
     {
       myValue.first = false;
       myValue.second = "";
       mAnimalsMap.insert(myGuid,myValue);
+      qDebug("Added new blank pair to mAnimals map for keeping track of percentages: " + 
+          myGuid.toLocal8Bit());
     }
     else
     {
@@ -199,14 +207,22 @@ void LaMainForm::loadAnimals()
     {
       myIterator.next();
       LaAnimalParameter myAnimalParameter = myIterator.value();
+      QString myParameterGuid = myAnimalParameter.guid();
+      QString myParameterName = myAnimalParameter.name();
       //only add this entry if it is for the current animal
       if (myGuid != myAnimalParameter.animalGuid())
       {
         continue;
       }
-      QString myParameterGuid = myAnimalParameter.guid();
-      QString myParameterName = myAnimalParameter.name();
+      //if the animal paraameter id has not yet been set in mAnimalsMap
+      //set it now...
+      if (myValue.second.isEmpty())
+      {
+        myValue.second = myParameterGuid;
+      }
       //see if this animal parameter percentage can be added to our running tot
+      qDebug("Comparing " + myValue.second.toLocal8Bit() + " <-> " +
+          myAnimalParameter.guid().toLocal8Bit());
       if (myValue.second == myAnimalParameter.guid())
       {
         myRunningPercentage += myAnimalParameter.percentTameMeat();
