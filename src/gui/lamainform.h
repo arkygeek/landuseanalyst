@@ -79,6 +79,7 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
     LaUtils::CropParameterMap mCropParametersMap;
     //    <animal guid <enabled, animalparamters guid>>
     QMap <QString,QPair<bool,QString> > mAnimalsMap;
+    QMap <QString,QPair<bool,QString> > mCropsMap;
 };
 
 #endif //LAMAINFORM_H

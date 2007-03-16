@@ -174,7 +174,7 @@ void LaMainForm::loadAnimals()
       myValue.first = false;
       myValue.second = "";
       mAnimalsMap.insert(myGuid,myValue);
-      qDebug("Added new blank pair to mAnimals map for keeping track of percentages: " + 
+      qDebug("Added new blank pair to mAnimals map for keeping track of percentages: " +
           myGuid.toLocal8Bit());
     }
     else
@@ -226,7 +226,7 @@ void LaMainForm::loadAnimals()
       if (myValue.second == myAnimalParameter.guid())
       {
         myRunningPercentage += myAnimalParameter.percentTameMeat();
-        QTableWidgetItem *mypPercentItem = 
+        QTableWidgetItem *mypPercentItem =
           new QTableWidgetItem(QString::number(myAnimalParameter.percentTameMeat()));
         qDebug("Percentage this animal contributes to diet: " +
             QString::number(myAnimalParameter.percentTameMeat()).toLocal8Bit());
@@ -252,19 +252,25 @@ void LaMainForm::loadAnimals()
   tblAnimals->insertRow(myCurrentRow);
   QTableWidgetItem *mypLabelItem = new QTableWidgetItem(QString(tr("Total Diet %")));
   tblAnimals->setItem(myCurrentRow, 1, mypLabelItem);
-  QTableWidgetItem *mypPercentItem = 
+  QTableWidgetItem *mypPercentItem =
           new QTableWidgetItem(QString::number(myRunningPercentage));
   mypPercentItem->setIcon(myIcon);
   tblAnimals->setItem(myCurrentRow, 3, mypPercentItem);
 }
+
 void LaMainForm::loadCrops()
 {
   tblCrops->clear();
   tblCrops->setRowCount(0);
-  tblCrops->setColumnCount(3);
+  tblCrops->setColumnCount(4);
+  //compute percentages each crop parameter adds to the total and
+  //print the total perc. Its up to the user at this stage to ensure
+  //that everything tots up to 100%
   int myCurrentRow=0;
-
+  int myRunningPercentage=0;
   QMap<QString,LaCrop> myCropsMap = LaUtils::getAvailableCrops();
+  //debug statemetn to print all crop keys
+  //qDebug((static_cast<QStringList>(myCropsMap.keys())).join("\n").toLocal8Bit());
   mCropParametersMap = LaUtils::getAvailableCropParameters();
   QMapIterator<QString, LaCrop> myIterator(myCropsMap);
   while (myIterator.hasNext())
@@ -273,17 +279,40 @@ void LaMainForm::loadCrops()
     LaCrop myCrop = myIterator.value();
     QString myGuid = myCrop.guid();
     QString myName = myCrop.name();
+    QPair<bool,QString> myValue;
+    //check if this crop is in mCropsMap and if not add it
+    //with a blank pair for now
+    if (!mCropsMap.contains(myGuid))
+    {
+      myValue.first = false;
+      myValue.second = "";
+      mCropsMap.insert(myGuid,myValue);
+      qDebug("Added new blank pair to mCrops map for keeping track of percentages: " +
+          myGuid.toLocal8Bit());
+    }
+    else
+    {
+      myValue=mCropsMap[myGuid];
+    }
     QIcon myIcon;
     myIcon.addFile(":/localdata.png");
     tblCrops->insertRow(myCurrentRow);
     // Add details to the new row
     QTableWidgetItem *mypUsedItem= new QTableWidgetItem(tr("Used?"));
-    mypUsedItem->setCheckState(Qt::Checked);
+    if (myValue.first)
+    {
+      mypUsedItem->setCheckState(Qt::Checked);
+    }
+    else
+    {
+      mypUsedItem->setCheckState(Qt::Unchecked);
+    }
     tblCrops->setItem(myCurrentRow, 0, mypUsedItem);
     QTableWidgetItem *mypNameItem = new QTableWidgetItem(myCrop.name());
     mypNameItem->setData(Qt::UserRole,myGuid);
     tblCrops->setItem(myCurrentRow, 1, mypNameItem);
     mypNameItem->setIcon(myIcon);
+    //create a var to hold the percentage for each selected parameter
     //add the crop parameters combo to the form
     QComboBox * mypCombo = new QComboBox(this);
     QMapIterator<QString, LaCropParameter> myIterator(mCropParametersMap);
@@ -291,21 +320,56 @@ void LaMainForm::loadCrops()
     {
       myIterator.next();
       LaCropParameter myCropParameter = myIterator.value();
+      QString myParameterGuid = myCropParameter.guid();
+      QString myParameterName = myCropParameter.name();
       //only add this entry if it is for the current crop
       if (myGuid != myCropParameter.cropGuid())
       {
         continue;
       }
-      QString myGuid = myCropParameter.guid();
-      QString myName = myCropParameter.name();
+      //if the crop paraameter id has not yet been set in mCropsMap
+      //set it now...
+      if (myValue.second.isEmpty())
+      {
+        myValue.second = myParameterGuid;
+      }
+      //see if this crop parameter percentage can be added to our running tot
+      qDebug("Comparing " + myValue.second.toLocal8Bit() + " <-> " +
+          myCropParameter.guid().toLocal8Bit());
+      if (myValue.second == myCropParameter.guid())
+      {
+        myRunningPercentage += myCropParameter.percentTameCrop();
+        QTableWidgetItem *mypPercentItem =
+          new QTableWidgetItem(QString::number(myCropParameter.percentTameCrop()));
+        qDebug("Percentage this crop contributes to diet: " +
+            QString::number(myCropParameter.percentTameCrop()).toLocal8Bit());
+        tblCrops->setItem(myCurrentRow, 3, mypPercentItem);
+      }
       //                icon, disp name, userdata
-      mypCombo->addItem(myIcon,myName,myGuid);
+      mypCombo->addItem(myIcon,myParameterName,myParameterGuid);
     }
+    setComboToDefault(mypCombo, myValue.second);
     tblCrops->setCellWidget ( myCurrentRow, 2, mypCombo);
     myCurrentRow++;
   }
+  //finally show the total percentage all the selected crops contribute to the diet
+  QIcon myIcon;
+  if (myRunningPercentage==100)
+  {
+    myIcon.addFile(":/status_ok.png");
+  }
+  else
+  {
+    myIcon.addFile(":/status_error.png");
+  }
+  tblCrops->insertRow(myCurrentRow);
+  QTableWidgetItem *mypLabelItem = new QTableWidgetItem(QString(tr("Total Diet %")));
+  tblCrops->setItem(myCurrentRow, 1, mypLabelItem);
+  QTableWidgetItem *mypPercentItem =
+          new QTableWidgetItem(QString::number(myRunningPercentage));
+  mypPercentItem->setIcon(myIcon);
+  tblCrops->setItem(myCurrentRow, 3, mypPercentItem);
 }
-
 void LaMainForm::animalCellClicked(int theRow, int theColumn)
 {
   qDebug("LaMainForm::animalCellClicked");
