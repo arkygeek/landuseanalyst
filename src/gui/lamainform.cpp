@@ -61,10 +61,10 @@ LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
   lblVersion->setText(QString("Version: %1").arg(VERSION) + " " + QString("$Revision$").replace("$",""));
   tblAnimals->horizontalHeader()->hide();
   tblAnimals->verticalHeader()->hide();
-  tblAnimals->horizontalHeader()->setResizeMode(1,QHeaderView::Stretch);
+  tblAnimals->horizontalHeader()->setResizeMode(2,QHeaderView::Stretch);
   tblCrops->horizontalHeader()->hide();
   tblCrops->verticalHeader()->hide();
-  tblCrops->horizontalHeader()->setResizeMode(1,QHeaderView::Stretch);
+  tblCrops->horizontalHeader()->setResizeMode(2,QHeaderView::Stretch);
   loadAnimals();
   loadCrops();
 }
@@ -228,7 +228,8 @@ void LaMainForm::loadAnimals()
         myRunningPercentage += myAnimalParameter.percentTameMeat();
         QTableWidgetItem *mypPercentItem = 
           new QTableWidgetItem(QString::number(myAnimalParameter.percentTameMeat()));
-        qDebug(QString::number(myAnimalParameter.percentTameMeat()).toLocal8Bit());
+        qDebug("Percentage this animal contributes to diet: " +
+            QString::number(myAnimalParameter.percentTameMeat()).toLocal8Bit());
         tblAnimals->setItem(myCurrentRow, 3, mypPercentItem);
       }
       //                icon, disp name, userdata
@@ -238,6 +239,23 @@ void LaMainForm::loadAnimals()
     tblAnimals->setCellWidget ( myCurrentRow, 2, mypCombo);
     myCurrentRow++;
   }
+  //finally show the total percentage all the selected animals contribute to the diet
+  QIcon myIcon;
+  if (myRunningPercentage==100)
+  {
+    myIcon.addFile(":/status_ok.png");
+  }
+  else
+  {
+    myIcon.addFile(":/status_error.png");
+  }
+  tblAnimals->insertRow(myCurrentRow);
+  QTableWidgetItem *mypLabelItem = new QTableWidgetItem(QString(tr("Total Diet %")));
+  tblAnimals->setItem(myCurrentRow, 1, mypLabelItem);
+  QTableWidgetItem *mypPercentItem = 
+          new QTableWidgetItem(QString::number(myRunningPercentage));
+  mypPercentItem->setIcon(myIcon);
+  tblAnimals->setItem(myCurrentRow, 3, mypPercentItem);
 }
 void LaMainForm::loadCrops()
 {

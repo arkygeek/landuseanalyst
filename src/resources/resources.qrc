@@ -26,5 +26,7 @@
         <file>pig.png</file>
         <file>sheep.png</file>
         <file>wheatclricon.png</file>
+        <file>status_error.png</file>
+        <file>status_ok.png</file>
     </qresource>
 </RCC>
