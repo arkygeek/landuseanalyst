@@ -448,7 +448,7 @@ void LaMainForm::on_pushButtonDietBreakdown_clicked()
 void LaMainForm::helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetItem * thepOldItem)
 {
   writeMessage("Item clicked in help browser: " + thepCurrentItem->text(0).toLocal8Bit());
-  QFile myQFile( ":/" + thepCurrentItem->text(0)  + ".html" );
+  QFile myQFile( ":/helpDocs/" + thepCurrentItem->text(0)  + ".html" );
   if ( myQFile.open( QIODevice::ReadOnly ) ) {
     //now we parse the loc file, checking each line for its taxon
     QTextStream myStream( &myQFile );

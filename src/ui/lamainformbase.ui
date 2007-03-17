@@ -54,7 +54,7 @@
       </size>
      </property>
      <property name="currentIndex" >
-      <number>3</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="main_tab" >
       <attribute name="title" >
@@ -1376,11 +1376,486 @@ p, li { white-space: pre-wrap; }
           </column>
           <item>
            <property name="text" >
+            <string>Model</string>
+           </property>
+           <item>
+            <property name="text" >
+             <string>Main</string>
+            </property>
+            <item>
+             <property name="text" >
+              <string>Settlement Information</string>
+             </property>
+             <item>
+              <property name="text" >
+               <string>Site Name</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Population</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Period</string>
+              </property>
+             </item>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Location</string>
+             </property>
+             <item>
+              <property name="text" >
+               <string>Easting</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Northing</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>JADIS Database</string>
+              </property>
+             </item>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Modelling Method</string>
+             </property>
+             <item>
+              <property name="text" >
+               <string>Euclidean</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Walking Time</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Path Distance</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Precision</string>
+              </property>
+             </item>
+            </item>
+           </item>
+           <item>
+            <property name="text" >
+             <string>Diet</string>
+            </property>
+            <item>
+             <property name="text" >
+              <string>Plant to Meat Ratio</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Wild to Tame Ratio</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Calories per person per day</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Breakdown</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Clear</string>
+             </property>
+            </item>
+           </item>
+           <item>
+            <property name="text" >
+             <string>Crops</string>
+            </property>
+            <item>
+             <property name="text" >
+              <string>Using the Crop Interface</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Managing Crops</string>
+             </property>
+             <item>
+              <property name="text" >
+               <string>Clone a crop</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Create a new crop</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Saving crops</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Crop Descriptions</string>
+              </property>
+              <item>
+               <property name="text" >
+                <string>Crop Name</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Crop Notes</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Crop Yield</string>
+               </property>
+               <item>
+                <property name="text" >
+                 <string>Crop Food Value</string>
+                </property>
+               </item>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Fodder Yield</string>
+               </property>
+               <item>
+                <property name="text" >
+                 <string>Crop Fodder Food Value</string>
+                </property>
+               </item>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Crop Area Units</string>
+               </property>
+              </item>
+             </item>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Crop Parameters</string>
+             </property>
+             <item>
+              <property name="text" >
+               <string>Crop Parameter Description</string>
+              </property>
+              <item>
+               <property name="text" >
+                <string>Crop Parameter Name</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Crop Parameter Notes</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Linking to a crop</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Crop Portion of diet</string>
+               </property>
+              </item>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Crop Suitability masks</string>
+              </property>
+              <item>
+               <property name="text" >
+                <string>Crop Masks Common</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Crop Masks Specific</string>
+               </property>
+              </item>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Crop Rotation</string>
+              </property>
+              <item>
+               <property name="text" >
+                <string>Crop to Fallow Ratio</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Crop Fallow Food Value</string>
+               </property>
+              </item>
+             </item>
+            </item>
+           </item>
+           <item>
+            <property name="text" >
+             <string>Animals</string>
+            </property>
+            <item>
+             <property name="text" >
+              <string>Using the Animals Interface</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Managing Animals</string>
+             </property>
+             <item>
+              <property name="text" >
+               <string>Clone an animal</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Create a new animal</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Saving animals</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Defining an animal</string>
+              </property>
+              <item>
+               <property name="text" >
+                <string>Animal Description</string>
+               </property>
+               <item>
+                <property name="text" >
+                 <string>Animal Name</string>
+                </property>
+               </item>
+               <item>
+                <property name="text" >
+                 <string>Animal Notes</string>
+                </property>
+               </item>
+               <item>
+                <property name="text" >
+                 <string>Usable Meat</string>
+                </property>
+               </item>
+               <item>
+                <property name="text" >
+                 <string>Kill Weight</string>
+                </property>
+               </item>
+               <item>
+                <property name="text" >
+                 <string>Grow Time</string>
+                </property>
+               </item>
+               <item>
+                <property name="text" >
+                 <string>Death Rate</string>
+                </property>
+               </item>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Reproduction</string>
+               </property>
+               <item>
+                <property name="text" >
+                 <string>Sexual Maturity</string>
+                </property>
+               </item>
+               <item>
+                <property name="text" >
+                 <string>Breeding Life</string>
+                </property>
+               </item>
+               <item>
+                <property name="text" >
+                 <string>Young per birth</string>
+                </property>
+               </item>
+               <item>
+                <property name="text" >
+                 <string>Weaning Age</string>
+                </property>
+               </item>
+               <item>
+                <property name="text" >
+                 <string>Gestation Time</string>
+                </property>
+               </item>
+               <item>
+                <property name="text" >
+                 <string>Estrous cycle</string>
+                </property>
+               </item>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Feeding Requirements</string>
+               </property>
+               <item>
+                <property name="text" >
+                 <string>Calories peranimal per day</string>
+                </property>
+                <item>
+                 <property name="text" >
+                  <string>While gestating</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text" >
+                  <string>While Lactating</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text" >
+                  <string>Juveniles</string>
+                 </property>
+                </item>
+               </item>
+              </item>
+             </item>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Animal Parameters</string>
+             </property>
+             <item>
+              <property name="text" >
+               <string>Setting Animal Parameters</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Animal Parameter Details</string>
+              </property>
+              <item>
+               <property name="text" >
+                <string>Animal Parameter Name</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Animal Parameter Notes</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Linking to an animal</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Portion of tame meat diet</string>
+               </property>
+              </item>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Animal Land Suitability</string>
+              </property>
+              <item>
+               <property name="text" >
+                <string>Animal Specific Land</string>
+               </property>
+               <item>
+                <property name="text" >
+                 <string>KCal setting</string>
+                </property>
+               </item>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Animal Common Land</string>
+               </property>
+               <item>
+                <property name="text" >
+                 <string>KCal setting</string>
+                </property>
+               </item>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Selecting Area Units</string>
+               </property>
+              </item>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Fodder as feed</string>
+              </property>
+              <item>
+               <property name="text" >
+                <string>Choosing feed</string>
+               </property>
+               <item>
+                <property name="text" >
+                 <string>Fodder feed</string>
+                </property>
+               </item>
+               <item>
+                <property name="text" >
+                 <string>Grain feed</string>
+                </property>
+               </item>
+              </item>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Fallow Use</string>
+              </property>
+              <item>
+               <property name="text" >
+                <string>Grazing Fallow</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Fallow Priority</string>
+               </property>
+              </item>
+             </item>
+            </item>
+           </item>
+           <item>
+            <property name="text" >
+             <string>Calculations</string>
+            </property>
+           </item>
+           <item>
+            <property name="text" >
+             <string>Results</string>
+            </property>
+           </item>
+          </item>
+          <item>
+           <property name="text" >
             <string>Requirements</string>
            </property>
            <item>
             <property name="text" >
-             <string>Files</string>
+             <string>File Preparation</string>
             </property>
             <item>
              <property name="text" >
@@ -1391,131 +1866,21 @@ p, li { white-space: pre-wrap; }
              <property name="text" >
               <string>Masks</string>
              </property>
+             <item>
+              <property name="text" >
+               <string>Digitizing</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Naming</string>
+              </property>
+             </item>
             </item>
            </item>
            <item>
             <property name="text" >
              <string>Numbers</string>
-            </property>
-           </item>
-          </item>
-          <item>
-           <property name="text" >
-            <string>Model</string>
-           </property>
-           <item>
-            <property name="text" >
-             <string>Precision</string>
-            </property>
-           </item>
-           <item>
-            <property name="text" >
-             <string>Hints</string>
-            </property>
-           </item>
-           <item>
-            <property name="text" >
-             <string>Quirks</string>
-            </property>
-           </item>
-          </item>
-          <item>
-           <property name="text" >
-            <string>Animals</string>
-           </property>
-           <item>
-            <property name="text" >
-             <string>Sheep</string>
-            </property>
-           </item>
-           <item>
-            <property name="text" >
-             <string>Goats</string>
-            </property>
-           </item>
-           <item>
-            <property name="text" >
-             <string>Pigs</string>
-            </property>
-            <item>
-             <property name="text" >
-              <string>Growing Time</string>
-             </property>
-            </item>
-            <item>
-             <property name="text" >
-              <string>Kill Weight</string>
-             </property>
-            </item>
-            <item>
-             <property name="text" >
-              <string>Litter Size</string>
-             </property>
-            </item>
-            <item>
-             <property name="text" >
-              <string>Food Value</string>
-             </property>
-            </item>
-            <item>
-             <property name="text" >
-              <string>Fodder</string>
-             </property>
-            </item>
-           </item>
-           <item>
-            <property name="text" >
-             <string>Cattle</string>
-            </property>
-           </item>
-           <item>
-            <property name="text" >
-             <string>Chickens</string>
-            </property>
-           </item>
-          </item>
-          <item>
-           <property name="text" >
-            <string>Plants</string>
-           </property>
-           <item>
-            <property name="text" >
-             <string>Wheat</string>
-            </property>
-            <item>
-             <property name="text" >
-              <string>Food Value</string>
-             </property>
-            </item>
-            <item>
-             <property name="text" >
-              <string>Yield</string>
-             </property>
-            </item>
-            <item>
-             <property name="text" >
-              <string>Fallow</string>
-             </property>
-            </item>
-           </item>
-           <item>
-            <property name="text" >
-             <string>Barley</string>
-            </property>
-           </item>
-           <item>
-            <property name="text" >
-             <string>Lentils</string>
-            </property>
-           </item>
-           <item>
-            <property name="text" >
-             <string>Olives</string>
-            </property>
-           </item>
-           <item>
-            <property name="text" >
-             <string>Grapes</string>
             </property>
            </item>
           </item>
