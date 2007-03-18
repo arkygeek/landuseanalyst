@@ -1716,11 +1716,11 @@ p, li { white-space: pre-wrap; }
                </property>
                <item>
                 <property name="text" >
-                 <string>Calories peranimal per day</string>
+                 <string>Calories per animal per day</string>
                 </property>
                 <item>
                  <property name="text" >
-                  <string>While gestating</string>
+                  <string>While Gestating</string>
                  </property>
                 </item>
                 <item>
