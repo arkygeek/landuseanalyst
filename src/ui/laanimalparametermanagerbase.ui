@@ -5,7 +5,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>534</width>
+    <width>549</width>
     <height>476</height>
    </rect>
   </property>
@@ -943,6 +943,35 @@ p, li { white-space: pre-wrap; }
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>tblAnimalParameterProfiles</tabstop>
+  <tabstop>pbnImport</tabstop>
+  <tabstop>pbnExport</tabstop>
+  <tabstop>toolNew</tabstop>
+  <tabstop>toolCopy</tabstop>
+  <tabstop>toolDelete</tabstop>
+  <tabstop>leName</tabstop>
+  <tabstop>leDescription</tabstop>
+  <tabstop>cboAnimal</tabstop>
+  <tabstop>sbPercentTameMeat</tabstop>
+  <tabstop>checkBoxSpecificRaster</tabstop>
+  <tabstop>checkBoxCommonRaster</tabstop>
+  <tabstop>sbSpecificRasterCalories</tabstop>
+  <tabstop>sbCommonRasterCalories</tabstop>
+  <tabstop>comboBoxAreaUnits</tabstop>
+  <tabstop>comboBoxFodderCrop1</tabstop>
+  <tabstop>sbFodderWheat</tabstop>
+  <tabstop>sbFodderWheatGrain</tabstop>
+  <tabstop>comboBoxFodderCrop2</tabstop>
+  <tabstop>sbFodderBarley</tabstop>
+  <tabstop>sbFodderBarleyGrain</tabstop>
+  <tabstop>comboBoxFodderCrop3</tabstop>
+  <tabstop>sbFodderLentils</tabstop>
+  <tabstop>sbFodderLentilsGrain</tabstop>
+  <tabstop>comboBoxFallowUsage</tabstop>
+  <tabstop>pbnApply</tabstop>
+  <tabstop>pbnClose</tabstop>
+ </tabstops>
  <resources>
   <include location="../resources/resources.qrc" />
  </resources>

@@ -955,6 +955,31 @@ p, li { white-space: pre-wrap; }
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>tblAnimals</tabstop>
+  <tabstop>pbnImport</tabstop>
+  <tabstop>pbnExport</tabstop>
+  <tabstop>toolNew</tabstop>
+  <tabstop>toolCopy</tabstop>
+  <tabstop>toolDelete</tabstop>
+  <tabstop>leName</tabstop>
+  <tabstop>leDescription</tabstop>
+  <tabstop>spinBoxUsableMeatPercent</tabstop>
+  <tabstop>spinBoxKillWeight</tabstop>
+  <tabstop>spinBoxGrowTime</tabstop>
+  <tabstop>spinBoxDeathRate</tabstop>
+  <tabstop>spinBoxSexualMaturity</tabstop>
+  <tabstop>spinBoxBreedingLife</tabstop>
+  <tabstop>spinBoxYoungPerBirth</tabstop>
+  <tabstop>spinBoxWeaningAge</tabstop>
+  <tabstop>spinBoxGestationTime</tabstop>
+  <tabstop>spinBoxEstrousCycleTime</tabstop>
+  <tabstop>spinBoxCaloriesForGestating</tabstop>
+  <tabstop>spinBoxCaloriesForLactating</tabstop>
+  <tabstop>spinBoxCaloriesForJuvenile</tabstop>
+  <tabstop>pbnApply</tabstop>
+  <tabstop>pbnClose</tabstop>
+ </tabstops>
  <resources>
   <include location="../../../openModellerDesktop/src/resources/resources.qrc" />
   <include location="../resources/resources.qrc" />

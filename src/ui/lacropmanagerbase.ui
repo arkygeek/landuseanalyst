@@ -539,6 +539,23 @@ p, li { white-space: pre-wrap; }
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>tblCrops</tabstop>
+  <tabstop>pbnImport</tabstop>
+  <tabstop>pbnExport</tabstop>
+  <tabstop>toolNew</tabstop>
+  <tabstop>toolCopy</tabstop>
+  <tabstop>toolDelete</tabstop>
+  <tabstop>leName</tabstop>
+  <tabstop>leDescription</tabstop>
+  <tabstop>spinBoxCropYield</tabstop>
+  <tabstop>spinBoxCropCalories</tabstop>
+  <tabstop>spinBoxCropFodderProduction</tabstop>
+  <tabstop>spinBoxCropFodderCalories</tabstop>
+  <tabstop>comboBoxYieldUnits</tabstop>
+  <tabstop>pbnApply</tabstop>
+  <tabstop>pbnClose</tabstop>
+ </tabstops>
  <resources>
   <include location="../resources/resources.qrc" />
  </resources>

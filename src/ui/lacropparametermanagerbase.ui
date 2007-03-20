@@ -783,6 +783,25 @@ p, li { white-space: pre-wrap; }
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>tblCropParameterProfiles</tabstop>
+  <tabstop>pbnImport</tabstop>
+  <tabstop>pbnExport</tabstop>
+  <tabstop>toolNew</tabstop>
+  <tabstop>toolCopy</tabstop>
+  <tabstop>toolDelete</tabstop>
+  <tabstop>leName</tabstop>
+  <tabstop>leDescription</tabstop>
+  <tabstop>cboCrop</tabstop>
+  <tabstop>sbPercentTameCrop</tabstop>
+  <tabstop>checkBoxUseCommonLand</tabstop>
+  <tabstop>checkBoxUseSpecificLand</tabstop>
+  <tabstop>sbFallowRatio</tabstop>
+  <tabstop>sbFallowCalories</tabstop>
+  <tabstop>comboBoxAreaUnits</tabstop>
+  <tabstop>pbnApply</tabstop>
+  <tabstop>pbnClose</tabstop>
+ </tabstops>
  <resources>
   <include location="../resources/resources.qrc" />
  </resources>
