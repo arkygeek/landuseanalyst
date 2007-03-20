@@ -2454,9 +2454,46 @@ p, li { white-space: pre-wrap; }
  </widget>
  <tabstops>
   <tabstop>MainTabs</tabstop>
+  <tabstop>lineEditSiteName</tabstop>
+  <tabstop>spinBoxPopulation</tabstop>
+  <tabstop>comboBoxSitePeriod</tabstop>
+  <tabstop>comboBoxProjection</tabstop>
+  <tabstop>lineEditEasting</tabstop>
+  <tabstop>lineEditNorthing</tabstop>
+  <tabstop>pushButtonJadis</tabstop>
+  <tabstop>radioButtonEuclidean_2</tabstop>
+  <tabstop>radioButtonWalkingTime_2</tabstop>
+  <tabstop>radioButtonPathDistance_2</tabstop>
+  <tabstop>spinBoxModelPrecision_2</tabstop>
+  <tabstop>pushButtonRun</tabstop>
   <tabstop>pushButtonLoad</tabstop>
   <tabstop>pushButtonSave</tabstop>
   <tabstop>pushButtonExit</tabstop>
+  <tabstop>horizontalSliderDiet</tabstop>
+  <tabstop>horizontalSliderCrop</tabstop>
+  <tabstop>horizontalSliderMeat</tabstop>
+  <tabstop>spinBoxDailyCalories</tabstop>
+  <tabstop>pushButtonDietClear</tabstop>
+  <tabstop>pushButtonDietBreakdown</tabstop>
+  <tabstop>breakdownDisplay</tabstop>
+  <tabstop>tblCrops</tabstop>
+  <tabstop>textBrowserCropParameterDefinition</tabstop>
+  <tabstop>textBrowserCropDefinition</tabstop>
+  <tabstop>pbnNewCrop</tabstop>
+  <tabstop>pbnNewCropParameter</tabstop>
+  <tabstop>tblAnimals</tabstop>
+  <tabstop>textBrowserAnimalDefinition</tabstop>
+  <tabstop>textBrowserAnimalParameterDefinition</tabstop>
+  <tabstop>pbnNewAnimal</tabstop>
+  <tabstop>pbnNewAnimalParameter</tabstop>
+  <tabstop>listWidgetCalculationsCrop</tabstop>
+  <tabstop>textBrowserResultsCrop</tabstop>
+  <tabstop>listWidgetCalculationsAnimal</tabstop>
+  <tabstop>textBrowserResultsAnimals</tabstop>
+  <tabstop>textBrowserResultsLeft</tabstop>
+  <tabstop>textBrowserResultsRight</tabstop>
+  <tabstop>treeHelp</tabstop>
+  <tabstop>textHelp</tabstop>
  </tabstops>
  <resources>
   <include location="../resources/resources.qrc" />
