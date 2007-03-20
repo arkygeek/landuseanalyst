@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>534</width>
-    <height>472</height>
+    <height>476</height>
    </rect>
   </property>
   <property name="minimumSize" >
@@ -18,6 +18,9 @@
   <property name="windowTitle" >
    <string>Animal Parameter Manager</string>
   </property>
+  <property name="windowIcon" >
+   <iconset resource="../resources/resources.qrc" >:/la_icon.png</iconset>
+  </property>
   <layout class="QGridLayout" >
    <property name="margin" >
     <number>9</number>
@@ -25,7 +28,238 @@
    <property name="spacing" >
     <number>6</number>
    </property>
-   <item row="1" column="0" >
+   <item row="6" column="1" >
+    <widget class="QPushButton" name="pbnClose" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>5</hsizetype>
+       <vsizetype>0</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="toolTip" >
+      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-weight:600; font-style:italic; color:#0000ff;">Have you applied your changes?&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+     </property>
+     <property name="text" >
+      <string>Close</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1" >
+    <widget class="QPushButton" name="pbnApply" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>5</hsizetype>
+       <vsizetype>0</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="toolTip" >
+      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Saves all settings&lt;/p>&lt;/body>&lt;/html></string>
+     </property>
+     <property name="whatsThis" >
+      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">After completing all fields to define a parameter, you &lt;span style=" font-weight:600;">MUST&lt;/span> click the Apply button to save it. The name does not have to be unique, as LandUse Analyst has a special way of saving parameters to allow for duplicate parameter names. It is helpful, however, to utilize the Notes field to distinguish between same-named parameter definitions.&lt;/p>&lt;/body>&lt;/html></string>
+     </property>
+     <property name="text" >
+      <string>Apply</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>239</width>
+       <height>31</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item rowspan="3" row="4" column="0" >
+    <widget class="QGroupBox" name="groupBox_3" >
+     <property name="whatsThis" >
+      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">In order for LandUse Analyst to create landuse maps, you must first create land suitability files to tell it what land is suitable for use by the crops and the animals. These files can be produced manually or automatically, but at the moment both must be done with external tools like QGis or GRASS. Future versions of Landuse Analyst will have the required features of these programs incorporated into it, but for now this step must be done externally. &lt;/p>&lt;/body>&lt;/html></string>
+     </property>
+     <property name="title" >
+      <string>Land Suitability Selection</string>
+     </property>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>6</number>
+      </property>
+      <property name="spacing" >
+       <number>5</number>
+      </property>
+      <item row="0" column="0" >
+       <widget class="QCheckBox" name="checkBoxSpecificRaster" >
+        <property name="toolTip" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">binary raster named: animalName.mask  where animalName is the name of the animal you are setting these parameters for.&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="whatsThis" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Sometimes you may want to specify that land is suitable for grazing by only one type of animal. LandUse Analyst allows you to designate a land suitability mask as being unique to that animal. Note that you can specify an animal to use both common land and specific land at the same time. For more detailed information on this, see the help section on Animal Common Land.&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="text" >
+         <string>Specific Land</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" >
+       <widget class="QSpinBox" name="sbSpecificRasterCalories" >
+        <property name="toolTip" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">KCalories per land area unit available for grazing animals &lt;span style=" font-weight:600;">per year&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="whatsThis" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Note that this setting is the number of KCalories per land area unit available for grazing animals &lt;span style=" font-weight:600;">per year&lt;/span>.  This value applies to only the land selected in the unique raster mask file created for this animal.&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="suffix" >
+         <string> KCal</string>
+        </property>
+        <property name="maximum" >
+         <number>99999999</number>
+        </property>
+        <property name="singleStep" >
+         <number>100</number>
+        </property>
+        <property name="value" >
+         <number>10000</number>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2" >
+       <widget class="QCheckBox" name="checkBoxCommonRaster" >
+        <property name="toolTip" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">binary raster named common.grazing.mask which more than one animal can graze from&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="text" >
+         <string>Common Land</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2" >
+       <widget class="QSpinBox" name="sbCommonRasterCalories" >
+        <property name="toolTip" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Food Value of grazing land in Kilo Calories&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="whatsThis" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-weight:600; color:#0000ff;">This value &lt;/span>&lt;span style=" font-weight:600; font-style:italic; text-decoration: underline; color:#0000ff;">MUST&lt;/span>&lt;span style=" font-weight:600; color:#0000ff;"> be the same for all animals grazing common land.&lt;/span>&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Sometimes land is suitable for grazing by more than one type of animal. LandUse Analyst allows you to designate one suitability mask as common grazing land. Note that you can specify an animal to use both common land and specific land at the same time. If this is the case, equal preference is given to all animals grazing the common land. This is not always ideal, as it may have been the case that some animals were given preference to the common land if the other suitable land was further away than the other animals using it.&lt;/p>
+&lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">A workaround for this problem is that LandUse Analyst produces classified maps of the land being used, so if it is the case that you find one animal being forced to travel much further than others, you can simply change settings to balance this. This can be accomplished by removing the other animals one at a time from using the common grazing land. It may be the case, however, that there is no ideal solution, and that they simply had to travel the extra distance!&lt;/p>
+&lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Note that this setting is the number of KCalories per land area unit available for grazing animals &lt;span style=" font-weight:600;">per year&lt;/span>.  This value applies to all of the land selected in the common raster mask file.&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="suffix" >
+         <string> KCal</string>
+        </property>
+        <property name="maximum" >
+         <number>9999999</number>
+        </property>
+        <property name="singleStep" >
+         <number>100</number>
+        </property>
+        <property name="value" >
+         <number>10000</number>
+        </property>
+       </widget>
+      </item>
+      <item rowspan="2" row="0" column="1" >
+       <widget class="Line" name="line" >
+        <property name="orientation" >
+         <enum>Qt::Vertical</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" colspan="3" >
+       <widget class="QComboBox" name="comboBoxAreaUnits" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>5</hsizetype>
+          <vsizetype>5</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="cursor" >
+         <cursor>13</cursor>
+        </property>
+        <property name="toolTip" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">1 dunum = 1000 square meters&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">1 hectare = 10,000 square meters&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="whatsThis" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Select either Dunums or Hectares. This option is merely for convenience, to accomodate data that is available based on the two different units. (Basically I just got sick of having to convert between the two all the time! :P)&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <item>
+         <property name="text" >
+          <string>per Dunum per Year</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>per Hectare per Year</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="2" column="1" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>239</width>
+       <height>16</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item rowspan="3" row="1" column="0" >
     <widget class="QGroupBox" name="groupBox" >
      <property name="title" >
       <string>Details</string>
@@ -68,6 +302,18 @@
             <height>26</height>
            </size>
           </property>
+          <property name="toolTip" >
+           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The Animal that these parameters are for.&lt;/p>&lt;/body>&lt;/html></string>
+          </property>
+          <property name="whatsThis" >
+           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">It is very important to select which animal your parameter settings are for. Once you slect the animal it appies to, simply click Apply, and it will then be properly allocated, and will show up in the dropdown list for that animal in the table on the top.&lt;/p>&lt;/body>&lt;/html></string>
+          </property>
          </widget>
         </item>
        </layout>
@@ -87,6 +333,13 @@
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">This animal contiributes this percent towards the tame meat portion of the diet&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="whatsThis" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">This tells LandUse Analyst how important the animal was to the populations diet. This figure is the percentage of the &lt;span style=" font-weight:600;">tame&lt;/span> meat portion of the diet. In other words, how much this animal contiributes compared to the other animals.&lt;/p>
+&lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">A very important note is that before the model will run, the sum of this value from all the animals in the model has to equal 100%. This value is kept updated and displayed in the lower portion of the main window and is visible at all times.&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="suffix" >
          <string> %</string>
@@ -138,7 +391,10 @@ p, li { white-space: pre-wrap; }
         <item>
          <widget class="QLineEdit" name="leName" >
           <property name="whatsThis" >
-           <string>Short name for the current layerset</string>
+           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Enter the name of the animal parameter you are defining in this field. You do not need a unique name. You can have, for example, 10 different animal parameters defined, all named "Jericho". LandUse Analyst uses a special method of saving the animals to eliminate the issue of duplicate filenames. This way, you can have, for example, conservative and optimistic settings for each animal at a site.&lt;/p>&lt;/body>&lt;/html></string>
           </property>
          </widget>
         </item>
@@ -162,7 +418,10 @@ p, li { white-space: pre-wrap; }
         <item>
          <widget class="QLineEdit" name="leDescription" >
           <property name="whatsThis" >
-           <string>Description of the current layerset</string>
+           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Because LandUse Analyst allows more than one type of parameter to be defined, the Notes: field allows you to give a brief description of the the parameter. For example, you may have two "Shuna" parameters defined, and the Notes: fields could contain "Conservative" and "Optimistic" to distinguish between them.&lt;/p>&lt;/body>&lt;/html></string>
           </property>
          </widget>
         </item>
@@ -173,6 +432,13 @@ p, li { white-space: pre-wrap; }
    </item>
    <item row="0" column="0" colspan="2" >
     <widget class="QGroupBox" name="grpProfiles" >
+     <property name="whatsThis" >
+      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">In order to enable LandUse Analyst to model animals, several details must be supplied. Animal Parameter Manager asks for the specific information about the animal which tells the program how the animal was fed, and how big a part of the settlements diet it was. As with Animal Manager, it is possible to have more than one parameter named the same thing. Again, just enter a descriptor in the Notes: field.&lt;/p>
+&lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">To define different parameters for the same animal, follow the same procedure as for defining multiple animals with the same name. Let's say you want to have two parameters set up for cows as an example. The Name: field is Cow for both, but in Notes: field, enter Optimistic for one, and Conservative for the other. Then adjust the parameters as you wish for each. Even though the name is the same, the parameters are saved uniquely. Having multiple parameters can be useful for setting up different scenarios, such as drought years, diease, catastrophic events, etc. Eventually, LandUse Analyst will have the ability to model over time, and will ahve these types of scenarios incorporated into the model.&lt;/p>&lt;/body>&lt;/html></string>
+     </property>
      <property name="title" >
       <string>Available Animal Parameter Settings</string>
      </property>
@@ -185,8 +451,18 @@ p, li { white-space: pre-wrap; }
       </property>
       <item row="0" column="0" colspan="6" >
        <widget class="QTableWidget" name="tblAnimalParameterProfiles" >
+        <property name="toolTip" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Select a parameter here to see and/or edit it's properties below.&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
         <property name="whatsThis" >
-         <string>Table of the currently available layersets</string>
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">In order to enable LandUse Analyst to model animals, several details must be supplied. Animal Parameter Manager asks for these specifics. As with Animal Manager, it is possible to have more than one parameter named the same thing. Again, just enter a descriptor in the Notes: field.&lt;/p>
+&lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">To define different parameters for the same animal, follow the same procedure as for defining multiple animals with the same name. Let's say you want to have two parameters set up for Cows as an example. The Name: field is Cow for both, but in Notes: field, enter Optimistic for one, and Conservative for the other. Then adjust the parameters as you wish for each. Even though the name is the same, the parameters are saved uniquely. Having multiple parameters can be useful for setting up different scenarios, such as drought years, diease, catastrophic events, etc. Eventually, LandUse Analyst will have the ability to model over time, and will have these types of scenarios incorporated into the model.&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="alternatingRowColors" >
          <bool>true</bool>
@@ -212,7 +488,16 @@ p, li { white-space: pre-wrap; }
       <item row="1" column="3" >
        <widget class="QToolButton" name="toolNew" >
         <property name="toolTip" >
-         <string>New</string>
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Define a new parameter&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="whatsThis" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">If you simply change the name or settings and click apply in the Animal Parameter Manager, you are just editing the parameter currently selected. To create a new parameter, you &lt;span style=" font-weight:600;">must&lt;/span> click on the New button.&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="text" >
          <string>...</string>
@@ -225,7 +510,16 @@ p, li { white-space: pre-wrap; }
       <item row="1" column="4" >
        <widget class="QToolButton" name="toolCopy" >
         <property name="toolTip" >
-         <string>Clone</string>
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Clone the currently selected parameter&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="whatsThis" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">If you want to create a new parameter that is similar to one already defined, you can clone this parameter to save time. All of the settings of the parameter you are cloning are transferred to the new clone, but the name is changed to Clone of ... (whatever the name of the parameter you are cloning was).&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="text" >
          <string>...</string>
@@ -238,7 +532,10 @@ p, li { white-space: pre-wrap; }
       <item row="1" column="5" >
        <widget class="QToolButton" name="toolDelete" >
         <property name="toolTip" >
-         <string>Delete</string>
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Delete the currently selected parameter&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="text" >
          <string>...</string>
@@ -290,10 +587,16 @@ p, li { white-space: pre-wrap; }
      </layout>
     </widget>
    </item>
-   <item rowspan="2" row="1" column="1" >
+   <item row="1" column="1" >
     <widget class="QGroupBox" name="grpFodderUse" >
      <property name="cursor" >
       <cursor>0</cursor>
+     </property>
+     <property name="toolTip" >
+      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">If your settlement fed the animal fodder, check off the Fodder section to enable the Fodder options to be accessible.  LandUse Analyst currently allows up to three crops to be used as feed.&lt;/p>&lt;/body>&lt;/html></string>
      </property>
      <property name="whatsThis" >
       <string>Select Fodder if you believe the animals were fed grain to supplement their grazing.  You will then have to select how many kg of the selected grain you believe they fed each animal either every day, week, or month.</string>
@@ -314,7 +617,7 @@ p, li { white-space: pre-wrap; }
       <property name="spacing" >
        <number>0</number>
       </property>
-      <item row="0" column="1" colspan="2" >
+      <item row="0" column="1" >
        <widget class="QLabel" name="labelFodderFodder" >
         <property name="toolTip" >
          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
@@ -325,6 +628,12 @@ p, li { white-space: pre-wrap; }
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-weight:600;">-1&lt;/span> for HIGH priority total utilization&lt;/p>
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-weight:600;">-2&lt;/span> for MED priority total utilization&lt;/p>
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-weight:600;">-3&lt;/span> for LOW priority total utilization&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="whatsThis" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">If your animal is fed straw or chaff left over after harvesting a crop, indicate what perentage of the animals diet being supplied by this by-product.&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="layoutDirection" >
          <enum>Qt::LeftToRight</enum>
@@ -337,7 +646,7 @@ p, li { white-space: pre-wrap; }
         </property>
        </widget>
       </item>
-      <item row="0" column="3" >
+      <item row="0" column="2" >
        <widget class="QLabel" name="labelFodderGrain" >
         <property name="layoutDirection" >
          <enum>Qt::RightToLeft</enum>
@@ -363,7 +672,7 @@ p, li { white-space: pre-wrap; }
         </property>
        </spacer>
       </item>
-      <item row="3" column="3" >
+      <item row="3" column="2" >
        <widget class="QSpinBox" name="sbFodderLentilsGrain" >
         <property name="sizePolicy" >
          <sizepolicy>
@@ -377,7 +686,13 @@ p, li { white-space: pre-wrap; }
          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of animals diet provided by LENTILS&lt;/p>&lt;/body>&lt;/html></string>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of animals diet provided by &lt;span style=" color:#0000ff;">GRAIN &lt;/span>from this crop &lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="whatsThis" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">If your animal is fed grain harvested from a crop, indicate the perentage of the animals diet being supplied by it is.&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="suffix" >
          <string>%</string>
@@ -387,7 +702,7 @@ p, li { white-space: pre-wrap; }
         </property>
        </widget>
       </item>
-      <item row="3" column="2" >
+      <item row="3" column="1" >
        <widget class="QSpinBox" name="sbFodderLentils" >
         <property name="sizePolicy" >
          <sizepolicy>
@@ -401,7 +716,13 @@ p, li { white-space: pre-wrap; }
          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of animals diet provided by &lt;span style=" color:#0000ff;">LENTIL FODDER&lt;/span>.&lt;/p>&lt;/body>&lt;/html></string>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of animals diet provided by &lt;span style=" color:#0000ff;">FODDER &lt;/span>from this crop &lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="whatsThis" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">If your animal is fed straw or chaff left over after harvesting a crop, indicate what perentage of the animals diet being supplied by this by-product.&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="suffix" >
          <string>%</string>
@@ -414,20 +735,7 @@ p, li { white-space: pre-wrap; }
         </property>
        </widget>
       </item>
-      <item row="3" column="0" colspan="2" >
-       <widget class="QLabel" name="labelFodderLentils" >
-        <property name="toolTip" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of animals diet provided by LENTILS&lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="text" >
-         <string>Lentils</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="3" >
+      <item row="2" column="2" >
        <widget class="QSpinBox" name="sbFodderBarleyGrain" >
         <property name="sizePolicy" >
          <sizepolicy>
@@ -441,7 +749,13 @@ p, li { white-space: pre-wrap; }
          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of animals diet provided by BARLEY&lt;/p>&lt;/body>&lt;/html></string>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of animals diet provided by &lt;span style=" color:#0000ff;">GRAIN &lt;/span>from this crop &lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="whatsThis" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">If your animal is fed grain harvested from a crop, indicate the perentage of the animals diet being supplied by it is.&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="suffix" >
          <string>%</string>
@@ -451,7 +765,7 @@ p, li { white-space: pre-wrap; }
         </property>
        </widget>
       </item>
-      <item row="2" column="2" >
+      <item row="2" column="1" >
        <widget class="QSpinBox" name="sbFodderBarley" >
         <property name="sizePolicy" >
          <sizepolicy>
@@ -465,7 +779,13 @@ p, li { white-space: pre-wrap; }
          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of animals diet provided by &lt;span style=" color:#0000ff;">BARLEY FODDER&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of animals diet provided by &lt;span style=" color:#0000ff;">FODDER &lt;/span>from this crop &lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="whatsThis" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">If your animal is fed straw or chaff left over after harvesting a crop, indicate what perentage of the animals diet being supplied by this by-product.&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="suffix" >
          <string>%</string>
@@ -478,20 +798,7 @@ p, li { white-space: pre-wrap; }
         </property>
        </widget>
       </item>
-      <item row="2" column="0" colspan="2" >
-       <widget class="QLabel" name="labelFodderBarley" >
-        <property name="toolTip" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of animals diet provided by BARLEY&lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="text" >
-         <string>Barley</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="3" >
+      <item row="1" column="2" >
        <widget class="QSpinBox" name="sbFodderWheatGrain" >
         <property name="sizePolicy" >
          <sizepolicy>
@@ -505,7 +812,13 @@ p, li { white-space: pre-wrap; }
          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of animals diet provided by WHEAT&lt;/p>&lt;/body>&lt;/html></string>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of animals diet provided by &lt;span style=" color:#0000ff;">GRAIN &lt;/span>from this crop &lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="whatsThis" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">If your animal is fed grain harvested from a crop, indicate the perentage of the animals diet being supplied by it is.&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="suffix" >
          <string>%</string>
@@ -515,7 +828,7 @@ p, li { white-space: pre-wrap; }
         </property>
        </widget>
       </item>
-      <item row="1" column="2" >
+      <item row="1" column="1" >
        <widget class="QSpinBox" name="sbFodderWheat" >
         <property name="sizePolicy" >
          <sizepolicy>
@@ -529,7 +842,14 @@ p, li { white-space: pre-wrap; }
          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of animals diet provided by &lt;span style=" color:#0000ff;">WHEAT FODDER.&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of animals diet provided by &lt;span style=" color:#0000ff;">FODDER &lt;/span>from this crop &lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="whatsThis" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">If your animal is fed straw or chaff left over after harvesting a crop, indicate what perentage of the animals diet being supplied by this by-product.&lt;/p>
+&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="suffix" >
          <string>%</string>
@@ -542,169 +862,29 @@ p, li { white-space: pre-wrap; }
         </property>
        </widget>
       </item>
-      <item row="1" column="0" colspan="2" >
-       <widget class="QLabel" name="labelFodderWheat" >
-        <property name="toolTip" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of animals diet provided by WHEAT&lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="text" >
-         <string>Wheat</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="4" column="1" >
-    <widget class="QPushButton" name="pbnApply" >
-     <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>5</hsizetype>
-       <vsizetype>0</vsizetype>
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text" >
-      <string>Apply</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="1" >
-    <widget class="QPushButton" name="pbnClose" >
-     <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>5</hsizetype>
-       <vsizetype>0</vsizetype>
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text" >
-      <string>Close</string>
-     </property>
-    </widget>
-   </item>
-   <item rowspan="4" row="2" column="0" >
-    <widget class="QGroupBox" name="groupBox_3" >
-     <property name="title" >
-      <string>Land Suitability Selection</string>
-     </property>
-     <layout class="QGridLayout" >
-      <property name="margin" >
-       <number>6</number>
-      </property>
-      <property name="spacing" >
-       <number>5</number>
-      </property>
-      <item row="0" column="0" >
-       <widget class="QCheckBox" name="checkBoxSpecificRaster" >
-        <property name="toolTip" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">binary raster named: animalName.mask  where animalName is the name of the animal you are setting these parameters for.&lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="text" >
-         <string>Specific Land</string>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="0" >
-       <widget class="QSpinBox" name="sbSpecificRasterCalories" >
-        <property name="toolTip" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Food Value of grazing land in Kilo Calories&lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="suffix" >
-         <string> KCal</string>
-        </property>
-        <property name="maximum" >
-         <number>99999999</number>
-        </property>
-        <property name="singleStep" >
-         <number>100</number>
-        </property>
-        <property name="value" >
-         <number>10000</number>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2" >
-       <widget class="QCheckBox" name="checkBoxCommonRaster" >
-        <property name="toolTip" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">binary raster named common.grazing.mask which more than one animal can graze from&lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="text" >
-         <string>Common Land</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2" >
-       <widget class="QSpinBox" name="sbCommonRasterCalories" >
-        <property name="toolTip" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Food Value of grazing land in Kilo Calories&lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="suffix" >
-         <string> KCal</string>
-        </property>
-        <property name="maximum" >
-         <number>9999999</number>
-        </property>
-        <property name="singleStep" >
-         <number>100</number>
-        </property>
-        <property name="value" >
-         <number>10000</number>
-        </property>
-       </widget>
-      </item>
-      <item rowspan="2" row="0" column="1" >
-       <widget class="Line" name="line" >
-        <property name="orientation" >
-         <enum>Qt::Vertical</enum>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0" colspan="3" >
-       <widget class="QComboBox" name="comboBoxAreaUnits" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>5</hsizetype>
-          <vsizetype>5</vsizetype>
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="cursor" >
-         <cursor>13</cursor>
-        </property>
-        <property name="toolTip" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">1 dunum = 1000 square meters&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">1 hectare = 10,000 square meters&lt;/p>&lt;/body>&lt;/html></string>
-        </property>
+       <widget class="QComboBox" name="comboBoxFodderCrop1" >
         <item>
          <property name="text" >
-          <string>per Dunum per Year</string>
+          <string>Define a crop!</string>
          </property>
         </item>
+       </widget>
+      </item>
+      <item row="2" column="0" >
+       <widget class="QComboBox" name="comboBoxFodderCrop2" >
         <item>
          <property name="text" >
-          <string>per Hectare per Year</string>
+          <string>Define a crop!</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="3" column="0" >
+       <widget class="QComboBox" name="comboBoxFodderCrop3" >
+        <item>
+         <property name="text" >
+          <string>Define a crop!</string>
          </property>
         </item>
        </widget>
@@ -731,6 +911,14 @@ p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">If your animal is to be allowed to graze fallow land resulting from crop rotation, set the priority of their access to this fallow land here.&lt;/p>&lt;/body>&lt;/html></string>
      </property>
+     <property name="whatsThis" >
+      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">LandUse Analyst allows animals to utilize fallow crop land as grazing land. There are many difficult aspects to including this in a model, but these difficulties are mostly transparent to the user. Essentially, you need to indicate only whether the animal will be allowed to graze fallow, and if so, what is it's access priority in relation to the other animals grazing the same fallow land. Given this, the software handles the rest!&lt;/p>
+&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Because some animals may have been given preferential access to the fallow land, LandUse Analyst has given three different priority levels to fallow access. The software first looks at the HIGH priority animals, and designates all fallow land to them, until either their needs are satisfied, or the available fallow land is all used. If there is more than enough fallow land for the HIGH priority animals, the remaining amount is then made available to the MED priority animals, and this repeats for the LOW priority ones as well.&lt;/p>&lt;/body>&lt;/html></string>
+     </property>
      <item>
       <property name="text" >
        <string>Do Not Graze Fallow</string>
@@ -755,7 +943,9 @@ p, li { white-space: pre-wrap; }
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../resources/resources.qrc" />
+ </resources>
  <connections>
   <connection>
    <sender>pbnClose</sender>

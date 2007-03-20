@@ -96,6 +96,25 @@
            <height>230</height>
           </size>
          </property>
+         <property name="toolTip" >
+          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:10pt; font-weight:600;">To learn more about a feature or field in LandUse Analyst, you can do one of four things.&lt;/span>&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">1. &lt;span style=" font-size:10pt; color:#0000ff;">Hover over it&lt;/span> with your mouse arrow for a brief description (like you are doing now to see this)&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">2. Click the &lt;span style=" font-size:12pt; font-weight:600; color:#0000ff;">?&lt;/span> in the top right of the main window and then click on the item you want detailed help for.&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"> Click anywhere to make the help box go away.&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">3. RIght Click on the thing you want help for.  If there is detailed help for it, you will see a &lt;span style=" font-weight:600; color:#0000ff;">What is this?&lt;/span> option that you can then click on.  Again, you can click anywhere to make the help box go away.&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">4. Go to the &lt;span style=" font-weight:600; color:#0000ff;">Help&lt;/span> &lt;span style=" font-weight:600; color:#0000ff;">Tab&lt;/span> and click on the item you want help with on the left for an even more detailed description of what things are and how they work&lt;/p>&lt;/body>&lt;/html></string>
+         </property>
+         <property name="whatsThis" >
+          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Landuse Analyst is a program that attempts to identify how much of the land surrounding an archaeological site would have been needed to sustain its population. &lt;a href="http://www.arkygeek.com/">&lt;span style=" text-decoration: underline; color:#0000ff;">Land Analyst&lt;/span>&lt;/a>, is Free Open Source Software (FOSS). That means that this program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version. &lt;/p>
+&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. &lt;/p>&lt;/body>&lt;/html></string>
+         </property>
          <property name="frameShape" >
           <enum>QFrame::StyledPanel</enum>
          </property>
@@ -145,6 +164,18 @@
        </item>
        <item row="4" column="1" colspan="2" >
         <widget class="QPushButton" name="pushButtonJadis" >
+         <property name="toolTip" >
+          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Not yet implemented...&lt;/p>&lt;/body>&lt;/html></string>
+         </property>
+         <property name="whatsThis" >
+          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">In future versions of LandUse Analyst, we hope to integrate database functionality to take advantage of extant databases such as JADIS. This kind of integration would make it possible to perform large scale network analysis of contemporaneous sites. In this early version, however, the button has no function.&lt;/p>&lt;/body>&lt;/html></string>
+         </property>
          <property name="text" >
           <string>Jadis Database</string>
          </property>
@@ -152,6 +183,12 @@
        </item>
        <item row="1" column="1" colspan="2" >
         <widget class="QComboBox" name="comboBoxProjection" >
+         <property name="toolTip" >
+          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The coordinate system chosen here must be the same as used throughout the model.  &lt;span style=" font-weight:600;">It is crucial that the E/N coordinates you supply here match those of the land suitability mask files you create.&lt;/span> If they do not match, the model simply will &lt;span style=" font-style:italic; text-decoration: underline;">not&lt;/span> work. &lt;/p>&lt;/body>&lt;/html></string>
+         </property>
          <item>
           <property name="text" >
            <string>UTM 36</string>
@@ -176,6 +213,12 @@
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The information entered here will be inserted as Meta-Data into the resulting maps.  However, Name and Period are optional.&lt;/p>&lt;/body>&lt;/html></string>
+         </property>
+         <property name="whatsThis" >
+          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The name of the site, it's period, and the estimated population.&lt;/p>&lt;/body>&lt;/html></string>
          </property>
          <property name="title" >
           <string>Settlement Information</string>
@@ -202,6 +245,18 @@ p, li { white-space: pre-wrap; }
               <horstretch>1</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
+            </property>
+            <property name="toolTip" >
+             <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The Period of the site (Optional)&lt;/p>&lt;/body>&lt;/html></string>
+            </property>
+            <property name="whatsThis" >
+             <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Enter the period of the site. If it is not listed, don't worry... it is not used in any of the calculations... (yet) In the future, when it is used, the list will not exist, and instead will be user-definable. Consider this option a sort of 'place-holder' at this point. (sorry!) &lt;/p>&lt;/body>&lt;/html></string>
             </property>
             <item>
              <property name="text" >
@@ -276,7 +331,14 @@ p, li { white-space: pre-wrap; }
            </widget>
           </item>
           <item row="0" column="1" colspan="3" >
-           <widget class="QLineEdit" name="lineEditSiteName" />
+           <widget class="QLineEdit" name="lineEditSiteName" >
+            <property name="toolTip" >
+             <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Enter the name of the site you are modelling here. &lt;/p>&lt;/body>&lt;/html></string>
+            </property>
+           </widget>
           </item>
           <item row="0" column="0" >
            <widget class="QLabel" name="textLabel2_4" >
@@ -299,10 +361,22 @@ p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Easting (required)&lt;/p>&lt;/body>&lt;/html></string>
          </property>
+         <property name="whatsThis" >
+          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The Easting of the site. Be sure you are using the same coordinate system as you do when creating your land suitability mask files!&lt;/p>&lt;/body>&lt;/html></string>
+         </property>
         </widget>
        </item>
        <item row="2" column="1" >
         <widget class="QLabel" name="label_6" >
+         <property name="toolTip" >
+          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Easting&lt;/p>&lt;/body>&lt;/html></string>
+         </property>
          <property name="text" >
           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
@@ -319,10 +393,22 @@ p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Northing (required)&lt;/p>&lt;/body>&lt;/html></string>
          </property>
+         <property name="whatsThis" >
+          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The Northing of the site. Be sure you are using the same coordinate system as you do when creating your land suitability mask files!&lt;/p>&lt;/body>&lt;/html></string>
+         </property>
         </widget>
        </item>
        <item row="3" column="1" >
         <widget class="QLabel" name="label_22" >
+         <property name="toolTip" >
+          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Northing&lt;/p>&lt;/body>&lt;/html></string>
+         </property>
          <property name="text" >
           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
@@ -357,6 +443,15 @@ p, li { white-space: pre-wrap; }
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="whatsThis" >
+          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">LandUse Analyst currently offers three types of analysis. Here you select which one you want to use.&lt;/p>
+&lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Euclidean method starts looking for suitable land at the site and moves outwards from that point 'as the crow flies'. In other words, using Euclidean geometry (or even more simply, it draws circles!)&lt;/p>
+&lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Walking Time method uses the same basic principle except that it moves outward from the site based on walking time instead of distance. This method is probably the most realistic scenario to run, but it is interesting to compare the results of the three different methods.&lt;/p>
+&lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Path Distance is very similar to Eucidean, except that this method considers topography when calculating distance from the site.&lt;/p>&lt;/body>&lt;/html></string>
+         </property>
          <property name="title" >
           <string>Modelling Method</string>
          </property>
@@ -377,6 +472,18 @@ p, li { white-space: pre-wrap; }
             </property>
             <item>
              <widget class="QLabel" name="label_2" >
+              <property name="toolTip" >
+               <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The smaller the value, the longer it will take to calculate the results!&lt;/p>&lt;/body>&lt;/html></string>
+              </property>
+              <property name="whatsThis" >
+               <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Landuse Analyst finds suitable land contained with a boundary around the site. This boundary is different for each modelling method, but the process is identical. Once this boundary has been determined, it looks inside and calcualtes the total area of suitable land and compares it to the Area Target. If the area of suitable land contained within this boundary falls within the range set by Model Precision, it has found the solution. If it is under this range, however, the boundary is moved outwards, and the process repeats until enough suitable land has been found.&lt;/p>&lt;/body>&lt;/html></string>
+              </property>
               <property name="text" >
                <string>Precision: </string>
               </property>
@@ -396,7 +503,16 @@ p, li { white-space: pre-wrap; }
                </sizepolicy>
               </property>
               <property name="toolTip" >
-               <string>The smaller the value, the longer it will take to calculate the results!</string>
+               <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The smaller the value, the longer it will take to calculate the results!&lt;/p>&lt;/body>&lt;/html></string>
+              </property>
+              <property name="whatsThis" >
+               <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Landuse Analyst finds suitable land contained with a boundary around the site. This boundary is different for each modelling method, but the process is identical. Once this boundary has been determined, it looks inside and calcualtes the total area of suitable land and compares it to the Area Target. If the area of suitable land contained within this boundary falls within the range set by Model Precision, it has found the solution. If it is under this range, however, the boundary is moved outwards, and the process repeats until enough suitable land has been found.&lt;/p>&lt;/body>&lt;/html></string>
               </property>
               <property name="maximum" >
                <number>50</number>
@@ -423,7 +539,7 @@ p, li { white-space: pre-wrap; }
              <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">When Path Distance is selected, a cost map for the area is created that calculates how far it is  to all areas of the map from the site.  This distance considers topography.  The program then calculates area contained within a certain distance of the site.  If the derived area is insufficient to support the population, the distance is increased, and it tries again.  This repeats until the required area is contained.&lt;/p>&lt;/body>&lt;/html></string>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">When Path Distance is selected, a cost map for the area is created that calculates how far it is  to all areas of the map from the site.  This is very similar to Eucidean, except that path distance considers topography.  The program then calculates area contained within a certain distance of the site.  If the derived area is insufficient to support the population, the distance is increased, and it tries again.  This repeats until the required area is contained.&lt;/p>&lt;/body>&lt;/html></string>
             </property>
             <property name="text" >
              <string>Path Distance</string>
@@ -439,7 +555,7 @@ p, li { white-space: pre-wrap; }
              <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">When Walking Time is selected, a cost map for the area is created that predicts how long it takes to get to any area on the map from the settlement.  The program then calculates the suitable area contained within the time it takes to walk.  If the derived area is insufficient to support the population, the walking time is increased, and it tries again.  This repeats until the required area is contained.&lt;/p>&lt;/body>&lt;/html></string>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">When Walking Time is selected, a cost map for the area is created that predicts how long it takes to get to any area on the map from the settlement.  The program then calculates the suitable area contained within the time it takes to walk.  If the derived area is insufficient to support the population, the walking time is increased, and it tries again.  This repeats until the required area is contained.  This method is probably the most realistic scenario to run, but it is interesting to compare the results of the three different methods.&lt;/p>&lt;/body>&lt;/html></string>
             </property>
             <property name="text" >
              <string>Walking Time</string>
@@ -530,7 +646,7 @@ p, li { white-space: pre-wrap; }
             <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">This figure is an average only.  In the future, I hope to be able to implement a feature whereby the human population is modelled, and account for different requirements of men, adult women, pregnant women, lactating women, and children.&lt;/p>&lt;/body>&lt;/html></string>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">In future versions of LandUse Analyst, the demographics of the human population will be modelled, but currently the user has to supply one figure for an average number of calories required by a single person on a daily basis.&lt;/p>&lt;/body>&lt;/html></string>
            </property>
            <property name="maximum" >
             <number>5000</number>
@@ -548,6 +664,18 @@ p, li { white-space: pre-wrap; }
          </item>
          <item>
           <widget class="QPushButton" name="pushButtonDietClear" >
+           <property name="toolTip" >
+            <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Erases everything in the Diet Breakdown display window&lt;/p>&lt;/body>&lt;/html></string>
+           </property>
+           <property name="whatsThis" >
+            <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Hit the Clear button to erase everything in the Diet Breakdown display window. This is useful if you make adjustments and don't want to clutter the view. The option to leave the previous data there (by not hitting the clear button) is in case the user wants to compare the results of different settings. &lt;/p>&lt;/body>&lt;/html></string>
+           </property>
            <property name="text" >
             <string>Clear</string>
            </property>
@@ -559,7 +687,13 @@ p, li { white-space: pre-wrap; }
             <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Press to refresh details in window below&lt;/p>&lt;/body>&lt;/html></string>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Displays the breakdown of the diet.&lt;/p>&lt;/body>&lt;/html></string>
+           </property>
+           <property name="whatsThis" >
+            <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Pressing the Breakdown button in the Diet Tab will show the calorie targets calculated for crops and domestic animals. These calculations rely on settings entered for the site's population, as well as the figure supplied for the number of calories required per person per day.&lt;/p>&lt;/body>&lt;/html></string>
            </property>
            <property name="text" >
             <string>Breakdown</string>
@@ -615,6 +749,12 @@ p, li { white-space: pre-wrap; }
              </item>
              <item row="1" column="2" >
               <widget class="QLabel" name="labelCropTamePercent" >
+               <property name="toolTip" >
+                <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The percentage of calories of the population's &lt;span style=" font-style:italic; text-decoration: underline;">plant&lt;/span> portion of the diet that is supplied by domesticated plants (crops).&lt;/p>&lt;/body>&lt;/html></string>
+               </property>
                <property name="text" >
                 <string>90</string>
                </property>
@@ -632,7 +772,13 @@ p, li { white-space: pre-wrap; }
                 <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Adjust this slider to set the ratio of Wild:Tame plants in the diet (calories)&lt;/p>&lt;/body>&lt;/html></string>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Adjust this slider to set the ratio of Wild:Tame plants in the plant portion of the diet (calories)&lt;/p>&lt;/body>&lt;/html></string>
+               </property>
+               <property name="whatsThis" >
+                <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The Wild to Tame Ratio is the distinction you must make when defining the settlements plant or meat portion of the diet. This setting relies on the assumption that all of their food comes from either wild sources or tame sources. To adjust, simply move the slider left or right, or spin your mouse wheel. &lt;span style=" font-weight:600;">Note that this setting is based on calories&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
                </property>
                <property name="maximum" >
                 <number>100</number>
@@ -662,6 +808,12 @@ p, li { white-space: pre-wrap; }
              </item>
              <item row="1" column="0" >
               <widget class="QLabel" name="labelCropWildPercent" >
+               <property name="toolTip" >
+                <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The percentage of calories of the population's &lt;span style=" font-style:italic; text-decoration: underline;">plant&lt;/span> portion of the diet that is supplied by non-domesticated plants.&lt;/p>&lt;/body>&lt;/html></string>
+               </property>
                <property name="text" >
                 <string>10</string>
                </property>
@@ -716,6 +868,12 @@ p, li { white-space: pre-wrap; }
             </property>
             <item>
              <widget class="QLabel" name="labelCropPercent" >
+              <property name="toolTip" >
+               <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The percentage of calories of the populations diet that is supplied by food that comes from plants.&lt;/p>&lt;/body>&lt;/html></string>
+              </property>
               <property name="text" >
                <string>50</string>
               </property>
@@ -731,6 +889,14 @@ p, li { white-space: pre-wrap; }
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Adjust this slider to set the ratio of Plant:Meat plants in the diet (calories)&lt;/p>&lt;/body>&lt;/html></string>
+              </property>
+              <property name="whatsThis" >
+               <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Set the overall division in the diet as a ratio between calories provided by &lt;span style=" font-weight:600; color:#0000ff;">Plants&lt;/span> and calories provided by &lt;span style=" font-weight:600; color:#0000ff;">Meat&lt;/span> with the top slider. You can either click and drag with the mouse, or use the mouse wheel. As you slide it, you will see that the percentages for both are automatically adjusted. This setting includes food from both wild and tame sources.&lt;/p>
+&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The Plant to Meat Ratio is the primary distinction you must make when defining the settlements diet. This setting relies on the assumption that all food comes from either plants or animals, regardless of whether or not it is tame or wild. &lt;span style=" font-weight:600; color:#0000ff;">Note that this setting is based on calories&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
               </property>
               <property name="maximum" >
                <number>100</number>
@@ -760,6 +926,12 @@ p, li { white-space: pre-wrap; }
             </item>
             <item>
              <widget class="QLabel" name="labelMeatPercent" >
+              <property name="toolTip" >
+               <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The percentage of calories of the populations diet that is supplied by food that comes from animals.&lt;/p>&lt;/body>&lt;/html></string>
+              </property>
               <property name="text" >
                <string>50</string>
               </property>
@@ -810,6 +982,12 @@ p, li { white-space: pre-wrap; }
              </item>
              <item row="1" column="2" >
               <widget class="QLabel" name="labelMeatWildPercent" >
+               <property name="toolTip" >
+                <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The percentage of calories of the population's &lt;span style=" font-style:italic; text-decoration: underline;">meat&lt;/span> portion of the diet that is supplied by non-domesticated animals.  (Hunting, fishing, scavenging, etc.)&lt;/p>&lt;/body>&lt;/html></string>
+               </property>
                <property name="text" >
                 <string>10</string>
                </property>
@@ -830,6 +1008,12 @@ p, li { white-space: pre-wrap; }
              </item>
              <item row="1" column="0" >
               <widget class="QLabel" name="labelMeatTamePercent" >
+               <property name="toolTip" >
+                <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The percentage of calories of the population's &lt;span style=" font-style:italic; text-decoration: underline;">meat&lt;/span> portion of the diet that is supplied by domesticated animals.&lt;/p>&lt;/body>&lt;/html></string>
+               </property>
                <property name="layoutDirection" >
                 <enum>Qt::LeftToRight</enum>
                </property>
@@ -850,7 +1034,13 @@ p, li { white-space: pre-wrap; }
                 <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Adjust this slider to set the ratio of Wild:Tame animals in the diet (calories)&lt;/p>&lt;/body>&lt;/html></string>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Adjust this slider to set the ratio of Wild:Tame animals in the meat portion of the diet (calories)&lt;/p>&lt;/body>&lt;/html></string>
+               </property>
+               <property name="whatsThis" >
+                <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The Wild to Tame Ratio is the distinction you must make when defining the settlements plant or meat portion of the diet. This setting relies on the assumption that all of their food comes from either wild sources or tame sources. To adjust, simply move the slider left or right, or spin your mouse wheel. &lt;span style=" font-weight:600;">Note that this setting is based on calories&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
                </property>
                <property name="layoutDirection" >
                 <enum>Qt::LeftToRight</enum>
@@ -929,6 +1119,15 @@ p, li { white-space: pre-wrap; }
            <height>200</height>
           </size>
          </property>
+         <property name="whatsThis" >
+          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">LandUse Analsyt needs area targets before it can determine landuse for a site. In order to calculate the area requirements for crops and animals, calorie targets must first be determined. The Diet section makes this task very straight forward. It is important to note that all dietary considerations in this program are based on calories (or in some cases KCalories).&lt;/p>
+&lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">With this in mind, the first step is to define their diets as a ratio between calories provided by &lt;span style=" font-weight:600;">Plants&lt;/span> and calories provided by &lt;span style=" font-weight:600;">Meat&lt;/span> with the top slider. You can either click and drag with the mouse, or use the mouse wheel. As you slide it, you will see that the percentages for both are automatically adjusted. This setting includes all sources of the diet.&lt;/p>
+&lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The second level of adjustment is to set the proportions between tame and wild sources. This works the same way as the top slider. Things to consider when setting these sliders are fishing, hunting, wild plant foraging, etc.&lt;/p>
+&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>&lt;/body>&lt;/html></string>
+         </property>
          <property name="title" >
           <string>Breakdown of Diet</string>
          </property>
@@ -945,7 +1144,7 @@ p, li { white-space: pre-wrap; }
              <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Press Breakdown Button to refresh&lt;/p>&lt;/body>&lt;/html></string>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Press Breakdown Button to display the breakdown of the population's diet.&lt;/p>&lt;/body>&lt;/html></string>
             </property>
            </widget>
           </item>
@@ -971,6 +1170,19 @@ p, li { white-space: pre-wrap; }
           <enum>Qt::Vertical</enum>
          </property>
          <widget class="QTableWidget" name="tblCrops" >
+          <property name="toolTip" >
+           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The crop selected here will be displayed below.  If the crop is to be included in the model, it must be checked off on left.  The model parameters must also be defined and linked to each crop being modelled.&lt;/p>&lt;/body>&lt;/html></string>
+          </property>
+          <property name="whatsThis" >
+           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The Crop Interface has been designed to be very simple and easy to use. The top section lists all of the defined crops, and selecting one will display its settings in the two lower sections. The lower sections are divided into the crop definition details on the left, and the model parameter settings for the currently selected crop on the right.&lt;/p>
+&lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">If you wish to edit either the crop or its parameters, you simply click on the Manage button below the display areas.&lt;/p>&lt;/body>&lt;/html></string>
+          </property>
           <property name="alternatingRowColors" >
            <bool>true</bool>
           </property>
@@ -1017,6 +1229,12 @@ p, li { white-space: pre-wrap; }
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="toolTip" >
+              <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Select a crop above to refresh this window&lt;/p>&lt;/body>&lt;/html></string>
+             </property>
             </widget>
            </item>
            <item>
@@ -1029,6 +1247,12 @@ p, li { white-space: pre-wrap; }
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="toolTip" >
+              <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Select a crop above to refresh this window&lt;/p>&lt;/body>&lt;/html></string>
+             </property>
             </widget>
            </item>
           </layout>
@@ -1037,6 +1261,19 @@ p, li { white-space: pre-wrap; }
        </item>
        <item row="1" column="1" >
         <widget class="QPushButton" name="pbnNewCropParameter" >
+         <property name="toolTip" >
+          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Open the Crop Parameter Manager&lt;/p>&lt;/body>&lt;/html></string>
+         </property>
+         <property name="whatsThis" >
+          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">In order to enable LandUse Analyst to model crops, several details must be supplied. Crop Parameter Manager asks for these specifics. As with Crop Manager, it is possible to have more than one parameter named the same thing. Again, just enter a descriptor in the Notes: field.&lt;/p>
+&lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">To define different parameters for the same crop, follow the same procedure as for defining multiple crops with the same name. Let's say you want to have two parameters set up for Wheat as an example. The Name: field is Wheat for both, but in Notes: field, enter Optimistic for one, and Conservative for the other. Then adjust the parameters as you wish for each. Even though the name is the same, the parameters are saved uniquely. Having multiple parameters can be useful for setting up different scenarios, such as drought years, diease, catastrophic events, etc. Eventually, LandUse Analyst will have the ability to model over time, and will have these types of scenarios incorporated into the model.&lt;/p>&lt;/body>&lt;/html></string>
+         </property>
          <property name="text" >
           <string>Manage Crop Parameters...</string>
          </property>
@@ -1051,6 +1288,18 @@ p, li { white-space: pre-wrap; }
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="toolTip" >
+          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Open the Crop Manager&lt;/p>&lt;/body>&lt;/html></string>
+         </property>
+         <property name="whatsThis" >
+          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Pressing this button will open up the Crop Manager.  There, you can create new crops from scratch, or clone previously defined crops to make changes to.  You can also delete crops if you wish.&lt;/p>&lt;/body>&lt;/html></string>
          </property>
          <property name="text" >
           <string>Manage Crops...</string>
@@ -1076,6 +1325,19 @@ p, li { white-space: pre-wrap; }
           <enum>Qt::Vertical</enum>
          </property>
          <widget class="QTableWidget" name="tblAnimals" >
+          <property name="toolTip" >
+           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The animal selected here will be displayed below.  If the animal is to be included in the model, it must be checked off on left.  The model parameters must also be defined and linked to each animal being modelled.&lt;/p>&lt;/body>&lt;/html></string>
+          </property>
+          <property name="whatsThis" >
+           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The Animal Interface has been designed to be very simple and easy to use. The top section lists all of the defined animals, and selecting one will display its settings in the two lower sections. The lower sections are divided into the animal definition details on the left, and the model parameter settings for the currently selected animal on the right.&lt;/p>
+&lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">If you wish to edit either the animal or its parameters, you simply click on the Manage button below the display areas.&lt;/p>&lt;/body>&lt;/html></string>
+          </property>
           <property name="alternatingRowColors" >
            <bool>true</bool>
           </property>
@@ -1127,6 +1389,12 @@ p, li { white-space: pre-wrap; }
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="toolTip" >
+              <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Select an animal above to refresh this window&lt;/p>&lt;/body>&lt;/html></string>
+             </property>
             </widget>
            </item>
            <item>
@@ -1138,6 +1406,12 @@ p, li { white-space: pre-wrap; }
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="toolTip" >
+              <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Select an animal above to refresh this window&lt;/p>&lt;/body>&lt;/html></string>
              </property>
             </widget>
            </item>
@@ -1155,6 +1429,18 @@ p, li { white-space: pre-wrap; }
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="toolTip" >
+          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Open the Animal Manager&lt;/p>&lt;/body>&lt;/html></string>
+         </property>
+         <property name="whatsThis" >
+          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">By pressing on the Manage Animals... button you will be brought to the Animal Manager. Here, you can create new animals from scratch, or clone previously defined animals to make changes to. You can also delete animals if you wish. &lt;/p>&lt;/body>&lt;/html></string>
+         </property>
          <property name="text" >
           <string>Manage Animals ...</string>
          </property>
@@ -1162,6 +1448,19 @@ p, li { white-space: pre-wrap; }
        </item>
        <item row="1" column="1" >
         <widget class="QPushButton" name="pbnNewAnimalParameter" >
+         <property name="toolTip" >
+          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Open the Animal Parameter Manager&lt;/p>&lt;/body>&lt;/html></string>
+         </property>
+         <property name="whatsThis" >
+          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">In order to enable LandUse Analyst to model animals, several details must be supplied. Animal Parameter Manager asks for the specific information about the animal which tells the program how the animal was fed, and how big a part of the settlements diet it was. As with Animal Manager, it is possible to have more than one parameter named the same thing. Again, just enter a descriptor in the Notes: field.&lt;/p>
+&lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">To define different parameters for the same animal, follow the same procedure as for defining multiple animals with the same name. Let's say you want to have two parameters set up for cows as an example. The Name: field is Cow for both, but in Notes: field, enter Optimistic for one, and Conservative for the other. Then adjust the parameters as you wish for each. Even though the name is the same, the parameters are saved uniquely. Having multiple parameters can be useful for setting up different scenarios, such as drought years, diease, catastrophic events, etc. Eventually, LandUse Analyst will have the ability to model over time, and will ahve these types of scenarios incorporated into the model.&lt;/p>&lt;/body>&lt;/html></string>
+         </property>
          <property name="text" >
           <string>Manage Animal Parameters ...</string>
          </property>
@@ -1200,6 +1499,18 @@ p, li { white-space: pre-wrap; }
             <height>0</height>
            </size>
           </property>
+          <property name="toolTip" >
+           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Select which crop you want to see the calculations for.&lt;/p>&lt;/body>&lt;/html></string>
+          </property>
+          <property name="whatsThis" >
+           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">To see the Calorie, Production, and Area targets for all of the crops and animals being modelled, simply select them from the list, and the results will be displayed in the area to the right. This information is meant to give the user an opportunity to make sure that the target look feasible before running the model (which can be very time consuming).&lt;/p>&lt;/body>&lt;/html></string>
+          </property>
           <item>
            <property name="text" >
             <string>Crop 1</string>
@@ -1235,6 +1546,14 @@ p, li { white-space: pre-wrap; }
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="whatsThis" >
+           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">To see the Calorie, Production, and Area targets for a crop simply select it from the list on the left, and the results will be displayed in the area to the right.&lt;/p>
+&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">This information is meant to give you an opportunity to make sure that the targets look feasible before running the model (which can be very time consuming).&lt;/p>&lt;/body>&lt;/html></string>
+          </property>
          </widget>
         </widget>
        </item>
@@ -1257,6 +1576,18 @@ p, li { white-space: pre-wrap; }
             <width>70</width>
             <height>0</height>
            </size>
+          </property>
+          <property name="toolTip" >
+           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Select which animal you want to see the calculations for.&lt;/p>&lt;/body>&lt;/html></string>
+          </property>
+          <property name="whatsThis" >
+           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">To see the Calorie, Production, and Area targets for all of the crops and animals being modelled, simply select them from the list, and the results will be displayed in the area to the right. This information is meant to give the user an opportunity to make sure that the target look feasible before running the model (which can be very time consuming).&lt;/p>&lt;/body>&lt;/html></string>
           </property>
           <item>
            <property name="text" >
@@ -1293,6 +1624,14 @@ p, li { white-space: pre-wrap; }
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="whatsThis" >
+           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">To see the Calorie, Production, and Area targets for an animal simply select it from the list on the left, and the results will be displayed in the area to the right.&lt;/p>
+&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">This information is meant to give you an opportunity to make sure that the targets look feasible before running the model (which can be very time consuming).&lt;/p>&lt;/body>&lt;/html></string>
+          </property>
          </widget>
         </widget>
        </item>
@@ -1323,6 +1662,13 @@ p, li { white-space: pre-wrap; }
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="toolTip" >
+           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The results produced by running the model are displayed here.  This feature, however, is not yet implemented in the Alpha version of LandUse Analyst, but is planned for the Initial Release.&lt;/p>
+&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>&lt;/body>&lt;/html></string>
+          </property>
          </widget>
          <widget class="QTextBrowser" name="textBrowserResultsRight" >
           <property name="sizePolicy" >
@@ -1332,6 +1678,12 @@ p, li { white-space: pre-wrap; }
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="toolTip" >
+           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The results produced by running the model are displayed here.  This feature, however, is not yet implemented in the Alpha version of LandUse Analyst, but is planned for the Initial Release.&lt;/p>&lt;/body>&lt;/html></string>
           </property>
          </widget>
         </widget>
@@ -1901,34 +2253,12 @@ p, li { white-space: pre-wrap; }
            <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Several pre-requisites exist for successful execution of a model scenario.  They are:&lt;/p>
-&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:12pt; font-weight:600; text-decoration: underline;">File Preparation&lt;/span>&lt;/p>
-&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600; text-decoration: underline;">&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;">Binary Rasters&lt;/p>
-&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600; text-decoration: underline;">&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600; text-decoration: underline;">&lt;span style=" font-weight:400; text-decoration:none;">	&lt;/span>&lt;span style=" font-weight:400; font-style:italic; text-decoration:none;">cropmask&lt;/span>&lt;/p>
-&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-style:italic;">&lt;span style=" font-style:normal;">If Unique Raster is checked, these files must exist:&lt;/span>&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">	&lt;span style=" font-style:italic;">wheatmask&lt;/span>&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-style:italic;">	barleymask&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-style:italic;">	lentilmask&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-style:italic;">	olivemask&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-style:italic;">	grapemask&lt;/p>
-&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-style:italic;">&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-style:italic;">&lt;span style=" font-style:normal;">If use raster is selected for the animal, these must exist:&lt;/span>&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">	&lt;span style=" font-style:italic;">sheepmask&lt;/span>&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-style:italic;">	goatmask&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-style:italic;">	pigmask&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-style:italic;">	cowmask&lt;/p>
-&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-weight:600; text-decoration: underline;">Digital Elevation Model (DEM)&lt;/span>&lt;/p>
-&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">	&lt;span style=" font-style:italic;">modeldem&lt;/span>&lt;/p>
-&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-style:italic;">&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-style:italic;">&lt;span style=" font-weight:600; text-decoration: underline;">* NOTE *&lt;/span>&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">It is extremely important that the raster mask files are binary only! (just 1 or void as cell values)&lt;/p>
-&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>&lt;/body>&lt;/html></string>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:10pt; font-weight:600;">To learn more about a feature or field in LandUse Analyst, you can do one of four things.&lt;/span>&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">1. &lt;span style=" font-size:10pt; color:#0000ff;">Hover over it&lt;/span> with your mouse arrow for a brief description&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">2. Click the &lt;span style=" font-size:12pt; font-weight:600; color:#0000ff;">?&lt;/span> in the top right of the main window and then click on the item you want detailed help for.&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"> Click anywhere to make the help box go away.&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">3. RIght Click on the thing you want help for.  If there is detailed help for it, you will see a &lt;span style=" font-weight:600; color:#0000ff;">What is this?&lt;/span> option that you can then click on.  Again, you can click anywhere to make the help box go away.&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">4. Go to the &lt;span style=" font-weight:600; color:#0000ff;">Help&lt;/span> &lt;span style=" font-weight:600; color:#0000ff;">Tab&lt;/span> and click on the item you want help with on the left for an even more detailed description of what things are and how they work&lt;/p>&lt;/body>&lt;/html></string>
           </property>
          </widget>
         </widget>
@@ -1947,6 +2277,12 @@ p, li { white-space: pre-wrap; }
      </property>
      <item>
       <widget class="QLabel" name="label_5" >
+       <property name="toolTip" >
+        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">This is the sum of percent of diet figures for all of the animals being used in the model.  &lt;span style=" font-weight:600; font-style:italic; text-decoration: underline; color:#0000ff;">This must be 100%&lt;/span> to run!&lt;/p>&lt;/body>&lt;/html></string>
+       </property>
        <property name="text" >
         <string>Animals:</string>
        </property>
@@ -1958,7 +2294,7 @@ p, li { white-space: pre-wrap; }
         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Must be 100% to run!&lt;/p>&lt;/body>&lt;/html></string>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">This is the sum of percent of diet figures for all of the animals being used in the model.  &lt;span style=" font-weight:600; font-style:italic; text-decoration: underline; color:#0000ff;">This must be 100%&lt;/span> to run!&lt;/p>&lt;/body>&lt;/html></string>
        </property>
        <property name="text" >
         <string>100%</string>
@@ -1970,6 +2306,12 @@ p, li { white-space: pre-wrap; }
      </item>
      <item>
       <widget class="QLabel" name="label_3" >
+       <property name="toolTip" >
+        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">This is the sum of percent of diet figures for all of the crops being used in the model.  &lt;span style=" font-weight:600; font-style:italic; text-decoration: underline; color:#0000ff;">This must be 100%&lt;/span> to run!&lt;/p>&lt;/body>&lt;/html></string>
+       </property>
        <property name="text" >
         <string>  Crops:</string>
        </property>
@@ -1981,7 +2323,7 @@ p, li { white-space: pre-wrap; }
         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Must be 100% to run!&lt;/p>&lt;/body>&lt;/html></string>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">This is the sum of percent of diet figures for all of the crops being used in the model.  &lt;span style=" font-weight:600; font-style:italic; text-decoration: underline; color:#0000ff;">This must be 100%&lt;/span> to run!&lt;/p>&lt;/body>&lt;/html></string>
        </property>
        <property name="text" >
         <string>100%</string>
@@ -2078,7 +2420,7 @@ p, li { white-space: pre-wrap; }
         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Save all parameters of this model to a file&lt;/p>&lt;/body>&lt;/html></string>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Save all settings of this model to a file&lt;/p>&lt;/body>&lt;/html></string>
        </property>
        <property name="text" >
         <string>Save</string>
@@ -2099,7 +2441,7 @@ p, li { white-space: pre-wrap; }
         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Exit Program&lt;/p>&lt;/body>&lt;/html></string>
+&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>&lt;/body>&lt;/html></string>
        </property>
        <property name="text" >
         <string>Exit</string>

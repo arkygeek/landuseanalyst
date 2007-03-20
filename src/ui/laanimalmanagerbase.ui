@@ -5,12 +5,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>486</width>
+    <width>597</width>
     <height>420</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>Animal Profile Manager</string>
+  </property>
+  <property name="windowIcon" >
+   <iconset resource="../resources/resources.qrc" >:/la_icon.png</iconset>
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >
@@ -28,6 +31,13 @@
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
+     </property>
+     <property name="whatsThis" >
+      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">In order to enable LandUse Analyst to model any animal, several details must be entered to define specific types or breeds. Animal Manager asks for general information about the animal in this section. You might want to have more than one breed of the same species, however, which is allowed.&lt;/p>
+&lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">To define different breeds of the same species is quite easy. Let's say you want to have two kinds of cows for example. The Name: field is Cow for both, but in Notes: field, enter Dairy for one, and Beast of Burden for the other. Then adjust the other parameters as you wish. Even though the name is the same, the animal is saved uniquely.&lt;/p>&lt;/body>&lt;/html></string>
      </property>
      <property name="title" >
       <string>Animal Description</string>
@@ -60,7 +70,13 @@
          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">number of days in estrous cycle&lt;/p>&lt;/body>&lt;/html></string>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of babies that do not survive to slaughter age.&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="whatsThis" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">LandUse Analyst accommodates for birthing deaths only. If an animal survives to weaning age but dies before slaughter, it is not modelled at this time. However, you can adjust the death rate setting to indicate the average survival rate of births. This is important for determining herd size, as it affects the number of mothers needed to sustain the production levels required by the settlement.&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="alignment" >
          <set>Qt::AlignRight</set>
@@ -100,7 +116,13 @@ p, li { white-space: pre-wrap; }
          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Average weight of animal (Kg) when butchered.&lt;/p>&lt;/body>&lt;/html></string>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Time from birth to slaughter weight&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="whatsThis" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Grow time, or the length of time from birth to slaughter weight, is quite important for estimating the herd size. The longer it takes an animal to reach slaughter weight from birth, the higher the number of animals alive at any given time.&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="alignment" >
          <set>Qt::AlignRight</set>
@@ -143,7 +165,13 @@ p, li { white-space: pre-wrap; }
          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Average weight of animal (Kg) when butchered.&lt;/p>&lt;/body>&lt;/html></string>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Average weight of animal (Kg) when slaughtered&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="whatsThis" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Animals can be slaughtered for butchering at any weight, but LandUse Analyst needs to know the average weight of the animals when they are slaughtered. This is their &lt;span style=" font-weight:600;">live weight.&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="alignment" >
          <set>Qt::AlignRight</set>
@@ -183,7 +211,13 @@ p, li { white-space: pre-wrap; }
          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">number of days in estrous cycle&lt;/p>&lt;/body>&lt;/html></string>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of live weight usable as meat&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="whatsThis" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The production targets for animals are in Kg of meat, so to be compatible with animal numbers, you must know the percentage of the animal's live weight that is usable for food. You can also take into account here the efficiency of the butchering technique that the population used. In other words, if you believe they were wasteful, this is where you would make an adjustment to integrate that.&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="alignment" >
          <set>Qt::AlignRight</set>
@@ -219,14 +253,20 @@ p, li { white-space: pre-wrap; }
       <item row="1" column="1" colspan="3" >
        <widget class="QLineEdit" name="leDescription" >
         <property name="whatsThis" >
-         <string>Description of the current layerset</string>
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Because LandUse Analyst allows more than one type of animal to be defined, the Notes: field allows you to give a brief description of the the animal. For example, you may have two "Sheep" defined, and the Notes: fields could contain "For Slaughter" and "Wool Producers" to distinguish between them.&lt;/p>&lt;/body>&lt;/html></string>
         </property>
        </widget>
       </item>
       <item row="0" column="1" colspan="3" >
        <widget class="QLineEdit" name="leName" >
         <property name="whatsThis" >
-         <string>Short name for the current layerset</string>
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Enter the name of the animal you are defining in this field. You do not need a unique name. You can have, for example, 10 animals defined, all named "Sheep". LandUse Analyst uses a special method of saving the animals to eliminate the issue of duplicate filenames.&lt;/p>&lt;/body>&lt;/html></string>
         </property>
        </widget>
       </item>
@@ -248,6 +288,12 @@ p, li { white-space: pre-wrap; }
        <width>0</width>
        <height>0</height>
       </size>
+     </property>
+     <property name="whatsThis" >
+      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">All of the settings in Reproduction define an animal's reproductive characteristics. LandUse Analyst calculates the time between births by adding the gestation time, weaning age, and one estrous cycle.&lt;/p>&lt;/body>&lt;/html></string>
      </property>
      <property name="title" >
       <string>Reproduction</string>
@@ -273,7 +319,13 @@ p, li { white-space: pre-wrap; }
          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">number of days in estrous cycle&lt;/p>&lt;/body>&lt;/html></string>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The number of days in their estrous cycle&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="whatsThis" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The number of days in the animal's estrous cycle.&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="alignment" >
          <set>Qt::AlignRight</set>
@@ -307,6 +359,12 @@ p, li { white-space: pre-wrap; }
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Gestation time in days&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="whatsThis" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The number of days for gestation. &lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="alignment" >
          <set>Qt::AlignRight</set>
@@ -344,6 +402,12 @@ p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Weeks from birth to weaning&lt;/p>&lt;/body>&lt;/html></string>
         </property>
+        <property name="whatsThis" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The age of the babies, in weeks, at which they stop feeding from their mother. It is assumed by LandUse Analyst that mothers will become pregnant after one estrous cycle following weaning.&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
         <property name="alignment" >
          <set>Qt::AlignRight</set>
         </property>
@@ -377,6 +441,12 @@ p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Number of young born per birth (average)&lt;/p>&lt;/body>&lt;/html></string>
         </property>
+        <property name="whatsThis" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Set the number of babies born to a mother. This is total number, not surviving numbers. To account for deaths between birth and weaning, adjust the Death Rate.&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
         <property name="alignment" >
          <set>Qt::AlignRight</set>
         </property>
@@ -409,6 +479,12 @@ p, li { white-space: pre-wrap; }
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Number of years females are useful for breeding&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="whatsThis" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">In order to determine the number of female offspring that need to be retained to sustain the adult female population (breeding herd) it is necessary to know how long a female of the species can be expected to breed reliably. This is &lt;span style=" font-weight:600;">not&lt;/span> life expectancy.&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="alignment" >
          <set>Qt::AlignRight</set>
@@ -444,7 +520,13 @@ p, li { white-space: pre-wrap; }
          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Number of years females are useful for breeding&lt;/p>&lt;/body>&lt;/html></string>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Age of females when they become sexually mature.&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="whatsThis" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Simply set the age, in months, at which the females become sexually mature, and are able to reliably breed.&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="alignment" >
          <set>Qt::AlignRight</set>
@@ -518,6 +600,12 @@ p, li { white-space: pre-wrap; }
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="toolTip" >
+      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-weight:600; font-style:italic; color:#0000ff;">Have you applied your changes?&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+     </property>
      <property name="text" >
       <string>Close</string>
      </property>
@@ -525,8 +613,17 @@ p, li { white-space: pre-wrap; }
    </item>
    <item row="3" column="2" >
     <widget class="QPushButton" name="pbnApply" >
+     <property name="toolTip" >
+      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Saves all settings&lt;/p>&lt;/body>&lt;/html></string>
+     </property>
      <property name="whatsThis" >
-      <string>Apply the changes that have just been made to these layerset details</string>
+      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">After completing all fields to define an animal, you &lt;span style=" font-weight:600;">MUST&lt;/span> click the Apply button to save it. The name does not have to be unique, as LandUse Analyst has a special way of saving animals to allow for duplicate Animal names. It is helpful, however, to utilize the Notes field to distinguish between same-named animal definitions.&lt;/p>&lt;/body>&lt;/html></string>
      </property>
      <property name="text" >
       <string>Apply</string>
@@ -562,6 +659,12 @@ p, li { white-space: pre-wrap; }
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="whatsThis" >
+      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">LandUse Analyst breaks down the calorie requirements for the animal being modelled into three categories: Gestating, Lactating, and Juvenile. Enter the average calories required per day for an animal in each of these categories.&lt;/p>&lt;/body>&lt;/html></string>
+     </property>
      <property name="title" >
       <string>Feed Requirements</string>
      </property>
@@ -574,6 +677,12 @@ p, li { white-space: pre-wrap; }
       </property>
       <item row="0" column="1" >
        <widget class="QLabel" name="label_13" >
+        <property name="toolTip" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Just as we had to set the average daily calorie requirements for the human population, we also need to supply information about this for animals. LandUse Analyst needs to know how many calories per day are required for the animals being modelled. &lt;/p>&lt;/body>&lt;/html></string>
+        </property>
         <property name="text" >
          <string>Cals/day</string>
         </property>
@@ -599,6 +708,12 @@ p, li { white-space: pre-wrap; }
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="toolTip" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The number of calories required per day for a female during gestation.&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
         <property name="suffix" >
          <string/>
         </property>
@@ -619,6 +734,12 @@ p, li { white-space: pre-wrap; }
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="toolTip" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The number of calories required per day for a female that is lactating.&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="suffix" >
          <string/>
@@ -655,6 +776,18 @@ p, li { white-space: pre-wrap; }
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="toolTip" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The number of calories required per day for a juvenile.&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="whatsThis" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The number of calories required per day for a juvenile. LandUse Analyst considers a Juvenile to be an animal after weaning and before slaughter.&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
         <property name="suffix" >
          <string/>
         </property>
@@ -683,8 +816,18 @@ p, li { white-space: pre-wrap; }
       </property>
       <item row="0" column="0" colspan="6" >
        <widget class="QTableWidget" name="tblAnimals" >
+        <property name="toolTip" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Select an animal here to see and/or edit it's properties below.&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
         <property name="whatsThis" >
-         <string>Table of the currently available layersets</string>
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">In order to enable LandUse Analyst to model animals, several details must be supplied. Animal Parameter Manager asks for these specifics. As with Animal Manager, it is possible to have more than one parameter named the same thing. Again, just enter a descriptor in the Notes: field.&lt;/p>
+&lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">To define different parameters for the same animal, follow the same procedure as for defining multiple animals with the same name. Let's say you want to have two parameters set up for Cows as an example. The Name: field is Cow for both, but in Notes: field, enter Optimistic for one, and Conservative for the other. Then adjust the parameters as you wish for each. Even though the name is the same, the parameters are saved uniquely. Having multiple parameters can be useful for setting up different scenarios, such as drought years, diease, catastrophic events, etc. Eventually, LandUse Analyst will have the ability to model over time, and will have these types of scenarios incorporated into the model.&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="alternatingRowColors" >
          <bool>true</bool>
@@ -749,7 +892,10 @@ p, li { white-space: pre-wrap; }
       <item row="1" column="5" >
        <widget class="QToolButton" name="toolDelete" >
         <property name="toolTip" >
-         <string>Delete</string>
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Delete the currently selected animal&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="text" >
          <string>...</string>
@@ -762,7 +908,17 @@ p, li { white-space: pre-wrap; }
       <item row="1" column="4" >
        <widget class="QToolButton" name="toolCopy" >
         <property name="toolTip" >
-         <string>Clone</string>
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Clone the currently selected animal&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="whatsThis" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">If you want to create a new animal that is similar to one already defined, you can clone this animal to save time. All of the settings of the animal you are cloning are transferred to the new clone, but the name is changed to Clone of ... (whatever the name of the animal you are cloning was).&lt;/p>
+&lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Note that the parameters are &lt;span style=" font-weight:600;">not&lt;/span> transferred.&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="text" >
          <string>...</string>
@@ -775,7 +931,16 @@ p, li { white-space: pre-wrap; }
       <item row="1" column="3" >
        <widget class="QToolButton" name="toolNew" >
         <property name="toolTip" >
-         <string>New</string>
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Define a new animal&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="whatsThis" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">If you simply change the name or settings and click apply in the Animal Manager, you are just editing the animal currently selected. To create a new animal, you must click on the New button.&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="text" >
          <string>...</string>
