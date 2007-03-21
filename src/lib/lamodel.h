@@ -67,11 +67,11 @@ class LaModel : public LaSerialisable, public LaGuid
     /** The life expectancy in years of the model */
     int precision() const;
     /** The number of years a female will reliably produce offspring */
-    int dietValue() const;
+    int dietPercent() const;
     /** The average number of young produced per pregnancy */
-    int plantValue() const;
+    int plantPercent() const;
     /** The age in weeks at which babies stop suckling */
-    int meatValue() const;
+    int meatPercent() const;
     /** The number of days required for gestation */
     int caloriesPerPersonDaily() const;
     /** The number of days in the female estrous cycle */
@@ -131,20 +131,20 @@ class LaModel : public LaSerialisable, public LaGuid
      */
     void setPrecision(int theMonths);
 
-    /** Set the average dietValueExpectancy in years
-     * @see dietValue()
+    /** Set the average dietPercentExpectancy in years
+     * @see dietPercent()
      */
-    void setDietValue(int theYears);
+    void setDietPercent(int theYears);
 
-    /** Set the average number of plantValue
-     * @see plantValue()
+    /** Set the average number of plantPercent
+     * @see plantPercent()
      */
-    void setPlantValue(int theInteger);
+    void setPlantPercent(int theInteger);
 
-    /** Set the meatValue in weeks
-     * @see meatValue()
+    /** Set the meatPercent in weeks
+     * @see meatPercent()
      */
-    void setMeatValue(int theWeeks);
+    void setMeatPercent(int theWeeks);
 
     /** Set the caloriesPerPersonDaily in Days
      * @see caloriesPerPersonDaily()
@@ -198,11 +198,11 @@ class LaModel : public LaSerialisable, public LaGuid
     /** The life expectancy in years of the model */
     int mPrecision;
     /** The number of years a female will reliably produce offspring */
-    int mDietValue;
+    int mDietPercent;
     /** The average number of young produced per pregnancy */
-    int mPlantValue;
+    int mPlantPercent;
     /** The age in weeks at which babies stop suckling */
-    int mMeatValue;
+    int mMeatPercent;
     /** The number of days required for gestation */
     int mCaloriesPerPersonDaily;
     /** The number of days in the female estrous cycle */

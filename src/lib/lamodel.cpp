@@ -96,7 +96,7 @@ QString LaModel::name() const
 {
   return mName;
 }
-QString LaModel::population() const
+int LaModel::population() const
 {
   return mPopulation;
 }
@@ -156,7 +156,7 @@ void LaModel::setName(QString theName)
 {
   mName=theName;
 }
-void LaModel::setPopulation(QString thePopulation)
+void LaModel::setPopulation(int thePopulation)
 {
   mPopulation=thePopulation;
 }
@@ -229,8 +229,8 @@ bool LaModel::fromXml(QString theXml)
   setGuid(myTopElement.attribute("guid"));
   qDebug("Model::fromXml - guid set to : " + guid().toLocal8Bit());
   mName=LaUtils::xmlDecode(myTopElement.firstChildElement("name").text());
-  mPopulation=LaUtils::xmlDecode(myTopElement.firstChildElement("population").text());
-  mPeriod=QString(myTopElement.firstChildElement("period").text()).toInt();
+  mPopulation=QString(myTopElement.firstChildElement("population").text()).toInt();
+  mPeriod=LaUtils::xmlDecode(myTopElement.firstChildElement("period").text());
   mProjection=QString(myTopElement.firstChildElement("projection").text()).toInt();
   mEasting=QString(myTopElement.firstChildElement("easting").text()).toInt();
   mNorthing=QString(myTopElement.firstChildElement("northing").text()).toInt();
@@ -251,8 +251,8 @@ QString LaModel::toXml()
   QString myString;
   myString+=QString("<model guid=\"" + guid() + "\">\n");
   myString+=QString("  <name>" + LaUtils::xmlEncode(mName) + "</name>\n");
-  myString+=QString("  <population>" + LaUtils::xmlEncode(mPopulation) + "</population>\n");
-  myString+=QString("  <period>" + QString::number(mPeriod) + "</period>\n");
+  myString+=QString("  <population>" + QString::number(mPopulation) + "</population>\n");
+  myString+=QString("  <period>" + LaUtils::xmlEncode(mPeriod) + "</period>\n");
   myString+=QString("  <projection>" + QString::number(mProjection) + "</projection>\n");
   myString+=QString("  <easting>" + QString::number(mEasting) + "</easting>\n");
   myString+=QString("  <northing>" + QString::number(mNorthing) + "</northing>\n");
@@ -274,8 +274,8 @@ QString LaModel::toText()
   QString myString;
   myString+=QString("guid=>" + guid() + "\n");
   myString+=QString("name=>" + LaUtils::xmlEncode(mName) + "\n");
-  myString+=QString("population=>" + LaUtils::xmlEncode(mPopulation) + "\n");
-  myString+=QString("period=>" + QString::number(mPeriod) + "\n");
+  myString+=QString("population=>" + QString::number(mPopulation) + "\n");
+  myString+=QString("period=>" + LaUtils::xmlEncode(mPeriod) + "\n");
   myString+=QString("projection=>" + QString::number(mProjection) + "\n");
   myString+=QString("easting=>" + QString::number(mEasting) + "\n");
   myString+=QString("northing=>" + QString::number(mNorthing) + "\n");
@@ -296,8 +296,8 @@ QString LaModel::toHtml()
   QString myString;
   myString+="<p align=\"center\"><h1>Details for " + LaUtils::xmlEncode(mName) + "</h1></p>";
   myString+="<p>GUID:" + guid() + "</p>";
-  myString+="<p>Population:" + mPopulation + "</p>";
-  myString+="<p>Percentage Usable Meat: " + QString::number(mPeriod) + "</p>";
+  myString+="<p>Population:" + QString::number(mPopulation) + "</p>";
+  myString+="<p>Percentage Usable Meat: " + LaUtils::xmlEncode(mPeriod) + "</p>";
   myString+="<p>Kill Weight: " + QString::number(mProjection) + "</p>";
   myString+="<p>Grow Time: " + QString::number(mEasting) + "</p>";
   myString+="<p>Death Rate: " + QString::number(mNorthing) + "</p>";
