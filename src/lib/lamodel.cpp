@@ -28,8 +28,8 @@ LaModel::LaModel() : LaSerialisable(), LaGuid()
 {
   setGuid();
   mName="No Name Set";
-  mPopulation="Not Set";
-  mPeriod=50;
+  mPopulation=500;
+  mPeriod="No Period Set";
   mProjection=100;
   mEasting=10;
   mNorthing=10;
@@ -37,9 +37,9 @@ LaModel::LaModel() : LaSerialisable(), LaGuid()
   mWalkingTime=5000;
   mPathDistance=3500;
   mPrecision=18;
-  mDietValue=5;
-  mPlantValue=1;
-  mMeatValue=12;
+  mDietPercent=5;
+  mPlantPercent=1;
+  mMeatPercent=12;
   mCaloriesPerPersonDaily=120;
   mSpare=21;
 }
@@ -62,9 +62,9 @@ LaModel::LaModel(const LaModel& theModel)
   mWalkingTime=theModel.walkingTime();
   mPathDistance=theModel.pathDistance();
   mPrecision=theModel.precision();
-  mDietValue=theModel.dietValue();
-  mPlantValue=theModel.plantValue();
-  mMeatValue=theModel.meatValue();
+  mDietPercent=theModel.dietPercent();
+  mPlantPercent=theModel.plantPercent();
+  mMeatPercent=theModel.meatPercent();
   mCaloriesPerPersonDaily=theModel.caloriesPerPersonDaily();
   mSpare=theModel.spare();
 }
@@ -84,9 +84,9 @@ LaModel& LaModel::operator=(const LaModel& theModel)
   mWalkingTime=theModel.walkingTime();
   mPathDistance=theModel.pathDistance();
   mPrecision=theModel.precision();
-  mDietValue=theModel.dietValue();
-  mPlantValue=theModel.plantValue();
-  mMeatValue=theModel.meatValue();
+  mDietPercent=theModel.dietPercent();
+  mPlantPercent=theModel.plantPercent();
+  mMeatPercent=theModel.meatPercent();
   mCaloriesPerPersonDaily=theModel.caloriesPerPersonDaily();
   mSpare=theModel.spare();
   return *this;
@@ -100,7 +100,7 @@ QString LaModel::population() const
 {
   return mPopulation;
 }
-int LaModel::period() const
+QString LaModel::period() const
 {
   return mPeriod;
 }
@@ -132,17 +132,17 @@ int LaModel::precision() const
 {
   return mPrecision;
 }
-int LaModel::dietValue() const
+int LaModel::dietPercent() const
 {
-  return mDietValue;
+  return mDietPercent;
 }
-int LaModel::plantValue() const
+int LaModel::plantPercent() const
 {
-  return mPlantValue;
+  return mPlantPercent;
 }
-int LaModel::meatValue() const
+int LaModel::meatPercent() const
 {
-  return mMeatValue;
+  return mMeatPercent;
 }
 int LaModel::caloriesPerPersonDaily() const
 {
@@ -160,11 +160,9 @@ void LaModel::setPopulation(QString thePopulation)
 {
   mPopulation=thePopulation;
 }
-void LaModel::setPeriod(int thePercentage)
+void LaModel::setPeriod(QString thePeriod)
 {
-  if (thePercentage > 100) {thePercentage=100;}
-  if (thePercentage < 0) {thePercentage=100;}
-  mPeriod=thePercentage;
+  mPeriod=thePeriod;
 }
 
 void LaModel::setProjection(int theKg)
@@ -195,17 +193,17 @@ void LaModel::setPrecision(int theMonths)
 {
   mPrecision=theMonths;
 }
-void LaModel::setDietValue(int theYears)
+void LaModel::setDietPercent(int theYears)
 {
-  mDietValue=theYears;
+  mDietPercent=theYears;
 }
-void LaModel::setPlantValue(int theInteger)
+void LaModel::setPlantPercent(int theInteger)
 {
-  mPlantValue=theInteger;
+  mPlantPercent=theInteger;
 }
-void LaModel::setMeatValue(int theWeeks)
+void LaModel::setMeatPercent(int theWeeks)
 {
-  mMeatValue=theWeeks;
+  mMeatPercent=theWeeks;
 }
 void LaModel::setCaloriesPerPersonDaily(int theDays)
 {
@@ -240,9 +238,9 @@ bool LaModel::fromXml(QString theXml)
   mWalkingTime=QString(myTopElement.firstChildElement("walkingTime").text()).toInt();
   mPathDistance=QString(myTopElement.firstChildElement("pathDistance").text()).toInt();
   mPrecision=QString(myTopElement.firstChildElement("precision").text()).toInt();
-  mDietValue=QString(myTopElement.firstChildElement("dietValue").text()).toInt();
-  mPlantValue=QString(myTopElement.firstChildElement("plantValue").text()).toInt();
-  mMeatValue=QString(myTopElement.firstChildElement("meatValue").text()).toInt();
+  mDietPercent=QString(myTopElement.firstChildElement("dietPercent").text()).toInt();
+  mPlantPercent=QString(myTopElement.firstChildElement("plantPercent").text()).toInt();
+  mMeatPercent=QString(myTopElement.firstChildElement("meatPercent").text()).toInt();
   mCaloriesPerPersonDaily=QString(myTopElement.firstChildElement("caloriesPerPersonDaily").text()).toInt();
   mSpare=QString(myTopElement.firstChildElement("spare").text()).toInt();
   return true;
@@ -262,9 +260,9 @@ QString LaModel::toXml()
   myString+=QString("  <walkingTime>" + QString::number(mWalkingTime) + "</walkingTime>\n");
   myString+=QString("  <pathDistance>" + QString::number(mPathDistance) + "</pathDistance>\n");
   myString+=QString("  <precision>" + QString::number(mPrecision) + "</precision>\n");
-  myString+=QString("  <dietValue>" + QString::number(mDietValue) + "</dietValue>\n");
-  myString+=QString("  <plantValue>" + QString::number(mPlantValue) + "</plantValue>\n");
-  myString+=QString("  <meatValue>" + QString::number(mMeatValue) + "</meatValue>\n");
+  myString+=QString("  <dietPercent>" + QString::number(mDietPercent) + "</dietPercent>\n");
+  myString+=QString("  <plantPercent>" + QString::number(mPlantPercent) + "</plantPercent>\n");
+  myString+=QString("  <meatPercent>" + QString::number(mMeatPercent) + "</meatPercent>\n");
   myString+=QString("  <caloriesPerPersonDaily>" + QString::number(mCaloriesPerPersonDaily) + "</caloriesPerPersonDaily>\n");
   myString+=QString("  <spare>" + QString::number(mSpare) + "</spare>\n");
   myString+=QString("</model>\n");
@@ -285,9 +283,9 @@ QString LaModel::toText()
   myString+=QString("walkingTime=>" + QString::number(mWalkingTime) + "\n");
   myString+=QString("pathDistance=>" + QString::number(mPathDistance) + "\n");
   myString+=QString("precision=>" + QString::number(mPrecision) + "\n");
-  myString+=QString("dietValue=>" + QString::number(mDietValue) + "\n");
-  myString+=QString("plantValue=>" + QString::number(mPlantValue) + "\n");
-  myString+=QString("meatValue=>" + QString::number(mMeatValue) + "\n");
+  myString+=QString("dietPercent=>" + QString::number(mDietPercent) + "\n");
+  myString+=QString("plantPercent=>" + QString::number(mPlantPercent) + "\n");
+  myString+=QString("meatPercent=>" + QString::number(mMeatPercent) + "\n");
   myString+=QString("caloriesPerPersonDaily=>" + QString::number(mCaloriesPerPersonDaily) + "\n");
   myString+=QString("spare=>" + QString::number(mSpare) + "\n");
   return myString;
@@ -307,9 +305,9 @@ QString LaModel::toHtml()
   myString+="<p>Calories foctating female: " + QString::number(mWalkingTime) + "</p>";
   myString+="<p>Calories fovenile: " + QString::number(mPathDistance) + "</p>";
   myString+="<p>Sexual Maturity: " + QString::number(mPrecision) + "</p>";
-  myString+="<p>Breeding Expectancy" + QString::number(mDietValue) + "</p>";
-  myString+="<p>Young Per Birth: " + QString::number(mPlantValue) + "</p>";
-  myString+="<p>Weaning Age: " + QString::number(mMeatValue) + "</p>";
+  myString+="<p>Breeding Expectancy" + QString::number(mDietPercent) + "</p>";
+  myString+="<p>Young Per Birth: " + QString::number(mPlantPercent) + "</p>";
+  myString+="<p>Weaning Age: " + QString::number(mMeatPercent) + "</p>";
   myString+="<p>Gestation Time: " + QString::number(mCaloriesPerPersonDaily) + "</p>";
   myString+="<p>Estrous Cycle: " + QString::number(mSpare) + "</p>";
   return myString;

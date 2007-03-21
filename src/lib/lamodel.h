@@ -18,8 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef LAMODEL_H
-#define LAMODEL_H
+#ifndef Percent
+#define Percent
 
 class QString;
 #include "laserialisable.h"
@@ -49,9 +49,9 @@ class LaModel : public LaSerialisable, public LaGuid
     /** The name of this model */
     QString name() const;
     /** The population of this model */
-    QString population() const;
+    int population() const;
     /** Percentage of models live weight that can be utilized for meat */
-    int period() const;
+    QString period() const;
     /** The weight in kg at which the models are slaughtered */
     int projection() const;
     /** The number of weeks from birth it takes to attain slaughtering weight */
@@ -89,12 +89,12 @@ class LaModel : public LaSerialisable, public LaGuid
     /** Set the model population
      * @see population()
      */
-    void setPopulation(QString thePopulation);
+    void setPopulation(int thePopulation);
 
     /** Set useableMeat as a percentage
      * @see period()
      */
-    void setPeriod(int thePercentage);
+    void setPeriod(QString thePeriod);
 
     /** Set projection as kg
      * @see projection()
@@ -180,9 +180,9 @@ class LaModel : public LaSerialisable, public LaGuid
     /** The name for this model */
     QString mName;
     /** The population for this model */
-    QString mPopulation;
+    int mPopulation;
     /** Percentage of models live weight that can be utilized for meat */
-    int mPeriod;
+    QString mPeriod;
     /** The weight in kg at which the models are slaughtered */
     int mProjection;
     /** The number of weeks from birth it takes to attain slaughtering weight */
@@ -209,5 +209,5 @@ class LaModel : public LaSerialisable, public LaGuid
     int mSpare;
 };
 
-#endif //LAMODEL_H
+#endif //Percent
 
