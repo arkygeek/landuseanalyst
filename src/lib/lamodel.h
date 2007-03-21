@@ -58,8 +58,8 @@ class LaModel : public LaSerialisable, public LaGuid
     int easting() const;
     /** The percentage of babies that die before being usable as either meat or breeding */
     int northing() const;
-    /** The number of calories a euclidean female requires per day */
-    int euclidean() const;
+    /** The number of calories a euclideanDistance female requires per day */
+    int euclideanDistance() const;
     /** The number of calories a walkingTime female requires per day */
     int walkingTime() const;
     /** The number of calories a pathDistance requires per day */
@@ -111,10 +111,10 @@ class LaModel : public LaSerialisable, public LaGuid
      */
     void setNorthing(int thePercentage);
 
-    /** Set the daily calories required for a euclidean female
-     * @see euclidean()
+    /** Set the daily calories required for a euclideanDistance female
+     * @see euclideanDistance()
      */
-    void setEuclidean(int theCalories);
+    void setEuclideanDistance(int theCalories);
 
     /** Set the daily calories required for a walkingTime female
      * @see Period()
@@ -189,8 +189,8 @@ class LaModel : public LaSerialisable, public LaGuid
     int mEasting;
     /** The percentage of babies that die before being usable as either meat or breeding */
     int mNorthing;
-    /** The number of calories a euclidean female requires per day */
-    int mEuclidean;
+    /** The number of calories a euclideanDistance female requires per day */
+    int mEuclideanDistance;
     /** The number of calories a walkingTime female requires per day */
     int mWalkingTime;
     /** The number of calories a pathDistance requires per day */

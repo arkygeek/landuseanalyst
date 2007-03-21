@@ -33,7 +33,7 @@ LaModel::LaModel() : LaSerialisable(), LaGuid()
   mProjection=100;
   mEasting=10;
   mNorthing=10;
-  mEuclidean=5000;
+  mEuclideanDistance=5000;
   mWalkingTime=5000;
   mPathDistance=3500;
   mPrecision=18;
@@ -58,7 +58,7 @@ LaModel::LaModel(const LaModel& theModel)
   mProjection=theModel.projection();
   mEasting=theModel.easting();
   mNorthing=theModel.northing();
-  mEuclidean=theModel.euclidean();
+  mEuclideanDistance=theModel.euclideanDistance();
   mWalkingTime=theModel.walkingTime();
   mPathDistance=theModel.pathDistance();
   mPrecision=theModel.precision();
@@ -80,7 +80,7 @@ LaModel& LaModel::operator=(const LaModel& theModel)
   mProjection=theModel.projection();
   mEasting=theModel.easting();
   mNorthing=theModel.northing();
-  mEuclidean=theModel.euclidean();
+  mEuclideanDistance=theModel.euclideanDistance();
   mWalkingTime=theModel.walkingTime();
   mPathDistance=theModel.pathDistance();
   mPrecision=theModel.precision();
@@ -116,9 +116,9 @@ int LaModel::northing() const
 {
   return mNorthing;
 }
-int LaModel::euclidean() const
+int LaModel::euclideanDistance() const
 {
-  return mEuclidean;
+  return mEuclideanDistance;
 }
 int LaModel::walkingTime() const
 {
@@ -179,9 +179,9 @@ void LaModel::setNorthing(int thePercentage)
 {
   mNorthing=thePercentage;
 }
-void LaModel::setEuclidean(int theCalories)
+void LaModel::setEuclideanDistance(int theCalories)
 {
-  mEuclidean=theCalories;
+  mEuclideanDistance=theCalories;
 }
 void LaModel::setWalkingTime(int theCalories)
 {
@@ -236,7 +236,7 @@ bool LaModel::fromXml(QString theXml)
   mProjection=QString(myTopElement.firstChildElement("projection").text()).toInt();
   mEasting=QString(myTopElement.firstChildElement("easting").text()).toInt();
   mNorthing=QString(myTopElement.firstChildElement("northing").text()).toInt();
-  mEuclidean=QString(myTopElement.firstChildElement("euclidean").text()).toInt();
+  mEuclideanDistance=QString(myTopElement.firstChildElement("euclideanDistance").text()).toInt();
   mWalkingTime=QString(myTopElement.firstChildElement("walkingTime").text()).toInt();
   mPathDistance=QString(myTopElement.firstChildElement("pathDistance").text()).toInt();
   mPrecision=QString(myTopElement.firstChildElement("precision").text()).toInt();
@@ -258,7 +258,7 @@ QString LaModel::toXml()
   myString+=QString("  <projection>" + QString::number(mProjection) + "</projection>\n");
   myString+=QString("  <easting>" + QString::number(mEasting) + "</easting>\n");
   myString+=QString("  <northing>" + QString::number(mNorthing) + "</northing>\n");
-  myString+=QString("  <euclidean>" + QString::number(mEuclidean) + "</euclidean>\n");
+  myString+=QString("  <euclideanDistance>" + QString::number(mEuclideanDistance) + "</euclideanDistance>\n");
   myString+=QString("  <walkingTime>" + QString::number(mWalkingTime) + "</walkingTime>\n");
   myString+=QString("  <pathDistance>" + QString::number(mPathDistance) + "</pathDistance>\n");
   myString+=QString("  <precision>" + QString::number(mPrecision) + "</precision>\n");
@@ -281,7 +281,7 @@ QString LaModel::toText()
   myString+=QString("projection=>" + QString::number(mProjection) + "\n");
   myString+=QString("easting=>" + QString::number(mEasting) + "\n");
   myString+=QString("northing=>" + QString::number(mNorthing) + "\n");
-  myString+=QString("euclidean=>" + QString::number(mEuclidean) + "\n");
+  myString+=QString("euclideanDistance=>" + QString::number(mEuclideanDistance) + "\n");
   myString+=QString("walkingTime=>" + QString::number(mWalkingTime) + "\n");
   myString+=QString("pathDistance=>" + QString::number(mPathDistance) + "\n");
   myString+=QString("precision=>" + QString::number(mPrecision) + "\n");
@@ -303,7 +303,7 @@ QString LaModel::toHtml()
   myString+="<p>Kill Weight: " + QString::number(mProjection) + "</p>";
   myString+="<p>Grow Time: " + QString::number(mEasting) + "</p>";
   myString+="<p>Death Rate: " + QString::number(mNorthing) + "</p>";
-  myString+="<p>Calories fostating female: " + QString::number(mEuclidean) + "</p>";
+  myString+="<p>Calories fostating female: " + QString::number(mEuclideanDistance) + "</p>";
   myString+="<p>Calories foctating female: " + QString::number(mWalkingTime) + "</p>";
   myString+="<p>Calories fovenile: " + QString::number(mPathDistance) + "</p>";
   myString+="<p>Sexual Maturity: " + QString::number(mPrecision) + "</p>";
