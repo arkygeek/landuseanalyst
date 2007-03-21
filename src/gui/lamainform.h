@@ -27,6 +27,8 @@
 //Local Includes
 #include <ui_lamainformbase.h>
 #include <lautils.h>
+#include <la.h>
+
 class QTreeWidgetItem;
 /**
   This is the main gui class
@@ -78,8 +80,8 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
     LaUtils::AnimalParameterMap mAnimalParametersMap;
     LaUtils::CropParameterMap mCropParametersMap;
     //    <animal guid <enabled, animalparamters guid>>
-    QMap <QString,QPair<bool,QString> > mAnimalsMap;
-    QMap <QString,QPair<bool,QString> > mCropsMap;
+    LaTripleMap mAnimalsMap;
+    LaTripleMap mCropsMap;
 };
 
 #endif //LAMAINFORM_H
