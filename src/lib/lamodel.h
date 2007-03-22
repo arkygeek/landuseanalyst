@@ -27,7 +27,7 @@ class QString;
 #include <QString>
 /**
   * An class to represent an model
-  * @author Tim Sutton
+  * @author Tim Sutton, Jason Jorgenson
   */
 
 class LaModel : public LaSerialisable, public LaGuid
@@ -50,20 +50,20 @@ class LaModel : public LaSerialisable, public LaGuid
     QString name() const;
     /** The population of this model */
     int population() const;
-    /** Percentage of models live weight that can be utilized for meat */
+    /** Term for the period or time of the analysis e.g. Chalcolithic */
     QString period() const;
-    /** The weight in kg at which the models are slaughtered */
+    /** What coordinate system being used */
     int projection() const;
-    /** The number of weeks from birth it takes to attain slaughtering weight */
+    /** East coordinates */
     int easting() const;
-    /** The percentage of babies that die before being usable as either meat or breeding */
+    /** North coordinates */
     int northing() const;
-    /** The number of calories a euclideanDistance female requires per day */
-    int euclideanDistance() const;
+    /** Do we use the Euclidean Distance modelling method */
+    bool euclideanDistance() const;
     /** The number of calories a walkingTime female requires per day */
-    int walkingTime() const;
+    bool walkingTime() const;
     /** The number of calories a pathDistance requires per day */
-    int pathDistance() const;
+    bool pathDistance() const;
     /** The life expectancy in years of the model */
     int precision() const;
     /** The number of years a female will reliably produce offspring */
@@ -114,17 +114,17 @@ class LaModel : public LaSerialisable, public LaGuid
     /** Set the daily calories required for a euclideanDistance female
      * @see euclideanDistance()
      */
-    void setEuclideanDistance(int theCalories);
+    void setEuclideanDistance(bool theBool);
 
     /** Set the daily calories required for a walkingTime female
      * @see Period()
      */
-    void setWalkingTime(int theCalories);
+    void setWalkingTime(bool theBool);
 
     /** Set the daily calories required for a pathDistance
      * @see Period()
      */
-    void setPathDistance(int theCalories);
+    void setPathDistance(bool theBool);
 
     /** Set the average lifeExpectancy in years
      * @see lifeExpectancy()
@@ -190,11 +190,11 @@ class LaModel : public LaSerialisable, public LaGuid
     /** The percentage of babies that die before being usable as either meat or breeding */
     int mNorthing;
     /** The number of calories a euclideanDistance female requires per day */
-    int mEuclideanDistance;
+    bool mEuclideanDistance;
     /** The number of calories a walkingTime female requires per day */
-    int mWalkingTime;
+    bool mWalkingTime;
     /** The number of calories a pathDistance requires per day */
-    int mPathDistance;
+    bool mPathDistance;
     /** The life expectancy in years of the model */
     int mPrecision;
     /** The number of years a female will reliably produce offspring */
