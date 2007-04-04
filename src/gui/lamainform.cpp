@@ -443,11 +443,9 @@ void LaMainForm::on_pushButtonDietBreakdown_clicked()
   writeDiet("Tame Animals account for " + QString::number((myDietPercentMeat/100.)*(myDietPercentTameMeat/100.)*100.).toLocal8Bit() + "% of the diet, or " + QString::number(myAnimalCalories/1000.).toLocal8Bit() + " kcal");
 }
 
-
-
 void LaMainForm::helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetItem * thepOldItem)
 {
-  writeMessage("Item clicked in help browser: " + thepCurrentItem->text(0).toLocal8Bit());
+  writeResultsLeft("Item clicked in help browser: " + thepCurrentItem->text(0).toLocal8Bit());
   QFile myQFile( ":/helpDocs/" + thepCurrentItem->text(0)  + ".html" );
   if ( myQFile.open( QIODevice::ReadOnly ) ) {
     //now we parse the loc file, checking each line for its taxon
@@ -456,14 +454,19 @@ void LaMainForm::helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetI
     myQFile.close();
   }
   else {
-    writeMessage("Help resource for : " + thepCurrentItem->text(0).toLocal8Bit() + " not found!");
+    writeResultsLeft("Help resource for : " + thepCurrentItem->text(0).toLocal8Bit() + " not found!");
   }
 }
 
 
-void LaMainForm::writeMessage(QString theText)
+void LaMainForm::writeResultsLeft(QString theText)
 {
   textBrowserResultsLeft->append(theText);
+}
+
+void LaMainForm::writeResultsRight(QString theText)
+{
+  textBrowserResultsRight->append(theText);
 }
 
 void LaMainForm::writeDiet(QString theText)
@@ -566,6 +569,7 @@ void LaMainForm::makeCircle(int theX, int theY)
 
 void LaMainForm::doBaseCalculations()
 {
+  // Ok, first try to pull some infor from a plant
 
 }
 

@@ -62,7 +62,8 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
 
   private slots:
     void helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetItem * thepOldItem);
-    void writeMessage(QString theText);
+    void writeResultsLeft(QString theText);
+    void writeResultsRight(QString theText);
     void writeDiet(QString theText);
     void makeCircle(int theX, int theY);
     void getArea(float theArea);
