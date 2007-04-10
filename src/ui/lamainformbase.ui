@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>651</width>
-    <height>346</height>
+    <height>422</height>
    </rect>
   </property>
   <property name="sizePolicy" >
@@ -559,105 +559,6 @@ p, li { white-space: pre-wrap; }
        <property name="spacing" >
         <number>6</number>
        </property>
-       <item row="1" column="0" >
-        <layout class="QHBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
-         </property>
-         <property name="spacing" >
-          <number>6</number>
-         </property>
-         <item>
-          <widget class="QLabel" name="label6" >
-           <property name="toolTip" >
-            <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Average requirements for each individual&lt;/p>&lt;/body>&lt;/html></string>
-           </property>
-           <property name="whatsThis" >
-            <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">This figure is an average only.  In the future, I hope to be able to implement a feature whereby the human population is modelled, and account for different requirements of men, adult women, pregnant women, lactating women, and children.&lt;/p>&lt;/body>&lt;/html></string>
-           </property>
-           <property name="text" >
-            <string>Calories per
-Person per Day</string>
-           </property>
-           <property name="wordWrap" >
-            <bool>false</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QSpinBox" name="spinBoxDailyCalories" >
-           <property name="toolTip" >
-            <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Set the average number of calories per day required per person&lt;/p>&lt;/body>&lt;/html></string>
-           </property>
-           <property name="whatsThis" >
-            <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">In future versions of LandUse Analyst, the demographics of the human population will be modelled, but currently the user has to supply one figure for an average number of calories required by a single person on a daily basis.&lt;/p>&lt;/body>&lt;/html></string>
-           </property>
-           <property name="maximum" >
-            <number>5000</number>
-           </property>
-           <property name="minimum" >
-            <number>1</number>
-           </property>
-           <property name="singleStep" >
-            <number>1</number>
-           </property>
-           <property name="value" >
-            <number>2500</number>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pushButtonDietClear" >
-           <property name="toolTip" >
-            <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Erases everything in the Diet Breakdown display window&lt;/p>&lt;/body>&lt;/html></string>
-           </property>
-           <property name="whatsThis" >
-            <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Hit the Clear button to erase everything in the Diet Breakdown display window. This is useful if you make adjustments and don't want to clutter the view. The option to leave the previous data there (by not hitting the clear button) is in case the user wants to compare the results of different settings. &lt;/p>&lt;/body>&lt;/html></string>
-           </property>
-           <property name="text" >
-            <string>Clear</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pushButtonDietBreakdown" >
-           <property name="toolTip" >
-            <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Displays the breakdown of the diet.&lt;/p>&lt;/body>&lt;/html></string>
-           </property>
-           <property name="whatsThis" >
-            <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Pressing the Breakdown button in the Diet Tab will show the calorie targets calculated for crops and domestic animals. These calculations rely on settings entered for the site's population, as well as the figure supplied for the number of calories required per person per day.&lt;/p>&lt;/body>&lt;/html></string>
-           </property>
-           <property name="text" >
-            <string>Breakdown</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
        <item row="0" column="0" >
         <widget class="QGroupBox" name="diet_comp_box" >
          <property name="sizePolicy" >
@@ -676,8 +577,69 @@ p, li { white-space: pre-wrap; }
            <number>9</number>
           </property>
           <property name="spacing" >
-           <number>6</number>
+           <number>24</number>
           </property>
+          <item row="2" column="0" colspan="2" >
+           <layout class="QHBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label6" >
+              <property name="toolTip" >
+               <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Average requirements for each individual&lt;/p>&lt;/body>&lt;/html></string>
+              </property>
+              <property name="whatsThis" >
+               <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">This figure is an average only.  In the future, I hope to be able to implement a feature whereby the human population is modelled, and account for different requirements of men, adult women, pregnant women, lactating women, and children.&lt;/p>&lt;/body>&lt;/html></string>
+              </property>
+              <property name="text" >
+               <string>Calories per
+Person per Day</string>
+              </property>
+              <property name="wordWrap" >
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="spinBoxDailyCalories" >
+              <property name="toolTip" >
+               <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Set the average number of calories per day required per person&lt;/p>&lt;/body>&lt;/html></string>
+              </property>
+              <property name="whatsThis" >
+               <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">In future versions of LandUse Analyst, the demographics of the human population will be modelled, but currently the user has to supply one figure for an average number of calories required by a single person on a daily basis.&lt;/p>&lt;/body>&lt;/html></string>
+              </property>
+              <property name="maximum" >
+               <number>5000</number>
+              </property>
+              <property name="minimum" >
+               <number>1</number>
+              </property>
+              <property name="singleStep" >
+               <number>1</number>
+              </property>
+              <property name="value" >
+               <number>2500</number>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
           <item row="1" column="0" >
            <widget class="QGroupBox" name="groupplantpercent" >
             <property name="title" >
@@ -1043,7 +1005,7 @@ p, li { white-space: pre-wrap; }
             </layout>
            </widget>
           </item>
-          <item row="2" column="0" colspan="2" >
+          <item row="3" column="0" colspan="2" >
            <spacer>
             <property name="orientation" >
              <enum>Qt::Vertical</enum>
@@ -1059,7 +1021,7 @@ p, li { white-space: pre-wrap; }
          </layout>
         </widget>
        </item>
-       <item rowspan="2" row="0" column="1" >
+       <item row="0" column="1" >
         <widget class="QGroupBox" name="groupBox_2" >
          <property name="sizePolicy" >
           <sizepolicy>
@@ -1089,20 +1051,254 @@ p, li { white-space: pre-wrap; }
          </property>
          <layout class="QGridLayout" >
           <property name="margin" >
-           <number>9</number>
+           <number>15</number>
           </property>
           <property name="spacing" >
-           <number>6</number>
+           <number>0</number>
           </property>
-          <item row="0" column="0" >
-           <widget class="QTextBrowser" name="breakdownDisplay" >
-            <property name="toolTip" >
+          <item row="8" column="0" >
+           <widget class="QLabel" name="label_20" >
+            <property name="text" >
              <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Press Breakdown Button to display the breakdown of the population's diet.&lt;/p>&lt;/body>&lt;/html></string>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:12pt; font-weight:600; font-style:italic;">KCalories Required:&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+            </property>
+            <property name="alignment" >
+             <set>Qt::AlignCenter</set>
             </property>
            </widget>
+          </item>
+          <item row="2" column="0" >
+           <layout class="QHBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_10" >
+              <property name="text" >
+               <string>Settlement:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="labelCaloriesSettlement" >
+              <property name="text" >
+               <string>TextLabel</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="0" column="0" >
+           <widget class="QLabel" name="label_4" >
+            <property name="text" >
+             <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:11pt; font-weight:600; font-style:italic;">kCals required per Annum&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+            </property>
+            <property name="alignment" >
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="10" column="0" >
+           <layout class="QHBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_21" >
+              <property name="text" >
+               <string>Tame Meat:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="labelCaloriesTameMeat" >
+              <property name="text" >
+               <string>TextLabel</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="7" column="0" >
+           <layout class="QHBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_19" >
+              <property name="text" >
+               <string>Tame Meat:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="labelPortionTameMeat" >
+              <property name="text" >
+               <string>TextLabel</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="9" column="0" >
+           <layout class="QHBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_23" >
+              <property name="text" >
+               <string>Tame Crops:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="labelCaloriesCrops" >
+              <property name="text" >
+               <string>TextLabel</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="4" column="0" >
+           <layout class="QHBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_12" >
+              <property name="text" >
+               <string>All Plants:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="labelPortionPlants" >
+              <property name="text" >
+               <string>TextLabel</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="1" column="0" >
+           <layout class="QHBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_8" >
+              <property name="text" >
+               <string>Individual:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="labelCaloriesIndividual" >
+              <property name="text" >
+               <string>TextLabel</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="6" column="0" >
+           <layout class="QHBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_18" >
+              <property name="text" >
+               <string>Tame Crops:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="labelPortionCrops" >
+              <property name="text" >
+               <string>TextLabel</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="3" column="0" >
+           <widget class="QLabel" name="label_15" >
+            <property name="text" >
+             <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:12pt; font-weight:600; font-style:italic;">Contribution to diet&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+            </property>
+            <property name="alignment" >
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0" >
+           <layout class="QHBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_16" >
+              <property name="text" >
+               <string>All Meat:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="labelPortionMeat" >
+              <property name="text" >
+               <string>TextLabel</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="11" column="0" >
+           <spacer>
+            <property name="orientation" >
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" >
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
         </widget>
@@ -2428,9 +2624,6 @@ p, li { white-space: pre-wrap; }
   <tabstop>horizontalSliderCrop</tabstop>
   <tabstop>horizontalSliderMeat</tabstop>
   <tabstop>spinBoxDailyCalories</tabstop>
-  <tabstop>pushButtonDietClear</tabstop>
-  <tabstop>pushButtonDietBreakdown</tabstop>
-  <tabstop>breakdownDisplay</tabstop>
   <tabstop>tblCrops</tabstop>
   <tabstop>textBrowserCropParameterDefinition</tabstop>
   <tabstop>textBrowserCropDefinition</tabstop>
@@ -2453,22 +2646,5 @@ p, li { white-space: pre-wrap; }
  <resources>
   <include location="../resources/resources.qrc" />
  </resources>
- <connections>
-  <connection>
-   <sender>pushButtonDietClear</sender>
-   <signal>clicked()</signal>
-   <receiver>breakdownDisplay</receiver>
-   <slot>clear()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>252</x>
-     <y>272</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>453</x>
-     <y>100</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

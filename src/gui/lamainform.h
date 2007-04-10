@@ -44,7 +44,6 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
     void on_horizontalSliderMeat_valueChanged(int theValue);
     void on_horizontalSliderDiet_valueChanged(int theValue);
     void on_horizontalSliderCrop_valueChanged(int theValue);
-    void on_pushButtonDietBreakdown_clicked();
     void on_pushButtonRun_clicked();
     void on_pushButtonLoad_clicked();
     void on_pushButtonSave_clicked();
@@ -64,7 +63,6 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
     void helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetItem * thepOldItem);
     void writeResultsLeft(QString theText);
     void writeResultsRight(QString theText);
-    void writeDiet(QString theText);
     void makeCircle(int theX, int theY);
     void getArea(float theArea);
     void makeWalkCost(int theX, int theY);
