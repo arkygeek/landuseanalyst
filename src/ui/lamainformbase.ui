@@ -1087,7 +1087,7 @@ p, li { white-space: pre-wrap; }
             <item>
              <widget class="QLabel" name="labelCaloriesSettlement" >
               <property name="text" >
-               <string>TextLabel</string>
+               <string>Adjust Diet Settings</string>
               </property>
              </widget>
             </item>
@@ -1124,7 +1124,7 @@ p, li { white-space: pre-wrap; }
             <item>
              <widget class="QLabel" name="labelCaloriesTameMeat" >
               <property name="text" >
-               <string>TextLabel</string>
+               <string>Adjust Diet Settings</string>
               </property>
              </widget>
             </item>
@@ -1148,7 +1148,7 @@ p, li { white-space: pre-wrap; }
             <item>
              <widget class="QLabel" name="labelPortionTameMeat" >
               <property name="text" >
-               <string>TextLabel</string>
+               <string>Adjust Diet Settings</string>
               </property>
              </widget>
             </item>
@@ -1172,7 +1172,7 @@ p, li { white-space: pre-wrap; }
             <item>
              <widget class="QLabel" name="labelCaloriesCrops" >
               <property name="text" >
-               <string>TextLabel</string>
+               <string>Adjust Diet Settings</string>
               </property>
              </widget>
             </item>
@@ -1196,7 +1196,7 @@ p, li { white-space: pre-wrap; }
             <item>
              <widget class="QLabel" name="labelPortionPlants" >
               <property name="text" >
-               <string>TextLabel</string>
+               <string>Adjust Diet Settings</string>
               </property>
              </widget>
             </item>
@@ -1220,7 +1220,7 @@ p, li { white-space: pre-wrap; }
             <item>
              <widget class="QLabel" name="labelCaloriesIndividual" >
               <property name="text" >
-               <string>TextLabel</string>
+               <string>Adjust Diet Settings</string>
               </property>
              </widget>
             </item>
@@ -1244,7 +1244,7 @@ p, li { white-space: pre-wrap; }
             <item>
              <widget class="QLabel" name="labelPortionCrops" >
               <property name="text" >
-               <string>TextLabel</string>
+               <string>Adjust Diet Settings</string>
               </property>
              </widget>
             </item>
@@ -1281,7 +1281,7 @@ p, li { white-space: pre-wrap; }
             <item>
              <widget class="QLabel" name="labelPortionMeat" >
               <property name="text" >
-               <string>TextLabel</string>
+               <string>Adjust Diet Settings</string>
               </property>
              </widget>
             </item>

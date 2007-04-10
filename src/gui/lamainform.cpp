@@ -90,6 +90,31 @@ void LaMainForm::writeSettings()
   mySettings.setValue("mainwindow/size", size());
 }
 
+void LaMainForm::on_spinBoxDailyCalories_valueChanged(int theValue)
+{
+  int myDietPercentMeat = horizontalSliderDiet->value();
+  int myDietPercentPlant = (100-(horizontalSliderDiet->value()));
+  float myTameCropPercentage = horizontalSliderCrop->value()*(myDietPercentPlant/100.);
+  float myTameMeatPercentage = horizontalSliderMeat->value()*(myDietPercentMeat/100.);
+  int myCaloriesIndividual = spinBoxDailyCalories->value();
+  int myPopulation = spinBoxPopulation->value();
+
+  float mykCaloriesIndividualAnnual = (myCaloriesIndividual*365.)/1000.;
+  float mykCaloriesSettlementAnnual = mykCaloriesIndividualAnnual*myPopulation;
+
+  float myTameCropkCalories = (myTameCropPercentage/100.)*mykCaloriesSettlementAnnual;
+  float myTameAnimalkCalories = (myTameMeatPercentage/100.)*mykCaloriesSettlementAnnual;
+
+  labelCaloriesIndividual->setText(QString::number(mykCaloriesIndividualAnnual));
+  labelCaloriesSettlement->setText(QString::number(mykCaloriesSettlementAnnual));
+  labelPortionPlants->setText(QString::number(myDietPercentPlant));
+  labelPortionMeat->setText(QString::number(myDietPercentMeat));
+  labelPortionCrops->setText(QString::number(myTameCropPercentage));
+  labelPortionTameMeat->setText(QString::number(myTameMeatPercentage));
+  labelCaloriesCrops->setText(QString::number(myTameCropkCalories));
+  labelCaloriesTameMeat->setText(QString::number(myTameAnimalkCalories));
+}
+
 void LaMainForm::on_horizontalSliderMeat_valueChanged(int theValue)
 {
   QString myMinString = QString::number(100-theValue);
@@ -480,22 +505,6 @@ void LaMainForm::on_pushButtonSave_clicked()
   //  implement me!
 }
 
-void LaMainForm::helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetItem * thepOldItem)
-{
-  writeResultsLeft("Item clicked in help browser: " + thepCurrentItem->text(0).toLocal8Bit());
-  QFile myQFile( ":/helpDocs/" + thepCurrentItem->text(0)  + ".html" );
-  if ( myQFile.open( QIODevice::ReadOnly ) ) {
-    //now we parse the loc file, checking each line for its taxon
-    QTextStream myStream( &myQFile );
-    textHelp->setHtml(myStream.readAll());
-    myQFile.close();
-  }
-  else {
-    writeResultsLeft("Help resource for : " + thepCurrentItem->text(0).toLocal8Bit() + " not found!");
-  }
-}
-
-
 void LaMainForm::writeResultsLeft(QString theText)
 {
   textBrowserResultsLeft->append(theText);
@@ -601,7 +610,7 @@ void LaMainForm::makeCircle(int theX, int theY)
 
 void LaMainForm::doBaseCalculations()
 {
-  // Ok, first try to pull some infor from a plant
+  // Ok, first try to pull some info from a plant
 
 }
 
@@ -624,4 +633,19 @@ bool LaMainForm::setComboToDefault(QComboBox * thepCombo, QString theDefault)
     return false;
   }
   return true;
+}
+
+void LaMainForm::helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetItem * thepOldItem)
+{
+  writeResultsLeft("Item clicked in help browser: " + thepCurrentItem->text(0).toLocal8Bit());
+  QFile myQFile( ":/helpDocs/" + thepCurrentItem->text(0)  + ".html" );
+  if ( myQFile.open( QIODevice::ReadOnly ) ) {
+    //now we parse the loc file, checking each line for its taxon
+    QTextStream myStream( &myQFile );
+    textHelp->setHtml(myStream.readAll());
+    myQFile.close();
+  }
+  else {
+    writeResultsLeft("Help resource for : " + thepCurrentItem->text(0).toLocal8Bit() + " not found!");
+  }
 }
