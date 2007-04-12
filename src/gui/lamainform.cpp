@@ -67,6 +67,7 @@ LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
   tblCrops->horizontalHeader()->setResizeMode(2,QHeaderView::Stretch);
   loadAnimals();
   loadCrops();
+  setDietLabels();
 }
 
 LaMainForm::~LaMainForm()
@@ -92,27 +93,7 @@ void LaMainForm::writeSettings()
 
 void LaMainForm::on_spinBoxDailyCalories_valueChanged(int theValue)
 {
-  int myDietPercentMeat = horizontalSliderDiet->value();
-  int myDietPercentPlant = (100-(horizontalSliderDiet->value()));
-  float myTameCropPercentage = horizontalSliderCrop->value()*(myDietPercentPlant/100.);
-  float myTameMeatPercentage = horizontalSliderMeat->value()*(myDietPercentMeat/100.);
-  int myCaloriesIndividual = spinBoxDailyCalories->value();
-  int myPopulation = spinBoxPopulation->value();
-
-  float mykCaloriesIndividualAnnual = (myCaloriesIndividual*365.)/1000.;
-  float mykCaloriesSettlementAnnual = mykCaloriesIndividualAnnual*myPopulation;
-
-  float myTameCropkCalories = (myTameCropPercentage/100.)*mykCaloriesSettlementAnnual;
-  float myTameAnimalkCalories = (myTameMeatPercentage/100.)*mykCaloriesSettlementAnnual;
-
-  labelCaloriesIndividual->setText(QString::number(mykCaloriesIndividualAnnual));
-  labelCaloriesSettlement->setText(QString::number(mykCaloriesSettlementAnnual));
-  labelPortionPlants->setText(QString::number(myDietPercentPlant));
-  labelPortionMeat->setText(QString::number(myDietPercentMeat));
-  labelPortionCrops->setText(QString::number(myTameCropPercentage));
-  labelPortionTameMeat->setText(QString::number(myTameMeatPercentage));
-  labelCaloriesCrops->setText(QString::number(myTameCropkCalories));
-  labelCaloriesTameMeat->setText(QString::number(myTameAnimalkCalories));
+  setDietLabels();
 }
 
 void LaMainForm::on_horizontalSliderMeat_valueChanged(int theValue)
@@ -121,27 +102,7 @@ void LaMainForm::on_horizontalSliderMeat_valueChanged(int theValue)
   QString myMaxString = QString::number(theValue);
   labelMeatWildPercent->setText(myMinString);
   labelMeatTamePercent->setText(myMaxString);
-  int myDietPercentMeat = horizontalSliderDiet->value();
-  int myDietPercentPlant = (100-(horizontalSliderDiet->value()));
-  float myTameCropPercentage = horizontalSliderCrop->value()*(myDietPercentPlant/100.);
-  float myTameMeatPercentage = horizontalSliderMeat->value()*(myDietPercentMeat/100.);
-  int myCaloriesIndividual = spinBoxDailyCalories->value();
-  int myPopulation = spinBoxPopulation->value();
-
-  float mykCaloriesIndividualAnnual = (myCaloriesIndividual*365.)/1000.;
-  float mykCaloriesSettlementAnnual = mykCaloriesIndividualAnnual*myPopulation;
-
-  float myTameCropkCalories = (myTameCropPercentage/100.)*mykCaloriesSettlementAnnual;
-  float myTameAnimalkCalories = (myTameMeatPercentage/100.)*mykCaloriesSettlementAnnual;
-
-  labelCaloriesIndividual->setText(QString::number(mykCaloriesIndividualAnnual));
-  labelCaloriesSettlement->setText(QString::number(mykCaloriesSettlementAnnual));
-  labelPortionPlants->setText(QString::number(myDietPercentPlant));
-  labelPortionMeat->setText(QString::number(myDietPercentMeat));
-  labelPortionCrops->setText(QString::number(myTameCropPercentage));
-  labelPortionTameMeat->setText(QString::number(myTameMeatPercentage));
-  labelCaloriesCrops->setText(QString::number(myTameCropkCalories));
-  labelCaloriesTameMeat->setText(QString::number(myTameAnimalkCalories));
+  setDietLabels();
 }
 
 void LaMainForm::on_horizontalSliderDiet_valueChanged(int theValue)
@@ -150,27 +111,7 @@ void LaMainForm::on_horizontalSliderDiet_valueChanged(int theValue)
   QString myMaxString = QString::number(100-theValue);
   labelMeatPercent->setText(myMinString);
   labelCropPercent->setText(myMaxString);
-  int myDietPercentMeat = horizontalSliderDiet->value();
-  int myDietPercentPlant = (100-(horizontalSliderDiet->value()));
-  float myTameCropPercentage = horizontalSliderCrop->value()*(myDietPercentPlant/100.);
-  float myTameMeatPercentage = horizontalSliderMeat->value()*(myDietPercentMeat/100.);
-  int myCaloriesIndividual = spinBoxDailyCalories->value();
-  int myPopulation = spinBoxPopulation->value();
-
-  float mykCaloriesIndividualAnnual = (myCaloriesIndividual*365.)/1000.;
-  float mykCaloriesSettlementAnnual = mykCaloriesIndividualAnnual*myPopulation;;
-
-  float myTameCropkCalories = (myTameCropPercentage/100.)*mykCaloriesSettlementAnnual;
-  float myTameAnimalkCalories = (myTameMeatPercentage/100.)*mykCaloriesSettlementAnnual;
-
-  labelCaloriesIndividual->setText(QString::number(mykCaloriesIndividualAnnual));
-  labelCaloriesSettlement->setText(QString::number(mykCaloriesSettlementAnnual));
-  labelPortionPlants->setText(QString::number(myDietPercentPlant));
-  labelPortionMeat->setText(QString::number(myDietPercentMeat));
-  labelPortionCrops->setText(QString::number(myTameCropPercentage));
-  labelPortionTameMeat->setText(QString::number(myTameMeatPercentage));
-  labelCaloriesCrops->setText(QString::number(myTameCropkCalories));
-  labelCaloriesTameMeat->setText(QString::number(myTameAnimalkCalories));
+  setDietLabels();
 }
 
 void LaMainForm::on_horizontalSliderCrop_valueChanged(int theValue)
@@ -179,27 +120,7 @@ void LaMainForm::on_horizontalSliderCrop_valueChanged(int theValue)
   QString myMaxString = QString::number(theValue);
   labelCropWildPercent->setText(myMinString);
   labelCropTamePercent->setText(myMaxString);
-  int myDietPercentMeat = horizontalSliderDiet->value();
-  int myDietPercentPlant = (100-(horizontalSliderDiet->value()));
-  float myTameCropPercentage = horizontalSliderCrop->value()*(myDietPercentPlant/100.);
-  float myTameMeatPercentage = horizontalSliderMeat->value()*(myDietPercentMeat/100.);
-  int myCaloriesIndividual = spinBoxDailyCalories->value();
-  int myPopulation = spinBoxPopulation->value();
-
-  float mykCaloriesIndividualAnnual = (myCaloriesIndividual*365.)/1000.;
-  float mykCaloriesSettlementAnnual = mykCaloriesIndividualAnnual*myPopulation;;
-
-  float myTameCropkCalories = (myTameCropPercentage/100.)*mykCaloriesSettlementAnnual;
-  float myTameAnimalkCalories = (myTameMeatPercentage/100.)*mykCaloriesSettlementAnnual;
-
-  labelCaloriesIndividual->setText(QString::number(mykCaloriesIndividualAnnual));
-  labelCaloriesSettlement->setText(QString::number(mykCaloriesSettlementAnnual));
-  labelPortionPlants->setText(QString::number(myDietPercentPlant));
-  labelPortionMeat->setText(QString::number(myDietPercentMeat));
-  labelPortionCrops->setText(QString::number(myTameCropPercentage));
-  labelPortionTameMeat->setText(QString::number(myTameMeatPercentage));
-  labelCaloriesCrops->setText(QString::number(myTameCropkCalories));
-  labelCaloriesTameMeat->setText(QString::number(myTameAnimalkCalories));
+  setDietLabels();
 }
 
 /**
@@ -466,6 +387,32 @@ void LaMainForm::loadCrops()
   //mypPercentItem->setIcon(myIcon);
   //tblCrops->setItem(myCurrentRow, 3, mypPercentItem);
 }
+
+void LaMainForm::setDietLabels()
+{
+  int myDietPercentMeat = horizontalSliderDiet->value();
+  int myDietPercentPlant = (100-(horizontalSliderDiet->value()));
+  float myTameCropPercentage = horizontalSliderCrop->value()*(myDietPercentPlant/100.);
+  float myTameMeatPercentage = horizontalSliderMeat->value()*(myDietPercentMeat/100.);
+  int myCaloriesIndividual = spinBoxDailyCalories->value();
+  int myPopulation = spinBoxPopulation->value();
+
+  float mykCaloriesIndividualAnnual = (myCaloriesIndividual*365.)/1000.;
+  float mykCaloriesSettlementAnnual = mykCaloriesIndividualAnnual*myPopulation;
+
+  float myTameCropkCalories = (myTameCropPercentage/100.)*mykCaloriesSettlementAnnual;
+  float myTameAnimalkCalories = (myTameMeatPercentage/100.)*mykCaloriesSettlementAnnual;
+
+  labelCaloriesIndividual->setText(QString::number(mykCaloriesIndividualAnnual));
+  labelCaloriesSettlement->setText(QString::number(mykCaloriesSettlementAnnual));
+  labelPortionPlants->setText(QString::number(myDietPercentPlant));
+  labelPortionMeat->setText(QString::number(myDietPercentMeat));
+  labelPortionCrops->setText(QString::number(myTameCropPercentage));
+  labelPortionTameMeat->setText(QString::number(myTameMeatPercentage));
+  labelCaloriesCrops->setText(QString::number(myTameCropkCalories));
+  labelCaloriesTameMeat->setText(QString::number(myTameAnimalkCalories));
+}
+
 void LaMainForm::animalCellClicked(int theRow, int theColumn)
 {
   qDebug("LaMainForm::animalCellClicked");

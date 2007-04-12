@@ -59,6 +59,7 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
     /** Refresh the crops list, remembering which were checked
      * from before */
     void loadCrops();
+    void setDietLabels();
 
   private slots:
     void helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetItem * thepOldItem);
