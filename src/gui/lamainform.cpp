@@ -25,6 +25,7 @@
 #include "lacropmanager.h"
 #include "lacropparametermanager.h"
 #include "laanimalparametermanager.h"
+#include "lamodel.h"
 
 //qt includes
 #include <QSettings>
@@ -165,7 +166,7 @@ void LaMainForm::loadAnimals()
   int myCurrentRow=0;
   int myRunningPercentage=0;
   QMap<QString,LaAnimal> myAnimalsMap = LaUtils::getAvailableAnimals();
-  //debug statemetn to print all animal keys
+  //debug statement to print all animal keys
   //qDebug((static_cast<QStringList>(myAnimalsMap.keys())).join("\n").toLocal8Bit());
   mAnimalParametersMap = LaUtils::getAvailableAnimalParameters();
   QMapIterator<QString, LaAnimal> myIterator(myAnimalsMap);
@@ -194,7 +195,8 @@ void LaMainForm::loadAnimals()
     myIcon.addFile(":/localdata.png");
     tblAnimals->insertRow(myCurrentRow);
     // Add details to the new row
-    QTableWidgetItem *mypUsedItem= new QTableWidgetItem(tr("Used?"));
+    //QTableWidgetItem *mypUsedItem= new QTableWidgetItem(tr("Used?"));
+    QTableWidgetItem *mypUsedItem= new QTableWidgetItem(tr(""));
     if (myValue.first)
     {
       mypUsedItem->setCheckState(Qt::Checked);
@@ -442,6 +444,22 @@ void LaMainForm::cropCellClicked(int theRow, int theColumn)
 void LaMainForm::on_pushButtonRun_clicked()
 {
   // implement me
+  LaModel myModel;
+
+  myModel.setName(lineEditSiteName->text());
+  myModel.setPopulation(spinBoxPopulation->value());
+  myModel.setPeriod(lineEditPeriod->text());
+  myModel.setProjection(comboBoxProjection->currentItem());
+  myModel.setEasting(lineEditEasting->text().toInt());
+  myModel.setNorthing(lineEditNorthing->text().toInt());
+  myModel.setEuclideanDistance(radioButtonEuclidean->isChecked());
+  myModel.setWalkingTime(radioButtonWalkingTime->isChecked());
+  myModel.setPathDistance(radioButtonPathDistance->isChecked());
+  myModel.setPrecision(spinBoxModelPrecision->value());
+  myModel.setDietPercent(horizontalSliderDiet->value());
+  myModel.setPlantPercent(horizontalSliderCrop->value());
+  myModel.setMeatPercent(horizontalSliderMeat->value());
+  myModel.setCaloriesPerPersonDaily(spinBoxDailyCalories->value());
 }
 void LaMainForm::on_pushButtonLoad_clicked()
 {

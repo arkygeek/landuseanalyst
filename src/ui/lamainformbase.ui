@@ -449,7 +449,7 @@ p, li { white-space: pre-wrap; }
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="spinBoxModelPrecision_2" >
+             <widget class="QSpinBox" name="spinBoxModelPrecision" >
               <property name="sizePolicy" >
                <sizepolicy>
                 <hsizetype>5</hsizetype>
@@ -484,7 +484,7 @@ p, li { white-space: pre-wrap; }
            </layout>
           </item>
           <item row="2" column="0" >
-           <widget class="QRadioButton" name="radioButtonPathDistance_2" >
+           <widget class="QRadioButton" name="radioButtonPathDistance" >
             <property name="toolTip" >
              <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
@@ -503,7 +503,7 @@ p, li { white-space: pre-wrap; }
            </widget>
           </item>
           <item row="1" column="0" >
-           <widget class="QRadioButton" name="radioButtonWalkingTime_2" >
+           <widget class="QRadioButton" name="radioButtonWalkingTime" >
             <property name="toolTip" >
              <string>Calculate catchment by growing distance based on walking time</string>
             </property>
@@ -522,7 +522,7 @@ p, li { white-space: pre-wrap; }
            </widget>
           </item>
           <item row="0" column="0" >
-           <widget class="QRadioButton" name="radioButtonEuclidean_2" >
+           <widget class="QRadioButton" name="radioButtonEuclidean" >
             <property name="toolTip" >
              <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
@@ -2612,10 +2612,10 @@ p, li { white-space: pre-wrap; }
   <tabstop>lineEditEasting</tabstop>
   <tabstop>lineEditNorthing</tabstop>
   <tabstop>pushButtonJadis</tabstop>
-  <tabstop>radioButtonEuclidean_2</tabstop>
-  <tabstop>radioButtonWalkingTime_2</tabstop>
-  <tabstop>radioButtonPathDistance_2</tabstop>
-  <tabstop>spinBoxModelPrecision_2</tabstop>
+  <tabstop>radioButtonEuclidean</tabstop>
+  <tabstop>radioButtonWalkingTime</tabstop>
+  <tabstop>radioButtonPathDistance</tabstop>
+  <tabstop>spinBoxModelPrecision</tabstop>
   <tabstop>pushButtonRun</tabstop>
   <tabstop>pushButtonLoad</tabstop>
   <tabstop>pushButtonSave</tabstop>

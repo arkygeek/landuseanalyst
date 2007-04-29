@@ -91,70 +91,70 @@ class LaModel : public LaSerialisable, public LaGuid
      */
     void setPopulation(int thePopulation);
 
-    /** Set useableMeat as a percentage
+    /** Set period of site being studied
      * @see period()
      */
     void setPeriod(QString thePeriod);
 
-    /** Set projection as kg
+    /** Set projection
      * @see projection()
      */
-    void setProjection(int theKg);
+    void setProjection(int theIndex);
 
-    /** Set the easting in weeks
+    /** Set the easting
      * @see easting()
      */
-    void setEasting(int theWeeks);
+    void setEasting(int theEasting);
 
-    /** Set the northing as a percentage
+    /** Set the northing
      * @see northing()
      */
-    void setNorthing(int thePercentage);
+    void setNorthing(int theNorthing);
 
-    /** Set the daily calories required for a euclideanDistance female
+    /** Set method of analysis to euclideanDistance
      * @see euclideanDistance()
      */
     void setEuclideanDistance(bool theBool);
 
-    /** Set the daily calories required for a walkingTime female
+    /** Set method of analysis to  walkingTime
      * @see Period()
      */
     void setWalkingTime(bool theBool);
 
-    /** Set the daily calories required for a pathDistance
-     * @see Period()
+    /** Set method of analysis to pathDistance
+     * @see pathDistance()
      */
     void setPathDistance(bool theBool);
 
-    /** Set the average lifeExpectancy in years
-     * @see lifeExpectancy()
+    /** Set mmodel's precision
+     * @see precision()
      */
-    void setPrecision(int theMonths);
+    void setPrecision(int thePrecision);
 
-    /** Set the average dietPercentExpectancy in years
+    /** Set the overall percent that Plants form, for the entire population's diet
      * @see dietPercent()
      */
-    void setDietPercent(int theYears);
+    void setDietPercent(int theDietPercent);
 
-    /** Set the average number of plantPercent
+    /** Set the percent of TAME Plants, of the Plant based portion of the diet
      * @see plantPercent()
      */
-    void setPlantPercent(int theInteger);
+    void setPlantPercent(int theDietPercent);
 
     /** Set the meatPercent in weeks
      * @see meatPercent()
      */
-    void setMeatPercent(int theWeeks);
+    void setMeatPercent(int theMeatPercent);
 
     /** Set the caloriesPerPersonDaily in Days
      * @see caloriesPerPersonDaily()
      */
-    void setCaloriesPerPersonDaily(int theDays);
+    void setCaloriesPerPersonDaily(int theCaloriesPerPersonDaily);
 
     /** Set the spare in days
      * @see spare()
      */
-    void setSpare(int theDays);
+    void setSpare(int theSpare);
 
     /** Return an xml representation of this layer
      * @NOTE this class inherits the serialisable interface so
@@ -181,31 +181,31 @@ class LaModel : public LaSerialisable, public LaGuid
     QString mName;
     /** The population for this model */
     int mPopulation;
-    /** Percentage of models live weight that can be utilized for meat */
+    /** Period of the site */
     QString mPeriod;
-    /** The weight in kg at which the models are slaughtered */
+    /** The projection of the data used in the model */
     int mProjection;
-    /** The number of weeks from birth it takes to attain slaughtering weight */
+    /** East coordinate of the site being analysed */
     int mEasting;
-    /** The percentage of babies that die before being usable as either meat or breeding */
+    /** North coordinate of the site being analysed */
     int mNorthing;
-    /** The number of calories a euclideanDistance female requires per day */
+    /** Euclidean method of analysis */
     bool mEuclideanDistance;
-    /** The number of calories a walkingTime female requires per day */
+    /** Walking time method of analysis */
     bool mWalkingTime;
-    /** The number of calories a pathDistance requires per day */
+    /** Path distance method of analysis */
     bool mPathDistance;
-    /** The life expectancy in years of the model */
+    /** Precision or degree of accuracy used to determine results */
     int mPrecision;
-    /** The number of years a female will reliably produce offspring */
+    /** Percentage of overall diet fulfilled by plant derived food */
     int mDietPercent;
-    /** The average number of young produced per pregnancy */
+    /** Percentage of Plant derived food fulfilled by domesticated crops */
     int mPlantPercent;
-    /** The age in weeks at which babies stop suckling */
+    /** Percentage of Animal (meat) derived food fulfilled by domesticated animals */
     int mMeatPercent;
-    /** The number of days required for gestation */
+    /** The number of calories required per person per day (average) */
     int mCaloriesPerPersonDaily;
-    /** The number of days in the female estrous cycle */
+    /** I'm sure there was something I needed this for :s */
     int mSpare;
 };
 
