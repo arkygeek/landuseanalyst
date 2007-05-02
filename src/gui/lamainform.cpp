@@ -454,8 +454,43 @@ void LaMainForm::cropCellClicked(int theRow, int theColumn)
 void LaMainForm::on_pushButtonRun_clicked()
 {
   //get a list of the selected animals
-  
+  QMap<QString,QString> mySelectedAnimalsMap;
+  //          <animal guid <enabled, animalparamters guid>>
+  QMapIterator<QString, QPair<bool, QString> > myAnimalIterator(mAnimalsMap);
+  while (myAnimalIterator.hasNext())
+  {
+    myAnimalIterator.next();
+    QPair<bool,QString> myPair = myAnimalIterator.value();
+    QString myAnimalGuid = myAnimalIterator.key();
+    bool    mySelectedFlag = myPair.first;
+    QString myAnimalParameterGuid = myPair.second;
+    if (mySelectedFlag)
+    {
+      mySelectedAnimalsMap.insert(myAnimalGuid,myAnimalParameterGuid);
+      qDebug("Added <" + myAnimalGuid.toLocal8Bit() + " , " + myAnimalParameterGuid.toLocal8Bit() + " >");
+    }
+  }
+
   //get a list of the selected crops
+  QMap<QString,QString> mySelectedCropsMap;
+  //          <crop guid <enabled, cropparamters guid>>
+  QMapIterator<QString, QPair<bool, QString> > myCropIterator(mCropsMap);
+  while (myCropIterator.hasNext())
+  {
+    myCropIterator.next();
+    QPair<bool,QString> myPair = myCropIterator.value();
+    QString myCropGuid = myCropIterator.key();
+    bool    mySelectedFlag = myPair.first;
+    QString myCropParameterGuid = myPair.second;
+    if (mySelectedFlag)
+    {
+      mySelectedCropsMap.insert(myCropGuid,myCropParameterGuid);
+      qDebug("Added <" + myCropGuid.toLocal8Bit() + " , " + myCropParameterGuid.toLocal8Bit() + " >");
+    }
+  }
+
+
+  //populate the model with all the form data
   LaModel myModel;
 
   myModel.setName(lineEditSiteName->text());
