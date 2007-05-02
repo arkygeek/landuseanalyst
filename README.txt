@@ -28,6 +28,6 @@ make install
 Making a kdevelop project with cmake:
 -----------------------------------------------
 mkdir build
-cmake -G KDevelop3 ..
+cmake -G KDevelop3 -D CMAKE_INSTALL_PREFIX=/home/timlinux/apps/..
 
 Then open the generated project using kdevelop
