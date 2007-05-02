@@ -168,7 +168,8 @@ void LaMainForm::loadAnimals()
   QMap<QString,LaAnimal> myAnimalsMap = LaUtils::getAvailableAnimals();
   //debug statement to print all animal keys
   //qDebug((static_cast<QStringList>(myAnimalsMap.keys())).join("\n").toLocal8Bit());
-  mAnimalParametersMap = LaUtils::getAvailableAnimalParameters();
+  LaUtils::AnimalParameterMap myAnimalParametersMap;
+  myAnimalParametersMap = LaUtils::getAvailableAnimalParameters();
   QMapIterator<QString, LaAnimal> myIterator(myAnimalsMap);
   while (myIterator.hasNext())
   {
@@ -213,7 +214,7 @@ void LaMainForm::loadAnimals()
     //create a var to hold the percentage for each selected parameter
     //add the animal parameters combo to the form
     QComboBox * mypCombo = new QComboBox(this);
-    QMapIterator<QString, LaAnimalParameter> myIterator(mAnimalParametersMap);
+    QMapIterator<QString, LaAnimalParameter> myIterator(myAnimalParametersMap);
     while (myIterator.hasNext())
     {
       myIterator.next();
@@ -286,7 +287,8 @@ void LaMainForm::loadCrops()
   myCropsMap = LaUtils::getAvailableCrops();
   //debug statemetn to print all crop keys
   //qDebug((static_cast<QStringList>(myCropsMap.keys())).join("\n").toLocal8Bit());
-  mCropParametersMap = LaUtils::getAvailableCropParameters();
+  LaUtils::CropParameterMap myCropParametersMap;
+  myCropParametersMap = LaUtils::getAvailableCropParameters();
   QMapIterator<QString, LaCrop> myIterator(myCropsMap);
   while (myIterator.hasNext())
   {
@@ -330,7 +332,7 @@ void LaMainForm::loadCrops()
     //create a var to hold the percentage for each selected parameter
     //add the crop parameters combo to the form
     QComboBox * mypCombo = new QComboBox(this);
-    QMapIterator<QString, LaCropParameter> myIterator(mCropParametersMap);
+    QMapIterator<QString, LaCropParameter> myIterator(myCropParametersMap);
     while (myIterator.hasNext())
     {
       myIterator.next();
@@ -419,12 +421,16 @@ void LaMainForm::animalCellClicked(int theRow, int theColumn)
 {
   qDebug("LaMainForm::animalCellClicked");
   QString myGuid = tblAnimals->item(tblAnimals->currentRow(),1)->data(Qt::UserRole).toString();
+  //get all animals, then get the animal for this cell if it exists
   QMap<QString,LaAnimal> myAnimalsMap = LaUtils::getAvailableAnimals();
   LaAnimal myAnimal = myAnimalsMap[myGuid];
   textBrowserAnimalDefinition->setHtml(myAnimal.toHtml());
   QComboBox * mypCombo=dynamic_cast<QComboBox *>(tblAnimals->cellWidget(tblAnimals->currentRow(),2));
   myGuid = mypCombo->itemData(mypCombo->currentIndex(),Qt::UserRole).toString();
-  LaAnimalParameter myAnimalParameter = mAnimalParametersMap[myGuid];
+  //get all animal parameters, then get the animal parameter for this cell if it exists
+  LaUtils::AnimalParameterMap myAnimalParametersMap;
+  myAnimalParametersMap = LaUtils::getAvailableAnimalParameters();
+  LaAnimalParameter myAnimalParameter = myAnimalParametersMap[myGuid];
   textBrowserAnimalParameterDefinition->setHtml(myAnimalParameter.toHtml());
 }
 
@@ -432,18 +438,24 @@ void LaMainForm::cropCellClicked(int theRow, int theColumn)
 {
   qDebug("LaMainForm::cropCellClicked");
   QString myGuid = tblCrops->item(tblCrops->currentRow(),1)->data(Qt::UserRole).toString();
+  //get all crops, then get the crop for this cell if it exists
   QMap<QString,LaCrop> myCropsMap = LaUtils::getAvailableCrops();
   LaCrop myCrop = myCropsMap[myGuid];
   textBrowserCropDefinition->setHtml(myCrop.toHtml());
   QComboBox * mypCombo=dynamic_cast<QComboBox *>(tblCrops->cellWidget(tblCrops->currentRow(),2));
   myGuid = mypCombo->itemData(mypCombo->currentIndex(),Qt::UserRole).toString();
-  LaCropParameter myCropParameter = mCropParametersMap[myGuid];
+  //get all crops parameters, then get the crop parameter for this cell if it exists
+  LaUtils::CropParameterMap myCropParametersMap;
+  myCropParametersMap = LaUtils::getAvailableCropParameters();
+  LaCropParameter myCropParameter = myCropParametersMap[myGuid];
   textBrowserCropParameterDefinition->setHtml(myCropParameter.toHtml());
 }
 
 void LaMainForm::on_pushButtonRun_clicked()
 {
-  // implement me
+  //get a list of the selected animals
+  
+  //get a list of the selected crops
   LaModel myModel;
 
   myModel.setName(lineEditSiteName->text());

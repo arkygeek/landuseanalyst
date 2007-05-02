@@ -78,8 +78,6 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
     void readSettings();
     void writeSettings();
     bool setComboToDefault(QComboBox * thepCombo, QString theDefault);
-    LaUtils::AnimalParameterMap mAnimalParametersMap;
-    LaUtils::CropParameterMap mCropParametersMap;
     //    <animal guid <enabled, animalparamters guid>>
     LaTripleMap mAnimalsMap;
     LaTripleMap mCropsMap;
