@@ -313,21 +313,21 @@ QString LaModel::toText()
 QString LaModel::toHtml()
 {
   QString myString;
-  myString+="<p align=\"center\"><h1>Details for " + LaUtils::xmlEncode(mName) + "</h1></p>";
-  myString+="<p>GUID:" + guid() + "</p>";
-  myString+="<p>Population:" + QString::number(mPopulation) + "</p>";
-  myString+="<p>Period: " + LaUtils::xmlEncode(mPeriod) + "</p>";
-  myString+="<p>Projection: " + QString::number(mProjection) + "</p>";
-  myString+="<p>Easting: " + QString::number(mEasting) + "</p>";
-  myString+="<p>Northing: " + QString::number(mNorthing) + "</p>";
-  myString+="<p>EuclideanDistance: " + QString::number(mEuclideanDistance) + "</p>";
-  myString+="<p>WalkingTime: " + QString::number(mWalkingTime) + "</p>";
-  myString+="<p>PathDistance: " + QString::number(mPathDistance) + "</p>";
-  myString+="<p>Precision: " + QString::number(mPrecision) + "</p>";
-  myString+="<p>DietPercent" + QString::number(mDietPercent) + "</p>";
-  myString+="<p>PlantPercent: " + QString::number(mPlantPercent) + "</p>";
-  myString+="<pmMeatPercent: " + QString::number(mMeatPercent) + "</p>";
-  myString+="<p>CaloriesPerPersonDaily: " + QString::number(mCaloriesPerPersonDaily) + "</p>";
-  myString+="<p>Spare: " + QString::number(mSpare) + "</p>";
+  myString+="<p align=\"center\"><h1>Details for " + LaUtils::xmlEncode(mName) + "</h1><br />";
+  myString+="GUID:" + guid() + "<br />";
+  myString+="Population:" + QString::number(mPopulation) + "<br />";
+  myString+="Period: " + LaUtils::xmlEncode(mPeriod) + "<br />";
+  myString+="Projection: " + QString::number(mProjection) + "<br />";
+  myString+="Easting: " + QString::number(mEasting) + "<br />";
+  myString+="Northing: " + QString::number(mNorthing) + "<br />";
+  myString+="Euclidean Distance: " + QString::number(mEuclideanDistance) + "<br />";
+  myString+="Walking Time: " + QString::number(mWalkingTime) + "<br />";
+  myString+="Path Distance: " + QString::number(mPathDistance) + "<br />";
+  myString+="Precision: " + QString::number(mPrecision) + "<br />";
+  myString+="Diet Percent" + QString::number(mDietPercent) + "<br />";
+  myString+="Plant Percent: " + QString::number(mPlantPercent) + "<br />";
+  myString+="Meat Percent: " + QString::number(mMeatPercent) + "<br />";
+  myString+="Calories Per PersonDaily: " + QString::number(mCaloriesPerPersonDaily) + "<br />";
+  myString+="Spare: " + QString::number(mSpare) + "</p>";
   return myString;
 }

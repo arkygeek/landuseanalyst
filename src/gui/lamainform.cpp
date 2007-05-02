@@ -472,20 +472,7 @@ void LaMainForm::on_pushButtonRun_clicked()
   myModel.setPlantPercent(horizontalSliderCrop->value());
   myModel.setMeatPercent(horizontalSliderMeat->value());
   myModel.setCaloriesPerPersonDaily(spinBoxDailyCalories->value());
-  textBrowserResultsLeft->setText("model Name: " + myModel.name());
-  textBrowserResultsLeft->append("Period: " + myModel.period());
-  textBrowserResultsLeft->append("Population: " + QString::number(myModel.population()));
-  textBrowserResultsLeft->append("Projection " + QString::number(myModel.projection()));
-  textBrowserResultsLeft->append("Easting: " + QString::number(myModel.easting()));
-  textBrowserResultsLeft->append("Northing: " + QString::number(myModel.northing()));
-  textBrowserResultsLeft->append("Euclidean Distance: " + QString::number(myModel.euclideanDistance()));
-  textBrowserResultsLeft->append("Walking Time: " + QString::number(myModel.walkingTime()));
-  textBrowserResultsLeft->append("Path Distance: " + QString::number(myModel.pathDistance()));
-  textBrowserResultsLeft->append("Precision: " + QString::number(myModel.precision()));
-  textBrowserResultsLeft->append("Diet Percent: " + QString::number(myModel.dietPercent()));
-  textBrowserResultsLeft->append("Plant Percent: " + QString::number(myModel.plantPercent()));
-  textBrowserResultsLeft->append("Meat Percent: " + QString::number(myModel.meatPercent()));
-  textBrowserResultsLeft->append("Calories Per Person Daily: " + QString::number(myModel.caloriesPerPersonDaily()));
+  textBrowserResultsLeft->setText(myModel.toHtml());
 }
 void LaMainForm::on_pushButtonLoad_clicked()
 {
