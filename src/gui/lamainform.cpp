@@ -467,9 +467,10 @@ void LaMainForm::on_pushButtonRun_clicked()
     myAnimalIterator.next();
     QPair<bool,QString> myPair = myAnimalIterator.value();
     QString myAnimalGuid = myAnimalIterator.key();
-    bool    mySelectedFlag = myPair.first;
     QString myAnimalParameterGuid = myPair.second;
-    if (mySelectedFlag)
+    //I'll turn this on when I have set up events for check box tick on and off
+    //bool mySelectedFlag = myPair.first;
+    //if (mySelectedFlag)
     {
       mySelectedAnimalsMap.insert(myAnimalGuid,myAnimalParameterGuid);
       qDebug("Added <" + myAnimalGuid.toLocal8Bit() + " , " + myAnimalParameterGuid.toLocal8Bit() + " >");
@@ -489,9 +490,10 @@ void LaMainForm::on_pushButtonRun_clicked()
     myCropIterator.next();
     QPair<bool,QString> myPair = myCropIterator.value();
     QString myCropGuid = myCropIterator.key();
-    bool    mySelectedFlag = myPair.first;
     QString myCropParameterGuid = myPair.second;
-    if (mySelectedFlag)
+    //I'll turn this on when I have set up events for check box tick on and off
+    //bool mySelectedFlag = myPair.first;
+    //if (mySelectedFlag)
     {
       mySelectedCropsMap.insert(myCropGuid,myCropParameterGuid);
       qDebug("Added <" + myCropGuid.toLocal8Bit() + " , " + myCropParameterGuid.toLocal8Bit() + " >");
