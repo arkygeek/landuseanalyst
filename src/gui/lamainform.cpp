@@ -453,7 +453,12 @@ void LaMainForm::cropCellClicked(int theRow, int theColumn)
 
 void LaMainForm::on_pushButtonRun_clicked()
 {
-  //get a list of the selected animals
+  LaModel myModel;
+  
+  //
+  // Get a list of the selected animals
+  //
+
   QMap<QString,QString> mySelectedAnimalsMap;
   //          <animal guid <enabled, animalparamters guid>>
   QMapIterator<QString, QPair<bool, QString> > myAnimalIterator(mAnimalsMap);
@@ -470,8 +475,12 @@ void LaMainForm::on_pushButtonRun_clicked()
       qDebug("Added <" + myAnimalGuid.toLocal8Bit() + " , " + myAnimalParameterGuid.toLocal8Bit() + " >");
     }
   }
+  myModel.setAnimals(mySelectedAnimalsMap);
 
-  //get a list of the selected crops
+  //
+  // Get a list of the selected crops
+  //
+
   QMap<QString,QString> mySelectedCropsMap;
   //          <crop guid <enabled, cropparamters guid>>
   QMapIterator<QString, QPair<bool, QString> > myCropIterator(mCropsMap);
@@ -488,10 +497,11 @@ void LaMainForm::on_pushButtonRun_clicked()
       qDebug("Added <" + myCropGuid.toLocal8Bit() + " , " + myCropParameterGuid.toLocal8Bit() + " >");
     }
   }
+  myModel.setCrops(mySelectedCropsMap);
 
-
-  //populate the model with all the form data
-  LaModel myModel;
+  //
+  // Populate the model with all the form data
+  //
 
   myModel.setName(lineEditSiteName->text());
   myModel.setPopulation(spinBoxPopulation->value());

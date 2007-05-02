@@ -203,6 +203,15 @@ void LaModel::setCaloriesPerPersonDaily(int theCalories)
 {
   mCaloriesPerPersonDaily=theCalories;
 }
+void LaModel::setAnimals(QMap<QString,QString> theAnimals)
+{
+  mAnimalsMap = theAnimals;
+}
+void LaModel::setCrops(QMap<QString,QString> theCrops)
+{
+  mCropsMap = theCrops;
+}
+
 void LaModel::setSpare(int theSpare)
 {
   mSpare=theSpare;

@@ -25,6 +25,7 @@ class QString;
 #include "laserialisable.h"
 #include "laguid.h"
 #include <QString>
+#include <QMap>
 /**
   * An class to represent an model
   * @author Tim Sutton, Jason Jorgenson
@@ -150,6 +151,16 @@ class LaModel : public LaSerialisable, public LaGuid
      * @see caloriesPerPersonDaily()
      */
     void setCaloriesPerPersonDaily(int theCaloriesPerPersonDaily);
+    
+    /** Set the animals for this model
+     * @param QMap<QString,QString> a list of animal guid and animal parameter guids
+     */
+    void setAnimals(QMap<QString,QString>);
+
+    /** Set the crop for this model
+     * @param QMap<QString,QString> a list of crop guid and animal parameter guids
+     */
+    void setCrops(QMap<QString,QString>);
 
     /** Set the spare in days
      * @see spare()
@@ -205,6 +216,10 @@ class LaModel : public LaSerialisable, public LaGuid
     int mMeatPercent;
     /** The number of calories required per person per day (average) */
     int mCaloriesPerPersonDaily;
+    /** A map to hold the associated animals and their parameters */
+    QMap<QString,QString> mAnimalsMap;
+    /** A map to hold the associated crops and their parameters */
+    QMap<QString,QString> mCropsMap;
     /** I'm sure there was something I needed this for :s */
     int mSpare;
 };
