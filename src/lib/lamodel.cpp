@@ -340,3 +340,110 @@ QString LaModel::toHtml()
   myString+="Spare: " + QString::number(mSpare) + "</p>";
   return myString;
 }
+
+void LaModel::run()
+{
+  // mainform data
+  int myPopulation, myDietComposition, myCropPercent, myAnimalPercent, myCaloriesPerPersonPerDay;
+
+  // Manage Crops (Description)
+  int myCropYield, myCropFoodValue, myFodderYield, myFodderFoodValue;
+  // Manage Crop Parameters
+  int myPortionOfDietTamePlant;
+  bool myCropRotation, myCropCommonLand, myCropSpecificLand;
+  float myCropFallowRatio;
+  int myFoodValueFallowLand;
+
+  // Manage Animal (Description)
+  int myUsableMeat, myKillWeight, myGrowTime, myDeathRate;
+  // Reproduction figures
+  int mySexualMaturity, myBreedingLife, myYoungPerBirth, myWeaningAge, myGestation, myEstrousCycle;
+  // Feed Requirements
+  int myCaloriesPerDayGestating, myCaloriesPerDayLactating, myCaloriesPerDayJuvenile;
+  // Manage Animal Parameters
+  int myPortionOfDietTameAnimals;
+  // land suitability
+  bool myAnimalCommonLand, myAnimalSpecificLand, myFodderGrazed;
+  int myKcalPerYearSpecificLand, myKcalPerYearCommonLand;
+  // fodder
+  int myCrop1FodderPercentAnimalsDiet, myCrop1GrainPercentAnimalsDiet;
+  int myCrop2FodderPercentAnimalsDiet, myCrop2GrainPercentAnimalsDiet;
+  int myCrop3FodderPercentAnimalsDiet, myCrop3GrainPercentAnimalsDiet;
+  int myFallowPriority;
+
+  ///////////////////////////
+  // Assign initial values //
+  ///////////////////////////
+
+  // mainform data
+  myPopulation=500;
+  myDietComposition=50;
+  myCropPercent=90;
+  myAnimalPercent=90;
+  myCaloriesPerPersonPerDay=2500;
+
+  // Manage Crops (Description)
+  myCropYield=60;
+  myCropFoodValue=3000;
+  myFodderYield=50;
+  myFodderFoodValue=1000;
+  // Manage Crop Parameters
+  myPortionOfDietTamePlant=100;
+  myCropRotation=1;
+  myCropCommonLand=1;
+  myCropSpecificLand=1;
+  myCropFallowRatio=1.0;
+  myFoodValueFallowLand=10000;
+
+  // Manage Animal (Description)
+  myUsableMeat=50;
+  myKillWeight=100;
+  myGrowTime=10;
+  myDeathRate=10;
+  // Reproduction figures
+  mySexualMaturity=18;
+  myBreedingLife=6;
+  myYoungPerBirth=8;
+  myWeaningAge=12;
+  myGestation=120;
+  myEstrousCycle=21;
+  // Feed Requirements
+  myCaloriesPerDayGestating=5000;
+  myCaloriesPerDayLactating=5000;
+  myCaloriesPerDayJuvenile=3500;
+  // Manage Animal Parameters
+  myPortionOfDietTameAnimals=100;
+  // land suitability
+  myAnimalCommonLand=1;
+  myAnimalSpecificLand=1;
+  myFodderGrazed=1;
+  myKcalPerYearSpecificLand=1500;
+  myKcalPerYearCommonLand=1500;
+  // fodder
+  myCrop1FodderPercentAnimalsDiet=0;
+  myCrop1GrainPercentAnimalsDiet=0;
+  myCrop2FodderPercentAnimalsDiet=0;
+  myCrop2GrainPercentAnimalsDiet=0;
+  myCrop3FodderPercentAnimalsDiet=0;
+  myCrop3GrainPercentAnimalsDiet=0;
+  myFallowPriority=1;
+
+  ///////////////////////////////
+  // Generic Crop Calculations //
+  /////////////////////////////////////////
+  // We need to calculate three values:  //
+  //  1. Calorie target                  //
+  //  2. Production target               //
+  //  3. Area target                     //
+  /////////////////////////////////////////
+
+  // Crop Calorie Target Calculations
+  float myCropOverallContributionToDiet;
+  float myCropCalorieTarget;
+// we must multiply by 0.01 to turn the following into percentages
+  myCropOverallContributionToDiet=(myDietComposition*0.01)*(myCropPercent*.01);
+  myCropCalorieTarget=myPopulation*myCaloriesPerPersonPerDay*365;
+
+
+
+}

@@ -151,7 +151,7 @@ class LaModel : public LaSerialisable, public LaGuid
      * @see caloriesPerPersonDaily()
      */
     void setCaloriesPerPersonDaily(int theCaloriesPerPersonDaily);
-    
+
     /** Set the animals for this model
      * @param QMap<QString,QString> a list of animal guid and animal parameter guids
      */
@@ -166,6 +166,10 @@ class LaModel : public LaSerialisable, public LaGuid
      * @see spare()
      */
     void setSpare(int theSpare);
+
+    /** Perform calcs on run
+     */
+    void run();
 
     /** Return an xml representation of this layer
      * @NOTE this class inherits the serialisable interface so
