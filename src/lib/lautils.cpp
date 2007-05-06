@@ -248,6 +248,43 @@ LaUtils::AnimalParameterMap LaUtils::getAvailableAnimalParameters()
   return myMap;
 }
 
+LaAnimalParameter LaUtils::getAnimalParameter(QString theGuid)
+{
+  QDir myDirectory(userAnimalParameterProfilesDirPath());
+  myDirectory.setFilter(QDir::Dirs | QDir::Files | QDir::NoSymLinks );
+  QFileInfoList myList = myDirectory.entryInfoList();
+  for (unsigned int i = 0; i < static_cast<unsigned int>(myList.size()); ++i)
+  {
+    QFileInfo myFileInfo = myList.at(i);
+    //Ignore directories
+    if(myFileInfo.fileName() == "." ||myFileInfo.fileName() == ".." )
+    {
+      continue;
+    }
+    //if the filename ends in .xml try to load it into our layerSets listing
+    if(myFileInfo.completeSuffix()=="xml")
+    {
+      //qDebug("Loading animalParameter: " + myList.at(i).absoluteFilePath().toLocal8Bit());
+      LaAnimalParameter myAnimalParameter;
+      myAnimalParameter.fromXmlFile(myFileInfo.absoluteFilePath());
+      if (myAnimalParameter.name().isEmpty())
+      {
+        qDebug("AnimalParameter name was empty!");
+        continue;
+      }
+      //qDebug("Adding " + myAnimalParameter.name());
+      //qDebug(myAnimalParameter.toText().toLocal8Bit());
+      if (myAnimalParameter.guid()==theGuid)
+      {
+        return myAnimalParameter;
+      }
+    }
+  }
+  LaAnimalParameter myAnimalParameter;
+  return myAnimalParameter; //retrun a blank one since no match found
+
+}
+
 LaUtils::CropParameterMap LaUtils::getAvailableCropParameters()
 {
   LaUtils::CropParameterMap myMap;
@@ -279,6 +316,43 @@ LaUtils::CropParameterMap LaUtils::getAvailableCropParameters()
     }
   }
   return myMap;
+}
+
+LaCropParameter LaUtils::getCropParameter(QString theGuid)
+{
+  QDir myDirectory(userCropParameterProfilesDirPath());
+  myDirectory.setFilter(QDir::Dirs | QDir::Files | QDir::NoSymLinks );
+  QFileInfoList myList = myDirectory.entryInfoList();
+  for (unsigned int i = 0; i < static_cast<unsigned int>(myList.size()); ++i)
+  {
+    QFileInfo myFileInfo = myList.at(i);
+    //Ignore directories
+    if(myFileInfo.fileName() == "." ||myFileInfo.fileName() == ".." )
+    {
+      continue;
+    }
+    //if the filename ends in .xml try to load it into our layerSets listing
+    if(myFileInfo.completeSuffix()=="xml")
+    {
+      //qDebug("Loading animalParameter: " + myList.at(i).absoluteFilePath().toLocal8Bit());
+      LaCropParameter myCropParameter;
+      myCropParameter.fromXmlFile(myFileInfo.absoluteFilePath());
+      if (myCropParameter.name().isEmpty())
+      {
+        qDebug("CropParameter name was empty!");
+        continue;
+      }
+      //qDebug("Adding " + myCropParameter.name());
+      //qDebug(myCropParameter.toText().toLocal8Bit());
+      if (myCropParameter.guid()==theGuid)
+      {
+        return myCropParameter;
+      }
+    }
+  }
+  LaCropParameter myCropParameter;
+  return myCropParameter; //retrun a blank one since no match found
+
 }
 
 

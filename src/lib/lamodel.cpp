@@ -353,6 +353,9 @@ QString LaModel::toHtml()
     LaAnimal myAnimal = LaUtils::getAnimal(myAnimalGuid);
     myString += myAnimal.toHtml();
     myString += "<br />";
+    LaAnimalParameter myParameter = LaUtils::getAnimalParameter(myAnimalParameterGuid);
+    myString += myParameter.toHtml();
+    myString += "<br />";
   }
   
   //iterate through crops
@@ -369,6 +372,9 @@ QString LaModel::toHtml()
     //myString += myText + "<br />";
     LaCrop myCrop = LaUtils::getCrop(myCropGuid);
     myString += myCrop.toHtml();
+    myString += "<br />";
+    LaCropParameter myParameter = LaUtils::getCropParameter(myCropParameterGuid);
+    myString += myParameter.toHtml();
     myString += "<br />";
   }
   return myString;

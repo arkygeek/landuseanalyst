@@ -137,6 +137,12 @@ class LaUtils
      **/
     static LaUtils::CropParameterMap getAvailableCropParameters();
 
+    /** Get a LaCropParameter given its GUID.
+     * If no matching animalparameter is found, a blank one is
+     * returned.
+     */
+    static LaCropParameter LaUtils::getCropParameter(QString theGuid);
+    
     /** This typedef is used to refer to a collection of layersets.
      * the key is the layerset name
      * the value is the layerset itself
@@ -146,6 +152,13 @@ class LaUtils
      * @return a QMap<QString,OmgLayerSet> where the QString key is the layerset name
      **/
     static LaUtils::AnimalParameterMap getAvailableAnimalParameters();
+    
+    /** Get a LaAnimalParameter given its GUID.
+     * If no matching animalparameter is found, a blank one is
+     * returned.
+     */
+    static LaAnimalParameter LaUtils::getAnimalParameter(QString theGuid);
+    
     /**
      * Find the place on the filesystem where user defined animalParameter
      * profiles are stored.
@@ -155,9 +168,11 @@ class LaUtils
      * @return QString containing the relevant directory name
      */
     static const QString userAnimalParameterProfilesDirPath();
+    
 
-    /** Get a QMap of the avaliable layersets in the users layersets directory
-     * @return a QMap<QString,OmgLayerSet> where the QString key is the layerset name
+    /** Get a QMap of the avaliable animals from the users animals directory
+     * @return a QMap<QString,OmgLayerSet> where the QString key is 
+     * the animal name.
      **/
     static LaUtils::AnimalMap getAvailableAnimals();
 
