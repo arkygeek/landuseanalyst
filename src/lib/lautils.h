@@ -102,7 +102,7 @@ class LaUtils
      * If no matching crop is found, a blank one is
      * returned.
      */
-    static LaCrop LaUtils::getCrop(QString theGuid);
+    static LaCrop getCrop(QString theGuid);
     
     /** This typedef is used to refer to a collection of layersets.
      * the key is the layerset name
@@ -114,7 +114,7 @@ class LaUtils
      * If no matching animal is found, a blank one is
      * returned.
      */
-    static LaAnimal LaUtils::getAnimal(QString theGuid);
+    static LaAnimal getAnimal(QString theGuid);
 
    /**
      * Find the place on the filesystem where user defined cropParameter
@@ -141,7 +141,7 @@ class LaUtils
      * If no matching animalparameter is found, a blank one is
      * returned.
      */
-    static LaCropParameter LaUtils::getCropParameter(QString theGuid);
+    static LaCropParameter getCropParameter(QString theGuid);
     
     /** This typedef is used to refer to a collection of layersets.
      * the key is the layerset name
@@ -157,7 +157,7 @@ class LaUtils
      * If no matching animalparameter is found, a blank one is
      * returned.
      */
-    static LaAnimalParameter LaUtils::getAnimalParameter(QString theGuid);
+    static LaAnimalParameter getAnimalParameter(QString theGuid);
     
     /**
      * Find the place on the filesystem where user defined animalParameter
