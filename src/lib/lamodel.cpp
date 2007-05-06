@@ -345,7 +345,7 @@ QString LaModel::toHtml()
     myAnimalIterator.next();
     QString myAnimalGuid = myAnimalIterator.key();
     QString myAnimalParameterGuid = myAnimalIterator.value();
-    //QString myText = "Animal " + myAnimalGuid.toLocal8Bit() + 
+    //QString myText = "Animal " + myAnimalGuid.toLocal8Bit() +
     //  " , ";
     //myText +=  myAnimalParameterGuid.toLocal8Bit() ;
     //myText += " ";
@@ -357,7 +357,7 @@ QString LaModel::toHtml()
     myString += myParameter.toHtml();
     myString += "<br />";
   }
-  
+
   //iterate through crops
   QMapIterator<QString, QString > myCropIterator(mCropsMap);
   while (myCropIterator.hasNext())
@@ -365,7 +365,7 @@ QString LaModel::toHtml()
     myCropIterator.next();
     QString myCropGuid = myCropIterator.key();
     QString myCropParameterGuid = myCropIterator.value();
-    //QString myText = "Crop " + myCropGuid.toLocal8Bit() + 
+    //QString myText = "Crop " + myCropGuid.toLocal8Bit() +
     //  " , ";
     //myText += myCropParameterGuid.toLocal8Bit() ;
     //myText += " ";
@@ -512,11 +512,39 @@ void LaModel::run()
   myAnimalOverallContributionToDiet=(myDietComposition*0.01)*(myAnimalPercent*.01);
   myCropCalorieTarget=myCalorieTarget*myAnimalOverallContributionToDiet;
 
-  // 2. Animal Production Target Calculations
+  // 2. Animal Production Target Calculations (kg usable meat)
   float  myAnimalProductionTarget;
   myAnimalProductionTarget=(myAnimalCalorieTarget/myAnimalFoodValue);
 
+  float myAnimalsRequired;
+  myAnimalsRequired=myAnimalProductionTarget/(myUsableMeat*.01);
+
   // 3. Animal Area Target Calculations
-
-
+  //
+  // In order to do this, we must determine the size of the herd required to produce
+  // enough offspring each year
+  float myBirthsPerYear;
+  myBirthsPerYear=365/(myGestation+myEstrousCycle+(myWeaningAge*7));
+  float myOffspringPerMotherYearly;
+  myOffspringPerMotherYearly=myBirthsPerYear*myYoungPerBirth*(1-myDeathRate);
+  float myMothersNeededStepOne;
+  myMothersNeededStepOne=myAnimalsRequired/myOffspringPerMotherYearly;
+  float myMalesStepOne;
+  myMalesStepOne=myMothersNeededStepOne/2;
+  float myFemalesStepOne;
+  myFemalesStepOne=myMothersNeededStepOne/2;
+  float myMotherReplacementsPerYear;
+  myMotherReplacementsPerYear=myMothersNeededStepOne/myBreedingLife;
+  float myAdditionalMothers;
+  myAdditionalMothers=(myMotherReplacementsPerYear/myOffspringPerMotherYearly)*2;
+  float myMalesStepTwo;
+  myMalesStepTwo=(myAdditionalMothers*myOffspringPerMotherYearly)/2;
+  float myFemalesStepTwo;
+  myFemalesStepTwo=(myAdditionalMothers*myOffspringPerMotherYearly)/2;
+  float myTotalMothers;
+  myTotalMothers=myMothersNeededStepOne+myAdditionalMothers;
+  float myTotalMales;
+  myTotalMales=myMalesStepOne+myMalesStepTwo;
+  float myTotalFemales;
+  myTotalFemales=myFemalesStepOne+myFemalesStepTwo;
 }
