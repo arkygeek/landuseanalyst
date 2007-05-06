@@ -47,6 +47,8 @@ class LaAnimal : public LaSerialisable, public LaGuid
     QString name() const;
     /** The description of this animal */
     QString description() const;
+    /** Food value of meat in calories per kh */
+    int meatFoodValue() const;
     /** Percentage of animals live weight that can be utilized for meat */
     int usableMeat() const;
     /** The weight in kg at which the animals are slaughtered */
@@ -87,6 +89,11 @@ class LaAnimal : public LaSerialisable, public LaGuid
      * @see description()
      */
     void setDescription(QString theDescription);
+
+    /** Set meatFoodValue as calories per kg
+     * @see meatFoodValue()
+     */
+    void setMeatFoodValue(int theFoodValue);
 
     /** Set useableMeat as a percentage
      * @see usableMeat()
@@ -178,6 +185,8 @@ class LaAnimal : public LaSerialisable, public LaGuid
     QString mName;
     /** The description for this animal */
     QString mDescription;
+    /** Food value of meat in calories per kg */
+    int mMeatFoodValue;
     /** Percentage of animals live weight that can be utilized for meat */
     int mUsableMeat;
     /** The weight in kg at which the animals are slaughtered */

@@ -178,6 +178,7 @@ void LaAnimalManager::showAnimal()
 {
   leName->setText(mAnimal.name());
   leDescription->setText(mAnimal.description());
+  spinBoxMeatFoodValue->setValue(mAnimal.meatFoodValue());
   spinBoxUsableMeatPercent->setValue(mAnimal.usableMeat());
   spinBoxKillWeight->setValue(mAnimal.killWeight());
   spinBoxGrowTime->setValue(mAnimal.growTime());
@@ -273,6 +274,7 @@ void LaAnimalManager::on_pbnApply_clicked()
 {
   mAnimal.setName(leName->text());
   mAnimal.setDescription(leDescription->text());
+  mAnimal.setMeatFoodValue(spinBoxMeatFoodValue->value());
   mAnimal.setUsableMeat(spinBoxUsableMeatPercent->value());
   mAnimal.setKillWeight(spinBoxKillWeight->value());
   mAnimal.setGrowTime(spinBoxGrowTime->value());

@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>597</width>
-    <height>420</height>
+    <width>648</width>
+    <height>440</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -44,20 +44,61 @@ p, li { white-space: pre-wrap; }
      </property>
      <layout class="QGridLayout" >
       <property name="margin" >
-       <number>5</number>
+       <number>9</number>
       </property>
       <property name="spacing" >
        <number>6</number>
       </property>
-      <item row="5" column="1" >
-       <widget class="QLabel" name="label_12" >
+      <item row="2" column="1" colspan="2" >
+       <widget class="QLabel" name="label_14" >
         <property name="text" >
-         <string>Death Rate</string>
+         <string>Food Value</string>
         </property>
        </widget>
       </item>
-      <item row="5" column="2" colspan="2" >
-       <widget class="QSpinBox" name="spinBoxDeathRate" >
+      <item row="0" column="0" >
+       <widget class="QLabel" name="label" >
+        <property name="text" >
+         <string>Name:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" >
+       <widget class="QLabel" name="label_4" >
+        <property name="text" >
+         <string>Notes:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" colspan="3" >
+       <widget class="QLineEdit" name="leDescription" >
+        <property name="whatsThis" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Because LandUse Analyst allows more than one type of animal to be defined, the Notes: field allows you to give a brief description of the the animal. For example, you may have two "Sheep" defined, and the Notes: fields could contain "For Slaughter" and "Wool Producers" to distinguish between them.&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" colspan="3" >
+       <widget class="QLineEdit" name="leName" >
+        <property name="whatsThis" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Enter the name of the animal you are defining in this field. You do not need a unique name. You can have, for example, 10 animals defined, all named "Sheep". LandUse Analyst uses a special method of saving the animals to eliminate the issue of duplicate filenames.&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1" >
+       <widget class="QLabel" name="label_10" >
+        <property name="text" >
+         <string>Kill Weight</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="3" >
+       <widget class="QSpinBox" name="spinBoxKillWeight" >
         <property name="sizePolicy" >
          <sizepolicy>
           <hsizetype>7</hsizetype>
@@ -70,39 +111,39 @@ p, li { white-space: pre-wrap; }
          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of babies that do not survive to slaughter age.&lt;/p>&lt;/body>&lt;/html></string>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Average weight of animal (Kg) when slaughtered&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="whatsThis" >
          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">LandUse Analyst accommodates for birthing deaths only. If an animal survives to weaning age but dies before slaughter, it is not modelled at this time. However, you can adjust the death rate setting to indicate the average survival rate of births. This is important for determining herd size, as it affects the number of mothers needed to sustain the production levels required by the settlement.&lt;/p>&lt;/body>&lt;/html></string>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Animals can be slaughtered for butchering at any weight, but LandUse Analyst needs to know the average weight of the animals when they are slaughtered. This is their &lt;span style=" font-weight:600;">live weight.&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="alignment" >
          <set>Qt::AlignRight</set>
         </property>
         <property name="suffix" >
-         <string> %</string>
+         <string> Kg</string>
         </property>
         <property name="prefix" >
          <string/>
         </property>
         <property name="maximum" >
-         <number>100</number>
+         <number>999</number>
         </property>
         <property name="value" >
-         <number>10</number>
+         <number>100</number>
         </property>
        </widget>
       </item>
-      <item row="4" column="1" >
+      <item row="5" column="1" >
        <widget class="QLabel" name="label_11" >
         <property name="text" >
          <string>Grow Time</string>
         </property>
        </widget>
       </item>
-      <item row="4" column="2" colspan="2" >
+      <item row="5" column="2" colspan="2" >
        <widget class="QSpinBox" name="spinBoxGrowTime" >
         <property name="sizePolicy" >
          <sizepolicy>
@@ -144,15 +185,15 @@ p, li { white-space: pre-wrap; }
         </property>
        </widget>
       </item>
-      <item row="3" column="1" colspan="2" >
-       <widget class="QLabel" name="label_10" >
+      <item row="6" column="1" >
+       <widget class="QLabel" name="label_12" >
         <property name="text" >
-         <string>Kill Weight</string>
+         <string>Death Rate</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="3" >
-       <widget class="QSpinBox" name="spinBoxKillWeight" >
+      <item row="6" column="2" colspan="2" >
+       <widget class="QSpinBox" name="spinBoxDeathRate" >
         <property name="sizePolicy" >
          <sizepolicy>
           <hsizetype>7</hsizetype>
@@ -165,39 +206,39 @@ p, li { white-space: pre-wrap; }
          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Average weight of animal (Kg) when slaughtered&lt;/p>&lt;/body>&lt;/html></string>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of babies that do not survive to slaughter age.&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="whatsThis" >
          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Animals can be slaughtered for butchering at any weight, but LandUse Analyst needs to know the average weight of the animals when they are slaughtered. This is their &lt;span style=" font-weight:600;">live weight.&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">LandUse Analyst accommodates for birthing deaths only. If an animal survives to weaning age but dies before slaughter, it is not modelled at this time. However, you can adjust the death rate setting to indicate the average survival rate of births. This is important for determining herd size, as it affects the number of mothers needed to sustain the production levels required by the settlement.&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="alignment" >
          <set>Qt::AlignRight</set>
         </property>
         <property name="suffix" >
-         <string> Kg</string>
+         <string> %</string>
         </property>
         <property name="prefix" >
          <string/>
         </property>
         <property name="maximum" >
-         <number>999</number>
+         <number>100</number>
         </property>
         <property name="value" >
-         <number>100</number>
+         <number>10</number>
         </property>
        </widget>
       </item>
-      <item row="2" column="1" colspan="2" >
+      <item row="3" column="1" >
        <widget class="QLabel" name="label_9" >
         <property name="text" >
          <string>Usable Meat</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="3" >
+      <item row="3" column="3" >
        <widget class="QSpinBox" name="spinBoxUsableMeatPercent" >
         <property name="sizePolicy" >
          <sizepolicy>
@@ -236,37 +277,42 @@ p, li { white-space: pre-wrap; }
         </property>
        </widget>
       </item>
-      <item row="0" column="0" >
-       <widget class="QLabel" name="label" >
-        <property name="text" >
-         <string>Name:</string>
+      <item row="2" column="3" >
+       <widget class="QSpinBox" name="spinBoxMeatFoodValue" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>5</hsizetype>
+          <vsizetype>0</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
-       </widget>
-      </item>
-      <item row="1" column="0" >
-       <widget class="QLabel" name="label_4" >
-        <property name="text" >
-         <string>Notes:</string>
+        <property name="toolTip" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of live weight usable as meat&lt;/p>&lt;/body>&lt;/html></string>
         </property>
-       </widget>
-      </item>
-      <item row="1" column="1" colspan="3" >
-       <widget class="QLineEdit" name="leDescription" >
         <property name="whatsThis" >
          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Because LandUse Analyst allows more than one type of animal to be defined, the Notes: field allows you to give a brief description of the the animal. For example, you may have two "Sheep" defined, and the Notes: fields could contain "For Slaughter" and "Wool Producers" to distinguish between them.&lt;/p>&lt;/body>&lt;/html></string>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The production targets for animals are in Kg of meat, so to be compatible with animal numbers, you must know the percentage of the animal's live weight that is usable for food. You can also take into account here the efficiency of the butchering technique that the population used. In other words, if you believe they were wasteful, this is where you would make an adjustment to integrate that.&lt;/p>&lt;/body>&lt;/html></string>
         </property>
-       </widget>
-      </item>
-      <item row="0" column="1" colspan="3" >
-       <widget class="QLineEdit" name="leName" >
-        <property name="whatsThis" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Enter the name of the animal you are defining in this field. You do not need a unique name. You can have, for example, 10 animals defined, all named "Sheep". LandUse Analyst uses a special method of saving the animals to eliminate the issue of duplicate filenames.&lt;/p>&lt;/body>&lt;/html></string>
+        <property name="alignment" >
+         <set>Qt::AlignRight</set>
+        </property>
+        <property name="suffix" >
+         <string> cal</string>
+        </property>
+        <property name="prefix" >
+         <string/>
+        </property>
+        <property name="maximum" >
+         <number>20000</number>
+        </property>
+        <property name="value" >
+         <number>3000</number>
         </property>
        </widget>
       </item>
@@ -643,7 +689,7 @@ p, li { white-space: pre-wrap; }
      </property>
      <property name="sizeHint" >
       <size>
-       <width>121</width>
+       <width>148</width>
        <height>16</height>
       </size>
      </property>

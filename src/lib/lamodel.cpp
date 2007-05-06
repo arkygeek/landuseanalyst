@@ -382,7 +382,7 @@ void LaModel::run()
   int myFoodValueFallowLand;
 
   // Manage Animal (Description)
-  int myUsableMeat, myKillWeight, myGrowTime, myDeathRate;
+  int myAnimalFoodValue, myUsableMeat, myKillWeight, myGrowTime, myDeathRate;
   // Reproduction figures
   int mySexualMaturity, myBreedingLife, myYoungPerBirth, myWeaningAge, myGestation, myEstrousCycle;
   // Feed Requirements
@@ -464,13 +464,47 @@ void LaModel::run()
   //  3. Area target                     //
   /////////////////////////////////////////
 
-  // Crop Calorie Target Calculations
+  // 1. Crop Calorie Target Calculations
   float myCropOverallContributionToDiet;
+  float myCalorieTarget;
   float myCropCalorieTarget;
-// we must multiply by 0.01 to turn the following into percentages
-  myCropOverallContributionToDiet=(myDietComposition*0.01)*(myCropPercent*.01);
-  myCropCalorieTarget=myPopulation*myCaloriesPerPersonPerDay*365;
+  // we must multiply by 0.01 to turn the following into percentages
+  myCropOverallContributionToDiet=((100-myDietComposition)*0.01)*(myCropPercent*.01);
+  myCalorieTarget=myPopulation*myCaloriesPerPersonPerDay*365;
+  myCropCalorieTarget=myCalorieTarget*myCropOverallContributionToDiet;
 
+  // 2. Crop Production Target Calculations
+  float myCropProductionTarget;
+  // kg of crop = required calories from this crop DIVIDEDBY calories in one kg (edible part) of the  crop
+  myCropProductionTarget=(myCropCalorieTarget/myCropFoodValue);
+
+  // 3. Crop Area Target Calculations
+  float myCropAreaTarget; // this will be in dunums!!!
+  // the following does not allow for units other than dunums.
+  ///* @TODO allow for units other than just dunums */
+  myCropAreaTarget=myCropProductionTarget/myCropYield;
+
+  /////////////////////////////////
+  // Generic Animal Calculations //
+  /////////////////////////////////////////
+  // We need to calculate three values:  //
+  //  1. Calorie target                  //
+  //  2. Production target               //
+  //  3. Area target                     //
+  /////////////////////////////////////////
+
+  // 1. Animal Calorie Target Calculations
+  float myAnimalOverallContributionToDiet;
+  float myAnimalCalorieTarget;
+  // we must multiply by 0.01 to turn the following into percentages
+  myAnimalOverallContributionToDiet=(myDietComposition*0.01)*(myAnimalPercent*.01);
+  myCropCalorieTarget=myCalorieTarget*myAnimalOverallContributionToDiet;
+
+  // 2. Animal Production Target Calculations
+  float  myAnimalProductionTarget;
+  myAnimalProductionTarget=(myAnimalCalorieTarget/myAnimalFoodValue);
+
+  // 3. Animal Area Target Calculations
 
 
 }

@@ -25,6 +25,7 @@ LaAnimal::LaAnimal() : LaSerialisable(), LaGuid()
   setGuid();
   mName="No Name Set";
   mDescription="Not Set";
+  mMeatFoodValue=3000;
   mUsableMeat=50;
   mKillWeight=100;
   mGrowTime=10;
@@ -49,6 +50,7 @@ LaAnimal::LaAnimal(const LaAnimal& theAnimal)
 {
   mName=theAnimal.name();
   mDescription=theAnimal.description();
+  mMeatFoodValue=theAnimal.meatFoodValue();
   setGuid(theAnimal.guid());
   mUsableMeat=theAnimal.usableMeat();
   mKillWeight=theAnimal.killWeight();
@@ -72,6 +74,7 @@ LaAnimal& LaAnimal::operator=(const LaAnimal& theAnimal)
   mName=theAnimal.name();
   mDescription=theAnimal.description();
   setGuid(theAnimal.guid());
+  mMeatFoodValue=theAnimal.meatFoodValue();
   mUsableMeat=theAnimal.usableMeat();
   mKillWeight=theAnimal.killWeight();
   mGrowTime=theAnimal.growTime();
@@ -95,6 +98,10 @@ QString LaAnimal::name() const
 QString LaAnimal::description() const
 {
   return mDescription;
+}
+int LaAnimal::meatFoodValue() const
+{
+  return mMeatFoodValue;
 }
 int LaAnimal::usableMeat() const
 {
@@ -155,6 +162,10 @@ void LaAnimal::setName(QString theName)
 void LaAnimal::setDescription(QString theDescription)
 {
   mDescription=theDescription;
+}
+void LaAnimal::setMeatFoodValue(int theMeatFoodValue)
+{
+  mMeatFoodValue=theMeatFoodValue;
 }
 void LaAnimal::setUsableMeat(int thePercentage)
 {
@@ -228,6 +239,7 @@ bool LaAnimal::fromXml(QString theXml)
   //qDebug("Animal::fromXml - guid set to : " + guid().toLocal8Bit());
   mName=LaUtils::xmlDecode(myTopElement.firstChildElement("name").text());
   mDescription=LaUtils::xmlDecode(myTopElement.firstChildElement("description").text());
+  mMeatFoodValue=QString(myTopElement.firstChildElement("meatFoodValue").text()).toInt();
   mUsableMeat=QString(myTopElement.firstChildElement("usableMeat").text()).toInt();
   mKillWeight=QString(myTopElement.firstChildElement("killWeight").text()).toInt();
   mGrowTime=QString(myTopElement.firstChildElement("growTime").text()).toInt();
@@ -250,6 +262,7 @@ QString LaAnimal::toXml()
   myString+=QString("<animal guid=\"" + guid() + "\">\n");
   myString+=QString("  <name>" + LaUtils::xmlEncode(mName) + "</name>\n");
   myString+=QString("  <description>" + LaUtils::xmlEncode(mDescription) + "</description>\n");
+  myString+=QString("  <meatFoodValue>" + QString::number(mMeatFoodValue) + "</meatFoodValue>\n");
   myString+=QString("  <usableMeat>" + QString::number(mUsableMeat) + "</usableMeat>\n");
   myString+=QString("  <killWeight>" + QString::number(mKillWeight) + "</killWeight>\n");
   myString+=QString("  <growTime>" + QString::number(mGrowTime) + "</growTime>\n");
@@ -273,6 +286,7 @@ QString LaAnimal::toText()
   myString+=QString("guid=>" + guid() + "\n");
   myString+=QString("name=>" + LaUtils::xmlEncode(mName) + "\n");
   myString+=QString("description=>" + LaUtils::xmlEncode(mDescription) + "\n");
+  myString+=QString("meatFoodValue=>" + QString::number(mMeatFoodValue) + "\n");
   myString+=QString("usableMeat=>" + QString::number(mUsableMeat) + "\n");
   myString+=QString("killWeight=>" + QString::number(mKillWeight) + "\n");
   myString+=QString("growTime=>" + QString::number(mGrowTime) + "\n");
@@ -295,6 +309,7 @@ QString LaAnimal::toHtml()
   myString+="<p align=\"center\"><h1>Details for " + LaUtils::xmlEncode(mName) + "</h1></p>";
   myString+="<p>GUID:" + guid() + "</p>";
   myString+="<p>Description:" + mDescription + "</p>";
+  myString+="<p>Food Value of Meat: " + QString::number(mMeatFoodValue) + "</p>";
   myString+="<p>Percentage Usable Meat: " + QString::number(mUsableMeat) + "</p>";
   myString+="<p>Kill Weight: " + QString::number(mKillWeight) + "</p>";
   myString+="<p>Grow Time: " + QString::number(mGrowTime) + "</p>";
