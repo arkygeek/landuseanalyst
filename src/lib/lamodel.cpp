@@ -343,13 +343,16 @@ QString LaModel::toHtml()
   while (myAnimalIterator.hasNext())
   {
     myAnimalIterator.next();
-    QString myAnimalGuid = myAnimalIterator.value();
-    QString myAnimalParameterGuid = myAnimalIterator.key();
-    QString myText = "Animal " + myAnimalGuid.toLocal8Bit() + 
-      " , ";
-    myText +=  myAnimalParameterGuid.toLocal8Bit() ;
-    myText += " ";
-    myString += myText + "<br />";
+    QString myAnimalGuid = myAnimalIterator.key();
+    QString myAnimalParameterGuid = myAnimalIterator.value();
+    //QString myText = "Animal " + myAnimalGuid.toLocal8Bit() + 
+    //  " , ";
+    //myText +=  myAnimalParameterGuid.toLocal8Bit() ;
+    //myText += " ";
+    //myString += myText + "<br />";
+    LaAnimal myAnimal = LaUtils::getAnimal(myAnimalGuid);
+    myString += myAnimal.toHtml();
+    myString += "<br />";
   }
   
   //iterate through crops
@@ -357,13 +360,16 @@ QString LaModel::toHtml()
   while (myCropIterator.hasNext())
   {
     myCropIterator.next();
-    QString myCropGuid = myCropIterator.value();
-    QString myCropParameterGuid = myCropIterator.key();
-    QString myText = "Crop " + myCropGuid.toLocal8Bit() + 
-      " , ";
-    myText +=  myCropParameterGuid.toLocal8Bit() ;
-    myText += " ";
-    myString += myText + "<br />";
+    QString myCropGuid = myCropIterator.key();
+    QString myCropParameterGuid = myCropIterator.value();
+    //QString myText = "Crop " + myCropGuid.toLocal8Bit() + 
+    //  " , ";
+    //myText += myCropParameterGuid.toLocal8Bit() ;
+    //myText += " ";
+    //myString += myText + "<br />";
+    LaCrop myCrop = LaUtils::getCrop(myCropGuid);
+    myString += myCrop.toHtml();
+    myString += "<br />";
   }
   return myString;
 }
