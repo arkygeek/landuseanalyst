@@ -46,18 +46,6 @@ LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
   //required by Qt4 to initialise the ui
   setupUi(this);
   readSettings();
-  /** See the qtdocs on signals and slots to understand below.
-   * we connect the currentItemChanged signal that a tree view emits when you
-   * click on an item to a little method that sets the help viewer contents
-   * appropriately. TS
-   */
-  connect(treeHelp, SIGNAL(currentItemChanged(QTreeWidgetItem * ,QTreeWidgetItem *)),
-      this, SLOT(helpItemClicked(QTreeWidgetItem * ,QTreeWidgetItem *)));
-  connect(pushButtonExit, SIGNAL(clicked()), qApp, SLOT(quit()));
-  connect(tblAnimals, SIGNAL(cellClicked( int,int)),
-      this, SLOT(animalCellClicked( int,int)));
-  connect(tblCrops, SIGNAL(cellClicked( int,int)),
-      this, SLOT(cropCellClicked( int,int)));
 
   lblVersion->setText(QString("Version: %1").arg(VERSION) + " " + QString("$Revision$").replace("$",""));
   tblAnimals->horizontalHeader()->hide();
@@ -69,6 +57,24 @@ LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
   loadAnimals();
   loadCrops();
   setDietLabels();
+  /** See the qtdocs on signals and slots to understand below.
+   * we connect the currentItemChanged signal that a tree view emits when you
+   * click on an item to a little method that sets the help viewer contents
+   * appropriately. TS
+   *
+   * Make sure this is the last stuff we do in the ctor! TS
+   */
+  connect(treeHelp, SIGNAL(currentItemChanged(QTreeWidgetItem * ,QTreeWidgetItem *)),
+      this, SLOT(helpItemClicked(QTreeWidgetItem * ,QTreeWidgetItem *)));
+  connect(pushButtonExit, SIGNAL(clicked()), qApp, SLOT(quit()));
+  connect(tblAnimals, SIGNAL(cellClicked( int,int)),
+      this, SLOT(animalCellClicked( int,int)));
+  connect(tblAnimals, SIGNAL(cellChanged( int,int)),
+      this, SLOT(animalCellChanged( int,int)));
+  connect(tblCrops, SIGNAL(cellClicked( int,int)),
+      this, SLOT(cropCellClicked( int,int)));
+  connect(tblCrops, SIGNAL(cellChanged( int,int)),
+      this, SLOT(cropCellChanged( int,int)));
 }
 
 LaMainForm::~LaMainForm()
@@ -248,6 +254,7 @@ void LaMainForm::loadAnimals()
       mypCombo->addItem(myIcon,myParameterName,myParameterGuid);
     }
     setComboToDefault(mypCombo, myValue.second);
+    mAnimalsMap[myGuid]=myValue;
     tblAnimals->setCellWidget ( myCurrentRow, 2, mypCombo);
     myCurrentRow++;
   }
@@ -366,6 +373,7 @@ void LaMainForm::loadCrops()
       mypCombo->addItem(myIcon,myParameterName,myParameterGuid);
     }
     setComboToDefault(mypCombo, myValue.second);
+    mCropsMap[myGuid]=myValue;
     tblCrops->setCellWidget ( myCurrentRow, 2, mypCombo);
     myCurrentRow++;
   }
@@ -434,6 +442,19 @@ void LaMainForm::animalCellClicked(int theRow, int theColumn)
   textBrowserAnimalParameterDefinition->setHtml(myAnimalParameter.toHtml());
 }
 
+void LaMainForm::animalCellChanged(int theRow, int theColumn)
+{
+  QString myGuid = tblAnimals->item(tblAnimals->currentRow(),1)->data(Qt::UserRole).toString();
+  bool myStateFlag = tblAnimals->item(tblAnimals->currentRow(),0)->checkState();
+  QPair<bool,QString> myPair = mAnimalsMap[myGuid];
+  myPair.first = myStateFlag;
+  QComboBox * mypCombo=dynamic_cast<QComboBox *>(tblAnimals->cellWidget(tblAnimals->currentRow(),2));
+  myPair.second = mypCombo->itemData(mypCombo->currentIndex(),Qt::UserRole).toString();
+  mAnimalsMap[myGuid] = myPair;
+  //debug only - comment out later
+  printCropsAndAnimals();
+}
+
 void LaMainForm::cropCellClicked(int theRow, int theColumn)
 {
   qDebug("LaMainForm::cropCellClicked");
@@ -449,6 +470,19 @@ void LaMainForm::cropCellClicked(int theRow, int theColumn)
   myCropParametersMap = LaUtils::getAvailableCropParameters();
   LaCropParameter myCropParameter = myCropParametersMap[myGuid];
   textBrowserCropParameterDefinition->setHtml(myCropParameter.toHtml());
+}
+
+void LaMainForm::cropCellChanged(int theRow, int theColumn)
+{
+  QString myGuid = tblCrops->item(tblCrops->currentRow(),1)->data(Qt::UserRole).toString();
+  bool myStateFlag = tblCrops->item(tblCrops->currentRow(),0)->checkState();
+  QPair<bool,QString> myPair = mCropsMap[myGuid];
+  myPair.first = myStateFlag;
+  QComboBox * mypCombo=dynamic_cast<QComboBox *>(tblCrops->cellWidget(tblCrops->currentRow(),2));
+  myPair.second = mypCombo->itemData(mypCombo->currentIndex(),Qt::UserRole).toString();
+  mCropsMap[myGuid] = myPair;
+  //debug only - comment out later
+  printCropsAndAnimals();
 }
 
 void LaMainForm::on_pushButtonRun_clicked()
@@ -468,9 +502,8 @@ void LaMainForm::on_pushButtonRun_clicked()
     QPair<bool,QString> myPair = myAnimalIterator.value();
     QString myAnimalGuid = myAnimalIterator.key();
     QString myAnimalParameterGuid = myPair.second;
-    //I'll turn this on when I have set up events for check box tick on and off
-    //bool mySelectedFlag = myPair.first;
-    //if (mySelectedFlag)
+    bool mySelectedFlag = myPair.first;
+    if (mySelectedFlag)
     {
       mySelectedAnimalsMap.insert(myAnimalGuid,myAnimalParameterGuid);
       qDebug("Added <" + myAnimalGuid.toLocal8Bit() + " , " + myAnimalParameterGuid.toLocal8Bit() + " >");
@@ -491,9 +524,8 @@ void LaMainForm::on_pushButtonRun_clicked()
     QPair<bool,QString> myPair = myCropIterator.value();
     QString myCropGuid = myCropIterator.key();
     QString myCropParameterGuid = myPair.second;
-    //I'll turn this on when I have set up events for check box tick on and off
-    //bool mySelectedFlag = myPair.first;
-    //if (mySelectedFlag)
+    bool mySelectedFlag = myPair.first;
+    if (mySelectedFlag)
     {
       mySelectedCropsMap.insert(myCropGuid,myCropParameterGuid);
       qDebug("Added <" + myCropGuid.toLocal8Bit() + " , " + myCropParameterGuid.toLocal8Bit() + " >");
@@ -670,7 +702,45 @@ void LaMainForm::helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetI
     textHelp->setHtml(myStream.readAll());
     myQFile.close();
   }
-  else {
+  else 
+  {
     writeResultsLeft("Help resource for : " + thepCurrentItem->text(0).toLocal8Bit() + " not found!");
+  }
+}
+
+
+void LaMainForm::printCropsAndAnimals()
+{
+  textBrowserResultsLeft->clear();
+  textBrowserResultsRight->clear();
+  QMapIterator<QString, QPair<bool, QString> > myAnimalIterator(mAnimalsMap);
+  while (myAnimalIterator.hasNext())
+  {
+    myAnimalIterator.next();
+    QPair<bool,QString> myPair = myAnimalIterator.value();
+    QString myAnimalGuid = myAnimalIterator.key();
+    bool mySelectedFlag = myPair.first;
+    QString myAnimalParameterGuid = myPair.second;
+    QString myText = "Animal <" + myAnimalGuid.toLocal8Bit() + 
+      " , <";
+    mySelectedFlag ? myText += "true," : myText += "false,";
+    myText +=  myAnimalParameterGuid.toLocal8Bit() ;
+    myText += "> >";
+    textBrowserResultsLeft->append(myText);
+  }
+  QMapIterator<QString, QPair<bool, QString> > myCropIterator(mCropsMap);
+  while (myCropIterator.hasNext())
+  {
+    myCropIterator.next();
+    QPair<bool,QString> myPair = myCropIterator.value();
+    QString myCropGuid = myCropIterator.key();
+    bool mySelectedFlag = myPair.first;
+    QString myCropParameterGuid = myPair.second;
+    QString myText = "Crop <" + myCropGuid.toLocal8Bit() + 
+      " , <";
+    mySelectedFlag ? myText += "true," : myText += "false,";
+    myText +=  myCropParameterGuid.toLocal8Bit() ;
+    myText += "> >";
+    textBrowserResultsRight->append(myText);
   }
 }
