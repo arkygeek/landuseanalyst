@@ -98,11 +98,23 @@ class LaUtils
      **/
     static LaUtils::CropMap getAvailableCrops();
 
+    /** Get a LaCrop given its GUID.
+     * If no matching crop is found, a blank one is
+     * returned.
+     */
+    static LaCrop LaUtils::getCrop(QString theGuid);
+    
     /** This typedef is used to refer to a collection of layersets.
      * the key is the layerset name
      * the value is the layerset itself
      */
     typedef QMap<QString,LaAnimal> AnimalMap;
+    
+    /** Get a LaAnimal given its GUID.
+     * If no matching animal is found, a blank one is
+     * returned.
+     */
+    static LaAnimal LaUtils::getAnimal(QString theGuid);
 
    /**
      * Find the place on the filesystem where user defined cropParameter

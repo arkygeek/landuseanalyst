@@ -90,6 +90,41 @@ LaUtils::AnimalMap LaUtils::getAvailableAnimals()
   }
   return myMap;
 }
+LaAnimal LaUtils::getAnimal(QString theGuid)
+{
+  QDir myDirectory(userAnimalProfilesDirPath());
+  myDirectory.setFilter(QDir::Dirs | QDir::Files | QDir::NoSymLinks );
+  QFileInfoList myList = myDirectory.entryInfoList();
+  for (unsigned int i = 0; i < static_cast<unsigned int>(myList.size()); ++i)
+  {
+    QFileInfo myFileInfo = myList.at(i);
+    //Ignore directories
+    if(myFileInfo.fileName() == "." ||myFileInfo.fileName() == ".." )
+    {
+      continue;
+    }
+    //if the filename ends in .xml try to load it into our layerSets listing
+    if(myFileInfo.completeSuffix()=="xml")
+    {
+      //qDebug("Loading animal: " + myList.at(i).absoluteFilePath().toLocal8Bit());
+      LaAnimal myAnimal;
+      myAnimal.fromXmlFile(myFileInfo.absoluteFilePath());
+      if (myAnimal.name().isEmpty())
+      {
+        qDebug("Animal name was empty!");
+        continue;
+      }
+      //qDebug("Adding " + myAnimal.name());
+      //qDebug(myAnimal.toText().toLocal8Bit());
+      if (myAnimal.guid()==theGuid)
+      {
+        return myAnimal;
+      }
+    }
+  }
+  LaAnimal myAnimal; //blank animal
+  return myAnimal;
+}
 
 LaUtils::CropMap LaUtils::getAvailableCrops()
 {
@@ -122,6 +157,42 @@ LaUtils::CropMap LaUtils::getAvailableCrops()
     }
   }
   return myMap;
+}
+
+LaCrop LaUtils::getCrop(QString theGuid)
+{
+  QDir myDirectory(userCropProfilesDirPath());
+  myDirectory.setFilter(QDir::Dirs | QDir::Files | QDir::NoSymLinks );
+  QFileInfoList myList = myDirectory.entryInfoList();
+  for (unsigned int i = 0; i < static_cast<unsigned int>(myList.size()); ++i)
+  {
+    QFileInfo myFileInfo = myList.at(i);
+    //Ignore directories
+    if(myFileInfo.fileName() == "." ||myFileInfo.fileName() == ".." )
+    {
+      continue;
+    }
+    //if the filename ends in .xml try to load it into our layerSets listing
+    if(myFileInfo.completeSuffix()=="xml")
+    {
+      //qDebug("Loading crop: " + myList.at(i).absoluteFilePath().toLocal8Bit());
+      LaCrop myCrop;
+      myCrop.fromXmlFile(myFileInfo.absoluteFilePath());
+      if (myCrop.name().isEmpty())
+      {
+        qDebug("Crop name was empty!");
+        continue;
+      }
+      //qDebug("Adding " + myCrop.name());
+      //qDebug(myCrop.toText().toLocal8Bit());
+      if (myCrop.guid()==theGuid)
+      {
+        return myCrop;
+      }
+    }
+  }
+  LaCrop myCrop; //blank crop
+  return myCrop;
 }
 
 const QString LaUtils::userAnimalParameterProfilesDirPath()
