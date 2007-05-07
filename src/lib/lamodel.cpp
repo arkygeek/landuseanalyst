@@ -391,7 +391,7 @@ void LaModel::run()
     QString myAnimalGuid = myAnimalIterator.key();
     QString myAnimalParameterGuid = myAnimalIterator.value();
     LaAnimal myAnimal = LaUtils::getAnimal(myAnimalGuid);
-    LaAnimalParameter myParameter = LaUtils::getAnimalParameter(myAnimalParameterGuid);
+    LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(myAnimalParameterGuid);
 
   ///////////////////
   // Assign values //
@@ -407,7 +407,7 @@ void LaModel::run()
   // Manage Animal Parameters
   int myPortionOfDietTameAnimals;
   // land suitability
-  bool myAnimalCommonLand, myAnimalSpecificLand, myFodderGrazed;
+  bool myAnimalCommonLand, myAnimalSpecificLand, myFodderUsed;
   int myKcalPerYearSpecificLand, myKcalPerYearCommonLand;
   // fodder
   int myCrop1FodderPercentAnimalsDiet, myCrop1GrainPercentAnimalsDiet;
@@ -415,43 +415,45 @@ void LaModel::run()
   int myCrop3FodderPercentAnimalsDiet, myCrop3GrainPercentAnimalsDiet;
   int myFallowPriority;
 
+  // mainform data
     myPopulation=myModel.population();
     myDietComposition=myModel.dietPercent();
     myAnimalPercent=myModel.meatPercent();
     myCaloriesPerPersonPerDay=myModel.caloriesPerPersonDaily();
-
   // Manage Animal (Description)
-  myUsableMeat=50;
-  myKillWeight=100;
-  myGrowTime=10;
-  myDeathRate=10;
+    myAnimalFoodValue=myAnimal.meatFoodValue();
+    myUsableMeat=myAnimal.usableMeat();
+    myKillWeight=myAnimal.killWeight();
+    myGrowTime=myAnimal.growTime();
+    myDeathRate=myAnimal.deathRate();
   // Reproduction figures
-  mySexualMaturity=18;
-  myBreedingLife=6;
-  myYoungPerBirth=8;
-  myWeaningAge=12;
-  myGestation=120;
-  myEstrousCycle=21;
+    mySexualMaturity=myAnimal.sexualMaturity();
+    myBreedingLife=myAnimal.breedingExpectancy();
+    myYoungPerBirth=myAnimal.youngPerBirth();
+    myWeaningAge=myAnimal.weaningAge();
+    myGestation=myAnimal.gestationTime();
+    myEstrousCycle=myAnimal.estrousCycle();
   // Feed Requirements
-  myCaloriesPerDayGestating=5000;
-  myCaloriesPerDayLactating=5000;
-  myCaloriesPerDayJuvenile=3500;
+    myCaloriesPerDayGestating=myAnimal.gestating();
+    myCaloriesPerDayLactating=myAnimal.lactating();
+    myCaloriesPerDayJuvenile=myAnimal.juvenile();
   // Manage Animal Parameters
-  myPortionOfDietTameAnimals=100;
+    myPortionOfDietTameAnimals=myAnimalParameter.percentTameMeat();
   // land suitability
-  myAnimalCommonLand=1;
-  myAnimalSpecificLand=1;
-  myFodderGrazed=1;
-  myKcalPerYearSpecificLand=1500;
-  myKcalPerYearCommonLand=1500;
+    myAnimalCommonLand=myAnimalParameter.useCommonGrazingLand();
+    myAnimalSpecificLand=myAnimalParameter.useSpecificGrazingLand();
+    myFodderUsed=myAnimalParameter.fodderUse();
+    myKcalPerYearSpecificLand=myAnimalParameter.foodValueOfSpecificGrazingLand();
+    myKcalPerYearCommonLand=myAnimalParameter.foodValueOfCommonGrazingLand();
   // fodder
-  myCrop1FodderPercentAnimalsDiet=0;
-  myCrop1GrainPercentAnimalsDiet=0;
-  myCrop2FodderPercentAnimalsDiet=0;
-  myCrop2GrainPercentAnimalsDiet=0;
-  myCrop3FodderPercentAnimalsDiet=0;
-  myCrop3GrainPercentAnimalsDiet=0;
-  myFallowPriority=1;
+    myCrop1FodderPercentAnimalsDiet=myAnimalParameter.fodderSource1();
+    myCrop1GrainPercentAnimalsDiet=myAnimalParameter.fodderSource1Grain();
+    myCrop2FodderPercentAnimalsDiet=myAnimalParameter.fodderSource2();
+    myCrop2GrainPercentAnimalsDiet=myAnimalParameter.fodderSource2Grain();
+    myCrop3FodderPercentAnimalsDiet=myAnimalParameter.fodderSource3();
+    myCrop3GrainPercentAnimalsDiet=myAnimalParameter.fodderSource3Grain();
+    myFallowPriority=myAnimalParameter.fallowUsage();
+
 /////////////////////////////////
   // Generic Animal Calculations //
   /////////////////////////////////////////

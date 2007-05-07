@@ -67,12 +67,12 @@ class LaAnimalParameter : public LaSerialisable, public LaGuid
       */
     int areaUnits() const;
     bool fodderUse() const;
-    int fodderWheat() const;
-    int fodderWheatGrain() const;
-    int fodderBarley() const;
-    int fodderBarleyGrain() const;
-    int fodderLentils() const;
-    int fodderLentilsGrain() const;
+    int fodderSource1() const;
+    int fodderSource1Grain() const;
+    int fodderSource2() const;
+    int fodderSource2Grain() const;
+    int fodderSource3() const;
+    int fodderSource3Grain() const;
     int fallowUsage() const;
 
 
@@ -102,12 +102,12 @@ class LaAnimalParameter : public LaSerialisable, public LaGuid
       */
     void setFoodValueOfCommonGrazingLand(int theCalories);
     void setFodderUse(bool theBool);
-    void setFodderWheat(int theValue);
-    void setFodderWheatGrain(int theValue);
-    void setFodderBarley(int theValue);
-    void setFodderBarleyGrain(int theValue);
-    void setFodderLentils(int theValue);
-    void setFodderLentilsGrain(int theValue);
+    void setFodderSource1(int theValue);
+    void setFodderSource1Grain(int theValue);
+    void setFodderSource2(int theValue);
+    void setFodderSource2Grain(int theValue);
+    void setFodderSource3(int theValue);
+    void setFodderSource3Grain(int theValue);
 
     /** If fallow is to be grazed, and if so, at either a
       * HIGH MED or LOW priority to it's access
@@ -150,12 +150,12 @@ class LaAnimalParameter : public LaSerialisable, public LaGuid
       */
     int mFoodValueOfCommonGrazingLand;
     bool mFodderUse;
-    int mFodderWheat;
-    int mFodderWheatGrain;
-    int mFodderBarley;
-    int mFodderBarleyGrain;
-    int mFodderLentils;
-    int mFodderLentilsGrain;
+    int mFodderSource1;
+    int mFodderSource1Grain;
+    int mFodderSource2;
+    int mFodderSource2Grain;
+    int mFodderSource3;
+    int mFodderSource3Grain;
     /** If fallow is to be grazed, and if so, at either a
       * HIGH MED or LOW priority to it's access
       */

@@ -201,12 +201,12 @@ void LaAnimalParameterManager::showAnimalParameter()
   sbCommonRasterCalories->setValue(mAnimalParameter.foodValueOfCommonGrazingLand());
   comboBoxAreaUnits->setCurrentIndex(mAnimalParameter.areaUnits());
   grpFodderUse->setChecked(mAnimalParameter.fodderUse());
-  sbFodderWheat->setValue(mAnimalParameter.fodderWheat());
-  sbFodderWheatGrain->setValue(mAnimalParameter.fodderWheatGrain());
-  sbFodderBarley->setValue(mAnimalParameter.fodderBarley());
-  sbFodderBarleyGrain->setValue(mAnimalParameter.fodderBarleyGrain());
-  sbFodderLentils->setValue(mAnimalParameter.fodderLentils());
-  sbFodderLentilsGrain->setValue(mAnimalParameter.fodderLentilsGrain());
+  sbFodderSource1->setValue(mAnimalParameter.fodderSource1());
+  sbFodderSource1Grain->setValue(mAnimalParameter.fodderSource1Grain());
+  sbFodderSource2->setValue(mAnimalParameter.fodderSource2());
+  sbFodderSource2Grain->setValue(mAnimalParameter.fodderSource2Grain());
+  sbFodderSource3->setValue(mAnimalParameter.fodderSource3());
+  sbFodderSource3Grain->setValue(mAnimalParameter.fodderSource3Grain());
 
   comboBoxFallowUsage->setCurrentIndex(mAnimalParameter.fallowUsage());
 }
@@ -287,12 +287,12 @@ void LaAnimalParameterManager::on_pbnApply_clicked()
   mAnimalParameter.setFoodValueOfCommonGrazingLand(sbCommonRasterCalories->value());
   mAnimalParameter.setFoodValueOfSpecificGrazingLand(sbSpecificRasterCalories->value());
   mAnimalParameter.setFodderUse(grpFodderUse->isChecked());
-  mAnimalParameter.setFodderWheat(sbFodderWheat->value());
-  mAnimalParameter.setFodderWheatGrain(sbFodderWheatGrain->value());
-  mAnimalParameter.setFodderBarley(sbFodderBarley->value());
-  mAnimalParameter.setFodderBarleyGrain(sbFodderBarleyGrain->value());
-  mAnimalParameter.setFodderLentils(sbFodderLentils->value());
-  mAnimalParameter.setFodderLentilsGrain(sbFodderLentilsGrain->value());
+  mAnimalParameter.setFodderSource1(sbFodderSource1->value());
+  mAnimalParameter.setFodderSource1Grain(sbFodderSource1Grain->value());
+  mAnimalParameter.setFodderSource2(sbFodderSource2->value());
+  mAnimalParameter.setFodderSource2Grain(sbFodderSource2Grain->value());
+  mAnimalParameter.setFodderSource3(sbFodderSource3->value());
+  mAnimalParameter.setFodderSource3Grain(sbFodderSource3Grain->value());
 
   mAnimalParameter.setAreaUnits(comboBoxAreaUnits->currentIndex());
   mAnimalParameter.setFallowUsage(comboBoxFallowUsage->currentIndex());
