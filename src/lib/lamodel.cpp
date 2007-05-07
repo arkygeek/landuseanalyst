@@ -470,6 +470,7 @@ void LaModel::run()
   // we must multiply by 0.01 to turn the following into percentages
   myAnimalOverallContributionToDiet=(myDietComposition*0.01)*(myAnimalPercent*.01);
   myAnimalCalorieTarget=myCalorieTarget*myAnimalOverallContributionToDiet;
+  qDebug("My Animal Calorie Target: " + QString::number(myAnimalCalorieTarget).toLocal8Bit());
 
   // 2. Animal Production Target Calculations (kg usable meat)
   float  myAnimalProductionTarget;
@@ -477,7 +478,7 @@ void LaModel::run()
 
   float myAnimalsRequired;
   myAnimalsRequired=myAnimalProductionTarget/(myUsableMeat*.01);
-
+  qDebug("My Animal Production Target: " + QString::number(myAnimalProductionTarget).toLocal8Bit());
   // 3. Animal Area Target Calculations
   //
   // In order to do this, we must determine the size of the herd required to produce
@@ -520,8 +521,6 @@ void LaModel::run()
     LaCrop myCrop = LaUtils::getCrop(myCropGuid);
     LaCropParameter myCropParameter = LaUtils::getCropParameter(myCropParameterGuid);
 
-
-
   // mainform data
 
   int myPopulation, myDietComposition, myCropPercent, myCaloriesPerPersonPerDay;
@@ -562,7 +561,6 @@ void LaModel::run()
     myFoodValueFallowLand=myCropParameter.fallowCalories();
     myCropRotationAreaUnits=myCropParameter.areaUnits();
 
-
   ///////////////////////////////
   // Generic Crop Calculations //
   /////////////////////////////////////////////////////////
@@ -591,20 +589,7 @@ void LaModel::run()
   // the following does not allow for units other than dunums.
   // @TODO allow for units other than just dunums
   myCropAreaTarget=myCropProductionTarget/myCropYield;
-
-
-////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
   }
-
-
 }
 
 /*
