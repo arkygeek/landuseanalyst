@@ -191,6 +191,8 @@ class LaModel : public LaSerialisable, public LaGuid
      * it MUST implement this
      */
     bool fromXml(const QString theXml);
+
+
   private:
     /** The name for this model */
     QString mName;
