@@ -617,7 +617,7 @@ void LaModel::run()
 
 }
 
-float LaModel::caloriesFromCrops()
+float LaModel::caloriesFromPlants()
 {
   LaModel myModel;
   float myPopulation=myModel.population();
@@ -630,7 +630,7 @@ float LaModel::caloriesFromCrops()
   return myCropCalorieTarget;
 }
 
-float LaModel::caloriesFromAnimals()
+float LaModel::caloriesFromMeat()
 {
   LaModel myModel;
   float myPopulation=myModel.population();
@@ -657,7 +657,7 @@ int LaModel::countCrops()
     LaCropParameter myCropParameter = LaUtils::getCropParameter(myCropParameterGuid);
     a++;
   }
-    return a;
+  return a;
 }
 
 int LaModel::countAnimals()
@@ -674,20 +674,38 @@ int LaModel::countAnimals()
     LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(myAnimalParameterGuid);
     a++;
   }
-    return a;
-}
-
-float LaModel::getCalorieTargetCrops()
-{
-  LaModel myModel;
-  int a;
   return a;
 }
-float LaModel::getCalorieTargetAnimals()
+
+float LaModel::getCalorieTargetCrops(QString theCropGuid, QString theCropParameterGuid)
 {
   LaModel myModel;
-  int a;
-  return a;}
+  LaCrop myCrop = LaUtils::getCrop(theCropGuid);
+  LaCropParameter myCropParameter = LaUtils::getCropParameter(theCropParameterGuid);
+  float myDietComposition=0.01*myModel.dietPercent();
+  float myPlantPercent=myModel.plantPercent();
+  float myPopulation=myModel.population();
+  float myCaloriesPerPersonPerDay=myModel.caloriesPerPersonDaily();
+
+
+  float myCropOverallContributionToDiet=(1-myDietComposition)*myPlantPercent;
+  float myCalorieTarget=myPopulation*myCaloriesPerPersonPerDay*365;
+  float myCropCalorieTarget;
+  myCropCalorieTarget=myCalorieTarget*myCropOverallContributionToDiet;
+
+  int a=0;
+  return a;
+}
+float LaModel::getCalorieTargetAnimals(QString theAnimalGuid, QString theAnimalParameterGuid)
+{
+  LaModel myModel;
+  LaAnimal myAnimal = LaUtils::getAnimal(theAnimalGuid);
+  LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(theAnimalParameterGuid);
+  float myMeatCalories=myModel.caloriesFromMeat();
+  float myAnimalPercent=myAnimalParameter.percentTameMeat();
+  float myCalorieTarget=myMeatCalories*(myAnimalPercent*.01);;
+  return myCalorieTarget;
+}
 float LaModel::getProductionTargetsCrops()
 {
   LaModel myModel;

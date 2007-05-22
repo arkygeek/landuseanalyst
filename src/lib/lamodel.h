@@ -78,12 +78,12 @@ class LaModel : public LaSerialisable, public LaGuid
     /** The number of days in the female estrous cycle */
     int spare() const;
 
-    float caloriesFromCrops();
-    float caloriesFromAnimals();
+    float caloriesFromPlants();
+    float caloriesFromMeat();
     int countCrops();
     int countAnimals();
-    float getCalorieTargetCrops();
-    float getCalorieTargetAnimals();
+    float getCalorieTargetCrops(QString theCropGuid, QString theCropParameterGuid);
+    float getCalorieTargetAnimals(QString theAnimalGuid, QString theAnimalParameterGuid);
     float getProductionTargetsCrops();
     float getProductionTargetsAnimals();
     float getAreaTargetsCrops();
