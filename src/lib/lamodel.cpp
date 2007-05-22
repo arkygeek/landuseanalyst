@@ -132,7 +132,7 @@ int LaModel::dietPercent() const
 }
 int LaModel::plantPercent() const
 {
-  if (mPlantPercent < 0) 
+  if (mPlantPercent < 0)
   {
     return 0;
   }
@@ -632,22 +632,18 @@ float LaModel::caloriesFromPlants()
 {
   float myDietComposition=0.01*(100-mDietPercent);
   float myCropPercent=0.01*(plantPercent());
-  float myCaloriesPerPersonPerDay=myModel.caloriesPerPersonDaily();
   float myCropOverallContributionToDiet=((100-myDietComposition))*myCropPercent;
-  float myCalorieTarget=myPopulation*myCaloriesPerPersonPerDay*365;
+  float myCalorieTarget=population()*caloriesPerPersonDaily()*365;
   float myCropCalorieTarget=myCalorieTarget*myCropOverallContributionToDiet;
   return myCropCalorieTarget;
 }
 
 float LaModel::caloriesFromTameMeat()
 {
-  LaModel myModel;
-  float myPopulation=myModel.population();
-  float myDietComposition=0.01*(myModel.dietPercent());
-  float myMeatPercent=0.01*(myModel.meatPercent());
-  float myCaloriesPerPersonPerDay=myModel.caloriesPerPersonDaily();
+  float myDietComposition=0.01*dietPercent();
+  float myMeatPercent=0.01*meatPercent();
   float myAnimalOverallContributionToDiet=myDietComposition*myMeatPercent;
-  float myCalorieTarget=myPopulation*myCaloriesPerPersonPerDay*365;
+  float myCalorieTarget=population()*mCaloriesPerPersonDaily*365;
   float myTameMeatCalorieTarget=myCalorieTarget*myAnimalOverallContributionToDiet;
   return myTameMeatCalorieTarget;
 }
