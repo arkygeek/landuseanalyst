@@ -384,6 +384,23 @@ void LaModel::run()
 {
   LaModel myModel;
 
+  /* Basic Steps are:
+
+      breakdownDiet
+      countCrops
+      countAnimals
+      getCalorieTargetCrops
+      getCalorieTargetAnimals
+      getProductionTargetsCrops
+      getProductionTargetsAnimals
+      getAreaTargetsCrops
+      allocateFallowGrazingLand
+      getAreaTargetsAnimals
+      adjustAreaTargetsCrops
+
+  */
+
+
   //iterate through crops
   QMapIterator<QString, QString > myCropIterator(mCropsMap);
   while (myCropIterator.hasNext())
@@ -600,10 +617,66 @@ void LaModel::run()
 
 }
 
-/*
-int cropCalcs(LaCrop theCrop)
+float LaModel::breakdownDiet()
 {
-  // implement me
+  LaModel myModel;
+  float myPopulation=myModel.population();
+  float myDietComposition=0.01*(100-myModel.dietPercent());
+  float myCropPercent=0.01*(myModel.plantPercent());
+  float myCaloriesPerPersonPerDay=myModel.caloriesPerPersonDaily();
+  float myCropOverallContributionToDiet=((100-myDietComposition))*myCropPercent;
+  float myCalorieTarget=myPopulation*myCaloriesPerPersonPerDay*365;
+  float myCropCalorieTarget=myCalorieTarget*myCropOverallContributionToDiet;
+  return myCropCalorieTarget;
 }
-*/
 
+int LaModel::countCrops()
+{
+  LaModel myModel;
+  int a;
+  return a;
+}
+float LaModel::getCalorieTargetCrops()
+{
+  LaModel myModel;
+  int a;
+  return a;
+}
+float LaModel::getCalorieTargetAnimals()
+{
+  LaModel myModel;
+  int a;
+  return a;}
+float LaModel::getProductionTargetsCrops()
+{
+  LaModel myModel;
+  int a;
+  return a;}
+float LaModel::getProductionTargetsAnimals()
+{
+  LaModel myModel;
+  int a;
+  return a;}
+float LaModel::getAreaTargetsCrops()
+{
+  LaModel myModel;
+  int a;
+  return a;}
+float LaModel::allocateFallowGrazingLand()
+{
+  LaModel myModel;
+  int a;
+  return a;
+}
+float LaModel::getAreaTargetsAnimals()
+{
+  LaModel myModel;
+  int a;
+  return a;
+}
+float LaModel::adjustAreaTargetsCrops()
+{
+  LaModel myModel;
+  int a;
+  return a;
+}

@@ -78,6 +78,18 @@ class LaModel : public LaSerialisable, public LaGuid
     /** The number of days in the female estrous cycle */
     int spare() const;
 
+    float breakdownDiet();
+    int countCrops();
+    int countAnimals();
+    float getCalorieTargetCrops();
+    float getCalorieTargetAnimals();
+    float getProductionTargetsCrops();
+    float getProductionTargetsAnimals();
+    float getAreaTargetsCrops();
+    float allocateFallowGrazingLand();
+    float getAreaTargetsAnimals();
+    float adjustAreaTargetsCrops();
+
     //
     // Mutators
     //

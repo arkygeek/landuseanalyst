@@ -488,7 +488,7 @@ void LaMainForm::cropCellChanged(int theRow, int theColumn)
 void LaMainForm::on_pushButtonRun_clicked()
 {
   LaModel myModel;
-  
+
   //
   // Get a list of the selected animals
   //
@@ -540,7 +540,7 @@ void LaMainForm::on_pushButtonRun_clicked()
   myModel.setName(lineEditSiteName->text());
   myModel.setPopulation(spinBoxPopulation->value());
   myModel.setPeriod(lineEditPeriod->text());
-  myModel.setProjection(comboBoxProjection->currentItem());
+  myModel.setProjection(comboBoxProjection->currentIndex());
   myModel.setEasting(lineEditEasting->text().toInt());
   myModel.setNorthing(lineEditNorthing->text().toInt());
   myModel.setEuclideanDistance(radioButtonEuclidean->isChecked());
@@ -702,7 +702,7 @@ void LaMainForm::helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetI
     textHelp->setHtml(myStream.readAll());
     myQFile.close();
   }
-  else 
+  else
   {
     writeResultsLeft("Help resource for : " + thepCurrentItem->text(0).toLocal8Bit() + " not found!");
   }
@@ -721,7 +721,7 @@ void LaMainForm::printCropsAndAnimals()
     QString myAnimalGuid = myAnimalIterator.key();
     bool mySelectedFlag = myPair.first;
     QString myAnimalParameterGuid = myPair.second;
-    QString myText = "Animal <" + myAnimalGuid.toLocal8Bit() + 
+    QString myText = "Animal <" + myAnimalGuid.toLocal8Bit() +
       " , <";
     mySelectedFlag ? myText += "true," : myText += "false,";
     myText +=  myAnimalParameterGuid.toLocal8Bit() ;
@@ -736,7 +736,7 @@ void LaMainForm::printCropsAndAnimals()
     QString myCropGuid = myCropIterator.key();
     bool mySelectedFlag = myPair.first;
     QString myCropParameterGuid = myPair.second;
-    QString myText = "Crop <" + myCropGuid.toLocal8Bit() + 
+    QString myText = "Crop <" + myCropGuid.toLocal8Bit() +
       " , <";
     mySelectedFlag ? myText += "true," : myText += "false,";
     myText +=  myCropParameterGuid.toLocal8Bit() ;
