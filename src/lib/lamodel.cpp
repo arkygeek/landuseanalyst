@@ -617,7 +617,7 @@ void LaModel::run()
 
 }
 
-float LaModel::breakdownDiet()
+float LaModel::caloriesFromCrops()
 {
   LaModel myModel;
   float myPopulation=myModel.population();
@@ -630,12 +630,53 @@ float LaModel::breakdownDiet()
   return myCropCalorieTarget;
 }
 
-int LaModel::countCrops()
+float LaModel::caloriesFromAnimals()
 {
   LaModel myModel;
-  int a;
-  return a;
+  float myPopulation=myModel.population();
+  float myDietComposition=0.01*(myModel.dietPercent());
+  float myMeatPercent=0.01*(myModel.meatPercent());
+  float myCaloriesPerPersonPerDay=myModel.caloriesPerPersonDaily();
+  float myAnimalOverallContributionToDiet=myDietComposition*myMeatPercent;
+  float myCalorieTarget=myPopulation*myCaloriesPerPersonPerDay*365;
+  float myAnimalCalorieTarget=myCalorieTarget*myAnimalOverallContributionToDiet;
+  return myAnimalCalorieTarget;
 }
+
+int LaModel::countCrops()
+{
+  int a=0;
+  //iterate through crops
+  QMapIterator<QString, QString > myCropIterator(mCropsMap);
+  while (myCropIterator.hasNext())
+  {
+    myCropIterator.next();
+    QString myCropGuid = myCropIterator.key();
+    QString myCropParameterGuid = myCropIterator.value();
+    LaCrop myCrop = LaUtils::getCrop(myCropGuid);
+    LaCropParameter myCropParameter = LaUtils::getCropParameter(myCropParameterGuid);
+    a++;
+  }
+    return a;
+}
+
+int LaModel::countAnimals()
+{
+  int a=0;
+  //iterate through animals
+  QMapIterator<QString, QString > myAnimalIterator(mAnimalsMap);
+  while (myAnimalIterator.hasNext())
+  {
+    myAnimalIterator.next();
+    QString myAnimalGuid = myAnimalIterator.key();
+    QString myAnimalParameterGuid = myAnimalIterator.value();
+    LaAnimal myAnimal = LaUtils::getAnimal(myAnimalGuid);
+    LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(myAnimalParameterGuid);
+    a++;
+  }
+    return a;
+}
+
 float LaModel::getCalorieTargetCrops()
 {
   LaModel myModel;
