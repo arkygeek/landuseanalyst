@@ -79,13 +79,13 @@ class LaModel : public LaSerialisable, public LaGuid
     int spare() const;
 
     float caloriesFromPlants();
-    float caloriesFromMeat();
+    float caloriesFromTameMeat();
     int countCrops();
     int countAnimals();
-    float getCalorieTargetCrops(QString theCropGuid, QString theCropParameterGuid);
-    float getCalorieTargetAnimals(QString theAnimalGuid, QString theAnimalParameterGuid);
-    float getProductionTargetsCrops();
-    float getProductionTargetsAnimals();
+    float getCalorieTargetCrops(QString theCropParameterGuid);
+    float getCalorieTargetAnimals(QString theAnimalParameterGuid);
+    float getProductionTargetsCrops(QString theCropGuid, QString theCropParameterGuid);
+    float getProductionTargetsAnimals(QString theAnimalGuid, QString theAnimalParameterGuid);
     float getAreaTargetsCrops();
     float allocateFallowGrazingLand();
     float getAreaTargetsAnimals();
