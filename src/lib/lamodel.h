@@ -242,6 +242,5 @@ class LaModel : public LaSerialisable, public LaGuid
     /** I'm sure there was something I needed this for :s */
     int mSpare;
 };
-
 #endif //Percent
 

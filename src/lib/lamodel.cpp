@@ -132,7 +132,18 @@ int LaModel::dietPercent() const
 }
 int LaModel::plantPercent() const
 {
-  return mPlantPercent;
+  if (mPlantPercent < 0) 
+  {
+    return 0;
+  }
+  else if (mPlantPercent > 100)
+  {
+    return 100;
+  }
+  else
+  {
+    return mPlantPercent;
+  }
 }
 int LaModel::meatPercent() const
 {
@@ -411,30 +422,30 @@ void LaModel::run()
     LaCrop myCrop = LaUtils::getCrop(myCropGuid);
     LaCropParameter myCropParameter = LaUtils::getCropParameter(myCropParameterGuid);
 
-  // mainform data
+    // mainform data
 
-  int myPopulation, myDietComposition, myCropPercent, myCaloriesPerPersonPerDay;
+    int myPopulation, myDietComposition, myCropPercent, myCaloriesPerPersonPerDay;
 
-  // Manage Crops (Description)
-  QString myName;
-  QString myDescription;
-  int myCropYield, myCropFoodValue, myCropFodderYield, myCropFodderFoodValue;
-  // Manage Crop Parameters
-  int myPortionOfDietTamePlant;
-  bool myCropRotation, myCropCommonLand, myCropSpecificLand;
-  float myCropFallowRatio;
-  int myFoodValueFallowLand;
-  int myCropAreaUnits, myCropRotationAreaUnits;
+    // Manage Crops (Description)
+    QString myName;
+    QString myDescription;
+    int myCropYield, myCropFoodValue, myCropFodderYield, myCropFodderFoodValue;
+    // Manage Crop Parameters
+    int myPortionOfDietTamePlant;
+    bool myCropRotation, myCropCommonLand, myCropSpecificLand;
+    float myCropFallowRatio;
+    int myFoodValueFallowLand;
+    int myCropAreaUnits, myCropRotationAreaUnits;
 
-  ///////////////////
-  // Assign values //
-  ///////////////////
-  // mainform data
+    ///////////////////
+    // Assign values //
+    ///////////////////
+    // mainform data
     myPopulation=myModel.population();
     myDietComposition=100-myModel.dietPercent();
     myCropPercent=myModel.plantPercent();
     myCaloriesPerPersonPerDay=myModel.caloriesPerPersonDaily();
-  // Manage Crops (Description)
+    // Manage Crops (Description)
     myName=myCrop.name();
     myDescription=myCrop.description();
     myCropYield=myCrop.cropYield();
@@ -442,7 +453,7 @@ void LaModel::run()
     myCropFodderYield=myCrop.fodderProduction();
     myCropFodderFoodValue=myCrop.fodderCalories();
     myCropAreaUnits=myCrop.yieldUnits();
-  // Manage Crop Parameters
+    // Manage Crop Parameters
     myPortionOfDietTamePlant=myCropParameter.percentTameCrop();
     myCropCommonLand=myCropParameter.useCommonLand();
     myCropSpecificLand=myCropParameter.useSpecificLand();
@@ -451,38 +462,38 @@ void LaModel::run()
     myFoodValueFallowLand=myCropParameter.fallowCalories();
     myCropRotationAreaUnits=myCropParameter.areaUnits();
 
-  ///////////////////////////////
-  // Generic Crop Calculations //
-  /////////////////////////////////////////////////////////
-  // We need to calculate three values:                  //
-  //  1. Calorie target      (myCalorieTarget)           //
-  //  2. Production target   (myCropProductionTarget)    //
-  //  3. Area target         (myCropAreaTarget)          //
-  /////////////////////////////////////////////////////////
+    ///////////////////////////////
+    // Generic Crop Calculations //
+    /////////////////////////////////////////////////////////
+    // We need to calculate three values:                  //
+    //  1. Calorie target      (myCalorieTarget)           //
+    //  2. Production target   (myCropProductionTarget)    //
+    //  3. Area target         (myCropAreaTarget)          //
+    /////////////////////////////////////////////////////////
 
-  // 1. Crop Calorie Target Calculations
-  float myCropOverallContributionToDiet;
-  float myCalorieTarget;
-  float myCropCalorieTarget;
-  // we must multiply by 0.01 to turn the following into percentages
-  myCropOverallContributionToDiet=((100-myDietComposition)*0.01)*(myCropPercent*.01);
-  myCalorieTarget=myPopulation*myCaloriesPerPersonPerDay*365;
-  myCropCalorieTarget=myCalorieTarget*myCropOverallContributionToDiet;
+    // 1. Crop Calorie Target Calculations
+    float myCropOverallContributionToDiet;
+    float myCalorieTarget;
+    float myCropCalorieTarget;
+    // we must multiply by 0.01 to turn the following into percentages
+    myCropOverallContributionToDiet=((100-myDietComposition)*0.01)*(myCropPercent*.01);
+    myCalorieTarget=myPopulation*myCaloriesPerPersonPerDay*365;
+    myCropCalorieTarget=myCalorieTarget*myCropOverallContributionToDiet;
 
-  // 2. Crop Production Target Calculations
-  float myCropProductionTarget;
-  // kg of crop = required calories from this crop DIVIDEDBY calories in one kg (edible part) of the  crop
-  myCropProductionTarget=(myCropCalorieTarget/myCropFoodValue);
+    // 2. Crop Production Target Calculations
+    float myCropProductionTarget;
+    // kg of crop = required calories from this crop DIVIDEDBY calories in one kg (edible part) of the  crop
+    myCropProductionTarget=(myCropCalorieTarget/myCropFoodValue);
 
-  // 3. Crop Area Target Calculations
-  float myCropArea; // this will be in dunums!!!
-  // the following does not allow for units other than dunums.
-  // @TODO allow for units other than just dunums
-  myCropArea=myCropProductionTarget/myCropYield;
-  float myFallowTotal;
-  myFallowTotal=myCropArea*myCropFallowRatio;
-  float myCropAreaTarget;
-  myCropAreaTarget=myCropArea+myFallowTotal;
+    // 3. Crop Area Target Calculations
+    float myCropArea; // this will be in dunums!!!
+    // the following does not allow for units other than dunums.
+    // @TODO allow for units other than just dunums
+    myCropArea=myCropProductionTarget/myCropYield;
+    float myFallowTotal;
+    myFallowTotal=myCropArea*myCropFallowRatio;
+    float myCropAreaTarget;
+    myCropAreaTarget=myCropArea+myFallowTotal;
   }
 
   //iterate through animals
@@ -619,10 +630,8 @@ void LaModel::run()
 
 float LaModel::caloriesFromPlants()
 {
-  LaModel myModel;
-  float myPopulation=myModel.population();
-  float myDietComposition=0.01*(100-myModel.dietPercent());
-  float myCropPercent=0.01*(myModel.plantPercent());
+  float myDietComposition=0.01*(100-mDietPercent);
+  float myCropPercent=0.01*(plantPercent());
   float myCaloriesPerPersonPerDay=myModel.caloriesPerPersonDaily();
   float myCropOverallContributionToDiet=((100-myDietComposition))*myCropPercent;
   float myCalorieTarget=myPopulation*myCaloriesPerPersonPerDay*365;
