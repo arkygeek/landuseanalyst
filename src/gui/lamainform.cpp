@@ -552,7 +552,7 @@ void LaMainForm::on_pushButtonRun_clicked()
   myModel.setMeatPercent(horizontalSliderMeat->value());
   myModel.setCaloriesPerPersonDaily(spinBoxDailyCalories->value());
   textBrowserResultsLeft->setText(myModel.toHtml());
-  textBrowserResultsLeft->setText("Number of Crops: " + myModel.countCrops());
+  textBrowserResultsLeft->setText("Number of Crops: " + QString::number(myModel.countCrops()));
 }
 void LaMainForm::on_pushButtonLoad_clicked()
 {
