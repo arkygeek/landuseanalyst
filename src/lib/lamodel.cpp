@@ -718,28 +718,16 @@ float LaModel::getAreaTargetsCrops(QString theCropGuid, float theProductionTarge
   return myCropAreaTarget;
 }
 
-float LaModel::getAreaTargetsAnimals(QString theAnimalGuid)
+float LaModel::caloriesNeededByAnimal(QString theAnimalGuid)
 {
   LaAnimal myAnimal = LaUtils::getAnimal(theAnimalGuid);
 
   float myAnimalOverallContributionToDiet=(dietPercent() * 0.01) * (meatPercent() * 0.01);
   float myCalorieTarget = population() * mCaloriesPerPersonDaily * 365;
-  //float myTameMeatCalorieTarget = myCalorieTarget * myAnimalOverallContributionToDiet;
-
   float myAnimalCalorieTarget=myCalorieTarget*myAnimalOverallContributionToDiet;
-  qDebug("My Animal Calorie Target: " + QString::number(myAnimalCalorieTarget).toLocal8Bit());
+  float myAnimalProductionTarget=(myAnimalCalorieTarget/myAnimal.meatFoodValue());
+  float myAnimalsRequired=myAnimalProductionTarget/(myAnimal.usableMeat()*.01);
 
-  // 2. Animal Production Target Calculations (kg usable meat)
-  float  myAnimalProductionTarget;
-  myAnimalProductionTarget=(myAnimalCalorieTarget/myAnimal.meatFoodValue());
-
-  float myAnimalsRequired;
-  myAnimalsRequired=myAnimalProductionTarget/(myAnimal.usableMeat()*.01);
-  qDebug("My Animal Production Target: " + QString::number(myAnimalProductionTarget).toLocal8Bit());
-  // 3. Animal Area Target Calculations
-  //
-  // In order to do this, we must determine the size of the herd required to produce
-  // enough offspring each year
   float myBirthsPerYear = 365 / (myAnimal.gestationTime() + myAnimal.estrousCycle() + (myAnimal.weaningAge() * 7));
   float myOffspringPerMotherYearly = myBirthsPerYear*myAnimal.youngPerBirth()*(1-myAnimal.deathRate());
   float myMothersNeededStepOne = myAnimalsRequired/myOffspringPerMotherYearly;
@@ -826,25 +814,35 @@ float LaModel::allocateFallowGrazingLand()
     myTotalFallowCalories += myAvailableFallowCalories;
   } // while
 
-  float myEqualFallow;
-  myEqualFallow=myTotalFallowCalories / myHigh;
-  float myLeftOverFallow;
-  myLeftOverFallow=0;
+  float myEquallyDividedFallowCalories = myTotalFallowCalories / myHigh;
+  float myLeftOverFallowCalories = 0;
+  int myFlag=0;
+  int myOuterLoopCounter = myHigh;
 
-  while (myAnimalIterator.hasNext())
+  while (myOuterLoopCounter > 0)
   {
-    myAnimalIterator.next();
-    QString myAnimalGuid = myAnimalIterator.key();
-    QString myAnimalParameterGuid = myAnimalIterator.value();
-    LaAnimal myAnimal = LaUtils::getAnimal(myAnimalGuid);
-    LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(myAnimalParameterGuid);
-
-    if (myAnimalParameter.fallowUsage()==1)
+    while (myAnimalIterator.hasNext())
     {
-      // implement me
-    }  //endif
-  } // while animal iteration
+      myAnimalIterator.next();
+      QString myAnimalGuid = myAnimalIterator.key();
+      QString myAnimalParameterGuid = myAnimalIterator.value();
+      LaAnimal myAnimal = LaUtils::getAnimal(myAnimalGuid);
+      LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(myAnimalParameterGuid);
 
+      if (myFlag == 1)
+      {
+        if (myAnimalParameter.fallowUsage() == 1)
+        {
+          if (caloriesNeededByAnimal(myAnimalGuid) < myEquallyDividedFallowCalories)
+          {
+            myLeftOverFallowCalories = myEquallyDividedFallowCalories - caloriesNeededByAnimal(myAnimalGuid);
+            myFlag = 1;
+          }
+        }
+      }
+    } // while animal iteration
+
+  }
   int a;
   return a;
 }
