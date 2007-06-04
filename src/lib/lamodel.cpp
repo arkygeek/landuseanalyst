@@ -711,10 +711,18 @@ float LaModel::getProductionTargetsAnimals(QString theAnimalGuid, int theCalorie
   return myAnimalProductionTarget;
 }
 
-float LaModel::getAreaTargetsCrops()
+float LaModel::getAreaTargetsCrops(QString theCropGuid, float theProductionTarget)
 {
-  int a;
-  return a;
+  LaCrop myCrop = LaUtils::getCrop(theCropGuid);
+  float myCropAreaTarget = theProductionTarget/myCrop.cropYield();
+  return myCropAreaTarget;
+}
+
+float LaModel::getFallowLandForACrop(QString theCropParameterGuid, int theAreaTarget)
+{
+  LaCropParameter myCropParameter = LaUtils::getCropParameter(theCropParameterGuid);
+  float myAvailableFallow = myCropParameter.fallowRatio() * theAreaTarget;
+  return myAvailableFallow;
 }
 
 float LaModel::allocateFallowGrazingLand()

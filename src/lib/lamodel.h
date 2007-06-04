@@ -86,7 +86,8 @@ class LaModel : public LaSerialisable, public LaGuid
     float getCalorieTargetAnimals(QString theAnimalParameterGuid);
     float getProductionTargetsCrops(QString theCropGuid, int theCalorieTarget);
     float getProductionTargetsAnimals(QString theAnimalGuid, int theCalorieTarget);
-    float getAreaTargetsCrops();
+    float getAreaTargetsCrops(QString theCropGuid, float theProductionTarget);
+    float getFallowLandForACrop(QString theCropParameterGuid, int theAreaTarget);
     float allocateFallowGrazingLand();
     float getAreaTargetsAnimals();
     float adjustAreaTargetsCrops();
