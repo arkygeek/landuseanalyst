@@ -697,16 +697,18 @@ float LaModel::getCalorieTargetAnimals(QString theAnimalParameterGuid)
   float myAnimalCalorieTarget=caloriesFromTameMeat()*myAnimalPercent;
   return myAnimalCalorieTarget;
 }
-float LaModel::getProductionTargetsCrops(QString theCropGuid, QString theCropParameterGuid)
+float LaModel::getProductionTargetsCrops(QString theCropGuid, int theCalorieTarget)
 {
-  int a;
-  return a;
+  LaCrop myCrop = LaUtils::getCrop(theCropGuid);
+  float myCropProductionTarget = theCalorieTarget / myCrop.cropCalories();
+  return myCropProductionTarget;
 }
 
-float LaModel::getProductionTargetsAnimals(QString theAnimalGuid, QString theAnimalParameterGuid)
+float LaModel::getProductionTargetsAnimals(QString theAnimalGuid, int theCalorieTarget)
 {
-  int a;
-  return a;
+  LaAnimal myAnimal = LaUtils::getAnimal(theAnimalGuid);
+  float myAnimalProductionTarget = (theCalorieTarget / myAnimal.meatFoodValue()) / (0.01 * myAnimal.usableMeat());
+  return myAnimalProductionTarget;
 }
 
 float LaModel::getAreaTargetsCrops()
