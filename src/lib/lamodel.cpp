@@ -567,7 +567,7 @@ void LaModel::run()
     myCrop3GrainPercentAnimalsDiet=myAnimalParameter.fodderSource3Grain();
     myFallowPriority=myAnimalParameter.fallowUsage();
 
-/////////////////////////////////
+  /////////////////////////////////
   // Generic Animal Calculations //
   /////////////////////////////////////////
   // We need to calculate three values:  //
@@ -718,6 +718,50 @@ float LaModel::getAreaTargetsCrops(QString theCropGuid, float theProductionTarge
   return myCropAreaTarget;
 }
 
+float LaModel::getAreaTargetsAnimals(QString theAnimalGuid)
+{
+  LaAnimal myAnimal = LaUtils::getAnimal(theAnimalGuid);
+
+  float myAnimalOverallContributionToDiet=(dietPercent() * 0.01) * (meatPercent() * 0.01);
+  float myCalorieTarget = population() * mCaloriesPerPersonDaily * 365;
+  //float myTameMeatCalorieTarget = myCalorieTarget * myAnimalOverallContributionToDiet;
+
+  float myAnimalCalorieTarget=myCalorieTarget*myAnimalOverallContributionToDiet;
+  qDebug("My Animal Calorie Target: " + QString::number(myAnimalCalorieTarget).toLocal8Bit());
+
+  // 2. Animal Production Target Calculations (kg usable meat)
+  float  myAnimalProductionTarget;
+  myAnimalProductionTarget=(myAnimalCalorieTarget/myAnimal.meatFoodValue());
+
+  float myAnimalsRequired;
+  myAnimalsRequired=myAnimalProductionTarget/(myAnimal.usableMeat()*.01);
+  qDebug("My Animal Production Target: " + QString::number(myAnimalProductionTarget).toLocal8Bit());
+  // 3. Animal Area Target Calculations
+  //
+  // In order to do this, we must determine the size of the herd required to produce
+  // enough offspring each year
+  float myBirthsPerYear = 365 / (myAnimal.gestationTime() + myAnimal.estrousCycle() + (myAnimal.weaningAge() * 7));
+  float myOffspringPerMotherYearly = myBirthsPerYear*myAnimal.youngPerBirth()*(1-myAnimal.deathRate());
+  float myMothersNeededStepOne = myAnimalsRequired/myOffspringPerMotherYearly;
+  float myMalesStepOne = myMothersNeededStepOne/2;
+  float myFemalesStepOne = myMothersNeededStepOne/2;
+  float myMotherReplacementsPerYear = myMothersNeededStepOne/myAnimal.deathRate();
+  float myAdditionalMothers = (myMotherReplacementsPerYear/myOffspringPerMotherYearly)*2;
+  float myMalesStepTwo = (myAdditionalMothers*myOffspringPerMotherYearly)/2;
+  float myFemalesStepTwo = (myAdditionalMothers*myOffspringPerMotherYearly)/2;
+
+  float myTotalMothers = myMothersNeededStepOne+myAdditionalMothers;
+  float myTotalMales = myMalesStepOne+myMalesStepTwo;
+  float myTotalFemales = myFemalesStepOne+myFemalesStepTwo;
+  float myTotalMarkets = myTotalMales+myTotalFemales;
+
+  float myTotalMothersCaloriesRequired = myTotalMothers * myAnimal.juvenile() * 365.;
+  float myTotalMarketsCaloriesRequired = myTotalMarkets * myAnimal.gestating() * 365.;
+
+  float myTotalCaloriesNeededToFeedAnimals = myTotalMothersCaloriesRequired + myTotalMarketsCaloriesRequired;
+  return myTotalCaloriesNeededToFeedAnimals;
+}
+
 float LaModel::getFallowLandForACrop(QString theCropParameterGuid, int theAreaTarget)
 {
   LaCropParameter myCropParameter = LaUtils::getCropParameter(theCropParameterGuid);
@@ -727,15 +771,84 @@ float LaModel::getFallowLandForACrop(QString theCropParameterGuid, int theAreaTa
 
 float LaModel::allocateFallowGrazingLand()
 {
+  // ok, I am sure I am going to cock this up, but here goes...
+
+  int myHigh, myMed, myLow, myAvailableFallow;
+
+  myHigh=0;
+  myMed=0;
+  myLow=0;
+  myAvailableFallow=0;
+
+  // Count the Crops in each Priority Level
+  QMapIterator<QString, QString > myAnimalIterator(mAnimalsMap);
+  while (myAnimalIterator.hasNext())
+  {
+    myAnimalIterator.next();
+    QString myAnimalGuid = myAnimalIterator.key();
+    QString myAnimalParameterGuid = myAnimalIterator.value();
+    LaAnimal myAnimal = LaUtils::getAnimal(myAnimalGuid);
+    LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(myAnimalParameterGuid);
+
+    switch (myAnimalParameter.fallowUsage())
+    {
+      case  0:
+            break;
+      case  1:
+            myHigh++;
+            break;
+      case  2:
+            myMed++;
+            break;
+      case  3:
+            myLow++;
+            break;
+    } //switch
+
+  }
+  float myTotalFallowCalories=0;
+  //iterate through crops
+  QMapIterator<QString, QString > myCropIterator(mCropsMap);
+  while (myCropIterator.hasNext())
+  {
+    myCropIterator.next();
+    QString myCropGuid = myCropIterator.key();
+    QString myCropParameterGuid = myCropIterator.value();
+    LaCrop myCrop = LaUtils::getCrop(myCropGuid);
+    LaCropParameter myCropParameter = LaUtils::getCropParameter(myCropParameterGuid);
+
+    float myCropPercent = 0.01 * myCropParameter.percentTameCrop();
+    float myCropCalorieTarget = caloriesFromPlants() * myCropPercent;
+    float myCropProductionTarget = myCropCalorieTarget / myCrop.cropCalories();
+    float myCropAreaTarget = myCropProductionTarget / myCrop.cropYield();
+    float myAvailableFallowCalories = myCropParameter.fallowRatio() * myCropAreaTarget * myCropParameter.fallowCalories();
+
+    myTotalFallowCalories += myAvailableFallowCalories;
+  } // while
+
+  float myEqualFallow;
+  myEqualFallow=myTotalFallowCalories / myHigh;
+  float myLeftOverFallow;
+  myLeftOverFallow=0;
+
+  while (myAnimalIterator.hasNext())
+  {
+    myAnimalIterator.next();
+    QString myAnimalGuid = myAnimalIterator.key();
+    QString myAnimalParameterGuid = myAnimalIterator.value();
+    LaAnimal myAnimal = LaUtils::getAnimal(myAnimalGuid);
+    LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(myAnimalParameterGuid);
+
+    if (myAnimalParameter.fallowUsage()==1)
+    {
+      // implement me
+    }  //endif
+  } // while animal iteration
+
   int a;
   return a;
 }
 
-float LaModel::getAreaTargetsAnimals()
-{
-  int a;
-  return a;
-}
 
 float LaModel::adjustAreaTargetsCrops()
 {
