@@ -761,8 +761,15 @@ float LaModel::allocateFallowGrazingLand()
 {
   // ok, I am sure I am going to cock this up, but here goes...
 
+  // We need to divide the available fallow land amongst the animals
+  // that graze fallow. We split the animal breeds by fallow land
+  // access priority (high / medium and low priority).
+  // e.g. We have 10 animal breeds, 6 of which graze fallow,
+  // caw and horse are high priority, shee and pig medium,
+  // chicken and gooxe low.
   int myHigh, myMed, myLow, myAvailableFallow;
 
+  
   myHigh=0;
   myMed=0;
   myLow=0;
@@ -841,7 +848,6 @@ float LaModel::allocateFallowGrazingLand()
         }
       }
     } // while animal iteration
-
   }
   int a;
   return a;
