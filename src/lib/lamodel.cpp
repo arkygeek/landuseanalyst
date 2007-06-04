@@ -780,8 +780,6 @@ float LaModel::allocateFallowGrazingLand()
 
     switch (myAnimalParameter.fallowUsage())
     {
-      case  0:
-            break;
       case  1:
             myHigh++;
             break;
@@ -790,6 +788,8 @@ float LaModel::allocateFallowGrazingLand()
             break;
       case  3:
             myLow++;
+            break;
+      default:
             break;
     } //switch
 
