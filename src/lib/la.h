@@ -28,3 +28,5 @@
 //    or
 //    <plant guid <enabled, animalparamters guid>>
 typedef QMap <QString,QPair<bool,QString> > LaTripleMap;
+
+enum Priority {High, Medium, Low};
