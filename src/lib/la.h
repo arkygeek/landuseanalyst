@@ -1,6 +1,6 @@
 /***************************************************************************
  *             Globally useful typedefs and defines
- *             
+ *
  *   Copyright (C) 2007 by: Tim Sutton        tim@linfiniti.com            *
  *                          Jason Jorgenson   arkygeek@gmail.com           *
  *                                                                         *
@@ -29,4 +29,4 @@
 //    <plant guid <enabled, animalparamters guid>>
 typedef QMap <QString,QPair<bool,QString> > LaTripleMap;
 
-enum Priority {High, Medium, Low};
+enum Priority {None, High, Medium, Low};

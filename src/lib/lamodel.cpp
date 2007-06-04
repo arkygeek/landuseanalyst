@@ -769,13 +769,13 @@ float LaModel::allocateFallowGrazingLand()
   // chicken and gooxe low.
   int myHigh, myMed, myLow, myAvailableFallow;
 
-  
+
   myHigh=0;
   myMed=0;
   myLow=0;
   myAvailableFallow=0;
 
-  // Count the Crops in each Priority Level
+  // Count the Animals in each Priority Level
   QMapIterator<QString, QString > myAnimalIterator(mAnimalsMap);
   while (myAnimalIterator.hasNext())
   {

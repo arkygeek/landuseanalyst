@@ -27,7 +27,7 @@ class QString;
 #include <QString>
 #include <QMap>
 /**
-  * An class to represent an model
+  * A class to represent an model
   * @author Tim Sutton, Jason Jorgenson
   */
 
