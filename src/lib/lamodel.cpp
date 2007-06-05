@@ -905,7 +905,7 @@ float LaModel::allocateFallowGrazingLand()
 
     } // while animal iterating
 
-  } // endif (myTotalFallowCalories > 0)
+  } // end else
 
   // step two
 
