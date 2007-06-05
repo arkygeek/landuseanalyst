@@ -21,6 +21,7 @@
 class QString;
 #include "laserialisable.h"
 #include "laguid.h"
+#include "la.h"
 #include <QString>
 /**
   * A class to represent animal parameters
@@ -73,7 +74,7 @@ class LaAnimalParameter : public LaSerialisable, public LaGuid
     int fodderSource2Grain() const;
     int fodderSource3() const;
     int fodderSource3Grain() const;
-    int fallowUsage() const;
+    Priority fallowUsage() const;
 
 
     //
@@ -112,7 +113,7 @@ class LaAnimalParameter : public LaSerialisable, public LaGuid
     /** If fallow is to be grazed, and if so, at either a
       * HIGH MED or LOW priority to it's access
       */
-    void setFallowUsage(int theIndexValue);
+    void setFallowUsage(Priority thePriority);
     void setAreaUnits(int theIndexValue);
     /** Return an xml representation of this layer
      * @NOTE this class inherits the serialisable interface so
@@ -159,7 +160,7 @@ class LaAnimalParameter : public LaSerialisable, public LaGuid
     /** If fallow is to be grazed, and if so, at either a
       * HIGH MED or LOW priority to it's access
       */
-    int mFallowUsage;
+    Priority mFallowUsage;
     int mAreaUnits;
 };
 

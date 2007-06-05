@@ -20,6 +20,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#ifndef LA
+#define LA
+
 #include <QMap>
 #include <QPair>
 #include <QString>
@@ -30,3 +33,4 @@
 typedef QMap <QString,QPair<bool,QString> > LaTripleMap;
 
 enum Priority {None, High, Medium, Low};
+#endif //LA

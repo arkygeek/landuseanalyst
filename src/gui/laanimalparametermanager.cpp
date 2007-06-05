@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "laanimalparametermanager.h"
+#include "la.h"
 #include "lautils.h"
 #include "laanimal.h"
 #include <QSettings>
@@ -207,8 +208,24 @@ void LaAnimalParameterManager::showAnimalParameter()
   sbFodderSource2Grain->setValue(mAnimalParameter.fodderSource2Grain());
   sbFodderSource3->setValue(mAnimalParameter.fodderSource3());
   sbFodderSource3Grain->setValue(mAnimalParameter.fodderSource3Grain());
-
-  comboBoxFallowUsage->setCurrentIndex(mAnimalParameter.fallowUsage());
+  
+  if (mAnimalParameter.fallowUsage()==High)
+  {
+    setComboToDefault(comboBoxFallowUsage,tr("High"));
+  }
+  else if (mAnimalParameter.fallowUsage()==Medium)
+  {
+    setComboToDefault(comboBoxFallowUsage,tr("Medium"));
+  }
+  else if (mAnimalParameter.fallowUsage()==Low)
+  {
+    setComboToDefault(comboBoxFallowUsage,tr("Low"));
+  }
+  else
+  {
+    setComboToDefault(comboBoxFallowUsage,tr("None"));
+  }
+  
 }
 
 void LaAnimalParameterManager::on_toolNew_clicked()
@@ -295,7 +312,23 @@ void LaAnimalParameterManager::on_pbnApply_clicked()
   mAnimalParameter.setFodderSource3Grain(sbFodderSource3Grain->value());
 
   mAnimalParameter.setAreaUnits(comboBoxAreaUnits->currentIndex());
-  mAnimalParameter.setFallowUsage(comboBoxFallowUsage->currentIndex());
+  QString myFallowUsage = QString(comboBoxFallowUsage->currentText());
+  if (myFallowUsage == "High")
+  {
+      mAnimalParameter.setFallowUsage(High);
+  }
+  else if (myFallowUsage == "Medium")
+  {
+      mAnimalParameter.setFallowUsage(Medium);
+  }    
+  else if (myFallowUsage == "Low")
+  {
+      mAnimalParameter.setFallowUsage(Low);
+  }
+  else
+  {
+    mAnimalParameter.setFallowUsage(None);
+  } 
   mAnimalParameter.toXmlFile( LaUtils::userAnimalParameterProfilesDirPath() +
       QDir::separator() + mAnimalParameter.guid() + ".xml");
   refreshAnimalParameterTable(mAnimalParameter.guid());

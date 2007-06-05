@@ -148,7 +148,7 @@ int LaAnimalParameter::fodderSource3Grain() const
 {
   return mFodderSource3Grain;
 }
-int LaAnimalParameter::fallowUsage() const
+Priority LaAnimalParameter::fallowUsage() const
 {
   return mFallowUsage;
 }
@@ -221,9 +221,9 @@ void LaAnimalParameter::setFodderSource3Grain(int theValue)
   mFodderSource3Grain=theValue;
 }
 
-void LaAnimalParameter::setFallowUsage(int theIndexValue)
+void LaAnimalParameter::setFallowUsage(Priority thePriority)
 {
-  mFallowUsage=theIndexValue;
+  mFallowUsage=thePriority;
 }
 
 bool LaAnimalParameter::fromXml(QString theXml)
@@ -258,8 +258,23 @@ mFoodValueOfSpecificGrazingLand=QString(myTopElement.firstChildElement("foodValu
   mFodderSource3=QString(myTopElement.firstChildElement("fodderSource3").text()).toInt();;
   mFodderSource3Grain=QString(myTopElement.firstChildElement("fodderSource3Grain").text()).toInt();;
 
-///////////
-  mFallowUsage=QString(myTopElement.firstChildElement("fallowUsage").text()).toInt();
+  QString myFallowUsage = QString(myTopElement.firstChildElement("fallowUsage").text());
+  if (myFallowUsage == "High")
+  {
+      mFallowUsage=High;
+  }
+  else if (myFallowUsage == "Medium")
+  {
+      mFallowUsage=Medium;
+  }    
+  else if (myFallowUsage == "Low")
+  {
+      mFallowUsage=Low;
+  }
+  else
+  {
+    mFallowUsage=None;
+  } 
   return true;
 }
 
@@ -282,7 +297,21 @@ QString LaAnimalParameter::toXml()
   myString+=QString("  <fodderSource2Grain>"+ QString::number(mFodderSource2Grain) +"</fodderSource2Grain>\n");
   myString+=QString("  <fodderSource3>"+ QString::number(mFodderSource3) +"</fodderSource3>\n");
   myString+=QString("  <fodderSource3Grain>"+ QString::number(mFodderSource3Grain) +"</fodderSource3Grain>\n");
-  myString+=QString("  <fallowUsage>" + QString::number(mFallowUsage) + "</fallowUsage>\n");
+  switch (mFallowUsage)
+  {
+    case  High:
+      myString+=QString("  <fallowUsage>High</fallowUsage>\n");
+      break;
+    case  Medium:
+      myString+=QString("  <fallowUsage>Medium</fallowUsage>\n");
+      break;
+    case  Low:
+      myString+=QString("  <fallowUsage>Low</fallowUsage>\n");
+      break;
+    default:
+      myString+=QString("  <fallowUsage></fallowUsage>\n");
+      break;
+  } //switch
   myString+=QString("</animalParameter>\n");
   return myString;
 }

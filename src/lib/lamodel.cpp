@@ -773,7 +773,7 @@ float LaModel::allocateFallowGrazingLand()
   myHigh=0;
   myMed=0;
   myLow=0;
-  myAvailableFallow=0;
+  myAvailableFallow=0; //calories
 
   // Count the Animals in each Priority Level
   QMapIterator<QString, QString > myAnimalIterator(mAnimalsMap);
