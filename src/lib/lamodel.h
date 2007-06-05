@@ -208,6 +208,17 @@ class LaModel : public LaSerialisable, public LaGuid
 
 
   private:
+    /** A map of running totals for calorie requirements for animals.
+     * As we account for each resource (fallow, crop x, crop y etc)
+     * we can remove it from the cumulative total.
+     */
+    QMap <QString,float> mAnimalCaloriesMap;
+    /** Initialise the cumulative calories map to the calories 
+     * required for each animal.
+     */
+    void initialiseAnimalCaloriesMap();
+
+    
     /** The name for this model */
     QString mName;
     /** The population for this model */

@@ -758,6 +758,17 @@ float LaModel::getFallowLandForACrop(QString theCropParameterGuid, int theAreaTa
   return myAvailableFallow;
 }
 
+void LaModel::initialiseAnimalCaloriesMap()
+{
+  mAnimalCaloriesMap.clear();
+  QMapIterator<QString, QString > myAnimalIterator(mAnimalsMap);
+  while (myAnimalIterator.hasNext())
+  {
+    myAnimalIterator.next();
+    QString myAnimalGuid = myAnimalIterator.key();
+    mAnimalCaloriesMap.insert(myAnimalGuid,caloriesNeededByAnimal(myAnimalGuid));
+  }
+}
 float LaModel::allocateFallowGrazingLand()
 {
   // ok, I am sure I am going to cock this up, but here goes...
@@ -768,11 +779,11 @@ float LaModel::allocateFallowGrazingLand()
   // e.g. We have 10 animal breeds, 6 of which graze fallow,
   // caw and horse are high priority, shee and pig medium,
   // chicken and gooxe low.
-  int myHigh, myMed, myLow, myAvailableFallow;
+  int myHigh, myMedium, myLow, myAvailableFallow;
 
 
   myHigh=0;
-  myMed=0;
+  myMedium=0;
   myLow=0;
   myAvailableFallow=0; //calories
 
@@ -792,7 +803,7 @@ float LaModel::allocateFallowGrazingLand()
             myHigh++;
             break;
       case  Medium:
-            myMed++;
+            myMedium++;
             break;
       case  Low:
             myLow++;
