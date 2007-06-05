@@ -23,6 +23,7 @@
 #include <QDomElement>
 #include "lamodel.h"
 #include "lautils.h"
+#include "la.h"
 
 LaModel::LaModel() : LaSerialisable(), LaGuid()
 {
@@ -787,14 +788,16 @@ float LaModel::allocateFallowGrazingLand()
 
     switch (myAnimalParameter.fallowUsage())
     {
-      case  1:
+      case  High:
             myHigh++;
             break;
-      case  2:
+      case  Medium:
             myMed++;
             break;
-      case  3:
+      case  Low:
             myLow++;
+            break;
+      case  None:
             break;
       default:
             break;
