@@ -771,23 +771,32 @@ void LaModel::initialiseAnimalCaloriesMap()
 }
 float LaModel::allocateFallowGrazingLand()
 {
-  // ok, I am sure I am going to cock this up, but here goes...
-
   // We need to divide the available fallow land amongst the animals
   // that graze fallow. We split the animal breeds by fallow land
   // access priority (high / medium and low priority).
   // e.g. We have 10 animal breeds, 6 of which graze fallow,
   // caw and horse are high priority, shee and pig medium,
   // chicken and gooxe low.
-  int myHigh, myMedium, myLow, myAvailableFallow;
 
+  int myAnimalsHighPriorityCount, myAnimalsMediumPriorityCount, myAnimalsLowPriorityCount;
+  float   myAnimalsHighPriorityCalorieRequirements;
+  float   myAnimalsMediumPriorityCalorieRequirements;
+  float   myAnimalsLowPriorityCalorieRequirements;
+  // put starting caloric requirements of all used animals into a map
+  // for reduction due to grazing of fallow crop land
+  initialiseAnimalCaloriesMap();
 
-  myHigh=0;
-  myMedium=0;
-  myLow=0;
-  myAvailableFallow=0; //calories
+  float myTotalFallowCalories=0;
 
-  // Count the Animals in each Priority Level
+  myAnimalsHighPriorityCount=0;
+  myAnimalsMediumPriorityCount=0;
+  myAnimalsLowPriorityCount=0;
+
+  myAnimalsHighPriorityCalorieRequirements=0;
+  myAnimalsMediumPriorityCalorieRequirements=0;
+  myAnimalsLowPriorityCalorieRequirements=0;
+
+  // Count the Animals in each Priority Level and sum their calorie requirements
   QMapIterator<QString, QString > myAnimalIterator(mAnimalsMap);
   while (myAnimalIterator.hasNext())
   {
@@ -800,13 +809,16 @@ float LaModel::allocateFallowGrazingLand()
     switch (myAnimalParameter.fallowUsage())
     {
       case  High:
-            myHigh++;
+            myAnimalsHighPriorityCount++;
+            myAnimalsHighPriorityCalorieRequirements += caloriesNeededByAnimal(myAnimalGuid);
             break;
       case  Medium:
-            myMedium++;
+            myAnimalsMediumPriorityCount++;
+            myAnimalsMediumPriorityCalorieRequirements += caloriesNeededByAnimal(myAnimalGuid);
             break;
       case  Low:
-            myLow++;
+            myAnimalsLowPriorityCount++;
+            myAnimalsLowPriorityCalorieRequirements += caloriesNeededByAnimal(myAnimalGuid);
             break;
       case  None:
             break;
@@ -814,9 +826,12 @@ float LaModel::allocateFallowGrazingLand()
             break;
     } //switch
 
-  }
-  float myTotalFallowCalories=0;
-  //iterate through crops
+  } //while animal count
+
+
+  //  iterate through crops to determine the total calories available to animals
+  //  by grazing fallow crop land
+
   QMapIterator<QString, QString > myCropIterator(mCropsMap);
   while (myCropIterator.hasNext())
   {
@@ -833,36 +848,79 @@ float LaModel::allocateFallowGrazingLand()
     float myAvailableFallowCalories = myCropParameter.fallowRatio() * myCropAreaTarget * myCropParameter.fallowCalories();
 
     myTotalFallowCalories += myAvailableFallowCalories;
-  } // while
+  } // while crop iterator
 
-  float myEquallyDividedFallowCalories = myTotalFallowCalories / myHigh;
-  float myLeftOverFallowCalories = 0;
-  int myFlag=0;
-  int myOuterLoopCounter = myHigh;
 
-  while (myOuterLoopCounter > 0)
+  float myLeftOverFallowCalories;
+  myLeftOverFallowCalories = 0;
+
+  // step one
+  myTotalFallowCalories=myTotalFallowCalories-myAnimalsHighPriorityCalorieRequirements;
+  if (myTotalFallowCalories > 0)
   {
+    // because there is leftover calories available to feed more critters, this
+    // shows that all of the animals caloric requirements are met with crop fallow
+    // and require no more feed so their values in the QMap will be set to 0
+    myLeftOverFallowCalories = myTotalFallowCalories;
+    QMapIterator<QString, QString > myAnimalIterator(mAnimalsMap);
     while (myAnimalIterator.hasNext())
     {
       myAnimalIterator.next();
+
       QString myAnimalGuid = myAnimalIterator.key();
       QString myAnimalParameterGuid = myAnimalIterator.value();
       LaAnimal myAnimal = LaUtils::getAnimal(myAnimalGuid);
       LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(myAnimalParameterGuid);
 
-      if (myFlag == 1)
+      if (myAnimalParameter.fallowUsage()==High)
       {
-        if (myAnimalParameter.fallowUsage() == 1)
-        {
-          if (caloriesNeededByAnimal(myAnimalGuid) < myEquallyDividedFallowCalories)
-          {
-            myLeftOverFallowCalories = myEquallyDividedFallowCalories - caloriesNeededByAnimal(myAnimalGuid);
-            myFlag = 1;
-          }
-        }
-      }
-    } // while animal iteration
-  }
+        mAnimalCaloriesMap.insert(myAnimalGuid,0);
+      } //endif (fallowUsage(myAnimalGuid)==High)
+
+    } // while animal iterating
+
+  } // endif (myTotalFallowCalories > 0)
+
+  else
+  {
+    // because there ARE NO leftover calories available to feed more critters, this
+    // shows that NOT ALL of the animals caloric requirements are met with crop fallow
+    // and therefore require more feed so their values in the QMap will be adjusted accordingly
+    myLeftOverFallowCalories = myTotalFallowCalories;
+    QMapIterator<QString, QString > myAnimalIterator(mAnimalsMap);
+    while (myAnimalIterator.hasNext())
+    {
+      myAnimalIterator.next();
+
+      QString myAnimalGuid = myAnimalIterator.key();
+      QString myAnimalParameterGuid = myAnimalIterator.value();
+      LaAnimal myAnimal = LaUtils::getAnimal(myAnimalGuid);
+      LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(myAnimalParameterGuid);
+
+      if (myAnimalParameter.fallowUsage()==High)
+      {
+        float myAdjustedCaloricRequirements = (mAnimalCaloriesMap.value(myAnimalGuid) / myAnimalsHighPriorityCalorieRequirements) * myTotalFallowCalories;
+        mAnimalCaloriesMap.insert(myAnimalGuid,myAdjustedCaloricRequirements);
+      } //endif (fallowUsage(myAnimalGuid)==High)
+
+    } // while animal iterating
+
+  } // endif (myTotalFallowCalories > 0)
+
+  // step two
+
+  // step three
+
+
+  while (myAnimalIterator.hasNext())
+  {
+    myAnimalIterator.next();
+    QString myAnimalGuid = myAnimalIterator.key();
+    QString myAnimalParameterGuid = myAnimalIterator.value();
+    LaAnimal myAnimal = LaUtils::getAnimal(myAnimalGuid);
+    LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(myAnimalParameterGuid);
+
+  } // while animal iterator
   int a;
   return a;
 }
