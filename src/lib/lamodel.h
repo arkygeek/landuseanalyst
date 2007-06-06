@@ -24,6 +24,7 @@
 class QString;
 #include "laserialisable.h"
 #include "laguid.h"
+#include "la.h"
 #include <QString>
 #include <QMap>
 /**
@@ -77,6 +78,7 @@ class LaModel : public LaSerialisable, public LaGuid
     int caloriesPerPersonDaily() const;
     /** The number of days in the female estrous cycle */
     int spare() const;
+    Status fallowStatus() const;
 
     float caloriesFromPlants();
     float caloriesFromTameMeat();
@@ -185,6 +187,8 @@ class LaModel : public LaSerialisable, public LaGuid
      */
     void run();
 
+    void setFallowStatus(Status theStatus);
+
     /** Return an xml representation of this layer
      * @NOTE this class inherits the serialisable interface so
      * it MUST implement this
@@ -213,12 +217,12 @@ class LaModel : public LaSerialisable, public LaGuid
      * we can remove it from the cumulative total.
      */
     QMap <QString,float> mAnimalCaloriesMap;
-    /** Initialise the cumulative calories map to the calories 
+    /** Initialise the cumulative calories map to the calories
      * required for each animal.
      */
     void initialiseAnimalCaloriesMap();
 
-    
+
     /** The name for this model */
     QString mName;
     /** The population for this model */
@@ -253,6 +257,7 @@ class LaModel : public LaSerialisable, public LaGuid
     QMap<QString,QString> mCropsMap;
     /** I'm sure there was something I needed this for :s */
     int mSpare;
+    Status mFallowStatus;
 };
 #endif //Percent
 

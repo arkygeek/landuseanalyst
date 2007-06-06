@@ -62,6 +62,7 @@ LaModel::LaModel(const LaModel& theModel)
   mMeatPercent=theModel.meatPercent();
   mCaloriesPerPersonDaily=theModel.caloriesPerPersonDaily();
   mSpare=theModel.spare();
+  mFallowStatus=theModel.fallowStatus();
 }
 
 LaModel& LaModel::operator=(const LaModel& theModel)
@@ -84,6 +85,7 @@ LaModel& LaModel::operator=(const LaModel& theModel)
   mMeatPercent=theModel.meatPercent();
   mCaloriesPerPersonDaily=theModel.caloriesPerPersonDaily();
   mSpare=theModel.spare();
+  mFallowStatus=theModel.fallowStatus();
   return *this;
 }
 
@@ -158,6 +160,12 @@ int LaModel::spare() const
 {
   return mSpare;
 }
+
+void LaModel::setFallowStatus(Status theStatus)
+{
+  mFallowStatus=theStatus;
+}
+
 void LaModel::setName(QString theName)
 {
   mName=theName;
@@ -769,6 +777,12 @@ void LaModel::initialiseAnimalCaloriesMap()
     mAnimalCaloriesMap.insert(myAnimalGuid,caloriesNeededByAnimal(myAnimalGuid));
   }
 }
+
+Status LaModel::fallowStatus() const
+{
+  return mFallowStatus;
+}
+
 float LaModel::allocateFallowGrazingLand()
 {
   // We need to divide the available fallow land amongst the animals
@@ -852,59 +866,68 @@ float LaModel::allocateFallowGrazingLand()
 
   float myLeftOverFallowCalories;
   myLeftOverFallowCalories = 0;
-
-  // step one
   myTotalFallowCalories=myTotalFallowCalories-myAnimalsHighPriorityCalorieRequirements;
-  if (myTotalFallowCalories > 0)
+
+  Status myFallowStatus;
+  if (myTotalFallowCalories > 0) {myFallowStatus=SomeAvailable;}
+  if (myTotalFallowCalories <= 0) {myFallowStatus=AllGone;}
+
+  switch (myFallowStatus)  // step one
   {
-    // because there is leftover calories available to feed more critters, this
-    // shows that all of the animals caloric requirements are met with crop fallow
-    // and require no more feed so their values in the QMap will be set to 0
-    myLeftOverFallowCalories = myTotalFallowCalories;
-    QMapIterator<QString, QString > myAnimalIterator(mAnimalsMap);
-    while (myAnimalIterator.hasNext())
-    {
-      myAnimalIterator.next();
+    case  SomeAvailable:
+          {
+            // because there is leftover calories available to feed more critters, this
+            // shows that all of the animals caloric requirements are met with crop fallow
+            // and require no more feed so their values in the QMap will be set to 0
+            myLeftOverFallowCalories = myTotalFallowCalories;
+            QMapIterator<QString, QString > myAnimalIterator(mAnimalsMap);
+            while (myAnimalIterator.hasNext())
+            {
+              myAnimalIterator.next();
 
-      QString myAnimalGuid = myAnimalIterator.key();
-      QString myAnimalParameterGuid = myAnimalIterator.value();
-      LaAnimal myAnimal = LaUtils::getAnimal(myAnimalGuid);
-      LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(myAnimalParameterGuid);
+              QString myAnimalGuid = myAnimalIterator.key();
+              QString myAnimalParameterGuid = myAnimalIterator.value();
+              LaAnimal myAnimal = LaUtils::getAnimal(myAnimalGuid);
+              LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(myAnimalParameterGuid);
 
-      if (myAnimalParameter.fallowUsage()==High)
-      {
-        mAnimalCaloriesMap[myAnimalGuid] = 0;
-      } //endif (fallowUsage(myAnimalGuid)==High)
+              if (myAnimalParameter.fallowUsage()==High)
+              {
+                mAnimalCaloriesMap[myAnimalGuid] = 0;
+              } //endif (fallowUsage(myAnimalGuid)==High)
 
-    } // while animal iterating
+            } // while animal iterating
+            break;
+          }
 
-  } // endif (myTotalFallowCalories > 0)
+    case  AllGone:
+          {
+            // because there ARE NO leftover calories available to feed more critters, this
+            // shows that NOT ALL of the animals caloric requirements are met with crop fallow
+            // and therefore require more feed so their values in the QMap will be adjusted accordingly
+            myLeftOverFallowCalories = myTotalFallowCalories;
+            QMapIterator<QString, QString > myAnimalIterator(mAnimalsMap);
+            while (myAnimalIterator.hasNext())
+            {
+              myAnimalIterator.next();
 
-  else
-  {
-    // because there ARE NO leftover calories available to feed more critters, this
-    // shows that NOT ALL of the animals caloric requirements are met with crop fallow
-    // and therefore require more feed so their values in the QMap will be adjusted accordingly
-    myLeftOverFallowCalories = myTotalFallowCalories;
-    QMapIterator<QString, QString > myAnimalIterator(mAnimalsMap);
-    while (myAnimalIterator.hasNext())
-    {
-      myAnimalIterator.next();
+              QString myAnimalGuid = myAnimalIterator.key();
+              QString myAnimalParameterGuid = myAnimalIterator.value();
+              LaAnimal myAnimal = LaUtils::getAnimal(myAnimalGuid);
+              LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(myAnimalParameterGuid);
 
-      QString myAnimalGuid = myAnimalIterator.key();
-      QString myAnimalParameterGuid = myAnimalIterator.value();
-      LaAnimal myAnimal = LaUtils::getAnimal(myAnimalGuid);
-      LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(myAnimalParameterGuid);
+              if (myAnimalParameter.fallowUsage()==High)
+              {
+                float myAdjustedCaloricRequirements = (mAnimalCaloriesMap.value(myAnimalGuid) / myAnimalsHighPriorityCalorieRequirements) * myTotalFallowCalories;
+                mAnimalCaloriesMap[myAnimalGuid] = myAdjustedCaloricRequirements;
+              } //endif (fallowUsage(myAnimalGuid)==High)
 
-      if (myAnimalParameter.fallowUsage()==High)
-      {
-        float myAdjustedCaloricRequirements = (mAnimalCaloriesMap.value(myAnimalGuid) / myAnimalsHighPriorityCalorieRequirements) * myTotalFallowCalories;
-        mAnimalCaloriesMap[myAnimalGuid] = myAdjustedCaloricRequirements;
-      } //endif (fallowUsage(myAnimalGuid)==High)
+            } // while animal iterating
+            break;
+          }
 
-    } // while animal iterating
-
-  } // end else
+    default:
+          break;
+  } //switch
 
   // step two
 
