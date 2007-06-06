@@ -745,3 +745,4 @@ void LaMainForm::printCropsAndAnimals()
     textBrowserResultsRight->append(myText);
   }
 }
+
