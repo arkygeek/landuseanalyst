@@ -850,7 +850,6 @@ float LaModel::allocateFallowGrazingLand()
     myTotalFallowCalories += myAvailableFallowCalories;
   } // while crop iterator
 
-
   float myLeftOverFallowCalories;
   myLeftOverFallowCalories = 0;
 
@@ -874,7 +873,7 @@ float LaModel::allocateFallowGrazingLand()
 
       if (myAnimalParameter.fallowUsage()==High)
       {
-        mAnimalCaloriesMap.insert(myAnimalGuid,0);
+        mAnimalCaloriesMap[myAnimalGuid] = 0;
       } //endif (fallowUsage(myAnimalGuid)==High)
 
     } // while animal iterating
@@ -900,7 +899,7 @@ float LaModel::allocateFallowGrazingLand()
       if (myAnimalParameter.fallowUsage()==High)
       {
         float myAdjustedCaloricRequirements = (mAnimalCaloriesMap.value(myAnimalGuid) / myAnimalsHighPriorityCalorieRequirements) * myTotalFallowCalories;
-        mAnimalCaloriesMap.insert(myAnimalGuid,myAdjustedCaloricRequirements);
+        mAnimalCaloriesMap[myAnimalGuid] = myAdjustedCaloricRequirements;
       } //endif (fallowUsage(myAnimalGuid)==High)
 
     } // while animal iterating
