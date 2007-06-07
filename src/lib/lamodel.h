@@ -93,7 +93,7 @@ class LaModel : public LaSerialisable, public LaGuid
     float allocateFallowGrazingLand();
     float caloriesNeededByAnimal(QString theAnimalGuid);
     float adjustAreaTargetsCrops();
-
+    float doTheFallowAllocation(Priority, float, float);
     //
     // Mutators
     //
@@ -188,7 +188,7 @@ class LaModel : public LaSerialisable, public LaGuid
     void run();
 
     void setFallowStatus(Status theStatus);
-
+    //void setDoTheFallowAllocation(Priority, float, float);
     /** Return an xml representation of this layer
      * @NOTE this class inherits the serialisable interface so
      * it MUST implement this
