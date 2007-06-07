@@ -864,21 +864,21 @@ float LaModel::allocateFallowGrazingLand()
     myTotalFallowCalories += myAvailableFallowCalories;
   } // while crop iterator
 
-  float myLeftOverFallowCalories;
-  myLeftOverFallowCalories = 0;
-  myTotalFallowCalories=myTotalFallowCalories-myAnimalsHighPriorityCalorieRequirements;
-
-  Status myFallowStatus;
-  if (myTotalFallowCalories > 0) {myFallowStatus=MoreThanEnoughToCompletelySatisfy;}
-  if (myTotalFallowCalories <= 0) {myFallowStatus=NotEnoughToCompletelySatisfy;}
-
-  Priority myPriority = High;
-
-  myTotalFallowCalories = doTheFallowAllocation(myPriority, myTotalFallowCalories, myAnimalsHighPriorityCalorieRequirements);
-  myPriority = Medium;
-  myTotalFallowCalories = doTheFallowAllocation(myPriority, myTotalFallowCalories, myAnimalsHighPriorityCalorieRequirements);
-  myPriority = Low;
-  myTotalFallowCalories = doTheFallowAllocation(myPriority, myTotalFallowCalories, myAnimalsHighPriorityCalorieRequirements);
+if (myTotalFallowCalories > 0)
+  {
+    Priority myPriority = High;
+    myTotalFallowCalories = doTheFallowAllocation(myPriority, myTotalFallowCalories, myAnimalsHighPriorityCalorieRequirements);
+  }
+if (myTotalFallowCalories > 0)
+  {
+    Priority myPriority = Medium;
+    myTotalFallowCalories = doTheFallowAllocation(myPriority, myTotalFallowCalories, myAnimalsHighPriorityCalorieRequirements);
+  }
+if (myTotalFallowCalories > 0)
+  {
+    Priority myPriority = Low;
+    myTotalFallowCalories = doTheFallowAllocation(myPriority, myTotalFallowCalories, myAnimalsHighPriorityCalorieRequirements);
+  }
 
   while (myAnimalIterator.hasNext())
   {
@@ -892,14 +892,10 @@ float LaModel::allocateFallowGrazingLand()
   int a;
   return a;
 }
-////
-////
-////
-////
 
-float LaModel::doTheFallowAllocation (Priority thePriority,\
-                        float theAvailableFallowCalories,\
-                        float theTotalCalorificRequirements)
+float LaModel::doTheFallowAllocation (Priority thePriority,
+                                      float theAvailableFallowCalories,
+                                      float theTotalCalorificRequirements)
 {
   float myTotalFallowCalories=theAvailableFallowCalories - theTotalCalorificRequirements;
   Status myFallowStatus;
