@@ -629,8 +629,8 @@ void LaModel::run()
   myTotalMales=myMalesStepOne+myMalesStepTwo;
   float myTotalFemales;
   myTotalFemales=myFemalesStepOne+myFemalesStepTwo;
-  float myTotalMarkets;
-  myTotalMarkets=myTotalMales+myTotalFemales;
+  float myTotalJuveniles;
+  myTotalJuveniles=myTotalMales+myTotalFemales;
   float myAnimalAreaTarget;
   myAnimalAreaTarget=myTotalMothers+myTotalMales+myTotalFemales;
   }
@@ -750,12 +750,12 @@ float LaModel::caloriesNeededByAnimal(QString theAnimalGuid)
   float myTotalMothers = myMothersNeededStepOne+myAdditionalMothers;
   float myTotalMales = myMalesStepOne+myMalesStepTwo;
   float myTotalFemales = myFemalesStepOne+myFemalesStepTwo;
-  float myTotalMarkets = myTotalMales+myTotalFemales;
+  float myTotalJuveniles = myTotalMales+myTotalFemales;
 
-  float myTotalMothersCaloriesRequired = myTotalMothers * myAnimal.juvenile() * 365.;
-  float myTotalMarketsCaloriesRequired = myTotalMarkets * myAnimal.gestating() * 365.;
+  float myTotalMothersCaloriesRequired = myTotalMothers * myAnimal.gestating() * 365.;
+  float myTotalJuvenilesCaloriesRequired = myTotalJuveniles * myAnimal.juvenile() * 365.;
 
-  float myTotalCaloriesNeededToFeedAnimals = myTotalMothersCaloriesRequired + myTotalMarketsCaloriesRequired;
+  float myTotalCaloriesNeededToFeedAnimals = myTotalMothersCaloriesRequired + myTotalJuvenilesCaloriesRequired;
   return myTotalCaloriesNeededToFeedAnimals;
 }
 
@@ -842,7 +842,6 @@ float LaModel::allocateFallowGrazingLand()
 
   } //while animal count
 
-
   //  iterate through crops to determine the total calories available to animals
   //  by grazing fallow crop land
 
@@ -864,33 +863,35 @@ float LaModel::allocateFallowGrazingLand()
     myTotalFallowCalories += myAvailableFallowCalories;
   } // while crop iterator
 
-if (myTotalFallowCalories > 0)
+  ////////////////////////////////////////
+  // The following three if statements  //
+  // process all of the animals which   //
+  // utilize fallow cropland as grazing //
+  // land.  It first checks that there  //
+  // is fallow land available, and next //
+  // allocates the the fallow based on  //
+  // the animals fallow access priority //
+  ////////////////////////////////////////
+
+  // HIGH priority animals get allocated fallow cropland
+  if (myTotalFallowCalories > 0)
   {
     Priority myPriority = High;
     myTotalFallowCalories = doTheFallowAllocation(myPriority, myTotalFallowCalories, myAnimalsHighPriorityCalorieRequirements);
   }
-if (myTotalFallowCalories > 0)
+  // MEDIUM priority animals get allocated fallow cropland
+  if (myTotalFallowCalories > 0)
   {
     Priority myPriority = Medium;
-    myTotalFallowCalories = doTheFallowAllocation(myPriority, myTotalFallowCalories, myAnimalsHighPriorityCalorieRequirements);
+    myTotalFallowCalories = doTheFallowAllocation(myPriority, myTotalFallowCalories, myAnimalsMediumPriorityCalorieRequirements);
   }
-if (myTotalFallowCalories > 0)
+  // LOW priority animals get allocated fallow cropland
+  if (myTotalFallowCalories > 0)
   {
     Priority myPriority = Low;
-    myTotalFallowCalories = doTheFallowAllocation(myPriority, myTotalFallowCalories, myAnimalsHighPriorityCalorieRequirements);
+    myTotalFallowCalories = doTheFallowAllocation(myPriority, myTotalFallowCalories, myAnimalsLowPriorityCalorieRequirements);
   }
-
-  while (myAnimalIterator.hasNext())
-  {
-    myAnimalIterator.next();
-    QString myAnimalGuid = myAnimalIterator.key();
-    QString myAnimalParameterGuid = myAnimalIterator.value();
-    LaAnimal myAnimal = LaUtils::getAnimal(myAnimalGuid);
-    LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(myAnimalParameterGuid);
-
-  } // while animal iterator
-  int a;
-  return a;
+  return myTotalFallowCalories;
 }
 
 float LaModel::doTheFallowAllocation (Priority thePriority,
