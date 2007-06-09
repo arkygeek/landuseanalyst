@@ -474,6 +474,7 @@ void LaMainForm::cropCellClicked(int theRow, int theColumn)
 
 void LaMainForm::cropCellChanged(int theRow, int theColumn)
 {
+
   QString myGuid = tblCrops->item(tblCrops->currentRow(),1)->data(Qt::UserRole).toString();
   bool myStateFlag = tblCrops->item(tblCrops->currentRow(),0)->checkState();
   QPair<bool,QString> myPair = mCropsMap[myGuid];
@@ -553,6 +554,32 @@ void LaMainForm::on_pushButtonRun_clicked()
   myModel.setCaloriesPerPersonDaily(spinBoxDailyCalories->value());
   textBrowserResultsLeft->setText(myModel.toHtml());
   textBrowserResultsLeft->setText("Number of Crops: " + QString::number(myModel.countCrops()));
+
+  /* Basic Steps are:
+
+    X breakdownDiet               ---> int LaModel::breakdownDiet()
+    X countCrops                  ---> int LaModel::countCrops()
+    X countAnimals                ---> int LaModel::countAnimals()
+    X getCalorieTargetCrops       ---> float LaModel::caloriesFromPlants()
+    X getCalorieTargetAnimals     ---> float LaModel::caloriesFromTameMeat()
+    X getProductionTargetsCrops   ---> float LaModel::getProductionTargetsCrops
+                                        (QString theCropGuid, int theCalorieTarget)
+    X getProductionTargetsAnimals ---> float LaModel::getProductionTargetsAnimals
+                                          (QString theAnimalGuid, int theCalorieTarget)
+    X getAreaTargetsCrops         ---> float LaModel::getAreaTargetsCrops
+                                          (QString theCropGuid, float theProductionTarget)
+      allocateFallowGrazingLand   ---> float LaModel::allocateFallowGrazingLand()
+      getAreaTargetsAnimals       ---> float LaModel::caloriesNeededByAnimal
+                                          (QString theAnimalGuid)
+      adjustAreaTargetsCrops      --->
+
+  */
+
+  textBrowserResultsLeft->setText("Number of Crops: " + QString::number(myModel.countCrops()) + \
+  "Number of Animals: " + QString::number(myModel.countAnimals()) + \
+  "Calories from Crops: " + QString::number(myModel.caloriesFromPlants()) + \
+  "Calories from Animals: " + QString::number(myModel.caloriesFromTameMeat()));
+
 }
 void LaMainForm::on_pushButtonLoad_clicked()
 {
