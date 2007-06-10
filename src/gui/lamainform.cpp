@@ -428,62 +428,81 @@ void LaMainForm::setDietLabels()
 void LaMainForm::animalCellClicked(int theRow, int theColumn)
 {
   qDebug("LaMainForm::animalCellClicked");
-  QString myGuid = tblAnimals->item(tblAnimals->currentRow(),1)->data(Qt::UserRole).toString();
-  //get all animals, then get the animal for this cell if it exists
-  QMap<QString,LaAnimal> myAnimalsMap = LaUtils::getAvailableAnimals();
-  LaAnimal myAnimal = myAnimalsMap[myGuid];
-  textBrowserAnimalDefinition->setHtml(myAnimal.toHtml());
-  QComboBox * mypCombo=dynamic_cast<QComboBox *>(tblAnimals->cellWidget(tblAnimals->currentRow(),2));
-  myGuid = mypCombo->itemData(mypCombo->currentIndex(),Qt::UserRole).toString();
-  //get all animal parameters, then get the animal parameter for this cell if it exists
-  LaUtils::AnimalParameterMap myAnimalParametersMap;
-  myAnimalParametersMap = LaUtils::getAvailableAnimalParameters();
-  LaAnimalParameter myAnimalParameter = myAnimalParametersMap[myGuid];
-  textBrowserAnimalParameterDefinition->setHtml(myAnimalParameter.toHtml());
+  QTableWidgetItem* item = tblAnimals->item(tblAnimals->currentRow(),1);
+  if (item)
+  {
+    QString myGuid = item->data(Qt::UserRole).toString();
+    //QString myGuid = tblAnimals->item(tblAnimals->currentRow(),1)->data(Qt::UserRole).toString();
+    //get all animals, then get the animal for this cell if it exists
+    QMap<QString,LaAnimal> myAnimalsMap = LaUtils::getAvailableAnimals();
+    LaAnimal myAnimal = myAnimalsMap[myGuid];
+    textBrowserAnimalDefinition->setHtml(myAnimal.toHtml());
+    QComboBox * mypCombo=dynamic_cast<QComboBox *>(tblAnimals->cellWidget(tblAnimals->currentRow(),2));
+    myGuid = mypCombo->itemData(mypCombo->currentIndex(),Qt::UserRole).toString();
+    //get all animal parameters, then get the animal parameter for this cell if it exists
+    LaUtils::AnimalParameterMap myAnimalParametersMap;
+    myAnimalParametersMap = LaUtils::getAvailableAnimalParameters();
+    LaAnimalParameter myAnimalParameter = myAnimalParametersMap[myGuid];
+    textBrowserAnimalParameterDefinition->setHtml(myAnimalParameter.toHtml());
+  }
 }
 
 void LaMainForm::animalCellChanged(int theRow, int theColumn)
 {
-  QString myGuid = tblAnimals->item(tblAnimals->currentRow(),1)->data(Qt::UserRole).toString();
-  bool myStateFlag = tblAnimals->item(tblAnimals->currentRow(),0)->checkState();
-  QPair<bool,QString> myPair = mAnimalsMap[myGuid];
-  myPair.first = myStateFlag;
-  QComboBox * mypCombo=dynamic_cast<QComboBox *>(tblAnimals->cellWidget(tblAnimals->currentRow(),2));
-  myPair.second = mypCombo->itemData(mypCombo->currentIndex(),Qt::UserRole).toString();
-  mAnimalsMap[myGuid] = myPair;
-  //debug only - comment out later
-  printCropsAndAnimals();
+  QTableWidgetItem* item = tblAnimals->item(tblAnimals->currentRow(),1);
+  if (item)
+  {
+    QString myGuid = item->data(Qt::UserRole).toString();
+    // QString myGuid = tblAnimals->item(tblAnimals->currentRow(),1)->data(Qt::UserRole).toString();
+    bool myStateFlag = tblAnimals->item(tblAnimals->currentRow(),0)->checkState();
+    QPair<bool,QString> myPair = mAnimalsMap[myGuid];
+    myPair.first = myStateFlag;
+    QComboBox * mypCombo=dynamic_cast<QComboBox *>(tblAnimals->cellWidget(tblAnimals->currentRow(),2));
+    myPair.second = mypCombo->itemData(mypCombo->currentIndex(),Qt::UserRole).toString();
+    mAnimalsMap[myGuid] = myPair;
+    //debug only - comment out later
+    printCropsAndAnimals();
+  }
 }
 
 void LaMainForm::cropCellClicked(int theRow, int theColumn)
 {
   qDebug("LaMainForm::cropCellClicked");
-  QString myGuid = tblCrops->item(tblCrops->currentRow(),1)->data(Qt::UserRole).toString();
-  //get all crops, then get the crop for this cell if it exists
-  QMap<QString,LaCrop> myCropsMap = LaUtils::getAvailableCrops();
-  LaCrop myCrop = myCropsMap[myGuid];
-  textBrowserCropDefinition->setHtml(myCrop.toHtml());
-  QComboBox * mypCombo=dynamic_cast<QComboBox *>(tblCrops->cellWidget(tblCrops->currentRow(),2));
-  myGuid = mypCombo->itemData(mypCombo->currentIndex(),Qt::UserRole).toString();
-  //get all crops parameters, then get the crop parameter for this cell if it exists
-  LaUtils::CropParameterMap myCropParametersMap;
-  myCropParametersMap = LaUtils::getAvailableCropParameters();
-  LaCropParameter myCropParameter = myCropParametersMap[myGuid];
-  textBrowserCropParameterDefinition->setHtml(myCropParameter.toHtml());
+    QTableWidgetItem* item = tblCrops->item(tblCrops->currentRow(),1);
+  if (item)
+  {
+    QString myGuid = item->data(Qt::UserRole).toString();
+    //QString myGuid = tblCrops->item(tblCrops->currentRow(),1)->data(Qt::UserRole).toString();
+    //get all crops, then get the crop for this cell if it exists
+    QMap<QString,LaCrop> myCropsMap = LaUtils::getAvailableCrops();
+    LaCrop myCrop = myCropsMap[myGuid];
+    textBrowserCropDefinition->setHtml(myCrop.toHtml());
+    QComboBox * mypCombo=dynamic_cast<QComboBox *>(tblCrops->cellWidget(tblCrops->currentRow(),2));
+    myGuid = mypCombo->itemData(mypCombo->currentIndex(),Qt::UserRole).toString();
+    //get all crops parameters, then get the crop parameter for this cell if it exists
+    LaUtils::CropParameterMap myCropParametersMap;
+    myCropParametersMap = LaUtils::getAvailableCropParameters();
+    LaCropParameter myCropParameter = myCropParametersMap[myGuid];
+    textBrowserCropParameterDefinition->setHtml(myCropParameter.toHtml());
+  }
 }
 
 void LaMainForm::cropCellChanged(int theRow, int theColumn)
 {
-
-  QString myGuid = tblCrops->item(tblCrops->currentRow(),1)->data(Qt::UserRole).toString();
-  bool myStateFlag = tblCrops->item(tblCrops->currentRow(),0)->checkState();
-  QPair<bool,QString> myPair = mCropsMap[myGuid];
-  myPair.first = myStateFlag;
-  QComboBox * mypCombo=dynamic_cast<QComboBox *>(tblCrops->cellWidget(tblCrops->currentRow(),2));
-  myPair.second = mypCombo->itemData(mypCombo->currentIndex(),Qt::UserRole).toString();
-  mCropsMap[myGuid] = myPair;
-  //debug only - comment out later
-  printCropsAndAnimals();
+  QTableWidgetItem* item = tblCrops->item(tblCrops->currentRow(),1);
+  if (item)
+  {
+    QString myGuid = item->data(Qt::UserRole).toString();
+    //QString myGuid = tblCrops->item(tblCrops->currentRow(),1)->data(Qt::UserRole).toString();
+    bool myStateFlag = tblCrops->item(tblCrops->currentRow(),0)->checkState();
+    QPair<bool,QString> myPair = mCropsMap[myGuid];
+    myPair.first = myStateFlag;
+    QComboBox * mypCombo=dynamic_cast<QComboBox *>(tblCrops->cellWidget(tblCrops->currentRow(),2));
+    myPair.second = mypCombo->itemData(mypCombo->currentIndex(),Qt::UserRole).toString();
+    mCropsMap[myGuid] = myPair;
+    //debug only - comment out later
+    printCropsAndAnimals();
+  }
 }
 
 void LaMainForm::on_pushButtonRun_clicked()
