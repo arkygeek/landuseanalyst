@@ -435,7 +435,7 @@ float LaModel::caloriesFromPlants()
 
   float myDietComposition=0.01*(100-mDietPercent);
   float myCropPercent=0.01*(plantPercent());
-  float myCropOverallContributionToDiet=((100-myDietComposition))*myCropPercent;
+  float myCropOverallContributionToDiet=myDietComposition*myCropPercent;
   float myCalorieTarget=population()*caloriesPerPersonDaily()*365;
   float myCropCalorieTarget=myCalorieTarget*myCropOverallContributionToDiet;
   return myCropCalorieTarget;
