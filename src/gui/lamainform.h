@@ -65,13 +65,7 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
     void helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetItem * thepOldItem);
     void writeResultsLeft(QString theText);
     void writeResultsRight(QString theText);
-    void makeCircle(int theX, int theY);
-    void getArea(float theArea);
-    void makeWalkCost(int theX, int theY);
-    void makeEuclideanCost(int theX, int theY);
-    void makePathDistanceCost(int theX, int theY);
-    void writeMetaData(QString theValue);
-    void doBaseCalculations();
+
     void animalCellClicked(int theRow, int theColumn);
     void animalCellChanged(int theRow, int theColumn);
     void cropCellClicked(int theRow, int theColumn);

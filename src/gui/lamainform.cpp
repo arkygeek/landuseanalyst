@@ -572,7 +572,6 @@ void LaMainForm::on_pushButtonRun_clicked()
   myModel.setMeatPercent(horizontalSliderMeat->value());
   myModel.setCaloriesPerPersonDaily(spinBoxDailyCalories->value());
   textBrowserResultsLeft->setText(myModel.toHtml());
-  textBrowserResultsLeft->setText("Number of Crops: " + QString::number(myModel.countCrops()));
 
   /* Basic Steps are:
 
@@ -594,10 +593,10 @@ void LaMainForm::on_pushButtonRun_clicked()
 
   */
 
-  textBrowserResultsLeft->setText("Number of Crops: " + QString::number(myModel.countCrops()) + \
-  "Number of Animals: " + QString::number(myModel.countAnimals()) + \
-  "Calories from Crops: " + QString::number(myModel.caloriesFromPlants()) + \
-  "Calories from Animals: " + QString::number(myModel.caloriesFromTameMeat()));
+  textBrowserResultsRight->append("Number of Crops: " + QString::number(myModel.countCrops()));
+  textBrowserResultsRight->append("Number of Animals: " + QString::number(myModel.countAnimals()));
+  textBrowserResultsRight->append("Calories from Crops: " + QString::number(myModel.caloriesFromPlants()));
+  textBrowserResultsRight->append("Calories from Animals: " + QString::number(myModel.caloriesFromTameMeat()));
 
 }
 void LaMainForm::on_pushButtonLoad_clicked()
@@ -619,104 +618,7 @@ void LaMainForm::writeResultsRight(QString theText)
   textBrowserResultsRight->append(theText);
 }
 
-void LaMainForm::getArea(float theArea)
-{
-  QString myProgram = "/usr/lib/grass/bin/r.stats";
-  QStringList myArgs;
-  myArgs << "tempraster";
-  QProcess myProcess;
-  myProcess.start(myProgram, myArgs);
 
-  if (!myProcess.waitForStarted())
-  {
-    qDebug("The process never started.....aaargh");
-  }
-
-  while (myProcess.waitForReadyRead(-1))
-  {
-  }
-
-  QString myString;
-  myString+=("--------- Output ----------\n");
-  myProcess.setReadChannel(QProcess::StandardOutput);
-  QByteArray myArray = myProcess.readAll();
-  myString.append(myArray);
-  myString+=("--------- Errors ----------\n");
-  myProcess.setReadChannel(QProcess::StandardError);
-  myArray = myProcess.readAll();
-  myString.append(myArray);
-
-  qDebug(myString.toLocal8Bit());
-
-  qDebug("The process completed");
-}
-
-void LaMainForm::makeWalkCost(int theX, int theY)
-{
-}
-
-void LaMainForm::makeEuclideanCost(int theX, int theY)
-{
-}
-
-void LaMainForm::makePathDistanceCost(int theX, int theY)
-{
-}
-
-void LaMainForm::writeMetaData(QString theValue)
-{
-}
-
-void LaMainForm::makeCircle(int theX, int theY)
-{
-  // to verify this worked do
-  //    d.rast
-  //    and check in the pull downlist (if your eyes dont fall out looking at those fonts)
-  //    to remove teh file again do:
-  //    g.remove rast=circle
-
-  /*
-     qDebug("Making crop circle...tweeedee treedee");
-     QString myProgram = "/usr/lib/grass/bin/r.circle";
-     QStringList myArgs;
-     myArgs << "-b"
-     << "output=circle"
-     <<  "coordinate=744800,3611100"
-     << "max=500"
-     << "--overwrite";
-     */
-  QString myProgram = "/usr/lib/grass/bin/r.stats";
-  QStringList myArgs;
-  myArgs << "landuse";
-  QProcess myProcess;
-  myProcess.start(myProgram, myArgs);
-  if (!myProcess.waitForStarted()) {
-    qDebug("The process never started.....aaargh");
-  }
-
-  while (myProcess.waitForReadyRead(-1)) {
-  }
-
-  QString myString;
-  myString+=("--------- Output ----------\n");
-  myProcess.setReadChannel(QProcess::StandardOutput);
-  QByteArray myArray = myProcess.readAll();
-  myString.append(myArray);
-  myString+=("--------- Errors ----------\n");
-  myProcess.setReadChannel(QProcess::StandardError);
-  myArray = myProcess.readAll();
-  myString.append(myArray);
-
-  qDebug(myString.toLocal8Bit());
-
-  qDebug("The process completed");
-}
-
-void LaMainForm::doBaseCalculations()
-{
-  // Ok, first try to pull some info from a plant
-
-}
 
 bool LaMainForm::setComboToDefault(QComboBox * thepCombo, QString theDefault)
 {

@@ -21,6 +21,9 @@
 #ifndef Percent
 #define Percent
 
+#include <QDialog>
+#include <QHash>
+#include <QPair>
 class QString;
 #include "laserialisable.h"
 #include "laguid.h"
@@ -258,6 +261,12 @@ class LaModel : public LaSerialisable, public LaGuid
     /** I'm sure there was something I needed this for :s */
     int mSpare;
     Status mFallowStatus;
+    void makeCircle(int theX, int theY);
+    void getArea(float theArea);
+    void makeWalkCost(int theX, int theY);
+    void makeEuclideanCost(int theX, int theY);
+    void makePathDistanceCost(int theX, int theY);
+    void writeMetaData(QString theValue);
 };
 #endif //Percent
 
