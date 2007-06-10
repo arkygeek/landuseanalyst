@@ -428,10 +428,10 @@ void LaMainForm::setDietLabels()
 void LaMainForm::animalCellClicked(int theRow, int theColumn)
 {
   qDebug("LaMainForm::animalCellClicked");
-  QTableWidgetItem* item = tblAnimals->item(tblAnimals->currentRow(),1);
-  if (item)
+  QTableWidgetItem* mypItem = tblAnimals->item(tblAnimals->currentRow(),1);
+  if (mypItem)
   {
-    QString myGuid = item->data(Qt::UserRole).toString();
+    QString myGuid = mypItem->data(Qt::UserRole).toString();
     //QString myGuid = tblAnimals->item(tblAnimals->currentRow(),1)->data(Qt::UserRole).toString();
     //get all animals, then get the animal for this cell if it exists
     QMap<QString,LaAnimal> myAnimalsMap = LaUtils::getAvailableAnimals();
@@ -449,10 +449,10 @@ void LaMainForm::animalCellClicked(int theRow, int theColumn)
 
 void LaMainForm::animalCellChanged(int theRow, int theColumn)
 {
-  QTableWidgetItem* item = tblAnimals->item(tblAnimals->currentRow(),1);
-  if (item)
+  QTableWidgetItem* mypItem = tblAnimals->item(tblAnimals->currentRow(),1);
+  if (mypItem)
   {
-    QString myGuid = item->data(Qt::UserRole).toString();
+    QString myGuid = mypItem->data(Qt::UserRole).toString();
     // QString myGuid = tblAnimals->item(tblAnimals->currentRow(),1)->data(Qt::UserRole).toString();
     bool myStateFlag = tblAnimals->item(tblAnimals->currentRow(),0)->checkState();
     QPair<bool,QString> myPair = mAnimalsMap[myGuid];
@@ -468,10 +468,10 @@ void LaMainForm::animalCellChanged(int theRow, int theColumn)
 void LaMainForm::cropCellClicked(int theRow, int theColumn)
 {
   qDebug("LaMainForm::cropCellClicked");
-    QTableWidgetItem* item = tblCrops->item(tblCrops->currentRow(),1);
-  if (item)
+    QTableWidgetItem* mypItem = tblCrops->item(tblCrops->currentRow(),1);
+  if (mypItem)
   {
-    QString myGuid = item->data(Qt::UserRole).toString();
+    QString myGuid = mypItem->data(Qt::UserRole).toString();
     //QString myGuid = tblCrops->item(tblCrops->currentRow(),1)->data(Qt::UserRole).toString();
     //get all crops, then get the crop for this cell if it exists
     QMap<QString,LaCrop> myCropsMap = LaUtils::getAvailableCrops();
@@ -489,10 +489,10 @@ void LaMainForm::cropCellClicked(int theRow, int theColumn)
 
 void LaMainForm::cropCellChanged(int theRow, int theColumn)
 {
-  QTableWidgetItem* item = tblCrops->item(tblCrops->currentRow(),1);
-  if (item)
+  QTableWidgetItem* mypItem = tblCrops->item(tblCrops->currentRow(),1);
+  if (mypItem)
   {
-    QString myGuid = item->data(Qt::UserRole).toString();
+    QString myGuid = mypItem->data(Qt::UserRole).toString();
     //QString myGuid = tblCrops->item(tblCrops->currentRow(),1)->data(Qt::UserRole).toString();
     bool myStateFlag = tblCrops->item(tblCrops->currentRow(),0)->checkState();
     QPair<bool,QString> myPair = mCropsMap[myGuid];
