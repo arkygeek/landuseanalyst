@@ -93,7 +93,7 @@ class LaModel : public LaSerialisable, public LaGuid
     int getProductionTargetsAnimals(QString theAnimalGuid, int theCalorieTarget);
     int getAreaTargetsCrops(QString theCropGuid, int theProductionTarget);
     int getFallowLandForACrop(QString theCropParameterGuid, int theAreaTarget);
-    int allocateFallowGrazingLand();
+    void allocateFallowGrazingLand();
     int caloriesNeededByAnimal(QString theAnimalGuid);
     int adjustAreaTargetsCrops();
     int doTheFallowAllocation(Priority, int, int);

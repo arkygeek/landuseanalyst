@@ -412,7 +412,7 @@ void LaModel::run()
                                           (QString theAnimalGuid, float theCalorieTarget)
     X getAreaTargetsCrops         ---> float LaModel::getAreaTargetsCrops
                                           (QString theCropGuid, float theProductionTarget)
-      allocateFallowGrazingLand   ---> float LaModel::allocateFallowGrazingLand()
+    X allocateFallowGrazingLand   ---> float LaModel::allocateFallowGrazingLand()
       getAreaTargetsAnimals       ---> float LaModel::caloriesNeededByAnimal
                                           (QString theAnimalGuid)
       adjustAreaTargetsCrops      --->
@@ -441,6 +441,20 @@ void LaModel::run()
   initialiseProductionRequiredAnimalsMap();
   initialiseProductionRequiredCropsMap();
   // Step 5
+  //        Area targets for crops are calculated and stored in a QMap
+  //        These calculations will produce values for the amount of
+  //          fallow land available for grazing, which will in turn
+  //          be used to reduce the amount of calories which the animals
+  //          who graze the fallow land need from specific grazing land.
+  initialiseAreaTargetsCropsMap();
+  // Step 5
+  //        If there is available fallow cropland for any animals to
+  //          graze, it needs to be allocated to the animals accordingly
+  //          to their access priority, and their total calorific
+  //          requirements will be reduced to reflect this 'already
+  //          counted for' land.
+  allocateFallowGrazingLand();
+  // Step 6
   //
 }
 
@@ -642,13 +656,22 @@ void LaModel::initialiseProductionRequiredAnimalsMap()
   }
 }
 
-void initialiseAreaTargetsAnimalsMap()
+void LaModel::initialiseAreaTargetsCropsMap()
 {
-
+  mAreaTargetsCropsMap.clear();
+  QMapIterator<QString, QString > myCropIterator(mCropsMap);
+  while (myCropIterator.hasNext())
+  {
+    myCropIterator.next();
+    QString myCropGuid = myCropIterator.key();
+    int myProductionTarget = static_cast<int>(mProductionRequiredCropsMap.value(myCropGuid));
+    mProductionRequiredCropsMap.insert(myCropGuid,getAreaTargetsCrops(myCropGuid, myProductionTarget));
+  }
 }
-void initialiseAreaTargetsCropsMap()
-{
 
+void LaModel::initialiseAreaTargetsAnimalsMap()
+{
+  // implement me please!
 }
 
 Status LaModel::fallowStatus() const
@@ -656,7 +679,7 @@ Status LaModel::fallowStatus() const
   return mFallowStatus;
 }
 
-int LaModel::allocateFallowGrazingLand()
+void LaModel::allocateFallowGrazingLand()
 {
   // We need to divide the available fallow land amongst the animals
   // that graze fallow. We split the animal breeds by fallow land
@@ -665,23 +688,15 @@ int LaModel::allocateFallowGrazingLand()
   // caw and horse are high priority, shee and pig medium,
   // chicken and gooxe low.
 
-  int myAnimalsHighPriorityCount, myAnimalsMediumPriorityCount, myAnimalsLowPriorityCount;
-  int   myAnimalsHighPriorityCalorieRequirements;
-  int   myAnimalsMediumPriorityCalorieRequirements;
-  int   myAnimalsLowPriorityCalorieRequirements;
+  int myAnimalsHighPriorityCount=0, myAnimalsMediumPriorityCount=0, myAnimalsLowPriorityCount=0;
+  int   myAnimalsHighPriorityCalorieRequirements=0;
+  int   myAnimalsMediumPriorityCalorieRequirements=0;
+  int   myAnimalsLowPriorityCalorieRequirements=0;
   // put starting caloric requirements of all used animals into a map
   // for reduction due to grazing of fallow crop land
-  initialiseCaloriesRequiredByAnimalsMap();
+  // initialiseCaloriesRequiredByAnimalsMap();
 
   int myTotalFallowCalories=0;
-
-  myAnimalsHighPriorityCount=0;
-  myAnimalsMediumPriorityCount=0;
-  myAnimalsLowPriorityCount=0;
-
-  myAnimalsHighPriorityCalorieRequirements=0;
-  myAnimalsMediumPriorityCalorieRequirements=0;
-  myAnimalsLowPriorityCalorieRequirements=0;
 
   // Count the Animals in each Priority Level and sum their calorie requirements
   QMapIterator<QString, QString > myAnimalIterator(mAnimalsMap);
@@ -764,8 +779,8 @@ int LaModel::allocateFallowGrazingLand()
     Priority myPriority = Low;
     myTotalFallowCalories = doTheFallowAllocation(myPriority, myTotalFallowCalories, myAnimalsLowPriorityCalorieRequirements);
   }
-  int myReturnValue = static_cast<int>(myTotalFallowCalories);
-  return myReturnValue;
+  //int myReturnValue = static_cast<int>(myTotalFallowCalories);
+  //return myReturnValue;
 }
 
 int LaModel::doTheFallowAllocation
@@ -775,11 +790,24 @@ int LaModel::doTheFallowAllocation
         int theTotalCalorificRequirements
       )
 {
-  int myTotalFallowCalories=theAvailableFallowCalories - theTotalCalorificRequirements;
-  Status myFallowStatus;
+  // when the total number of calories needed by the animals
+  // is taken away from the total available calories (from crop fallow),
+  // there will be one of two results.
+  // 1. the result will be <=0, meaning that additional sources of
+  //    food is required for the animals.  (fodder or grazing land)
+  // 2. the result will be > 0, meaning that there is enough food value
+  //    in the crop fallow to completely feed the animals.
+  int myTotalFallowCalories = theAvailableFallowCalories - theTotalCalorificRequirements;
 
-  if (myTotalFallowCalories > 0) {myFallowStatus=MoreThanEnoughToCompletelySatisfy;}
-  else {myFallowStatus=NotEnoughToCompletelySatisfy;}
+  // set up the conditions for the fallow allocation...
+  // there is either enough fallow to feed the animal completely
+  // or not enough to feed them completely.  If there is enough,
+  // the animal will not be requiring any additional source of
+  // calories.  In other words, we won't be needing to graze them
+  // on any other land besides the crop fallow.
+  Status myFallowStatus;
+  if (myTotalFallowCalories > 0) {myFallowStatus = MoreThanEnoughToCompletelySatisfy;}
+  else {myFallowStatus = NotEnoughToCompletelySatisfy;}
 
   switch (myFallowStatus)
   {
