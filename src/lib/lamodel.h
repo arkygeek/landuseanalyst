@@ -80,23 +80,23 @@ class LaModel : public LaSerialisable, public LaGuid
     /** The number of days required for gestation */
     int caloriesPerPersonDaily() const;
     /** The number of days in the female estrous cycle */
-    int spare() const;
+
     Status fallowStatus() const;
 
-    float caloriesFromPlants();
-    float caloriesFromTameMeat();
+    int caloriesFromCrops();
+    int caloriesFromTameMeat();
     int countCrops();
     int countAnimals();
-    float getCalorieTargetCrops(QString theCropParameterGuid);
-    float getCalorieTargetAnimals(QString theAnimalParameterGuid);
-    float getProductionTargetsCrops(QString theCropGuid, int theCalorieTarget);
-    float getProductionTargetsAnimals(QString theAnimalGuid, int theCalorieTarget);
-    float getAreaTargetsCrops(QString theCropGuid, float theProductionTarget);
-    float getFallowLandForACrop(QString theCropParameterGuid, int theAreaTarget);
-    float allocateFallowGrazingLand();
-    float caloriesNeededByAnimal(QString theAnimalGuid);
-    float adjustAreaTargetsCrops();
-    float doTheFallowAllocation(Priority, float, float);
+    float caloriesProvidedByTheCrop(QString theCropParameterGuid);
+    int caloriesProvidedByTheAnimal(QString theAnimalParameterGuid);
+    int getProductionTargetsCrops(QString theCropGuid, int theCalorieTarget);
+    int getProductionTargetsAnimals(QString theAnimalGuid, int theCalorieTarget);
+    int getAreaTargetsCrops(QString theCropGuid, int theProductionTarget);
+    int getFallowLandForACrop(QString theCropParameterGuid, int theAreaTarget);
+    int allocateFallowGrazingLand();
+    int caloriesNeededByAnimal(QString theAnimalGuid);
+    int adjustAreaTargetsCrops();
+    int doTheFallowAllocation(Priority, int, int);
     //
     // Mutators
     //
@@ -159,7 +159,7 @@ class LaModel : public LaSerialisable, public LaGuid
     /** Set the percent of TAME Plants, of the Plant based portion of the diet
      * @see plantPercent()
      */
-    void setPlantPercent(int theDietPercent);
+    void setCropPercent(int theDietPercent);
 
     /** Set the meatPercent in weeks
      * @see meatPercent()
@@ -180,11 +180,6 @@ class LaModel : public LaSerialisable, public LaGuid
      * @param QMap<QString,QString> a list of crop guid and animal parameter guids
      */
     void setCrops(QMap<QString,QString>);
-
-    /** Set the spare in days
-     * @see spare()
-     */
-    void setSpare(int theSpare);
 
     /** Perform calcs on run
      */
@@ -215,15 +210,49 @@ class LaModel : public LaSerialisable, public LaGuid
 
 
   private:
+    /** A map of calorie targets for animals.
+     */
+    QMap <QString,float> mCaloriesProvidedByAnimalsMap;
+    /** Initialise the map of calories needing to be provided
+     * by each individual animal.
+     */
+    void initialiseCaloriesProvidedByAnimalsMap();
+
+    /** A map of calorie targets for crops.
+     */
+    QMap <QString,float> mCaloriesProvidedByCropsMap;
+    /** Initialise the map of calories needing to be provided
+     * by each individual crop.
+     */
+    void initialiseCaloriesProvidedByCropsMap();
+
+    /** A map of production targets for animals.
+     */
+    QMap <QString,float> mProductionRequiredAnimalsMap;
+    /** Initialise the map of calories needing to be provided
+     * by each individual animal.
+     */
+    void initialiseProductionRequiredAnimalsMap();
+
+    /** A map of calorie targets for crops.
+     */
+    QMap <QString,float> mProductionRequiredCropsMap;
+    /** Initialise the map of production levels needing
+     * to meet the calorie requirements
+     */
+    void initialiseProductionRequiredCropsMap();
+
+///////////////////////////////////////////////////////////////////////////////////
+
     /** A map of running totals for calorie requirements for animals.
      * As we account for each resource (fallow, crop x, crop y etc)
      * we can remove it from the cumulative total.
      */
-    QMap <QString,float> mAnimalCaloriesMap;
+    QMap <QString,float> mCaloriesRequiredByAnimalsMap;
     /** Initialise the cumulative calories map to the calories
      * required for each animal.
      */
-    void initialiseAnimalCaloriesMap();
+    void initialiseCaloriesRequiredByAnimalsMap();
 
 
     /** The name for this model */
@@ -249,7 +278,7 @@ class LaModel : public LaSerialisable, public LaGuid
     /** Percentage of overall diet fulfilled by plant derived food */
     int mDietPercent;
     /** Percentage of Plant derived food fulfilled by domesticated crops */
-    int mPlantPercent;
+    int mPercentOfDietThatIsFromCrops;
     /** Percentage of Animal (meat) derived food fulfilled by domesticated animals */
     int mMeatPercent;
     /** The number of calories required per person per day (average) */
@@ -258,8 +287,7 @@ class LaModel : public LaSerialisable, public LaGuid
     QMap<QString,QString> mAnimalsMap;
     /** A map to hold the associated crops and their parameters */
     QMap<QString,QString> mCropsMap;
-    /** I'm sure there was something I needed this for :s */
-    int mSpare;
+
     Status mFallowStatus;
     void makeCircle(int theX, int theY);
     void getArea(float theArea);

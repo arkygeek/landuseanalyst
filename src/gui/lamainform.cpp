@@ -568,7 +568,7 @@ void LaMainForm::on_pushButtonRun_clicked()
   myModel.setPathDistance(radioButtonPathDistance->isChecked());
   myModel.setPrecision(spinBoxModelPrecision->value());
   myModel.setDietPercent(horizontalSliderDiet->value());
-  myModel.setPlantPercent(horizontalSliderCrop->value());
+  myModel.setCropPercent(horizontalSliderCrop->value());
   myModel.setMeatPercent(horizontalSliderMeat->value());
   myModel.setCaloriesPerPersonDaily(spinBoxDailyCalories->value());
   textBrowserResultsLeft->setText(myModel.toHtml());
@@ -595,7 +595,7 @@ void LaMainForm::on_pushButtonRun_clicked()
 
   textBrowserResultsRight->append("Number of Crops: " + QString::number(myModel.countCrops()));
   textBrowserResultsRight->append("Number of Animals: " + QString::number(myModel.countAnimals()));
-  textBrowserResultsRight->append("Calories from Crops: " + QString::number(myModel.caloriesFromPlants()));
+  textBrowserResultsRight->append("Calories from Crops: " + QString::number(myModel.caloriesFromCrops()));
   textBrowserResultsRight->append("Calories from Animals: " + QString::number(myModel.caloriesFromTameMeat()));
 
 }

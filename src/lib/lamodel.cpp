@@ -46,7 +46,7 @@ LaModel::LaModel() : LaSerialisable(), LaGuid()
   mProjection=100;
   mPrecision=5;
   mDietPercent=25;
-  mPlantPercent=10;
+  mPercentOfDietThatIsFromCrops=10;
   mMeatPercent=10;
   mCaloriesPerPersonDaily=2500;
 }
@@ -70,10 +70,9 @@ LaModel::LaModel(const LaModel& theModel)
   mPathDistance=theModel.pathDistance();
   mPrecision=theModel.precision();
   mDietPercent=theModel.dietPercent();
-  mPlantPercent=theModel.plantPercent();
+  mPercentOfDietThatIsFromCrops=theModel.plantPercent();
   mMeatPercent=theModel.meatPercent();
   mCaloriesPerPersonDaily=theModel.caloriesPerPersonDaily();
-  mSpare=theModel.spare();
   mFallowStatus=theModel.fallowStatus();
 }
 
@@ -93,10 +92,9 @@ LaModel& LaModel::operator=(const LaModel& theModel)
   mPathDistance=theModel.pathDistance();
   mPrecision=theModel.precision();
   mDietPercent=theModel.dietPercent();
-  mPlantPercent=theModel.plantPercent();
+  mPercentOfDietThatIsFromCrops=theModel.plantPercent();
   mMeatPercent=theModel.meatPercent();
   mCaloriesPerPersonDaily=theModel.caloriesPerPersonDaily();
-  mSpare=theModel.spare();
   mFallowStatus=theModel.fallowStatus();
   return *this;
 }
@@ -147,17 +145,17 @@ int LaModel::dietPercent() const
 }
 int LaModel::plantPercent() const
 {
-  if (mPlantPercent < 0)
+  if (mPercentOfDietThatIsFromCrops < 0)
   {
     return 0;
   }
-  else if (mPlantPercent > 100)
+  else if (mPercentOfDietThatIsFromCrops > 100)
   {
     return 100;
   }
   else
   {
-    return mPlantPercent;
+    return mPercentOfDietThatIsFromCrops;
   }
 }
 int LaModel::meatPercent() const
@@ -167,10 +165,6 @@ int LaModel::meatPercent() const
 int LaModel::caloriesPerPersonDaily() const
 {
   return mCaloriesPerPersonDaily;
-}
-int LaModel::spare() const
-{
-  return mSpare;
 }
 
 void LaModel::setFallowStatus(Status theStatus)
@@ -223,9 +217,9 @@ void LaModel::setDietPercent(int thePercent)
 {
   mDietPercent=thePercent;
 }
-void LaModel::setPlantPercent(int thePercent)
+void LaModel::setCropPercent(int thePercent)
 {
-  mPlantPercent=thePercent;
+  mPercentOfDietThatIsFromCrops=thePercent;
 }
 void LaModel::setMeatPercent(int thePercent)
 {
@@ -242,11 +236,6 @@ void LaModel::setAnimals(QMap<QString,QString> theAnimals)
 void LaModel::setCrops(QMap<QString,QString> theCrops)
 {
   mCropsMap = theCrops;
-}
-
-void LaModel::setSpare(int theSpare)
-{
-  mSpare=theSpare;
 }
 
 bool LaModel::fromXml(QString theXml)
@@ -299,10 +288,9 @@ bool LaModel::fromXml(QString theXml)
   }
   mPrecision=QString(myTopElement.firstChildElement("precision").text()).toInt();
   mDietPercent=QString(myTopElement.firstChildElement("dietPercent").text()).toInt();
-  mPlantPercent=QString(myTopElement.firstChildElement("plantPercent").text()).toInt();
+  mPercentOfDietThatIsFromCrops=QString(myTopElement.firstChildElement("plantPercent").text()).toInt();
   mMeatPercent=QString(myTopElement.firstChildElement("meatPercent").text()).toInt();
   mCaloriesPerPersonDaily=QString(myTopElement.firstChildElement("caloriesPerPersonDaily").text()).toInt();
-  mSpare=QString(myTopElement.firstChildElement("spare").text()).toInt();
   return true;
 }
 
@@ -321,10 +309,9 @@ QString LaModel::toXml()
   myString+=QString("  <pathDistance>" + QString::number(mPathDistance) + "</pathDistance>\n");
   myString+=QString("  <precision>" + QString::number(mPrecision) + "</precision>\n");
   myString+=QString("  <dietPercent>" + QString::number(mDietPercent) + "</dietPercent>\n");
-  myString+=QString("  <plantPercent>" + QString::number(mPlantPercent) + "</plantPercent>\n");
+  myString+=QString("  <plantPercent>" + QString::number(mPercentOfDietThatIsFromCrops) + "</plantPercent>\n");
   myString+=QString("  <meatPercent>" + QString::number(mMeatPercent) + "</meatPercent>\n");
   myString+=QString("  <caloriesPerPersonDaily>" + QString::number(mCaloriesPerPersonDaily) + "</caloriesPerPersonDaily>\n");
-  myString+=QString("  <spare>" + QString::number(mSpare) + "</spare>\n");
   myString+=QString("</model>\n");
   return myString;
 }
@@ -344,10 +331,9 @@ QString LaModel::toText()
   myString+=QString("pathDistance=>" + QString::number(mPathDistance) + "\n");
   myString+=QString("precision=>" + QString::number(mPrecision) + "\n");
   myString+=QString("dietPercent=>" + QString::number(mDietPercent) + "\n");
-  myString+=QString("plantPercent=>" + QString::number(mPlantPercent) + "\n");
+  myString+=QString("plantPercent=>" + QString::number(mPercentOfDietThatIsFromCrops) + "\n");
   myString+=QString("meatPercent=>" + QString::number(mMeatPercent) + "\n");
   myString+=QString("caloriesPerPersonDaily=>" + QString::number(mCaloriesPerPersonDaily) + "\n");
-  myString+=QString("spare=>" + QString::number(mSpare) + "\n");
   return myString;
 }
 
@@ -366,10 +352,9 @@ QString LaModel::toHtml()
   myString+="Path Distance: " + QString::number(mPathDistance) + "<br />";
   myString+="Precision: " + QString::number(mPrecision) + "<br />";
   myString+="Diet Percent" + QString::number(mDietPercent) + "<br />";
-  myString+="Plant Percent: " + QString::number(mPlantPercent) + "<br />";
+  myString+="Plant Percent: " + QString::number(mPercentOfDietThatIsFromCrops) + "<br />";
   myString+="Meat Percent: " + QString::number(mMeatPercent) + "<br />";
   myString+="Calories Per PersonDaily: " + QString::number(mCaloriesPerPersonDaily) + "<br />";
-  myString+="Spare: " + QString::number(mSpare) + "</p>";
   //iterate through animals
   QMapIterator<QString, QString > myAnimalIterator(mAnimalsMap);
   while (myAnimalIterator.hasNext())
@@ -414,19 +399,17 @@ QString LaModel::toHtml()
 
 void LaModel::run()
 {
-  LaModel myModel;
-
   /* Basic Steps are:
 
     X breakdownDiet               ---> int LaModel::breakdownDiet()
     X countCrops                  ---> int LaModel::countCrops()
     X countAnimals                ---> int LaModel::countAnimals()
-    X getCalorieTargetCrops       ---> float LaModel::caloriesFromPlants()
-    X getCalorieTargetAnimals     ---> float LaModel::caloriesFromTameMeat()
+    X caloriesProvidedByTheCrop       ---> float LaModel::caloriesFromCrops()
+    X caloriesProvidedByTheAnimal     ---> float LaModel::caloriesFromTameMeat()
     X getProductionTargetsCrops   ---> float LaModel::getProductionTargetsCrops
-                                        (QString theCropGuid, int theCalorieTarget)
+                                        (QString theCropGuid, float theCalorieTarget)
     X getProductionTargetsAnimals ---> float LaModel::getProductionTargetsAnimals
-                                          (QString theAnimalGuid, int theCalorieTarget)
+                                          (QString theAnimalGuid, float theCalorieTarget)
     X getAreaTargetsCrops         ---> float LaModel::getAreaTargetsCrops
                                           (QString theCropGuid, float theProductionTarget)
       allocateFallowGrazingLand   ---> float LaModel::allocateFallowGrazingLand()
@@ -436,31 +419,54 @@ void LaModel::run()
 
   */
 
-  float myCaloriesFromCrops;
-  myCaloriesFromCrops = caloriesFromPlants();
 
+  // Step 1
+  //        Calculate calories needed from crops and tame meat to sustain the settlement
+  //        available here -->  caloriesFromCrops();
+  //        available here -->  caloriesFromTameMeat();
+  // Step 2
+  //        Calculate calorie targets for each crop and each animals
+  //        (These results will be stored in a QMap)
+  initialiseCaloriesProvidedByCropsMap();
+  initialiseCaloriesProvidedByAnimalsMap();
+  // Step 3
+  //        Now we need to calculate how many calories the animals
+  //          are going to need to stay alive.
+  //        (These calculations are going to be stored in a QMap)
+  initialiseCaloriesRequiredByAnimalsMap();
+  // Step 4
+  //        Production targets must now be calculated for each animal and crop
+  //        Animals first, because if the animals are fed grain, it will
+  //          increase the production targets of the crops
+
+
+
+
+
+  initialiseCaloriesRequiredByAnimalsMap();
 
 }
 
-float LaModel::caloriesFromPlants()
+int LaModel::caloriesFromCrops()
 {
-
   float myDietComposition=0.01*(100-mDietPercent);
   float myCropPercent=0.01*(plantPercent());
   float myCropOverallContributionToDiet=myDietComposition*myCropPercent;
   float myCalorieTarget=population()*caloriesPerPersonDaily()*365;
   float myCropCalorieTarget=myCalorieTarget*myCropOverallContributionToDiet;
-  return myCropCalorieTarget;
+  int myReturnValue = (int) myCropCalorieTarget;
+  return myReturnValue;
 }
 
-float LaModel::caloriesFromTameMeat()
+int LaModel::caloriesFromTameMeat()
 {
   float myDietComposition=0.01*dietPercent();
   float myMeatPercent=0.01*meatPercent();
   float myAnimalOverallContributionToDiet=myDietComposition*myMeatPercent;
   float myCalorieTarget=population()*mCaloriesPerPersonDaily*365;
   float myTameMeatCalorieTarget=myCalorieTarget*myAnimalOverallContributionToDiet;
-  return myTameMeatCalorieTarget;
+  int myReturnValue = (int) myTameMeatCalorieTarget;
+  return myReturnValue;
 }
 
 int LaModel::countCrops()
@@ -497,43 +503,47 @@ int LaModel::countAnimals()
   return myAnimalCounter;
 }
 
-float LaModel::getCalorieTargetCrops(QString theCropParameterGuid)
+float LaModel::caloriesProvidedByTheCrop(QString theCropParameterGuid)
 {
   LaCropParameter myCropParameter = LaUtils::getCropParameter(theCropParameterGuid);
   float myCropPercent=0.01*myCropParameter.percentTameCrop();
-  float myCropCalorieTarget=caloriesFromPlants()*myCropPercent;
+  float myCropCalorieTarget=caloriesFromCrops()*myCropPercent;
   return myCropCalorieTarget;
 }
 
-float LaModel::getCalorieTargetAnimals(QString theAnimalParameterGuid)
+int LaModel::caloriesProvidedByTheAnimal(QString theAnimalParameterGuid)
 {
   LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(theAnimalParameterGuid);
   float myAnimalPercent=0.01*myAnimalParameter.percentTameMeat();
   float myAnimalCalorieTarget=caloriesFromTameMeat()*myAnimalPercent;
-  return myAnimalCalorieTarget;
+  int myReturnValue = (int) myAnimalCalorieTarget;
+  return myReturnValue;
 }
-float LaModel::getProductionTargetsCrops(QString theCropGuid, int theCalorieTarget)
+int LaModel::getProductionTargetsCrops(QString theCropGuid, int theCalorieTarget)
 {
   LaCrop myCrop = LaUtils::getCrop(theCropGuid);
   float myCropProductionTarget = theCalorieTarget / myCrop.cropCalories();
-  return myCropProductionTarget;
+  int myReturnValue = (int) myCropProductionTarget;
+  return myReturnValue;
 }
 
-float LaModel::getProductionTargetsAnimals(QString theAnimalGuid, int theCalorieTarget)
+int LaModel::getProductionTargetsAnimals(QString theAnimalGuid, int theCalorieTarget)
 {
   LaAnimal myAnimal = LaUtils::getAnimal(theAnimalGuid);
   float myAnimalProductionTarget = (theCalorieTarget / myAnimal.meatFoodValue()) / (0.01 * myAnimal.usableMeat());
-  return myAnimalProductionTarget;
+  int myReturnValue = (int) myAnimalProductionTarget;
+  return myReturnValue;
 }
 
-float LaModel::getAreaTargetsCrops(QString theCropGuid, float theProductionTarget)
+int LaModel::getAreaTargetsCrops(QString theCropGuid, int theProductionTarget)
 {
   LaCrop myCrop = LaUtils::getCrop(theCropGuid);
   float myCropAreaTarget = theProductionTarget/myCrop.cropYield();
-  return myCropAreaTarget;
+  int myReturnValue = (int) myCropAreaTarget;
+  return myReturnValue;
 }
 
-float LaModel::caloriesNeededByAnimal(QString theAnimalGuid)
+int LaModel::caloriesNeededByAnimal(QString theAnimalGuid)
 { // this is essentially the generic animal model
   LaAnimal myAnimal = LaUtils::getAnimal(theAnimalGuid);
 
@@ -562,25 +572,76 @@ float LaModel::caloriesNeededByAnimal(QString theAnimalGuid)
   float myTotalJuvenilesCaloriesRequired = myTotalJuveniles * myAnimal.juvenile() * 365.;
 
   float myTotalCaloriesNeededToFeedAnimals = myTotalMothersCaloriesRequired + myTotalJuvenilesCaloriesRequired;
-  return myTotalCaloriesNeededToFeedAnimals;
+  int myReturnValue = (int) myTotalCaloriesNeededToFeedAnimals;
+  return myReturnValue;
 }
 
-float LaModel::getFallowLandForACrop(QString theCropParameterGuid, int theAreaTarget)
+int LaModel::getFallowLandForACrop(QString theCropParameterGuid, int theAreaTarget)
 {
   LaCropParameter myCropParameter = LaUtils::getCropParameter(theCropParameterGuid);
   float myAvailableFallow = myCropParameter.fallowRatio() * theAreaTarget;
-  return myAvailableFallow;
+  int myReturnValue = (int) myAvailableFallow;
+  return myReturnValue;
 }
 
-void LaModel::initialiseAnimalCaloriesMap()
+void LaModel::initialiseCaloriesProvidedByAnimalsMap()
 {
-  mAnimalCaloriesMap.clear();
+  mCaloriesProvidedByAnimalsMap.clear();
   QMapIterator<QString, QString > myAnimalIterator(mAnimalsMap);
   while (myAnimalIterator.hasNext())
   {
     myAnimalIterator.next();
     QString myAnimalGuid = myAnimalIterator.key();
-    mAnimalCaloriesMap.insert(myAnimalGuid,caloriesNeededByAnimal(myAnimalGuid));
+    mCaloriesProvidedByAnimalsMap.insert(myAnimalGuid,caloriesProvidedByTheAnimal(myAnimalGuid));
+  }
+}
+
+void LaModel::initialiseCaloriesProvidedByCropsMap()
+{
+  mCaloriesProvidedByCropsMap.clear();
+  QMapIterator<QString, QString > myCropIterator(mCropsMap);
+  while (myCropIterator.hasNext())
+  {
+    myCropIterator.next();
+    QString myCropGuid = myCropIterator.key();
+    mCaloriesProvidedByCropsMap.insert(myCropGuid,caloriesProvidedByTheCrop(myCropGuid));
+  }
+}
+
+void LaModel::initialiseCaloriesRequiredByAnimalsMap()
+{
+  mCaloriesRequiredByAnimalsMap.clear();
+  QMapIterator<QString, QString > myAnimalIterator(mAnimalsMap);
+  while (myAnimalIterator.hasNext())
+  {
+    myAnimalIterator.next();
+    QString myAnimalGuid = myAnimalIterator.key();
+    mCaloriesRequiredByAnimalsMap.insert(myAnimalGuid,caloriesNeededByAnimal(myAnimalGuid));
+  }
+}
+void LaModel::initialiseProductionRequiredCropsMap()
+{
+  mProductionRequiredCropsMap.clear();
+  QMapIterator<QString, QString > myCropIterator(mCropsMap);
+  while (myCropIterator.hasNext())
+  {
+    myCropIterator.next();
+    QString myCropGuid = myCropIterator.key();
+    int myProductionTarget = (int) mCaloriesProvidedByCropsMap.value(myCropGuid);
+    mProductionRequiredCropsMap.insert(myCropGuid,getProductionTargetsCrops(myCropGuid, myProductionTarget));
+  }
+}
+
+void LaModel::initialiseProductionRequiredAnimalsMap()
+{
+  mProductionRequiredAnimalsMap.clear();
+  QMapIterator<QString, QString > myAnimalIterator(mAnimalsMap);
+  while (myAnimalIterator.hasNext())
+  {
+    myAnimalIterator.next();
+    QString myAnimalGuid = myAnimalIterator.key();
+    int myProductionTarget = (int) mCaloriesProvidedByAnimalsMap.value(myAnimalGuid);
+    mProductionRequiredAnimalsMap.insert(myAnimalGuid,getProductionTargetsAnimals(myAnimalGuid, myProductionTarget));
   }
 }
 
@@ -589,7 +650,7 @@ Status LaModel::fallowStatus() const
   return mFallowStatus;
 }
 
-float LaModel::allocateFallowGrazingLand()
+int LaModel::allocateFallowGrazingLand()
 {
   // We need to divide the available fallow land amongst the animals
   // that graze fallow. We split the animal breeds by fallow land
@@ -599,14 +660,14 @@ float LaModel::allocateFallowGrazingLand()
   // chicken and gooxe low.
 
   int myAnimalsHighPriorityCount, myAnimalsMediumPriorityCount, myAnimalsLowPriorityCount;
-  float   myAnimalsHighPriorityCalorieRequirements;
-  float   myAnimalsMediumPriorityCalorieRequirements;
-  float   myAnimalsLowPriorityCalorieRequirements;
+  int   myAnimalsHighPriorityCalorieRequirements;
+  int   myAnimalsMediumPriorityCalorieRequirements;
+  int   myAnimalsLowPriorityCalorieRequirements;
   // put starting caloric requirements of all used animals into a map
   // for reduction due to grazing of fallow crop land
-  initialiseAnimalCaloriesMap();
+  initialiseCaloriesRequiredByAnimalsMap();
 
-  float myTotalFallowCalories=0;
+  int myTotalFallowCalories=0;
 
   myAnimalsHighPriorityCount=0;
   myAnimalsMediumPriorityCount=0;
@@ -661,12 +722,12 @@ float LaModel::allocateFallowGrazingLand()
     LaCropParameter myCropParameter = LaUtils::getCropParameter(myCropParameterGuid);
 
     float myCropPercent = 0.01 * myCropParameter.percentTameCrop();
-    float myCropCalorieTarget = caloriesFromPlants() * myCropPercent;
+    float myCropCalorieTarget = caloriesFromCrops() * myCropPercent;
     float myCropProductionTarget = myCropCalorieTarget / myCrop.cropCalories();
     float myCropAreaTarget = myCropProductionTarget / myCrop.cropYield();
     float myAvailableFallowCalories = myCropParameter.fallowRatio() * myCropAreaTarget * myCropParameter.fallowCalories();
 
-    myTotalFallowCalories += myAvailableFallowCalories;
+    myTotalFallowCalories += (int) myAvailableFallowCalories;
   } // while crop iterator
 
   ////////////////////////////////////////
@@ -697,17 +758,18 @@ float LaModel::allocateFallowGrazingLand()
     Priority myPriority = Low;
     myTotalFallowCalories = doTheFallowAllocation(myPriority, myTotalFallowCalories, myAnimalsLowPriorityCalorieRequirements);
   }
-  return myTotalFallowCalories;
+  int myReturnValue = (int) myTotalFallowCalories;
+  return myReturnValue;
 }
 
-float LaModel::doTheFallowAllocation
+int LaModel::doTheFallowAllocation
       (
         Priority thePriority,
-        float theAvailableFallowCalories,
-        float theTotalCalorificRequirements
+        int theAvailableFallowCalories,
+        int theTotalCalorificRequirements
       )
 {
-  float myTotalFallowCalories=theAvailableFallowCalories - theTotalCalorificRequirements;
+  int myTotalFallowCalories=theAvailableFallowCalories - theTotalCalorificRequirements;
   Status myFallowStatus;
 
   if (myTotalFallowCalories > 0) {myFallowStatus=MoreThanEnoughToCompletelySatisfy;}
@@ -732,7 +794,7 @@ float LaModel::doTheFallowAllocation
 
               if (myAnimalParameter.fallowUsage()==thePriority)
               {
-                mAnimalCaloriesMap[myAnimalGuid] = 0;
+                mCaloriesRequiredByAnimalsMap[myAnimalGuid] = 0;
               } //endif (fallowUsage(myAnimalGuid)
 
             } // while animal iterating
@@ -756,8 +818,8 @@ float LaModel::doTheFallowAllocation
 
               if (myAnimalParameter.fallowUsage()==thePriority)
               {
-                float myAdjustedCaloricRequirements = (mAnimalCaloriesMap.value(myAnimalGuid) / theTotalCalorificRequirements) * myTotalFallowCalories;
-                mAnimalCaloriesMap[myAnimalGuid] = myAdjustedCaloricRequirements;
+                int myAdjustedCaloricRequirements = (int) (mCaloriesRequiredByAnimalsMap.value(myAnimalGuid) / theTotalCalorificRequirements) * myTotalFallowCalories;
+                mCaloriesRequiredByAnimalsMap[myAnimalGuid] = myAdjustedCaloricRequirements;
               } //endif (fallowUsage(myAnimalGuid)==High)
 
             } // while animal iterating
@@ -772,7 +834,7 @@ float LaModel::doTheFallowAllocation
 
 ////////// All of the following functions are GRASS related functions ////////
 
-float LaModel::adjustAreaTargetsCrops()
+int LaModel::adjustAreaTargetsCrops()
 {
   int a;
   return a;
