@@ -508,11 +508,7 @@ void LaMainForm::cropCellChanged(int theRow, int theColumn)
 void LaMainForm::on_pushButtonRun_clicked()
 {
   LaModel myModel;
-
-  //
   // Get a list of the selected animals
-  //
-
   QMap<QString,QString> mySelectedAnimalsMap;
   //          <animal guid <enabled, animalparamters guid>>
   QMapIterator<QString, QPair<bool, QString> > myAnimalIterator(mAnimalsMap);
@@ -531,10 +527,7 @@ void LaMainForm::on_pushButtonRun_clicked()
   }
   myModel.setAnimals(mySelectedAnimalsMap);
 
-  //
   // Get a list of the selected crops
-  //
-
   QMap<QString,QString> mySelectedCropsMap;
   //          <crop guid <enabled, cropparamters guid>>
   QMapIterator<QString, QPair<bool, QString> > myCropIterator(mCropsMap);
@@ -553,10 +546,7 @@ void LaMainForm::on_pushButtonRun_clicked()
   }
   myModel.setCrops(mySelectedCropsMap);
 
-  //
   // Populate the model with all the form data
-  //
-
   myModel.setName(lineEditSiteName->text());
   myModel.setPopulation(spinBoxPopulation->value());
   myModel.setPeriod(lineEditPeriod->text());
@@ -599,13 +589,17 @@ void LaMainForm::on_pushButtonRun_clicked()
   textBrowserResultsRight->append("Calories from Animals: " + QString::number(myModel.caloriesFromTameMeat()));
 
 }
+
 void LaMainForm::on_pushButtonLoad_clicked()
 {
   //  implement me!
+  //  seriously... please implement me!
 }
+
 void LaMainForm::on_pushButtonSave_clicked()
 {
   //  implement me!
+  //  go on... get on with it!
 }
 
 void LaMainForm::writeResultsLeft(QString theText)

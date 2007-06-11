@@ -228,7 +228,7 @@ class LaModel : public LaSerialisable, public LaGuid
 
     /** A map of production targets for animals.
      */
-    QMap <QString,float> mProductionRequiredAnimalsMap;
+    QMap <QString,int> mProductionRequiredAnimalsMap;
     /** Initialise the map of calories needing to be provided
      * by each individual animal.
      */
@@ -241,6 +241,23 @@ class LaModel : public LaSerialisable, public LaGuid
      * to meet the calorie requirements
      */
     void initialiseProductionRequiredCropsMap();
+///////////////////////////////////////////////////////////////////////////////////
+    /** A map of are targets for animals.
+     */
+    QMap <QString,int> mAreaTargetsAnimalsMap;
+    /** Initialise the map of calories needing to be provided
+     * by each individual animal.
+     */
+    void initialiseAreaTargetsAnimalsMap();
+
+    /** A map of are targets for crops.
+     */
+    QMap <QString,int> mAreaTargetsCropsMap;
+    /** Initialise the map of calories needing to be provided
+     * by each individual crop.
+     */
+    void initialiseAreaTargetsCropsMap();
+
 
 ///////////////////////////////////////////////////////////////////////////////////
 
