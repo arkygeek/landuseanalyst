@@ -94,9 +94,11 @@ class LaModel : public LaSerialisable, public LaGuid
     int getAreaTargetsCrops(QString theCropGuid, int theProductionTarget);
     int getFallowLandForACrop(QString theCropParameterGuid, int theAreaTarget);
     void allocateFallowGrazingLand();
+    void adjustAnimalTargetsForFodder();
     int caloriesNeededByAnimal(QString theAnimalGuid);
     int adjustAreaTargetsCrops();
     int doTheFallowAllocation(Priority, int, int);
+
     //
     // Mutators
     //
@@ -181,9 +183,9 @@ class LaModel : public LaSerialisable, public LaGuid
      */
     void setCrops(QMap<QString,QString>);
 
-    /** Perform calcs on run
+    /** Perform calcs
      */
-    void run();
+    void DoCalculations();
 
     void setFallowStatus(Status theStatus);
     //void setDoTheFallowAllocation(Priority, float, float);
@@ -272,6 +274,7 @@ class LaModel : public LaSerialisable, public LaGuid
     void initialiseCaloriesRequiredByAnimalsMap();
 
 
+
     /** The name for this model */
     QString mName;
     /** The population for this model */
@@ -312,6 +315,7 @@ class LaModel : public LaSerialisable, public LaGuid
     void makeEuclideanCost(int theX, int theY);
     void makePathDistanceCost(int theX, int theY);
     void writeMetaData(QString theValue);
+    int mCommonGrazingLandAreaTarget;
 };
 #endif //Percent
 

@@ -397,49 +397,38 @@ QString LaModel::toHtml()
   return myString;
 }
 
-void LaModel::run()
+    /////////////////////////////////////////////
+   //                                         //
+  //  The 'GUTS' of this class follow below  //
+ //                                         //
+/////////////////////////////////////////////
+
+void LaModel::DoCalculations()
 {
-  /* Basic Steps are:
-
-    X breakdownDiet               ---> int LaModel::breakdownDiet()
-    X countCrops                  ---> int LaModel::countCrops()
-    X countAnimals                ---> int LaModel::countAnimals()
-    X caloriesProvidedByTheCrop       ---> float LaModel::caloriesFromCrops()
-    X caloriesProvidedByTheAnimal     ---> float LaModel::caloriesFromTameMeat()
-    X getProductionTargetsCrops   ---> float LaModel::getProductionTargetsCrops
-                                        (QString theCropGuid, float theCalorieTarget)
-    X getProductionTargetsAnimals ---> float LaModel::getProductionTargetsAnimals
-                                          (QString theAnimalGuid, float theCalorieTarget)
-    X getAreaTargetsCrops         ---> float LaModel::getAreaTargetsCrops
-                                          (QString theCropGuid, float theProductionTarget)
-    X allocateFallowGrazingLand   ---> float LaModel::allocateFallowGrazingLand()
-      getAreaTargetsAnimals       ---> float LaModel::caloriesNeededByAnimal
-                                          (QString theAnimalGuid)
-      adjustAreaTargetsCrops      --->
-
-  */
-
-
   // Step 1
   //        Calculate calories needed from crops and tame meat to sustain the settlement
   //        available here -->  caloriesFromCrops();
   //        available here -->  caloriesFromTameMeat();
+
   // Step 2
   //        Calculate calorie targets for each crop and each animals
   //        (These results will be stored in a QMap)
   initialiseCaloriesProvidedByCropsMap();
   initialiseCaloriesProvidedByAnimalsMap();
+
   // Step 3
   //        Now we need to calculate how many calories the animals
   //          are going to need to stay alive.
   //        (These calculations are going to be stored in a QMap)
   initialiseCaloriesRequiredByAnimalsMap();
+
   // Step 4
   //        Production targets must now be calculated for each animal and crop
   //        Animals first, because if the animals are fed grain, it will
   //          increase the production targets of the crops
   initialiseProductionRequiredAnimalsMap();
   initialiseProductionRequiredCropsMap();
+
   // Step 5
   //        Area targets for crops are calculated and stored in a QMap
   //        These calculations will produce values for the amount of
@@ -447,17 +436,48 @@ void LaModel::run()
   //          be used to reduce the amount of calories which the animals
   //          who graze the fallow land need from specific grazing land.
   initialiseAreaTargetsCropsMap();
-  // Step 5
+
+  // Step 6
   //        If there is available fallow cropland for any animals to
   //          graze, it needs to be allocated to the animals accordingly
   //          to their access priority, and their total calorific
   //          requirements will be reduced to reflect this 'already
   //          counted for' land.
   allocateFallowGrazingLand();
-  // Step 6
-  //
-}
 
+  // Step 7
+  //        If there are additional feed requirements for any animals we
+  //          now need to check to see if they receive calories from fodder.
+  //        If they do get fed fodder, this is the process that gets followed:
+  //          1)  They get fed straw and chaff first, as it is less costly
+  //              to the settlement than feeding them the grain.  If there is
+  //              enough calories provided by the straw/chaff fodder to satisfy
+  //              their remaining calorific needs, there is no need to search
+  //              for any additional grazing land, so that animals area target
+  //              needs to be set to zero.
+  //          2)  If the straw/chaff doesn't satisfy their feeding requirements,
+  //              then the same process as above is followed, but considering
+  //              of course the grain in this step.  However, at this point, if
+  //              grain is being used, the amount of that grain needs to be added
+  //              onto the prodction level requirement of the crop. (Step 7)
+  adjustAnimalTargetsForFodder();
+
+  // Step 8
+  //        Adjust the production levels of the crops to reflect any increases in
+  //          demand resulting from grain being used to feed animals.
+  //        adjustCropProductionForFodder(); // implement later
+  //
+  // Step 8
+  //        Calculate area targets for the animals based on their final
+  //          calorific requirements after considering fallow grazing
+  //          and the use of fodder as feed.
+  initialiseAreaTargetsAnimalsMap();
+}
+void LaModel::adjustAnimalTargetsForFodder()
+{
+  // after serious consideration, I have decided to implement fodder later.
+  // it is not as important as getting the rest of the project working.
+}
 int LaModel::caloriesFromCrops()
 {
   float myDietComposition=0.01*(100-mDietPercent);
@@ -670,8 +690,48 @@ void LaModel::initialiseAreaTargetsCropsMap()
 }
 
 void LaModel::initialiseAreaTargetsAnimalsMap()
-{
-  // implement me please!
+{ // this also returns an area target for common land
+  mAreaTargetsAnimalsMap.clear();
+  mCommonGrazingLandAreaTarget = 0;
+  //iterate through animals
+  QMapIterator<QString, QString > myAnimalIterator(mAnimalsMap);
+  while (myAnimalIterator.hasNext())
+  {
+    myAnimalIterator.next();
+    QString myAnimalGuid = myAnimalIterator.key();
+    QString myAnimalParameterGuid = myAnimalIterator.value();
+    LaAnimal myAnimal = LaUtils::getAnimal(myAnimalGuid);
+    LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(myAnimalParameterGuid);
+    // check to see if this animal needs any additional food
+    if (mCaloriesRequiredByAnimalsMap[myAnimalGuid] > 0) // yes, the animal needs more food
+    {
+      // figure out how much grazing land is needed to supply this many calories
+      LandBeingGrazed myLandBeingGrazed;
+      if (myAnimalParameter.useCommonGrazingLand()==1){myLandBeingGrazed=Common;}
+      else {myLandBeingGrazed=Unique;}
+
+      switch (myLandBeingGrazed)
+      {
+        case Common:
+             {
+               mCommonGrazingLandAreaTarget++;
+               mAreaTargetsAnimalsMap[myAnimalGuid]=0;
+             }
+        case Unique:
+             {
+               float myTarget = mCaloriesRequiredByAnimalsMap.value(myAnimalGuid) / myAnimalParameter.foodValueOfSpecificGrazingLand();
+               mAreaTargetsAnimalsMap[myAnimalGuid]=static_cast<int>(myTarget);
+             }
+      }
+      //int myCaloriesNeeded = static_cast<int>(mCaloriesRequiredByAnimalsMap.value(myAnimalGuid));
+
+      //mProductionRequiredAnimalsMap.insert(myAnimalGuid,getProductionTargetsAnimals(myAnimalGuid, myProductionTarget));
+    }
+    else // the animal needs no additional food
+    {
+      mAreaTargetsAnimalsMap[myAnimalGuid] = 0;
+    }
+  }
 }
 
 Status LaModel::fallowStatus() const

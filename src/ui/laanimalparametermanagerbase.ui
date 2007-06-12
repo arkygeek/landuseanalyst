@@ -124,6 +124,12 @@ p, li { white-space: pre-wrap; }
         <property name="text" >
          <string>Specific Land</string>
         </property>
+        <property name="checked" >
+         <bool>true</bool>
+        </property>
+        <property name="tristate" >
+         <bool>false</bool>
+        </property>
        </widget>
       </item>
       <item row="1" column="0" >
@@ -983,12 +989,44 @@ p, li { white-space: pre-wrap; }
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>210</x>
-     <y>309</y>
+     <x>494</x>
+     <y>466</y>
     </hint>
     <hint type="destinationlabel" >
      <x>246</x>
      <y>306</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBoxSpecificRaster</sender>
+   <signal>clicked()</signal>
+   <receiver>checkBoxCommonRaster</receiver>
+   <slot>toggle()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>116</x>
+     <y>391</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>228</x>
+     <y>393</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBoxCommonRaster</sender>
+   <signal>clicked()</signal>
+   <receiver>checkBoxSpecificRaster</receiver>
+   <slot>toggle()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>244</x>
+     <y>387</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>57</x>
+     <y>389</y>
     </hint>
    </hints>
   </connection>

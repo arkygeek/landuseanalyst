@@ -34,5 +34,5 @@ typedef QMap <QString,QPair<bool,QString> > LaTripleMap;
 
 enum Priority {None, High, Medium, Low};
 enum Status {MoreThanEnoughToCompletelySatisfy, NotEnoughToCompletelySatisfy};
-
+enum LandBeingGrazed {Common, Unique};
 #endif //LA
