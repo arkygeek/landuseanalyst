@@ -563,31 +563,47 @@ void LaMainForm::on_pushButtonRun_clicked()
   myModel.setCaloriesPerPersonDaily(spinBoxDailyCalories->value());
   textBrowserResultsLeft->setText(myModel.toHtml());
 
-  /* Basic Steps are:
+  // for debugging only...
 
-    X breakdownDiet               ---> int LaModel::breakdownDiet()
-    X countCrops                  ---> int LaModel::countCrops()
-    X countAnimals                ---> int LaModel::countAnimals()
-    X getCalorieTargetCrops       ---> float LaModel::caloriesFromPlants()
-    X getCalorieTargetAnimals     ---> float LaModel::caloriesFromTameMeat()
-    X getProductionTargetsCrops   ---> float LaModel::getProductionTargetsCrops
-                                        (QString theCropGuid, int theCalorieTarget)
-    X getProductionTargetsAnimals ---> float LaModel::getProductionTargetsAnimals
-                                          (QString theAnimalGuid, int theCalorieTarget)
-    X getAreaTargetsCrops         ---> float LaModel::getAreaTargetsCrops
-                                          (QString theCropGuid, float theProductionTarget)
-      allocateFallowGrazingLand   ---> float LaModel::allocateFallowGrazingLand()
-      getAreaTargetsAnimals       ---> float LaModel::caloriesNeededByAnimal
-                                          (QString theAnimalGuid)
-      adjustAreaTargetsCrops      --->
+  qDebug("Number of Crops: " + QString::number(myModel.countCrops()));
+  qDebug("Number of Animals: " + QString::number(myModel.countAnimals()));
+  qDebug("Calories from Crops: " + QString::number(myModel.caloriesFromCrops()));
+  qDebug("Calories from Animals: " + QString::number(myModel.caloriesFromTameMeat()));
+  qDebug("Calories target for Crops: " + QString::number(myModel.caloriesFromTameMeat()));
 
-  */
+  // iterate through crops and animals and display the calorie, production and area targets
+  debugChecks();
+}
 
-  textBrowserResultsRight->append("Number of Crops: " + QString::number(myModel.countCrops()));
-  textBrowserResultsRight->append("Number of Animals: " + QString::number(myModel.countAnimals()));
-  textBrowserResultsRight->append("Calories from Crops: " + QString::number(myModel.caloriesFromCrops()));
-  textBrowserResultsRight->append("Calories from Animals: " + QString::number(myModel.caloriesFromTameMeat()));
+void LaMainForm::debugChecks()
+{
+  // iterate through crops and display the calorie, production and area targets
+    QMapIterator<QString, QPair<bool, QString> > myAnimalIterator(mAnimalsMap);
+  while (myAnimalIterator.hasNext())
+  {
+    myAnimalIterator.next();
+    QPair<bool,QString> myPair = myAnimalIterator.value();
+    QString myAnimalGuid = myAnimalIterator.key();
+    bool mySelectedFlag = myPair.first;
+    QString myAnimalParameterGuid = myPair.second;
+    QString myText = "Animal <" + myAnimalGuid.toLocal8Bit() +
+      " , <";
+    mySelectedFlag ? myText += "true," : myText += "false,";
+    myText +=  myAnimalParameterGuid.toLocal8Bit() ;
+    myText += "> >";
+    textBrowserResultsLeft->append(myText);
+  }
 
+  // iterate through animals and display the calorie, production and area targets
+  QMapIterator<QString, QPair<bool, QString> > myCropIterator(mCropsMap);
+  while (myCropIterator.hasNext())
+  {
+    LaModel myModel;
+    myCropIterator.next();
+    QPair<bool,QString> myPair = myCropIterator.value();
+    QString myCropGuid = myCropIterator.key();
+    qDebug("Calories target for: " + myModel.name());
+  }
 }
 
 void LaMainForm::on_pushButtonLoad_clicked()

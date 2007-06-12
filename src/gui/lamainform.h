@@ -75,6 +75,7 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
     void writeSettings();
     // A simple helper / debug function to print the state of
     // animals and crops maps
+    void debugChecks();
     void printCropsAndAnimals();
     bool setComboToDefault(QComboBox * thepCombo, QString theDefault);
     //    <animal guid <enabled, animalparamters guid>>
