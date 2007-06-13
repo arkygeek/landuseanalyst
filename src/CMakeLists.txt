@@ -5,7 +5,7 @@
 add_subdirectory(lib)
 add_subdirectory(gui)
 IF (ENABLE_TESTS)
-  add_subdirectory(test)
+  add_subdirectory(tests)
 ENDIF (ENABLE_TESTS)
 
 IF (APPLE)

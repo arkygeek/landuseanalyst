@@ -18,9 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include <QtTest/QtTest>
-#include <QCoreApplication>
 #include <QString>
-#include <QDir>
 
 #include <lamodel.h>
 #include <lautils.h>
@@ -45,10 +43,10 @@ void LaModelTest::saveAndLoadModel()
 }
 void LaModelTest::run()
 {
-  myFileName += "/../../../test_data/modelOutputs/24a192e7-dbb8-4531-b1c5-b9b2718614a2.xml";
+  QString myFileName += "/../../../test_data/modelOutputs/24a192e7-dbb8-4531-b1c5-b9b2718614a2.xml";
   LaModel myModel;
   myModel.fromXmlFile(myFileName);
-  myModel.run();
+  //myModel.run();
 }
 
 QTEST_MAIN(LaModelTest) 
