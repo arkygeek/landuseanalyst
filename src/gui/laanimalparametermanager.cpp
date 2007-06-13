@@ -182,7 +182,7 @@ void LaAnimalParameterManager::cellClicked(int theRow, int theColumn)
 }
 void LaAnimalParameterManager::selectAnimalParameter(QString theFileName)
 {
-  qDebug("selectAnimalParameter Called : " + theFileName);
+  qDebug("selectAnimalParameter Called : " + theFileName.toLocal8Bit());
   QString myAnimalParameterDir = LaUtils::userAnimalParameterProfilesDirPath();
   LaAnimalParameter myAnimalParameter;
   myAnimalParameter.fromXmlFile(myAnimalParameterDir + QDir::separator() + theFileName);
