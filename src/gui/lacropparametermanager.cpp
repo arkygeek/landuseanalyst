@@ -183,7 +183,7 @@ void LaCropParameterManager::cellClicked(int theRow, int theColumn)
 }
 void LaCropParameterManager::selectCropParameter(QString theFileName)
 {
-  qDebug("selectCropParameter Called : " + theFileName);
+  qDebug("selectCropParameter Called : " + theFileName.toLocal8Bit());
   QString myCropParameterDir = LaUtils::userCropParameterProfilesDirPath();
   LaCropParameter myCropParameter;
   myCropParameter.fromXmlFile(myCropParameterDir + QDir::separator() + theFileName);
