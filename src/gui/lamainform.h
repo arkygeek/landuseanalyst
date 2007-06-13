@@ -32,7 +32,7 @@
 class QTreeWidgetItem;
 /**
   This is the main gui class
-  @author Tim Sutton
+  @author Tim Sutton, Jason Jorgenson
 */
 class LaMainForm : public QDialog, private Ui::LaMainFormBase
 {

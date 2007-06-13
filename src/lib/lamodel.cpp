@@ -604,6 +604,9 @@ int LaModel::caloriesNeededByAnimal(QString theAnimalGuid)
 
   float myTotalCaloriesNeededToFeedAnimals = myTotalMothersCaloriesRequired + myTotalJuvenilesCaloriesRequired;
   int myReturnValue = static_cast<int>(myTotalCaloriesNeededToFeedAnimals);
+  //(theAnimalGuid));
+  qDebug("Animal: " + myAnimal.name());
+
   return myReturnValue;
 }
 
