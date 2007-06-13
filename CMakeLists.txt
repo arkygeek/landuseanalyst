@@ -2,6 +2,9 @@ project(landuseanalyst) # the name of your project
 
 cmake_minimum_required(VERSION 2.4.0)
 
+SET (ENABLE_TESTS FALSE CACHE BOOL "Build unit tests (use 'make test' to run them")
+SET (PEDANTIC TRUE CACHE BOOL "Treat warnings as errors")
+
 IF (WIN32)
 
   SET (BIN_DIR    ${CMAKE_INSTALL_PREFIX})
@@ -42,22 +45,38 @@ ENDIF (WIN32)
 # search for Qt4
 
 find_package(Qt4 REQUIRED) # find and setup Qt4 for this project
-SET( QT_USE_QT3SUPPORT TRUE)
 SET( QT_USE_QTXML      TRUE )
-SET( QT_USE_QTNETWORK  TRUE )
-SET( QT_USE_QTSVG      TRUE )
-# TODO: should not be needed, report it to CMake devs
-IF (APPLE AND QT_USE_QT3SUPPORT)
-  SET( QT_USE_QTSQL    TRUE )
-ENDIF (APPLE AND QT_USE_QT3SUPPORT)
+#SET( QT_USE_QTNETWORK  TRUE )
+#SET( QT_USE_QTSVG      TRUE )
+#SET( QT_USE_QTSQL    TRUE )
+#SET( QT_USE_QT3SUPPORT TRUE)
 
 #############################################################
 # enable warnings
 
-ADD_DEFINITIONS( -Wall -Werror )
-
+IF (PEDANTIC)
+  ADD_DEFINITIONS( -Wall -Werror )
+ENDIF (PEDANTIC)
 # tell cmake to process CMakeLists.txt in that subdirectory
 add_subdirectory(src)
+
+############################################################
+# Enable tests
+
+IF (ENABLE_TESTS)
+  IF (WIN32)
+    FILE (GLOB animalFiles test_data/animalProfiles*.xml)
+    FILE (GLOB animalParameterFiles test_data/animalParamterProfiles*.xml)
+    FILE (GLOB cropFiles test_data/cropProfiles/*.xml)
+    FILE (GLOB cropParameterFiles test_data/cropParameterProfiles/*.xml)
+    FILE (GLOB modelFiles test_data/modelOutputs/*.xml)
+    INSTALL (FILES ${animalFiles} DESTINATION ${CMAKE_INSTALL_PREFIX}/test_data/animalProfiles)
+    INSTALL (FILES ${animalParameterFiles} DESTINATION ${CMAKE_INSTALL_PREFIX}/test_data/animalParameterProfiles)
+    INSTALL (FILES ${cropFiles} DESTINATION ${CMAKE_INSTALL_PREFIX}/test_data/cropProfiles)
+    INSTALL (FILES ${cropParameterFiles} DESTINATION ${CMAKE_INSTALL_PREFIX}/test_data/cropParameterProfiles)
+    INSTALL (FILES ${modelFiles} DESTINATION ${CMAKE_INSTALL_PREFIX}/test_data/modelOutputs)
+  ENDIF (WIN32)
+ENDIF (ENABLE_TESTS)
 
 #############################################################
 # Uninstall stuff see: http://www.vtk.org/Wiki/CMake_FAQ

@@ -1,0 +1,18 @@
+<animal guid="69484c00-449d-40a8-88cb-ef9097b83a0c">
+  <name>Sample Animal 1</name>
+  <description>Sample Animal 1</description>
+  <meatFoodValue>3000</meatFoodValue>
+  <usableMeat>50</usableMeat>
+  <killWeight>100</killWeight>
+  <growTime>10</growTime>
+  <deathRate>10</deathRate>
+  <gestating>5000</gestating>
+  <lactating>5000</lactating>
+  <juvenile>3500</juvenile>
+  <sexualMaturity>18</sexualMaturity>
+  <breedingLife>5</breedingLife>
+  <youngPerBirth>1</youngPerBirth>
+  <weaningAge>12</weaningAge>
+  <gestationTime>120</gestationTime>
+  <estrousCycle>21</estrousCycle>
+</animal>

@@ -604,10 +604,11 @@ int LaModel::caloriesNeededByAnimal(QString theAnimalGuid)
 
   float myTotalCaloriesNeededToFeedAnimals = myTotalMothersCaloriesRequired + myTotalJuvenilesCaloriesRequired;
 
-  qDebug("Animal: " + myAnimal.name());
-  qDebug("Breeding Stock: " + QString::number(myTotalMothers));
-  qDebug("Juveniles: " + QString::number(myTotalJuveniles));
-  qDebug("Calories needed annually to feed the entire herd: " + QString::number(myTotalCaloriesNeededToFeedAnimals));
+  qDebug("Animal: " + myAnimal.name().toLocal8Bit());
+  qDebug("Breeding Stock: " + QString::number(myTotalMothers).toLocal8Bit());
+  qDebug("Juveniles: " + QString::number(myTotalJuveniles).toLocal8Bit());
+  qDebug("Calories needed annually to feed the entire herd: " + 
+      QString::number(myTotalCaloriesNeededToFeedAnimals).toLocal8Bit());
   qDebug("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
 
   int myReturnValue = static_cast<int>(myTotalCaloriesNeededToFeedAnimals);
