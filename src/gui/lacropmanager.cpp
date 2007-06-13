@@ -166,7 +166,7 @@ void LaCropManager::cellClicked(int theRow, int theColumn)
 }
 void LaCropManager::selectCrop(QString theFileName)
 {
-  qDebug("selectCrop Called : " + theFileName);
+  qDebug("selectCrop Called : " + theFileName.toLocal8Bit());
   QString myCropDir = LaUtils::userCropProfilesDirPath();
   LaCrop myCrop;
   myCrop.fromXmlFile(myCropDir + QDir::separator() + theFileName);
