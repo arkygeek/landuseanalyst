@@ -28,17 +28,18 @@
 #include "lamodel.h"
 
 //qt includes
+#include <QComboBox>
+#include <QDir>
+#include <QFile>
+#include <QHeaderView>
+#include <QListWidget>
+#include <QProcess>
 #include <QSettings>
+#include <QStringList>
+#include <QTableWidgetItem>
+#include <QTextStream>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
-#include <QTableWidgetItem>
-#include <QFile>
-#include <QTextStream>
-#include <QProcess>
-#include <QStringList>
-#include <QListWidget>
-#include <QComboBox>
-#include <QHeaderView>
 
 LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
   : QDialog(parent,fl)
@@ -565,14 +566,16 @@ void LaMainForm::on_pushButtonRun_clicked()
 
   // for debugging only...
 
-  qDebug("Number of Crops: " + QString::number(myModel.countCrops()));
-  qDebug("Number of Animals: " + QString::number(myModel.countAnimals()));
-  qDebug("Calories from Crops: " + QString::number(myModel.caloriesFromCrops()));
-  qDebug("Calories from Animals: " + QString::number(myModel.caloriesFromTameMeat()));
-  qDebug("Calories target for Crops: " + QString::number(myModel.caloriesFromTameMeat()));
+  qDebug("Number of Crops: " + QString::number(myModel.countCrops()).toLocal8Bit());
+  qDebug("Number of Animals: " + QString::number(myModel.countAnimals()).toLocal8Bit());
+  qDebug("Calories from Crops: " + QString::number(myModel.caloriesFromCrops()).toLocal8Bit());
+  qDebug("Calories from Animals: " + QString::number(myModel.caloriesFromTameMeat()).toLocal8Bit());
+  qDebug("Calories target for Crops: " + QString::number(myModel.caloriesFromTameMeat()).toLocal8Bit());
 
   // iterate through crops and animals and display the calorie, production and area targets
   myModel.DoCalculations();
+  myModel.toXmlFile( LaUtils::getModelOutputDir() +
+      QDir::separator() + myModel.guid() + ".xml");
 }
 
 
@@ -581,8 +584,6 @@ void LaMainForm::debugChecks()
   // iterate through crops and display the calorie, production and area targets
 
   // iterate through animals and display the calorie, production and area targets
-
-
 }
 
 void LaMainForm::on_pushButtonLoad_clicked()
