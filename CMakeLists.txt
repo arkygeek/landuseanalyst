@@ -2,7 +2,7 @@ project(landuseanalyst) # the name of your project
 
 cmake_minimum_required(VERSION 2.4.0)
 
-SET (ENABLE_TESTS FALSE CACHE BOOL "Build unit tests (use 'make test' to run them")
+SET (ENABLE_TESTS TRUE CACHE BOOL "Build unit tests (use 'make test' to run them")
 SET (PEDANTIC TRUE CACHE BOOL "Treat warnings as errors")
 
 IF (WIN32)
@@ -76,6 +76,8 @@ IF (ENABLE_TESTS)
     INSTALL (FILES ${cropParameterFiles} DESTINATION ${CMAKE_INSTALL_PREFIX}/test_data/cropParameterProfiles)
     INSTALL (FILES ${modelFiles} DESTINATION ${CMAKE_INSTALL_PREFIX}/test_data/modelOutputs)
   ENDIF (WIN32)
+  #tell cmake to enable testing - this will give us a 'make test' target
+  ENABLE_TESTING()
 ENDIF (ENABLE_TESTS)
 
 #############################################################

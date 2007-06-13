@@ -1,3 +1,7 @@
+set(QT_USE_CORE TRUE)
+set(QT_USE_GUI TRUE)
+set(QT_USE_QTTEST TRUE)
+include(${QT_USE_FILE})
 #####################################################
 # Don't forget to include output directory, otherwise
 # the UI file won't be wrapped!

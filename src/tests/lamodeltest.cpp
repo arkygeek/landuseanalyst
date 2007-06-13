@@ -43,7 +43,7 @@ void LaModelTest::saveAndLoadModel()
 }
 void LaModelTest::run()
 {
-  QString myFileName += "/../../../test_data/modelOutputs/24a192e7-dbb8-4531-b1c5-b9b2718614a2.xml";
+  QString myFileName = "/../../../test_data/modelOutputs/24a192e7-dbb8-4531-b1c5-b9b2718614a2.xml";
   LaModel myModel;
   myModel.fromXmlFile(myFileName);
   //myModel.run();
