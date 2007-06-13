@@ -166,7 +166,7 @@ void LaAnimalManager::cellClicked(int theRow, int theColumn)
 }
 void LaAnimalManager::selectAnimal(QString theFileName)
 {
-  qDebug("selectAnimal Called : " + theFileName);
+  qDebug("selectAnimal Called : " + theFileName.toLocal8Bit());
   QString myAnimalDir = LaUtils::userAnimalProfilesDirPath();
   LaAnimal myAnimal;
   myAnimal.fromXmlFile(myAnimalDir + QDir::separator() + theFileName);
