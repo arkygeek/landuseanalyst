@@ -603,10 +603,14 @@ int LaModel::caloriesNeededByAnimal(QString theAnimalGuid)
   float myTotalJuvenilesCaloriesRequired = myTotalJuveniles * myAnimal.juvenile() * 365.;
 
   float myTotalCaloriesNeededToFeedAnimals = myTotalMothersCaloriesRequired + myTotalJuvenilesCaloriesRequired;
-  int myReturnValue = static_cast<int>(myTotalCaloriesNeededToFeedAnimals);
-  //(theAnimalGuid));
-  qDebug("Animal: " + myAnimal.name());
 
+  qDebug("Animal: " + myAnimal.name());
+  qDebug("Breeding Stock: " + QString::number(myTotalMothers));
+  qDebug("Juveniles: " + QString::number(myTotalJuveniles));
+  qDebug("Calories needed annually to feed the entire herd: " + QString::number(myTotalCaloriesNeededToFeedAnimals));
+  qDebug("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+
+  int myReturnValue = static_cast<int>(myTotalCaloriesNeededToFeedAnimals);
   return myReturnValue;
 }
 
@@ -917,11 +921,13 @@ int LaModel::doTheFallowAllocation
               {
                 int myAdjustedCaloricRequirements =
                     static_cast<int>(
-                                    (mCaloriesRequiredByAnimalsMap.value(myAnimalGuid) /
-                                      theTotalCalorificRequirements)
-                                    * myTotalFallowCalories
+                                     (
+                                      mCaloriesRequiredByAnimalsMap.value( myAnimalGuid )
+                                      / theTotalCalorificRequirements
+                                     )
+                                     * myTotalFallowCalories
                                     );
-                mCaloriesRequiredByAnimalsMap[myAnimalGuid] = myAdjustedCaloricRequirements;
+                mCaloriesRequiredByAnimalsMap [myAnimalGuid] = myAdjustedCaloricRequirements;
               } //endif (fallowUsage(myAnimalGuid)==High)
 
             } // while animal iterating

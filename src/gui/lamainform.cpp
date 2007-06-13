@@ -572,14 +572,16 @@ void LaMainForm::on_pushButtonRun_clicked()
   qDebug("Calories target for Crops: " + QString::number(myModel.caloriesFromTameMeat()));
 
   // iterate through crops and animals and display the calorie, production and area targets
-
+  myModel.DoCalculations();
 }
+
 
 void LaMainForm::debugChecks()
 {
   // iterate through crops and display the calorie, production and area targets
 
   // iterate through animals and display the calorie, production and area targets
+
 
 }
 
