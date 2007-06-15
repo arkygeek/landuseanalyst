@@ -740,7 +740,7 @@ void LaModel::initialiseProductionRequiredCropsMap()
     QString myCropGuid = myCropIterator.key();
     int myProductionTarget = static_cast<int>(mCaloriesProvidedByCropsMap.value(myCropGuid));
     mProductionRequiredCropsMap.insert(myCropGuid,getProductionTargetsCrops(myCropGuid, myProductionTarget));
-    qDebug("cropGuid: " + myCropGuid.toLocal8Bit());
+    qDebug("cropGuid: " + QString::number(mProductionRequiredCropsMap.value(myCropGuid)).toLocal8Bit());
     qDebug("ProductionTarget: " + QString::number(mProductionRequiredCropsMap.value(myCropGuid)).toLocal8Bit());
     qDebug("cropGuid: " + myCropGuid.toLocal8Bit());
 
@@ -877,7 +877,9 @@ void LaModel::allocateFallowGrazingLand()
     } //switch
 
   } //while animal count
-
+  qDebug("High Priority Animals: " + QString::number(myAnimalsHighPriorityCount).toLocal8Bit() );
+  qDebug("Medium Priority Animals: " + QString::number(myAnimalsMediumPriorityCount).toLocal8Bit() );
+  qDebug("Low Priority Animals: " + QString::number(myAnimalsLowPriorityCount).toLocal8Bit() );
   //  iterate through crops to determine the total calories available to animals
   //  by grazing fallow crop land
 
