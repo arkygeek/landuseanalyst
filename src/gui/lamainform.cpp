@@ -319,19 +319,15 @@ void LaMainForm::loadCrops()
     {
       myValue=mCropsMap[myGuid];
     }
+
     QIcon myIcon;
     myIcon.addFile(":/localdata.png");
     tblCrops->insertRow(myCurrentRow);
     // Add details to the new row
     QTableWidgetItem *mypUsedItem= new QTableWidgetItem(tr("Used?"));
-    if (myValue.first)
-    {
-      mypUsedItem->setCheckState(Qt::Checked);
-    }
-    else
-    {
-      mypUsedItem->setCheckState(Qt::Unchecked);
-    }
+
+    (myValue.first) ? mypUsedItem->setCheckState(Qt::Checked) : mypUsedItem->setCheckState(Qt::Unchecked);
+
     tblCrops->setItem(myCurrentRow, 0, mypUsedItem);
     QTableWidgetItem *mypNameItem = new QTableWidgetItem(myCrop.name());
     mypNameItem->setData(Qt::UserRole,myGuid);
@@ -380,14 +376,7 @@ void LaMainForm::loadCrops()
   }
   //finally show the total percentage all the selected crops contribute to the diet
   QIcon myIcon;
-  if (myRunningPercentage==100)
-  {
-    myIcon.addFile(":/status_ok.png");
-  }
-  else
-  {
-    myIcon.addFile(":/status_error.png");
-  }
+  (myRunningPercentage==100) ? myIcon.addFile(":/status_ok.png") : myIcon.addFile(":/status_error.png");
 
   QString myPercentItem = QString::number(myRunningPercentage);
   labelCropCheck->setText(myPercentItem + "\%");
