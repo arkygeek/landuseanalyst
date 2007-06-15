@@ -87,7 +87,7 @@ class LaModel : public LaSerialisable, public LaGuid
     int caloriesFromTameMeat();
     int countCrops();
     int countAnimals();
-    float caloriesProvidedByTheCrop(QString theCropParameterGuid);
+    int caloriesProvidedByTheCrop(QString theCropParameterGuid);
     int caloriesProvidedByTheAnimal(QString theAnimalParameterGuid);
     int getProductionTargetsCrops(QString theCropGuid, int theCalorieTarget);
     int getProductionTargetsAnimals(QString theAnimalGuid, int theCalorieTarget);
