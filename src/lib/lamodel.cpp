@@ -698,7 +698,8 @@ void LaModel::initialiseCaloriesProvidedByAnimalsMap()
   {
     myAnimalIterator.next();
     QString myAnimalGuid = myAnimalIterator.key();
-    mCaloriesProvidedByAnimalsMap.insert(myAnimalGuid,caloriesProvidedByTheAnimal(myAnimalGuid));
+    QString myAnimalParameterGuid = mAnimalsMap.value(myAnimalGuid);
+    mCaloriesProvidedByAnimalsMap.insert(myAnimalGuid,caloriesProvidedByTheAnimal(myAnimalParameterGuid));
   }
 }
 
