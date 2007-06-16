@@ -271,7 +271,7 @@ QString LaAnimal::toXml()
   myString+=QString("  <lactating>" + QString::number(mLactating) + "</lactating>\n");
   myString+=QString("  <juvenile>" + QString::number(mJuvenile) + "</juvenile>\n");
   myString+=QString("  <sexualMaturity>" + QString::number(mSexualMaturity) + "</sexualMaturity>\n");
-  myString+=QString("  <breedingLife>" + QString::number(mBreedingExpectancy) + "</breedingLife>\n");
+  myString+=QString("  <breedingExpectancy>" + QString::number(mBreedingExpectancy) + "</breedingExpectancy>\n");
   myString+=QString("  <youngPerBirth>" + QString::number(mYoungPerBirth) + "</youngPerBirth>\n");
   myString+=QString("  <weaningAge>" + QString::number(mWeaningAge) + "</weaningAge>\n");
   myString+=QString("  <gestationTime>" + QString::number(mGestationTime) + "</gestationTime>\n");
@@ -295,7 +295,7 @@ QString LaAnimal::toText()
   myString+=QString("lactating=>" + QString::number(mLactating) + "\n");
   myString+=QString("juvenile=>" + QString::number(mJuvenile) + "\n");
   myString+=QString("sexualMaturity=>" + QString::number(mSexualMaturity) + "\n");
-  myString+=QString("breedingLife=>" + QString::number(mBreedingExpectancy) + "\n");
+  myString+=QString("breedingExpectancy=>" + QString::number(mBreedingExpectancy) + "\n");
   myString+=QString("youngPerBirth=>" + QString::number(mYoungPerBirth) + "\n");
   myString+=QString("weaningAge=>" + QString::number(mWeaningAge) + "\n");
   myString+=QString("gestationTime=>" + QString::number(mGestationTime) + "\n");

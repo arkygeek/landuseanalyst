@@ -641,15 +641,21 @@ int LaModel::caloriesNeededByAnimal(QString theAnimalGuid)
 { // this is essentially the generic animal model
   qDebug("method ==> int LaModel::caloriesNeededByAnimal(QString theAnimalGuid)");
   LaAnimal myAnimal = LaUtils::getAnimal(theAnimalGuid);
+  // LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(mAnimalsMap.value(theAnimalGuid));
+  // float myAnimalOverallContributionToDiet=(dietPercent() * 0.01) * (meatPercent() * 0.01);
+  // float myCalorieTarget = population() * mCaloriesPerPersonDaily * 365;
+  // float myAnimalCalorieTarget=myCalorieTarget*myAnimalOverallContributionToDiet;
 
-  float myAnimalOverallContributionToDiet=(dietPercent() * 0.01) * (meatPercent() * 0.01);
-  float myCalorieTarget = population() * mCaloriesPerPersonDaily * 365;
-  float myAnimalCalorieTarget=myCalorieTarget*myAnimalOverallContributionToDiet;
-  float myAnimalProductionTarget=(myAnimalCalorieTarget/myAnimal.meatFoodValue());
-  float myAnimalsRequired=myAnimalProductionTarget/(myAnimal.usableMeat()*.01);
-
+  float myAnimalProductionTarget=(mCaloriesProvidedByAnimalsMap.value(theAnimalGuid) / myAnimal.meatFoodValue());
+    qDebug("animal prodn target = calorie target of animal / food value");
+    qDebug("mCaloriesProvidedByAnimalsMap.value(theAnimalGuid): " + QString::number(mCaloriesProvidedByAnimalsMap.value(theAnimalGuid)).toLocal8Bit());
+    qDebug("myAnimal.meatFoodValue(): " + QString::number(myAnimal.meatFoodValue()).toLocal8Bit());
+  float myAnimalsRequired=(myAnimalProductionTarget / myAnimal.killWeight()) / (myAnimal.usableMeat()*.01);
+    qDebug("slaughter animals reqd: " + QString::number(myAnimalsRequired).toLocal8Bit());
   float myBirthsPerYear = 365 / (myAnimal.gestationTime() + myAnimal.estrousCycle() + (myAnimal.weaningAge() * 7));
-  float myOffspringPerMotherYearly = myBirthsPerYear*myAnimal.youngPerBirth()*(1-myAnimal.deathRate());
+    qDebug("BirthEventsPerYear: " + QString::number(myBirthsPerYear).toLocal8Bit());
+  float myOffspringPerMotherYearly = myBirthsPerYear * myAnimal.youngPerBirth() * (1-(0.01*myAnimal.deathRate()));
+    qDebug("OffspringPerMotherYearly = " + QString::number(myOffspringPerMotherYearly).toLocal8Bit());
   float myMothersNeededStepOne = myAnimalsRequired/myOffspringPerMotherYearly;
   float myMalesStepOne = myMothersNeededStepOne/2;
   float myFemalesStepOne = myMothersNeededStepOne/2;
