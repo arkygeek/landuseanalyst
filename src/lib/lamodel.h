@@ -194,6 +194,16 @@ class LaModel : public LaSerialisable, public LaGuid
      * it MUST implement this
      */
     QString toXml();
+    /** Return an xml representation of this layer
+     * @NOTE this class inherits the serialisable interface so
+     * it MUST implement this
+     */
+    QString toXmlCalorieAnimalTargets();
+    /** Return an xml representation of this layer
+     * @NOTE this class inherits the serialisable interface so
+     * it MUST implement this
+     */
+    QString toXmlCalorieCropTargets();
     /** Return a plain text representation of this layer
      */
     QString toText();
