@@ -64,6 +64,7 @@
     myIcon.addFile(":/localdata.png");
     cboAnimal->addItem(myName,myGuid);
   }
+  //setFallowComboBox();
 }
 
 LaAnimalParameterManager::~LaAnimalParameterManager()
@@ -208,24 +209,27 @@ void LaAnimalParameterManager::showAnimalParameter()
   sbFodderSource2Grain->setValue(mAnimalParameter.fodderSource2Grain());
   sbFodderSource3->setValue(mAnimalParameter.fodderSource3());
   sbFodderSource3Grain->setValue(mAnimalParameter.fodderSource3Grain());
-  
+
+  //trial
+  //setFallowComboBox();
+  //endTrial
   if (mAnimalParameter.fallowUsage()==High)
   {
-    setComboToDefault(comboBoxFallowUsage,tr("High"));
+    setComboToDefault(comboBoxFallowUsage,tr("HIGH Fallow Usage"));
   }
   else if (mAnimalParameter.fallowUsage()==Medium)
   {
-    setComboToDefault(comboBoxFallowUsage,tr("Medium"));
+    setComboToDefault(comboBoxFallowUsage,tr("MED Fallow Usage"));
   }
   else if (mAnimalParameter.fallowUsage()==Low)
   {
-    setComboToDefault(comboBoxFallowUsage,tr("Low"));
+    setComboToDefault(comboBoxFallowUsage,tr("LOW Fallow Usage"));
   }
   else
   {
-    setComboToDefault(comboBoxFallowUsage,tr("None"));
+    setComboToDefault(comboBoxFallowUsage,tr("Do Not Graze Fallow"));
   }
-  
+
 }
 
 void LaAnimalParameterManager::on_toolNew_clicked()
@@ -313,26 +317,33 @@ void LaAnimalParameterManager::on_pbnApply_clicked()
 
   mAnimalParameter.setAreaUnits(comboBoxAreaUnits->currentIndex());
   QString myFallowUsage = QString(comboBoxFallowUsage->currentText());
-  if (myFallowUsage == "High")
+  //setFallowComboBox();
+  Priority myPriority;
+  if (myFallowUsage == "HIGH Fallow Priority")
   {
-      mAnimalParameter.setFallowUsage(High);
+      myPriority = High;
+      mAnimalParameter.setFallowUsage(myPriority);
   }
-  else if (myFallowUsage == "Medium")
+  else if (myFallowUsage == "MED Fallow Priority")
   {
-      mAnimalParameter.setFallowUsage(Medium);
-  }    
-  else if (myFallowUsage == "Low")
+      myPriority = Medium;
+      mAnimalParameter.setFallowUsage(myPriority);
+  }
+  else if (myFallowUsage == "LOW Fallow Priority")
   {
-      mAnimalParameter.setFallowUsage(Low);
+      myPriority = Low;
+      mAnimalParameter.setFallowUsage(myPriority);
   }
   else
   {
-    mAnimalParameter.setFallowUsage(None);
-  } 
+      myPriority = None;
+      mAnimalParameter.setFallowUsage(myPriority);
+  }
   mAnimalParameter.toXmlFile( LaUtils::userAnimalParameterProfilesDirPath() +
       QDir::separator() + mAnimalParameter.guid() + ".xml");
   refreshAnimalParameterTable(mAnimalParameter.guid());
 }
+
 bool LaAnimalParameterManager::setComboToDefault(QComboBox * thepCombo, QString theDefault)
 {
   if (!theDefault.isEmpty())
@@ -341,6 +352,7 @@ bool LaAnimalParameterManager::setComboToDefault(QComboBox * thepCombo, QString 
     for ( int myCounter = 0; myCounter < thepCombo->count(); myCounter++ )
     {
       thepCombo->setCurrentIndex(myCounter);
+
       if (thepCombo->itemData(myCounter,Qt::UserRole)==theDefault)
       {
         break;
@@ -352,4 +364,15 @@ bool LaAnimalParameterManager::setComboToDefault(QComboBox * thepCombo, QString 
     return false;
   }
   return true;
+}
+void LaAnimalParameterManager::setFallowComboBox()
+{
+  Priority myPriority = None;
+  comboBoxFallowUsage->setItemData(0, QVariant("Do Not Graze Fallow"), Qt::UserRole);
+  myPriority = High;
+  comboBoxFallowUsage->setItemData(1, QVariant("HIGH Fallow Priority"), Qt::UserRole);
+  myPriority = Medium;
+  comboBoxFallowUsage->setItemData(2, QVariant("MED Fallow Priority"), Qt::UserRole);
+  myPriority = Low;
+  comboBoxFallowUsage->setItemData(3, QVariant("LOW Fallow Priority"), Qt::UserRole);
 }

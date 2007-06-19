@@ -61,6 +61,7 @@ class LaAnimalParameterManager : public QDialog, private Ui::LaAnimalParameterMa
       LaAnimalParameter mAnimalParameter;
       void readSettings();
       void writeSettings();
+      void setFallowComboBox();
       /** @TODO move this into LaGuiUtils - a gui subclass of LaUtils */
       bool setComboToDefault(QComboBox * thepCombo, QString theDefault);
 };

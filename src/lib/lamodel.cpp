@@ -1177,12 +1177,14 @@ QString LaModel::toXmlCalorieCropTargets()
     LaCrop myCrop = LaUtils::getCrop(myCropGuid);
     LaCropParameter myCropParameter = LaUtils::getCropParameter(mCropsMap.value(myCropGuid));
     // add to the QString to create the xml file
-    myString += QString("  <guid=\"" + myCropIterator.key() + "\">\n");
+    myString += QString("  <crop>\n");
+    myString += QString("    <guid=\"" + myCropIterator.key() + "\">\n");
     myString += QString("    <name>" + LaUtils::xmlEncode(myCrop.name()) + "</name>\n");
     myString += QString("    <description>" + LaUtils::xmlEncode(myCrop.description()) + "</description>\n");
-    myString += QString("  <parameterGuid=\"" + myCropParameter.guid() + "\">\n");
+    myString += QString("    <parameterGuid=\"" + myCropParameter.guid() + "\">\n");
     myString += QString("    <name>" + LaUtils::xmlEncode(myCropParameter.name()) + "</name>\n");
     myString += QString("    <calorieTarget>" + QString::number(myCalorieTarget) + "</calorieTarget>\n");
+    myString += QString("  </crop>\n");
   } // while crop iterator
 
   myString += QString("</cropCalorieTargetReport>\n");
@@ -1206,12 +1208,15 @@ QString LaModel::toXmlCalorieAnimalTargets()
     LaAnimal myAnimal = LaUtils::getAnimal(myAnimalGuid);
     LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(mAnimalsMap.value(myAnimalGuid));
     // add to the QString to create the xml file
-    myString += QString("  <guid=\"" + myAnimalIterator.key() + "\">\n");
+    myString += QString("  <animal>\n");
+    myString += QString("    <guid=\"" + myAnimalIterator.key() + "\">\n");
     myString += QString("    <name>" + LaUtils::xmlEncode(myAnimal.name()) + "</name>\n");
     myString += QString("    <description>" + LaUtils::xmlEncode(myAnimal.description()) + "</description>\n");
-    myString += QString("  <parameterGuid=\"" + myAnimalParameter.guid() + "\">\n");
+    myString += QString("    <parameterGuid=\"" + myAnimalParameter.guid() + "\">\n");
     myString += QString("    <name>" + LaUtils::xmlEncode(myAnimalParameter.name()) + "</name>\n");
     myString += QString("    <calorieTarget>" + QString::number(myCalorieTarget) + "</calorieTarget>\n");
+    myString += QString("  </animal>\n");
+
   } // while crop iterator
 
   myString += QString("</animalCalorieTargetReport>\n");
@@ -1235,12 +1240,14 @@ QString LaModel::toXmlProductionCropTargets()
     LaCrop myCrop = LaUtils::getCrop(myCropGuid);
     LaCropParameter myCropParameter = LaUtils::getCropParameter(mCropsMap.value(myCropGuid));
     // add to the QString to create the xml file
-    myString += QString("  <guid=\"" + myCropIterator.key() + "\">\n");
+    myString += QString("  <crop>\n");
+    myString += QString("    <guid=\"" + myCropIterator.key() + "\">\n");
     myString += QString("    <name>" + LaUtils::xmlEncode(myCrop.name()) + "</name>\n");
     myString += QString("    <description>" + LaUtils::xmlEncode(myCrop.description()) + "</description>\n");
-    myString += QString("  <parameterGuid=\"" + myCropParameter.guid() + "\">\n");
+    myString += QString("    <parameterGuid=\"" + myCropParameter.guid() + "\">\n");
     myString += QString("    <name>" + LaUtils::xmlEncode(myCropParameter.name()) + "</name>\n");
     myString += QString("    <productionTarget>" + QString::number(myProductionTarget) + "</productionTarget>\n");
+    myString += QString("  </crop>\n");
   } // while crop iterator
 
   myString+=QString("</cropProductionTargetReport>\n");
@@ -1264,12 +1271,14 @@ QString LaModel::toXmlProductionAnimalTargets()
     LaAnimal myAnimal = LaUtils::getAnimal(myAnimalGuid);
     LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(mAnimalsMap.value(myAnimalGuid));
     // add to the QString to create the xml file
-    myString+=QString("  <guid=\"" + myAnimalIterator.key() + "\">\n");
-    myString+=QString("    <name>" + LaUtils::xmlEncode(myAnimal.name()) + "</name>\n");
-    myString+=QString("    <description>" + LaUtils::xmlEncode(myAnimal.description()) + "</description>\n");
-    myString+=QString("  <parameterGuid=\"" + myAnimalParameter.guid() + "\">\n");
-    myString+=QString("    <name>" + LaUtils::xmlEncode(myAnimalParameter.name()) + "</name>\n");
-    myString+=QString("    <productionTarget>" + QString::number(myProductionTarget) + "</productionTarget>\n");
+    myString += QString("  <animal>\n");
+    myString += QString("    <guid=\"" + myAnimalIterator.key() + "\">\n");
+    myString += QString("    <name>" + LaUtils::xmlEncode(myAnimal.name()) + "</name>\n");
+    myString += QString("    <description>" + LaUtils::xmlEncode(myAnimal.description()) + "</description>\n");
+    myString += QString("    <parameterGuid=\"" + myAnimalParameter.guid() + "\">\n");
+    myString += QString("    <name>" + LaUtils::xmlEncode(myAnimalParameter.name()) + "</name>\n");
+    myString += QString("    <productionTarget>" + QString::number(myProductionTarget) + "</productionTarget>\n");
+    myString += QString("  </animal>\n");
   } // while crop iterator
 
   myString += QString("</animalProductionTargetReport>\n");
@@ -1293,12 +1302,14 @@ QString LaModel::toXmlAreaCropTargets()
     LaCrop myCrop = LaUtils::getCrop(myCropGuid);
     LaCropParameter myCropParameter = LaUtils::getCropParameter(mCropsMap.value(myCropGuid));
     // add to the QString to create the xml file
-    myString += QString("  <guid=\"" + myCropIterator.key() + "\">\n");
+    myString += QString("  <crop>\n");
+    myString += QString("    <guid=\"" + myCropIterator.key() + "\">\n");
     myString += QString("    <name>" + LaUtils::xmlEncode(myCrop.name()) + "</name>\n");
     myString += QString("    <description>" + LaUtils::xmlEncode(myCrop.description()) + "</description>\n");
-    myString += QString("  <parameterGuid=\"" + myCropParameter.guid() + "\">\n");
+    myString += QString("    <parameterGuid=\"" + myCropParameter.guid() + "\">\n");
     myString += QString("    <name>" + LaUtils::xmlEncode(myCropParameter.name()) + "</name>\n");
     myString += QString("    <productionTarget>" + QString::number(myAreaTarget) + "</productionTarget>\n");
+    myString += QString("  </crop>\n");
   } // while crop iterator
 
   myString+=QString("</cropAreaTargetReport>\n");
@@ -1322,12 +1333,14 @@ QString LaModel::toXmlAreaAnimalTargets()
     LaAnimal myAnimal = LaUtils::getAnimal(myAnimalGuid);
     LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(mAnimalsMap.value(myAnimalGuid));
     // add to the QString to create the xml file
-    myString+=QString("  <guid=\"" + myAnimalIterator.key() + "\">\n");
-    myString+=QString("    <name>" + LaUtils::xmlEncode(myAnimal.name()) + "</name>\n");
-    myString+=QString("    <description>" + LaUtils::xmlEncode(myAnimal.description()) + "</description>\n");
-    myString+=QString("  <parameterGuid=\"" + myAnimalParameter.guid() + "\">\n");
-    myString+=QString("    <name>" + LaUtils::xmlEncode(myAnimalParameter.name()) + "</name>\n");
-    myString+=QString("    <productionTarget>" + QString::number(myAreaTarget) + "</productionTarget>\n");
+    myString += QString("  <animal>\n");
+    myString += QString("    <guid=\"" + myAnimalIterator.key() + "\">\n");
+    myString += QString("    <name>" + LaUtils::xmlEncode(myAnimal.name()) + "</name>\n");
+    myString += QString("    <description>" + LaUtils::xmlEncode(myAnimal.description()) + "</description>\n");
+    myString += QString("    <parameterGuid=\"" + myAnimalParameter.guid() + "\">\n");
+    myString += QString("    <name>" + LaUtils::xmlEncode(myAnimalParameter.name()) + "</name>\n");
+    myString += QString("    <productionTarget>" + QString::number(myAreaTarget) + "</productionTarget>\n");
+    myString += QString("  </animal>\n");
   } // while crop iterator
 
   myString += QString("</animalAreaTargetReport>\n");

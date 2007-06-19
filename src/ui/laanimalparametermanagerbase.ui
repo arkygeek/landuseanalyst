@@ -925,26 +925,6 @@ p, li { white-space: pre-wrap; }
 &lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Because some animals may have been given preferential access to the fallow land, LandUse Analyst has given three different priority levels to fallow access. The software first looks at the HIGH priority animals, and designates all fallow land to them, until either their needs are satisfied, or the available fallow land is all used. If there is more than enough fallow land for the HIGH priority animals, the remaining amount is then made available to the MED priority animals, and this repeats for the LOW priority ones as well.&lt;/p>&lt;/body>&lt;/html></string>
      </property>
-     <item>
-      <property name="text" >
-       <string>Do Not Graze Fallow</string>
-      </property>
-     </item>
-     <item>
-      <property name="text" >
-       <string>HIGH Fallow Priority</string>
-      </property>
-     </item>
-     <item>
-      <property name="text" >
-       <string>MED Fallow Priority</string>
-      </property>
-     </item>
-     <item>
-      <property name="text" >
-       <string>LOW Fallow Priority</string>
-      </property>
-     </item>
     </widget>
    </item>
   </layout>
