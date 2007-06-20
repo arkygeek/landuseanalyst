@@ -25,6 +25,7 @@
 #include "lautils.h"
 #include "la.h"
 
+
 #include <QSettings>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
@@ -407,8 +408,9 @@ QString LaModel::toHtml()
  //                                         //
 /////////////////////////////////////////////
 
-void LaModel::DoCalculations()
+void LaModel::DoCalculations(int theCommonGrazingLandCalories)
 {
+  mCommonGrazingLandFoodValue = theCommonGrazingLandCalories;
   qDebug("method ==> void LaModel::DoCalculations()");
   // Step 1
   //        Calculate calories needed from crops and tame meat to sustain the settlement
@@ -509,7 +511,7 @@ int LaModel::caloriesFromTameMeat()
   float myTameMeatCalorieTarget=myCalorieTarget*myAnimalOverallContributionToDiet;
   int myReturnValue = static_cast<int>(myTameMeatCalorieTarget);
   qDebug("method ==> int LaModel::caloriesFromTameMeat()");
-  qDebug("Overall Crop Tame Meat Target: " + QString::number(myReturnValue).toLocal8Bit());
+  qDebug("Overall Tame Meat Target: " + QString::number(myReturnValue).toLocal8Bit());
   qDebug("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
   return myReturnValue;
 }
@@ -630,8 +632,8 @@ int LaModel::getAreaTargetsCrops(QString theCropGuid, int theProductionTarget)
   qDebug("method ==> int LaModel::getAreaTargetsCrops(QString theCropGuid, int theProductionTarget)");
   qDebug("Crop Guid: " + myCrop.guid().toLocal8Bit());
   qDebug("Crop Name: " + myCrop.name().toLocal8Bit());
-  qDebug("Area Target is the production target of: " + theProductionTarget);
-  qDebug(" Divided by the crop yield of " + myCrop.cropYield());
+  qDebug("Area Target is the production target of: " + QString::number(theProductionTarget).toLocal8Bit());
+  qDebug(" Divided by the crop yield of " + QString::number(myCrop.cropYield()).toLocal8Bit());
   qDebug(" which gives a result of: " + QString::number(myReturnValue).toLocal8Bit());
   qDebug("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
   return myReturnValue;
@@ -709,6 +711,8 @@ int LaModel::getFallowLandForACrop(QString theCropParameterGuid, int theAreaTarg
   LaCropParameter myCropParameter = LaUtils::getCropParameter(theCropParameterGuid);
   float myAvailableFallow = myCropParameter.fallowRatio() * theAreaTarget;
   int myReturnValue = static_cast<int>(myAvailableFallow);
+  qDebug("crop parameter: " + myCropParameter.name().toLocal8Bit());
+  qDebug("fallow land for the crop: " + QString::number(myReturnValue).toLocal8Bit());
   return myReturnValue;
 }
 
@@ -723,6 +727,8 @@ void LaModel::initialiseCaloriesProvidedByAnimalsMap()
     QString myAnimalGuid = myAnimalIterator.key();
     QString myAnimalParameterGuid = mAnimalsMap.value(myAnimalGuid);
     mCaloriesProvidedByAnimalsMap.insert(myAnimalGuid,caloriesProvidedByTheAnimal(myAnimalParameterGuid));
+    qDebug("Animal Guid: " + myAnimalGuid.toLocal8Bit());
+    qDebug("Calories Provided: " + QString::number(caloriesProvidedByTheAnimal(myAnimalParameterGuid)).toLocal8Bit());
   }
 }
 
@@ -795,15 +801,16 @@ void LaModel::initialiseAreaTargetsCropsMap()
     myCropIterator.next();
     QString myCropGuid = myCropIterator.key();
     int myProductionTarget = static_cast<int>(mProductionRequiredCropsMap.value(myCropGuid));
-    mProductionRequiredCropsMap.insert(myCropGuid,getAreaTargetsCrops(myCropGuid, myProductionTarget));
+    mAreaTargetsCropsMap.insert(myCropGuid,getAreaTargetsCrops(myCropGuid, myProductionTarget));
   }
 }
 
 void LaModel::initialiseAreaTargetsAnimalsMap()
 { // this also returns an area target for common land
   qDebug("method ==> void LaModel::initialiseAreaTargetsAnimalsMap()");
+  qDebug("Common Grazing LAnd Food Value: " + QString::number(static_cast<int>(mCommonGrazingLandFoodValue)).toLocal8Bit());
   mAreaTargetsAnimalsMap.clear();
-  mCommonGrazingLandAreaTarget = 0;
+  mCommonGrazingLandCalorieTarget= 0;
   //iterate through animals
   QMapIterator<QString, QString > myAnimalIterator(mAnimalsMap);
   while (myAnimalIterator.hasNext())
@@ -813,26 +820,29 @@ void LaModel::initialiseAreaTargetsAnimalsMap()
     QString myAnimalParameterGuid = myAnimalIterator.value();
     LaAnimal myAnimal = LaUtils::getAnimal(myAnimalGuid);
     LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(myAnimalParameterGuid);
+    qDebug("XxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXx");
+    qDebug("Animal: " + myAnimal.name().toLocal8Bit());
     // check to see if this animal needs any additional food
     if (mCaloriesRequiredByAnimalsMap[myAnimalGuid] > 0) // yes, the animal needs more food
     {
+      qDebug("Animal Needs more Food!");
       // figure out how much grazing land is needed to supply this many calories
       LandBeingGrazed myLandBeingGrazed;
-      if (myAnimalParameter.useCommonGrazingLand()==1){myLandBeingGrazed=Common;}
-      else {myLandBeingGrazed=Unique;}
+      myLandBeingGrazed =  (myAnimalParameter.useCommonGrazingLand()==1) ? Common:Unique;
 
       switch (myLandBeingGrazed)
       {
         case Common:
-             {
-               mCommonGrazingLandAreaTarget++;
+               qDebug("Animal is grazing Common Land");
+               mCommonGrazingLandCalorieTarget += static_cast<int>(mCaloriesRequiredByAnimalsMap.value(myAnimalGuid));
                mAreaTargetsAnimalsMap[myAnimalGuid]=0;
-             }
+               break;
         case Unique:
-             {
+               qDebug("Animal is grazing Unique Land");
                float myTarget = mCaloriesRequiredByAnimalsMap.value(myAnimalGuid) / myAnimalParameter.foodValueOfSpecificGrazingLand();
-               mAreaTargetsAnimalsMap[myAnimalGuid]=static_cast<int>(myTarget);
-             }
+               mAreaTargetsAnimalsMap[myAnimalGuid] = static_cast<int>(myTarget);
+               qDebug("The Area Target is: " + QString::number(static_cast<int>(myTarget)).toLocal8Bit());
+               break;
       }
       //int myCaloriesNeeded = static_cast<int>(mCaloriesRequiredByAnimalsMap.value(myAnimalGuid));
 
@@ -840,9 +850,14 @@ void LaModel::initialiseAreaTargetsAnimalsMap()
     }
     else // the animal needs no additional food
     {
+      qDebug("Animal needs no additional food.");
       mAreaTargetsAnimalsMap[myAnimalGuid] = 0;
     }
+    mCommonGrazingLandAreaTarget = mCommonGrazingLandCalorieTarget / mCommonGrazingLandFoodValue;
+
+    qDebug("XxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXx");
   }
+    qDebug("The Common Grazing Land Area Target is: " + QString::number(static_cast<int>(mCommonGrazingLandAreaTarget)).toLocal8Bit());
 }
 
 Status LaModel::fallowStatus() const

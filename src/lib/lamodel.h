@@ -28,6 +28,7 @@ class QString;
 #include "laserialisable.h"
 #include "laguid.h"
 #include "la.h"
+
 #include <QString>
 #include <QMap>
 /**
@@ -185,7 +186,7 @@ class LaModel : public LaSerialisable, public LaGuid
 
     /** Perform calcs
      */
-    void DoCalculations();
+    void DoCalculations(int theCommonGrazingLandCalories);
 
     void setFallowStatus(Status theStatus);
     //void setDoTheFallowAllocation(Priority, float, float);
@@ -345,6 +346,8 @@ class LaModel : public LaSerialisable, public LaGuid
     void makeEuclideanCost(int theX, int theY);
     void makePathDistanceCost(int theX, int theY);
     void writeMetaData(QString theValue);
+    int mCommonGrazingLandCalorieTarget;
+    int mCommonGrazingLandFoodValue;
     int mCommonGrazingLandAreaTarget;
 };
 #endif //Percent

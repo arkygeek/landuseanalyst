@@ -497,6 +497,7 @@ void LaMainForm::cropCellChanged(int theRow, int theColumn)
 
 void LaMainForm::on_pushButtonRun_clicked()
 {
+  mCommonGrazingLandFoodValue = sbCommonRasterCalories->value();
   LaModel myModel;
   // Get a list of the selected animals
   QMap<QString,QString> mySelectedAnimalsMap;
@@ -562,7 +563,7 @@ void LaMainForm::on_pushButtonRun_clicked()
   qDebug("Calories target for Crops: " + QString::number(myModel.caloriesFromTameMeat()).toLocal8Bit());
 
   // iterate through crops and animals and display the calorie, production and area targets
-  myModel.DoCalculations();
+  myModel.DoCalculations(mCommonGrazingLandFoodValue);
   myModel.toXmlFile( LaUtils::getModelOutputDir() +
       QDir::separator() + myModel.guid() + ".xml");
 

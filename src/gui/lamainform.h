@@ -81,6 +81,7 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
     //    <animal guid <enabled, animalparamters guid>>
     LaTripleMap mAnimalsMap;
     LaTripleMap mCropsMap;
+    int mCommonGrazingLandFoodValue;
 };
 
 #endif //LAMAINFORM_H
