@@ -695,13 +695,14 @@ int LaModel::caloriesNeededByAnimal(QString theAnimalGuid)
   qDebug("Animal: " + myAnimal.name().toLocal8Bit());
   qDebug("Breeding Stock: " + QString::number(myTotalMothers).toLocal8Bit());
   qDebug("Juveniles: " + QString::number(myTotalJuveniles).toLocal8Bit());
+  int myReturnValue = static_cast<int>(myTotalCaloriesNeededToFeedAnimals);
   qDebug("Calories needed annually to feed the entire herd: " +
-      QString::number(myTotalCaloriesNeededToFeedAnimals).toLocal8Bit());
+      QString::number(myReturnValue).toLocal8Bit());
   qDebug("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
   qDebug("||||||||||||||||||||||||||||||||||||||||||||||||");
   qDebug("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
 
-  int myReturnValue = static_cast<int>(myTotalCaloriesNeededToFeedAnimals);
+
   return myReturnValue;
 }
 
@@ -1354,7 +1355,7 @@ QString LaModel::toXmlAreaAnimalTargets()
     myString += QString("    <description>" + LaUtils::xmlEncode(myAnimal.description()) + "</description>\n");
     myString += QString("    <parameterGuid=\"" + myAnimalParameter.guid() + "\">\n");
     myString += QString("    <name>" + LaUtils::xmlEncode(myAnimalParameter.name()) + "</name>\n");
-    myString += QString("    <productionTarget>" + QString::number(myAreaTarget) + "</productionTarget>\n");
+    myString += QString("    <areaTarget>" + QString::number(myAreaTarget) + "</areaTarget>\n");
     myString += QString("  </animal>\n");
   } // while crop iterator
 
