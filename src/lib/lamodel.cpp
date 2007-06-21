@@ -492,7 +492,7 @@ int LaModel::caloriesFromCrops()
   float myDietComposition = 0.01 * ( 100 - mDietPercent );
   float myCropPercent = 0.01 * ( plantPercent() );
   float myCropOverallContributionToDiet = myDietComposition * myCropPercent;
-  float myCalorieTarget = population() * caloriesPerPersonDaily() * 365;
+  float myCalorieTarget = population() * (mCaloriesPerPersonDaily/1000.) * 365.; // kcalories
   float myCropCalorieTarget = myCalorieTarget * myCropOverallContributionToDiet;
   int myReturnValue = static_cast<int> (myCropCalorieTarget);
   qDebug("method ==> int LaModel::caloriesFromCrops()");
@@ -507,7 +507,7 @@ int LaModel::caloriesFromTameMeat()
   float myDietComposition=0.01*dietPercent();
   float myMeatPercent=0.01*meatPercent();
   float myAnimalOverallContributionToDiet=myDietComposition*myMeatPercent;
-  float myCalorieTarget=population()*mCaloriesPerPersonDaily*365;
+  float myCalorieTarget= population() * (mCaloriesPerPersonDaily/1000.) * 365.; // kcalories
   float myTameMeatCalorieTarget=myCalorieTarget*myAnimalOverallContributionToDiet;
   int myReturnValue = static_cast<int>(myTameMeatCalorieTarget);
   qDebug("method ==> int LaModel::caloriesFromTameMeat()");
@@ -596,7 +596,7 @@ int LaModel::getProductionTargetsCrops(QString theCropGuid, int theCalorieTarget
 {
   qDebug("method ==> int LaModel::getProductionTargetsCrops(QString theCropGuid, int theCalorieTarget)");
   LaCrop myCrop = LaUtils::getCrop(theCropGuid);
-  float myCropProductionTarget = theCalorieTarget / myCrop.cropCalories();
+  float myCropProductionTarget = theCalorieTarget / (myCrop.cropCalories() / 1000.); //kcalories
   int myReturnValue = static_cast<int>(myCropProductionTarget);
   ///@TODO remove this debugging stuff
   qDebug("method ==> int LaModel::getProductionTargetsCrops(QString theCropGuid, int theCalorieTarget)");
@@ -611,7 +611,7 @@ int LaModel::getProductionTargetsAnimals(QString theAnimalGuid, int theCalorieTa
 {
   qDebug("method ==> int LaModel::getProductionTargetsAnimals(QString theAnimalGuid, int theCalorieTarget)");
   LaAnimal myAnimal = LaUtils::getAnimal(theAnimalGuid);
-  float myAnimalProductionTarget = (theCalorieTarget / myAnimal.meatFoodValue()) / (0.01 * myAnimal.usableMeat());
+  float myAnimalProductionTarget = (theCalorieTarget / (myAnimal.meatFoodValue()/1000.)) / (0.01 * myAnimal.usableMeat()); // kcalories
   int myReturnValue = static_cast<int>(myAnimalProductionTarget);
   ///@TODO remove this debugging stuff
   qDebug("method ==> int LaModel::getProductionTargetsAnimals(QString theAnimalGuid, int theCalorieTarget)");
@@ -651,10 +651,10 @@ int LaModel::caloriesNeededByAnimal(QString theAnimalGuid)
   // float myCalorieTarget = population() * mCaloriesPerPersonDaily * 365;
   // float myAnimalCalorieTarget=myCalorieTarget*myAnimalOverallContributionToDiet;
 
-  float myAnimalProductionTarget=(mCaloriesProvidedByAnimalsMap.value(theAnimalGuid) / myAnimal.meatFoodValue());
+  float myAnimalProductionTarget=(mCaloriesProvidedByAnimalsMap.value(theAnimalGuid) / (myAnimal.meatFoodValue()/1000.));
     qDebug("animal prodn target = calorie target of animal / food value");
     qDebug("mCaloriesProvidedByAnimalsMap.value(theAnimalGuid): " + QString::number(mCaloriesProvidedByAnimalsMap.value(theAnimalGuid)).toLocal8Bit());
-    qDebug("myAnimal.meatFoodValue(): " + QString::number(myAnimal.meatFoodValue()).toLocal8Bit());
+    qDebug("myAnimal.meatFoodValue(): " + QString::number(myAnimal.meatFoodValue()/1000.).toLocal8Bit());
     qDebug("myAnimalProductionTarget = " + QString::number(myAnimalProductionTarget).toLocal8Bit());
   float myAnimalsRequired=(myAnimalProductionTarget / myAnimal.killWeight()) / (myAnimal.usableMeat()*.01);
     qDebug("slaughter animals reqd: " + QString::number(myAnimalsRequired).toLocal8Bit());
@@ -684,12 +684,12 @@ int LaModel::caloriesNeededByAnimal(QString theAnimalGuid)
     qDebug("TotalFemales = " + QString::number(myTotalFemales).toLocal8Bit());
   float myTotalJuveniles = myTotalMales+myTotalFemales;
     qDebug("TotalJuveniles = " + QString::number(myTotalJuveniles).toLocal8Bit());
-  float myTotalMothersCaloriesRequired = myTotalMothers * myAnimal.gestating() * 365.;
+  float myTotalMothersCaloriesRequired = myTotalMothers * (myAnimal.gestating()/1000.) * 365.; // kcalories
     qDebug("TotalMothersCaloriesRequired = " + QString::number(myTotalMothersCaloriesRequired).toLocal8Bit());
-  float myTotalJuvenilesCaloriesRequired = myTotalJuveniles * myAnimal.juvenile() * 365.;
+  float myTotalJuvenilesCaloriesRequired = myTotalJuveniles * (myAnimal.juvenile()/1000.) * 365.; // kcalories
     qDebug("TotalJuvenilesCaloriesRequired = " + QString::number(myTotalJuvenilesCaloriesRequired).toLocal8Bit());
   float myTotalCaloriesNeededToFeedAnimals = myTotalMothersCaloriesRequired + myTotalJuvenilesCaloriesRequired;
-    qDebug("TotalCaloriesNeededToFeedAnimals = " + QString::number(myTotalCaloriesNeededToFeedAnimals).toLocal8Bit());
+    qDebug("Total kiloCalories Needed To Feed Animals = " + QString::number(myTotalCaloriesNeededToFeedAnimals).toLocal8Bit());
 
   qDebug("method ==> int LaModel::caloriesNeededByAnimal(QString theAnimalGuid)");
   qDebug("Animal: " + myAnimal.name().toLocal8Bit());
@@ -834,12 +834,12 @@ void LaModel::initialiseAreaTargetsAnimalsMap()
       switch (myLandBeingGrazed)
       {
         case Common:
-               qDebug("Animal is grazing Common Land");
+               qDebug("Animal is grazing Common Land so required calories are added to common land target");
                mCommonGrazingLandCalorieTarget += static_cast<int>(mCaloriesRequiredByAnimalsMap.value(myAnimalGuid));
                mAreaTargetsAnimalsMap[myAnimalGuid]=0;
                break;
         case Unique:
-               qDebug("Animal is grazing Unique Land");
+               qDebug("Animal is grazing Unique Land so required calories are divided by food value of unique grazing land");
                float myTarget = mCaloriesRequiredByAnimalsMap.value(myAnimalGuid) / myAnimalParameter.foodValueOfSpecificGrazingLand();
                mAreaTargetsAnimalsMap[myAnimalGuid] = static_cast<int>(myTarget);
                qDebug("The Area Target is: " + QString::number(static_cast<int>(myTarget)).toLocal8Bit());
@@ -933,14 +933,14 @@ void LaModel::allocateFallowGrazingLand()
     LaCropParameter myCropParameter = LaUtils::getCropParameter(myCropParameterGuid);
 
     float myCropPercent = 0.01 * myCropParameter.percentTameCrop();
-    float myCropCalorieTarget = caloriesFromCrops() * myCropPercent;
-    float myCropProductionTarget = myCropCalorieTarget / myCrop.cropCalories();
+    float myCropCalorieTarget = caloriesFromCrops() * myCropPercent; // already kcalories
+    float myCropProductionTarget = myCropCalorieTarget / (myCrop.cropCalories()/1000.);
     float myCropAreaTarget = myCropProductionTarget / myCrop.cropYield();
     float myAvailableFallowCalories = myCropParameter.fallowRatio() * myCropAreaTarget * myCropParameter.fallowCalories();
 
     myTotalFallowCalories += static_cast<int>(myAvailableFallowCalories);
   } // while crop iterator
-
+  qDebug("Total Available Fallow Calories before adjustments: " + QString::number(myTotalFallowCalories).toLocal8Bit());
   ////////////////////////////////////////
   // The following three if statements  //
   // process all of the animals which   //
@@ -955,19 +955,25 @@ void LaModel::allocateFallowGrazingLand()
   if (myTotalFallowCalories > 0)
   {
     Priority myPriority = High;
-    myTotalFallowCalories = doTheFallowAllocation(myPriority, myTotalFallowCalories, myAnimalsHighPriorityCalorieRequirements);
+    int myLeftoverCalories = doTheFallowAllocation(myPriority, myTotalFallowCalories, myAnimalsHighPriorityCalorieRequirements);
+    qDebug("Available Fallow Calories after HIGH adjustments: " + QString::number(myLeftoverCalories).toLocal8Bit());
+    myTotalFallowCalories = myLeftoverCalories;
   }
   // MEDIUM priority animals get allocated fallow cropland
   if (myTotalFallowCalories > 0)
   {
     Priority myPriority = Medium;
-    myTotalFallowCalories = doTheFallowAllocation(myPriority, myTotalFallowCalories, myAnimalsMediumPriorityCalorieRequirements);
+    int myLeftoverCalories = doTheFallowAllocation(myPriority, myTotalFallowCalories, myAnimalsMediumPriorityCalorieRequirements);
+    qDebug("Available Fallow Calories after MED adjustments: " + QString::number(myLeftoverCalories).toLocal8Bit());
+    myTotalFallowCalories = myLeftoverCalories;
   }
   // LOW priority animals get allocated fallow cropland
   if (myTotalFallowCalories > 0)
   {
     Priority myPriority = Low;
-    myTotalFallowCalories = doTheFallowAllocation(myPriority, myTotalFallowCalories, myAnimalsLowPriorityCalorieRequirements);
+    int myLeftoverCalories = doTheFallowAllocation(myPriority, myTotalFallowCalories, myAnimalsLowPriorityCalorieRequirements);
+    qDebug("Available Fallow Calories after LOW adjustments: " + QString::number(myLeftoverCalories).toLocal8Bit());
+    myTotalFallowCalories = myLeftoverCalories;
   }
   //int myReturnValue = static_cast<int>(myTotalFallowCalories);
   //return myReturnValue;
@@ -997,13 +1003,13 @@ int LaModel::doTheFallowAllocation
   // calories.  In other words, we won't be needing to graze them
   // on any other land besides the crop fallow.
   Status myFallowStatus;
-  if (myTotalFallowCalories > 0) {myFallowStatus = MoreThanEnoughToCompletelySatisfy;}
-  else {myFallowStatus = NotEnoughToCompletelySatisfy;}
-
+  myFallowStatus = (myTotalFallowCalories > 0) ? MoreThanEnoughToCompletelySatisfy : NotEnoughToCompletelySatisfy;
+  qDebug("Fallow Status: " + QString(myFallowStatus).toLocal8Bit());
   switch (myFallowStatus)
   {
     case  MoreThanEnoughToCompletelySatisfy:
           {
+            qDebug("MoreThanEnoughToCompletelySatisfy");
             // because there is leftover calories available to feed more critters, this
             // shows that all of the animals caloric requirements are met with crop fallow
             // and require no more feed so their values in the QMap will be set to 0
@@ -1028,6 +1034,7 @@ int LaModel::doTheFallowAllocation
 
     case  NotEnoughToCompletelySatisfy:
           {
+            qDebug("NotEnoughToCompletelySatisfy");
             // because there ARE NO leftover calories available to feed more critters, this
             // shows that NOT ALL of the animals caloric requirements are met with crop fallow
             // and therefore require more feed so their values in the QMap will be adjusted accordingly
@@ -1049,8 +1056,10 @@ int LaModel::doTheFallowAllocation
                                       mCaloriesRequiredByAnimalsMap.value( myAnimalGuid )
                                       / theTotalCalorificRequirements
                                      )
-                                     * myTotalFallowCalories
+                                     * theAvailableFallowCalories //myTotalFallowCalories
                                     );
+                qDebug("Adjusting calories required by: " + myAnimal.name().toLocal8Bit());
+                qDebug("Adjusted requirement is: " + QString::number(myAdjustedCaloricRequirements).toLocal8Bit());
                 mCaloriesRequiredByAnimalsMap [myAnimalGuid] = myAdjustedCaloricRequirements;
               } //endif (fallowUsage(myAnimalGuid)==High)
 
