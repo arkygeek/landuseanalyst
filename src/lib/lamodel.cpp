@@ -1085,113 +1085,7 @@ int LaModel::doTheFallowAllocation
   return myTotalFallowCalories;
 }
 
-////////// All of the following functions are GRASS related functions ////////
 
-int LaModel::adjustAreaTargetsCrops()
-{
-  qDebug("method ==> int LaModel::adjustAreaTargetsCrops()");
-  int a;
-  return a;
-}
-
-void LaModel::getArea(float theArea)
-{
-  qDebug("method ==> void LaModel::getArea(float theArea)");
-  QString myProgram = "/usr/lib/grass/bin/r.stats";
-  QStringList myArgs;
-  myArgs << "tempraster";
-  QProcess myProcess;
-  myProcess.start(myProgram, myArgs);
-
-  if (!myProcess.waitForStarted())
-  {
-    qDebug("The process never started.....aaargh");
-  }
-
-  while (myProcess.waitForReadyRead(-1))
-  {
-  }
-
-  QString myString;
-  myString+=("--------- Output ----------\n");
-  myProcess.setReadChannel(QProcess::StandardOutput);
-  QByteArray myArray = myProcess.readAll();
-  myString.append(myArray);
-  myString+=("--------- Errors ----------\n");
-  myProcess.setReadChannel(QProcess::StandardError);
-  myArray = myProcess.readAll();
-  myString.append(myArray);
-
-  qDebug(myString.toLocal8Bit());
-
-  qDebug("The process completed");
-}
-
-void LaModel::makeWalkCost(int theX, int theY)
-{
-  qDebug("method ==> void LaModel::makeWalkCost(int theX, int theY)");
-}
-
-void LaModel::makeEuclideanCost(int theX, int theY)
-{
-  qDebug("method ==> void LaModel::makeEuclideanCost(int theX, int theY)");
-}
-
-void LaModel::makePathDistanceCost(int theX, int theY)
-{
-  qDebug("method ==> void LaModel::makePathDistanceCost(int theX, int theY)");
-}
-
-void LaModel::writeMetaData(QString theValue)
-{
-  qDebug("method ==> void LaModel::writeMetaData(QString theValue)");
-}
-
-void LaModel::makeCircle(int theX, int theY)
-{
-  qDebug("method ==> void LaModel::makeCircle(int theX, int theY");
-  // to verify this worked do
-  //    d.rast
-  //    and check in the pull downlist (if your eyes dont fall out looking at those fonts)
-  //    to remove teh file again do:
-  //    g.remove rast=circle
-
-  /*
-     qDebug("Making crop circle...tweeedee treedee");
-     QString myProgram = "/usr/lib/grass/bin/r.circle";
-     QStringList myArgs;
-     myArgs << "-b"
-     << "output=circle"
-     <<  "coordinate=744800,3611100"
-     << "max=500"
-     << "--overwrite";
-     */
-  QString myProgram = "/usr/lib/grass/bin/r.stats";
-  QStringList myArgs;
-  myArgs << "landuse";
-  QProcess myProcess;
-  myProcess.start(myProgram, myArgs);
-  if (!myProcess.waitForStarted()) {
-    qDebug("The process never started.....aaargh");
-  }
-
-  while (myProcess.waitForReadyRead(-1)) {
-  }
-
-  QString myString;
-  myString+=("--------- Output ----------\n");
-  myProcess.setReadChannel(QProcess::StandardOutput);
-  QByteArray myArray = myProcess.readAll();
-  myString.append(myArray);
-  myString+=("--------- Errors ----------\n");
-  myProcess.setReadChannel(QProcess::StandardError);
-  myArray = myProcess.readAll();
-  myString.append(myArray);
-
-  qDebug(myString.toLocal8Bit());
-
-  qDebug("The process completed");
-}
 
   ////////////////////////////////////////////////////////////////////////
  // The following is all for generating reports on calculation results //
@@ -1382,4 +1276,112 @@ QString LaModel::toXmlAreaAnimalTargets()
 
   myString += QString("</animalAreaTargetReport>\n");
   return myString;
+}
+
+////////// All of the following functions are GRASS related functions ////////
+
+int LaModel::adjustAreaTargetsCrops()
+{
+  qDebug("method ==> int LaModel::adjustAreaTargetsCrops()");
+  int a;
+  return a;
+}
+
+void LaModel::getArea(float theArea)
+{
+  qDebug("method ==> void LaModel::getArea(float theArea)");
+  QString myProgram = "/usr/lib/grass/bin/r.stats";
+  QStringList myArgs;
+  myArgs << "tempraster";
+  QProcess myProcess;
+  myProcess.start(myProgram, myArgs);
+
+  if (!myProcess.waitForStarted())
+  {
+    qDebug("The process never started.....aaargh");
+  }
+
+  while (myProcess.waitForReadyRead(-1))
+  {
+  }
+
+  QString myString;
+  myString+=("--------- Output ----------\n");
+  myProcess.setReadChannel(QProcess::StandardOutput);
+  QByteArray myArray = myProcess.readAll();
+  myString.append(myArray);
+  myString+=("--------- Errors ----------\n");
+  myProcess.setReadChannel(QProcess::StandardError);
+  myArray = myProcess.readAll();
+  myString.append(myArray);
+
+  qDebug(myString.toLocal8Bit());
+
+  qDebug("The process completed");
+}
+
+void LaModel::makeWalkCost(int theX, int theY)
+{
+  qDebug("method ==> void LaModel::makeWalkCost(int theX, int theY)");
+}
+
+void LaModel::makeEuclideanCost(int theX, int theY)
+{
+  qDebug("method ==> void LaModel::makeEuclideanCost(int theX, int theY)");
+}
+
+void LaModel::makePathDistanceCost(int theX, int theY)
+{
+  qDebug("method ==> void LaModel::makePathDistanceCost(int theX, int theY)");
+}
+
+void LaModel::writeMetaData(QString theValue)
+{
+  qDebug("method ==> void LaModel::writeMetaData(QString theValue)");
+}
+
+void LaModel::makeCircle(int theX, int theY)
+{
+  qDebug("method ==> void LaModel::makeCircle(int theX, int theY");
+  // to verify this worked do
+  //    d.rast
+  //    and check in the pull downlist (if your eyes dont fall out looking at those fonts)
+  //    to remove teh file again do:
+  //    g.remove rast=circle
+
+  /*
+     qDebug("Making crop circle...tweeedee treedee");
+     QString myProgram = "/usr/lib/grass/bin/r.circle";
+     QStringList myArgs;
+     myArgs << "-b"
+     << "output=circle"
+     <<  "coordinate=744800,3611100"
+     << "max=500"
+     << "--overwrite";
+     */
+  QString myProgram = "/usr/lib/grass/bin/r.stats";
+  QStringList myArgs;
+  myArgs << "landuse";
+  QProcess myProcess;
+  myProcess.start(myProgram, myArgs);
+  if (!myProcess.waitForStarted()) {
+    qDebug("The process never started.....aaargh");
+  }
+
+  while (myProcess.waitForReadyRead(-1)) {
+  }
+
+  QString myString;
+  myString+=("--------- Output ----------\n");
+  myProcess.setReadChannel(QProcess::StandardOutput);
+  QByteArray myArray = myProcess.readAll();
+  myString.append(myArray);
+  myString+=("--------- Errors ----------\n");
+  myProcess.setReadChannel(QProcess::StandardError);
+  myArray = myProcess.readAll();
+  myString.append(myArray);
+
+  qDebug(myString.toLocal8Bit());
+
+  qDebug("The process completed");
 }
