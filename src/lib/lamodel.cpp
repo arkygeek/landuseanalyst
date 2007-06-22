@@ -920,6 +920,11 @@ void LaModel::allocateFallowGrazingLand()
   qDebug("High Priority Animals: " + QString::number(myAnimalsHighPriorityCount).toLocal8Bit() );
   qDebug("Medium Priority Animals: " + QString::number(myAnimalsMediumPriorityCount).toLocal8Bit() );
   qDebug("Low Priority Animals: " + QString::number(myAnimalsLowPriorityCount).toLocal8Bit() );
+
+  qDebug("High Priority Animal Calorie requirements: " + QString::number(myAnimalsHighPriorityCalorieRequirements).toLocal8Bit() );
+  qDebug("Medium Priority Animal Calorie requirements: " + QString::number(myAnimalsMediumPriorityCalorieRequirements).toLocal8Bit() );
+  qDebug("Low Priority Animal Calorie requirements: " + QString::number(myAnimalsLowPriorityCalorieRequirements).toLocal8Bit() );
+
   //  iterate through crops to determine the total calories available to animals
   //  by grazing fallow crop land
 
@@ -956,7 +961,7 @@ void LaModel::allocateFallowGrazingLand()
   {
     Priority myPriority = High;
     int myLeftoverCalories = doTheFallowAllocation(myPriority, myTotalFallowCalories, myAnimalsHighPriorityCalorieRequirements);
-    qDebug("Available Fallow Calories after HIGH adjustments: " + QString::number(myLeftoverCalories).toLocal8Bit());
+    qDebug("Remaining Fallow Calories after HIGH adjustments: " + QString::number(myLeftoverCalories).toLocal8Bit());
     myTotalFallowCalories = myLeftoverCalories;
   }
   // MEDIUM priority animals get allocated fallow cropland
@@ -964,7 +969,7 @@ void LaModel::allocateFallowGrazingLand()
   {
     Priority myPriority = Medium;
     int myLeftoverCalories = doTheFallowAllocation(myPriority, myTotalFallowCalories, myAnimalsMediumPriorityCalorieRequirements);
-    qDebug("Available Fallow Calories after MED adjustments: " + QString::number(myLeftoverCalories).toLocal8Bit());
+    qDebug("Remaining Fallow Calories after MED adjustments: " + QString::number(myLeftoverCalories).toLocal8Bit());
     myTotalFallowCalories = myLeftoverCalories;
   }
   // LOW priority animals get allocated fallow cropland
@@ -972,7 +977,7 @@ void LaModel::allocateFallowGrazingLand()
   {
     Priority myPriority = Low;
     int myLeftoverCalories = doTheFallowAllocation(myPriority, myTotalFallowCalories, myAnimalsLowPriorityCalorieRequirements);
-    qDebug("Available Fallow Calories after LOW adjustments: " + QString::number(myLeftoverCalories).toLocal8Bit());
+    qDebug("Remaining Fallow Calories after LOW adjustments: " + QString::number(myLeftoverCalories).toLocal8Bit());
     myTotalFallowCalories = myLeftoverCalories;
   }
   //int myReturnValue = static_cast<int>(myTotalFallowCalories);
@@ -1029,7 +1034,7 @@ int LaModel::doTheFallowAllocation
               } //endif (fallowUsage(myAnimalGuid)
 
             } // while animal iterating
-            break;
+                        break;
           }
 
     case  NotEnoughToCompletelySatisfy:
@@ -1050,7 +1055,7 @@ int LaModel::doTheFallowAllocation
 
               if (myAnimalParameter.fallowUsage()==thePriority)
               {
-                int myAdjustedCaloricRequirements =
+                int myAllottedCalories =
                     static_cast<int>(
                                      (
                                       mCaloriesRequiredByAnimalsMap.value( myAnimalGuid )
@@ -1059,11 +1064,17 @@ int LaModel::doTheFallowAllocation
                                      * theAvailableFallowCalories //myTotalFallowCalories
                                     );
                 qDebug("Adjusting calories required by: " + myAnimal.name().toLocal8Bit());
-                qDebug("Adjusted requirement is: " + QString::number(myAdjustedCaloricRequirements).toLocal8Bit());
-                mCaloriesRequiredByAnimalsMap [myAnimalGuid] = myAdjustedCaloricRequirements;
+                qDebug("Allotted Calories from fallow are: " + QString::number(myAllottedCalories).toLocal8Bit());
+                qDebug("Original calorie target was: " + QString::number(mCaloriesRequiredByAnimalsMap.value(myAnimalGuid)).toLocal8Bit());
+                float myNewCalorieTarget = mCaloriesRequiredByAnimalsMap.value(myAnimalGuid) - myAllottedCalories;
+                qDebug("New calorie target is: " + QString::number(myNewCalorieTarget).toLocal8Bit());
+                mCaloriesRequiredByAnimalsMap [myAnimalGuid] = myNewCalorieTarget;
               } //endif (fallowUsage(myAnimalGuid)==High)
 
             } // while animal iterating
+            qDebug("After allocation, total available calories from fallow: " + QString::number(myTotalFallowCalories).toLocal8Bit());
+            myTotalFallowCalories = 0;
+            qDebug("WHICH HAS NOW BEEN SET TO 0");
             break;
           }
 
