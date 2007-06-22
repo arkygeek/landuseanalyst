@@ -495,7 +495,6 @@ int LaModel::caloriesFromCrops()
   float myCalorieTarget = population() * (mCaloriesPerPersonDaily/1000.) * 365.; // kcalories
   float myCropCalorieTarget = myCalorieTarget * myCropOverallContributionToDiet;
   int myReturnValue = static_cast<int> (myCropCalorieTarget);
-  qDebug("method ==> int LaModel::caloriesFromCrops()");
   qDebug("Overall Crop Calorie Target: " + QString::number(myReturnValue).toLocal8Bit());
   qDebug("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
   return myReturnValue;
@@ -506,9 +505,9 @@ int LaModel::caloriesFromTameMeat()
   qDebug("method ==> int LaModel::caloriesFromTameMeat()");
   float myDietComposition=0.01*dietPercent();
   float myMeatPercent=0.01*meatPercent();
-  float myAnimalOverallContributionToDiet=myDietComposition*myMeatPercent;
+  float myAnimalOverallContributionToDiet=myDietComposition * myMeatPercent;
   float myCalorieTarget= population() * (mCaloriesPerPersonDaily/1000.) * 365.; // kcalories
-  float myTameMeatCalorieTarget=myCalorieTarget*myAnimalOverallContributionToDiet;
+  float myTameMeatCalorieTarget=myCalorieTarget * myAnimalOverallContributionToDiet;
   int myReturnValue = static_cast<int>(myTameMeatCalorieTarget);
   qDebug("method ==> int LaModel::caloriesFromTameMeat()");
   qDebug("Overall Tame Meat Target: " + QString::number(myReturnValue).toLocal8Bit());
@@ -581,8 +580,8 @@ int LaModel::caloriesProvidedByTheAnimal(QString theAnimalParameterGuid)
 {
   qDebug("method ==> int LaModel::caloriesProvidedByTheAnimal(QString theAnimalParameterGuid)");
   LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(theAnimalParameterGuid);
-  float myAnimalPercent=0.01*myAnimalParameter.percentTameMeat();
-  float myAnimalCalorieTarget=caloriesFromTameMeat()*myAnimalPercent;
+  float myAnimalPercent = 0.01 * myAnimalParameter.percentTameMeat();
+  float myAnimalCalorieTarget = caloriesFromTameMeat() * myAnimalPercent;
   int myReturnValue = static_cast<int>(myAnimalCalorieTarget);
   ///@TODO remove this debugging stuff
   qDebug("method ==> int LaModel::caloriesProvidedByTheAnimal(QString theAnimalParameterGuid)");
@@ -626,7 +625,7 @@ int LaModel::getAreaTargetsCrops(QString theCropGuid, int theProductionTarget)
 {
   qDebug("method ==> int LaModel::getAreaTargetsCrops(QString theCropGuid, int theProductionTarget)");
   LaCrop myCrop = LaUtils::getCrop(theCropGuid);
-  float myCropAreaTarget = theProductionTarget/myCrop.cropYield();
+  float myCropAreaTarget = theProductionTarget / myCrop.cropYield();
   int myReturnValue = static_cast<int>(myCropAreaTarget);
   ///@TODO remove this debugging stuff
   qDebug("method ==> int LaModel::getAreaTargetsCrops(QString theCropGuid, int theProductionTarget)");
@@ -651,7 +650,7 @@ int LaModel::caloriesNeededByAnimal(QString theAnimalGuid)
   // float myCalorieTarget = population() * mCaloriesPerPersonDaily * 365;
   // float myAnimalCalorieTarget=myCalorieTarget*myAnimalOverallContributionToDiet;
 
-  float myAnimalProductionTarget=(mCaloriesProvidedByAnimalsMap.value(theAnimalGuid) / (myAnimal.meatFoodValue()/1000.));
+  float myAnimalProductionTarget=getProductionTargetsAnimals( theAnimalGuid, static_cast <int>(mCaloriesProvidedByAnimalsMap.value(theAnimalGuid))); //(mCaloriesProvidedByAnimalsMap.value(theAnimalGuid) / (myAnimal.meatFoodValue()/1000.));
     qDebug("animal prodn target = calorie target of animal / food value");
     qDebug("mCaloriesProvidedByAnimalsMap.value(theAnimalGuid): " + QString::number(mCaloriesProvidedByAnimalsMap.value(theAnimalGuid)).toLocal8Bit());
     qDebug("myAnimal.meatFoodValue(): " + QString::number(myAnimal.meatFoodValue()/1000.).toLocal8Bit());
@@ -787,8 +786,8 @@ void LaModel::initialiseProductionRequiredAnimalsMap()
   {
     myAnimalIterator.next();
     QString myAnimalGuid = myAnimalIterator.key();
-    int myProductionTarget = static_cast<int>(mCaloriesProvidedByAnimalsMap.value(myAnimalGuid));
-    mProductionRequiredAnimalsMap.insert(myAnimalGuid,getProductionTargetsAnimals(myAnimalGuid, myProductionTarget));
+    int myCalorieTarget = static_cast<int>(mCaloriesProvidedByAnimalsMap.value(myAnimalGuid));
+    mProductionRequiredAnimalsMap.insert(myAnimalGuid,getProductionTargetsAnimals(myAnimalGuid, myCalorieTarget));
   }
 }
 
@@ -1033,8 +1032,9 @@ int LaModel::doTheFallowAllocation
                 mCaloriesRequiredByAnimalsMap[myAnimalGuid] = 0;
               } //endif (fallowUsage(myAnimalGuid)
 
-            } // while animal iterating
-                        break;
+             } // while animal iterating
+             // myTotalFallowCalories += theTotalCalorificRequirements;
+             break;
           }
 
     case  NotEnoughToCompletelySatisfy:
@@ -1069,6 +1069,7 @@ int LaModel::doTheFallowAllocation
                 float myNewCalorieTarget = mCaloriesRequiredByAnimalsMap.value(myAnimalGuid) - myAllottedCalories;
                 qDebug("New calorie target is: " + QString::number(myNewCalorieTarget).toLocal8Bit());
                 mCaloriesRequiredByAnimalsMap [myAnimalGuid] = myNewCalorieTarget;
+                myTotalFallowCalories += myAllottedCalories;
               } //endif (fallowUsage(myAnimalGuid)==High)
 
             } // while animal iterating

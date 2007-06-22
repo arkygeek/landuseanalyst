@@ -555,13 +555,12 @@ void LaMainForm::on_pushButtonRun_clicked()
   textBrowserResultsLeft->setText(myModel.toHtml());
 
   // for debugging only...
-
+  qDebug("LAMAINFORM!!!!");
   qDebug("Number of Crops: " + QString::number(myModel.countCrops()).toLocal8Bit());
   qDebug("Number of Animals: " + QString::number(myModel.countAnimals()).toLocal8Bit());
   qDebug("Calories from Crops: " + QString::number(myModel.caloriesFromCrops()).toLocal8Bit());
   qDebug("Calories from Animals: " + QString::number(myModel.caloriesFromTameMeat()).toLocal8Bit());
-  qDebug("Calories target for Crops: " + QString::number(myModel.caloriesFromTameMeat()).toLocal8Bit());
-
+  qDebug("end LAMAINFORM!!!!");
   // iterate through crops and animals and display the calorie, production and area targets
   myModel.DoCalculations(mCommonGrazingLandFoodValue);
   myModel.toXmlFile( LaUtils::getModelOutputDir() +
