@@ -100,6 +100,13 @@ class LaModel : public LaSerialisable, public LaGuid
     int caloriesNeededByAnimal(QString theAnimalGuid);
     int adjustAreaTargetsCrops();
     int doTheFallowAllocation(Priority, int, int);
+    QMap <QString, int> animalCalorieTargetsMap() const;
+    QMap <QString, int> animalFeedRequirementsMap() const;
+    QMap <QString, int> animalProductionTargetsMap() const;
+    QMap <QString, int> animalAreaTargetsMap() const;
+    QMap <QString, int> cropCalorieTargetsMap() const;
+    QMap <QString, int> cropProductionTargetsMap() const;
+    QMap <QString, int> cropAreaTargetsMap() const;
 
     //
     // Mutators
@@ -251,7 +258,7 @@ class LaModel : public LaSerialisable, public LaGuid
   private:
     /** A map of calorie targets for animals.
      */
-    QMap <QString,float> mCaloriesProvidedByAnimalsMap;
+    QMap <QString,int> mCaloriesProvidedByAnimalsMap;
     /** Initialise the map of calories needing to be provided
      * by each individual animal.
      */
@@ -259,7 +266,7 @@ class LaModel : public LaSerialisable, public LaGuid
 
     /** A map of calorie targets for crops.
      */
-    QMap <QString,float> mCaloriesProvidedByCropsMap;
+    QMap <QString,int> mCaloriesProvidedByCropsMap;
     /** Initialise the map of calories needing to be provided
      * by each individual crop.
      */
@@ -275,7 +282,7 @@ class LaModel : public LaSerialisable, public LaGuid
 
     /** A map of calorie targets for crops.
      */
-    QMap <QString,float> mProductionRequiredCropsMap;
+    QMap <QString,int> mProductionRequiredCropsMap;
     /** Initialise the map of production levels needing
      * to meet the calorie requirements
      */
@@ -304,7 +311,7 @@ class LaModel : public LaSerialisable, public LaGuid
      * As we account for each resource (fallow, crop x, crop y etc)
      * we can remove it from the cumulative total.
      */
-    QMap <QString,float> mCaloriesRequiredByAnimalsMap;
+    QMap <QString,int> mCaloriesRequiredByAnimalsMap;
     /** Initialise the cumulative calories map to the calories
      * required for each animal.
      */

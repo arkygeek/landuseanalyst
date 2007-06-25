@@ -167,10 +167,44 @@ int LaModel::caloriesPerPersonDaily() const
 {
   return mCaloriesPerPersonDaily;
 }
-
-    int LaModel::foodValueCommonLand() const
+int LaModel::foodValueCommonLand() const
 {
   return mCommonGrazingLandFoodValue;
+}
+QMap <QString, int> LaModel::animalCalorieTargetsMap() const
+{
+  // need to implement logic to ensure that the calculations have been performed!
+  return mCaloriesProvidedByAnimalsMap;
+}
+QMap <QString, int> LaModel::animalFeedRequirementsMap() const
+{
+  // need to implement logic to ensure that the calculations have been performed!
+  return mCaloriesRequiredByAnimalsMap;
+}
+QMap <QString, int> LaModel::animalProductionTargetsMap() const
+{
+  // need to implement logic to ensure that the calculations have been performed!
+  return mProductionRequiredAnimalsMap;
+}
+QMap <QString, int> LaModel::animalAreaTargetsMap() const
+{
+  // need to implement logic to ensure that the calculations have been performed!
+  return mAreaTargetsAnimalsMap;
+}
+QMap <QString, int> LaModel::cropCalorieTargetsMap() const
+{
+  // need to implement logic to ensure that the calculations have been performed!
+  return mCaloriesProvidedByCropsMap;
+}
+QMap <QString, int> LaModel::cropProductionTargetsMap() const
+{
+  // need to implement logic to ensure that the calculations have been performed!
+  return mProductionRequiredCropsMap;
+}
+QMap <QString, int> LaModel::cropAreaTargetsMap() const
+{
+  // need to implement logic to ensure that the calculations have been performed!
+  return mAreaTargetsCropsMap;
 }
 
 void LaModel::setFallowStatus(Status theStatus)
@@ -1078,7 +1112,7 @@ int LaModel::doTheFallowAllocation
                 qDebug("Original calorie target was: " + QString::number(mCaloriesRequiredByAnimalsMap.value(myAnimalGuid)).toLocal8Bit());
                 float myNewCalorieTarget = mCaloriesRequiredByAnimalsMap.value(myAnimalGuid) - myAllottedCalories;
                 qDebug("New calorie target is: " + QString::number(myNewCalorieTarget).toLocal8Bit());
-                mCaloriesRequiredByAnimalsMap [myAnimalGuid] = myNewCalorieTarget;
+                mCaloriesRequiredByAnimalsMap [myAnimalGuid] = static_cast<int>(myNewCalorieTarget);
                 myTotalFallowCalories += myAllottedCalories;
               } //endif (fallowUsage(myAnimalGuid)==High)
 
@@ -1109,7 +1143,7 @@ QString LaModel::toXmlCalorieCropTargets()
   // Loop through the mCaloriesProvidedByCropsMap
   QString myString;
   myString += QString("<cropCalorieTargetReport>\n");
-  QMapIterator<QString, float> myCropIterator (mCaloriesProvidedByCropsMap);
+  QMapIterator<QString, int> myCropIterator (mCaloriesProvidedByCropsMap);
   while (myCropIterator.hasNext())
   {
     myCropIterator.next();
@@ -1140,7 +1174,7 @@ QString LaModel::toXmlCalorieAnimalTargets()
   // Loop through the mCaloriesProvidedByAniamlsMap
   QString myString;
   myString += QString("<animalCalorieTargetReport>\n");
-  QMapIterator<QString, float> myAnimalIterator (mCaloriesProvidedByAnimalsMap);
+  QMapIterator<QString, int> myAnimalIterator (mCaloriesProvidedByAnimalsMap);
   while (myAnimalIterator.hasNext())
   {
     myAnimalIterator.next();
@@ -1172,7 +1206,7 @@ QString LaModel::toXmlProductionCropTargets()
   // Loop through the mProductionRequiredCropsMap
   QString myString;
   myString += QString("<cropProductionTargetReport>\n");
-  QMapIterator<QString, float> myCropIterator (mProductionRequiredCropsMap);
+  QMapIterator<QString, int> myCropIterator (mProductionRequiredCropsMap);
   while (myCropIterator.hasNext())
   {
     myCropIterator.next();
