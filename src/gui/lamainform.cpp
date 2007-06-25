@@ -552,6 +552,7 @@ void LaMainForm::on_pushButtonRun_clicked()
   myModel.setCropPercent(horizontalSliderCrop->value());
   myModel.setMeatPercent(horizontalSliderMeat->value());
   myModel.setCaloriesPerPersonDaily(spinBoxDailyCalories->value());
+  myModel.setCommonLandValue(sbCommonRasterCalories->value());
   textBrowserResultsLeft->setText(myModel.toHtml());
 
   // for debugging only...
@@ -562,7 +563,7 @@ void LaMainForm::on_pushButtonRun_clicked()
   qDebug("Calories from Animals: " + QString::number(myModel.caloriesFromTameMeat()).toLocal8Bit());
   qDebug("end LAMAINFORM!!!!");
   // iterate through crops and animals and display the calorie, production and area targets
-  myModel.DoCalculations(mCommonGrazingLandFoodValue);
+  myModel.DoCalculations();
   myModel.toXmlFile( LaUtils::getModelOutputDir() +
       QDir::separator() + myModel.guid() + ".xml");
 

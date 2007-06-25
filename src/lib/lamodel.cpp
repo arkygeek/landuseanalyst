@@ -168,6 +168,11 @@ int LaModel::caloriesPerPersonDaily() const
   return mCaloriesPerPersonDaily;
 }
 
+    int LaModel::foodValueCommonLand() const
+{
+  return mCommonGrazingLandFoodValue;
+}
+
 void LaModel::setFallowStatus(Status theStatus)
 {
   mFallowStatus=theStatus;
@@ -230,6 +235,12 @@ void LaModel::setCaloriesPerPersonDaily(int theCalories)
 {
   mCaloriesPerPersonDaily=theCalories;
 }
+
+void LaModel::setCommonLandValue(int theValue)
+{
+  mCommonGrazingLandFoodValue=theValue;
+}
+
 void LaModel::setAnimals(QMap<QString,QString> theAnimals)
 {
   mAnimalsMap = theAnimals;
@@ -408,9 +419,8 @@ QString LaModel::toHtml()
  //                                         //
 /////////////////////////////////////////////
 
-void LaModel::DoCalculations(int theCommonGrazingLandCalories)
+void LaModel::DoCalculations()
 {
-  mCommonGrazingLandFoodValue = theCommonGrazingLandCalories;
   qDebug("method ==> void LaModel::DoCalculations()");
   // Step 1
   //        Calculate calories needed from crops and tame meat to sustain the settlement

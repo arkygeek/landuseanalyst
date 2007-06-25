@@ -64,23 +64,24 @@ class LaModel : public LaSerialisable, public LaGuid
     int easting() const;
     /** North coordinates */
     int northing() const;
-    /** Do we use the Euclidean Distance modelling method */
+    /** euclidean Distance selected */
     bool euclideanDistance() const;
-    /** The number of calories a walkingTime female requires per day */
+    /** swalkingTime elected */
     bool walkingTime() const;
-    /** The number of calories a pathDistance requires per day */
+    /** pathDistance selected */
     bool pathDistance() const;
-    /** The life expectancy in years of the model */
+    /** The precision of the land area calculations */
     int precision() const;
-    /** The number of years a female will reliably produce offspring */
+    /** what percent of the diet comes from Meat */
     int dietPercent() const;
-    /** The average number of young produced per pregnancy */
+    /** what percent of the diet comes from crops */
     int plantPercent() const;
-    /** The age in weeks at which babies stop suckling */
+    /** what percent of the diet comes from meat */
     int meatPercent() const;
-    /** The number of days required for gestation */
+    /** TCalories per person per day */
     int caloriesPerPersonDaily() const;
-    /** The number of days in the female estrous cycle */
+    /** Food Value of the common grazing land */
+    int foodValueCommonLand() const;
 
     Status fallowStatus() const;
 
@@ -174,6 +175,11 @@ class LaModel : public LaSerialisable, public LaGuid
      */
     void setCaloriesPerPersonDaily(int theCaloriesPerPersonDaily);
 
+    /** Set the caloriesPerPersonDaily in Days
+     * @see caloriesPerPersonDaily()
+     */
+    void setCommonLandValue(int theValue);
+
     /** Set the animals for this model
      * @param QMap<QString,QString> a list of animal guid and animal parameter guids
      */
@@ -186,7 +192,7 @@ class LaModel : public LaSerialisable, public LaGuid
 
     /** Perform calcs
      */
-    void DoCalculations(int theCommonGrazingLandCalories);
+    void DoCalculations();
 
     void setFallowStatus(Status theStatus);
     //void setDoTheFallowAllocation(Priority, float, float);
