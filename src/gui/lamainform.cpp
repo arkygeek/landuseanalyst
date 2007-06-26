@@ -162,6 +162,12 @@ void LaMainForm::on_pbnNewAnimalParameter_clicked()
     loadAnimals();
 }
 
+//void LaMainForm::on_pbnFallow_clicked()
+//{
+//    LaModelReports myModelReports;
+//    myModelReports.fallowTable();
+//}
+
 void LaMainForm::loadAnimals()
 {
   tblAnimals->clear();

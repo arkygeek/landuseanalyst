@@ -1679,7 +1679,60 @@ p, li { white-space: pre-wrap; }
        <property name="spacing" >
         <number>6</number>
        </property>
-       <item row="0" column="0" >
+       <item row="0" column="3" colspan="4" >
+        <widget class="QSplitter" name="splitter_5" >
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <widget class="QListWidget" name="listWidgetCalculationsAnimal" >
+          <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>4</hsizetype>
+            <vsizetype>7</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize" >
+           <size>
+            <width>70</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="toolTip" >
+           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Select which animal you want to see the calculations for.&lt;/p>&lt;/body>&lt;/html></string>
+          </property>
+          <property name="whatsThis" >
+           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">To see the Calorie, Production, and Area targets for all of the crops and animals being modelled, simply select them from the list, and the results will be displayed in the area to the right. This information is meant to give the user an opportunity to make sure that the target look feasible before running the model (which can be very time consuming).&lt;/p>&lt;/body>&lt;/html></string>
+          </property>
+         </widget>
+         <widget class="QTextBrowser" name="textBrowserResultsAnimals" >
+          <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>3</hsizetype>
+            <vsizetype>5</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="whatsThis" >
+           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">To see the Calorie, Production, and Area targets for an animal simply select it from the list on the left, and the results will be displayed in the area to the right.&lt;/p>
+&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">This information is meant to give you an opportunity to make sure that the targets look feasible before running the model (which can be very time consuming).&lt;/p>&lt;/body>&lt;/html></string>
+          </property>
+         </widget>
+        </widget>
+       </item>
+       <item row="0" column="0" colspan="3" >
         <widget class="QSplitter" name="splitter_2" >
          <property name="orientation" >
           <enum>Qt::Horizontal</enum>
@@ -1732,57 +1785,52 @@ p, li { white-space: pre-wrap; }
          </widget>
         </widget>
        </item>
-       <item row="0" column="1" >
-        <widget class="QSplitter" name="splitter_5" >
+       <item row="1" column="0" >
+        <spacer>
          <property name="orientation" >
           <enum>Qt::Horizontal</enum>
          </property>
-         <widget class="QListWidget" name="listWidgetCalculationsAnimal" >
-          <property name="sizePolicy" >
-           <sizepolicy>
-            <hsizetype>4</hsizetype>
-            <vsizetype>7</vsizetype>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize" >
-           <size>
-            <width>70</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="toolTip" >
-           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Select which animal you want to see the calculations for.&lt;/p>&lt;/body>&lt;/html></string>
-          </property>
-          <property name="whatsThis" >
-           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">To see the Calorie, Production, and Area targets for all of the crops and animals being modelled, simply select them from the list, and the results will be displayed in the area to the right. This information is meant to give the user an opportunity to make sure that the target look feasible before running the model (which can be very time consuming).&lt;/p>&lt;/body>&lt;/html></string>
-          </property>
-         </widget>
-         <widget class="QTextBrowser" name="textBrowserResultsAnimals" >
-          <property name="sizePolicy" >
-           <sizepolicy>
-            <hsizetype>3</hsizetype>
-            <vsizetype>5</vsizetype>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="whatsThis" >
-           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">To see the Calorie, Production, and Area targets for an animal simply select it from the list on the left, and the results will be displayed in the area to the right.&lt;/p>
-&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">This information is meant to give you an opportunity to make sure that the targets look feasible before running the model (which can be very time consuming).&lt;/p>&lt;/body>&lt;/html></string>
-          </property>
-         </widget>
+         <property name="sizeHint" >
+          <size>
+           <width>341</width>
+           <height>27</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="1" >
+        <widget class="QPushButton" name="pbnTargets" >
+         <property name="text" >
+          <string>Targets</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2" colspan="2" >
+        <widget class="QPushButton" name="pbnFallow" >
+         <property name="text" >
+          <string>Fallow</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="6" >
+        <widget class="QPushButton" name="pbnHtml" >
+         <property name="text" >
+          <string>HTML</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="4" >
+        <widget class="QPushButton" name="pbnHerds" >
+         <property name="text" >
+          <string>Herds</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="5" >
+        <widget class="QPushButton" name="pbnText" >
+         <property name="text" >
+          <string>Text Report</string>
+         </property>
         </widget>
        </item>
       </layout>
