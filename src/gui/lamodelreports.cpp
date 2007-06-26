@@ -38,4 +38,13 @@ LaModelReports::~LaModelReports()
 
 }
 
+QTable LaModelReports::targetsTable()
+{
+    //////////////////////////////////////////
+   //   Standard Table For Final Targets   //
+  //////////////////////////////////////////
+
+
+}
+
 
