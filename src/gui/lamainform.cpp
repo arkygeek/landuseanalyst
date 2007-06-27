@@ -170,6 +170,7 @@ void LaMainForm::on_pbnNewAnimalParameter_clicked()
 
 void LaMainForm::loadAnimals()
 {
+  listWidgetCalculationsAnimal->clear();
   tblAnimals->clear();
   tblAnimals->setRowCount(0);
   tblAnimals->setColumnCount(4);
@@ -250,7 +251,13 @@ void LaMainForm::loadAnimals()
           myAnimalParameter.guid().toLocal8Bit());
       if (myValue.second == myAnimalParameter.guid())
       {
-        if (myValue.first) {myRunningPercentage += myAnimalParameter.percentTameMeat();}
+        if (myValue.first)
+          {
+            myRunningPercentage += myAnimalParameter.percentTameMeat();
+            QListWidgetItem *item = new QListWidgetItem(myAnimal.name());
+            item->setData(Qt::UserRole,myAnimal.guid());
+            listWidgetCalculationsAnimal->addItem(item);
+          }
         QTableWidgetItem *mypPercentItem =
           new QTableWidgetItem(QString::number(myAnimalParameter.percentTameMeat()));
         qDebug("Percentage this animal contributes to diet: " +
@@ -289,6 +296,7 @@ void LaMainForm::loadAnimals()
 
 void LaMainForm::loadCrops()
 {
+  listWidgetCalculationsCrop->clear();
   tblCrops->clear();
   tblCrops->setRowCount(0);
   tblCrops->setColumnCount(4);
@@ -365,7 +373,16 @@ void LaMainForm::loadCrops()
           myCropParameter.guid().toLocal8Bit());
       if (myValue.second == myCropParameter.guid())
       {
-        if (myValue.first) {myRunningPercentage += myCropParameter.percentTameCrop();}
+        if (myValue.first)
+          {
+            myRunningPercentage += myCropParameter.percentTameCrop();
+            QListWidgetItem *item = new QListWidgetItem(myCrop.name());
+            item->setData(Qt::UserRole,myCrop.guid());
+            listWidgetCalculationsCrop->addItem(item);
+            //QListWidgetItem *itemWidget->setData( Qt::UserRole + 0, myCrop.guid());
+            //QListWidgetItem *itemWidget->setData( Qt::DisplayRole, myCrop.name());
+            //listWidgetCalculationsCrop->addItem(itemWidget);
+          }
         QTableWidgetItem *mypPercentItem =
           new QTableWidgetItem(QString::number(myCropParameter.percentTameCrop()));
         qDebug("Percentage this crop contributes to diet: " +
