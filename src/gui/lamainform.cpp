@@ -505,6 +505,13 @@ void LaMainForm::cropCellChanged(int theRow, int theColumn)
 
 void LaMainForm::on_pushButtonRun_clicked()
 {
+  if (labelCropCheck->text() != "100\%" or labelAnimalCheck->text() != "100\%")
+    {
+      textBrowserResultsRight->setText("Check that Animals and Crops are both at 100%\n");
+      textBrowserResultsRight->append("I am NOT going to do anything until you do!");
+      return;
+    }
+
   mCommonGrazingLandFoodValue = sbCommonRasterCalories->value();
   LaModel myModel;
   // Get a list of the selected animals
