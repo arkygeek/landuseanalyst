@@ -250,7 +250,7 @@ void LaMainForm::loadAnimals()
           myAnimalParameter.guid().toLocal8Bit());
       if (myValue.second == myAnimalParameter.guid())
       {
-        myRunningPercentage += myAnimalParameter.percentTameMeat();
+        if (myValue.first) {myRunningPercentage += myAnimalParameter.percentTameMeat();}
         QTableWidgetItem *mypPercentItem =
           new QTableWidgetItem(QString::number(myAnimalParameter.percentTameMeat()));
         qDebug("Percentage this animal contributes to diet: " +
@@ -365,7 +365,7 @@ void LaMainForm::loadCrops()
           myCropParameter.guid().toLocal8Bit());
       if (myValue.second == myCropParameter.guid())
       {
-        myRunningPercentage += myCropParameter.percentTameCrop();
+        if (myValue.first) {myRunningPercentage += myCropParameter.percentTameCrop();}
         QTableWidgetItem *mypPercentItem =
           new QTableWidgetItem(QString::number(myCropParameter.percentTameCrop()));
         qDebug("Percentage this crop contributes to diet: " +
@@ -441,6 +441,7 @@ void LaMainForm::animalCellClicked(int theRow, int theColumn)
     LaAnimalParameter myAnimalParameter = myAnimalParametersMap[myGuid];
     textBrowserAnimalParameterDefinition->setHtml(myAnimalParameter.toHtml());
   }
+  loadAnimals();
 }
 
 void LaMainForm::animalCellChanged(int theRow, int theColumn)
@@ -481,6 +482,7 @@ void LaMainForm::cropCellClicked(int theRow, int theColumn)
     LaCropParameter myCropParameter = myCropParametersMap[myGuid];
     textBrowserCropParameterDefinition->setHtml(myCropParameter.toHtml());
   }
+  loadCrops();
 }
 
 void LaMainForm::cropCellChanged(int theRow, int theColumn)
