@@ -575,20 +575,20 @@ void LaMainForm::on_pushButtonRun_clicked()
   myModel.toXmlFile( LaUtils::getModelOutputDir() +
       QDir::separator() + myModel.guid() + ".xml");
 
-  textBrowserResultsRight->append("Crop Calorie Targets");
-  textBrowserResultsRight->append(myModel.toXmlCalorieCropTargets());
-  textBrowserResultsRight->append("Animal Calorie Targets");
-  textBrowserResultsRight->append(myModel.toXmlCalorieAnimalTargets());
+  //textBrowserResultsRight->append("Crop Calorie Targets");
+  textBrowserResultsRight->append(myModel.toHtmlCalorieCropTargets());
+  //textBrowserResultsRight->append("Animal Calorie Targets");
+  textBrowserResultsRight->append(myModel.toHtmlCalorieAnimalTargets());
 
-  textBrowserResultsRight->append("Crop Production Targets");
-  textBrowserResultsRight->append(myModel.toXmlProductionCropTargets());
-  textBrowserResultsRight->append("Animal Production Targets");
-  textBrowserResultsRight->append(myModel.toXmlProductionAnimalTargets());
+  //textBrowserResultsRight->append("Crop Production Targets");
+  textBrowserResultsRight->append(myModel.toHtmlProductionCropTargets());
+  //textBrowserResultsRight->append("Animal Production Targets");
+  textBrowserResultsRight->append(myModel.toHtmlProductionAnimalTargets());
 
-  textBrowserResultsRight->append("Crop Area Targets");
-  textBrowserResultsRight->append(myModel.toXmlAreaCropTargets());
-  textBrowserResultsRight->append("Animal Area Targets");
-  textBrowserResultsRight->append(myModel.toXmlAreaAnimalTargets());
+  //textBrowserResultsRight->append("Crop Area Targets");
+  textBrowserResultsRight->append(myModel.toHtmlAreaCropTargets());
+  //textBrowserResultsRight->append("Animal Area Targets");
+  textBrowserResultsRight->append(myModel.toHtmlAreaAnimalTargets());
 }
 
 
