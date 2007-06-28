@@ -24,6 +24,7 @@ SET(LA_CORE_OTHER_HDRS
   )
 #headers that need to be mocd
 SET(LA_CORE_MOC_HDRS
+  lamodel.h
   )
 
 set(QT_USE_CORE TRUE)

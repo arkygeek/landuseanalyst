@@ -36,8 +36,9 @@ class QString;
   * @author Tim Sutton, Jason Jorgenson
   */
 
-class LaModel : public LaSerialisable, public LaGuid
+class LaModel : public QObject, public LaSerialisable, public LaGuid
 {
+  Q_OBJECT;
   public:
     /** Constructor . */
     LaModel();
@@ -254,6 +255,18 @@ class LaModel : public LaSerialisable, public LaGuid
      */
     bool fromXml(const QString theXml);
 
+    /** Broadcast to any listeners status messages.
+     *  This is a convenience function. Internally it will
+     *  do emit message(QString theMessage) each time it
+     *  is called.
+     *  @param QString theMessage to be logged. */
+    void logMessage(QString theMessage);
+  
+  signals:
+    /** Send log info to any listeners.
+     * @param QString the message to be logged.
+     */
+    void message(QString theMessage);
 
   private:
     /** A map of calorie targets for animals.

@@ -532,6 +532,8 @@ void LaMainForm::on_pushButtonRun_clicked()
 
   mCommonGrazingLandFoodValue = sbCommonRasterCalories->value();
   LaModel myModel;
+  connect(&myModel, SIGNAL(message( QString )), 
+             this, SLOT(logMessage( QString )));
   // Get a list of the selected animals
   QMap<QString,QString> mySelectedAnimalsMap;
   //          <animal guid <enabled, animalparamters guid>>
@@ -723,3 +725,8 @@ void LaMainForm::printCropsAndAnimals()
   }
 }
 
+void LaMainForm::logMessage(QString theMessage)
+{
+  tbLogs->append(theMessage);
+  tbLogs->ensureCursorVisible();
+}
