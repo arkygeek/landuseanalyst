@@ -68,8 +68,7 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
     void logMessage(QString theString);
   private slots:
     void helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetItem * thepOldItem);
-    void writeResultsLeft(QString theText);
-    void writeResultsRight(QString theText);
+    void writeResults(QString theText);
 
     void animalCellClicked(int theRow, int theColumn);
     void animalCellChanged(int theRow, int theColumn);

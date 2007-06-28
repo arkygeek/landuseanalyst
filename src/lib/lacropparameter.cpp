@@ -221,7 +221,7 @@ QString LaCropParameter::toText()
 QString LaCropParameter::toHtml()
 {
   QString myString;
-  myString+="<p align=\"center\"><h1>Details for " + LaUtils::xmlEncode(mName) + "</h1></p>";
+  myString+="<p align=\"center\"><h3  style=\"color:#466aa5; font-size:11pt; font-weight:bold;\">Details for " + LaUtils::xmlEncode(mName) + "</h3></p>";
   myString+="<table>";
   //  myString+="<tr><td><b>GUID:</th><td>" + guid() + "</td></tr>";
   myString+="<tr><td><b>Description: </th><td>" + mDescription + "</p>";

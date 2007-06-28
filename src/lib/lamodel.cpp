@@ -390,8 +390,9 @@ QString LaModel::toHtml()
 {
   logMessage("method ==> QString LaModel::toHtml()");
   QString myString;
-  myString+="<p align=\"center\"><h1>Details for " + LaUtils::xmlEncode(mName) + "</h1><br />";
-  myString+="GUID:" + guid() + "<br />";
+  myString+="<p align=\"center\"><h1 style=\"color:#466aa5; font-size:14pt; font-weight:bold;\">Model Report</h1><p/>";
+  myString+="<p align=\"center\"><h3 style=\"color:#466aa5; font-size:11pt; font-weight:bold;\">" + LaUtils::xmlEncode(mName) + "</h3><p/>";
+  //myString+="GUID:" + guid() + "<br />";
   myString+="Population:" + QString::number(mPopulation) + "<br />";
   myString+="Period: " + LaUtils::xmlEncode(mPeriod) + "<br />";
   myString+="Projection: " + QString::number(mProjection) + "<br />";
@@ -1142,13 +1143,7 @@ QString LaModel::toHtmlCalorieCropTargets()
 
   // Loop through the mCaloriesProvidedByCropsMap
   QString myString;
-  myString += QString("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n");
-  myString += QString("<HTML>\n");
-  myString += QString("<HEAD>\n");
-  myString += QString("  <TITLE>Crop Calorie Targets</TITLE>\n");
-  myString += QString("</HEAD>\n");
-  //myString += QString("<BODY LANG="en-US" DIR="LTR">\n");
-  myString += QString("<P STYLE=\"margin-bottom: 0in\">Crop Targets</P>\n");
+  myString += QString("<h3 style=\"color:#466aa5; font-size:11pt; font-weight:bold;\"> Crop Targets</h3>\n");
   myString += QString("<P STYLE=\"margin-bottom: 0in\"><BR>\n");
   myString += QString("</P>\n");
   myString += QString("<TABLE WIDTH=100% BORDER=1 BORDERCOLOR=\"#000000\" CELLPADDING=4 CELLSPACING=0>\n");
@@ -1196,9 +1191,6 @@ QString LaModel::toHtmlCalorieCropTargets()
   } // while crop iterator
 
     myString += QString("</TABLE>\n");
-    myString += QString("<P STYLE=\"margin-bottom: 0in\">  </P>\n");
-    myString += QString("</BODY>\n");
-    myString += QString("</HTML>\n");
   return myString;
 }
 

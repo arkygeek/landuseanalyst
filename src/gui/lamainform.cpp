@@ -525,8 +525,8 @@ void LaMainForm::on_pushButtonRun_clicked()
 {
   if (labelCropCheck->text() != "100\%" or labelAnimalCheck->text() != "100\%")
     {
-      textBrowserResultsRight->setText("Check that Animals and Crops are both at 100%\n");
-      textBrowserResultsRight->append("I am NOT going to do anything until you do!");
+      tbReport->setText("Check that Animals and Crops are both at 100%\n");
+      tbReport->append("I am NOT going to do anything until you do!");
       return;
     }
 
@@ -588,7 +588,7 @@ void LaMainForm::on_pushButtonRun_clicked()
   myModel.setMeatPercent(horizontalSliderMeat->value());
   myModel.setCaloriesPerPersonDaily(spinBoxDailyCalories->value());
   myModel.setCommonLandValue(sbCommonRasterCalories->value());
-  textBrowserResultsLeft->setText(myModel.toHtml());
+  tbReport->setHtml(myModel.toHtml());
 
   // for debugging only...
   qDebug("LAMAINFORM!!!!");
@@ -602,20 +602,20 @@ void LaMainForm::on_pushButtonRun_clicked()
   myModel.toXmlFile( LaUtils::getModelOutputDir() +
       QDir::separator() + myModel.guid() + ".xml");
 
-  //textBrowserResultsRight->append("Crop Calorie Targets");
-  textBrowserResultsRight->append(myModel.toHtmlCalorieCropTargets());
-  //textBrowserResultsRight->append("Animal Calorie Targets");
-  textBrowserResultsRight->append(myModel.toHtmlCalorieAnimalTargets());
+  //tbReport->append("Crop Calorie Targets");
+  tbReport->append(myModel.toHtmlCalorieCropTargets());
+  //tbReport->append("Animal Calorie Targets");
+  tbReport->append(myModel.toHtmlCalorieAnimalTargets());
 
-  //textBrowserResultsRight->append("Crop Production Targets");
-  textBrowserResultsRight->append(myModel.toHtmlProductionCropTargets());
-  //textBrowserResultsRight->append("Animal Production Targets");
-  textBrowserResultsRight->append(myModel.toHtmlProductionAnimalTargets());
+  //tbReport->append("Crop Production Targets");
+  tbReport->append(myModel.toHtmlProductionCropTargets());
+  //tbReport->append("Animal Production Targets");
+  tbReport->append(myModel.toHtmlProductionAnimalTargets());
 
-  //textBrowserResultsRight->append("Crop Area Targets");
-  textBrowserResultsRight->append(myModel.toHtmlAreaCropTargets());
-  //textBrowserResultsRight->append("Animal Area Targets");
-  textBrowserResultsRight->append(myModel.toHtmlAreaAnimalTargets());
+  //tbReport->append("Crop Area Targets");
+  tbReport->append(myModel.toHtmlAreaCropTargets());
+  //tbReport->append("Animal Area Targets");
+  tbReport->append(myModel.toHtmlAreaAnimalTargets());
 }
 
 
@@ -638,15 +638,11 @@ void LaMainForm::on_pushButtonSave_clicked()
   //  go on... get on with it!
 }
 
-void LaMainForm::writeResultsLeft(QString theText)
+void LaMainForm::writeResults(QString theText)
 {
-  textBrowserResultsLeft->append(theText);
+  tbReport->append(theText);
 }
 
-void LaMainForm::writeResultsRight(QString theText)
-{
-  textBrowserResultsRight->append(theText);
-}
 
 
 
@@ -673,7 +669,7 @@ bool LaMainForm::setComboToDefault(QComboBox * thepCombo, QString theDefault)
 
 void LaMainForm::helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetItem * thepOldItem)
 {
-  writeResultsLeft("Item clicked in help browser: " + thepCurrentItem->text(0).toLocal8Bit());
+  writeResults("Item clicked in help browser: " + thepCurrentItem->text(0).toLocal8Bit());
   QFile myQFile( ":/helpDocs/" + thepCurrentItem->text(0)  + ".html" );
   if ( myQFile.open( QIODevice::ReadOnly ) ) {
     //now we parse the loc file, checking each line for its taxon
@@ -683,15 +679,14 @@ void LaMainForm::helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetI
   }
   else
   {
-    writeResultsLeft("Help resource for : " + thepCurrentItem->text(0).toLocal8Bit() + " not found!");
+    writeResults("Help resource for : " + thepCurrentItem->text(0).toLocal8Bit() + " not found!");
   }
 }
 
 
 void LaMainForm::printCropsAndAnimals()
 {
-  textBrowserResultsLeft->clear();
-  textBrowserResultsRight->clear();
+  tbReport->clear();
   QMapIterator<QString, QPair<bool, QString> > myAnimalIterator(mAnimalsMap);
   while (myAnimalIterator.hasNext())
   {
