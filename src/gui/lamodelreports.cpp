@@ -38,3 +38,7 @@ LaModelReports::~LaModelReports()
 
 }
 
+void LaModelReports::fallowTable()
+{
+  // implement me!
+}

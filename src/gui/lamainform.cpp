@@ -26,6 +26,7 @@
 #include "lacropparametermanager.h"
 #include "laanimalparametermanager.h"
 #include "lamodel.h"
+#include "lamodelreports.h"
 
 //qt includes
 #include <QComboBox>
@@ -162,11 +163,11 @@ void LaMainForm::on_pbnNewAnimalParameter_clicked()
     loadAnimals();
 }
 
-//void LaMainForm::on_pbnFallow_clicked()
-//{
-//    LaModelReports myModelReports;
-//    myModelReports.fallowTable();
-//}
+void LaMainForm::on_pbnFallow_clicked()
+{
+    //LaModelReports myModelReports;
+    //myModelReports.fallowTable();
+}
 
 void LaMainForm::loadAnimals()
 {

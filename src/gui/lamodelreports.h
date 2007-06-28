@@ -30,12 +30,18 @@ This class is for any output from LandUse Analyst
 */
 class LaModelReports : public LaModel, public LaMainForm
 {
-Q_OBJECT
+
 public:
     LaModelReports();
 
     ~LaModelReports();
 
+    //
+    //// Accessors
+    //
+
+    void fallowTable();
 };
+
 
 #endif
