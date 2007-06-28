@@ -685,55 +685,52 @@ int LaModel::getAreaTargetsCrops(QString theCropGuid, int theProductionTarget)
 
 int LaModel::caloriesNeededByAnimal(QString theAnimalGuid)
 { // this is essentially the generic animal model
-  logMessage("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-  logMessage("||||||||||||||||||||||||||||||||||||||||||||||||");
-  logMessage("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
+
   logMessage("method ==> int LaModel::caloriesNeededByAnimal(QString theAnimalGuid)");
   LaAnimal myAnimal = LaUtils::getAnimal(theAnimalGuid);
-  // LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(mAnimalsMap.value(theAnimalGuid));
-  // float myAnimalOverallContributionToDiet=(dietPercent() * 0.01) * (meatPercent() * 0.01);
-  // float myCalorieTarget = population() * mCaloriesPerPersonDaily * 365;
-  // float myAnimalCalorieTarget=myCalorieTarget*myAnimalOverallContributionToDiet;
+  QString myString = ("Steps to determine the feed requirements of: " + myAnimal.name());
+  myString += ("we first determine the production target, in Kg, required to satisfy the calorific demands of the settlement.  The formula  [CalorieTargetOfAnimal / FoodValueOfAnimalsMeat] is used.  This looks like:\n\n");
+  //myString += (QString::number(mCaloriesProvidedByAnimalsMap.value(theAnimalGuid) + " / " );
+  float myAnimalProductionTarget=getProductionTargetsAnimals( theAnimalGuid, static_cast <int>(mCaloriesProvidedByAnimalsMap.value(theAnimalGuid)));
 
-  float myAnimalProductionTarget=getProductionTargetsAnimals( theAnimalGuid, static_cast <int>(mCaloriesProvidedByAnimalsMap.value(theAnimalGuid))); //(mCaloriesProvidedByAnimalsMap.value(theAnimalGuid) / (myAnimal.meatFoodValue()/1000.));
-    logMessage("animal prodn target = calorie target of animal / food value");
-    logMessage("mCaloriesProvidedByAnimalsMap.value(theAnimalGuid): " + QString::number(mCaloriesProvidedByAnimalsMap.value(theAnimalGuid)).toLocal8Bit());
-    logMessage("myAnimal.meatFoodValue(): " + QString::number(myAnimal.meatFoodValue()/1000.).toLocal8Bit());
-    logMessage("myAnimalProductionTarget = " + QString::number(myAnimalProductionTarget).toLocal8Bit());
+  logMessage("animal prodn target = calorie target of animal / food value");
+  logMessage("mCaloriesProvidedByAnimalsMap.value(theAnimalGuid): " + QString::number(mCaloriesProvidedByAnimalsMap.value(theAnimalGuid)).toLocal8Bit());
+  logMessage("myAnimal.meatFoodValue(): " + QString::number(myAnimal.meatFoodValue()/1000.).toLocal8Bit());
+  logMessage("myAnimalProductionTarget = " + QString::number(myAnimalProductionTarget).toLocal8Bit());
   float myAnimalsRequired=(myAnimalProductionTarget / myAnimal.killWeight()) / (myAnimal.usableMeat()*.01);
-    logMessage("slaughter animals reqd: " + QString::number(myAnimalsRequired).toLocal8Bit());
+  logMessage("slaughter animals reqd: " + QString::number(myAnimalsRequired).toLocal8Bit());
   float myBirthsPerYear = 365.0 / (myAnimal.gestationTime() + myAnimal.estrousCycle() + (myAnimal.weaningAge() * 7.0));
-    logMessage("BirthEventsPerYear: " + QString::number(myBirthsPerYear).toLocal8Bit());
+  logMessage("BirthEventsPerYear: " + QString::number(myBirthsPerYear).toLocal8Bit());
   float myOffspringPerMotherYearly = myBirthsPerYear * myAnimal.youngPerBirth() * (1.0-(0.01*myAnimal.deathRate()));
-    logMessage("OffspringPerMotherYearly = " + QString::number(myOffspringPerMotherYearly).toLocal8Bit());
+  logMessage("OffspringPerMotherYearly = " + QString::number(myOffspringPerMotherYearly).toLocal8Bit());
   float myMothersNeededStepOne = myAnimalsRequired/myOffspringPerMotherYearly;
-    logMessage("MothersNeededStepOne = " + QString::number(myMothersNeededStepOne).toLocal8Bit());
+  logMessage("MothersNeededStepOne = " + QString::number(myMothersNeededStepOne).toLocal8Bit());
   float myMalesStepOne = (myMothersNeededStepOne * myOffspringPerMotherYearly)/2;
-    logMessage("MalesStepOne = " + QString::number(myMalesStepOne).toLocal8Bit());
+  logMessage("MalesStepOne = " + QString::number(myMalesStepOne).toLocal8Bit());
   float myFemalesStepOne = myMalesStepOne;
-    logMessage("FemalesStepOne = " + QString::number(myFemalesStepOne).toLocal8Bit());
+  logMessage("FemalesStepOne = " + QString::number(myFemalesStepOne).toLocal8Bit());
   float myMotherReplacementsPerYear = myMothersNeededStepOne/myAnimal.breedingExpectancy();
-    logMessage("MotherReplacementsPerYear = " + QString::number(myMotherReplacementsPerYear).toLocal8Bit());
+  logMessage("MotherReplacementsPerYear = " + QString::number(myMotherReplacementsPerYear).toLocal8Bit());
   float myAdditionalMothers = (myMotherReplacementsPerYear/myOffspringPerMotherYearly)*2;
-    logMessage("AdditionalMothers = " + QString::number(myAdditionalMothers).toLocal8Bit());
+  logMessage("AdditionalMothers = " + QString::number(myAdditionalMothers).toLocal8Bit());
   float myMalesStepTwo = (myAdditionalMothers*myOffspringPerMotherYearly)/2;
-    logMessage("MalesStepTwo = " + QString::number(myMalesStepTwo).toLocal8Bit());
+  logMessage("MalesStepTwo = " + QString::number(myMalesStepTwo).toLocal8Bit());
   float myFemalesStepTwo = (myAdditionalMothers*myOffspringPerMotherYearly)/2;
-    logMessage("FemalesStepTwo = " + QString::number(myFemalesStepTwo).toLocal8Bit());
+  logMessage("FemalesStepTwo = " + QString::number(myFemalesStepTwo).toLocal8Bit());
   float myTotalMothers = myMothersNeededStepOne+myAdditionalMothers;
-    logMessage("TotalMothers = " + QString::number(myTotalMothers).toLocal8Bit());
+  logMessage("TotalMothers = " + QString::number(myTotalMothers).toLocal8Bit());
   float myTotalMales = myMalesStepOne+myMalesStepTwo;
-    logMessage("TotalMales = " + QString::number(myTotalMales).toLocal8Bit());
+  logMessage("TotalMales = " + QString::number(myTotalMales).toLocal8Bit());
   float myTotalFemales = myFemalesStepOne-myFemalesStepTwo;
-    logMessage("TotalFemales = " + QString::number(myTotalFemales).toLocal8Bit());
+  logMessage("TotalFemales = " + QString::number(myTotalFemales).toLocal8Bit());
   float myTotalJuveniles = myTotalMales+myTotalFemales;
-    logMessage("TotalJuveniles = " + QString::number(myTotalJuveniles).toLocal8Bit());
+  logMessage("TotalJuveniles = " + QString::number(myTotalJuveniles).toLocal8Bit());
   float myTotalMothersCaloriesRequired = myTotalMothers * (myAnimal.gestating()/1000.) * 365.; // kcalories
-    logMessage("TotalMothersCaloriesRequired = " + QString::number(myTotalMothersCaloriesRequired).toLocal8Bit());
+  logMessage("TotalMothersCaloriesRequired = " + QString::number(myTotalMothersCaloriesRequired).toLocal8Bit());
   float myTotalJuvenilesCaloriesRequired = myTotalJuveniles * (myAnimal.juvenile()/1000.) * 365.; // kcalories
-    logMessage("TotalJuvenilesCaloriesRequired = " + QString::number(myTotalJuvenilesCaloriesRequired).toLocal8Bit());
+  logMessage("TotalJuvenilesCaloriesRequired = " + QString::number(myTotalJuvenilesCaloriesRequired).toLocal8Bit());
   float myTotalCaloriesNeededToFeedAnimals = myTotalMothersCaloriesRequired + myTotalJuvenilesCaloriesRequired;
-    logMessage("Total kiloCalories Needed To Feed Animals = " + QString::number(myTotalCaloriesNeededToFeedAnimals).toLocal8Bit());
+  logMessage("Total kiloCalories Needed To Feed Animals = " + QString::number(myTotalCaloriesNeededToFeedAnimals).toLocal8Bit());
 
   logMessage("method ==> int LaModel::caloriesNeededByAnimal(QString theAnimalGuid)");
   logMessage("Animal: " + myAnimal.name().toLocal8Bit());
