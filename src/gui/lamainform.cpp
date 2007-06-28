@@ -705,7 +705,7 @@ void LaMainForm::printCropsAndAnimals()
     mySelectedFlag ? myText += "true," : myText += "false,";
     myText +=  myAnimalParameterGuid.toLocal8Bit() ;
     myText += "> >";
-    textBrowserResultsLeft->append(myText);
+    tbLogs->append(myText);
   }
 
   QMapIterator<QString, QPair<bool, QString> > myCropIterator(mCropsMap);
@@ -721,7 +721,7 @@ void LaMainForm::printCropsAndAnimals()
     mySelectedFlag ? myText += "true," : myText += "false,";
     myText +=  myCropParameterGuid.toLocal8Bit() ;
     myText += "> >";
-    textBrowserResultsRight->append(myText);
+    tbLogs->append(myText);
   }
 }
 

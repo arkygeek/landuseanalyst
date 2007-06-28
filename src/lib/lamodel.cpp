@@ -1476,7 +1476,9 @@ QString LaModel::toHtmlAreaAnimalTargets()
   return myString;
 }
 
-////////// All of the following functions are GRASS related functions ////////
+//
+// Grass related functions follow ...
+//
 
 int LaModel::adjustAreaTargetsCrops()
 {
@@ -1583,6 +1585,10 @@ void LaModel::makeCircle(int theX, int theY)
 
   logMessage("The process completed");
 }
+
+//
+// Utility functions
+//
 
 void LaModel::logMessage(QString theMessage)
 {
