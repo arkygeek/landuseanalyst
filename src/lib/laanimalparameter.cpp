@@ -347,7 +347,7 @@ QString LaAnimalParameter::toHtml()
   myString+="<table>";
   //myString+="<tr><td><b>GUID:</th><td>" + guid() + "</td></tr>";
   myString+="<tr><td><b>Description:</b></td><td>" + mDescription + "</td></tr>";
-  myString+="<tr><td><b>Animal:</b></td><td>" + mAnimalGuid + "</td></tr>";
+  //myString+="<tr><td><b>Animal:</b></td><td>" + mAnimalGuid + "</td></tr>";
   myString+="<tr><td><b>Percentage of Tame Meat:</b></td><td> " + QString::number(mPercentTameMeat) + "</td></tr>";
   myString+="<tr><td><b>Use Common Grazing Land:</b></td><td> " + QString::number(mUseCommonGrazingLand) + "</td></tr>";
   myString+="<tr><td><b>Use Specific Grazing Land:</b></td><td> " + QString::number(mUseSpecificGrazingLand) + "</td></tr>";

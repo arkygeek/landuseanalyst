@@ -182,7 +182,7 @@ QString LaCrop::toHtml()
 {
   QString myString;
   myString+="<p align=\"center\"><h1>Details for " + LaUtils::xmlEncode(mName) + "</h1></p>";
-  myString+="<p>GUID:" + guid() + "</p>";
+  //myString+="<p>GUID:" + guid() + "</p>";
   myString+="<p>Description:" + mDescription + "</p>";
    myString+="<p>Average Crop Yield: "
                     + QString::number(mCropYield)
