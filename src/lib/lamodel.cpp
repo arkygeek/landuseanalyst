@@ -1140,7 +1140,7 @@ QString LaModel::toHtmlCalorieCropTargets()
 
   // Loop through the mCaloriesProvidedByCropsMap
   QString myString;
-  myString += QString("<h3 style=\"color:#466aa5; font-size:11pt; font-weight:bold;\"> Crop Targets</h3>\n");
+  myString += QString("<h3 style=\"color:#466aa5; font-size:11pt; font-weight:bold;\"> Crop Calorie Targets</h3>\n");
   myString += QString("<P STYLE=\"margin-bottom: 0in\"><BR>\n");
   myString += QString("</P>\n");
   myString += QString("<TABLE WIDTH=100% BORDER=1 BORDERCOLOR=\"#000000\" CELLPADDING=4 CELLSPACING=0>\n");
@@ -1198,13 +1198,7 @@ QString LaModel::toHtmlCalorieAnimalTargets()
 
   // Loop through the mCaloriesProvidedByAniamlsMap
   QString myString;
-  myString += QString("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n");
-  myString += QString("<HTML>\n");
-  myString += QString("<HEAD>\n");
-  myString += QString("  <TITLE>Animal Calorie Targets</TITLE>\n");
-  myString += QString("</HEAD>\n");
-  //myString += QString("<BODY LANG="en-US" DIR="LTR">\n");
-  myString += QString("<P STYLE=\"margin-bottom: 0in\">Animal Targets</P>\n");
+  myString += QString("<h3 style=\"color:#466aa5; font-size:11pt; font-weight:bold;\"> Animal Calorie Targets</h3>\n");
   myString += QString("<P STYLE=\"margin-bottom: 0in\"><BR>\n");
   myString += QString("</P>\n");
   myString += QString("<TABLE WIDTH=100% BORDER=1 BORDERCOLOR=\"#000000\" CELLPADDING=4 CELLSPACING=0>\n");
@@ -1247,9 +1241,6 @@ QString LaModel::toHtmlCalorieAnimalTargets()
 
   } // while animal iterator
     myString += QString("</TABLE>\n");
-    myString += QString("<P STYLE=\"margin-bottom: 0in\">  </P>\n");
-    myString += QString("</BODY>\n");
-    myString += QString("</HTML>\n");
   return myString;
 }
 
@@ -1260,13 +1251,7 @@ QString LaModel::toHtmlProductionCropTargets()
 
   // Loop through the mProductionRequiredCropsMap
   QString myString;
-  myString += QString("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n");
-  myString += QString("<HTML>\n");
-  myString += QString("<HEAD>\n");
-  myString += QString("  <TITLE>Crop Production Targets</TITLE>\n");
-  myString += QString("</HEAD>\n");
-  //myString += QString("<BODY LANG="en-US" DIR="LTR">\n");
-  myString += QString("<P STYLE=\"margin-bottom: 0in\">Crop Targets</P>\n");
+  myString += QString("<h3 style=\"color:#466aa5; font-size:11pt; font-weight:bold;\"> Crop Production Targets</h3>\n");
   myString += QString("<P STYLE=\"margin-bottom: 0in\"><BR>\n");
   myString += QString("</P>\n");
   myString += QString("<TABLE WIDTH=100% BORDER=1 BORDERCOLOR=\"#000000\" CELLPADDING=4 CELLSPACING=0>\n");
@@ -1300,9 +1285,6 @@ QString LaModel::toHtmlProductionCropTargets()
   } // while crop iterator
 
     myString += QString("</TABLE>\n");
-    myString += QString("<P STYLE=\"margin-bottom: 0in\">  </P>\n");
-    myString += QString("</BODY>\n");
-    myString += QString("</HTML>\n");
   return myString;
 }
 
@@ -1313,13 +1295,7 @@ QString LaModel::toHtmlProductionAnimalTargets()
 
   // Loop through the mProductionRequiredAnimalsMap
   QString myString;
-  myString += QString("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n");
-  myString += QString("<HTML>\n");
-  myString += QString("<HEAD>\n");
-  myString += QString("  <TITLE>Animal Production Targets</TITLE>\n");
-  myString += QString("</HEAD>\n");
-  //myString += QString("<BODY LANG="en-US" DIR="LTR">\n");
-  myString += QString("<P STYLE=\"margin-bottom: 0in\">Animal Targets</P>\n");
+  myString += QString("<h3 style=\"color:#466aa5; font-size:11pt; font-weight:bold;\"> Animal Production Targets</h3>\n");
   myString += QString("<P STYLE=\"margin-bottom: 0in\"><BR>\n");
   myString += QString("</P>\n");
   myString += QString("<TABLE WIDTH=100% BORDER=1 BORDERCOLOR=\"#000000\" CELLPADDING=4 CELLSPACING=0>\n");
@@ -1353,9 +1329,6 @@ QString LaModel::toHtmlProductionAnimalTargets()
   } // while crop iterator
 
     myString += QString("</TABLE>\n");
-    myString += QString("<P STYLE=\"margin-bottom: 0in\">  </P>\n");
-    myString += QString("</BODY>\n");
-    myString += QString("</HTML>\n");
   return myString;
 }
 
@@ -1366,13 +1339,7 @@ QString LaModel::toHtmlAreaCropTargets()
 
   // Loop through the mAreaTargetsCropsMap
   QString myString;
-  myString += QString("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n");
-  myString += QString("<HTML>\n");
-  myString += QString("<HEAD>\n");
-  myString += QString("  <TITLE>Crop Area Targets</TITLE>\n");
-  myString += QString("</HEAD>\n");
-  //myString += QString("<BODY LANG="en-US" DIR="LTR">\n");
-  myString += QString("<P STYLE=\"margin-bottom: 0in\">Crop Targets</P>\n");
+  myString += QString("<h3 style=\"color:#466aa5; font-size:11pt; font-weight:bold;\"> Crop Area Targets</h3>\n");
   myString += QString("<P STYLE=\"margin-bottom: 0in\"><BR>\n");
   myString += QString("</P>\n");
   myString += QString("<TABLE WIDTH=100% BORDER=1 BORDERCOLOR=\"#000000\" CELLPADDING=4 CELLSPACING=0>\n");
@@ -1406,9 +1373,6 @@ QString LaModel::toHtmlAreaCropTargets()
   } // while crop iterator
 
     myString += QString("</TABLE>\n");
-    myString += QString("<P STYLE=\"margin-bottom: 0in\">  </P>\n");
-    myString += QString("</BODY>\n");
-    myString += QString("</HTML>\n");
   return myString;
 }
 
@@ -1419,13 +1383,7 @@ QString LaModel::toHtmlAreaAnimalTargets()
 
   // Loop through the mAreaTargetsAnimalsMap
   QString myString;
-  myString += QString("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n");
-  myString += QString("<HTML>\n");
-  myString += QString("<HEAD>\n");
-  myString += QString("  <TITLE>Animal Area Targets</TITLE>\n");
-  myString += QString("</HEAD>\n");
-  //myString += QString("<BODY LANG="en-US" DIR="LTR">\n");
-  myString += QString("<P STYLE=\"margin-bottom: 0in\">Animal Targets</P>\n");
+  myString += QString("<h3 style=\"color:#466aa5; font-size:11pt; font-weight:bold;\"> Animal Area Targets</h3>\n");
   myString += QString("<P STYLE=\"margin-bottom: 0in\"><BR>\n");
   myString += QString("</P>\n");
   myString += QString("<TABLE WIDTH=100% BORDER=1 BORDERCOLOR=\"#000000\" CELLPADDING=4 CELLSPACING=0>\n");
@@ -1459,9 +1417,6 @@ QString LaModel::toHtmlAreaAnimalTargets()
   } // while crop iterator
 
     myString += QString("</TABLE>\n");
-    myString += QString("<P STYLE=\"margin-bottom: 0in\">  </P>\n");
-    myString += QString("</BODY>\n");
-    myString += QString("</HTML>\n");
   return myString;
 }
 
