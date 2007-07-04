@@ -56,6 +56,7 @@ LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
   tblCrops->horizontalHeader()->hide();
   tblCrops->verticalHeader()->hide();
   tblCrops->horizontalHeader()->setResizeMode(2,QHeaderView::Stretch);
+  listWidgetCalculationsAnimal->clear();
   loadAnimals();
   loadCrops();
   setDietLabels();
@@ -68,6 +69,12 @@ LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
    */
   connect(treeHelp, SIGNAL(currentItemChanged(QTreeWidgetItem * ,QTreeWidgetItem *)),
       this, SLOT(helpItemClicked(QTreeWidgetItem * ,QTreeWidgetItem *)));
+
+////////////////////////
+  connect(listWidgetCalculationsCrop, SIGNAL(currentItemChanged(QListWidgetItem * ,QListWidgetItem *)), this, SLOT(cropCalcClicked(QListWidgetItem * ,QListWidgetItem *)));
+  connect(listWidgetCalculationsAnimal, SIGNAL(currentItemChanged(QListWidgetItem * ,QListWidgetItem *)), this, SLOT(animalCalcClicked(QListWidgetItem * ,QListWidgetItem *)));
+////////////////////////
+
   connect(pushButtonExit, SIGNAL(clicked()), qApp, SLOT(quit()));
   connect(tblAnimals, SIGNAL(cellClicked( int,int)),
       this, SLOT(animalCellClicked( int,int)));
@@ -142,6 +149,7 @@ void LaMainForm::on_pbnNewAnimal_clicked()
 {
   LaAnimalManager myAnimalManager;
   myAnimalManager.exec();
+  listWidgetCalculationsAnimal->clear();
   loadAnimals();
 }
 void LaMainForm::on_pbnNewCrop_clicked()
@@ -160,6 +168,7 @@ void LaMainForm::on_pbnNewAnimalParameter_clicked()
 {
     LaAnimalParameterManager myAnimalParameterManager;
     myAnimalParameterManager.exec();
+    listWidgetCalculationsAnimal->clear();
     loadAnimals();
 }
 
@@ -172,6 +181,8 @@ void LaMainForm::on_pbnFallow_clicked()
 void LaMainForm::loadAnimals()
 {
   listWidgetCalculationsAnimal->clear();
+  LaModel myModel;
+  myModel.clearCalcMaps();
   tblAnimals->clear();
   tblAnimals->setRowCount(0);
   tblAnimals->setColumnCount(4);
@@ -216,10 +227,21 @@ void LaMainForm::loadAnimals()
     if (myValue.first)
     {
       mypUsedItem->setCheckState(Qt::Checked);
+      // populate the calcs QListWidgetItem
+     // if (QListWidgetItem(myAnimal.name()).exists)
+     // {
+        QListWidgetItem *myItem = new QListWidgetItem(myAnimal.name());
+        myItem->setData(Qt::UserRole,myAnimal.guid());
+        listWidgetCalculationsAnimal->addItem(myItem);
+     // }
     }
     else
     {
       mypUsedItem->setCheckState(Qt::Unchecked);
+      // DE-populate the calcs QListWidgetItem
+      QListWidgetItem *myItem = new QListWidgetItem(myAnimal.name());
+      myItem->setData(Qt::UserRole,myAnimal.guid());
+      listWidgetCalculationsAnimal->takeItem(listWidgetCalculationsAnimal->row(myItem));
     }
     tblAnimals->setItem(myCurrentRow, 0, mypUsedItem);
     QTableWidgetItem *mypNameItem = new QTableWidgetItem(myAnimal.name());
@@ -255,9 +277,6 @@ void LaMainForm::loadAnimals()
         if (myValue.first)
           {
             myRunningPercentage += myAnimalParameter.percentTameMeat();
-            QListWidgetItem *item = new QListWidgetItem(myAnimal.name());
-            item->setData(Qt::UserRole,myAnimal.guid());
-            listWidgetCalculationsAnimal->addItem(item);
           }
         QTableWidgetItem *mypPercentItem =
           new QTableWidgetItem(QString::number(myAnimalParameter.percentTameMeat()));
@@ -377,12 +396,9 @@ void LaMainForm::loadCrops()
         if (myValue.first)
           {
             myRunningPercentage += myCropParameter.percentTameCrop();
-            QListWidgetItem *item = new QListWidgetItem(myCrop.name());
-            item->setData(Qt::UserRole,myCrop.guid());
-            listWidgetCalculationsCrop->addItem(item);
-            //QListWidgetItem *itemWidget->setData( Qt::UserRole + 0, myCrop.guid());
-            //QListWidgetItem *itemWidget->setData( Qt::DisplayRole, myCrop.name());
-            //listWidgetCalculationsCrop->addItem(itemWidget);
+            QListWidgetItem *myItem = new QListWidgetItem(myCrop.name());
+            myItem->setData(Qt::UserRole,myCrop.guid());
+            listWidgetCalculationsCrop->addItem(myItem);
           }
         QTableWidgetItem *mypPercentItem =
           new QTableWidgetItem(QString::number(myCropParameter.percentTameCrop()));
@@ -441,6 +457,7 @@ void LaMainForm::setDietLabels()
 
 void LaMainForm::animalCellClicked(int theRow, int theColumn)
 {
+  listWidgetCalculationsAnimal->clear();
   qDebug("LaMainForm::animalCellClicked");
   QTableWidgetItem* mypItem = tblAnimals->item(tblAnimals->currentRow(),1);
   if (mypItem)
@@ -459,11 +476,13 @@ void LaMainForm::animalCellClicked(int theRow, int theColumn)
     LaAnimalParameter myAnimalParameter = myAnimalParametersMap[myGuid];
     textBrowserAnimalParameterDefinition->setHtml(myAnimalParameter.toHtml());
   }
+  listWidgetCalculationsAnimal->clear();
   loadAnimals();
 }
 
 void LaMainForm::animalCellChanged(int theRow, int theColumn)
 {
+  //listWidgetCalculationsAnimal->clear();
   QTableWidgetItem* mypItem = tblAnimals->item(tblAnimals->currentRow(),1);
   if (mypItem)
   {
@@ -478,6 +497,7 @@ void LaMainForm::animalCellChanged(int theRow, int theColumn)
     //debug only - comment out later
     printCropsAndAnimals();
   }
+  //loadAnimals();
 }
 
 void LaMainForm::cropCellClicked(int theRow, int theColumn)
@@ -532,7 +552,7 @@ void LaMainForm::on_pushButtonRun_clicked()
 
   mCommonGrazingLandFoodValue = sbCommonRasterCalories->value();
   LaModel myModel;
-  connect(&myModel, SIGNAL(message( QString )), 
+  connect(&myModel, SIGNAL(message( QString )),
              this, SLOT(logMessage( QString )));
   // Get a list of the selected animals
   QMap<QString,QString> mySelectedAnimalsMap;
@@ -683,6 +703,28 @@ void LaMainForm::helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetI
   }
 }
 
+void LaMainForm::cropCalcClicked(QListWidgetItem * thepCurrentItem, QListWidgetItem * thepOldItem)
+{
+  if (thepCurrentItem==0) {return;}
+  textBrowserResultsCrop->setText("Item clicked in crop calcs: " + thepCurrentItem->text());
+  textBrowserResultsCrop->append("Guid: " + thepCurrentItem->data(Qt::UserRole).toString());
+  //LaModel myModel;
+
+}
+
+void LaMainForm::animalCalcClicked(QListWidgetItem * thepCurrentItem, QListWidgetItem * thepOldItem)
+{
+  if (thepCurrentItem==0) {return;}
+  LaModel myModel;
+  myModel.DoCalculations();
+  textBrowserResultsAnimals->setText("Item clicked in animal calcs: " + thepCurrentItem->text());
+  textBrowserResultsAnimals->append("Guid: " + thepCurrentItem->data(Qt::UserRole).toString());
+  QString myGuid = thepCurrentItem->data(Qt::UserRole).toString();
+  QMap <QString, QString> myCalcsMap = myModel.calcsAnimalsMap();
+  QString myCalcs = myCalcsMap.value(myGuid);
+  textBrowserResultsAnimals->append(myCalcs);
+  //myModel.clearCalcMaps();
+  }
 
 void LaMainForm::printCropsAndAnimals()
 {

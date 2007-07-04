@@ -108,6 +108,9 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
     QMap <QString, int> cropCalorieTargetsMap() const;
     QMap <QString, int> cropProductionTargetsMap() const;
     QMap <QString, int> cropAreaTargetsMap() const;
+    QMap <QString, QString> calcsCropsMap() const;
+    QMap <QString, QString> calcsAnimalsMap() const;
+    QString reportForAnimal(QString theAnimalGuid);
 
     //
     // Mutators
@@ -201,7 +204,7 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
     /** Perform calcs
      */
     void DoCalculations();
-
+    void clearCalcMaps();
     void setFallowStatus(Status theStatus);
     //void setDoTheFallowAllocation(Priority, float, float);
     /** Return an xml representation of this layer
@@ -261,7 +264,7 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
      *  is called.
      *  @param QString theMessage to be logged. */
     void logMessage(QString theMessage);
-  
+
   signals:
     /** Send log info to any listeners.
      * @param QString the message to be logged.
@@ -309,9 +312,14 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
      */
     void initialiseAreaTargetsAnimalsMap();
 
+    /** Initialise thecalculations map for Animals
+     */
+    void initialiseCalcsAnimalsMap();
+
     /** A map of are targets for crops.
      */
     QMap <QString,int> mAreaTargetsCropsMap;
+
     /** Initialise the map of calories needing to be provided
      * by each individual crop.
      */
@@ -330,6 +338,13 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
      */
     void initialiseCaloriesRequiredByAnimalsMap();
 
+    /** A map of all of the calculations for Animals
+     */
+    QMap <QString,QString> mCalcsAnimalsMap;
+
+    /** A map of all of the calculations for Crops
+     */
+    QMap <QString,QString> mCalcsCropsMap;
 
 
     /** The name for this model */

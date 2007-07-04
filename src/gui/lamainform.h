@@ -61,15 +61,16 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
      * from before */
     void loadCrops();
     void setDietLabels();
-    /** Slot to log any messages from classes we are listening 
-     * to. 
+    /** Slot to log any messages from classes we are listening
+     * to.
      * @param QString containing the message.
      */
     void logMessage(QString theString);
   private slots:
     void helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetItem * thepOldItem);
     void writeResults(QString theText);
-
+    void cropCalcClicked(QListWidgetItem * thepCurrentItem, QListWidgetItem * thepOldItem);
+    void animalCalcClicked(QListWidgetItem * thepCurrentItem, QListWidgetItem * thepOldItem);
     void animalCellClicked(int theRow, int theColumn);
     void animalCellChanged(int theRow, int theColumn);
     void cropCellClicked(int theRow, int theColumn);
