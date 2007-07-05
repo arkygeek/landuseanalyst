@@ -84,6 +84,8 @@ LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
       this, SLOT(cropCellClicked( int,int)));
   connect(tblCrops, SIGNAL(cellChanged( int,int)),
       this, SLOT(cropCellChanged( int,int)));
+  connect(cbDebug, SIGNAL(clicked()),
+      this, SLOT(on_cbDebug_clicked()));
 }
 
 LaMainForm::~LaMainForm()
@@ -176,6 +178,21 @@ void LaMainForm::on_pbnFallow_clicked()
 {
     //LaModelReports myModelReports;
     //myModelReports.fallowTable();
+}
+
+void LaMainForm::on_cbDebug_clicked()
+{
+  /*if (cbDebug->checkState)
+  {
+    MainTabs.setTabEnabled(tabLogs);
+  }
+  else
+  {
+    tabLogs.setTabDisabled.setHidden
+  }
+  //(cbDebug->checkState) ? MainTabs.setTabEnabled(tabLogs) : tabLogs.setTabDisabled.setHidden;
+  */
+  logMessage("This is supposed to hide/display the Logs Tab");
 }
 
 void LaMainForm::loadAnimals()
@@ -723,7 +740,9 @@ void LaMainForm::animalCalcClicked(QListWidgetItem * thepCurrentItem, QListWidge
       tbReport->append("I am NOT going to do anything until you do!");
       return;
     }
-
+  progressBarCalcs->reset();
+  progressBarCalcs->setRange(0,0);
+  //progressBarCalcs->setMaximum(0);
   mCommonGrazingLandFoodValue = sbCommonRasterCalories->value();
 
   connect(&myModel, SIGNAL(message( QString )),
@@ -784,11 +803,12 @@ void LaMainForm::animalCalcClicked(QListWidgetItem * thepCurrentItem, QListWidge
   myModel.setCommonLandValue(sbCommonRasterCalories->value());
   tbReport->setHtml(myModel.toHtml());
   myModel.DoCalculations();
-;
+
   QString myGuid = thepCurrentItem->data(Qt::UserRole).toString();
   QMap <QString, QString> myCalcsMap = myModel.calcsAnimalsMap();
   textBrowserResultsAnimals->setText(myCalcsMap.value(myGuid));
-  }
+  progressBarCalcs->setMaximum(100);
+}
 
 void LaMainForm::printCropsAndAnimals()
 {

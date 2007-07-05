@@ -53,7 +53,7 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
     void on_pbnNewAnimalParameter_clicked();
     void on_spinBoxDailyCalories_valueChanged(int theValue);
     void on_pbnFallow_clicked();
-
+    void on_cbDebug_clicked();
     /** Refresh the animals list, remembering which were checked
      * from before */
     void loadAnimals();

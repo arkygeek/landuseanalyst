@@ -767,23 +767,6 @@ int LaModel::caloriesNeededByAnimal(QString theAnimalGuid)
   logMessage("Calories needed annually to feed the entire herd: " +
       QString::number(myReturnValue).toLocal8Bit());
   logMessage("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-  logMessage("||||||||||||||||||||||||||||||||||||||||||||||||");
-  logMessage("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-
-  // populate QMap for calcs
-  QString myReport;
-  myReport += "Calculations for determining herd demographics for " + myAnimal.name() + "\n";
-  myReport += "Calorie Target Of Animal = " + mCaloriesProvidedByAnimalsMap.value(theAnimalGuid);
-  myReport += "\n";
-  myReport += "Production Target Of Animal (Kg)= " + QString::number(myAnimalProductionTarget) + "\n";
-  myReport += "slaughter animals reqd per year: " + QString::number(myAnimalsRequired) + "\n";
-  myReport += "BirthEventsPerYear: " + QString::number(myBirthsPerYear) + "\n";
-  myReport += "OffspringPerMotherYearly = " + QString::number(myOffspringPerMotherYearly) + "\n";
-  myReport += "TotalMothers = " + QString::number(myTotalMothers);
-  myReport += "TotalJuveniles = " + QString::number(myTotalJuveniles);
-  myReport += "Calories Required by Adult Females= " + QString::number(myTotalMothersCaloriesRequired);
-  myReport += "Calories Required by Juveniles = " + QString::number(myTotalJuvenilesCaloriesRequired);
-  myReport += "Total kiloCalories Needed = " + QString::number(myTotalCaloriesNeededToFeedAnimals);
   return myReturnValue;
 }
 
