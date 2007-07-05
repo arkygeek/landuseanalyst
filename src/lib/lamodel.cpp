@@ -569,7 +569,6 @@ int LaModel::caloriesFromCrops()
 
 int LaModel::caloriesFromTameMeat()
 {
-  logMessage("method ==> int LaModel::caloriesFromTameMeat()");
   float myDietComposition=0.01*dietPercent();
   float myMeatPercent=0.01*meatPercent();
   float myAnimalOverallContributionToDiet=myDietComposition * myMeatPercent;
@@ -578,7 +577,6 @@ int LaModel::caloriesFromTameMeat()
   int myReturnValue = static_cast<int>(myTameMeatCalorieTarget);
   logMessage("method ==> int LaModel::caloriesFromTameMeat()");
   logMessage("Overall Tame Meat Target: " + QString::number(myReturnValue).toLocal8Bit());
-  logMessage("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
   return myReturnValue;
 }
 
@@ -599,13 +597,11 @@ int LaModel::countCrops()
   }
   logMessage("method ==> int LaModel::countCrops()");
   logMessage("Crop Count: " + QString::number(myCropCounter).toLocal8Bit());
-  logMessage("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
   return myCropCounter;
 }
 
 int LaModel::countAnimals()
 {
-  logMessage("method ==> int LaModel::countAnimals()");
   int myAnimalCounter=0;
   //iterate through animals
   QMapIterator<QString, QString > myAnimalIterator(mAnimalsMap);
@@ -620,13 +616,12 @@ int LaModel::countAnimals()
   }
   logMessage("method ==> int LaModel::countAnimals()");
   logMessage("Animal Count: " + QString::number(myAnimalCounter).toLocal8Bit());
-  logMessage("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+
   return myAnimalCounter;
 }
 
 int LaModel::caloriesProvidedByTheCrop(QString theCropParameterGuid)
 {
-  logMessage("method ==> int LaModel::caloriesProvidedByTheCrop(QString theCropParameterGuid)");
   LaCropParameter myCropParameter = LaUtils::getCropParameter(theCropParameterGuid);
   float myCropPercent = 0.01 * myCropParameter.percentTameCrop();
   float myCropCalorieTarget=caloriesFromCrops()*myCropPercent;
@@ -639,13 +634,11 @@ int LaModel::caloriesProvidedByTheCrop(QString theCropParameterGuid)
   logMessage("crop percent: " + QString::number(myCropPercent).toLocal8Bit());
   logMessage("Calorie Target float: " + QString::number(myCropCalorieTarget).toLocal8Bit());
   logMessage("Calorie Target int: " + QString::number(myReturnValue).toLocal8Bit());
-  logMessage("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
   return myReturnValue;
 }
 
 int LaModel::caloriesProvidedByTheAnimal(QString theAnimalParameterGuid)
 {
-  logMessage("method ==> int LaModel::caloriesProvidedByTheAnimal(QString theAnimalParameterGuid)");
   LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(theAnimalParameterGuid);
   float myAnimalPercent = 0.01 * myAnimalParameter.percentTameMeat();
   float myAnimalCalorieTarget = caloriesFromTameMeat() * myAnimalPercent;
@@ -655,12 +648,10 @@ int LaModel::caloriesProvidedByTheAnimal(QString theAnimalParameterGuid)
   logMessage("Animal Parameter Guid: " + myAnimalParameter.guid().toLocal8Bit());
   logMessage("Animal Parameter Name: " + myAnimalParameter.name().toLocal8Bit());
   logMessage("Calorie Target: " + QString::number(myReturnValue).toLocal8Bit());
-  logMessage("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
   return myReturnValue;
 }
 int LaModel::getProductionTargetsCrops(QString theCropGuid, int theCalorieTarget)
 {
-  logMessage("method ==> int LaModel::getProductionTargetsCrops(QString theCropGuid, int theCalorieTarget)");
   LaCrop myCrop = LaUtils::getCrop(theCropGuid);
   float myCropProductionTarget = theCalorieTarget / (myCrop.cropCalories() / 1000.); //kcalories
   int myReturnValue = static_cast<int>(myCropProductionTarget);
@@ -669,13 +660,11 @@ int LaModel::getProductionTargetsCrops(QString theCropGuid, int theCalorieTarget
   logMessage("Crop Guid: " + myCrop.guid().toLocal8Bit());
   logMessage("Crop Name: " + myCrop.name().toLocal8Bit());
   logMessage("Production Target: " + QString::number(myReturnValue).toLocal8Bit());
-  logMessage("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
   return myReturnValue;
 }
 
 int LaModel::getProductionTargetsAnimals(QString theAnimalGuid, int theCalorieTarget)
 {
-  logMessage("method ==> int LaModel::getProductionTargetsAnimals(QString theAnimalGuid, int theCalorieTarget)");
   LaAnimal myAnimal = LaUtils::getAnimal(theAnimalGuid);
   float myAnimalProductionTarget = (theCalorieTarget / (myAnimal.meatFoodValue()/1000.)) / (0.01 * myAnimal.usableMeat()); // kcalories
   int myReturnValue = static_cast<int>(myAnimalProductionTarget);
@@ -684,13 +673,11 @@ int LaModel::getProductionTargetsAnimals(QString theAnimalGuid, int theCalorieTa
   logMessage("Animal Guid: " + myAnimal.guid().toLocal8Bit());
   logMessage("Animal Name: " + myAnimal.name().toLocal8Bit());
   logMessage("Production Target: " + QString::number(myReturnValue).toLocal8Bit());
-  logMessage("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
   return myReturnValue;
 }
 
 int LaModel::getAreaTargetsCrops(QString theCropGuid, int theProductionTarget)
 {
-  logMessage("method ==> int LaModel::getAreaTargetsCrops(QString theCropGuid, int theProductionTarget)");
   LaCrop myCrop = LaUtils::getCrop(theCropGuid);
   float myCropAreaTarget = theProductionTarget / myCrop.cropYield();
   int myReturnValue = static_cast<int>(myCropAreaTarget);
@@ -701,7 +688,6 @@ int LaModel::getAreaTargetsCrops(QString theCropGuid, int theProductionTarget)
   logMessage("Area Target is the production target of: " + QString::number(theProductionTarget).toLocal8Bit());
   logMessage(" Divided by the crop yield of " + QString::number(myCrop.cropYield()).toLocal8Bit());
   logMessage(" which gives a result of: " + QString::number(myReturnValue).toLocal8Bit());
-  logMessage("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
   return myReturnValue;
 }
 
@@ -825,6 +811,8 @@ QString LaModel::reportForAnimal(QString theAnimalGuid)
   myReport += "Cals Req'd Juveniles: " + QString::number(myTotalJuvenilesCaloriesRequired);
   myReport += "\n";
   myReport += "Total kiloCalories: " + QString::number(myTotalCaloriesNeededToFeedAnimals);
+  myReport += "\n";
+  myReport += "Area Target: " + QString::number(mAreaTargetsAnimalsMap.value(theAnimalGuid));
   myReport += "\n";
   logMessage(myReport.toLocal8Bit());
   return myReport;
@@ -972,7 +960,6 @@ void LaModel::initialiseAreaTargetsAnimalsMap()
     QString myAnimalParameterGuid = myAnimalIterator.value();
     LaAnimal myAnimal = LaUtils::getAnimal(myAnimalGuid);
     LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(myAnimalParameterGuid);
-    logMessage("XxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXx");
     logMessage("Animal: " + myAnimal.name().toLocal8Bit());
     // check to see if this animal needs any additional food
     if (mCaloriesRequiredByAnimalsMap[myAnimalGuid] > 0) // yes, the animal needs more food
@@ -1007,7 +994,6 @@ void LaModel::initialiseAreaTargetsAnimalsMap()
     }
     mCommonGrazingLandAreaTarget = mCommonGrazingLandCalorieTarget / mCommonGrazingLandFoodValue;
 
-    logMessage("XxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXx");
   }
     logMessage("The Common Grazing Land Area Target is: " + QString::number(static_cast<int>(mCommonGrazingLandAreaTarget)).toLocal8Bit());
 }
