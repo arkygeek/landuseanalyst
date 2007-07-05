@@ -182,7 +182,7 @@ void LaCropManager::showCrop()
   spinBoxCropYield->setValue(mCrop.cropYield());
   spinBoxCropCalories->setValue(mCrop.cropCalories());
   spinBoxCropFodderProduction->setValue(mCrop.fodderProduction());
-  spinBoxCropFodderCalories->setValue(mCrop.fodderCalories());
+  spinBoxCropFodderTDN->setValue(mCrop.fodderCalories());
   comboBoxYieldUnits->setCurrentIndex(mCrop.yieldUnits());
 }
 
@@ -269,7 +269,7 @@ void LaCropManager::on_pbnApply_clicked()
   mCrop.setCropYield(spinBoxCropYield->value());
   mCrop.setCropCalories(spinBoxCropCalories->value());
   mCrop.setFodderProduction(spinBoxCropFodderProduction->value());
-  mCrop.setFodderCalories(spinBoxCropFodderCalories->value());
+  mCrop.setFodderTDN(spinBoxCropFodderTDN->value());
   mCrop.setYieldUnits(comboBoxYieldUnits->currentIndex());
   mCrop.toXmlFile( LaUtils::userCropProfilesDirPath() +
       QDir::separator() + mCrop.guid() + ".xml");

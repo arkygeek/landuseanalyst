@@ -209,7 +209,7 @@ p, li { white-space: pre-wrap; }
           <item>
            <widget class="QLabel" name="labelFallow2" >
             <property name="text" >
-             <string>Food Value*</string>
+             <string>TDN *</string>
             </property>
             <property name="alignment" >
              <set>Qt::AlignCenter</set>
@@ -217,7 +217,7 @@ p, li { white-space: pre-wrap; }
            </widget>
           </item>
           <item>
-           <widget class="QSpinBox" name="sbFallowCalories" >
+           <widget class="QSpinBox" name="sbFallowTDN" >
             <property name="sizePolicy" >
              <sizepolicy>
               <hsizetype>5</hsizetype>
@@ -239,16 +239,19 @@ p, li { white-space: pre-wrap; }
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">If the selected crop is being grown in a rotation, producing fallow land, that land can be grazed. LandUse Analyst needs to know how many calories this land can give grazing animals per year. These numbers are in KCalories per dunum/hectare. (you can select the area units)&lt;/p>&lt;/body>&lt;/html></string>
             </property>
             <property name="suffix" >
-             <string> KCalories</string>
+             <string> Kg</string>
             </property>
             <property name="maximum" >
-             <number>500</number>
+             <number>5000</number>
             </property>
             <property name="minimum" >
              <number>1</number>
             </property>
+            <property name="singleStep" >
+             <number>10</number>
+            </property>
             <property name="value" >
-             <number>8</number>
+             <number>500</number>
             </property>
            </widget>
           </item>
@@ -800,7 +803,7 @@ p, li { white-space: pre-wrap; }
   <tabstop>checkBoxUseCommonLand</tabstop>
   <tabstop>checkBoxUseSpecificLand</tabstop>
   <tabstop>sbFallowRatio</tabstop>
-  <tabstop>sbFallowCalories</tabstop>
+  <tabstop>sbFallowTDN</tabstop>
   <tabstop>comboBoxAreaUnits</tabstop>
   <tabstop>pbnApply</tabstop>
   <tabstop>pbnClose</tabstop>

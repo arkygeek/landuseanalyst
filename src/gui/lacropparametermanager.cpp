@@ -200,7 +200,7 @@ void LaCropParameterManager::showCropParameter()
   sbPercentTameCrop->setValue(mCropParameter.percentTameCrop());
   grpCropRotation->setChecked(mCropParameter.cropRotation());
   sbFallowRatio->setValue(mCropParameter.fallowRatio());
-  sbFallowCalories->setValue(mCropParameter.fallowCalories());
+  sbFallowTDN->setValue(mCropParameter.fallowCalories());
   comboBoxAreaUnits->setCurrentIndex(mCropParameter.areaUnits());
   checkBoxUseCommonLand->setChecked(mCropParameter.useCommonLand());
   checkBoxUseSpecificLand->setChecked(mCropParameter.useSpecificLand());
@@ -279,7 +279,7 @@ void LaCropParameterManager::on_pbnApply_clicked()
   mCropParameter.setPercentTameCrop(sbPercentTameCrop->value());
   mCropParameter.setCropRotation(grpCropRotation->isChecked());
   mCropParameter.setFallowRatio(sbFallowRatio->value());
-  mCropParameter.setFallowCalories(sbFallowCalories->value());
+  mCropParameter.setFallowCalories(sbFallowTDN->value());
   mCropParameter.setAreaUnits(comboBoxAreaUnits->currentIndex());
   mCropParameter.setUseCommonLand(checkBoxUseCommonLand->isChecked());
   mCropParameter.setUseSpecificLand(checkBoxUseSpecificLand->isChecked());

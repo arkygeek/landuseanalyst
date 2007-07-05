@@ -1483,12 +1483,15 @@ p, li { white-space: pre-wrap; }
          <item>
           <widget class="QLabel" name="label_7" >
            <property name="text" >
-            <string>Food Value of Common Grazing Land (per Annum):</string>
+            <string>TDN Yield of Common Grazing Land</string>
+           </property>
+           <property name="alignment" >
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="sbCommonRasterCalories" >
+          <widget class="QSpinBox" name="sbCommonRasterTDN" >
            <property name="toolTip" >
             <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
@@ -1505,18 +1508,34 @@ p, li { white-space: pre-wrap; }
 &lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Note that this setting is the number of KCalories per land area unit available for grazing animals &lt;span style=" font-weight:600;">per year&lt;/span>.  This value applies to all of the land selected in the common raster mask file.&lt;/p>&lt;/body>&lt;/html></string>
            </property>
            <property name="suffix" >
-            <string> KCalories per Dunum</string>
+            <string> Kg / hectare</string>
            </property>
            <property name="maximum" >
-            <number>500</number>
+            <number>5000</number>
            </property>
-           <property name="singleStep" >
+           <property name="minimum" >
             <number>1</number>
            </property>
+           <property name="singleStep" >
+            <number>10</number>
+           </property>
            <property name="value" >
-            <number>16</number>
+            <number>500</number>
            </property>
           </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
          </item>
         </layout>
        </item>

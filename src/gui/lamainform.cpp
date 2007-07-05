@@ -567,7 +567,7 @@ void LaMainForm::on_pushButtonRun_clicked()
       return;
     }
 
-  mCommonGrazingLandFoodValue = sbCommonRasterCalories->value();
+  mCommonGrazingLandFoodValue = sbCommonRasterTDN->value();
   LaModel myModel;
   connect(&myModel, SIGNAL(message( QString )),
              this, SLOT(logMessage( QString )));
@@ -624,7 +624,7 @@ void LaMainForm::on_pushButtonRun_clicked()
   myModel.setCropPercent(horizontalSliderCrop->value());
   myModel.setMeatPercent(horizontalSliderMeat->value());
   myModel.setCaloriesPerPersonDaily(spinBoxDailyCalories->value());
-  myModel.setCommonLandValue(sbCommonRasterCalories->value());
+  myModel.setCommonLandValue(sbCommonRasterTDN->value());
   tbReport->setHtml(myModel.toHtml());
 
   // for debugging only...
@@ -737,7 +737,7 @@ void LaMainForm::cropCalcClicked(QListWidgetItem * thepCurrentItem, QListWidgetI
   // show the user that the computer is thinking
   progressBarCalcs->reset();
   progressBarCalcs->setRange(0,0);
-  mCommonGrazingLandFoodValue = sbCommonRasterCalories->value();
+  mCommonGrazingLandFoodValue = sbCommonRasterTDN->value();
 
   connect(&myModel, SIGNAL(message( QString )),
              this, SLOT(logMessage( QString )));
@@ -794,7 +794,7 @@ void LaMainForm::cropCalcClicked(QListWidgetItem * thepCurrentItem, QListWidgetI
   myModel.setCropPercent(horizontalSliderCrop->value());
   myModel.setMeatPercent(horizontalSliderMeat->value());
   myModel.setCaloriesPerPersonDaily(spinBoxDailyCalories->value());
-  myModel.setCommonLandValue(sbCommonRasterCalories->value());
+  myModel.setCommonLandValue(sbCommonRasterTDN->value());
   tbReport->setHtml(myModel.toHtml());
   myModel.DoCalculations();
 
@@ -826,7 +826,7 @@ void LaMainForm::animalCalcClicked(QListWidgetItem * thepCurrentItem, QListWidge
   // show the user that the computer is thinking
   progressBarCalcs->reset();
   progressBarCalcs->setRange(0,0);
-  mCommonGrazingLandFoodValue = sbCommonRasterCalories->value();
+  mCommonGrazingLandFoodValue = sbCommonRasterTDN->value();
 
   connect(&myModel, SIGNAL(message( QString )),
              this, SLOT(logMessage( QString )));
@@ -883,7 +883,7 @@ void LaMainForm::animalCalcClicked(QListWidgetItem * thepCurrentItem, QListWidge
   myModel.setCropPercent(horizontalSliderCrop->value());
   myModel.setMeatPercent(horizontalSliderMeat->value());
   myModel.setCaloriesPerPersonDaily(spinBoxDailyCalories->value());
-  myModel.setCommonLandValue(sbCommonRasterCalories->value());
+  myModel.setCommonLandValue(sbCommonRasterTDN->value());
   tbReport->setHtml(myModel.toHtml());
   myModel.DoCalculations();
 

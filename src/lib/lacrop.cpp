@@ -117,7 +117,7 @@ void LaCrop::setFodderProduction(int theKg)
 {
   mCropFodderProduction=theKg;
 }
-void LaCrop::setFodderCalories(int theCalories)
+void LaCrop::setFodderTDN(int theCalories)
 {
   mCropFodderCalories=theCalories;
 }

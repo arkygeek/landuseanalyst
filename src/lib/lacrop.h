@@ -89,7 +89,7 @@ class LaCrop : public LaSerialisable, public LaGuid
     /** Set the fodderCalories with an integer
      * @see fodderCalories()
      */
-    void setFodderCalories(int theCalories);
+    void setFodderTDN(int theCalories);
     /** Set the yieldUnits for area from index
      * @see yieldUnits()
      */

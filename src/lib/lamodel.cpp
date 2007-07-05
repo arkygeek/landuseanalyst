@@ -711,10 +711,10 @@ int LaModel::caloriesNeededByAnimal(QString theAnimalGuid)
   float myTotalMales = myMalesStepOne+myMalesStepTwo;
   float myTotalFemales = myFemalesStepOne-myFemalesStepTwo;
   float myTotalJuveniles = myTotalMales+myTotalFemales;
-  float myTotalMothersCaloriesRequired = myTotalMothers * (myAnimal.gestating()/1000.) * 365.; // kcalories
-  float myTotalJuvenilesCaloriesRequired = myTotalJuveniles * (myAnimal.juvenile()/1000.) * 365.; // kcalories
-  float myTotalCaloriesNeededToFeedAnimals = myTotalMothersCaloriesRequired + myTotalJuvenilesCaloriesRequired;
-  int myReturnValue = static_cast<int>(myTotalCaloriesNeededToFeedAnimals);
+  float myTotalMothersTDNRequired = myTotalMothers * myAnimal.gestating();
+  float myTotalJuvenilesTDNRequired = myTotalJuveniles * myAnimal.juvenile();
+  float myTDNNeededToFeedAnimals = myTotalMothersTDNRequired + myTotalJuvenilesTDNRequired;
+  int myReturnValue = static_cast<int>(myTDNNeededToFeedAnimals);
 
   // log report
   logMessage("method ==> int LaModel::caloriesNeededByAnimal(QString theAnimalGuid)");
@@ -736,14 +736,14 @@ int LaModel::caloriesNeededByAnimal(QString theAnimalGuid)
   logMessage("TotalMales = " + QString::number(myTotalMales).toLocal8Bit());
   logMessage("TotalFemales = " + QString::number(myTotalFemales).toLocal8Bit());
   logMessage("TotalJuveniles = " + QString::number(myTotalJuveniles).toLocal8Bit());
-  logMessage("TotalMothersCaloriesRequired = " + QString::number (myTotalMothersCaloriesRequired).toLocal8Bit());
-  logMessage("TotalJuvenilesCaloriesRequired = " + QString::number (myTotalJuvenilesCaloriesRequired).toLocal8Bit());
-  logMessage("Total kiloCalories Needed To Feed Animals = " + QString::number(myTotalCaloriesNeededToFeedAnimals).toLocal8Bit());
+  logMessage("Total Adult Females TDN(Kg) = " + QString::number (myTotalMothersTDNRequired).toLocal8Bit());
+  logMessage("Total Juveniles TDN(Kg) = " + QString::number (myTotalJuvenilesTDNRequired).toLocal8Bit());
+  logMessage("Total TDN (Kg) Needed To Feed Animals = " + QString::number(myTDNNeededToFeedAnimals).toLocal8Bit());
   logMessage("method ==> int LaModel::caloriesNeededByAnimal(QString theAnimalGuid)");
   logMessage("Animal: " + myAnimal.name().toLocal8Bit());
   logMessage("Breeding Stock: " + QString::number(myTotalMothers).toLocal8Bit());
   logMessage("Juveniles: " + QString::number(myTotalJuveniles).toLocal8Bit());
-  logMessage("Calories needed annually to feed the entire herd: " +
+  logMessage("Kg TDN needed annually to feed the entire herd: " +
       QString::number(myReturnValue).toLocal8Bit());
   logMessage("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
   return myReturnValue;
@@ -786,9 +786,9 @@ QString LaModel::reportForAnimal(QString theAnimalGuid)
   float myTotalMales = myMalesStepOne+myMalesStepTwo;
   float myTotalFemales = myFemalesStepOne-myFemalesStepTwo;
   float myTotalJuveniles = myTotalMales+myTotalFemales;
-  float myTotalMothersCaloriesRequired = myTotalMothers * (myAnimal.gestating()/1000.) * 365.; // kcalories
-  float myTotalJuvenilesCaloriesRequired = myTotalJuveniles * (myAnimal.juvenile()/1000.) * 365.; // kcalories
-  float myTotalCaloriesNeededToFeedAnimals = myTotalMothersCaloriesRequired + myTotalJuvenilesCaloriesRequired;
+  float myTotalMothersTDNRequired = myTotalMothers * (myAnimal.gestating()/1000.) * 365.; // kcalories
+  float myTotalJuvenilesTDNRequired = myTotalJuveniles * (myAnimal.juvenile()/1000.) * 365.; // kcalories
+  float myTDNNeededToFeedAnimals = myTotalMothersTDNRequired + myTotalJuvenilesTDNRequired;
 
   myReport += "Details for " + myAnimal.name();
   myReport += "\n";
@@ -806,11 +806,11 @@ QString LaModel::reportForAnimal(QString theAnimalGuid)
   myReport += "\n";
   myReport += "Juveniles: " + QString::number(myTotalJuveniles);
   myReport += "\n";
-  myReport += "Cals Req'd Adult: " + QString::number(myTotalMothersCaloriesRequired);
+  myReport += "TDN (Kg) Req'd Adult: " + QString::number(static_cast <int>(myTotalMothersTDNRequired));
   myReport += "\n";
-  myReport += "Cals Req'd Juveniles: " + QString::number(myTotalJuvenilesCaloriesRequired);
+  myReport += "TDN (Kg) Req'd Juveniles: " + QString::number(static_cast <int>(myTotalJuvenilesTDNRequired));
   myReport += "\n";
-  myReport += "Total kiloCalories: " + QString::number(myTotalCaloriesNeededToFeedAnimals);
+  myReport += "Total TDN (Kg) Req'd: " + QString::number(static_cast <int> (myTDNNeededToFeedAnimals));
   myReport += "\n";
   myReport += "Area Target: " + QString::number(mAreaTargetsAnimalsMap.value(theAnimalGuid));
   myReport += "\n";
