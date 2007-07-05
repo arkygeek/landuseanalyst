@@ -207,8 +207,18 @@ QMap <QString, int> LaModel::cropAreaTargetsMap() const
   return mAreaTargetsCropsMap;
 }
 
-QMap <QString, QString> LaModel::calcsAnimalsMap() const
+QMap <QString, QString> LaModel::calcsAnimalsMap()
 {
+  initialiseCaloriesProvidedByCropsMap();
+  initialiseCaloriesProvidedByAnimalsMap();
+  initialiseCaloriesRequiredByAnimalsMap();
+  initialiseProductionRequiredAnimalsMap();
+  initialiseProductionRequiredCropsMap();
+  initialiseAreaTargetsCropsMap();
+  allocateFallowGrazingLand();
+  adjustAnimalTargetsForFodder();
+  initialiseAreaTargetsAnimalsMap();
+  initialiseCalcsAnimalsMap();
   return mCalcsAnimalsMap;
 }
 
@@ -801,29 +811,29 @@ QString LaModel::reportForAnimal(QString theAnimalGuid)
   float myTotalJuvenilesCaloriesRequired = myTotalJuveniles * (myAnimal.juvenile()/1000.) * 365.; // kcalories
   float myTotalCaloriesNeededToFeedAnimals = myTotalMothersCaloriesRequired + myTotalJuvenilesCaloriesRequired;
 
-  myReport += "Calculations for determining herd demographics for " + myAnimal.name();
+  myReport += "Details for " + myAnimal.name();
   myReport += "\n";
-  myReport += "Calorie Target Of Animal = " + mCaloriesProvidedByAnimalsMap.value(theAnimalGuid);
+  myReport += "Calorie Target: " + QString::number(mCaloriesProvidedByAnimalsMap.value(theAnimalGuid));
   myReport += "\n";
-  myReport += "Production Target Of Animal (Kg)= " + QString::number(myAnimalProductionTarget);
+  myReport += "Prod'n Target(Kg): " + QString::number(myAnimalProductionTarget);
   myReport += "\n";
-  myReport += "slaughter animals reqd per year: " + QString::number(myAnimalsRequired);
+  myReport += "slaughter animals: " + QString::number(myAnimalsRequired);
   myReport += "\n";
-  myReport += "BirthEventsPerYear: " + QString::number(myBirthsPerYear);
+  myReport += "Births/Year: " + QString::number(myBirthsPerYear);
   myReport += "\n";
-  myReport += "OffspringPerMotherYearly = " + QString::number(myOffspringPerMotherYearly);
+  myReport += "Offspring/Mother: " + QString::number(myOffspringPerMotherYearly);
   myReport += "\n";
-  myReport += "TotalMothers = " + QString::number(myTotalMothers);
+  myReport += "Adult Females: " + QString::number(myTotalMothers);
   myReport += "\n";
-  myReport += "TotalJuveniles = " + QString::number(myTotalJuveniles);
+  myReport += "Juveniles: " + QString::number(myTotalJuveniles);
   myReport += "\n";
-  myReport += "Calories Required by Adult Females= " + QString::number(myTotalMothersCaloriesRequired);
+  myReport += "Cals Req'd Adult: " + QString::number(myTotalMothersCaloriesRequired);
   myReport += "\n";
-  myReport += "Calories Required by Juveniles = " + QString::number(myTotalJuvenilesCaloriesRequired);
+  myReport += "Cals Req'd Juveniles: " + QString::number(myTotalJuvenilesCaloriesRequired);
   myReport += "\n";
-  myReport += "Total kiloCalories Needed = " + QString::number(myTotalCaloriesNeededToFeedAnimals);
+  myReport += "Total kiloCalories: " + QString::number(myTotalCaloriesNeededToFeedAnimals);
   myReport += "\n";
-
+  logMessage(myReport.toLocal8Bit());
   return myReport;
 }
 
@@ -938,6 +948,7 @@ void LaModel::initialiseCalcsAnimalsMap()
     myAnimalIterator.next();
     QString myAnimalGuid = myAnimalIterator.key();
     QString myReport = reportForAnimal(myAnimalGuid);
+    logMessage(myReport.toLocal8Bit());
     mCalcsAnimalsMap.insert(myAnimalGuid, myReport);
   }
 }

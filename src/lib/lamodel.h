@@ -109,7 +109,7 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
     QMap <QString, int> cropProductionTargetsMap() const;
     QMap <QString, int> cropAreaTargetsMap() const;
     QMap <QString, QString> calcsCropsMap() const;
-    QMap <QString, QString> calcsAnimalsMap() const;
+    QMap <QString, QString> calcsAnimalsMap();
     QString reportForAnimal(QString theAnimalGuid);
 
     //
