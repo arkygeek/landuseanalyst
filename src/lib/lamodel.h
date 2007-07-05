@@ -108,10 +108,10 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
     QMap <QString, int> cropCalorieTargetsMap() const;
     QMap <QString, int> cropProductionTargetsMap() const;
     QMap <QString, int> cropAreaTargetsMap() const;
-    QMap <QString, QString> calcsCropsMap() const;
+    QMap <QString, QString> calcsCropsMap();
     QMap <QString, QString> calcsAnimalsMap();
     QString reportForAnimal(QString theAnimalGuid);
-
+    QString reportForCrop(QString theCropGuid);
     //
     // Mutators
     //
@@ -316,6 +316,9 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
      */
     void initialiseCalcsAnimalsMap();
 
+    /** Initialise thecalculations map for Crops
+     */
+    void initialiseCalcsCropsMap();
     /** A map of are targets for crops.
      */
     QMap <QString,int> mAreaTargetsCropsMap;

@@ -209,21 +209,13 @@ QMap <QString, int> LaModel::cropAreaTargetsMap() const
 
 QMap <QString, QString> LaModel::calcsAnimalsMap()
 {
-  initialiseCaloriesProvidedByCropsMap();
-  initialiseCaloriesProvidedByAnimalsMap();
-  initialiseCaloriesRequiredByAnimalsMap();
-  initialiseProductionRequiredAnimalsMap();
-  initialiseProductionRequiredCropsMap();
-  initialiseAreaTargetsCropsMap();
-  allocateFallowGrazingLand();
-  adjustAnimalTargetsForFodder();
-  initialiseAreaTargetsAnimalsMap();
-  initialiseCalcsAnimalsMap();
+
   return mCalcsAnimalsMap;
 }
 
-QMap <QString, QString> LaModel::calcsCropsMap() const
+QMap <QString, QString> LaModel::calcsCropsMap()
 {
+
   return mCalcsCropsMap;
 }
 
@@ -553,6 +545,7 @@ void LaModel::DoCalculations()
   //          and the use of fodder as feed.
   initialiseAreaTargetsAnimalsMap();
   initialiseCalcsAnimalsMap();
+  initialiseCalcsCropsMap();
 }
 void LaModel::adjustAnimalTargetsForFodder()
 {
@@ -770,7 +763,24 @@ int LaModel::caloriesNeededByAnimal(QString theAnimalGuid)
   return myReturnValue;
 }
 
+QString LaModel::reportForCrop(QString theCropGuid)
+{
+  LaCrop myCrop = LaUtils::getCrop(theCropGuid);
 
+  QString myReport;
+  myReport += "Details for " + myCrop.name();
+  myReport += "\n";
+  myReport += "Calorie Target: " + QString::number(mCaloriesProvidedByCropsMap.value(theCropGuid));
+  myReport += "\n";
+  myReport += "Prod'n Target(Kg): " + QString::number(mProductionRequiredCropsMap.value(theCropGuid));
+  myReport += "\n";
+  myReport += "Area Target: " + QString::number(mAreaTargetsCropsMap.value(theCropGuid));
+  myReport += "\n";
+
+  logMessage(myReport.toLocal8Bit());
+  return myReport;
+
+}
 QString LaModel::reportForAnimal(QString theAnimalGuid)
 { // this is the animal model calculation results
   QString myReport;
@@ -920,7 +930,18 @@ void LaModel::initialiseAreaTargetsCropsMap()
     mAreaTargetsCropsMap.insert(myCropGuid,getAreaTargetsCrops(myCropGuid, myProductionTarget));
   }
 }
-
+void LaModel::initialiseCalcsCropsMap()
+{
+  QMapIterator<QString, QString > myCropIterator(mCropsMap);
+  while (myCropIterator.hasNext())
+  {
+    myCropIterator.next();
+    QString myCropGuid = myCropIterator.key();
+    QString myReport = reportForCrop(myCropGuid);
+    logMessage(myReport.toLocal8Bit());
+    mCalcsCropsMap.insert(myCropGuid, myReport);
+  }
+}
 void LaModel::initialiseCalcsAnimalsMap()
 { // this also returns an area target for common land
   //mCalcsAnimalsMap.clear();

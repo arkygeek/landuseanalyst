@@ -722,27 +722,110 @@ void LaMainForm::helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetI
 
 void LaMainForm::cropCalcClicked(QListWidgetItem * thepCurrentItem, QListWidgetItem * thepOldItem)
 {
+  // zero trap to prevent seg faults
   if (thepCurrentItem==0) {return;}
-  textBrowserResultsCrop->setText("Item clicked in crop calcs: " + thepCurrentItem->text());
-  textBrowserResultsCrop->append("Guid: " + thepCurrentItem->data(Qt::UserRole).toString());
+
+  // ensure that the crops and animals are both at 100%
+  LaModel myModel;
+  if (labelCropCheck->text() != "100\%" or labelAnimalCheck->text() != "100\%")
+  {
+    tbReport->setText("Check that Animals and Crops are both at 100%\n");
+    tbReport->append("I am NOT going to do anything until they are!");
+    return;
+  }
+
+  // show the user that the computer is thinking
+  progressBarCalcs->reset();
+  progressBarCalcs->setRange(0,0);
+  mCommonGrazingLandFoodValue = sbCommonRasterCalories->value();
+
+  connect(&myModel, SIGNAL(message( QString )),
+             this, SLOT(logMessage( QString )));
+  // Get a list of the selected animals
+  QMap<QString,QString> mySelectedAnimalsMap;
+  //          <animal guid <enabled, animalparamters guid>>
+  QMapIterator<QString, QPair<bool, QString> > myAnimalIterator(mAnimalsMap);
+  while (myAnimalIterator.hasNext())
+  {
+    myAnimalIterator.next();
+    QPair<bool,QString> myPair = myAnimalIterator.value();
+    QString myAnimalGuid = myAnimalIterator.key();
+    QString myAnimalParameterGuid = myPair.second;
+    bool mySelectedFlag = myPair.first;
+    if (mySelectedFlag)
+    {
+      mySelectedAnimalsMap.insert(myAnimalGuid,myAnimalParameterGuid);
+      qDebug("Added <" + myAnimalGuid.toLocal8Bit() + " , " + myAnimalParameterGuid.toLocal8Bit() + " >");
+    }
+  }
+  myModel.setAnimals(mySelectedAnimalsMap);
+
+  // Get a list of the selected crops
+  QMap<QString,QString> mySelectedCropsMap;
+  //          <crop guid <enabled, cropparamters guid>>
+  QMapIterator<QString, QPair<bool, QString> > myCropIterator(mCropsMap);
+  while (myCropIterator.hasNext())
+  {
+    myCropIterator.next();
+    QPair<bool,QString> myPair = myCropIterator.value();
+    QString myCropGuid = myCropIterator.key();
+    QString myCropParameterGuid = myPair.second;
+    bool mySelectedFlag = myPair.first;
+    if (mySelectedFlag)
+    {
+      mySelectedCropsMap.insert(myCropGuid,myCropParameterGuid);
+      qDebug("Added <" + myCropGuid.toLocal8Bit() + " , " + myCropParameterGuid.toLocal8Bit() + " >");
+    }
+  }
+  myModel.setCrops(mySelectedCropsMap);
+
+  // Populate the model with all the form data
+  myModel.setName(lineEditSiteName->text());
+  myModel.setPopulation(spinBoxPopulation->value());
+  myModel.setPeriod(lineEditPeriod->text());
+  myModel.setProjection(comboBoxProjection->currentIndex());
+  myModel.setEasting(lineEditEasting->text().toInt());
+  myModel.setNorthing(lineEditNorthing->text().toInt());
+  myModel.setEuclideanDistance(radioButtonEuclidean->isChecked());
+  myModel.setWalkingTime(radioButtonWalkingTime->isChecked());
+  myModel.setPathDistance(radioButtonPathDistance->isChecked());
+  myModel.setPrecision(spinBoxModelPrecision->value());
+  myModel.setDietPercent(horizontalSliderDiet->value());
+  myModel.setCropPercent(horizontalSliderCrop->value());
+  myModel.setMeatPercent(horizontalSliderMeat->value());
+  myModel.setCaloriesPerPersonDaily(spinBoxDailyCalories->value());
+  myModel.setCommonLandValue(sbCommonRasterCalories->value());
+  tbReport->setHtml(myModel.toHtml());
+  myModel.DoCalculations();
+
+  QString myGuid = thepCurrentItem->data(Qt::UserRole).toString();
+  QMap <QString, QString> myCalcsMap = myModel.calcsCropsMap();
+  textBrowserResultsCrop->setText(myCalcsMap.value(myGuid));
+  progressBarCalcs->setMaximum(100);
+
+  //textBrowserResultsCrop->setText("Item clicked in crop calcs: " + thepCurrentItem->text());
+  //textBrowserResultsCrop->append("Guid: " + thepCurrentItem->data(Qt::UserRole).toString());
   //LaModel myModel;
 
 }
 
 void LaMainForm::animalCalcClicked(QListWidgetItem * thepCurrentItem, QListWidgetItem * thepOldItem)
 {
+  // zero trap to prevent seg faults
   if (thepCurrentItem==0) {return;}
 
+  // ensure that the crops and animals are both at 100%
   LaModel myModel;
   if (labelCropCheck->text() != "100\%" or labelAnimalCheck->text() != "100\%")
-    {
-      tbReport->setText("Check that Animals and Crops are both at 100%\n");
-      tbReport->append("I am NOT going to do anything until you do!");
-      return;
-    }
+  {
+    tbReport->setText("Check that Animals and Crops are both at 100%\n");
+    tbReport->append("I am NOT going to do anything until they are!");
+    return;
+  }
+
+  // show the user that the computer is thinking
   progressBarCalcs->reset();
   progressBarCalcs->setRange(0,0);
-  //progressBarCalcs->setMaximum(0);
   mCommonGrazingLandFoodValue = sbCommonRasterCalories->value();
 
   connect(&myModel, SIGNAL(message( QString )),
