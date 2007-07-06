@@ -1526,12 +1526,17 @@ int LaModel::adjustAreaTargetsCrops()
   return a;
 }
 
-void LaModel::getArea(float theArea)
+void LaModel::getArea(QString theLayerName, float theArea)
 {
   logMessage("method ==> void LaModel::getArea(float theArea)");
+
+  #ifdef Q_OS_MACX
+  QString myProgram = "/Applications/GRASS.app/Contents/Resources/bin/r.stats";
+  #else
   QString myProgram = "/usr/lib/grass/bin/r.stats";
+  #endif
   QStringList myArgs;
-  myArgs << "tempraster";
+  myArgs << theLayerName;
   QProcess myProcess;
   myProcess.start(myProgram, myArgs);
 

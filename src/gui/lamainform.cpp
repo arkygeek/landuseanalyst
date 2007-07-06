@@ -570,6 +570,10 @@ void LaMainForm::on_pushButtonRun_clicked()
   LaModel myModel;
   connect(&myModel, SIGNAL(message( QString )),
              this, SLOT(logMessage( QString )));
+
+  //test stats
+  myModel.getArea("crops",100);
+  
   // Get a list of the selected animals
   QMap<QString,QString> mySelectedAnimalsMap;
   //          <animal guid <enabled, animalparamters guid>>
