@@ -942,7 +942,8 @@ void LaMainForm::logMessage(QString theMessage)
 void LaMainForm::showAnimalDefinitionReport(LaAnimal &theAnimal, LaAnimalParameter &theAnimalParameter)
 {
   QString myHtml;
-  myHtml = "<table width=\"100%\">";
+  myHtml = "<body>";
+  myHtml += "<table width=\"100%\">";
   myHtml += "<tr>";
   myHtml += "<td>";
   myHtml += theAnimal.toHtml();
@@ -952,6 +953,7 @@ void LaMainForm::showAnimalDefinitionReport(LaAnimal &theAnimal, LaAnimalParamet
   myHtml += "</td>";
   myHtml += "</tr>";
   myHtml += "</table>";
-  textBrowserAnimalDefinition->setHtml(myHtml);
+  myHtml += "</body>";
   textBrowserAnimalDefinition->document()->setDefaultStyleSheet(LaUtils::getStandardCss());
+  textBrowserAnimalDefinition->setHtml(myHtml);
 }

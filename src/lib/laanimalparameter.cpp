@@ -343,24 +343,24 @@ QString LaAnimalParameter::toText()
 QString LaAnimalParameter::toHtml()
 {
   QString myString;
-  myString+="<p align=\"center\"><h3 >Details for " + LaUtils::xmlEncode(mName) + "</h3></p>";
+  myString+="<h3 >Details for " + LaUtils::xmlEncode(mName) + "</h3>";
   myString+="<table>";
-  //myString+="<tr><td><b>GUID:</th><td>" + guid() + "</td></tr>";
-  myString+="<tr><td><b>Description:</b></td><td>" + mDescription + "</td></tr>";
-  //myString+="<tr><td><b>Animal:</b></td><td>" + mAnimalGuid + "</td></tr>";
-  myString+="<tr><td><b>Percentage of Tame Meat:</b></td><td> " + QString::number(mPercentTameMeat) + "</td></tr>";
-  myString+="<tr><td><b>Use Common Grazing Land:</b></td><td> " + QString::number(mUseCommonGrazingLand) + "</td></tr>";
-  myString+="<tr><td><b>Use Specific Grazing Land:</b></td><td> " + QString::number(mUseSpecificGrazingLand) + "</td></tr>";
-  myString+="<tr><td><b>Food Value Of Common Grazing Land:</b></td><td> " + QString::number(mFoodValueOfCommonGrazingLand) + "</td></tr>";
-  myString+="<tr><td><b>Food Value Of Specific Grazing Land:</b></td><td> " + QString::number(mFoodValueOfSpecificGrazingLand) + "</td></tr>";
-  myString+="<tr><td><b>Area Units:</b></td><td> "+ QString::number(mAreaUnits) + "</td></tr>";
-  myString+="<tr><td><b>Fodder Wheat:</b></td><td>"+ QString::number(mFodderSource1) + "</td></tr>";
-  myString+="<tr><td><b>Fodder Wheat Grain:</b></td><td>"+ QString::number(mFodderSource1Grain) + "</td></tr>";
-  myString+="<tr><td><b>Fodder Barley:</b></td><td>"+ QString::number(mFodderSource2) + "</td></tr>";
-  myString+="<tr><td><b>Fodder Barley Grain:</b></td><td>"+ QString::number(mFodderSource2Grain) + "</td></tr>";
-  myString+="<tr><td><b>Fodder Lentils:</b></td><td>"+ QString::number(mFodderSource3) + "</td></tr>";
-  myString+="<tr><td><b>Fodder Wheat Lentils:</b></td><td>"+ QString::number(mFodderSource3Grain) + "</td></tr>";
-  myString+="<tr><td><b>Fallow Usage:</b></td><td> " + QString::number(mFallowUsage) + "</td></tr>";
+  //myString+="<tr><td>GUID:</th><td>" + guid() + "</td></tr>";
+  myString+="<tr><td>Description:</td><td>" + mDescription + "</td></tr>";
+  //myString+="<tr><td>Animal:</td><td>" + mAnimalGuid + "</td></tr>";
+  myString+="<tr><td>Percentage of Tame Meat:</td><td> " + QString::number(mPercentTameMeat) + "</td></tr>";
+  myString+="<tr><td>Use Common Grazing Land:</td><td> " + QString::number(mUseCommonGrazingLand) + "</td></tr>";
+  myString+="<tr><td>Use Specific Grazing Land:</td><td> " + QString::number(mUseSpecificGrazingLand) + "</td></tr>";
+  myString+="<tr><td>Food Value Of Common Grazing Land:</td><td> " + QString::number(mFoodValueOfCommonGrazingLand) + "</td></tr>";
+  myString+="<tr><td>Food Value Of Specific Grazing Land:</td><td> " + QString::number(mFoodValueOfSpecificGrazingLand) + "</td></tr>";
+  myString+="<tr><td>Area Units:</td><td> "+ QString::number(mAreaUnits) + "</td></tr>";
+  myString+="<tr><td>Fodder Wheat:</td><td>"+ QString::number(mFodderSource1) + "</td></tr>";
+  myString+="<tr><td>Fodder Wheat Grain:</td><td>"+ QString::number(mFodderSource1Grain) + "</td></tr>";
+  myString+="<tr><td>Fodder Barley:</td><td>"+ QString::number(mFodderSource2) + "</td></tr>";
+  myString+="<tr><td>Fodder Barley Grain:</td><td>"+ QString::number(mFodderSource2Grain) + "</td></tr>";
+  myString+="<tr><td>Fodder Lentils:</td><td>"+ QString::number(mFodderSource3) + "</td></tr>";
+  myString+="<tr><td>Fodder Wheat Lentils:</td><td>"+ QString::number(mFodderSource3Grain) + "</td></tr>";
+  myString+="<tr><td>Fallow Usage:</td><td> " + QString::number(mFallowUsage) + "</td></tr>";
   myString+="</table>";
   return myString;
 }

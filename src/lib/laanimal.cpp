@@ -306,7 +306,7 @@ QString LaAnimal::toText()
 QString LaAnimal::toHtml()
 {
   QString myString;
-  myString+="<p align=\"center\"><h3>Details for " + LaUtils::xmlEncode(mName) + "</h3></p>";
+  myString+="<h3>Details for " + LaUtils::xmlEncode(mName) + "</h3>";
   //myString+="<p>GUID:" + guid() + "</p>";
   myString+="<p>Description:" + mDescription + "</p>";
   myString+="<p>Food Value of Meat: " + QString::number(mMeatFoodValue) + "</p>";
