@@ -181,7 +181,7 @@ QString LaCrop::toText()
 QString LaCrop::toHtml()
 {
   QString myString;
-  myString+="<p align=\"center\"><h3 style=\"color:#466aa5; font-size:11pt; font-weight:bold;\">Details for " + LaUtils::xmlEncode(mName) + "</h3></p>";
+  myString+="<p align=\"center\"><h3>Details for " + LaUtils::xmlEncode(mName) + "</h3></p>";
   //myString+="<p>GUID:" + guid() + "</p>";
   myString+="<p>Description:" + mDescription + "</p>";
    myString+="<p>Average Crop Yield: "

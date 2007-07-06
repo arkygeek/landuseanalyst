@@ -11,9 +11,7 @@
    </rect>
   </property>
   <property name="sizePolicy" >
-   <sizepolicy>
-    <hsizetype>0</hsizetype>
-    <vsizetype>0</vsizetype>
+   <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -25,18 +23,10 @@
    <iconset resource="../resources/resources.qrc" >:/la_icon_small.png</iconset>
   </property>
   <layout class="QGridLayout" >
-   <property name="margin" >
-    <number>9</number>
-   </property>
-   <property name="spacing" >
-    <number>6</number>
-   </property>
    <item row="0" column="0" >
     <widget class="QTabWidget" name="MainTabs" >
      <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>0</hsizetype>
-       <vsizetype>0</vsizetype>
+      <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -64,12 +54,6 @@
        <string>Main</string>
       </attribute>
       <layout class="QGridLayout" >
-       <property name="margin" >
-        <number>9</number>
-       </property>
-       <property name="spacing" >
-        <number>6</number>
-       </property>
        <item row="5" column="1" >
         <spacer>
          <property name="orientation" >
@@ -86,9 +70,7 @@
        <item rowspan="5" row="0" column="0" >
         <widget class="QFrame" name="frame_2" >
          <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>0</hsizetype>
-           <vsizetype>0</vsizetype>
+          <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -125,18 +107,10 @@ p, li { white-space: pre-wrap; }
           <enum>QFrame::Raised</enum>
          </property>
          <layout class="QGridLayout" >
-          <property name="margin" >
-           <number>9</number>
-          </property>
-          <property name="spacing" >
-           <number>6</number>
-          </property>
           <item row="0" column="0" >
            <widget class="QLabel" name="label_17" >
             <property name="sizePolicy" >
-             <sizepolicy>
-              <hsizetype>0</hsizetype>
-              <vsizetype>0</vsizetype>
+             <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -240,12 +214,6 @@ p, li { white-space: pre-wrap; }
           <bool>false</bool>
          </property>
          <layout class="QGridLayout" >
-          <property name="margin" >
-           <number>9</number>
-          </property>
-          <property name="spacing" >
-           <number>6</number>
-          </property>
           <item row="0" column="0" >
            <widget class="QLabel" name="textLabel2_4" >
             <property name="text" >
@@ -269,9 +237,7 @@ p, li { white-space: pre-wrap; }
           <item row="1" column="2" >
            <widget class="QSpinBox" name="spinBoxPopulation" >
             <property name="sizePolicy" >
-             <sizepolicy>
-              <hsizetype>0</hsizetype>
-              <vsizetype>0</vsizetype>
+             <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -282,11 +248,11 @@ p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Estimated population of the settlement (required)&lt;/p>&lt;/body>&lt;/html></string>
             </property>
-            <property name="maximum" >
-             <number>20000</number>
-            </property>
             <property name="minimum" >
              <number>1</number>
+            </property>
+            <property name="maximum" >
+             <number>20000</number>
             </property>
             <property name="singleStep" >
              <number>1</number>
@@ -402,9 +368,7 @@ p, li { white-space: pre-wrap; }
        <item rowspan="4" row="1" column="3" >
         <widget class="QGroupBox" name="model_method_box" >
          <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>0</hsizetype>
-           <vsizetype>0</vsizetype>
+          <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -422,17 +386,8 @@ p, li { white-space: pre-wrap; }
           <string>Modelling Method</string>
          </property>
          <layout class="QGridLayout" >
-          <property name="margin" >
-           <number>9</number>
-          </property>
-          <property name="spacing" >
-           <number>6</number>
-          </property>
           <item row="3" column="0" >
            <layout class="QHBoxLayout" >
-            <property name="margin" >
-             <number>0</number>
-            </property>
             <property name="spacing" >
              <number>0</number>
             </property>
@@ -461,9 +416,7 @@ p, li { white-space: pre-wrap; }
             <item>
              <widget class="QSpinBox" name="spinBoxModelPrecision" >
               <property name="sizePolicy" >
-               <sizepolicy>
-                <hsizetype>0</hsizetype>
-                <vsizetype>0</vsizetype>
+               <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
@@ -480,11 +433,11 @@ p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Landuse Analyst finds suitable land contained with a boundary around the site. This boundary is different for each modelling method, but the process is identical. Once this boundary has been determined, it looks inside and calcualtes the total area of suitable land and compares it to the Area Target. If the area of suitable land contained within this boundary falls within the range set by Model Precision, it has found the solution. If it is under this range, however, the boundary is moved outwards, and the process repeats until enough suitable land has been found.&lt;/p>&lt;/body>&lt;/html></string>
               </property>
-              <property name="maximum" >
-               <number>50</number>
-              </property>
               <property name="minimum" >
                <number>1</number>
+              </property>
+              <property name="maximum" >
+               <number>50</number>
               </property>
               <property name="value" >
                <number>5</number>
@@ -563,18 +516,10 @@ p, li { white-space: pre-wrap; }
        <string>Diet</string>
       </attribute>
       <layout class="QGridLayout" >
-       <property name="margin" >
-        <number>9</number>
-       </property>
-       <property name="spacing" >
-        <number>6</number>
-       </property>
        <item row="0" column="0" >
         <widget class="QGroupBox" name="diet_comp_box" >
          <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>0</hsizetype>
-           <vsizetype>0</vsizetype>
+          <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -583,20 +528,8 @@ p, li { white-space: pre-wrap; }
           <string>Dietary Composition Percentages (Calories!)</string>
          </property>
          <layout class="QGridLayout" >
-          <property name="margin" >
-           <number>9</number>
-          </property>
-          <property name="spacing" >
-           <number>6</number>
-          </property>
           <item row="2" column="0" colspan="2" >
            <layout class="QHBoxLayout" >
-            <property name="margin" >
-             <number>0</number>
-            </property>
-            <property name="spacing" >
-             <number>6</number>
-            </property>
             <item>
              <widget class="QLabel" name="label6" >
               <property name="toolTip" >
@@ -634,11 +567,11 @@ p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">In future versions of LandUse Analyst, the demographics of the human population will be modelled, but currently the user has to supply one figure for an average number of calories required by a single person on a daily basis.&lt;/p>&lt;/body>&lt;/html></string>
               </property>
-              <property name="maximum" >
-               <number>5000</number>
-              </property>
               <property name="minimum" >
                <number>1</number>
+              </property>
+              <property name="maximum" >
+               <number>5000</number>
               </property>
               <property name="singleStep" >
                <number>1</number>
@@ -656,12 +589,6 @@ p, li { white-space: pre-wrap; }
              <string>PLANT</string>
             </property>
             <layout class="QGridLayout" >
-             <property name="margin" >
-              <number>9</number>
-             </property>
-             <property name="spacing" >
-              <number>6</number>
-             </property>
              <item row="1" column="1" >
               <spacer>
                <property name="orientation" >
@@ -785,12 +712,6 @@ p, li { white-space: pre-wrap; }
           </item>
           <item row="0" column="0" colspan="2" >
            <layout class="QHBoxLayout" >
-            <property name="margin" >
-             <number>0</number>
-            </property>
-            <property name="spacing" >
-             <number>6</number>
-            </property>
             <item>
              <widget class="QLabel" name="labelCropPercent" >
               <property name="toolTip" >
@@ -873,12 +794,6 @@ p, li { white-space: pre-wrap; }
              <string>MEAT</string>
             </property>
             <layout class="QGridLayout" >
-             <property name="margin" >
-              <number>9</number>
-             </property>
-             <property name="spacing" >
-              <number>6</number>
-             </property>
              <item row="0" column="0" >
               <widget class="QLabel" name="label_14" >
                <property name="text" >
@@ -1025,9 +940,7 @@ p, li { white-space: pre-wrap; }
        <item row="0" column="1" >
         <widget class="QGroupBox" name="groupBox_2" >
          <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>0</hsizetype>
-           <vsizetype>0</vsizetype>
+          <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -1051,12 +964,6 @@ p, li { white-space: pre-wrap; }
           <string>Breakdown of Diet</string>
          </property>
          <layout class="QGridLayout" >
-          <property name="margin" >
-           <number>9</number>
-          </property>
-          <property name="spacing" >
-           <number>6</number>
-          </property>
           <item row="8" column="0" >
            <widget class="QLabel" name="label_20" >
             <property name="text" >
@@ -1072,12 +979,6 @@ p, li { white-space: pre-wrap; }
           </item>
           <item row="2" column="0" >
            <layout class="QHBoxLayout" >
-            <property name="margin" >
-             <number>0</number>
-            </property>
-            <property name="spacing" >
-             <number>6</number>
-            </property>
             <item>
              <widget class="QLabel" name="label_10" >
               <property name="text" >
@@ -1109,12 +1010,6 @@ p, li { white-space: pre-wrap; }
           </item>
           <item row="10" column="0" >
            <layout class="QHBoxLayout" >
-            <property name="margin" >
-             <number>0</number>
-            </property>
-            <property name="spacing" >
-             <number>6</number>
-            </property>
             <item>
              <widget class="QLabel" name="label_21" >
               <property name="text" >
@@ -1133,12 +1028,6 @@ p, li { white-space: pre-wrap; }
           </item>
           <item row="7" column="0" >
            <layout class="QHBoxLayout" >
-            <property name="margin" >
-             <number>0</number>
-            </property>
-            <property name="spacing" >
-             <number>6</number>
-            </property>
             <item>
              <widget class="QLabel" name="label_19" >
               <property name="text" >
@@ -1157,12 +1046,6 @@ p, li { white-space: pre-wrap; }
           </item>
           <item row="9" column="0" >
            <layout class="QHBoxLayout" >
-            <property name="margin" >
-             <number>0</number>
-            </property>
-            <property name="spacing" >
-             <number>6</number>
-            </property>
             <item>
              <widget class="QLabel" name="label_23" >
               <property name="text" >
@@ -1181,12 +1064,6 @@ p, li { white-space: pre-wrap; }
           </item>
           <item row="4" column="0" >
            <layout class="QHBoxLayout" >
-            <property name="margin" >
-             <number>0</number>
-            </property>
-            <property name="spacing" >
-             <number>6</number>
-            </property>
             <item>
              <widget class="QLabel" name="label_12" >
               <property name="text" >
@@ -1205,12 +1082,6 @@ p, li { white-space: pre-wrap; }
           </item>
           <item row="1" column="0" >
            <layout class="QHBoxLayout" >
-            <property name="margin" >
-             <number>0</number>
-            </property>
-            <property name="spacing" >
-             <number>6</number>
-            </property>
             <item>
              <widget class="QLabel" name="label_8" >
               <property name="text" >
@@ -1229,12 +1100,6 @@ p, li { white-space: pre-wrap; }
           </item>
           <item row="6" column="0" >
            <layout class="QHBoxLayout" >
-            <property name="margin" >
-             <number>0</number>
-            </property>
-            <property name="spacing" >
-             <number>6</number>
-            </property>
             <item>
              <widget class="QLabel" name="label_18" >
               <property name="text" >
@@ -1266,12 +1131,6 @@ p, li { white-space: pre-wrap; }
           </item>
           <item row="5" column="0" >
            <layout class="QHBoxLayout" >
-            <property name="margin" >
-             <number>0</number>
-            </property>
-            <property name="spacing" >
-             <number>6</number>
-            </property>
             <item>
              <widget class="QLabel" name="label_16" >
               <property name="text" >
@@ -1311,12 +1170,6 @@ p, li { white-space: pre-wrap; }
        <string>Crops</string>
       </attribute>
       <layout class="QGridLayout" >
-       <property name="margin" >
-        <number>9</number>
-       </property>
-       <property name="spacing" >
-        <number>6</number>
-       </property>
        <item row="0" column="0" colspan="2" >
         <widget class="QSplitter" name="splitter_4" >
          <property name="orientation" >
@@ -1366,18 +1219,10 @@ p, li { white-space: pre-wrap; }
          </widget>
          <widget class="QWidget" name="layoutWidget" >
           <layout class="QHBoxLayout" >
-           <property name="margin" >
-            <number>0</number>
-           </property>
-           <property name="spacing" >
-            <number>6</number>
-           </property>
            <item>
             <widget class="QTextBrowser" name="textBrowserCropDefinition" >
              <property name="sizePolicy" >
-              <sizepolicy>
-               <hsizetype>0</hsizetype>
-               <vsizetype>0</vsizetype>
+              <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -1393,9 +1238,7 @@ p, li { white-space: pre-wrap; }
            <item>
             <widget class="QTextBrowser" name="textBrowserCropParameterDefinition" >
              <property name="sizePolicy" >
-              <sizepolicy>
-               <hsizetype>0</hsizetype>
-               <vsizetype>0</vsizetype>
+              <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -1435,9 +1278,7 @@ p, li { white-space: pre-wrap; }
        <item row="1" column="0" >
         <widget class="QPushButton" name="pbnNewCrop" >
          <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>0</hsizetype>
-           <vsizetype>0</vsizetype>
+          <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -1466,20 +1307,8 @@ p, li { white-space: pre-wrap; }
        <string>Animals</string>
       </attribute>
       <layout class="QGridLayout" >
-       <property name="margin" >
-        <number>9</number>
-       </property>
-       <property name="spacing" >
-        <number>6</number>
-       </property>
        <item row="2" column="0" colspan="2" >
         <layout class="QHBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
-         </property>
-         <property name="spacing" >
-          <number>6</number>
-         </property>
          <item>
           <widget class="QLabel" name="label_7" >
            <property name="text" >
@@ -1510,11 +1339,11 @@ p, li { white-space: pre-wrap; }
            <property name="suffix" >
             <string> Kg / hectare</string>
            </property>
-           <property name="maximum" >
-            <number>5000</number>
-           </property>
            <property name="minimum" >
             <number>1</number>
+           </property>
+           <property name="maximum" >
+            <number>5000</number>
            </property>
            <property name="singleStep" >
             <number>10</number>
@@ -1542,9 +1371,7 @@ p, li { white-space: pre-wrap; }
        <item row="1" column="0" >
         <widget class="QPushButton" name="pbnNewAnimal" >
          <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>0</hsizetype>
-           <vsizetype>0</vsizetype>
+          <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -1640,36 +1467,10 @@ p, li { white-space: pre-wrap; }
          </widget>
          <widget class="QWidget" name="layoutWidget" >
           <layout class="QHBoxLayout" >
-           <property name="margin" >
-            <number>0</number>
-           </property>
-           <property name="spacing" >
-            <number>6</number>
-           </property>
            <item>
             <widget class="QTextBrowser" name="textBrowserAnimalDefinition" >
              <property name="sizePolicy" >
-              <sizepolicy>
-               <hsizetype>0</hsizetype>
-               <vsizetype>0</vsizetype>
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="toolTip" >
-              <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Select an animal above to refresh this window&lt;/p>&lt;/body>&lt;/html></string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QTextBrowser" name="textBrowserAnimalParameterDefinition" >
-             <property name="sizePolicy" >
-              <sizepolicy>
-               <hsizetype>0</hsizetype>
-               <vsizetype>0</vsizetype>
+              <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -1693,12 +1494,6 @@ p, li { white-space: pre-wrap; }
        <string>Calculations</string>
       </attribute>
       <layout class="QGridLayout" >
-       <property name="margin" >
-        <number>9</number>
-       </property>
-       <property name="spacing" >
-        <number>6</number>
-       </property>
        <item row="1" column="0" colspan="7" >
         <widget class="QProgressBar" name="progressBarCalcs" >
          <property name="value" >
@@ -1764,9 +1559,7 @@ p, li { white-space: pre-wrap; }
          </property>
          <widget class="QListWidget" name="listWidgetCalculationsCrop" >
           <property name="sizePolicy" >
-           <sizepolicy>
-            <hsizetype>0</hsizetype>
-            <vsizetype>0</vsizetype>
+           <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -1792,9 +1585,7 @@ p, li { white-space: pre-wrap; }
          </widget>
          <widget class="QTextBrowser" name="textBrowserResultsCrop" >
           <property name="sizePolicy" >
-           <sizepolicy>
-            <hsizetype>0</hsizetype>
-            <vsizetype>0</vsizetype>
+           <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -1817,9 +1608,7 @@ p, li { white-space: pre-wrap; }
          </property>
          <widget class="QListWidget" name="listWidgetCalculationsAnimal" >
           <property name="sizePolicy" >
-           <sizepolicy>
-            <hsizetype>0</hsizetype>
-            <vsizetype>0</vsizetype>
+           <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -1845,9 +1634,7 @@ p, li { white-space: pre-wrap; }
          </widget>
          <widget class="QTextBrowser" name="textBrowserResultsAnimals" >
           <property name="sizePolicy" >
-           <sizepolicy>
-            <hsizetype>0</hsizetype>
-            <vsizetype>0</vsizetype>
+           <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -1870,12 +1657,6 @@ p, li { white-space: pre-wrap; }
        <string>Results</string>
       </attribute>
       <layout class="QGridLayout" >
-       <property name="margin" >
-        <number>9</number>
-       </property>
-       <property name="spacing" >
-        <number>6</number>
-       </property>
        <item row="0" column="0" >
         <widget class="QSplitter" name="splitter_6" >
          <property name="orientation" >
@@ -1883,9 +1664,7 @@ p, li { white-space: pre-wrap; }
          </property>
          <widget class="QTextBrowser" name="tbReport" >
           <property name="sizePolicy" >
-           <sizepolicy>
-            <hsizetype>0</hsizetype>
-            <vsizetype>0</vsizetype>
+           <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -1907,12 +1686,6 @@ p, li { white-space: pre-wrap; }
        <string>Log</string>
       </attribute>
       <layout class="QGridLayout" >
-       <property name="margin" >
-        <number>9</number>
-       </property>
-       <property name="spacing" >
-        <number>6</number>
-       </property>
        <item row="0" column="0" >
         <widget class="QTextBrowser" name="tbLogs" />
        </item>
@@ -1923,12 +1696,6 @@ p, li { white-space: pre-wrap; }
        <string>Help</string>
       </attribute>
       <layout class="QGridLayout" >
-       <property name="margin" >
-        <number>9</number>
-       </property>
-       <property name="spacing" >
-        <number>6</number>
-       </property>
        <item row="1" column="0" >
         <widget class="QCheckBox" name="cbDebug" >
          <property name="text" >
@@ -1943,9 +1710,7 @@ p, li { white-space: pre-wrap; }
          </property>
          <widget class="QTreeWidget" name="treeHelp" >
           <property name="sizePolicy" >
-           <sizepolicy>
-            <hsizetype>0</hsizetype>
-            <vsizetype>0</vsizetype>
+           <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -2474,9 +2239,7 @@ p, li { white-space: pre-wrap; }
          </widget>
          <widget class="QTextBrowser" name="textHelp" >
           <property name="sizePolicy" >
-           <sizepolicy>
-            <hsizetype>0</hsizetype>
-            <vsizetype>0</vsizetype>
+           <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
             <horstretch>255</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -2487,13 +2250,13 @@ p, li { white-space: pre-wrap; }
           <property name="html" >
            <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:10pt; font-weight:600;">To learn more about a feature or field in LandUse Analyst, you can do one of four things.&lt;/span>&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">1. &lt;span style=" font-size:10pt; color:#0000ff;">Hover over it&lt;/span> with your mouse arrow for a brief description&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">2. Click the &lt;span style=" font-size:12pt; font-weight:600; color:#0000ff;">?&lt;/span> in the top right of the main window and then click on the item you want detailed help for.&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"> Click anywhere to make the help box go away.&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">3. RIght Click on the thing you want help for.  If there is detailed help for it, you will see a &lt;span style=" font-weight:600; color:#0000ff;">What is this?&lt;/span> option that you can then click on.  Again, you can click anywhere to make the help box go away.&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">4. Go to the &lt;span style=" font-weight:600; color:#0000ff;">Help&lt;/span> &lt;span style=" font-weight:600; color:#0000ff;">Tab&lt;/span> and click on the item you want help with on the left for an even more detailed description of what things are and how they work&lt;/p>&lt;/body>&lt;/html></string>
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Lucida Grande'; font-size:13pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;">&lt;span style=" font-size:10pt; font-weight:600;">To learn more about a feature or field in LandUse Analyst, you can do one of four things.&lt;/span>&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;">1. &lt;span style=" font-size:10pt; color:#0000ff;">Hover over it&lt;/span> with your mouse arrow for a brief description&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;">2. Click the &lt;span style=" font-size:12pt; font-weight:600; color:#0000ff;">?&lt;/span> in the top right of the main window and then click on the item you want detailed help for.&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;"> Click anywhere to make the help box go away.&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;">3. RIght Click on the thing you want help for.  If there is detailed help for it, you will see a &lt;span style=" font-weight:600; color:#0000ff;">What is this?&lt;/span> option that you can then click on.  Again, you can click anywhere to make the help box go away.&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;">4. Go to the &lt;span style=" font-weight:600; color:#0000ff;">Help&lt;/span> &lt;span style=" font-weight:600; color:#0000ff;">Tab&lt;/span> and click on the item you want help with on the left for an even more detailed description of what things are and how they work&lt;/p>&lt;/body>&lt;/html></string>
           </property>
          </widget>
         </widget>
@@ -2504,12 +2267,6 @@ p, li { white-space: pre-wrap; }
    </item>
    <item row="1" column="0" >
     <layout class="QHBoxLayout" >
-     <property name="margin" >
-      <number>0</number>
-     </property>
-     <property name="spacing" >
-      <number>6</number>
-     </property>
      <item>
       <widget class="QLabel" name="label_5" >
        <property name="toolTip" >
@@ -2584,9 +2341,7 @@ p, li { white-space: pre-wrap; }
      <item>
       <widget class="QPushButton" name="pushButtonRun" >
        <property name="sizePolicy" >
-        <sizepolicy>
-         <hsizetype>0</hsizetype>
-         <vsizetype>0</vsizetype>
+        <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -2617,9 +2372,7 @@ p, li { white-space: pre-wrap; }
      <item>
       <widget class="QPushButton" name="pushButtonLoad" >
        <property name="sizePolicy" >
-        <sizepolicy>
-         <hsizetype>0</hsizetype>
-         <vsizetype>0</vsizetype>
+        <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -2644,9 +2397,7 @@ p, li { white-space: pre-wrap; }
      <item>
       <widget class="QPushButton" name="pushButtonSave" >
        <property name="sizePolicy" >
-        <sizepolicy>
-         <hsizetype>0</hsizetype>
-         <vsizetype>0</vsizetype>
+        <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -2665,9 +2416,7 @@ p, li { white-space: pre-wrap; }
      <item>
       <widget class="QPushButton" name="pushButtonExit" >
        <property name="sizePolicy" >
-        <sizepolicy>
-         <hsizetype>0</hsizetype>
-         <vsizetype>0</vsizetype>
+        <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -2714,7 +2463,6 @@ p, li { white-space: pre-wrap; }
   <tabstop>pbnNewCropParameter</tabstop>
   <tabstop>tblAnimals</tabstop>
   <tabstop>textBrowserAnimalDefinition</tabstop>
-  <tabstop>textBrowserAnimalParameterDefinition</tabstop>
   <tabstop>pbnNewAnimal</tabstop>
   <tabstop>pbnNewAnimalParameter</tabstop>
   <tabstop>listWidgetCalculationsCrop</tabstop>

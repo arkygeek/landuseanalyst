@@ -28,7 +28,11 @@
 #include <ui_lamainformbase.h>
 #include <lautils.h>
 #include <la.h>
+#include <laanimal.h>
+#include <laanimalparameter.h>
 
+
+//forward declarations
 class QTreeWidgetItem;
 /**
   This is the main gui class
@@ -82,6 +86,8 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
     // animals and crops maps
     void debugChecks();
     void printCropsAndAnimals();
+    /* Show html report in the animal tab for the animal and its associated param */
+    void showAnimalDefinitionReport(LaAnimal &theAnimal, LaAnimalParameter &theAnimalParamter);
     bool setComboToDefault(QComboBox * thepCombo, QString theDefault);
     //    <animal guid <enabled, animalparamters guid>>
     LaTripleMap mAnimalsMap;

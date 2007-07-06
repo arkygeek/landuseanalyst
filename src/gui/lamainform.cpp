@@ -484,14 +484,13 @@ void LaMainForm::animalCellClicked(int theRow, int theColumn)
     //get all animals, then get the animal for this cell if it exists
     QMap<QString,LaAnimal> myAnimalsMap = LaUtils::getAvailableAnimals();
     LaAnimal myAnimal = myAnimalsMap[myGuid];
-    textBrowserAnimalDefinition->setHtml(myAnimal.toHtml());
     QComboBox * mypCombo=dynamic_cast<QComboBox *>(tblAnimals->cellWidget(tblAnimals->currentRow(),2));
     myGuid = mypCombo->itemData(mypCombo->currentIndex(),Qt::UserRole).toString();
     //get all animal parameters, then get the animal parameter for this cell if it exists
     LaUtils::AnimalParameterMap myAnimalParametersMap;
     myAnimalParametersMap = LaUtils::getAvailableAnimalParameters();
     LaAnimalParameter myAnimalParameter = myAnimalParametersMap[myGuid];
-    textBrowserAnimalParameterDefinition->setHtml(myAnimalParameter.toHtml());
+    showAnimalDefinitionReport(myAnimal,myAnimalParameter);
   }
   listWidgetCalculationsAnimal->clear();
   loadAnimals();
@@ -933,4 +932,22 @@ void LaMainForm::logMessage(QString theMessage)
 {
   tbLogs->append(theMessage);
   tbLogs->ensureCursorVisible();
+}
+
+
+void LaMainForm::showAnimalDefinitionReport(LaAnimal &theAnimal, LaAnimalParameter &theAnimalParameter)
+{
+  QString myHtml;
+  myHtml = "<table width=\"100%\">";
+  myHtml += "<tr>";
+  myHtml += "<td>";
+  myHtml += theAnimal.toHtml();
+  myHtml += "</td>";
+  myHtml += "<td>";
+  myHtml += theAnimalParameter.toHtml();
+  myHtml += "</td>";
+  myHtml += "</tr>";
+  myHtml += "</table>";
+  textBrowserAnimalDefinition->setHtml(myHtml);
+  textBrowserAnimalDefinition->document()->setDefaultStyleSheet(LaUtils::getStandardCss());
 }

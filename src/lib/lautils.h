@@ -216,6 +216,12 @@ class LaUtils
      */
     static QString xmlDecode(QString theString);
 
+    /** Get the standard style sheet for reports. Typically this will be 
+      * used like this:
+      * QString myStyle = getStandardCss();
+      * textBrowserFoo->document()->setDefaultStylesheet(myStyle);
+      */
+    static QString getStandardCss();
   private:
 
 };

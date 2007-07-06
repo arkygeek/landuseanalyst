@@ -343,7 +343,7 @@ QString LaAnimalParameter::toText()
 QString LaAnimalParameter::toHtml()
 {
   QString myString;
-  myString+="<p align=\"center\"><h3  style=\"color:#466aa5; font-size:11pt; font-weight:bold;\">Details for " + LaUtils::xmlEncode(mName) + "</h3></p>";
+  myString+="<p align=\"center\"><h3 >Details for " + LaUtils::xmlEncode(mName) + "</h3></p>";
   myString+="<table>";
   //myString+="<tr><td><b>GUID:</th><td>" + guid() + "</td></tr>";
   myString+="<tr><td><b>Description:</b></td><td>" + mDescription + "</td></tr>";
