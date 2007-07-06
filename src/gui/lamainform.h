@@ -30,6 +30,8 @@
 #include <la.h>
 #include <laanimal.h>
 #include <laanimalparameter.h>
+#include <lacrop.h>
+#include <lacropparameter.h>
 
 
 //forward declarations
@@ -88,6 +90,8 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
     void printCropsAndAnimals();
     /* Show html report in the animal tab for the animal and its associated param */
     void showAnimalDefinitionReport(LaAnimal &theAnimal, LaAnimalParameter &theAnimalParamter);
+    /* Show html report in the crop tab for the crop and its associated param */
+    void showCropDefinitionReport(LaCrop &theCrop, LaCropParameter &theCropParameter);
     bool setComboToDefault(QComboBox * thepCombo, QString theDefault);
     //    <animal guid <enabled, animalparamters guid>>
     LaTripleMap mAnimalsMap;

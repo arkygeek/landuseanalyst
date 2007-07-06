@@ -402,8 +402,8 @@ QString LaModel::toHtml()
 {
   logMessage("method ==> QString LaModel::toHtml()");
   QString myString;
-  myString+="<p align=\"center\"><h1>Model Report</h1><p/>";
-  myString+="<p align=\"center\"><h3>" + LaUtils::xmlEncode(mName) + "</h3><p/>";
+  myString+="<h1>Model Report</h1>";
+  myString+="<h3>" + LaUtils::xmlEncode(mName) + "</h3>";
   //myString+="GUID:" + guid() + "<br />";
   myString+="Population:" + QString::number(mPopulation) + "<br />";
   myString+="Period: " + LaUtils::xmlEncode(mPeriod) + "<br />";
@@ -1237,19 +1237,15 @@ QString LaModel::toHtmlCalorieCropTargets()
   // Loop through the mCaloriesProvidedByCropsMap
   QString myString;
   myString += QString("<h3> Crop Calorie Targets</h3>\n");
-  myString += QString("<P STYLE=\"margin-bottom: 0in\"><BR>\n");
-  myString += QString("</P>\n");
-  myString += QString("<TABLE WIDTH=100% BORDER=1 BORDERCOLOR=\"#000000\" CELLPADDING=4 CELLSPACING=0>\n");
-  myString += QString("  <COL WIDTH=64*>\n");
-  myString += QString("  <COL WIDTH=16*>\n");
-  myString += QString("  <TR VALIGN=TOP>\n");
-  myString += QString("    <TH WIDTH=50%>\n");
-  myString += QString("      <P>Crop</P>\n");
-  myString += QString("    </TH>\n");
-  myString += QString("    <TH WIDTH=50%>\n");
-  myString += QString("      <P>kCalories</P>\n");
-  myString += QString("    </TH>\n");
-  myString += QString("  </TR>\n");
+  myString += QString("<table>");
+  myString += QString("  <tr>\n");
+  myString += QString("    <th>\n");
+  myString += QString("      Crop\n");
+  myString += QString("    </th>\n");
+  myString += QString("    <th>\n");
+  myString += QString("      kCalories\n");
+  myString += QString("    </th>\n");
+  myString += QString("  </tr>\n");
 
   QMapIterator<QString, int> myCropIterator (mCaloriesProvidedByCropsMap);
   while (myCropIterator.hasNext())
@@ -1262,14 +1258,14 @@ QString LaModel::toHtmlCalorieCropTargets()
 
     // add to the QString to create the html file
 
-    myString += QString("  <TR VALIGN=TOP>\n");
-    myString += QString("    <TD WIDTH=50%>\n");
-    myString += QString("      <P>" + LaUtils::xmlEncode(myCrop.name()) + "</P>\n");
-    myString += QString("    </TD>\n");
-    myString += QString("    <TD WIDTH=50%>\n");
-    myString += QString("      <P>" + QString::number(myCalorieTarget) + "</P>\n");
-    myString += QString("    </TD>\n");
-    myString += QString("  </TR>\n");
+    myString += QString("  <tr>\n");
+    myString += QString("    <td>\n");
+    myString += QString("      " + LaUtils::xmlEncode(myCrop.name()) + "\n");
+    myString += QString("    </td>\n");
+    myString += QString("    <td>\n");
+    myString += QString("      " + QString::number(myCalorieTarget) + "\n");
+    myString += QString("    </td>\n");
+    myString += QString("  </tr>\n");
 
 
     // add to the QString to create the xml file
@@ -1283,7 +1279,7 @@ QString LaModel::toHtmlCalorieCropTargets()
     //myString += QString("  </crop>\n");
   } // while crop iterator
 
-    myString += QString("</TABLE>\n");
+    myString += QString("</table>\n");
   return myString;
 }
 
@@ -1296,18 +1292,18 @@ QString LaModel::toHtmlCalorieAnimalTargets()
   QString myString;
   myString += QString("<h3> Animal Calorie Targets</h3>\n");
   myString += QString("<P STYLE=\"margin-bottom: 0in\"><BR>\n");
-  myString += QString("</P>\n");
-  myString += QString("<TABLE WIDTH=100% BORDER=1 BORDERCOLOR=\"#000000\" CELLPADDING=4 CELLSPACING=0>\n");
+  myString += QString("\n");
+  myString += QString("<table>");
   myString += QString("  <COL WIDTH=64*>\n");
   myString += QString("  <COL WIDTH=16*>\n");
-  myString += QString("  <TR VALIGN=TOP>\n");
-  myString += QString("    <TH WIDTH=50%>\n");
-  myString += QString("      <P>Animal</P>\n");
-  myString += QString("    </TH>\n");
-  myString += QString("    <TH WIDTH=50%>\n");
-  myString += QString("      <P>kCalories</P>\n");
-  myString += QString("    </TH>\n");
-  myString += QString("  </TR>\n");
+  myString += QString("  <tr>\n");
+  myString += QString("    <th>\n");
+  myString += QString("      Animal\n");
+  myString += QString("    </th>\n");
+  myString += QString("    <th>\n");
+  myString += QString("      kCalories\n");
+  myString += QString("    </th>\n");
+  myString += QString("  </tr>\n");
   QMapIterator<QString, int> myAnimalIterator (mCaloriesProvidedByAnimalsMap);
   while (myAnimalIterator.hasNext())
   {
@@ -1316,14 +1312,14 @@ QString LaModel::toHtmlCalorieAnimalTargets()
     int myCalorieTarget = static_cast <int>(myAnimalIterator.value());
     LaAnimal myAnimal = LaUtils::getAnimal(myAnimalGuid);
     LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(mAnimalsMap.value(myAnimalGuid));
-    myString += QString("  <TR VALIGN=TOP>\n");
-    myString += QString("    <TD WIDTH=50%>\n");
-    myString += QString("      <P>" + LaUtils::xmlEncode(myAnimal.name()) + "</P>\n");
-    myString += QString("    </TD>\n");
-    myString += QString("    <TD WIDTH=50%>\n");
-    myString += QString("      <P>" + QString::number(myCalorieTarget) + "</P>\n");
-    myString += QString("    </TD>\n");
-    myString += QString("  </TR>\n");
+    myString += QString("  <tr>\n");
+    myString += QString("    <td>\n");
+    myString += QString("      " + LaUtils::xmlEncode(myAnimal.name()) + "\n");
+    myString += QString("    </td>\n");
+    myString += QString("    <td>\n");
+    myString += QString("      " + QString::number(myCalorieTarget) + "\n");
+    myString += QString("    </td>\n");
+    myString += QString("  </tr>\n");
 
     // add to the QString to create the xml file
     //myString += QString("  <animal>\n");
@@ -1336,7 +1332,7 @@ QString LaModel::toHtmlCalorieAnimalTargets()
     //myString += QString("  </animal>\n");
 
   } // while animal iterator
-    myString += QString("</TABLE>\n");
+    myString += QString("</table>\n");
   return myString;
 }
 
@@ -1349,18 +1345,18 @@ QString LaModel::toHtmlProductionCropTargets()
   QString myString;
   myString += QString("<h3> Crop Production Targets</h3>\n");
   myString += QString("<P STYLE=\"margin-bottom: 0in\"><BR>\n");
-  myString += QString("</P>\n");
-  myString += QString("<TABLE WIDTH=100% BORDER=1 BORDERCOLOR=\"#000000\" CELLPADDING=4 CELLSPACING=0>\n");
+  myString += QString("\n");
+  myString += QString("<table>");
   myString += QString("  <COL WIDTH=64*>\n");
   myString += QString("  <COL WIDTH=16*>\n");
-  myString += QString("  <TR VALIGN=TOP>\n");
-  myString += QString("    <TH WIDTH=50%>\n");
-  myString += QString("      <P>Crop</P>\n");
-  myString += QString("    </TH>\n");
-  myString += QString("    <TH WIDTH=50%>\n");
-  myString += QString("      <P>Kg</P>\n");
-  myString += QString("    </TH>\n");
-  myString += QString("  </TR>\n");
+  myString += QString("  <tr>\n");
+  myString += QString("    <th>\n");
+  myString += QString("      Crop\n");
+  myString += QString("    </th>\n");
+  myString += QString("    <th>\n");
+  myString += QString("      Kg\n");
+  myString += QString("    </th>\n");
+  myString += QString("  </tr>\n");
   QMapIterator<QString, int> myCropIterator (mProductionRequiredCropsMap);
   while (myCropIterator.hasNext())
   {
@@ -1370,17 +1366,17 @@ QString LaModel::toHtmlProductionCropTargets()
     LaCrop myCrop = LaUtils::getCrop(myCropGuid);
     LaCropParameter myCropParameter = LaUtils::getCropParameter(mCropsMap.value(myCropGuid));
     // add to the QString to create the xml file
-    myString += QString("  <TR VALIGN=TOP>\n");
-    myString += QString("    <TD WIDTH=50%>\n");
-    myString += QString("      <P>" + LaUtils::xmlEncode(myCrop.name()) + "</P>\n");
-    myString += QString("    </TD>\n");
-    myString += QString("    <TD WIDTH=50%>\n");
-    myString += QString("      <P>" + QString::number(myProductionTarget) + "</P>\n");
-    myString += QString("    </TD>\n");
-    myString += QString("  </TR>\n");
+    myString += QString("  <tr>\n");
+    myString += QString("    <td>\n");
+    myString += QString("      " + LaUtils::xmlEncode(myCrop.name()) + "\n");
+    myString += QString("    </td>\n");
+    myString += QString("    <td>\n");
+    myString += QString("      " + QString::number(myProductionTarget) + "\n");
+    myString += QString("    </td>\n");
+    myString += QString("  </tr>\n");
   } // while crop iterator
 
-    myString += QString("</TABLE>\n");
+    myString += QString("</table>\n");
   return myString;
 }
 
@@ -1393,18 +1389,18 @@ QString LaModel::toHtmlProductionAnimalTargets()
   QString myString;
   myString += QString("<h3> Animal Production Targets</h3>\n");
   myString += QString("<P STYLE=\"margin-bottom: 0in\"><BR>\n");
-  myString += QString("</P>\n");
-  myString += QString("<TABLE WIDTH=100% BORDER=1 BORDERCOLOR=\"#000000\" CELLPADDING=4 CELLSPACING=0>\n");
+  myString += QString("\n");
+  myString += QString("<table>");
   myString += QString("  <COL WIDTH=64*>\n");
   myString += QString("  <COL WIDTH=16*>\n");
-  myString += QString("  <TR VALIGN=TOP>\n");
-  myString += QString("    <TH WIDTH=50%>\n");
-  myString += QString("      <P>Animal</P>\n");
-  myString += QString("    </TH>\n");
-  myString += QString("    <TH WIDTH=50%>\n");
-  myString += QString("      <P>Kg</P>\n");
-  myString += QString("    </TH>\n");
-  myString += QString("  </TR>\n");
+  myString += QString("  <tr>\n");
+  myString += QString("    <th>\n");
+  myString += QString("      Animal\n");
+  myString += QString("    </th>\n");
+  myString += QString("    <th>\n");
+  myString += QString("      Kg\n");
+  myString += QString("    </th>\n");
+  myString += QString("  </tr>\n");
   QMapIterator<QString, int> myAnimalIterator (mProductionRequiredAnimalsMap);
   while (myAnimalIterator.hasNext())
   {
@@ -1414,17 +1410,17 @@ QString LaModel::toHtmlProductionAnimalTargets()
     LaAnimal myAnimal = LaUtils::getAnimal(myAnimalGuid);
     LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(mAnimalsMap.value(myAnimalGuid));
     // add to the QString to create the xml file
-    myString += QString("  <TR VALIGN=TOP>\n");
-    myString += QString("    <TD WIDTH=50%>\n");
-    myString += QString("      <P>" + LaUtils::xmlEncode(myAnimal.name()) + "</P>\n");
-    myString += QString("    </TD>\n");
-    myString += QString("    <TD WIDTH=50%>\n");
-    myString += QString("      <P>" + QString::number(myProductionTarget) + "</P>\n");
-    myString += QString("    </TD>\n");
-    myString += QString("  </TR>\n");
+    myString += QString("  <tr>\n");
+    myString += QString("    <td>\n");
+    myString += QString("      " + LaUtils::xmlEncode(myAnimal.name()) + "\n");
+    myString += QString("    </td>\n");
+    myString += QString("    <td>\n");
+    myString += QString("      " + QString::number(myProductionTarget) + "\n");
+    myString += QString("    </td>\n");
+    myString += QString("  </tr>\n");
   } // while crop iterator
 
-    myString += QString("</TABLE>\n");
+    myString += QString("</table>\n");
   return myString;
 }
 
@@ -1437,18 +1433,18 @@ QString LaModel::toHtmlAreaCropTargets()
   QString myString;
   myString += QString("<h3> Crop Area Targets</h3>\n");
   myString += QString("<P STYLE=\"margin-bottom: 0in\"><BR>\n");
-  myString += QString("</P>\n");
-  myString += QString("<TABLE WIDTH=100% BORDER=1 BORDERCOLOR=\"#000000\" CELLPADDING=4 CELLSPACING=0>\n");
+  myString += QString("\n");
+  myString += QString("<table>");
   myString += QString("  <COL WIDTH=64*>\n");
   myString += QString("  <COL WIDTH=16*>\n");
-  myString += QString("  <TR VALIGN=TOP>\n");
-  myString += QString("    <TH WIDTH=50%>\n");
-  myString += QString("      <P>Crop</P>\n");
-  myString += QString("    </TH>\n");
-  myString += QString("    <TH WIDTH=50%>\n");
-  myString += QString("      <P>Area</P>\n");
-  myString += QString("    </TH>\n");
-  myString += QString("  </TR>\n");
+  myString += QString("  <tr>\n");
+  myString += QString("    <th>\n");
+  myString += QString("      Crop\n");
+  myString += QString("    </th>\n");
+  myString += QString("    <th>\n");
+  myString += QString("      Area\n");
+  myString += QString("    </th>\n");
+  myString += QString("  </tr>\n");
   QMapIterator<QString, int> myCropIterator (mAreaTargetsCropsMap);
   while (myCropIterator.hasNext())
   {
@@ -1458,17 +1454,17 @@ QString LaModel::toHtmlAreaCropTargets()
     LaCrop myCrop = LaUtils::getCrop(myCropGuid);
     LaCropParameter myCropParameter = LaUtils::getCropParameter(mCropsMap.value(myCropGuid));
     // add to the QString to create the xml file
-    myString += QString("  <TR VALIGN=TOP>\n");
-    myString += QString("    <TD WIDTH=50%>\n");
-    myString += QString("      <P>" + LaUtils::xmlEncode(myCrop.name()) + "</P>\n");
-    myString += QString("    </TD>\n");
-    myString += QString("    <TD WIDTH=50%>\n");
-    myString += QString("      <P>" + QString::number(myAreaTarget) + "</P>\n");
-    myString += QString("    </TD>\n");
-    myString += QString("  </TR>\n");
+    myString += QString("  <tr>\n");
+    myString += QString("    <td>\n");
+    myString += QString("      " + LaUtils::xmlEncode(myCrop.name()) + "\n");
+    myString += QString("    </td>\n");
+    myString += QString("    <td>\n");
+    myString += QString("      " + QString::number(myAreaTarget) + "\n");
+    myString += QString("    </td>\n");
+    myString += QString("  </tr>\n");
   } // while crop iterator
 
-    myString += QString("</TABLE>\n");
+    myString += QString("</table>\n");
   return myString;
 }
 
@@ -1480,18 +1476,16 @@ QString LaModel::toHtmlAreaAnimalTargets()
   // Loop through the mAreaTargetsAnimalsMap
   QString myString;
   myString += QString("<h3> Animal Area Targets</h3>\n");
-  myString += QString("</P>\n");
-  myString += QString("<TABLE WIDTH=100% BORDER=1 BORDERCOLOR=\"#000000\" CELLPADDING=4 CELLSPACING=0>\n");
-  myString += QString("  <COL WIDTH=64*>\n");
-  myString += QString("  <COL WIDTH=16*>\n");
-  myString += QString("  <TR VALIGN=TOP>\n");
-  myString += QString("    <TH WIDTH=50%>\n");
-  myString += QString("      <P>Animal</P>\n");
-  myString += QString("    </TH>\n");
-  myString += QString("    <TH WIDTH=50%>\n");
-  myString += QString("      <P>Area</P>\n");
-  myString += QString("    </TH>\n");
-  myString += QString("  </TR>\n");
+  myString += QString("\n");
+  myString += QString("<table>");
+  myString += QString("  <tr>\n");
+  myString += QString("    <th>\n");
+  myString += QString("      Animal\n");
+  myString += QString("    </th>\n");
+  myString += QString("    <th>\n");
+  myString += QString("      Area\n");
+  myString += QString("    </th>\n");
+  myString += QString("  </tr>\n");
   QMapIterator<QString, int> myAnimalIterator (mAreaTargetsAnimalsMap);
   while (myAnimalIterator.hasNext())
   {
@@ -1501,17 +1495,17 @@ QString LaModel::toHtmlAreaAnimalTargets()
     LaAnimal myAnimal = LaUtils::getAnimal(myAnimalGuid);
     LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(mAnimalsMap.value(myAnimalGuid));
     // add to the QString to create the xml file
-    myString += QString("  <TR VALIGN=TOP>\n");
-    myString += QString("    <TD WIDTH=50%>\n");
-    myString += QString("      <P>" + LaUtils::xmlEncode(myAnimal.name()) + "</P>\n");
-    myString += QString("    </TD>\n");
-    myString += QString("    <TD WIDTH=50%>\n");
-    myString += QString("      <P>" + QString::number(myAreaTarget) + "</P>\n");
-    myString += QString("    </TD>\n");
-    myString += QString("  </TR>\n");
+    myString += QString("  <tr>\n");
+    myString += QString("    <td>\n");
+    myString += QString("      " + LaUtils::xmlEncode(myAnimal.name()) + "\n");
+    myString += QString("    </td>\n");
+    myString += QString("    <td>\n");
+    myString += QString("      " + QString::number(myAreaTarget) + "\n");
+    myString += QString("    </td>\n");
+    myString += QString("  </tr>\n");
   } // while crop iterator
 
-    myString += QString("</TABLE>\n");
+    myString += QString("</table>\n");
   return myString;
 }
 

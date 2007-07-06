@@ -1217,62 +1217,20 @@ p, li { white-space: pre-wrap; }
            </property>
           </column>
          </widget>
-         <widget class="QWidget" name="layoutWidget" >
-          <layout class="QHBoxLayout" >
-           <item>
-            <widget class="QTextBrowser" name="textBrowserCropDefinition" >
-             <property name="sizePolicy" >
-              <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="toolTip" >
-              <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+         <widget class="QTextBrowser" name="textBrowserCropDefinition" >
+          <property name="sizePolicy" >
+           <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="toolTip" >
+           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Select a crop above to refresh this window&lt;/p>&lt;/body>&lt;/html></string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QTextBrowser" name="textBrowserCropParameterDefinition" >
-             <property name="sizePolicy" >
-              <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="toolTip" >
-              <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Select a crop above to refresh this window&lt;/p>&lt;/body>&lt;/html></string>
-             </property>
-            </widget>
-           </item>
-          </layout>
+          </property>
          </widget>
-        </widget>
-       </item>
-       <item row="1" column="1" >
-        <widget class="QPushButton" name="pbnNewCropParameter" >
-         <property name="toolTip" >
-          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Open the Crop Parameter Manager&lt;/p>&lt;/body>&lt;/html></string>
-         </property>
-         <property name="whatsThis" >
-          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">In order to enable LandUse Analyst to model crops, several details must be supplied. Crop Parameter Manager asks for these specifics. As with Crop Manager, it is possible to have more than one parameter named the same thing. Again, just enter a descriptor in the Notes: field.&lt;/p>
-&lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">To define different parameters for the same crop, follow the same procedure as for defining multiple crops with the same name. Let's say you want to have two parameters set up for Wheat as an example. The Name: field is Wheat for both, but in Notes: field, enter Optimistic for one, and Conservative for the other. Then adjust the parameters as you wish for each. Even though the name is the same, the parameters are saved uniquely. Having multiple parameters can be useful for setting up different scenarios, such as drought years, diease, catastrophic events, etc. Eventually, LandUse Analyst will have the ability to model over time, and will have these types of scenarios incorporated into the model.&lt;/p>&lt;/body>&lt;/html></string>
-         </property>
-         <property name="text" >
-          <string>Manage Crop Parameters...</string>
-         </property>
         </widget>
        </item>
        <item row="1" column="0" >
@@ -1300,6 +1258,26 @@ p, li { white-space: pre-wrap; }
          </property>
         </widget>
        </item>
+       <item row="1" column="1" >
+        <widget class="QPushButton" name="pbnNewCropParameter" >
+         <property name="toolTip" >
+          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Open the Crop Parameter Manager&lt;/p>&lt;/body>&lt;/html></string>
+         </property>
+         <property name="whatsThis" >
+          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">In order to enable LandUse Analyst to model crops, several details must be supplied. Crop Parameter Manager asks for these specifics. As with Crop Manager, it is possible to have more than one parameter named the same thing. Again, just enter a descriptor in the Notes: field.&lt;/p>
+&lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">To define different parameters for the same crop, follow the same procedure as for defining multiple crops with the same name. Let's say you want to have two parameters set up for Wheat as an example. The Name: field is Wheat for both, but in Notes: field, enter Optimistic for one, and Conservative for the other. Then adjust the parameters as you wish for each. Even though the name is the same, the parameters are saved uniquely. Having multiple parameters can be useful for setting up different scenarios, such as drought years, diease, catastrophic events, etc. Eventually, LandUse Analyst will have the ability to model over time, and will have these types of scenarios incorporated into the model.&lt;/p>&lt;/body>&lt;/html></string>
+         </property>
+         <property name="text" >
+          <string>Manage Crop Parameters...</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="animals_tab" >
@@ -1307,6 +1285,119 @@ p, li { white-space: pre-wrap; }
        <string>Animals</string>
       </attribute>
       <layout class="QGridLayout" >
+       <item row="0" column="0" colspan="2" >
+        <widget class="QSplitter" name="splitter_3" >
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <widget class="QTableWidget" name="tblAnimals" >
+          <property name="toolTip" >
+           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The animal selected here will be displayed below.  If the animal is to be included in the model, it must be checked off on left.  The model parameters must also be defined and linked to each animal being modelled.&lt;/p>&lt;/body>&lt;/html></string>
+          </property>
+          <property name="whatsThis" >
+           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The Animal Interface has been designed to be very simple and easy to use. The top section lists all of the defined animals, and selecting one will display its settings in the two lower sections. The lower sections are divided into the animal definition details on the left, and the model parameter settings for the currently selected animal on the right.&lt;/p>
+&lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">If you wish to edit either the animal or its parameters, you simply click on the Manage button below the display areas.&lt;/p>&lt;/body>&lt;/html></string>
+          </property>
+          <property name="alternatingRowColors" >
+           <bool>true</bool>
+          </property>
+          <property name="selectionMode" >
+           <enum>QAbstractItemView::SingleSelection</enum>
+          </property>
+          <property name="selectionBehavior" >
+           <enum>QAbstractItemView::SelectRows</enum>
+          </property>
+          <property name="showGrid" >
+           <bool>false</bool>
+          </property>
+          <column>
+           <property name="text" >
+            <string>Use?</string>
+           </property>
+          </column>
+          <column>
+           <property name="text" >
+            <string>Animal</string>
+           </property>
+          </column>
+          <column>
+           <property name="text" >
+            <string>Parameters</string>
+           </property>
+          </column>
+          <column>
+           <property name="text" >
+            <string>Percentage</string>
+           </property>
+          </column>
+         </widget>
+         <widget class="QTextBrowser" name="textBrowserAnimalDefinition" >
+          <property name="sizePolicy" >
+           <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="toolTip" >
+           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Select an animal above to refresh this window&lt;/p>&lt;/body>&lt;/html></string>
+          </property>
+         </widget>
+        </widget>
+       </item>
+       <item row="1" column="0" >
+        <widget class="QPushButton" name="pbnNewAnimal" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip" >
+          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Open the Animal Manager&lt;/p>&lt;/body>&lt;/html></string>
+         </property>
+         <property name="whatsThis" >
+          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">By pressing on the Manage Animals... button you will be brought to the Animal Manager. Here, you can create new animals from scratch, or clone previously defined animals to make changes to. You can also delete animals if you wish. &lt;/p>&lt;/body>&lt;/html></string>
+         </property>
+         <property name="text" >
+          <string>Manage Animals ...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1" >
+        <widget class="QPushButton" name="pbnNewAnimalParameter" >
+         <property name="toolTip" >
+          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Open the Animal Parameter Manager&lt;/p>&lt;/body>&lt;/html></string>
+         </property>
+         <property name="whatsThis" >
+          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">In order to enable LandUse Analyst to model animals, several details must be supplied. Animal Parameter Manager asks for the specific information about the animal which tells the program how the animal was fed, and how big a part of the settlements diet it was. As with Animal Manager, it is possible to have more than one parameter named the same thing. Again, just enter a descriptor in the Notes: field.&lt;/p>
+&lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">To define different parameters for the same animal, follow the same procedure as for defining multiple animals with the same name. Let's say you want to have two parameters set up for cows as an example. The Name: field is Cow for both, but in Notes: field, enter Optimistic for one, and Conservative for the other. Then adjust the parameters as you wish for each. Even though the name is the same, the parameters are saved uniquely. Having multiple parameters can be useful for setting up different scenarios, such as drought years, diease, catastrophic events, etc. Eventually, LandUse Analyst will have the ability to model over time, and will ahve these types of scenarios incorporated into the model.&lt;/p>&lt;/body>&lt;/html></string>
+         </property>
+         <property name="text" >
+          <string>Manage Animal Parameters ...</string>
+         </property>
+        </widget>
+       </item>
        <item row="2" column="0" colspan="2" >
         <layout class="QHBoxLayout" >
          <item>
@@ -1367,125 +1458,6 @@ p, li { white-space: pre-wrap; }
           </spacer>
          </item>
         </layout>
-       </item>
-       <item row="1" column="0" >
-        <widget class="QPushButton" name="pbnNewAnimal" >
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip" >
-          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Open the Animal Manager&lt;/p>&lt;/body>&lt;/html></string>
-         </property>
-         <property name="whatsThis" >
-          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">By pressing on the Manage Animals... button you will be brought to the Animal Manager. Here, you can create new animals from scratch, or clone previously defined animals to make changes to. You can also delete animals if you wish. &lt;/p>&lt;/body>&lt;/html></string>
-         </property>
-         <property name="text" >
-          <string>Manage Animals ...</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1" >
-        <widget class="QPushButton" name="pbnNewAnimalParameter" >
-         <property name="toolTip" >
-          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Open the Animal Parameter Manager&lt;/p>&lt;/body>&lt;/html></string>
-         </property>
-         <property name="whatsThis" >
-          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">In order to enable LandUse Analyst to model animals, several details must be supplied. Animal Parameter Manager asks for the specific information about the animal which tells the program how the animal was fed, and how big a part of the settlements diet it was. As with Animal Manager, it is possible to have more than one parameter named the same thing. Again, just enter a descriptor in the Notes: field.&lt;/p>
-&lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">To define different parameters for the same animal, follow the same procedure as for defining multiple animals with the same name. Let's say you want to have two parameters set up for cows as an example. The Name: field is Cow for both, but in Notes: field, enter Optimistic for one, and Conservative for the other. Then adjust the parameters as you wish for each. Even though the name is the same, the parameters are saved uniquely. Having multiple parameters can be useful for setting up different scenarios, such as drought years, diease, catastrophic events, etc. Eventually, LandUse Analyst will have the ability to model over time, and will ahve these types of scenarios incorporated into the model.&lt;/p>&lt;/body>&lt;/html></string>
-         </property>
-         <property name="text" >
-          <string>Manage Animal Parameters ...</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0" colspan="2" >
-        <widget class="QSplitter" name="splitter_3" >
-         <property name="orientation" >
-          <enum>Qt::Vertical</enum>
-         </property>
-         <widget class="QTableWidget" name="tblAnimals" >
-          <property name="toolTip" >
-           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The animal selected here will be displayed below.  If the animal is to be included in the model, it must be checked off on left.  The model parameters must also be defined and linked to each animal being modelled.&lt;/p>&lt;/body>&lt;/html></string>
-          </property>
-          <property name="whatsThis" >
-           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The Animal Interface has been designed to be very simple and easy to use. The top section lists all of the defined animals, and selecting one will display its settings in the two lower sections. The lower sections are divided into the animal definition details on the left, and the model parameter settings for the currently selected animal on the right.&lt;/p>
-&lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">If you wish to edit either the animal or its parameters, you simply click on the Manage button below the display areas.&lt;/p>&lt;/body>&lt;/html></string>
-          </property>
-          <property name="alternatingRowColors" >
-           <bool>true</bool>
-          </property>
-          <property name="selectionMode" >
-           <enum>QAbstractItemView::SingleSelection</enum>
-          </property>
-          <property name="selectionBehavior" >
-           <enum>QAbstractItemView::SelectRows</enum>
-          </property>
-          <property name="showGrid" >
-           <bool>false</bool>
-          </property>
-          <column>
-           <property name="text" >
-            <string>Use?</string>
-           </property>
-          </column>
-          <column>
-           <property name="text" >
-            <string>Animal</string>
-           </property>
-          </column>
-          <column>
-           <property name="text" >
-            <string>Parameters</string>
-           </property>
-          </column>
-          <column>
-           <property name="text" >
-            <string>Percentage</string>
-           </property>
-          </column>
-         </widget>
-         <widget class="QWidget" name="layoutWidget" >
-          <layout class="QHBoxLayout" >
-           <item>
-            <widget class="QTextBrowser" name="textBrowserAnimalDefinition" >
-             <property name="sizePolicy" >
-              <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="toolTip" >
-              <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Select an animal above to refresh this window&lt;/p>&lt;/body>&lt;/html></string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </widget>
        </item>
       </layout>
      </widget>
@@ -2457,7 +2429,6 @@ p, li { white-space: pre-wrap; }
   <tabstop>horizontalSliderMeat</tabstop>
   <tabstop>spinBoxDailyCalories</tabstop>
   <tabstop>tblCrops</tabstop>
-  <tabstop>textBrowserCropParameterDefinition</tabstop>
   <tabstop>textBrowserCropDefinition</tabstop>
   <tabstop>pbnNewCrop</tabstop>
   <tabstop>pbnNewCropParameter</tabstop>

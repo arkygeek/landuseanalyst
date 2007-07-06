@@ -221,17 +221,17 @@ QString LaCropParameter::toText()
 QString LaCropParameter::toHtml()
 {
   QString myString;
-  myString+="<p align=\"center\"><h3 >Details for " + LaUtils::xmlEncode(mName) + "</h3></p>";
+  myString+="<h3>Details for " + LaUtils::xmlEncode(mName) + "</h3>";
   myString+="<table>";
-  //  myString+="<tr><td><b>GUID:</th><td>" + guid() + "</td></tr>";
-  myString+="<tr><td><b>Description: </th><td>" + mDescription + "</p>";
-  myString+="<tr><td><b>Percent Tame Crop Diet: </th><td>" + QString::number(mPercentTameCrop) + "</td></tr>";
-  myString+="<tr><td><b>cropRotation: </th><td>" + QString::number(mCropRotation) + "</td></tr>";
-  myString+="<tr><td><b>fallowRatio: </th><td>" + QString::number(mFallowRatio) + "</td></tr>";
-  myString+="<tr><td><b>fallowCalories: </th><td>" + QString::number(mFallowCalories) + "</td></tr>";
-  myString+=("<tr><td><b>AreaUnits(0=Dunum, 1=Hectare): </th><td>" + QString::number(mAreaUnits) + "</td></tr>");
-  myString+=("<tr><td><b>useCommonLand: </th><td>" + QString::number(mUseCommonLand) + "</td></tr>");
-  myString+=("<tr><td><b>useSpecificLand: </th><td>" + QString::number(mUseSpecificLand) + "</td></tr>");
+  //  myString+="<tr><td>GUID:</th><td>" + guid() + "</td></tr>";
+  myString+="<tr><td>Description: </th><td>" + mDescription + "</p>";
+  myString+="<tr><td>Percent Tame Crop Diet: </th><td>" + QString::number(mPercentTameCrop) + "</td></tr>";
+  myString+="<tr><td>cropRotation: </th><td>" + QString::number(mCropRotation) + "</td></tr>";
+  myString+="<tr><td>fallowRatio: </th><td>" + QString::number(mFallowRatio) + "</td></tr>";
+  myString+="<tr><td>fallowCalories: </th><td>" + QString::number(mFallowCalories) + "</td></tr>";
+  myString+=("<tr><td>AreaUnits(0=Dunum, 1=Hectare): </th><td>" + QString::number(mAreaUnits) + "</td></tr>");
+  myString+=("<tr><td>useCommonLand: </th><td>" + QString::number(mUseCommonLand) + "</td></tr>");
+  myString+=("<tr><td>useSpecificLand: </th><td>" + QString::number(mUseSpecificLand) + "</td></tr>");
   myString+="</table>";
   return myString;
 }
