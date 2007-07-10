@@ -174,24 +174,60 @@ void LaAnimalParameterManager::refreshAnimalParameterTable(QString theGuid)
 
 void LaAnimalParameterManager::populateFodder()
 {
-  mCropMap.clear();
-  mCropMap = LaUtils::getAvailableCrops();
-  cbFodderCrop1->clear();
-  cbFodderCrop2->clear();
-  cbFodderCrop3->clear();
+  tblFodder->clear();
+  tblFodder->setRowCount(0);
+  tblFodder->setColumnCount(3);
 
-  QMapIterator<QString, LaCrop> myIterator(mCropMap);
+  int myCurrentRow=0;
+  QMap<QString,LaCrop> myCropsMap;
+  myCropsMap = LaUtils::getAvailableCrops();
+
+  QMapIterator<QString, LaCrop> myIterator(myCropsMap);
   while (myIterator.hasNext())
   {
     myIterator.next();
     LaCrop myCrop = myIterator.value();
-    QString myName = myCrop.name();
     QString myGuid = myCrop.guid();
-    cbFodderCrop1->addItem(myName, myGuid);
-    cbFodderCrop2->addItem(myName, myGuid);
-    cbFodderCrop3->addItem(myName, myGuid);
-  }
+    QString myName = myCrop.name();
+    /*QPair<bool,QString> myValue;
+    //check if this crop iscurrently selected and if not disable it
+    if (!mCropsMap.contains(myGuid))
+    {
+      myValue.first = false;
+      myValue.second = "";
+      mCropsMap.insert(myGuid,myValue);
+    }
+    else
+    {
+      myValue=mCropsMap[myGuid];
+    }*/
 
+    //QIcon myIcon;
+    //myIcon.addFile(":/localdata.png");
+    tblFodder->insertRow(myCurrentRow);
+    // Add details to the new row
+    //QTableWidgetItem *mypUsedItem= new QTableWidgetItem(tr("Used?"));
+    //mypUsedItem->setCheckState(Qt::Unchecked);
+    //(myValue.first) ? mypUsedItem->setCheckState(Qt::Checked) : mypUsedItem->setCheckState(Qt::Unchecked);
+
+    //tblFodder->setItem(myCurrentRow, 0, mypUsedItem);
+    QTableWidgetItem *mypNameItem = new QTableWidgetItem(myCrop.name());
+    mypNameItem->setCheckState(Qt::Unchecked);
+    mypNameItem->setData(Qt::UserRole,myGuid);
+    tblFodder->setItem(myCurrentRow, 0, mypNameItem);
+    //mypNameItem->setIcon(myIcon);
+    //create a var to hold the percentage for each selected parameter
+    //add the crop parameters combo to the form
+    QSpinBox * mypSpinFodder = new QSpinBox(this);
+    //mypSpinFodder->addItem(myParameterName,myParameterGuid);
+    QSpinBox * mypSpinGrain = new QSpinBox(this);
+
+    //myCropsMap[myGuid]=myValue;
+    tblFodder->setCellWidget ( myCurrentRow, 1, mypSpinFodder);
+    tblFodder->setCellWidget ( myCurrentRow, 2, mypSpinGrain);
+
+    myCurrentRow++;
+  }
 }
 
 void LaAnimalParameterManager::cellClicked(int theRow, int theColumn)
@@ -226,20 +262,20 @@ void LaAnimalParameterManager::showAnimalParameter()
   comboBoxAreaUnits->setCurrentIndex(mAnimalParameter.areaUnits());
   grpFodderUse->setChecked(mAnimalParameter.fodderUse());
 
-  sbFodder1->setValue(mAnimalParameter.fodder1());
-  sbFodderGrain1->setValue(mAnimalParameter.fodderGrain1());
+  //sbFodder1->setValue(mAnimalParameter.fodder1());
+  //sbFodderGrain1->setValue(mAnimalParameter.fodderGrain1());
 
-  sbFodder2->setValue(mAnimalParameter.fodder2());
-  sbFodderGrain2->setValue(mAnimalParameter.fodderGrain2());
+  //sbFodder2->setValue(mAnimalParameter.fodder2());
+  //sbFodderGrain2->setValue(mAnimalParameter.fodderGrain2());
 
-  sbFodder3->setValue(mAnimalParameter.fodder3());
-  sbFodderGrain3->setValue(mAnimalParameter.fodderGrain3());
+  //sbFodder3->setValue(mAnimalParameter.fodder3());
+  //sbFodderGrain3->setValue(mAnimalParameter.fodderGrain3());
 
   //LaAnimal myAnimal;
   //QString myGuid = mAnimalsMap.key(mAnimalParameter.fodderSource1());
-  setComboToDefault(cbFodderCrop1,mAnimalParameter.animalGuid());
-  setComboToDefault(cbFodderCrop2,mAnimalParameter.animalGuid());
-  setComboToDefault(cbFodderCrop3,mAnimalParameter.animalGuid());
+  //setComboToDefault(cbFodderCrop1,mAnimalParameter.animalGuid());
+  //setComboToDefault(cbFodderCrop2,mAnimalParameter.animalGuid());
+  //setComboToDefault(cbFodderCrop3,mAnimalParameter.animalGuid());
   //cbFodderCrop1->addItem(mAnimalParameter.fodderSource1(),myGuid);
   //cbFodderCrop2->addItem(mAnimalParameter.fodderSource2());
   //cbFodderCrop3->addItem(mAnimalParameter.fodderSource2());
@@ -344,17 +380,17 @@ void LaAnimalParameterManager::on_pbnApply_clicked()
   mAnimalParameter.setFoodValueOfSpecificGrazingLand(sbSpecificRasterTDN->value());
   mAnimalParameter.setFodderUse(grpFodderUse->isChecked());
 
-  mAnimalParameter.setFodderSource1(cbFodderCrop1->itemData(cbFodderCrop1->currentIndex(),Qt::UserRole).toString());
-  mAnimalParameter.setFodder1(sbFodder1->value());
-  mAnimalParameter.setFodderGrain1(sbFodderGrain1->value());
+  //mAnimalParameter.setFodderSource1(cbFodderCrop1->itemData(cbFodderCrop1->currentIndex(),Qt::UserRole).toString());
+  //mAnimalParameter.setFodder1(sbFodder1->value());
+  //mAnimalParameter.setFodderGrain1(sbFodderGrain1->value());
 
-  mAnimalParameter.setFodderSource2(cbFodderCrop1->itemData(cbFodderCrop2->currentIndex(),Qt::UserRole).toString());
-  mAnimalParameter.setFodder2(sbFodder2->value());
-  mAnimalParameter.setFodderGrain2(sbFodderGrain2->value());
+  //mAnimalParameter.setFodderSource2(cbFodderCrop1->itemData(cbFodderCrop2->currentIndex(),Qt::UserRole).toString());
+  //mAnimalParameter.setFodder2(sbFodder2->value());
+  //mAnimalParameter.setFodderGrain2(sbFodderGrain2->value());
 
-  mAnimalParameter.setFodderSource3(cbFodderCrop1->itemData(cbFodderCrop3->currentIndex(),Qt::UserRole).toString());
-  mAnimalParameter.setFodder3(sbFodder3->value());
-  mAnimalParameter.setFodderGrain3(sbFodderGrain3->value());
+  //mAnimalParameter.setFodderSource3(cbFodderCrop1->itemData(cbFodderCrop3->currentIndex(),Qt::UserRole).toString());
+  //mAnimalParameter.setFodder3(sbFodder3->value());
+  //mAnimalParameter.setFodderGrain3(sbFodderGrain3->value());
 
   mAnimalParameter.setAreaUnits(comboBoxAreaUnits->currentIndex());
   QString myFallowUsage = QString(comboBoxFallowUsage->currentText());

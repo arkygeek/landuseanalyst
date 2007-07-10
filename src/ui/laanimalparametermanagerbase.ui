@@ -28,17 +28,176 @@
    <property name="spacing" >
     <number>6</number>
    </property>
-   <item row="5" column="1" >
+   <item rowspan="2" row="1" column="1" colspan="3" >
+    <widget class="QGroupBox" name="grpFodderUse" >
+     <property name="cursor" >
+      <cursor>0</cursor>
+     </property>
+     <property name="toolTip" >
+      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">If your settlement fed the animal fodder, check off the Fodder section to enable the Fodder options to be accessible.  LandUse Analyst currently allows up to three crops to be used as feed.&lt;/p>&lt;/body>&lt;/html></string>
+     </property>
+     <property name="whatsThis" >
+      <string>Select Fodder if you believe the animals were fed grain to supplement their grazing.  You will then have to select how many kg of the selected grain you believe they fed each animal either every day, week, or month.</string>
+     </property>
+     <property name="title" >
+      <string>Fodder</string>
+     </property>
+     <property name="checkable" >
+      <bool>true</bool>
+     </property>
+     <property name="checked" >
+      <bool>false</bool>
+     </property>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>4</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item row="0" column="0" >
+       <widget class="QTableWidget" name="tblFodder" >
+        <property name="toolTip" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The animal selected here will be displayed below.  If the animal is to be included in the model, it must be checked off on left.  The model parameters must also be defined and linked to each animal being modelled.&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="whatsThis" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The Animal Interface has been designed to be very simple and easy to use. The top section lists all of the defined animals, and selecting one will display its settings in the two lower sections. The lower sections are divided into the animal definition details on the left, and the model parameter settings for the currently selected animal on the right.&lt;/p>
+&lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">If you wish to edit either the animal or its parameters, you simply click on the Manage button below the display areas.&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="alternatingRowColors" >
+         <bool>true</bool>
+        </property>
+        <property name="selectionMode" >
+         <enum>QAbstractItemView::SingleSelection</enum>
+        </property>
+        <property name="selectionBehavior" >
+         <enum>QAbstractItemView::SelectRows</enum>
+        </property>
+        <property name="showGrid" >
+         <bool>false</bool>
+        </property>
+        <column>
+         <property name="text" >
+          <string>Used</string>
+         </property>
+        </column>
+        <column>
+         <property name="text" >
+          <string>Crop</string>
+         </property>
+        </column>
+        <column>
+         <property name="text" >
+          <string>Fodder</string>
+         </property>
+        </column>
+        <column>
+         <property name="text" >
+          <string>Grain</string>
+         </property>
+        </column>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="3" column="1" colspan="3" >
+    <widget class="QComboBox" name="comboBoxFallowUsage" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>5</hsizetype>
+       <vsizetype>5</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="cursor" >
+      <cursor>13</cursor>
+     </property>
+     <property name="toolTip" >
+      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">If your animal is to be allowed to graze fallow land resulting from crop rotation, set the priority of their access to this fallow land here.&lt;/p>&lt;/body>&lt;/html></string>
+     </property>
+     <property name="whatsThis" >
+      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">LandUse Analyst allows animals to utilize fallow crop land as grazing land. There are many difficult aspects to including this in a model, but these difficulties are mostly transparent to the user. Essentially, you need to indicate only whether the animal will be allowed to graze fallow, and if so, what is it's access priority in relation to the other animals grazing the same fallow land. Given this, the software handles the rest!&lt;/p>
+&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Because some animals may have been given preferential access to the fallow land, LandUse Analyst has given three different priority levels to fallow access. The software first looks at the HIGH priority animals, and designates all fallow land to them, until either their needs are satisfied, or the available fallow land is all used. If there is more than enough fallow land for the HIGH priority animals, the remaining amount is then made available to the MED priority animals, and this repeats for the LOW priority ones as well.&lt;/p>&lt;/body>&lt;/html></string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1" colspan="2" >
+    <widget class="QPushButton" name="pbnApply" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>5</hsizetype>
+       <vsizetype>0</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="toolTip" >
+      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Saves all settings&lt;/p>&lt;/body>&lt;/html></string>
+     </property>
+     <property name="whatsThis" >
+      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">After completing all fields to define a parameter, you &lt;span style=" font-weight:600;">MUST&lt;/span> click the Apply button to save it. The name does not have to be unique, as LandUse Analyst has a special way of saving parameters to allow for duplicate parameter names. It is helpful, however, to utilize the Notes field to distinguish between same-named parameter definitions.&lt;/p>&lt;/body>&lt;/html></string>
+     </property>
+     <property name="text" >
+      <string>Apply</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="2" colspan="2" >
+    <widget class="QLineEdit" name="leRasterName" />
+   </item>
+   <item row="4" column="1" >
     <widget class="QLabel" name="label_3" >
      <property name="text" >
       <string>Raster Mask </string>
      </property>
     </widget>
    </item>
-   <item row="5" column="2" >
-    <widget class="QLineEdit" name="leRasterName" />
+   <item row="5" column="3" >
+    <widget class="QPushButton" name="pbnClose" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>5</hsizetype>
+       <vsizetype>0</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="toolTip" >
+      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-weight:600; font-style:italic; color:#0000ff;">Have you applied your changes?&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+     </property>
+     <property name="text" >
+      <string>Close</string>
+     </property>
+    </widget>
    </item>
-   <item rowspan="4" row="4" column="0" >
+   <item rowspan="4" row="2" column="0" >
     <widget class="QGroupBox" name="groupBox_3" >
      <property name="whatsThis" >
       <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
@@ -207,20 +366,7 @@ p, li { white-space: pre-wrap; }
      </layout>
     </widget>
    </item>
-   <item row="2" column="1" colspan="2" >
-    <spacer>
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" >
-      <size>
-       <width>326</width>
-       <height>16</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item rowspan="3" row="1" column="0" >
+   <item row="1" column="0" >
     <widget class="QGroupBox" name="groupBox" >
      <property name="title" >
       <string>Details</string>
@@ -391,7 +537,7 @@ p, li { white-space: pre-wrap; }
      </layout>
     </widget>
    </item>
-   <item row="0" column="0" colspan="3" >
+   <item row="0" column="0" colspan="4" >
     <widget class="QGroupBox" name="grpProfiles" >
      <property name="whatsThis" >
       <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
@@ -548,401 +694,6 @@ p, li { white-space: pre-wrap; }
      </layout>
     </widget>
    </item>
-   <item row="1" column="1" colspan="2" >
-    <widget class="QGroupBox" name="grpFodderUse" >
-     <property name="cursor" >
-      <cursor>0</cursor>
-     </property>
-     <property name="toolTip" >
-      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">If your settlement fed the animal fodder, check off the Fodder section to enable the Fodder options to be accessible.  LandUse Analyst currently allows up to three crops to be used as feed.&lt;/p>&lt;/body>&lt;/html></string>
-     </property>
-     <property name="whatsThis" >
-      <string>Select Fodder if you believe the animals were fed grain to supplement their grazing.  You will then have to select how many kg of the selected grain you believe they fed each animal either every day, week, or month.</string>
-     </property>
-     <property name="title" >
-      <string>Fodder</string>
-     </property>
-     <property name="checkable" >
-      <bool>true</bool>
-     </property>
-     <property name="checked" >
-      <bool>false</bool>
-     </property>
-     <layout class="QGridLayout" >
-      <property name="margin" >
-       <number>2</number>
-      </property>
-      <property name="spacing" >
-       <number>0</number>
-      </property>
-      <item row="0" column="1" >
-       <widget class="QLabel" name="labelFodderFodder" >
-        <property name="toolTip" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of animals diet provided by &lt;span style=" font-weight:600;">FODDER&lt;/span>.&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" color:#0000ff;">To use &lt;/span>&lt;span style=" font-style:italic; color:#0000ff;">all&lt;/span>&lt;span style=" color:#0000ff;"> that is available use a &lt;/span>&lt;span style=" font-weight:600; color:#0000ff;">negative number:&lt;/span>&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-weight:600;">-1&lt;/span> for HIGH priority total utilization&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-weight:600;">-2&lt;/span> for MED priority total utilization&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-weight:600;">-3&lt;/span> for LOW priority total utilization&lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="whatsThis" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">If your animal is fed straw or chaff left over after harvesting a crop, indicate what perentage of the animals diet being supplied by this by-product.&lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="layoutDirection" >
-         <enum>Qt::LeftToRight</enum>
-        </property>
-        <property name="text" >
-         <string>Fodder</string>
-        </property>
-        <property name="alignment" >
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2" >
-       <widget class="QLabel" name="labelFodderGrain" >
-        <property name="layoutDirection" >
-         <enum>Qt::RightToLeft</enum>
-        </property>
-        <property name="text" >
-         <string>Grain</string>
-        </property>
-        <property name="alignment" >
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0" >
-       <spacer>
-        <property name="orientation" >
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" >
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="3" column="2" >
-       <widget class="QSpinBox" name="sbFodderGrain3" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>4</hsizetype>
-          <vsizetype>0</vsizetype>
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="toolTip" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of animals diet provided by &lt;span style=" color:#0000ff;">GRAIN &lt;/span>from this crop &lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="whatsThis" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">If your animal is fed grain harvested from a crop, indicate the perentage of the animals diet being supplied by it is.&lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="suffix" >
-         <string>%</string>
-        </property>
-        <property name="maximum" >
-         <number>100</number>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1" >
-       <widget class="QSpinBox" name="sbFodder3" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>4</hsizetype>
-          <vsizetype>0</vsizetype>
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="toolTip" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of animals diet provided by &lt;span style=" color:#0000ff;">FODDER &lt;/span>from this crop &lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="whatsThis" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">If your animal is fed straw or chaff left over after harvesting a crop, indicate what perentage of the animals diet being supplied by this by-product.&lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="suffix" >
-         <string>%</string>
-        </property>
-        <property name="maximum" >
-         <number>100</number>
-        </property>
-        <property name="minimum" >
-         <number>-3</number>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="2" >
-       <widget class="QSpinBox" name="sbFodderGrain2" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>4</hsizetype>
-          <vsizetype>0</vsizetype>
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="toolTip" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of animals diet provided by &lt;span style=" color:#0000ff;">GRAIN &lt;/span>from this crop &lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="whatsThis" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">If your animal is fed grain harvested from a crop, indicate the perentage of the animals diet being supplied by it is.&lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="suffix" >
-         <string>%</string>
-        </property>
-        <property name="maximum" >
-         <number>100</number>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1" >
-       <widget class="QSpinBox" name="sbFodder2" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>0</hsizetype>
-          <vsizetype>0</vsizetype>
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="toolTip" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of animals diet provided by &lt;span style=" color:#0000ff;">FODDER &lt;/span>from this crop &lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="whatsThis" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">If your animal is fed straw or chaff left over after harvesting a crop, indicate what perentage of the animals diet being supplied by this by-product.&lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="suffix" >
-         <string>%</string>
-        </property>
-        <property name="maximum" >
-         <number>100</number>
-        </property>
-        <property name="minimum" >
-         <number>-3</number>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2" >
-       <widget class="QSpinBox" name="sbFodderGrain1" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>0</hsizetype>
-          <vsizetype>0</vsizetype>
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="toolTip" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of animals diet provided by &lt;span style=" color:#0000ff;">GRAIN &lt;/span>from this crop &lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="whatsThis" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">If your animal is fed grain harvested from a crop, indicate the perentage of the animals diet being supplied by it is.&lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="suffix" >
-         <string>%</string>
-        </property>
-        <property name="maximum" >
-         <number>100</number>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1" >
-       <widget class="QSpinBox" name="sbFodder1" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>0</hsizetype>
-          <vsizetype>0</vsizetype>
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="toolTip" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of animals diet provided by &lt;span style=" color:#0000ff;">FODDER &lt;/span>from this crop &lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="whatsThis" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">If your animal is fed straw or chaff left over after harvesting a crop, indicate what perentage of the animals diet being supplied by this by-product.&lt;/p>
-&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="suffix" >
-         <string>%</string>
-        </property>
-        <property name="maximum" >
-         <number>100</number>
-        </property>
-        <property name="minimum" >
-         <number>-3</number>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0" >
-       <widget class="QComboBox" name="cbFodderCrop1" >
-        <item>
-         <property name="text" >
-          <string>Define a crop!</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item row="2" column="0" >
-       <widget class="QComboBox" name="cbFodderCrop2" >
-        <item>
-         <property name="text" >
-          <string>Define a crop!</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item row="3" column="0" >
-       <widget class="QComboBox" name="cbFodderCrop3" >
-        <item>
-         <property name="text" >
-          <string>Define a crop!</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="3" column="1" colspan="2" >
-    <widget class="QComboBox" name="comboBoxFallowUsage" >
-     <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>5</hsizetype>
-       <vsizetype>5</vsizetype>
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="cursor" >
-      <cursor>13</cursor>
-     </property>
-     <property name="toolTip" >
-      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">If your animal is to be allowed to graze fallow land resulting from crop rotation, set the priority of their access to this fallow land here.&lt;/p>&lt;/body>&lt;/html></string>
-     </property>
-     <property name="whatsThis" >
-      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">LandUse Analyst allows animals to utilize fallow crop land as grazing land. There are many difficult aspects to including this in a model, but these difficulties are mostly transparent to the user. Essentially, you need to indicate only whether the animal will be allowed to graze fallow, and if so, what is it's access priority in relation to the other animals grazing the same fallow land. Given this, the software handles the rest!&lt;/p>
-&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Because some animals may have been given preferential access to the fallow land, LandUse Analyst has given three different priority levels to fallow access. The software first looks at the HIGH priority animals, and designates all fallow land to them, until either their needs are satisfied, or the available fallow land is all used. If there is more than enough fallow land for the HIGH priority animals, the remaining amount is then made available to the MED priority animals, and this repeats for the LOW priority ones as well.&lt;/p>&lt;/body>&lt;/html></string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="1" colspan="2" >
-    <spacer>
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" >
-      <size>
-       <width>326</width>
-       <height>16</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="6" column="1" colspan="2" >
-    <widget class="QPushButton" name="pbnApply" >
-     <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>5</hsizetype>
-       <vsizetype>0</vsizetype>
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="toolTip" >
-      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Saves all settings&lt;/p>&lt;/body>&lt;/html></string>
-     </property>
-     <property name="whatsThis" >
-      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">After completing all fields to define a parameter, you &lt;span style=" font-weight:600;">MUST&lt;/span> click the Apply button to save it. The name does not have to be unique, as LandUse Analyst has a special way of saving parameters to allow for duplicate parameter names. It is helpful, however, to utilize the Notes field to distinguish between same-named parameter definitions.&lt;/p>&lt;/body>&lt;/html></string>
-     </property>
-     <property name="text" >
-      <string>Apply</string>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="1" colspan="2" >
-    <widget class="QPushButton" name="pbnClose" >
-     <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>5</hsizetype>
-       <vsizetype>0</vsizetype>
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="toolTip" >
-      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-weight:600; font-style:italic; color:#0000ff;">Have you applied your changes?&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
-     </property>
-     <property name="text" >
-      <string>Close</string>
-     </property>
-    </widget>
-   </item>
   </layout>
  </widget>
  <tabstops>
@@ -961,15 +712,6 @@ p, li { white-space: pre-wrap; }
   <tabstop>sbSpecificRasterTDN</tabstop>
   <tabstop>sbCommonRasterTDN</tabstop>
   <tabstop>comboBoxAreaUnits</tabstop>
-  <tabstop>cbFodderCrop1</tabstop>
-  <tabstop>sbFodder1</tabstop>
-  <tabstop>sbFodderGrain1</tabstop>
-  <tabstop>cbFodderCrop2</tabstop>
-  <tabstop>sbFodder2</tabstop>
-  <tabstop>sbFodderGrain2</tabstop>
-  <tabstop>cbFodderCrop3</tabstop>
-  <tabstop>sbFodder3</tabstop>
-  <tabstop>sbFodderGrain3</tabstop>
   <tabstop>comboBoxFallowUsage</tabstop>
   <tabstop>pbnApply</tabstop>
   <tabstop>pbnClose</tabstop>

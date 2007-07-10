@@ -94,6 +94,7 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
     LaTripleMap mAnimalsMap;
     LaTripleMap mCropsMap;
     int mCommonGrazingLandFoodValue;
+    QMap<QString,QString> mSelectedCropsMap;
 };
 
 #endif //LAMAINFORM_H

@@ -659,6 +659,29 @@ void LaMainForm::on_pushButtonRun_clicked()
 }
 
 
+/*
+void LaMainForm::selectedCrops()
+{
+  // Get a list of the selected crops
+
+  //          <crop guid <enabled, cropparamters guid>>
+  QMapIterator<QString, QPair<bool, QString> > myCropIterator(mCropsMap);
+  while (myCropIterator.hasNext())
+  {
+    myCropIterator.next();
+    QPair<bool,QString> myPair = myCropIterator.value();
+    QString myCropGuid = myCropIterator.key();
+    QString myCropParameterGuid = myPair.second;
+    bool mySelectedFlag = myPair.first;
+    if (mySelectedFlag)
+    {
+      mSelectedCropsMap.insert(myCropGuid,myCropParameterGuid);
+      qDebug("Added <" + myCropGuid.toLocal8Bit() + " , " + myCropParameterGuid.toLocal8Bit() + " >");
+    }
+  }
+}
+*/
+
 void LaMainForm::debugChecks()
 {
   // iterate through crops and display the calorie, production and area targets
