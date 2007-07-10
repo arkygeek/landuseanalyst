@@ -58,7 +58,7 @@ class LaCropParameter : public LaSerialisable, public LaGuid
     /** The food value, in calories, of a dunum/hectare
       * of fallow land
       */
-    int fallowCalories() const;
+    int fallowTDN() const;
     /** Selects 0==dunums 1==hectares as units for area */
     int areaUnits() const;
     /** A flag indicating that the crop can be grown on
@@ -69,6 +69,7 @@ class LaCropParameter : public LaSerialisable, public LaGuid
       * land apart from common agricultural land
       */
     bool useSpecificLand() const;
+    QString rasterName() const;
 
     //
     // Mutators
@@ -89,7 +90,7 @@ class LaCropParameter : public LaSerialisable, public LaGuid
     /** The food value, in calories, of a dunum/hectare
       * of fallow land
       */
-    void setFallowCalories(int theCalories);
+    void setFallowTDN(int theKg);
     /** Selects 0==dunums 1==hectares as units for area */
     void setAreaUnits(int theIndexValue);
     /** A flag indicating that the crop can be grown on
@@ -100,7 +101,7 @@ class LaCropParameter : public LaSerialisable, public LaGuid
       * land apart from common agricultural land
       */
     void setUseSpecificLand(bool theBool);
-
+    void setRasterName(QString theRasterName);
 
     /** Return an xml representation of this layer
      * @NOTE this class inherits the serialisable interface so
@@ -136,7 +137,7 @@ class LaCropParameter : public LaSerialisable, public LaGuid
     /** The food value, in calories, of a dunum/hectare
       * of fallow land
       */
-    int mFallowCalories;
+    int mFallowTDN;
     /** Selects 0==dunums 1==hectares as units for area */
     int mAreaUnits;
     /** A flag indicating that the crop can be grown on
@@ -147,7 +148,7 @@ class LaCropParameter : public LaSerialisable, public LaGuid
       * land apart from common agricultural land
       */
     bool mUseSpecificLand;
-
+    QString mRasterName;
 };
 
 #endif //LACROPPARAMETER_H

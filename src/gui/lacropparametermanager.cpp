@@ -200,10 +200,11 @@ void LaCropParameterManager::showCropParameter()
   sbPercentTameCrop->setValue(mCropParameter.percentTameCrop());
   grpCropRotation->setChecked(mCropParameter.cropRotation());
   sbFallowRatio->setValue(mCropParameter.fallowRatio());
-  sbFallowTDN->setValue(mCropParameter.fallowCalories());
+  sbFallowTDN->setValue(mCropParameter.fallowTDN());
   comboBoxAreaUnits->setCurrentIndex(mCropParameter.areaUnits());
   checkBoxUseCommonLand->setChecked(mCropParameter.useCommonLand());
   checkBoxUseSpecificLand->setChecked(mCropParameter.useSpecificLand());
+  leRasterName->setText(mCropParameter.rasterName());
 }
 
 void LaCropParameterManager::on_toolNew_clicked()
@@ -279,10 +280,11 @@ void LaCropParameterManager::on_pbnApply_clicked()
   mCropParameter.setPercentTameCrop(sbPercentTameCrop->value());
   mCropParameter.setCropRotation(grpCropRotation->isChecked());
   mCropParameter.setFallowRatio(sbFallowRatio->value());
-  mCropParameter.setFallowCalories(sbFallowTDN->value());
+  mCropParameter.setFallowTDN(sbFallowTDN->value());
   mCropParameter.setAreaUnits(comboBoxAreaUnits->currentIndex());
   mCropParameter.setUseCommonLand(checkBoxUseCommonLand->isChecked());
   mCropParameter.setUseSpecificLand(checkBoxUseSpecificLand->isChecked());
+  mCropParameter.setRasterName(leRasterName->text());
   mCropParameter.toXmlFile( LaUtils::userCropParameterProfilesDirPath() +
       QDir::separator() + mCropParameter.guid() + ".xml");
   refreshCropParameterTable(mCropParameter.guid());

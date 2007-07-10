@@ -46,10 +46,11 @@ LaCropParameter::LaCropParameter(const LaCropParameter& theCropParameter)
   mPercentTameCrop=theCropParameter.percentTameCrop();
   mCropRotation = theCropParameter.cropRotation();
   mFallowRatio = theCropParameter.fallowRatio();
-  mFallowCalories = theCropParameter.fallowCalories();
+  mFallowTDN = theCropParameter.fallowTDN();
   mAreaUnits = theCropParameter.areaUnits();
   mUseCommonLand = theCropParameter.useCommonLand();
   mUseSpecificLand = theCropParameter.useSpecificLand();
+  mRasterName = theCropParameter.rasterName();
 }
 
 LaCropParameter& LaCropParameter::operator=(const LaCropParameter& theCropParameter)
@@ -63,10 +64,11 @@ LaCropParameter& LaCropParameter::operator=(const LaCropParameter& theCropParame
   mPercentTameCrop=theCropParameter.percentTameCrop();
   mCropRotation = theCropParameter.cropRotation();
   mFallowRatio = theCropParameter.fallowRatio();
-  mFallowCalories = theCropParameter.fallowCalories();
+  mFallowTDN = theCropParameter.fallowTDN();
   mAreaUnits = theCropParameter.areaUnits();
   mUseCommonLand = theCropParameter.useCommonLand();
   mUseSpecificLand = theCropParameter.useSpecificLand();
+  mRasterName = theCropParameter.rasterName();
   return *this;
 }
 
@@ -97,9 +99,9 @@ float LaCropParameter::fallowRatio() const
 {
   return mFallowRatio;
 }
-int LaCropParameter::fallowCalories() const
+int LaCropParameter::fallowTDN() const
 {
-  return mFallowCalories;
+  return mFallowTDN;
 }
 int LaCropParameter::areaUnits() const
 {
@@ -112,6 +114,10 @@ bool LaCropParameter::useCommonLand() const
 bool LaCropParameter::useSpecificLand() const
 {
   return mUseSpecificLand;
+}
+QString LaCropParameter::rasterName() const
+{
+  return mRasterName;
 }
 
 void LaCropParameter::setName(QString theName)
@@ -140,9 +146,9 @@ void LaCropParameter::setFallowRatio(float theFallowRatio)
 {
   mFallowRatio=theFallowRatio;
 }
-void LaCropParameter::setFallowCalories(int theCalories)
+void LaCropParameter::setFallowTDN(int theKg)
 {
-  mFallowCalories=theCalories;
+  mFallowTDN=theKg;
 }
 void LaCropParameter::setAreaUnits(int theIndexValue)
 {
@@ -155,6 +161,11 @@ void LaCropParameter::setUseSpecificLand(bool theFlag)
 void LaCropParameter::setUseCommonLand(bool theFlag)
 {
   mUseCommonLand=theFlag;
+}
+
+void LaCropParameter::setRasterName(QString theRasterName)
+{
+  mRasterName=theRasterName;
 }
 
 bool LaCropParameter::fromXml(QString theXml)
@@ -177,10 +188,11 @@ bool LaCropParameter::fromXml(QString theXml)
   mPercentTameCrop=QString(myTopElement.firstChildElement("percentTameCrop").text()).toInt();
   mCropRotation=QString(myTopElement.firstChildElement("cropRotation").text()).toInt();
   mFallowRatio=QString(myTopElement.firstChildElement("fallowRatio").text()).toFloat();
-  mFallowCalories=QString(myTopElement.firstChildElement("fallowCalories").text()).toInt();
+  mFallowTDN=QString(myTopElement.firstChildElement("fallowTDN").text()).toInt();
   mAreaUnits=QString(myTopElement.firstChildElement("areaUnits").text()).toInt();
   mUseCommonLand=QString(myTopElement.firstChildElement("useCommonLand").text()).toInt();
   mUseSpecificLand=QString(myTopElement.firstChildElement("useSpecificLand").text()).toInt();
+  mRasterName=LaUtils::xmlDecode(myTopElement.firstChildElement("rasterName").text());
   return true;
 }
 
@@ -188,16 +200,17 @@ QString LaCropParameter::toXml()
 {
   QString myString;
   myString+=QString("<cropParameter guid=\"" + guid() + "\">\n");
-    myString+=QString("  <name>" + LaUtils::xmlEncode(mName) + "</name>\n");
+  myString+=QString("  <name>" + LaUtils::xmlEncode(mName) + "</name>\n");
   myString+=QString("  <description>" + LaUtils::xmlEncode(mDescription) + "</description>\n");
   myString+=QString("  <crop>" + LaUtils::xmlEncode(mCropGuid) + "</crop>\n");
   myString+=QString("  <percentTameCrop>" + QString::number(mPercentTameCrop) + "</percentTameCrop>\n");
   myString+=QString("  <cropRotation>" + QString::number(mCropRotation) + "</cropRotation>\n");
   myString+=QString("  <fallowRatio>" + QString::number(mFallowRatio) + "</fallowRatio>\n");
-  myString+=QString("  <fallowCalories>" + QString::number(mFallowCalories) + "</fallowCalories>\n");
+  myString+=QString("  <fallowTDN>" + QString::number(mFallowTDN) + "</fallowTDN>\n");
   myString+=QString("  <areaUnits>" + QString::number(mAreaUnits) + "</areaUnits>\n");
   myString+=QString("  <useCommonLand>" + QString::number(mUseCommonLand) + "</useCommonLand>\n");
   myString+=QString("  <useSpecificLand>" + QString::number(mUseSpecificLand) + "</useSpecificLand>\n");
+  myString+=QString("  <rasterName>" + LaUtils::xmlEncode(mRasterName) + "</rasterName>\n");
   myString+=QString("</cropParameter>\n");
   return myString;
 }
@@ -210,28 +223,37 @@ QString LaCropParameter::toText()
   myString+=QString("description=>" + LaUtils::xmlEncode(mDescription) + "\n");
   myString+=QString("crop=>" + mCropGuid + "\n");
   myString+=QString("percentTameCrop=>" + QString::number(mPercentTameCrop) + "\n");
-  myString+=QString("cropRotation=>" + QString::number(mCropRotation) + "\n");
+  QString myCropRotation = (mCropRotation==0) ? "None" : "Used";
+  myString+=QString("cropRotation=>" + myCropRotation + "\n");
   myString+=QString("fallowRatio=>" + QString::number(mFallowRatio) + "\n");
-  myString+=QString("fallowCalories=>" + QString::number(mFallowCalories) + "\n");
-  myString+=QString("areaUnits=>" + QString::number(mAreaUnits) + "\n");
-  myString+=QString("useCommonLand=>" + QString::number(mUseCommonLand) + "\n");
-  myString+=QString("useSpecificLand=>" + QString::number(mUseSpecificLand) + "\n");
+
+  QString myUnits = (mAreaUnits==0) ? "Dunum" : "Hectare";
+  myString+=QString("fallowTDN kg/" + myUnits + "=>" + QString::number(mFallowTDN) + "\n");
+  //myString+=QString("areaUnits=>" + QString::number(mAreaUnits) + "\n");
+
+  QString myLandUsed = (mUseCommonLand==1) ? "Common" : "Specific";
+  myString+=QString("Landused=>" + myLandUsed + "\n");
+  //myString+=QString("useSpecificLand=>" + QString::number(mUseSpecificLand) + "\n");
+  myString+=QString("rasterName=>" + LaUtils::xmlEncode(mRasterName) + "\n");
   return myString;
 }
 QString LaCropParameter::toHtml()
 {
   QString myString;
-  myString+="<h3>Details for " + LaUtils::xmlEncode(mName) + "</h3>";
-  myString+="<table>";
-  //  myString+="<tr><td>GUID:</th><td>" + guid() + "</td></tr>";
-  myString+="<tr><td>Description: </th><td>" + mDescription + "</p>";
-  myString+="<tr><td>Percent Tame Crop Diet: </th><td>" + QString::number(mPercentTameCrop) + "</td></tr>";
-  myString+="<tr><td>cropRotation: </th><td>" + QString::number(mCropRotation) + "</td></tr>";
-  myString+="<tr><td>fallowRatio: </th><td>" + QString::number(mFallowRatio) + "</td></tr>";
-  myString+="<tr><td>fallowCalories: </th><td>" + QString::number(mFallowCalories) + "</td></tr>";
-  myString+=("<tr><td>AreaUnits(0=Dunum, 1=Hectare): </th><td>" + QString::number(mAreaUnits) + "</td></tr>");
-  myString+=("<tr><td>useCommonLand: </th><td>" + QString::number(mUseCommonLand) + "</td></tr>");
-  myString+=("<tr><td>useSpecificLand: </th><td>" + QString::number(mUseSpecificLand) + "</td></tr>");
+  QString myCropRotation = (mCropRotation==0) ? "None" : "Used";
+  QString myUnits = (mAreaUnits==0) ? "Dunum" : "Hectare";
+  QString myLandUsed = (mUseCommonLand==1) ? "Common" : "Specific";
+  QString myRasterName = (mUseCommonLand==1) ? "LaCropCommonMask" : mRasterName;
+  myString+="<h3 >Details for " + LaUtils::xmlEncode(mName) + "</h3>";
+  myString+="<table>";  //  myString+="<tr><td><b>GUID:</th><td>" + guid() + "</td></tr>";
+  myString+="<tr><td><b>Description: </td><td>" + mDescription + "</td></tr>";
+  myString+="<tr><td><b>Raster Mask: </td><td>" + mRasterName + "</td></tr>";
+  myString+="<tr><td><b>Percent Tame Crop Diet: </td><td>" + QString::number(mPercentTameCrop) + "</td></tr>";
+  myString+="<tr><td><b>cropRotation: </td><td>" + myCropRotation + "</td></tr>";
+  myString+="<tr><td><b>fallowRatio: </th><td>" + QString::number(mFallowRatio) + "</td></tr>";
+  myString+="<tr><td><b>Fallow TDN kg/" + myUnits + ": </td><td>" + QString::number(mFallowTDN) + "</td></tr>";
+
+  myString+=("<tr><td><b>" + myLandUsed + " Land Raster: </td><td>" + myRasterName + "</td></tr>");
   myString+="</table>";
   return myString;
 }

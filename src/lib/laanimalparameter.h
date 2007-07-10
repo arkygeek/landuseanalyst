@@ -68,13 +68,21 @@ class LaAnimalParameter : public LaSerialisable, public LaGuid
       */
     int areaUnits() const;
     bool fodderUse() const;
-    int fodderSource1() const;
-    int fodderSource1Grain() const;
-    int fodderSource2() const;
-    int fodderSource2Grain() const;
-    int fodderSource3() const;
-    int fodderSource3Grain() const;
+
+    QString fodderSource1() const;
+    int fodder1() const;
+    int fodderGrain1() const;
+
+    QString fodderSource2() const;
+    int fodder2() const;
+    int fodderGrain2() const;
+
+    QString fodderSource3() const;
+    int fodder3() const;
+    int fodderGrain3() const;
+
     Priority fallowUsage() const;
+    QString rasterName() const;
 
 
     //
@@ -103,18 +111,25 @@ class LaAnimalParameter : public LaSerialisable, public LaGuid
       */
     void setFoodValueOfCommonGrazingLand(int theCalories);
     void setFodderUse(bool theBool);
-    void setFodderSource1(int theValue);
-    void setFodderSource1Grain(int theValue);
-    void setFodderSource2(int theValue);
-    void setFodderSource2Grain(int theValue);
-    void setFodderSource3(int theValue);
-    void setFodderSource3Grain(int theValue);
+
+    void setFodderSource1(QString theGuid);
+    void setFodder1(int theValue);
+    void setFodderGrain1(int theValue);
+
+    void setFodderSource2(QString theGuid);
+    void setFodder2(int theValue);
+    void setFodderGrain2(int theValue);
+
+    void setFodderSource3(QString theGuid);
+    void setFodder3(int theValue);
+    void setFodderGrain3(int theValue);
 
     /** If fallow is to be grazed, and if so, at either a
       * HIGH MED or LOW priority to it's access
       */
     void setFallowUsage(Priority thePriority);
     void setAreaUnits(int theIndexValue);
+    void setRasterName(QString theRasterName);
     /** Return an xml representation of this layer
      * @NOTE this class inherits the serialisable interface so
      * it MUST implement this
@@ -151,17 +166,23 @@ class LaAnimalParameter : public LaSerialisable, public LaGuid
       */
     int mFoodValueOfCommonGrazingLand;
     bool mFodderUse;
-    int mFodderSource1;
-    int mFodderSource1Grain;
-    int mFodderSource2;
-    int mFodderSource2Grain;
-    int mFodderSource3;
-    int mFodderSource3Grain;
+    QString mFodderSource1;
+    int mFodder1;
+    int mFodderGrain1;
+
+    QString mFodderSource2;
+    int mFodder2;
+    int mFodderGrain2;
+
+    QString mFodderSource3;
+    int mFodder3;
+    int mFodderGrain3;
     /** If fallow is to be grazed, and if so, at either a
       * HIGH MED or LOW priority to it's access
       */
     Priority mFallowUsage;
     int mAreaUnits;
+    QString mRasterName;
 };
 
 #endif //LAANIMALPARAMETER_H

@@ -1078,7 +1078,7 @@ void LaModel::allocateFallowGrazingLand()
     float myCropCalorieTarget = caloriesFromCrops() * myCropPercent; // already kcalories
     float myCropProductionTarget = myCropCalorieTarget / (myCrop.cropCalories()/1000.);
     float myCropAreaTarget = myCropProductionTarget / myCrop.cropYield();
-    float myAvailableFallowCalories = myCropParameter.fallowRatio() * myCropAreaTarget * myCropParameter.fallowCalories();
+    float myAvailableFallowCalories = myCropParameter.fallowRatio() * myCropAreaTarget * myCropParameter.fallowTDN();
 
     myTotalFallowCalories += static_cast<int>(myAvailableFallowCalories);
   } // while crop iterator
@@ -1584,7 +1584,7 @@ void LaModel::makeCircle(int theX, int theY)
   // to verify this worked do
   //    d.rast
   //    and check in the pull downlist (if your eyes dont fall out looking at those fonts)
-  //    to remove teh file again do:
+  //    to remove the file again do:
   //    g.remove rast=circle
 
   /*

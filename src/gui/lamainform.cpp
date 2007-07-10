@@ -513,7 +513,6 @@ void LaMainForm::animalCellChanged(int theRow, int theColumn)
     //debug only - comment out later
     printCropsAndAnimals();
   }
-  //loadAnimals();
 }
 
 void LaMainForm::cropCellClicked(int theRow, int theColumn)
@@ -527,12 +526,14 @@ void LaMainForm::cropCellClicked(int theRow, int theColumn)
     //get all crops, then get the crop for this cell if it exists
     QMap<QString,LaCrop> myCropsMap = LaUtils::getAvailableCrops();
     LaCrop myCrop = myCropsMap[myGuid];
+    textBrowserCropDefinition->setHtml(myCrop.toHtml());
     QComboBox * mypCombo=dynamic_cast<QComboBox *>(tblCrops->cellWidget(tblCrops->currentRow(),2));
     myGuid = mypCombo->itemData(mypCombo->currentIndex(),Qt::UserRole).toString();
     //get all crops parameters, then get the crop parameter for this cell if it exists
     LaUtils::CropParameterMap myCropParametersMap;
     myCropParametersMap = LaUtils::getAvailableCropParameters();
     LaCropParameter myCropParameter = myCropParametersMap[myGuid];
+    //textBrowserCropParameterDefinition->setHtml(myCropParameter.toHtml());
     showCropDefinitionReport(myCrop,myCropParameter);
   }
   loadCrops();
@@ -572,7 +573,7 @@ void LaMainForm::on_pushButtonRun_clicked()
 
   //test stats
   myModel.getArea("crops",100);
-  
+
   // Get a list of the selected animals
   QMap<QString,QString> mySelectedAnimalsMap;
   //          <animal guid <enabled, animalparamters guid>>
@@ -627,6 +628,7 @@ void LaMainForm::on_pushButtonRun_clicked()
   myModel.setMeatPercent(horizontalSliderMeat->value());
   myModel.setCaloriesPerPersonDaily(spinBoxDailyCalories->value());
   myModel.setCommonLandValue(sbCommonRasterTDN->value());
+  tbReport->setHtml(myModel.toHtml());
 
   // for debugging only...
   qDebug("LAMAINFORM!!!!");
@@ -640,26 +642,20 @@ void LaMainForm::on_pushButtonRun_clicked()
   myModel.toXmlFile( LaUtils::getModelOutputDir() +
       QDir::separator() + myModel.guid() + ".xml");
 
-  //
-  // Make the report
-  //
-  tbReport->document()->setDefaultStyleSheet(LaUtils::getStandardCss());
-  QString myReport = myModel.toHtml();
-  //myReport += "Crop Calorie Targets");
-  myReport += myModel.toHtmlCalorieCropTargets();
-  //myReport += "Animal Calorie Targets");
-  myReport += myModel.toHtmlCalorieAnimalTargets();
+  //tbReport->append("Crop Calorie Targets");
+  tbReport->append(myModel.toHtmlCalorieCropTargets());
+  //tbReport->append("Animal Calorie Targets");
+  tbReport->append(myModel.toHtmlCalorieAnimalTargets());
 
-  //myReport += "Crop Production Targets");
-  myReport += myModel.toHtmlProductionCropTargets();
-  //myReport += "Animal Production Targets");
-  myReport += myModel.toHtmlProductionAnimalTargets();
+  //tbReport->append("Crop Production Targets");
+  tbReport->append(myModel.toHtmlProductionCropTargets());
+  //tbReport->append("Animal Production Targets");
+  tbReport->append(myModel.toHtmlProductionAnimalTargets());
 
-  //myReport += "Crop Area Targets");
-  myReport += myModel.toHtmlAreaCropTargets();
-  //myReport += "Animal Area Targets");
-  myReport += myModel.toHtmlAreaAnimalTargets();
-  tbReport->setHtml(myReport);
+  //tbReport->append("Crop Area Targets");
+  tbReport->append(myModel.toHtmlAreaCropTargets());
+  //tbReport->append("Animal Area Targets");
+  tbReport->append(myModel.toHtmlAreaAnimalTargets());
 }
 
 
@@ -942,24 +938,6 @@ void LaMainForm::logMessage(QString theMessage)
   tbLogs->ensureCursorVisible();
 }
 
-void LaMainForm::showCropDefinitionReport(LaCrop &theCrop, LaCropParameter &theCropParameter)
-{
-  QString myHtml;
-  myHtml = "<body>";
-  myHtml += "<table width=\"100%\">";
-  myHtml += "<tr>";
-  myHtml += "<td>";
-  myHtml += theCrop.toHtml();
-  myHtml += "</td>";
-  myHtml += "<td>";
-  myHtml += theCropParameter.toHtml();
-  myHtml += "</td>";
-  myHtml += "</tr>";
-  myHtml += "</table>";
-  myHtml += "</body>";
-  textBrowserCropDefinition->document()->setDefaultStyleSheet(LaUtils::getStandardCss());
-  textBrowserCropDefinition->setHtml(myHtml);
-}
 
 void LaMainForm::showAnimalDefinitionReport(LaAnimal &theAnimal, LaAnimalParameter &theAnimalParameter)
 {
@@ -978,4 +956,23 @@ void LaMainForm::showAnimalDefinitionReport(LaAnimal &theAnimal, LaAnimalParamet
   myHtml += "</body>";
   textBrowserAnimalDefinition->document()->setDefaultStyleSheet(LaUtils::getStandardCss());
   textBrowserAnimalDefinition->setHtml(myHtml);
+}
+
+void LaMainForm::showCropDefinitionReport(LaCrop &theCrop, LaCropParameter &theCropParameter)
+{
+  QString myHtml;
+  myHtml = "<body>";
+  myHtml += "<table width=\"100%\">";
+  myHtml += "<tr>";
+  myHtml += "<td>";
+  myHtml += theCrop.toHtml();
+  myHtml += "</td>";
+  myHtml += "<td>";
+  myHtml += theCropParameter.toHtml();
+  myHtml += "</td>";
+  myHtml += "</tr>";
+  myHtml += "</table>";
+  myHtml += "</body>";
+  textBrowserCropDefinition->document()->setDefaultStyleSheet(LaUtils::getStandardCss());
+  textBrowserCropDefinition->setHtml(myHtml);
 }

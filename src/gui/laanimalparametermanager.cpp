@@ -90,7 +90,7 @@ void LaAnimalParameterManager::writeSettings()
 
 void LaAnimalParameterManager::refreshAnimalParameterTable(QString theGuid)
 {
-
+  populateFodder();
   mAnimalParameterMap.clear();
   tblAnimalParameterProfiles->clear();
   tblAnimalParameterProfiles->setRowCount(0);
@@ -172,18 +172,40 @@ void LaAnimalParameterManager::refreshAnimalParameterTable(QString theGuid)
   tblAnimalParameterProfiles->horizontalHeader()->setResizeMode(1,QHeaderView::Stretch);
 }
 
+void LaAnimalParameterManager::populateFodder()
+{
+  mCropMap.clear();
+  mCropMap = LaUtils::getAvailableCrops();
+  cbFodderCrop1->clear();
+  cbFodderCrop2->clear();
+  cbFodderCrop3->clear();
+
+  QMapIterator<QString, LaCrop> myIterator(mCropMap);
+  while (myIterator.hasNext())
+  {
+    myIterator.next();
+    LaCrop myCrop = myIterator.value();
+    QString myName = myCrop.name();
+    QString myGuid = myCrop.guid();
+    cbFodderCrop1->addItem(myName, myGuid);
+    cbFodderCrop2->addItem(myName, myGuid);
+    cbFodderCrop3->addItem(myName, myGuid);
+  }
+
+}
+
 void LaAnimalParameterManager::cellClicked(int theRow, int theColumn)
 {
   //note we use the alg name not the id becuase user may have customised params
-  qDebug("LaAnimalParameterManager::cellClicked");
+  //qDebug("LaAnimalParameterManager::cellClicked");
   QString myGuid = tblAnimalParameterProfiles->item(tblAnimalParameterProfiles->currentRow(),0)->text();
-  qDebug("Guid is: " + myGuid.toLocal8Bit());
+  //qDebug("Guid is: " + myGuid.toLocal8Bit());
   QString myFileName = myGuid + ".xml";
   selectAnimalParameter(myFileName);
 }
 void LaAnimalParameterManager::selectAnimalParameter(QString theFileName)
 {
-  qDebug("selectAnimalParameter Called : " + theFileName.toLocal8Bit());
+  //qDebug("selectAnimalParameter Called : " + theFileName.toLocal8Bit());
   QString myAnimalParameterDir = LaUtils::userAnimalParameterProfilesDirPath();
   LaAnimalParameter myAnimalParameter;
   myAnimalParameter.fromXmlFile(myAnimalParameterDir + QDir::separator() + theFileName);
@@ -203,12 +225,24 @@ void LaAnimalParameterManager::showAnimalParameter()
   sbCommonRasterTDN->setValue(mAnimalParameter.foodValueOfCommonGrazingLand());
   comboBoxAreaUnits->setCurrentIndex(mAnimalParameter.areaUnits());
   grpFodderUse->setChecked(mAnimalParameter.fodderUse());
-  sbFodderSource1->setValue(mAnimalParameter.fodderSource1());
-  sbFodderSource1Grain->setValue(mAnimalParameter.fodderSource1Grain());
-  sbFodderSource2->setValue(mAnimalParameter.fodderSource2());
-  sbFodderSource2Grain->setValue(mAnimalParameter.fodderSource2Grain());
-  sbFodderSource3->setValue(mAnimalParameter.fodderSource3());
-  sbFodderSource3Grain->setValue(mAnimalParameter.fodderSource3Grain());
+
+  sbFodder1->setValue(mAnimalParameter.fodder1());
+  sbFodderGrain1->setValue(mAnimalParameter.fodderGrain1());
+
+  sbFodder2->setValue(mAnimalParameter.fodder2());
+  sbFodderGrain2->setValue(mAnimalParameter.fodderGrain2());
+
+  sbFodder3->setValue(mAnimalParameter.fodder3());
+  sbFodderGrain3->setValue(mAnimalParameter.fodderGrain3());
+
+  //LaAnimal myAnimal;
+  //QString myGuid = mAnimalsMap.key(mAnimalParameter.fodderSource1());
+  setComboToDefault(cbFodderCrop1,mAnimalParameter.animalGuid());
+  setComboToDefault(cbFodderCrop2,mAnimalParameter.animalGuid());
+  setComboToDefault(cbFodderCrop3,mAnimalParameter.animalGuid());
+  //cbFodderCrop1->addItem(mAnimalParameter.fodderSource1(),myGuid);
+  //cbFodderCrop2->addItem(mAnimalParameter.fodderSource2());
+  //cbFodderCrop3->addItem(mAnimalParameter.fodderSource2());
 
   //trial
   //setFallowComboBox();
@@ -230,6 +264,7 @@ void LaAnimalParameterManager::showAnimalParameter()
     setComboToDefault(comboBoxFallowUsage,tr("None"));
   }
 
+  leRasterName->setText(mAnimalParameter.rasterName());
 }
 
 void LaAnimalParameterManager::on_toolNew_clicked()
@@ -308,12 +343,18 @@ void LaAnimalParameterManager::on_pbnApply_clicked()
   mAnimalParameter.setFoodValueOfCommonGrazingLand(sbCommonRasterTDN->value());
   mAnimalParameter.setFoodValueOfSpecificGrazingLand(sbSpecificRasterTDN->value());
   mAnimalParameter.setFodderUse(grpFodderUse->isChecked());
-  mAnimalParameter.setFodderSource1(sbFodderSource1->value());
-  mAnimalParameter.setFodderSource1Grain(sbFodderSource1Grain->value());
-  mAnimalParameter.setFodderSource2(sbFodderSource2->value());
-  mAnimalParameter.setFodderSource2Grain(sbFodderSource2Grain->value());
-  mAnimalParameter.setFodderSource3(sbFodderSource3->value());
-  mAnimalParameter.setFodderSource3Grain(sbFodderSource3Grain->value());
+
+  mAnimalParameter.setFodderSource1(cbFodderCrop1->itemData(cbFodderCrop1->currentIndex(),Qt::UserRole).toString());
+  mAnimalParameter.setFodder1(sbFodder1->value());
+  mAnimalParameter.setFodderGrain1(sbFodderGrain1->value());
+
+  mAnimalParameter.setFodderSource2(cbFodderCrop1->itemData(cbFodderCrop2->currentIndex(),Qt::UserRole).toString());
+  mAnimalParameter.setFodder2(sbFodder2->value());
+  mAnimalParameter.setFodderGrain2(sbFodderGrain2->value());
+
+  mAnimalParameter.setFodderSource3(cbFodderCrop1->itemData(cbFodderCrop3->currentIndex(),Qt::UserRole).toString());
+  mAnimalParameter.setFodder3(sbFodder3->value());
+  mAnimalParameter.setFodderGrain3(sbFodderGrain3->value());
 
   mAnimalParameter.setAreaUnits(comboBoxAreaUnits->currentIndex());
   QString myFallowUsage = QString(comboBoxFallowUsage->currentText());
@@ -339,6 +380,7 @@ void LaAnimalParameterManager::on_pbnApply_clicked()
       myPriority = None;
       mAnimalParameter.setFallowUsage(myPriority);
   }
+  mAnimalParameter.setRasterName(leRasterName->text());
   mAnimalParameter.toXmlFile( LaUtils::userAnimalParameterProfilesDirPath() +
       QDir::separator() + mAnimalParameter.guid() + ".xml");
   refreshAnimalParameterTable(mAnimalParameter.guid());

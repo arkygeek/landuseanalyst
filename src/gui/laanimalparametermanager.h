@@ -58,10 +58,12 @@ class LaAnimalParameterManager : public QDialog, private Ui::LaAnimalParameterMa
       void selectAnimalParameter(QString theFileName);
 
       LaUtils::AnimalParameterMap mAnimalParameterMap;
+      LaUtils::CropMap mCropMap;
       LaAnimalParameter mAnimalParameter;
       void readSettings();
       void writeSettings();
       void setFallowComboBox();
+      void populateFodder();
       /** @TODO move this into LaGuiUtils - a gui subclass of LaUtils */
       bool setComboToDefault(QComboBox * thepCombo, QString theDefault);
 };

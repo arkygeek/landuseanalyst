@@ -19,6 +19,7 @@
 #include <QDomElement>
 #include "laanimalparameter.h"
 #include "lautils.h"
+#include "lacrop.h"
 
 LaAnimalParameter::LaAnimalParameter() : LaSerialisable(), LaGuid()
 {
@@ -46,15 +47,23 @@ LaAnimalParameter::LaAnimalParameter(const LaAnimalParameter& theAnimalParameter
   mFoodValueOfCommonGrazingLand = theAnimalParameter.foodValueOfCommonGrazingLand();
   mAreaUnits = theAnimalParameter.areaUnits();
   mFodderUse = theAnimalParameter.fodderUse();
+
   mFodderSource1 = theAnimalParameter.fodderSource1();
-  mFodderSource1Grain = theAnimalParameter.fodderSource1Grain();
+  mFodder1 = theAnimalParameter.fodder1();
+  mFodderGrain1 = theAnimalParameter.fodderGrain1();
+
   mFodderSource2 = theAnimalParameter.fodderSource2();
-  mFodderSource2Grain = theAnimalParameter.fodderSource2Grain();
+  mFodder2 = theAnimalParameter.fodder2();
+  mFodderGrain2 = theAnimalParameter.fodderGrain2();
+
   mFodderSource3 = theAnimalParameter.fodderSource3();
-  mFodderSource3Grain = theAnimalParameter.fodderSource3Grain();
+  mFodder3 = theAnimalParameter.fodder3();
+  mFodderGrain3 = theAnimalParameter.fodderGrain3();
+
   mUseSpecificGrazingLand = theAnimalParameter.useSpecificGrazingLand();
   mUseCommonGrazingLand = theAnimalParameter.useCommonGrazingLand();
   mFallowUsage = theAnimalParameter.fallowUsage();
+  mRasterName = theAnimalParameter.rasterName();
 }
 
 LaAnimalParameter& LaAnimalParameter::operator=(const LaAnimalParameter& theAnimalParameter)
@@ -73,13 +82,21 @@ LaAnimalParameter& LaAnimalParameter::operator=(const LaAnimalParameter& theAnim
   mUseCommonGrazingLand = theAnimalParameter.useCommonGrazingLand();
   mAreaUnits = theAnimalParameter.areaUnits();
   mFodderUse = theAnimalParameter.fodderUse();
+
   mFodderSource1 = theAnimalParameter.fodderSource1();
-  mFodderSource1Grain = theAnimalParameter.fodderSource1Grain();
+  mFodder1 = theAnimalParameter.fodder1();
+  mFodderGrain1 = theAnimalParameter.fodderGrain1();
+
   mFodderSource2 = theAnimalParameter.fodderSource2();
-  mFodderSource2Grain = theAnimalParameter.fodderSource2Grain();
+  mFodder2 = theAnimalParameter.fodder2();
+  mFodderGrain2 = theAnimalParameter.fodderGrain2();
+
   mFodderSource3 = theAnimalParameter.fodderSource3();
-  mFodderSource3Grain = theAnimalParameter.fodderSource3Grain();
+  mFodder3 = theAnimalParameter.fodder3();
+  mFodderGrain3 = theAnimalParameter.fodderGrain3();
+
   mFallowUsage = theAnimalParameter.fallowUsage();
+  mRasterName = theAnimalParameter.rasterName();
   return *this;
 }
 
@@ -124,33 +141,50 @@ bool LaAnimalParameter::fodderUse() const
 {
   return mFodderUse;
 }
-int LaAnimalParameter::fodderSource1() const
+QString LaAnimalParameter::fodderSource1() const
 {
   return mFodderSource1;
 }
-int LaAnimalParameter::fodderSource1Grain() const
+int LaAnimalParameter::fodder1() const
 {
-  return mFodderSource1Grain;
+  return mFodder1;
 }
-int LaAnimalParameter::fodderSource2() const
+int LaAnimalParameter::fodderGrain1() const
+{
+  return mFodderGrain1;
+}
+QString LaAnimalParameter::fodderSource2() const
 {
   return mFodderSource2;
 }
-int LaAnimalParameter::fodderSource2Grain() const
+int LaAnimalParameter::fodder2() const
 {
-  return mFodderSource2Grain;
+  return mFodder2;
 }
-int LaAnimalParameter::fodderSource3() const
+int LaAnimalParameter::fodderGrain2() const
+{
+  return mFodderGrain2;
+}
+QString LaAnimalParameter::fodderSource3() const
 {
   return mFodderSource3;
 }
-int LaAnimalParameter::fodderSource3Grain() const
+int LaAnimalParameter::fodder3() const
 {
-  return mFodderSource3Grain;
+  return mFodder3;
+}
+int LaAnimalParameter::fodderGrain3() const
+{
+  return mFodderGrain3;
 }
 Priority LaAnimalParameter::fallowUsage() const
 {
   return mFallowUsage;
+}
+
+QString LaAnimalParameter::rasterName() const
+{
+  return mRasterName;
 }
 
 /////////////////////////////////////////////////////////
@@ -196,34 +230,54 @@ void LaAnimalParameter::setFodderUse(bool theBool)
 {
   mFodderUse=theBool;
 }
-void LaAnimalParameter::setFodderSource1(int theValue)
+
+void LaAnimalParameter::setFodderSource1(QString theGuid)
 {
-  mFodderSource1=theValue;
+  mFodderSource1=theGuid;
 }
-void LaAnimalParameter::setFodderSource1Grain(int theValue)
+void LaAnimalParameter::setFodder1(int theValue)
 {
-  mFodderSource1Grain=theValue;
+  mFodder1=theValue;
 }
-void LaAnimalParameter::setFodderSource2(int theValue)
+void LaAnimalParameter::setFodderGrain1(int theValue)
 {
-  mFodderSource2=theValue;
+  mFodderGrain1=theValue;
 }
-void LaAnimalParameter::setFodderSource2Grain(int theValue)
+
+void LaAnimalParameter::setFodderSource2(QString theGuid)
 {
-  mFodderSource2Grain=theValue;
+  mFodderSource2=theGuid;
 }
-void LaAnimalParameter::setFodderSource3(int theValue)
+void LaAnimalParameter::setFodder2(int theValue)
 {
-  mFodderSource3=theValue;
+  mFodder2=theValue;
 }
-void LaAnimalParameter::setFodderSource3Grain(int theValue)
+void LaAnimalParameter::setFodderGrain2(int theValue)
 {
-  mFodderSource3Grain=theValue;
+  mFodderGrain2=theValue;
+}
+
+void LaAnimalParameter::setFodderSource3(QString theGuid)
+{
+  mFodderSource3=theGuid;
+}
+void LaAnimalParameter::setFodder3(int theValue)
+{
+  mFodder3=theValue;
+}
+void LaAnimalParameter::setFodderGrain3(int theValue)
+{
+  mFodderGrain3=theValue;
 }
 
 void LaAnimalParameter::setFallowUsage(Priority thePriority)
 {
   mFallowUsage=thePriority;
+}
+
+void LaAnimalParameter::setRasterName(QString theRasterName)
+{
+  mRasterName=theRasterName;
 }
 
 bool LaAnimalParameter::fromXml(QString theXml)
@@ -250,13 +304,18 @@ bool LaAnimalParameter::fromXml(QString theXml)
 mFoodValueOfSpecificGrazingLand=QString(myTopElement.firstChildElement("foodValueOfSpecificGrazingLand").text()).toInt();
 ///////////
   mAreaUnits=QString(myTopElement.firstChildElement("areaUnits").text()).toInt();
-  mFodderUse=QString(myTopElement.firstChildElement("fodderUse").text()).toInt();;
-  mFodderSource1=QString(myTopElement.firstChildElement("fodderSource1").text()).toInt();;
-  mFodderSource1Grain=QString(myTopElement.firstChildElement("fodderSource1Grain").text()).toInt();;
-  mFodderSource2=QString(myTopElement.firstChildElement("fodderSource2").text()).toInt();;
-  mFodderSource2Grain=QString(myTopElement.firstChildElement("fodderSource2Grain").text()).toInt();;
-  mFodderSource3=QString(myTopElement.firstChildElement("fodderSource3").text()).toInt();;
-  mFodderSource3Grain=QString(myTopElement.firstChildElement("fodderSource3Grain").text()).toInt();;
+  mFodderUse=QString(myTopElement.firstChildElement("fodderUse").text()).toInt();
+  mFodderSource1=QString(myTopElement.firstChildElement("fodderSource1").text()).toInt();
+  mFodder1=QString(myTopElement.firstChildElement("fodder1").text()).toInt();
+  mFodderGrain1=QString(myTopElement.firstChildElement("fodderGrain1").text()).toInt();
+
+  mFodderSource2=QString(myTopElement.firstChildElement("fodderSource2").text()).toInt();
+  mFodder2=QString(myTopElement.firstChildElement("fodder2").text()).toInt();
+  mFodderGrain2=QString(myTopElement.firstChildElement("fodderGrain2").text()).toInt();
+
+  mFodderSource3=QString(myTopElement.firstChildElement("fodderSource3").text()).toInt();
+  mFodder3=QString(myTopElement.firstChildElement("fodder3").text()).toInt();
+  mFodderGrain3=QString(myTopElement.firstChildElement("fodderGrain3").text()).toInt();
 
   QString myFallowUsage = QString(myTopElement.firstChildElement("fallowUsage").text());
   if (myFallowUsage == "High")
@@ -266,7 +325,7 @@ mFoodValueOfSpecificGrazingLand=QString(myTopElement.firstChildElement("foodValu
   else if (myFallowUsage == "Medium")
   {
       mFallowUsage=Medium;
-  }    
+  }
   else if (myFallowUsage == "Low")
   {
       mFallowUsage=Low;
@@ -274,7 +333,8 @@ mFoodValueOfSpecificGrazingLand=QString(myTopElement.firstChildElement("foodValu
   else
   {
     mFallowUsage=None;
-  } 
+  }
+  mRasterName=LaUtils::xmlDecode(myTopElement.firstChildElement("rasterName").text());
   return true;
 }
 
@@ -291,12 +351,17 @@ QString LaAnimalParameter::toXml()
   myString+=QString("  <foodValueOfSpecificGrazingLand>" + QString::number(mFoodValueOfSpecificGrazingLand) + "</foodValueOfSpecificGrazingLand>\n");
   myString+=QString("  <areaUnits>" + QString::number(mAreaUnits) + "</areaUnits>\n");
   myString+=QString("  <fodderUse>"+ QString::number(mFodderUse) +"</fodderUse>\n");
-  myString+=QString("  <fodderSource1>"+ QString::number(mFodderSource1) +"</fodderSource1>\n");
-  myString+=QString("  <fodderSource1Grain>"+ QString::number(mFodderSource1Grain) +"</fodderSource1Grain>\n");
-  myString+=QString("  <fodderSource2>"+ QString::number(mFodderSource2) +"</fodderSource2>\n");
-  myString+=QString("  <fodderSource2Grain>"+ QString::number(mFodderSource2Grain) +"</fodderSource2Grain>\n");
-  myString+=QString("  <fodderSource3>"+ QString::number(mFodderSource3) +"</fodderSource3>\n");
-  myString+=QString("  <fodderSource3Grain>"+ QString::number(mFodderSource3Grain) +"</fodderSource3Grain>\n");
+  myString+=QString("  <fodderSource1>"+ mFodderSource1 +"</fodderSource1>\n");
+  myString+=QString("  <fodder1>"+ QString::number(mFodder1) + "</fodder1>\n");
+  myString+=QString("  <fodderGrain1>"+ QString::number(mFodderGrain1) +"</fodderGrain1>\n");
+
+  myString+=QString("  <fodderSource2>"+ mFodderSource2 +"</fodderSource2>\n");
+  myString+=QString("  <fodder2>"+ QString::number(mFodder2) +"</fodder2>\n");
+  myString+=QString("  <fodderGrain2>"+ QString::number(mFodderGrain2) +"</fodderGrain2>\n");
+
+  myString+=QString("  <fodderSource3>"+ mFodderSource3 +"</fodderSource3>\n");
+  myString+=QString("  <fodder3>"+ QString::number(mFodder3) +"</fodder3>\n");
+  myString+=QString("  <fodderGrain3>"+ QString::number(mFodderGrain3) +"</fodderGrain3>\n");
   switch (mFallowUsage)
   {
     case  High:
@@ -312,6 +377,7 @@ QString LaAnimalParameter::toXml()
       myString+=QString("  <fallowUsage></fallowUsage>\n");
       break;
   } //switch
+  myString+=QString("  <rasterName>" + LaUtils::xmlEncode(mRasterName) + "</RasterName>\n");
   myString+=QString("</animalParameter>\n");
   return myString;
 }
@@ -329,38 +395,87 @@ QString LaAnimalParameter::toText()
   myString+=QString("foodValueOfCommonGrazingLand=>" + QString::number(mFoodValueOfCommonGrazingLand) + "\n");
   myString+=QString("foodValueOfSpecificGrazingLand=>" + QString::number(mFoodValueOfSpecificGrazingLand) + "\n");
   myString+=QString("areaUnits=>" + QString::number(mAreaUnits) + "\n");
-  myString+=QString("fodderUse=>"+ QString::number(mFodderUse) + "\n");
-  myString+=QString("fodderSource1=>"+ QString::number(mFodderSource1) + "\n");
-  myString+=QString("fodderSource1Grain=>"+ QString::number(mFodderSource1Grain) + "\n");
-  myString+=QString("fodderSource2=>"+ QString::number(mFodderSource2) + "\n");
-  myString+=QString("fodderSource2Grain=>"+ QString::number(mFodderSource2Grain) + "\n");
-  myString+=QString("fodderSource3=>"+ QString::number(mFodderSource3) + "\n");
-  myString+=QString("fodderSource1Lentils=>"+ QString::number(mFodderSource3Grain) + "\n");
+  myString+=QString("fodderUse=>" + QString::number(mFodderUse) + "\n");
+
+  myString+=QString("fodderSource1=>" + mFodderSource1 + "\n");
+  myString+=QString("fodder1=>" + QString::number(mFodder1) + "\n");
+  myString+=QString("fodderGrain1=>" + QString::number(mFodderGrain1) + "\n");
+
+  myString+=QString("fodderSource2=>" + mFodderSource2 + "\n");
+  myString+=QString("fodder2=>" + QString::number(mFodder2) + "\n");
+  myString+=QString("fodderGrain2=>" + QString::number(mFodderGrain2) + "\n");
+
+  myString+=QString("fodderSource3=>" + mFodderSource3 + "\n");
+  myString+=QString("fodder3=>" + QString::number(mFodder3) + "\n");
+  myString+=QString("fodderGrain3=>" + QString::number(mFodderGrain3) + "\n");
+
   myString+=QString("fallowUsage=>" + QString::number(mFallowUsage) + "\n");
+  myString+=QString("rasterName=>" + LaUtils::xmlEncode(mRasterName) + "\n");
   return myString;
 }
 
 QString LaAnimalParameter::toHtml()
 {
   QString myString;
+  QString myFodderUse = (mFodderUse==0) ? "Not Used" : "Used";
+  QString myFallowUsage;
+  switch (mFallowUsage)
+  {
+    case  High:
+      myFallowUsage=QString("High Priority");
+      break;
+    case  Medium:
+      myFallowUsage=QString("Medium Priority");
+      break;
+    case  Low:
+      myFallowUsage=QString("Low Priority");
+      break;
+    default:
+      myFallowUsage=QString("None");
+      break;
+  }
+
   myString+="<h3 >Details for " + LaUtils::xmlEncode(mName) + "</h3>";
   myString+="<table>";
   //myString+="<tr><td>GUID:</th><td>" + guid() + "</td></tr>";
   myString+="<tr><td>Description:</td><td>" + mDescription + "</td></tr>";
   //myString+="<tr><td>Animal:</td><td>" + mAnimalGuid + "</td></tr>";
+  myString+="<tr><td>Raster Mask:</td><td>" + LaUtils::xmlEncode(mRasterName) + "</td></tr>";
   myString+="<tr><td>Percentage of Tame Meat:</td><td> " + QString::number(mPercentTameMeat) + "</td></tr>";
   myString+="<tr><td>Use Common Grazing Land:</td><td> " + QString::number(mUseCommonGrazingLand) + "</td></tr>";
   myString+="<tr><td>Use Specific Grazing Land:</td><td> " + QString::number(mUseSpecificGrazingLand) + "</td></tr>";
   myString+="<tr><td>Food Value Of Common Grazing Land:</td><td> " + QString::number(mFoodValueOfCommonGrazingLand) + "</td></tr>";
   myString+="<tr><td>Food Value Of Specific Grazing Land:</td><td> " + QString::number(mFoodValueOfSpecificGrazingLand) + "</td></tr>";
   myString+="<tr><td>Area Units:</td><td> "+ QString::number(mAreaUnits) + "</td></tr>";
-  myString+="<tr><td>Fodder Wheat:</td><td>"+ QString::number(mFodderSource1) + "</td></tr>";
-  myString+="<tr><td>Fodder Wheat Grain:</td><td>"+ QString::number(mFodderSource1Grain) + "</td></tr>";
-  myString+="<tr><td>Fodder Barley:</td><td>"+ QString::number(mFodderSource2) + "</td></tr>";
-  myString+="<tr><td>Fodder Barley Grain:</td><td>"+ QString::number(mFodderSource2Grain) + "</td></tr>";
-  myString+="<tr><td>Fodder Lentils:</td><td>"+ QString::number(mFodderSource3) + "</td></tr>";
-  myString+="<tr><td>Fodder Wheat Lentils:</td><td>"+ QString::number(mFodderSource3Grain) + "</td></tr>";
-  myString+="<tr><td>Fallow Usage:</td><td> " + QString::number(mFallowUsage) + "</td></tr>";
+
+
+  if (myFallowUsage=="None")
+  {
+    myString+="<tr><td>No Fallow Grazing</td></tr>";
+  }
+  else
+  {
+    myString+="<tr><td>Fallow Grazing:</td><td>" + myFallowUsage + "</td></tr>";
+  }
+  if (myFodderUse=="Used")
+  {
+    myString+="<tr><td>Fodder Source 1:</td><td>"+ mFodderSource1 + "</td></tr>";
+    myString+="<tr><td>Fodder 1:</td><td>"+ QString::number(mFodder1) + "</td></tr>";
+    myString+="<tr><td>Fodder Grain 1:</td><td>"+ QString::number(mFodderGrain1) + "</td></tr>";
+
+    myString+="<tr><td>Fodder Source 2:</td><td>"+ mFodderSource2 + "</td></tr>";
+    myString+="<tr><td>Fodder 2:</td><td>"+ QString::number(mFodder2) + "</td></tr>";
+    myString+="<tr><td>Fodder Grain 2:</td><td>"+ QString::number(mFodderGrain2) + "</td></tr>";
+
+    myString+="<tr><td>Fodder Lentils:</td><td>"+ mFodderSource3 + "</td></tr>";
+    myString+="<tr><td>Fodder 3:</td><td>"+ QString::number(mFodder3) + "</td></tr>";
+    myString+="<tr><td>Fodder Grain 3:</td><td>"+ QString::number(mFodderGrain3) + "</td></tr>";
+  }
+  else
+  {
+    myString+="<tr><td>Fodder not used</td><td>";
+  }
+
   myString+="</table>";
   return myString;
 }

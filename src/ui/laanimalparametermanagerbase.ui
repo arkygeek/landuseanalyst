@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>549</width>
-    <height>476</height>
+    <width>611</width>
+    <height>472</height>
    </rect>
   </property>
   <property name="minimumSize" >
@@ -28,68 +28,17 @@
    <property name="spacing" >
     <number>6</number>
    </property>
-   <item row="6" column="1" >
-    <widget class="QPushButton" name="pbnClose" >
-     <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>5</hsizetype>
-       <vsizetype>0</vsizetype>
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="toolTip" >
-      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-weight:600; font-style:italic; color:#0000ff;">Have you applied your changes?&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
-     </property>
-     <property name="text" >
-      <string>Close</string>
-     </property>
-    </widget>
-   </item>
    <item row="5" column="1" >
-    <widget class="QPushButton" name="pbnApply" >
-     <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>5</hsizetype>
-       <vsizetype>0</vsizetype>
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="toolTip" >
-      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Saves all settings&lt;/p>&lt;/body>&lt;/html></string>
-     </property>
-     <property name="whatsThis" >
-      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">After completing all fields to define a parameter, you &lt;span style=" font-weight:600;">MUST&lt;/span> click the Apply button to save it. The name does not have to be unique, as LandUse Analyst has a special way of saving parameters to allow for duplicate parameter names. It is helpful, however, to utilize the Notes field to distinguish between same-named parameter definitions.&lt;/p>&lt;/body>&lt;/html></string>
-     </property>
+    <widget class="QLabel" name="label_3" >
      <property name="text" >
-      <string>Apply</string>
+      <string>Raster Mask </string>
      </property>
     </widget>
    </item>
-   <item row="4" column="1" >
-    <spacer>
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" >
-      <size>
-       <width>239</width>
-       <height>31</height>
-      </size>
-     </property>
-    </spacer>
+   <item row="5" column="2" >
+    <widget class="QLineEdit" name="leRasterName" />
    </item>
-   <item rowspan="3" row="4" column="0" >
+   <item rowspan="4" row="4" column="0" >
     <widget class="QGroupBox" name="groupBox_3" >
      <property name="whatsThis" >
       <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
@@ -258,14 +207,14 @@ p, li { white-space: pre-wrap; }
      </layout>
     </widget>
    </item>
-   <item row="2" column="1" >
+   <item row="2" column="1" colspan="2" >
     <spacer>
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
      </property>
      <property name="sizeHint" >
       <size>
-       <width>239</width>
+       <width>326</width>
        <height>16</height>
       </size>
      </property>
@@ -442,7 +391,7 @@ p, li { white-space: pre-wrap; }
      </layout>
     </widget>
    </item>
-   <item row="0" column="0" colspan="2" >
+   <item row="0" column="0" colspan="3" >
     <widget class="QGroupBox" name="grpProfiles" >
      <property name="whatsThis" >
       <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
@@ -599,7 +548,7 @@ p, li { white-space: pre-wrap; }
      </layout>
     </widget>
    </item>
-   <item row="1" column="1" >
+   <item row="1" column="1" colspan="2" >
     <widget class="QGroupBox" name="grpFodderUse" >
      <property name="cursor" >
       <cursor>0</cursor>
@@ -685,7 +634,7 @@ p, li { white-space: pre-wrap; }
        </spacer>
       </item>
       <item row="3" column="2" >
-       <widget class="QSpinBox" name="sbFodderSource3Grain" >
+       <widget class="QSpinBox" name="sbFodderGrain3" >
         <property name="sizePolicy" >
          <sizepolicy>
           <hsizetype>4</hsizetype>
@@ -715,7 +664,7 @@ p, li { white-space: pre-wrap; }
        </widget>
       </item>
       <item row="3" column="1" >
-       <widget class="QSpinBox" name="sbFodderSource3" >
+       <widget class="QSpinBox" name="sbFodder3" >
         <property name="sizePolicy" >
          <sizepolicy>
           <hsizetype>4</hsizetype>
@@ -748,7 +697,7 @@ p, li { white-space: pre-wrap; }
        </widget>
       </item>
       <item row="2" column="2" >
-       <widget class="QSpinBox" name="sbFodderSource2Grain" >
+       <widget class="QSpinBox" name="sbFodderGrain2" >
         <property name="sizePolicy" >
          <sizepolicy>
           <hsizetype>4</hsizetype>
@@ -778,7 +727,7 @@ p, li { white-space: pre-wrap; }
        </widget>
       </item>
       <item row="2" column="1" >
-       <widget class="QSpinBox" name="sbFodderSource2" >
+       <widget class="QSpinBox" name="sbFodder2" >
         <property name="sizePolicy" >
          <sizepolicy>
           <hsizetype>0</hsizetype>
@@ -811,7 +760,7 @@ p, li { white-space: pre-wrap; }
        </widget>
       </item>
       <item row="1" column="2" >
-       <widget class="QSpinBox" name="sbFodderSource1Grain" >
+       <widget class="QSpinBox" name="sbFodderGrain1" >
         <property name="sizePolicy" >
          <sizepolicy>
           <hsizetype>0</hsizetype>
@@ -841,7 +790,7 @@ p, li { white-space: pre-wrap; }
        </widget>
       </item>
       <item row="1" column="1" >
-       <widget class="QSpinBox" name="sbFodderSource1" >
+       <widget class="QSpinBox" name="sbFodder1" >
         <property name="sizePolicy" >
          <sizepolicy>
           <hsizetype>0</hsizetype>
@@ -875,7 +824,7 @@ p, li { white-space: pre-wrap; }
        </widget>
       </item>
       <item row="1" column="0" >
-       <widget class="QComboBox" name="comboBoxFodderCrop1" >
+       <widget class="QComboBox" name="cbFodderCrop1" >
         <item>
          <property name="text" >
           <string>Define a crop!</string>
@@ -884,7 +833,7 @@ p, li { white-space: pre-wrap; }
        </widget>
       </item>
       <item row="2" column="0" >
-       <widget class="QComboBox" name="comboBoxFodderCrop2" >
+       <widget class="QComboBox" name="cbFodderCrop2" >
         <item>
          <property name="text" >
           <string>Define a crop!</string>
@@ -893,7 +842,7 @@ p, li { white-space: pre-wrap; }
        </widget>
       </item>
       <item row="3" column="0" >
-       <widget class="QComboBox" name="comboBoxFodderCrop3" >
+       <widget class="QComboBox" name="cbFodderCrop3" >
         <item>
          <property name="text" >
           <string>Define a crop!</string>
@@ -904,7 +853,7 @@ p, li { white-space: pre-wrap; }
      </layout>
     </widget>
    </item>
-   <item row="3" column="1" >
+   <item row="3" column="1" colspan="2" >
     <widget class="QComboBox" name="comboBoxFallowUsage" >
      <property name="sizePolicy" >
       <sizepolicy>
@@ -933,6 +882,67 @@ p, li { white-space: pre-wrap; }
      </property>
     </widget>
    </item>
+   <item row="4" column="1" colspan="2" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>326</width>
+       <height>16</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="6" column="1" colspan="2" >
+    <widget class="QPushButton" name="pbnApply" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>5</hsizetype>
+       <vsizetype>0</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="toolTip" >
+      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Saves all settings&lt;/p>&lt;/body>&lt;/html></string>
+     </property>
+     <property name="whatsThis" >
+      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">After completing all fields to define a parameter, you &lt;span style=" font-weight:600;">MUST&lt;/span> click the Apply button to save it. The name does not have to be unique, as LandUse Analyst has a special way of saving parameters to allow for duplicate parameter names. It is helpful, however, to utilize the Notes field to distinguish between same-named parameter definitions.&lt;/p>&lt;/body>&lt;/html></string>
+     </property>
+     <property name="text" >
+      <string>Apply</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="1" colspan="2" >
+    <widget class="QPushButton" name="pbnClose" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>5</hsizetype>
+       <vsizetype>0</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="toolTip" >
+      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-weight:600; font-style:italic; color:#0000ff;">Have you applied your changes?&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+     </property>
+     <property name="text" >
+      <string>Close</string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <tabstops>
@@ -951,15 +961,15 @@ p, li { white-space: pre-wrap; }
   <tabstop>sbSpecificRasterTDN</tabstop>
   <tabstop>sbCommonRasterTDN</tabstop>
   <tabstop>comboBoxAreaUnits</tabstop>
-  <tabstop>comboBoxFodderCrop1</tabstop>
-  <tabstop>sbFodderSource1</tabstop>
-  <tabstop>sbFodderSource1Grain</tabstop>
-  <tabstop>comboBoxFodderCrop2</tabstop>
-  <tabstop>sbFodderSource2</tabstop>
-  <tabstop>sbFodderSource2Grain</tabstop>
-  <tabstop>comboBoxFodderCrop3</tabstop>
-  <tabstop>sbFodderSource3</tabstop>
-  <tabstop>sbFodderSource3Grain</tabstop>
+  <tabstop>cbFodderCrop1</tabstop>
+  <tabstop>sbFodder1</tabstop>
+  <tabstop>sbFodderGrain1</tabstop>
+  <tabstop>cbFodderCrop2</tabstop>
+  <tabstop>sbFodder2</tabstop>
+  <tabstop>sbFodderGrain2</tabstop>
+  <tabstop>cbFodderCrop3</tabstop>
+  <tabstop>sbFodder3</tabstop>
+  <tabstop>sbFodderGrain3</tabstop>
   <tabstop>comboBoxFallowUsage</tabstop>
   <tabstop>pbnApply</tabstop>
   <tabstop>pbnClose</tabstop>
