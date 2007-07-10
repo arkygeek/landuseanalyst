@@ -746,12 +746,12 @@ p, li { white-space: pre-wrap; }
       <item row="1" column="0" >
        <widget class="QLabel" name="labelFeedRequirements2" >
         <property name="text" >
-         <string>Gestating</string>
+         <string>Adult Female</string>
         </property>
        </widget>
       </item>
       <item row="1" column="1" >
-       <widget class="QSpinBox" name="spinBoxCaloriesForGestating" >
+       <widget class="QSpinBox" name="spinBoxTDNForGestating" >
         <property name="sizePolicy" >
          <sizepolicy>
           <hsizetype>7</hsizetype>
@@ -764,7 +764,7 @@ p, li { white-space: pre-wrap; }
          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The number of calories required per day for a female during gestation.&lt;/p>&lt;/body>&lt;/html></string>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Annual TDN (kg) required for an adult female&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="suffix" >
          <string/>
@@ -778,7 +778,7 @@ p, li { white-space: pre-wrap; }
        </widget>
       </item>
       <item row="2" column="1" >
-       <widget class="QSpinBox" name="spinBoxCaloriesForLactating" >
+       <widget class="QSpinBox" name="spinBoxTDNForLactating" >
         <property name="sizePolicy" >
          <sizepolicy>
           <hsizetype>7</hsizetype>
@@ -806,20 +806,32 @@ p, li { white-space: pre-wrap; }
       </item>
       <item row="2" column="0" >
        <widget class="QLabel" name="labelFeedRequirements3" >
+        <property name="toolTip" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Annual TDN (kg) required for an adult male&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
         <property name="text" >
-         <string>Lactating</string>
+         <string>Adult Male</string>
         </property>
        </widget>
       </item>
       <item row="3" column="0" >
        <widget class="QLabel" name="labelFeedRequirements4" >
+        <property name="toolTip" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Annual TDN (kg) required for a juvenile&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
         <property name="text" >
          <string>Juvenile</string>
         </property>
        </widget>
       </item>
       <item row="3" column="1" >
-       <widget class="QSpinBox" name="spinBoxCaloriesForJuvenile" >
+       <widget class="QSpinBox" name="spinBoxTDNForJuvenile" >
         <property name="sizePolicy" >
          <sizepolicy>
           <hsizetype>7</hsizetype>
@@ -1026,9 +1038,9 @@ p, li { white-space: pre-wrap; }
   <tabstop>spinBoxWeaningAge</tabstop>
   <tabstop>spinBoxGestationTime</tabstop>
   <tabstop>spinBoxEstrousCycleTime</tabstop>
-  <tabstop>spinBoxCaloriesForGestating</tabstop>
-  <tabstop>spinBoxCaloriesForLactating</tabstop>
-  <tabstop>spinBoxCaloriesForJuvenile</tabstop>
+  <tabstop>spinBoxTDNForGestating</tabstop>
+  <tabstop>spinBoxTDNForLactating</tabstop>
+  <tabstop>spinBoxTDNForJuvenile</tabstop>
   <tabstop>pbnApply</tabstop>
   <tabstop>pbnClose</tabstop>
  </tabstops>
