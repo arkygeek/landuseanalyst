@@ -4,6 +4,8 @@
     begin                : March 2006
     copyright            : (C) 2003 by Tim Sutton
     email                : tim@linfiniti.com
+                         : (C) 2007 by Jason Jorgenson
+    email                : arkygeek@gmail.com
  ***************************************************************************/
 
 /***************************************************************************
@@ -351,6 +353,8 @@ QString LaAnimalParameter::toXml()
   myString+=QString("  <foodValueOfSpecificGrazingLand>" + QString::number(mFoodValueOfSpecificGrazingLand) + "</foodValueOfSpecificGrazingLand>\n");
   myString+=QString("  <areaUnits>" + QString::number(mAreaUnits) + "</areaUnits>\n");
   myString+=QString("  <fodderUse>"+ QString::number(mFodderUse) +"</fodderUse>\n");
+
+
   myString+=QString("  <fodderSource1>"+ mFodderSource1 +"</fodderSource1>\n");
   myString+=QString("  <fodder1>"+ QString::number(mFodder1) + "</fodder1>\n");
   myString+=QString("  <fodderGrain1>"+ QString::number(mFodderGrain1) +"</fodderGrain1>\n");

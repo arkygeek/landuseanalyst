@@ -189,21 +189,7 @@ void LaAnimalParameterManager::populateFodder()
     LaCrop myCrop = myIterator.value();
     QString myGuid = myCrop.guid();
     QString myName = myCrop.name();
-    /*QPair<bool,QString> myValue;
-    //check if this crop iscurrently selected and if not disable it
-    if (!mCropsMap.contains(myGuid))
-    {
-      myValue.first = false;
-      myValue.second = "";
-      mCropsMap.insert(myGuid,myValue);
-    }
-    else
-    {
-      myValue=mCropsMap[myGuid];
-    }*/
 
-    //QIcon myIcon;
-    //myIcon.addFile(":/localdata.png");
     tblFodder->insertRow(myCurrentRow);
     // Add details to the new row
     //QTableWidgetItem *mypUsedItem= new QTableWidgetItem(tr("Used?"));
