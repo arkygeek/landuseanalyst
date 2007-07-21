@@ -22,6 +22,7 @@
 #include "laanimalparameter.h"
 #include "lautils.h"
 #include "lacrop.h"
+#include "lafoodsource.h"
 
 LaAnimalParameter::LaAnimalParameter() : LaSerialisable(), LaGuid()
 {

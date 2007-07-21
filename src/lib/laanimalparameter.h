@@ -22,6 +22,7 @@ class QString;
 #include "laserialisable.h"
 #include "laguid.h"
 #include "la.h"
+#include "lafoodsource.h"
 #include <QString>
 /**
   * A class to represent animal parameters
