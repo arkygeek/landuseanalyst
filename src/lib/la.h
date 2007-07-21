@@ -32,6 +32,11 @@
 //    <plant guid <enabled, animalparamters guid>>
 typedef QMap <QString,QPair<bool,QString> > LaTripleMap;
 
+//    LaFoodSource is a map < <Guid,enabled> , <Fodder,Grain> >
+//    or
+//    LaFoodSource is a map < <Guid,disabled> , <Fodder,Grain> >
+typedef QMap < QPair<QString,bool> , QPair<int,int> > LaFoodSourceMap;
+
 enum Priority {None, High, Medium, Low};
 enum Status {MoreThanEnoughToCompletelySatisfy, NotEnoughToCompletelySatisfy};
 enum LandBeingGrazed {Common, Unique};
