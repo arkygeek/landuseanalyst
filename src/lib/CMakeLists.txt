@@ -7,6 +7,7 @@ SET(LA_CORE_SRCS
   laguid.cpp
   lacrop.cpp
   lacropparameter.cpp
+  lafoodsource.cpp
   laserialisable.cpp
   lautils.cpp
   lamodel.cpp
@@ -19,6 +20,7 @@ SET(LA_CORE_OTHER_HDRS
   lacrop.h
   lamodel.h
   lacropparameter.h
+  lafoodsource.h
   laserialisable.h
   version.h
   )

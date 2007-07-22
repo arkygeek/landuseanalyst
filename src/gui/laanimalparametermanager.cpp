@@ -21,6 +21,7 @@
 #include "la.h"
 #include "lautils.h"
 #include "laanimal.h"
+#include "lafoodsource.h"
 #include <QSettings>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
@@ -178,8 +179,6 @@ void LaAnimalParameterManager::populateFodder()
   tblFodder->setRowCount(0);
   tblFodder->setColumnCount(3);
   mFoodSourceMap.clear();
-  QPair <QString,bool> myFodderSource;
-  QPair <int,int> myFodderValues;
 
   int myCurrentRow=0;
   QMap<QString,LaCrop> myCropsMap;
@@ -211,19 +210,25 @@ void LaAnimalParameterManager::populateFodder()
     //mypSpinFodder->addItem(myParameterName,myParameterGuid);
     QSpinBox * mypSpinGrain = new QSpinBox(this);
 
+    const int myDefaultFodderValue=0;
+    const int myDefaultGrainValue=0;
+    
+    mypSpinFodder->setValue(myDefaultFodderValue);
+    mypSpinGrain->setValue(myDefaultGrainValue);
+
     //myCropsMap[myGuid]=myValue;
     tblFodder->setCellWidget ( myCurrentRow, 1, mypSpinFodder);
     tblFodder->setCellWidget ( myCurrentRow, 2, mypSpinGrain);
 
-    // set up the QPairs to insert into the fodder map
-    myFodderSource.first = myGuid;
-    myFodderSource.second = mypNameItem->checkState();
+    // Add fodder values to the fodder map - this will
+    // be updated again when user presses apply
 
-    myFodderValues.first = mypSpinFodder->value();
-    myFodderValues.second =mypSpinGrain->value();
+    LaFoodSource myFoodSource;
+    myFoodSource.setFodder(myDefaultFodderValue);
+    myFoodSource.setGrain(myDefaultGrainValue);
 
     // insert the two QPairs into the QMap
-    mFoodSourceMap.insert(myFodderSource,myFodderValues);
+    mFoodSourceMap.insert(myGuid,myFoodSource);
 
     myCurrentRow++;
   }

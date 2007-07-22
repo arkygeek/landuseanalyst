@@ -26,6 +26,7 @@
 #include <QMap>
 #include <QPair>
 #include <QString>
+#include <lafoodsource.h>
 
 //    <animal guid <enabled, animalparamters guid>>
 //    or
@@ -35,7 +36,7 @@ typedef QMap <QString,QPair<bool,QString> > LaTripleMap;
 //    LaFoodSource is a map < <Guid,enabled> , <Fodder,Grain> >
 //    or
 //    LaFoodSource is a map < <Guid,disabled> , <Fodder,Grain> >
-typedef QMap < QPair<QString,bool> , QPair<int,int> > LaFoodSourceMap;
+typedef QMap < QString, LaFoodSource > LaFoodSourceMap;
 
 enum Priority {None, High, Medium, Low};
 enum Status {MoreThanEnoughToCompletelySatisfy, NotEnoughToCompletelySatisfy};
