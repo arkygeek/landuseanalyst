@@ -60,6 +60,7 @@ class LaAnimalParameterManager : public QDialog, private Ui::LaAnimalParameterMa
       LaUtils::AnimalParameterMap mAnimalParameterMap;
       LaUtils::CropMap mCropMap;
       LaAnimalParameter mAnimalParameter;
+      LaFoodSourceMap mFoodSourceMap;
       void readSettings();
       void writeSettings();
       void setFallowComboBox();

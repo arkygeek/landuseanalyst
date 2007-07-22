@@ -22,6 +22,7 @@ class QString;
 #include "laserialisable.h"
 #include "laguid.h"
 #include "la.h"
+#include "lafoodsource.h"
 #include <QString>
 /**
   * A class to represent animal parameters
@@ -69,21 +70,10 @@ class LaAnimalParameter : public LaSerialisable, public LaGuid
     int areaUnits() const;
     bool fodderUse() const;
 
-    QString fodderSource1() const;
-    int fodder1() const;
-    int fodderGrain1() const;
-
-    QString fodderSource2() const;
-    int fodder2() const;
-    int fodderGrain2() const;
-
-    QString fodderSource3() const;
-    int fodder3() const;
-    int fodderGrain3() const;
+  // fodder stuff here
 
     Priority fallowUsage() const;
     QString rasterName() const;
-
 
     //
     // Mutators
@@ -112,17 +102,7 @@ class LaAnimalParameter : public LaSerialisable, public LaGuid
     void setFoodValueOfCommonGrazingLand(int theCalories);
     void setFodderUse(bool theBool);
 
-    void setFodderSource1(QString theGuid);
-    void setFodder1(int theValue);
-    void setFodderGrain1(int theValue);
-
-    void setFodderSource2(QString theGuid);
-    void setFodder2(int theValue);
-    void setFodderGrain2(int theValue);
-
-    void setFodderSource3(QString theGuid);
-    void setFodder3(int theValue);
-    void setFodderGrain3(int theValue);
+  // fodder stuff here
 
     /** If fallow is to be grazed, and if so, at either a
       * HIGH MED or LOW priority to it's access
@@ -166,23 +146,18 @@ class LaAnimalParameter : public LaSerialisable, public LaGuid
       */
     int mFoodValueOfCommonGrazingLand;
     bool mFodderUse;
-    QString mFodderSource1;
-    int mFodder1;
-    int mFodderGrain1;
+    /** This QMap contains
+      * <GUID of the crop, a bool of it used>,<fodder,grain>
+      */
+    LaFoodSourceMap mFoodSourceMap;
 
-    QString mFodderSource2;
-    int mFodder2;
-    int mFodderGrain2;
-
-    QString mFodderSource3;
-    int mFodder3;
-    int mFodderGrain3;
     /** If fallow is to be grazed, and if so, at either a
       * HIGH MED or LOW priority to it's access
       */
     Priority mFallowUsage;
     int mAreaUnits;
     QString mRasterName;
+
 };
 
 #endif //LAANIMALPARAMETER_H
