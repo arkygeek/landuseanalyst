@@ -177,9 +177,6 @@ void LaAnimalParameterManager::populateFodder()
   tblFodder->clear();
   tblFodder->setRowCount(0);
   tblFodder->setColumnCount(3);
-  mFoodSourceMap.clear();
-  QPair <QString,bool> myFodderSource;
-  QPair <int,int> myFodderValues;
 
   int myCurrentRow=0;
   QMap<QString,LaCrop> myCropsMap;
@@ -214,16 +211,6 @@ void LaAnimalParameterManager::populateFodder()
     //myCropsMap[myGuid]=myValue;
     tblFodder->setCellWidget ( myCurrentRow, 1, mypSpinFodder);
     tblFodder->setCellWidget ( myCurrentRow, 2, mypSpinGrain);
-
-    // set up the QPairs to insert into the fodder map
-    myFodderSource.first = myGuid;
-    myFodderSource.second = mypNameItem->checkState();
-
-    myFodderValues.first = mypSpinFodder->value();
-    myFodderValues.second =mypSpinGrain->value();
-
-    // insert the two QPairs into the QMap
-    mFoodSourceMap.insert(myFodderSource,myFodderValues);
 
     myCurrentRow++;
   }
@@ -261,8 +248,27 @@ void LaAnimalParameterManager::showAnimalParameter()
   comboBoxAreaUnits->setCurrentIndex(mAnimalParameter.areaUnits());
   grpFodderUse->setChecked(mAnimalParameter.fodderUse());
 
-  // fodder stuff
+  //sbFodder1->setValue(mAnimalParameter.fodder1());
+  //sbFodderGrain1->setValue(mAnimalParameter.fodderGrain1());
 
+  //sbFodder2->setValue(mAnimalParameter.fodder2());
+  //sbFodderGrain2->setValue(mAnimalParameter.fodderGrain2());
+
+  //sbFodder3->setValue(mAnimalParameter.fodder3());
+  //sbFodderGrain3->setValue(mAnimalParameter.fodderGrain3());
+
+  //LaAnimal myAnimal;
+  //QString myGuid = mAnimalsMap.key(mAnimalParameter.fodderSource1());
+  //setComboToDefault(cbFodderCrop1,mAnimalParameter.animalGuid());
+  //setComboToDefault(cbFodderCrop2,mAnimalParameter.animalGuid());
+  //setComboToDefault(cbFodderCrop3,mAnimalParameter.animalGuid());
+  //cbFodderCrop1->addItem(mAnimalParameter.fodderSource1(),myGuid);
+  //cbFodderCrop2->addItem(mAnimalParameter.fodderSource2());
+  //cbFodderCrop3->addItem(mAnimalParameter.fodderSource2());
+
+  //trial
+  //setFallowComboBox();
+  //endTrial
   if (mAnimalParameter.fallowUsage()==High)
   {
     setComboToDefault(comboBoxFallowUsage,tr("High"));
@@ -360,12 +366,17 @@ void LaAnimalParameterManager::on_pbnApply_clicked()
   mAnimalParameter.setFoodValueOfSpecificGrazingLand(sbSpecificRasterTDN->value());
   mAnimalParameter.setFodderUse(grpFodderUse->isChecked());
 
-  // fodder stuff
+  //mAnimalParameter.setFodderSource1(cbFodderCrop1->itemData(cbFodderCrop1->currentIndex(),Qt::UserRole).toString());
+  //mAnimalParameter.setFodder1(sbFodder1->value());
+  //mAnimalParameter.setFodderGrain1(sbFodderGrain1->value());
 
-  QPair <QString, bool> myCrop;
-  QPair <int, int> myFeed;
-  LaFoodSourceMap myFoodSourceMap;
+  //mAnimalParameter.setFodderSource2(cbFodderCrop1->itemData(cbFodderCrop2->currentIndex(),Qt::UserRole).toString());
+  //mAnimalParameter.setFodder2(sbFodder2->value());
+  //mAnimalParameter.setFodderGrain2(sbFodderGrain2->value());
 
+  //mAnimalParameter.setFodderSource3(cbFodderCrop1->itemData(cbFodderCrop3->currentIndex(),Qt::UserRole).toString());
+  //mAnimalParameter.setFodder3(sbFodder3->value());
+  //mAnimalParameter.setFodderGrain3(sbFodderGrain3->value());
 
   mAnimalParameter.setAreaUnits(comboBoxAreaUnits->currentIndex());
   QString myFallowUsage = QString(comboBoxFallowUsage->currentText());
