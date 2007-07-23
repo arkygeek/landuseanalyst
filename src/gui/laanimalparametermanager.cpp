@@ -381,13 +381,24 @@ void LaAnimalParameterManager::on_pbnApply_clicked()
     int myGrain, myFodder;
     bool myFodderFlag;
 
+    //QWidget * mypWidgetUsed = tblFodder->cellWidget(myCurrentRow,0);
     QWidget * mypWidgetFodder = tblFodder->cellWidget(myCurrentRow,1);
     QWidget * mypWidgetGrain = tblFodder->cellWidget(myCurrentRow,2);
+    //QTableWidgetItem * QTableWidget::item (myCurrentRow, 0);
+
+    //const QTableWidgetItem * item = tblFodder->item (myCurrentRow, 0);
     QSpinBox * mypSpinBoxFodder = qobject_cast<QSpinBox *> (mypWidgetFodder);
-    QSpinBox * mypSpinBoxGrain = qobject_cast<QSpinBox *> (mypWidgetGrain);
+    QSpinBox *  mypSpinBoxGrain = qobject_cast<QSpinBox *> (mypWidgetGrain);
+
+    //QTableWidgetItem *mypNameItem = new QTableWidgetItem(myCrop.name());
+    //mypNameItem->setCheckState(Qt::Unchecked);
+    //mypNameItem->setData(Qt::UserRole,myGuid);
+    //tblFodder->setItem(myCurrentRow, 0, mypNameItem);
+
 
     myFodder = mypSpinBoxFodder->value();
     myGrain = mypSpinBoxGrain->value();
+    //myFodderFlag = mypFodderFlag->checkState();
 
     myFoodSource.setGrain(myGrain);
     myFoodSource.setFodder(myFodder);
