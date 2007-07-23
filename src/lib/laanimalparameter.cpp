@@ -179,6 +179,11 @@ void LaAnimalParameter::setFodderUse(bool theBool)
 }
 
 // fodder stuff here
+void LaAnimalParameter::setFodderData(LaFoodSourceMap theFoodSourceMap)
+{
+  mFoodSourceMap = theFoodSourceMap;
+}
+
 
 void LaAnimalParameter::setFallowUsage(Priority thePriority)
 {

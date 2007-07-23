@@ -40,6 +40,11 @@ int LaFoodSource::fodder() const
   return mFodder;
 }
 
+bool LaFoodSource::useFodder() const
+{
+  return mUseFodder;
+}
+
 //mutators
 void LaFoodSource::setGrain(int theValue)
 {
@@ -49,4 +54,9 @@ void LaFoodSource::setGrain(int theValue)
 void LaFoodSource::setFodder(int theValue)
 {
   mFodder = theValue;
+}
+
+void LaFoodSource::setUseFodder(bool theFlag)
+{
+  mUseFodder = theFlag;
 }

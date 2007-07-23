@@ -103,6 +103,7 @@ class LaAnimalParameter : public LaSerialisable, public LaGuid
     void setFodderUse(bool theBool);
 
   // fodder stuff here
+    void setFodderData(LaFoodSourceMap theFoodSourceMap);
 
     /** If fallow is to be grazed, and if so, at either a
       * HIGH MED or LOW priority to it's access

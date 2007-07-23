@@ -66,6 +66,7 @@
     cboAnimal->addItem(myName,myGuid);
   }
   setFallowComboBox();
+  populateFodder();
 }
 
 LaAnimalParameterManager::~LaAnimalParameterManager()
@@ -91,7 +92,7 @@ void LaAnimalParameterManager::writeSettings()
 
 void LaAnimalParameterManager::refreshAnimalParameterTable(QString theGuid)
 {
-  populateFodder();
+
   mAnimalParameterMap.clear();
   tblAnimalParameterProfiles->clear();
   tblAnimalParameterProfiles->setRowCount(0);
@@ -178,6 +179,8 @@ void LaAnimalParameterManager::populateFodder()
   tblFodder->clear();
   tblFodder->setRowCount(0);
   tblFodder->setColumnCount(3);
+
+  LaFoodSource myFoodSource;
   mFoodSourceMap.clear();
 
   int myCurrentRow=0;
@@ -212,7 +215,7 @@ void LaAnimalParameterManager::populateFodder()
 
     const int myDefaultFodderValue=0;
     const int myDefaultGrainValue=0;
-    
+
     mypSpinFodder->setValue(myDefaultFodderValue);
     mypSpinGrain->setValue(myDefaultGrainValue);
 
@@ -222,12 +225,8 @@ void LaAnimalParameterManager::populateFodder()
 
     // Add fodder values to the fodder map - this will
     // be updated again when user presses apply
-
-    LaFoodSource myFoodSource;
     myFoodSource.setFodder(myDefaultFodderValue);
     myFoodSource.setGrain(myDefaultGrainValue);
-
-    // insert the two QPairs into the QMap
     mFoodSourceMap.insert(myGuid,myFoodSource);
 
     myCurrentRow++;
@@ -365,12 +364,7 @@ void LaAnimalParameterManager::on_pbnApply_clicked()
   mAnimalParameter.setFoodValueOfSpecificGrazingLand(sbSpecificRasterTDN->value());
   mAnimalParameter.setFodderUse(grpFodderUse->isChecked());
 
-  // fodder stuff
-
-  QPair <QString, bool> myCrop;
-  QPair <int, int> myFeed;
-  LaFoodSourceMap myFoodSourceMap;
-
+  mAnimalParameter.setFodderData(mFoodSourceMap);
 
   mAnimalParameter.setAreaUnits(comboBoxAreaUnits->currentIndex());
   QString myFallowUsage = QString(comboBoxFallowUsage->currentText());
