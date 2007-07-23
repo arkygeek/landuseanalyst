@@ -379,26 +379,18 @@ void LaAnimalParameterManager::on_pbnApply_clicked()
     LaFoodSource myFoodSource;
 
     int myGrain, myFodder;
-    //bool myFodderFlag;
+    bool myFodderFlag;
 
-    //QWidget * mypWidgetUsed = tblFodder->cellWidget(myCurrentRow,0);
     QWidget * mypWidgetFodder = tblFodder->cellWidget(myCurrentRow,1);
     QWidget * mypWidgetGrain = tblFodder->cellWidget(myCurrentRow,2);
-    //QTableWidgetItem * QTableWidget::item (myCurrentRow, 0);
 
-    const QTableWidgetItem * myFodderFlag = tblFodder->item (myCurrentRow, 0);
-    QSpinBox * mypSpinBoxFodder = qobject_cast<QSpinBox *> (mypWidgetFodder);
-    QSpinBox *  mypSpinBoxGrain = qobject_cast<QSpinBox *> (mypWidgetGrain);
-
-    //QTableWidgetItem *mypNameItem = new QTableWidgetItem(myCrop.name());
-    //mypNameItem->setCheckState(Qt::Unchecked);
-    //mypNameItem->setData(Qt::UserRole,myGuid);
-    //tblFodder->setItem(myCurrentRow, 0, mypNameItem);
-
+    const QTableWidgetItem * mypFodderFlag = tblFodder->item (myCurrentRow, 0);
+    const QSpinBox * mypSpinBoxFodder = qobject_cast<QSpinBox *> (mypWidgetFodder);
+    const QSpinBox *  mypSpinBoxGrain = qobject_cast<QSpinBox *> (mypWidgetGrain);
 
     myFodder = mypSpinBoxFodder->value();
     myGrain = mypSpinBoxGrain->value();
-    //myFodderFlag = mypFodderFlag->checkState();
+    myFodderFlag = mypFodderFlag->checkState();
 
     myFoodSource.setGrain(myGrain);
     myFoodSource.setFodder(myFodder);
