@@ -396,6 +396,8 @@ void LaAnimalParameterManager::on_pbnApply_clicked()
     myFoodSource.setFodder(myFodder);
     myFoodSource.setUseFodder(myFodderFlag);
 
+    mFoodSourceMap.insert(myCrop.guid(), myFoodSource);
+
     myCurrentRow++;
   }
 
