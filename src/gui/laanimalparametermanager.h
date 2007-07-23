@@ -26,6 +26,7 @@
 #include <ui_laanimalparametermanagerbase.h>
 #include <laanimalparameter.h>
 #include <lautils.h>
+#include <QSpinBox>
 class QTreeWidgetItem;
 /**
   This is the main gui class

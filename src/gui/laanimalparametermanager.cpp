@@ -365,7 +365,7 @@ void LaAnimalParameterManager::on_pbnApply_clicked()
   mAnimalParameter.setFodderUse(grpFodderUse->isChecked());
 
   // populate the fodder map from the table.
-  LaFoodSourceMap myFoodSourceMap;
+  mFoodSourceMap.clear();
 
   int myCurrentRow=0;
   QMap<QString,LaCrop> myCropsMap;
@@ -378,14 +378,21 @@ void LaAnimalParameterManager::on_pbnApply_clicked()
     LaCrop myCrop = myIterator.value();
     LaFoodSource myFoodSource;
 
-    myFoodSource.setGuid(myCrop.guid());
-    myFoodSource.setName(myCrop.name());
-    //myFoodSource.setGrain(putStuffHere);
-    //myFoodSource.setFodder(putStuffHere);
-    //myFoodSource.setUseFodder(putStuffHere);
+    int myGrain, myFodder;
+    bool myFodderFlag;
 
+    QWidget * mypWidgetFodder = tblFodder->cellWidget(myCurrentRow,1);
+    QWidget * mypWidgetGrain = tblFodder->cellWidget(myCurrentRow,2);
+    QSpinBox * mypSpinBoxFodder = static_cast<QSpinBox *> (mypWidgetFodder);
+    QSpinBox * mypSpinBoxGrain = static_cast<QSpinBox *> (mypWidgetGrain);
 
-    //tblFodder->insertRow(myCurrentRow);
+    myFodder = mypSpinBoxFodder->value();
+    myGrain = mypSpinBoxGrain->value();
+
+    myFoodSource.setGrain(myGrain);
+    myFoodSource.setFodder(myFodder);
+    myFoodSource.setUseFodder(myFodderFlag);
+
     myCurrentRow++;
   }
 

@@ -31,15 +31,6 @@ LaFoodSource::~LaFoodSource()
 
 //accessors
 
-QString LaFoodSource::guid() const
-{
-  return mGuid;
-}
-
-QString LaFoodSource::name() const
-{
-  return mName;
-}
 
 int LaFoodSource::grain() const
 {
@@ -57,15 +48,6 @@ bool LaFoodSource::useFodder() const
 }
 
 //mutators
-void LaFoodSource::setGuid(QString theGuid)
-{
-  mGuid = theGuid;
-}
-
-void LaFoodSource::setName(QString theName)
-{
-  mName = theName;
-}
 
 void LaFoodSource::setGrain(int theValue)
 {
