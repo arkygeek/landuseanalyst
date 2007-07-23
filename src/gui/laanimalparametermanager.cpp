@@ -364,6 +364,31 @@ void LaAnimalParameterManager::on_pbnApply_clicked()
   mAnimalParameter.setFoodValueOfSpecificGrazingLand(sbSpecificRasterTDN->value());
   mAnimalParameter.setFodderUse(grpFodderUse->isChecked());
 
+  // populate the fodder map from the table.
+  LaFoodSourceMap myFoodSourceMap;
+
+  int myCurrentRow=0;
+  QMap<QString,LaCrop> myCropsMap;
+  myCropsMap = LaUtils::getAvailableCrops();
+
+  QMapIterator<QString, LaCrop> myIterator(myCropsMap);
+  while (myIterator.hasNext())
+  {
+    myIterator.next();
+    LaCrop myCrop = myIterator.value();
+    LaFoodSource myFoodSource;
+
+    myFoodSource.setGuid(myCrop.guid());
+    myFoodSource.setName(myCrop.name());
+    //myFoodSource.setGrain(putStuffHere);
+    //myFoodSource.setFodder(putStuffHere);
+    //myFoodSource.setUseFodder(putStuffHere);
+
+
+    //tblFodder->insertRow(myCurrentRow);
+    myCurrentRow++;
+  }
+
   mAnimalParameter.setFodderData(mFoodSourceMap);
 
   mAnimalParameter.setAreaUnits(comboBoxAreaUnits->currentIndex());
