@@ -383,8 +383,8 @@ void LaAnimalParameterManager::on_pbnApply_clicked()
 
     QWidget * mypWidgetFodder = tblFodder->cellWidget(myCurrentRow,1);
     QWidget * mypWidgetGrain = tblFodder->cellWidget(myCurrentRow,2);
-    QSpinBox * mypSpinBoxFodder = static_cast<QSpinBox *> (mypWidgetFodder);
-    QSpinBox * mypSpinBoxGrain = static_cast<QSpinBox *> (mypWidgetGrain);
+    QSpinBox * mypSpinBoxFodder = qobject_cast<QSpinBox *> (mypWidgetFodder);
+    QSpinBox * mypSpinBoxGrain = qobject_cast<QSpinBox *> (mypWidgetGrain);
 
     myFodder = mypSpinBoxFodder->value();
     myGrain = mypSpinBoxGrain->value();
