@@ -366,39 +366,31 @@ void LaAnimalParameterManager::on_pbnApply_clicked()
 
   // populate the fodder map from the table.
   mFoodSourceMap.clear();
-
-  int myCurrentRow=0;
-  QMap<QString,LaCrop> myCropsMap;
-  myCropsMap = LaUtils::getAvailableCrops();
-
-  QMapIterator<QString, LaCrop> myIterator(myCropsMap);
-  while (myIterator.hasNext())
+  int myRowCount = tblFodder->rowCount();
+  for (int myCurrentRow=0; myCurrentRow < myRowCount; ++myCurrentRow)
   {
-    myIterator.next();
-    LaCrop myCrop = myIterator.value();
+
+    QTableWidgetItem * mypNameWidget = 
+      tblFodder->item(myCurrentRow,0);
+    QSpinBox * mypFodderSpinBox = 
+      qobject_cast<QSpinBox *> 
+      (tblFodder->cellWidget(myCurrentRow,1));
+    QSpinBox * mypGrainSpinBox = 
+      qobject_cast<QSpinBox *> 
+      (tblFodder->cellWidget(myCurrentRow,2));
+
+    //dont bother doing anything further if the 
+    //first widget in the row is not checked
+    if (!mypNameWidget->checkState())
+    {
+      continue;
+    }
     LaFoodSource myFoodSource;
+    myFoodSource.setFodder(mypFodderSpinBox->value());
+    myFoodSource.setGrain(mypGrainSpinBox->value());
+    QString myGuid = mypNameWidget->data(Qt::UserRole).toString();
 
-    int myGrain, myFodder;
-    bool myFodderFlag;
-
-    QWidget * mypWidgetFodder = tblFodder->cellWidget(myCurrentRow,1);
-    QWidget * mypWidgetGrain = tblFodder->cellWidget(myCurrentRow,2);
-
-    const QTableWidgetItem * mypFodderFlag = tblFodder->item (myCurrentRow, 0);
-    const QSpinBox * mypSpinBoxFodder = qobject_cast<QSpinBox *> (mypWidgetFodder);
-    const QSpinBox *  mypSpinBoxGrain = qobject_cast<QSpinBox *> (mypWidgetGrain);
-
-    myFodder = mypSpinBoxFodder->value();
-    myGrain = mypSpinBoxGrain->value();
-    myFodderFlag = mypFodderFlag->checkState();
-
-    myFoodSource.setGrain(myGrain);
-    myFoodSource.setFodder(myFodder);
-    myFoodSource.setUseFodder(myFodderFlag);
-
-    mFoodSourceMap.insert(myCrop.guid(), myFoodSource);
-
-    myCurrentRow++;
+    mFoodSourceMap.insert(myGuid, myFoodSource);
   }
 
   mAnimalParameter.setFodderData(mFoodSourceMap);
