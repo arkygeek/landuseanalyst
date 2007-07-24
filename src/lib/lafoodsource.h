@@ -33,17 +33,14 @@ public:
   // accessors
   int grain() const;
   int fodder() const;
-  bool useFodder() const;
 
   // mutators
   void setGrain(int theValue);
   void setFodder(int theValue);
-  void setUseFodder(bool theFlag);
 
 private:
   int mGrain;
   int mFodder;
-  bool mUseFodder;
 
 };
 
