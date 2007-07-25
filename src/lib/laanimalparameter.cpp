@@ -261,7 +261,24 @@ QString LaAnimalParameter::toXml()
 
   if (myFodderUse=="Used")
   {
+      myString+=QString("   <fodderCrops>\n");
     // write out the map for fodder info to xml
+    QMapIterator<QString, LaFoodSource> myIterator(mFoodSourceMap);
+    while (myIterator.hasNext())
+    {
+      myIterator.next();
+      LaFoodSource myFoodSource = myIterator.value();
+
+      QString myGuid = myIterator.key();
+      QString myFodderStrawChaff = QString::number(myFoodSource.fodder());
+      QString myFodderGrain = QString::number(myFoodSource.grain());
+      myString+=QString("    <fodderCrop>\n");
+      myString+=QString("      <fodderCropGuid>"+ myGuid +"</fodderCropGuid>\n");
+      myString+=QString("      <fodderStrawChaff>"+ myFodderStrawChaff +"</fodderStrawChaff>\n");
+      myString+=QString("      <fodderGrain>"+ myFodderGrain +"</fodderGrain>\n");
+      myString+=QString("    </fodderCrop>\n");
+    }
+      myString+=QString("   </fodderCrops>\n");
   }
 
   switch (mFallowUsage)
@@ -360,7 +377,25 @@ QString LaAnimalParameter::toHtml()
   }
   if (myFodderUse=="Used")
   {
-    // write out the map for fodder info to html
+    myString+=QString("   <fodderCrops>\n");
+    // write out the map for fodder info to xml
+    int myCounter = 0;
+    QMapIterator<QString, LaFoodSource> myIterator(mFoodSourceMap);
+    while (myIterator.hasNext())
+    {
+      myIterator.next();
+      myCounter++;
+      LaFoodSource myFoodSource = myIterator.value();
+
+      QString myGuid = myIterator.key();
+      QString myFodderStrawChaff = QString::number(myFoodSource.fodder());
+      QString myFodderGrain = QString::number(myFoodSource.grain());
+
+      myString+="<tr><td>Fodder Source #:</td><td> " + QString::number(myCounter) + "</td></tr>";
+      myString+="<tr><td>Crop Guid: "+ myGuid + "</td></tr>";
+      myString+="<tr><td>Straw and Chaff: "+ myFodderStrawChaff + "</td></tr>";
+      myString+="<tr><td>Grain: "+ myFodderGrain + "</td></tr>";
+    }
   }
   else
   {
