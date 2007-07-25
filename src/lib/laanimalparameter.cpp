@@ -220,7 +220,19 @@ mFoodValueOfSpecificGrazingLand=QString(myTopElement.firstChildElement("foodValu
 ///////////
   mAreaUnits=QString(myTopElement.firstChildElement("areaUnits").text()).toInt();
   mFodderUse=QString(myTopElement.firstChildElement("fodderUse").text()).toInt();
-  // fodder stuff here
+  // populate the fodder map
+  mFoodSourceMap.clear();
+  QDomNodeList myFodderCropsList = myDocument.elementsByTagName("fodderCrop");
+  for (int myCounter=0; myCounter < myFodderCropsList.size(); myCounter++)
+  {
+    QDomNode myFoodSourceNode = myFodderCropsList.item(myCounter);
+    QDomElement myFoodSourceElement = myFoodSourceNode.toElement();
+
+    QString myGuid = myFoodSourceElement.firstChildElement("fodderCropGuid").text();
+    QString myFodderStrawChaff = QString(myFoodSourceElement.firstChildElement("fodderStrawChaff").text());
+    QString myGrain = QString(myFoodSourceElement.firstChildElement("fodderGrain").text());
+
+  }
 
   QString myFallowUsage = QString(myTopElement.firstChildElement("fallowUsage").text());
   if (myFallowUsage == "High")
