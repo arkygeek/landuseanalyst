@@ -228,11 +228,19 @@ mFoodValueOfSpecificGrazingLand=QString(myTopElement.firstChildElement("foodValu
     QDomNode myFoodSourceNode = myFodderCropsList.item(myCounter);
     QDomElement myFoodSourceElement = myFoodSourceNode.toElement();
 
+    // load the data from the xml into local variables
     QString myGuid = myFoodSourceElement.firstChildElement("fodderCropGuid").text();
-    QString myFodderStrawChaff = QString(myFoodSourceElement.firstChildElement("fodderStrawChaff").text());
-    QString myGrain = QString(myFoodSourceElement.firstChildElement("fodderGrain").text());
+    int myFodderStrawChaff = myFoodSourceElement.firstChildElement("fodderStrawChaff").text().toInt();
+    int myGrain = myFoodSourceElement.firstChildElement("fodderGrain").text().toInt();
+    LaFoodSource myFoodSource;
 
-  }
+    // setup the data to insert into the map
+    myFoodSource.setFodder(myFodderStrawChaff);
+    myFoodSource.setGrain(myGrain);
+
+    // insert data into map
+    mFoodSourceMap.insert(myGuid,myFoodSource);
+  } // end of for loop
 
   QString myFallowUsage = QString(myTopElement.firstChildElement("fallowUsage").text());
   if (myFallowUsage == "High")
