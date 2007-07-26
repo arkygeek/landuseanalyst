@@ -47,6 +47,7 @@ LaAnimalParameter::LaAnimalParameter(const LaAnimalParameter& theAnimalParameter
   mFoodValueOfCommonGrazingLand = theAnimalParameter.foodValueOfCommonGrazingLand();
   mAreaUnits = theAnimalParameter.areaUnits();
   mFodderUse = theAnimalParameter.fodderUse();
+  mFoodSourceMap = theAnimalParameter.fodderSourceMap();
 
   // fodder stuff here
 
@@ -124,7 +125,6 @@ bool LaAnimalParameter::fodderUse() const
 
 LaFoodSourceMap LaAnimalParameter::fodderSourceMap() const
 {
-
   return mFoodSourceMap;
 }
 
@@ -220,8 +220,8 @@ bool LaAnimalParameter::fromXml(QString theXml)
   mUseCommonGrazingLand=QString(myTopElement.firstChildElement("useCommonGrazingLand").text()).toInt();
   mUseSpecificGrazingLand=QString(myTopElement.firstChildElement("useSpecificGrazingLand").text()).toInt();
   mFoodValueOfCommonGrazingLand=QString(myTopElement.firstChildElement("foodValueOfCommonGrazingLand").text()).toInt();
-mFoodValueOfSpecificGrazingLand=QString(myTopElement.firstChildElement("foodValueOfSpecificGrazingLand").text()).toInt();
-///////////
+  mFoodValueOfSpecificGrazingLand=QString(myTopElement.firstChildElement("foodValueOfSpecificGrazingLand").text()).toInt();
+  ///////////
   mAreaUnits=QString(myTopElement.firstChildElement("areaUnits").text()).toInt();
   mFodderUse=QString(myTopElement.firstChildElement("fodderUse").text()).toInt();
   // populate the fodder map
@@ -241,25 +241,23 @@ mFoodValueOfSpecificGrazingLand=QString(myTopElement.firstChildElement("foodValu
     // setup the data to insert into the map
     myFoodSource.setFodder(myFodderStrawChaff);
     myFoodSource.setGrain(myGrain);
-    qDebug("myFodderStrawChaff: " + QString::number(myFodderStrawChaff).toLocal8Bit());
-    qDebug("myFodderGrain: " + QString::number(myGrain).toLocal8Bit());
     // insert data into map
     mFoodSourceMap.insert(myGuid,myFoodSource);
-    qDebug("Number of food sources: " + QString::number(mFoodSourceMap.count()).toLocal8Bit());
   } // end of for loop
+  qDebug("Number of food sources restored from xml: " + QString::number(mFoodSourceMap.count()).toLocal8Bit());
 
   QString myFallowUsage = QString(myTopElement.firstChildElement("fallowUsage").text());
   if (myFallowUsage == "High")
   {
-      mFallowUsage=High;
+    mFallowUsage=High;
   }
   else if (myFallowUsage == "Medium")
   {
-      mFallowUsage=Medium;
+    mFallowUsage=Medium;
   }
   else if (myFallowUsage == "Low")
   {
-      mFallowUsage=Low;
+    mFallowUsage=Low;
   }
   else
   {
@@ -272,7 +270,6 @@ mFoodValueOfSpecificGrazingLand=QString(myTopElement.firstChildElement("foodValu
 QString LaAnimalParameter::toXml()
 {
   QString myString;
-  QString myFodderUse = (mFodderUse==0) ? "Not Used" : "Used";
 
   myString+=QString("<animalParameter guid=\"" + guid() + "\">\n");
   myString+=QString("  <name>" + LaUtils::xmlEncode(mName) + "</name>\n");
@@ -285,9 +282,11 @@ QString LaAnimalParameter::toXml()
   myString+=QString("  <areaUnits>" + QString::number(mAreaUnits) + "</areaUnits>\n");
   myString+=QString("  <fodderUse>"+ QString::number(mFodderUse) +"</fodderUse>\n");
 
-  if (myFodderUse=="Used")
+  if (mFodderUse)
   {
-      myString+=QString("   <fodderCrops>\n");
+
+    qDebug("Fodder is used");
+    myString+=QString("   <fodderCrops>\n");
     // write out the map for fodder info to xml
     QMapIterator<QString, LaFoodSource> myIterator(mFoodSourceMap);
     while (myIterator.hasNext())
@@ -304,7 +303,11 @@ QString LaAnimalParameter::toXml()
       myString+=QString("      <fodderGrain>"+ myFodderGrain + "</fodderGrain>\n");
       myString+=QString("    </fodderCrop>\n");
     }
-      myString+=QString("   </fodderCrops>\n");
+    myString+=QString("   </fodderCrops>\n");
+  }
+  else
+  {
+    qDebug("Fodder is not used");
   }
 
   switch (mFallowUsage)
@@ -330,7 +333,6 @@ QString LaAnimalParameter::toXml()
 QString LaAnimalParameter::toText()
 {
   QString myString;
-  QString myFodderUse = (mFodderUse==0) ? "Not Used" : "Used";
 
   myString+=QString("guid=>" + guid() + "\n");
   myString+=QString("name=>" + LaUtils::xmlEncode(mName) + "\n");
@@ -344,7 +346,7 @@ QString LaAnimalParameter::toText()
   myString+=QString("areaUnits=>" + QString::number(mAreaUnits) + "\n");
   myString+=QString("fodderUse=>" + QString::number(mFodderUse) + "\n");
 
-  if (myFodderUse=="Used")
+  if (mFodderUse)
   {
     // write out the map for fodder info to text
   }
@@ -361,7 +363,6 @@ QString LaAnimalParameter::toText()
 QString LaAnimalParameter::toHtml()
 {
   QString myString;
-  QString myFodderUse = (mFodderUse==0) ? "Not Used" : "Used";
   QString myFallowUsage;
   switch (mFallowUsage)
   {
@@ -401,7 +402,7 @@ QString LaAnimalParameter::toHtml()
   {
     myString+="<tr><td>Fallow Grazing:</td><td>" + myFallowUsage + "</td></tr>";
   }
-  if (myFodderUse=="Used")
+  if (mFodderUse)
   {
     myString+=QString("   <fodderCrops>\n");
     // write out the map for fodder info to xml

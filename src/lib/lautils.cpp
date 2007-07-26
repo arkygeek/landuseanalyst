@@ -243,6 +243,13 @@ LaUtils::AnimalParameterMap LaUtils::getAvailableAnimalParameters()
       //qDebug("Adding " + myAnimalParameter.name());
       //qDebug(myAnimalParameter.toText().toLocal8Bit());
       myMap[myAnimalParameter.guid()]=myAnimalParameter;
+
+
+      //for debug only...
+      ;
+      qDebug(" ++ lautil  Restoring " + 
+          QString::number(myAnimalParameter.fodderSourceMap().count()).toLocal8Bit()
+          + " food sources into animal parameter.");
     }
   }
   return myMap;
