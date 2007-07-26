@@ -233,6 +233,55 @@ void LaAnimalParameterManager::populateFodder()
   }
 }
 
+void LaAnimalParameterManager::refreshFodderTable(QString theGuid)
+{
+  // int myMapSize = mFoodSourceMap.size();
+
+  // start outer loop (TableSize)
+  for (int myCounter=0; myCounter < tblFodder->rowCount(); myCounter++)
+  {
+    // start inner loop (iterate through the map)
+    QMapIterator<QString, LaFoodSource> myIterator(mFoodSourceMap);
+    while (myIterator.hasNext())
+    {
+      myIterator.next();
+      LaFoodSource myFoodSource = myIterator.value();
+      LaCrop myCrop = LaUtils::getCrop(myIterator.key());
+      QString myGuid = myCrop.guid();
+      QString myName = myCrop.name();
+/*
+      //tblFodder->insertRow(myCurrentRow);
+      QTableWidgetItem *mypNameItem = new QTableWidgetItem(myCrop.name());
+      mypNameItem->setCheckState(Qt::Unchecked);
+      mypNameItem->setData(Qt::UserRole,myGuid);
+      //tblFodder->setItem(myCurrentRow, 0, mypNameItem);
+
+      QSpinBox * mypSpinFodder = new QSpinBox(this);
+      //mypSpinFodder->addItem(myParameterName,myParameterGuid);
+      QSpinBox * mypSpinGrain = new QSpinBox(this);
+
+      const int myDefaultFodderValue=0;
+      const int myDefaultGrainValue=0;
+
+      mypSpinFodder->setValue(myDefaultFodderValue);
+      mypSpinGrain->setValue(myDefaultGrainValue);
+
+      //myCropsMap[myGuid]=myValue;
+      //tblFodder->setCellWidget ( myCurrentRow, 1, mypSpinFodder);
+      //tblFodder->setCellWidget ( myCurrentRow, 2, mypSpinGrain);
+
+      // Add fodder values to the fodder map - this will
+      // be updated again when user presses apply
+      myFoodSource.setFodder(myDefaultFodderValue);
+      myFoodSource.setGrain(myDefaultGrainValue);
+      //mFoodSourceMap.insert(myGuid,myFoodSource);
+
+      //myCurrentRow++;
+*/
+    }
+  }
+}
+
 void LaAnimalParameterManager::cellClicked(int theRow, int theColumn)
 {
   //note we use the alg name not the id becuase user may have customised params
@@ -370,16 +419,16 @@ void LaAnimalParameterManager::on_pbnApply_clicked()
   for (int myCurrentRow=0; myCurrentRow < myRowCount; ++myCurrentRow)
   {
 
-    QTableWidgetItem * mypNameWidget = 
+    QTableWidgetItem * mypNameWidget =
       tblFodder->item(myCurrentRow,0);
-    QSpinBox * mypFodderSpinBox = 
-      qobject_cast<QSpinBox *> 
+    QSpinBox * mypFodderSpinBox =
+      qobject_cast<QSpinBox *>
       (tblFodder->cellWidget(myCurrentRow,1));
-    QSpinBox * mypGrainSpinBox = 
-      qobject_cast<QSpinBox *> 
+    QSpinBox * mypGrainSpinBox =
+      qobject_cast<QSpinBox *>
       (tblFodder->cellWidget(myCurrentRow,2));
 
-    //dont bother doing anything further if the 
+    //dont bother doing anything further if the
     //first widget in the row is not checked
     if (!mypNameWidget->checkState())
     {

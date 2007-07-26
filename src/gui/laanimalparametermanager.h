@@ -58,17 +58,19 @@ class LaAnimalParameterManager : public QDialog, private Ui::LaAnimalParameterMa
   private:
       void refreshAnimalParameterTable(QString theGuid=0);
       void selectAnimalParameter(QString theFileName);
+      void refreshFodderTable(QString theGuid=0);
+      void readSettings();
+      void writeSettings();
+      void setFallowComboBox();
+      void populateFodder();
+
+      /** @TODO move this into LaGuiUtils - a gui subclass of LaUtils */
+      bool setComboToDefault(QComboBox * thepCombo, QString theDefault);
 
       LaUtils::AnimalParameterMap mAnimalParameterMap;
       LaUtils::CropMap mCropMap;
       LaAnimalParameter mAnimalParameter;
       LaFoodSourceMap mFoodSourceMap;
-      void readSettings();
-      void writeSettings();
-      void setFallowComboBox();
-      void populateFodder();
-      /** @TODO move this into LaGuiUtils - a gui subclass of LaUtils */
-      bool setComboToDefault(QComboBox * thepCombo, QString theDefault);
 };
 
 #endif //LAANIMALPARAMETERMANAGER_H

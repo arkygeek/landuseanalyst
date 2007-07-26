@@ -69,8 +69,7 @@ class LaAnimalParameter : public LaSerialisable, public LaGuid
       */
     int areaUnits() const;
     bool fodderUse() const;
-
-  // fodder stuff here
+    LaFoodSourceMap fodderSourceMap() const;
 
     Priority fallowUsage() const;
     QString rasterName() const;

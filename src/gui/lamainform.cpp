@@ -630,57 +630,21 @@ void LaMainForm::on_pushButtonRun_clicked()
   myModel.setCommonLandValue(sbCommonRasterTDN->value());
   tbReport->setHtml(myModel.toHtml());
 
-  // for debugging only...
-  qDebug("LAMAINFORM!!!!");
-  qDebug("Number of Crops: " + QString::number(myModel.countCrops()).toLocal8Bit());
-  qDebug("Number of Animals: " + QString::number(myModel.countAnimals()).toLocal8Bit());
-  qDebug("Calories from Crops: " + QString::number(myModel.caloriesFromCrops()).toLocal8Bit());
-  qDebug("Calories from Animals: " + QString::number(myModel.caloriesFromTameMeat()).toLocal8Bit());
-  qDebug("end LAMAINFORM!!!!");
   // iterate through crops and animals and display the calorie, production and area targets
   myModel.DoCalculations();
   myModel.toXmlFile( LaUtils::getModelOutputDir() +
       QDir::separator() + myModel.guid() + ".xml");
 
-  //tbReport->append("Crop Calorie Targets");
   tbReport->append(myModel.toHtmlCalorieCropTargets());
-  //tbReport->append("Animal Calorie Targets");
   tbReport->append(myModel.toHtmlCalorieAnimalTargets());
 
-  //tbReport->append("Crop Production Targets");
   tbReport->append(myModel.toHtmlProductionCropTargets());
-  //tbReport->append("Animal Production Targets");
   tbReport->append(myModel.toHtmlProductionAnimalTargets());
 
-  //tbReport->append("Crop Area Targets");
   tbReport->append(myModel.toHtmlAreaCropTargets());
-  //tbReport->append("Animal Area Targets");
   tbReport->append(myModel.toHtmlAreaAnimalTargets());
 }
 
-
-/*
-void LaMainForm::selectedCrops()
-{
-  // Get a list of the selected crops
-
-  //          <crop guid <enabled, cropparamters guid>>
-  QMapIterator<QString, QPair<bool, QString> > myCropIterator(mCropsMap);
-  while (myCropIterator.hasNext())
-  {
-    myCropIterator.next();
-    QPair<bool,QString> myPair = myCropIterator.value();
-    QString myCropGuid = myCropIterator.key();
-    QString myCropParameterGuid = myPair.second;
-    bool mySelectedFlag = myPair.first;
-    if (mySelectedFlag)
-    {
-      mSelectedCropsMap.insert(myCropGuid,myCropParameterGuid);
-      qDebug("Added <" + myCropGuid.toLocal8Bit() + " , " + myCropParameterGuid.toLocal8Bit() + " >");
-    }
-  }
-}
-*/
 
 void LaMainForm::debugChecks()
 {
@@ -800,7 +764,6 @@ void LaMainForm::cropCalcClicked(QListWidgetItem * thepCurrentItem, QListWidgetI
     if (mySelectedFlag)
     {
       mySelectedCropsMap.insert(myCropGuid,myCropParameterGuid);
-      qDebug("Added <" + myCropGuid.toLocal8Bit() + " , " + myCropParameterGuid.toLocal8Bit() + " >");
     }
   }
   myModel.setCrops(mySelectedCropsMap);
@@ -828,11 +791,6 @@ void LaMainForm::cropCalcClicked(QListWidgetItem * thepCurrentItem, QListWidgetI
   QMap <QString, QString> myCalcsMap = myModel.calcsCropsMap();
   textBrowserResultsCrop->setText(myCalcsMap.value(myGuid));
   progressBarCalcs->setMaximum(100);
-
-  //textBrowserResultsCrop->setText("Item clicked in crop calcs: " + thepCurrentItem->text());
-  //textBrowserResultsCrop->append("Guid: " + thepCurrentItem->data(Qt::UserRole).toString());
-  //LaModel myModel;
-
 }
 
 void LaMainForm::animalCalcClicked(QListWidgetItem * thepCurrentItem, QListWidgetItem * thepOldItem)

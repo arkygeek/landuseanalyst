@@ -122,7 +122,10 @@ bool LaAnimalParameter::fodderUse() const
   return mFodderUse;
 }
 
-//fodder stuff here
+LaFoodSourceMap LaAnimalParameter::fodderSourceMap() const
+{
+  return mFoodSourceMap;
+}
 
 Priority LaAnimalParameter::fallowUsage() const
 {
@@ -293,9 +296,9 @@ QString LaAnimalParameter::toXml()
       QString myFodderStrawChaff = QString::number(myFoodSource.fodder());
       QString myFodderGrain = QString::number(myFoodSource.grain());
       myString+=QString("    <fodderCrop>\n");
-      myString+=QString("      <fodderCropGuid>"+ myGuid +"</fodderCropGuid>\n");
-      myString+=QString("      <fodderStrawChaff>"+ myFodderStrawChaff +"</fodderStrawChaff>\n");
-      myString+=QString("      <fodderGrain>"+ myFodderGrain +"</fodderGrain>\n");
+      myString+=QString("      <fodderCropGuid>" + myGuid + "</fodderCropGuid>\n");
+      myString+=QString("      <fodderStrawChaff>" + myFodderStrawChaff + "</fodderStrawChaff>\n");
+      myString+=QString("      <fodderGrain>"+ myFodderGrain + "</fodderGrain>\n");
       myString+=QString("    </fodderCrop>\n");
     }
       myString+=QString("   </fodderCrops>\n");
