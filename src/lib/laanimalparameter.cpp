@@ -124,6 +124,7 @@ bool LaAnimalParameter::fodderUse() const
 
 LaFoodSourceMap LaAnimalParameter::fodderSourceMap() const
 {
+
   return mFoodSourceMap;
 }
 
@@ -240,7 +241,8 @@ mFoodValueOfSpecificGrazingLand=QString(myTopElement.firstChildElement("foodValu
     // setup the data to insert into the map
     myFoodSource.setFodder(myFodderStrawChaff);
     myFoodSource.setGrain(myGrain);
-
+    qDebug("myFodderStrawChaff: " + QString::number(myFodderStrawChaff).toLocal8Bit());
+    qDebug("myFodderGrain: " + QString::number(myGrain).toLocal8Bit());
     // insert data into map
     mFoodSourceMap.insert(myGuid,myFoodSource);
   } // end of for loop

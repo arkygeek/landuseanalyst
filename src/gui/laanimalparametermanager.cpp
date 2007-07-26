@@ -235,6 +235,7 @@ void LaAnimalParameterManager::populateFodder()
 
 void LaAnimalParameterManager::refreshFodderTable(QString theGuid)
 {
+  mFoodSourceMap = LaAnimalParameter().fodderSourceMap();
   for (int myCurrentRow=0; myCurrentRow < tblFodder->rowCount(); myCurrentRow++)
   {
     QTableWidgetItem * mypItem = tblFodder->item(myCurrentRow,0);
@@ -288,7 +289,7 @@ void LaAnimalParameterManager::showAnimalParameter()
   comboBoxAreaUnits->setCurrentIndex(mAnimalParameter.areaUnits());
   grpFodderUse->setChecked(mAnimalParameter.fodderUse());
 
-  // fodder stuff
+  refreshFodderTable();
 
   if (mAnimalParameter.fallowUsage()==High)
   {
