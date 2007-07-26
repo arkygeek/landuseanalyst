@@ -245,6 +245,7 @@ mFoodValueOfSpecificGrazingLand=QString(myTopElement.firstChildElement("foodValu
     qDebug("myFodderGrain: " + QString::number(myGrain).toLocal8Bit());
     // insert data into map
     mFoodSourceMap.insert(myGuid,myFoodSource);
+    qDebug("Number of food sources: " + QString::number(mFoodSourceMap.count()).toLocal8Bit());
   } // end of for loop
 
   QString myFallowUsage = QString(myTopElement.firstChildElement("fallowUsage").text());
