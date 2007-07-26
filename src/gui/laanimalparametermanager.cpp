@@ -181,7 +181,7 @@ void LaAnimalParameterManager::populateFodder()
   tblFodder->setColumnCount(3);
 
   LaFoodSource myFoodSource;
-  mFoodSourceMap.clear();
+  //mFoodSourceMap.clear();
 
   int myCurrentRow=0;
   QMap<QString,LaCrop> myCropsMap;
@@ -227,7 +227,7 @@ void LaAnimalParameterManager::populateFodder()
     // be updated again when user presses apply
     myFoodSource.setFodder(myDefaultFodderValue);
     myFoodSource.setGrain(myDefaultGrainValue);
-    mFoodSourceMap.insert(myGuid,myFoodSource);
+    //mFoodSourceMap.insert(myGuid,myFoodSource);
 
     myCurrentRow++;
   }
@@ -235,7 +235,6 @@ void LaAnimalParameterManager::populateFodder()
 
 void LaAnimalParameterManager::refreshFodderTable(QString theGuid)
 {
-  mFoodSourceMap = LaAnimalParameter().fodderSourceMap();
   for (int myCurrentRow=0; myCurrentRow < tblFodder->rowCount(); myCurrentRow++)
   {
     QTableWidgetItem * mypItem = tblFodder->item(myCurrentRow,0);
@@ -243,10 +242,12 @@ void LaAnimalParameterManager::refreshFodderTable(QString theGuid)
 
     QSpinBox * mypFodderSpinBox = qobject_cast <QSpinBox *> (tblFodder->cellWidget(myCurrentRow,1));
     QSpinBox * mypGrainSpinBox = qobject_cast <QSpinBox *> (tblFodder->cellWidget(myCurrentRow,2));
+    LaAnimalParameter myAnimalParameter;
+    LaFoodSourceMap myFoodSourceMap = myAnimalParameter.fodderSourceMap();
 
-    if (mFoodSourceMap.contains(myGuid))
+    if (myFoodSourceMap.contains(myGuid))
     {
-      LaFoodSource myFoodSource = mFoodSourceMap.value(myGuid);
+      LaFoodSource myFoodSource = myFoodSourceMap.value(myGuid);
       int myFodderValue = myFoodSource.fodder();
       int myGrainValue = myFoodSource.grain();
       ///@TODO remove this debug stuff
@@ -393,7 +394,7 @@ void LaAnimalParameterManager::on_pbnApply_clicked()
   mAnimalParameter.setFodderUse(grpFodderUse->isChecked());
 
   // populate the fodder map from the table.
-  mFoodSourceMap.clear();
+  LaFoodSourceMap myFoodSourceMap;
   int myRowCount = tblFodder->rowCount();
   for (int myCurrentRow=0; myCurrentRow < myRowCount; ++myCurrentRow)
   {
@@ -418,10 +419,11 @@ void LaAnimalParameterManager::on_pbnApply_clicked()
     myFoodSource.setGrain(mypGrainSpinBox->value());
     QString myGuid = mypNameWidget->data(Qt::UserRole).toString();
 
-    mFoodSourceMap.insert(myGuid, myFoodSource);
+    myFoodSourceMap.insert(myGuid, myFoodSource);
+
   }
 
-  mAnimalParameter.setFodderData(mFoodSourceMap);
+  mAnimalParameter.setFodderData(myFoodSourceMap);
 
   mAnimalParameter.setAreaUnits(comboBoxAreaUnits->currentIndex());
   QString myFallowUsage = QString(comboBoxFallowUsage->currentText());

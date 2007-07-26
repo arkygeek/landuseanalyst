@@ -70,7 +70,6 @@ class LaAnimalParameterManager : public QDialog, private Ui::LaAnimalParameterMa
       LaUtils::AnimalParameterMap mAnimalParameterMap;
       LaUtils::CropMap mCropMap;
       LaAnimalParameter mAnimalParameter;
-      LaFoodSourceMap mFoodSourceMap;
 };
 
 #endif //LAANIMALPARAMETERMANAGER_H
