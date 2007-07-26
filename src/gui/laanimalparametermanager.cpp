@@ -235,49 +235,23 @@ void LaAnimalParameterManager::populateFodder()
 
 void LaAnimalParameterManager::refreshFodderTable(QString theGuid)
 {
-  // int myMapSize = mFoodSourceMap.size();
-
-  // start outer loop (TableSize)
-  for (int myCounter=0; myCounter < tblFodder->rowCount(); myCounter++)
+  for (int myCurrentRow=0; myCurrentRow < tblFodder->rowCount(); myCurrentRow++)
   {
-    // start inner loop (iterate through the map)
-    QMapIterator<QString, LaFoodSource> myIterator(mFoodSourceMap);
-    while (myIterator.hasNext())
+    QTableWidgetItem * mypItem = tblFodder->item(myCurrentRow,0);
+    QString myGuid = mypItem->data(Qt::UserRole).toString();
+
+    QSpinBox * mypFodderSpinBox = qobject_cast <QSpinBox *> (tblFodder->cellWidget(myCurrentRow,1));
+    QSpinBox * mypGrainSpinBox = qobject_cast <QSpinBox *> (tblFodder->cellWidget(myCurrentRow,2));
+
+    if (mFoodSourceMap.contains(myGuid))
     {
-      myIterator.next();
-      LaFoodSource myFoodSource = myIterator.value();
-      LaCrop myCrop = LaUtils::getCrop(myIterator.key());
-      QString myGuid = myCrop.guid();
-      QString myName = myCrop.name();
-/*
-      //tblFodder->insertRow(myCurrentRow);
-      QTableWidgetItem *mypNameItem = new QTableWidgetItem(myCrop.name());
-      mypNameItem->setCheckState(Qt::Unchecked);
-      mypNameItem->setData(Qt::UserRole,myGuid);
-      //tblFodder->setItem(myCurrentRow, 0, mypNameItem);
+      LaFoodSource myFoodSource = mFoodSourceMap.value(myGuid);
+      int myFodderValue = myFoodSource.fodder();
+      int myGrainValue = myFoodSource.grain();
 
-      QSpinBox * mypSpinFodder = new QSpinBox(this);
-      //mypSpinFodder->addItem(myParameterName,myParameterGuid);
-      QSpinBox * mypSpinGrain = new QSpinBox(this);
-
-      const int myDefaultFodderValue=0;
-      const int myDefaultGrainValue=0;
-
-      mypSpinFodder->setValue(myDefaultFodderValue);
-      mypSpinGrain->setValue(myDefaultGrainValue);
-
-      //myCropsMap[myGuid]=myValue;
-      //tblFodder->setCellWidget ( myCurrentRow, 1, mypSpinFodder);
-      //tblFodder->setCellWidget ( myCurrentRow, 2, mypSpinGrain);
-
-      // Add fodder values to the fodder map - this will
-      // be updated again when user presses apply
-      myFoodSource.setFodder(myDefaultFodderValue);
-      myFoodSource.setGrain(myDefaultGrainValue);
-      //mFoodSourceMap.insert(myGuid,myFoodSource);
-
-      //myCurrentRow++;
-*/
+      mypFodderSpinBox->setValue(myFodderValue);
+      mypGrainSpinBox->setValue(myGrainValue);
+      mypItem->setCheckState(Qt::Checked);
     }
   }
 }
@@ -381,6 +355,7 @@ void LaAnimalParameterManager::on_toolCopy_clicked()
   myAnimalParameter.setName(tr("Copy of ") + myAnimalParameter.name());
   myAnimalParameter.toXmlFile(myNewFileName);
   refreshAnimalParameterTable(myAnimalParameter.guid());
+  refreshFodderTable();
 }
 void LaAnimalParameterManager::on_toolDelete_clicked()
 {
@@ -399,6 +374,7 @@ void LaAnimalParameterManager::on_toolDelete_clicked()
       tr("Unable to delete file \n") + myFile.fileName());
     }
     refreshAnimalParameterTable();
+    refreshFodderTable();
   }
 }
 void LaAnimalParameterManager::on_pbnApply_clicked()
@@ -472,6 +448,7 @@ void LaAnimalParameterManager::on_pbnApply_clicked()
   mAnimalParameter.toXmlFile( LaUtils::userAnimalParameterProfilesDirPath() +
       QDir::separator() + mAnimalParameter.guid() + ".xml");
   refreshAnimalParameterTable(mAnimalParameter.guid());
+  refreshFodderTable();
 }
 
 bool LaAnimalParameterManager::setComboToDefault(QComboBox * thepCombo, QString theDefault)
