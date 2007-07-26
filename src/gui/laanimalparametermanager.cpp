@@ -249,7 +249,9 @@ void LaAnimalParameterManager::refreshFodderTable(QString theGuid)
       LaFoodSource myFoodSource = mFoodSourceMap.value(myGuid);
       int myFodderValue = myFoodSource.fodder();
       int myGrainValue = myFoodSource.grain();
-
+      ///@TODO remove this debug stuff
+      qDebug("value from map for myFodderValue: " + QString::number(myFodderValue).toLocal8Bit());
+      qDebug("value from map for myGrainValue: " + QString::number(myGrainValue).toLocal8Bit());
       mypFodderSpinBox->setValue(myFodderValue);
       mypGrainSpinBox->setValue(myGrainValue);
       mypItem->setCheckState(Qt::Checked);
