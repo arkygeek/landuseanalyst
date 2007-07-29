@@ -22,6 +22,8 @@
 #include "lautils.h"
 #include "laanimal.h"
 #include "lafoodsource.h"
+#include "lamainform.h"
+
 #include <QSettings>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
@@ -38,7 +40,8 @@
 #include <QTableWidgetItem>
 #include <QFileDialog>
 #include <QListWidgetItem>
-
+#include <QIcon>
+#include <QtDebug>
   LaAnimalParameterManager::LaAnimalParameterManager(QWidget* parent, Qt::WFlags fl)
 : QDialog(parent,fl)
 {
@@ -221,6 +224,8 @@ void LaAnimalParameterManager::populateFodder()
 
 void LaAnimalParameterManager::refreshFodderTable(QString theGuid)
 {
+  LaMainForm myMainForm;
+  QMap <QString, QString> mySelectedCropsMap = myMainForm.getSelectedCrops();
   LaFoodSourceMap myFoodSourceMap = mAnimalParameter.fodderSourceMap();
   qDebug("Restoring " + QString::number(myFoodSourceMap.count()).toLocal8Bit()
     + " food sources into animal parameter.");
@@ -228,7 +233,7 @@ void LaAnimalParameterManager::refreshFodderTable(QString theGuid)
   {
     QTableWidgetItem * mypItem = tblFodder->item(myCurrentRow,0);
     QString myGuid = mypItem->data(Qt::UserRole).toString();
-
+    qDebug("tblFodderGuid: " + myGuid.toLocal8Bit());
     QSpinBox * mypFodderSpinBox = qobject_cast <QSpinBox *> (tblFodder->cellWidget(myCurrentRow,1));
     QSpinBox * mypGrainSpinBox = qobject_cast <QSpinBox *> (tblFodder->cellWidget(myCurrentRow,2));
 
@@ -244,14 +249,34 @@ void LaAnimalParameterManager::refreshFodderTable(QString theGuid)
       mypFodderSpinBox->setValue(myFodderValue);
       mypGrainSpinBox->setValue(myGrainValue);
       mypItem->setCheckState(Qt::Checked);
+      qDebug("++++ Crop Guid in fodder Table: " + myGuid.toLocal8Bit());
+      //Q_ASSERT(mySelectedCropsMap.contains(myGuid));
+      QString myGuidFromSelectedMap = mySelectedCropsMap.value(myGuid);
+      //qDebug("++-- Crop Guid from selected map: " + myGuidFromSelectedMap.toLocal8Bit());
+      qDebug() << "++-- Crop Guid from selected map:" << myGuidFromSelectedMap;
+      qDebug() << mySelectedCropsMap;
+
+      if (mySelectedCropsMap.contains(myGuid) == true)
+      {
+        QIcon myIcon;
+        myIcon.addFile(":/status_ok.png");
+        mypItem->setIcon(myIcon);
+      }
+      else
+      {
+        QIcon myIcon;
+        myIcon.addFile(":/status_error.png");
+        mypItem->setIcon(myIcon);
+      }
+
     }
     else
     {
       mypFodderSpinBox->setValue(0);
       mypGrainSpinBox->setValue(0);
       mypItem->setCheckState(Qt::Unchecked);
-
     }
+
   }
 }
 
@@ -457,6 +482,11 @@ void LaAnimalParameterManager::on_pbnApply_clicked()
   refreshFodderTable();
 }
 
+void LaAnimalParameterManager::setSelectedCropsMap(LaTripleMap theSelectedCropsMap)
+{
+  mSelectedCropsMap = theSelectedCropsMap;
+}
+
 bool LaAnimalParameterManager::setComboToDefault(QComboBox * thepCombo, QString theDefault)
 {
   if (!theDefault.isEmpty())
@@ -478,6 +508,7 @@ bool LaAnimalParameterManager::setComboToDefault(QComboBox * thepCombo, QString 
   }
   return true;
 }
+
 void LaAnimalParameterManager::setFallowComboBox()
 {
   comboBoxFallowUsage->addItem("Do Not Graze Fallow", "None");

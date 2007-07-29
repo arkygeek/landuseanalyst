@@ -43,6 +43,7 @@ class LaAnimalParameterManager : public QDialog, private Ui::LaAnimalParameterMa
   public slots:
     //void on_pushButtonLoad_clicked();
     //void on_pushButtonSave_clicked();
+    void setSelectedCropsMap(LaTripleMap theSelectedCropsMap);
 
   private slots:
       void cellClicked(int theRow, int theColumn);
@@ -70,6 +71,7 @@ class LaAnimalParameterManager : public QDialog, private Ui::LaAnimalParameterMa
       LaUtils::AnimalParameterMap mAnimalParameterMap;
       LaUtils::CropMap mCropMap;
       LaAnimalParameter mAnimalParameter;
+      LaTripleMap mSelectedCropsMap;
 };
 
 #endif //LAANIMALPARAMETERMANAGER_H

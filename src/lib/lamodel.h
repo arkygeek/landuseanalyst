@@ -98,7 +98,7 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
     int getFallowLandForACrop(QString theCropParameterGuid, int theAreaTarget);
     void allocateFallowGrazingLand();
     void adjustAnimalTargetsForFodder();
-    int caloriesNeededByAnimal(QString theAnimalGuid);
+    int requiredTDN(QString theAnimalGuid);
     int adjustAreaTargetsCrops();
     int doTheFallowAllocation(Priority, int, int);
     QMap <QString, int> animalCalorieTargetsMap() const;
@@ -345,11 +345,11 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
      * As we account for each resource (fallow, crop x, crop y etc)
      * we can remove it from the cumulative total.
      */
-    QMap <QString,int> mCaloriesRequiredByAnimalsMap;
+    QMap <QString,int> mRequiredTDNMap;
     /** Initialise the cumulative calories map to the calories
      * required for each animal.
      */
-    void initialiseCaloriesRequiredByAnimalsMap();
+    void initialiseTDNMap();
 
     /** A map of all of the calculations for Animals
      */

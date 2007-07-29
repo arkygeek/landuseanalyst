@@ -48,6 +48,7 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
     void on_horizontalSliderMeat_valueChanged(int theValue);
     void on_horizontalSliderDiet_valueChanged(int theValue);
     void on_horizontalSliderCrop_valueChanged(int theValue);
+    QMap <QString, QString> getSelectedCrops();
     void on_pushButtonRun_clicked();
     void on_pushButtonLoad_clicked();
     void on_pushButtonSave_clicked();
@@ -94,7 +95,7 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
     LaTripleMap mAnimalsMap;
     LaTripleMap mCropsMap;
     int mCommonGrazingLandFoodValue;
-    QMap<QString,QString> mSelectedCropsMap;
+    //QMap<QString,int> mSelectedCropsMap;
 };
 
 #endif //LAMAINFORM_H

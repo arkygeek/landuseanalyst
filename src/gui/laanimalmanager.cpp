@@ -203,8 +203,9 @@ void LaAnimalManager::on_pushButtonLoad_clicked()
 
 void LaAnimalManager::on_pushButtonSave_clicked()
 {
-
+  // not yet implemented
 }
+
 void LaAnimalManager::on_toolNew_clicked()
 {
   qDebug("New toolbutton clicked");

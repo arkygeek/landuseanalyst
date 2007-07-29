@@ -41,6 +41,7 @@
 #include <QTextStream>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
+#include <QtDebug>
 
 LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
   : QDialog(parent,fl)
@@ -147,6 +148,31 @@ void LaMainForm::on_horizontalSliderCrop_valueChanged(int theValue)
   * clearing of the listWidgets, and so forth.
   */
 
+
+QMap <QString, QString> LaMainForm::getSelectedCrops()
+{
+  qDebug() << "mCropsMap :::::: " << mCropsMap;
+
+  QMap<QString, QString> mySelectedCropsMap;
+  QMapIterator<QString, QPair<bool, QString> > myCropIterator(mCropsMap);
+  while (myCropIterator.hasNext())
+  {
+    myCropIterator.next();
+    QPair<bool,QString> myPair = myCropIterator.value();
+    QString myCropGuid = myCropIterator.key();
+    QString myCropParameterGuid = myPair.second;
+    bool mySelectedFlag = myPair.first;
+    qDebug() << "QPAIR" << myPair;
+    if (mySelectedFlag)
+    {
+      mySelectedCropsMap.insert(myCropGuid,myCropParameterGuid);
+      qDebug("adding to SelectedCropsMap: " + myCropGuid.toLocal8Bit());
+    }
+  }
+    qDebug() << "mainformMap:" << mySelectedCropsMap;
+    return mySelectedCropsMap;
+}
+
 void LaMainForm::on_pbnNewAnimal_clicked()
 {
   LaAnimalManager myAnimalManager;
@@ -169,6 +195,7 @@ void LaMainForm::on_pbnNewCropParameter_clicked()
 void LaMainForm::on_pbnNewAnimalParameter_clicked()
 {
     LaAnimalParameterManager myAnimalParameterManager;
+    //myAnimalParameterManager.setSelectedCropsMap(mCropsMap);
     myAnimalParameterManager.exec();
     listWidgetCalculationsAnimal->clear();
     loadAnimals();
@@ -376,7 +403,7 @@ void LaMainForm::loadCrops()
     tblCrops->insertRow(myCurrentRow);
     // Add details to the new row
     QTableWidgetItem *mypUsedItem= new QTableWidgetItem(tr("Used?"));
-
+    qDebug() << "line 406 myValue.first is: " << myValue.first;
     (myValue.first) ? mypUsedItem->setCheckState(Qt::Checked) : mypUsedItem->setCheckState(Qt::Unchecked);
 
     tblCrops->setItem(myCurrentRow, 0, mypUsedItem);
@@ -534,7 +561,7 @@ void LaMainForm::cropCellClicked(int theRow, int theColumn)
     myCropParametersMap = LaUtils::getAvailableCropParameters();
     LaCropParameter myCropParameter = myCropParametersMap[myGuid];
     //textBrowserCropParameterDefinition->setHtml(myCropParameter.toHtml());
-    showCropDefinitionReport(myCrop,myCropParameter);
+    //showCropDefinitionReport(myCrop,myCropParameter);
   }
   loadCrops();
 }
@@ -547,6 +574,7 @@ void LaMainForm::cropCellChanged(int theRow, int theColumn)
     QString myGuid = mypItem->data(Qt::UserRole).toString();
     //QString myGuid = tblCrops->item(tblCrops->currentRow(),1)->data(Qt::UserRole).toString();
     bool myStateFlag = tblCrops->item(tblCrops->currentRow(),0)->checkState();
+    qDebug() << "myStateFlag ===> " << myStateFlag;
     QPair<bool,QString> myPair = mCropsMap[myGuid];
     myPair.first = myStateFlag;
     QComboBox * mypCombo=dynamic_cast<QComboBox *>(tblCrops->cellWidget(tblCrops->currentRow(),2));
@@ -808,8 +836,8 @@ void LaMainForm::animalCalcClicked(QListWidgetItem * thepCurrentItem, QListWidge
   }
 
   // show the user that the computer is thinking
-  progressBarCalcs->reset();
-  progressBarCalcs->setRange(0,0);
+  //progressBarCalcs->reset();
+  //progressBarCalcs->setRange(0,0);
   mCommonGrazingLandFoodValue = sbCommonRasterTDN->value();
 
   connect(&myModel, SIGNAL(message( QString )),
@@ -828,14 +856,12 @@ void LaMainForm::animalCalcClicked(QListWidgetItem * thepCurrentItem, QListWidge
     if (mySelectedFlag)
     {
       mySelectedAnimalsMap.insert(myAnimalGuid,myAnimalParameterGuid);
-      qDebug("Added <" + myAnimalGuid.toLocal8Bit() + " , " + myAnimalParameterGuid.toLocal8Bit() + " >");
     }
   }
   myModel.setAnimals(mySelectedAnimalsMap);
 
   // Get a list of the selected crops
   QMap<QString,QString> mySelectedCropsMap;
-  //          <crop guid <enabled, cropparamters guid>>
   QMapIterator<QString, QPair<bool, QString> > myCropIterator(mCropsMap);
   while (myCropIterator.hasNext())
   {
@@ -847,7 +873,6 @@ void LaMainForm::animalCalcClicked(QListWidgetItem * thepCurrentItem, QListWidge
     if (mySelectedFlag)
     {
       mySelectedCropsMap.insert(myCropGuid,myCropParameterGuid);
-      qDebug("Added <" + myCropGuid.toLocal8Bit() + " , " + myCropParameterGuid.toLocal8Bit() + " >");
     }
   }
   myModel.setCrops(mySelectedCropsMap);

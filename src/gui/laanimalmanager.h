@@ -35,11 +35,17 @@ class LaAnimalManager : public QDialog, private Ui::LaAnimalManagerBase
 {
   Q_OBJECT
   public:
+    /** @TODO document this properly
+      */
     LaAnimalManager(QWidget* parent = 0, Qt::WFlags fl = 0 );
     ~LaAnimalManager();
 
   public slots:
+    /** when called loads animal profile from an XML file
+      */
     void on_pushButtonLoad_clicked();
+    /** @TODO what is this for? not yet implemented
+      */
     void on_pushButtonSave_clicked();
 
   private slots:

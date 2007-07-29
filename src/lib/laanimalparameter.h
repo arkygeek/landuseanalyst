@@ -64,10 +64,13 @@ class LaAnimalParameter : public LaSerialisable, public LaGuid
     /** Food value of common (or shared) grazing land as calories per dunum/hectare
       * NOTE that changing this value for any animal changes it for all!
       */
-    int foodValueOfCommonGrazingLand() const;    /** If fallow is to be grazed, and if so, at either a
-      * HIGH MED or LOW priority to it's access
+    int foodValueOfCommonGrazingLand() const;
+    /** Selection between dunums and hectares
       */
     int areaUnits() const;
+    /** If fallow is to be grazed, and if so, at either a
+      * HIGH MED or LOW priority to it's access
+      */
     bool fodderUse() const;
     LaFoodSourceMap fodderSourceMap() const;
 

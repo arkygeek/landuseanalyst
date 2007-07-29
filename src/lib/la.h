@@ -41,4 +41,5 @@ typedef QMap < QString, LaFoodSource > LaFoodSourceMap;
 enum Priority {None, High, Medium, Low};
 enum Status {MoreThanEnoughToCompletelySatisfy, NotEnoughToCompletelySatisfy};
 enum LandBeingGrazed {Common, Unique};
+enum AreaUnit {Dunum, Hectare};
 #endif //LA
