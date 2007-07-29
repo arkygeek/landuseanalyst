@@ -148,6 +148,11 @@ void LaMainForm::on_horizontalSliderCrop_valueChanged(int theValue)
   * clearing of the listWidgets, and so forth.
   */
 
+LaTripleMap LaMainForm::getAvailableCrops()
+{
+  return mCropsMap;
+}
+
 
 QMap <QString, QString> LaMainForm::getSelectedCrops()
 {
@@ -198,7 +203,9 @@ void LaMainForm::on_pbnNewAnimalParameter_clicked()
     //myAnimalParameterManager.setSelectedCropsMap(mCropsMap);
     myAnimalParameterManager.exec();
     listWidgetCalculationsAnimal->clear();
+    qDebug() << "mCropsMap before:" << mCropsMap;
     loadAnimals();
+    qDebug() << "mCropsMap after:" << mCropsMap;
 }
 
 void LaMainForm::on_pbnFallow_clicked()

@@ -49,6 +49,7 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
     void on_horizontalSliderDiet_valueChanged(int theValue);
     void on_horizontalSliderCrop_valueChanged(int theValue);
     QMap <QString, QString> getSelectedCrops();
+    LaTripleMap getAvailableCrops();
     void on_pushButtonRun_clicked();
     void on_pushButtonLoad_clicked();
     void on_pushButtonSave_clicked();

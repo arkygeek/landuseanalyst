@@ -179,6 +179,12 @@ void LaAnimalParameterManager::refreshAnimalParameterTable(QString theGuid)
 
 void LaAnimalParameterManager::populateFodder()
 {
+  LaMainForm myMainForm;
+  QMap <QString, QString> mySelectedCropsMap = myMainForm.getSelectedCrops();
+  LaTripleMap myAvailableCropsMap = myMainForm.getAvailableCrops();
+  qDebug() << "++==++ mySelectedCropsMap line 185" << mySelectedCropsMap;
+  qDebug() << "++==++ myAvailableCropsMap line 186"<< myAvailableCropsMap;
+
   tblFodder->clear();
   tblFodder->setRowCount(0);
   tblFodder->setColumnCount(3);
@@ -198,6 +204,20 @@ void LaAnimalParameterManager::populateFodder()
     tblFodder->insertRow(myCurrentRow);
     // Add details to the new row
     QTableWidgetItem *mypNameItem = new QTableWidgetItem(myCrop.name());
+
+    if (mySelectedCropsMap.contains(myGuid) == true)
+    {
+      QIcon myIcon;
+      myIcon.addFile(":/status_ok.png");
+      mypNameItem->setIcon(myIcon);
+    }
+    else
+    {
+      QIcon myIcon;
+      myIcon.addFile(":/status_error.png");
+      mypNameItem->setIcon(myIcon);
+    }
+
     mypNameItem->setCheckState(Qt::Unchecked);
     mypNameItem->setData(Qt::UserRole,myGuid);
     tblFodder->setItem(myCurrentRow, 0, mypNameItem);
@@ -224,8 +244,6 @@ void LaAnimalParameterManager::populateFodder()
 
 void LaAnimalParameterManager::refreshFodderTable(QString theGuid)
 {
-  LaMainForm myMainForm;
-  QMap <QString, QString> mySelectedCropsMap = myMainForm.getSelectedCrops();
   LaFoodSourceMap myFoodSourceMap = mAnimalParameter.fodderSourceMap();
   qDebug("Restoring " + QString::number(myFoodSourceMap.count()).toLocal8Bit()
     + " food sources into animal parameter.");
@@ -236,8 +254,6 @@ void LaAnimalParameterManager::refreshFodderTable(QString theGuid)
     qDebug("tblFodderGuid: " + myGuid.toLocal8Bit());
     QSpinBox * mypFodderSpinBox = qobject_cast <QSpinBox *> (tblFodder->cellWidget(myCurrentRow,1));
     QSpinBox * mypGrainSpinBox = qobject_cast <QSpinBox *> (tblFodder->cellWidget(myCurrentRow,2));
-
-
     if (myFoodSourceMap.contains(myGuid))
     {
       LaFoodSource myFoodSource = myFoodSourceMap.value(myGuid);
@@ -251,24 +267,9 @@ void LaAnimalParameterManager::refreshFodderTable(QString theGuid)
       mypItem->setCheckState(Qt::Checked);
       qDebug("++++ Crop Guid in fodder Table: " + myGuid.toLocal8Bit());
       //Q_ASSERT(mySelectedCropsMap.contains(myGuid));
-      QString myGuidFromSelectedMap = mySelectedCropsMap.value(myGuid);
+      //QString myGuidFromSelectedMap = mySelectedCropsMap.value(myGuid);
       //qDebug("++-- Crop Guid from selected map: " + myGuidFromSelectedMap.toLocal8Bit());
-      qDebug() << "++-- Crop Guid from selected map:" << myGuidFromSelectedMap;
-      qDebug() << mySelectedCropsMap;
-
-      if (mySelectedCropsMap.contains(myGuid) == true)
-      {
-        QIcon myIcon;
-        myIcon.addFile(":/status_ok.png");
-        mypItem->setIcon(myIcon);
-      }
-      else
-      {
-        QIcon myIcon;
-        myIcon.addFile(":/status_error.png");
-        mypItem->setIcon(myIcon);
-      }
-
+      //qDebug() << "++-- Crop Guid from selected map:" << myGuidFromSelectedMap;
     }
     else
     {
