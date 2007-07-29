@@ -13,6 +13,8 @@
 #include <QStringList>
 #include <QVector>
 #include <QtXml>
+
+#include <QFileDialog>
 #ifdef Q_OS_MACX
 //for getting app bundle path
 #include <ApplicationServices/ApplicationServices.h>
@@ -247,7 +249,7 @@ LaUtils::AnimalParameterMap LaUtils::getAvailableAnimalParameters()
 
       //for debug only...
       ;
-      qDebug(" ++ lautil  Restoring " + 
+      qDebug(" ++ lautil  Restoring " +
           QString::number(myAnimalParameter.fodderSourceMap().count()).toLocal8Bit()
           + " food sources into animal parameter.");
     }
@@ -491,3 +493,8 @@ QString LaUtils::getStandardCss()
   return myStyle;
 }
 
+QString LaUtils::openGraphicFile()
+{
+QString myFileName = QFileDialog::getOpenFileName(0, "Choose a file","~/.landuseAnalyst", "Images (*.png *.xpm *.jpg)");
+  return myFileName;
+}

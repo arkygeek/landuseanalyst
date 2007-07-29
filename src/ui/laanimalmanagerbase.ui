@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>648</width>
-    <height>440</height>
+    <width>701</width>
+    <height>477</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -22,11 +22,268 @@
    <property name="spacing" >
     <number>6</number>
    </property>
-   <item rowspan="4" row="1" column="0" >
-    <widget class="QGroupBox" name="groupBoxAnimalDescription" >
+   <item row="0" column="0" colspan="3" >
+    <widget class="QGroupBox" name="grpProfiles" >
+     <property name="title" >
+      <string>Available Animal Profiles</string>
+     </property>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>9</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item row="0" column="0" colspan="3" >
+       <widget class="QTableWidget" name="tblAnimals" >
+        <property name="toolTip" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Select an animal here to see and/or edit it's properties below.&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="whatsThis" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">In order to enable LandUse Analyst to model animals, several details must be supplied. Animal Parameter Manager asks for these specifics. As with Animal Manager, it is possible to have more than one parameter named the same thing. Again, just enter a descriptor in the Notes: field.&lt;/p>
+&lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">To define different parameters for the same animal, follow the same procedure as for defining multiple animals with the same name. Let's say you want to have two parameters set up for Cows as an example. The Name: field is Cow for both, but in Notes: field, enter Optimistic for one, and Conservative for the other. Then adjust the parameters as you wish for each. Even though the name is the same, the parameters are saved uniquely. Having multiple parameters can be useful for setting up different scenarios, such as drought years, diease, catastrophic events, etc. Eventually, LandUse Analyst will have the ability to model over time, and will have these types of scenarios incorporated into the model.&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="alternatingRowColors" >
+         <bool>true</bool>
+        </property>
+        <property name="selectionMode" >
+         <enum>QAbstractItemView::SingleSelection</enum>
+        </property>
+        <property name="selectionBehavior" >
+         <enum>QAbstractItemView::SelectRows</enum>
+        </property>
+        <column>
+         <property name="text" >
+          <string>FileName</string>
+         </property>
+        </column>
+        <column>
+         <property name="text" >
+          <string>Name</string>
+         </property>
+        </column>
+       </widget>
+      </item>
+      <item row="1" column="0" >
+       <widget class="QPushButton" name="pbnImport" >
+        <property name="minimumSize" >
+         <size>
+          <width>80</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text" >
+         <string>Import</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" >
+       <widget class="QPushButton" name="pbnExport" >
+        <property name="minimumSize" >
+         <size>
+          <width>80</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text" >
+         <string>Export</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2" >
+       <spacer>
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" >
+         <size>
+          <width>371</width>
+          <height>27</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item rowspan="2" row="0" column="3" >
+       <layout class="QGridLayout" >
+        <property name="margin" >
+         <number>0</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item row="0" column="0" colspan="4" >
+         <widget class="QGraphicsView" name="gvAnimalPix" >
+          <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>0</hsizetype>
+            <vsizetype>0</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize" >
+           <size>
+            <width>120</width>
+            <height>120</height>
+           </size>
+          </property>
+          <property name="maximumSize" >
+           <size>
+            <width>120</width>
+            <height>120</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1" >
+         <widget class="QToolButton" name="toolCopy" >
+          <property name="toolTip" >
+           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Clone the currently selected animal&lt;/p>&lt;/body>&lt;/html></string>
+          </property>
+          <property name="whatsThis" >
+           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">If you want to create a new animal that is similar to one already defined, you can clone this animal to save time. All of the settings of the animal you are cloning are transferred to the new clone, but the name is changed to Clone of ... (whatever the name of the animal you are cloning was).&lt;/p>
+&lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Note that the parameters are &lt;span style=" font-weight:600;">not&lt;/span> transferred.&lt;/p>&lt;/body>&lt;/html></string>
+          </property>
+          <property name="text" >
+           <string>...</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../resources/resources.qrc" >:/copy.png</iconset>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="3" >
+         <widget class="QToolButton" name="toolDelete" >
+          <property name="toolTip" >
+           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Delete the currently selected animal&lt;/p>&lt;/body>&lt;/html></string>
+          </property>
+          <property name="text" >
+           <string>...</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../resources/resources.qrc" >:/delete.png</iconset>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2" >
+         <spacer>
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" >
+           <size>
+            <width>20</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="1" column="0" >
+         <widget class="QToolButton" name="toolNew" >
+          <property name="toolTip" >
+           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Define a new animal&lt;/p>&lt;/body>&lt;/html></string>
+          </property>
+          <property name="whatsThis" >
+           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">If you simply change the name or settings and click apply in the Animal Manager, you are just editing the animal currently selected. To create a new animal, you must click on the New button.&lt;/p>&lt;/body>&lt;/html></string>
+          </property>
+          <property name="text" >
+           <string>...</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../resources/resources.qrc" >:/new.png</iconset>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="3" column="2" >
+    <widget class="QPushButton" name="pbnApply" >
+     <property name="toolTip" >
+      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Saves all settings&lt;/p>&lt;/body>&lt;/html></string>
+     </property>
+     <property name="whatsThis" >
+      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">After completing all fields to define an animal, you &lt;span style=" font-weight:600;">MUST&lt;/span> click the Apply button to save it. The name does not have to be unique, as LandUse Analyst has a special way of saving animals to allow for duplicate Animal names. It is helpful, however, to utilize the Notes field to distinguish between same-named animal definitions.&lt;/p>&lt;/body>&lt;/html></string>
+     </property>
+     <property name="text" >
+      <string>Apply</string>
+     </property>
+     <property name="checkable" >
+      <bool>false</bool>
+     </property>
+     <property name="flat" >
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="2" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>148</width>
+       <height>16</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="4" column="2" >
+    <widget class="QPushButton" name="pbnClose" >
      <property name="sizePolicy" >
       <sizepolicy>
-       <hsizetype>3</hsizetype>
+       <hsizetype>1</hsizetype>
+       <vsizetype>0</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="toolTip" >
+      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-weight:600; font-style:italic; color:#0000ff;">Have you applied your changes?&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+     </property>
+     <property name="text" >
+      <string>Close</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2" >
+    <widget class="QGroupBox" name="groupBoxFeedRequirements" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>5</hsizetype>
        <vsizetype>5</vsizetype>
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
@@ -36,69 +293,49 @@
       <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">In order to enable LandUse Analyst to model any animal, several details must be entered to define specific types or breeds. Animal Manager asks for general information about the animal in this section. You might want to have more than one breed of the same species, however, which is allowed.&lt;/p>
-&lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">To define different breeds of the same species is quite easy. Let's say you want to have two kinds of cows for example. The Name: field is Cow for both, but in Notes: field, enter Dairy for one, and Beast of Burden for the other. Then adjust the other parameters as you wish. Even though the name is the same, the animal is saved uniquely.&lt;/p>&lt;/body>&lt;/html></string>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">LandUse Analyst breaks down the calorie requirements for the animal being modelled into three categories: Gestating, Lactating, and Juvenile. Enter the average calories required per day for an animal in each of these categories.&lt;/p>&lt;/body>&lt;/html></string>
      </property>
      <property name="title" >
-      <string>Animal Description</string>
+      <string>Feed Requirements</string>
      </property>
      <layout class="QGridLayout" >
       <property name="margin" >
        <number>9</number>
       </property>
       <property name="spacing" >
-       <number>6</number>
+       <number>2</number>
       </property>
-      <item row="2" column="1" colspan="2" >
-       <widget class="QLabel" name="label_14" >
-        <property name="text" >
-         <string>Food Value</string>
+      <item row="0" column="1" >
+       <widget class="QLabel" name="label_13" >
+        <property name="toolTip" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Total Digestive Nutrients&lt;/p>&lt;/body>&lt;/html></string>
         </property>
-       </widget>
-      </item>
-      <item row="0" column="0" >
-       <widget class="QLabel" name="label" >
+        <property name="whatsThis" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Just as we had to set the average daily calorie requirements for the human population, we also need to supply information about this for animals. LandUse Analyst needs to know the TDN (Total Digestible Nutrients) in kg for the animals being modelled. &lt;/p>&lt;/body>&lt;/html></string>
+        </property>
         <property name="text" >
-         <string>Name:</string>
+         <string>TDN (Kg)</string>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignCenter</set>
         </property>
        </widget>
       </item>
       <item row="1" column="0" >
-       <widget class="QLabel" name="label_4" >
+       <widget class="QLabel" name="labelFeedRequirements2" >
         <property name="text" >
-         <string>Notes:</string>
+         <string>Adult Female</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="1" colspan="3" >
-       <widget class="QLineEdit" name="leDescription" >
-        <property name="whatsThis" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Because LandUse Analyst allows more than one type of animal to be defined, the Notes: field allows you to give a brief description of the the animal. For example, you may have two "Sheep" defined, and the Notes: fields could contain "For Slaughter" and "Wool Producers" to distinguish between them.&lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1" colspan="3" >
-       <widget class="QLineEdit" name="leName" >
-        <property name="whatsThis" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Enter the name of the animal you are defining in this field. You do not need a unique name. You can have, for example, 10 animals defined, all named "Sheep". LandUse Analyst uses a special method of saving the animals to eliminate the issue of duplicate filenames.&lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="1" >
-       <widget class="QLabel" name="label_10" >
-        <property name="text" >
-         <string>Kill Weight</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="3" >
-       <widget class="QSpinBox" name="spinBoxKillWeight" >
+      <item row="1" column="1" >
+       <widget class="QSpinBox" name="spinBoxTDNForGestating" >
         <property name="sizePolicy" >
          <sizepolicy>
           <hsizetype>7</hsizetype>
@@ -111,89 +348,21 @@ p, li { white-space: pre-wrap; }
          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Average weight of animal (Kg) when slaughtered&lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="whatsThis" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Animals can be slaughtered for butchering at any weight, but LandUse Analyst needs to know the average weight of the animals when they are slaughtered. This is their &lt;span style=" font-weight:600;">live weight.&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="alignment" >
-         <set>Qt::AlignRight</set>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Annual TDN (kg) required for an adult female&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="suffix" >
-         <string> Kg</string>
-        </property>
-        <property name="prefix" >
          <string/>
         </property>
         <property name="maximum" >
-         <number>999</number>
+         <number>10000</number>
         </property>
         <property name="value" >
-         <number>100</number>
+         <number>4000</number>
         </property>
        </widget>
       </item>
-      <item row="5" column="1" >
-       <widget class="QLabel" name="label_11" >
-        <property name="text" >
-         <string>Grow Time</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="2" colspan="2" >
-       <widget class="QSpinBox" name="spinBoxGrowTime" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>5</hsizetype>
-          <vsizetype>0</vsizetype>
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="toolTip" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Time from birth to slaughter weight&lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="whatsThis" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Grow time, or the length of time from birth to slaughter weight, is quite important for estimating the herd size. The longer it takes an animal to reach slaughter weight from birth, the higher the number of animals alive at any given time.&lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="alignment" >
-         <set>Qt::AlignRight</set>
-        </property>
-        <property name="suffix" >
-         <string> Mths</string>
-        </property>
-        <property name="prefix" >
-         <string/>
-        </property>
-        <property name="maximum" >
-         <number>60</number>
-        </property>
-        <property name="minimum" >
-         <number>1</number>
-        </property>
-        <property name="value" >
-         <number>12</number>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="1" >
-       <widget class="QLabel" name="label_12" >
-        <property name="text" >
-         <string>Death Rate</string>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="2" colspan="2" >
-       <widget class="QSpinBox" name="spinBoxDeathRate" >
+      <item row="2" column="1" >
+       <widget class="QSpinBox" name="spinBoxTDNForLactating" >
         <property name="sizePolicy" >
          <sizepolicy>
           <hsizetype>7</hsizetype>
@@ -206,43 +375,50 @@ p, li { white-space: pre-wrap; }
          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of babies that do not survive to slaughter age.&lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="whatsThis" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">LandUse Analyst accommodates for birthing deaths only. If an animal survives to weaning age but dies before slaughter, it is not modelled at this time. However, you can adjust the death rate setting to indicate the average survival rate of births. This is important for determining herd size, as it affects the number of mothers needed to sustain the production levels required by the settlement.&lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="alignment" >
-         <set>Qt::AlignRight</set>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The number of calories required per day for a female that is lactating.&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="suffix" >
-         <string> %</string>
-        </property>
-        <property name="prefix" >
          <string/>
         </property>
         <property name="maximum" >
-         <number>100</number>
+         <number>20000</number>
         </property>
         <property name="value" >
-         <number>10</number>
+         <number>4000</number>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" >
+       <widget class="QLabel" name="labelFeedRequirements3" >
+        <property name="toolTip" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Annual TDN (kg) required for an adult male&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="text" >
+         <string>Adult Male</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0" >
+       <widget class="QLabel" name="labelFeedRequirements4" >
+        <property name="toolTip" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Annual TDN (kg) required for a juvenile&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="text" >
+         <string>Juvenile</string>
         </property>
        </widget>
       </item>
       <item row="3" column="1" >
-       <widget class="QLabel" name="label_9" >
-        <property name="text" >
-         <string>Usable Meat</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="3" >
-       <widget class="QSpinBox" name="spinBoxUsableMeatPercent" >
+       <widget class="QSpinBox" name="spinBoxTDNForJuvenile" >
         <property name="sizePolicy" >
          <sizepolicy>
-          <hsizetype>5</hsizetype>
+          <hsizetype>7</hsizetype>
           <vsizetype>0</vsizetype>
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
@@ -252,60 +428,15 @@ p, li { white-space: pre-wrap; }
          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of live weight usable as meat&lt;/p>&lt;/body>&lt;/html></string>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The number of calories required per day for a juvenile.&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="whatsThis" >
          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The production targets for animals are in Kg of meat, so to be compatible with animal numbers, you must know the percentage of the animal's live weight that is usable for food. You can also take into account here the efficiency of the butchering technique that the population used. In other words, if you believe they were wasteful, this is where you would make an adjustment to integrate that.&lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="alignment" >
-         <set>Qt::AlignRight</set>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The number of calories required per day for a juvenile. LandUse Analyst considers a Juvenile to be an animal after weaning and before slaughter.&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="suffix" >
-         <string> %</string>
-        </property>
-        <property name="prefix" >
-         <string/>
-        </property>
-        <property name="maximum" >
-         <number>120</number>
-        </property>
-        <property name="value" >
-         <number>80</number>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="3" >
-       <widget class="QSpinBox" name="spinBoxMeatFoodValue" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>5</hsizetype>
-          <vsizetype>0</vsizetype>
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="toolTip" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of live weight usable as meat&lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="whatsThis" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The production targets for animals are in Kg of meat, so to be compatible with animal numbers, you must know the percentage of the animal's live weight that is usable for food. You can also take into account here the efficiency of the butchering technique that the population used. In other words, if you believe they were wasteful, this is where you would make an adjustment to integrate that.&lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="alignment" >
-         <set>Qt::AlignRight</set>
-        </property>
-        <property name="suffix" >
-         <string> cal</string>
-        </property>
-        <property name="prefix" >
          <string/>
         </property>
         <property name="maximum" >
@@ -636,70 +767,11 @@ p, li { white-space: pre-wrap; }
      </layout>
     </widget>
    </item>
-   <item row="4" column="2" >
-    <widget class="QPushButton" name="pbnClose" >
+   <item rowspan="4" row="1" column="0" >
+    <widget class="QGroupBox" name="groupBoxAnimalDescription" >
      <property name="sizePolicy" >
       <sizepolicy>
-       <hsizetype>1</hsizetype>
-       <vsizetype>0</vsizetype>
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="toolTip" >
-      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-weight:600; font-style:italic; color:#0000ff;">Have you applied your changes?&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
-     </property>
-     <property name="text" >
-      <string>Close</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="2" >
-    <widget class="QPushButton" name="pbnApply" >
-     <property name="toolTip" >
-      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Saves all settings&lt;/p>&lt;/body>&lt;/html></string>
-     </property>
-     <property name="whatsThis" >
-      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">After completing all fields to define an animal, you &lt;span style=" font-weight:600;">MUST&lt;/span> click the Apply button to save it. The name does not have to be unique, as LandUse Analyst has a special way of saving animals to allow for duplicate Animal names. It is helpful, however, to utilize the Notes field to distinguish between same-named animal definitions.&lt;/p>&lt;/body>&lt;/html></string>
-     </property>
-     <property name="text" >
-      <string>Apply</string>
-     </property>
-     <property name="checkable" >
-      <bool>false</bool>
-     </property>
-     <property name="flat" >
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="2" >
-    <spacer>
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" >
-      <size>
-       <width>148</width>
-       <height>16</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="1" column="2" >
-    <widget class="QGroupBox" name="groupBoxFeedRequirements" >
-     <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>5</hsizetype>
+       <hsizetype>3</hsizetype>
        <vsizetype>5</vsizetype>
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
@@ -709,167 +781,11 @@ p, li { white-space: pre-wrap; }
       <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">LandUse Analyst breaks down the calorie requirements for the animal being modelled into three categories: Gestating, Lactating, and Juvenile. Enter the average calories required per day for an animal in each of these categories.&lt;/p>&lt;/body>&lt;/html></string>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">In order to enable LandUse Analyst to model any animal, several details must be entered to define specific types or breeds. Animal Manager asks for general information about the animal in this section. You might want to have more than one breed of the same species, however, which is allowed.&lt;/p>
+&lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">To define different breeds of the same species is quite easy. Let's say you want to have two kinds of cows for example. The Name: field is Cow for both, but in Notes: field, enter Dairy for one, and Beast of Burden for the other. Then adjust the other parameters as you wish. Even though the name is the same, the animal is saved uniquely.&lt;/p>&lt;/body>&lt;/html></string>
      </property>
      <property name="title" >
-      <string>Feed Requirements</string>
-     </property>
-     <layout class="QGridLayout" >
-      <property name="margin" >
-       <number>9</number>
-      </property>
-      <property name="spacing" >
-       <number>2</number>
-      </property>
-      <item row="0" column="1" >
-       <widget class="QLabel" name="label_13" >
-        <property name="toolTip" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Total Digestive Nutrients&lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="whatsThis" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Just as we had to set the average daily calorie requirements for the human population, we also need to supply information about this for animals. LandUse Analyst needs to know the TDN (Total Digestible Nutrients) in kg for the animals being modelled. &lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="text" >
-         <string>TDN (Kg)</string>
-        </property>
-        <property name="alignment" >
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0" >
-       <widget class="QLabel" name="labelFeedRequirements2" >
-        <property name="text" >
-         <string>Adult Female</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1" >
-       <widget class="QSpinBox" name="spinBoxTDNForGestating" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>7</hsizetype>
-          <vsizetype>0</vsizetype>
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="toolTip" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Annual TDN (kg) required for an adult female&lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="suffix" >
-         <string/>
-        </property>
-        <property name="maximum" >
-         <number>10000</number>
-        </property>
-        <property name="value" >
-         <number>4000</number>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1" >
-       <widget class="QSpinBox" name="spinBoxTDNForLactating" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>7</hsizetype>
-          <vsizetype>0</vsizetype>
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="toolTip" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The number of calories required per day for a female that is lactating.&lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="suffix" >
-         <string/>
-        </property>
-        <property name="maximum" >
-         <number>20000</number>
-        </property>
-        <property name="value" >
-         <number>4000</number>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0" >
-       <widget class="QLabel" name="labelFeedRequirements3" >
-        <property name="toolTip" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Annual TDN (kg) required for an adult male&lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="text" >
-         <string>Adult Male</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0" >
-       <widget class="QLabel" name="labelFeedRequirements4" >
-        <property name="toolTip" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Annual TDN (kg) required for a juvenile&lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="text" >
-         <string>Juvenile</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1" >
-       <widget class="QSpinBox" name="spinBoxTDNForJuvenile" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>7</hsizetype>
-          <vsizetype>0</vsizetype>
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="toolTip" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The number of calories required per day for a juvenile.&lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="whatsThis" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The number of calories required per day for a juvenile. LandUse Analyst considers a Juvenile to be an animal after weaning and before slaughter.&lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="suffix" >
-         <string/>
-        </property>
-        <property name="maximum" >
-         <number>20000</number>
-        </property>
-        <property name="value" >
-         <number>3000</number>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="0" column="0" colspan="3" >
-    <widget class="QGroupBox" name="grpProfiles" >
-     <property name="title" >
-      <string>Available Animal Profiles</string>
+      <string>Animal Description</string>
      </property>
      <layout class="QGridLayout" >
       <property name="margin" >
@@ -878,139 +794,317 @@ p, li { white-space: pre-wrap; }
       <property name="spacing" >
        <number>6</number>
       </property>
-      <item row="0" column="0" colspan="6" >
-       <widget class="QTableWidget" name="tblAnimals" >
-        <property name="toolTip" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Select an animal here to see and/or edit it's properties below.&lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="whatsThis" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">In order to enable LandUse Analyst to model animals, several details must be supplied. Animal Parameter Manager asks for these specifics. As with Animal Manager, it is possible to have more than one parameter named the same thing. Again, just enter a descriptor in the Notes: field.&lt;/p>
-&lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">To define different parameters for the same animal, follow the same procedure as for defining multiple animals with the same name. Let's say you want to have two parameters set up for Cows as an example. The Name: field is Cow for both, but in Notes: field, enter Optimistic for one, and Conservative for the other. Then adjust the parameters as you wish for each. Even though the name is the same, the parameters are saved uniquely. Having multiple parameters can be useful for setting up different scenarios, such as drought years, diease, catastrophic events, etc. Eventually, LandUse Analyst will have the ability to model over time, and will have these types of scenarios incorporated into the model.&lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="alternatingRowColors" >
-         <bool>true</bool>
-        </property>
-        <property name="selectionMode" >
-         <enum>QAbstractItemView::SingleSelection</enum>
-        </property>
-        <property name="selectionBehavior" >
-         <enum>QAbstractItemView::SelectRows</enum>
-        </property>
-        <column>
-         <property name="text" >
-          <string>FileName</string>
-         </property>
-        </column>
-        <column>
-         <property name="text" >
-          <string>Name</string>
-         </property>
-        </column>
-       </widget>
-      </item>
-      <item row="1" column="2" >
-       <spacer>
-        <property name="orientation" >
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" >
-         <size>
-          <width>71</width>
-          <height>27</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="1" column="1" >
-       <widget class="QPushButton" name="pbnExport" >
-        <property name="minimumSize" >
-         <size>
-          <width>80</width>
-          <height>0</height>
-         </size>
+      <item row="2" column="1" >
+       <widget class="QLabel" name="label_14" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>0</hsizetype>
+          <vsizetype>5</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
         <property name="text" >
-         <string>Export</string>
+         <string>Food Value</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1" >
+       <widget class="QLabel" name="label_9" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>0</hsizetype>
+          <vsizetype>5</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text" >
+         <string>Usable Meat</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0" >
+       <widget class="QLabel" name="label" >
+        <property name="text" >
+         <string>Name:</string>
         </property>
        </widget>
       </item>
       <item row="1" column="0" >
-       <widget class="QPushButton" name="pbnImport" >
-        <property name="minimumSize" >
-         <size>
-          <width>80</width>
-          <height>0</height>
-         </size>
-        </property>
+       <widget class="QLabel" name="label_4" >
         <property name="text" >
-         <string>Import</string>
+         <string>Notes:</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="5" >
-       <widget class="QToolButton" name="toolDelete" >
+      <item row="0" column="1" colspan="3" >
+       <widget class="QLineEdit" name="leName" >
+        <property name="whatsThis" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Enter the name of the animal you are defining in this field. You do not need a unique name. You can have, for example, 10 animals defined, all named "Sheep". LandUse Analyst uses a special method of saving the animals to eliminate the issue of duplicate filenames.&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1" >
+       <widget class="QLabel" name="label_10" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>0</hsizetype>
+          <vsizetype>5</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text" >
+         <string>Kill Weight</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="3" >
+       <widget class="QSpinBox" name="spinBoxKillWeight" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>7</hsizetype>
+          <vsizetype>0</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="toolTip" >
          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Delete the currently selected animal&lt;/p>&lt;/body>&lt;/html></string>
-        </property>
-        <property name="text" >
-         <string>...</string>
-        </property>
-        <property name="icon" >
-         <iconset resource="../resources/resources.qrc" >:/delete.png</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="4" >
-       <widget class="QToolButton" name="toolCopy" >
-        <property name="toolTip" >
-         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Clone the currently selected animal&lt;/p>&lt;/body>&lt;/html></string>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Average weight of animal (Kg) when slaughtered&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="whatsThis" >
          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">If you want to create a new animal that is similar to one already defined, you can clone this animal to save time. All of the settings of the animal you are cloning are transferred to the new clone, but the name is changed to Clone of ... (whatever the name of the animal you are cloning was).&lt;/p>
-&lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Note that the parameters are &lt;span style=" font-weight:600;">not&lt;/span> transferred.&lt;/p>&lt;/body>&lt;/html></string>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Animals can be slaughtered for butchering at any weight, but LandUse Analyst needs to know the average weight of the animals when they are slaughtered. This is their &lt;span style=" font-weight:600;">live weight.&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignRight</set>
+        </property>
+        <property name="suffix" >
+         <string> Kg</string>
+        </property>
+        <property name="prefix" >
+         <string/>
+        </property>
+        <property name="maximum" >
+         <number>999</number>
+        </property>
+        <property name="value" >
+         <number>100</number>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1" >
+       <widget class="QLabel" name="label_11" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>0</hsizetype>
+          <vsizetype>5</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
         <property name="text" >
-         <string>...</string>
+         <string>Grow Time</string>
         </property>
-        <property name="icon" >
-         <iconset resource="../resources/resources.qrc" >:/copy.png</iconset>
+       </widget>
+      </item>
+      <item row="5" column="2" colspan="2" >
+       <widget class="QSpinBox" name="spinBoxGrowTime" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>5</hsizetype>
+          <vsizetype>0</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="toolTip" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Time from birth to slaughter weight&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="whatsThis" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Grow time, or the length of time from birth to slaughter weight, is quite important for estimating the herd size. The longer it takes an animal to reach slaughter weight from birth, the higher the number of animals alive at any given time.&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignRight</set>
+        </property>
+        <property name="suffix" >
+         <string> Mths</string>
+        </property>
+        <property name="prefix" >
+         <string/>
+        </property>
+        <property name="maximum" >
+         <number>60</number>
+        </property>
+        <property name="minimum" >
+         <number>1</number>
+        </property>
+        <property name="value" >
+         <number>12</number>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="1" >
+       <widget class="QLabel" name="label_12" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>0</hsizetype>
+          <vsizetype>5</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text" >
+         <string>Death Rate</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="2" colspan="2" >
+       <widget class="QSpinBox" name="spinBoxDeathRate" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>7</hsizetype>
+          <vsizetype>0</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="toolTip" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of babies that do not survive to slaughter age.&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="whatsThis" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">LandUse Analyst accommodates for birthing deaths only. If an animal survives to weaning age but dies before slaughter, it is not modelled at this time. However, you can adjust the death rate setting to indicate the average survival rate of births. This is important for determining herd size, as it affects the number of mothers needed to sustain the production levels required by the settlement.&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignRight</set>
+        </property>
+        <property name="suffix" >
+         <string> %</string>
+        </property>
+        <property name="prefix" >
+         <string/>
+        </property>
+        <property name="maximum" >
+         <number>100</number>
+        </property>
+        <property name="value" >
+         <number>10</number>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="3" >
+       <widget class="QSpinBox" name="spinBoxUsableMeatPercent" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>5</hsizetype>
+          <vsizetype>0</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="toolTip" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of live weight usable as meat&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="whatsThis" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The production targets for animals are in Kg of meat, so to be compatible with animal numbers, you must know the percentage of the animal's live weight that is usable for food. You can also take into account here the efficiency of the butchering technique that the population used. In other words, if you believe they were wasteful, this is where you would make an adjustment to integrate that.&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignRight</set>
+        </property>
+        <property name="suffix" >
+         <string> %</string>
+        </property>
+        <property name="prefix" >
+         <string/>
+        </property>
+        <property name="maximum" >
+         <number>120</number>
+        </property>
+        <property name="value" >
+         <number>80</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" colspan="2" >
+       <widget class="QLineEdit" name="leDescription" >
+        <property name="whatsThis" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Because LandUse Analyst allows more than one type of animal to be defined, the Notes: field allows you to give a brief description of the the animal. For example, you may have two "Sheep" defined, and the Notes: fields could contain "For Slaughter" and "Wool Producers" to distinguish between them.&lt;/p>&lt;/body>&lt;/html></string>
         </property>
        </widget>
       </item>
       <item row="1" column="3" >
-       <widget class="QToolButton" name="toolNew" >
+       <widget class="QPushButton" name="pbnAnimalPic" >
+        <property name="text" >
+         <string>Set Graphic</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="3" >
+       <widget class="QSpinBox" name="spinBoxMeatFoodValue" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>0</hsizetype>
+          <vsizetype>0</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="toolTip" >
          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Define a new animal&lt;/p>&lt;/body>&lt;/html></string>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Percent of live weight usable as meat&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="whatsThis" >
          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">If you simply change the name or settings and click apply in the Animal Manager, you are just editing the animal currently selected. To create a new animal, you must click on the New button.&lt;/p>&lt;/body>&lt;/html></string>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The production targets for animals are in Kg of meat, so to be compatible with animal numbers, you must know the percentage of the animal's live weight that is usable for food. You can also take into account here the efficiency of the butchering technique that the population used. In other words, if you believe they were wasteful, this is where you would make an adjustment to integrate that.&lt;/p>&lt;/body>&lt;/html></string>
         </property>
-        <property name="text" >
-         <string>...</string>
+        <property name="alignment" >
+         <set>Qt::AlignRight</set>
         </property>
-        <property name="icon" >
-         <iconset resource="../resources/resources.qrc" >:/new.png</iconset>
+        <property name="suffix" >
+         <string> cal</string>
+        </property>
+        <property name="prefix" >
+         <string/>
+        </property>
+        <property name="maximum" >
+         <number>20000</number>
+        </property>
+        <property name="value" >
+         <number>3000</number>
         </property>
        </widget>
       </item>

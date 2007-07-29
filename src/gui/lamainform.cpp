@@ -199,7 +199,7 @@ void LaMainForm::on_pbnNewCropParameter_clicked()
 }
 void LaMainForm::on_pbnNewAnimalParameter_clicked()
 {
-    LaAnimalParameterManager myAnimalParameterManager;
+    LaAnimalParameterManager myAnimalParameterManager(mCropsMap);
     //myAnimalParameterManager.setSelectedCropsMap(mCropsMap);
     myAnimalParameterManager.exec();
     listWidgetCalculationsAnimal->clear();

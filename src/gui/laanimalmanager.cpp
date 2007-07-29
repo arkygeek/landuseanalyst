@@ -44,6 +44,8 @@
   readSettings();
   connect(tblAnimals, SIGNAL(cellClicked( int,int)),
       this, SLOT(cellClicked( int,int)));
+  connect(pbnAnimalPic, SIGNAL(clicked()), this, SLOT(on_pbnAnimalPic_clicked()));
+
   refreshAnimalTable();
   //disable these buttons unless experimental is allowed
   pbnImport->setVisible(false);
@@ -192,6 +194,14 @@ void LaAnimalManager::showAnimal()
   spinBoxWeaningAge->setValue(mAnimal.weaningAge());
   spinBoxGestationTime->setValue(mAnimal.gestationTime());
   spinBoxEstrousCycleTime->setValue(mAnimal.estrousCycle());
+}
+
+QString LaAnimalManager::on_pbnAnimalPic_clicked()
+{
+  LaUtils myUtils;
+  QString myFile = myUtils.openGraphicFile();
+  // bool QFile::copy ( const QString & newName )
+  return myFile;
 }
 
 void LaAnimalManager::on_pushButtonLoad_clicked()

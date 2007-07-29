@@ -103,13 +103,13 @@ class LaUtils
      * returned.
      */
     static LaCrop getCrop(QString theGuid);
-    
+
     /** This typedef is used to refer to a collection of layersets.
      * the key is the layerset name
      * the value is the layerset itself
      */
     typedef QMap<QString,LaAnimal> AnimalMap;
-    
+
     /** Get a LaAnimal given its GUID.
      * If no matching animal is found, a blank one is
      * returned.
@@ -142,7 +142,7 @@ class LaUtils
      * returned.
      */
     static LaCropParameter getCropParameter(QString theGuid);
-    
+
     /** This typedef is used to refer to a collection of layersets.
      * the key is the layerset name
      * the value is the layerset itself
@@ -152,13 +152,13 @@ class LaUtils
      * @return a QMap<QString,OmgLayerSet> where the QString key is the layerset name
      **/
     static LaUtils::AnimalParameterMap getAvailableAnimalParameters();
-    
+
     /** Get a LaAnimalParameter given its GUID.
      * If no matching animalparameter is found, a blank one is
      * returned.
      */
     static LaAnimalParameter getAnimalParameter(QString theGuid);
-    
+
     /**
      * Find the place on the filesystem where user defined animalParameter
      * profiles are stored.
@@ -168,10 +168,10 @@ class LaUtils
      * @return QString containing the relevant directory name
      */
     static const QString userAnimalParameterProfilesDirPath();
-    
+
 
     /** Get a QMap of the avaliable animals from the users animals directory
-     * @return a QMap<QString,OmgLayerSet> where the QString key is 
+     * @return a QMap<QString,OmgLayerSet> where the QString key is
      * the animal name.
      **/
     static LaUtils::AnimalMap getAvailableAnimals();
@@ -216,12 +216,13 @@ class LaUtils
      */
     static QString xmlDecode(QString theString);
 
-    /** Get the standard style sheet for reports. Typically this will be 
+    /** Get the standard style sheet for reports. Typically this will be
       * used like this:
       * QString myStyle = getStandardCss();
       * textBrowserFoo->document()->setDefaultStylesheet(myStyle);
       */
     static QString getStandardCss();
+    QString openGraphicFile();
   private:
 
 };

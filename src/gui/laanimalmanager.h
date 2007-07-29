@@ -55,9 +55,8 @@ class LaAnimalManager : public QDialog, private Ui::LaAnimalManagerBase
       void on_toolNew_clicked();
       void on_toolDelete_clicked();
       void on_pbnApply_clicked();
+      QString on_pbnAnimalPic_clicked();
       void resizeEvent(QResizeEvent*);
-
-
 
   private:
       void refreshAnimalTable(QString theGuid=0);

@@ -37,7 +37,7 @@ class LaAnimalParameterManager : public QDialog, private Ui::LaAnimalParameterMa
 {
   Q_OBJECT
   public:
-    LaAnimalParameterManager(QWidget* parent = 0, Qt::WFlags fl = 0 );
+    LaAnimalParameterManager(LaTripleMap & mCropMap, QWidget* parent = 0, Qt::WFlags fl = 0 );
     ~LaAnimalParameterManager();
 
   public slots:

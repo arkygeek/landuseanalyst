@@ -42,12 +42,13 @@
 #include <QListWidgetItem>
 #include <QIcon>
 #include <QtDebug>
-  LaAnimalParameterManager::LaAnimalParameterManager(QWidget* parent, Qt::WFlags fl)
+  LaAnimalParameterManager::LaAnimalParameterManager(LaTripleMap & theSelectedCropsMap, QWidget* parent, Qt::WFlags fl)
 : QDialog(parent,fl)
 {
   //required by Qt4 to initialise the ui
   setupUi(this);
   readSettings();
+  mSelectedCropsMap = theSelectedCropsMap;
   connect(tblAnimalParameterProfiles, SIGNAL(cellClicked( int,int)),
       this, SLOT(cellClicked( int,int)));
   refreshAnimalParameterTable();
@@ -179,11 +180,8 @@ void LaAnimalParameterManager::refreshAnimalParameterTable(QString theGuid)
 
 void LaAnimalParameterManager::populateFodder()
 {
-  LaMainForm myMainForm;
-  QMap <QString, QString> mySelectedCropsMap = myMainForm.getSelectedCrops();
-  LaTripleMap myAvailableCropsMap = myMainForm.getAvailableCrops();
-  qDebug() << "++==++ mySelectedCropsMap line 185" << mySelectedCropsMap;
-  qDebug() << "++==++ myAvailableCropsMap line 186"<< myAvailableCropsMap;
+
+  qDebug() << "++==++ mCropsMap line 185" << mSelectedCropsMap;
 
   tblFodder->clear();
   tblFodder->setRowCount(0);
@@ -205,11 +203,21 @@ void LaAnimalParameterManager::populateFodder()
     // Add details to the new row
     QTableWidgetItem *mypNameItem = new QTableWidgetItem(myCrop.name());
 
-    if (mySelectedCropsMap.contains(myGuid) == true)
+    if (mSelectedCropsMap.contains(myGuid) == true)
     {
-      QIcon myIcon;
-      myIcon.addFile(":/status_ok.png");
-      mypNameItem->setIcon(myIcon);
+      QPair <bool, QString> myPair = mSelectedCropsMap.value(myGuid);
+      if (myPair.first)
+      {
+        QIcon myIcon;
+        myIcon.addFile(":/status_ok.png");
+        mypNameItem->setIcon(myIcon);
+      }
+      else
+      {
+        QIcon myIcon;
+        myIcon.addFile(":/status_error.png");
+        mypNameItem->setIcon(myIcon);
+      }
     }
     else
     {
