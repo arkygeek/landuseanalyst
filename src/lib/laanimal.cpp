@@ -65,6 +65,7 @@ LaAnimal::LaAnimal(const LaAnimal& theAnimal)
   mWeaningAge=theAnimal.weaningAge();
   mGestationTime=theAnimal.gestationTime();
   mEstrousCycle=theAnimal.estrousCycle();
+  mImageFile=theAnimal.imageFile();
 }
 
 LaAnimal& LaAnimal::operator=(const LaAnimal& theAnimal)
@@ -88,6 +89,8 @@ LaAnimal& LaAnimal::operator=(const LaAnimal& theAnimal)
   mWeaningAge=theAnimal.weaningAge();
   mGestationTime=theAnimal.gestationTime();
   mEstrousCycle=theAnimal.estrousCycle();
+  mImageFile=theAnimal.imageFile();
+
   return *this;
 }
 
@@ -154,6 +157,10 @@ int LaAnimal::gestationTime() const
 int LaAnimal::estrousCycle() const
 {
   return mEstrousCycle;
+}
+QString LaAnimal::imageFile() const
+{
+  return mImageFile;
 }
 void LaAnimal::setName(QString theName)
 {
@@ -222,7 +229,10 @@ void LaAnimal::setEstrousCycle(int theDays)
 {
   mEstrousCycle=theDays;
 }
-
+void LaAnimal::setImageFile(QString theImageFileName)
+{
+  mImageFile=theImageFileName;
+}
 bool LaAnimal::fromXml(QString theXml)
 {
   //qDebug("Loading animal from xml");
@@ -253,6 +263,7 @@ bool LaAnimal::fromXml(QString theXml)
   mWeaningAge=QString(myTopElement.firstChildElement("weaningAge").text()).toInt();
   mGestationTime=QString(myTopElement.firstChildElement("gestationTime").text()).toInt();
   mEstrousCycle=QString(myTopElement.firstChildElement("estrousCycle").text()).toInt();
+  mImageFile=QString(myTopElement.firstChildElement("imageFile").text());
   return true;
 }
 
@@ -276,6 +287,7 @@ QString LaAnimal::toXml()
   myString+=QString("  <weaningAge>" + QString::number(mWeaningAge) + "</weaningAge>\n");
   myString+=QString("  <gestationTime>" + QString::number(mGestationTime) + "</gestationTime>\n");
   myString+=QString("  <estrousCycle>" + QString::number(mEstrousCycle) + "</estrousCycle>\n");
+  myString+=QString("  <imageFile>" + LaUtils::xmlEncode(mImageFile) + "</imageFile>\n");
   myString+=QString("</animal>\n");
   return myString;
 }

@@ -55,7 +55,7 @@ class LaAnimalManager : public QDialog, private Ui::LaAnimalManagerBase
       void on_toolNew_clicked();
       void on_toolDelete_clicked();
       void on_pbnApply_clicked();
-      QString on_pbnAnimalPic_clicked();
+      void on_pbnAnimalPic_clicked();
       void resizeEvent(QResizeEvent*);
 
   private:
@@ -66,6 +66,7 @@ class LaAnimalManager : public QDialog, private Ui::LaAnimalManagerBase
       LaAnimal mAnimal;
       void readSettings();
       void writeSettings();
+      QString mImageFile;
 };
 
 #endif //LAANIMALFORMMAIN_H

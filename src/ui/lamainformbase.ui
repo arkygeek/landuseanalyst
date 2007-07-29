@@ -1356,30 +1356,6 @@ p, li { white-space: pre-wrap; }
        <property name="spacing" >
         <number>6</number>
        </property>
-       <item row="0" column="4" >
-        <widget class="QGraphicsView" name="gvCropPix" >
-         <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>0</hsizetype>
-           <vsizetype>0</vsizetype>
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize" >
-          <size>
-           <width>120</width>
-           <height>120</height>
-          </size>
-         </property>
-         <property name="maximumSize" >
-          <size>
-           <width>120</width>
-           <height>120</height>
-          </size>
-         </property>
-        </widget>
-       </item>
        <item row="2" column="1" >
         <widget class="QLineEdit" name="leCommonCropLandRasterName" />
        </item>
@@ -1509,6 +1485,14 @@ p, li { white-space: pre-wrap; }
          </column>
         </widget>
        </item>
+       <item row="0" column="4" >
+        <widget class="QLabel" name="lblCropPix" >
+         <property name="text" >
+          <string>No Graphic
+Selected</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="animals_tab" >
@@ -1527,7 +1511,7 @@ p, li { white-space: pre-wrap; }
          <property name="orientation" >
           <enum>Qt::Vertical</enum>
          </property>
-         <widget class="QWidget" name="" >
+         <widget class="QWidget" name="layoutWidget" >
           <layout class="QHBoxLayout" >
            <property name="margin" >
             <number>0</number>
@@ -1585,26 +1569,10 @@ p, li { white-space: pre-wrap; }
             </widget>
            </item>
            <item>
-            <widget class="QGraphicsView" name="gvAnimalPix" >
-             <property name="sizePolicy" >
-              <sizepolicy>
-               <hsizetype>0</hsizetype>
-               <vsizetype>0</vsizetype>
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize" >
-              <size>
-               <width>120</width>
-               <height>120</height>
-              </size>
-             </property>
-             <property name="maximumSize" >
-              <size>
-               <width>120</width>
-               <height>120</height>
-              </size>
+            <widget class="QLabel" name="lblAnimalPix" >
+             <property name="text" >
+              <string>No Graphic
+Selected</string>
              </property>
             </widget>
            </item>

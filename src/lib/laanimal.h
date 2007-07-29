@@ -75,6 +75,8 @@ class LaAnimal : public LaSerialisable, public LaGuid
     int gestationTime() const;
     /** The number of days in the female estrous cycle */
     int estrousCycle() const;
+    /** The image file associated with the animal */
+    QString imageFile() const;
 
     //
     // Mutators
@@ -159,7 +161,10 @@ class LaAnimal : public LaSerialisable, public LaGuid
      * @see estrousCycle()
      */
     void setEstrousCycle(int theDays);
-
+    /** Set the image file
+     * @see imageFile()
+     */
+    void setImageFile(QString theImageFileName);
     /** Return an xml representation of this layer
      * @NOTE this class inherits the serialisable interface so
      * it MUST implement this
@@ -213,6 +218,7 @@ class LaAnimal : public LaSerialisable, public LaGuid
     int mGestationTime;
     /** The number of days in the female estrous cycle */
     int mEstrousCycle;
+    QString mImageFile;
 };
 
 #endif //LAANIMAL_H

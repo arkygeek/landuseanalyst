@@ -195,15 +195,17 @@ void LaAnimalManager::showAnimal()
   spinBoxWeaningAge->setValue(mAnimal.weaningAge());
   spinBoxGestationTime->setValue(mAnimal.gestationTime());
   spinBoxEstrousCycleTime->setValue(mAnimal.estrousCycle());
+  lblAnimalPix->setPixmap(mAnimal.imageFile());
 }
 
-QString LaAnimalManager::on_pbnAnimalPic_clicked()
+void LaAnimalManager::on_pbnAnimalPic_clicked()
 {
   LaUtils myUtils;
   QString myFile = myUtils.openGraphicFile();
   lblAnimalPix->setPixmap(myFile);
+  mImageFile = myFile;
   // bool QFile::copy ( const QString & newName )
-  return myFile;
+  //return myFile;
 }
 
 void LaAnimalManager::on_pushButtonLoad_clicked()
@@ -301,6 +303,12 @@ void LaAnimalManager::on_pbnApply_clicked()
   mAnimal.setWeaningAge(spinBoxWeaningAge->value());
   mAnimal.setGestationTime(spinBoxGestationTime->value());
   mAnimal.setEstrousCycle(spinBoxEstrousCycleTime->value());
+  //const QLabel *mypLabel = lblAnimalPix;
+  //QString mypLabelPix = lblAnimalPix->pixmap();
+  mAnimal.setImageFile(mImageFile);
+
+  //lblAnimalPix->setPixmap(myFile);
+
   mAnimal.toXmlFile( LaUtils::userAnimalProfilesDirPath() +
       QDir::separator() + mAnimal.guid() + ".xml");
   refreshAnimalTable(mAnimal.guid());

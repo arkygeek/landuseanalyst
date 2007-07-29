@@ -525,6 +525,7 @@ void LaMainForm::animalCellClicked(int theRow, int theColumn)
     myAnimalParametersMap = LaUtils::getAvailableAnimalParameters();
     LaAnimalParameter myAnimalParameter = myAnimalParametersMap[myGuid];
     showAnimalDefinitionReport(myAnimal,myAnimalParameter);
+    lblAnimalPix->setPixmap(myAnimal.imageFile());
   }
   listWidgetCalculationsAnimal->clear();
   loadAnimals();
