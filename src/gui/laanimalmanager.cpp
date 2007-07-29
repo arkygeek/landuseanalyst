@@ -35,7 +35,8 @@
 #include <QTableWidgetItem>
 #include <QFileDialog>
 #include <QListWidgetItem>
-
+#include <QLabel>
+#include <QPixmap>
   LaAnimalManager::LaAnimalManager(QWidget* parent, Qt::WFlags fl)
 : QDialog(parent,fl)
 {
@@ -200,6 +201,7 @@ QString LaAnimalManager::on_pbnAnimalPic_clicked()
 {
   LaUtils myUtils;
   QString myFile = myUtils.openGraphicFile();
+  lblAnimalPix->setPixmap(myFile);
   // bool QFile::copy ( const QString & newName )
   return myFile;
 }

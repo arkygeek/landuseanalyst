@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2006 by Tim Sutton   *
- *   tim@linfiniti.com   *
+ *   Copyright (C) 2006 by Tim Sutton         tim@linfiniti.com            *
+ *                         Jason Jorgenson    jjorgenson@gmail.com         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -86,6 +86,16 @@ class LaUtils
      * @return QString containing the relevant directory name
      */
     static const QString userCropProfilesDirPath();
+    /**
+     * Find the place on the filesystem where user images
+     * are stored.
+     *
+     * Typically this will be ~/.landuseAnalyst/images
+     *
+     * @return QString containing the relevant directory name
+     */
+    static const QString userImagesDirPath();
+
 
     /** This typedef is used to refer to a collection of layersets.
      * the key is the layerset name

@@ -21,7 +21,7 @@
 #endif
 
 
-/*
+/**
  * Returns the path to the settings directory in user's home dir
  */
 const QString LaUtils::userSettingsDirPath()
@@ -206,12 +206,19 @@ const QString LaUtils::userAnimalParameterProfilesDirPath()
   return myPath;
 }
 
+const QString LaUtils::userImagesDirPath()
+{
+  QString myPath = QDir::homePath() + QString("/.landuseAnalyst") +
+    QDir::separator()+"images"+QDir::separator();
+  QDir().mkpath(myPath);
+  return myPath;
+}
 
 const QString LaUtils::userCropParameterProfilesDirPath()
 {
   //alg profiles are always saved in the users home dir under .landuseAnalyst/
   QString myPath = QDir::homePath() + QString("/.landuseAnalyst/") +
-    QDir::separator()+"cropParameterProfiles"+QDir::separator();
+    QDir::separator() + "cropParameterProfiles" + QDir::separator();
   QDir().mkpath(myPath);
   return myPath;
 }
@@ -495,6 +502,11 @@ QString LaUtils::getStandardCss()
 
 QString LaUtils::openGraphicFile()
 {
-QString myFileName = QFileDialog::getOpenFileName(0, "Choose a file","~/.landuseAnalyst", "Images (*.png *.xpm *.jpg)");
-  return myFileName;
+  QString myHomePath = QDir::homePath();
+  QString myFileName = QFileDialog::getOpenFileName(0, "Choose an image", myHomePath, "Images (*.png *.xpm *.jpg)");
+  QFileInfo fi(myFileName);
+  QString myName = fi.fileName();
+  QString myDestinationFilePathName = userImagesDirPath() + myName;
+  QFile::copy(myFileName, myDestinationFilePathName);
+  return myDestinationFilePathName;
 }
