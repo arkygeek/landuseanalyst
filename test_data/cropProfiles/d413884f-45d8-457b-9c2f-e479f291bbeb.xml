@@ -1,0 +1,9 @@
+<crop guid="d413884f-45d8-457b-9c2f-e479f291bbeb">
+  <name>Barley</name>
+  <description>No barley notes</description>
+  <cropYield>50</cropYield>
+  <cropCalories>3000</cropCalories>
+  <fodderProduction>50</fodderProduction>
+  <fodderCalories>1000</fodderCalories>
+  <yieldUnits>0</yieldUnits>
+</crop>

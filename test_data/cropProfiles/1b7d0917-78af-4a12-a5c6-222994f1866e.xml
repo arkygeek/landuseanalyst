@@ -1,0 +1,9 @@
+<crop guid="1b7d0917-78af-4a12-a5c6-222994f1866e">
+  <name>Wheat</name>
+  <description>No wheat notes</description>
+  <cropYield>50</cropYield>
+  <cropCalories>3000</cropCalories>
+  <fodderProduction>50</fodderProduction>
+  <fodderCalories>1100</fodderCalories>
+  <yieldUnits>0</yieldUnits>
+</crop>

@@ -1,0 +1,9 @@
+<crop guid="978beb56-632c-4747-a80b-5efbc2cb57ba">
+  <name>Olives</name>
+  <description>mature</description>
+  <cropYield>60</cropYield>
+  <cropCalories>4000</cropCalories>
+  <fodderProduction>0</fodderProduction>
+  <fodderCalories>1000</fodderCalories>
+  <yieldUnits>0</yieldUnits>
+</crop>
