@@ -51,6 +51,8 @@ LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
   readSettings();
   lblCropPix->setScaledContents(true);
   lblAnimalPix->setScaledContents(true);
+  lblCropPicCalcs->setScaledContents(true);
+  lblAnimalPicCalcs->setScaledContents(true);
   lblVersion->setText(QString("Version: %1").arg(VERSION) + " " + QString("$Revision$").replace("$",""));
   tblAnimals->horizontalHeader()->hide();
   tblAnimals->verticalHeader()->hide();
@@ -820,6 +822,8 @@ void LaMainForm::cropCalcClicked(QListWidgetItem * thepCurrentItem, QListWidgetI
   myModel.DoCalculations();
 
   QString myGuid = thepCurrentItem->data(Qt::UserRole).toString();
+  LaCrop myCrop = LaUtils::getCrop(myGuid);
+  lblCropPicCalcs->setPixmap(myCrop.imageFile());
   QMap <QString, QString> myCalcsMap = myModel.calcsCropsMap();
   textBrowserResultsCrop->setText(myCalcsMap.value(myGuid));
 }
@@ -900,6 +904,8 @@ void LaMainForm::animalCalcClicked(QListWidgetItem * thepCurrentItem, QListWidge
   myModel.DoCalculations();
 
   QString myGuid = thepCurrentItem->data(Qt::UserRole).toString();
+  LaAnimal myAnimal = LaUtils::getAnimal(myGuid);
+  lblAnimalPicCalcs->setPixmap(myAnimal.imageFile());
   QMap <QString, QString> myCalcsMap = myModel.calcsAnimalsMap();
   textBrowserResultsAnimals->setText(myCalcsMap.value(myGuid));
   progressBarCalcs->setMaximum(100);
