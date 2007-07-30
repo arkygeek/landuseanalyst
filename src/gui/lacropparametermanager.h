@@ -22,6 +22,7 @@
 
 //QT Includes
 #include <QDialog>
+#include <QComboBox>
 //Local Includes
 #include <ui_lacropparametermanagerbase.h>
 #include <lacropparameter.h>
@@ -44,6 +45,7 @@ class LaCropParameterManager : public QDialog, private Ui::LaCropParameterManage
 
   private slots:
       void cellClicked(int theRow, int theColumn);
+      void on_cboCrop_changed(int theIndex);
       void showCropParameter();
       void on_toolCopy_clicked();
       void on_toolNew_clicked();

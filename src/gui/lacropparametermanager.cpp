@@ -36,6 +36,7 @@
 #include <QTableWidgetItem>
 #include <QFileDialog>
 #include <QListWidgetItem>
+#include <QComboBox>
 
   LaCropParameterManager::LaCropParameterManager(QWidget* parent, Qt::WFlags fl)
 : QDialog(parent,fl)
@@ -45,11 +46,11 @@
   readSettings();
   connect(tblCropParameterProfiles, SIGNAL(cellClicked( int,int)),
       this, SLOT(cellClicked( int,int)));
-  refreshCropParameterTable();
+
   //disable these buttons unless experimental is allowed
   pbnImport->setVisible(false);
   pbnExport->setVisible(false);
-
+  lblCropPic->setScaledContents(true);
  //populate the plants combo
   LaUtils::CropMap myCropsMap;
   myCropsMap = LaUtils::getAvailableCrops();
@@ -64,7 +65,10 @@
     myIcon.addFile(":/localdata.png");
     cboCrop->addItem(myName,myGuid);
   }
+  connect(cboCrop, SIGNAL(currentIndexChanged( int)),
+      this, SLOT(on_cboCrop_changed( int)));
 
+  refreshCropParameterTable();
 }
 
 LaCropParameterManager::~LaCropParameterManager()
@@ -172,6 +176,15 @@ void LaCropParameterManager::refreshCropParameterTable(QString theGuid)
   tblCropParameterProfiles->horizontalHeader()->setResizeMode(1,QHeaderView::Stretch);
 }
 
+void LaCropParameterManager::on_cboCrop_changed(int theIndex)
+{
+  LaCrop myCrop = LaUtils::getCrop(cboCrop->itemData(cboCrop->currentIndex(),Qt::UserRole).toString());
+  QString myCropPic = myCrop.imageFile();
+
+
+  lblCropPic->setPixmap(myCropPic);
+}
+
 void LaCropParameterManager::cellClicked(int theRow, int theColumn)
 {
   //note we use the alg name not the id because user may have customised params
@@ -180,6 +193,9 @@ void LaCropParameterManager::cellClicked(int theRow, int theColumn)
   qDebug("Guid is: " + myGuid.toLocal8Bit());
   QString myFileName = myGuid + ".xml";
   selectCropParameter(myFileName);
+  LaCrop myCrop = LaUtils::getCrop(cboCrop->itemData(cboCrop->currentIndex(),Qt::UserRole).toString());
+  QString myAnimalPic = myCrop.imageFile();
+  lblCropPic->setPixmap(myAnimalPic);
 }
 void LaCropParameterManager::selectCropParameter(QString theFileName)
 {

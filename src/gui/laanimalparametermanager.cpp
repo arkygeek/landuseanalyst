@@ -48,9 +48,12 @@
   //required by Qt4 to initialise the ui
   setupUi(this);
   readSettings();
+  lblAnimalPic->setScaledContents(true);
   mSelectedCropsMap = theSelectedCropsMap;
   connect(tblAnimalParameterProfiles, SIGNAL(cellClicked( int,int)),
       this, SLOT(cellClicked( int,int)));
+  connect(cboAnimal, SIGNAL(currentIndexChanged( int)),
+      this, SLOT(on_cboAnimal_changed( int)));
   refreshAnimalParameterTable();
   //disable these buttons unless experimental is allowed
   pbnImport->setVisible(false);
@@ -414,6 +417,14 @@ void LaAnimalParameterManager::on_toolDelete_clicked()
     refreshFodderTable();
   }
 }
+
+void LaAnimalParameterManager::on_cboAnimal_changed(int theIndex)
+{
+  LaAnimal myAnimal = LaUtils::getAnimal(cboAnimal->itemData(cboAnimal->currentIndex(),Qt::UserRole).toString());
+  QString myAnimalPic = myAnimal.imageFile();
+  lblAnimalPic->setPixmap(myAnimalPic);
+}
+
 void LaAnimalParameterManager::on_pbnApply_clicked()
 {
   mAnimalParameter.setName(leName->text());

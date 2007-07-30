@@ -47,6 +47,7 @@ class LaAnimalParameterManager : public QDialog, private Ui::LaAnimalParameterMa
 
   private slots:
       void cellClicked(int theRow, int theColumn);
+      void on_cboAnimal_changed(int theValue);
       void showAnimalParameter();
       void on_toolCopy_clicked();
       void on_toolNew_clicked();

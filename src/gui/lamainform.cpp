@@ -49,7 +49,8 @@ LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
   //required by Qt4 to initialise the ui
   setupUi(this);
   readSettings();
-
+  lblCropPix->setScaledContents(true);
+  lblAnimalPix->setScaledContents(true);
   lblVersion->setText(QString("Version: %1").arg(VERSION) + " " + QString("$Revision$").replace("$",""));
   tblAnimals->horizontalHeader()->hide();
   tblAnimals->verticalHeader()->hide();
@@ -577,7 +578,7 @@ void LaMainForm::on_pushButtonRun_clicked()
 
   // show the user that the computer is thinking
   progressBarCalcs->reset();
-  progressBarCalcs->setRange(0,8);
+  progressBarCalcs->setRange(0,9);
 
   mCommonGrazingLandFoodValue = sbCommonRasterTDN->value();
   LaModel myModel;
@@ -586,7 +587,7 @@ void LaMainForm::on_pushButtonRun_clicked()
 
   //test stats
   myModel.getArea("crops",100);
-
+  progressBarCalcs->setValue(1);
   // Get a list of the selected animals
   QMap<QString,QString> mySelectedAnimalsMap;
   //          <animal guid <enabled, animalparamters guid>>
@@ -642,28 +643,28 @@ void LaMainForm::on_pushButtonRun_clicked()
   myModel.setCommonLandValue(sbCommonRasterTDN->value());
 
   tbReport->setHtml(myModel.toHtml());
-  progressBarCalcs->setValue(1);
-
-  myModel.DoCalculations();
   progressBarCalcs->setValue(2);
 
-  tbReport->append(myModel.toHtmlCalorieCropTargets());
+  myModel.DoCalculations();
   progressBarCalcs->setValue(3);
 
-  tbReport->append(myModel.toHtmlCalorieAnimalTargets());
+  tbReport->append(myModel.toHtmlCalorieCropTargets());
   progressBarCalcs->setValue(4);
 
-  tbReport->append(myModel.toHtmlProductionCropTargets());
+  tbReport->append(myModel.toHtmlCalorieAnimalTargets());
   progressBarCalcs->setValue(5);
 
-  tbReport->append(myModel.toHtmlProductionAnimalTargets());
+  tbReport->append(myModel.toHtmlProductionCropTargets());
   progressBarCalcs->setValue(6);
 
-  tbReport->append(myModel.toHtmlAreaCropTargets());
+  tbReport->append(myModel.toHtmlProductionAnimalTargets());
   progressBarCalcs->setValue(7);
 
-  tbReport->append(myModel.toHtmlAreaAnimalTargets());
+  tbReport->append(myModel.toHtmlAreaCropTargets());
   progressBarCalcs->setValue(8);
+
+  tbReport->append(myModel.toHtmlAreaAnimalTargets());
+  progressBarCalcs->setValue(9);
 }
 
 void LaMainForm::debugChecks()

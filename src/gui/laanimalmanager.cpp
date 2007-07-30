@@ -43,6 +43,7 @@
   //required by Qt4 to initialise the ui
   setupUi(this);
   readSettings();
+  lblAnimalPix->setScaledContents(true);
   connect(tblAnimals, SIGNAL(cellClicked( int,int)),
       this, SLOT(cellClicked( int,int)));
   connect(pbnAnimalPic, SIGNAL(clicked()), this, SLOT(on_pbnAnimalPic_clicked()));

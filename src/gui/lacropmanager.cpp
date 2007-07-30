@@ -42,6 +42,7 @@
   //required by Qt4 to initialise the ui
   setupUi(this);
   readSettings();
+  lblCropPix->setScaledContents(true);
   connect(tblCrops, SIGNAL(cellClicked( int,int)),
       this, SLOT(cellClicked( int,int)));
   connect(pbnCropPic, SIGNAL(clicked()),
