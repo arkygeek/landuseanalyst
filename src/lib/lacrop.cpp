@@ -196,12 +196,13 @@ QString LaCrop::toHtml()
   myString+="<h3>Details for " + LaUtils::xmlEncode(mName) + "</h3>";
   //myString+="<p>GUID:" + guid() + "</p>";
   myString+="<table>";
-  myString+="<tr><td><b>Description: </td><td>" + mDescription + "</td></tr>";
-  myString+="<tr><td><b>Avg Yield: </td><td>" + QString::number(mCropYield) + "</td></tr>";
-  myString+="<tr><td><b>Cals/Kg: </td><td>" + QString::number(mCropCalories) + "</td></tr>";
+  myString+="<tr><td><b>Description: </b></td><td>" + mDescription + "</td></tr>";
+  myString+="<tr><td><b>Avg Yield: </b></td><td>" + QString::number(mCropYield) + "</td></tr>";
+  myString+="<tr><td><b>Cals/Kg: </b></td><td>" + QString::number(mCropCalories) + "</td></tr>";
   QString myUnits = (mYieldUnits==0) ? "Dunum" : "Hectare";
-  myString+="<tr><td><b>Fodder (kg/" + myUnits + "): </td><td>" + QString::number(mCropFodderProduction) + "</td></tr>";
-  myString+="<tr><td><b>Fodder TDN/Kg: </td><td>" + QString::number(mCropFodderCalories) + "</td></tr>";
-  myString+="<tr><td><b>AreaUnits: </td><td>" + myUnits + "</td></tr>";
+  myString+="<tr><td><b>Fodder (kg/" + myUnits + "): </b></td><td>" + QString::number(mCropFodderProduction) + "</td></tr>";
+  myString+="<tr><td><b>Fodder TDN/Kg: </b></td><td>" + QString::number(mCropFodderCalories) + "</td></tr>";
+  myString+="<tr><td><b>AreaUnits: </b></td><td>" + myUnits + "</td></tr>";
+  myString+="</table>";
   return myString;
 }

@@ -577,7 +577,7 @@ void LaMainForm::on_pushButtonRun_clicked()
 
   // show the user that the computer is thinking
   progressBarCalcs->reset();
-  progressBarCalcs->setRange(0,0);
+  progressBarCalcs->setRange(0,8);
 
   mCommonGrazingLandFoodValue = sbCommonRasterTDN->value();
   LaModel myModel;
@@ -640,22 +640,30 @@ void LaMainForm::on_pushButtonRun_clicked()
   myModel.setMeatPercent(horizontalSliderMeat->value());
   myModel.setCaloriesPerPersonDaily(spinBoxDailyCalories->value());
   myModel.setCommonLandValue(sbCommonRasterTDN->value());
-  tbReport->setHtml(myModel.toHtml());
 
-  // iterate through crops and animals and display the calorie, production and area targets
+  tbReport->setHtml(myModel.toHtml());
+  progressBarCalcs->setValue(1);
+
   myModel.DoCalculations();
-  //myModel.toXmlFile( LaUtils::getModelOutputDir() +
-  //    QDir::separator() + myModel.guid() + ".xml");
+  progressBarCalcs->setValue(2);
 
   tbReport->append(myModel.toHtmlCalorieCropTargets());
+  progressBarCalcs->setValue(3);
+
   tbReport->append(myModel.toHtmlCalorieAnimalTargets());
+  progressBarCalcs->setValue(4);
 
   tbReport->append(myModel.toHtmlProductionCropTargets());
+  progressBarCalcs->setValue(5);
+
   tbReport->append(myModel.toHtmlProductionAnimalTargets());
+  progressBarCalcs->setValue(6);
 
   tbReport->append(myModel.toHtmlAreaCropTargets());
+  progressBarCalcs->setValue(7);
+
   tbReport->append(myModel.toHtmlAreaAnimalTargets());
-  progressBarCalcs->setMaximum(100);
+  progressBarCalcs->setValue(8);
 }
 
 void LaMainForm::debugChecks()

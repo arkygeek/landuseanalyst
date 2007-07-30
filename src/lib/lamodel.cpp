@@ -405,19 +405,19 @@ QString LaModel::toHtml()
   myString+="<h1>Model Report</h1>";
   myString+="<h3>" + LaUtils::xmlEncode(mName) + "</h3>";
   //myString+="GUID:" + guid() + "<br />";
-  myString+="Population:" + QString::number(mPopulation) + "<br />";
-  myString+="Period: " + LaUtils::xmlEncode(mPeriod) + "<br />";
-  myString+="Projection: " + QString::number(mProjection) + "<br />";
-  myString+="Easting: " + QString::number(mEasting) + "<br />";
-  myString+="Northing: " + QString::number(mNorthing) + "<br />";
-  myString+="Euclidean Distance: " + QString::number(mEuclideanDistance) + "<br />";
-  myString+="Walking Time: " + QString::number(mWalkingTime) + "<br />";
-  myString+="Path Distance: " + QString::number(mPathDistance) + "<br />";
-  myString+="Precision: " + QString::number(mPrecision) + "<br />";
-  myString+="Diet Percent" + QString::number(mDietPercent) + "<br />";
-  myString+="Plant Percent: " + QString::number(mPercentOfDietThatIsFromCrops) + "<br />";
-  myString+="Meat Percent: " + QString::number(mMeatPercent) + "<br />";
-  myString+="Calories Per PersonDaily: " + QString::number(mCaloriesPerPersonDaily) + "<br />";
+  myString+="<br>Population:" + QString::number(mPopulation) + "</br>";
+  myString+="<br>Period: " + LaUtils::xmlEncode(mPeriod) + "</br>";
+  myString+="<br>Projection: " + QString::number(mProjection) + "</br>";
+  myString+="<br>Easting: " + QString::number(mEasting) + "</br>";
+  myString+="<br>Northing: " + QString::number(mNorthing) + "</br>";
+  myString+="<br>Euclidean Distance: " + QString::number(mEuclideanDistance) + "</br>";
+  myString+="<br>Walking Time: " + QString::number(mWalkingTime) + "</br>";
+  myString+="<br>Path Distance: " + QString::number(mPathDistance) + "</br>";
+  myString+="<br>Precision: " + QString::number(mPrecision) + "</br>";
+  myString+="<br>Diet Percent" + QString::number(mDietPercent) + "</br>";
+  myString+="<br>Plant Percent: " + QString::number(mPercentOfDietThatIsFromCrops) + "</br>";
+  myString+="<br>Meat Percent: " + QString::number(mMeatPercent) + "</br>";
+  myString+="<br>Calories Per Person Daily: " + QString::number(mCaloriesPerPersonDaily) + "</br>";
   //iterate through animals
   QMapIterator<QString, QString > myAnimalIterator(mAnimalsMap);
   while (myAnimalIterator.hasNext())
@@ -431,11 +431,13 @@ QString LaModel::toHtml()
     //myText += " ";
     //myString += myText + "<br />";
     LaAnimal myAnimal = LaUtils::getAnimal(myAnimalGuid);
+    myString += "<br>";
     myString += myAnimal.toHtml();
-    myString += "<br />";
+    myString += "</br>";
     LaAnimalParameter myParameter = LaUtils::getAnimalParameter(myAnimalParameterGuid);
+    myString += "<br>";
     myString += myParameter.toHtml();
-    myString += "<br />";
+    myString += "</br>";
   }
 
   //iterate through crops

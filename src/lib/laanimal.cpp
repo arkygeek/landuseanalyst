@@ -319,24 +319,25 @@ QString LaAnimal::toHtml()
   QString myString;
   myString+="<h2>Details for " + LaUtils::xmlEncode(mName) + "</h2>";
   myString+="<table>";
-  myString+="<tr><td><b>Description:</td><td>" + mDescription + "</td></tr>";
-  myString+="<tr><td><b>Meat Food Value:</td><td>" + QString::number(mMeatFoodValue) + "</td></tr>";
-  myString+="<tr><td><b>Usable Meat (%):</td><td>" + QString::number(mUsableMeat) + "</td></tr>";
+  myString+="<tr><td><b>Description:</b></td><td>" + mDescription + "</td></tr>";
+  myString+="<tr><td><b>Meat Food Value:</b></td><td>" + QString::number(mMeatFoodValue) + "</td></tr>";
+  myString+="<tr><td><b>Usable Meat (%):</b></td><td>" + QString::number(mUsableMeat) + "</td></tr>";
 
-  myString+="<tr><td><b>Sexual Maturity:</td><td>" + QString::number(mSexualMaturity) + "</td></tr>";
-  myString+="<tr><td><b>Years Breedable:</td><td>" + QString::number(mBreedingExpectancy) + "</td></tr>";
-  myString+="<tr><td><b>Young Per Birth:</td><td>" + QString::number(mYoungPerBirth) + "</td></tr>";
-  myString+="<tr><td><b>Weaning Age:</td><td>" + QString::number(mWeaningAge) + "</td></tr>";
-  myString+="<tr><td><b>Kill Weight (Kg):</td><td>" + QString::number(mKillWeight) + "</td></tr>";
-  myString+="<tr><td><b>Grow Time:</td><td>" + QString::number(mGrowTime) + "</td></tr>";
-  myString+="<tr><td><b>Death Rate (%):</td><td>" + QString::number(mDeathRate) + "</td></tr>";
+  myString+="<tr><td><b>Sexual Maturity:</b></td><td>" + QString::number(mSexualMaturity) + "</td></tr>";
+  myString+="<tr><td><b>Years Breedable:</b></td><td>" + QString::number(mBreedingExpectancy) + "</td></tr>";
+  myString+="<tr><td><b>Young Per Birth:</b></td><td>" + QString::number(mYoungPerBirth) + "</td></tr>";
+  myString+="<tr><td><b>Weaning Age:</b></td><td>" + QString::number(mWeaningAge) + "</td></tr>";
+  myString+="<tr><td><b>Kill Weight (Kg):</b></td><td>" + QString::number(mKillWeight) + "</td></tr>";
+  myString+="<tr><td><b>Grow Time:</b></td><td>" + QString::number(mGrowTime) + "</td></tr>";
+  myString+="<tr><td><b>Death Rate (%):</b></td><td>" + QString::number(mDeathRate) + "</td></tr>";
 
-  myString+="<tr><td><b>Gestation Time:</td><td>" + QString::number(mGestationTime) + "</td></tr>";
-  myString+="<tr><td><b>Estrous Cycle:</td><td>" + QString::number(mEstrousCycle) + "</td></tr>";
+  myString+="<tr><td><b>Gestation Time:</b></td><td>" + QString::number(mGestationTime) + "</td></tr>";
+  myString+="<tr><td><b>Estrous Cycle:</b></td><td>" + QString::number(mEstrousCycle) + "</td></tr>";
   myString+="<tr><td></td><td>";
   myString+="<tr><td><FONT COLOR=\"#0063F7\">TDN Requirements (Kg/yr)</FONT></td><td>";
-  myString+="<tr><td><b>Gestating Female:</td><td>" + QString::number(mGestating) + "</td></tr>";
-  myString+="<tr><td><b>Lactating Female:</td><td>" + QString::number(mLactating) + "</td></tr>";
-  myString+="<tr><td><b>Juveniles:</td><td>" + QString::number(mJuvenile) + "</td></tr>";
+  myString+="<tr><td><b>Gestating Female:</b></td><td>" + QString::number(mGestating) + "</td></tr>";
+  myString+="<tr><td><b>Lactating Female:</b></td><td>" + QString::number(mLactating) + "</td></tr>";
+  myString+="<tr><td><b>Juveniles:</b></td><td>" + QString::number(mJuvenile) + "</td></tr>";
+  myString+="</table>";
   return myString;
 }

@@ -246,14 +246,14 @@ QString LaCropParameter::toHtml()
   QString myRasterName = (mUseCommonLand==1) ? "LaCropCommonMask" : mRasterName;
   myString+="<h3 >Details for " + LaUtils::xmlEncode(mName) + "</h3>";
   myString+="<table>";  //  myString+="<tr><td><b>GUID:</th><td>" + guid() + "</td></tr>";
-  myString+="<tr><td><b>Description: </td><td>" + mDescription + "</td></tr>";
-  myString+="<tr><td><b>Raster Mask: </td><td>" + mRasterName + "</td></tr>";
-  myString+="<tr><td><b>Percent Tame Crop Diet: </td><td>" + QString::number(mPercentTameCrop) + "</td></tr>";
-  myString+="<tr><td><b>cropRotation: </td><td>" + myCropRotation + "</td></tr>";
-  myString+="<tr><td><b>fallowRatio: </th><td>" + QString::number(mFallowRatio) + "</td></tr>";
-  myString+="<tr><td><b>Fallow TDN kg/" + myUnits + ": </td><td>" + QString::number(mFallowTDN) + "</td></tr>";
+  myString+="<tr><td><b>Description: </b></td><td>" + mDescription + "</td></tr>";
+  myString+="<tr><td><b>Raster Mask: </b></td><td>" + mRasterName + "</td></tr>";
+  myString+="<tr><td><b>Percent Tame Crop Diet: </b></td><td>" + QString::number(mPercentTameCrop) + "</td></tr>";
+  myString+="<tr><td><b>cropRotation: </b></td><td>" + myCropRotation + "</td></tr>";
+  myString+="<tr><td><b>fallowRatio: </b></th><td>" + QString::number(mFallowRatio) + "</td></tr>";
+  myString+="<tr><td><b>Fallow TDN kg/" + myUnits + ": </b></td><td>" + QString::number(mFallowTDN) + "</td></tr>";
 
-  myString+=("<tr><td><b>" + myLandUsed + " Land Raster: </td><td>" + myRasterName + "</td></tr>");
+  myString+=("<tr><td><b>" + myLandUsed + " Land Raster: </b></td><td>" + myRasterName + "</td></tr>");
   myString+="</table>";
   return myString;
 }
