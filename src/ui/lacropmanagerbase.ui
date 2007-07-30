@@ -143,19 +143,6 @@ Selected</string>
           </property>
          </widget>
         </item>
-        <item row="2" column="2" >
-         <spacer>
-          <property name="orientation" >
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" >
-           <size>
-            <width>16</width>
-            <height>25</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
        </layout>
       </item>
       <item row="1" column="2" >
@@ -209,7 +196,7 @@ Selected</string>
         </property>
         <property name="minimumSize" >
          <size>
-          <width>350</width>
+          <width>0</width>
           <height>0</height>
          </size>
         </property>
@@ -283,10 +270,10 @@ p, li { white-space: pre-wrap; }
        </spacer>
       </item>
       <item row="7" column="1" colspan="2" >
-       <widget class="QComboBox" name="comboBoxYieldUnits" >
+       <widget class="QComboBox" name="comboBoxAreaUnits" >
         <property name="sizePolicy" >
          <sizepolicy>
-          <hsizetype>7</hsizetype>
+          <hsizetype>5</hsizetype>
           <vsizetype>0</vsizetype>
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
@@ -305,16 +292,6 @@ p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Select either Dunums or Hectares. This option is merely for convenience, to accomodate data that is available based on the two different units. (Basically I just got sick of having to convert between the two all the time! :P)&lt;/p>&lt;/body>&lt;/html></string>
         </property>
-        <item>
-         <property name="text" >
-          <string>* Per Dunum</string>
-         </property>
-        </item>
-        <item>
-         <property name="text" >
-          <string>* Per Hectare</string>
-         </property>
-        </item>
        </widget>
       </item>
       <item row="6" column="0" colspan="4" >
@@ -341,7 +318,7 @@ p, li { white-space: pre-wrap; }
       <item row="7" column="0" >
        <widget class="QLabel" name="label_3" >
         <property name="text" >
-         <string>Area Units</string>
+         <string>Area Units *</string>
         </property>
        </widget>
       </item>
@@ -677,7 +654,7 @@ p, li { white-space: pre-wrap; }
   <tabstop>spinBoxCropCalories</tabstop>
   <tabstop>spinBoxCropFodderProduction</tabstop>
   <tabstop>spinBoxCropFodderTDN</tabstop>
-  <tabstop>comboBoxYieldUnits</tabstop>
+  <tabstop>comboBoxAreaUnits</tabstop>
   <tabstop>pbnApply</tabstop>
   <tabstop>pbnClose</tabstop>
  </tabstops>

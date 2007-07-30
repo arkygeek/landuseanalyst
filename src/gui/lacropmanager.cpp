@@ -47,6 +47,8 @@
       this, SLOT(cellClicked( int,int)));
   connect(pbnCropPic, SIGNAL(clicked()),
       this, SLOT(on_pbnCropPic_clicked()));
+  comboBoxAreaUnits->addItem("Dunum");
+  comboBoxAreaUnits->addItem("Hectare");
   refreshCropTable();
   //disable these buttons unless experimental is allowed
   pbnImport->setVisible(false);
@@ -194,7 +196,7 @@ void LaCropManager::showCrop()
   spinBoxCropCalories->setValue(mCrop.cropCalories());
   spinBoxCropFodderProduction->setValue(mCrop.fodderProduction());
   spinBoxCropFodderTDN->setValue(mCrop.fodderCalories());
-  comboBoxYieldUnits->setCurrentIndex(mCrop.yieldUnits());
+  comboBoxAreaUnits->setCurrentIndex(mCrop.areaUnits());
   lblCropPix->setPixmap(mCrop.imageFile());
 }
 
@@ -282,7 +284,19 @@ void LaCropManager::on_pbnApply_clicked()
   mCrop.setCropCalories(spinBoxCropCalories->value());
   mCrop.setFodderProduction(spinBoxCropFodderProduction->value());
   mCrop.setFodderTDN(spinBoxCropFodderTDN->value());
-  mCrop.setYieldUnits(comboBoxYieldUnits->currentIndex());
+  QString mySelectedAreaUnit = QString(comboBoxAreaUnits->currentText());
+  AreaUnits myAreaUnits;
+  if (mySelectedAreaUnit == "Dunum")
+  {
+    myAreaUnits = Dunum;
+    mCrop.setAreaUnits(myAreaUnits);
+  }
+  else if (mySelectedAreaUnit == "Hectare")
+  {
+    myAreaUnits = Hectare;
+    mCrop.setAreaUnits(myAreaUnits);
+  }
+
   mCrop.setImageFile(mImageFile);
   mCrop.toXmlFile( LaUtils::userCropProfilesDirPath() +
       QDir::separator() + mCrop.guid() + ".xml");

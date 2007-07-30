@@ -22,6 +22,8 @@ class QString;
 #include "laserialisable.h"
 #include "laguid.h"
 #include <QString>
+#include "la.h"
+
 /**
   * An class to represent an crop
   * @author Tim Sutton, Jason Jorgenson
@@ -58,7 +60,7 @@ class LaCrop : public LaSerialisable, public LaGuid
     /** All production levels based on either Kg/Dunum or Kg/Hectare
      *  0==Dunum 1==Hectare
      */
-    int yieldUnits() const;
+    AreaUnits areaUnits() const;
     /** The image file associated with the animal */
     QString imageFile() const;
 
@@ -95,7 +97,7 @@ class LaCrop : public LaSerialisable, public LaGuid
     /** Set the yieldUnits for area from index
      * @see yieldUnits()
      */
-    void setYieldUnits(int theIndex);
+    void setAreaUnits(AreaUnits theAreaUnit);
 
     /** Set the image file
      * @see imageFile()
@@ -144,7 +146,7 @@ class LaCrop : public LaSerialisable, public LaGuid
     /** Set the yieldUnits for area from index
      * @see yieldUnits()
      */
-    int mYieldUnits;
+    AreaUnits mAreaUnits;
     QString mImageFile;
 };
 

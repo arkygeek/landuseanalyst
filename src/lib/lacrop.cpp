@@ -29,7 +29,7 @@ LaCrop::LaCrop() : LaSerialisable(), LaGuid()
   mCropCalories=3000;
   mCropFodderProduction=50;
   mCropFodderCalories=1000;
-  mYieldUnits=0;
+
 }
 LaCrop::~LaCrop()
 {
@@ -46,7 +46,7 @@ LaCrop::LaCrop(const LaCrop& theCrop)
   mCropCalories=theCrop.cropCalories();
   mCropFodderProduction=theCrop.fodderProduction();
   mCropFodderCalories=theCrop.fodderCalories();
-  mYieldUnits=theCrop.yieldUnits();
+  mAreaUnits=theCrop.areaUnits();
   mImageFile=theCrop.imageFile();
 }
 
@@ -61,7 +61,7 @@ LaCrop& LaCrop::operator=(const LaCrop& theCrop)
   mCropCalories=theCrop.cropCalories();
   mCropFodderProduction=theCrop.fodderProduction();
   mCropFodderCalories=theCrop.fodderCalories();
-  mYieldUnits=theCrop.yieldUnits();
+  mAreaUnits=theCrop.areaUnits();
   mImageFile=theCrop.imageFile();
   return *this;
 }
@@ -92,9 +92,9 @@ int LaCrop::fodderCalories() const
 {
   return mCropFodderCalories;
 }
-int LaCrop::yieldUnits() const
+AreaUnits LaCrop::areaUnits() const
 {
-  return mYieldUnits;
+  return mAreaUnits;
 }
 QString LaCrop::imageFile() const
 {
@@ -126,9 +126,9 @@ void LaCrop::setFodderTDN(int theCalories)
 {
   mCropFodderCalories=theCalories;
 }
-void LaCrop::setYieldUnits(int theIndex)
+void LaCrop::setAreaUnits(AreaUnits theAreaUnit)
 {
-  mYieldUnits=theIndex;
+  mAreaUnits=theAreaUnit;
 }
 void LaCrop::setImageFile(QString theImageFileName)
 {
@@ -154,7 +154,15 @@ bool LaCrop::fromXml(QString theXml)
   mCropCalories=QString(myTopElement.firstChildElement("cropCalories").text()).toInt();
   mCropFodderProduction=QString(myTopElement.firstChildElement("fodderProduction").text()).toInt();
   mCropFodderCalories=QString(myTopElement.firstChildElement("fodderCalories").text()).toInt();
-  mYieldUnits=QString(myTopElement.firstChildElement("yieldUnits").text()).toInt();
+  QString myAreaUnits = QString(myTopElement.firstChildElement("areaUnits").text());
+  if (myAreaUnits == "Dunum")
+  {
+    mAreaUnits=Dunum;
+  }
+  else if (myAreaUnits == "Hectare")
+  {
+    mAreaUnits=Hectare;
+  }
   mImageFile=QString(myTopElement.firstChildElement("imageFile").text());
   return true;
 }
@@ -169,7 +177,15 @@ QString LaCrop::toXml()
   myString+=QString("  <cropCalories>" + QString::number(mCropCalories) + "</cropCalories>\n");
   myString+=QString("  <fodderProduction>" + QString::number(mCropFodderProduction) + "</fodderProduction>\n");
   myString+=QString("  <fodderCalories>" + QString::number(mCropFodderCalories) + "</fodderCalories>\n");
-  myString+=QString("  <yieldUnits>" + QString::number(mYieldUnits) + "</yieldUnits>\n");
+  switch (mAreaUnits)
+  {
+    case Dunum:
+      myString+=QString("  <areaUnits>Dunum</areaUnits>\n");
+      break;
+    case Hectare:
+      myString+=QString("  <areaUnits>Hectare</areaUnits>\n");
+      break;
+  }
   myString+=QString("  <imageFile>" + LaUtils::xmlEncode(mImageFile) + "</imageFile>\n");
   myString+=QString("</crop>\n");
   return myString;
@@ -185,7 +201,7 @@ QString LaCrop::toText()
   myString+=QString("cropCalories=>" + QString::number(mCropCalories) + "\n");
   myString+=QString("fodderProduction=>" + QString::number(mCropFodderProduction) + "\n");
   myString+=QString("fodderCalories=>" + QString::number(mCropFodderCalories) + "\n");
-  QString myUnits = (mYieldUnits==0) ? "Dunum" : "Hectare";
+  QString myUnits = (mAreaUnits==0) ? "Dunum" : "Hectare";
   myString+=QString("yieldUnits=>" + myUnits + "\n");
   return myString;
 }
@@ -199,7 +215,7 @@ QString LaCrop::toHtml()
   myString+="<tr><td><b>Description: </b></td><td>" + mDescription + "</td></tr>";
   myString+="<tr><td><b>Avg Yield: </b></td><td>" + QString::number(mCropYield) + "</td></tr>";
   myString+="<tr><td><b>Cals/Kg: </b></td><td>" + QString::number(mCropCalories) + "</td></tr>";
-  QString myUnits = (mYieldUnits==0) ? "Dunum" : "Hectare";
+  QString myUnits = (mAreaUnits==0) ? "Dunum" : "Hectare";
   myString+="<tr><td><b>Fodder (kg/" + myUnits + "): </b></td><td>" + QString::number(mCropFodderProduction) + "</td></tr>";
   myString+="<tr><td><b>Fodder TDN/Kg: </b></td><td>" + QString::number(mCropFodderCalories) + "</td></tr>";
   myString+="<tr><td><b>AreaUnits: </b></td><td>" + myUnits + "</td></tr>";
