@@ -47,6 +47,7 @@ LaCrop::LaCrop(const LaCrop& theCrop)
   mCropFodderProduction=theCrop.fodderProduction();
   mCropFodderCalories=theCrop.fodderCalories();
   mYieldUnits=theCrop.yieldUnits();
+  mImageFile=theCrop.imageFile();
 }
 
 LaCrop& LaCrop::operator=(const LaCrop& theCrop)
@@ -61,6 +62,7 @@ LaCrop& LaCrop::operator=(const LaCrop& theCrop)
   mCropFodderProduction=theCrop.fodderProduction();
   mCropFodderCalories=theCrop.fodderCalories();
   mYieldUnits=theCrop.yieldUnits();
+  mImageFile=theCrop.imageFile();
   return *this;
 }
 
@@ -94,7 +96,10 @@ int LaCrop::yieldUnits() const
 {
   return mYieldUnits;
 }
-
+QString LaCrop::imageFile() const
+{
+  return mImageFile;
+}
 void LaCrop::setName(QString theName)
 {
   mName=theName;
@@ -125,7 +130,10 @@ void LaCrop::setYieldUnits(int theIndex)
 {
   mYieldUnits=theIndex;
 }
-
+void LaCrop::setImageFile(QString theImageFileName)
+{
+  mImageFile=theImageFileName;
+}
 bool LaCrop::fromXml(QString theXml)
 {
   //qDebug("Loading Crop from xml");
@@ -147,6 +155,7 @@ bool LaCrop::fromXml(QString theXml)
   mCropFodderProduction=QString(myTopElement.firstChildElement("fodderProduction").text()).toInt();
   mCropFodderCalories=QString(myTopElement.firstChildElement("fodderCalories").text()).toInt();
   mYieldUnits=QString(myTopElement.firstChildElement("yieldUnits").text()).toInt();
+  mImageFile=QString(myTopElement.firstChildElement("imageFile").text());
   return true;
 }
 
@@ -161,6 +170,7 @@ QString LaCrop::toXml()
   myString+=QString("  <fodderProduction>" + QString::number(mCropFodderProduction) + "</fodderProduction>\n");
   myString+=QString("  <fodderCalories>" + QString::number(mCropFodderCalories) + "</fodderCalories>\n");
   myString+=QString("  <yieldUnits>" + QString::number(mYieldUnits) + "</yieldUnits>\n");
+  myString+=QString("  <imageFile>" + LaUtils::xmlEncode(mImageFile) + "</imageFile>\n");
   myString+=QString("</crop>\n");
   return myString;
 }

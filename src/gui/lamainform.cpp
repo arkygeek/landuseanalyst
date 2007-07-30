@@ -70,12 +70,10 @@ LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
    */
   connect(treeHelp, SIGNAL(currentItemChanged(QTreeWidgetItem * ,QTreeWidgetItem *)),
       this, SLOT(helpItemClicked(QTreeWidgetItem * ,QTreeWidgetItem *)));
-
-////////////////////////
-  connect(listWidgetCalculationsCrop, SIGNAL(currentItemChanged(QListWidgetItem * ,QListWidgetItem *)), this, SLOT(cropCalcClicked(QListWidgetItem * ,QListWidgetItem *)));
-  connect(listWidgetCalculationsAnimal, SIGNAL(currentItemChanged(QListWidgetItem * ,QListWidgetItem *)), this, SLOT(animalCalcClicked(QListWidgetItem * ,QListWidgetItem *)));
-////////////////////////
-
+  connect(listWidgetCalculationsCrop, SIGNAL(currentItemChanged(QListWidgetItem * ,QListWidgetItem *)),
+      this, SLOT(cropCalcClicked(QListWidgetItem * ,QListWidgetItem *)));
+  connect(listWidgetCalculationsAnimal, SIGNAL(currentItemChanged(QListWidgetItem * ,QListWidgetItem *)),
+      this, SLOT(animalCalcClicked(QListWidgetItem * ,QListWidgetItem *)));
   connect(pushButtonExit, SIGNAL(clicked()), qApp, SLOT(quit()));
   connect(tblAnimals, SIGNAL(cellClicked( int,int)),
       this, SLOT(animalCellClicked( int,int)));
@@ -167,14 +165,11 @@ QMap <QString, QString> LaMainForm::getSelectedCrops()
     QString myCropGuid = myCropIterator.key();
     QString myCropParameterGuid = myPair.second;
     bool mySelectedFlag = myPair.first;
-    qDebug() << "QPAIR" << myPair;
     if (mySelectedFlag)
     {
       mySelectedCropsMap.insert(myCropGuid,myCropParameterGuid);
-      qDebug("adding to SelectedCropsMap: " + myCropGuid.toLocal8Bit());
     }
   }
-    qDebug() << "mainformMap:" << mySelectedCropsMap;
     return mySelectedCropsMap;
 }
 
@@ -200,18 +195,14 @@ void LaMainForm::on_pbnNewCropParameter_clicked()
 void LaMainForm::on_pbnNewAnimalParameter_clicked()
 {
     LaAnimalParameterManager myAnimalParameterManager(mCropsMap);
-    //myAnimalParameterManager.setSelectedCropsMap(mCropsMap);
     myAnimalParameterManager.exec();
     listWidgetCalculationsAnimal->clear();
-    qDebug() << "mCropsMap before:" << mCropsMap;
     loadAnimals();
-    qDebug() << "mCropsMap after:" << mCropsMap;
 }
 
 void LaMainForm::on_pbnFallow_clicked()
 {
-    //LaModelReports myModelReports;
-    //myModelReports.fallowTable();
+  //not implemented
 }
 
 void LaMainForm::on_cbDebug_clicked()
@@ -262,8 +253,6 @@ void LaMainForm::loadAnimals()
       myValue.first = false;
       myValue.second = "";
       mAnimalsMap.insert(myGuid,myValue);
-      qDebug("Added new blank pair to mAnimals map for keeping track of percentages: " +
-          myGuid.toLocal8Bit());
     }
     else
     {
@@ -273,18 +262,14 @@ void LaMainForm::loadAnimals()
     myIcon.addFile(":/localdata.png");
     tblAnimals->insertRow(myCurrentRow);
     // Add details to the new row
-    //QTableWidgetItem *mypUsedItem= new QTableWidgetItem(tr("Used?"));
-    QTableWidgetItem *mypUsedItem= new QTableWidgetItem(tr(""));
+    QTableWidgetItem *mypUsedItem= new QTableWidgetItem(tr("Used?"));
+    //QTableWidgetItem *mypUsedItem= new QTableWidgetItem(tr(""));
     if (myValue.first)
     {
       mypUsedItem->setCheckState(Qt::Checked);
-      // populate the calcs QListWidgetItem
-     // if (QListWidgetItem(myAnimal.name()).exists)
-     // {
-        QListWidgetItem *myItem = new QListWidgetItem(myAnimal.name());
-        myItem->setData(Qt::UserRole,myAnimal.guid());
-        listWidgetCalculationsAnimal->addItem(myItem);
-     // }
+      QListWidgetItem *myItem = new QListWidgetItem(myAnimal.name());
+      myItem->setData(Qt::UserRole,myAnimal.guid());
+      listWidgetCalculationsAnimal->addItem(myItem);
     }
     else
     {
@@ -321,8 +306,6 @@ void LaMainForm::loadAnimals()
         myValue.second = myParameterGuid;
       }
       //see if this animal parameter percentage can be added to our running tot
-      qDebug("Comparing " + myValue.second.toLocal8Bit() + " <-> " +
-          myAnimalParameter.guid().toLocal8Bit());
       if (myValue.second == myAnimalParameter.guid())
       {
         if (myValue.first)
@@ -331,11 +314,9 @@ void LaMainForm::loadAnimals()
           }
         QTableWidgetItem *mypPercentItem =
           new QTableWidgetItem(QString::number(myAnimalParameter.percentTameMeat()));
-        qDebug("Percentage this animal contributes to diet: " +
-            QString::number(myAnimalParameter.percentTameMeat()).toLocal8Bit());
         tblAnimals->setItem(myCurrentRow, 3, mypPercentItem);
       }
-      //                icon, disp name, userdata
+      //                icon,  disp name,      userdata
       mypCombo->addItem(myIcon,myParameterName,myParameterGuid);
     }
     setComboToDefault(mypCombo, myValue.second);
@@ -397,8 +378,8 @@ void LaMainForm::loadCrops()
       myValue.first = false;
       myValue.second = "";
       mCropsMap.insert(myGuid,myValue);
-      qDebug("Added new blank pair to mCrops map for keeping track of percentages: " +
-          myGuid.toLocal8Bit());
+      //qDebug("Added new blank pair to mCrops map for keeping track of percentages: " +
+      //    myGuid.toLocal8Bit());
     }
     else
     {
@@ -410,7 +391,6 @@ void LaMainForm::loadCrops()
     tblCrops->insertRow(myCurrentRow);
     // Add details to the new row
     QTableWidgetItem *mypUsedItem= new QTableWidgetItem(tr("Used?"));
-    qDebug() << "line 406 myValue.first is: " << myValue.first;
     (myValue.first) ? mypUsedItem->setCheckState(Qt::Checked) : mypUsedItem->setCheckState(Qt::Unchecked);
 
     tblCrops->setItem(myCurrentRow, 0, mypUsedItem);
@@ -471,14 +451,6 @@ void LaMainForm::loadCrops()
 
   QString myPercentItem = QString::number(myRunningPercentage);
   labelCropCheck->setText(myPercentItem + "\%");
-
-  //tblCrops->insertRow(myCurrentRow);
-  //QTableWidgetItem *mypLabelItem = new QTableWidgetItem(QString(tr("Total Diet %")));
-  //tblCrops->setItem(myCurrentRow, 1, mypLabelItem);
-  //QTableWidgetItem *mypPercentItem =
-  //        new QTableWidgetItem(QString::number(myRunningPercentage));
-  //mypPercentItem->setIcon(myIcon);
-  //tblCrops->setItem(myCurrentRow, 3, mypPercentItem);
 }
 
 void LaMainForm::setDietLabels()
@@ -568,8 +540,8 @@ void LaMainForm::cropCellClicked(int theRow, int theColumn)
     LaUtils::CropParameterMap myCropParametersMap;
     myCropParametersMap = LaUtils::getAvailableCropParameters();
     LaCropParameter myCropParameter = myCropParametersMap[myGuid];
-    //textBrowserCropParameterDefinition->setHtml(myCropParameter.toHtml());
-    //showCropDefinitionReport(myCrop,myCropParameter);
+    lblCropPix->setPixmap(myCrop.imageFile());
+    showCropDefinitionReport(myCrop,myCropParameter);
   }
   loadCrops();
 }
@@ -582,14 +554,14 @@ void LaMainForm::cropCellChanged(int theRow, int theColumn)
     QString myGuid = mypItem->data(Qt::UserRole).toString();
     //QString myGuid = tblCrops->item(tblCrops->currentRow(),1)->data(Qt::UserRole).toString();
     bool myStateFlag = tblCrops->item(tblCrops->currentRow(),0)->checkState();
-    qDebug() << "myStateFlag ===> " << myStateFlag;
+    //qDebug() << "myStateFlag ===> " << myStateFlag;
     QPair<bool,QString> myPair = mCropsMap[myGuid];
     myPair.first = myStateFlag;
     QComboBox * mypCombo=dynamic_cast<QComboBox *>(tblCrops->cellWidget(tblCrops->currentRow(),2));
     myPair.second = mypCombo->itemData(mypCombo->currentIndex(),Qt::UserRole).toString();
     mCropsMap[myGuid] = myPair;
     //debug only - comment out later
-    printCropsAndAnimals();
+    //printCropsAndAnimals();
   }
 }
 
@@ -624,7 +596,7 @@ void LaMainForm::on_pushButtonRun_clicked()
     if (mySelectedFlag)
     {
       mySelectedAnimalsMap.insert(myAnimalGuid,myAnimalParameterGuid);
-      qDebug("Added <" + myAnimalGuid.toLocal8Bit() + " , " + myAnimalParameterGuid.toLocal8Bit() + " >");
+      //qDebug("Added <" + myAnimalGuid.toLocal8Bit() + " , " + myAnimalParameterGuid.toLocal8Bit() + " >");
     }
   }
   myModel.setAnimals(mySelectedAnimalsMap);
@@ -643,11 +615,10 @@ void LaMainForm::on_pushButtonRun_clicked()
     if (mySelectedFlag)
     {
       mySelectedCropsMap.insert(myCropGuid,myCropParameterGuid);
-      qDebug("Added <" + myCropGuid.toLocal8Bit() + " , " + myCropParameterGuid.toLocal8Bit() + " >");
+      //qDebug("Added <" + myCropGuid.toLocal8Bit() + " , " + myCropParameterGuid.toLocal8Bit() + " >");
     }
   }
   myModel.setCrops(mySelectedCropsMap);
-
   // Populate the model with all the form data
   myModel.setName(lineEditSiteName->text());
   myModel.setPopulation(spinBoxPopulation->value());
@@ -705,9 +676,6 @@ void LaMainForm::writeResults(QString theText)
 {
   tbReport->append(theText);
 }
-
-
-
 
 bool LaMainForm::setComboToDefault(QComboBox * thepCombo, QString theDefault)
 {

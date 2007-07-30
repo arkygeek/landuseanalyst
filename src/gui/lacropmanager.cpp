@@ -44,6 +44,8 @@
   readSettings();
   connect(tblCrops, SIGNAL(cellClicked( int,int)),
       this, SLOT(cellClicked( int,int)));
+  connect(pbnCropPic, SIGNAL(clicked()),
+      this, SLOT(on_pbnCropPic_clicked()));
   refreshCropTable();
   //disable these buttons unless experimental is allowed
   pbnImport->setVisible(false);
@@ -69,6 +71,14 @@ void LaCropManager::writeSettings()
   QSettings mySettings;
   mySettings.setValue("mainwindow/pos", pos());
   mySettings.setValue("mainwindow/size", size());
+}
+
+void LaCropManager::on_pbnCropPic_clicked()
+{
+  LaUtils myUtils;
+  QString myFile = myUtils.openGraphicFile();
+  lblCropPix->setPixmap(myFile);
+  mImageFile = myFile;
 }
 
 void LaCropManager::refreshCropTable(QString theGuid)
@@ -184,6 +194,7 @@ void LaCropManager::showCrop()
   spinBoxCropFodderProduction->setValue(mCrop.fodderProduction());
   spinBoxCropFodderTDN->setValue(mCrop.fodderCalories());
   comboBoxYieldUnits->setCurrentIndex(mCrop.yieldUnits());
+  lblCropPix->setPixmap(mCrop.imageFile());
 }
 
 void LaCropManager::on_pushButtonLoad_clicked()
@@ -271,6 +282,7 @@ void LaCropManager::on_pbnApply_clicked()
   mCrop.setFodderProduction(spinBoxCropFodderProduction->value());
   mCrop.setFodderTDN(spinBoxCropFodderTDN->value());
   mCrop.setYieldUnits(comboBoxYieldUnits->currentIndex());
+  mCrop.setImageFile(mImageFile);
   mCrop.toXmlFile( LaUtils::userCropProfilesDirPath() +
       QDir::separator() + mCrop.guid() + ".xml");
   refreshCropTable(mCrop.guid());

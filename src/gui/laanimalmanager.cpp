@@ -102,7 +102,7 @@ void LaAnimalManager::refreshAnimalTable(QString theGuid)
     qDebug(myAnimal.toText().toLocal8Bit());
     if (theGuid.isEmpty())
     {
-      qDebug("No default active row was requested.Assigning to myAnimal.guid()!");;
+      //qDebug("No default active row was requested.Assigning to myAnimal.guid()!");;
       theGuid=myAnimal.guid();
     }
     if (myAnimal.guid()==theGuid)
@@ -204,8 +204,6 @@ void LaAnimalManager::on_pbnAnimalPic_clicked()
   QString myFile = myUtils.openGraphicFile();
   lblAnimalPix->setPixmap(myFile);
   mImageFile = myFile;
-  // bool QFile::copy ( const QString & newName )
-  //return myFile;
 }
 
 void LaAnimalManager::on_pushButtonLoad_clicked()
@@ -303,12 +301,7 @@ void LaAnimalManager::on_pbnApply_clicked()
   mAnimal.setWeaningAge(spinBoxWeaningAge->value());
   mAnimal.setGestationTime(spinBoxGestationTime->value());
   mAnimal.setEstrousCycle(spinBoxEstrousCycleTime->value());
-  //const QLabel *mypLabel = lblAnimalPix;
-  //QString mypLabelPix = lblAnimalPix->pixmap();
   mAnimal.setImageFile(mImageFile);
-
-  //lblAnimalPix->setPixmap(myFile);
-
   mAnimal.toXmlFile( LaUtils::userAnimalProfilesDirPath() +
       QDir::separator() + mAnimal.guid() + ".xml");
   refreshAnimalTable(mAnimal.guid());

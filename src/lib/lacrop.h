@@ -22,12 +22,12 @@ class QString;
 #include "laserialisable.h"
 #include "laguid.h"
 #include <QString>
-/** 
+/**
   * An class to represent an crop
   * @author Tim Sutton, Jason Jorgenson
   */
 
-class LaCrop : public LaSerialisable, public LaGuid 
+class LaCrop : public LaSerialisable, public LaGuid
 {
   public:
     /** Constructor . */
@@ -35,10 +35,10 @@ class LaCrop : public LaSerialisable, public LaGuid
     /** Desctructor . */
     ~LaCrop();
     /** copy constructor */
-    LaCrop(const LaCrop& theCrop); 
+    LaCrop(const LaCrop& theCrop);
     /** Assignement operator */
     LaCrop& operator= (const LaCrop& theCrop);
-    
+
     //
     // Accessors
     //
@@ -59,6 +59,8 @@ class LaCrop : public LaSerialisable, public LaGuid
      *  0==Dunum 1==Hectare
      */
     int yieldUnits() const;
+    /** The image file associated with the animal */
+    QString imageFile() const;
 
     //
     // Mutators
@@ -78,7 +80,7 @@ class LaCrop : public LaSerialisable, public LaGuid
      * @see cropYield()
      */
     void setCropYield(int theKg);
-    /** Set cropCalories as kg 
+    /** Set cropCalories as kg
      * @see cropCalories()
      */
     void setCropCalories(int theCalories);
@@ -94,6 +96,11 @@ class LaCrop : public LaSerialisable, public LaGuid
      * @see yieldUnits()
      */
     void setYieldUnits(int theIndex);
+
+    /** Set the image file
+     * @see imageFile()
+     */
+    void setImageFile(QString theImageFileName);
 
     /** Return an xml representation of this layer
      * @NOTE this class inherits the serialisable interface so
@@ -122,7 +129,7 @@ class LaCrop : public LaSerialisable, public LaGuid
      * @see cropYield()
      */
     int mCropYield;
-    /** Set cropCalories as kg 
+    /** Set cropCalories as kg
      * @see cropCalories()
      */
     int mCropCalories;
@@ -138,7 +145,7 @@ class LaCrop : public LaSerialisable, public LaGuid
      * @see yieldUnits()
      */
     int mYieldUnits;
-
+    QString mImageFile;
 };
 
 #endif //LACROP_H

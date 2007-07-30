@@ -50,7 +50,7 @@ class LaCropManager : public QDialog, private Ui::LaCropManagerBase
       void on_toolDelete_clicked();
       void on_pbnApply_clicked();
       void resizeEvent(QResizeEvent*);
-
+      void on_pbnCropPic_clicked();
 
 
   private:
@@ -61,6 +61,7 @@ class LaCropManager : public QDialog, private Ui::LaCropManagerBase
       LaCrop mCrop;
       void readSettings();
       void writeSettings();
+      QString mImageFile;
 };
 
 #endif //LACROPFORMMAIN_H

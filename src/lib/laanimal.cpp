@@ -90,7 +90,6 @@ LaAnimal& LaAnimal::operator=(const LaAnimal& theAnimal)
   mGestationTime=theAnimal.gestationTime();
   mEstrousCycle=theAnimal.estrousCycle();
   mImageFile=theAnimal.imageFile();
-
   return *this;
 }
 
