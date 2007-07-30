@@ -644,8 +644,8 @@ void LaMainForm::on_pushButtonRun_clicked()
 
   // iterate through crops and animals and display the calorie, production and area targets
   myModel.DoCalculations();
-  myModel.toXmlFile( LaUtils::getModelOutputDir() +
-      QDir::separator() + myModel.guid() + ".xml");
+  //myModel.toXmlFile( LaUtils::getModelOutputDir() +
+  //    QDir::separator() + myModel.guid() + ".xml");
 
   tbReport->append(myModel.toHtmlCalorieCropTargets());
   tbReport->append(myModel.toHtmlCalorieAnimalTargets());
@@ -673,8 +673,25 @@ void LaMainForm::on_pushButtonLoad_clicked()
 
 void LaMainForm::on_pushButtonSave_clicked()
 {
-  //  implement me!
-  //  go on... get on with it!
+  // Populate the model with all the form data
+  LaModel myModel;
+  myModel.setName(lineEditSiteName->text());
+  myModel.setPopulation(spinBoxPopulation->value());
+  myModel.setPeriod(lineEditPeriod->text());
+  myModel.setProjection(comboBoxProjection->currentIndex());
+  myModel.setEasting(lineEditEasting->text().toInt());
+  myModel.setNorthing(lineEditNorthing->text().toInt());
+  myModel.setEuclideanDistance(radioButtonEuclidean->isChecked());
+  myModel.setWalkingTime(radioButtonWalkingTime->isChecked());
+  myModel.setPathDistance(radioButtonPathDistance->isChecked());
+  myModel.setPrecision(spinBoxModelPrecision->value());
+  myModel.setDietPercent(horizontalSliderDiet->value());
+  myModel.setCropPercent(horizontalSliderCrop->value());
+  myModel.setMeatPercent(horizontalSliderMeat->value());
+  myModel.setCaloriesPerPersonDaily(spinBoxDailyCalories->value());
+  myModel.setCommonLandValue(sbCommonRasterTDN->value());
+  myModel.toXmlFile( LaUtils::getModelOutputDir() +
+      QDir::separator() + myModel.guid() + ".xml");
 }
 
 void LaMainForm::writeResults(QString theText)
