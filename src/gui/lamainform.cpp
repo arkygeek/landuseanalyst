@@ -151,7 +151,6 @@ LaTripleMap LaMainForm::getAvailableCrops()
   return mCropsMap;
 }
 
-
 QMap <QString, QString> LaMainForm::getSelectedCrops()
 {
   qDebug() << "mCropsMap :::::: " << mCropsMap;
@@ -186,12 +185,14 @@ void LaMainForm::on_pbnNewCrop_clicked()
   myCropManager.exec();
   loadCrops();
 }
+
 void LaMainForm::on_pbnNewCropParameter_clicked()
 {
     LaCropParameterManager myCropParameterManager;
     myCropParameterManager.exec();
     loadCrops();
 }
+
 void LaMainForm::on_pbnNewAnimalParameter_clicked()
 {
     LaAnimalParameterManager myAnimalParameterManager(mCropsMap);
@@ -574,6 +575,10 @@ void LaMainForm::on_pushButtonRun_clicked()
       return;
     }
 
+  // show the user that the computer is thinking
+  progressBarCalcs->reset();
+  progressBarCalcs->setRange(0,0);
+
   mCommonGrazingLandFoodValue = sbCommonRasterTDN->value();
   LaModel myModel;
   connect(&myModel, SIGNAL(message( QString )),
@@ -650,8 +655,8 @@ void LaMainForm::on_pushButtonRun_clicked()
 
   tbReport->append(myModel.toHtmlAreaCropTargets());
   tbReport->append(myModel.toHtmlAreaAnimalTargets());
+  progressBarCalcs->setMaximum(100);
 }
-
 
 void LaMainForm::debugChecks()
 {
@@ -728,9 +733,6 @@ void LaMainForm::cropCalcClicked(QListWidgetItem * thepCurrentItem, QListWidgetI
     return;
   }
 
-  // show the user that the computer is thinking
-  progressBarCalcs->reset();
-  progressBarCalcs->setRange(0,0);
   mCommonGrazingLandFoodValue = sbCommonRasterTDN->value();
 
   connect(&myModel, SIGNAL(message( QString )),
@@ -794,7 +796,6 @@ void LaMainForm::cropCalcClicked(QListWidgetItem * thepCurrentItem, QListWidgetI
   QString myGuid = thepCurrentItem->data(Qt::UserRole).toString();
   QMap <QString, QString> myCalcsMap = myModel.calcsCropsMap();
   textBrowserResultsCrop->setText(myCalcsMap.value(myGuid));
-  progressBarCalcs->setMaximum(100);
 }
 
 void LaMainForm::animalCalcClicked(QListWidgetItem * thepCurrentItem, QListWidgetItem * thepOldItem)

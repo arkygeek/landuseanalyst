@@ -1,0 +1,16 @@
+<model guid="9aa54cb3-4c11-4941-9f15-f5e312c510a0">
+  <name></name>
+  <population>3000</population>
+  <period></period>
+  <projection>0</projection>
+  <easting>0</easting>
+  <northing>0</northing>
+  <euclideanDistance>1</euclideanDistance>
+  <walkingTime>0</walkingTime>
+  <pathDistance>0</pathDistance>
+  <precision>5</precision>
+  <dietPercent>25</dietPercent>
+  <plantPercent>90</plantPercent>
+  <meatPercent>90</meatPercent>
+  <caloriesPerPersonDaily>2500</caloriesPerPersonDaily>
+</model>
