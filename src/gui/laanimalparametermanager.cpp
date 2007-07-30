@@ -72,6 +72,8 @@
     myIcon.addFile(":/localdata.png");
     cboAnimal->addItem(myName,myGuid);
   }
+  comboBoxAreaUnits->addItem("Dunum");
+  comboBoxAreaUnits->addItem("Hectare");
   setFallowComboBox();
   populateFodder();
 }
@@ -471,7 +473,19 @@ void LaAnimalParameterManager::on_pbnApply_clicked()
     + " food sources into animal parameter.");
   mAnimalParameter.setFodderData(myFoodSourceMap);
 
-  mAnimalParameter.setAreaUnits(comboBoxAreaUnits->currentIndex());
+  QString mySelectedAreaUnit = QString(comboBoxAreaUnits->currentText());
+  AreaUnits myAreaUnits;
+  if (mySelectedAreaUnit == "Dunum")
+  {
+    myAreaUnits = Dunum;
+    mAnimalParameter.setAreaUnits(myAreaUnits);
+  }
+  else if (mySelectedAreaUnit == "Hectare")
+  {
+    myAreaUnits = Hectare;
+    mAnimalParameter.setAreaUnits(myAreaUnits);
+  }
+
   QString myFallowUsage = QString(comboBoxFallowUsage->currentText());
   //setFallowComboBox();
   Priority myPriority;

@@ -67,7 +67,7 @@ class LaAnimalParameter : public LaSerialisable, public LaGuid
     int foodValueOfCommonGrazingLand() const;
     /** Selection between dunums and hectares
       */
-    int areaUnits() const;
+    AreaUnits areaUnits() const;
     /** If fallow is to be grazed, and if so, at either a
       * HIGH MED or LOW priority to it's access
       */
@@ -111,7 +111,7 @@ class LaAnimalParameter : public LaSerialisable, public LaGuid
       * HIGH MED or LOW priority to it's access
       */
     void setFallowUsage(Priority thePriority);
-    void setAreaUnits(int theIndexValue);
+    void setAreaUnits(AreaUnits theIndexValue);
     void setRasterName(QString theRasterName);
     /** Return an xml representation of this layer
      * @NOTE this class inherits the serialisable interface so
@@ -158,7 +158,7 @@ class LaAnimalParameter : public LaSerialisable, public LaGuid
       * HIGH MED or LOW priority to it's access
       */
     Priority mFallowUsage;
-    int mAreaUnits;
+    AreaUnits mAreaUnits;
     QString mRasterName;
 
 };

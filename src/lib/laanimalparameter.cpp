@@ -23,6 +23,7 @@
 #include "lautils.h"
 #include "lacrop.h"
 #include "lafoodsource.h"
+#include "la.h"
 
 LaAnimalParameter::LaAnimalParameter() : LaSerialisable(), LaGuid()
 {
@@ -99,11 +100,13 @@ int LaAnimalParameter::percentTameMeat() const
 }
 int LaAnimalParameter::foodValueOfSpecificGrazingLand() const
 {
-  return mFoodValueOfSpecificGrazingLand;
+  int myAreaInHectares = LaUtils::convertAreaToHectares (mAreaUnits, mFoodValueOfSpecificGrazingLand);
+  return myAreaInHectares;
 }
 int LaAnimalParameter::foodValueOfCommonGrazingLand() const
 {
-  return mFoodValueOfCommonGrazingLand;
+  int myAreaInHectares = LaUtils::convertAreaToHectares (mAreaUnits, mFoodValueOfCommonGrazingLand);
+  return myAreaInHectares;
 }
 bool LaAnimalParameter::useSpecificGrazingLand() const
 {
@@ -113,7 +116,7 @@ bool LaAnimalParameter::useCommonGrazingLand() const
 {
   return mUseCommonGrazingLand;
 }
-int LaAnimalParameter::areaUnits() const
+AreaUnits LaAnimalParameter::areaUnits() const
 {
   return mAreaUnits;
 }
@@ -172,9 +175,9 @@ void LaAnimalParameter::setUseCommonGrazingLand(bool theFlag)
 {
   mUseCommonGrazingLand=theFlag;
 }
-void LaAnimalParameter::setAreaUnits(int theIndexValue)
+void LaAnimalParameter::setAreaUnits(AreaUnits theAreaUnits)
 {
-  mAreaUnits=theIndexValue;
+  mAreaUnits=theAreaUnits;
 }
 
 void LaAnimalParameter::setFodderUse(bool theBool)
@@ -222,7 +225,17 @@ bool LaAnimalParameter::fromXml(QString theXml)
   mFoodValueOfCommonGrazingLand=QString(myTopElement.firstChildElement("foodValueOfCommonGrazingLand").text()).toInt();
   mFoodValueOfSpecificGrazingLand=QString(myTopElement.firstChildElement("foodValueOfSpecificGrazingLand").text()).toInt();
   ///////////
-  mAreaUnits=QString(myTopElement.firstChildElement("areaUnits").text()).toInt();
+  //mAreaUnits=LaUtils::xmlDecode(myTopElement.firstChildElement("areaUnits").text());
+  QString myAreaUnits = QString(myTopElement.firstChildElement("areaUnits").text());
+  if (myAreaUnits == "Dunum")
+  {
+    mAreaUnits=Dunum;
+  }
+  else if (myAreaUnits == "Hectare")
+  {
+    mAreaUnits=Hectare;
+  }
+
   mFodderUse=QString(myTopElement.firstChildElement("fodderUse").text()).toInt();
   // populate the fodder map
   mFoodSourceMap.clear();
@@ -279,7 +292,16 @@ QString LaAnimalParameter::toXml()
   myString+=QString("  <useCommonGrazingLand>" + QString::number(mUseCommonGrazingLand) + "</useCommonGrazingLand>\n");
   myString+=QString("  <useSpecificGrazingLand>" + QString::number(mUseSpecificGrazingLand) + "</useSpecificGrazingLand>\n");  myString+=QString("  <foodValueOfCommonGrazingLand>" + QString::number(mFoodValueOfCommonGrazingLand) + "</foodValueOfCommonGrazingLand>\n");
   myString+=QString("  <foodValueOfSpecificGrazingLand>" + QString::number(mFoodValueOfSpecificGrazingLand) + "</foodValueOfSpecificGrazingLand>\n");
-  myString+=QString("  <areaUnits>" + QString::number(mAreaUnits) + "</areaUnits>\n");
+
+  switch (mAreaUnits)
+  {
+    case Dunum:
+      myString+=QString("  <areaUnits>Dunum</areaUnits>\n");
+      break;
+    case Hectare:
+      myString+=QString("  <areaUnits>Hectare</areaUnits>\n");
+      break;
+  }
   myString+=QString("  <fodderUse>"+ QString::number(mFodderUse) +"</fodderUse>\n");
 
   if (mFodderUse)

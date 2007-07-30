@@ -3,6 +3,7 @@
 #include "lacrop.h"
 #include "laanimalparameter.h"
 #include "lacropparameter.h"
+#include "la.h"
 
 #include <QApplication>
 #include <QDir>
@@ -223,6 +224,30 @@ const QString LaUtils::userCropParameterProfilesDirPath()
   return myPath;
 }
 
+int LaUtils::convertAreaToHectares(AreaUnits theAreaUnit, int theArea)
+{
+  // this may seem ridiculous to do it this way, but
+  // i plan to include other area units and this way
+  // it will make it very easy to work with in the future
+  // all need be done is add new units to la.h enum and enter
+  // into the following switch...
+
+  float myHectares = 0.;
+
+  switch (theAreaUnit)  // Dunum, Hectare
+  {
+    case  Dunum:
+      myHectares = theArea * 10.;
+      break;
+    case  Hectare:
+      myHectares = theArea;
+      break;   /*    add new units here after updating la.h enum ex:
+    case  Acre:
+      HyHectares = theArea / 2.47105381;
+      break;     */
+  }
+  return static_cast<int>(myHectares);
+}
 
 LaUtils::AnimalParameterMap LaUtils::getAvailableAnimalParameters()
 {

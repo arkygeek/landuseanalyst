@@ -27,6 +27,7 @@ class QStringList;
 #include "lacrop.h"
 #include "laanimalparameter.h"
 #include "lacropparameter.h"
+#include "la.h"
 
 /** This is a helper class with mainly static methods for easily
  * obtaining the directories and paths relating to the application
@@ -168,6 +169,8 @@ class LaUtils
      * returned.
      */
     static LaAnimalParameter getAnimalParameter(QString theGuid);
+
+    static int convertAreaToHectares(AreaUnits theAreaUnit, int theArea);
 
     /**
      * Find the place on the filesystem where user defined animalParameter
