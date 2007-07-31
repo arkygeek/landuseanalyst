@@ -37,21 +37,25 @@ void LaGrassTest::runCommand()
   myArguments << "type=rast";
   //first test with no error log param
   QString myResult = myGrass.runCommand(myCommand,myArguments);
-  qDebug(myResult.toLocal8Bit());
   QVERIFY(!myResult.isEmpty());
   //now test with error log
   QString myErrors;
   myResult = myGrass.runCommand(myCommand,myArguments,myErrors);
-  qDebug(myErrors.toLocal8Bit());
   QVERIFY(!myResult.isEmpty());
   QVERIFY(myErrors.isEmpty());
 }
 void LaGrassTest::getRasterList()
 {
+  QStringList myList;
   LaGrass myGrass;
-  //QStringList myList = myGrass.getRasterList("tim");
-  QStringList myList = myGrass.getRasterList("PERMANENT");
-  qDebug(myList.join("\n").toLocal8Bit());
+  QStringList myMapsetList = myGrass.getMapsetList();
+  QStringListIterator myIterator(myMapsetList);
+  while (myIterator.hasNext())
+  {
+    //append the raster names in this mapet to our full list
+    myList << myGrass.getRasterList(myIterator.next());
+  }
+  qDebug("\n" + myList.join("\n").toLocal8Bit());
   QVERIFY(myList.count() > 0);
 }
 

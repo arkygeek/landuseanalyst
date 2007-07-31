@@ -67,6 +67,10 @@ class LaGrass : public QObject
      */
      QString runCommand(QString theCommand, 
                         QStringList theArguments);
+    /** Get a list of grass mapsets
+     * @return QStringList of mapset names.
+     */
+    QStringList getMapsetList();
     /** Get a list of grass rasters from the 
      * PERMANENT and users mapset.
      * @param bool thePrependMapsetFlag. Optional paramter which

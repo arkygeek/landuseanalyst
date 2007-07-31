@@ -39,6 +39,17 @@ LaGrass::~LaGrass()
 
 }
 
+QStringList LaGrass::getMapsetList()
+{
+  QString myCommand = "g.mapsets";
+  QStringList myArguments;
+  myArguments << "-l";
+  //run the command ignoring error logs
+  QString myResult = runCommand(myCommand,myArguments);
+  myResult = myResult.simplified();
+  QStringList myList = myResult.split(QRegExp("\\s+"));
+  return myList;
+}
 
 QStringList LaGrass::getRasterList(QString theMapset, bool thePrependMapsetFlag /*=true */)
 {
@@ -46,7 +57,7 @@ QStringList LaGrass::getRasterList(QString theMapset, bool thePrependMapsetFlag 
   QStringList myArguments;
   myArguments << "type=rast";
   myArguments << "mapset=" + theMapset;
-  //first test with no error log param
+  //run the command ignoring error logs
   QString myResult = runCommand(myCommand,myArguments);
   //check for no files
   if (myResult.contains("no raster files available"))
