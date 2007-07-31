@@ -57,28 +57,26 @@ SET( QT_USE_QTXML      TRUE )
 IF (PEDANTIC)
   ADD_DEFINITIONS( -Wall -Werror )
 ENDIF (PEDANTIC)
-# tell cmake to process CMakeLists.txt in that subdirectory
-add_subdirectory(src)
 
 ############################################################
 # Enable tests
-
+#############################################################
+# Check if we should enable unit test builds
 IF (ENABLE_TESTS)
-  IF (WIN32)
-    FILE (GLOB animalFiles test_data/animalProfiles*.xml)
-    FILE (GLOB animalParameterFiles test_data/animalParamterProfiles*.xml)
-    FILE (GLOB cropFiles test_data/cropProfiles/*.xml)
-    FILE (GLOB cropParameterFiles test_data/cropParameterProfiles/*.xml)
-    FILE (GLOB modelFiles test_data/modelOutputs/*.xml)
-    INSTALL (FILES ${animalFiles} DESTINATION ${CMAKE_INSTALL_PREFIX}/test_data/animalProfiles)
-    INSTALL (FILES ${animalParameterFiles} DESTINATION ${CMAKE_INSTALL_PREFIX}/test_data/animalParameterProfiles)
-    INSTALL (FILES ${cropFiles} DESTINATION ${CMAKE_INSTALL_PREFIX}/test_data/cropProfiles)
-    INSTALL (FILES ${cropParameterFiles} DESTINATION ${CMAKE_INSTALL_PREFIX}/test_data/cropParameterProfiles)
-    INSTALL (FILES ${modelFiles} DESTINATION ${CMAKE_INSTALL_PREFIX}/test_data/modelOutputs)
-  ENDIF (WIN32)
   #tell cmake to enable testing - this will give us a 'make test' target
   ENABLE_TESTING()
+  SET (TEST_DATA_DIR "${CMAKE_CURRENT_SOURCE_DIR}/test_data")
+  #where unit test binaries should be installed to and run from
+  SET (LA_TEST_DIR ${CMAKE_INSTALL_PREFIX}/tests)
 ENDIF (ENABLE_TESTS)
+MESSAGE ("+ Test Install Dir: ${LA_TEST_DIR}")
+
+
+############################################################
+# Descend into subdirs
+#############################################################
+# tell cmake to process CMakeLists.txt in that subdirectory
+add_subdirectory(src)
 
 #############################################################
 # Uninstall stuff see: http://www.vtk.org/Wiki/CMake_FAQ

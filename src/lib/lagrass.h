@@ -37,9 +37,29 @@ class LaGrass : public QObject
     LaGrass();
     /** Desctructor . */
     ~LaGrass();
-    //
-    // Grass functions
-    //
+    /** This is the main wrapper function - most others
+     * will call it to actually invoke the grass engine.
+     * @param QString theCommand - a single command name e.g. g.list
+     * @param QString theArguments - a stringlist of paramters
+     * e.g.
+     * QStringList myArgs;
+     * myArgs << "type=rast" << "type=vect";
+     * @param &QString theErrorLog - an optional parameters which 
+     * is a string passed by reference. On completion, any errors
+     * from stderr will have been placed in this string.
+     * @return QString - verbatim output of the command as
+     * returned by GRASS. The calling function will be responsible
+     * for parsing that output.
+     */
+     QString runCommand(QString theCommand, 
+                        QStringList theArguments,
+                        QString &theErrorLog = "");
+    /** Get a list of grass rasters from the 
+     * PERMANENT and users mapset.
+     * @return QStringList of layer names.
+     */
+    QStringList getRasterList(QString theMapset);
+    
     void makeCircle(int theX, int theY);
     void getArea(QString theLayerName,float theArea);
     void makeWalkCost(int theX, int theY);

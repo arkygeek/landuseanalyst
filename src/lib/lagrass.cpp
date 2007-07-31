@@ -39,10 +39,16 @@ LaGrass::~LaGrass()
 
 }
 
-//
-// Grass related functions follow ...
-//
 
+QStringList LaGrass::getRasterList(QString theMapset)
+{
+  QStringList myList;
+
+
+
+
+  return myList;
+}
 
 void LaGrass::getArea(QString theLayerName, float theArea)
 {
@@ -155,5 +161,41 @@ void LaGrass::makeCircle(int theX, int theY)
 void LaGrass::logMessage(QString theMessage)
 {
   emit message(theMessage);
+}
+
+QString LaGrass::runCommand(QString theCommand, 
+    QStringList theArguments,
+    QString &theErrorLog /*=""*/)
+{
+  #ifdef Q_OS_MACX
+  QString myProgram = "/Applications/GRASS.app/Contents/Resources/bin/" + theCommand;
+  #else
+  QString myProgram = "/usr/lib/grass/bin/" + theCommand;
+  #endif
+  //windows users can wallow in self pity for now...
+  
+  QProcess myProcess;
+  myProcess.start(myProgram, theArguments);
+
+  if (!myProcess.waitForStarted())
+  {
+    logMessage("The process never started.....aaargh");
+  }
+
+  while (myProcess.waitForReadyRead(-1))
+  {
+  }
+
+  QString myLog;
+  //log
+  myProcess.setReadChannel(QProcess::StandardOutput);
+  QByteArray myArray = myProcess.readAll();
+  myLog.append(myArray);
+  //errors
+  myProcess.setReadChannel(QProcess::StandardError);
+  myArray = myProcess.readAll();
+  theErrorLog.append(myArray);
+  
+  return myLog;
 }
 

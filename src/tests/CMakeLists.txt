@@ -24,12 +24,6 @@ INCLUDE_DIRECTORIES(
   #${GEOS_INCLUDE_DIR}
   )
 
-IF (WIN32)
-  SET (DEST ${CMAKE_INSTALL_PREFIX})
-ELSE (WIN32)
-  SET (DEST ${CMAKE_CURRENT_BINARY_DIR})
-ENDIF (WIN32)
-
 # expect that classes are being IMPORTED for the exe
 IF (WIN32)
   # expect that classes are being imported
@@ -60,6 +54,8 @@ IF (APPLE)
   SET (CMAKE_INSTALL_NAME_DIR @executable_path/../lib)
 ENDIF (APPLE)
 
+MESSAGE("Test Data Dir: ${TEST_DATA_DIR}")
+ADD_DEFINITIONS(-DTEST_DATA_DIR="\\"${TEST_DATA_DIR}\\"")
 #note for tests we should not include the moc of our
 #qtests in the executable file list as the moc is
 #directly included in the sources
@@ -73,6 +69,7 @@ ENDIF (APPLE)
 #############################################################
 
 # model test
+MESSAGE ("Test Install Dir: ${LA_TEST_DIR}")
 SET(modeltest_SRCS lamodeltest.cpp)
 SET(modeltest_MOC_CPPS lamodeltest.cpp)
 QT4_WRAP_CPP(modeltest_MOC_SRCS ${modeltest_MOC_CPPS})
@@ -80,6 +77,34 @@ ADD_CUSTOM_TARGET(modeltestmoc ALL DEPENDS ${modeltest_MOC_SRCS})
 ADD_EXECUTABLE(modeltest ${modeltest_SRCS})
 ADD_DEPENDENCIES(modeltest modeltestmoc)
 TARGET_LINK_LIBRARIES(modeltest ${QT_LIBRARIES} la_core)
-INSTALL(TARGETS modeltest RUNTIME DESTINATION ${DEST})
-ADD_TEST(model ${DEST}/modeltest)
+INSTALL(TARGETS modeltest RUNTIME DESTINATION ${LA_TEST_DIR})
+ADD_TEST(model ${LA_TEST_DIR}/modeltest)
 
+# grass test
+SET(grasstest_SRCS lagrasstest.cpp)
+SET(grasstest_MOC_CPPS lagrasstest.cpp)
+QT4_WRAP_CPP(grasstest_MOC_SRCS ${grasstest_MOC_CPPS})
+ADD_CUSTOM_TARGET(grasstestmoc ALL DEPENDS ${grasstest_MOC_SRCS})
+ADD_EXECUTABLE(grasstest ${grasstest_SRCS})
+ADD_DEPENDENCIES(grasstest grasstestmoc)
+TARGET_LINK_LIBRARIES(grasstest ${QT_LIBRARIES} la_core)
+INSTALL(TARGETS grasstest RUNTIME DESTINATION ${LA_TEST_DIR})
+ADD_TEST(grass ${LA_TEST_DIR}/grasstest)
+
+
+
+
+
+
+
+
+# Put the libs needed into the test dir
+MESSAGE ("Current Binary Dir: ${CMAKE_CURRENT_BINARY_DIR}")
+IF (WIN32)
+INSTALL (FILES ${CMAKE_BINARY_DIR}/src/lib/libla_core.dll DESTINATION ${LA_TEST_DIR})
+ENDIF (WIN32)
+
+IF (APPLE)
+INSTALL (FILES ${CMAKE_BINARY_DIR}/src/lib/libla_core.dylib DESTINATION ${LA_TEST_DIR}/lib/)
+#experiment tests need modeller plugins here
+ENDIF (APPLE)
