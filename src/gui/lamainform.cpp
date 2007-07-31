@@ -55,10 +55,21 @@ LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
   lblAnimalPix->setScaledContents(true);
   lblCropPicCalcs->setScaledContents(true);
   lblAnimalPicCalcs->setScaledContents(true);
+
+  QStringList myList;
   LaGrass myGrass;
-  cboDEM->addItems(myGrass.getRasterList("PERMANENT"));
-  cboCommonGrazingRaster->addItems(myGrass.getRasterList("PERMANENT"));
-  cboCommonCropRaster->addItems(myGrass.getRasterList("PERMANENT"));
+  QStringList myMapsetList = myGrass.getMapsetList();
+  QStringListIterator myIterator(myMapsetList);
+  while (myIterator.hasNext())
+  {
+    //append the raster names in this mapet to our full list
+    myList << myGrass.getRasterList(myIterator.next());
+  }
+  myGrass.getRasterList(myMapsetList);
+  cboDEM->addItems(myList);
+  cboCommonGrazingRaster->addItems(myList);
+  cboCommonCropRaster->addItems(myList);
+
   //cboDEM->addItems(myGrass.getRasterList("
   lblVersion->setText(QString("Version: %1").arg(VERSION) + " " + QString("$Revision$").replace("$",""));
   tblAnimals->horizontalHeader()->hide();
