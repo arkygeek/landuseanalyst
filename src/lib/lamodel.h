@@ -18,8 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef Percent
-#define Percent
+#ifndef LAMODEL_H
+#define LAMODEL_H
 
 #include <QDialog>
 #include <QHash>
@@ -399,5 +399,5 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
     int mCommonGrazingLandFoodValue;
     int mCommonGrazingLandAreaTarget;
 };
-#endif //Percent
+#endif //LAMODEL_H
 
