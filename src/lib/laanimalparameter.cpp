@@ -17,13 +17,17 @@
  *                                                                         *
  ***************************************************************************/
 #include <QString>
+#include <QStringList>
 #include <QDomDocument>
 #include <QDomElement>
+#include <QComboBox>
+
 #include "laanimalparameter.h"
 #include "lautils.h"
 #include "lacrop.h"
 #include "lafoodsource.h"
 #include "la.h"
+#include "lagrass.h"
 
 LaAnimalParameter::LaAnimalParameter() : LaSerialisable(), LaGuid()
 {

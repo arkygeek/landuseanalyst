@@ -65,7 +65,7 @@ LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
     //append the raster names in this mapet to our full list
     myList << myGrass.getRasterList(myIterator.next());
   }
-  myGrass.getRasterList(myMapsetList);
+  //myGrass.getRasterList(myMapsetList);
   cboDEM->addItems(myList);
   cboCommonGrazingRaster->addItems(myList);
   cboCommonCropRaster->addItems(myList);

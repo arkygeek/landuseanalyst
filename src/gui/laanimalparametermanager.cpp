@@ -23,7 +23,7 @@
 #include "laanimal.h"
 #include "lafoodsource.h"
 #include "lamainform.h"
-
+#include "lagrass.h"
 #include <QSettings>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
@@ -51,7 +51,17 @@
   setupUi(this);
   readSettings();
   lblAnimalPic->setScaledContents(true);
-
+  QStringList myList;
+  LaGrass myGrass;
+  QStringList myMapsetList = myGrass.getMapsetList();
+  QStringListIterator myIterator1(myMapsetList);
+  while (myIterator1.hasNext())
+  {
+    //append the raster names in this mapet to our full list
+    myList << myGrass.getRasterList(myIterator1.next());
+  }
+  //myGrass.getRasterList(myMapsetList);
+  cboRaster->addItems(myList);
   mSelectedCropsMap = thePair.first;
   mCommonGrazingLandTDN = thePair.second;
   sbCommonRasterTDN->setReadOnly(false);
@@ -357,7 +367,7 @@ void LaAnimalParameterManager::showAnimalParameter()
     setComboToDefault(comboBoxFallowUsage,tr("None"));
   }
 
-  leRasterName->setText(mAnimalParameter.rasterName());
+  //leRasterName->setText(mAnimalParameter.rasterName());
 }
 
 void LaAnimalParameterManager::on_toolNew_clicked()
@@ -520,7 +530,7 @@ void LaAnimalParameterManager::on_pbnApply_clicked()
       myPriority = None;
       mAnimalParameter.setFallowUsage(myPriority);
   }
-  mAnimalParameter.setRasterName(leRasterName->text());
+  mAnimalParameter.setRasterName(cboAnimal->currentText());
   mAnimalParameter.toXmlFile( LaUtils::userAnimalParameterProfilesDirPath() +
       QDir::separator() + mAnimalParameter.guid() + ".xml");
   refreshAnimalParameterTable(mAnimalParameter.guid());

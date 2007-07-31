@@ -20,6 +20,7 @@
 #include "lacropparametermanager.h"
 #include "lautils.h"
 #include "lacrop.h"
+#include "lagrass.h"
 #include <QSettings>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
@@ -46,7 +47,17 @@
   readSettings();
   connect(tblCropParameterProfiles, SIGNAL(cellClicked( int,int)),
       this, SLOT(cellClicked( int,int)));
-
+  QStringList myList;
+  LaGrass myGrass;
+  QStringList myMapsetList = myGrass.getMapsetList();
+  QStringListIterator myIterator1(myMapsetList);
+  while (myIterator1.hasNext())
+  {
+    //append the raster names in this mapet to our full list
+    myList << myGrass.getRasterList(myIterator1.next());
+  }
+  //myGrass.getRasterList(myMapsetList);
+  cboRaster->addItems(myList);
   //disable these buttons unless experimental is allowed
   pbnImport->setVisible(false);
   pbnExport->setVisible(false);
@@ -224,7 +235,7 @@ void LaCropParameterManager::showCropParameter()
   comboBoxAreaUnits->setCurrentIndex(mCropParameter.areaUnits());
   checkBoxUseCommonLand->setChecked(mCropParameter.useCommonLand());
   checkBoxUseSpecificLand->setChecked(mCropParameter.useSpecificLand());
-  leRasterName->setText(mCropParameter.rasterName());
+  //cboRastere->setText(mCropParameter.rasterName());
 }
 
 void LaCropParameterManager::on_toolNew_clicked()
@@ -318,7 +329,7 @@ void LaCropParameterManager::on_pbnApply_clicked()
 
   mCropParameter.setUseCommonLand(checkBoxUseCommonLand->isChecked());
   mCropParameter.setUseSpecificLand(checkBoxUseSpecificLand->isChecked());
-  mCropParameter.setRasterName(leRasterName->text());
+  mCropParameter.setRasterName(cboCrop->currentText());
   mCropParameter.toXmlFile( LaUtils::userCropParameterProfilesDirPath() +
       QDir::separator() + mCropParameter.guid() + ".xml");
   refreshCropParameterTable(mCropParameter.guid());
