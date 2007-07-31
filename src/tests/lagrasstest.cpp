@@ -34,9 +34,16 @@ void LaGrassTest::runCommand()
   QString myCommand = "g.list";
   QStringList myArguments;
   myArguments << "type=rast";
-  //first test with no log param
+  //first test with no error log param
   QString myResult = myGrass.runCommand(myCommand,myArguments);
-  
+  qDebug(myResult.toLocal8Bit());
+  QVERIFY(!myResult.isEmpty());
+  //now test with error log
+  QString myErrors;
+  myResult = myGrass.runCommand(myCommand,myArguments,myErrors);
+  qDebug(myErrors.toLocal8Bit());
+  QVERIFY(!myResult.isEmpty());
+  QVERIFY(myErrors.isEmpty());
 }
 
 QTEST_MAIN(LaGrassTest) 
