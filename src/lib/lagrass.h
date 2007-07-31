@@ -80,6 +80,18 @@ class LaGrass : public QObject
      * @return QStringList of layer names.
      */
     QStringList getRasterList(QString theMapset, bool thePrependMapsetFlag=true);
+
+    /** Create a friction map. All cells in the map will be set
+     * to a friction of 1.
+     * @param QString grass raster layer name for a DEM on 
+     * which the friction map will be based.
+     * @param QString output layer name for the friction map
+     *        (it will be put into the current active mapset)
+     * @return bool - false if the frictionmap creation failed
+     */
+    bool createFrictionMap(QString theBaseRaster,QString theOututRaster);
+
+    
     
     void makeCircle(int theX, int theY);
     void getArea(QString theLayerName,float theArea);

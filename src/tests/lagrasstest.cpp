@@ -26,7 +26,9 @@ class LaGrassTest: public QObject
   Q_OBJECT;
       private slots:
       void runCommand();
+      void getMapsetList();
       void getRasterList();
+      void createFrictionMap();
 };
 
 void LaGrassTest::runCommand()
@@ -44,6 +46,12 @@ void LaGrassTest::runCommand()
   QVERIFY(!myResult.isEmpty());
   QVERIFY(myErrors.isEmpty());
 }
+void LaGrassTest::getMapsetList()
+{
+  LaGrass myGrass;
+  QStringList myList = myGrass.getMapsetList();
+  QVERIFY(myList.count() > 0);
+}
 void LaGrassTest::getRasterList()
 {
   QStringList myList;
@@ -57,6 +65,11 @@ void LaGrassTest::getRasterList()
   }
   qDebug("\n" + myList.join("\n").toLocal8Bit());
   QVERIFY(myList.count() > 0);
+}
+void LaGrassTest::createFrictionMap()
+{
+  LaGrass myGrass;
+  myGrass.createFrictionMap("tim.dem","laFrictionMap");
 }
 
 QTEST_MAIN(LaGrassTest) 

@@ -82,6 +82,25 @@ QStringList LaGrass::getRasterList(QString theMapset, bool thePrependMapsetFlag 
   }
   return myFinalList;
 }
+bool LaGrass::createFrictionMap(QString theBaseRaster,QString theOutputRaster)
+{
+  //r.mapcalc "laFrictionMap = if(isnull(laDEM), null(), 1)"
+  QString myCommand = "r.mapcalc";
+  QStringList myArguments;
+  myArguments << "\"" + theOutputRaster + " = if(isnull(" + theBaseRaster + "), null(), 1)\"";
+  qDebug(myCommand.toLocal8Bit() + myArguments.join(" ").toLocal8Bit());
+  QString myErrorLog;
+  QString myResult = runCommand(myCommand,myArguments,myErrorLog);
+  qDebug(myResult.toLocal8Bit());
+  if (myErrorLog.isEmpty())
+  {
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+}
 
 void LaGrass::getArea(QString theLayerName, float theArea)
 {
