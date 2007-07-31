@@ -266,15 +266,6 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
     void logMessage(QString theMessage);
 
 
-    //
-    // Grass functions
-    //
-    void makeCircle(int theX, int theY);
-    void getArea(QString theLayerName,float theArea);
-    void makeWalkCost(int theX, int theY);
-    void makeEuclideanCost(int theX, int theY);
-    void makePathDistanceCost(int theX, int theY);
-
   signals:
     /** Send log info to any listeners.
      * @param QString the message to be logged.
@@ -394,7 +385,6 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
     QMap<QString,QString> mCropsMap;
 
     Status mFallowStatus;
-    void writeMetaData(QString theValue);
     int mCommonGrazingLandCalorieTarget;
     int mCommonGrazingLandFoodValue;
     int mCommonGrazingLandAreaTarget;

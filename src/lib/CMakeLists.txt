@@ -11,6 +11,7 @@ SET(LA_CORE_SRCS
   laserialisable.cpp
   lautils.cpp
   lamodel.cpp
+  lagrass.cpp
   )
 #headers that dont need to be MOCs but that may be distributed etc later
 SET(LA_CORE_OTHER_HDRS
@@ -27,6 +28,7 @@ SET(LA_CORE_OTHER_HDRS
 #headers that need to be mocd
 SET(LA_CORE_MOC_HDRS
   lamodel.h
+  lagrass.h
   )
 
 set(QT_USE_CORE TRUE)
