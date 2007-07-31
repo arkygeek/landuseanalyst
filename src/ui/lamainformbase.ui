@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>651</width>
-    <height>452</height>
+    <height>393</height>
    </rect>
   </property>
   <property name="sizePolicy" >
@@ -506,52 +506,10 @@ p, li { white-space: pre-wrap; }
             </property>
            </widget>
           </item>
-          <item row="1" column="4" >
-           <widget class="QPushButton" name="pbnDemSelect" >
-            <property name="sizePolicy" >
-             <sizepolicy>
-              <hsizetype>0</hsizetype>
-              <vsizetype>0</vsizetype>
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="maximumSize" >
-             <size>
-              <width>23</width>
-              <height>23</height>
-             </size>
-            </property>
-            <property name="text" >
-             <string>...</string>
-            </property>
-           </widget>
-          </item>
           <item row="2" column="1" colspan="2" >
            <widget class="QLabel" name="label_31" >
             <property name="text" >
              <string>Co-ordinate System</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="4" >
-           <widget class="QPushButton" name="pbnMapsetSelect" >
-            <property name="sizePolicy" >
-             <sizepolicy>
-              <hsizetype>0</hsizetype>
-              <vsizetype>0</vsizetype>
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="maximumSize" >
-             <size>
-              <width>23</width>
-              <height>23</height>
-             </size>
-            </property>
-            <property name="text" >
-             <string>...</string>
             </property>
            </widget>
           </item>
@@ -595,11 +553,11 @@ p, li { white-space: pre-wrap; }
             </item>
            </widget>
           </item>
-          <item row="0" column="2" colspan="2" >
-           <widget class="QLineEdit" name="leMapsetName" />
+          <item row="1" column="2" colspan="3" >
+           <widget class="QComboBox" name="cboDEM" />
           </item>
-          <item row="1" column="2" colspan="2" >
-           <widget class="QLineEdit" name="leRasterName" />
+          <item row="0" column="2" colspan="3" >
+           <widget class="QComboBox" name="cboMapSet" />
           </item>
          </layout>
         </widget>
@@ -1664,20 +1622,7 @@ p, li { white-space: pre-wrap; }
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="leCommonCropLandRasterName" />
-         </item>
-         <item>
-          <widget class="QPushButton" name="pbnCommonCropFileSelect" >
-           <property name="maximumSize" >
-            <size>
-             <width>23</width>
-             <height>23</height>
-            </size>
-           </property>
-           <property name="text" >
-            <string>...</string>
-           </property>
-          </widget>
+          <widget class="QComboBox" name="cboCommonCropRaster" />
          </item>
         </layout>
        </item>
@@ -2007,20 +1952,7 @@ p, li { white-space: pre-wrap; }
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="leCommonGrazingLandRasterName" />
-         </item>
-         <item>
-          <widget class="QPushButton" name="pbnCommonGrazingFileSelect" >
-           <property name="maximumSize" >
-            <size>
-             <width>23</width>
-             <height>23</height>
-            </size>
-           </property>
-           <property name="text" >
-            <string>...</string>
-           </property>
-          </widget>
+          <widget class="QComboBox" name="cboCommonGrazingRaster" />
          </item>
         </layout>
        </item>

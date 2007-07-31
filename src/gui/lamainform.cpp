@@ -27,6 +27,7 @@
 #include "laanimalparametermanager.h"
 #include "lamodel.h"
 #include "lamodelreports.h"
+#include "lagrass.h"
 
 //qt includes
 #include <QComboBox>
@@ -54,6 +55,11 @@ LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
   lblAnimalPix->setScaledContents(true);
   lblCropPicCalcs->setScaledContents(true);
   lblAnimalPicCalcs->setScaledContents(true);
+  LaGrass myGrass;
+  cboDEM->addItems(myGrass.getRasterList("PERMANENT"));
+  cboCommonGrazingRaster->addItems(myGrass.getRasterList("PERMANENT"));
+  cboCommonCropRaster->addItems(myGrass.getRasterList("PERMANENT"));
+  //cboDEM->addItems(myGrass.getRasterList("
   lblVersion->setText(QString("Version: %1").arg(VERSION) + " " + QString("$Revision$").replace("$",""));
   tblAnimals->horizontalHeader()->hide();
   tblAnimals->verticalHeader()->hide();

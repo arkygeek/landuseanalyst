@@ -115,5 +115,6 @@
         <file>new.png</file>
         <file>status_error.png</file>
         <file>status_ok.png</file>
+        <file>tux-indiana.png</file>
     </qresource>
 </RCC>
