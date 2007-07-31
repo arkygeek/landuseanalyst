@@ -42,14 +42,21 @@
 #include <QListWidgetItem>
 #include <QIcon>
 #include <QtDebug>
-  LaAnimalParameterManager::LaAnimalParameterManager(LaTripleMap & theSelectedCropsMap, QWidget* parent, Qt::WFlags fl)
+#include <QPair>
+
+  LaAnimalParameterManager::LaAnimalParameterManager(QPair<LaTripleMap, int> & thePair, QWidget* parent, Qt::WFlags fl)
 : QDialog(parent,fl)
 {
   //required by Qt4 to initialise the ui
   setupUi(this);
   readSettings();
   lblAnimalPic->setScaledContents(true);
-  mSelectedCropsMap = theSelectedCropsMap;
+
+  mSelectedCropsMap = thePair.first;
+  mCommonGrazingLandTDN = thePair.second;
+  sbCommonRasterTDN->setReadOnly(false);
+  sbCommonRasterTDN->setValue(mCommonGrazingLandTDN);
+  sbCommonRasterTDN->setReadOnly(true);
   connect(tblAnimalParameterProfiles, SIGNAL(cellClicked( int,int)),
       this, SLOT(cellClicked( int,int)));
   connect(cboAnimal, SIGNAL(currentIndexChanged( int)),
@@ -76,6 +83,7 @@
   comboBoxAreaUnits->addItem("Hectare");
   setFallowComboBox();
   populateFodder();
+  refreshAnimalParameterTable();
 }
 
 LaAnimalParameterManager::~LaAnimalParameterManager()
@@ -326,7 +334,7 @@ void LaAnimalParameterManager::showAnimalParameter()
   checkBoxCommonRaster->setChecked(mAnimalParameter.useCommonGrazingLand());
   checkBoxSpecificRaster->setChecked(mAnimalParameter.useSpecificGrazingLand());
   sbSpecificRasterTDN->setValue(mAnimalParameter.foodValueOfSpecificGrazingLand());
-  sbCommonRasterTDN->setValue(mAnimalParameter.foodValueOfCommonGrazingLand());
+  sbCommonRasterTDN->setValue(mCommonGrazingLandTDN);
   comboBoxAreaUnits->setCurrentIndex(mAnimalParameter.areaUnits());
   grpFodderUse->setChecked(mAnimalParameter.fodderUse());
 
@@ -435,6 +443,20 @@ void LaAnimalParameterManager::on_pbnApply_clicked()
   mAnimalParameter.setPercentTameMeat(sbPercentTameMeat->value());
   mAnimalParameter.setUseCommonGrazingLand(checkBoxCommonRaster->isChecked());
   mAnimalParameter.setUseSpecificGrazingLand(checkBoxSpecificRaster->isChecked());
+
+  QString mySelectedAreaUnit = QString(comboBoxAreaUnits->currentText());
+  AreaUnits myAreaUnits;
+  if (mySelectedAreaUnit == "Dunum")
+  {
+    myAreaUnits = Dunum;
+    mAnimalParameter.setAreaUnits(myAreaUnits);
+  }
+  else if (mySelectedAreaUnit == "Hectare")
+  {
+    myAreaUnits = Hectare;
+    mAnimalParameter.setAreaUnits(myAreaUnits);
+  }
+
   mAnimalParameter.setFoodValueOfCommonGrazingLand(sbCommonRasterTDN->value());
   mAnimalParameter.setFoodValueOfSpecificGrazingLand(sbSpecificRasterTDN->value());
   mAnimalParameter.setFodderUse(grpFodderUse->isChecked());
@@ -473,18 +495,7 @@ void LaAnimalParameterManager::on_pbnApply_clicked()
     + " food sources into animal parameter.");
   mAnimalParameter.setFodderData(myFoodSourceMap);
 
-  QString mySelectedAreaUnit = QString(comboBoxAreaUnits->currentText());
-  AreaUnits myAreaUnits;
-  if (mySelectedAreaUnit == "Dunum")
-  {
-    myAreaUnits = Dunum;
-    mAnimalParameter.setAreaUnits(myAreaUnits);
-  }
-  else if (mySelectedAreaUnit == "Hectare")
-  {
-    myAreaUnits = Hectare;
-    mAnimalParameter.setAreaUnits(myAreaUnits);
-  }
+
 
   QString myFallowUsage = QString(comboBoxFallowUsage->currentText());
   //setFallowComboBox();

@@ -100,13 +100,15 @@ int LaAnimalParameter::percentTameMeat() const
 }
 int LaAnimalParameter::foodValueOfSpecificGrazingLand() const
 {
-  int myAreaInHectares = LaUtils::convertAreaToHectares (mAreaUnits, mFoodValueOfSpecificGrazingLand);
-  return myAreaInHectares;
+  //int myAreaInHectares = LaUtils::convertAreaToHectares (mAreaUnits, mFoodValueOfSpecificGrazingLand);
+  //return myAreaInHectares;
+  return mFoodValueOfSpecificGrazingLand;
 }
 int LaAnimalParameter::foodValueOfCommonGrazingLand() const
 {
-  int myAreaInHectares = LaUtils::convertAreaToHectares (mAreaUnits, mFoodValueOfCommonGrazingLand);
-  return myAreaInHectares;
+  //int myAreaInHectares = LaUtils::convertAreaToHectares (mAreaUnits, mFoodValueOfCommonGrazingLand);
+  //return myAreaInHectares;
+  return mFoodValueOfCommonGrazingLand;
 }
 bool LaAnimalParameter::useSpecificGrazingLand() const
 {

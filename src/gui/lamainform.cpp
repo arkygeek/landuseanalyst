@@ -42,6 +42,7 @@
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QtDebug>
+#include <QPair>
 
 LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
   : QDialog(parent,fl)
@@ -63,6 +64,8 @@ LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
   listWidgetCalculationsAnimal->clear();
   loadAnimals();
   loadCrops();
+  comboBoxAreaUnits->addItem("Dunum");
+  comboBoxAreaUnits->addItem("Hectare");
   setDietLabels();
   /** See the qtdocs on signals and slots to understand below.
    * we connect the currentItemChanged signal that a tree view emits when you
@@ -198,7 +201,11 @@ void LaMainForm::on_pbnNewCropParameter_clicked()
 
 void LaMainForm::on_pbnNewAnimalParameter_clicked()
 {
-    LaAnimalParameterManager myAnimalParameterManager(mCropsMap);
+    int myCommonGrazingLandTDN = sbCommonRasterTDN->value();
+    QPair<LaTripleMap, int> myPair;
+    myPair.first=mCropsMap;
+    myPair.second=myCommonGrazingLandTDN;
+    LaAnimalParameterManager myAnimalParameterManager(myPair);
     myAnimalParameterManager.exec();
     listWidgetCalculationsAnimal->clear();
     loadAnimals();
@@ -588,7 +595,7 @@ void LaMainForm::on_pushButtonRun_clicked()
              this, SLOT(logMessage( QString )));
 
   //test stats
-  myModel.getArea("crops",100);
+  //myModel.getArea("crops",100);
   progressBarCalcs->setValue(1);
   // Get a list of the selected animals
   QMap<QString,QString> mySelectedAnimalsMap;
@@ -642,7 +649,21 @@ void LaMainForm::on_pushButtonRun_clicked()
   myModel.setCropPercent(horizontalSliderCrop->value());
   myModel.setMeatPercent(horizontalSliderMeat->value());
   myModel.setCaloriesPerPersonDaily(spinBoxDailyCalories->value());
-  myModel.setCommonLandValue(sbCommonRasterTDN->value());
+
+  // the following adjusts the TDN value for use with hectares
+  // which is the only output that is used.
+  QString mySelectedAreaUnit = QString(comboBoxAreaUnits->currentText());
+  AreaUnits myAreaUnits;
+  if (mySelectedAreaUnit == "Dunum")
+  {
+    myAreaUnits = Dunum;
+  }
+  else if (mySelectedAreaUnit == "Hectare")
+  {
+    myAreaUnits = Hectare;
+  }
+  int myAdjustedTDN = LaUtils::convertAreaToHectares(myAreaUnits, sbCommonRasterTDN->value());
+  myModel.setCommonLandValue(myAdjustedTDN);
 
   tbReport->setHtml(myModel.toHtml());
   progressBarCalcs->setValue(2);
