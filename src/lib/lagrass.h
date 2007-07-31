@@ -44,8 +44,8 @@ class LaGrass : public QObject
      * e.g.
      * QStringList myArgs;
      * myArgs << "type=rast" << "type=vect";
-     * @param &QString theErrorLog - an optional parameters which 
-     * is a string passed by reference. On completion, any errors
+     * @param &QString theErrorLog - a string passed by reference. 
+     * On completion, any errors
      * from stderr will have been placed in this string.
      * @return QString - verbatim output of the command as
      * returned by GRASS. The calling function will be responsible
@@ -53,7 +53,20 @@ class LaGrass : public QObject
      */
      QString runCommand(QString theCommand, 
                         QStringList theArguments,
-                        QString &theErrorLog = "");
+                        QString &theErrorLog);
+     /** Overloaded version of above command that needs no
+      * log parameter.
+     * @param QString theCommand - a single command name e.g. g.list
+     * @param QString theArguments - a stringlist of paramters
+     * e.g.
+     * QStringList myArgs;
+     * myArgs << "type=rast" << "type=vect";
+     * @return QString - verbatim output of the command as
+     * returned by GRASS. The calling function will be responsible
+     * for parsing that output.
+     */
+     QString runCommand(QString theCommand, 
+                        QStringList theArguments);
     /** Get a list of grass rasters from the 
      * PERMANENT and users mapset.
      * @return QStringList of layer names.

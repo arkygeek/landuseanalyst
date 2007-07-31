@@ -30,6 +30,13 @@ class LaGrassTest: public QObject
 
 void LaGrassTest::runCommand()
 {
+  LaGrass myGrass;
+  QString myCommand = "g.list";
+  QStringList myArguments;
+  myArguments << "type=rast";
+  //first test with no log param
+  QString myResult = myGrass.runCommand(myCommand,myArguments);
+  
 }
 
 QTEST_MAIN(LaGrassTest) 

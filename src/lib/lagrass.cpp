@@ -198,4 +198,11 @@ QString LaGrass::runCommand(QString theCommand,
   
   return myLog;
 }
+QString LaGrass::runCommand(QString theCommand, 
+    QStringList theArguments) 
+{
+  QString myErrors;
+  QString myLog = runCommand(theCommand, theArguments, myErrors);
+  return myLog;
+}
 
