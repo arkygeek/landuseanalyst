@@ -26,6 +26,7 @@ class LaGrassTest: public QObject
   Q_OBJECT;
       private slots:
       void runCommand();
+      void getRasterList();
 };
 
 void LaGrassTest::runCommand()
@@ -44,6 +45,14 @@ void LaGrassTest::runCommand()
   qDebug(myErrors.toLocal8Bit());
   QVERIFY(!myResult.isEmpty());
   QVERIFY(myErrors.isEmpty());
+}
+void LaGrassTest::getRasterList()
+{
+  LaGrass myGrass;
+  //QStringList myList = myGrass.getRasterList("tim");
+  QStringList myList = myGrass.getRasterList("PERMANENT");
+  qDebug(myList.join("\n").toLocal8Bit());
+  QVERIFY(myList.count() > 0);
 }
 
 QTEST_MAIN(LaGrassTest) 

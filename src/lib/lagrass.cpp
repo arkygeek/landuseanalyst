@@ -40,14 +40,36 @@ LaGrass::~LaGrass()
 }
 
 
-QStringList LaGrass::getRasterList(QString theMapset)
+QStringList LaGrass::getRasterList(QString theMapset, bool thePrependMapsetFlag /*=true */)
 {
-  QStringList myList;
-
-
-
-
-  return myList;
+  QString myCommand = "g.list";
+  QStringList myArguments;
+  myArguments << "type=rast";
+  myArguments << "mapset=" + theMapset;
+  //first test with no error log param
+  QString myResult = runCommand(myCommand,myArguments);
+  //check for no files
+  if (myResult.contains("no raster files available"))
+  {
+    //return an empty list
+    return QStringList();
+  }
+  //strip off grass decoration crap...
+  myResult.replace("raster files available in mapset " + theMapset + ":","");
+  myResult = myResult.simplified();
+  QStringList myList = myResult.split(QRegExp("\\s+"));
+  QStringList myFinalList;
+  //prepend the mapset name to each raster name
+  if (thePrependMapsetFlag)
+  {
+    QStringListIterator myIterator(myList);
+    while (myIterator.hasNext())
+    {
+      QString myString = myIterator.next();
+      myFinalList << theMapset + "." + myString;
+    }
+  }
+  return myFinalList;
 }
 
 void LaGrass::getArea(QString theLayerName, float theArea)
@@ -195,6 +217,8 @@ QString LaGrass::runCommand(QString theCommand,
   myProcess.setReadChannel(QProcess::StandardError);
   myArray = myProcess.readAll();
   theErrorLog.append(myArray);
+  // get rid of some grass decorations...
+  myLog.replace("----------------------------------------------","");
   
   return myLog;
 }

@@ -69,9 +69,13 @@ class LaGrass : public QObject
                         QStringList theArguments);
     /** Get a list of grass rasters from the 
      * PERMANENT and users mapset.
+     * @param bool thePrependMapsetFlag. Optional paramter which
+     * defaults to true. Adds the mapset name in front of each layer
+     * e.g.
+     * PERMANENT.dem
      * @return QStringList of layer names.
      */
-    QStringList getRasterList(QString theMapset);
+    QStringList getRasterList(QString theMapset, bool thePrependMapsetFlag=true);
     
     void makeCircle(int theX, int theY);
     void getArea(QString theLayerName,float theArea);
