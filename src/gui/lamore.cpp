@@ -69,7 +69,7 @@
     myIcon.addFile(":/localdata.png");
     cboAnimal->addItem(myName,myGuid);
   }
-
+  mRowCount = 0;
 }
 
 LaMore::~LaMore()
@@ -93,18 +93,31 @@ void LaMore::writeSettings()
   mySettings.setValue("mainwindow/size", size());
 }
 
+void LaMore::resizeEvent ( QResizeEvent * theEvent )
+{
+  tblAnimals->setColumnWidth(0,0);
+  tblAnimals->setColumnWidth(1,tblAnimals->width());
+  tblAnimals->horizontalHeader()->setResizeMode(1,QHeaderView::Stretch);
+}
+
 void LaMore::on_pbnInsert_clicked()
 {
   // add an animal to the table
+    QTableWidgetItem *mypNameItem = new QTableWidgetItem(QString());
   if (rbManual->isChecked())
   {
     // add item to table from manual inputs
-
+    mRowCount++;
+    tblAnimals->insertRow(mRowCount);
+    int myCurrentRow = static_cast<int> (mRowCount);
+    mypNameItem->setText(leAnimal->text());
+    tblAnimals->setItem(myCurrentRow, 0, mypNameItem);
   }
   else if (rbAuto->isChecked())
   {
     // add item to table from pre-defined animals
-
+    mRowCount++;
+    tblAnimals->insertRow(mRowCount);
   }
   else return;
   return;

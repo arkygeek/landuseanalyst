@@ -45,7 +45,7 @@ class LaMore : public QDialog, private Ui::LaMoreBase
     void on_pbnInsert_clicked();
 
   private slots:
-      //void resizeEvent(QResizeEvent*);
+      void resizeEvent(QResizeEvent*);
 
   private:
       void refreshTable();
@@ -58,6 +58,8 @@ class LaMore : public QDialog, private Ui::LaMoreBase
       LaUtils::AnimalParameterMap mAnimalParameterMap;
       LaUtils::CropMap mCropMap;
       LaAnimalParameter mAnimalParameter;
+
+      int mRowCount;
 };
 
 #endif //LAMORE_H
