@@ -452,7 +452,6 @@ void LaAnimalParameterManager::on_pbnMore_clicked()
 {
   LaMore myMore;
   myMore.exec();
-
 }
 
 void LaAnimalParameterManager::on_pbnApply_clicked()

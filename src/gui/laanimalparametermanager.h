@@ -53,6 +53,7 @@ class LaAnimalParameterManager : public QDialog, private Ui::LaAnimalParameterMa
       void on_toolNew_clicked();
       void on_toolDelete_clicked();
       void on_pbnApply_clicked();
+      void on_pbnMore_clicked();
       void resizeEvent(QResizeEvent*);
 
 
@@ -68,7 +69,7 @@ class LaAnimalParameterManager : public QDialog, private Ui::LaAnimalParameterMa
 
       /** @TODO move this into LaGuiUtils - a gui subclass of LaUtils */
       bool setComboToDefault(QComboBox * thepCombo, QString theDefault);
-      void on_pbnMore_clicked();
+
       LaUtils::AnimalParameterMap mAnimalParameterMap;
       LaUtils::CropMap mCropMap;
       LaAnimalParameter mAnimalParameter;
