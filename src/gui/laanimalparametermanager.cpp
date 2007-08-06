@@ -24,6 +24,7 @@
 #include "lafoodsource.h"
 #include "lamainform.h"
 #include "lagrass.h"
+#include "lamore.h"
 #include <QSettings>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
@@ -71,6 +72,8 @@
       this, SLOT(cellClicked( int,int)));
   connect(cboAnimal, SIGNAL(currentIndexChanged( int)),
       this, SLOT(on_cboAnimal_changed( int)));
+  connect(pbnMore, SIGNAL(clicked()),
+      this, SLOT(on_pbnMore_clicked()));
   refreshAnimalParameterTable();
   //disable these buttons unless experimental is allowed
   pbnImport->setVisible(false);
@@ -443,6 +446,13 @@ void LaAnimalParameterManager::on_cboAnimal_changed(int theIndex)
   LaAnimal myAnimal = LaUtils::getAnimal(cboAnimal->itemData(cboAnimal->currentIndex(),Qt::UserRole).toString());
   QString myAnimalPic = myAnimal.imageFile();
   lblAnimalPic->setPixmap(myAnimalPic);
+}
+
+void LaAnimalParameterManager::on_pbnMore_clicked()
+{
+  LaMore myMore;
+  myMore.exec();
+
 }
 
 void LaAnimalParameterManager::on_pbnApply_clicked()

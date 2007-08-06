@@ -1,7 +1,7 @@
 #################################################################
 #
 #         QMAKE Project File for LandUse Analyst Gui
-# 
+#
 #                      Tim Sutton 2005
 #                   Jason Jorgenson 2007
 #
@@ -16,7 +16,7 @@ CONFIG(debug, debug|release){
     #needed for mac maybe make this macx: only?
     TARGET = $$member(TARGET,0)-release
 }
-#LIBS += $${OMGLIBADD} 
+#LIBS += $${OMGLIBADD}
 #LIBS += $${OMGWIDGETSLIBADD}
 #this gets nullified by settings.pro if we arent building with ws support
 #win32:LIBS += $${EXPATLIBADD}
@@ -33,19 +33,20 @@ win32: RC_FILE = ../../win/landuseanalyst.rc
 macx: ICON = ../../mac/Resources/landuseanalyst.icns
 message("Building $${TARGET} (exe) into $${DESTDIR}")
 
-RESOURCES = ../resources/resources.qrc 
+RESOURCES = ../resources/resources.qrc
 
 #QT += network
 QT += gui core
 
-#INCLUDEPATH += ../lib 
+#INCLUDEPATH += ../lib
 #################################################################
 
 FORMS += ../ui/lamainformbase.ui \
          ../ui/laanimalmanagerbase.ui \
          ../ui/laanimalformdetailsbase.ui \
          ../ui/laplantmanagerbase.ui \
-         ../ui/laplantformdetailsbase.ui
+         ../ui/laplantformdetailsbase.ui \
+         ../ui/lamorebase.ui
 
 HEADERS += lamainform.h \
            lautils.h \
@@ -57,7 +58,8 @@ HEADERS += lamainform.h \
            laplantmanager.h \
            laplantdetails.h \
            laplant.h \
-           laserialisable.h
+           laserialisable.h \
+           lamore.h
 
 SOURCES += main.cpp \
            lautils.cpp \
@@ -70,7 +72,8 @@ SOURCES += main.cpp \
            laplantmanager.cpp \
            laplantdetails.cpp \
            laplant.cpp \
-           laserialisable.cpp 
+           laserialisable.cpp \
+           lamore.cpp
 
 CONFIG += warn_on
 

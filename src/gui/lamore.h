@@ -17,13 +17,14 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef LAANIMALPARAMETERMANAGER_H
-#define LAANIMALPARAMETERMANAGER_H
+#ifndef LAMORE_H
+#define LAMORE_H
 
 //QT Includes
 #include <QDialog>
+
 //Local Includes
-#include <ui_laanimalparametermanagerbase.h>
+#include <ui_lamorebase.h>
 #include <laanimalparameter.h>
 #include <lautils.h>
 #include <QSpinBox>
@@ -33,47 +34,30 @@ class QTreeWidgetItem;
   This is the main gui class
   @author Tim Sutton, Jason Jorgenson
 */
-class LaAnimalParameterManager : public QDialog, private Ui::LaAnimalParameterManagerBase
+class LaMore : public QDialog, private Ui::LaMoreBase
 {
   Q_OBJECT
   public:
-    LaAnimalParameterManager(QPair<LaTripleMap, int> & thePair, QWidget* parent = 0, Qt::WFlags fl = 0 );
-    ~LaAnimalParameterManager();
+    LaMore(QWidget* parent = 0, Qt::WFlags fl = 0 );
+    ~LaMore();
 
   public slots:
-    //void on_pushButtonLoad_clicked();
-    //void on_pushButtonSave_clicked();
-    void setSelectedCropsMap(LaTripleMap theSelectedCropsMap);
+    void on_pbnInsert_clicked();
 
   private slots:
-      void cellClicked(int theRow, int theColumn);
-      void on_cboAnimal_changed(int theValue);
-      void showAnimalParameter();
-      void on_toolCopy_clicked();
-      void on_toolNew_clicked();
-      void on_toolDelete_clicked();
-      void on_pbnApply_clicked();
-      void resizeEvent(QResizeEvent*);
-
-
+      //void resizeEvent(QResizeEvent*);
 
   private:
-      void refreshAnimalParameterTable(QString theGuid=0);
-      void selectAnimalParameter(QString theFileName);
-      void refreshFodderTable(QString theGuid=0);
+      void refreshTable();
       void readSettings();
       void writeSettings();
-      void setFallowComboBox();
-      void populateFodder();
 
       /** @TODO move this into LaGuiUtils - a gui subclass of LaUtils */
       bool setComboToDefault(QComboBox * thepCombo, QString theDefault);
-      void on_pbnMore_clicked();
+
       LaUtils::AnimalParameterMap mAnimalParameterMap;
       LaUtils::CropMap mCropMap;
       LaAnimalParameter mAnimalParameter;
-      LaTripleMap mSelectedCropsMap;
-      int mCommonGrazingLandTDN;
 };
 
-#endif //LAANIMALPARAMETERMANAGER_H
+#endif //LAMORE_H

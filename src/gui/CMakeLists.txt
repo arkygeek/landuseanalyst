@@ -14,6 +14,7 @@ set(landuseanalyst_SRCS
     lacropparametermanager.cpp
     laanimalmanager.cpp
     laanimalparametermanager.cpp
+    lamore.cpp
    )
 SET(landuseanalyst_UIS
     ../ui/lamainformbase.ui
@@ -21,6 +22,7 @@ SET(landuseanalyst_UIS
     ../ui/lacropparametermanagerbase.ui
     ../ui/laanimalmanagerbase.ui
     ../ui/laanimalparametermanagerbase.ui
+    ../ui/lamorebase.ui
     )
 SET(landuseanalyst_MOC_HDRS
     lamainform.h
@@ -28,6 +30,7 @@ SET(landuseanalyst_MOC_HDRS
     lacropparametermanager.h
     laanimalmanager.h
     laanimalparametermanager.h
+    lamore.h
     )
 SET(landuseanalyst_RCCS
     ../resources/resources.qrc
@@ -117,7 +120,7 @@ ENDIF( APPLE )
 
 # link the "landuseanalyst" target against the Qt libraries. which libraries
 # exactly, is defined by the "include(${QT_USE_FILE})" line above, which sets up this variable.
-target_link_libraries(landuseanalyst 
+target_link_libraries(landuseanalyst
      ${QT_LIBRARIES}
      la_core
      )

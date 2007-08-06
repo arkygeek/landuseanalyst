@@ -22,22 +22,10 @@
    <iconset resource="../resources/resources.qrc" >:/la_icon_small.png</iconset>
   </property>
   <layout class="QGridLayout" >
-   <property name="leftMargin" >
+   <property name="margin" >
     <number>9</number>
    </property>
-   <property name="topMargin" >
-    <number>9</number>
-   </property>
-   <property name="rightMargin" >
-    <number>9</number>
-   </property>
-   <property name="bottomMargin" >
-    <number>9</number>
-   </property>
-   <property name="horizontalSpacing" >
-    <number>6</number>
-   </property>
-   <property name="verticalSpacing" >
+   <property name="spacing" >
     <number>6</number>
    </property>
    <item rowspan="2" row="4" column="3" >
@@ -53,14 +41,16 @@ Mask</string>
       <number>0</number>
      </property>
      <property name="textInteractionFlags" >
-      <set>Qt::NoTextInteraction</set>
+      <enum>Qt::NoTextInteraction</enum>
      </property>
     </widget>
    </item>
    <item rowspan="2" row="5" column="0" colspan="3" >
     <widget class="QGroupBox" name="groupBoxSuitableLand" >
      <property name="sizePolicy" >
-      <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+      <sizepolicy>
+       <hsizetype>0</hsizetype>
+       <vsizetype>0</vsizetype>
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -81,28 +71,18 @@ p, li { white-space: pre-wrap; }
       <string>Suitability Masks</string>
      </property>
      <layout class="QGridLayout" >
-      <property name="leftMargin" >
-       <number>0</number>
+      <property name="margin" >
+       <number>9</number>
       </property>
-      <property name="topMargin" >
-       <number>0</number>
-      </property>
-      <property name="rightMargin" >
-       <number>0</number>
-      </property>
-      <property name="bottomMargin" >
-       <number>0</number>
-      </property>
-      <property name="horizontalSpacing" >
-       <number>0</number>
-      </property>
-      <property name="verticalSpacing" >
-       <number>0</number>
+      <property name="spacing" >
+       <number>6</number>
       </property>
       <item row="0" column="1" >
        <widget class="QCheckBox" name="checkBoxUseSpecificLand" >
         <property name="sizePolicy" >
-         <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+         <sizepolicy>
+          <hsizetype>0</hsizetype>
+          <vsizetype>0</vsizetype>
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -124,7 +104,9 @@ p, li { white-space: pre-wrap; }
       <item row="0" column="0" >
        <widget class="QCheckBox" name="checkBoxUseCommonLand" >
         <property name="sizePolicy" >
-         <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+         <sizepolicy>
+          <hsizetype>0</hsizetype>
+          <vsizetype>0</vsizetype>
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -152,7 +134,9 @@ p, li { white-space: pre-wrap; }
    <item row="4" column="0" colspan="2" >
     <widget class="QLabel" name="labelPortionDiet" >
      <property name="sizePolicy" >
-      <sizepolicy vsizetype="Maximum" hsizetype="Minimum" >
+      <sizepolicy>
+       <hsizetype>0</hsizetype>
+       <vsizetype>0</vsizetype>
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -171,7 +155,9 @@ p, li { white-space: pre-wrap; }
    <item row="4" column="2" >
     <widget class="QSpinBox" name="sbPercentTameCrop" >
      <property name="sizePolicy" >
-      <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+      <sizepolicy>
+       <hsizetype>0</hsizetype>
+       <vsizetype>0</vsizetype>
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -202,25 +188,18 @@ p, li { white-space: pre-wrap; }
    </item>
    <item row="6" column="5" >
     <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
      <property name="spacing" >
       <number>6</number>
-     </property>
-     <property name="leftMargin" >
-      <number>0</number>
-     </property>
-     <property name="topMargin" >
-      <number>0</number>
-     </property>
-     <property name="rightMargin" >
-      <number>0</number>
-     </property>
-     <property name="bottomMargin" >
-      <number>0</number>
      </property>
      <item>
       <widget class="QPushButton" name="pbnApply" >
        <property name="sizePolicy" >
-        <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+        <sizepolicy>
+         <hsizetype>0</hsizetype>
+         <vsizetype>0</vsizetype>
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -245,7 +224,9 @@ p, li { white-space: pre-wrap; }
      <item>
       <widget class="QPushButton" name="pbnClose" >
        <property name="sizePolicy" >
-        <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+        <sizepolicy>
+         <hsizetype>0</hsizetype>
+         <vsizetype>0</vsizetype>
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -269,42 +250,18 @@ p, li { white-space: pre-wrap; }
       <string>Available Crop Parameter Settings</string>
      </property>
      <layout class="QGridLayout" >
-      <property name="leftMargin" >
+      <property name="margin" >
        <number>9</number>
       </property>
-      <property name="topMargin" >
-       <number>9</number>
-      </property>
-      <property name="rightMargin" >
-       <number>9</number>
-      </property>
-      <property name="bottomMargin" >
-       <number>9</number>
-      </property>
-      <property name="horizontalSpacing" >
-       <number>6</number>
-      </property>
-      <property name="verticalSpacing" >
+      <property name="spacing" >
        <number>6</number>
       </property>
       <item rowspan="2" row="0" column="3" >
        <layout class="QGridLayout" >
-        <property name="leftMargin" >
+        <property name="margin" >
          <number>0</number>
         </property>
-        <property name="topMargin" >
-         <number>0</number>
-        </property>
-        <property name="rightMargin" >
-         <number>0</number>
-        </property>
-        <property name="bottomMargin" >
-         <number>0</number>
-        </property>
-        <property name="horizontalSpacing" >
-         <number>6</number>
-        </property>
-        <property name="verticalSpacing" >
+        <property name="spacing" >
          <number>6</number>
         </property>
         <item row="2" column="2" >
@@ -486,7 +443,9 @@ p, li { white-space: pre-wrap; }
    <item rowspan="3" row="1" column="3" colspan="3" >
     <widget class="QGroupBox" name="grpCropRotation" >
      <property name="sizePolicy" >
-      <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+      <sizepolicy>
+       <hsizetype>0</hsizetype>
+       <vsizetype>0</vsizetype>
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -496,9 +455,6 @@ p, li { white-space: pre-wrap; }
        <width>227</width>
        <height>100</height>
       </size>
-     </property>
-     <property name="cursor" >
-      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="whatsThis" >
       <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
@@ -517,60 +473,27 @@ p, li { white-space: pre-wrap; }
       <bool>false</bool>
      </property>
      <layout class="QGridLayout" >
-      <property name="leftMargin" >
-       <number>3</number>
+      <property name="margin" >
+       <number>9</number>
       </property>
-      <property name="topMargin" >
-       <number>3</number>
-      </property>
-      <property name="rightMargin" >
-       <number>3</number>
-      </property>
-      <property name="bottomMargin" >
-       <number>3</number>
-      </property>
-      <property name="horizontalSpacing" >
-       <number>3</number>
-      </property>
-      <property name="verticalSpacing" >
-       <number>3</number>
+      <property name="spacing" >
+       <number>6</number>
       </property>
       <item row="0" column="0" >
        <layout class="QVBoxLayout" >
+        <property name="margin" >
+         <number>0</number>
+        </property>
         <property name="spacing" >
          <number>3</number>
         </property>
-        <property name="leftMargin" >
-         <number>0</number>
-        </property>
-        <property name="topMargin" >
-         <number>0</number>
-        </property>
-        <property name="rightMargin" >
-         <number>0</number>
-        </property>
-        <property name="bottomMargin" >
-         <number>0</number>
-        </property>
         <item>
          <layout class="QGridLayout" >
-          <property name="leftMargin" >
+          <property name="margin" >
            <number>0</number>
           </property>
-          <property name="topMargin" >
-           <number>0</number>
-          </property>
-          <property name="rightMargin" >
-           <number>0</number>
-          </property>
-          <property name="bottomMargin" >
-           <number>0</number>
-          </property>
-          <property name="horizontalSpacing" >
-           <number>0</number>
-          </property>
-          <property name="verticalSpacing" >
-           <number>0</number>
+          <property name="spacing" >
+           <number>6</number>
           </property>
           <item row="1" column="1" >
            <widget class="QDoubleSpinBox" name="sbFallowRatio" >
@@ -601,7 +524,9 @@ p, li { white-space: pre-wrap; }
           <item row="0" column="0" colspan="2" >
            <widget class="QLabel" name="labelFallow1" >
             <property name="sizePolicy" >
-             <sizepolicy vsizetype="Preferred" hsizetype="Minimum" >
+             <sizepolicy>
+              <hsizetype>0</hsizetype>
+              <vsizetype>0</vsizetype>
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -638,7 +563,9 @@ p, li { white-space: pre-wrap; }
         <item>
          <widget class="QLabel" name="labelFallow5" >
           <property name="sizePolicy" >
-           <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
+           <sizepolicy>
+            <hsizetype>0</hsizetype>
+            <vsizetype>0</vsizetype>
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -661,40 +588,19 @@ p, li { white-space: pre-wrap; }
       </item>
       <item row="0" column="2" >
        <layout class="QGridLayout" >
-        <property name="leftMargin" >
+        <property name="margin" >
          <number>0</number>
         </property>
-        <property name="topMargin" >
-         <number>0</number>
-        </property>
-        <property name="rightMargin" >
-         <number>0</number>
-        </property>
-        <property name="bottomMargin" >
-         <number>0</number>
-        </property>
-        <property name="horizontalSpacing" >
-         <number>3</number>
-        </property>
-        <property name="verticalSpacing" >
-         <number>3</number>
+        <property name="spacing" >
+         <number>6</number>
         </property>
         <item row="0" column="0" colspan="2" >
          <layout class="QVBoxLayout" >
+          <property name="margin" >
+           <number>0</number>
+          </property>
           <property name="spacing" >
            <number>6</number>
-          </property>
-          <property name="leftMargin" >
-           <number>0</number>
-          </property>
-          <property name="topMargin" >
-           <number>0</number>
-          </property>
-          <property name="rightMargin" >
-           <number>0</number>
-          </property>
-          <property name="bottomMargin" >
-           <number>0</number>
           </property>
           <item>
            <widget class="QLabel" name="labelFallow2" >
@@ -709,7 +615,9 @@ p, li { white-space: pre-wrap; }
           <item>
            <widget class="QSpinBox" name="sbFallowTDN" >
             <property name="sizePolicy" >
-             <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+             <sizepolicy>
+              <hsizetype>0</hsizetype>
+              <vsizetype>0</vsizetype>
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -729,11 +637,11 @@ p, li { white-space: pre-wrap; }
             <property name="suffix" >
              <string> Kg</string>
             </property>
-            <property name="minimum" >
-             <number>1</number>
-            </property>
             <property name="maximum" >
              <number>5000</number>
+            </property>
+            <property name="minimum" >
+             <number>1</number>
             </property>
             <property name="singleStep" >
              <number>10</number>
@@ -748,7 +656,9 @@ p, li { white-space: pre-wrap; }
         <item row="1" column="1" >
          <widget class="QComboBox" name="comboBoxAreaUnits" >
           <property name="sizePolicy" >
-           <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
+           <sizepolicy>
+            <hsizetype>0</hsizetype>
+            <vsizetype>0</vsizetype>
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -765,7 +675,9 @@ p, li { white-space: pre-wrap; }
         <item row="1" column="0" >
          <widget class="QLabel" name="labelFallow6" >
           <property name="sizePolicy" >
-           <sizepolicy vsizetype="Preferred" hsizetype="Maximum" >
+           <sizepolicy>
+            <hsizetype>0</hsizetype>
+            <vsizetype>0</vsizetype>
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -821,25 +733,18 @@ p, li { white-space: pre-wrap; }
    </item>
    <item row="3" column="0" colspan="3" >
     <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
      <property name="spacing" >
       <number>6</number>
-     </property>
-     <property name="leftMargin" >
-      <number>0</number>
-     </property>
-     <property name="topMargin" >
-      <number>0</number>
-     </property>
-     <property name="rightMargin" >
-      <number>0</number>
-     </property>
-     <property name="bottomMargin" >
-      <number>0</number>
      </property>
      <item>
       <widget class="QLabel" name="label_2" >
        <property name="sizePolicy" >
-        <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
+        <sizepolicy>
+         <hsizetype>0</hsizetype>
+         <vsizetype>0</vsizetype>
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -876,7 +781,9 @@ p, li { white-space: pre-wrap; }
    <item row="2" column="0" >
     <widget class="QLabel" name="label_4" >
      <property name="sizePolicy" >
-      <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
+      <sizepolicy>
+       <hsizetype>0</hsizetype>
+       <vsizetype>0</vsizetype>
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -889,7 +796,9 @@ p, li { white-space: pre-wrap; }
    <item row="2" column="1" colspan="2" >
     <widget class="QLineEdit" name="leDescription" >
      <property name="sizePolicy" >
-      <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+      <sizepolicy>
+       <hsizetype>0</hsizetype>
+       <vsizetype>0</vsizetype>
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
