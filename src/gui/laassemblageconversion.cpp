@@ -123,21 +123,41 @@ void LaAssemblageConversion::on_pbnInsert_clicked()
     qDebug() << "myName = " << myName;
 
     QTableWidgetItem *mypUsableMeatItem= new QTableWidgetItem(QString::number(myUsableMeat));
-    tblAnimals->setItem(myRowCount, 1, mypUsableMeatItem);
+    tblAnimals->setItem(myRowCount, 2, mypUsableMeatItem);
 
     QTableWidgetItem *mypCalsPerKgItem= new QTableWidgetItem(QString::number(myCalsPerKg));
-    tblAnimals->setItem(myRowCount, 2, mypCalsPerKgItem);
-    QTableWidgetItem *mypNumber= new QTableWidgetItem(QString::number(myNumber));
+    tblAnimals->setItem(myRowCount, 3, mypCalsPerKgItem);
 
-    tblAnimals->setItem(myRowCount, 3, mypNumber);
+    QTableWidgetItem *mypNumber= new QTableWidgetItem(QString::number(myNumber));
+    tblAnimals->setItem(myRowCount, 1, mypNumber);
     //tblAnimals->insertRow(myRowCount);
   }
   else if (rbAuto->isChecked() == true)
   {
     // add item to table from pre-defined animals
     qDebug() << "auto is checked";
+    LaAnimal myAnimal = LaUtils::getAnimal( cboAnimal->itemData( cboAnimal->currentIndex(), Qt::UserRole).toString());
 
-    tblAnimals->insertRow(myRowCount);
+    QString myName = myAnimal.name();
+    int myUsableMeatPercent = myAnimal.usableMeat();
+    int myKillWeight = myAnimal.killWeight();
+    int myCalsPerKg = myAnimal.meatFoodValue();
+    float myUsableMeat = (0.01*myUsableMeatPercent) * myKillWeight;
+    float myNumber = dsbNumber->value();
+
+    QTableWidgetItem *mypNameItem = new QTableWidgetItem(myName);
+    tblAnimals->setItem(myRowCount, 0, mypNameItem);
+    qDebug() << "myName = " << myName;
+
+    QTableWidgetItem *mypUsableMeatItem= new QTableWidgetItem(QString::number(myUsableMeat));
+    tblAnimals->setItem(myRowCount, 2, mypUsableMeatItem);
+
+    QTableWidgetItem *mypCalsPerKgItem= new QTableWidgetItem(QString::number(myCalsPerKg));
+    tblAnimals->setItem(myRowCount, 3, mypCalsPerKgItem);
+
+
+    QTableWidgetItem *mypNumber= new QTableWidgetItem(QString::number(myNumber));
+    tblAnimals->setItem(myRowCount, 1, mypNumber);
   }
   else
     {
