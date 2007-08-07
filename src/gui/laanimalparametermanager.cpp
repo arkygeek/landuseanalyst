@@ -24,7 +24,7 @@
 #include "lafoodsource.h"
 #include "lamainform.h"
 #include "lagrass.h"
-#include "lamore.h"
+#include "laassemblageconversion.h"
 #include <QSettings>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
