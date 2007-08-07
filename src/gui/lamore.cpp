@@ -52,8 +52,8 @@
   setupUi(this);
   readSettings();
 
-  connect(pbnInsert, SIGNAL(clicked()),
-      this, SLOT(on_pbnInsert_clicked()));
+//  connect(pbnInsert, SIGNAL(clicked()),
+ //     this, SLOT(on_pbnInsert_clicked()));
 
   tblAnimals->setColumnCount(4);
   //populate the animals combo
@@ -105,7 +105,7 @@ void LaMore::on_pbnInsert_clicked()
   // add an animal to the table
   qDebug() << "pbnInsert";
   int myRowCount = tblAnimals->rowCount();
-  if (myRowCount==0) {tblAnimals->insertRow(myRowCount);}
+  tblAnimals->insertRow(myRowCount);
 
   qDebug() << "rowCount: " << myRowCount;
   if (rbManual->isChecked() == true)

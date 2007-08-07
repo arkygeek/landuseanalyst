@@ -46,7 +46,7 @@
   lblAnimalPix->setScaledContents(true);
   connect(tblAnimals, SIGNAL(cellClicked( int,int)),
       this, SLOT(cellClicked( int,int)));
-  connect(pbnAnimalPic, SIGNAL(clicked()), this, SLOT(on_pbnAnimalPic_clicked()));
+  //connect(pbnAnimalPic, SIGNAL(clicked()), this, SLOT(on_pbnAnimalPic_clicked()));
 
   refreshAnimalTable();
   //disable these buttons unless experimental is allowed

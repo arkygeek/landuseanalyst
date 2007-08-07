@@ -72,8 +72,8 @@
       this, SLOT(cellClicked( int,int)));
   connect(cboAnimal, SIGNAL(currentIndexChanged( int)),
       this, SLOT(on_cboAnimal_changed( int)));
-  connect(pbnMore, SIGNAL(clicked()),
-      this, SLOT(on_pbnMore_clicked()));
+  //connect(pbnMore, SIGNAL(clicked()),
+      //this, SLOT(on_pbnMore_clicked()));
   refreshAnimalParameterTable();
   //disable these buttons unless experimental is allowed
   pbnImport->setVisible(false);

@@ -42,7 +42,7 @@ class LaMore : public QDialog, private Ui::LaMoreBase
     ~LaMore();
 
   public slots:
-    void on_pbnInsert_clicked();
+    virtual void on_pbnInsert_clicked();
 
   private slots:
       void resizeEvent(QResizeEvent*);

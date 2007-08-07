@@ -46,8 +46,8 @@ class LaAnimalManager : public QDialog, private Ui::LaAnimalManagerBase
     void on_pushButtonLoad_clicked();
     /** @TODO what is this for? not yet implemented
       */
-    void on_pushButtonSave_clicked();
-
+      virtual void on_pushButtonSave_clicked();
+      virtual void on_pbnAnimalPic_clicked();
   private slots:
       void cellClicked(int theRow, int theColumn);
       void showAnimal();
@@ -55,7 +55,7 @@ class LaAnimalManager : public QDialog, private Ui::LaAnimalManagerBase
       void on_toolNew_clicked();
       void on_toolDelete_clicked();
       void on_pbnApply_clicked();
-      void on_pbnAnimalPic_clicked();
+
       void resizeEvent(QResizeEvent*);
 
   private:
