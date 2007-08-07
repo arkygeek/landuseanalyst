@@ -110,24 +110,24 @@ void LaMore::on_pbnInsert_clicked()
   {
     qDebug() << "manual is checked";
     // add item to table from manual inputs
-    //tblAnimals->insertRow(myRowCount);
+    tblAnimals->insertRow(myRowCount);
     QString myName = leAnimal->text();
     int myUsableMeat = sbUsableMeat->value();
     int myCalsPerKg = sbCalsPerKg->value();
     float myNumber = dsbNumber->value();
 
     QTableWidgetItem *mypNameItem = new QTableWidgetItem(myName);
-    tblAnimals->setItem(0, 1, mypNameItem);
+    tblAnimals->setItem(myRowCount, 1, mypNameItem);
     qDebug() << "mypNameItem = " << mypNameItem;
 
     QTableWidgetItem *mypUsableMeatItem= new QTableWidgetItem(QString::number(myUsableMeat));
-    tblAnimals->setItem(0, 2, mypUsableMeatItem);
+    tblAnimals->setItem(myRowCount, 2, mypUsableMeatItem);
 
     QTableWidgetItem *mypCalsPerKgItem= new QTableWidgetItem(QString::number(myCalsPerKg));
-    tblAnimals->setItem(0, 3, mypCalsPerKgItem);
+    tblAnimals->setItem(myRowCount, 3, mypCalsPerKgItem);
     QTableWidgetItem *mypNumber= new QTableWidgetItem(QString::number(myNumber));
 
-    tblAnimals->setItem(0, 4, mypNumber);
+    tblAnimals->setItem(myRowCount, 4, mypNumber);
 
   }
   else if (rbAuto->isChecked() == true)
