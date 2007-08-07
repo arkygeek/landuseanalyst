@@ -17,14 +17,14 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef LAMORE_H
-#define LAMORE_H
+#ifndef LAASSEMBLAGECONVERSION_H
+#define LAASSEMBLAGECONVERSION_H
 
 //QT Includes
 #include <QDialog>
 
 //Local Includes
-#include <ui_lamorebase.h>
+#include <ui_laassemblageconversionbase.h>
 #include <laanimalparameter.h>
 #include <lautils.h>
 #include <QSpinBox>
@@ -34,12 +34,12 @@ class QTreeWidgetItem;
   This is the main gui class
   @author Tim Sutton, Jason Jorgenson
 */
-class LaMore : public QDialog, private Ui::LaMoreBase
+class LaAssemblageConversion : public QDialog, private Ui::LaAssemblageConversionBase
 {
   Q_OBJECT
   public:
-    LaMore(QWidget* parent = 0, Qt::WFlags fl = 0 );
-    ~LaMore();
+    LaAssemblageConversion(QWidget* parent = 0, Qt::WFlags fl = 0 );
+    ~LaAssemblageConversion();
 
   public slots:
     virtual void on_pbnInsert_clicked();
@@ -62,4 +62,4 @@ class LaMore : public QDialog, private Ui::LaMoreBase
       //int mRowCount;
 };
 
-#endif //LAMORE_H
+#endif //LAASSEMBLAGECONVERSION_H

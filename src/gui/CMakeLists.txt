@@ -14,7 +14,7 @@ set(landuseanalyst_SRCS
     lacropparametermanager.cpp
     laanimalmanager.cpp
     laanimalparametermanager.cpp
-    lamore.cpp
+    laassemblageconversion.cpp
    )
 SET(landuseanalyst_UIS
     ../ui/lamainformbase.ui
@@ -22,7 +22,7 @@ SET(landuseanalyst_UIS
     ../ui/lacropparametermanagerbase.ui
     ../ui/laanimalmanagerbase.ui
     ../ui/laanimalparametermanagerbase.ui
-    ../ui/lamorebase.ui
+    ../ui/laassemblageconversionbase.ui
     )
 SET(landuseanalyst_MOC_HDRS
     lamainform.h
@@ -30,7 +30,7 @@ SET(landuseanalyst_MOC_HDRS
     lacropparametermanager.h
     laanimalmanager.h
     laanimalparametermanager.h
-    lamore.h
+    laassemblageconversion.h
     )
 SET(landuseanalyst_RCCS
     ../resources/resources.qrc

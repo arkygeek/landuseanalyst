@@ -450,8 +450,8 @@ void LaAnimalParameterManager::on_cboAnimal_changed(int theIndex)
 
 void LaAnimalParameterManager::on_pbnMore_clicked()
 {
-  LaMore myMore;
-  myMore.exec();
+  LaAssemblageConversion myAssemblageConversion;
+  myAssemblageConversion.exec();
 }
 
 void LaAnimalParameterManager::on_pbnApply_clicked()

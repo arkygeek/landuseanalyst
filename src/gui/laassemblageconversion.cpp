@@ -18,7 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "lamore.h"
+#include "laassemblageconversion.h"
 #include "la.h"
 #include "lautils.h"
 #include "laanimal.h"
@@ -45,7 +45,7 @@
 #include <QtDebug>
 #include <QPair>
 
-  LaMore::LaMore(QWidget* parent, Qt::WFlags fl)
+  LaAssemblageConversion::LaAssemblageConversion(QWidget* parent, Qt::WFlags fl)
 : QDialog(parent,fl)
 {
   //required by Qt4 to initialise the ui
@@ -72,12 +72,12 @@
   }
 }
 
-LaMore::~LaMore()
+LaAssemblageConversion::~LaAssemblageConversion()
 {
   writeSettings();
 }
 
-void LaMore::readSettings()
+void LaAssemblageConversion::readSettings()
 {
   QSettings mySettings;
   QPoint pos = mySettings.value("mainwindow/pos", QPoint(200, 200)).toPoint();
@@ -86,21 +86,21 @@ void LaMore::readSettings()
   move(pos);
 }
 
-void LaMore::writeSettings()
+void LaAssemblageConversion::writeSettings()
 {
   QSettings mySettings;
   mySettings.setValue("mainwindow/pos", pos());
   mySettings.setValue("mainwindow/size", size());
 }
 
-void LaMore::resizeEvent ( QResizeEvent * theEvent )
+void LaAssemblageConversion::resizeEvent ( QResizeEvent * theEvent )
 {
   //tblAnimals->setColumnWidth(0,0);
   //tblAnimals->setColumnWidth(1,tblAnimals->width());
   tblAnimals->horizontalHeader()->setResizeMode(0,QHeaderView::Stretch);
 }
 
-void LaMore::on_pbnInsert_clicked()
+void LaAssemblageConversion::on_pbnInsert_clicked()
 {
   // add an animal to the table
   qDebug() << "pbnInsert";
@@ -136,8 +136,8 @@ void LaMore::on_pbnInsert_clicked()
   {
     // add item to table from pre-defined animals
     qDebug() << "auto is checked";
-    myRowCount++;
-    //tblAnimals->insertRow(myRowCount);
+
+    tblAnimals->insertRow(myRowCount);
   }
   else
     {
@@ -147,12 +147,12 @@ void LaMore::on_pbnInsert_clicked()
   return;
 }
 
-void LaMore::refreshTable()
+void LaAssemblageConversion::refreshTable()
 {
   //
 }
 
-bool LaMore::setComboToDefault(QComboBox * thepCombo, QString theDefault)
+bool LaAssemblageConversion::setComboToDefault(QComboBox * thepCombo, QString theDefault)
 {
   if (!theDefault.isEmpty())
   {
