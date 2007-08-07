@@ -55,7 +55,7 @@
 //  connect(pbnInsert, SIGNAL(clicked()),
  //     this, SLOT(on_pbnInsert_clicked()));
 
-  tblAnimals->setColumnCount(4);
+  tblAnimals->setColumnCount(5);
   //populate the animals combo
   LaUtils::AnimalMap myAnimalsMap;
   myAnimalsMap = LaUtils::getAvailableAnimals();
@@ -95,9 +95,9 @@ void LaMore::writeSettings()
 
 void LaMore::resizeEvent ( QResizeEvent * theEvent )
 {
-  tblAnimals->setColumnWidth(0,0);
-  tblAnimals->setColumnWidth(1,tblAnimals->width());
-  tblAnimals->horizontalHeader()->setResizeMode(1,QHeaderView::Stretch);
+  //tblAnimals->setColumnWidth(0,0);
+  //tblAnimals->setColumnWidth(1,tblAnimals->width());
+  tblAnimals->horizontalHeader()->setResizeMode(0,QHeaderView::Stretch);
 }
 
 void LaMore::on_pbnInsert_clicked()
@@ -119,17 +119,17 @@ void LaMore::on_pbnInsert_clicked()
     float myNumber = dsbNumber->value();
 
     QTableWidgetItem *mypNameItem = new QTableWidgetItem(myName);
-    tblAnimals->setItem(myRowCount, 1, mypNameItem);
+    tblAnimals->setItem(myRowCount, 0, mypNameItem);
     qDebug() << "myName = " << myName;
 
     QTableWidgetItem *mypUsableMeatItem= new QTableWidgetItem(QString::number(myUsableMeat));
-    tblAnimals->setItem(myRowCount, 2, mypUsableMeatItem);
+    tblAnimals->setItem(myRowCount, 1, mypUsableMeatItem);
 
     QTableWidgetItem *mypCalsPerKgItem= new QTableWidgetItem(QString::number(myCalsPerKg));
-    tblAnimals->setItem(myRowCount, 3, mypCalsPerKgItem);
+    tblAnimals->setItem(myRowCount, 2, mypCalsPerKgItem);
     QTableWidgetItem *mypNumber= new QTableWidgetItem(QString::number(myNumber));
 
-    tblAnimals->setItem(myRowCount, 4, mypNumber);
+    tblAnimals->setItem(myRowCount, 3, mypNumber);
     //tblAnimals->insertRow(myRowCount);
   }
   else if (rbAuto->isChecked() == true)
