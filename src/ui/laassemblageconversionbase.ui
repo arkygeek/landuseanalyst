@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>LaMoreBase</class>
- <widget class="QDialog" name="LaMoreBase" >
+ <class>LaAssemblageConversionBase</class>
+ <widget class="QDialog" name="LaAssemblageConversionBase" >
   <property name="geometry" >
    <rect>
     <x>0</x>
@@ -10,7 +10,7 @@
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>Percent Diet Conversion</string>
+   <string>Assemblage Conversion Utility</string>
   </property>
   <property name="windowIcon" >
    <iconset resource="../resources/resources.qrc" >:/la_icon_small.png</iconset>
@@ -250,7 +250,7 @@ p, li { white-space: pre-wrap; }
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>LaMoreBase</receiver>
+   <receiver>LaAssemblageConversionBase</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel" >
@@ -266,7 +266,7 @@ p, li { white-space: pre-wrap; }
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>LaMoreBase</receiver>
+   <receiver>LaAssemblageConversionBase</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel" >
