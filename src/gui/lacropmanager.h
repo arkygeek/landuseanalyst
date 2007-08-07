@@ -35,12 +35,13 @@ class LaCropManager : public QDialog, private Ui::LaCropManagerBase
 {
   Q_OBJECT
   public:
-    LaCropManager(QWidget* parent = 0, Qt::WFlags fl = 0 );
-    ~LaCropManager();
+      LaCropManager(QWidget* parent = 0, Qt::WFlags fl = 0 );
+      ~LaCropManager();
 
   public slots:
-    void on_pushButtonLoad_clicked();
-    void on_pushButtonSave_clicked();
+      void on_pushButtonLoad_clicked();
+      void on_pushButtonSave_clicked();
+      void on_pbnCropPic_clicked();
 
   private slots:
       void cellClicked(int theRow, int theColumn);
@@ -50,8 +51,6 @@ class LaCropManager : public QDialog, private Ui::LaCropManagerBase
       void on_toolDelete_clicked();
       void on_pbnApply_clicked();
       void resizeEvent(QResizeEvent*);
-      void on_pbnCropPic_clicked();
-
 
   private:
       void refreshCropTable(QString theGuid=0);

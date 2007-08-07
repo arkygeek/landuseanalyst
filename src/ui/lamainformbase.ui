@@ -1983,7 +1983,7 @@ p, li { white-space: pre-wrap; }
          <item>
           <widget class="QComboBox" name="comboBoxAreaUnits" >
            <property name="sizePolicy" >
-            <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+            <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>

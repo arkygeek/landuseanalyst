@@ -45,8 +45,6 @@
   lblCropPix->setScaledContents(true);
   connect(tblCrops, SIGNAL(cellClicked( int,int)),
       this, SLOT(cellClicked( int,int)));
-  connect(pbnCropPic, SIGNAL(clicked()),
-      this, SLOT(on_pbnCropPic_clicked()));
   comboBoxAreaUnits->addItem("Dunum");
   comboBoxAreaUnits->addItem("Hectare");
   refreshCropTable();
