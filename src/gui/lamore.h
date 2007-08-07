@@ -59,7 +59,7 @@ class LaMore : public QDialog, private Ui::LaMoreBase
       LaUtils::CropMap mCropMap;
       LaAnimalParameter mAnimalParameter;
 
-      int mRowCount;
+      //int mRowCount;
 };
 
 #endif //LAMORE_H

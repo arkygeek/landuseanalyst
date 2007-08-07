@@ -69,7 +69,7 @@
     myIcon.addFile(":/localdata.png");
     cboAnimal->addItem(myName,myGuid);
   }
-  mRowCount = 0;
+  //mRowCount = 0;
 }
 
 LaMore::~LaMore()
@@ -103,23 +103,45 @@ void LaMore::resizeEvent ( QResizeEvent * theEvent )
 void LaMore::on_pbnInsert_clicked()
 {
   // add an animal to the table
-    QTableWidgetItem *mypNameItem = new QTableWidgetItem(QString());
-  if (rbManual->isChecked())
+  qDebug() << "pbnInsert";
+  int myRowCount = tblAnimals->rowCount();
+
+  if (rbManual->isChecked() == true)
   {
+    qDebug() << "manual is checked";
     // add item to table from manual inputs
-    mRowCount++;
-    tblAnimals->insertRow(mRowCount);
-    int myCurrentRow = static_cast<int> (mRowCount);
-    mypNameItem->setText(leAnimal->text());
-    tblAnimals->setItem(myCurrentRow, 0, mypNameItem);
+    //tblAnimals->insertRow(myRowCount);
+    QString myName = leAnimal->text();
+    int myUsableMeat = sbUsableMeat->value();
+    int myCalsPerKg = sbCalsPerKg->value();
+    float myNumber = dsbNumber->value();
+
+    QTableWidgetItem *mypNameItem = new QTableWidgetItem(myName);
+    tblAnimals->setItem(0, 1, mypNameItem);
+    qDebug() << "mypNameItem = " << mypNameItem;
+
+    QTableWidgetItem *mypUsableMeatItem= new QTableWidgetItem(QString::number(myUsableMeat));
+    tblAnimals->setItem(0, 2, mypUsableMeatItem);
+
+    QTableWidgetItem *mypCalsPerKgItem= new QTableWidgetItem(QString::number(myCalsPerKg));
+    tblAnimals->setItem(0, 3, mypCalsPerKgItem);
+    QTableWidgetItem *mypNumber= new QTableWidgetItem(QString::number(myNumber));
+
+    tblAnimals->setItem(0, 4, mypNumber);
+
   }
-  else if (rbAuto->isChecked())
+  else if (rbAuto->isChecked() == true)
   {
     // add item to table from pre-defined animals
-    mRowCount++;
-    tblAnimals->insertRow(mRowCount);
+    qDebug() << "auto is checked";
+    myRowCount++;
+    tblAnimals->insertRow(myRowCount);
   }
-  else return;
+  else
+    {
+      qDebug() << "nothing selected, just returning";
+      return;
+    }
   return;
 }
 
