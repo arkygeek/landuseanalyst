@@ -55,6 +55,7 @@
   connect(pbnInsert, SIGNAL(clicked()),
       this, SLOT(on_pbnInsert_clicked()));
 
+  tblAnimals->setColumnCount(4);
   //populate the animals combo
   LaUtils::AnimalMap myAnimalsMap;
   myAnimalsMap = LaUtils::getAvailableAnimals();
@@ -69,7 +70,6 @@
     myIcon.addFile(":/localdata.png");
     cboAnimal->addItem(myName,myGuid);
   }
-  //mRowCount = 0;
 }
 
 LaMore::~LaMore()
@@ -105,12 +105,14 @@ void LaMore::on_pbnInsert_clicked()
   // add an animal to the table
   qDebug() << "pbnInsert";
   int myRowCount = tblAnimals->rowCount();
+  if (myRowCount==0) {tblAnimals->insertRow(myRowCount);}
 
+  qDebug() << "rowCount: " << myRowCount;
   if (rbManual->isChecked() == true)
   {
     qDebug() << "manual is checked";
     // add item to table from manual inputs
-    tblAnimals->insertRow(myRowCount);
+
     QString myName = leAnimal->text();
     int myUsableMeat = sbUsableMeat->value();
     int myCalsPerKg = sbCalsPerKg->value();
@@ -118,7 +120,7 @@ void LaMore::on_pbnInsert_clicked()
 
     QTableWidgetItem *mypNameItem = new QTableWidgetItem(myName);
     tblAnimals->setItem(myRowCount, 1, mypNameItem);
-    qDebug() << "mypNameItem = " << mypNameItem;
+    qDebug() << "myName = " << myName;
 
     QTableWidgetItem *mypUsableMeatItem= new QTableWidgetItem(QString::number(myUsableMeat));
     tblAnimals->setItem(myRowCount, 2, mypUsableMeatItem);
@@ -128,14 +130,14 @@ void LaMore::on_pbnInsert_clicked()
     QTableWidgetItem *mypNumber= new QTableWidgetItem(QString::number(myNumber));
 
     tblAnimals->setItem(myRowCount, 4, mypNumber);
-
+    //tblAnimals->insertRow(myRowCount);
   }
   else if (rbAuto->isChecked() == true)
   {
     // add item to table from pre-defined animals
     qDebug() << "auto is checked";
     myRowCount++;
-    tblAnimals->insertRow(myRowCount);
+    //tblAnimals->insertRow(myRowCount);
   }
   else
     {
