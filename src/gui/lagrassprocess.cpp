@@ -39,8 +39,6 @@
   pbarOverall->setValue(0);
   lblCurrentArea->setText(0);
   lblAreaTarget->setText(0);
-  mCurrentAreaTarget = 0;
-  mSearches = 0;
 }
 
 LaGrassProcess::~LaGrassProcess()
@@ -66,18 +64,26 @@ void LaGrassProcess::writeSettings()
 
 void LaGrassProcess::on_pbnStart_clicked()
 {
-  // begin grass analysis
-  // get area target (mCurrentAreaTarget)
-  // get number of searches to be run (mSearches)
 
-  // initialise the pro
+
+
+
+  // go do the searches!!!
+}
+
+void LaGrassProcess::setPbarTargetRange(int theTarget)
+{
   pbarTarget->reset();
-  pbarTarget->setRange(0,mCurrentAreaTarget);
+  pbarTarget->setRange(0,theTarget);
   pbarTarget->setValue(0);
+  lblAreaTarget->setText("Target:\n" + QString::number(theTarget));
+}
+
+void LaGrassProcess::setPbarOverallRange(int theOverall)
+{
   pbarOverall->reset();
-  pbarOverall->setRange(0,mSearches);
+  pbarOverall->setRange(0,theOverall);
   pbarOverall->setValue(0);
-  lblAreaTarget->setText("Target:\n" + QString::number(mCurrentAreaTarget));
 }
 
 void LaGrassProcess::on_pbnAbort_clicked()
@@ -85,12 +91,13 @@ void LaGrassProcess::on_pbnAbort_clicked()
   // abort the grass analysis
 }
 
-void LaGrassProcess::refreshCurrentProgress(int theArea)
+void LaGrassProcess::updateCurrentProgress(int theArea)
 {
   pbarTarget->setValue(theArea);
+  lblCurrentArea->setText(QString::number(theArea));
 }
 
-void LaGrassProcess::refreshOverallProgress(int theStep)
+void LaGrassProcess::updateOverallProgress(int theStep)
 {
   pbarOverall->setValue(theStep);
 }
