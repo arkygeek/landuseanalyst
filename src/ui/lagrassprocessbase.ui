@@ -1,0 +1,300 @@
+<ui version="4.0" >
+ <class>LaGrassProcessBase</class>
+ <widget class="QDialog" name="LaGrassProcessBase" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>400</height>
+   </rect>
+  </property>
+  <property name="minimumSize" >
+   <size>
+    <width>0</width>
+    <height>400</height>
+   </size>
+  </property>
+  <property name="windowTitle" >
+   <string>Grass Processing</string>
+  </property>
+  <property name="windowIcon" >
+   <iconset resource="../resources/resources.qrc" >:/la_icon_small.png</iconset>
+  </property>
+  <layout class="QGridLayout" >
+   <item row="0" column="0" colspan="2" >
+    <widget class="QLabel" name="lblGraphic" >
+     <property name="minimumSize" >
+      <size>
+       <width>100</width>
+       <height>100</height>
+      </size>
+     </property>
+     <property name="maximumSize" >
+      <size>
+       <width>100</width>
+       <height>100</height>
+      </size>
+     </property>
+     <property name="text" >
+      <string>No Graphic</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item rowspan="4" row="0" column="2" >
+    <widget class="QFrame" name="frame_2" >
+     <property name="frameShape" >
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow" >
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QGridLayout" >
+      <item row="0" column="0" >
+       <widget class="QLabel" name="lblPreview" >
+        <property name="text" >
+         <string>No Preview Currently Available</string>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item rowspan="2" row="1" column="0" >
+    <widget class="QProgressBar" name="pBarOverall" >
+     <property name="minimumSize" >
+      <size>
+       <width>45</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="value" >
+      <number>24</number>
+     </property>
+     <property name="textVisible" >
+      <bool>false</bool>
+     </property>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="format" >
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" >
+    <widget class="QLabel" name="label_5" >
+     <property name="font" >
+      <font>
+       <pointsize>7</pointsize>
+      </font>
+     </property>
+     <property name="text" >
+      <string>123456</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1" >
+    <widget class="QProgressBar" name="pBarTarget" >
+     <property name="minimumSize" >
+      <size>
+       <width>45</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="value" >
+      <number>24</number>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="textVisible" >
+      <bool>false</bool>
+     </property>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="format" >
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" >
+    <widget class="QLabel" name="label_6" >
+     <property name="font" >
+      <font>
+       <pointsize>7</pointsize>
+      </font>
+     </property>
+     <property name="text" >
+      <string>Overall
+Progress</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1" >
+    <widget class="QLabel" name="label_4" >
+     <property name="font" >
+      <font>
+       <pointsize>7</pointsize>
+      </font>
+     </property>
+     <property name="text" >
+      <string>Target:
+123456</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0" colspan="3" >
+    <widget class="QFrame" name="frame" >
+     <property name="frameShape" >
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow" >
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QGridLayout" >
+      <item row="0" column="0" colspan="2" >
+       <widget class="QLabel" name="label_7" >
+        <property name="text" >
+         <string>GRASS messages</string>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" >
+       <widget class="QLabel" name="label_3" >
+        <property name="minimumSize" >
+         <size>
+          <width>42</width>
+          <height>42</height>
+         </size>
+        </property>
+        <property name="maximumSize" >
+         <size>
+          <width>42</width>
+          <height>42</height>
+         </size>
+        </property>
+        <property name="text" >
+         <string/>
+        </property>
+        <property name="pixmap" >
+         <pixmap resource="../resources/resources.qrc" >:/icona_grass.gif</pixmap>
+        </property>
+        <property name="scaledContents" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item rowspan="3" row="1" column="1" >
+       <widget class="QTextBrowser" name="tbGrass" >
+        <property name="sizePolicy" >
+         <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="whatsThis" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">To see the Calorie, Production, and Area targets for a crop simply select it from the list on the left, and the results will be displayed in the area to the right.&lt;/p>
+&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">This information is meant to give you an opportunity to make sure that the targets look feasible before running the model (which can be very time consuming).&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" >
+       <widget class="QPushButton" name="pbnStart" >
+        <property name="sizePolicy" >
+         <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize" >
+         <size>
+          <width>42</width>
+          <height>42</height>
+         </size>
+        </property>
+        <property name="maximumSize" >
+         <size>
+          <width>42</width>
+          <height>42</height>
+         </size>
+        </property>
+        <property name="text" >
+         <string>Start</string>
+        </property>
+       </widget>
+      </item>
+      <item rowspan="2" row="3" column="0" >
+       <widget class="QPushButton" name="pbnAbort" >
+        <property name="sizePolicy" >
+         <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize" >
+         <size>
+          <width>42</width>
+          <height>42</height>
+         </size>
+        </property>
+        <property name="text" >
+         <string>Abort</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1" >
+       <widget class="QProgressBar" name="pbarThinking" >
+        <property name="maximumSize" >
+         <size>
+          <width>16777215</width>
+          <height>8</height>
+         </size>
+        </property>
+        <property name="value" >
+         <number>0</number>
+        </property>
+        <property name="textVisible" >
+         <bool>false</bool>
+        </property>
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="format" >
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../resources/resources.qrc" />
+ </resources>
+ <connections/>
+</ui>

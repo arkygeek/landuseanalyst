@@ -17,57 +17,49 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef LAANIMALMANAGER_H
-#define LAANIMALMANAGER_H
 
-//QT Includes
-#include <QDialog>
-//Local Includes
-#include <ui_laanimalmanagerbase.h>
-#include <laanimal.h>
-#include <lautils.h>
 
-class QTreeWidgetItem;
+#ifndef LAGRASSPROCESSLIB_H
+#define LAGRASSPROCESSLIB_H
+
+#include <QString>
+#include <QMap>
+#include <QObject>
 /**
-  This is the main gui class
-  @author Tim Sutton, Jason Jorgenson
-*/
-class LaAnimalManager : public QDialog, private Ui::LaAnimalManagerBase
+  * A class for grass analysis
+  * @author Jason Jorgenson, Tim Sutton
+  */
+
+class LaGrassProcessLib : public QObject
 {
   Q_OBJECT
   public:
-    /** @TODO document this properly
-      */
-    LaAnimalManager(QWidget* parent = 0, Qt::WFlags fl = 0 );
-    ~LaAnimalManager();
+    /** Constructor . */
+    LaGrassProcessLib();
+    /** Desctructor . */
+    ~LaGrassProcessLib();
 
-  public slots:
-    /** when called loads animal profile from an XML file
-      */
-    void on_pushButtonLoad_clicked();
-    /** @TODO what is this for? not yet implemented
-      */
-      virtual void on_pushButtonSave_clicked();
-      virtual void on_pbnAnimalPic_clicked();
-  private slots:
-      void cellClicked(int theRow, int theColumn);
-      void showAnimal();
-      void on_toolCopy_clicked();
-      void on_toolNew_clicked();
-      void on_toolDelete_clicked();
-      void on_pbnApply_clicked();
+  ///////////////
+ // Accessors //
+///////////////
+    /** Return the Current Area */
+    int currentArea() const;
 
-      void resizeEvent(QResizeEvent*);
+  //////////////
+ // Mutators //
+//////////////
+    /** Set the Current Area
+     * @see currentArea()
+     */
+    void setCurrentArea(int theCurrentArea);
+
+  signals:
+    /** Send log info to any listeners.
+     * @param QString the message to be logged.
+     */
 
   private:
-      void refreshAnimalTable(QString theGuid=0);
-      void selectAnimal(QString theFileName);
-
-      LaUtils::AnimalMap mAnimalMap;
-      LaAnimal mAnimal;
-      void readSettings();
-      void writeSettings();
-      QString mImageFile;
+    int mCurrentArea;
 };
 
-#endif //LAANIMALFORMMAIN_H
+#endif //LAGRASSPROCESSLIB_H

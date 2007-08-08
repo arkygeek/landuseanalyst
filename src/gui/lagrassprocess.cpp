@@ -17,57 +17,51 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef LAANIMALMANAGER_H
-#define LAANIMALMANAGER_H
 
-//QT Includes
-#include <QDialog>
-//Local Includes
-#include <ui_laanimalmanagerbase.h>
-#include <laanimal.h>
-#include <lautils.h>
-
-class QTreeWidgetItem;
-/**
-  This is the main gui class
-  @author Tim Sutton, Jason Jorgenson
-*/
-class LaAnimalManager : public QDialog, private Ui::LaAnimalManagerBase
+#include "lagrassprocess.h"
+#include "lautils.h"
+#include <QString>
+#include <QMessageBox>
+#include <QLabel>
+#include <QPixmap>
+#include <QSettings>
+  LaGrassProcess::LaGrassProcess(QWidget* parent, Qt::WFlags fl)
+: QDialog(parent,fl)
 {
-  Q_OBJECT
-  public:
-    /** @TODO document this properly
-      */
-    LaAnimalManager(QWidget* parent = 0, Qt::WFlags fl = 0 );
-    ~LaAnimalManager();
+  //required by Qt4 to initialise the ui
+  setupUi(this);
+  readSettings();
+  lblGraphic->setScaledContents(true);
+  lblPreview->setScaledContents(true);
+}
 
-  public slots:
-    /** when called loads animal profile from an XML file
-      */
-    void on_pushButtonLoad_clicked();
-    /** @TODO what is this for? not yet implemented
-      */
-      virtual void on_pushButtonSave_clicked();
-      virtual void on_pbnAnimalPic_clicked();
-  private slots:
-      void cellClicked(int theRow, int theColumn);
-      void showAnimal();
-      void on_toolCopy_clicked();
-      void on_toolNew_clicked();
-      void on_toolDelete_clicked();
-      void on_pbnApply_clicked();
+LaGrassProcess::~LaGrassProcess()
+{
+  writeSettings();
+}
 
-      void resizeEvent(QResizeEvent*);
+void LaGrassProcess::readSettings()
+{
+  QSettings mySettings;
+  QPoint pos = mySettings.value("mainwindow/pos", QPoint(200, 200)).toPoint();
+  QSize size = mySettings.value("mainwindow/size", QSize(400, 400)).toSize();
+  resize(size);
+  move(pos);
+}
 
-  private:
-      void refreshAnimalTable(QString theGuid=0);
-      void selectAnimal(QString theFileName);
+void LaGrassProcess::writeSettings()
+{
+  QSettings mySettings;
+  mySettings.setValue("mainwindow/pos", pos());
+  mySettings.setValue("mainwindow/size", size());
+}
 
-      LaUtils::AnimalMap mAnimalMap;
-      LaAnimal mAnimal;
-      void readSettings();
-      void writeSettings();
-      QString mImageFile;
-};
+void LaGrassProcess::on_pbnStart_clicked()
+{
+  // begin grass analysis
+}
 
-#endif //LAANIMALFORMMAIN_H
+void LaGrassProcess::on_pbnAbort_clicked()
+{
+  // abort the grass analysis
+}

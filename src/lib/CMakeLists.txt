@@ -12,6 +12,7 @@ SET(LA_CORE_SRCS
   lautils.cpp
   lamodel.cpp
   lagrass.cpp
+  lagrassprocesslib.cpp
   )
 #headers that dont need to be MOCs but that may be distributed etc later
 SET(LA_CORE_OTHER_HDRS
@@ -29,6 +30,7 @@ SET(LA_CORE_OTHER_HDRS
 SET(LA_CORE_MOC_HDRS
   lamodel.h
   lagrass.h
+  lagrassprocesslib.h
   )
 
 set(QT_USE_CORE TRUE)

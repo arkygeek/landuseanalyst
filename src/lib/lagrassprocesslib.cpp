@@ -17,57 +17,52 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef LAANIMALMANAGER_H
-#define LAANIMALMANAGER_H
+#include <QString>
+#include <QDomDocument>
+#include <QDomElement>
+#include "lagrassprocesslib.h"
+#include "lautils.h"
 
-//QT Includes
-#include <QDialog>
-//Local Includes
-#include <ui_laanimalmanagerbase.h>
-#include <laanimal.h>
-#include <lautils.h>
 
-class QTreeWidgetItem;
-/**
-  This is the main gui class
-  @author Tim Sutton, Jason Jorgenson
-*/
-class LaAnimalManager : public QDialog, private Ui::LaAnimalManagerBase
+LaGrassProcessLib::LaGrassProcessLib() : QObject()
 {
-  Q_OBJECT
-  public:
-    /** @TODO document this properly
-      */
-    LaAnimalManager(QWidget* parent = 0, Qt::WFlags fl = 0 );
-    ~LaAnimalManager();
+  mCurrentArea = 0;
+}
+LaGrassProcessLib::~LaGrassProcessLib()
+{
 
-  public slots:
-    /** when called loads animal profile from an XML file
-      */
-    void on_pushButtonLoad_clicked();
-    /** @TODO what is this for? not yet implemented
-      */
-      virtual void on_pushButtonSave_clicked();
-      virtual void on_pbnAnimalPic_clicked();
-  private slots:
-      void cellClicked(int theRow, int theColumn);
-      void showAnimal();
-      void on_toolCopy_clicked();
-      void on_toolNew_clicked();
-      void on_toolDelete_clicked();
-      void on_pbnApply_clicked();
+}
 
-      void resizeEvent(QResizeEvent*);
+//copy constructor
+//LaGrassProcessLib::LaGrassProcessLib(const LaGrassProcessLib& theGrassProcessLib)
+//{
+//  mCurrentArea=theGrassProcessLib.currentArea();
+//}
 
-  private:
-      void refreshAnimalTable(QString theGuid=0);
-      void selectAnimal(QString theFileName);
+//LaGrassProcessLib& LaGrassProcessLib::operator=(const LaGrassProcessLib& theGrassProcessLib)
+//{
+//  if (this == &theGrassProcessLib) return *this;   // Gracefully handle self assignment
+//
+//  mCurrentArea=theGrassProcessLib.currentArea();
+//  return *this;
+//}
 
-      LaUtils::AnimalMap mAnimalMap;
-      LaAnimal mAnimal;
-      void readSettings();
-      void writeSettings();
-      QString mImageFile;
-};
+  ///////////////
+ // Accessors //
+///////////////
 
-#endif //LAANIMALFORMMAIN_H
+int LaGrassProcessLib::currentArea() const
+{
+  return mCurrentArea;
+}
+
+  //////////////
+ // Mutators //
+//////////////
+
+void LaGrassProcessLib::setCurrentArea(int theCurrentArea)
+{
+  mCurrentArea = theCurrentArea;
+}
+
+

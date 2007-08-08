@@ -46,7 +46,8 @@ FORMS += ../ui/lamainformbase.ui \
          ../ui/laanimalformdetailsbase.ui \
          ../ui/laplantmanagerbase.ui \
          ../ui/laplantformdetailsbase.ui \
-         ../ui/laassemblageconversionbase.ui
+         ../ui/laassemblageconversionbase.ui \
+         ../ui/lagrassprocessbase.ui
 
 HEADERS += lamainform.h \
            lautils.h \
@@ -59,7 +60,8 @@ HEADERS += lamainform.h \
            laplantdetails.h \
            laplant.h \
            laserialisable.h \
-           laassemblageconversion.h
+           laassemblageconversion.h \
+           lagrassprocess.h
 
 SOURCES += main.cpp \
            lautils.cpp \
@@ -73,7 +75,8 @@ SOURCES += main.cpp \
            laplantdetails.cpp \
            laplant.cpp \
            laserialisable.cpp \
-           laassemblageconversion.cpp
+           laassemblageconversion.cpp \
+           lagrassprocess.cpp
 
 CONFIG += warn_on
 
