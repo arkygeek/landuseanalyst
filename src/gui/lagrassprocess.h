@@ -44,12 +44,21 @@ class LaGrassProcess : public QDialog, private Ui::LaGrassProcessBase
     void on_pbnStart_clicked();
     /** aborts the grass analysis process */
     void on_pbnAbort_clicked();
+    void refreshCurrentProgress(int theArea);
+    void refreshOverallProgress(int theStep);
+    void writeGrassMessage(QString theGrassMessage);
+    void updatePreview(QString thePreviewFile);
+    void updateGraphic(QString theGraphicFile);
+    void toggleBusyProgressBar(bool theStatus);
 
   private slots:
 
   private:
       void readSettings();
       void writeSettings();
+
+      int mCurrentAreaTarget;
+      int mSearches;
 };
 
 #endif //LAGRASSPROCESS_H
