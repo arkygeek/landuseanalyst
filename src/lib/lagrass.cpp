@@ -102,42 +102,38 @@ bool LaGrass::createFrictionMap(QString theBaseRaster,QString theOutputRaster)
   }
 }
 
-void LaGrass::getArea(QString theLayerName, float theArea)
+float LaGrass::getArea(QString theLayerName)
 {
   logMessage("method ==> void LaGrass::getArea(float theArea)");
-
-  #ifdef Q_OS_MACX
-  QString myProgram = "/Applications/GRASS.app/Contents/Resources/bin/r.stats";
-  #else
-  QString myProgram = "/usr/lib/grass/bin/r.stats";
-  #endif
-  QStringList myArgs;
-  myArgs << theLayerName;
-  QProcess myProcess;
-  myProcess.start(myProgram, myArgs);
-
-  if (!myProcess.waitForStarted())
+  //r.stats -a -n fs=,
+  QString myCommand = "r.stats -a -n fs=,";
+  QStringList myArguments;
+  myArguments << "-a" << "-n" << "fs=," << theLayerName;
+  qDebug(myCommand.toLocal8Bit() + myArguments.join(" ").toLocal8Bit());
+  QString myErrorLog;
+  QString myResult = runCommand(myCommand,myArguments,myErrorLog);
+  qDebug(myResult.toLocal8Bit());
+  if (myErrorLog.isEmpty())
   {
-    logMessage("The process never started.....aaargh");
+    return 0;
   }
-
-  while (myProcess.waitForReadyRead(-1))
+  else
   {
+    myResult = myResult.simplified();
+    //put each line of output into a list entry
+    QStringList myList = myResult.split(QRegExp("\\s+"));
+    if (myList.count() < 1)
+    {
+      //row should be like 3,32323 (class,area)
+      QStringList myList2 = myList.at(0).split((","));
+      if (myList2.count() < 1)
+      {
+        //get only area
+        return myList.at(1).toFloat();
+      }
+    }
   }
-
-  QString myString;
-  myString+=("--------- Output ----------\n");
-  myProcess.setReadChannel(QProcess::StandardOutput);
-  QByteArray myArray = myProcess.readAll();
-  myString.append(myArray);
-  myString+=("--------- Errors ----------\n");
-  myProcess.setReadChannel(QProcess::StandardError);
-  myArray = myProcess.readAll();
-  myString.append(myArray);
-
-  logMessage(myString.toLocal8Bit());
-
-  logMessage("The process completed");
+  return 0;
 }
 
 void LaGrass::makeWalkCost(int theX, int theY)

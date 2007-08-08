@@ -91,10 +91,14 @@ class LaGrass : public QObject
      */
     bool createFrictionMap(QString theBaseRaster,QString theOututRaster);
 
+    /** Get the area stats for the raster
+     * @param theRasterLayer - should be a boolean layer
+     * @return the first area for the first class.
+     */
+    float getArea(QString theLayerName);
     
     
     void makeCircle(int theX, int theY);
-    void getArea(QString theLayerName,float theArea);
     void makeWalkCost(int theX, int theY);
     void makeEuclideanCost(int theX, int theY);
     void makePathDistanceCost(int theX, int theY);
