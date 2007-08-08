@@ -214,6 +214,33 @@ void LaAssemblageConversion::on_pbnCalculate_clicked()
 
 }
 
+void LaAssemblageConversion::on_pbnSave_clicked()
+{
+  QString myString= "Name,Number,UsableMeat,CalsPerKg,PercentDiet";
+  myString += "\n";
+  for (int myCurrentRow=0; myCurrentRow < tblAnimals->rowCount(); myCurrentRow++)
+  {
+    QTableWidgetItem * mypNameWidget          = tblAnimals->item(myCurrentRow,0);
+    QTableWidgetItem * mypNumberWidget        = tblAnimals->item(myCurrentRow,1);
+    QTableWidgetItem * mypUsableMeatWidget    = tblAnimals->item(myCurrentRow,2);
+    QTableWidgetItem * mypCalsPerKgWidget     = tblAnimals->item(myCurrentRow,3);
+    QTableWidgetItem * mypContributionToDiet  = tblAnimals->item(myCurrentRow,4);
+
+    myString += mypNameWidget->text()         + ",";
+    myString += mypNumberWidget->text()       + ",";
+    myString += mypUsableMeatWidget->text()   + ",";
+    myString += mypCalsPerKgWidget->text()    + ",";
+    myString += mypContributionToDiet->text() + ",";
+    myString += "\n";
+  }
+
+  LaUtils myUtils;
+  QString myFileName = myUtils.saveFile();
+  myUtils.createTextFile(myFileName, myString);
+  return;
+}
+
+
 void LaAssemblageConversion::on_pbnClearTable_clicked()
 {
   tblAnimals->clear();

@@ -45,6 +45,7 @@ class LaAssemblageConversion : public QDialog, private Ui::LaAssemblageConversio
     virtual void on_pbnInsert_clicked();
     virtual void on_pbnCalculate_clicked();
     virtual void on_pbnClearTable_clicked();
+    virtual void on_pbnSave_clicked();
 
   private slots:
       void resizeEvent(QResizeEvent*);

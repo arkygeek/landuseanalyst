@@ -197,6 +197,14 @@ LaCrop LaUtils::getCrop(QString theGuid)
   LaCrop myCrop; //blank crop
   return myCrop;
 }
+const QString LaUtils::userConversionTablesDirPath()
+{
+  // always saved in the users home dir under .landuseAnalyst/
+  QString myPath = QDir::homePath() + QString("/.landuseAnalyst/") +
+    QDir::separator()+"conversionTables"+QDir::separator();
+  QDir().mkpath(myPath);
+  return myPath;
+}
 
 const QString LaUtils::userAnimalParameterProfilesDirPath()
 {
@@ -533,5 +541,15 @@ QString LaUtils::openGraphicFile()
   QString myName = fi.fileName();
   QString myDestinationFilePathName = userImagesDirPath() + myName;
   QFile::copy(myFileName, myDestinationFilePathName);
+  return myDestinationFilePathName;
+}
+
+QString LaUtils::saveFile()
+{
+  QString myHomePath = QDir::homePath();
+  QString myFileName = QFileDialog::getSaveFileName(0, "Choose a file name", userConversionTablesDirPath(), "*.csv");
+  QFileInfo fi(myFileName);
+  QString myName = fi.fileName();
+  QString myDestinationFilePathName = userConversionTablesDirPath() + myName;
   return myDestinationFilePathName;
 }

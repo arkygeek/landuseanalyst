@@ -137,6 +137,16 @@ class LaUtils
      */
     static const QString userCropParameterProfilesDirPath();
 
+   /**
+     * Find the place on the filesystem where user created
+     * conversion tables in csv format are stored
+     *
+     * Typically this will be ~/.landuseAnalyst/conversionTables
+     *
+     * @return QString containing the relevant directory name
+     */
+    static const QString userConversionTablesDirPath();
+
     /** This typedef is used to refer to a collection of layersets.
      * the key is the layerset name
      * the value is the layerset itself
@@ -236,6 +246,7 @@ class LaUtils
       */
     static QString getStandardCss();
     QString openGraphicFile();
+    QString saveFile();
   private:
 
 };
