@@ -34,7 +34,7 @@ LaGrassProcessLib::~LaGrassProcessLib()
 
 }
 
-void LaGrassProcessLib::analyseModel()
+void LaGrassProcessLib::analyseModel(QString theRasterMask, int theAreaTarget)
 {
 
   // get the area targets

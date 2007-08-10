@@ -20,6 +20,9 @@
 
 #include "lagrassprocess.h"
 #include "lautils.h"
+#include "lacropparameter.h"
+#include "laanimalparameter.h"
+
 #include <QString>
 #include <QMessageBox>
 #include <QLabel>
@@ -76,6 +79,8 @@ void LaGrassProcess::on_pbnStart_clicked()
   while (myCropIterator.hasNext())
   {
     myCropIterator.next();
+    LaCropParameter myCropParameter;
+    QString myRasterMap = myCropParameter.rasterName();
     // do some random shit
   }
 

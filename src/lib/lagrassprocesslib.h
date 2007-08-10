@@ -40,7 +40,7 @@ class LaGrassProcessLib : public QObject
     /** Desctructor . */
     ~LaGrassProcessLib();
 
-    void analyseModel();
+    void analyseModel(QString theRasterMask, int theAreaTarget);
     LandFound getSearchStatus(int theCurrentlyContainedArea, int theAreaTarget);
 
   signals:
