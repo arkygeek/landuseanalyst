@@ -25,12 +25,17 @@
 #include <QLabel>
 #include <QPixmap>
 #include <QSettings>
+
   LaGrassProcess::LaGrassProcess(QPair<QMap<QString, int>, QMap<QString, int> > & thePair, QWidget* parent, Qt::WFlags fl)
 : QDialog(parent,fl)
 {
   //required by Qt4 to initialise the ui
   setupUi(this);
   readSettings();
+
+  mCropAreaTargetsMap = thePair.first;
+  mAnimalAreaTargetsMap = thePair.second;
+
   lblGraphic->setScaledContents(true);
   lblPreview->setScaledContents(true);
   pbarTarget->setRange(0,100);
@@ -64,11 +69,22 @@ void LaGrassProcess::writeSettings()
 
 void LaGrassProcess::on_pbnStart_clicked()
 {
+  // so here we go.  I have the maps and their targets, so i
+  // think all i need to do is iterate through them one at a time!
 
+  QMapIterator<QString, int > myCropIterator(mCropAreaTargetsMap);
+  while (myCropIterator.hasNext())
+  {
+    myCropIterator.next();
+    // do some random shit
+  }
 
-
-
-  // go do the searches!!!
+  QMapIterator<QString, int > myAnimalIterator(mAnimalAreaTargetsMap);
+  while (myAnimalIterator.hasNext())
+  {
+    myAnimalIterator.next();
+    // do some more random shit
+  }
 }
 
 void LaGrassProcess::setPbarTargetRange(int theTarget)

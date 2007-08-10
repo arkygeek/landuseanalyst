@@ -61,6 +61,8 @@ class LaGrassProcess : public QDialog, private Ui::LaGrassProcessBase
 
       int mCurrentAreaTarget;
       int mSearches;
+      QMap <QString, int> mCropAreaTargetsMap;
+      QMap <QString, int> mAnimalAreaTargetsMap;
 };
 
 #endif //LAGRASSPROCESS_H
