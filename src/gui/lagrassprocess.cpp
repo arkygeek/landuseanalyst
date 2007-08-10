@@ -90,9 +90,11 @@ void LaGrassProcess::on_pbnStart_clicked()
     QString myCropParameterGuid = myMainForm.getMatchingCropParameterGuid(myCropIterator.key());
     LaCropParameter myCropParameter = LaUtils::getCropParameter(myCropParameterGuid);
     QString myCropRasterFile = myCropParameter.rasterName();
-    qDebug() << "MyName" << myName <<"needs area of: " << myCropIterator.value();
+    qDebug() << "MyName" << myName << "needs area of: " << myCropIterator.value();
     qDebug() << "The Raster is: " << myCropRasterFile;
-    // do some random shit
+    lblAreaTarget->setText("Target:\n" + QString::number(myCropIterator.value()));
+    lblGraphic->setPixmap(myCrop.imageFile());
+    // go analyse the stuff...
   }
 
   QMapIterator<QString, int > myAnimalIterator(mAnimalAreaTargetsMap);
@@ -107,7 +109,10 @@ void LaGrassProcess::on_pbnStart_clicked()
     QString myAnimalRasterFile = myAnimalParameter.rasterName();
     qDebug() << "MyName" << myName <<"needs area of: " << myAnimalIterator.value();
     qDebug() << "The Raster is: " << myAnimalRasterFile;
-    // do some more random shit
+    lblAreaTarget->setText("Target:\n" + QString::number(myAnimalIterator.value()));
+    lblGraphic->setPixmap(myAnimal.imageFile());
+    // go analyse the stuff...
+    //
   }
 }
 
