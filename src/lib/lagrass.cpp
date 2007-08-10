@@ -144,7 +144,7 @@ bool LaGrass::makeWalkCost(int theX, int theY)
 
   QString myCommand = "r.walk";
   QStringList myArguments;
-  myArguments << "max_cost=20000"
+  myArguments << "max_cost=18000"
               << "elevation=" + myElevationMap
               << "friction=" + myFrictionMap
               << "output=laWalkCost"
@@ -186,23 +186,6 @@ void LaGrass::writeMetaData(QString theValue)
 
 void LaGrass::reclass(QString theRaster, int theMax)
 {
-
-  // to verify this worked do
-  //    d.rast
-  //    and check in the pull downlist (if your eyes dont fall out looking at those fonts)
-  //    to remove the file again do:
-  //    g.remove rast=circle
-
-  /*
-     logMessage("Making crop circle...tweeedee treedee");
-     QString myProgram = "/usr/lib/grass/bin/r.circle";
-     QStringList myArgs;
-     myArgs << "-b"
-     << "output=circle"
-     <<  "coordinate=744800,3611100"
-     << "max=500"
-     << "--overwrite";
-     */
   QString myProgram = "/usr/lib/grass/bin/r.reclass";
   QStringList myArgs;
   myArgs << "input=" + theRaster
