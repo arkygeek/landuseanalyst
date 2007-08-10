@@ -45,6 +45,7 @@
 #include <QTreeWidgetItem>
 #include <QtDebug>
 #include <QPair>
+#include <QString>
 
 LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
   : QDialog(parent,fl)
@@ -173,6 +174,20 @@ void LaMainForm::on_horizontalSliderCrop_valueChanged(int theValue)
 LaTripleMap LaMainForm::getAvailableCrops()
 {
   return mCropsMap;
+}
+
+QString LaMainForm::getMatchingCropParameterGuid(QString theCropGuid)
+{
+  QPair<bool, QString> myPair = mCropsMap.value(theCropGuid);
+  QString myCropParameterGuid = myPair.second;
+  return myCropParameterGuid;
+}
+
+QString LaMainForm::getMatchingAnimalParameterGuid(QString theAnimalGuid)
+{
+  QPair<bool, QString> myPair = mAnimalsMap.value(theAnimalGuid);
+  QString myAnimalParameterGuid = myPair.second;
+  return myAnimalParameterGuid;
 }
 
 QMap <QString, QString> LaMainForm::getSelectedCrops()

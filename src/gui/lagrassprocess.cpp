@@ -22,6 +22,9 @@
 #include "lautils.h"
 #include "lacropparameter.h"
 #include "laanimalparameter.h"
+#include "lamainform.h"
+#include "lacrop.h"
+#include "laanimal.h"
 
 #include <QString>
 #include <QMessageBox>
@@ -82,8 +85,13 @@ void LaGrassProcess::on_pbnStart_clicked()
   {
     myCropIterator.next();
     LaCrop myCrop = LaUtils::getCrop(myCropIterator.key());
-    QString myRasterName = myCrop.name();
-    qDebug() << "MyName" << myRasterName <<"needs area of: " << myCropIterator.value();
+    QString myName = myCrop.name();
+    LaMainForm myMainForm;
+    QString myCropParameterGuid = myMainForm.getMatchingCropParameterGuid(myCropIterator.key());
+    LaCropParameter myCropParameter = LaUtils::getCropParameter(myCropParameterGuid);
+    QString myCropRasterFile = myCropParameter.rasterName();
+    qDebug() << "MyName" << myName <<"needs area of: " << myCropIterator.value();
+    qDebug() << "The Raster is: " << myCropRasterFile;
     // do some random shit
   }
 
@@ -93,7 +101,12 @@ void LaGrassProcess::on_pbnStart_clicked()
     myAnimalIterator.next();
     LaAnimal myAnimal = LaUtils::getAnimal(myAnimalIterator.key());
     QString myName = myAnimal.name();
+    LaMainForm myMainForm;
+    QString myAnimalParameterGuid = myMainForm.getMatchingAnimalParameterGuid(myAnimalIterator.key());
+    LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(myAnimalParameterGuid);
+    QString myAnimalRasterFile = myAnimalParameter.rasterName();
     qDebug() << "MyName" << myName <<"needs area of: " << myAnimalIterator.value();
+    qDebug() << "The Raster is: " << myAnimalRasterFile;
     // do some more random shit
   }
 }
