@@ -44,14 +44,14 @@ class LaGrass : public QObject
      * e.g.
      * QStringList myArgs;
      * myArgs << "type=rast" << "type=vect";
-     * @param &QString theErrorLog - a string passed by reference. 
+     * @param &QString theErrorLog - a string passed by reference.
      * On completion, any errors
      * from stderr will have been placed in this string.
      * @return QString - verbatim output of the command as
      * returned by GRASS. The calling function will be responsible
      * for parsing that output.
      */
-     QString runCommand(QString theCommand, 
+     QString runCommand(QString theCommand,
                         QStringList theArguments,
                         QString &theErrorLog);
      /** Overloaded version of above command that needs no
@@ -65,13 +65,13 @@ class LaGrass : public QObject
      * returned by GRASS. The calling function will be responsible
      * for parsing that output.
      */
-     QString runCommand(QString theCommand, 
+     QString runCommand(QString theCommand,
                         QStringList theArguments);
     /** Get a list of grass mapsets
      * @return QStringList of mapset names.
      */
     QStringList getMapsetList();
-    /** Get a list of grass rasters from the 
+    /** Get a list of grass rasters from the
      * PERMANENT and users mapset.
      * @param bool thePrependMapsetFlag. Optional paramter which
      * defaults to true. Adds the mapset name in front of each layer
@@ -83,7 +83,7 @@ class LaGrass : public QObject
 
     /** Create a friction map. All cells in the map will be set
      * to a friction of 1.
-     * @param QString grass raster layer name for a DEM on 
+     * @param QString grass raster layer name for a DEM on
      * which the friction map will be based.
      * @param QString output layer name for the friction map
      *        (it will be put into the current active mapset)
@@ -96,10 +96,10 @@ class LaGrass : public QObject
      * @return the first area for the first class.
      */
     float getArea(QString theLayerName);
-    
-    
-    void makeCircle(int theX, int theY);
-    void makeWalkCost(int theX, int theY);
+
+
+    void reclass(QString theRaster, int theMax);
+    bool makeWalkCost(int theX, int theY);
     void makeEuclideanCost(int theX, int theY);
     void makePathDistanceCost(int theX, int theY);
     void writeMetaData(QString theValue);

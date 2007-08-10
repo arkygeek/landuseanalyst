@@ -136,9 +136,37 @@ float LaGrass::getArea(QString theLayerName)
   return 0;
 }
 
-void LaGrass::makeWalkCost(int theX, int theY)
+bool LaGrass::makeWalkCost(int theX, int theY)
 {
   logMessage("method ==> void LaGrass::makeWalkCost(int theX, int theY)");
+  //r.walk max_cost=20000 elevation=dem_patched_filled@PERMANENT friction=theFrictionMap output=rwalkResultsSlopeMax20kFMap coordinate=744800,3611100 percent_memory=100 nseg=4 walk_coeff=0.72,6.0,1.9998,-1.9998 lambda=0 slope_factor=-0.2125 -k
+  QString myElevationMap="", myFrictionMap="";
+
+  QString myCommand = "r.walk";
+  QStringList myArguments;
+  myArguments << "max_cost=20000"
+              << "elevation=" + myElevationMap
+              << "friction=" + myFrictionMap
+              << "output=laWalkCost"
+              << "coordinate=" + QString::number(theX) + "," + QString::number(theY)
+              << "percent_memory=100"
+              << "nseg=4"
+              << "walk_coeff=0.72,6.0,1.9998,-1.999"
+              << "lambda=0"
+              << "slope_factor=-0.2125"
+              << "-k";
+  qDebug(myCommand.toLocal8Bit() + myArguments.join(" ").toLocal8Bit());
+  QString myErrorLog;
+  QString myResult = runCommand(myCommand,myArguments,myErrorLog);
+  qDebug(myResult.toLocal8Bit());
+  if (myErrorLog.isEmpty())
+  {
+    return true;
+  }
+  else
+  {
+    return false;
+  }
 }
 
 void LaGrass::makeEuclideanCost(int theX, int theY)
@@ -156,9 +184,9 @@ void LaGrass::writeMetaData(QString theValue)
   logMessage("method ==> void LaGrass::writeMetaData(QString theValue)");
 }
 
-void LaGrass::makeCircle(int theX, int theY)
+void LaGrass::reclass(QString theRaster, int theMax)
 {
-  logMessage("method ==> void LaGrass::makeCircle(int theX, int theY");
+
   // to verify this worked do
   //    d.rast
   //    and check in the pull downlist (if your eyes dont fall out looking at those fonts)
@@ -175,9 +203,11 @@ void LaGrass::makeCircle(int theX, int theY)
      << "max=500"
      << "--overwrite";
      */
-  QString myProgram = "/usr/lib/grass/bin/r.stats";
+  QString myProgram = "/usr/lib/grass/bin/r.reclass";
   QStringList myArgs;
-  myArgs << "landuse";
+  myArgs << "input=" + theRaster
+         << "output=laCostMapReclassed"
+         << "\"0 thru " + QString::number(theMax) + " = 1\"";
   QProcess myProcess;
   myProcess.start(myProgram, myArgs);
   if (!myProcess.waitForStarted()) {
@@ -211,7 +241,7 @@ void LaGrass::logMessage(QString theMessage)
   emit message(theMessage);
 }
 
-QString LaGrass::runCommand(QString theCommand, 
+QString LaGrass::runCommand(QString theCommand,
     QStringList theArguments,
     QString &theErrorLog /*=""*/)
 {
@@ -221,7 +251,7 @@ QString LaGrass::runCommand(QString theCommand,
   QString myProgram = "/usr/lib/grass/bin/" + theCommand;
   #endif
   //windows users can wallow in self pity for now...
-  
+
   QProcess myProcess;
   myProcess.start(myProgram, theArguments);
 
@@ -245,11 +275,11 @@ QString LaGrass::runCommand(QString theCommand,
   theErrorLog.append(myArray);
   // get rid of some grass decorations...
   myLog.replace("----------------------------------------------","");
-  
+
   return myLog;
 }
-QString LaGrass::runCommand(QString theCommand, 
-    QStringList theArguments) 
+QString LaGrass::runCommand(QString theCommand,
+    QStringList theArguments)
 {
   QString myErrors;
   QString myLog = runCommand(theCommand, theArguments, myErrors);

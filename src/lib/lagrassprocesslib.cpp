@@ -76,6 +76,8 @@ void LaGrassProcessLib::analyseModel()
   {
     int myMid = (myFirst + myLast) / 2;  // compute mid point.
     // reclass with 1 to midpoint and null beyond and then check results
+    //    echo "0 thru $step = 1" | r.reclass input=$cost output=cost.reclass --o
+    //    r.stats -n -a fs=- input=cost.reclass > $TMP1
 
     // find out if the contained area is within acceptable range
     mySearchStatus = getSearchStatus(myCurrentlyContainedArea, myAreaTarget);
@@ -106,9 +108,7 @@ LandFound LaGrassProcessLib::getSearchStatus(int theCurrentlyContainedArea, int 
   float myMaximumAcceptable = theAreaTarget + myAcceptableRange;
 
   if (theCurrentlyContainedArea >= myMinimumAcceptable)
-    {
-      myStatus = (theCurrentlyContainedArea <= myMaximumAcceptable) ? FoundTarget : TooMuch;
-    }
+    {      myStatus = (theCurrentlyContainedArea <= myMaximumAcceptable) ? FoundTarget : TooMuch;    }
   else
     {
       myStatus = NotEnough;
