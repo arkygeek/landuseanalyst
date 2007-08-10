@@ -329,7 +329,7 @@ void LaCropParameterManager::on_pbnApply_clicked()
 
   mCropParameter.setUseCommonLand(checkBoxUseCommonLand->isChecked());
   mCropParameter.setUseSpecificLand(checkBoxUseSpecificLand->isChecked());
-  mCropParameter.setRasterName(cboCrop->currentText());
+  mCropParameter.setRasterName(cboRaster->currentText());
   mCropParameter.toXmlFile( LaUtils::userCropParameterProfilesDirPath() +
       QDir::separator() + mCropParameter.guid() + ".xml");
   refreshCropParameterTable(mCropParameter.guid());

@@ -539,7 +539,7 @@ void LaAnimalParameterManager::on_pbnApply_clicked()
       myPriority = None;
       mAnimalParameter.setFallowUsage(myPriority);
   }
-  mAnimalParameter.setRasterName(cboAnimal->currentText());
+  mAnimalParameter.setRasterName(cboRaster->currentText());
   mAnimalParameter.toXmlFile( LaUtils::userAnimalParameterProfilesDirPath() +
       QDir::separator() + mAnimalParameter.guid() + ".xml");
   refreshAnimalParameterTable(mAnimalParameter.guid());
