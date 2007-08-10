@@ -28,6 +28,7 @@
 #include "lamodel.h"
 #include "lamodelreports.h"
 #include "lagrass.h"
+#include "lagrassprocess.h"
 
 //qt includes
 #include <QComboBox>
@@ -705,6 +706,20 @@ void LaMainForm::on_pushButtonRun_clicked()
 
   tbReport->append(myModel.toHtmlAreaAnimalTargets());
   progressBarCalcs->setValue(9);
+
+
+
+  QMap<QString, int> myAnimalTargetsMap = myModel.getAreaTargetsAnimalsMap();
+  QMap<QString, int> myCropsTargetsMap = myModel.getAreaTargetsCropsMap();
+
+  QPair<QMap<QString, int>, QMap<QString, int> > myPairOfAreaTargetMaps;
+  myPairOfAreaTargetMaps.first=myAnimalTargetsMap;
+  myPairOfAreaTargetMaps.second=myCropsTargetsMap;
+
+  LaGrassProcess myGrassProcess(myPairOfAreaTargetMaps);
+
+  myGrassProcess.exec();
+
 }
 
 void LaMainForm::debugChecks()

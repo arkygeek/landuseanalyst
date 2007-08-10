@@ -112,6 +112,9 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
     QMap <QString, QString> calcsAnimalsMap();
     QString reportForAnimal(QString theAnimalGuid);
     QString reportForCrop(QString theCropGuid);
+    QMap<QString, int> getAreaTargetsAnimalsMap();
+    QMap<QString, int> getAreaTargetsCropsMap();
+
     //
     // Mutators
     //

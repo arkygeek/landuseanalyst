@@ -36,7 +36,7 @@ class LaGrassProcess : public QDialog, private Ui::LaGrassProcessBase
 {
   Q_OBJECT
   public:
-    LaGrassProcess(QWidget* parent = 0, Qt::WFlags fl = 0 );
+    LaGrassProcess(QPair<QMap<QString, int>, QMap<QString, int> > & thePair, QWidget* parent = 0, Qt::WFlags fl = 0 );
     ~LaGrassProcess();
 
   public slots:

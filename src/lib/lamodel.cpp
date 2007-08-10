@@ -1520,6 +1520,16 @@ QString LaModel::toHtmlAreaAnimalTargets()
   return myString;
 }
 
+QMap<QString, int> LaModel::getAreaTargetsAnimalsMap()
+{
+  return mAreaTargetsAnimalsMap;
+}
+
+QMap<QString, int> LaModel::getAreaTargetsCropsMap()
+{
+  return mAreaTargetsCropsMap;
+}
+
 //
 // Utility functions
 //

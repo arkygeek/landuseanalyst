@@ -25,7 +25,7 @@
 #include <QLabel>
 #include <QPixmap>
 #include <QSettings>
-  LaGrassProcess::LaGrassProcess(QWidget* parent, Qt::WFlags fl)
+  LaGrassProcess::LaGrassProcess(QPair<QMap<QString, int>, QMap<QString, int> > & thePair, QWidget* parent, Qt::WFlags fl)
 : QDialog(parent,fl)
 {
   //required by Qt4 to initialise the ui
