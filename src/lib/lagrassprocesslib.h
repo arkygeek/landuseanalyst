@@ -25,6 +25,7 @@
 #include <QString>
 #include <QMap>
 #include <QObject>
+#include "la.h"
 /**
   * A class for grass analysis
   * @author Jason Jorgenson, Tim Sutton
@@ -39,27 +40,13 @@ class LaGrassProcessLib : public QObject
     /** Desctructor . */
     ~LaGrassProcessLib();
 
-  ///////////////
- // Accessors //
-///////////////
-    /** Return the Current Area */
-    int currentArea() const;
-
-  //////////////
- // Mutators //
-//////////////
-    /** Set the Current Area
-     * @see currentArea()
-     */
-    void setCurrentArea(int theCurrentArea);
+    void analyseModel();
+    LandFound getSearchStatus(int theCurrentlyContainedArea, int theAreaTarget);
 
   signals:
-    /** Send log info to any listeners.
-     * @param QString the message to be logged.
-     */
 
   private:
-    int mCurrentArea;
+
 };
 
 #endif //LAGRASSPROCESSLIB_H
