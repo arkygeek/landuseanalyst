@@ -28,6 +28,7 @@
 #include <QLabel>
 #include <QPixmap>
 #include <QSettings>
+#include <QtDebug>
 
   LaGrassProcess::LaGrassProcess(QPair<QMap<QString, int>, QMap<QString, int> > & thePair, QWidget* parent, Qt::WFlags fl)
 : QDialog(parent,fl)
@@ -36,8 +37,8 @@
   setupUi(this);
   readSettings();
 
-  mCropAreaTargetsMap = thePair.first;
-  mAnimalAreaTargetsMap = thePair.second;
+  mAnimalAreaTargetsMap = thePair.first;
+  mCropAreaTargetsMap = thePair.second;
 
   lblGraphic->setScaledContents(true);
   lblPreview->setScaledContents(true);
@@ -47,6 +48,7 @@
   pbarOverall->setValue(0);
   lblCurrentArea->setText(0);
   lblAreaTarget->setText(0);
+  qDebug() << "thePair" << thePair;
 }
 
 LaGrassProcess::~LaGrassProcess()
@@ -79,8 +81,9 @@ void LaGrassProcess::on_pbnStart_clicked()
   while (myCropIterator.hasNext())
   {
     myCropIterator.next();
-    LaCropParameter myCropParameter;
-    QString myRasterMap = myCropParameter.rasterName();
+    LaCrop myCrop = LaUtils::getCrop(myCropIterator.key());
+    QString myRasterName = myCrop.name();
+    qDebug() << "MyName" << myRasterName <<"needs area of: " << myCropIterator.value();
     // do some random shit
   }
 
@@ -88,6 +91,9 @@ void LaGrassProcess::on_pbnStart_clicked()
   while (myAnimalIterator.hasNext())
   {
     myAnimalIterator.next();
+    LaAnimal myAnimal = LaUtils::getAnimal(myAnimalIterator.key());
+    QString myName = myAnimal.name();
+    qDebug() << "MyName" << myName <<"needs area of: " << myAnimalIterator.value();
     // do some more random shit
   }
 }
