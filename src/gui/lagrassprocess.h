@@ -26,6 +26,7 @@
 //Local Includes
 #include <lautils.h>
 #include "ui_lagrassprocessbase.h"
+#include "la.h"
 
 class QTreeWidgetItem;
 /**
@@ -52,7 +53,8 @@ class LaGrassProcess : public QDialog, private Ui::LaGrassProcessBase
     void updatePreview(QString thePreviewFile);
     void updateGraphic(QString theGraphicFile);
     void toggleBusyProgressBar(bool theStatus);
-
+    void analyseModel(QString theRasterMask, int theAreaTarget);
+    LandFound getSearchStatus(int theCurrentlyContainedArea, int theAreaTarget);
   private slots:
 
   private:

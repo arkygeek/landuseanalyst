@@ -217,7 +217,7 @@ bool LaAnimalParameter::fromXml(QString theXml)
   if (myTopElement.isNull())
   {
     //TODO - just make this a warning
-    qDebug("top element could not be found!");
+   //qDebug("top element could not be found!");
   }
   //qDebug("AnimalParameter::fromXml - guid found : " + myTopElement.attribute("guid").toLocal8Bit());
   setGuid(myTopElement.attribute("guid"));
@@ -263,7 +263,7 @@ bool LaAnimalParameter::fromXml(QString theXml)
     // insert data into map
     mFoodSourceMap.insert(myGuid,myFoodSource);
   } // end of for loop
-  qDebug("Number of food sources restored from xml: " + QString::number(mFoodSourceMap.count()).toLocal8Bit());
+ //qDebug("Number of food sources restored from xml: " + QString::number(mFoodSourceMap.count()).toLocal8Bit());
 
   QString myFallowUsage = QString(myTopElement.firstChildElement("fallowUsage").text());
   if (myFallowUsage == "High")
@@ -313,7 +313,7 @@ QString LaAnimalParameter::toXml()
   if (mFodderUse)
   {
 
-    qDebug("Fodder is used");
+   //qDebug("Fodder is used");
     myString+=QString("   <fodderCrops>\n");
     // write out the map for fodder info to xml
     QMapIterator<QString, LaFoodSource> myIterator(mFoodSourceMap);
@@ -335,7 +335,7 @@ QString LaAnimalParameter::toXml()
   }
   else
   {
-    qDebug("Fodder is not used");
+   //qDebug("Fodder is not used");
   }
 
   switch (mFallowUsage)

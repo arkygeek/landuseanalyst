@@ -63,7 +63,7 @@ void LaGrassProcess::readSettings()
 {
   QSettings mySettings;
   QPoint pos = mySettings.value("mainwindow/pos", QPoint(200, 200)).toPoint();
-  QSize size = mySettings.value("mainwindow/size", QSize(400, 400)).toSize();
+  QSize size = mySettings.value("mainwindow/size", QSize(200, 400)).toSize();
   resize(size);
   move(pos);
 }
@@ -85,6 +85,7 @@ void LaGrassProcess::on_pbnStart_clicked()
   {
     myCropIterator.next();
     LaCrop myCrop = LaUtils::getCrop(myCropIterator.key());
+    lblGraphic->setPixmap(myCrop.imageFile());
     QString myName = myCrop.name();
     LaMainForm myMainForm;
     QString myCropParameterGuid = myMainForm.getMatchingCropParameterGuid(myCropIterator.key());
@@ -93,7 +94,7 @@ void LaGrassProcess::on_pbnStart_clicked()
     qDebug() << "MyName" << myName << "needs area of: " << myCropIterator.value();
     qDebug() << "The Raster is: " << myCropRasterFile;
     lblAreaTarget->setText("Target:\n" + QString::number(myCropIterator.value()));
-    lblGraphic->setPixmap(myCrop.imageFile());
+
     // go analyse the stuff...
   }
 
@@ -102,6 +103,7 @@ void LaGrassProcess::on_pbnStart_clicked()
   {
     myAnimalIterator.next();
     LaAnimal myAnimal = LaUtils::getAnimal(myAnimalIterator.key());
+    lblGraphic->setPixmap(myAnimal.imageFile());
     QString myName = myAnimal.name();
     LaMainForm myMainForm;
     QString myAnimalParameterGuid = myMainForm.getMatchingAnimalParameterGuid(myAnimalIterator.key());
@@ -110,7 +112,7 @@ void LaGrassProcess::on_pbnStart_clicked()
     qDebug() << "MyName" << myName <<"needs area of: " << myAnimalIterator.value();
     qDebug() << "The Raster is: " << myAnimalRasterFile;
     lblAreaTarget->setText("Target:\n" + QString::number(myAnimalIterator.value()));
-    lblGraphic->setPixmap(myAnimal.imageFile());
+
     // go analyse the stuff...
     //
   }
@@ -175,4 +177,71 @@ void LaGrassProcess::toggleBusyProgressBar(bool theStatus)
                 pbarBusy->setRange(0,1);
                 break;
   }
+}
+
+void LaGrassProcess::analyseModel(QString theRasterMask, int theAreaTarget)
+{
+
+  // get the area targets
+
+
+    ///////////////////////
+   // Make Cost Surface //
+  ///////////////////////
+
+  // r.mapcalc "TimeOnlyFrictionMap=if(isnull(DEM), null(), 1)"
+  // r.walk max_cost=20000 elevation=dem_patched_filled@PERMANENT friction=theFrictionMap output=rwalkResultsSlopeMax20kFMap coordinate=744800,3611100 percent_memory=100 nseg=4 walk_coeff=0.72,6.0,1.9998,-1.9998 lambda=0 slope_factor=-0.2125 -k
+
+
+
+   // find the land!
+   int myFirst = 0;
+   int myLast=18000;
+   int myAreaTarget = 500; // change this to real value
+   LandFound mySearchStatus = NotEnough;
+   int myCurrentlyContainedArea = 0;
+
+   while (myFirst <= myLast)
+  {
+    int myMid = (myFirst + myLast) / 2;  // compute mid point.
+    // reclass with 1 to midpoint and null beyond and then check results
+    //    echo "0 thru $step = 1" | r.reclass input=$cost output=cost.reclass --o
+    //    r.stats -n -a fs=- input=cost.reclass > $TMP1
+
+    // find out if the contained area is within acceptable range
+    mySearchStatus = getSearchStatus(myCurrentlyContainedArea, myAreaTarget);
+
+    switch (mySearchStatus)
+    {
+      case NotEnough:
+            myFirst = myMid + 1;  // repeat search in top half.
+            break;;
+      case TooMuch:
+            myLast = myMid - 1; // repeat search in bottom half.
+            break;
+      case FoundTarget:
+            // found it. break out of loop /////
+            myFirst = myLast+1;
+            break;
+    }
+
+  }
+}
+
+LandFound LaGrassProcess::getSearchStatus(int theCurrentlyContainedArea, int theAreaTarget)
+{
+  LandFound myStatus;
+  int myPrecision=5;  //get the real value for precision
+  float myAcceptableRange=(theAreaTarget*myPrecision*0.01)/2.0;
+  float myMinimumAcceptable = theAreaTarget - myAcceptableRange;
+  float myMaximumAcceptable = theAreaTarget + myAcceptableRange;
+
+  if (theCurrentlyContainedArea >= myMinimumAcceptable)
+    {      myStatus = (theCurrentlyContainedArea <= myMaximumAcceptable) ? FoundTarget : TooMuch;    }
+  else
+    {
+      myStatus = NotEnough;
+    }
+
+  return myStatus;
 }

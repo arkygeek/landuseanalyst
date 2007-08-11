@@ -192,7 +192,7 @@ QString LaMainForm::getMatchingAnimalParameterGuid(QString theAnimalGuid)
 
 QMap <QString, QString> LaMainForm::getSelectedCrops()
 {
-  qDebug() << "mCropsMap :::::: " << mCropsMap;
+  //qDebug() << "mCropsMap :::::: " << mCropsMap;
 
   QMap<QString, QString> mySelectedCropsMap;
   QMapIterator<QString, QPair<bool, QString> > myCropIterator(mCropsMap);
@@ -464,8 +464,8 @@ void LaMainForm::loadCrops()
         myValue.second = myParameterGuid;
       }
       //see if this crop parameter percentage can be added to our running tot
-      qDebug("Comparing " + myValue.second.toLocal8Bit() + " <-> " +
-          myCropParameter.guid().toLocal8Bit());
+      //qDebug("Comparing " + myValue.second.toLocal8Bit() + " <-> " +
+          //myCropParameter.guid().toLocal8Bit());
       if (myValue.second == myCropParameter.guid())
       {
         if (myValue.first)
@@ -477,8 +477,8 @@ void LaMainForm::loadCrops()
           }
         QTableWidgetItem *mypPercentItem =
           new QTableWidgetItem(QString::number(myCropParameter.percentTameCrop()));
-        qDebug("Percentage this crop contributes to diet: " +
-            QString::number(myCropParameter.percentTameCrop()).toLocal8Bit());
+        //qDebug("Percentage this crop contributes to diet: " +
+            //QString::number(myCropParameter.percentTameCrop()).toLocal8Bit());
         tblCrops->setItem(myCurrentRow, 3, mypPercentItem);
       }
       //                icon, disp name, userdata
@@ -525,7 +525,7 @@ void LaMainForm::setDietLabels()
 void LaMainForm::animalCellClicked(int theRow, int theColumn)
 {
   listWidgetCalculationsAnimal->clear();
-  qDebug("LaMainForm::animalCellClicked");
+  //qDebug("LaMainForm::animalCellClicked");
   QTableWidgetItem* mypItem = tblAnimals->item(tblAnimals->currentRow(),1);
   if (mypItem)
   {
@@ -568,7 +568,7 @@ void LaMainForm::animalCellChanged(int theRow, int theColumn)
 
 void LaMainForm::cropCellClicked(int theRow, int theColumn)
 {
-  qDebug("LaMainForm::cropCellClicked");
+  //qDebug("LaMainForm::cropCellClicked");
     QTableWidgetItem* mypItem = tblCrops->item(tblCrops->currentRow(),1);
   if (mypItem)
   {
@@ -847,7 +847,7 @@ void LaMainForm::cropCalcClicked(QListWidgetItem * thepCurrentItem, QListWidgetI
     if (mySelectedFlag)
     {
       mySelectedAnimalsMap.insert(myAnimalGuid,myAnimalParameterGuid);
-      qDebug("Added <" + myAnimalGuid.toLocal8Bit() + " , " + myAnimalParameterGuid.toLocal8Bit() + " >");
+     //qDebug("Added <" + myAnimalGuid.toLocal8Bit() + " , " + myAnimalParameterGuid.toLocal8Bit() + " >");
     }
   }
   myModel.setAnimals(mySelectedAnimalsMap);

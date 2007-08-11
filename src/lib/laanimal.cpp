@@ -241,7 +241,7 @@ bool LaAnimal::fromXml(QString theXml)
   if (myTopElement.isNull())
   {
     //TODO - just make this a warning
-    qDebug("top element could not be found!");
+   //qDebug("top element could not be found!");
   }
   //qDebug("Animal::fromXml - guid found : " + myTopElement.attribute("guid").toLocal8Bit());
   setGuid(myTopElement.attribute("guid"));
