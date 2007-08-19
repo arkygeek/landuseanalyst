@@ -186,7 +186,7 @@ void LaGrass::writeMetaData(QString theValue)
 
 void LaGrass::reclass(QString theRaster, int theMax)
 {
-  QString myProgram = "/usr/lib/grass/bin/r.reclass";
+  QString myProgram = "r.reclass";
   QStringList myArgs;
   myArgs << "input=" + theRaster
          << "output=laCostMapReclassed"
@@ -269,3 +269,4 @@ QString LaGrass::runCommand(QString theCommand,
   return myLog;
 }
 
+// reclass

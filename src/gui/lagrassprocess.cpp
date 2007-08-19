@@ -79,6 +79,9 @@ void LaGrassProcess::on_pbnStart_clicked()
 {
   // so here we go.  I have the maps and their targets, so i
   // think all i need to do is iterate through them one at a time!
+  int myOverallProgress = 1;
+  int myNumberOfSearches = mCropAreaTargetsMap.size() + mAnimalAreaTargetsMap.size();
+  setPbarOverallRange(myNumberOfSearches);
 
   QMapIterator<QString, int > myCropIterator(mCropAreaTargetsMap);
   while (myCropIterator.hasNext())
@@ -86,6 +89,9 @@ void LaGrassProcess::on_pbnStart_clicked()
     myCropIterator.next();
     LaCrop myCrop = LaUtils::getCrop(myCropIterator.key());
     lblGraphic->setPixmap(myCrop.imageFile());
+    lblGraphic->repaint();
+    lblAreaTarget->setText("Target:\n" + QString::number(myCropIterator.value()));
+    lblAreaTarget->repaint();
     QString myName = myCrop.name();
     LaMainForm myMainForm;
     QString myCropParameterGuid = myMainForm.getMatchingCropParameterGuid(myCropIterator.key());
@@ -93,9 +99,10 @@ void LaGrassProcess::on_pbnStart_clicked()
     QString myCropRasterFile = myCropParameter.rasterName();
     qDebug() << "MyName" << myName << "needs area of: " << myCropIterator.value();
     qDebug() << "The Raster is: " << myCropRasterFile;
-    lblAreaTarget->setText("Target:\n" + QString::number(myCropIterator.value()));
 
     // go analyse the stuff...
+    updateOverallProgress(myOverallProgress);
+    myOverallProgress++;
   }
 
   QMapIterator<QString, int > myAnimalIterator(mAnimalAreaTargetsMap);
@@ -104,17 +111,21 @@ void LaGrassProcess::on_pbnStart_clicked()
     myAnimalIterator.next();
     LaAnimal myAnimal = LaUtils::getAnimal(myAnimalIterator.key());
     lblGraphic->setPixmap(myAnimal.imageFile());
+    lblGraphic->repaint();
+    lblAreaTarget->setText("Target:\n" + QString::number(myAnimalIterator.value()));
+    lblAreaTarget->repaint();
     QString myName = myAnimal.name();
     LaMainForm myMainForm;
     QString myAnimalParameterGuid = myMainForm.getMatchingAnimalParameterGuid(myAnimalIterator.key());
     LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(myAnimalParameterGuid);
     QString myAnimalRasterFile = myAnimalParameter.rasterName();
-    qDebug() << "MyName" << myName <<"needs area of: " << myAnimalIterator.value();
+    qDebug() << myName <<" needs area of: " << myAnimalIterator.value();
     qDebug() << "The Raster is: " << myAnimalRasterFile;
-    lblAreaTarget->setText("Target:\n" + QString::number(myAnimalIterator.value()));
+
 
     // go analyse the stuff...
-    //
+    updateOverallProgress(myOverallProgress);
+    myOverallProgress++;
   }
 }
 
@@ -200,6 +211,7 @@ void LaGrassProcess::analyseModel(QString theRasterMask, int theAreaTarget)
    int myAreaTarget = 500; // change this to real value
    LandFound mySearchStatus = NotEnough;
    int myCurrentlyContainedArea = 0;
+   int myPrecision = 5; // change this to real value
 
    while (myFirst <= myLast)
   {
@@ -209,7 +221,7 @@ void LaGrassProcess::analyseModel(QString theRasterMask, int theAreaTarget)
     //    r.stats -n -a fs=- input=cost.reclass > $TMP1
 
     // find out if the contained area is within acceptable range
-    mySearchStatus = getSearchStatus(myCurrentlyContainedArea, myAreaTarget);
+    mySearchStatus = getSearchStatus(myCurrentlyContainedArea, myAreaTarget, myPrecision);
 
     switch (mySearchStatus)
     {
@@ -228,7 +240,7 @@ void LaGrassProcess::analyseModel(QString theRasterMask, int theAreaTarget)
   }
 }
 
-LandFound LaGrassProcess::getSearchStatus(int theCurrentlyContainedArea, int theAreaTarget)
+LandFound LaGrassProcess::getSearchStatus(int theCurrentlyContainedArea, int theAreaTarget, int thePrecision)
 {
   LandFound myStatus;
   int myPrecision=5;  //get the real value for precision
