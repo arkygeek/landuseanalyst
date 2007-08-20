@@ -190,6 +190,25 @@ QString LaMainForm::getMatchingAnimalParameterGuid(QString theAnimalGuid)
   return myAnimalParameterGuid;
 }
 
+QPair <int, int> LaMainForm::getSiteCoordinates()
+{
+  QPair <int, int> myCoordinates;
+  QString myNorthing = lineEditNorthing->text();
+  QString myEasting = lineEditEasting->text();
+
+  myCoordinates.first = myEasting.toInt();
+  myCoordinates.second = myNorthing.toInt();
+
+  return myCoordinates;
+}
+
+QString LaMainForm::getDEM()
+{
+  QString myDEM = cboDEM->currentText();
+  return myDEM;
+}
+
+
 QMap <QString, QString> LaMainForm::getSelectedCrops()
 {
   //qDebug() << "mCropsMap :::::: " << mCropsMap;
@@ -727,11 +746,19 @@ void LaMainForm::on_pushButtonRun_clicked()
   QMap<QString, int> myAnimalTargetsMap = myModel.getAreaTargetsAnimalsMap();
   QMap<QString, int> myCropsTargetsMap = myModel.getAreaTargetsCropsMap();
 
-  QPair<QMap<QString, int>, QMap<QString, int> > myPairOfAreaTargetMaps;
-  myPairOfAreaTargetMaps.first=myAnimalTargetsMap;
-  myPairOfAreaTargetMaps.second=myCropsTargetsMap;
+  QString myDEM = cboDEM->currentText();
 
-  LaGrassProcess myGrassProcess(myPairOfAreaTargetMaps);
+  QPair <int, int> myCoordinates;
+    QString myEasting = lineEditEasting->text();
+    QString myNorthing = lineEditNorthing->text();
+    myCoordinates.first = myEasting.toInt();
+    myCoordinates.second = myNorthing.toInt();
+
+  QPair<QMap<QString, int>, QMap<QString, int> > myPairOfAreaTargetMaps;
+    myPairOfAreaTargetMaps.first=myAnimalTargetsMap;
+    myPairOfAreaTargetMaps.second=myCropsTargetsMap;
+
+  LaGrassProcess myGrassProcess(myDEM, myCoordinates, myPairOfAreaTargetMaps);
 
   myGrassProcess.exec();
 

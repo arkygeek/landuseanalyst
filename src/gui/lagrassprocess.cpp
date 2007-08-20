@@ -25,6 +25,7 @@
 #include "lamainform.h"
 #include "lacrop.h"
 #include "laanimal.h"
+#include "lagrass.h"
 
 #include <QString>
 #include <QMessageBox>
@@ -33,7 +34,7 @@
 #include <QSettings>
 #include <QtDebug>
 
-  LaGrassProcess::LaGrassProcess(QPair<QMap<QString, int>, QMap<QString, int> > & thePair, QWidget* parent, Qt::WFlags fl)
+  LaGrassProcess::LaGrassProcess(QString theDEM, QPair<int, int> theCoordinates, QPair<QMap<QString, int>, QMap<QString, int> > & thePair, QWidget* parent, Qt::WFlags fl)
 : QDialog(parent,fl)
 {
   //required by Qt4 to initialise the ui
@@ -42,7 +43,8 @@
 
   mAnimalAreaTargetsMap = thePair.first;
   mCropAreaTargetsMap = thePair.second;
-
+  mDEM = theDEM;
+  mCoordinates = theCoordinates;
   lblGraphic->setScaledContents(true);
   lblPreview->setScaledContents(true);
   pbarTarget->setRange(0,100);
@@ -84,30 +86,48 @@ void LaGrassProcess::on_pbnStart_clicked()
   int myNumberOfSearches = mCropAreaTargetsMap.size() + mAnimalAreaTargetsMap.size();
   setPbarOverallRange(myNumberOfSearches);
 
+  // create cost surface maps
+
+  LaGrass myGrass;
+  int myEasting = mCoordinates.first;
+  int myNorthing = mCoordinates.second;
+  //QString myDEM = mDEM;
+  // Make Cost Surface: bool LaGrass::makeWalkCost(int theX, int theY)
+  myGrass.makeWalkCost(myEasting, myNorthing, mDEM);
+
+
   QMapIterator<QString, int > myCropIterator(mCropAreaTargetsMap);
   while (myCropIterator.hasNext())
   {
     myCropIterator.next();
     LaCrop myCrop = LaUtils::getCrop(myCropIterator.key());
-    lblGraphic->setPixmap(myCrop.imageFile());
-    lblGraphic->repaint();
-    lblAreaTarget->setText("Target:\n" + QString::number(myCropIterator.value()));
-    lblAreaTarget->repaint();
+
+    // set the images and area target label
+      lblGraphic->setPixmap(myCrop.imageFile());
+      lblGraphic->repaint();
+      //lblPreview->setPixmap(convertedRasterFile);
+      //lblPreview->repaint();
+      lblAreaTarget->setText("Target:\n" + QString::number(myCropIterator.value()));
+      lblAreaTarget->repaint();
+
+    int myAreaTarget = myCropIterator.value();
     QString myName = myCrop.name();
+
     LaMainForm myMainForm;
     QString myCropParameterGuid = myMainForm.getMatchingCropParameterGuid(myCropIterator.key());
+
     LaCropParameter myCropParameter = LaUtils::getCropParameter(myCropParameterGuid);
     QString myCropRasterFile = myCropParameter.rasterName();
-    //qDebug() << "MyName" << myName << "needs area of: " << myCropIterator.value();
-    //qDebug() << "The Raster is: " << myCropRasterFile;
+
     setPbarTargetRange(17);
-    for (int i=0; i<18; i++)
-    {
-      pbarTarget->setValue(i);
-    }
+    //for (int i=0; i<18; i++)
+    //{
+    //  pbarTarget->setValue(i);
+    //}
     // go analyse the stuff...
+
+    analyseModel(myCropRasterFile, myAreaTarget);
     updateOverallProgress(myOverallProgress);
-    //pbarBusy->repaint();
     myOverallProgress++;
   }
 
@@ -116,26 +136,28 @@ void LaGrassProcess::on_pbnStart_clicked()
   {
     myAnimalIterator.next();
     LaAnimal myAnimal = LaUtils::getAnimal(myAnimalIterator.key());
-    lblGraphic->setPixmap(myAnimal.imageFile());
-    lblGraphic->repaint();
-    lblAreaTarget->setText("Target:\n" + QString::number(myAnimalIterator.value()));
-    lblAreaTarget->repaint();
+
+    // set the images and area target label
+      lblGraphic->setPixmap(myAnimal.imageFile());
+      lblGraphic->repaint();
+      //lblPreview->setPixmap(convertedRasterFile);
+      //lblPreview->repaint();
+      lblAreaTarget->setText("Target:\n" + QString::number(myAnimalIterator.value()));
+      lblAreaTarget->repaint();
     QString myName = myAnimal.name();
     LaMainForm myMainForm;
     QString myAnimalParameterGuid = myMainForm.getMatchingAnimalParameterGuid(myAnimalIterator.key());
     LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(myAnimalParameterGuid);
     QString myAnimalRasterFile = myAnimalParameter.rasterName();
-    //qDebug() << myName <<" needs area of: " << myAnimalIterator.value();
-    //qDebug() << "The Raster is: " << myAnimalRasterFile;
     setPbarTargetRange(17);
-    for (int i=0; i<18; i++)
-    {
-      pbarTarget->setValue(i);
-    }
-
+    //for (int i=0; i<18; i++)
+    //{
+    //  pbarTarget->setValue(i);
+    //}
     // go analyse the stuff...
+    int myAreaTarget = myAnimalIterator.value();
+    analyseModel(myAnimalRasterFile, myAreaTarget);
     updateOverallProgress(myOverallProgress);
-    //pbarBusy->repaint();
     myOverallProgress++;
   }
   toggleBusyProgressBar(false);
@@ -207,18 +229,11 @@ void LaGrassProcess::toggleBusyProgressBar(bool theStatus)
 
 void LaGrassProcess::analyseModel(QString theRasterMask, int theAreaTarget)
 {
+  LaGrass myGrass;
 
-  // get the area targets
-
-
-    ///////////////////////
-   // Make Cost Surface //
-  ///////////////////////
 
   // r.mapcalc "TimeOnlyFrictionMap=if(isnull(DEM), null(), 1)"
   // r.walk max_cost=20000 elevation=dem_patched_filled@PERMANENT friction=theFrictionMap output=rwalkResultsSlopeMax20kFMap coordinate=744800,3611100 percent_memory=100 nseg=4 walk_coeff=0.72,6.0,1.9998,-1.9998 lambda=0 slope_factor=-0.2125 -k
-
-
 
    // find the land!
    int myFirst = 0;

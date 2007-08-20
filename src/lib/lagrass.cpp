@@ -21,7 +21,7 @@
 #include "lagrass.h"
 #include "lautils.h"
 #include "la.h"
-
+//#include "lagrassprocess.h"
 
 #include <QString>
 #include <QStringList>
@@ -30,6 +30,7 @@
 #include <QTextStream>
 #include <QProcess>
 #include <QStringList>
+#include <QDebug>
 
 LaGrass::LaGrass() : QObject()
 {
@@ -77,7 +78,7 @@ QStringList LaGrass::getRasterList(QString theMapset, bool thePrependMapsetFlag 
     while (myIterator.hasNext())
     {
       QString myString = myIterator.next();
-      myFinalList << theMapset + "." + myString;
+      myFinalList << myString + "@" + theMapset;
     }
   }
   return myFinalList;
@@ -136,11 +137,13 @@ float LaGrass::getArea(QString theLayerName)
   return 0;
 }
 
-bool LaGrass::makeWalkCost(int theX, int theY)
+bool LaGrass::makeWalkCost(int theX, int theY, QString theDEM)
 {
   logMessage("method ==> void LaGrass::makeWalkCost(int theX, int theY)");
   //r.walk max_cost=20000 elevation=dem_patched_filled@PERMANENT friction=theFrictionMap output=rwalkResultsSlopeMax20kFMap coordinate=744800,3611100 percent_memory=100 nseg=4 walk_coeff=0.72,6.0,1.9998,-1.9998 lambda=0 slope_factor=-0.2125 -k
-  QString myElevationMap="", myFrictionMap="";
+  qDebug() << "Coordinates: " << theX << "," << theY;
+  QString myElevationMap=theDEM;
+  QString myFrictionMap=theDEM;
 
   QString myCommand = "r.walk";
   QStringList myArguments;
@@ -156,6 +159,8 @@ bool LaGrass::makeWalkCost(int theX, int theY)
               << "slope_factor=-0.2125"
               << "-k";
   qDebug(myCommand.toLocal8Bit() + myArguments.join(" ").toLocal8Bit());
+  //LaGrassProcess myGrassProcess;
+
   QString myErrorLog;
   QString myResult = runCommand(myCommand,myArguments,myErrorLog);
   qDebug(myResult.toLocal8Bit());

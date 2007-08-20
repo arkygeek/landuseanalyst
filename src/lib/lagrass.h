@@ -99,7 +99,7 @@ class LaGrass : public QObject
 
 
     void reclass(QString theRaster, int theMax);
-    bool makeWalkCost(int theX, int theY);
+    bool makeWalkCost(int theX, int theY, QString theDEM);
     void makeEuclideanCost(int theX, int theY);
     void makePathDistanceCost(int theX, int theY);
     void writeMetaData(QString theValue);

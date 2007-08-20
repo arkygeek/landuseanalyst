@@ -37,7 +37,7 @@ class LaGrassProcess : public QDialog, private Ui::LaGrassProcessBase
 {
   Q_OBJECT
   public:
-    LaGrassProcess(QPair<QMap<QString, int>, QMap<QString, int> > & thePair, QWidget* parent = 0, Qt::WFlags fl = 0 );
+    LaGrassProcess(QString theDEM, QPair<int, int> theCoordinates, QPair<QMap<QString, int>, QMap<QString, int> > & thePair, QWidget* parent = 0, Qt::WFlags fl = 0 );
     ~LaGrassProcess();
 
   public slots:
@@ -65,6 +65,8 @@ class LaGrassProcess : public QDialog, private Ui::LaGrassProcessBase
       int mSearches;
       QMap <QString, int> mCropAreaTargetsMap;
       QMap <QString, int> mAnimalAreaTargetsMap;
+      QPair <int, int> mCoordinates;
+      QString mDEM;
 };
 
 #endif //LAGRASSPROCESS_H
