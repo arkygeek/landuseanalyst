@@ -49,7 +49,7 @@
   pbarTarget->setValue(0);
   pbarOverall->setRange(0,100);
   pbarOverall->setValue(0);
-  lblCurrentArea->setText(0);
+  lblCurrentArea->setText("0");
   lblAreaTarget->setText(0);
   qDebug() << "thePair" << thePair;
 }
@@ -79,6 +79,7 @@ void LaGrassProcess::on_pbnStart_clicked()
 {
   // so here we go.  I have the maps and their targets, so i
   // think all i need to do is iterate through them one at a time!
+  toggleBusyProgressBar(true);
   int myOverallProgress = 1;
   int myNumberOfSearches = mCropAreaTargetsMap.size() + mAnimalAreaTargetsMap.size();
   setPbarOverallRange(myNumberOfSearches);
@@ -97,11 +98,16 @@ void LaGrassProcess::on_pbnStart_clicked()
     QString myCropParameterGuid = myMainForm.getMatchingCropParameterGuid(myCropIterator.key());
     LaCropParameter myCropParameter = LaUtils::getCropParameter(myCropParameterGuid);
     QString myCropRasterFile = myCropParameter.rasterName();
-    qDebug() << "MyName" << myName << "needs area of: " << myCropIterator.value();
-    qDebug() << "The Raster is: " << myCropRasterFile;
-
+    //qDebug() << "MyName" << myName << "needs area of: " << myCropIterator.value();
+    //qDebug() << "The Raster is: " << myCropRasterFile;
+    setPbarTargetRange(17);
+    for (int i=0; i<18; i++)
+    {
+      pbarTarget->setValue(i);
+    }
     // go analyse the stuff...
     updateOverallProgress(myOverallProgress);
+    //pbarBusy->repaint();
     myOverallProgress++;
   }
 
@@ -119,14 +125,20 @@ void LaGrassProcess::on_pbnStart_clicked()
     QString myAnimalParameterGuid = myMainForm.getMatchingAnimalParameterGuid(myAnimalIterator.key());
     LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(myAnimalParameterGuid);
     QString myAnimalRasterFile = myAnimalParameter.rasterName();
-    qDebug() << myName <<" needs area of: " << myAnimalIterator.value();
-    qDebug() << "The Raster is: " << myAnimalRasterFile;
-
+    //qDebug() << myName <<" needs area of: " << myAnimalIterator.value();
+    //qDebug() << "The Raster is: " << myAnimalRasterFile;
+    setPbarTargetRange(17);
+    for (int i=0; i<18; i++)
+    {
+      pbarTarget->setValue(i);
+    }
 
     // go analyse the stuff...
     updateOverallProgress(myOverallProgress);
+    //pbarBusy->repaint();
     myOverallProgress++;
   }
+  toggleBusyProgressBar(false);
 }
 
 void LaGrassProcess::setPbarTargetRange(int theTarget)
@@ -181,11 +193,14 @@ void LaGrassProcess::toggleBusyProgressBar(bool theStatus)
   {
     case true:  // turn it on
                 // set the progress bar to move (min,max = 0,0)
-                pbarBusy->setRange(0,0);
+                //pbarBusy->setMinimum(0);
+                pbarBusy->setMaximum(0);
+                pbarBusy->repaint();
                 break;
     case false: // shut it off
                 // set the progress bar to not move (min,max = 0,1)
-                pbarBusy->setRange(0,1);
+                //pbarBusy->setMinimum(0);
+                pbarBusy->setMaximum(1);
                 break;
   }
 }
@@ -212,9 +227,13 @@ void LaGrassProcess::analyseModel(QString theRasterMask, int theAreaTarget)
    LandFound mySearchStatus = NotEnough;
    int myCurrentlyContainedArea = 0;
    int myPrecision = 5; // change this to real value
+   int myStatusCount = 0;
+   setPbarTargetRange(17);
 
    while (myFirst <= myLast)
   {
+    updateCurrentProgress(myStatusCount);
+    myStatusCount++;
     int myMid = (myFirst + myLast) / 2;  // compute mid point.
     // reclass with 1 to midpoint and null beyond and then check results
     //    echo "0 thru $step = 1" | r.reclass input=$cost output=cost.reclass --o
@@ -233,6 +252,7 @@ void LaGrassProcess::analyseModel(QString theRasterMask, int theAreaTarget)
             break;
       case FoundTarget:
             // found it. break out of loop /////
+            updateCurrentProgress(myStatusCount);
             myFirst = myLast+1;
             break;
     }
