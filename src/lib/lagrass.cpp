@@ -139,9 +139,9 @@ float LaGrass::getArea(QString theLayerName)
 
 bool LaGrass::makeWalkCost(int theX, int theY, QString theDEM)
 {
-  logMessage("method ==> void LaGrass::makeWalkCost(int theX, int theY)");
+  //logMessage("method ==> void LaGrass::makeWalkCost(int theX, int theY)");
   //r.walk max_cost=20000 elevation=dem_patched_filled@PERMANENT friction=theFrictionMap output=rwalkResultsSlopeMax20kFMap coordinate=744800,3611100 percent_memory=100 nseg=4 walk_coeff=0.72,6.0,1.9998,-1.9998 lambda=0 slope_factor=-0.2125 -k
-  qDebug() << "Coordinates: " << theX << "," << theY;
+  //qDebug() << "Coordinates: " << theX << "," << theY;
   QString myElevationMap=theDEM;
   QString myFrictionMap=theDEM;
 
@@ -157,13 +157,14 @@ bool LaGrass::makeWalkCost(int theX, int theY, QString theDEM)
               << "walk_coeff=0.72,6.0,1.9998,-1.999"
               << "lambda=0"
               << "slope_factor=-0.2125"
-              << "-k";
+              << "-k"
+              << "--overwrite";
   qDebug(myCommand.toLocal8Bit() + myArguments.join(" ").toLocal8Bit());
-  //LaGrassProcess myGrassProcess;
 
   QString myErrorLog;
   QString myResult = runCommand(myCommand,myArguments,myErrorLog);
-  qDebug(myResult.toLocal8Bit());
+  //qDebug(myResult.toLocal8Bit());
+  //LaGrassProcess myLaGrassProcess;
   if (myErrorLog.isEmpty())
   {
     return true;

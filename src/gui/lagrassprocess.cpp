@@ -53,7 +53,6 @@
   pbarOverall->setValue(0);
   lblCurrentArea->setText("0");
   lblAreaTarget->setText(0);
-  qDebug() << "thePair" << thePair;
 }
 
 LaGrassProcess::~LaGrassProcess()
@@ -93,8 +92,11 @@ void LaGrassProcess::on_pbnStart_clicked()
   int myNorthing = mCoordinates.second;
   //QString myDEM = mDEM;
   // Make Cost Surface: bool LaGrass::makeWalkCost(int theX, int theY)
+  tbGrass->setText("Creating Cost Surface Raster...");
+  //tbGrass->repaint();
   myGrass.makeWalkCost(myEasting, myNorthing, mDEM);
-
+  tbGrass->append("Cost Surface Generation complete.");
+  //tbGrass->repaint();
 
   QMapIterator<QString, int > myCropIterator(mCropAreaTargetsMap);
   while (myCropIterator.hasNext())
