@@ -103,7 +103,7 @@ int LaCropParameter::fallowTDN() const
 {
   return mFallowTDN;
 }
-int LaCropParameter::areaUnits() const
+AreaUnits LaCropParameter::areaUnits() const
 {
   return mAreaUnits;
 }
@@ -150,9 +150,9 @@ void LaCropParameter::setFallowTDN(int theKg)
 {
   mFallowTDN=theKg;
 }
-void LaCropParameter::setAreaUnits(int theIndexValue)
+void LaCropParameter::setAreaUnits(AreaUnits theAreaUnit)
 {
-  mAreaUnits=theIndexValue;
+  mAreaUnits=theAreaUnit;
 }
 void LaCropParameter::setUseSpecificLand(bool theFlag)
 {
@@ -189,7 +189,17 @@ bool LaCropParameter::fromXml(QString theXml)
   mCropRotation=QString(myTopElement.firstChildElement("cropRotation").text()).toInt();
   mFallowRatio=QString(myTopElement.firstChildElement("fallowRatio").text()).toFloat();
   mFallowTDN=QString(myTopElement.firstChildElement("fallowTDN").text()).toInt();
-  mAreaUnits=QString(myTopElement.firstChildElement("areaUnits").text()).toInt();
+
+  QString myAreaUnits = QString(myTopElement.firstChildElement("areaUnits").text());
+  if (myAreaUnits == "Dunum")
+  {
+    mAreaUnits=Dunum;
+  }
+  else if (myAreaUnits == "Hectare")
+  {
+    mAreaUnits=Hectare;
+  }
+  //mAreaUnits=QString(myTopElement.firstChildElement("areaUnits").text()).toInt();
   mUseCommonLand=QString(myTopElement.firstChildElement("useCommonLand").text()).toInt();
   mUseSpecificLand=QString(myTopElement.firstChildElement("useSpecificLand").text()).toInt();
   mRasterName=LaUtils::xmlDecode(myTopElement.firstChildElement("rasterName").text());
@@ -199,6 +209,7 @@ bool LaCropParameter::fromXml(QString theXml)
 QString LaCropParameter::toXml()
 {
   QString myString;
+  QString myUnits = (mAreaUnits==0) ? "Dunum" : "Hectare";
   myString+=QString("<cropParameter guid=\"" + guid() + "\">\n");
   myString+=QString("  <name>" + LaUtils::xmlEncode(mName) + "</name>\n");
   myString+=QString("  <description>" + LaUtils::xmlEncode(mDescription) + "</description>\n");
@@ -207,7 +218,7 @@ QString LaCropParameter::toXml()
   myString+=QString("  <cropRotation>" + QString::number(mCropRotation) + "</cropRotation>\n");
   myString+=QString("  <fallowRatio>" + QString::number(mFallowRatio) + "</fallowRatio>\n");
   myString+=QString("  <fallowTDN>" + QString::number(mFallowTDN) + "</fallowTDN>\n");
-  myString+=QString("  <areaUnits>" + QString::number(mAreaUnits) + "</areaUnits>\n");
+  myString+=QString("  <areaUnits>" + myUnits + "</areaUnits>\n");
   myString+=QString("  <useCommonLand>" + QString::number(mUseCommonLand) + "</useCommonLand>\n");
   myString+=QString("  <useSpecificLand>" + QString::number(mUseSpecificLand) + "</useSpecificLand>\n");
   myString+=QString("  <rasterName>" + LaUtils::xmlEncode(mRasterName) + "</rasterName>\n");
@@ -244,6 +255,7 @@ QString LaCropParameter::toHtml()
   QString myUnits = (mAreaUnits==0) ? "Dunum" : "Hectare";
   QString myLandUsed = (mUseCommonLand==1) ? "Common" : "Specific";
   QString myRasterName = (mUseCommonLand==1) ? "LaCropCommonMask" : mRasterName;
+
   myString+="<h3 >Details for " + LaUtils::xmlEncode(mName) + "</h3>";
   myString+="<table>";  //  myString+="<tr><td><b>GUID:</th><td>" + guid() + "</td></tr>";
   myString+="<tr><td><b>Description: </b></td><td>" + mDescription + "</td></tr>";

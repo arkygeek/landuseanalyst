@@ -19,7 +19,10 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-
+// Sallah: Indy, why does the floor move?
+//Indiana Jones: Give me your torch. [Sallah does, and Indy drops it in.]
+//               Snakes. Why'd it have to be snakes?
+//Sallah: Asps. Very dangerous. You go first.
 #ifndef LA
 #define LA
 

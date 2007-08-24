@@ -72,6 +72,9 @@
   }
 }
 
+// Sallah: How?
+// Indy: I don't know, I'm making this up as I go.
+
 LaAssemblageConversion::~LaAssemblageConversion()
 {
   writeSettings();

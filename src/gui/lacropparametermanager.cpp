@@ -312,7 +312,6 @@ void LaCropParameterManager::on_pbnApply_clicked()
   mCropParameter.setCropRotation(grpCropRotation->isChecked());
   mCropParameter.setFallowRatio(sbFallowRatio->value());
   mCropParameter.setFallowTDN(sbFallowTDN->value());
-  mCropParameter.setAreaUnits(comboBoxAreaUnits->currentIndex());
 
   QString mySelectedAreaUnit = QString(comboBoxAreaUnits->currentText());
   AreaUnits myAreaUnits;

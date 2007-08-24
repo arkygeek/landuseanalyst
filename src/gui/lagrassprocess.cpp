@@ -93,10 +93,10 @@ void LaGrassProcess::on_pbnStart_clicked()
   //QString myDEM = mDEM;
   // Make Cost Surface: bool LaGrass::makeWalkCost(int theX, int theY)
   tbGrass->setText("Creating Cost Surface Raster...");
-  //tbGrass->repaint();
+  tbGrass->repaint();
   myGrass.makeWalkCost(myEasting, myNorthing, mDEM);
   tbGrass->append("Cost Surface Generation complete.");
-  //tbGrass->repaint();
+  tbGrass->repaint();
 
   QMapIterator<QString, int > myCropIterator(mCropAreaTargetsMap);
   while (myCropIterator.hasNext())

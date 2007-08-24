@@ -21,6 +21,7 @@
 class QString;
 #include "laserialisable.h"
 #include "laguid.h"
+#include "la.h"
 #include <QString>
 /**
   * A class to represent a crop
@@ -60,7 +61,7 @@ class LaCropParameter : public LaSerialisable, public LaGuid
       */
     int fallowTDN() const;
     /** Selects 0==dunums 1==hectares as units for area */
-    int areaUnits() const;
+    AreaUnits areaUnits() const;
     /** A flag indicating that the crop can be grown on
       * land that is also suitable for other crops
       */
@@ -92,7 +93,7 @@ class LaCropParameter : public LaSerialisable, public LaGuid
       */
     void setFallowTDN(int theKg);
     /** Selects 0==dunums 1==hectares as units for area */
-    void setAreaUnits(int theIndexValue);
+    void setAreaUnits(AreaUnits theAreaUnit);
     /** A flag indicating that the crop can be grown on
       * land that is also suitable for other crops
       */
@@ -139,7 +140,7 @@ class LaCropParameter : public LaSerialisable, public LaGuid
       */
     int mFallowTDN;
     /** Selects 0==dunums 1==hectares as units for area */
-    int mAreaUnits;
+    AreaUnits mAreaUnits;
     /** A flag indicating that the crop can be grown on
       * land that is also suitable for other crops
       */

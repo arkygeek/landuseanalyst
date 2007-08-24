@@ -339,7 +339,7 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
      * As we account for each resource (fallow, crop x, crop y etc)
      * we can remove it from the cumulative total.
      */
-    QMap <QString,int> mRequiredTDNMap;
+    QMap <QString,int> mTDNMap;
     /** Initialise the cumulative calories map to the calories
      * required for each animal.
      */

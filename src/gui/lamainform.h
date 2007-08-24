@@ -77,6 +77,13 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
      */
     void logMessage(QString theString);
   private slots:
+
+    //Rene Belloq: You and I are very much alike. Archeology is our religion,
+    // yet we have both fallen from the pure faith. Our methods have not differed
+    // as much as you pretend. I am but a shadowy reflection of you. It would take
+    // only a nudge to make you like me. To push you out of the light.
+    //Indiana Jones: Now you're getting nasty.
+
     void helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetItem * thepOldItem);
     void writeResults(QString theText);
     void cropCalcClicked(QListWidgetItem * thepCurrentItem, QListWidgetItem * thepOldItem);
