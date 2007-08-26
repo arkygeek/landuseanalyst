@@ -37,6 +37,7 @@
 #include <QListWidget>
 #include <QComboBox>
 #include <QHeaderView>
+#include <QDebug>
 
 LaModel::LaModel() : QObject(),  LaSerialisable(), LaGuid()
 {
@@ -282,9 +283,14 @@ void LaModel::setCaloriesPerPersonDaily(int theCalories)
   mCaloriesPerPersonDaily=theCalories;
 }
 
+void LaModel::setCommonLandAreaUnits(AreaUnits theAreaUnits)
+{
+  mCommonLandAreaUnits = theAreaUnits;
+}
+
 void LaModel::setCommonLandValue(int theValue)
 {
-  mCommonGrazingLandFoodValue=theValue;
+  mCommonGrazingLandFoodValue = (mCommonLandAreaUnits == Dunum) ? theValue*10 : theValue;
 }
 
 void LaModel::setAnimals(QMap<QString,QString> theAnimals)
@@ -924,7 +930,13 @@ void LaModel::initialiseAreaTargetsCropsMap()
     myCropIterator.next();
     QString myCropGuid = myCropIterator.key();
     int myProductionTarget = static_cast<int>(mProductionRequiredCropsMap.value(myCropGuid));
+    int myAreaTarget = getAreaTargetsCrops(myCropGuid, myProductionTarget);
     mAreaTargetsCropsMap.insert(myCropGuid,getAreaTargetsCrops(myCropGuid, myProductionTarget));
+
+    QString myCropParameterGuid = mCropsMap.value(myCropGuid);
+    LaCropParameter myCropParameter = LaUtils::getCropParameter(myCropParameterGuid);
+    //bool myCommonLandUsed =
+    mCommonCropLand = (myCropParameter.useCommonLand() == true) ? mCommonCropLand + myAreaTarget : mCommonCropLand;
   }
 }
 void LaModel::initialiseCalcsCropsMap()
@@ -938,6 +950,7 @@ void LaModel::initialiseCalcsCropsMap()
     logMessage(myReport.toLocal8Bit());
     mCalcsCropsMap.insert(myCropGuid, myReport);
   }
+  mCalcsCropsMap.insert("Common Land", QString::number(mCommonCropLand));
 }
 void LaModel::initialiseCalcsAnimalsMap()
 { // this also returns an area target for common land
@@ -952,6 +965,7 @@ void LaModel::initialiseCalcsAnimalsMap()
     logMessage(myReport.toLocal8Bit());
     mCalcsAnimalsMap.insert(myAnimalGuid, myReport);
   }
+  mCalcsAnimalsMap.insert("Common Land", QString::number(mCommonGrazingLandAreaTarget));
 }
 
 void LaModel::initialiseAreaTargetsAnimalsMap()
@@ -976,21 +990,29 @@ void LaModel::initialiseAreaTargetsAnimalsMap()
       logMessage("Animal Needs more Food!");
       // figure out how much grazing land is needed to supply this many calories
       LandBeingGrazed myLandBeingGrazed;
+      int myFoodValueOfCommonGrazingLand = myAnimalParameter.foodValueOfCommonGrazingLand();
+
       myLandBeingGrazed =  (myAnimalParameter.useCommonGrazingLand()==1) ? Common:Unique;
 
       switch (myLandBeingGrazed)
       {
         case Common:
+             {
                logMessage("Animal is grazing Common Land so required calories are added to common land target");
                mCommonGrazingLandCalorieTarget += static_cast<int>(mTDNMap.value(myAnimalGuid));
-               mAreaTargetsAnimalsMap[myAnimalGuid]=0;
+               logMessage("Cumulative Area Target for Common Land: " + QString::number(mCommonGrazingLandCalorieTarget));
+               float myCommonTarget = mTDNMap.value(myAnimalGuid) / myFoodValueOfCommonGrazingLand;
+               mAreaTargetsAnimalsMap[myAnimalGuid] = static_cast<int>(myCommonTarget);
                break;
+             }
         case Unique:
+             {
                logMessage("Animal is grazing Unique Land so required calories are divided by food value of unique grazing land");
-               float myTarget = mTDNMap.value(myAnimalGuid) / myAnimalParameter.foodValueOfSpecificGrazingLand();
-               mAreaTargetsAnimalsMap[myAnimalGuid] = static_cast<int>(myTarget);
-               logMessage("The Area Target is: " + QString::number(static_cast<int>(myTarget)).toLocal8Bit());
+               float myTarget1 = mTDNMap.value(myAnimalGuid) / myAnimalParameter.foodValueOfSpecificGrazingLand();
+               mAreaTargetsAnimalsMap[myAnimalGuid] = static_cast<int>(myTarget1);
+               logMessage("The Area Target is: " + QString::number(static_cast<int>(myTarget1)).toLocal8Bit());
                break;
+             }
       }
       //int myCaloriesNeeded = static_cast<int>(mTDNMap.value(myAnimalGuid));
 
@@ -1001,10 +1023,13 @@ void LaModel::initialiseAreaTargetsAnimalsMap()
       logMessage("Animal needs no additional food.");
       mAreaTargetsAnimalsMap[myAnimalGuid] = 0;
     }
+    // CHECK FOR AREA UNIT CONVERSION HERE!
     mCommonGrazingLandAreaTarget = mCommonGrazingLandCalorieTarget / mCommonGrazingLandFoodValue;
 
   }
-    logMessage("The Common Grazing Land Area Target is: " + QString::number(static_cast<int>(mCommonGrazingLandAreaTarget)).toLocal8Bit());
+    logMessage(" ");
+    logMessage("The Final Common Grazing Land Area Target is: " + QString::number(static_cast<int>(mCommonGrazingLandAreaTarget)).toLocal8Bit());
+    logMessage(" ");
 }
 
 Status LaModel::fallowStatus() const
@@ -1149,7 +1174,7 @@ int LaModel::doTheFallowAllocation
         int theTDNNeeded
       )
 {
-
+  qDebug() << "TDN Map: " << mTDNMap;
   // when the total number of calories needed by the animals
   // is taken away from the total available calories (from crop fallow),
   // there will be one of two results.
@@ -1157,8 +1182,8 @@ int LaModel::doTheFallowAllocation
   //    food is required for the animals.  (fodder or grazing land)
   // 2. the result will be > 0, meaning that there is enough food value
   //    in the crop fallow to completely feed the animals.
-  int myTotalFallowTDN = theAvailableFallowTDN - theTDNNeeded;
-
+  float myTotalFallowTDN = theAvailableFallowTDN - theTDNNeeded;
+  qDebug() << "myTotalFallowTDN: "  << myTotalFallowTDN;
   // set up the conditions for the fallow allocation...
   // there is either enough fallow to feed the animal completely
   // or not enough to feed them completely.  If there is enough,
@@ -1167,7 +1192,9 @@ int LaModel::doTheFallowAllocation
   // on any other land besides the crop fallow.
   Status myFallowStatus;
   myFallowStatus = (myTotalFallowTDN > 0) ? MoreThanEnoughToCompletelySatisfy : NotEnoughToCompletelySatisfy;
-  logMessage("Fallow Status: " + QString(myFallowStatus).toLocal8Bit());
+  QString myFallowStatusString = (myFallowStatus!=NotEnoughToCompletelySatisfy) ? "More than Enough" : "Not Enough";
+  logMessage("Fallow Status: " + myFallowStatusString);
+  qDebug () << "FallowStatus: " << myFallowStatus;
   switch (myFallowStatus)
   {
     case  MoreThanEnoughToCompletelySatisfy:
@@ -1198,7 +1225,7 @@ int LaModel::doTheFallowAllocation
 
     case  NotEnoughToCompletelySatisfy:
           {
-            logMessage("NotEnoughToCompletelySatisfy");
+            logMessage("CASE: NotEnoughToCompletelySatisfy");
             // because there ARE NO leftover TDN available to feed more critters, this
             // shows that NOT ALL of the animals requirements are met with crop fallow
             // and therefore require more feed so their values in the QMap will be adjusted
@@ -1206,33 +1233,32 @@ int LaModel::doTheFallowAllocation
             while (myAnimalIterator.hasNext())
             {
               myAnimalIterator.next();
+              logMessage("    Iterating through Animals looking for a match");
 
               QString myAnimalGuid = myAnimalIterator.key();
               QString myAnimalParameterGuid = myAnimalIterator.value();
               LaAnimal myAnimal = LaUtils::getAnimal(myAnimalGuid);
               LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(myAnimalParameterGuid);
-
+              int myCurrentAnimalsTDN = mTDNMap.value( myAnimalGuid );
+              logMessage("       Current Animal: " + myAnimal.name());
+              qDebug() << "        theTDNNeeded: " << theTDNNeeded;
+              qDebug() << "        theAvailableFallowTDN: " << theAvailableFallowTDN;
+              qDebug() << "        myCurrentAnimalsTDN: " << myCurrentAnimalsTDN;
               if (myAnimalParameter.fallowUsage()==thePriority)
               {
-                int myAllottedCalories =
-                    static_cast<int>(
-                                     (
-                                      mTDNMap.value( myAnimalGuid )
-                                      / theTDNNeeded
-                                     )
-                                     * theAvailableFallowTDN // myTotalFallowTDN
-                                    );
-                logMessage("Adjusting calories required by: " + myAnimal.name().toLocal8Bit());
-                logMessage("Allotted Calories from fallow are: " + QString::number(myAllottedCalories).toLocal8Bit());
-                logMessage("Original calorie target was: " + QString::number(mTDNMap.value(myAnimalGuid)).toLocal8Bit());
-                float myNewCalorieTarget = mTDNMap.value(myAnimalGuid) - myAllottedCalories;
-                logMessage("New calorie target is: " + QString::number(myNewCalorieTarget).toLocal8Bit());
-                mTDNMap [myAnimalGuid] = static_cast<int>(myNewCalorieTarget);
-                myTotalFallowTDN += myAllottedCalories;
+                double myAllottedTDN = ((myCurrentAnimalsTDN / static_cast<float>(theTDNNeeded)) * theAvailableFallowTDN);
+                logMessage("Adjusting calories required by: " + myAnimal.name());
+                qDebug() << "myAllottedTDN: " << myAllottedTDN;
+                logMessage("Allotted TDN from fallow are: " + QString::number(myAllottedTDN));
+                logMessage("Original TDN target was: " + QString::number(mTDNMap.value(myAnimalGuid)));
+                float myNewTDNTarget = mTDNMap.value(myAnimalGuid) - myAllottedTDN;
+                logMessage("New TDN target is: " + QString::number(myNewTDNTarget));
+                mTDNMap [myAnimalGuid] = static_cast<int>(myNewTDNTarget);
+                myTotalFallowTDN += static_cast<int>(myAllottedTDN);
               } // endif (fallowUsage(myAnimalGuid)==High)
 
             } // while animal iterating
-            logMessage("After allocation, total available calories from fallow: " + QString::number(myTotalFallowTDN).toLocal8Bit());
+            logMessage("After allocation, total available TDN from fallow: " + QString::number(myTotalFallowTDN).toLocal8Bit());
             myTotalFallowTDN = 0;
             logMessage("WHICH HAS NOW BEEN SET TO 0");
             break;
@@ -1241,7 +1267,7 @@ int LaModel::doTheFallowAllocation
     default:
           break;
   } //switch
-  return myTotalFallowTDN;
+  return static_cast<int>(myTotalFallowTDN);
 }
 
 

@@ -194,6 +194,8 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
      */
     void setCommonLandValue(int theValue);
 
+    void setCommonLandAreaUnits(AreaUnits theAreaUnits);
+
     /** Set the animals for this model
      * @param QMap<QString,QString> a list of animal guid and animal parameter guids
      */
@@ -386,11 +388,12 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
     QMap<QString,QString> mAnimalsMap;
     /** A map to hold the associated crops and their parameters */
     QMap<QString,QString> mCropsMap;
-
+    AreaUnits mCommonLandAreaUnits;
     Status mFallowStatus;
     int mCommonGrazingLandCalorieTarget;
     int mCommonGrazingLandFoodValue;
     int mCommonGrazingLandAreaTarget;
+    int mCommonCropLand;
 };
 #endif //LAMODEL_H
 

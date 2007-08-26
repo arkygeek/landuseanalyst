@@ -609,6 +609,10 @@ void LaMainForm::cropCellClicked(int theRow, int theColumn)
   loadCrops();
 }
 
+// Belloq: What a fitting end to your life's pursuits. You're about to become
+//         a permanent addition to this archaeological find. Who knows? In a
+//         thousand years, even you may be worth something.
+
 void LaMainForm::cropCellChanged(int theRow, int theColumn)
 {
   QTableWidgetItem* mypItem = tblCrops->item(tblCrops->currentRow(),1);
@@ -994,6 +998,9 @@ void LaMainForm::animalCalcClicked(QListWidgetItem * thepCurrentItem, QListWidge
   myModel.setCropPercent(horizontalSliderCrop->value());
   myModel.setMeatPercent(horizontalSliderMeat->value());
   myModel.setCaloriesPerPersonDaily(spinBoxDailyCalories->value());
+  QString myAreaUnitsText = (comboBoxAreaUnits->currentText());
+  AreaUnits myAreaUnits =  (myAreaUnitsText == "Dunum") ? Dunum : Hectare;
+  myModel.setCommonLandAreaUnits(myAreaUnits);
   myModel.setCommonLandValue(sbCommonRasterTDN->value());
   tbReport->setHtml(myModel.toHtml());
   myModel.DoCalculations();
