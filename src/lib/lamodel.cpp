@@ -101,51 +101,18 @@ LaModel& LaModel::operator=(const LaModel& theModel)
   return *this;
 }
 
-QString LaModel::name() const
-{
-  return mName;
-}
-int LaModel::population() const
-{
-  return mPopulation;
-}
-QString LaModel::period() const
-{
-  return mPeriod;
-}
-int LaModel::projection() const
-{
-  return mProjection;
-}
-int LaModel::easting() const
-{
-  return mEasting;
-}
-int LaModel::northing() const
-{
-  return mNorthing;
-}
-bool LaModel::euclideanDistance() const
-{
-  return mEuclideanDistance;
-}
-bool LaModel::walkingTime() const
-{
-  return mWalkingTime;
-}
-bool LaModel::pathDistance() const
-{
-  return mPathDistance;
-}
-int LaModel::precision() const
-{
-  return mPrecision;
-}
-int LaModel::dietPercent() const
-{
-  return mDietPercent;
-}
-int LaModel::plantPercent() const
+QString LaModel::name()           const { return mName;}
+QString LaModel::period()         const { return mPeriod;}
+int  LaModel::population()        const { return mPopulation;}
+int  LaModel::projection()        const { return mProjection;}
+int  LaModel::easting()           const { return mEasting;}
+int  LaModel::northing()          const { return mNorthing;}
+bool LaModel::euclideanDistance() const { return mEuclideanDistance;}
+bool LaModel::walkingTime()       const { return mWalkingTime;}
+bool LaModel::pathDistance()      const { return mPathDistance;}
+int  LaModel::precision()         const { return mPrecision;}
+int  LaModel::dietPercent()       const { return mDietPercent;}
+int  LaModel::plantPercent()      const
 {
   if (mPercentOfDietThatIsFromCrops < 0)
   {
@@ -160,148 +127,44 @@ int LaModel::plantPercent() const
     return mPercentOfDietThatIsFromCrops;
   }
 }
-int LaModel::meatPercent() const
-{
-  return mMeatPercent;
-}
-int LaModel::caloriesPerPersonDaily() const
-{
-  return mCaloriesPerPersonDaily;
-}
-int LaModel::foodValueCommonLand() const
-{
-  return mCommonGrazingTDN;
-}
-QMap <QString, int> LaModel::animalCalorieTargetsMap() const
-{
-  // need to implement logic to ensure that the calculations have been performed!
-  return mCaloriesProvidedByAnimalsMap;
-}
-QMap <QString, int> LaModel::animalFeedRequirementsMap() const
-{
-  // need to implement logic to ensure that the calculations have been performed!
-  return mTDNMap;
-}
-QMap <QString, int> LaModel::animalProductionTargetsMap() const
-{
-  // need to implement logic to ensure that the calculations have been performed!
-  return mProductionRequiredAnimalsMap;
-}
-QMap <QString, int> LaModel::animalAreaTargetsMap() const
-{
-  // need to implement logic to ensure that the calculations have been performed!
-  return mAreaTargetsAnimalsMap;
-}
-QMap <QString, int> LaModel::cropCalorieTargetsMap() const
-{
-  // need to implement logic to ensure that the calculations have been performed!
-  return mCaloriesProvidedByCropsMap;
-}
-QMap <QString, int> LaModel::cropProductionTargetsMap() const
-{
-  // need to implement logic to ensure that the calculations have been performed!
-  return mProductionRequiredCropsMap;
-}
-QMap <QString, int> LaModel::cropAreaTargetsMap() const
-{
-  // need to implement logic to ensure that the calculations have been performed!
-  return mAreaTargetsCropsMap;
-}
+int LaModel::meatPercent() const { return mMeatPercent;}
+int LaModel::caloriesPerPersonDaily()                      const { return mCaloriesPerPersonDaily;          }
+int LaModel::foodValueCommonLand()                         const { return mCommonGrazingTDN;                }
 
-QMap <QString, QString> LaModel::calcsAnimalsMap()
-{
+QMap <QString, int> LaModel::animalCalorieTargetsMap()     const { return mCaloriesProvidedByAnimalsMap;    }
+QMap <QString, int> LaModel::animalFeedRequirementsMap()   const { return mTDNMap;                          }
+QMap <QString, int> LaModel::animalProductionTargetsMap()  const { return mProductionRequiredAnimalsMap;    }
+QMap <QString, int> LaModel::animalAreaTargetsMap()        const { return mAreaTargetsAnimalsMap;           }
+QMap <QString, int> LaModel::cropCalorieTargetsMap()       const { return mCaloriesProvidedByCropsMap;      }
+QMap <QString, int> LaModel::cropProductionTargetsMap()    const { return mProductionRequiredCropsMap;      }
+QMap <QString, int> LaModel::cropAreaTargetsMap()          const { return mAreaTargetsCropsMap;             }
 
-  return mCalcsAnimalsMap;
-}
+QMap <QString, QString> LaModel::calcsAnimalsMap()               { return mCalcsAnimalsMap;}
+QMap <QString, QString> LaModel::calcsCropsMap()                 { return mCalcsCropsMap;}
 
-QMap <QString, QString> LaModel::calcsCropsMap()
-{
-
-  return mCalcsCropsMap;
-}
-
-void LaModel::setFallowStatus(Status theStatus)
-{
-  mFallowStatus=theStatus;
-}
-
-void LaModel::setName(QString theName)
-{
-  mName=theName;
-}
-void LaModel::setPopulation(int thePopulation)
-{
-  mPopulation=thePopulation;
-}
-void LaModel::setPeriod(QString thePeriod)
-{
-  mPeriod=thePeriod;
-}
-
-void LaModel::setProjection(int theIndex)
-{
-  mProjection=theIndex;
-}
-void LaModel::setEasting(int theEasting)
-{
-  mEasting=theEasting;
-}
-void LaModel::setNorthing(int theNorthing)
-{
-  mNorthing=theNorthing;
-}
-void LaModel::setEuclideanDistance(bool theBool)
-{
-  mEuclideanDistance=theBool;
-}
-void LaModel::setWalkingTime(bool theBool)
-{
-  mWalkingTime=theBool;
-}
-void LaModel::setPathDistance(bool theBool)
-{
-  mPathDistance=theBool;
-}
-void LaModel::setPrecision(int thePrecision)
-{
-  mPrecision=thePrecision;
-}
-void LaModel::setDietPercent(int thePercent)
-{
-  mDietPercent=thePercent;
-}
-void LaModel::setCropPercent(int thePercent)
-{
-  mPercentOfDietThatIsFromCrops=thePercent;
-}
-void LaModel::setMeatPercent(int thePercent)
-{
-  mMeatPercent=thePercent;
-}
-void LaModel::setCaloriesPerPersonDaily(int theCalories)
-{
-  mCaloriesPerPersonDaily=theCalories;
-}
-
-void LaModel::setCommonLandAreaUnits(AreaUnits theAreaUnits)
-{
-  mCommonLandAreaUnits = theAreaUnits;
-}
-
-void LaModel::setCommonLandValue(int theValue)
+void LaModel::setFallowStatus           (Status theStatus)       { mFallowStatus=theStatus;                 }
+void LaModel::setName                   (QString theName)        { mName=theName;                           }
+void LaModel::setPopulation             (int thePopulation)      { mPopulation=thePopulation;               }
+void LaModel::setPeriod                 (QString thePeriod)      { mPeriod=thePeriod;                       }
+void LaModel::setProjection             (int theIndex)           { mProjection=theIndex;                    }
+void LaModel::setEasting                (int theEasting)         { mEasting=theEasting;                     }
+void LaModel::setNorthing               (int theNorthing)        { mNorthing=theNorthing;                   }
+void LaModel::setEuclideanDistance      (bool theBool)           { mEuclideanDistance=theBool;              }
+void LaModel::setWalkingTime            (bool theBool)           { mWalkingTime=theBool;                    }
+void LaModel::setPathDistance           (bool theBool)           { mPathDistance=theBool;                   }
+void LaModel::setPrecision              (int thePrecision)       { mPrecision=thePrecision;                 }
+void LaModel::setDietPercent            (int thePercent)         { mDietPercent=thePercent;                 }
+void LaModel::setCropPercent            (int thePercent)         { mPercentOfDietThatIsFromCrops=thePercent;}
+void LaModel::setMeatPercent            (int thePercent)         { mMeatPercent=thePercent;                 }
+void LaModel::setCaloriesPerPersonDaily (int theCalories)        { mCaloriesPerPersonDaily=theCalories;     }
+void LaModel::setCommonLandAreaUnits    (AreaUnits theAreaUnits) { mCommonLandAreaUnits = theAreaUnits;     }
+void LaModel::setCommonLandValue        (int theValue)
 {
   //mCommonGrazingTDN = (mCommonLandAreaUnits == Dunum) ? theValue*10 : theValue;
   mCommonGrazingTDN = theValue;
 }
-
-void LaModel::setAnimals(QMap<QString,QString> theAnimals)
-{
-  mAnimalsMap = theAnimals;
-}
-void LaModel::setCrops(QMap<QString,QString> theCrops)
-{
-  mCropsMap = theCrops;
-}
+void LaModel::setAnimals(QMap<QString,QString> theAnimals)       { mAnimalsMap = theAnimals;}
+void LaModel::setCrops(QMap<QString,QString> theCrops)           { mCropsMap = theCrops;}
 
 bool LaModel::fromXml(QString theXml)
 {
@@ -972,7 +835,7 @@ void LaModel::initialiseCalcsAnimalsMap()
 void LaModel::initialiseAreaTargetsAnimalsMap()
 { // this also returns an area target for common land
   logMessage("method ==> void LaModel::initialiseAreaTargetsAnimalsMap()");
-  logMessage("Common Grazing LAnd Food Value: " + QString::number(static_cast<int>(mCommonGrazingTDN)).toLocal8Bit());
+  logMessage("Common Grazing Land TDN: " + QString::number(static_cast<int>(mCommonGrazingTDN)).toLocal8Bit());
   mAreaTargetsAnimalsMap.clear();
   mCommonGrazingLandTDNTarget= 0;
   //iterate through animals
@@ -986,12 +849,20 @@ void LaModel::initialiseAreaTargetsAnimalsMap()
     LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(myAnimalParameterGuid);
     logMessage("Animal: " + myAnimal.name().toLocal8Bit());
     AreaUnits mySpecificAreaUnits = myAnimalParameter.areaUnits();
-    AreaUnits myCommonAreaUnits = mCommonLandAreaUnits;
-    float myTDNSpecific = LaUtils::convertAreaToHectares(mySpecificAreaUnits, myAnimalParameter.TDNSpecificGrazingLand());
-    float myTDNCommon   = LaUtils::convertAreaToHectares(myCommonAreaUnits, mCommonGrazingTDN);
+    //AreaUnits myCommonAreaUnits = mCommonLandAreaUnits;
 
+
+
+
+    float myTDNSpecific = LaUtils::convertAreaToHectares(mySpecificAreaUnits, myAnimalParameter.TDNSpecificGrazingLand());
+
+
+
+
+    //float myTDNCommon   = LaUtils::convertAreaToHectares(myCommonAreaUnits, mCommonGrazingTDN);
+    float myTDNCommon   = mCommonGrazingTDN;
     qDebug() << "   +++   myTDNSpecific = " << myTDNSpecific;
-    qDebug() << "   +++   myTDNCommon   = " << myTDNCommon;
+    qDebug() << "   +++   myTDNCommon   = " << mCommonGrazingTDN;
 
     // check to see if this animal needs any additional food
     if (mTDNMap[myAnimalGuid] > 0) // yes, the animal needs more food
@@ -1550,9 +1421,10 @@ QString LaModel::toHtmlAreaAnimalTargets()
   {
     myAnimalIterator.next();
     QString myAnimalGuid = myAnimalIterator.key();
-    int myAreaTarget = static_cast <int>(myAnimalIterator.value());
+    int myAreaTargetUnchanged = static_cast <int>(myAnimalIterator.value());
     LaAnimal myAnimal = LaUtils::getAnimal(myAnimalGuid);
     LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(mAnimalsMap.value(myAnimalGuid));
+    int myAreaTarget = LaUtils::convertAreaToHectares(myAnimalParameter.areaUnits(), myAreaTargetUnchanged);
     // add to the QString to create the xml file
     myString += QString("  <tr>\n");
     myString += QString("    <td>\n");
