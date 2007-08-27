@@ -720,7 +720,8 @@ void LaMainForm::on_pushButtonRun_clicked()
   {
     myAreaUnits = Hectare;
   }
-  int myAdjustedTDN = LaUtils::convertAreaToHectares(myAreaUnits, sbCommonRasterTDN->value());
+  //int myAdjustedTDN = LaUtils::convertAreaToHectares(myAreaUnits, sbCommonRasterTDN->value());
+  int myAdjustedTDN = sbCommonRasterTDN->value();
   myModel.setCommonLandValue(myAdjustedTDN);
 
   tbReport->setHtml(myModel.toHtml());
