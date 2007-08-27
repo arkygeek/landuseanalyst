@@ -132,10 +132,10 @@ void LaCropParameterManager::refreshCropParameterTable(QString theGuid)
   {
     myIterator.next();
     LaCropParameter myCropParameter = myIterator.value();
-    qDebug(myCropParameter.toText().toLocal8Bit());
+    //qDebug(myCropParameter.toText().toLocal8Bit());
     if (theGuid.isEmpty())
     {
-      qDebug("No default active row was requested.Assigning to myCropParameter.guid()!");;
+     //qDebug("No default active row was requested.Assigning to myCropParameter.guid()!");;
       theGuid=myCropParameter.guid();
     }
     if (myCropParameter.guid()==theGuid)
@@ -145,7 +145,7 @@ void LaCropParameterManager::refreshCropParameterTable(QString theGuid)
     // Insert new row ready to fill with details
     tblCropParameterProfiles->insertRow(myCurrentRow);
     QString myGuid = myCropParameter.guid();
-    qDebug ("Inserting crop parameter with guid: " + myGuid.toLocal8Bit());
+   //qDebug ("Inserting crop parameter with guid: " + myGuid.toLocal8Bit());
     // Add details to the new row
     QTableWidgetItem *mypFileNameItem= new QTableWidgetItem(myGuid);
     tblCropParameterProfiles->setItem(myCurrentRow, 0, mypFileNameItem);
@@ -203,9 +203,9 @@ void LaCropParameterManager::on_cboCrop_changed(int theIndex)
 void LaCropParameterManager::cellClicked(int theRow, int theColumn)
 {
   //note we use the alg name not the id because user may have customised params
-  qDebug("LaCropParameterManager::cellClicked");
+ //qDebug("LaCropParameterManager::cellClicked");
   QString myGuid = tblCropParameterProfiles->item(tblCropParameterProfiles->currentRow(),0)->text();
-  qDebug("Guid is: " + myGuid.toLocal8Bit());
+ //qDebug("Guid is: " + myGuid.toLocal8Bit());
   QString myFileName = myGuid + ".xml";
   selectCropParameter(myFileName);
   LaCrop myCrop = LaUtils::getCrop(cboCrop->itemData(cboCrop->currentIndex(),Qt::UserRole).toString());
@@ -214,7 +214,7 @@ void LaCropParameterManager::cellClicked(int theRow, int theColumn)
 }
 void LaCropParameterManager::selectCropParameter(QString theFileName)
 {
-  qDebug("selectCropParameter Called : " + theFileName.toLocal8Bit());
+ //qDebug("selectCropParameter Called : " + theFileName.toLocal8Bit());
   QString myCropParameterDir = LaUtils::userCropParameterProfilesDirPath();
   LaCropParameter myCropParameter;
   myCropParameter.fromXmlFile(myCropParameterDir + QDir::separator() + theFileName);
@@ -240,7 +240,7 @@ void LaCropParameterManager::showCropParameter()
 
 void LaCropParameterManager::on_toolNew_clicked()
 {
-  qDebug("New toolbutton clicked");
+ //qDebug("New toolbutton clicked");
   LaCropParameter myCropParameter;
   myCropParameter.setGuid();
   mCropParameter = myCropParameter;
@@ -256,7 +256,7 @@ void LaCropParameterManager::resizeEvent ( QResizeEvent * theEvent )
 
 void LaCropParameterManager::on_toolCopy_clicked()
 {
-  qDebug("Copy toolbutton clicked");
+ //qDebug("Copy toolbutton clicked");
   if (tblCropParameterProfiles->currentRow() < 0)
   {
     return;
@@ -286,7 +286,7 @@ void LaCropParameterManager::on_toolCopy_clicked()
 }
 void LaCropParameterManager::on_toolDelete_clicked()
 {
-  qDebug("Delete toolbutton clicked");
+ //qDebug("Delete toolbutton clicked");
   if (tblCropParameterProfiles->currentRow() < 0)
   {
     return;

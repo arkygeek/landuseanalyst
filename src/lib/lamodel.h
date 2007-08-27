@@ -390,8 +390,9 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
     QMap<QString,QString> mCropsMap;
     AreaUnits mCommonLandAreaUnits;
     Status mFallowStatus;
-    int mCommonGrazingLandCalorieTarget;
-    int mCommonGrazingLandFoodValue;
+    int mCommonGrazingLandTDNTarget;
+    //int mCommonGrazingLandTDN;
+    int mCommonGrazingTDN;
     int mCommonGrazingLandAreaTarget;
     int mCommonCropLand;
 };

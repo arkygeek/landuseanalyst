@@ -37,7 +37,7 @@ class LaAnimalParameterManager : public QDialog, private Ui::LaAnimalParameterMa
 {
   Q_OBJECT
   public:
-    LaAnimalParameterManager(QPair<LaTripleMap, int> & thePair, QWidget* parent = 0, Qt::WFlags fl = 0 );
+    LaAnimalParameterManager(QPair<LaTripleMap, int> & thePair, AreaUnits & theAreaUnits, QWidget* parent = 0, Qt::WFlags fl = 0 );
     ~LaAnimalParameterManager();
 
   public slots:
@@ -74,7 +74,8 @@ class LaAnimalParameterManager : public QDialog, private Ui::LaAnimalParameterMa
       LaUtils::CropMap mCropMap;
       LaAnimalParameter mAnimalParameter;
       LaTripleMap mSelectedCropsMap;
-      int mCommonGrazingLandTDN;
+      int mCommonGrazedLandTDN;
+      AreaUnits mCommonGrazingLandAreaUnits;
 };
 
 #endif //LAANIMALPARAMETERMANAGER_H

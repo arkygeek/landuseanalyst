@@ -254,10 +254,12 @@ void LaMainForm::on_pbnNewCropParameter_clicked()
 void LaMainForm::on_pbnNewAnimalParameter_clicked()
 {
     int myCommonGrazingLandTDN = sbCommonRasterTDN->value();
+    QString myCommonGrazingLandAreaUnits = comboBoxAreaUnits->currentText();
+    AreaUnits myAreaUnits = (myCommonGrazingLandAreaUnits == "Dunum") ? Dunum : Hectare;
     QPair<LaTripleMap, int> myPair;
     myPair.first=mCropsMap;
     myPair.second=myCommonGrazingLandTDN;
-    LaAnimalParameterManager myAnimalParameterManager(myPair);
+    LaAnimalParameterManager myAnimalParameterManager(myPair, myAreaUnits);
     myAnimalParameterManager.exec();
     listWidgetCalculationsAnimal->clear();
     loadAnimals();
@@ -645,7 +647,7 @@ void LaMainForm::on_pushButtonRun_clicked()
   progressBarCalcs->reset();
   progressBarCalcs->setRange(0,9);
 
-  mCommonGrazingLandFoodValue = sbCommonRasterTDN->value();
+  mCommonLandGrazingTDN = sbCommonRasterTDN->value();
   LaModel myModel;
   connect(&myModel, SIGNAL(message( QString )),
              this, SLOT(logMessage( QString )));
@@ -860,7 +862,7 @@ void LaMainForm::cropCalcClicked(QListWidgetItem * thepCurrentItem, QListWidgetI
     return;
   }
 
-  mCommonGrazingLandFoodValue = sbCommonRasterTDN->value();
+  mCommonLandGrazingTDN = sbCommonRasterTDN->value();
 
   connect(&myModel, SIGNAL(message( QString )),
              this, SLOT(logMessage( QString )));
@@ -944,8 +946,9 @@ void LaMainForm::animalCalcClicked(QListWidgetItem * thepCurrentItem, QListWidge
   // show the user that the computer is thinking
   //progressBarCalcs->reset();
   //progressBarCalcs->setRange(0,0);
-  mCommonGrazingLandFoodValue = sbCommonRasterTDN->value();
-
+  AreaUnits myAreaUnits = (comboBoxAreaUnits->currentText() == "Dunum") ? Dunum : Hectare;
+  mCommonLandGrazingTDN = sbCommonRasterTDN->value();
+  //  mCommonLandGrazingTDN = LaUtils::convertAreaToHectares(myAreaUnits, sbCommonRasterTDN->value());
   connect(&myModel, SIGNAL(message( QString )),
              this, SLOT(logMessage( QString )));
   // Get a list of the selected animals
@@ -999,7 +1002,6 @@ void LaMainForm::animalCalcClicked(QListWidgetItem * thepCurrentItem, QListWidge
   myModel.setMeatPercent(horizontalSliderMeat->value());
   myModel.setCaloriesPerPersonDaily(spinBoxDailyCalories->value());
   QString myAreaUnitsText = (comboBoxAreaUnits->currentText());
-  AreaUnits myAreaUnits =  (myAreaUnitsText == "Dunum") ? Dunum : Hectare;
   myModel.setCommonLandAreaUnits(myAreaUnits);
   myModel.setCommonLandValue(sbCommonRasterTDN->value());
   tbReport->setHtml(myModel.toHtml());

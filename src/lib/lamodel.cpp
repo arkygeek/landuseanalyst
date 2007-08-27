@@ -170,7 +170,7 @@ int LaModel::caloriesPerPersonDaily() const
 }
 int LaModel::foodValueCommonLand() const
 {
-  return mCommonGrazingLandFoodValue;
+  return mCommonGrazingTDN;
 }
 QMap <QString, int> LaModel::animalCalorieTargetsMap() const
 {
@@ -290,7 +290,8 @@ void LaModel::setCommonLandAreaUnits(AreaUnits theAreaUnits)
 
 void LaModel::setCommonLandValue(int theValue)
 {
-  mCommonGrazingLandFoodValue = (mCommonLandAreaUnits == Dunum) ? theValue*10 : theValue;
+  //mCommonGrazingTDN = (mCommonLandAreaUnits == Dunum) ? theValue*10 : theValue;
+  mCommonGrazingTDN = theValue;
 }
 
 void LaModel::setAnimals(QMap<QString,QString> theAnimals)
@@ -688,7 +689,7 @@ int LaModel::getAreaTargetsCrops(QString theCropGuid, int theProductionTarget)
 {
   LaCrop myCrop = LaUtils::getCrop(theCropGuid);
   AreaUnits myAreaUnits = myCrop.areaUnits();
-
+  qDebug() << "    LaModel::getAreaTargetsCrops AreaUnits== " << myAreaUnits;
   int myCropYieldHectares = LaUtils::convertAreaToHectares(myAreaUnits, myCrop.cropYield());
   float myCropAreaTarget = theProductionTarget / myCropYieldHectares;
   int myReturnValue = static_cast<int>(myCropAreaTarget);
@@ -931,7 +932,7 @@ void LaModel::initialiseAreaTargetsCropsMap()
     QString myCropGuid = myCropIterator.key();
     int myProductionTarget = static_cast<int>(mProductionRequiredCropsMap.value(myCropGuid));
     int myAreaTarget = getAreaTargetsCrops(myCropGuid, myProductionTarget);
-    mAreaTargetsCropsMap.insert(myCropGuid,getAreaTargetsCrops(myCropGuid, myProductionTarget));
+    mAreaTargetsCropsMap.insert(myCropGuid,myAreaTarget);
 
     QString myCropParameterGuid = mCropsMap.value(myCropGuid);
     LaCropParameter myCropParameter = LaUtils::getCropParameter(myCropParameterGuid);
@@ -971,9 +972,9 @@ void LaModel::initialiseCalcsAnimalsMap()
 void LaModel::initialiseAreaTargetsAnimalsMap()
 { // this also returns an area target for common land
   logMessage("method ==> void LaModel::initialiseAreaTargetsAnimalsMap()");
-  logMessage("Common Grazing LAnd Food Value: " + QString::number(static_cast<int>(mCommonGrazingLandFoodValue)).toLocal8Bit());
+  logMessage("Common Grazing LAnd Food Value: " + QString::number(static_cast<int>(mCommonGrazingTDN)).toLocal8Bit());
   mAreaTargetsAnimalsMap.clear();
-  mCommonGrazingLandCalorieTarget= 0;
+  mCommonGrazingLandTDNTarget= 0;
   //iterate through animals
   QMapIterator<QString, QString > myAnimalIterator(mAnimalsMap);
   while (myAnimalIterator.hasNext())
@@ -984,13 +985,21 @@ void LaModel::initialiseAreaTargetsAnimalsMap()
     LaAnimal myAnimal = LaUtils::getAnimal(myAnimalGuid);
     LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(myAnimalParameterGuid);
     logMessage("Animal: " + myAnimal.name().toLocal8Bit());
+    AreaUnits mySpecificAreaUnits = myAnimalParameter.areaUnits();
+    AreaUnits myCommonAreaUnits = mCommonLandAreaUnits;
+    float myTDNSpecific = LaUtils::convertAreaToHectares(mySpecificAreaUnits, myAnimalParameter.TDNSpecificGrazingLand());
+    float myTDNCommon   = LaUtils::convertAreaToHectares(myCommonAreaUnits, mCommonGrazingTDN);
+
+    qDebug() << "   +++   myTDNSpecific = " << myTDNSpecific;
+    qDebug() << "   +++   myTDNCommon   = " << myTDNCommon;
+
     // check to see if this animal needs any additional food
     if (mTDNMap[myAnimalGuid] > 0) // yes, the animal needs more food
     {
       logMessage("Animal Needs more Food!");
       // figure out how much grazing land is needed to supply this many calories
       LandBeingGrazed myLandBeingGrazed;
-      int myFoodValueOfCommonGrazingLand = myAnimalParameter.foodValueOfCommonGrazingLand();
+      //int myTDNCommonGrazingLand = myAnimalParameter.TDNCommonGrazingLand();
 
       myLandBeingGrazed =  (myAnimalParameter.useCommonGrazingLand()==1) ? Common:Unique;
 
@@ -998,17 +1007,17 @@ void LaModel::initialiseAreaTargetsAnimalsMap()
       {
         case Common:
              {
-               logMessage("Animal is grazing Common Land so required calories are added to common land target");
-               mCommonGrazingLandCalorieTarget += static_cast<int>(mTDNMap.value(myAnimalGuid));
-               logMessage("Cumulative Area Target for Common Land: " + QString::number(mCommonGrazingLandCalorieTarget));
-               float myCommonTarget = mTDNMap.value(myAnimalGuid) / myFoodValueOfCommonGrazingLand;
+               logMessage("Animal is grazing Common Land so required TDN is added to common land TDN target");
+               mCommonGrazingLandTDNTarget += static_cast<int>(mTDNMap.value(myAnimalGuid));
+               logMessage("Cumulative TDN Target for Common Land: " + QString::number(mCommonGrazingLandTDNTarget));
+               float myCommonTarget = mTDNMap.value(myAnimalGuid) / myTDNCommon;
                mAreaTargetsAnimalsMap[myAnimalGuid] = static_cast<int>(myCommonTarget);
                break;
              }
         case Unique:
              {
-               logMessage("Animal is grazing Unique Land so required calories are divided by food value of unique grazing land");
-               float myTarget1 = mTDNMap.value(myAnimalGuid) / myAnimalParameter.foodValueOfSpecificGrazingLand();
+               logMessage("Animal is grazing Unique Land so required TDN is divided by TDN of unique grazing land");
+               float myTarget1 = mTDNMap.value(myAnimalGuid) / myTDNSpecific;
                mAreaTargetsAnimalsMap[myAnimalGuid] = static_cast<int>(myTarget1);
                logMessage("The Area Target is: " + QString::number(static_cast<int>(myTarget1)).toLocal8Bit());
                break;
@@ -1024,7 +1033,7 @@ void LaModel::initialiseAreaTargetsAnimalsMap()
       mAreaTargetsAnimalsMap[myAnimalGuid] = 0;
     }
     // CHECK FOR AREA UNIT CONVERSION HERE!
-    mCommonGrazingLandAreaTarget = mCommonGrazingLandCalorieTarget / mCommonGrazingLandFoodValue;
+    mCommonGrazingLandAreaTarget = mCommonGrazingLandTDNTarget / mCommonGrazingTDN;
 
   }
     logMessage(" ");

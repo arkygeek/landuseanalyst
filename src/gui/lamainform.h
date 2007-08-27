@@ -17,8 +17,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef LAMAINFORMFORM_H
-#define LAMAINFORMFORM_H
+#ifndef mCommonGrazingLandTDN
+#define mCommonGrazingLandTDN
 
 //QT Includes
 #include <QDialog>
@@ -106,7 +106,7 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
     //    <animal guid <enabled, animalparamters guid>>
     LaTripleMap mAnimalsMap;
     LaTripleMap mCropsMap;
-    int mCommonGrazingLandFoodValue;
+    int mCommonLandGrazingTDN;
     //QMap<QString,int> mSelectedCropsMap;
 };
 

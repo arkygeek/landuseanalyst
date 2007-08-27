@@ -60,11 +60,11 @@ class LaAnimalParameter : public LaSerialisable, public LaGuid
     /** A flag indicating that the animal grazes land shared with other animals */
     bool useCommonGrazingLand() const;
     /** Food value of specific (or unique) grazing land as calories per dunum/hectare */
-    int foodValueOfSpecificGrazingLand() const;
+    int TDNSpecificGrazingLand() const;
     /** Food value of common (or shared) grazing land as calories per dunum/hectare
       * NOTE that changing this value for any animal changes it for all!
       */
-    int foodValueOfCommonGrazingLand() const;
+    int TDNCommonGrazingLand() const;
     /** Selection between dunums and hectares
       */
     AreaUnits areaUnits() const;
@@ -97,11 +97,11 @@ class LaAnimalParameter : public LaSerialisable, public LaGuid
     /** A flag indicating that the animal grazes land shared with other animals */
     void setUseCommonGrazingLand(bool theBool);
     /** Food value of specific (or unique) grazing land as calories per dunum/hectare */
-    void setFoodValueOfSpecificGrazingLand(int theCalories);
+    void setTDNSpecificGrazingLand(int theCalories);
     /** Food value of common (or shared) grazing land as calories per dunum/hectare
       * NOTE that changing this value for any animal changes it for all!
       */
-    void setFoodValueOfCommonGrazingLand(int theCalories);
+    void setTDNCommonGrazingLand(int theCalories);
     void setFodderUse(bool theBool);
 
   // fodder stuff here
@@ -143,11 +143,11 @@ class LaAnimalParameter : public LaSerialisable, public LaGuid
     /** A flag indicating that the animal grazes land shared with other animals */
     bool mUseCommonGrazingLand;
     /** Food value of specific (or unique) grazing land as calories per dunum/hectare */
-    int mFoodValueOfSpecificGrazingLand;
+    int mTDNSpecificGrazingLand;
     /** Food value of common (or shared) grazing land as calories per dunum/hectare
       * NOTE that changing this value for any animal changes it for all!
       */
-    int mFoodValueOfCommonGrazingLand;
+    int mTDNCommonGrazingLand;
     bool mFodderUse;
     /** This QMap contains
       * <GUID of the crop, a bool of it used>,<fodder,grain>

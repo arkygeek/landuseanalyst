@@ -45,7 +45,7 @@
 #include <QtDebug>
 #include <QPair>
 
-  LaAnimalParameterManager::LaAnimalParameterManager(QPair<LaTripleMap, int> & thePair, QWidget* parent, Qt::WFlags fl)
+  LaAnimalParameterManager::LaAnimalParameterManager(QPair<LaTripleMap, int> & thePair, AreaUnits & theAreaUnits, QWidget* parent, Qt::WFlags fl)
 : QDialog(parent,fl)
 {
   //required by Qt4 to initialise the ui
@@ -64,9 +64,10 @@
   //myGrass.getRasterList(myMapsetList);
   cboRaster->addItems(myList);
   mSelectedCropsMap = thePair.first;
-  mCommonGrazingLandTDN = thePair.second;
+  mCommonGrazedLandTDN = thePair.second;
+  mCommonGrazingLandAreaUnits = theAreaUnits;
   sbCommonRasterTDN->setReadOnly(false);
-  sbCommonRasterTDN->setValue(mCommonGrazingLandTDN);
+  sbCommonRasterTDN->setValue(mCommonGrazedLandTDN);
   sbCommonRasterTDN->setReadOnly(true);
   connect(tblAnimalParameterProfiles, SIGNAL(cellClicked( int,int)),
       this, SLOT(cellClicked( int,int)));
@@ -346,8 +347,8 @@ void LaAnimalParameterManager::showAnimalParameter()
   sbPercentTameMeat->setValue(mAnimalParameter.percentTameMeat());
   checkBoxCommonRaster->setChecked(mAnimalParameter.useCommonGrazingLand());
   checkBoxSpecificRaster->setChecked(mAnimalParameter.useSpecificGrazingLand());
-  sbSpecificRasterTDN->setValue(mAnimalParameter.foodValueOfSpecificGrazingLand());
-  sbCommonRasterTDN->setValue(mCommonGrazingLandTDN);
+  sbSpecificRasterTDN->setValue(mAnimalParameter.TDNSpecificGrazingLand());
+  sbCommonRasterTDN->setValue(mCommonGrazedLandTDN);
   comboBoxAreaUnits->setCurrentIndex(mAnimalParameter.areaUnits());
   grpFodderUse->setChecked(mAnimalParameter.fodderUse());
 
@@ -476,8 +477,8 @@ void LaAnimalParameterManager::on_pbnApply_clicked()
     mAnimalParameter.setAreaUnits(myAreaUnits);
   }
 
-  mAnimalParameter.setFoodValueOfCommonGrazingLand(sbCommonRasterTDN->value());
-  mAnimalParameter.setFoodValueOfSpecificGrazingLand(sbSpecificRasterTDN->value());
+  mAnimalParameter.setTDNCommonGrazingLand(sbCommonRasterTDN->value());
+  mAnimalParameter.setTDNSpecificGrazingLand(sbSpecificRasterTDN->value());
   mAnimalParameter.setFodderUse(grpFodderUse->isChecked());
 
   // populate the fodder map from the table.
