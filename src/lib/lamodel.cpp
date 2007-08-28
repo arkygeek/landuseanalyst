@@ -158,10 +158,10 @@ void LaModel::setCropPercent            (int thePercent)         { mPercentOfDie
 void LaModel::setMeatPercent            (int thePercent)         { mMeatPercent=thePercent;                 }
 void LaModel::setCaloriesPerPersonDaily (int theCalories)        { mCaloriesPerPersonDaily=theCalories;     }
 void LaModel::setCommonLandAreaUnits    (AreaUnits theAreaUnits) { mCommonLandAreaUnits = theAreaUnits;     }
-void LaModel::setCommonLandValue        (int theValue)
+void LaModel::setCommonLandValue        (int theTDN, AreaUnits theAreaUnits)
 {
-  //mCommonGrazingTDN = (mCommonLandAreaUnits == Dunum) ? theValue*10 : theValue;
-  mCommonGrazingTDN = theValue;
+  mCommonGrazingTDN = LaUtils::convertAreaToHectares(theAreaUnits, theTDN);
+  //mCommonGrazingTDN = theValue;
 }
 void LaModel::setAnimals(QMap<QString,QString> theAnimals)       { mAnimalsMap = theAnimals;}
 void LaModel::setCrops(QMap<QString,QString> theCrops)           { mCropsMap = theCrops;}

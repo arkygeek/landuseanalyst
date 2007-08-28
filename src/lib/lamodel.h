@@ -192,7 +192,7 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
     /** Set the caloriesPerPersonDaily in Days
      * @see caloriesPerPersonDaily()
      */
-    void setCommonLandValue(int theValue);
+    void setCommonLandValue(int theTDN, AreaUnits theAreaUnits);
 
     void setCommonLandAreaUnits(AreaUnits theAreaUnits);
 
