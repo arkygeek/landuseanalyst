@@ -48,7 +48,7 @@ QStringList LaGrass::getMapsetList()
   //run the command ignoring error logs
   QString myResult = runCommand(myCommand,myArguments);
   myResult = myResult.simplified();
-  QStringList myList = myResult.split(QRegExp("\\s+"));
+  QStringList myList = myResult.split(QRegExp("\\s+")); // splits on white space
   return myList;
 }
 
@@ -69,7 +69,7 @@ QStringList LaGrass::getRasterList(QString theMapset, bool thePrependMapsetFlag 
   //strip off grass decoration crap...
   myResult.replace("raster files available in mapset " + theMapset + ":","");
   myResult = myResult.simplified();
-  QStringList myList = myResult.split(QRegExp("\\s+"));
+  QStringList myList = myResult.split(QRegExp("\\s+")); // splits on white space
   QStringList myFinalList;
   //prepend the mapset name to each raster name
   if (thePrependMapsetFlag)
@@ -83,12 +83,52 @@ QStringList LaGrass::getRasterList(QString theMapset, bool thePrependMapsetFlag 
   }
   return myFinalList;
 }
+
+bool LaGrass::copyMap(QString theOriginalRaster, QString theCopy)
+{
+  QString myCommand = "g.copy";
+  QStringList myArguments;
+  myArguments << " rast=" + theOriginalRaster + "," + theCopy;
+  qDebug(myCommand.toLocal8Bit() + myArguments.join(" ").toLocal8Bit());
+  QString myErrorLog;
+  QString myResult = runCommand(myCommand,myArguments,myErrorLog);
+  qDebug(myResult.toLocal8Bit());
+  if (myErrorLog.isEmpty())
+  {
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
 bool LaGrass::createFrictionMap(QString theBaseRaster,QString theOutputRaster)
 {
   //r.mapcalc "laFrictionMap = if(isnull(laDEM), null(), 1)"
   QString myCommand = "r.mapcalc";
   QStringList myArguments;
-  myArguments << "\"" + theOutputRaster + " = if(isnull(" + theBaseRaster + "), null(), 1)\"";
+  myArguments << " \"" + theOutputRaster + " = if(isnull(" + theBaseRaster + "), null(), 1)\"";
+  qDebug(myCommand.toLocal8Bit() + myArguments.join(" ").toLocal8Bit());
+  QString myErrorLog;
+  QString myResult = runCommand(myCommand,myArguments,myErrorLog);
+  qDebug(myResult.toLocal8Bit());
+  if (myErrorLog.isEmpty())
+  {
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+bool LaGrass::createMask(QString theCostSurface, QString theMaskRaster)
+{
+  //r.mapcalc "laFrictionMap = if(isnull(laDEM), null(), 1)"
+  QString myCommand = "r.mapcalc";
+  QStringList myArguments;
+  myArguments << " tmpMask = \'" + theCostSurface + " * " + theMaskRaster + "\'";
   qDebug(myCommand.toLocal8Bit() + myArguments.join(" ").toLocal8Bit());
   QString myErrorLog;
   QString myResult = runCommand(myCommand,myArguments,myErrorLog);
@@ -107,9 +147,9 @@ float LaGrass::getArea(QString theLayerName)
 {
   logMessage("method ==> void LaGrass::getArea(float theArea)");
   //r.stats -a -n fs=,
-  QString myCommand = "r.stats -a -n fs=,";
+  QString myCommand = "r.stats";
   QStringList myArguments;
-  myArguments << "-a" << "-n" << "fs=," << theLayerName;
+  myArguments << " -a" << "-n" << "fs=," << theLayerName;
   qDebug(myCommand.toLocal8Bit() + myArguments.join(" ").toLocal8Bit());
   QString myErrorLog;
   QString myResult = runCommand(myCommand,myArguments,myErrorLog);

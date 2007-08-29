@@ -80,6 +80,9 @@ void LaGrassProcess::on_pbnStart_clicked()
 {
   // so here we go.  I have the maps and their targets, so i
   // think all i need to do is iterate through them one at a time!
+  tbGrass->setText("Creating Cost Surface Raster...");
+  tbGrass->repaint();
+
   toggleBusyProgressBar(true);
   int myOverallProgress = 1;
   // need to change the next line to iterate through both maps and check for common land use
@@ -132,11 +135,8 @@ void LaGrassProcess::on_pbnStart_clicked()
   LaGrass myGrass;
   //int myEasting = mCoordinates.first;
   //int myNorthing = mCoordinates.second;
-  //QString myDEM = mDEM;
-  // Make Cost Surface: bool LaGrass::makeWalkCost(int theX, int theY)
-  tbGrass->setText("Creating Cost Surface Raster...");
-  tbGrass->repaint();
   //myGrass.makeWalkCost(myEasting, myNorthing, mDEM);
+
   tbGrass->append("Cost Surface Generation complete.");
   tbGrass->repaint();
 
@@ -172,7 +172,7 @@ void LaGrassProcess::on_pbnStart_clicked()
       //}
       // go analyse the stuff...
 
-      analyseModel(myCropRasterFile, myAreaTarget);
+      analyseModel(myName, myCropRasterFile, myAreaTarget);
       updateOverallProgress(myOverallProgress);
       myOverallProgress++;
     }
@@ -184,7 +184,8 @@ void LaGrassProcess::on_pbnStart_clicked()
         lblGraphic->repaint();
         lblAreaTarget->setText("Target:\n" + QString::number(myCropIterator.value()));
         lblAreaTarget->repaint();
-      analyseModel(":/commonTarget.png", myCropIterator.value());
+      QString myRasterName = "cerealMask";
+      analyseModel(myRasterName, "cerealMask", myCropIterator.value());
       updateOverallProgress(myOverallProgress);
       myOverallProgress++;
     }
@@ -217,7 +218,7 @@ void LaGrassProcess::on_pbnStart_clicked()
       //}
       // go analyse the stuff...
       int myAreaTarget = myAnimalIterator.value();
-      analyseModel(myAnimalRasterFile, myAreaTarget);
+      analyseModel(myName, myAnimalRasterFile, myAreaTarget);
       updateOverallProgress(myOverallProgress);
       myOverallProgress++;
     }
@@ -229,7 +230,7 @@ void LaGrassProcess::on_pbnStart_clicked()
         lblGraphic->repaint();
         lblAreaTarget->setText("Target:\n" + QString::number(myAnimalIterator.value()));
         lblAreaTarget->repaint();
-      analyseModel(":/commonTarget.png", myAnimalIterator.value());
+      analyseModel("treesMask" ,"treesMask", myAnimalIterator.value());
       updateOverallProgress(myOverallProgress);
       myOverallProgress++;
     }
@@ -301,22 +302,17 @@ void LaGrassProcess::toggleBusyProgressBar(bool theStatus)
   }
 }
 
-void LaGrassProcess::analyseModel(QString theRasterMask, int theAreaTarget)
+void LaGrassProcess::analyseModel(QString theItem, QString theRasterMask, int theAreaTarget)
 {
   LaGrass myGrass;
-
-
-  // r.mapcalc "TimeOnlyFrictionMap=if(isnull(DEM), null(), 1)"
-  // r.walk max_cost=20000 elevation=dem_patched_filled@PERMANENT friction=theFrictionMap output=rwalkResultsSlopeMax20kFMap coordinate=744800,3611100 percent_memory=100 nseg=4 walk_coeff=0.72,6.0,1.9998,-1.9998 lambda=0 slope_factor=-0.2125 -k
-
-   // find the land!
    int myFirst = 0;
    int myLast=18000;
    int myAreaTarget = theAreaTarget;
-   LandFound mySearchStatus = NotEnough;
-   int myCurrentlyContainedArea = 0;
+   float myCurrentlyContainedArea = 0.0;
    int myPrecision = 5; // change this to real value
    int myStatusCount = 0;
+   LandFound mySearchStatus = NotEnough;
+
    setPbarTargetRange(17);
 
    while (myFirst <= myLast)
@@ -327,9 +323,12 @@ void LaGrassProcess::analyseModel(QString theRasterMask, int theAreaTarget)
     // reclass with 1 to midpoint and null beyond and then check results
     //    echo "0 thru $step = 1" | r.reclass input=$cost output=cost.reclass --o
     //    r.stats -n -a fs=- input=cost.reclass > $TMP1
+    myGrass.reclass("laWalkCost", myMid); // makes a raster called laCostMapReclassed
 
+    myGrass.createMask("laCostMapReclassed" , theRasterMask); // creates tmpMask
+    myCurrentlyContainedArea = myGrass.getArea("tmpMask");
     // find out if the contained area is within acceptable range
-    mySearchStatus = getSearchStatus(myCurrentlyContainedArea, myAreaTarget, myPrecision);
+    mySearchStatus = getSearchStatus(static_cast<int>(myCurrentlyContainedArea), myAreaTarget, myPrecision);
 
     switch (mySearchStatus)
     {
@@ -341,6 +340,9 @@ void LaGrassProcess::analyseModel(QString theRasterMask, int theAreaTarget)
             break;
       case FoundTarget:
             // found it. break out of loop /////
+            // copy final raster to permanentRaster
+            QString myRasterName = theItem+"RESULTS";
+            myGrass.copyMap("tmpMask", myRasterName);
             updateCurrentProgress(myStatusCount);
             myFirst = myLast+1;
             break;

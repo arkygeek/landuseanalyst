@@ -89,7 +89,18 @@ class LaGrass : public QObject
      *        (it will be put into the current active mapset)
      * @return bool - false if the frictionmap creation failed
      */
-    bool createFrictionMap(QString theBaseRaster,QString theOututRaster);
+    bool createFrictionMap(QString theBaseRaster, QString theOututRaster);
+    bool copyMap(QString theOriginalRaster, QString theCopy);
+    /** Create a mask map. All cells in the map will be set
+     * to either a 1 or null.
+     * @param QString grass raster layer name for generated
+     * cost surface used in analysis.
+     * @param QString the layer name of the binary raster mask
+     * @return bool - false if the frictionmap creation failed
+     * @note generates a raster called tmpMask which
+     *       will be put into the current active mapset
+     */
+    bool createMask(QString theCostSurface, QString theMaskRaster);
 
     /** Get the area stats for the raster
      * @param theRasterLayer - should be a boolean layer
