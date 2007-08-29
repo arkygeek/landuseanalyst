@@ -76,6 +76,7 @@ LaModel::LaModel(const LaModel& theModel)
   mMeatPercent=theModel.meatPercent();
   mCaloriesPerPersonDaily=theModel.caloriesPerPersonDaily();
   mFallowStatus=theModel.fallowStatus();
+  mFallowRatio=theModel.fallowRatio();
 }
 
 LaModel& LaModel::operator=(const LaModel& theModel)
@@ -98,6 +99,7 @@ LaModel& LaModel::operator=(const LaModel& theModel)
   mMeatPercent=theModel.meatPercent();
   mCaloriesPerPersonDaily=theModel.caloriesPerPersonDaily();
   mFallowStatus=theModel.fallowStatus();
+  mFallowRatio=theModel.fallowRatio();
   return *this;
 }
 
@@ -143,6 +145,7 @@ QMap <QString, QString> LaModel::calcsAnimalsMap()               { return mCalcs
 QMap <QString, QString> LaModel::calcsCropsMap()                 { return mCalcsCropsMap;}
 
 void LaModel::setFallowStatus           (Status theStatus)       { mFallowStatus=theStatus;                 }
+void LaModel::setFallowRatio            (float theRatio)         { mFallowRatio=theRatio;                   }
 void LaModel::setName                   (QString theName)        { mName=theName;                           }
 void LaModel::setPopulation             (int thePopulation)      { mPopulation=thePopulation;               }
 void LaModel::setPeriod                 (QString thePeriod)      { mPeriod=thePeriod;                       }
@@ -161,7 +164,6 @@ void LaModel::setCommonLandAreaUnits    (AreaUnits theAreaUnits) { mCommonLandAr
 void LaModel::setCommonLandValue        (int theTDN, AreaUnits theAreaUnits)
 {
   mCommonGrazingTDN = LaUtils::convertAreaToHectares(theAreaUnits, theTDN);
-  //mCommonGrazingTDN = theValue;
 }
 void LaModel::setAnimals(QMap<QString,QString> theAnimals)       { mAnimalsMap = theAnimals;}
 void LaModel::setCrops(QMap<QString,QString> theCrops)           { mCropsMap = theCrops;}
@@ -554,7 +556,10 @@ int LaModel::getAreaTargetsCrops(QString theCropGuid, int theProductionTarget)
   AreaUnits myAreaUnits = myCrop.areaUnits();
   qDebug() << "    LaModel::getAreaTargetsCrops AreaUnits== " << myAreaUnits;
   int myCropYieldHectares = LaUtils::convertAreaToHectares(myAreaUnits, myCrop.cropYield());
-  float myCropAreaTarget = theProductionTarget / myCropYieldHectares;
+  QString myCropParameterGuid = mCropsMap.value(theCropGuid);
+  LaCropParameter myCropParameter = LaUtils::getCropParameter(myCropParameterGuid);
+  float myFallowRatio = myCropParameter.fallowRatio();
+  float myCropAreaTarget = (theProductionTarget / myCropYieldHectares) * (1.0 + myFallowRatio);
   int myReturnValue = static_cast<int>(myCropAreaTarget);
 
   ///@TODO remove this debugging stuff
@@ -799,7 +804,7 @@ void LaModel::initialiseAreaTargetsCropsMap()
 
     QString myCropParameterGuid = mCropsMap.value(myCropGuid);
     LaCropParameter myCropParameter = LaUtils::getCropParameter(myCropParameterGuid);
-    //bool myCommonLandUsed =
+
     mCommonCropLand = (myCropParameter.useCommonLand() == true) ? mCommonCropLand + myAreaTarget : mCommonCropLand;
   }
 }
@@ -917,6 +922,11 @@ Status LaModel::fallowStatus() const
   return mFallowStatus;
 }
 
+float LaModel::fallowRatio() const
+{
+  return mFallowStatus;
+}
+
 void LaModel::allocateFallowGrazingLand()
 {
   logMessage("method ==> void LaModel::allocateFallowGrazingLand()");
@@ -994,12 +1004,15 @@ void LaModel::allocateFallowGrazingLand()
 
     AreaUnits myCropAreaUnits = myCrop.areaUnits();
     int myCropYield = LaUtils::convertAreaToHectares(myCropAreaUnits, static_cast<int> (myCrop.cropYield()));
-    float myCropAreaTarget = myCropProductionTarget / myCropYield;
+    //QString myCropParameterGuid = mCropsMap.value(theCropGuid);
+    //LaCropParameter myCropParameter = LaUtils::getCropParameter(myCropParameterGuid);
+    float myFallowRatio = myCropParameter.fallowRatio();
+    float myFallowArea = (myCropProductionTarget / myCropYield) * myFallowRatio;
 
     AreaUnits myFallowAreaUnits = myCropParameter.areaUnits();
     int myFallowTDNBefore = myCropParameter.fallowTDN();
     int myFallowTDN = LaUtils::convertAreaToHectares(myFallowAreaUnits, myFallowTDNBefore);
-    float myAvailableFallowTDN = myCropParameter.fallowRatio() * myCropAreaTarget * myFallowTDN;
+    float myAvailableFallowTDN = myFallowRatio * myFallowArea * myFallowTDN;
 
     myTotalFallowTDN += static_cast<int>(myAvailableFallowTDN);
   } // while crop iterator

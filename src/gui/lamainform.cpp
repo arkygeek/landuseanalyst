@@ -583,18 +583,16 @@ void LaMainForm::animalCellChanged(int theRow, int theColumn)
     myPair.second = mypCombo->itemData(mypCombo->currentIndex(),Qt::UserRole).toString();
     mAnimalsMap[myGuid] = myPair;
     //debug only - comment out later
-    printCropsAndAnimals();
+    //printCropsAndAnimals();
   }
 }
 
 void LaMainForm::cropCellClicked(int theRow, int theColumn)
 {
-  //qDebug("LaMainForm::cropCellClicked");
     QTableWidgetItem* mypItem = tblCrops->item(tblCrops->currentRow(),1);
   if (mypItem)
   {
     QString myGuid = mypItem->data(Qt::UserRole).toString();
-    //QString myGuid = tblCrops->item(tblCrops->currentRow(),1)->data(Qt::UserRole).toString();
     //get all crops, then get the crop for this cell if it exists
     QMap<QString,LaCrop> myCropsMap = LaUtils::getAvailableCrops();
     LaCrop myCrop = myCropsMap[myGuid];
@@ -621,16 +619,12 @@ void LaMainForm::cropCellChanged(int theRow, int theColumn)
   if (mypItem)
   {
     QString myGuid = mypItem->data(Qt::UserRole).toString();
-    //QString myGuid = tblCrops->item(tblCrops->currentRow(),1)->data(Qt::UserRole).toString();
     bool myStateFlag = tblCrops->item(tblCrops->currentRow(),0)->checkState();
-    //qDebug() << "myStateFlag ===> " << myStateFlag;
     QPair<bool,QString> myPair = mCropsMap[myGuid];
     myPair.first = myStateFlag;
     QComboBox * mypCombo=dynamic_cast<QComboBox *>(tblCrops->cellWidget(tblCrops->currentRow(),2));
     myPair.second = mypCombo->itemData(mypCombo->currentIndex(),Qt::UserRole).toString();
     mCropsMap[myGuid] = myPair;
-    //debug only - comment out later
-    //printCropsAndAnimals();
   }
 }
 
@@ -647,13 +641,10 @@ void LaMainForm::on_pushButtonRun_clicked()
   progressBarCalcs->reset();
   progressBarCalcs->setRange(0,9);
 
-  //mCommonLandGrazingTDN = sbCommonRasterTDN->value();
   LaModel myModel;
   connect(&myModel, SIGNAL(message( QString )),
              this, SLOT(logMessage( QString )));
 
-  //test stats
-  //myModel.getArea("crops",100);
   progressBarCalcs->setValue(1);
   // Get a list of the selected animals
   QMap<QString,QString> mySelectedAnimalsMap;
@@ -676,7 +667,7 @@ void LaMainForm::on_pushButtonRun_clicked()
 
   // Get a list of the selected crops
   QMap<QString,QString> mySelectedCropsMap;
-  //          <crop guid <enabled, cropparamters guid>>
+  // <crop guid <enabled, cropparamters guid>>
   QMapIterator<QString, QPair<bool, QString> > myCropIterator(mCropsMap);
   while (myCropIterator.hasNext())
   {
@@ -713,7 +704,6 @@ void LaMainForm::on_pushButtonRun_clicked()
   QString mySelectedAreaUnit = QString(comboBoxAreaUnits->currentText());
   AreaUnits myAreaUnits = (mySelectedAreaUnit == "Dunum") ? Dunum:Hectare;
 
-  //int myAdjustedTDN = LaUtils::convertAreaToHectares(myAreaUnits, sbCommonRasterTDN->value());
   int myTDN = sbCommonRasterTDN->value();
   myModel.setCommonLandValue(myTDN, myAreaUnits);
 
@@ -859,13 +849,11 @@ void LaMainForm::cropCalcClicked(QListWidgetItem * thepCurrentItem, QListWidgetI
     return;
   }
 
-  //mCommonLandGrazingTDN = sbCommonRasterTDN->value();
-
   connect(&myModel, SIGNAL(message( QString )),
              this, SLOT(logMessage( QString )));
   // Get a list of the selected animals
   QMap<QString,QString> mySelectedAnimalsMap;
-  //          <animal guid <enabled, animalparamters guid>>
+  //  <animal guid <enabled, animalparamters guid>>
   QMapIterator<QString, QPair<bool, QString> > myAnimalIterator(mAnimalsMap);
   while (myAnimalIterator.hasNext())
   {
@@ -877,14 +865,13 @@ void LaMainForm::cropCalcClicked(QListWidgetItem * thepCurrentItem, QListWidgetI
     if (mySelectedFlag)
     {
       mySelectedAnimalsMap.insert(myAnimalGuid,myAnimalParameterGuid);
-     //qDebug("Added <" + myAnimalGuid.toLocal8Bit() + " , " + myAnimalParameterGuid.toLocal8Bit() + " >");
     }
   }
   myModel.setAnimals(mySelectedAnimalsMap);
 
   // Get a list of the selected crops
   QMap<QString,QString> mySelectedCropsMap;
-  //          <crop guid <enabled, cropparamters guid>>
+  //  <crop guid <enabled, cropparamters guid>>
   QMapIterator<QString, QPair<bool, QString> > myCropIterator(mCropsMap);
   while (myCropIterator.hasNext())
   {
@@ -916,7 +903,6 @@ void LaMainForm::cropCalcClicked(QListWidgetItem * thepCurrentItem, QListWidgetI
   myModel.setCropPercent(horizontalSliderCrop->value());
   myModel.setMeatPercent(horizontalSliderMeat->value());
   myModel.setCaloriesPerPersonDaily(spinBoxDailyCalories->value());
-  //myModel.setCommonLandValue(sbCommonRasterTDN->value());
   myModel.setCommonLandValue(sbCommonRasterTDN->value(), myAreaUnits);
   tbReport->setHtml(myModel.toHtml());
   myModel.DoCalculations();
@@ -946,13 +932,12 @@ void LaMainForm::animalCalcClicked(QListWidgetItem * thepCurrentItem, QListWidge
   //progressBarCalcs->reset();
   //progressBarCalcs->setRange(0,0);
   AreaUnits myAreaUnits = (comboBoxAreaUnits->currentText() == "Dunum") ? Dunum : Hectare;
-  //mCommonLandGrazingTDN = sbCommonRasterTDN->value();
-  //  mCommonLandGrazingTDN = LaUtils::convertAreaToHectares(myAreaUnits, sbCommonRasterTDN->value());
+
   connect(&myModel, SIGNAL(message( QString )),
              this, SLOT(logMessage( QString )));
   // Get a list of the selected animals
   QMap<QString,QString> mySelectedAnimalsMap;
-  //          <animal guid <enabled, animalparamters guid>>
+  // <animal guid <enabled, animalparamters guid>>
   QMapIterator<QString, QPair<bool, QString> > myAnimalIterator(mAnimalsMap);
   while (myAnimalIterator.hasNext())
   {
@@ -985,7 +970,6 @@ void LaMainForm::animalCalcClicked(QListWidgetItem * thepCurrentItem, QListWidge
   }
   myModel.setCrops(mySelectedCropsMap);
   QString mySelectedAreaUnit = QString(comboBoxAreaUnits->currentText());
-  //AreaUnits myAreaUnits = (mySelectedAreaUnit == "Dunum") ? Dunum:Hectare;
   // Populate the model with all the form data
   myModel.setName(lineEditSiteName->text());
   myModel.setPopulation(spinBoxPopulation->value());

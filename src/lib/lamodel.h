@@ -85,6 +85,7 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
     int foodValueCommonLand() const;
 
     Status fallowStatus() const;
+    float fallowRatio() const;
 
     int caloriesFromCrops();
     int caloriesFromTameMeat();
@@ -211,6 +212,7 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
     void DoCalculations();
     void clearCalcMaps();
     void setFallowStatus(Status theStatus);
+    void setFallowRatio(float theRatio);
     //void setDoTheFallowAllocation(Priority, float, float);
     /** Return an xml representation of this layer
      * @NOTE this class inherits the serialisable interface so
@@ -390,6 +392,7 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
     QMap<QString,QString> mCropsMap;
     AreaUnits mCommonLandAreaUnits;
     Status mFallowStatus;
+    float mFallowRatio;
     int mCommonGrazingLandTDNTarget;
     //int mCommonGrazingLandTDN;
     int mCommonGrazingTDN;
