@@ -34,15 +34,15 @@
 #include <QSettings>
 #include <QtDebug>
 
-  LaGrassProcess::LaGrassProcess(QString theDEM, QPair<int, int> theCoordinates, QPair<QMap<QString, int>, QMap<QString, int> > & thePair, QWidget* parent, Qt::WFlags fl)
+  LaGrassProcess::LaGrassProcess(QString theDEM, QPair<int, int> theCoordinates, QPair<QMap<QString, int>, QMap<QString, int> > & thePairOfAreaTargetMaps, QWidget* parent, Qt::WFlags fl)
 : QDialog(parent,fl)
 {
   //required by Qt4 to initialise the ui
   setupUi(this);
   readSettings();
 
-  mAnimalAreaTargetsMap = thePair.first;
-  mCropAreaTargetsMap = thePair.second;
+  mAnimalAreaTargetsMap = thePairOfAreaTargetMaps.first;
+  mCropAreaTargetsMap = thePairOfAreaTargetMaps.second;
   mDEM = theDEM;
   mCoordinates = theCoordinates;
   lblGraphic->setScaledContents(true);

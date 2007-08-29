@@ -792,6 +792,7 @@ void LaModel::initialiseProductionRequiredAnimalsMap()
 void LaModel::initialiseAreaTargetsCropsMap()
 {
   logMessage("method ==> void LaModel::initialiseAreaTargetsCropsMap()");
+  mCommonCropLand = 0;
   mAreaTargetsCropsMap.clear();
   QMapIterator<QString, QString > myCropIterator(mCropsMap);
   while (myCropIterator.hasNext())
@@ -807,7 +808,9 @@ void LaModel::initialiseAreaTargetsCropsMap()
 
     mCommonCropLand = (myCropParameter.useCommonLand() == true) ? mCommonCropLand + myAreaTarget : mCommonCropLand;
   }
+    mAreaTargetsCropsMap.insert("CommonTarget",static_cast<int>(mCommonCropLand));
 }
+
 void LaModel::initialiseCalcsCropsMap()
 {
   QMapIterator<QString, QString > myCropIterator(mCropsMap);
@@ -854,17 +857,9 @@ void LaModel::initialiseAreaTargetsAnimalsMap()
     LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(myAnimalParameterGuid);
     logMessage("Animal: " + myAnimal.name().toLocal8Bit());
     AreaUnits mySpecificAreaUnits = myAnimalParameter.areaUnits();
-    //AreaUnits myCommonAreaUnits = mCommonLandAreaUnits;
-
-
-
 
     float myTDNSpecific = LaUtils::convertAreaToHectares(mySpecificAreaUnits, myAnimalParameter.TDNSpecificGrazingLand());
 
-
-
-
-    //float myTDNCommon   = LaUtils::convertAreaToHectares(myCommonAreaUnits, mCommonGrazingTDN);
     float myTDNCommon   = mCommonGrazingTDN;
     qDebug() << "   +++   myTDNSpecific = " << myTDNSpecific;
     qDebug() << "   +++   myTDNCommon   = " << mCommonGrazingTDN;
@@ -915,6 +910,7 @@ void LaModel::initialiseAreaTargetsAnimalsMap()
     logMessage(" ");
     logMessage("The Final Common Grazing Land Area Target is: " + QString::number(static_cast<int>(mCommonGrazingLandAreaTarget)).toLocal8Bit());
     logMessage(" ");
+    mAreaTargetsAnimalsMap.insert("CommonTarget",static_cast<int>(mCommonGrazingLandAreaTarget));
 }
 
 Status LaModel::fallowStatus() const
@@ -1393,18 +1389,33 @@ QString LaModel::toHtmlAreaCropTargets()
   {
     myCropIterator.next();
     QString myCropGuid = myCropIterator.key();
-    int myAreaTarget = static_cast <int>(myCropIterator.value());
-    LaCrop myCrop = LaUtils::getCrop(myCropGuid);
-    LaCropParameter myCropParameter = LaUtils::getCropParameter(mCropsMap.value(myCropGuid));
-    // add to the QString to create the xml file
-    myString += QString("  <tr>\n");
-    myString += QString("    <td>\n");
-    myString += QString("      " + LaUtils::xmlEncode(myCrop.name()) + "\n");
-    myString += QString("    </td>\n");
-    myString += QString("    <td>\n");
-    myString += QString("      " + QString::number(myAreaTarget) + "\n");
-    myString += QString("    </td>\n");
-    myString += QString("  </tr>\n");
+    if (myCropGuid != "CommonTarget")
+    {
+      int myAreaTarget = static_cast <int>(myCropIterator.value());
+      LaCrop myCrop = LaUtils::getCrop(myCropGuid);
+      LaCropParameter myCropParameter = LaUtils::getCropParameter(mCropsMap.value(myCropGuid));
+      // add to the QString to create the xml file
+      myString += QString("  <tr>\n");
+      myString += QString("    <td>\n");
+      myString += QString("      " + LaUtils::xmlEncode(myCrop.name()) + "\n");
+      myString += QString("    </td>\n");
+      myString += QString("    <td>\n");
+      myString += QString("      " + QString::number(myAreaTarget) + "\n");
+      myString += QString("    </td>\n");
+      myString += QString("  </tr>\n");
+    }
+    else
+    {
+      QString myAreaTarget = QString::number(mAreaTargetsCropsMap.value("CommonTarget"));
+      myString += QString("  <tr>\n");
+      myString += QString("    <td>\n");
+      myString += QString("      CommonTarget\n");
+      myString += QString("    </td>\n");
+      myString += QString("    <td>\n");
+      myString += QString("      " + myAreaTarget + "\n");
+      myString += QString("    </td>\n");
+      myString += QString("  </tr>\n");
+    }
   } // while crop iterator
 
     myString += QString("</table>\n");
@@ -1434,20 +1445,35 @@ QString LaModel::toHtmlAreaAnimalTargets()
   {
     myAnimalIterator.next();
     QString myAnimalGuid = myAnimalIterator.key();
-    int myAreaTargetUnchanged = static_cast <int>(myAnimalIterator.value());
-    LaAnimal myAnimal = LaUtils::getAnimal(myAnimalGuid);
-    LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(mAnimalsMap.value(myAnimalGuid));
-    int myAreaTarget = LaUtils::convertAreaToHectares(myAnimalParameter.areaUnits(), myAreaTargetUnchanged);
-    // add to the QString to create the xml file
-    myString += QString("  <tr>\n");
-    myString += QString("    <td>\n");
-    myString += QString("      " + LaUtils::xmlEncode(myAnimal.name()) + "\n");
-    myString += QString("    </td>\n");
-    myString += QString("    <td>\n");
-    myString += QString("      " + QString::number(myAreaTarget) + "\n");
-    myString += QString("    </td>\n");
-    myString += QString("  </tr>\n");
-  } // while crop iterator
+    if (myAnimalGuid != "CommonTarget")
+    {
+      int myAreaTargetUnchanged = static_cast <int>(myAnimalIterator.value());
+      LaAnimal myAnimal = LaUtils::getAnimal(myAnimalGuid);
+      LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(mAnimalsMap.value(myAnimalGuid));
+      int myAreaTarget = LaUtils::convertAreaToHectares(myAnimalParameter.areaUnits(), myAreaTargetUnchanged);
+      // add to the QString to create the xml file
+      myString += QString("  <tr>\n");
+      myString += QString("    <td>\n");
+      myString += QString("      " + LaUtils::xmlEncode(myAnimal.name()) + "\n");
+      myString += QString("    </td>\n");
+      myString += QString("    <td>\n");
+      myString += QString("      " + QString::number(myAreaTarget) + "\n");
+      myString += QString("    </td>\n");
+      myString += QString("  </tr>\n");
+    }
+    else
+    {
+      QString myAreaTarget = QString::number(mAreaTargetsAnimalsMap.value("CommonTarget"));
+      myString += QString("  <tr>\n");
+      myString += QString("    <td>\n");
+      myString += QString("      CommonTarget\n");
+      myString += QString("    </td>\n");
+      myString += QString("    <td>\n");
+      myString += QString("      " + myAreaTarget + "\n");
+      myString += QString("    </td>\n");
+      myString += QString("  </tr>\n");
+    }
+  }
 
     myString += QString("</table>\n");
   return myString;
