@@ -82,6 +82,7 @@ void LaGrassProcess::on_pbnStart_clicked()
   // think all i need to do is iterate through them one at a time!
   toggleBusyProgressBar(true);
   int myOverallProgress = 1;
+  // need to change the next line to iterate through both maps and check for common land use
   int myNumberOfSearches = mCropAreaTargetsMap.size() + mAnimalAreaTargetsMap.size();
   setPbarOverallRange(myNumberOfSearches);
 
@@ -102,35 +103,50 @@ void LaGrassProcess::on_pbnStart_clicked()
   while (myCropIterator.hasNext())
   {
     myCropIterator.next();
-    LaCrop myCrop = LaUtils::getCrop(myCropIterator.key());
+    if (myCropIterator.key() != "CommonTarget")
+    {
+      LaCrop myCrop = LaUtils::getCrop(myCropIterator.key());
 
-    // set the images and area target label
-      lblGraphic->setPixmap(myCrop.imageFile());
-      lblGraphic->repaint();
-      //lblPreview->setPixmap(convertedRasterFile);
-      //lblPreview->repaint();
-      lblAreaTarget->setText("Target:\n" + QString::number(myCropIterator.value()));
-      lblAreaTarget->repaint();
+      // set the images and area target label
+        lblGraphic->setPixmap(myCrop.imageFile());
+        lblGraphic->repaint();
+        //lblPreview->setPixmap(convertedRasterFile);
+        //lblPreview->repaint();
+        lblAreaTarget->setText("Target:\n" + QString::number(myCropIterator.value()));
+        lblAreaTarget->repaint();
 
-    int myAreaTarget = myCropIterator.value();
-    QString myName = myCrop.name();
+      int myAreaTarget = myCropIterator.value();
+      QString myName = myCrop.name();
 
-    LaMainForm myMainForm;
-    QString myCropParameterGuid = myMainForm.getMatchingCropParameterGuid(myCropIterator.key());
+      LaMainForm myMainForm;
+      QString myCropParameterGuid = myMainForm.getMatchingCropParameterGuid(myCropIterator.key());
 
-    LaCropParameter myCropParameter = LaUtils::getCropParameter(myCropParameterGuid);
-    QString myCropRasterFile = myCropParameter.rasterName();
+      LaCropParameter myCropParameter = LaUtils::getCropParameter(myCropParameterGuid);
+      QString myCropRasterFile = myCropParameter.rasterName();
 
-    setPbarTargetRange(17);
-    //for (int i=0; i<18; i++)
-    //{
-    //  pbarTarget->setValue(i);
-    //}
-    // go analyse the stuff...
+      setPbarTargetRange(17);
+      //for (int i=0; i<18; i++)
+      //{
+      //  pbarTarget->setValue(i);
+      //}
+      // go analyse the stuff...
 
-    analyseModel(myCropRasterFile, myAreaTarget);
-    updateOverallProgress(myOverallProgress);
-    myOverallProgress++;
+      analyseModel(myCropRasterFile, myAreaTarget);
+      updateOverallProgress(myOverallProgress);
+      myOverallProgress++;
+    }
+    else
+    {
+      //do stuff for commonTarget
+        QString myCommonPixMap = ":/commonTarget.png";
+        lblGraphic->setPixmap(myCommonPixMap);
+        lblGraphic->repaint();
+        lblAreaTarget->setText("Target:\n" + QString::number(myCropIterator.value()));
+        lblAreaTarget->repaint();
+      analyseModel(":/commonTarget.png", myCropIterator.value());
+      updateOverallProgress(myOverallProgress);
+      myOverallProgress++;
+    }
   }
 
   QMapIterator<QString, int > myAnimalIterator(mAnimalAreaTargetsMap);
