@@ -83,19 +83,60 @@ void LaGrassProcess::on_pbnStart_clicked()
   toggleBusyProgressBar(true);
   int myOverallProgress = 1;
   // need to change the next line to iterate through both maps and check for common land use
+  LaMainForm myMainForm;
+  QMapIterator<QString, int > myCropCounter(mCropAreaTargetsMap);
+  while (myCropCounter.hasNext())
+  {
+    myCropCounter.next();
+    if (myCropCounter.key() != "CommonTarget")
+    {
+      // check for use of common targets
+      // if it does not use common target then add to count
+      QString myCropGuid = myCropCounter.key();
+      QString myCropParameterGuid = myMainForm.getMatchingCropParameterGuid(myCropGuid);
+      LaCropParameter myCropParameter = LaUtils::getCropParameter(myCropParameterGuid);
+      bool myCommonLandUsed = myCropParameter.useCommonLand();
+      if (myCommonLandUsed)
+      {
+        qDebug() << "removing from area map: "  << myCropGuid;
+        mCropAreaTargetsMap.remove(myCropGuid);
+      }
+    }
+  }
+  QMapIterator<QString, int > myAnimalCounter(mAnimalAreaTargetsMap);
+  while (myAnimalCounter.hasNext())
+  {
+    myAnimalCounter.next();
+    if (myAnimalCounter.key() != "CommonTarget")
+    {
+      // check for use of common targets
+      // if it does not use common target then add to count
+      QString myAnimalGuid = myAnimalCounter.key();
+      QString myAnimalParameterGuid = myMainForm.getMatchingAnimalParameterGuid(myAnimalGuid);
+      LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(myAnimalParameterGuid);
+      bool myCommonLandUsed = myAnimalParameter.useCommonGrazingLand();
+      if (myCommonLandUsed)
+      {
+        qDebug() << "removing from area map: "  << myAnimalGuid;
+        mAnimalAreaTargetsMap.remove(myAnimalGuid);
+      }
+    }
+  }
+
+
   int myNumberOfSearches = mCropAreaTargetsMap.size() + mAnimalAreaTargetsMap.size();
   setPbarOverallRange(myNumberOfSearches);
 
   // create cost surface maps
 
   LaGrass myGrass;
-  int myEasting = mCoordinates.first;
-  int myNorthing = mCoordinates.second;
+  //int myEasting = mCoordinates.first;
+  //int myNorthing = mCoordinates.second;
   //QString myDEM = mDEM;
   // Make Cost Surface: bool LaGrass::makeWalkCost(int theX, int theY)
   tbGrass->setText("Creating Cost Surface Raster...");
   tbGrass->repaint();
-  myGrass.makeWalkCost(myEasting, myNorthing, mDEM);
+  //myGrass.makeWalkCost(myEasting, myNorthing, mDEM);
   tbGrass->append("Cost Surface Generation complete.");
   tbGrass->repaint();
 
@@ -153,30 +194,45 @@ void LaGrassProcess::on_pbnStart_clicked()
   while (myAnimalIterator.hasNext())
   {
     myAnimalIterator.next();
-    LaAnimal myAnimal = LaUtils::getAnimal(myAnimalIterator.key());
+    if (myAnimalIterator.key() != "CommonTarget")
+    {
+      LaAnimal myAnimal = LaUtils::getAnimal(myAnimalIterator.key());
 
-    // set the images and area target label
-      lblGraphic->setPixmap(myAnimal.imageFile());
-      lblGraphic->repaint();
-      //lblPreview->setPixmap(convertedRasterFile);
-      //lblPreview->repaint();
-      lblAreaTarget->setText("Target:\n" + QString::number(myAnimalIterator.value()));
-      lblAreaTarget->repaint();
-    QString myName = myAnimal.name();
-    LaMainForm myMainForm;
-    QString myAnimalParameterGuid = myMainForm.getMatchingAnimalParameterGuid(myAnimalIterator.key());
-    LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(myAnimalParameterGuid);
-    QString myAnimalRasterFile = myAnimalParameter.rasterName();
-    setPbarTargetRange(17);
-    //for (int i=0; i<18; i++)
-    //{
-    //  pbarTarget->setValue(i);
-    //}
-    // go analyse the stuff...
-    int myAreaTarget = myAnimalIterator.value();
-    analyseModel(myAnimalRasterFile, myAreaTarget);
-    updateOverallProgress(myOverallProgress);
-    myOverallProgress++;
+      // set the images and area target label
+        lblGraphic->setPixmap(myAnimal.imageFile());
+        lblGraphic->repaint();
+        //lblPreview->setPixmap(convertedRasterFile);
+        //lblPreview->repaint();
+        lblAreaTarget->setText("Target:\n" + QString::number(myAnimalIterator.value()));
+        lblAreaTarget->repaint();
+      QString myName = myAnimal.name();
+      LaMainForm myMainForm;
+      QString myAnimalParameterGuid = myMainForm.getMatchingAnimalParameterGuid(myAnimalIterator.key());
+      LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(myAnimalParameterGuid);
+      QString myAnimalRasterFile = myAnimalParameter.rasterName();
+      setPbarTargetRange(17);
+      //for (int i=0; i<18; i++)
+      //{
+      //  pbarTarget->setValue(i);
+      //}
+      // go analyse the stuff...
+      int myAreaTarget = myAnimalIterator.value();
+      analyseModel(myAnimalRasterFile, myAreaTarget);
+      updateOverallProgress(myOverallProgress);
+      myOverallProgress++;
+    }
+    else
+    {
+      //do stuff for commonTarget
+        QString myCommonPixMap = ":/commonTarget.png";
+        lblGraphic->setPixmap(myCommonPixMap);
+        lblGraphic->repaint();
+        lblAreaTarget->setText("Target:\n" + QString::number(myAnimalIterator.value()));
+        lblAreaTarget->repaint();
+      analyseModel(":/commonTarget.png", myAnimalIterator.value());
+      updateOverallProgress(myOverallProgress);
+      myOverallProgress++;
+    }
   }
   toggleBusyProgressBar(false);
 }
@@ -256,7 +312,7 @@ void LaGrassProcess::analyseModel(QString theRasterMask, int theAreaTarget)
    // find the land!
    int myFirst = 0;
    int myLast=18000;
-   int myAreaTarget = 500; // change this to real value
+   int myAreaTarget = theAreaTarget;
    LandFound mySearchStatus = NotEnough;
    int myCurrentlyContainedArea = 0;
    int myPrecision = 5; // change this to real value
