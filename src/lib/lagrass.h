@@ -109,7 +109,7 @@ class LaGrass : public QObject
     float getArea(QString theLayerName);
 
 
-    void reclass(QString theRaster, int theMax);
+    bool reclass(QString theRaster, int theMax);
     bool makeWalkCost(int theX, int theY, QString theDEM);
     void makeEuclideanCost(int theX, int theY);
     void makePathDistanceCost(int theX, int theY);

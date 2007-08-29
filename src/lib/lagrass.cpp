@@ -32,6 +32,7 @@
 #include <QStringList>
 #include <QDebug>
 
+
 LaGrass::LaGrass() : QObject()
 {
 }
@@ -230,35 +231,32 @@ void LaGrass::writeMetaData(QString theValue)
   logMessage("method ==> void LaGrass::writeMetaData(QString theValue)");
 }
 
-void LaGrass::reclass(QString theRaster, int theMax)
+bool LaGrass::reclass(QString theRaster, int theMax)
 {
-  QString myProgram = "r.reclass";
-  QStringList myArgs;
-  myArgs << "input=" + theRaster
-         << "output=laCostMapReclassed"
-         << "\"0 thru " + QString::number(theMax) + " = 1\"";
-  QProcess myProcess;
-  myProcess.start(myProgram, myArgs);
-  if (!myProcess.waitForStarted()) {
-    logMessage("The process never started.....aaargh");
-  }
+      qDebug() << "reclass invoked";
 
-  while (myProcess.waitForReadyRead(-1)) {
-  }
+     QProcess myProcess;
+     myProcess.start("/usr/lib/grass/bin/r.reclass", QStringList() << " input=" + theRaster << "output=laCostMapReclassed");
+     if (!myProcess.waitForStarted())
+      {
+      qDebug() << "something not working so good 1";
+        return false;
+      }
 
-  QString myString;
-  myString+=("--------- Output ----------\n");
-  myProcess.setReadChannel(QProcess::StandardOutput);
-  QByteArray myArray = myProcess.readAll();
-  myString.append(myArray);
-  myString+=("--------- Errors ----------\n");
-  myProcess.setReadChannel(QProcess::StandardError);
-  myArray = myProcess.readAll();
-  myString.append(myArray);
+     QString myPipedText = "0 thru " + QString::number(theMax) + " = 1";
+     qDebug() << "myPipedText: " << myPipedText;
+     myProcess.write(myPipedText.toUtf8());
+     myProcess.closeWriteChannel();
 
-  logMessage(myString.toLocal8Bit());
+    if (!myProcess.waitForFinished())
+    {
+      qDebug() << "something not working so good 2";
+      return false;
+    }
+     QByteArray result = myProcess.readAll();
+      qDebug() << " working good";
 
-  logMessage("The process completed");
+     return true;
 }
 
 //
