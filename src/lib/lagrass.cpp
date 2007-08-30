@@ -129,7 +129,7 @@ bool LaGrass::createMask(QString theCostSurface, QString theMaskRaster)
   //r.mapcalc "laFrictionMap = if(isnull(laDEM), null(), 1)"
   QString myCommand = "r.mapcalc";
   QStringList myArguments;
-  myArguments << " tmpMask = \'" + theCostSurface + " * " + theMaskRaster + "\'";
+  myArguments << " tmpMask=" + theCostSurface + "*" + theMaskRaster;
   qDebug(myCommand.toLocal8Bit() + myArguments.join(" ").toLocal8Bit());
   QString myErrorLog;
   QString myResult = runCommand(myCommand,myArguments,myErrorLog);
@@ -233,13 +233,38 @@ void LaGrass::writeMetaData(QString theValue)
 
 bool LaGrass::reclass(QString theRaster, int theMax)
 {
-      qDebug() << "reclass invoked";
+  qDebug() << "reclass invoked";
+  //r.mapcalc "laFrictionMap = if(isnull(laDEM), null(), 1)"
+  QString myCommand = "r.mapcalc";
+  QStringList myArguments;
+  myArguments << " laCostMapReclassed=if(" + theRaster + "<" + QString::number(theMax) + ", 1, 0)";
+  qDebug(myCommand.toLocal8Bit() + myArguments.join(" ").toLocal8Bit());
+  QString myErrorLog;
+  QString myResult = runCommand(myCommand,myArguments,myErrorLog);
+  qDebug(myResult.toLocal8Bit());
+  if (myErrorLog.isEmpty())
+  {
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+  /*#ifdef Q_OS_MACX
+  QString myProgram = "/Applications/GRASS.app/Contents/Resources/bin/r.reclass";
+  #else
+  QString myProgram = "/usr/lib/grass/bin/r.reclass";
+  #endif
+  //windows users can wallow in self pity for now...
 
-     QProcess myProcess;
-     myProcess.start("/usr/lib/grass/bin/r.reclass", QStringList() << " input=" + theRaster << "output=laCostMapReclassed");
+  QStringList myArguments;
+  myArguments << " input=" + theRaster << "output=laCostMapReclassed";
+
+  QProcess myProcess;
+     myProcess.start(myProgram, myArguments);
      if (!myProcess.waitForStarted())
       {
-      qDebug() << "something not working so good 1";
+      qDebug() << "Process Didn't Start";
         return false;
       }
 
@@ -250,13 +275,28 @@ bool LaGrass::reclass(QString theRaster, int theMax)
 
     if (!myProcess.waitForFinished())
     {
-      qDebug() << "something not working so good 2";
+      qDebug() << "something not working so good in wait for finished";
       return false;
     }
      QByteArray result = myProcess.readAll();
       qDebug() << " working good";
 
-     return true;
+     return true;*/
+/*   QProcess gzip;
+     gzip.start("gzip", QStringList() << "-c");
+     if (!gzip.waitForStarted())
+         return false;
+
+     gzip.write("Qt rocks!");
+     gzip.closeWriteChannel();
+
+     if (!gzip.waitForFinished())
+         return false;
+
+     QByteArray result = gzip.readAll();
+*/
+
+
 }
 
 //

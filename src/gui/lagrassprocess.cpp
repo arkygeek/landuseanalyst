@@ -171,7 +171,8 @@ void LaGrassProcess::on_pbnStart_clicked()
       //  pbarTarget->setValue(i);
       //}
       // go analyse the stuff...
-
+      qDebug() << "myAreaTarget: " << myAreaTarget;
+      qDebug() << "myName: " << myName;
       analyseModel(myName, myCropRasterFile, myAreaTarget);
       updateOverallProgress(myOverallProgress);
       myOverallProgress++;
@@ -305,8 +306,8 @@ void LaGrassProcess::toggleBusyProgressBar(bool theStatus)
 void LaGrassProcess::analyseModel(QString theItem, QString theRasterMask, int theAreaTarget)
 {
   LaGrass myGrass;
-   int myFirst = 0;
-   int myLast=18000;
+   float myFirst = 0;
+   float myLast=18000;
    int myAreaTarget = theAreaTarget;
    float myCurrentlyContainedArea = 0.0;
    int myPrecision = 5; // change this to real value
@@ -315,17 +316,20 @@ void LaGrassProcess::analyseModel(QString theItem, QString theRasterMask, int th
 
    setPbarTargetRange(17);
 
+
+  myGrass.createMask("laCostMapReclassed" , theRasterMask); // creates tmpMask
    while (myFirst <= myLast)
   {
     updateCurrentProgress(myStatusCount);
     myStatusCount++;
-    int myMid = (myFirst + myLast) / 2;  // compute mid point.
+    float myMid = (myFirst + myLast) / 2.;  // compute mid point.
     // reclass with 1 to midpoint and null beyond and then check results
     //    echo "0 thru $step = 1" | r.reclass input=$cost output=cost.reclass --o
     //    r.stats -n -a fs=- input=cost.reclass > $TMP1
-    myGrass.reclass("laWalkCost", myMid); // makes a raster called laCostMapReclassed
+    qDebug() << "midpoint value: " << myMid;
+    qDebug() << "midpoint valueas int: " << static_cast<int>(myMid);
 
-    myGrass.createMask("laCostMapReclassed" , theRasterMask); // creates tmpMask
+    myGrass.reclass("laWalkCost", static_cast<int>(myMid)); // makes a raster called laCostMapReclassed
     myCurrentlyContainedArea = myGrass.getArea("tmpMask");
     // find out if the contained area is within acceptable range
     mySearchStatus = getSearchStatus(static_cast<int>(myCurrentlyContainedArea), myAreaTarget, myPrecision);
