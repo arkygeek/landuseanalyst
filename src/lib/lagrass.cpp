@@ -109,7 +109,7 @@ bool LaGrass::createFrictionMap(QString theBaseRaster,QString theOutputRaster)
   //r.mapcalc "laFrictionMap = if(isnull(laDEM), null(), 1)"
   QString myCommand = "r.mapcalc";
   QStringList myArguments;
-  myArguments << " \"" + theOutputRaster + " = if(isnull(" + theBaseRaster + "), null(), 1)\"";
+  myArguments << theOutputRaster + " = if(isnull(" + theBaseRaster + "), null(), 1)";
   qDebug(myCommand.toLocal8Bit() + myArguments.join(" ").toLocal8Bit());
   QString myErrorLog;
   QString myResult = runCommand(myCommand,myArguments,myErrorLog);
@@ -129,7 +129,8 @@ bool LaGrass::createMask(QString theCostSurface, QString theMaskRaster)
   //r.mapcalc "laFrictionMap = if(isnull(laDEM), null(), 1)"
   QString myCommand = "r.mapcalc";
   QStringList myArguments;
-  myArguments << " tmpMask=" + theCostSurface + "*" + theMaskRaster;
+  QString myMaskName = "tmpMask";
+  myArguments << myMaskName + "=" + theCostSurface + "*" + theMaskRaster;
   qDebug(myCommand.toLocal8Bit() + myArguments.join(" ").toLocal8Bit());
   QString myErrorLog;
   QString myResult = runCommand(myCommand,myArguments,myErrorLog);
@@ -243,7 +244,7 @@ bool LaGrass::reclass(QString theRaster, int theMax)
   //r.mapcalc "laFrictionMap = if(isnull(laDEM), null(), 1)"
   QString myCommand = "r.mapcalc";
   QStringList myArguments;
-  myArguments << " laCostMapReclassed=if(" + theRaster + "<" + QString::number(theMax) + ", 1, 0)";
+  myArguments << "laCostMapReclassed=if(" + theRaster + "<" + QString::number(theMax) + ",1,0)";
   qDebug(myCommand.toLocal8Bit() + myArguments.join(" ").toLocal8Bit());
   QString myErrorLog;
   QString myResult = runCommand(myCommand,myArguments,myErrorLog);
