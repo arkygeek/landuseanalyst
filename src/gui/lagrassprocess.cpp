@@ -186,7 +186,7 @@ void LaGrassProcess::on_pbnStart_clicked()
         lblAreaTarget->setText("Target:\n" + QString::number(myCropIterator.value()));
         lblAreaTarget->repaint();
       QString myRasterName = "cerealMask@shuna";
-      analyseModel(myRasterName, "cerealMask", myCropIterator.value());
+      analyseModel("cerealMask", myRasterName, myCropIterator.value());
       updateOverallProgress(myOverallProgress);
       myOverallProgress++;
     }
@@ -231,7 +231,7 @@ void LaGrassProcess::on_pbnStart_clicked()
         lblGraphic->repaint();
         lblAreaTarget->setText("Target:\n" + QString::number(myAnimalIterator.value()));
         lblAreaTarget->repaint();
-      analyseModel("treesMask@shuna" ,"treesMask", myAnimalIterator.value());
+      analyseModel("treesMask" ,"treesMask@shuna", myAnimalIterator.value());
       updateOverallProgress(myOverallProgress);
       myOverallProgress++;
     }
