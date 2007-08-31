@@ -89,7 +89,7 @@ bool LaGrass::copyMap(QString theOriginalRaster, QString theCopy)
 {
   QString myCommand = "g.copy";
   QStringList myArguments;
-  myArguments << " rast=" + theOriginalRaster + "," + theCopy;
+  myArguments << "rast=" + theOriginalRaster + "," + theCopy;
   qDebug(myCommand.toLocal8Bit() + myArguments.join(" ").toLocal8Bit());
   QString myErrorLog;
   QString myResult = runCommand(myCommand,myArguments,myErrorLog);
@@ -150,7 +150,7 @@ float LaGrass::getArea(QString theLayerName)
   //r.stats -a -n fs=,
   QString myCommand = "r.stats";
   QStringList myArguments;
-  myArguments << " -a" << "-n" << "fs=," << "input="+theLayerName;
+  myArguments << "-a" << "-n" << "fs=," << "input="+theLayerName;
   qDebug(myCommand.toLocal8Bit() + myArguments.join(" ").toLocal8Bit());
   QString myErrorLog;
   QString myResult = runCommand(myCommand,myArguments,myErrorLog);
@@ -161,6 +161,7 @@ float LaGrass::getArea(QString theLayerName)
   }
   else
   {
+    qDebug() << "myResult: " << myResult;
     myResult = myResult.simplified();
     qDebug() << "myResult.simplified(): " << myResult;
     //put each line of output into a list entry
@@ -169,12 +170,12 @@ float LaGrass::getArea(QString theLayerName)
    // if (myList.count() < 1)
     //{
       //row should be like 3,32323 (class,area)
-      QStringList myList2 = myList.at(0).split((","));
+      QStringList myList2 = myList.at(1).split((","));
       qDebug() << "myList2: " << myList2;
       //if (myList2.count() < 1)
       //{
         //get only area
-        float myArea = myList.at(1).toFloat();
+        float myArea = myList2.at(1).toFloat() * 0.0001; // adjust for hectares
         qDebug() << "Area (returnValue): " << myArea;
         return myArea;
       //}
@@ -346,6 +347,8 @@ QString LaGrass::runCommand(QString theCommand,
   myArray = myProcess.readAll();
   theErrorLog.append(myArray);
   // get rid of some grass decorations...
+  qDebug() <<"GRASS> " << theCommand << theArguments;
+  qDebug() <<"Results: " << myLog;
   myLog.replace("----------------------------------------------","");
 
   return myLog;
