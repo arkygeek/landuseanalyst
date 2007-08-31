@@ -317,7 +317,7 @@ void LaGrassProcess::analyseModel(QString theItem, QString theRasterMask, int th
    setPbarTargetRange(17);
 
 
-  myGrass.createMask("laCostMapReclassed" , theRasterMask); // creates tmpMask
+
    while (myFirst <= myLast)
   {
     updateCurrentProgress(myStatusCount);
@@ -330,25 +330,31 @@ void LaGrassProcess::analyseModel(QString theItem, QString theRasterMask, int th
     qDebug() << "midpoint valueas int: " << static_cast<int>(myMid);
 
     myGrass.reclass("laWalkCost", static_cast<int>(myMid)); // makes a raster called laCostMapReclassed
+    myGrass.createMask("laCostMapReclassed" , theRasterMask); // creates tmpMask
     myCurrentlyContainedArea = myGrass.getArea("tmpMask");
     // find out if the contained area is within acceptable range
+
     mySearchStatus = getSearchStatus(static_cast<int>(myCurrentlyContainedArea), myAreaTarget, myPrecision);
 
     switch (mySearchStatus)
     {
       case NotEnough:
-            myFirst = myMid + 1;  // repeat search in top half.
+            qDebug() << "NotEnough.  Current is " << myCurrentlyContainedArea << "Needed: " << myAreaTarget;
+            myFirst = myMid + 1.;  // repeat search in top half.
             break;;
       case TooMuch:
-            myLast = myMid - 1; // repeat search in bottom half.
+            qDebug() << "NotEnough.  Current is " << myCurrentlyContainedArea << "Needed: " << myAreaTarget;
+            myLast = myMid - 1.; // repeat search in bottom half.
             break;
       case FoundTarget:
             // found it. break out of loop /////
             // copy final raster to permanentRaster
+            qDebug() << "TARGET FOUND!  Current is " << myCurrentlyContainedArea << "Actual Needed: " << myAreaTarget;
+            qDebug() << "which falls within the precision range";
             QString myRasterName = theItem+"RESULTS";
             myGrass.copyMap("tmpMask", myRasterName);
             updateCurrentProgress(myStatusCount);
-            myFirst = myLast+1;
+            myFirst = myLast+1.;
             break;
     }
 
@@ -358,15 +364,32 @@ void LaGrassProcess::analyseModel(QString theItem, QString theRasterMask, int th
 LandFound LaGrassProcess::getSearchStatus(int theCurrentlyContainedArea, int theAreaTarget, int thePrecision)
 {
   LandFound myStatus;
-  int myPrecision=5;  //get the real value for precision
+  float myPrecision=5.;  //get the real value for precision
   float myAcceptableRange=(theAreaTarget*myPrecision*0.01)/2.0;
   float myMinimumAcceptable = theAreaTarget - myAcceptableRange;
   float myMaximumAcceptable = theAreaTarget + myAcceptableRange;
-
+  qDebug() << "myAcceptableRange:" << myAcceptableRange;
+  qDebug() << "myMinimumAcceptable:" << myMinimumAcceptable;
+  qDebug() << "myMaximumAcceptable:" << myMaximumAcceptable;
   if (theCurrentlyContainedArea >= myMinimumAcceptable)
-    {      myStatus = (theCurrentlyContainedArea <= myMaximumAcceptable) ? FoundTarget : TooMuch;    }
+    {
+      qDebug() << "the currently contained area of " << theCurrentlyContainedArea << "is >= the MIN target of " << theAreaTarget;
+      if (theCurrentlyContainedArea <= myMaximumAcceptable)
+      {
+      qDebug() << "the currently contained area of " << theCurrentlyContainedArea << "is also <= the MAX target of " << theAreaTarget;
+        myStatus = FoundTarget;
+      }
+      else
+      {
+      qDebug() << "the currently contained area of " << theCurrentlyContainedArea << "is > the MAX target of " << theAreaTarget;
+        myStatus = TooMuch;
+      }
+
+
+    }
   else
     {
+      qDebug() << "the currently contained area of " << theCurrentlyContainedArea << "is < the MIN target of " << theAreaTarget;
       myStatus = NotEnough;
     }
 
