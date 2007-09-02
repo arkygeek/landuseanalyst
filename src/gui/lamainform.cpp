@@ -58,16 +58,18 @@ LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
   lblCropPicCalcs->setScaledContents(true);
   lblAnimalPicCalcs->setScaledContents(true);
 
-  QStringList myList;
+  QStringList myWholeList;
   LaGrass myGrass;
   QStringList myMapsetList = myGrass.getMapsetList();
+  cboMapSet->addItems(myMapsetList);
   QStringListIterator myIterator(myMapsetList);
   while (myIterator.hasNext())
   {
     //append the raster names in this mapet to our full list
-    myList << myGrass.getRasterList(myIterator.next());
+    myWholeList << myGrass.getRasterList(myIterator.next());
   }
-  //myGrass.getRasterList(myMapsetList);
+  QString myMapset = cboMapSet->currentText();
+  QStringList myList = myGrass.getRasterList(myMapset);
   cboDEM->addItems(myList);
   cboCommonGrazingRaster->addItems(myList);
   cboCommonCropRaster->addItems(myList);
@@ -268,6 +270,19 @@ void LaMainForm::on_pbnNewAnimalParameter_clicked()
 void LaMainForm::on_pbnFallow_clicked()
 {
   //not implemented
+}
+
+void LaMainForm::on_cboMapSet_currentIndexChanged()
+{
+  LaGrass myGrass;
+  QString myMapset = cboMapSet->currentText();
+  QStringList myList = myGrass.getRasterList(myMapset);
+  cboDEM->clear();
+  cboCommonGrazingRaster->clear();
+  cboCommonCropRaster->clear();
+  cboDEM->addItems(myList);
+  cboCommonGrazingRaster->addItems(myList);
+  cboCommonCropRaster->addItems(myList);
 }
 
 void LaMainForm::on_cbDebug_clicked()
