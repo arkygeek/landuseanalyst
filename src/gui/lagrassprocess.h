@@ -40,7 +40,10 @@ class LaGrassProcess : public QDialog, private Ui::LaGrassProcessBase
     LaGrassProcess(QString theDEM, QPair<int, int> theCoordinates, QPair<QMap<QString, int>, QMap<QString, int> > & thePairOfAreaTargetMaps, QWidget* parent = 0, Qt::WFlags fl = 0 );
     ~LaGrassProcess();
 
+
   public slots:
+
+
     /** when called starts the grass analysis */
     void on_pbnStart_clicked();
     /** aborts the grass analysis process */
@@ -53,7 +56,7 @@ class LaGrassProcess : public QDialog, private Ui::LaGrassProcessBase
     void updatePreview(QString thePreviewFile);
     void updateGraphic(QString theGraphicFile);
     void toggleBusyProgressBar(bool theStatus);
-    void analyseModel(QString theItem, QString theRasterMask, int theAreaTarget);
+    float analyseModel(QString theItem, QString theRasterMask, int theAreaTarget);
     LandFound getSearchStatus(int theCurrentlyContainedArea, int theAreaTarget, int thePrecision);
   private slots:
 
@@ -63,6 +66,7 @@ class LaGrassProcess : public QDialog, private Ui::LaGrassProcessBase
 
       int mCurrentAreaTarget;
       int mSearches;
+
       QMap <QString, int> mCropAreaTargetsMap;
       QMap <QString, int> mAnimalAreaTargetsMap;
       QPair <int, int> mCoordinates;

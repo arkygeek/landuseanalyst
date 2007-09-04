@@ -85,6 +85,8 @@ QStringList LaGrass::getRasterList(QString theMapset, bool thePrependMapsetFlag 
   return myFinalList;
 }
 
+
+
 bool LaGrass::copyMap(QString theOriginalRaster, QString theCopy)
 {
   QString myCommand = "g.copy";
@@ -124,6 +126,28 @@ bool LaGrass::createFrictionMap(QString theBaseRaster,QString theOutputRaster)
   }
 }
 
+bool LaGrass::createInverseMask(float theMin, QString theMaskRaster)
+{
+  QString myCommand = "r.mapcalc";
+  QStringList myArguments;
+  myArguments << "laCostMapReclassed=if(laWalkCost>" + QString::number(theMin) + ",1,0)";
+  qDebug(myCommand.toLocal8Bit() + myArguments.join(" ").toLocal8Bit());
+  QString myErrorLog;
+  QString myResult = runCommand(myCommand,myArguments,myErrorLog);
+  qDebug(myResult.toLocal8Bit());
+
+  createCombinedMask("laCostMapReclassed", theMaskRaster);
+
+  if (myErrorLog.isEmpty())
+  {
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
 bool LaGrass::createMask(QString theCostSurface, QString theMaskRaster)
 {
   //r.mapcalc "laFrictionMap = if(isnull(laDEM), null(), 1)"
@@ -135,6 +159,52 @@ bool LaGrass::createMask(QString theCostSurface, QString theMaskRaster)
   QString myErrorLog;
   QString myResult = runCommand(myCommand,myArguments,myErrorLog);
   qDebug(myResult.toLocal8Bit());
+  if (myErrorLog.isEmpty())
+  {
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+bool LaGrass::createCombinedMask(QString theCostSurface, QString theMaskRaster)
+{
+  QString myCommand = "r.mapcalc";
+  QStringList myArguments;
+  QString myMaskName = "laLeftOver";
+  myArguments << myMaskName + "=" + theCostSurface + "*" + theMaskRaster;
+  qDebug(myCommand.toLocal8Bit() + myArguments.join(" ").toLocal8Bit());
+  QString myErrorLog;
+  QString myResult = runCommand(myCommand,myArguments,myErrorLog);
+  qDebug(myResult.toLocal8Bit());
+  if (myErrorLog.isEmpty())
+  {
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+bool LaGrass::mergeMaps(QString theLeftoversGoHere)
+{
+
+
+  QString myErrorLog;
+  QString myCommand = "r.mapcalc";
+
+  // first we need to make the remaining land available
+  // by changing all the null values to zero, and then
+  // adding the two together.  (null + 1 is still null)
+
+  QStringList myArguments;
+  myArguments << "laCombinedMaps='if(isnull("+ theLeftoversGoHere +"),0," + theLeftoversGoHere + ") + if(isnull(laLeftOver),0,laLeftOver)'";
+  QString myResult = runCommand(myCommand,myArguments,myErrorLog);
+  qDebug(myResult.toLocal8Bit());
+
   if (myErrorLog.isEmpty())
   {
     return true;

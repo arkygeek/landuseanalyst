@@ -101,6 +101,19 @@ class LaGrass : public QObject
      *       will be put into the current active mapset
      */
     bool createMask(QString theCostSurface, QString theMaskRaster);
+    bool createInverseMask(float theMin, QString theMaskRaster);
+    bool createCombinedMask(QString theCostSurface, QString theMaskRaster);
+
+    /** Add leftovers from the current mask to the leftovers mask
+     * which is available to the animals for grazing
+     * @param QString grass raster layer name for generated
+     * cost surface used in analysis.
+     * @param QString the layer name of the binary raster mask
+     * @return bool - false if the frictionmap creation failed
+     * @note generates a raster called laLeftOverMask which
+     *       will be put into the current active mapset
+     */
+    bool mergeMaps(QString theLeftoversGoHere);
 
     /** Get the area stats for the raster
      * @param theRasterLayer - should be a boolean layer
