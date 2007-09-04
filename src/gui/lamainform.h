@@ -45,9 +45,9 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
     LaMainForm(QWidget* parent = 0, Qt::WFlags fl = 0 );
     ~LaMainForm();
   public slots:
-    void on_horizontalSliderMeat_valueChanged(int theValue);
-    void on_horizontalSliderDiet_valueChanged(int theValue);
-    void on_horizontalSliderCrop_valueChanged(int theValue);
+    void on_sliderMeat_valueChanged(int theValue);
+    void on_sliderDiet_valueChanged(int theValue);
+    void on_sliderCrop_valueChanged(int theValue);
     QMap <QString, QString> getSelectedCrops();
     QPair <int, int> getSiteCoordinates();
     LaTripleMap getAvailableCrops();

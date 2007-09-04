@@ -34,6 +34,7 @@
 #include <QSettings>
 #include <QtDebug>
 
+const QString MapSetName = "tim";
   LaGrassProcess::LaGrassProcess(QString theDEM, QPair<int, int> theCoordinates, QPair<QMap<QString, int>, QMap<QString, int> > & thePairOfAreaTargetMaps, QWidget* parent, Qt::WFlags fl)
 : QDialog(parent,fl)
 {
@@ -187,7 +188,7 @@ void LaGrassProcess::accept()
         lblGraphic->repaint();
         lblAreaTarget->setText("Target:\n" + QString::number(myCropIterator.value()));
         lblAreaTarget->repaint();
-      QString myRasterName = "cerealMask@shuna";
+      QString myRasterName = "cerealMask@" + MapSetName;
       myMinimumCost = analyseModel("cerealMask", myRasterName, myCropIterator.value());
       updateOverallProgress(myOverallProgress);
       myOverallProgress++;
@@ -223,21 +224,21 @@ void LaGrassProcess::accept()
       // hard coded to add the leftover mask to the common animal mask
       myGrass.mergeMaps(myAnimalRasterFile);
 
-      analyseModel(myName, "laCombinedMasks@shuna", myAreaTarget);
+      analyseModel(myName, "laCombinedMasks@" + MapSetName, myAreaTarget);
       updateOverallProgress(myOverallProgress);
       myOverallProgress++;
     }
     else
     {
       //do stuff for commonTarget
-      myGrass.mergeMaps("treesMask@shuna"); // creates laCombinedMask
+      myGrass.mergeMaps("treesMask@" + MapSetName); // creates laCombinedMask
         QString myCommonPixMap = ":/commonTarget.png";
         lblGraphic->setPixmap(myCommonPixMap);
         lblGraphic->repaint();
         lblAreaTarget->setText("Target:\n" + QString::number(myAnimalIterator.value()));
         lblAreaTarget->repaint();
       // hard coded to add the leftover mask to the common animal mask
-      analyseModel("treesMask" ,"laLeftOver@shuna", myAnimalIterator.value());
+      analyseModel("treesMask" ,"laLeftOver@" + MapSetName, myAnimalIterator.value());
       updateOverallProgress(myOverallProgress);
       myOverallProgress++;
     }

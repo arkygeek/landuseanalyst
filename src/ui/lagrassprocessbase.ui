@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>637</width>
-    <height>626</height>
+    <width>586</width>
+    <height>644</height>
    </rect>
   </property>
   <property name="minimumSize" >
@@ -23,13 +23,25 @@
   </property>
   <layout class="QGridLayout" >
    <item rowspan="2" row="0" column="0" >
-    <widget class="QGroupBox" name="groupBox" >
+    <widget class="QGroupBox" name="grpPreview" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="title" >
       <string>Preview</string>
      </property>
      <layout class="QGridLayout" >
       <item row="0" column="0" >
        <widget class="QLabel" name="lblPreview" >
+        <property name="sizePolicy" >
+         <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="text" >
          <string>No Preview Currently Available</string>
         </property>
@@ -42,7 +54,13 @@
     </widget>
    </item>
    <item row="0" column="1" >
-    <widget class="QGroupBox" name="groupBox_3" >
+    <widget class="QGroupBox" name="grpCurrentTarget" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="maximumSize" >
       <size>
        <width>200</width>
@@ -63,8 +81,8 @@
         </property>
         <property name="maximumSize" >
          <size>
-          <width>100</width>
-          <height>100</height>
+          <width>1000000</width>
+          <height>1000000</height>
          </size>
         </property>
         <property name="text" >
@@ -77,10 +95,11 @@
       </item>
       <item row="1" column="0" >
        <widget class="QLabel" name="lblCurrentArea" >
-        <property name="font" >
-         <font>
-          <pointsize>7</pointsize>
-         </font>
+        <property name="sizePolicy" >
+         <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
         <property name="text" >
          <string>123456</string>
@@ -94,7 +113,13 @@
     </widget>
    </item>
    <item row="1" column="1" >
-    <widget class="QGroupBox" name="groupBox_4" >
+    <widget class="QGroupBox" name="grpProgress" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="minimumSize" >
       <size>
        <width>0</width>
@@ -113,6 +138,12 @@
      <layout class="QGridLayout" >
       <item row="0" column="0" >
        <widget class="QLabel" name="label" >
+        <property name="minimumSize" >
+         <size>
+          <width>0</width>
+          <height>16</height>
+         </size>
+        </property>
         <property name="text" >
          <string>Current GRASS Command</string>
         </property>
@@ -120,6 +151,18 @@
       </item>
       <item row="1" column="0" >
        <widget class="QProgressBar" name="pbarBusy" >
+        <property name="sizePolicy" >
+         <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize" >
+         <size>
+          <width>0</width>
+          <height>19</height>
+         </size>
+        </property>
         <property name="maximumSize" >
          <size>
           <width>16777215</width>
@@ -142,6 +185,12 @@
       </item>
       <item row="2" column="0" >
        <widget class="QLabel" name="lblAreaTarget" >
+        <property name="minimumSize" >
+         <size>
+          <width>0</width>
+          <height>16</height>
+         </size>
+        </property>
         <property name="text" >
          <string>Target: 123456</string>
         </property>
@@ -152,10 +201,16 @@
       </item>
       <item row="3" column="0" >
        <widget class="QProgressBar" name="pbarTarget" >
+        <property name="sizePolicy" >
+         <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="minimumSize" >
          <size>
           <width>45</width>
-          <height>0</height>
+          <height>19</height>
          </size>
         </property>
         <property name="value" >
@@ -177,6 +232,12 @@
       </item>
       <item row="4" column="0" >
        <widget class="QLabel" name="label_6" >
+        <property name="minimumSize" >
+         <size>
+          <width>0</width>
+          <height>16</height>
+         </size>
+        </property>
         <property name="text" >
          <string>Overall Progress</string>
         </property>
@@ -187,10 +248,16 @@
       </item>
       <item row="5" column="0" >
        <widget class="QProgressBar" name="pbarOverall" >
+        <property name="sizePolicy" >
+         <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="minimumSize" >
          <size>
           <width>45</width>
-          <height>0</height>
+          <height>19</height>
          </size>
         </property>
         <property name="value" >
@@ -212,6 +279,12 @@
    </item>
    <item row="2" column="0" colspan="2" >
     <widget class="QGroupBox" name="groupBox_2" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Minimum" hsizetype="Expanding" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="title" >
       <string>Log</string>
      </property>

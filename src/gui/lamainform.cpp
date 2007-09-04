@@ -126,6 +126,15 @@ void LaMainForm::readSettings()
   QSize size = mySettings.value("mainwindow/size", QSize(400, 400)).toSize();
   resize(size);
   move(pos);
+
+  //
+  // Restore controls to their last used values
+  //
+  lineEditSiteName->setText(mySettings.value("siteName","").toString());
+  lineEditEasting->setText(mySettings.value("easting","").toString());
+  lineEditNorthing->setText(mySettings.value("northing","").toString());
+  sliderDiet->setValue(mySettings.value("percentPlantDiet","50").toInt());
+  sbCommonRasterTDN->setValue(mySettings.value("commonTDN","40").toInt());
 }
 
 void LaMainForm::writeSettings()
@@ -133,6 +142,15 @@ void LaMainForm::writeSettings()
   QSettings mySettings;
   mySettings.setValue("mainwindow/pos", pos());
   mySettings.setValue("mainwindow/size", size());
+
+  //
+  // Store defaults
+  //
+  mySettings.setValue("siteName",lineEditSiteName->text());
+  mySettings.setValue("easting",lineEditEasting->text());
+  mySettings.setValue("northing",lineEditNorthing->text());
+  mySettings.setValue("percentPlantDiet",sliderDiet->value());
+  mySettings.setValue("commonTDN",sbCommonRasterTDN->value());
 }
 
 void LaMainForm::on_spinBoxDailyCalories_valueChanged(int theValue)
@@ -140,7 +158,7 @@ void LaMainForm::on_spinBoxDailyCalories_valueChanged(int theValue)
   setDietLabels();
 }
 
-void LaMainForm::on_horizontalSliderMeat_valueChanged(int theValue)
+void LaMainForm::on_sliderMeat_valueChanged(int theValue)
 {
   QString myMinString = QString::number(100-theValue);
   QString myMaxString = QString::number(theValue);
@@ -149,7 +167,7 @@ void LaMainForm::on_horizontalSliderMeat_valueChanged(int theValue)
   setDietLabels();
 }
 
-void LaMainForm::on_horizontalSliderDiet_valueChanged(int theValue)
+void LaMainForm::on_sliderDiet_valueChanged(int theValue)
 {
   QString myMinString = QString::number(theValue);
   QString myMaxString = QString::number(100-theValue);
@@ -158,7 +176,7 @@ void LaMainForm::on_horizontalSliderDiet_valueChanged(int theValue)
   setDietLabels();
 }
 
-void LaMainForm::on_horizontalSliderCrop_valueChanged(int theValue)
+void LaMainForm::on_sliderCrop_valueChanged(int theValue)
 {
   QString myMinString = QString::number(100-theValue);
   QString myMaxString = QString::number(theValue);
@@ -535,10 +553,10 @@ void LaMainForm::loadCrops()
 
 void LaMainForm::setDietLabels()
 {
-  int myDietPercentMeat = horizontalSliderDiet->value();
-  int myDietPercentPlant = (100-(horizontalSliderDiet->value()));
-  float myTameCropPercentage = horizontalSliderCrop->value()*(myDietPercentPlant/100.);
-  float myTameMeatPercentage = horizontalSliderMeat->value()*(myDietPercentMeat/100.);
+  int myDietPercentMeat = sliderDiet->value();
+  int myDietPercentPlant = (100-(sliderDiet->value()));
+  float myTameCropPercentage = sliderCrop->value()*(myDietPercentPlant/100.);
+  float myTameMeatPercentage = sliderMeat->value()*(myDietPercentMeat/100.);
   int myCaloriesIndividual = spinBoxDailyCalories->value();
   int myPopulation = spinBoxPopulation->value();
 
@@ -709,9 +727,9 @@ void LaMainForm::on_pushButtonRun_clicked()
   myModel.setWalkingTime(radioButtonWalkingTime->isChecked());
   myModel.setPathDistance(radioButtonPathDistance->isChecked());
   myModel.setPrecision(spinBoxModelPrecision->value());
-  myModel.setDietPercent(horizontalSliderDiet->value());
-  myModel.setCropPercent(horizontalSliderCrop->value());
-  myModel.setMeatPercent(horizontalSliderMeat->value());
+  myModel.setDietPercent(sliderDiet->value());
+  myModel.setCropPercent(sliderCrop->value());
+  myModel.setMeatPercent(sliderMeat->value());
   myModel.setCaloriesPerPersonDaily(spinBoxDailyCalories->value());
 
   // the following adjusts the TDN value for use with hectares
@@ -799,9 +817,9 @@ void LaMainForm::on_pushButtonSave_clicked()
   myModel.setWalkingTime(radioButtonWalkingTime->isChecked());
   myModel.setPathDistance(radioButtonPathDistance->isChecked());
   myModel.setPrecision(spinBoxModelPrecision->value());
-  myModel.setDietPercent(horizontalSliderDiet->value());
-  myModel.setCropPercent(horizontalSliderCrop->value());
-  myModel.setMeatPercent(horizontalSliderMeat->value());
+  myModel.setDietPercent(sliderDiet->value());
+  myModel.setCropPercent(sliderCrop->value());
+  myModel.setMeatPercent(sliderMeat->value());
   myModel.setCaloriesPerPersonDaily(spinBoxDailyCalories->value());
   myModel.setCommonLandValue(sbCommonRasterTDN->value(), myAreaUnits);
   myModel.toXmlFile( LaUtils::getModelOutputDir() +
@@ -914,9 +932,9 @@ void LaMainForm::cropCalcClicked(QListWidgetItem * thepCurrentItem, QListWidgetI
   myModel.setWalkingTime(radioButtonWalkingTime->isChecked());
   myModel.setPathDistance(radioButtonPathDistance->isChecked());
   myModel.setPrecision(spinBoxModelPrecision->value());
-  myModel.setDietPercent(horizontalSliderDiet->value());
-  myModel.setCropPercent(horizontalSliderCrop->value());
-  myModel.setMeatPercent(horizontalSliderMeat->value());
+  myModel.setDietPercent(sliderDiet->value());
+  myModel.setCropPercent(sliderCrop->value());
+  myModel.setMeatPercent(sliderMeat->value());
   myModel.setCaloriesPerPersonDaily(spinBoxDailyCalories->value());
   myModel.setCommonLandValue(sbCommonRasterTDN->value(), myAreaUnits);
   tbReport->setHtml(myModel.toHtml());
@@ -996,9 +1014,9 @@ void LaMainForm::animalCalcClicked(QListWidgetItem * thepCurrentItem, QListWidge
   myModel.setWalkingTime(radioButtonWalkingTime->isChecked());
   myModel.setPathDistance(radioButtonPathDistance->isChecked());
   myModel.setPrecision(spinBoxModelPrecision->value());
-  myModel.setDietPercent(horizontalSliderDiet->value());
-  myModel.setCropPercent(horizontalSliderCrop->value());
-  myModel.setMeatPercent(horizontalSliderMeat->value());
+  myModel.setDietPercent(sliderDiet->value());
+  myModel.setCropPercent(sliderCrop->value());
+  myModel.setMeatPercent(sliderMeat->value());
   myModel.setCaloriesPerPersonDaily(spinBoxDailyCalories->value());
   QString myAreaUnitsText = (comboBoxAreaUnits->currentText());
   myModel.setCommonLandAreaUnits(myAreaUnits);
