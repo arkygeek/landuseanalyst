@@ -303,9 +303,33 @@ void LaGrass::makePathDistanceCost(int theX, int theY)
   logMessage("method ==> void LaGrass::makePathDistanceCost(int theX, int theY)");
 }
 
-void LaGrass::writeMetaData(QString theValue)
+void LaGrass::writeMetaData(QStringList theMetaData)
 {
   logMessage("method ==> void LaGrass::writeMetaData(QString theValue)");
+  /*  ---> BASH example <---
+    # write info to history section of raster map
+    r.support map=catchment history="Radius was ${radius}"
+    r.support map=catchment history="This results in ${area} sq meters and the target was ${land_reqrd_total}"
+
+   */
+
+  // iterate through the list, adding each to the history.
+  //QString myCommand = "r.support";
+  //QStringList myArguments;
+  //QString myMaskName = "laLeftOver";
+  //myArguments << myMaskName + "=" + theCostSurface + "*" + theMaskRaster;
+  //qDebug(myCommand.toLocal8Bit() + myArguments.join(" ").toLocal8Bit());
+  //QString myErrorLog;
+  //QString myResult = runCommand(myCommand,myArguments,myErrorLog);
+  //qDebug(myResult.toLocal8Bit());
+  //if (myErrorLog.isEmpty())
+  //{
+    //return true;
+  //}
+  //else
+  //{
+  //  return false;
+  //}
 }
 
 bool LaGrass::reclass(QString theRaster, int theMax)
@@ -327,53 +351,6 @@ bool LaGrass::reclass(QString theRaster, int theMax)
   {
     return false;
   }
-  /*#ifdef Q_OS_MACX
-  QString myProgram = "/Applications/GRASS.app/Contents/Resources/bin/r.reclass";
-  #else
-  QString myProgram = "/usr/lib/grass/bin/r.reclass";
-  #endif
-  //windows users can wallow in self pity for now...
-
-  QStringList myArguments;
-  myArguments << " input=" + theRaster << "output=laCostMapReclassed";
-
-  QProcess myProcess;
-     myProcess.start(myProgram, myArguments);
-     if (!myProcess.waitForStarted())
-      {
-      qDebug() << "Process Didn't Start";
-        return false;
-      }
-
-     QString myPipedText = "0 thru " + QString::number(theMax) + " = 1";
-     qDebug() << "myPipedText: " << myPipedText;
-     myProcess.write(myPipedText.toUtf8());
-     myProcess.closeWriteChannel();
-
-    if (!myProcess.waitForFinished())
-    {
-      qDebug() << "something not working so good in wait for finished";
-      return false;
-    }
-     QByteArray result = myProcess.readAll();
-      qDebug() << " working good";
-
-     return true;*/
-/*   QProcess gzip;
-     gzip.start("gzip", QStringList() << "-c");
-     if (!gzip.waitForStarted())
-         return false;
-
-     gzip.write("Qt rocks!");
-     gzip.closeWriteChannel();
-
-     if (!gzip.waitForFinished())
-         return false;
-
-     QByteArray result = gzip.readAll();
-*/
-
-
 }
 
 //

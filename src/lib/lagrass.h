@@ -126,7 +126,7 @@ class LaGrass : public QObject
     bool makeWalkCost(int theX, int theY, QString theDEM);
     void makeEuclideanCost(int theX, int theY);
     void makePathDistanceCost(int theX, int theY);
-    void writeMetaData(QString theValue);
+    void writeMetaData(QStringList theMetaData);
     /** Broadcast to any listeners status messages.
      *  This is a convenience function. Internally it will
      *  do emit message(QString theMessage) each time it
