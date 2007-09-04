@@ -76,7 +76,7 @@ void LaGrassProcess::writeSettings()
   mySettings.setValue("mainwindow/size", size());
 }
 
-void LaGrassProcess::on_pbnStart_clicked()
+void LaGrassProcess::accept()
 {
   // first, we need to remove the items from the map
   // that use Common Land, and then determine the
@@ -260,7 +260,7 @@ void LaGrassProcess::setPbarOverallRange(int theOverall)
   pbarOverall->setValue(0);
 }
 
-void LaGrassProcess::on_pbnAbort_clicked()
+void LaGrassProcess::reject()
 {
   // abort the grass analysis
 }

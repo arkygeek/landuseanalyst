@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>400</height>
+    <width>637</width>
+    <height>626</height>
    </rect>
   </property>
   <property name="minimumSize" >
@@ -22,35 +22,10 @@
    <iconset resource="../resources/resources.qrc" >:/la_icon_small.png</iconset>
   </property>
   <layout class="QGridLayout" >
-   <item row="0" column="0" colspan="2" >
-    <widget class="QLabel" name="lblGraphic" >
-     <property name="minimumSize" >
-      <size>
-       <width>100</width>
-       <height>100</height>
-      </size>
-     </property>
-     <property name="maximumSize" >
-      <size>
-       <width>100</width>
-       <height>100</height>
-      </size>
-     </property>
-     <property name="text" >
-      <string>No Graphic</string>
-     </property>
-     <property name="alignment" >
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item rowspan="4" row="0" column="2" >
-    <widget class="QFrame" name="frame_2" >
-     <property name="frameShape" >
-      <enum>QFrame::StyledPanel</enum>
-     </property>
-     <property name="frameShadow" >
-      <enum>QFrame::Raised</enum>
+   <item rowspan="2" row="0" column="0" >
+    <widget class="QGroupBox" name="groupBox" >
+     <property name="title" >
+      <string>Preview</string>
      </property>
      <layout class="QGridLayout" >
       <item row="0" column="0" >
@@ -66,113 +41,34 @@
      </layout>
     </widget>
    </item>
-   <item rowspan="2" row="1" column="0" >
-    <widget class="QProgressBar" name="pbarOverall" >
-     <property name="minimumSize" >
+   <item row="0" column="1" >
+    <widget class="QGroupBox" name="groupBox_3" >
+     <property name="maximumSize" >
       <size>
-       <width>45</width>
-       <height>0</height>
+       <width>200</width>
+       <height>16777215</height>
       </size>
      </property>
-     <property name="value" >
-      <number>24</number>
-     </property>
-     <property name="textVisible" >
-      <bool>false</bool>
-     </property>
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="format" >
-      <string/>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1" >
-    <widget class="QLabel" name="lblCurrentArea" >
-     <property name="font" >
-      <font>
-       <pointsize>7</pointsize>
-      </font>
-     </property>
-     <property name="text" >
-      <string>123456</string>
-     </property>
-     <property name="alignment" >
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="1" >
-    <widget class="QProgressBar" name="pbarTarget" >
-     <property name="minimumSize" >
-      <size>
-       <width>45</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="value" >
-      <number>24</number>
-     </property>
-     <property name="alignment" >
-      <set>Qt::AlignCenter</set>
-     </property>
-     <property name="textVisible" >
-      <bool>false</bool>
-     </property>
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="format" >
-      <string/>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0" >
-    <widget class="QLabel" name="label_6" >
-     <property name="font" >
-      <font>
-       <pointsize>7</pointsize>
-      </font>
-     </property>
-     <property name="text" >
-      <string>Overall
-Progress</string>
-     </property>
-     <property name="alignment" >
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1" >
-    <widget class="QLabel" name="lblAreaTarget" >
-     <property name="font" >
-      <font>
-       <pointsize>7</pointsize>
-      </font>
-     </property>
-     <property name="text" >
-      <string>Target:
-123456</string>
-     </property>
-     <property name="alignment" >
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0" colspan="3" >
-    <widget class="QFrame" name="frame" >
-     <property name="frameShape" >
-      <enum>QFrame::StyledPanel</enum>
-     </property>
-     <property name="frameShadow" >
-      <enum>QFrame::Raised</enum>
+     <property name="title" >
+      <string>Current Target</string>
      </property>
      <layout class="QGridLayout" >
-      <item row="0" column="0" colspan="2" >
-       <widget class="QLabel" name="label_7" >
+      <item row="0" column="0" >
+       <widget class="QLabel" name="lblGraphic" >
+        <property name="minimumSize" >
+         <size>
+          <width>100</width>
+          <height>100</height>
+         </size>
+        </property>
+        <property name="maximumSize" >
+         <size>
+          <width>100</width>
+          <height>100</height>
+         </size>
+        </property>
         <property name="text" >
-         <string>GRASS messages</string>
+         <string>No Graphic</string>
         </property>
         <property name="alignment" >
          <set>Qt::AlignCenter</set>
@@ -180,31 +76,147 @@ Progress</string>
        </widget>
       </item>
       <item row="1" column="0" >
-       <widget class="QLabel" name="label_3" >
-        <property name="minimumSize" >
-         <size>
-          <width>42</width>
-          <height>42</height>
-         </size>
-        </property>
-        <property name="maximumSize" >
-         <size>
-          <width>42</width>
-          <height>42</height>
-         </size>
+       <widget class="QLabel" name="lblCurrentArea" >
+        <property name="font" >
+         <font>
+          <pointsize>7</pointsize>
+         </font>
         </property>
         <property name="text" >
-         <string/>
+         <string>123456</string>
         </property>
-        <property name="pixmap" >
-         <pixmap resource="../resources/resources.qrc" >:/icona_grass.gif</pixmap>
-        </property>
-        <property name="scaledContents" >
-         <bool>true</bool>
+        <property name="alignment" >
+         <set>Qt::AlignCenter</set>
         </property>
        </widget>
       </item>
-      <item rowspan="3" row="1" column="1" >
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="1" >
+    <widget class="QGroupBox" name="groupBox_4" >
+     <property name="minimumSize" >
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize" >
+      <size>
+       <width>200</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="title" >
+      <string>Progress</string>
+     </property>
+     <layout class="QGridLayout" >
+      <item row="0" column="0" >
+       <widget class="QLabel" name="label" >
+        <property name="text" >
+         <string>Current GRASS Command</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" >
+       <widget class="QProgressBar" name="pbarBusy" >
+        <property name="maximumSize" >
+         <size>
+          <width>16777215</width>
+          <height>1677772</height>
+         </size>
+        </property>
+        <property name="value" >
+         <number>0</number>
+        </property>
+        <property name="textVisible" >
+         <bool>false</bool>
+        </property>
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="format" >
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" >
+       <widget class="QLabel" name="lblAreaTarget" >
+        <property name="text" >
+         <string>Target: 123456</string>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0" >
+       <widget class="QProgressBar" name="pbarTarget" >
+        <property name="minimumSize" >
+         <size>
+          <width>45</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="value" >
+         <number>24</number>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="textVisible" >
+         <bool>false</bool>
+        </property>
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="format" >
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0" >
+       <widget class="QLabel" name="label_6" >
+        <property name="text" >
+         <string>Overall Progress</string>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0" >
+       <widget class="QProgressBar" name="pbarOverall" >
+        <property name="minimumSize" >
+         <size>
+          <width>45</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="value" >
+         <number>24</number>
+        </property>
+        <property name="textVisible" >
+         <bool>false</bool>
+        </property>
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="format" >
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="2" >
+    <widget class="QGroupBox" name="groupBox_2" >
+     <property name="title" >
+      <string>Log</string>
+     </property>
+     <layout class="QGridLayout" >
+      <item row="0" column="0" >
        <widget class="QTextBrowser" name="tbGrass" >
         <property name="sizePolicy" >
          <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
@@ -222,73 +234,27 @@ p, li { white-space: pre-wrap; }
         </property>
        </widget>
       </item>
-      <item row="2" column="0" >
-       <widget class="QPushButton" name="pbnStart" >
-        <property name="sizePolicy" >
-         <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize" >
-         <size>
-          <width>42</width>
-          <height>42</height>
-         </size>
-        </property>
-        <property name="maximumSize" >
-         <size>
-          <width>42</width>
-          <height>42</height>
-         </size>
-        </property>
-        <property name="text" >
-         <string>Start</string>
-        </property>
-       </widget>
-      </item>
-      <item rowspan="2" row="3" column="0" >
-       <widget class="QPushButton" name="pbnAbort" >
-        <property name="sizePolicy" >
-         <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="maximumSize" >
-         <size>
-          <width>42</width>
-          <height>42</height>
-         </size>
-        </property>
-        <property name="text" >
-         <string>Abort</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="1" >
-       <widget class="QProgressBar" name="pbarBusy" >
-        <property name="maximumSize" >
-         <size>
-          <width>16777215</width>
-          <height>8</height>
-         </size>
-        </property>
-        <property name="value" >
-         <number>0</number>
-        </property>
-        <property name="textVisible" >
-         <bool>false</bool>
-        </property>
-        <property name="orientation" >
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="format" >
-         <string/>
-        </property>
-       </widget>
-      </item>
      </layout>
+    </widget>
+   </item>
+   <item row="3" column="0" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>401</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="3" column="1" >
+    <widget class="QDialogButtonBox" name="buttonBox" >
+     <property name="standardButtons" >
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::NoButton|QDialogButtonBox::Ok</set>
+     </property>
     </widget>
    </item>
   </layout>
@@ -296,5 +262,38 @@ p, li { white-space: pre-wrap; }
  <resources>
   <include location="../resources/resources.qrc" />
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>LaGrassProcessBase</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>598</x>
+     <y>605</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>302</x>
+     <y>595</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>LaGrassProcessBase</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>512</x>
+     <y>601</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>162</x>
+     <y>611</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

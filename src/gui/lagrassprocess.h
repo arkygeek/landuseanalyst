@@ -45,9 +45,9 @@ class LaGrassProcess : public QDialog, private Ui::LaGrassProcessBase
 
 
     /** when called starts the grass analysis */
-    void on_pbnStart_clicked();
+    void accept();
     /** aborts the grass analysis process */
-    void on_pbnAbort_clicked();
+    void reject();
     void setPbarTargetRange(int theTarget);
     void setPbarOverallRange(int theOverall);
     void updateCurrentProgress(int theArea);
