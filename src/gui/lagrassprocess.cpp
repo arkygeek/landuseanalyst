@@ -34,8 +34,7 @@
 #include <QSettings>
 #include <QtDebug>
 
-const QString MapSetName = "tim";
-  LaGrassProcess::LaGrassProcess(QString theDEM, QPair<int, int> theCoordinates, QPair<QMap<QString, int>, QMap<QString, int> > & thePairOfAreaTargetMaps, QWidget* parent, Qt::WFlags fl)
+  LaGrassProcess::LaGrassProcess(LaRasterInfo theRasterInfo, QPair<int, int> theCoordinates, QPair<QMap<QString, int>, QMap<QString, int> > & thePairOfAreaTargetMaps, QWidget* parent, Qt::WFlags fl)
 : QDialog(parent,fl)
 {
   //required by Qt4 to initialise the ui
@@ -44,7 +43,10 @@ const QString MapSetName = "tim";
 
   mAnimalAreaTargetsMap = thePairOfAreaTargetMaps.first;
   mCropAreaTargetsMap = thePairOfAreaTargetMaps.second;
-  mDEM = theDEM;
+  mDEM = (theRasterInfo.first).first;
+  mMapset = (theRasterInfo.first).second;
+  mCommonCropRaster = (theRasterInfo.second).first;
+  mCommonGrazingRaster = (theRasterInfo.second).second;
   mCoordinates = theCoordinates;
   lblGraphic->setScaledContents(true);
   lblPreview->setScaledContents(true);
@@ -188,11 +190,10 @@ void LaGrassProcess::accept()
         lblGraphic->repaint();
         lblAreaTarget->setText("Target:\n" + QString::number(myCropIterator.value()));
         lblAreaTarget->repaint();
-      QString myRasterName = "cerealMask@" + MapSetName;
-      myMinimumCost = analyseModel("cerealMask", myRasterName, myCropIterator.value());
+      myMinimumCost = analyseModel("commonCropMask", mCommonCropRaster, myCropIterator.value());
       updateOverallProgress(myOverallProgress);
       myOverallProgress++;
-      myGrass.createInverseMask(myMinimumCost, myRasterName); // creates laLeftOver
+      myGrass.createInverseMask(myMinimumCost, mCommonCropRaster); // creates laLeftOver
 
     }
   }
@@ -224,21 +225,21 @@ void LaGrassProcess::accept()
       // hard coded to add the leftover mask to the common animal mask
       myGrass.mergeMaps(myAnimalRasterFile);
 
-      analyseModel(myName, "laCombinedMasks@" + MapSetName, myAreaTarget);
+      analyseModel(myName, "laCombinedMasks@" + mMapset, myAreaTarget);
       updateOverallProgress(myOverallProgress);
       myOverallProgress++;
     }
     else
     {
       //do stuff for commonTarget
-      myGrass.mergeMaps("treesMask@" + MapSetName); // creates laCombinedMask
+      myGrass.mergeMaps(mCommonGrazingRaster); // creates laCombinedMask
         QString myCommonPixMap = ":/commonTarget.png";
         lblGraphic->setPixmap(myCommonPixMap);
         lblGraphic->repaint();
         lblAreaTarget->setText("Target:\n" + QString::number(myAnimalIterator.value()));
         lblAreaTarget->repaint();
       // hard coded to add the leftover mask to the common animal mask
-      analyseModel("treesMask" ,"laLeftOver@" + MapSetName, myAnimalIterator.value());
+      analyseModel(mCommonGrazingRaster, "laLeftOver@" + mMapset, myAnimalIterator.value());
       updateOverallProgress(myOverallProgress);
       myOverallProgress++;
     }
@@ -346,11 +347,11 @@ float LaGrassProcess::analyseModel(QString theItem, QString theRasterMask, int t
     switch (mySearchStatus)
     {
       case NotEnough:
-            qDebug() << "NotEnough.  Current is " << myCurrentlyContainedArea << "Needed: " << myAreaTarget;
+            qDebug() << "Not Close Enough. (low) Current is " << myCurrentlyContainedArea << "Needed: " << myAreaTarget;
             myFirst = myMid + 1.;  // repeat search in top half.
             break;;
       case TooMuch:
-            qDebug() << "NotEnough.  Current is " << myCurrentlyContainedArea << "Needed: " << myAreaTarget;
+            qDebug() << "Not Close Enough. (high) Current is " << myCurrentlyContainedArea << "Needed: " << myAreaTarget;
             myLast = myMid - 1.; // repeat search in bottom half.
             break;
       case FoundTarget:
@@ -358,7 +359,7 @@ float LaGrassProcess::analyseModel(QString theItem, QString theRasterMask, int t
             // copy final raster to permanentRaster
             qDebug() << "TARGET FOUND!  Current is " << myCurrentlyContainedArea << "Actual Needed: " << myAreaTarget;
             qDebug() << "which falls within the precision range";
-            QString myRasterName = theItem+"RESULTS";
+            QString myRasterName = "RESULTS"+theItem;
             myGrass.copyMap("tmpMask", myRasterName);
 
             updateCurrentProgress(myStatusCount);

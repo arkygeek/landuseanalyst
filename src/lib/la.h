@@ -36,6 +36,8 @@
 //    <plant guid <enabled, animalparamters guid>>
 typedef QMap <QString,QPair<bool,QString> > LaTripleMap;
 
+typedef QPair <QPair<QString,QString>, QPair<QString,QString> > LaRasterInfo;
+
 //    LaFoodSource is a map < <Guid,enabled> , <Fodder,Grain> >
 //    or
 //    LaFoodSource is a map < <Guid,disabled> , <Fodder,Grain> >

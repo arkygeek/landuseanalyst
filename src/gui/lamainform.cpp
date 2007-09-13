@@ -770,6 +770,20 @@ void LaMainForm::on_pushButtonRun_clicked()
   QMap<QString, int> myCropsTargetsMap = myModel.getAreaTargetsCropsMap();
 
   QString myDEM = cboDEM->currentText();
+  QString myMapset = cboMapSet->currentText();
+  QString myCommonCropRaster = cboCommonCropRaster->currentText();
+  QString myCommonGrazingRaster = cboCommonGrazingRaster->currentText();
+
+  QPair <QString, QString> myDEMandMapset;
+  myDEMandMapset.first = myDEM;
+  myDEMandMapset.second = myMapset;
+  QPair <QString, QString> myCropAndGrazingRasters;
+  myCropAndGrazingRasters.first = myCommonCropRaster;
+  myCropAndGrazingRasters.second = myCommonGrazingRaster;
+
+  LaRasterInfo myRasterInfo;
+  myRasterInfo.first = myDEMandMapset;
+  myRasterInfo.second = myCropAndGrazingRasters;
 
   QPair <int, int> myCoordinates;
     QString myEasting = lineEditEasting->text();
@@ -781,7 +795,7 @@ void LaMainForm::on_pushButtonRun_clicked()
     myPairOfAreaTargetMaps.first=myAnimalTargetsMap;
     myPairOfAreaTargetMaps.second=myCropsTargetsMap;
 
-  LaGrassProcess myGrassProcess(myDEM, myCoordinates, myPairOfAreaTargetMaps);
+  LaGrassProcess myGrassProcess(myRasterInfo, myCoordinates, myPairOfAreaTargetMaps);
 
   myGrassProcess.exec();
 
