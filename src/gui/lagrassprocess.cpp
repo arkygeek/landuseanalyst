@@ -239,7 +239,7 @@ void LaGrassProcess::accept()
         lblAreaTarget->setText("Target:\n" + QString::number(myAnimalIterator.value()));
         lblAreaTarget->repaint();
       // hard coded to add the leftover mask to the common animal mask
-      analyseModel(mCommonGrazingRaster, "laLeftOver@" + mMapset, myAnimalIterator.value());
+      analyseModel("commonRasterMask", "laCombinedMasks@" + mMapset, myAnimalIterator.value());
       updateOverallProgress(myOverallProgress);
       myOverallProgress++;
     }
