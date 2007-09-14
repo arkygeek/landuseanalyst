@@ -201,8 +201,19 @@ bool LaGrass::mergeMaps(QString theLeftoversGoHere)
   // adding the two together.  (null + 1 is still null)
 
   QStringList myArguments;
-  myArguments << "laCombinedMaps = 'if( isnull ( "+ theLeftoversGoHere +"),0," + theLeftoversGoHere + ") + if( isnull ( laLeftOver),0,laLeftOver)'";
+  myArguments << "laTreesMapTmp = if( isnull ( treesMask@shuna),0,treesMask@shuna)";
   QString myResult = runCommand(myCommand,myArguments,myErrorLog);
+  qDebug(myResult.toLocal8Bit());
+
+  myArguments.clear();
+ //+ if( isnull ( laLeftOver),0,laLeftOver)\'";
+  myArguments << "laLeftOverTmp = if( isnull ( laLeftOver),0,laLeftOver)";
+  myResult = runCommand(myCommand,myArguments,myErrorLog);
+  qDebug(myResult.toLocal8Bit());
+
+  myArguments.clear();
+  myArguments << "laCombinedMasks = laLeftOverTmp + laTreesMapTmp";
+  myResult = runCommand(myCommand,myArguments,myErrorLog);
   qDebug(myResult.toLocal8Bit());
 
   if (myErrorLog.isEmpty())
