@@ -123,6 +123,7 @@ class LaGrass : public QObject
 
 
     bool reclass(QString theRaster, int theMax);
+    bool removeFile(QString theFile);
     bool makeWalkCost(int theX, int theY, QString theDEM);
     void makeEuclideanCost(int theX, int theY);
     void makePathDistanceCost(int theX, int theY);

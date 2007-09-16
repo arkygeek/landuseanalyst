@@ -190,7 +190,7 @@ void LaGrassProcess::accept()
         lblGraphic->repaint();
         lblAreaTarget->setText("Target:\n" + QString::number(myCropIterator.value()));
         lblAreaTarget->repaint();
-      myMinimumCost = analyseModel("commonCropMask", mCommonCropRaster, myCropIterator.value());
+      myMinimumCost = analyseModel("commonCrop", mCommonCropRaster, myCropIterator.value());
       updateOverallProgress(myOverallProgress);
       myOverallProgress++;
       myGrass.createInverseMask(myMinimumCost, mCommonCropRaster); // creates laLeftOver
@@ -232,14 +232,14 @@ void LaGrassProcess::accept()
     else
     {
       //do stuff for commonTarget
-      myGrass.mergeMaps(mCommonGrazingRaster); // creates laCombinedMask
+      myGrass.mergeMaps(mCommonGrazingRaster); // creates laCombinedMasks
         QString myCommonPixMap = ":/commonTarget.png";
         lblGraphic->setPixmap(myCommonPixMap);
         lblGraphic->repaint();
         lblAreaTarget->setText("Target:\n" + QString::number(myAnimalIterator.value()));
         lblAreaTarget->repaint();
       // hard coded to add the leftover mask to the common animal mask
-      analyseModel("commonRasterMask", "laCombinedMasks@" + mMapset, myAnimalIterator.value());
+      analyseModel("commonGrazing", "laCombinedMasks@" + mMapset, myAnimalIterator.value());
       updateOverallProgress(myOverallProgress);
       myOverallProgress++;
     }
