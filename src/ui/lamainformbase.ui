@@ -65,7 +65,7 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex" >
-      <number>3</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="main_tab" >
       <attribute name="title" >
@@ -235,7 +235,7 @@ p, li { white-space: pre-wrap; }
              <string>Walking Time</string>
             </property>
             <property name="checked" >
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -257,7 +257,7 @@ p, li { white-space: pre-wrap; }
              <string>Euclidean</string>
             </property>
             <property name="checked" >
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
            </widget>
           </item>
@@ -325,6 +325,9 @@ p, li { white-space: pre-wrap; }
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Enter the name of the site you are modelling here. &lt;/p>&lt;/body>&lt;/html></string>
+            </property>
+            <property name="text" >
+             <string>Shuna</string>
             </property>
            </widget>
           </item>
@@ -443,6 +446,9 @@ p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The Easting of the site. Be sure you are using the same coordinate system as you do when creating your land suitability mask files!&lt;/p>&lt;/body>&lt;/html></string>
               </property>
+              <property name="text" >
+               <string>744800</string>
+              </property>
              </widget>
             </item>
            </layout>
@@ -493,6 +499,9 @@ p, li { white-space: pre-wrap; }
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The Northing of the site. Be sure you are using the same coordinate system as you do when creating your land suitability mask files!&lt;/p>&lt;/body>&lt;/html></string>
+              </property>
+              <property name="text" >
+               <string>3611100</string>
               </property>
              </widget>
             </item>
@@ -1969,7 +1978,7 @@ p, li { white-space: pre-wrap; }
             <number>1</number>
            </property>
            <property name="value" >
-            <number>40</number>
+            <number>8</number>
            </property>
           </widget>
          </item>
@@ -2269,24 +2278,6 @@ p, li { white-space: pre-wrap; }
        <string>Calculations</string>
       </attribute>
       <layout class="QGridLayout" >
-       <property name="leftMargin" >
-        <number>9</number>
-       </property>
-       <property name="topMargin" >
-        <number>9</number>
-       </property>
-       <property name="rightMargin" >
-        <number>9</number>
-       </property>
-       <property name="bottomMargin" >
-        <number>9</number>
-       </property>
-       <property name="horizontalSpacing" >
-        <number>6</number>
-       </property>
-       <property name="verticalSpacing" >
-        <number>6</number>
-       </property>
        <item row="0" column="0" colspan="6" >
         <widget class="QSplitter" name="splitter_5" >
          <property name="orientation" >
@@ -2296,23 +2287,31 @@ p, li { white-space: pre-wrap; }
           <property name="orientation" >
            <enum>Qt::Horizontal</enum>
           </property>
-          <widget class="QWidget" name="layoutWidget" >
+          <widget class="QWidget" name="" >
            <layout class="QVBoxLayout" >
-            <property name="spacing" >
-             <number>6</number>
-            </property>
-            <property name="leftMargin" >
-             <number>0</number>
-            </property>
-            <property name="topMargin" >
-             <number>0</number>
-            </property>
-            <property name="rightMargin" >
-             <number>0</number>
-            </property>
-            <property name="bottomMargin" >
-             <number>0</number>
-            </property>
+            <item>
+             <widget class="QLabel" name="lblCropPicCalcs" >
+              <property name="minimumSize" >
+               <size>
+                <width>70</width>
+                <height>70</height>
+               </size>
+              </property>
+              <property name="maximumSize" >
+               <size>
+                <width>70</width>
+                <height>70</height>
+               </size>
+              </property>
+              <property name="text" >
+               <string>No Image
+Selected</string>
+              </property>
+              <property name="alignment" >
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
             <item>
              <widget class="QListWidget" name="listWidgetCalculationsCrop" >
               <property name="sizePolicy" >
@@ -2341,29 +2340,6 @@ p, li { white-space: pre-wrap; }
               </property>
              </widget>
             </item>
-            <item>
-             <widget class="QLabel" name="lblCropPicCalcs" >
-              <property name="minimumSize" >
-               <size>
-                <width>70</width>
-                <height>70</height>
-               </size>
-              </property>
-              <property name="maximumSize" >
-               <size>
-                <width>70</width>
-                <height>70</height>
-               </size>
-              </property>
-              <property name="text" >
-               <string>No Image
-Selected</string>
-              </property>
-              <property name="alignment" >
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
            </layout>
           </widget>
           <widget class="QTextBrowser" name="textBrowserResultsCrop" >
@@ -2387,23 +2363,31 @@ p, li { white-space: pre-wrap; }
           <property name="orientation" >
            <enum>Qt::Horizontal</enum>
           </property>
-          <widget class="QWidget" name="layoutWidget" >
+          <widget class="QWidget" name="" >
            <layout class="QVBoxLayout" >
-            <property name="spacing" >
-             <number>6</number>
-            </property>
-            <property name="leftMargin" >
-             <number>0</number>
-            </property>
-            <property name="topMargin" >
-             <number>0</number>
-            </property>
-            <property name="rightMargin" >
-             <number>0</number>
-            </property>
-            <property name="bottomMargin" >
-             <number>0</number>
-            </property>
+            <item>
+             <widget class="QLabel" name="lblAnimalPicCalcs" >
+              <property name="minimumSize" >
+               <size>
+                <width>70</width>
+                <height>70</height>
+               </size>
+              </property>
+              <property name="maximumSize" >
+               <size>
+                <width>70</width>
+                <height>70</height>
+               </size>
+              </property>
+              <property name="text" >
+               <string>No Image
+Selected</string>
+              </property>
+              <property name="alignment" >
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
             <item>
              <widget class="QListWidget" name="listWidgetCalculationsAnimal" >
               <property name="sizePolicy" >
@@ -2432,29 +2416,6 @@ p, li { white-space: pre-wrap; }
               </property>
              </widget>
             </item>
-            <item>
-             <widget class="QLabel" name="lblAnimalPicCalcs" >
-              <property name="minimumSize" >
-               <size>
-                <width>70</width>
-                <height>70</height>
-               </size>
-              </property>
-              <property name="maximumSize" >
-               <size>
-                <width>70</width>
-                <height>70</height>
-               </size>
-              </property>
-              <property name="text" >
-               <string>No Image
-Selected</string>
-              </property>
-              <property name="alignment" >
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
            </layout>
           </widget>
           <widget class="QTextBrowser" name="textBrowserResultsAnimals" >
@@ -2476,41 +2437,6 @@ p, li { white-space: pre-wrap; }
          </widget>
         </widget>
        </item>
-       <item row="1" column="4" >
-        <widget class="QPushButton" name="pbnText" >
-         <property name="text" >
-          <string>Text Report</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="3" >
-        <widget class="QPushButton" name="pbnHerds" >
-         <property name="text" >
-          <string>Herds</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="5" >
-        <widget class="QPushButton" name="pbnHtml" >
-         <property name="text" >
-          <string>HTML</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="2" >
-        <widget class="QPushButton" name="pbnFallow" >
-         <property name="text" >
-          <string>Fallow</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1" >
-        <widget class="QPushButton" name="pbnTargets" >
-         <property name="text" >
-          <string>Targets</string>
-         </property>
-        </widget>
-       </item>
        <item row="1" column="0" >
         <spacer>
          <property name="orientation" >
@@ -2523,6 +2449,41 @@ p, li { white-space: pre-wrap; }
           </size>
          </property>
         </spacer>
+       </item>
+       <item row="1" column="1" >
+        <widget class="QPushButton" name="pbnTargets" >
+         <property name="text" >
+          <string>Targets</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2" >
+        <widget class="QPushButton" name="pbnFallow" >
+         <property name="text" >
+          <string>Fallow</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="3" >
+        <widget class="QPushButton" name="pbnHerds" >
+         <property name="text" >
+          <string>Herds</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="4" >
+        <widget class="QPushButton" name="pbnText" >
+         <property name="text" >
+          <string>Text Report</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="5" >
+        <widget class="QPushButton" name="pbnHtml" >
+         <property name="text" >
+          <string>HTML</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -3199,13 +3160,13 @@ p, li { white-space: pre-wrap; }
           <property name="html" >
            <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Lucida Grande'; font-size:13pt; font-weight:400; font-style:normal;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;">&lt;span style=" font-size:10pt; font-weight:600;">To learn more about a feature or field in LandUse Analyst, you can do one of four things.&lt;/span>&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;">1. &lt;span style=" font-size:10pt; color:#0000ff;">Hover over it&lt;/span> with your mouse arrow for a brief description&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;">2. Click the &lt;span style=" font-size:12pt; font-weight:600; color:#0000ff;">?&lt;/span> in the top right of the main window and then click on the item you want detailed help for.&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;"> Click anywhere to make the help box go away.&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;">3. RIght Click on the thing you want help for.  If there is detailed help for it, you will see a &lt;span style=" font-weight:600; color:#0000ff;">What is this?&lt;/span> option that you can then click on.  Again, you can click anywhere to make the help box go away.&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;">4. Go to the &lt;span style=" font-weight:600; color:#0000ff;">Help&lt;/span> &lt;span style=" font-weight:600; color:#0000ff;">Tab&lt;/span> and click on the item you want help with on the left for an even more detailed description of what things are and how they work&lt;/p>&lt;/body>&lt;/html></string>
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:10pt; font-weight:600;">To learn more about a feature or field in LandUse Analyst, you can do one of four things.&lt;/span>&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">1. &lt;span style=" font-size:10pt; color:#0000ff;">Hover over it&lt;/span> with your mouse arrow for a brief description&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">2. Click the &lt;span style=" font-size:12pt; font-weight:600; color:#0000ff;">?&lt;/span> in the top right of the main window and then click on the item you want detailed help for.&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"> Click anywhere to make the help box go away.&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">3. RIght Click on the thing you want help for.  If there is detailed help for it, you will see a &lt;span style=" font-weight:600; color:#0000ff;">What is this?&lt;/span> option that you can then click on.  Again, you can click anywhere to make the help box go away.&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">4. Go to the &lt;span style=" font-weight:600; color:#0000ff;">Help&lt;/span> &lt;span style=" font-weight:600; color:#0000ff;">Tab&lt;/span> and click on the item you want help with on the left for an even more detailed description of what things are and how they work&lt;/p>&lt;/body>&lt;/html></string>
           </property>
          </widget>
         </widget>
@@ -3410,38 +3371,52 @@ p, li { white-space: pre-wrap; }
   </layout>
  </widget>
  <tabstops>
-  <tabstop>MainTabs</tabstop>
   <tabstop>lineEditSiteName</tabstop>
+  <tabstop>lineEditPeriod</tabstop>
   <tabstop>spinBoxPopulation</tabstop>
-  <tabstop>comboBoxProjection</tabstop>
   <tabstop>lineEditEasting</tabstop>
   <tabstop>lineEditNorthing</tabstop>
   <tabstop>radioButtonEuclidean</tabstop>
   <tabstop>radioButtonWalkingTime</tabstop>
   <tabstop>radioButtonPathDistance</tabstop>
   <tabstop>spinBoxModelPrecision</tabstop>
+  <tabstop>cboMapSet</tabstop>
+  <tabstop>cboDEM</tabstop>
+  <tabstop>comboBoxProjection</tabstop>
   <tabstop>pushButtonRun</tabstop>
   <tabstop>pushButtonLoad</tabstop>
   <tabstop>pushButtonSave</tabstop>
   <tabstop>pushButtonExit</tabstop>
+  <tabstop>MainTabs</tabstop>
   <tabstop>sliderDiet</tabstop>
   <tabstop>sliderCrop</tabstop>
   <tabstop>sliderMeat</tabstop>
   <tabstop>spinBoxDailyCalories</tabstop>
   <tabstop>tblCrops</tabstop>
   <tabstop>textBrowserCropDefinition</tabstop>
+  <tabstop>cboCommonCropRaster</tabstop>
   <tabstop>pbnNewCrop</tabstop>
   <tabstop>pbnNewCropParameter</tabstop>
   <tabstop>tblAnimals</tabstop>
   <tabstop>textBrowserAnimalDefinition</tabstop>
+  <tabstop>cboCommonGrazingRaster</tabstop>
+  <tabstop>sbCommonRasterTDN</tabstop>
+  <tabstop>comboBoxAreaUnits</tabstop>
   <tabstop>pbnNewAnimal</tabstop>
   <tabstop>pbnNewAnimalParameter</tabstop>
   <tabstop>listWidgetCalculationsCrop</tabstop>
   <tabstop>textBrowserResultsCrop</tabstop>
   <tabstop>listWidgetCalculationsAnimal</tabstop>
   <tabstop>textBrowserResultsAnimals</tabstop>
+  <tabstop>pbnTargets</tabstop>
+  <tabstop>pbnFallow</tabstop>
+  <tabstop>pbnHerds</tabstop>
+  <tabstop>pbnText</tabstop>
+  <tabstop>pbnHtml</tabstop>
   <tabstop>tbReport</tabstop>
+  <tabstop>tbLogs</tabstop>
   <tabstop>treeHelp</tabstop>
+  <tabstop>cbDebug</tabstop>
   <tabstop>textHelp</tabstop>
  </tabstops>
  <resources>

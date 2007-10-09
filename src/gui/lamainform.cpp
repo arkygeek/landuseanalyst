@@ -567,13 +567,13 @@ void LaMainForm::setDietLabels()
   float myTameAnimalkCalories = (myTameMeatPercentage/100.)*mykCaloriesSettlementAnnual;
 
   labelCaloriesIndividual->setText(QString::number(mykCaloriesIndividualAnnual));
-  labelCaloriesSettlement->setText(QString::number(mykCaloriesSettlementAnnual));
+  labelCaloriesSettlement->setText(QString::number(static_cast <int>(mykCaloriesSettlementAnnual)));
   labelPortionPlants->setText(QString::number(myDietPercentPlant));
   labelPortionMeat->setText(QString::number(myDietPercentMeat));
-  labelPortionCrops->setText(QString::number(myTameCropPercentage));
-  labelPortionTameMeat->setText(QString::number(myTameMeatPercentage));
-  labelCaloriesCrops->setText(QString::number(myTameCropkCalories));
-  labelCaloriesTameMeat->setText(QString::number(myTameAnimalkCalories));
+  labelPortionCrops->setText(QString::number(static_cast <int>(myTameCropPercentage)));
+  labelPortionTameMeat->setText(QString::number(static_cast <int>(myTameMeatPercentage)));
+  labelCaloriesCrops->setText(QString::number(static_cast <int>(myTameCropkCalories)));
+  labelCaloriesTameMeat->setText(QString::number(static_cast <int>(myTameAnimalkCalories)));
 }
 
 void LaMainForm::animalCellClicked(int theRow, int theColumn)
@@ -838,6 +838,7 @@ void LaMainForm::on_pushButtonSave_clicked()
   myModel.setCommonLandValue(sbCommonRasterTDN->value(), myAreaUnits);
   myModel.toXmlFile( LaUtils::getModelOutputDir() +
       QDir::separator() + myModel.guid() + ".xml");
+  writeSettings();
 }
 
 void LaMainForm::writeResults(QString theText)
