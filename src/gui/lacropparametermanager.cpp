@@ -149,7 +149,7 @@ void LaCropParameterManager::refreshCropParameterTable(QString theGuid)
     // Add details to the new row
     QTableWidgetItem *mypFileNameItem= new QTableWidgetItem(myGuid);
     tblCropParameterProfiles->setItem(myCurrentRow, 0, mypFileNameItem);
-    QTableWidgetItem *mypNameItem = new QTableWidgetItem(myCropParameter.name());
+    QTableWidgetItem *mypNameItem = new QTableWidgetItem(myCropParameter.name()  + "  (" + myCropParameter.description() + ")");
     tblCropParameterProfiles->setItem(myCurrentRow, 1, mypNameItem);
     //display an icon indicating if the layerset is local or remote (e.g. terralib)
     //LaCropParameter::Origin myOrigin = myCropParameter.origin();

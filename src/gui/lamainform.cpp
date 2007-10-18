@@ -378,6 +378,7 @@ void LaMainForm::loadAnimals()
       listWidgetCalculationsAnimal->takeItem(listWidgetCalculationsAnimal->row(myItem));
     }
     tblAnimals->setItem(myCurrentRow, 0, mypUsedItem);
+
     QTableWidgetItem *mypNameItem = new QTableWidgetItem(myAnimal.name());
     mypNameItem->setData(Qt::UserRole,myGuid);
     tblAnimals->setItem(myCurrentRow, 1, mypNameItem);
@@ -391,7 +392,7 @@ void LaMainForm::loadAnimals()
       myIterator.next();
       LaAnimalParameter myAnimalParameter = myIterator.value();
       QString myParameterGuid = myAnimalParameter.guid();
-      QString myParameterName = myAnimalParameter.name();
+      QString myParameterName = myAnimalParameter.name() + "  (" + myAnimalParameter.description() + ")";
       //only add this entry if it is for the current animal
       if (myGuid != myAnimalParameter.animalGuid())
       {
@@ -505,7 +506,7 @@ void LaMainForm::loadCrops()
       myIterator.next();
       LaCropParameter myCropParameter = myIterator.value();
       QString myParameterGuid = myCropParameter.guid();
-      QString myParameterName = myCropParameter.name();
+      QString myParameterName = myCropParameter.name()  + "  (" + myCropParameter.description() + ")";
       //only add this entry if it is for the current crop
       if (myGuid != myCropParameter.cropGuid())
       {

@@ -138,9 +138,9 @@ void LaGrassProcess::accept()
   // create cost surface maps
 
   LaGrass myGrass;
-  //int myEasting = mCoordinates.first;
-  //int myNorthing = mCoordinates.second;
-  //myGrass.makeWalkCost(myEasting, myNorthing, mDEM);
+  int myEasting = mCoordinates.first;
+  int myNorthing = mCoordinates.second;
+  myGrass.makeWalkCost(myEasting, myNorthing, mDEM);
 
   tbGrass->append("Cost Surface Generation complete.");
   tbGrass->repaint();

@@ -163,7 +163,7 @@ void LaAnimalParameterManager::refreshAnimalParameterTable(QString theGuid)
     // Add details to the new row
     QTableWidgetItem *mypFileNameItem= new QTableWidgetItem(myGuid);
     tblAnimalParameterProfiles->setItem(myCurrentRow, 0, mypFileNameItem);
-    QTableWidgetItem *mypNameItem = new QTableWidgetItem(myAnimalParameter.name());
+    QTableWidgetItem *mypNameItem = new QTableWidgetItem(myAnimalParameter.name()  + "  (" + myAnimalParameter.description() + ")");
     tblAnimalParameterProfiles->setItem(myCurrentRow, 1, mypNameItem);
     //display an icon indicating if the layerset is local or remote (e.g. terralib)
     //LaAnimalParameter::Origin myOrigin = myAnimalParameter.origin();
