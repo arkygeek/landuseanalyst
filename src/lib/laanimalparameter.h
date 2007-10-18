@@ -51,7 +51,7 @@ class LaAnimalParameter : public LaSerialisable, public LaGuid
     /** Get the guid of the animal this set of params is associated with */
     QString animalGuid() const;
     /** Portion of the Tame Meat Diet (Percentage) */
-    int percentTameMeat() const;
+    float percentTameMeat() const;
 
     /** A flag for whether the animal has it's own specific
       * land designated to it for grazing
@@ -88,7 +88,7 @@ class LaAnimalParameter : public LaSerialisable, public LaGuid
     /** Set the guid of the animal this set of params is associated with */
     void setAnimalGuid(QString theGuid);
     /** Portion of the Tame Meat Diet (Percentage) */
-    void setPercentTameMeat(int thePercentage);
+    void setPercentTameMeat(float thePercentage);
 
     /** A flag for whether the animal has it's own specific
       * land designated to it for grazing
@@ -134,7 +134,7 @@ class LaAnimalParameter : public LaSerialisable, public LaGuid
     /** The animal guid these parameters are associated with */
     QString mAnimalGuid;
     /** Portion of the Tame Meat Diet (Percentage) */
-    int mPercentTameMeat;
+    float mPercentTameMeat;
 
     /** A flag for whether the animal has it's own specific
       * land designated to it for grazing

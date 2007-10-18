@@ -330,7 +330,7 @@ void LaMainForm::loadAnimals()
   //print the total perc. Its up to the user at this stage to ensure
   //that everything tots up to 100%
   int myCurrentRow=0;
-  int myRunningPercentage=0;
+  float myRunningPercentage=0.;
   QMap<QString,LaAnimal> myAnimalsMap = LaUtils::getAvailableAnimals();
   //debug statement to print all animal keys
   //qDebug((static_cast<QStringList>(myAnimalsMap.keys())).join("\n").toLocal8Bit());
@@ -455,7 +455,7 @@ void LaMainForm::loadCrops()
   //print the total perc. Its up to the user at this stage to ensure
   //that everything tots up to 100%
   int myCurrentRow=0;
-  int myRunningPercentage=0;
+  float myRunningPercentage=0.;
   QMap<QString,LaCrop> myCropsMap;
   myCropsMap = LaUtils::getAvailableCrops();
   //debug statemetn to print all crop keys

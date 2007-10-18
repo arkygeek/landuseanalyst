@@ -98,7 +98,7 @@ QString LaAnimalParameter::animalGuid() const
 {
   return mAnimalGuid;
 }
-int LaAnimalParameter::percentTameMeat() const
+float LaAnimalParameter::percentTameMeat() const
 {
   return mPercentTameMeat;
 }
@@ -161,7 +161,7 @@ void LaAnimalParameter::setAnimalGuid(QString theGuid)
 {
   mAnimalGuid = theGuid;
 }
-void LaAnimalParameter::setPercentTameMeat(int thePercentage)
+void LaAnimalParameter::setPercentTameMeat(float thePercentage)
 {
   mPercentTameMeat=thePercentage;
 }
@@ -225,7 +225,7 @@ bool LaAnimalParameter::fromXml(QString theXml)
   mName=LaUtils::xmlDecode(myTopElement.firstChildElement("name").text());
   mDescription=LaUtils::xmlDecode(myTopElement.firstChildElement("description").text());
   mAnimalGuid=LaUtils::xmlDecode(myTopElement.firstChildElement("animal").text());
-  mPercentTameMeat=QString(myTopElement.firstChildElement("percentTameMeat").text()).toInt();
+  mPercentTameMeat=QString(myTopElement.firstChildElement("percentTameMeat").text()).toFloat();
   mUseCommonGrazingLand=QString(myTopElement.firstChildElement("useCommonGrazingLand").text()).toInt();
   mUseSpecificGrazingLand=QString(myTopElement.firstChildElement("useSpecificGrazingLand").text()).toInt();
   mTDNCommonGrazingLand=QString(myTopElement.firstChildElement("foodValueOfCommonGrazingLand").text()).toInt();

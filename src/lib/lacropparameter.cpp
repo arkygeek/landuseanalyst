@@ -87,7 +87,7 @@ QString LaCropParameter::cropGuid() const
   return mCropGuid;
 }
 
-int LaCropParameter::percentTameCrop() const
+float LaCropParameter::percentTameCrop() const
 {
   return mPercentTameCrop;
 }
@@ -134,7 +134,7 @@ void LaCropParameter::setCropGuid(QString theGuid)
   mCropGuid = theGuid;
 }
 
-void LaCropParameter::setPercentTameCrop(int thePercentage)
+void LaCropParameter::setPercentTameCrop(float thePercentage)
 {
   mPercentTameCrop=thePercentage;
 }
@@ -185,7 +185,7 @@ bool LaCropParameter::fromXml(QString theXml)
   mName=LaUtils::xmlDecode(myTopElement.firstChildElement("name").text());
   mDescription=LaUtils::xmlDecode(myTopElement.firstChildElement("description").text());
   mCropGuid=LaUtils::xmlDecode(myTopElement.firstChildElement("crop").text());
-  mPercentTameCrop=QString(myTopElement.firstChildElement("percentTameCrop").text()).toInt();
+  mPercentTameCrop=QString(myTopElement.firstChildElement("percentTameCrop").text()).toFloat();
   mCropRotation=QString(myTopElement.firstChildElement("cropRotation").text()).toInt();
   mFallowRatio=QString(myTopElement.firstChildElement("fallowRatio").text()).toFloat();
   mFallowTDN=QString(myTopElement.firstChildElement("fallowTDN").text()).toInt();

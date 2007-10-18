@@ -51,7 +51,7 @@ class LaCropParameter : public LaSerialisable, public LaGuid
     /** Get the guid of the crop this set of params is associated with */
     QString cropGuid() const;
     /** Portion of the Tame Crop  Diet (Percentage) */
-    int percentTameCrop() const;
+    float percentTameCrop() const;
     /** Flag for determining use of crop rotation */
     bool cropRotation() const;
     /**The ratio of crop to fallow land */
@@ -83,7 +83,7 @@ class LaCropParameter : public LaSerialisable, public LaGuid
     /** Set the guid of the crop this set of params is associated with */
     void setCropGuid(QString theGuid);
     /** Portion of the Tame Crop  Diet (Percentage) */
-    void setPercentTameCrop(int thePercentage);
+    void setPercentTameCrop(float thePercentage);
     /** Flag for determining use of crop rotation */
     void setCropRotation(bool theFlag);
     /**The ratio of crop to fallow land */
@@ -130,7 +130,7 @@ class LaCropParameter : public LaSerialisable, public LaGuid
     /** The crop guid these parameters are associated with */
     QString mCropGuid;
     /** Portion of the Tame Crop Diet (Percentage) */
-    int mPercentTameCrop;
+    float mPercentTameCrop;
     /** Food value of specific (or unique) land as calories per dunum/hectare */
     bool mCropRotation;
     /**The ratio of crop to fallow land */
