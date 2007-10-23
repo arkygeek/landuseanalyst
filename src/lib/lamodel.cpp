@@ -350,7 +350,7 @@ void LaModel::DoCalculations()
 {
   mCalcsAnimalsMap.clear();
   mCalcsCropsMap.clear();
-  logMessage("method ==> void LaModel::DoCalculations()");
+  //logMessage("method ==> void LaModel::DoCalculations()");
   // Step 1
   //        Calculate calories needed from crops and tame meat to sustain the settlement
   //        available here -->  caloriesFromCrops();
@@ -423,13 +423,13 @@ void LaModel::DoCalculations()
 }
 void LaModel::adjustAnimalTargetsForFodder()
 {
-  logMessage("method ==> void LaModel::adjustAnimalTargetsForFodder()");
+  //logMessage("method ==> void LaModel::adjustAnimalTargetsForFodder()");
   // after serious consideration, I have decided to implement fodder later.
   // it is not as important as getting the rest of the project working.
 }
 int LaModel::caloriesFromCrops()
 {
-  logMessage("method ==> int LaModel::caloriesFromCrops()");
+  //logMessage("method ==> int LaModel::caloriesFromCrops()");
   float myDietComposition = 0.01 * ( 100 - mDietPercent );
   float myCropPercent = 0.01 * ( plantPercent() );
   float myCropOverallContributionToDiet = myDietComposition * myCropPercent;
@@ -437,7 +437,6 @@ int LaModel::caloriesFromCrops()
   float myCropCalorieTarget = myCalorieTarget * myCropOverallContributionToDiet;
   int myReturnValue = static_cast<int> (myCropCalorieTarget);
   logMessage("Overall Crop Calorie Target: " + QString::number(myReturnValue).toLocal8Bit());
-  logMessage("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
   return myReturnValue;
 }
 
@@ -449,14 +448,14 @@ int LaModel::caloriesFromTameMeat()
   float myCalorieTarget= population() * (mCaloriesPerPersonDaily/1000.) * 365.; // kcalories
   float myTameMeatCalorieTarget=myCalorieTarget * myAnimalOverallContributionToDiet;
   int myReturnValue = static_cast<int>(myTameMeatCalorieTarget);
-  logMessage("method ==> int LaModel::caloriesFromTameMeat()");
+  //logMessage("method ==> int LaModel::caloriesFromTameMeat()");
   logMessage("Overall Tame Meat Target: " + QString::number(myReturnValue).toLocal8Bit());
   return myReturnValue;
 }
 
 int LaModel::countCrops()
 {
-  logMessage("method ==> int LaModel::countCrops()");
+  //logMessage("method ==> int LaModel::countCrops()");
   int myCropCounter=0;
   //iterate through crops
   QMapIterator<QString, QString > myCropIterator(mCropsMap);
@@ -469,8 +468,8 @@ int LaModel::countCrops()
     LaCropParameter myCropParameter = LaUtils::getCropParameter(myCropParameterGuid);
     myCropCounter++;
   }
-  logMessage("method ==> int LaModel::countCrops()");
-  logMessage("Crop Count: " + QString::number(myCropCounter).toLocal8Bit());
+  //logMessage("method ==> int LaModel::countCrops()");
+  //logMessage("Crop Count: " + QString::number(myCropCounter).toLocal8Bit());
   return myCropCounter;
 }
 
@@ -488,8 +487,8 @@ int LaModel::countAnimals()
     LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(myAnimalParameterGuid);
     myAnimalCounter++;
   }
-  logMessage("method ==> int LaModel::countAnimals()");
-  logMessage("Animal Count: " + QString::number(myAnimalCounter).toLocal8Bit());
+  //logMessage("method ==> int LaModel::countAnimals()");
+  //logMessage("Animal Count: " + QString::number(myAnimalCounter).toLocal8Bit());
 
   return myAnimalCounter;
 }
@@ -501,7 +500,7 @@ int LaModel::caloriesProvidedByTheCrop(QString theCropParameterGuid)
   float myCropCalorieTarget=caloriesFromCrops()*myCropPercent;
   int myReturnValue = static_cast<int>(myCropCalorieTarget);
   ///@TODO remove this debugging stuff
-  logMessage("method ==> int LaModel::caloriesProvidedByTheCrop(QString theCropParameterGuid)");
+  //logMessage("method ==> int LaModel::caloriesProvidedByTheCrop(QString theCropParameterGuid)");
   logMessage("Crop Parameter Guid that was passed here: " + theCropParameterGuid.toLocal8Bit());
   logMessage("Crop Parameter Name: " + myCropParameter.name().toLocal8Bit());
   logMessage("myCropParameter.percentTameCrop() is giving a result of:" + QString::number(myCropParameter.percentTameCrop()).toLocal8Bit());
