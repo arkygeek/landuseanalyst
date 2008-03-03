@@ -109,7 +109,8 @@ to or greater than the target area, the loop was ended, and the solution was
 deemed found.  An except from the script (shown below) illustrates how 
 the target area was calculated:
 
-\begin{smallverbatim} while [ ${area} -le ${land_reqrd_total} ]; 
+\begin{smallverbatim} 
+while [ ${area} -le ${land_reqrd_total} ]; 
 do 
   ((radius=${radius} + 5)) 
   r.circle -b output=circle coordinate=\ 
@@ -122,17 +123,12 @@ do
   area_dec=`awk '{print $2}' /tmp/catchment_report` 
   echo "a catchment area with a radius of \ $radius}
         meters contains area=${area_dec//.*/}"
-  echo "${area} square meters of land and \
-        our target is echo ${land_reqrd_total} square meters"
+  echo "${area} square meters of land and target is" 
+  echo ${land_reqrd_total} square meters"
 done 
 \end{smallverbatim}
 
-  \begin{figure}[htbp] %Proof of Concept
-  \includegraphics[scale=0.37]{./images/LanduseAnalyst544.jpg}
-   % img42.jpg: 800x600 pixel, 72dpi, 28.22x21.17 cm, bb=0 0 800 600
-   \label{fig:euclideanResults} \caption{Landuse Analyst's primary interface}
-   \end{figure}
-
+  
 
 
 \section{Moving to a Graphical User Interface} \label{GUI} 
@@ -147,13 +143,20 @@ capabilities and offered little 'hand holding' to the user as the analysis was
 carried out.
 
 Consequently we embarked on the development of a Graphical User Interface (GUI) based 
-application, written in C++ and Qt4. This programming environment decision was largely 
+application (see Fig. \ref{fig:htbp}), written in C++ and Qt4. This programming environment decision was largely 
 motivated by a desire to capitalise on existing code bases from openModeller
 \footnote{openModeller is available at \url{http://openmodeller.sourceforge.net/}} 
 and Quantum GIS (QGIS)\footnote{QGIS is available at \url{http://qgis.org}}.  
 For invoking GRASS tools we opted to use QProcess to launch GRASS commands in 
 their own process and then implemented application logic to parse the results of 
 each command from stdout.
+
+\begin{figure}[htbp] %Proof of Concept
+  \includegraphics[scale=0.37]{./images/LanduseAnalyst544.jpg}
+   % img42.jpg: 800x600 pixel, 72dpi, 28.22x21.17 cm, bb=0 0 800 600
+   \label{fig:euclideanResults} \caption{Landuse Analyst's primary interface}
+   \end{figure}
+
 
 \section{Analytical Functionality} \label{sec:Analytical Functionality}
 
@@ -218,7 +221,7 @@ the cost surfaces.
   
   Walking Time is likely going to be the primary choice of the three methods of
   creating catchment areas in Landuse Analyst.  The cost surface that is
-  generated for this method (see Fig. \ref{fig:rwalk} uses a DEM to calculate
+  generated for this method (see Fig. \ref{fig:rwalk}) uses a DEM to calculate
   how long it would take to walk from a starting point (the site, or ZERO on
   the cost surface) to all points on the DEM within a five hour walk ($18,000$
   seconds). Five hours is simply the time used for this case
