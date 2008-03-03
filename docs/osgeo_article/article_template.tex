@@ -1,0 +1,453 @@
+% Template GRASS newsletter - Article Language: Latex LandUse Analyst This
+% project aims to define a settlement's use of, and impact on, their
+% surrounding landscape.
+
+% Head
+
+\title{Landuse Analyst} \subtitle{Identifying Settlements' Landuse Catchment
+Areas.}
+
+\author{by Jason Jorgenson and Tim Sutton}
+
+\maketitle
+
+\section{Introduction} \label{sec:Introduction}
+
+This paper describes a software application we are developing that automates
+the process of computing landuse requirements for a study being conducted in
+the Jordan Valley. The Jordan Valley is found in the Southern Levant, which is
+a name commonly used to refer to the geographic region broadly described as
+modern-day Israel, Palestine and Jordan}, between the Dead Sea and Lake
+Tiberias (see Figure \ref{fig:shunaGoogleEarth}).
+
+\begin{figure}[htbp] %Location
+\includegraphics[scale=0.17]{./images/ShunaGoogleEarth3D.jpg}
+% img42.jpg: 800x600 pixel, 72dpi, 28.22x21.17 cm, bb=0 0 800 600
+\label{fig:shunaGoogleEarth} \caption{Looking South-South-East from Lake
+Tiberias Down the Jordan Valley towards Shuna.} \end{figure}
+
+We describe how the application logic for Landuse Analyst was prototyped as a
+BASH shell script calling various GRASS utilities, and then developed into a
+more flexible application with a graphical user interface.
+
+\section{Background} \label{sec:Background} For an archaeologist, understanding
+the relationship that existed between people in the past and their landscape is
+very important.  People throughout time have relied on various plants and
+animals, wild or domestic, to provide them with the food they require to
+survive.  Regardless of the period in time being examined, a relationship
+exists between people and the space which they occupy.  A better understanding
+of this relationship can help to more confidently theorise about a range of
+issues in the reconstruction of past societies.  Imagine, for example, the
+relationship that nomadic hunter gatherers had with the land, and then compare
+that to  an artisan living in a settlement of several thousand people.  We can
+piece together clues revealed through a combination of archaeological surveys,
+ethnoarchaeology, written records, oral traditions, and excavations. The
+insight gained from these clues can offer a more concrete understanding of the
+relationship people had with their landscapes, allowing archaeologists to
+better understand topics such as social and economic organisation\footnote{In
+one sense, economic organization can be thought of as the strategy used to
+collect and distribute resources.  In modern societies, urban centres rely upon
+the surplus production of agricultural commodities provided by farmers in the
+countryside.  This reliance necessitates a certain level of organization
+between rural and urban people.  By applying this same logic in historical
+contexts, we can infer landuse patterns .}, as well as short and long term
+impacts communities might have had on the landscape.  An understanding of long
+term impacts of ancient humans on their landscape can be useful for modern day
+researchers by, for example, providing insight into the environmental impact of
+current human activities.
+
+\section{Evidence} \label{sec:Evidence} By examining seeds, bones, and other
+items found at archaeological sites, archaeologists are able to determine 
+dietary habits, and from the relative quantities found, estimate the
+importance each food source would have had in the diet.  Specific agricultural practices
+can be detected in the archaeological record in a number of ways.  If the scale
+of production is known, crop selection, for example, can help indicate whether
+crops were being cultivated for subsistence use or for more commercial
+purposes\footnote{Sometimes, written accounts exist which can help to
+piece this together.}.  If there is evidence of surplus production of any
+particular crop or animal, this can be a possible indication that it was being
+grown commercially.  Other possible inferences include taxation, storage,
+redistribution, indications of intensified farming, and craft specialization,
+all of which can indicate increased economic complexity.  Through careful
+study, a better understanding of the land use habits and patterns of these
+populations can unlock many interesting facets of the culture and lifestyle of
+these peoples.
+
+\section{Early Attempts} \label{sec:EarlyAttempts} 
+
+In order to learn more about how people interacted with their land, it is very
+helpful to determine an approximate area of land to support settlement
+populations and it's likely distribution.  In order to do this, it is necessary
+to first know how much land would have been needed to produce enough food to
+sustain the settlement.  A three step process is used to calculate the amount of
+land a settlement would have required based on it's population and diet
+make-up.  
+
+XXXXX What are the three steps???  XXXXXXXXX
+
+Once an area target is known, the land surrounding the
+site must be classified as either suitable or unsuitable for each crop sown and
+each type of animal being raised.  Lastly, the area target from the first step
+can be used to query the land suitability classification map for that area of
+land surrounding the site.
+
+From a GIS point of view, one of the greatest challenges of this project was
+developing a method for finding the outer extent (or boundary), within which
+the combined area of suitable land satisfies the target area.  The usable land
+surrounding a settlement is almost certainly not going to contiguous, but
+rather be comprised of multiple, irregularly shaped polygons. A further
+complication is the fact that some of the irregularly shaped polygons may
+be bisected one or more times by the 'boundary line'.  
+
+In late 2006, a BASH script was created running in a GRASS shell.
+
+This script found a specific area of classified, suitable land surrounding a
+point (Fig.\\ref{fig:euclideanResults})  by starting at a point and moving
+outwards in a circle five meters at a time, checking each time to see if there
+was enough suitable land contained with the perimeter.  As soon as it was equal
+to or greater than the target area, the loop was ended, and the solution was
+deemed found.  An except from the script (shown below) illustrates how 
+the target area was calculated:
+
+\begin{smallverbatim} while [ ${area} -le ${land_reqrd_total} ]; 
+do 
+  ((radius=${radius} + 5)) 
+  r.circle -b output=circle coordinate=\ 
+  744800,3611100 max=\${radius} --overwrite 
+  g.remove rast=catchment 
+  r.mapcalc catchment=``${src}''*circle 
+  rm /tmp/catchment_report 
+  r.stats -an inpu=catchment > /tmp/catchment_report 
+  cat /tmp/catchment_report 
+  area_dec=`awk '{print $2}' /tmp/catchment_report` 
+  echo "a catchment area with a radius of \ $radius}
+        meters contains area=${area_dec//.*/}"
+  echo "${area} square meters of land and \
+        our target is echo ${land_reqrd_total} square meters"
+done 
+\end{smallverbatim}
+
+  \begin{figure}[htbp] %Proof of Concept
+  \includegraphics[scale=0.37]{./images/LanduseAnalyst544.jpg}
+   % img42.jpg: 800x600 pixel, 72dpi, 28.22x21.17 cm, bb=0 0 800 600
+   \label{fig:euclideanResults} \caption{Landuse Analyst's primary interface}
+   \end{figure}
+
+
+
+\section{Moving to a Graphical User Interface} \label{GUI} 
+ 
+The complexity of the animal and crop modelling made using BASH scripts very
+awkward.  While the BASH scripting aproach worked well for a proof of concept,
+the implementation included a large number of hard coded variables and the solution 
+did not provide a flexible environment for experimentation. For example, adding 
+and removing different types of crops and animals to the analysis required modifictions 
+to the BASH script each time. The BASH script approach approach also had poor reporting
+capabilities and offered little 'hand holding' to the user as the analysis was 
+carried out.
+
+Consequently we embarked on the development of a Graphical User Interface (GUI) based 
+application, written in C++ and Qt4. This programming environment decision was largely 
+motivated by a desire to capitalise on existing code bases from openModeller
+\footnote{openModeller is available at \url{http://openmodeller.sourceforge.net/}} 
+and Quantum GIS (QGIS)\footnote{QGIS is available at \url{http://qgis.org}}.  
+For invoking GRASS tools we opted to use QProcess to launch GRASS commands in 
+their own process and then implemented application logic to parse the results of 
+each command from stdout.
+
+\section{Analytical Functionality} \label{sec:Analytical Functionality}
+
+Landuse Analyst includes various routines for calculating the amount of land 
+the settlement needs.  Briefly, these can outlined as follows:
+
+  \begin{enumerate} 
+  \item Breaking down the basic diet of the community into specific crops and
+  animals being used for nourishment.  Each individual crop and animal needs to
+  be expressed as a percentage of the peoples' diet.  This is estimated using
+  proportions based on archaeological evidence such as faunal and
+  paleobotanical remains discovered from excavations.  
+  \item Calculating  calorie targets for the crops and animals identified above.  
+  \item Calculating production targets which fulfill the calorie targets.
+  Production targets are calculated in kilograms, and take into account factors such as 
+  calories per kilogram of produce, and what percentage of an animals weight is
+  usable as food.  
+  \item Calculating land area targets needed to satisfy the
+  production targets.  Each crop and animal is allocated a specific area
+  target.  
+  \item Carrying out a spatial analysis of the land surrounding the settlement to
+  find land suitable for each crop and animal that satisfies the area targets.  
+  \end{enumerate}
+
+The details of how these targets are determined are a major part of Landuse
+Analyst, but beyond the scope of this article.  What will be discussed in
+further detail is how the land classification and identification problems were
+approached.
+
+\section{Catchment Creation Methods} 
+
+When searching for land that meets the area targets, LandUse Analyst starts at
+the coordinates of the settlement and moves outward to a point where the land
+contained within equals the area target.  Landuse Analyst implements three
+different methods for searching outwards from the settlement.  The key
+difference between the three methods is the way in which a cost-surface gets
+generated, which we will now examine.  All three methods currently used by LA
+require a \textbf{D}igital \textbf{E}levation \textbf{M}odel (DEM) to generate
+the cost surfaces.
+
+
+
+  \subsubsection{Euclidean} \label{subsection:Euclidean} 
+  
+  This method ignores all topographic features of the landscape when moving
+  outwards from the site.  Essentially we are drawing circles around the site,
+  with the site right in the middle.  Drawbacks to using this method exist.
+  Whilst moving across a landscape, people are affected by slope, rivers,
+  landcover, etc.  Circles are just convenient when there is no easy way to
+  calculate with an alternative method.  The primary reason for its inclusion
+  as a catchment area creation method in Landuse Analyst is to provide the user
+  with the option of seeing the difference between this rather simplistic
+  approach and the other two methods.
+
+  \subsubsection{Path Distance}\index{Path Distance}
+  
+  Path Distance is a cost surface creation method that looks at elevation data
+  from a DEM and calculates distance from the site taking into account the
+  extra distances travelled going up or down slopes.
+
+  \subsubsection{Walking Time}\index{Walking Time}
+  
+  Walking Time is likely going to be the primary choice of the three methods of
+  creating catchment areas in Landuse Analyst.  The cost surface that is
+  generated for this method (see Fig. \ref{fig:rwalk} uses a DEM to calculate
+  how long it would take to walk from a starting point (the site, or ZERO on
+  the cost surface) to all points on the DEM within a five hour walk ($18,000$
+  seconds). Five hours is simply the time used for this case
+  study\footnote{This number is currently hard coded. Future versions will
+  allow the user to edit this value.} This creates a cost surface with values
+  from $0$ to $18,000$ (See Fig. \ref{fig:rwalk}).  The GRASS module r.walk is
+  used to produce this cost surface.
+
+%\setkeys{Gin}{width=1\textwidth}
+\begin{figure}[htbp] \centering
+\includegraphics[scale=0.29]{./images/rwalkShuna.jpg}
+   %caption of the figure
+   \caption{Cost surface generated by GRASS module
+   \textit{r.walk}} \label{fig:rwalk} \end{figure}
+
+\section{Land Suitability Raster Masks} 
+
+The land suitability masks must be binary rasters, meaning that the cells of
+the raster file only contain 0 or 1 (NULL values are currently not supported).
+The land that is deemed suitable for use should be set to a value of 1, and the
+rest of the land is set to 0.  This binary raster  can then be multiplied by a
+selection layer (as created by either Walking Distance, Path Distance,
+or Euclidean methods).  This selection layer (also a binary raster) grows in size until enough area is
+found within it's bounds - identifying the land to be analysed.
+
+In the current version, the software gives the option using three different
+methods for landuse classification.  They are: 
+
+\begin{enumerate} 
+
+\item  Use only the user supplied classification map (a binary mask) 
+
+\item  Use minimum and maximum slope values to create a classification map
+which will be used exclusively.  This can be done for common crop land and
+common grazing land independantly.  For example, the user might stipulate
+$0^\circ \leq m \leq 9^\circ$ for crops and $9^\circ < m \leq 15^\circ$ for
+grazing land, where $m=slope$.  
+
+\item  Using a combination of the two classification maps.  Slope can be chosen
+to either add to or subtract from the user supplied map, or alternatively, the
+user supplied map can either add to or subtract from the slope map.  This
+combination of the two can be very useful if, for example, a user wishes to use
+a soil classification map as the primary indication of landuse suitability, but
+refine that map by taking out the land they consider too steep for use.  In
+this case the program generated slope maks would be subtracted from the user
+supplied (soil) classification map.  
+
+\end{enumerate}
+
+
+XXXXXX Why use BASH script output at this point XXXXXXXXXX
+
+
+  \begin{figure}[htbp] %Location
+  \includegraphics[scale=0.225]{./images/landcatchment.jpg}
+   % img42.jpg: 800x600 pixel, 72dpi, 28.22x21.17 cm, bb=0 0 800 600
+   \label{fig:landCatchment} \caption{Results of the BASH script which
+   identified the suitable land surrounding a point equal to a particular area.
+   The different shades represent different settlement populations.}
+   \end{figure}
+
+\section{Finding the land} 
+
+In order to find the suitable land required
+to produce enough food to sustain the settlement that is in closest proximity, 
+a conditional loop is used which defines the outer extent of the catchement area, 
+and then calculates the area of suitable land contained within it.  This process is identical for all
+analysis methods.  The earliest versions of Landuse Analyst started at the
+closest point to the site that could potentially solve the problem
+\footnote{The closest point, or minimum radius, is a perfect circle equal in
+area to the target.}, and then moved steadily outwards until the area target
+was found.  The amount to move outward in each step was a value provided by the
+user, and might have been a value like 30 (which in the case of walking
+distance meant 30 seconds, on  a cost surface of 20,000.  This would mean that
+potentailly, there would have to be $\frac{20,000}{30}$ or nearly 7000 iterations!)
+The basic steps involved were:
+
+   \begin{enumerate} 
+   
+   \item  Set the initital boundary to start the analysis
+   
+   \item  Calculate the area of suitable land found within this boundary 
+   
+   \item If the area of land required has been satisfied, write the results to a new
+   file for that item and exit the loop 
+   
+   \item  Increase the value of the analysis boundary 
+   
+   \item  Repeat the loop (starting at Step 2)
+   
+   \end{enumerate}
+
+This method proved extremely time consuming;  If even 3,500 loops, which is
+about half of the cost surface map, was required, and each loop took as little
+as 45 seconds, the computation time was nearly 44 hours.   To increase the
+efficiency, a modified binary search is now used.  This involved a somewhat
+different approach.  Instead of using a step amount, a percentage is used.
+This percentage value is called the \textit{Precision}. 
+The area of land deemed as equalling the current area target gets changed into
+a range $\pm$ the precision value multiplied by the target area. 
+If a value of $5\%$ is entered, and the area
+target is 100 hectares, Landuse Analyst accepts $100 \pm(\frac{100 \cdot
+5\%}{2})$ (which is $97.5$ to $102.5$ hectares) as the target area.  The loop
+uses three terms, $CurrentMidValue$ $FirstValue$ and $LastValue$ At the
+beginning of the process, $FirstValue=0$ and $LastValue=18,000$ which coincides
+with the full extent of the cost surface.  $CurrentMidValue$ is calculated
+within the loop.  The loop works like this:
+
+  \begin{enumerate} 
+  
+  \item Set the analysis boundary: $CurrentMidValue=\frac{FirstValue +
+  LastValue}{2}$.  
+  
+  \item Calculate the area of suitable land found within the boundary whose
+  outermost boundary is $CurrentMidValue$ 
+  
+  \item If the contained area falls within the target range, write the results
+  to a new file and exit the loop 
+  
+  \item If the contained area is more than the maximum value in the target
+  range, set a halfway between $FirstValue$ and $CurrentMidValue$. This is done
+  by making $LastValue=CurrentMidValue$ and then returning back to step number
+  one.  (Note $FirstValue$ remains unchanged.) 
+  
+  \item If the contained area is less than the minimum value in the target
+  range, set a halfway between $LastValue$ and $CurrentMidValue$. This is done
+  by making $FirstValue=CurrentMidValue$ and then returning back to step number
+  one.  (Note $LastValue$ remains unchanged.) 
+  
+  \end{enumerate}
+
+By using this method, the \textit{maximum} number of steps in the loop is 17.
+This method of searching for the area targets made a huge difference in Landuse
+Analyst's speed\footnote{ a typical 'run' on a decent computer system is
+$\approx$ 2 to 3 minutes now, compared to up to two weeks using the original
+method.}, allowing users to now examine many different variations of an entire
+model quickly and easily even on an average computer system.  The resultant
+maps clearly show which land was likely to have been used, and for what purpose
+it was being used for\ref{fig:caseStudy}
+ 
+  \begin{figure}[htbp] %Location
+  \includegraphics[scale=0.225]{./images/LEB130007030FallowSlope.jpg}
+  \label{fig:caseStudy} \caption{Case Study: Shuna  Population 3000, EB1a}
+  \end{figure}
+
+\section{Future Development} \label{FuturePlans} 
+
+Landuse Analyst is still in the early stages of its development and many
+improvements to usebility and aplication capabilities are planned. That said,
+the application is already capable of producing useful results (though more
+testing is still needed) in a more flexible, user friendly and efficient manner
+than the original BASH prototype.
+
+There are many routes that Landuse Analyst can take from this point with
+respect to it's future development; it can continue on as a standalone
+application, or turn into a plugin for another application like openModeller or
+QGIS.  Before these decisions are made, however, the features in the current
+version must be finalised and implemented.  Some features which are currently
+in the planning phase are network analysis  for inter-site relationships,
+experiment settings, where the model can be set to run a given number of times
+using different input variables, and report generation complete with graphs and
+maps. 
+
+The network analysis feature will look at all contemporaneous sites in a given
+area, and examine production potential.  If a site can potentially produce
+excess meat, but falls short in cropland, it will look to neighboring sites to
+see if they can make up the difference.  If there is a potential for trade or
+supplementation, the most efficient walking routes can then be found using
+r.drain on a cost surface generated with r.walk.  This could potentially show
+the likely pathways between sites, as well as how intensively used they might
+have been.  Taking this further, one might look for places where these routes
+merge, or cross, which might be an indicator for a potential archaeological
+site which has yet to be discovered.
+
+The current version of Landuse Analyst requires that every scenario be modelled
+manually and seperately.  For example, one might wish to look at how adjusting
+the yield of crops would affect the land requirements to simulate drought
+years.  One might also want to compare the results of different dietary
+proportions of meat content to plant content.  With the experiment module, it
+will be possible to have the software automatically cycle through all of these
+different scenarios automatically.
+
+Drawing much on the work done in openModeller, there is also the hope that it
+will be possible to have Landuse Analyst compile presentation quality reports,
+complete with spreadsheets and graphs.  This will be a great time saving
+feature.  In addition, this will provide a consistency that will make it much
+easier to systematically compare results with other users.
+
+Anyone interested in knowing more about this project, or better yet, in
+contributing to it, please don't hesitate in contacting us.
+
+
+%etc.  \end{smallverbatim}
+
+
+%if you want to cite please use:
+
+% \cite{name:year} or \citep{name:year}
+
+%.... revealed by \cite{herborg:2003} if it shall be in parentheses use
+%\citep{herborg:2003}
+
+
+%End of text.
+
+
+
+\begin{footnotesize}
+%\begin{thebibliography}{99}
+
+%\bibitem[Herborg et~al. (2003) Herborg, Bentley, Clare, Rushton]{herborg:2003}
+%L.M. Herborg, M.G. Bentley, A.S. Clare, S.P. Rushton (2003) \newblock The
+%spread of the Chinese mitten crab (Eriocheir sinensis) in Europe; the
+%predictive value of an historical data set.  \newblock {\em Hydrobiologia}
+%503: 21-28.
+
+
+%\end{thebibliography}
+\end{footnotesize}
+
+
+\address{Jason Jorgenson\\ University of Liverpool\\
+\url{http://www.arkygeek.com}\\ \email{arkygeek AT gmail com}}
+
+\address{Tim Sutton\\ Centro de Referncia em Informao Ambiental, CRIA\\ \url{http://cria.org.br}\\
+\email{timlinux@linfiniti.com}}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: main_document.tex
+%%% End:
+
