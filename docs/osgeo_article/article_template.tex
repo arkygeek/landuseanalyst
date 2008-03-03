@@ -1,11 +1,11 @@
-% Template GRASS newsletter - Article Language: Latex LandUse Analyst This
+% Template GRASS newsletter - Article Language: Latex LA This
 % project aims to define a settlement's use of, and impact on, their
 % surrounding landscape.
 
 % Head
 
-\title{Landuse Analyst} \subtitle{Identifying Settlements' Landuse Catchment
-Areas.}
+\title{LA} \subtitle{Identifying Landuse Catchments for 
+ancient settlements.}
 
 \author{by Jason Jorgenson and Tim Sutton}
 
@@ -26,7 +26,7 @@ Tiberias (see Figure \ref{fig:shunaGoogleEarth}).
 \label{fig:shunaGoogleEarth} \caption{Looking South-South-East from Lake
 Tiberias Down the Jordan Valley towards Shuna.} \end{figure}
 
-We describe how the application logic for Landuse Analyst was prototyped as a
+We describe how the application logic for Landuse Analyst (LA) was prototyped as a
 BASH shell script calling various GRASS utilities, and then developed into a
 more flexible application with a graphical user interface.
 
@@ -53,12 +53,12 @@ between rural and urban people.  By applying this same logic in historical
 contexts, we can infer landuse patterns .}, as well as short and long term
 impacts communities might have had on the landscape.  An understanding of long
 term impacts of ancient humans on their landscape can be useful for modern day
-researchers by, for example, providing insight into the environmental impact of
+researchers by, for example, providing insight into the potential environmental impact of
 current human activities.
 
 \section{Evidence} \label{sec:Evidence} By examining seeds, bones, and other
 items found at archaeological sites, archaeologists are able to determine 
-dietary habits, and from the relative quantities found, estimate the
+dietary habits. From the relative quantities found estimates can be made of the
 importance each food source would have had in the diet.  Specific agricultural practices
 can be detected in the archaeological record in a number of ways.  If the scale
 of production is known, crop selection, for example, can help indicate whether
@@ -73,7 +73,7 @@ study, a better understanding of the land use habits and patterns of these
 populations can unlock many interesting facets of the culture and lifestyle of
 these peoples.
 
-\section{Early Attempts} \label{sec:EarlyAttempts} 
+\section{Early attempts} \label{sec:EarlyAttempts} 
 
 In order to learn more about how people interacted with their land, it is very
 helpful to determine an approximate area of land to support settlement
@@ -86,9 +86,9 @@ make-up.
 XXXXX What are the three steps???  XXXXXXXXX
 YYYYY THEY ARE:  YYYYY :P
 
-\section{Calorie Targets}
-  \index{Landuse Analyst!Calorie Targets}
-  Calorie Targets are the first level of calculations done by Landuse Analyst.  Calorie targets are obtained through a number of steps (see Fig. \ref{fig:dietDiagram}), which are as follows.
+\section{Calorie targets}
+  \index{LA!Calorie Targets}
+  Calorie Targets are the first level of calculations done by LA.  Calorie targets are obtained through a number of steps (see Fig. \ref{fig:dietDiagram}), which are as follows.
 
 \subsection{Steps in calculating calorie targets}
 
@@ -102,14 +102,14 @@ YYYYY THEY ARE:  YYYYY :P
 \begin{figure}[ht] %dietMeatDiagram
  \includegraphics[scale=.20]{./images/fancyDietMeat.jpg}
  % dietDiagram.jpg: 740x731 pixel, 72dpi, 26.10x25.78 cm, bb=0 0 740 731
- \textit{\caption[Plant Portion of Diet]{\label{fig:dietMeatDiagram}How LA sees the meat portion of the diet.}}
+ \textit{\caption[Plant Portion of Diet]{\label{fig:dietMeatDiagram}Specification of meat component of diet in LA.}}
 
 \end{figure}
 
 \begin{figure}[ht] %dietCropDiagram
  \centering
  \includegraphics[scale=.2]{./images/dietFancyCrops.jpg}
- \textit{\caption[Plant Portion of Diet]{\label{fig:dietCropDiagram}How LA sees the plant portions of the diet.  Note that the input figures for percent of diet were: \textbf{HorseBean} $7\%$, \textbf{Einkorn} $13\%$, \textbf{Emmer} $34\%$, \textbf{Lentils} $12\%$, \textbf{Peas} $15\%$, \textbf{Olives}\ $18\%$.  These numbers translate to the ones shown above after processing as in Fig. \ref{fig:dietDiagram}.}}
+ \textit{\caption[Plant Portion of Diet]{\label{fig:dietCropDiagram}Specification of the plant component of diet in LA.  Note that the input figures for percent of diet were: \textbf{HorseBean} $7\%$, \textbf{Einkorn} $13\%$, \textbf{Emmer} $34\%$, \textbf{Lentils} $12\%$, \textbf{Peas} $15\%$, \textbf{Olives}\ $18\%$.  These numbers translate to those shown above after processing as in Fig. \ref{fig:dietDiagram}.}}
 \end{figure}
 
     \begin{enumerate}
@@ -126,11 +126,11 @@ YYYYY THEY ARE:  YYYYY :P
   \label{fig:LADiet}%LADiet
     \includegraphics[scale=.4]{./images/LanduseAnalystDiet545.jpg}
     % LanduseAnalystDiet545.jpg: 638x417 pixel, 762dpi, 2.13x1.39 cm, bb=0 0 60 39
-  \caption{ Diet Tab, Landuse Analyst}
+  \caption{ Diet Tab, LA}
 \end{figure}
 
-\section{Production Targets}
-  \index{Landuse Analyst!Production Targets}
+\section{Production targets}
+  \index{LA!Production Targets}
   Production targets are measures of weight, and represent how many Kg of each crop and animal must be produced to satisy the Calorie Targets calculated above.  Because crops and animals need to be treated somewhat differently at this stage, I will deal with each in a seperate section, beginning with Crops as they are most easily explained.
 
   \subsection{Crops}
@@ -139,8 +139,8 @@ YYYYY THEY ARE:  YYYYY :P
   \subsection{Animals}
   Although the first part of the calculations for Production Targets of Animals is identical to that of Crops, there is one further consideration.  Animals get slaughtered, and only part of their carcasses are usable as food.  This usable part of their live weight is supplied by the user when they define the animal in the Animal Manager form as what percentage of their live weight is usable as food.  To illustrate this simply, let's say that $50\%$ of a goat's live body weight is usable as food.  If the first part of the production target calculations resulted in a target for goat meat of $100$ Kg, then this last stage of the production target calculation process would change this to $200$ Kg by dividing $100$ by $50\%$   $\left[ \frac{100}{50\%}=200\right]$.
 
-\section{Area Targets}
-\index{Landuse Analyst!Area Targets}
+\section{Area targets}
+\index{LA!Area Targets}
 Now that we have production targets, it is possible to calculate area targets for each crop and animal by looking at yield values for plants, and grazing requirements for animals.  As with Production Targets, Area Targets are quite simple to compute for crops, but get very complicated for animals.
 
 Animals are difficult to calculate area targets for because their land requirements are largely based on their numbers.  On top of this, it isn't just the number of animals needed for slaughter that is required; you also have to remember that a herd of adult females large enough to sustain a steady supply of offspring with numbers enough to keep the production targets met has to be added into the equation as well.  In addition to this, animals can graze fallow crop land, eat fodder from the crops being grown, as well as graze other types of land.  The details of how this all works is explained in detail later.  For now, lets look at how area targets are calculated for crops.
@@ -153,11 +153,11 @@ hand corner of the form.
 
     \begin{figure}[htbp]
         \includegraphics[scale=.4]{./images/LanduseAnalystCrops546.jpg}
-      \label{fig:crop} \caption{Crops Tab, Landuse Analyst Version 0.1 Revision 544}
+      \label{fig:crop} \caption{Crops Tab, LA Version 0.1 Revision 544}
     \end{figure}
     
-  \textbf{Crop rotation}\index{Landuse Analyst!Crop Rotation} affects the area target directly, so a few points about it need to be
-mentioned.  Quite simply, Landuse Analyst  treats crop rotation as a ratio of sown land to fallow land.  If a ratio of $1:1.00$ is used,
+  \textbf{Crop rotation}\index{LA!Crop Rotation} affects the area target directly, so a few points about it need to be
+mentioned.  Quite simply, LA  treats crop rotation as a ratio of sown land to fallow land.  If a ratio of $1:1.00$ is used,
 this means that the practise was to sow their land every other year and leave last years cropland fallow (More complicated crop rotations
 are possible in LA, and the process of setting this up are explained in more detail in the Help section of the program itself).  The crop
 rotation data is entered as a crop parameter in the Crop Parameter form (See Fig. \ref{fig:cropParameters} on page
@@ -171,17 +171,17 @@ value with the keyboard.
 
 
   \subsection{Animals}
-  Herd Size\index{Landuse Analyst!Grazing Requirements} determination is perhaps the single most difficult calculation that Landuse Analyst
+  Herd Size\index{LA!Grazing Requirements} determination is perhaps the single most difficult calculation that LA
 performs.  Added to the complexity of this is the problem that different animals have different dietary requirements, and even further, even if they are the same, they require different amounts of feed depending on things like whether they are pregnant or lactating, and what the weather conditions are like.  Again, to further complicate this issue, not all land that can be grazed has the same food value to the animals.
 
-  With the exception of weather conditions, Landuse Analyst addresses all of the issues.  One of the first things a user must do when using
+  With the exception of weather conditions, LA addresses all of the issues.  One of the first things a user must do when using
 Landuse Analust is to define all of the crops and animals that the settlement used.  By define, I mean that they must provide information about many aspects of them, including (for animals) information relating to their dietary requirements, their reproduction cycle, and their grazing preferences.  Most importantly however, \textit{TDN} must be explained.
 
     \subsubsection{TDN}
       \label{TDN}
       \index{TDN}
       \index{Total Digestable Nutrients}
-    \textbf{TDN} is an acronym for \textbf{T}otal \textbf{D}igestable \textbf{N}utrients, and is a commonly used term among ranchers to describe the quality of the feed available to their animals, and is expressed as a measure of weight.  To help illustrate this, I will use an example.  A rancher buys bales of hay that weigh exactly the same from two different sources.  He discovers that he needs 15 bales a day to feed his herd when using the bales from the first supplier, and only 12 a day when using those from the other.  The TDN or Total Digestable Nutrients of the hay from the second supplier is thus obviously higher than that from the first.  The quality of the hay is better.  This same concept can be applied to land, where a hectare of one type of land might provide 1000 kg of TDN the same area of land with different cover or other characteristics might only be able to provide $850$ kg of TDN.  The nice thing about working with TDN is that it is a universal kind of measure.  TDN can be used for any grazing animal, and since the purpose of Landuse Analyst is to identify the land which a settlement was using for food production, this is all we need.  For a complete description of how to define animals, please see  \textit{Defining Animals}, section \ref{definingAnimals} on page \pageref{definingAnimals}.
+    \textbf{TDN} is an acronym for \textbf{T}otal \textbf{D}igestable \textbf{N}utrients, and is a commonly used term among ranchers to describe the quality of the feed available to their animals, and is expressed as a measure of weight.  To help illustrate this, I will use an example.  A rancher buys bales of hay that weigh exactly the same from two different sources.  He discovers that he needs 15 bales a day to feed his herd when using the bales from the first supplier, and only 12 a day when using those from the other.  The TDN or Total Digestable Nutrients of the hay from the second supplier is thus obviously higher than that from the first.  The quality of the hay is better.  This same concept can be applied to land, where a hectare of one type of land might provide 1000 kg of TDN the same area of land with different cover or other characteristics might only be able to provide $850$ kg of TDN.  The nice thing about working with TDN is that it is a universal kind of measure.  TDN can be used for any grazing animal, and since the purpose of LA is to identify the land which a settlement was using for food production, this is all we need.  For a complete description of how to define animals, please see  \textit{Defining Animals}, section \ref{definingAnimals} on page \pageref{definingAnimals}.
 
 --------------------------
 
@@ -232,7 +232,7 @@ done
   
 
 
-\section{Moving to a Graphical User Interface} \label{GUI} 
+\section{Moving to a graphical user interface} \label{GUI} 
  
 The complexity of the animal and crop modelling made using BASH scripts very
 awkward.  While the BASH scripting aproach worked well for a proof of concept,
@@ -255,13 +255,13 @@ each command from stdout.
 \begin{figure}[htbp] %Proof of Concept
   \includegraphics[scale=0.37]{./images/LanduseAnalyst544.jpg}
    % img42.jpg: 800x600 pixel, 72dpi, 28.22x21.17 cm, bb=0 0 800 600
-   \label{fig:euclideanResults} \caption{Landuse Analyst's primary interface}
+   \label{fig:euclideanResults} \caption{LA's primary interface}
    \end{figure}
 
 
-\section{Analytical Functionality} \label{sec:Analytical Functionality}
+\section{Analytical functionality} \label{sec:Analytical Functionality}
 
-Landuse Analyst includes various routines for calculating the amount of land 
+LA includes various routines for calculating the amount of land 
 the settlement needs.  Briefly, these can outlined as follows:
 
   \begin{enumerate} 
@@ -287,11 +287,11 @@ Analyst, but beyond the scope of this article.  What will be discussed in
 further detail is how the land classification and identification problems were
 approached.
 
-\section{Catchment Creation Methods} 
+\section{Catchment creation methods} 
 
-When searching for land that meets the area targets, LandUse Analyst starts at
+When searching for land that meets the area targets, LA starts at
 the coordinates of the settlement and moves outward to a point where the land
-contained within equals the area target.  Landuse Analyst implements three
+contained within equals the area target.  LA implements three
 different methods for searching outwards from the settlement.  The key
 difference between the three methods is the way in which a cost-surface gets
 generated, which we will now examine.  All three methods currently used by LA
@@ -308,7 +308,7 @@ the cost surfaces.
   Whilst moving across a landscape, people are affected by slope, rivers,
   landcover, etc.  Circles are just convenient when there is no easy way to
   calculate with an alternative method.  The primary reason for its inclusion
-  as a catchment area creation method in Landuse Analyst is to provide the user
+  as a catchment area creation method in LA is to provide the user
   with the option of seeing the difference between this rather simplistic
   approach and the other two methods.
 
@@ -321,7 +321,7 @@ the cost surfaces.
   \subsubsection{Walking Time}\index{Walking Time}
   
   Walking Time is likely going to be the primary choice of the three methods of
-  creating catchment areas in Landuse Analyst.  The cost surface that is
+  creating catchment areas in LA.  The cost surface that is
   generated for this method (see Fig. \ref{fig:rwalk}) uses a DEM to calculate
   how long it would take to walk from a starting point (the site, or ZERO on
   the cost surface) to all points on the DEM within a five hour walk ($18,000$
@@ -338,7 +338,7 @@ the cost surfaces.
    \caption{Cost surface generated by GRASS module
    \textit{r.walk}} \label{fig:rwalk} \end{figure}
 
-\section{Land Suitability Raster Masks} 
+\section{Land suitability raster masks} 
 
 The land suitability masks must be binary rasters, meaning that the cells of
 the raster file only contain 0 or 1 (NULL values are currently not supported).
@@ -390,7 +390,7 @@ In order to find the suitable land required
 to produce enough food to sustain the settlement that is in closest proximity, 
 a conditional loop is used which defines the outer extent of the catchement area, 
 and then calculates the area of suitable land contained within it.  This process is identical for all
-analysis methods.  The earliest versions of Landuse Analyst started at the
+analysis methods.  The earliest versions of LA started at the
 closest point to the site that could potentially solve the problem
 \footnote{The closest point, or minimum radius, is a perfect circle equal in
 area to the target.}, and then moved steadily outwards until the area target
@@ -424,7 +424,7 @@ This percentage value is called the \textit{Precision}.
 The area of land deemed as equalling the current area target gets changed into
 a range $\pm$ the precision value multiplied by the target area. 
 If a value of $5\%$ is entered, and the area
-target is 100 hectares, Landuse Analyst accepts $100 \pm(\frac{100 \cdot
+target is 100 hectares, LA accepts $100 \pm(\frac{100 \cdot
 5\%}{2})$ (which is $97.5$ to $102.5$ hectares) as the target area.  The loop
 uses three terms, $CurrentMidValue$ $FirstValue$ and $LastValue$ At the
 beginning of the process, $FirstValue=0$ and $LastValue=18,000$ which coincides
@@ -468,15 +468,15 @@ it was being used for\ref{fig:caseStudy}
   \label{fig:caseStudy} \caption{Case Study: Shuna  Population 3000, EB1a}
   \end{figure}
 
-\section{Future Development} \label{FuturePlans} 
+\section{Future development} \label{FuturePlans} 
 
-Landuse Analyst is still in the early stages of its development and many
+LA is still in the early stages of its development and many
 improvements to usebility and aplication capabilities are planned. That said,
 the application is already capable of producing useful results (though more
 testing is still needed) in a more flexible, user friendly and efficient manner
 than the original BASH prototype.
 
-There are many routes that Landuse Analyst can take from this point with
+There are many routes that LA can take from this point with
 respect to it's future development; it can continue on as a standalone
 application, or turn into a plugin for another application like openModeller or
 QGIS.  Before these decisions are made, however, the features in the current
@@ -497,7 +497,7 @@ have been.  Taking this further, one might look for places where these routes
 merge, or cross, which might be an indicator for a potential archaeological
 site which has yet to be discovered.
 
-The current version of Landuse Analyst requires that every scenario be modelled
+The current version of LA requires that every scenario be modelled
 manually and seperately.  For example, one might wish to look at how adjusting
 the yield of crops would affect the land requirements to simulate drought
 years.  One might also want to compare the results of different dietary
@@ -506,7 +506,7 @@ will be possible to have the software automatically cycle through all of these
 different scenarios automatically.
 
 Drawing much on the work done in openModeller, there is also the hope that it
-will be possible to have Landuse Analyst compile presentation quality reports,
+will be possible to have LA compile presentation quality reports,
 complete with spreadsheets and graphs.  This will be a great time saving
 feature.  In addition, this will provide a consistency that will make it much
 easier to systematically compare results with other users.
