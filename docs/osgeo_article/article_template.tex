@@ -83,107 +83,12 @@ sustain the settlement.  A three step process is used to calculate the amount of
 land a settlement would have required based on it's population and diet
 make-up.  
 
-XXXXX What are the three steps???  XXXXXXXXX
-YYYYY THEY ARE:  YYYYY :P
-
-\section{Calorie targets}
-  \index{LA!Calorie Targets}
-  Calorie Targets are the first level of calculations done by LA.  Calorie targets are obtained through a number of steps (see Fig. \ref{fig:dietDiagram}), which are as follows.
-
-\subsection{Steps in calculating calorie targets}
-
-\begin{figure}[ht] %dietDiagram
- \centering
- \includegraphics[scale=.20]{./images/dietDiagram.jpg}
- % dietDiagram.jpg: 740x731 pixel, 72dpi, 26.10x25.78 cm, bb=0 0 740 731
- \textit{\caption{\label{fig:dietDiagram}How LA looks at a settlement's diet composition.}}
-\end{figure}
-
-\begin{figure}[ht] %dietMeatDiagram
- \includegraphics[scale=.20]{./images/fancyDietMeat.jpg}
- % dietDiagram.jpg: 740x731 pixel, 72dpi, 26.10x25.78 cm, bb=0 0 740 731
- \textit{\caption[Plant Portion of Diet]{\label{fig:dietMeatDiagram}Specification of meat component of diet in LA.}}
-
-\end{figure}
-
-\begin{figure}[ht] %dietCropDiagram
- \centering
- \includegraphics[scale=.2]{./images/dietFancyCrops.jpg}
- \textit{\caption[Plant Portion of Diet]{\label{fig:dietCropDiagram}Specification of the plant component of diet in LA.  Note that the input figures for percent of diet were: \textbf{HorseBean} $7\%$, \textbf{Einkorn} $13\%$, \textbf{Emmer} $34\%$, \textbf{Lentils} $12\%$, \textbf{Peas} $15\%$, \textbf{Olives}\ $18\%$.  These numbers translate to those shown above after processing as in Fig. \ref{fig:dietDiagram}.}}
-\end{figure}
-
-    \begin{enumerate}
-      \item \textbf{\textit{Basic Information}} - The user supplies LA with the population of the settlement, as well as the average daily calorific requirements of an average member of the population.  By multiplying these figures together, the total number of calories required for the settlement is calculated (see Fig. \ref{fig:LADiet}).
-
-      \item \textbf{\textit{Primary Dietary Components}} - This step works on the principle that calories can come from only two fundamental sources: plants and animals.  By adjusting a slider right or left, this overall ratio is set.  To explain how this works, let's say that the yearly calorific requirement for a settlement is $1,000,000$.  If the slider is set to show $70\%$ Plants and $30\%$ meat, this would mean that LA will calculate the number of calories that need to come from Plants as $700,000$ and those that need to be supplied by meat as $300,000$.
-
-      \item \textbf{\textit{Detailed Dietary Components}} - At this step, the process gets split into two sections.  One section is for the Plant portion of the diet, and the other is for the Meat portion.  Again, the calculations are done based on values which are set by a slider that indicates what percentage of the plants or animals come from domestic sources.  To illustrate this, we will continue using the figures above of $700,000$ for plants and $300,000$ for animals.  If the slider on the plant side is set to $90\%$ Tame\footnote{The word tame was used purely for aesthetic purposes in the design of the input form of LA} then the number of calories that need to be supplied by domestic plants (crops) would be $700 \cdot 90\%$ or $630,000$ calories.  As an example, if peas are defined as a crop, and the percentage of diet setting in Wheat's Parameters is set to $15.00\%$ then using the values from the previous step, LA calculates that Peas must provide $630,000 \cdot 15.00\%$ or $94,500$ calories.  This also means that Peas represent $15\%\cdot90\%\cdot70\%=9.45\%$ of the overall diet.  Remember that the $15\%$ is a portion of the \textit{tame crop} part of the diet! ( See Fig. \ref{fig:dietCropDiagram} and Fig. \ref{fig:dietMeatDiagram}).  The exact same thing happens with meat.
-
-      \item \textbf{\textit{Crop/Animal Contributions}} - The final step is easy to understand, but is not done in the Diet section of the program.  Rather, it is calculated using values that are supplied as parameters for each individual crop and animal.  This parameter is set with a spin-box in the Parameter Manager form.  This value tells LA that this individual animal or crop comprises the indicated percentage of the calories being supplied by tame sources, which is the value from the previous step.
-    \end{enumerate}
-
-\begin{figure}[htbp]
-  \label{fig:LADiet}%LADiet
-    \includegraphics[scale=.4]{./images/LanduseAnalystDiet545.jpg}
-    % LanduseAnalystDiet545.jpg: 638x417 pixel, 762dpi, 2.13x1.39 cm, bb=0 0 60 39
-  \caption{ Diet Tab, LA}
-\end{figure}
-
-\section{Production targets}
-  \index{LA!Production Targets}
-  Production targets are measures of weight, and represent how many Kg of each crop and animal must be produced to satisy the Calorie Targets calculated above.  Because crops and animals need to be treated somewhat differently at this stage, I will deal with each in a seperate section, beginning with Crops as they are most easily explained.
-
-  \subsection{Crops}
-  Another peice of data which the user must supply is food value of each crop.  Using the calorie targets and the user supplied food value, the model calculates the production target necessary to meet these needs.  For example, if you need $337,500$ calories of wheat, and wheat has a food value of $3000$ calories/Kg then you need $\frac{337500}{3000}$ or $112.5$ Kg of wheat.
-
-  \subsection{Animals}
-  Although the first part of the calculations for Production Targets of Animals is identical to that of Crops, there is one further consideration.  Animals get slaughtered, and only part of their carcasses are usable as food.  This usable part of their live weight is supplied by the user when they define the animal in the Animal Manager form as what percentage of their live weight is usable as food.  To illustrate this simply, let's say that $50\%$ of a goat's live body weight is usable as food.  If the first part of the production target calculations resulted in a target for goat meat of $100$ Kg, then this last stage of the production target calculation process would change this to $200$ Kg by dividing $100$ by $50\%$   $\left[ \frac{100}{50\%}=200\right]$.
-
-\section{Area targets}
-\index{LA!Area Targets}
-Now that we have production targets, it is possible to calculate area targets for each crop and animal by looking at yield values for plants, and grazing requirements for animals.  As with Production Targets, Area Targets are quite simple to compute for crops, but get very complicated for animals.
-
-Animals are difficult to calculate area targets for because their land requirements are largely based on their numbers.  On top of this, it isn't just the number of animals needed for slaughter that is required; you also have to remember that a herd of adult females large enough to sustain a steady supply of offspring with numbers enough to keep the production targets met has to be added into the equation as well.  In addition to this, animals can graze fallow crop land, eat fodder from the crops being grown, as well as graze other types of land.  The details of how this all works is explained in detail later.  For now, lets look at how area targets are calculated for crops.
-
-  \subsection{Crops}
-    A list of all crops that have been defined is found when the Crops tab is clicked (Fig. \ref{fig:crop}).  Note that the user has the
-choice of selecting it for inclusion in the model, as well as being able to select different parameters from a drop-down list.  To the
-right of the drop down list is the crop's contribution to the tame plant portion of the diet using the currently selected parameter.  The total of these percentages must be equal to $100\%$ before the model will run, and the current total is always visible in the bottom left
-hand corner of the form.
-
-    \begin{figure}[htbp]
-        \includegraphics[scale=.4]{./images/LanduseAnalystCrops546.jpg}
-      \label{fig:crop} \caption{Crops Tab, LA Version 0.1 Revision 544}
-    \end{figure}
-    
-  \textbf{Crop rotation}\index{LA!Crop Rotation} affects the area target directly, so a few points about it need to be
-mentioned.  Quite simply, LA  treats crop rotation as a ratio of sown land to fallow land.  If a ratio of $1:1.00$ is used,
-this means that the practise was to sow their land every other year and leave last years cropland fallow (More complicated crop rotations
-are possible in LA, and the process of setting this up are explained in more detail in the Help section of the program itself).  The crop
-rotation data is entered as a crop parameter in the Crop Parameter form (See Fig. \ref{fig:cropParameters} on page
-\pageref{fig:cropParameters})  by adjusting the value of a spinbox either with the mouse wheel, the $+/-$ buttons, or manually entering a
-value with the keyboard.
-    \begin{figure}[htbp] %crop parameters
-        \includegraphics[scale=.27]{./images/cropParameters.jpg}
-        % cropParameters.jpg: 842x384 pixel, 762dpi, 2.81x1.28 cm, bb=0 0 80 36
-      \caption[Crop Parameters]{\label{fig:cropParameters}\textit{Crop Parameters form for setting the particulars of the crop.}}
-    \end{figure}
-
-
-  \subsection{Animals}
-  Herd Size\index{LA!Grazing Requirements} determination is perhaps the single most difficult calculation that LA
-performs.  Added to the complexity of this is the problem that different animals have different dietary requirements, and even further, even if they are the same, they require different amounts of feed depending on things like whether they are pregnant or lactating, and what the weather conditions are like.  Again, to further complicate this issue, not all land that can be grazed has the same food value to the animals.
-
-  With the exception of weather conditions, LA addresses all of the issues.  One of the first things a user must do when using
-Landuse Analust is to define all of the crops and animals that the settlement used.  By define, I mean that they must provide information about many aspects of them, including (for animals) information relating to their dietary requirements, their reproduction cycle, and their grazing preferences.  Most importantly however, \textit{TDN} must be explained.
-
-    \subsubsection{TDN}
-      \label{TDN}
-      \index{TDN}
-      \index{Total Digestable Nutrients}
-    \textbf{TDN} is an acronym for \textbf{T}otal \textbf{D}igestable \textbf{N}utrients, and is a commonly used term among ranchers to describe the quality of the feed available to their animals, and is expressed as a measure of weight.  To help illustrate this, I will use an example.  A rancher buys bales of hay that weigh exactly the same from two different sources.  He discovers that he needs 15 bales a day to feed his herd when using the bales from the first supplier, and only 12 a day when using those from the other.  The TDN or Total Digestable Nutrients of the hay from the second supplier is thus obviously higher than that from the first.  The quality of the hay is better.  This same concept can be applied to land, where a hectare of one type of land might provide 1000 kg of TDN the same area of land with different cover or other characteristics might only be able to provide $850$ kg of TDN.  The nice thing about working with TDN is that it is a universal kind of measure.  TDN can be used for any grazing animal, and since the purpose of LA is to identify the land which a settlement was using for food production, this is all we need.  For a complete description of how to define animals, please see  \textit{Defining Animals}, section \ref{definingAnimals} on page \pageref{definingAnimals}.
-
---------------------------
+\begin{enumerate}
+ \item Calculating Calorie Targets
+ \item Calculating Production Targets
+ \item Calculating Area Targets
+\end{enumerate}
+These are discussed in more detail later.
 
 
 Once an area target is known, the land surrounding the
@@ -207,44 +112,21 @@ point (Fig.\\ref{fig:euclideanResults})  by starting at a point and moving
 outwards in a circle five meters at a time, checking each time to see if there
 was enough suitable land contained with the perimeter.  As soon as it was equal
 to or greater than the target area, the loop was ended, and the solution was
-deemed found.  An except from the script (shown below) illustrates how 
-the target area was calculated:
-
-\begin{smallverbatim} 
-while [ ${area} -le ${land_reqrd_total} ]; 
-do 
-  ((radius=${radius} + 5)) 
-  r.circle -b output=circle coordinate=\ 
-  744800,3611100 max=\${radius} --overwrite 
-  g.remove rast=catchment 
-  r.mapcalc catchment=``${src}''*circle 
-  rm /tmp/catchment_report 
-  r.stats -an inpu=catchment > /tmp/catchment_report 
-  cat /tmp/catchment_report 
-  area_dec=`awk '{print $2}' /tmp/catchment_report` 
-  echo "a catchment area with a radius of \ $radius}
-        meters contains area=${area_dec//.*/}"
-  echo "${area} square meters of land and target is" 
-  echo ${land_reqrd_total} square meters"
-done 
-\end{smallverbatim}
-
-  
-
+deemed found.
 
 \section{Moving to a graphical user interface} \label{GUI} 
  
 The complexity of the animal and crop modelling made using BASH scripts very
 awkward.  While the BASH scripting aproach worked well for a proof of concept,
 the implementation included a large number of hard coded variables and the solution 
-did not provide a flexible environment for experimentation. For example, adding 
-and removing different types of crops and animals to the analysis required modifictions 
-to the BASH script each time. The BASH script approach approach also had poor reporting
+did not provide a flexible environment for experimentation. For example, adding, removing or even 
+editing different types of crops and animals to the analysis required heavy modifictions 
+to the BASH script.  The BASH script approach approach also had poor reporting
 capabilities and offered little 'hand holding' to the user as the analysis was 
 carried out.
 
 Consequently we embarked on the development of a Graphical User Interface (GUI) based 
-application (see Fig. \ref{fig:htbp}), written in C++ and Qt4. This programming environment decision was largely 
+application (see Fig. \ref{fig:la544}), written in C++ and Qt4. This programming environment decision was largely 
 motivated by a desire to capitalise on existing code bases from openModeller
 \footnote{openModeller is available at \url{http://openmodeller.sourceforge.net/}} 
 and Quantum GIS (QGIS)\footnote{QGIS is available at \url{http://qgis.org}}.  
@@ -253,9 +135,9 @@ their own process and then implemented application logic to parse the results of
 each command from stdout.
 
 \begin{figure}[htbp] %Proof of Concept
-  \includegraphics[scale=0.37]{./images/LanduseAnalyst544.jpg}
+  \includegraphics[scale=0.36]{./images/LanduseAnalyst544.jpg}
    % img42.jpg: 800x600 pixel, 72dpi, 28.22x21.17 cm, bb=0 0 800 600
-   \label{fig:euclideanResults} \caption{LA's primary interface}
+   \label{fig:la544} \caption{LA's primary interface}
    \end{figure}
 
 
@@ -283,9 +165,102 @@ the settlement needs.  Briefly, these can outlined as follows:
   \end{enumerate}
 
 The details of how these targets are determined are a major part of Landuse
-Analyst, but beyond the scope of this article.  What will be discussed in
-further detail is how the land classification and identification problems were
-approached.
+Analyst, but largely beyond the scope of this article.  A brief overview follows.
+\section{Calorie targets}
+  \index{LA!Calorie Targets}
+  Calorie Targets are the first level of calculations done by LA.  Calorie targets are obtained through a number of steps (see Fig. \ref{fig:dietDiagram}), which are as follows.
+
+\subsection{Steps in calculating calorie targets}
+
+\begin{figure}[ht] %dietDiagram
+ \centering
+ \includegraphics[scale=.32]{./images/dietDiagram.jpg}
+ % dietDiagram.jpg: 740x731 pixel, 72dpi, 26.10x25.78 cm, bb=0 0 740 731
+ \caption{\label{fig:dietDiagram}How LA looks at a settlement's diet composition.}
+\end{figure}
+
+\begin{figure}[ht] %dietMeatDiagram
+ \includegraphics[scale=.23]{./images/fancyDietMeat.jpg}
+ % dietDiagram.jpg: 740x731 pixel, 72dpi, 26.10x25.78 cm, bb=0 0 740 731
+ \caption[Plant Portion of Diet]{\label{fig:dietMeatDiagram}Specification of meat component of diet in LA.}
+\end{figure}
+
+\begin{figure}[ht] %dietCropDiagram
+ \includegraphics[scale=.23]{./images/dietFancyCrops.jpg}
+ \caption[Plant Portion of Diet]{\label{fig:dietCropDiagram}Specification of the plant component of diet in LA.  Note that the input figures for percent of diet were: \textbf{HorseBean} $7\%$, \textbf{Einkorn} $13\%$, \textbf{Emmer} $34\%$, \textbf{Lentils} $12\%$, \textbf{Peas} $15\%$, \textbf{Olives}\ $18\%$.  These numbers translate to those shown above after processing as in Fig. \ref{fig:dietDiagram}.}
+\end{figure}
+
+    \begin{enumerate}
+      \item \textbf{\textit{Basic Information}} - The user supplies LA with the population of the settlement, as well as the average daily calorific requirements of an average member of the population.  By multiplying these figures together, the total number of calories required for the settlement is calculated (see Fig. \ref{fig:LADiet}).
+
+      \item \textbf{\textit{Primary Dietary Components}} - This step works on the principle that calories can come from only two fundamental sources: plants and animals.  By adjusting a slider right or left, this overall ratio is set.  To explain how this works, let's say that the yearly calorific requirement for a settlement is $1,000,000$.  If the slider is set to show $70\%$ Plants and $30\%$ meat, this would mean that LA will calculate the number of calories that need to come from Plants as $700,000$ and those that need to be supplied by meat as $300,000$.
+
+      \item \textbf{\textit{Detailed Dietary Components}} - At this step, the process gets split into two sections.  One section is for the Plant portion of the diet, and the other is for the Meat portion.  Again, the calculations are done based on values which are set by a slider that indicates what percentage of the plants or animals come from domestic sources.  To illustrate this, we will continue using the figures above of $700,000$ for plants and $300,000$ for animals.  If the slider on the plant side is set to $90\%$ Tame\footnote{The word tame was used purely for aesthetic purposes in the design of the input form of LA} then the number of calories that need to be supplied by domestic plants (crops) would be $700 \cdot 90\%$ or $630,000$ calories.  As an example, if peas are defined as a crop, and the percentage of diet setting in Wheat's Parameters is set to $15.00\%$ then using the values from the previous step, LA calculates that Peas must provide $630,000 \cdot 15.00\%$ or $94,500$ calories.  This also means that Peas represent $15\%\cdot90\%\cdot70\%=9.45\%$ of the overall diet.  Remember that the $15\%$ is a portion of the \textit{tame crop} part of the diet! ( See Fig. \ref{fig:dietCropDiagram} and Fig. \ref{fig:dietMeatDiagram}).  The exact same thing happens with meat.
+
+      \item \textbf{\textit{Crop/Animal Contributions}} - The final step is easy to understand, but is not done in the Diet section of the program.  Rather, it is calculated using values that are supplied as parameters for each individual crop and animal.  This parameter is set with a spin-box in the Parameter Manager form.  This value tells LA that this individual animal or crop comprises the indicated percentage of the calories being supplied by tame sources, which is the value from the previous step.
+    \end{enumerate}
+
+\begin{figure}[htbp]
+  \label{fig:LADiet}%LADiet
+    \includegraphics[scale=.355]{./images/LanduseAnalystDiet545.jpg}
+    % LanduseAnalystDiet545.jpg: 638x417 pixel, 762dpi, 2.13x1.39 cm, bb=0 0 60 39
+  \caption{ Diet Tab, LA}
+\end{figure}
+
+\section{Production targets}
+  \index{LA!Production Targets}
+  Production targets are measures of weight, and represent how many Kg of each crop and animal must be produced to satisy the Calorie Targets calculated above.  Because crops and animals need to be treated somewhat differently at this stage, I will deal with each in a seperate section, beginning with Crops as they are most easily explained.
+
+  \subsection{Crops}
+  Another peice of data which the user must supply is food value of each crop.  Using the calorie targets and the user supplied food value, the model calculates the production target necessary to meet these needs.  For example, if you need $337,500$ calories of wheat, and wheat has a food value of $3000$ calories/Kg then you need $\frac{337500}{3000}$ or $112.5$ Kg of wheat.
+
+  \subsection{Animals}
+  Although the first part of the calculations for Production Targets of Animals is identical to that of Crops, there is one further consideration.  Animals get slaughtered, and only part of their carcasses are usable as food.  This usable part of their live weight is supplied by the user when they define the animal in the Animal Manager form as what percentage of their live weight is usable as food.  To illustrate this simply, let's say that $50\%$ of a goat's live body weight is usable as food.  If the first part of the production target calculations resulted in a target for goat meat of $100$ Kg, then this last stage of the production target calculation process would change this to $200$ Kg by dividing $100$ by $50\%$   $\left[ \frac{100}{50\%}=200\right]$.
+
+\section{Area targets}
+\index{LA!Area Targets}
+Now that we have production targets, it is possible to calculate area targets for each crop and animal by looking at yield values for plants, and grazing requirements for animals.  As with Production Targets, Area Targets are quite simple to compute for crops, but get very complicated for animals.
+
+Animals are difficult to calculate area targets for because their land requirements are largely based on their numbers.  On top of this, it isn't just the number of animals needed for slaughter that is required; you also have to remember that a herd of adult females large enough to sustain a steady supply of offspring with numbers enough to keep the production targets met has to be added into the equation as well.  In addition to this, animals can graze fallow crop land, eat fodder from the crops being grown, as well as graze other types of land.  The details of how this all works is explained in detail later.  For now, lets look at how area targets are calculated for crops.
+
+  \subsection{Crops}
+    A list of all crops that have been defined is found when the Crops tab is clicked (Fig. \ref{fig:crop}).  Note that the user has the
+choice of selecting it for inclusion in the model, as well as being able to select different parameters from a drop-down list.  To the
+right of the drop down list is the crop's contribution to the tame plant portion of the diet using the currently selected parameter.  The total of these percentages must be equal to $100\%$ before the model will run, and the current total is always visible in the bottom left
+hand corner of the form.
+
+    \begin{figure}[htbp]
+        \includegraphics[scale=.366]{./images/LanduseAnalystCrops546.jpg}
+      \label{fig:crop} \caption{Crops Tab, LA Version 0.1 Revision 544}
+    \end{figure}
+    
+  \textbf{Crop rotation}\index{LA!Crop Rotation} affects the area target directly, so a few points about it need to be
+mentioned.  Quite simply, LA  treats crop rotation as a ratio of sown land to fallow land.  If a ratio of $1:1.00$ is used,
+this means that the practise was to sow their land every other year and leave last years cropland fallow (More complicated crop rotations
+are possible in LA, and the process of setting this up are explained in more detail in the Help section of the program itself).  The crop
+rotation data is entered as a crop parameter in the Crop Parameter form (See Fig. \ref{fig:cropParameters} on page
+\pageref{fig:cropParameters})  by adjusting the value of a spinbox either with the mouse wheel, the $+/-$ buttons, or manually entering a
+value with the keyboard.
+    \begin{figure}[htbp] %crop parameters
+        \includegraphics[scale=.28]{./images/cropParameters.jpg}
+        % cropParameters.jpg: 842x384 pixel, 762dpi, 2.81x1.28 cm, bb=0 0 80 36
+      \caption[Crop Parameters]{\label{fig:cropParameters}\textit{Crop Parameters form for setting the particulars of the crop.}}
+    \end{figure}
+
+
+  \subsection{Animals}
+  Herd Size\index{LA!Grazing Requirements} determination is perhaps the single most difficult calculation that LA
+performs.  Added to the complexity of this is the problem that different animals have different dietary requirements, and even further, even if they are the same, they require different amounts of feed depending on things like whether they are pregnant or lactating, and what the weather conditions are like.  Again, to further complicate this issue, not all land that can be grazed has the same food value to the animals.
+
+  With the exception of weather conditions, LA addresses all of the issues.  One of the first things a user must do when using
+Landuse Analust is to define all of the crops and animals that the settlement used.  By define, I mean that they must provide information about many aspects of them, including (for animals) information relating to their dietary requirements, their reproduction cycle, and their grazing preferences.  Most importantly however, \textit{TDN} must be explained.
+
+    \subsubsection{TDN}
+      \label{TDN}
+      \index{TDN}
+      \index{Total Digestable Nutrients}
+    \textbf{TDN} is an acronym for \textbf{T}otal \textbf{D}igestable \textbf{N}utrients, and is a commonly used term among ranchers to describe the quality of the feed available to their animals, and is expressed as a measure of weight.  To help illustrate this, I will use an example.  A rancher buys bales of hay that weigh exactly the same from two different sources.  He discovers that he needs 15 bales a day to feed his herd when using the bales from the first supplier, and only 12 a day when using those from the other.  The TDN or Total Digestable Nutrients of the hay from the second supplier is thus obviously higher than that from the first.  The quality of the hay is better.  This same concept can be applied to land, where a hectare of one type of land might provide 1000 kg of TDN the same area of land with different cover or other characteristics might only be able to provide $850$ kg of TDN.  The nice thing about working with TDN is that it is a universal kind of measure.  TDN can be used for any grazing animal, and since the purpose of LA is to identify the land which a settlement was using for food production, this is all we need.
+
 
 \section{Catchment creation methods} 
 
