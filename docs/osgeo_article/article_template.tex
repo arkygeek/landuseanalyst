@@ -275,25 +275,19 @@ diagram of meat component of diet.}}
   Production targets are measures of weight, and represent how many Kg of each
   crop and animal must be produced to satisfy the calorie targets calculated
   above.  Because crops and animals need to be treated somewhat differently at
-  this stage, I will deal with each in a separate section, beginning with Crops
+  this stage, they will be dealt with in separate sections, beginning with Crops
   as they are most easily explained.
 
   \subsubsection{Crops}
 The user must supply a food value of each crop.  Using the calorie targets and
 the user supplied food value, the model calculates the production target
-necessary to meet these needs.  For example, if you need $337,500$ calories of
-wheat, and wheat has a food value of $3000$ calories/Kg then you need
-$\frac{337500}{3000}$ or $112.5$ Kg of wheat.
+necessary to meet these needs.
 
   \subsubsection{Animals}
 When animals get slaughtered, and only part of their carcasses are usable as
 food.  This usable part of their live weight is supplied by the user when they
 define the animal in the Animal Manager form, expressed as the percentage of
-their live weight which is usable as food. For example if $50\%$ of a goat's
-live body weight is usable as food and the first part of the production target
-calculations resulted in a target for goat meat of $100$ Kg, then this last
-stage of the production target calculation process would change this to $200$
-Kg by dividing $100$ by $50\%$   $\left[ \frac{100}{50\%}=200\right]$.
+their live weight which is usable as food.
 
 \subsection{Step 3: Determine area targets}
 \index{LA!Area Targets}
@@ -301,16 +295,6 @@ Once production targets are calculated, it is possible to calculate area
 targets for each crop and animal by looking at yield values for plants, and
 grazing requirements for animals.  As with Production Targets, Area Targets are
 quite simple to compute for crops, but get very complicated for animals.
-
-Animals are difficult to calculate area targets for because their land
-requirements are largely based on their numbers.  On top of this, it isn't just
-the number of animals needed for slaughter that is required;  a herd of adult
-females large enough to sustain a steady supply of offspring with numbers
-enough to keep the production targets met has to be added into the equation as
-well.  In addition to this, animals can graze fallow crop land, eat fodder from
-the crops being grown, as well as graze other types of land.  LA takes these
-interactions into account in its computations.  For now, lets look at how area
-targets are calculated for crops.
 
   \section{Crops}
     A list of all crops that have been defined is found when the Crops tab is
@@ -344,43 +328,37 @@ Parameters form for setting the particulars of the crop.}}
     \end{figure}
 
 
-  \section{Animals}
-  Herd Size determination is perhaps the single most difficult calculation that
-  LA performs.  Added to the complexity of this is the problem that different
-  animals have different dietary requirements, and even further, even if they
-  are the same, they require different amounts of feed depending on things like
-  whether they are pregnant or lactating, and what the weather conditions are
-  like.  Again, to further complicate this issue, not all land that can be
-  grazed has the same food value to the animals.
+\section{Animals}
+Animals are difficult to calculate area targets for because their land
+requirements are largely based on their numbers, and a herd of adult
+females large enough to sustain a steady supply of offspring with numbers
+enough to keep the production targets met has to be added into the equation as
+well.  In addition, animals can graze fallow crop land, eat fodder from
+the crops being grown, and graze other types of land.  LA takes these
+interactions into account in its computations.
+Herd Size determination is perhaps the single most difficult calculation that
+LA performs.  Added to the complexity of this is the problem that different
+animals have different dietary requirements, and even further, even if they
+are the same, they require different amounts of feed depending on things like
+whether they are pregnant or lactating, and what the weather conditions are
+like.  Again, to further complicate this issue, not all land that can be
+grazed has the same food value to the animals.
 
-  With the exception of weather conditions, LA addresses these issues.  One of
-  the first things a user must do when using Landuse Analust is to define all
-  of the crops and animals that the settlement used.  During this process the
-  users provides information about aspects including (for animals) information
-  relating to their dietary requirements, their reproduction cycle, and their
-  grazing preferences.  Most importantly however, \textit{Total Digestable
-  Nutrients (TDN)} must be explained.
+With the exception of weather conditions, LA addresses these issues.  One of
+the first things a user must do when using Landuse Analust is to define all
+of the crops and animals that the settlement used.  During this process the
+users provides information about aspects including (for animals) information
+relating to their dietary requirements, their reproduction cycle, and their
+grazing preferences.  
 
-    \subsubsection{TDN}
+
       \label{TDN}
       \index{TDN}
       \index{Total Digestable Nutrients}
     \textbf{TDN} is an acronym for \textbf{T}otal \textbf{D}igestable
     \textbf{N}utrients, and is a commonly used term among ranchers to describe
     the quality of the feed available to their animals, and is expressed as a
-    measure of weight. If a rancher buys bales of hay that weigh exactly the
-    same from two different sources.  He discovers that he needs 15 bales a day
-    to feed his herd when using the bales from the first supplier, and only 12
-    a day when using those from the other.  The TDN or Total Digestable
-    Nutrients of the hay from the second supplier is thus obviously higher than
-    that from the first.  The quality of the hay is better.  This same concept
-    can be applied to land, where a hectare of one type of land might provide
-    1000 kg of TDN the same area of land with different cover or other
-    characteristics might only be able to provide $850$ kg of TDN.  The nice
-    thing about working with TDN is that it is a universal kind of measure.
-    TDN can be used for any grazing animal, and since the purpose of LA is to
-    identify the land which a settlement was using for food production, this is
-    all we need.
+    measure of weight.  TDN can be used for any grazing animal, and since the purpose of LA is to identify the land which a settlement was using for food production, this is all we need.
 
 
 \section{Defining Crops}\index{Crops!Defining}Every crop has unique
@@ -389,50 +367,19 @@ main areas.
   \subsection{Defining the Plants}\index{Crops!Plant Definition}First, there is
 the plant itself, which has seven input fields (see Fig. \ref{fig:cropManager} .
     \begin{enumerate}
-      \item \textbf{\textit{Name}} - This is, quite simply, the name you wish to
-give the crop.  This can be the same as another crop, as Landuse Analyst uses a
-GUID (Globally Unique Identifier) when saving the data.  An example of when this
-could be useful is perhaps when the same crop is grown on different land, which
-gives lower or higher yields.  You could therefore have, say, three crops called
-''wheat``, each with different average yields corresponding to the land
-classified as suitable for it.  In order to tell the difference between these
-like-named crops, there is a Notes field (explained in \#2).
+      \item \textbf{\textit{Name}}
 
-      \item \textbf{\textit{Notes}} - This field is used to differentiate
-between crops that have the same, or similar, names.  For example, if we were to
-continue using the wheat example from above, you might use 'Marginal Land',
-'Average Land', and 'Ideal Land' to reflect the respective yield expectancies.
+      \item \textbf{\textit{Notes}}
 
-      \item \textbf{\textit{Yield}} - Here you must enter what you think the
-average yield for the crop would have been. This is a measure of Kg produced per
-the given area of sown land.  Currently, you can choose between \textit{dunums}
-and \textit{hectares} as area units.
+      \item \textbf{\textit{Yield}}
 
-      \item \textbf{\textit{Food Value}} - The number of calories in 1 Kg of
-that part of the crop which is eaten (IE. the grain or fruit).
+      \item \textbf{\textit{Food Value}}
 
-      \item \textbf{\textit{Fodder}} - Fodder is the straw and chaff left after
-harvesting the crop.  This means that you must take into account the use of
-straw and chaff in other applications or activities such as textile or pottery
-production, etc.  The Fodder Yield is a measure of weight how many Kg of Straw
-and Chaff (per area unit) that is made available to animals for feed.  Enter the
-number of Kilograms expected to be produced from this crop per area
-unit\footnote{This has to be the same as the setting for \textit{Yield} area
-units, which is currently either \textit{Dunums} or \textit{Hectares}}.  Note
-that this fodder amount is solely for consumption by animals.  If straw or chaff
-is being used for other purposes, it must be taken out of the total expected
-fodder level.
+      \item \textbf{\textit{Fodder}}
 
-      \item \textbf{\textit{TDN}} - The TDN (Total Digestive Nutrients) of the
-fodder is, like grazing land, a measure of the food value of the fodder.  For
-further clarification, refer back to section \ref{TDN} on page \pageref{TDN}.
+      \item \textbf{\textit{TDN}}
 
-      \item \textbf{\textit{Area Units}} - Although Landuse Analyst's output is
-always expressed in Hectares, you can choose between Hectares and Dunums when
-defining your crops.  This is particularly useful if the source of your data is
-in Dunums, and not Hectares.\footnote{It is relatively simple to add other area
-units by changing the source code, and at some point, the ability to do so will
-actually be integrated into the software as an advanced feature.}
+      \item \textbf{\textit{Area Units}}
     \end{enumerate}
 
       \begin{figure}[htbp]
@@ -447,7 +394,7 @@ actually be integrated into the software as an advanced feature.}
   Once you have defined the plants that are being grown as crops, Landuse
 Analyst needs to know the specifics of how each crop is being grown, as well as
 what portion of the settlement's diet it provides (see Fig.
-\ref{fig:cropParameters} on page \pageref{fig:cropParameters}).  It must also
+\ref{fig:cropParameters}).  It must also
 know what land is capable of growing each crop by selecting either Common or
 Specific Land Suitability masks (keeping in mind that if Specific Land is
 selected, the Raster Mask must be selected from the drop down list).  The two
@@ -479,15 +426,13 @@ parcels of land being sown, and one parcel of land in fallow.  This is a ratio
 of $2:1.00$ .  This needs to be expressed as a $1:x$ ratio however, so we must
 multiply both by the reciprocal of the value for crop.  In this case, the crop's
 value is $2$, and the reciprocal of $2$ is $\frac{1}{2}$ so we end up with:
-$\frac{2}{2}:\frac{1.00}{2} = 1:0.50$.  Note that this ratio as also applicable
-to lentils.
+$\frac{2}{2}:\frac{1.00}{2} = 1:0.50$.
 
     Another important aspect of defining crop rotation concerns animals.  It is
 possible for animals to graze the fallow land, which will reduce the amount of
 grazing land otherwise required to sustain the animals.  In order to know how
 much contribution the fallow land makes, it is necessary to know the food value
-of the fallow land.  This is again a measure of TDN (see TDN, page
-\pageref{TDN}).  Using the ratio of crop land to fallow land along with the food
+of the fallow land.  Using the ratio of crop land to fallow land along with the food
 value of the fallow land allows Landuse Analyst to accurately adjust the grazing
 land requirements for the animal herds.  How this is done is explained in detail
 in the following section.
@@ -531,38 +476,19 @@ three categories.  These variables are explained as follows:
   \begin{enumerate}
     \item \textbf{Animal Description}
       \begin{enumerate}
-        \item \textit{\textbf{Name}} - Enter the name of the animal you are
-defining in the name field.  As with crops, you do not need a unique name. You
-can have, for example, two animals defined, both named "Sheep". LandUse Analyst
-uses a special method of saving the animals to eliminate the issue of duplicate
-filenames.  The Notes field allows a convenient way to differentiate between
-like-named animals.
-        \item  \textit{\textbf{Notes}} - Because LandUse Analyst allows more
-than one type of animal to be defined, the Notes: field allows you to give a
-brief description of the the animal. For example, you may have two "Sheep"
-defined, and the Notes fields could contain "For Slaughter" and "Wool Producers"
-to distinguish between them.
-        \item  \textit\textbf{{Food Value}} - Quite simply, this is the number
-of calories in one kilogram of meat from the animal.  A common value for this
-variable is around 3000.
-        \item  \textit{\textbf{Usable Meat}} - The production targets for
-animals are in Kg of meat, so to be compatible with animal numbers, you must
-know the percentage of the animal's live weight that is usable for food. You can
-also take into account here the efficiency of the butchering technique that the
-population used. In other words, if you believe they were wasteful, this is
-where you would make an adjustment to integrate that.
+        \item \textit{\textbf{Name}}
+        \item  \textit{\textbf{Notes}}
+        \item  \textit\textbf{{Food Value}} - the number
+of calories in one kilogram of meat from the animal.
+        \item  \textit{\textbf{Usable Meat}} - the percentage of the animal's live weight that is usable as food.
         \item  \textit{\textbf{Kill Weight}} - This is the live weight of the
-animals at the time of slaughter.  Animals may have been slaughtered for
-butchering at any weight, but LandUse Analyst needs to know the average weight
-of the animals when they are slaughtered.
+animals at the time of slaughter.
         \item  \textit{\textbf{Grow Time}} - The length of time from birth to
 slaughter weight.  This is quite important for estimating the herd size. The
 longer it takes an animal to reach slaughter weight from birth, the higher the
-number of animals alive at any given time.  This will have a direct affect on
-the amount of feed required to sustain the herd.
+number of animals alive at any given time.
         \item  \textit{\textbf{Death Rate}} - LandUse Analyst accommodates for
-birthing deaths only. If an animal survives to weaning age but dies before
-slaughter, it is not modelled at this time. However, you can adjust the death
+birthing deaths only. However, you can adjust the death
 rate setting to indicate the average survival rate of births. This is important
 for determining herd size, as it affects the number of mothers needed to sustain
 the production levels required by the settlement. 
@@ -570,75 +496,51 @@ the production levels required by the settlement.
 
     \item \textbf{Reproduction}
       \begin{enumerate}
-        \item  \textit{\textbf{Sexual Maturity}} - Simply set the age, in
-months, at which the females become sexually mature, and are able to reliably
-breed.
-        \item  \textit\textbf{{Breeding Life}} -In order to determine the number
-of female offspring that need to be retained to sustain the adult female
-population (breeding herd) it is necessary to know how long a female of the
-species can be expected to breed reliably. This is not life expectancy. 
-        \item  \textit{\textbf{Young per Birth}} -Set the number of babies born
-to a mother. This is total number, not surviving numbers. To account for deaths
-between birth and weaning, adjust the Death Rate. 
-        \item  \textit{\textbf{Weaning Age}} -The age of the babies, in weeks,
+        \item  \textit{\textbf{Sexual Maturity}} - the age, in
+months, at which the females become sexually mature
+        \item  \textit\textbf{{Breeding Life}} - how long a female
+can be expected to breed reliably.
+        \item  \textit{\textbf{Young per Birth}}
+        \item  \textit{\textbf{Weaning Age}} - The age of the babies, in weeks,
 at which they stop feeding from their mother. It is assumed by LandUse Analyst
 that mothers will become pregnant after one oestrous cycle following weaning. 
         \item  \textit{\textbf{Gestation Time}} -The number of days for
 gestation. 
         \item  \textit{\textbf{Oestrous Cycle}} - The number of days in the
 animal's oestrous cycle
-
       \end{enumerate}
 
     \item \textbf{Feed Requirements}
       \begin{enumerate}
-        \item  \textit{\textbf{Gestating}} - The number of calories required per
+        \item  \textit{\textbf{Gestating}} - calories required per
 day for a female during gestation.
-        \item  \textit{\textbf{Lactating}} - The number of calories required per
+        \item  \textit{\textbf{Lactating}} - calories required per
 day for a female while lactating.
-        \item  \textit{\textbf{Juveniles}} - The number of calories required
+        \item  \textit{\textbf{Juveniles}} - calories required
 \textit{on average} for a juvenile.  Although future versions of Landuse Analyst
 will incorporate the rise in feed requirements as juveniles grow from weanlings
-to slaughter weight, at this early stage of development I have decided to use an
-average.
+to slaughter weight, at this early stage of development an average must be used.
       \end{enumerate}
   \end{enumerate}
 
   \subsection{Animal Model Parameters}
-To define different parameters (see Fig. \ref{fig:animalParameters} on page
-\pageref{fig:animalParameters}) for the same animal, follow the same procedure
-as for defining multiple animals with the same name. Let's say you want to have
-two parameters set up for Cow as an example. The Name: field is Cow for both,
-but in Notes: field, enter Optimistic for one, and Conservative for the other.
-Then adjust the parameters as you wish for each. Even though the name is the
-same, the parameters are saved uniquely. Having multiple parameters can be
-useful for setting up different scenarios, such as drought years, disease,
+To define different parameters (see Fig. \ref{fig:animalParameters}) for the same animal, follow the same procedure
+used for defining multiple animals with the same name. Having multiple parameters can be useful for setting up different scenarios, such as drought years, disease,
 catastrophic events, etc. Eventually, Landuse Analyst will have the ability to
 model over time, and will have these types of scenarios incorporated into the
-model.
+software.
 
-\begin{figure}[ht]
+\begin{figure}[htbp]
     \includegraphics[scale=.23]{./images/animalParameters.jpg}
     % animalParameters.jpg: 1006x511 pixel, 762dpi, 3.35x1.70 cm, bb=0 0 95 48
   \caption{\label{fig:animalParameters}Animal Parameters Form}
 \end{figure}
 
   \begin{enumerate}
-    \item \textbf{Details}The Details section is where you enter the name for
-the parameter, any notes for the settings, and most importantly the Animal to
-which the parameters are to be applied.
+    \item \textbf{Details}
       \begin{enumerate}
-        \item \textit{\textbf{Name}} -Enter the name of the animal parameter you
-are defining in this field. You do not need a unique name. You can have, for
-example, 10 different animal parameters defined, all named "Jericho". LandUse
-Analyst uses a special method of saving the animals to eliminate the issue of
-duplicate filenames. This way, you can have, for example, conservative and
-optimistic settings for each animal at a site.
-        \item \textit{\textbf{Notes}} -Because LandUse Analyst allows more than
-one type of parameter to be defined, the Notes: field allows you to give a brief
-description ofhttp://www.google.co.uk/ the the parameter. For example, you may
-have two "Shuna" parameters defined, and the Notes: fields could contain
-"Conservative" and "Optimistic" to distinguish between them. 
+        \item \textit{\textbf{Name}}
+        \item \textit{\textbf{Notes}} 
         \item \textit{\textbf{Animal}} -It is very important to select which
 animal your parameter settings are for. Once you select the animal it appose to,
 simply click Apply, and it will then be properly allocated, and will show up in
@@ -681,9 +583,7 @@ Animal Common Land.   Note that the other setting in this section is for the TDN
           \begin{enumerate}
             \item \textit{\textbf{TDN}} - The TDN (in Kg) per land area unit
 available for grazing animals per year.
-            \item \textit{\textbf{Area Units}} -Select either Dunums or
-Hectares. This option is merely for convenience, to accommodate data that is
-available based on the two different units.
+            \item \textit{\textbf{Area Units}}
           \end{enumerate}
       \end{enumerate}
   \begin{enumerate}
@@ -704,13 +604,6 @@ diet being supplied by this by-product.
       \end{enumerate}
   \end{enumerate}
     \item \textit{\textbf{Percent of Diet}}
-This tells LandUse Analyst how important the animal was to the populations diet.
-This figure is the percentage of the tame meat portion of the diet. In other
-words, how much this animal contributes compared to the other animals.
-A very important note is that before the model will run, the sum of this value
-from all the animals in the model has to equal $100\%$. This value is kept
-updated and displayed in the lower portion of the main window and is visible at
-all times.
 \end{enumerate}
 
 \begin{figure}[htbp]
