@@ -15,11 +15,12 @@ ancient settlements.}
 
 This paper describes a software application we are developing that automates
 the process of computing landuse requirements for any settlement of people.
-The examples used throughout are of the archaeological site Shuna (see Figure \ref{fig:shunaGoogleEarth}) in the Jordan Valley.
+The examples used throughout are of the archaeological site Shuna (see Figure
+\ref{fig:shunaGoogleEarth}) in the Jordan Valley.
 The Jordan Valley is found in the Southern Levant, which is
 a name commonly used to refer to the geographic region broadly described as
 modern-day Israel, Palestine and Jordan, between the Dead Sea and Lake
-Tiberias .
+Tiberias.
 
 \begin{figure}[htbp] %Location
 \includegraphics[scale=0.17]{./images/ShunaGoogleEarth3D.jpg}
@@ -27,7 +28,8 @@ Tiberias .
 \label{fig:shunaGoogleEarth} \caption{Looking South-South-East from Lake
 Tiberias Down the Jordan Valley towards Shuna.} \end{figure}
 
-We describe how the application logic for Landuse Analyst (LA) was prototyped as a
+We describe how the application logic for Landuse Analyst (LA) was prototyped as
+a
 BASH shell script calling various GRASS utilities, and then developed into a
 more flexible application with a graphical user interface.
 
@@ -45,21 +47,24 @@ piece together clues revealed through a combination of archaeological surveys,
 ethnoarchaeology, written records, oral traditions, and excavations. The
 insight gained from these clues can offer a more concrete understanding of the
 relationship people had with their landscapes, allowing archaeologists to
-better understand topics such as social and economic organisation.  In
+better understand topics such as social and economic organisation\footnote{In
 one sense, economic organization can be thought of as the strategy used to
 collect and distribute resources.  In modern societies, urban centres rely upon
 the surplus production of agricultural commodities provided by farmers in the
 countryside.  This reliance necessitates a certain level of organization
 between rural and urban people.  By applying this same logic in historical
-contexts, we can infer landuse patterns.  An understanding of long
+contexts, we can infer landuse patterns .}, as well as short and long term
+impacts communities might have had on the landscape.  An understanding of long
 term impacts of ancient humans on their landscape can be useful for modern day
-researchers by, for example, providing insight into the potential environmental impact of
+researchers by, for example, providing insight into the potential environmental
+impact of
 current human activities.
 
 \section{Evidence} \label{sec:Evidence} By examining seeds, bones, and other
 items found at archaeological sites, archaeologists are able to determine 
 dietary habits. From the relative quantities found estimates can be made of the
-importance each food source would have had in the diet.  Specific agricultural practices
+importance each food source would have had in the diet.  Specific agricultural
+practices
 can be detected in the archaeological record in a number of ways.  If the scale
 of production is known, crop selection, for example, can help indicate whether
 crops were being cultivated for subsistence use or for more commercial
@@ -117,20 +122,27 @@ deemed found.
  
 The complexity of the animal and crop modelling made using BASH scripts very
 awkward.  While the BASH scripting aproach worked well for a proof of concept,
-the implementation included a large number of hard coded variables and the solution 
-did not provide a flexible environment for experimentation. For example, adding, removing or even 
-editing different types of crops and animals to the analysis required heavy modifictions 
+the implementation included a large number of hard coded variables and the
+solution 
+did not provide a flexible environment for experimentation. For example, adding,
+removing or even 
+editing different types of crops and animals to the analysis required heavy
+modifictions 
 to the BASH script.  The BASH script approach approach also had poor reporting
 capabilities and offered little 'hand holding' to the user as the analysis was 
 carried out.
 
-Consequently we embarked on the development of a Graphical User Interface (GUI) based 
-application (see Fig. \ref{fig:la544}), written in C++ and Qt4. This programming environment decision was largely 
+Consequently we embarked on the development of a Graphical User Interface (GUI)
+based 
+application (see Fig. \ref{fig:la544}), written in C++ and Qt4. This programming
+environment decision was largely 
 motivated by a desire to capitalise on existing code bases from openModeller
-\footnote{openModeller is available at \url{http://openmodeller.sourceforge.net/}} 
+\footnote{openModeller is available at
+\url{http://openmodeller.sourceforge.net/}} 
 and Quantum GIS (QGIS)\footnote{QGIS is available at \url{http://qgis.org}}.  
 For invoking GRASS tools we opted to use QProcess to launch GRASS commands in 
-their own process and then implemented application logic to parse the results of 
+their own process and then implemented application logic to parse the results
+of 
 each command from stdout.
 
 \begin{figure}[htbp] %Proof of Concept
@@ -151,38 +163,46 @@ the settlement needs.  Briefly, these can outlined as follows:
   be expressed as a percentage of the peoples' diet.  This is estimated using
   proportions based on archaeological evidence such as faunal and
   paleobotanical remains discovered from excavations.  
-  \item Calculating  calorie targets for the crops and animals identified above.  
+  \item Calculating  calorie targets for the crops and animals identified above.
+ 
   \item Calculating production targets which fulfill the calorie targets.
-  Production targets are calculated in kilograms, and take into account factors such as 
+  Production targets are calculated in kilograms, and take into account factors
+such as 
   calories per kilogram of produce, and what percentage of an animals weight is
   usable as food.  
   \item Calculating land area targets needed to satisfy the
   production targets.  Each crop and animal is allocated a specific area
   target.  
-  \item Carrying out a spatial analysis of the land surrounding the settlement to
+  \item Carrying out a spatial analysis of the land surrounding the settlement
+to
   find land suitable for each crop and animal that satisfies the area targets.  
   \end{enumerate}
 
 The details of how these targets are determined are a major part of Landuse
-Analyst, but largely beyond the scope of this article.  A brief overview follows.
+Analyst, but largely beyond the scope of this article.  A brief overview
+follows.
 
 \subsection{Step 1: Determine calorie targets}
   \index{LA!Calorie targets}
-  Calorie targets are the first level of calculations done by LA.  Calorie targets are determined 
-through a number of steps (see Fig. \ref{fig:dietDiagram}), which are as follows.
+  Calorie targets are the first level of calculations done by LA.  Calorie
+targets are determined 
+through a number of steps (see Fig. \ref{fig:dietDiagram}), which are as
+follows.
 
 
 \begin{figure}[ht] %dietDiagram
  \centering
  \includegraphics[scale=.32]{./images/dietDiagram.jpg}
  % dietDiagram.jpg: 740x731 pixel, 72dpi, 26.10x25.78 cm, bb=0 0 740 731
- \textit{\caption{\label{fig:dietDiagram}Conceptual diagram of a settlement's diet composition.}}
+ \textit{\caption{\label{fig:dietDiagram}Conceptual diagram of a settlement's
+diet composition.}}
 \end{figure}
 
 \begin{figure}[ht] %dietMeatDiagram
  \includegraphics[scale=.23]{./images/fancyDietMeat.jpg}
  % dietDiagram.jpg: 740x731 pixel, 72dpi, 26.10x25.78 cm, bb=0 0 740 731
- \textit{\caption[Plant Portion of Diet]{\label{fig:dietMeatDiagram}Conceptual diagram of meat component of diet.}}
+ \textit{\caption[Plant Portion of Diet]{\label{fig:dietMeatDiagram}Conceptual
+diagram of meat component of diet.}}
 
 \end{figure}
 
@@ -245,7 +265,8 @@ through a number of steps (see Fig. \ref{fig:dietDiagram}), which are as follows
 \begin{figure}[htbp]
   \label{fig:LADiet}%LADiet
     \includegraphics[scale=.355]{./images/LanduseAnalystDiet545.jpg}
-    % LanduseAnalystDiet545.jpg: 638x417 pixel, 762dpi, 2.13x1.39 cm, bb=0 0 60 39
+    % LanduseAnalystDiet545.jpg: 638x417 pixel, 762dpi, 2.13x1.39 cm, bb=0 0 60
+39
   \caption{ Diet Tab, LA}
 \end{figure}
 
@@ -318,7 +339,8 @@ targets are calculated for crops.
     \begin{figure}[htbp] %crop parameters
         \includegraphics[scale=.28]{./images/cropParameters.jpg}
         % cropParameters.jpg: 842x384 pixel, 762dpi, 2.81x1.28 cm, bb=0 0 80 36
-      \caption[Crop Parameters]{\label{fig:cropParameters}\textit{Crop Parameters form for setting the particulars of the crop.}}
+      \caption[Crop Parameters]{\label{fig:cropParameters}\textit{Crop
+Parameters form for setting the particulars of the crop.}}
     \end{figure}
 
 
@@ -360,6 +382,356 @@ targets are calculated for crops.
     identify the land which a settlement was using for food production, this is
     all we need.
 
+
+\section{Defining Crops}\index{Crops!Defining}Every crop has unique
+characteristics, and Landuse Analyst splits these defining qualities into two
+main areas.
+  \subsection{Defining the Plants}\index{Crops!Plant Definition}First, there is
+the plant itself, which has seven input fields (see Fig. \ref{fig:cropManager} .
+    \begin{enumerate}
+      \item \textbf{\textit{Name}} - This is, quite simply, the name you wish to
+give the crop.  This can be the same as another crop, as Landuse Analyst uses a
+GUID (Globally Unique IDentifier) when saving the data.  An example of when this
+could be useful is perhaps when the same crop is grown on different land, which
+gives lower or higher yields.  You could therefore have, say, three crops called
+''wheat``, each with different average yields corresponding to the land
+classified as suitable for it.  In order to tell the difference between these
+like-named crops, there is a Notes field (explained in \#2).
+
+      \item \textbf{\textit{Notes}} - This field is used to differentiate
+between crops that have the same, or similar, names.  For example, if we were to
+continue using the wheat example from above, you might use 'Marginal Land',
+'Average Land', and 'Ideal Land' to reflect the respective yield expectancies.
+
+      \item \textbf{\textit{Yield}} - Here you must enter what you think the
+average yield for the crop would have been. This is a measure of Kg produced per
+the given area of sown land.  Currently, you can choose between \textit{dunums}
+and \textit{hectares} as area units.
+
+      \item \textbf{\textit{Food Value}} - The number of calories in 1 Kg of
+that part of the crop which is eaten (ie. the grain or fruit).
+
+      \item \textbf{\textit{Fodder}} - Fodder is the straw and chaff left after
+harvesting the crop.  This means that you must take into account the use of
+straw and chaff in other applications or activities such as textile or pottery
+production, etc.  The Fodder Yield is a measure of weight how many Kg of Straw
+and Chaff (per area unit) that is made available to animals for feed.  Enter the
+number of Kilograms expected to be produced from this crop per area
+unit\footnote{This has to be the same as the setting for \textit{Yield} area
+units, which is currently either \textit{Dunums} or \textit{Hectares}}.  Note
+that this fodder amount is solely for consumption by animals.  If straw or chaff
+is being used for other purposes, it must be taken out of the total expected
+fodder level.
+
+      \item \textbf{\textit{TDN}} - The TDN (Total Digestive Nutrients) of the
+fooder is, like grazing land, a measure of the food value of the fodder.  For
+further clarification, refer back to section \ref{TDN} on page \pageref{TDN}.
+
+      \item \textbf{\textit{Area Units}} - Although Landuse Analyst's output is
+always expressed in Hectares, you can choose between Hectares and Dunums when
+defining your crops.  This is particularly useful if the source of your data is
+in Dunums, and not Hectares.\footnote{It is relatively simple to add other area
+units by changing the source code, and at some point, the ability to do so will
+actually be integrated into the software as an advanced feature.}
+    \end{enumerate}
+
+      \begin{figure}[htbp]
+        \includegraphics[scale=.6]{./images/cropManager.jpg}
+        % cropManager.jpg: 402x434 pixel, 762dpi, 1.34x1.45 cm, bb=0 0 38 41
+      \label{fig:cropManager} \caption{Crop Manager}
+    \end{figure}
+
+
+  \subsection{Crop Parameters}
+  \label{cropParameters}
+  Once you have defined the plants that are being grown as crops, Landuse
+Analyst needs to know the specifics of how each crop is being grown, as well as
+what portion of the settlement's diet it provides (see Fig.
+\ref{fig:cropParameters} on page \pageref{fig:cropParameters}).  It must also
+know what land is capable of growing each crop by selecting either Common or
+Specific Land Suitability masks (keeping in mind that if Specific Land is
+selected, the Raster Mask must be selected from the drop down list).  The two
+major entries, however, involve \textit{crop rotation} and the selection of
+\textit{suitability masks}.
+
+    \subsection{Crop Rotation}
+    \label{cropRotation}
+    A common farming technique still used widely even today is the practice of
+resting your cropland every growing season or so.  This is called \textit{crop
+rotation} and is critical to the process of determining how much land is
+required for food production, as it can more than double the necessary area. 
+Take a simple scenario where a farmer sows ten hectares of wheat, and leaves
+another ten hectares \textit{fallow}\footnote{fallow is a term used to describe
+land that is 'resting' from growing a crop, having previously done so.}.  The
+following year, he sows the ten hectares of 'rested' fallow land, and leaves
+last year's cropland to rest (as fallow).  This type of rotation, sowing ten
+hectares and fallowing ten hectares, can be described with a ratio of
+\textbf{\textit{Sown Land}} to \textbf{\textit{Fallow Land}} or in this case,
+$1:1.00$ .  Note that two decimal places are used when describing the portion
+for fallow land.  This is to accommodate more comlex crop rotation regimes. 
+Such a regime might be sowing ten hecatares of wheat in year one, then the same
+ten hectares to lentils in year two, and fallowing the same in year three.  In
+order to maintain the production of lentils and wheat using this rotation, the
+farmer needs ten hectares of cropland for wheat, another ten hectares for
+lentils, and still have enough fallow to rest the land in the rotation every
+third year.  In any given year, between the three parcels of land, there are two
+parcels of land being sown, and one parcel of land in fallow.  This is a ratio
+of $2:1.00$ .  This needs to be expressed as a $1:x$ ratio however, so we must
+multiply both by the reciprocal of the value for crop.  In this case, the crop's
+value is $2$, and the reciprocal of $2$ is $\frac{1}{2}$ so we end up with:
+$\frac{2}{2}:\frac{1.00}{2} = 1:0.50$.  Note that this ratio as also applicable
+to lentils.
+
+    Another important aspect of defining crop rotation concerns animals.  It is
+possible for animals to graze the fallow land, which will reduce the amount of
+grazing land otherwise required to sustain the animals.  In order to know how
+much contribution the fallow land makes, it is necessary to know the food value
+of the fallow land.  This is again a measure of TDN (see TDN, page
+\pageref{TDN}).  Using the ratio of crop land to fallow land along with the food
+value of the fallow land allows Landuse Analyst to accurately adjust the grazing
+land requirements for the animal herds.  How this is done is explained in detail
+in the following section.
+
+\section{Defining Animals}
+  \label{definingAnimals}
+Animals present several challenges that plants do not.  For starters, a certain
+number of females must be kept solely as breeding stock, and this number must be
+calculated based production requirements.  Secondly, the possibility exists that
+par of the animals' diet was from either straw/chaff left over from harvesting
+crops, or directly from harvested grain.  In the case of grain being used as
+feed, the amount used must be considered when determining the production targets
+for the crops.  Thirdly, if crop rotation was happening and fallow land was
+present, there is the possibility that this was used as grazing land, and would
+therefore reduce the amount of natural grazing land required.  This also adds
+complexity to the crop models because grazing fallow land adds fertiliser,
+potentially increasing yields.  This phenomenon can be factored in to Landuse
+Analyst by manually adjusting the expected yield of the affected crops.
+
+Version 0.1 of LandUse Analyst allows each animals' diet to include a percentage
+of their diet from fodder.  The amount is expressed as an overall percentage of
+their diet in terms of calories.  Furthermore, the model provides separate
+inputs for fodder (straw/chaff) and for grain.  When setting up the model for
+the crops, the user supplies fodder production levels for the crops, as well as
+caloric levels for the fodder.  By pressing the VIEW button for the animal, it
+is possible to see if there is enough fodder available for all of the animals
+using it.  If there is not enough, it tells the user in the output.
+
+  \subsection{Animal Characteristics}
+  Landuse Analyst uses several input variables (see Fig. \ref{fig:animalManager}
+on page \pageref{fig:animalManager}) to define an animal and groups them into
+three categories.  These variables are explained as follows:
+
+\begin{figure}[htbp]
+    \includegraphics[scale=.39]{./images/animalManager.jpg}
+    % animalManager.jpg: 683x452 pixel, 762dpi, 2.28x1.51 cm, bb=0 0 65 43
+ \label{fig:animalManager} \caption{Animal Manager Form}
+\end{figure}
+
+
+  \begin{enumerate}
+    \item \textbf{Animal Description}
+      \begin{enumerate}
+        \item \textit{\textbf{Name}} - Enter the name of the animal you are
+defining in the name field.  As with crops, you do not need a unique name. You
+can have, for example, two animals defined, both named "Sheep". LandUse Analyst
+uses a special method of saving the animals to eliminate the issue of duplicate
+filenames.  The Notes field allows a convenient way to differentiate between
+like-named animals.
+        \item  \textit{\textbf{Notes}} - Because LandUse Analyst allows more
+than one type of animal to be defined, the Notes: field allows you to give a
+brief description of the the animal. For example, you may have two "Sheep"
+defined, and the Notes fields could contain "For Slaughter" and "Wool Producers"
+to distinguish between them.
+        \item  \textit\textbf{{Food Value}} - Quite simply, this is the number
+of calories in one kilogram of meat from the animal.  A common value for this
+variable is around 3000.
+        \item  \textit{\textbf{Usable Meat}} - The production targets for
+animals are in Kg of meat, so to be compatible with animal numbers, you must
+know the percentage of the animal's live weight that is usable for food. You can
+also take into account here the efficiency of the butchering technique that the
+population used. In other words, if you believe they were wasteful, this is
+where you would make an adjustment to integrate that.
+        \item  \textit{\textbf{Kill Weight}} - This is the live weight of the
+animals at the time of slaughter.  Animals may have been slaughtered for
+butchering at any weight, but LandUse Analyst needs to know the average weight
+of the animals when they are slaughtered.
+        \item  \textit{\textbf{Grow Time}} - The length of time from birth to
+slaughter weight.  This is quite important for estimating the herd size. The
+longer it takes an animal to reach slaughter weight from birth, the higher the
+number of animals alive at any given time.  This will have a direct affect on
+the amount of feed required to sustain the herd.
+        \item  \textit{\textbf{Death Rate}} - LandUse Analyst accommodates for
+birthing deaths only. If an animal survives to weaning age but dies before
+slaughter, it is not modelled at this time. However, you can adjust the death
+rate setting to indicate the average survival rate of births. This is important
+for determining herd size, as it affects the number of mothers needed to sustain
+the production levels required by the settlement. 
+      \end{enumerate}
+
+    \item \textbf{Reproduction}
+      \begin{enumerate}
+        \item  \textit{\textbf{Sexual Maturity}} - Simply set the age, in
+months, at which the females become sexually mature, and are able to reliably
+breed.
+        \item  \textit\textbf{{Breeding Life}} -In order to determine the number
+of female offspring that need to be retained to sustain the adult female
+population (breeding herd) it is necessary to know how long a female of the
+species can be expected to breed reliably. This is not life expectancy. 
+        \item  \textit{\textbf{Young per Birth}} -Set the number of babies born
+to a mother. This is total number, not surviving numbers. To account for deaths
+between birth and weaning, adjust the Death Rate. 
+        \item  \textit{\textbf{Weaning Age}} -The age of the babies, in weeks,
+at which they stop feeding from their mother. It is assumed by LandUse Analyst
+that mothers will become pregnant after one estrous cycle following weaning. 
+        \item  \textit{\textbf{Gestation Time}} -The number of days for
+gestation. 
+        \item  \textit{\textbf{Estrous Cycle}} - The number of days in the
+animal's estrous cycle
+
+      \end{enumerate}
+
+    \item \textbf{Feed Requirements}
+      \begin{enumerate}
+        \item  \textit{\textbf{Gestating}} - The number of calories required per
+day for a female during gestation.
+        \item  \textit{\textbf{Lactating}} - The number of calories required per
+day for a female while lactating.
+        \item  \textit{\textbf{Juveniles}} - The number of calories required
+\textit{on average} for a juvenile.  Although future versions of Landuse Analyst
+will incorporate the rise in feed requirements as juveniles grow from weanlings
+to slaughter weight, at this early stage of development I have decided to use an
+average.
+      \end{enumerate}
+  \end{enumerate}
+
+  \subsection{Animal Model Parameters}
+To define different parameters (see Fig. \ref{fig:animalParameters} on page
+\pageref{fig:animalParameters}) for the same animal, follow the same procedure
+as for defining multiple animals with the same name. Let's say you want to have
+two parameters set up for Cow as an example. The Name: field is Cow for both,
+but in Notes: field, enter Optimistic for one, and Conservative for the other.
+Then adjust the parameters as you wish for each. Even though the name is the
+same, the parameters are saved uniquely. Having multiple parameters can be
+useful for setting up different scenarios, such as drought years, diease,
+catastrophic events, etc. Eventually, Landuse Analyst will have the ability to
+model over time, and will have these types of scenarios incorporated into the
+model.
+
+\begin{figure}[ht]
+    \includegraphics[scale=.23]{./images/animalParameters.jpg}
+    % animalParameters.jpg: 1006x511 pixel, 762dpi, 3.35x1.70 cm, bb=0 0 95 48
+  \caption{\label{fig:animalParameters}Animal Parameters Form}
+\end{figure}
+
+  \begin{enumerate}
+    \item \textbf{Details}The Details section is where you enter the name for
+the parameter, any notes for the settings, and most importantly the Animal to
+which the parameters are to be applied.
+      \begin{enumerate}
+        \item \textit{\textbf{Name}} -Enter the name of the animal parameter you
+are defining in this field. You do not need a unique name. You can have, for
+example, 10 different animal parameters defined, all named "Jericho". LandUse
+Analyst uses a special method of saving the animals to eliminate the issue of
+duplicate filenames. This way, you can have, for example, conservative and
+optimistic settings for each animal at a site.
+        \item \textit{\textbf{Notes}} -Because LandUse Analyst allows more than
+one type of parameter to be defined, the Notes: field allows you to give a brief
+description ofhttp://www.google.co.uk/ the the parameter. For example, you may
+have two "Shuna" parameters defined, and the Notes: fields could contain
+"Conservative" and "Optimistic" to distinguish between them. 
+        \item \textit{\textbf{Animal}} -It is very important to select which
+animal your parameter settings are for. Once you slect the animal it appies to,
+simply click Apply, and it will then be properly allocated, and will show up in
+the dropdown list for that animal in the table on the top. 
+        \item \textit{\textbf{Raster Mask}} - Select the raster mask file that
+will be used to identify suitable land for this animal to graze.  Note that this
+field is not needed if common land is being grazed.
+        \item \textit{\textbf{Fallow Priority}} - If the animal grazes fallow,,
+this is simply a way to give preferencial access to fallow land to certain
+animals.  There is no minimum or maximum number of animals per prioority level,
+so all animals could be set to High Prioirity, or all but one to Medium and one
+to Low.  It is also acceptable to only allow one animal access to the fallow,
+which can again be at any prioority level.  (i.e. all animals can be set to not
+graze fallow, and even if just one of them is set to low priority, it will get
+access to all of the available fallow land)
+      \end{enumerate}
+    \item \textbf{Land Suitability Selection}
+      \begin{enumerate}
+        \item \textit{\textbf{Common Land}} -Sometimes land is suitable for
+grazing by more than one type of animal. LandUse Analyst allows you to designate
+one suitability mask as common grazing land. Note that you can specify an animal
+to use both common land and specific land at the same time. If this is the case,
+equal preference is given to all animals grazing the common land. This is not
+always ideal, as it may have been the case that some animals were given
+preference to the common land if the other suitable land was further away than
+the other animals using it\footnote{A workaround for this problem is that
+LandUse Analyst produces classified maps of the land being used, so if it is the
+case that you find one animal being forced to travel much further than others,
+you can simply change settings to balance this. This can be accomplished by
+removing the other animals one at a time from using the common grazing land. It
+may be the case, however, that there is no ideal solution, and that they simply
+had to travel the extra distance!}.
+        \item \textit{\textbf{Specific Land}} -Sometimes you may want to specify
+that land is suitable for grazing by only one type of animal. LandUse Analyst
+allows you to designate a land suitability mask as being unique to that animal.
+Note that you can specify an animal to use both common land and specific land at
+the same time. For more detailed information on this, see the help section on
+Animal Common Land.   Note that the other setting in this section is for the TDN
+(in Kg) per land area unit available for grazing animals per year.
+          \begin{enumerate}
+            \item \textit{\textbf{TDN}} - The TDN (in Kg) per land area unit
+available for grazing animals per year.
+            \item \textit{\textbf{Area Units}} -Select either Dunums or
+Hectares. This option is merely for convenience, to accomodate data that is
+available based on the two different units.
+          \end{enumerate}
+      \end{enumerate}
+  \begin{enumerate}
+    \item \textbf{Fodder} - If your settlement fed the animal fodder, check off
+the Fodder section to enable the Fodder options to be accessible. 
+      \begin{enumerate}
+        \item \textit{\textbf{Crop}} - All of the crops being grown by the
+settlement are in this list.  If our animal which you are setting the parameters
+for are utilizing this crop's fodder, either directly by eating the grain, or
+indirectly by eating it's straw and chaff, simply indicate the percent of it's
+diet that is being provided by each.
+        \item \textit{\textbf{Grain}} - If your animal is fed grain harvested
+from a crop, indicate the perentage of the animals diet being supplied by it
+is. 
+        \item \textit{\textbf{Straw \& Chaff}} - If your animal is fed straw or
+chaff left over after harvesting a crop, indicate what perentage of the animals
+diet being supplied by this by-product. 
+      \end{enumerate}
+  \end{enumerate}
+    \item \textit{\textbf{Percent of Diet}}
+This tells LandUse Analyst how important the animal was to the populations diet.
+This figure is the percentage of the tame meat portion of the diet. In other
+words, how much this animal contiributes compared to the other animals.
+A very important note is that before the model will run, the sum of this value
+from all the animals in the model has to equal $100\%$. This value is kept
+updated and displayed in the lower portion of the main window and is visible at
+all times.
+\end{enumerate}
+
+\begin{figure}[htbp]
+    \includegraphics[scale=.4]{./images/animalHerdSize.jpg}
+    % animalHerdSize.jpg: 2371x3180 pixel, 300dpi, 20.07x26.92 cm, bb=0 0 569
+763
+    \caption[Animal Herd Size Calculation]{\label{fig:herdSize}\textit{Animal
+Herd Size Calculation - This diagram assumes that the production target has
+already been worked out.  Units for input variables are: \textbf{WA}-days,
+\textbf{SM}-months, \textbf{BL}-years, \textbf{KW}-kg, \textbf{DR}-percentage,
+\textbf{GT}-days, \textbf{EC}-days, \textbf{LS}-years, \textbf{PT}-kg.}}
+\end{figure}
+
+\section{Herd Size Calculation}
+The size of the herd required to sustain a particular amount of meat for a
+population is crucial for determining an area target for each type of animal
+raised.  I was able to work out an algorythm generic enough to make this
+calculation for any animal that has been defined in Landuse Analyst.  By taking
+the Production Target and several user inputs, the total number of adult females
+(Mothers) and animals being raised for meat (Meat Animals) can be approximated. 
+This process is outlined in Fig. \ref{fig:herdSize}.
 
 \section{Catchment creation methods} 
 
@@ -418,7 +790,8 @@ the raster file only contain 0 or 1 (NULL values are currently not supported).
 The land that is deemed suitable for use should be set to a value of 1, and the
 rest of the land is set to 0.  This binary raster  can then be multiplied by a
 selection layer (as created by either Walking Distance, Path Distance,
-or Euclidean methods).  This selection layer (also a binary raster) grows in size until enough area is
+or Euclidean methods).  This selection layer (also a binary raster) grows in
+size until enough area is
 found within it's bounds - identifying the land to be analysed.
 
 In the current version, the software gives the option using three different
@@ -457,8 +830,10 @@ supplied (soil) classification map.
 
 In order to find the suitable land required
 to produce enough food to sustain the settlement that is in closest proximity, 
-a conditional loop is used which defines the outer extent of the catchement area, 
-and then calculates the area of suitable land contained within it.  This process is identical for all
+a conditional loop is used which defines the outer extent of the catchement
+area, 
+and then calculates the area of suitable land contained within it.  This process
+is identical for all
 analysis methods.  The earliest versions of LA started at the
 closest point to the site that could potentially solve the problem
 \footnote{The closest point, or minimum radius, is a perfect circle equal in
@@ -466,7 +841,8 @@ area to the target.}, and then moved steadily outwards until the area target
 was found.  The amount to move outward in each step was a value provided by the
 user, and might have been a value like 30 (which in the case of walking
 distance meant 30 seconds, on  a cost surface of 20,000.  This would mean that
-potentailly, there would have to be $\frac{20,000}{30}$ or nearly 7000 iterations!)
+potentailly, there would have to be $\frac{20,000}{30}$ or nearly 7000
+iterations!)
 The basic steps involved were:
 
    \begin{enumerate} 
@@ -475,7 +851,8 @@ The basic steps involved were:
    
    \item  Calculate the area of suitable land found within this boundary 
    
-   \item If the area of land required has been satisfied, write the results to a new
+   \item If the area of land required has been satisfied, write the results to a
+new
    file for that item and exit the loop 
    
    \item  Increase the value of the analysis boundary 
@@ -534,7 +911,9 @@ it was being used for\ref{fig:caseStudy}
  
   \begin{figure}[htbp] %Location
   \includegraphics[scale=0.225]{./images/LEB130007030FallowSlope.jpg}
-  \label{fig:caseStudy} \caption{Case Study: Shuna  Population 3000, EB1a.  Green is for growing crops, blue for grazing.  Walking Time was used to create the cost surface.}
+  \label{fig:caseStudy} \caption{Case Study: Shuna  Population 3000, EB1a. 
+Green is for growing crops, blue for grazing.  Walking Time was used to create
+the cost surface.}
   \end{figure}
 
 \section{Future development} \label{FuturePlans} 
@@ -614,58 +993,14 @@ contributing to it, please don't hesitate in contacting us.
 
 
 \address{Jason Jorgenson\\ University of Liverpool\\
-\url{http://www.arkygeek.com} (under development)\\ \email{jjorgenson@gmail.com}}
+\url{http://www.arkygeek.com} (under development)\\
+\email{jjorgenson@gmail.com}}
 
-\address{Tim Sutton\\ Centro de Referncia em Informao Ambiental, CRIA\\ \url{http://cria.org.br}\\
+\address{Tim Sutton\\ Centro de Referncia em Informao Ambiental, CRIA\\
+\url{http://cria.org.br}\\
 \email{timlinux@linfiniti.com}}
 
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: main_document.tex
 %%% End:
-
-
-
-
-
-
-
-
-
-
-
-\section{{Prototyping in BASH and GRASS}
-
-In late 2006, a BASH script was created running in a GRASS shell.
-This script found a specific area of classified, suitable land surrounding a
-point (Fig.\\ref{fig:euclideanResults})  by starting at a point and moving
-outwards in a circle five meters at a time, checking each time to see if there
-was enough suitable land contained with the perimeter.  As soon as it was equal
-to or greater than the target area, the loop was ended, and the solution was
-deemed found.  
-
-\section{Moving to a graphical user interface} \label{GUI} 
- 
-The complexity of the animal and crop modelling made using BASH scripts very
-awkward.  While the BASH scripting aproach worked well for a proof of concept,
-the implementation included a large number of hard coded variables and the solution 
-did not provide a flexible environment for experimentation. For example, adding 
-and removing different types of crops and animals to the analysis required modifictions 
-to the BASH script each time. The BASH script approach approach also had poor reporting
-capabilities and offered little 'hand holding' to the user as the analysis was 
-carried out.
-
-Consequently we embarked on the development of a Graphical User Interface (GUI) based 
-application (see Fig. \ref{fig:htbp}), written in C++ and Qt4. This programming environment decision was largely 
-motivated by a desire to capitalise on existing code bases from openModeller
-\footnote{openModeller is available at \url{http://openmodeller.sourceforge.net/}} 
-and Quantum GIS (QGIS)\footnote{QGIS is available at \url{http://qgis.org}}.  
-For invoking GRASS tools we opted to use QProcess to launch GRASS commands in 
-their own process and then implemented application logic to parse the results of 
-each command from stdout.
-
-\begin{figure}[htbp] %Proof of Concept
-  \includegraphics[scale=0.37]{./images/LanduseAnalyst544.jpg}
-   % img42.jpg: 800x600 pixel, 72dpi, 28.22x21.17 cm, bb=0 0 800 600
-   \label{fig:euclideanResults} \caption{LA's primary interface}
-   \end{figure}
