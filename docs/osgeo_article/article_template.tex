@@ -195,9 +195,9 @@ Analyst, but largely beyond the scope of this article.  A brief overview follows
 
       \item \textbf{\textit{Primary Dietary Components}} - This step works on the principle that calories can come from only two fundamental sources: plants and animals.  By adjusting a slider right or left, this overall ratio is set.  To explain how this works, let's say that the yearly calorific requirement for a settlement is $1,000,000$.  If the slider is set to show $70\%$ Plants and $30\%$ meat, this would mean that LA will calculate the number of calories that need to come from Plants as $700,000$ and those that need to be supplied by meat as $300,000$.
 
-      \item \textbf{\textit{Detailed Dietary Components}} - At this step, the process gets split into two sections.  One section is for the Plant portion of the diet, and the other is for the Meat portion.  Again, the calculations are done based on values which are set by a slider that indicates what percentage of the plants or animals come from domestic sources.  To illustrate this, we will continue using the figures above of $700,000$ for plants and $300,000$ for animals.  If the slider on the plant side is set to $90\%$ Tame\footnote{The word tame was used purely for aesthetic purposes in the design of the input form of LA} then the number of calories that need to be supplied by domestic plants (crops) would be $700 \cdot 90\%$ or $630,000$ calories.  As an example, if peas are defined as a crop, and the percentage of diet setting in Wheat's Parameters is set to $15.00\%$ then using the values from the previous step, LA calculates that Peas must provide $630,000 \cdot 15.00\%$ or $94,500$ calories.  This also means that Peas represent $15\%\cdot90\%\cdot70\%=9.45\%$ of the overall diet.  Remember that the $15\%$ is a portion of the \textit{tame crop} part of the diet! ( See Fig. \ref{fig:dietCropDiagram} and Fig. \ref{fig:dietMeatDiagram}).  The exact same thing happens with meat.
+      \item \textbf{\textit{Detailed Dietary Components}} - At this step, the process gets split into two sections.  One section is for the Plant portion of the diet, and the other is for the Meat portion.  Again, the calculations are done based on values which are set by a slider that indicates what percentage of the plants or animals come from domestic sources.  To illustrate this, we will continue using the figures above of $700,000$ for plants and $300,000$ for animals.  If the slider on the plant side is set to $90\%$ Tame\footnote{The word tame was used purely for aesthetic purposes in the design of the input form of LA} then the number of calories that need to be supplied by domestic plants (crops) would be $700 \cdot 90\%$ or $630,000$ calories.  
 
-      \item \textbf{\textit{Crop/Animal Contributions}} - The final step is easy to understand, but is not done in the Diet section of the program.  Rather, it is calculated using values that are supplied as parameters for each individual crop and animal.  This parameter is set with a spin-box in the Parameter Manager form.  This value tells LA that this individual animal or crop comprises the indicated percentage of the calories being supplied by tame sources, which is the value from the previous step.
+      \item \textbf{\textit{Crop/Animal Contributions}} - The final step is easy to understand, but is not done in the Diet section of the program.  Rather, it is calculated using values that are supplied as parameters for each individual crop and animal.  This parameter is set with a spin-box in the Parameter Manager form.  This value tells LA that this individual animal or crop comprises the indicated percentage of the calories being supplied by tame sources, which is the value from the previous step.As an example, if peas are defined as a crop, and the percentage of diet setting in Wheat's Parameters is set to $15.00\%$ then using the values from the previous step, LA calculates that Peas must provide $630,000 \cdot 15.00\%$ or $94,500$ calories.  This also means that Peas represent $15\%\cdot90\%\cdot70\%=9.45\%$ of the overall diet.  Remember that the $15\%$ is a portion of the \textit{tame crop} part of the diet! ( See Fig. \ref{fig:dietCropDiagram} and Fig. \ref{fig:dietMeatDiagram}).  The exact same thing happens with meat.
     \end{enumerate}
 
 \begin{figure}[htbp]
@@ -249,7 +249,7 @@ value with the keyboard.
 
 
   \subsection{Animals}
-  Herd Size\index{LA!Grazing Requirements} determination is perhaps the single most difficult calculation that LA
+  Herd Size determination is perhaps the single most difficult calculation that LA
 performs.  Added to the complexity of this is the problem that different animals have different dietary requirements, and even further, even if they are the same, they require different amounts of feed depending on things like whether they are pregnant or lactating, and what the weather conditions are like.  Again, to further complicate this issue, not all land that can be grazed has the same food value to the animals.
 
   With the exception of weather conditions, LA addresses all of the issues.  One of the first things a user must do when using
@@ -354,8 +354,8 @@ XXXXXX Why use BASH script output at this point XXXXXXXXXX
   \begin{figure}[htbp] %Location
   \includegraphics[scale=0.225]{./images/landcatchment.jpg}
    % img42.jpg: 800x600 pixel, 72dpi, 28.22x21.17 cm, bb=0 0 800 600
-   \label{fig:landCatchment} \caption{Results of the BASH script which
-   identified the suitable land surrounding a point equal to a particular area.
+   \label{fig:landCatchment} \caption{Results which identified the suitable
+         land surrounding Shuna using Euclidean method.
    The different shades represent different settlement populations.}
    \end{figure}
 
