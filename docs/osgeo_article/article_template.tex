@@ -358,7 +358,9 @@ grazing preferences.
     \textbf{TDN} is an acronym for \textbf{T}otal \textbf{D}igestable
     \textbf{N}utrients, and is a commonly used term among ranchers to describe
     the quality of the feed available to their animals, and is expressed as a
-    measure of weight.  TDN can be used for any grazing animal, and since the purpose of LA is to identify the land which a settlement was using for food production, this is all we need.
+    measure of weight.  TDN can be used for any grazing animal, and since the
+purpose of LA is to identify the land which a settlement was using for food
+production, this is all we need.
 
 
 \section{Defining Crops}\index{Crops!Defining}Every crop has unique
@@ -432,10 +434,10 @@ $\frac{2}{2}:\frac{1.00}{2} = 1:0.50$.
 possible for animals to graze the fallow land, which will reduce the amount of
 grazing land otherwise required to sustain the animals.  In order to know how
 much contribution the fallow land makes, it is necessary to know the food value
-of the fallow land.  Using the ratio of crop land to fallow land along with the food
-value of the fallow land allows Landuse Analyst to accurately adjust the grazing
-land requirements for the animal herds.  How this is done is explained in detail
-in the following section.
+of the fallow land.  Using the ratio of crop land to fallow land along with the
+food value of the fallow land allows Landuse Analyst to accurately adjust the
+grazing land requirements for the animal herds.  How this is done is explained
+in detail in the following section.
 
 \section{Defining Animals}
   \label{definingAnimals}
@@ -480,7 +482,8 @@ three categories.  These variables are explained as follows:
         \item  \textit{\textbf{Notes}}
         \item  \textit\textbf{{Food Value}} - the number
 of calories in one kilogram of meat from the animal.
-        \item  \textit{\textbf{Usable Meat}} - the percentage of the animal's live weight that is usable as food.
+        \item  \textit{\textbf{Usable Meat}} - the percentage of the animal's
+live weight that is usable as food.
         \item  \textit{\textbf{Kill Weight}} - This is the live weight of the
 animals at the time of slaughter.
         \item  \textit{\textbf{Grow Time}} - The length of time from birth to
@@ -524,11 +527,12 @@ to slaughter weight, at this early stage of development an average must be used.
   \end{enumerate}
 
   \subsection{Animal Model Parameters}
-To define different parameters (see Fig. \ref{fig:animalParameters}) for the same animal, follow the same procedure
-used for defining multiple animals with the same name. Having multiple parameters can be useful for setting up different scenarios, such as drought years, disease,
-catastrophic events, etc. Eventually, Landuse Analyst will have the ability to
-model over time, and will have these types of scenarios incorporated into the
-software.
+To define different parameters (see Fig. \ref{fig:animalParameters}) for the
+same animal, follow the same procedure used for defining multiple animals with
+the same name. Having multiple parameters can be useful for setting up different
+scenarios, such as drought years, disease, catastrophic events, etc. Eventually,
+Landuse Analyst will have the ability to model over time, and will have these
+types of scenarios incorporated into the software.
 
 \begin{figure}[htbp]
     \includegraphics[scale=.23]{./images/animalParameters.jpg}
@@ -620,11 +624,11 @@ already been worked out.  Units for input variables are: \textbf{WA}-days,
 \section{Herd Size Calculation}
 The size of the herd required to sustain a particular amount of meat for a
 population is crucial for determining an area target for each type of animal
-raised.  I was able to work out an algorithm generic enough to make this
-calculation for any animal that has been defined in Landuse Analyst.  By taking
-the Production Target and several user inputs, the total number of adult females
-(Mothers) and animals being raised for meat (Meat Animals) can be approximated. 
-This process is outlined in Fig. \ref{fig:herdSize}.
+raised.  An algorithm generic enough to make this calculation for any animal
+that has been defined in Landuse Analyst was created. By taking the Production
+Target and several user inputs, the total number of adult females (Mothers) and
+animals being raised for meat (Meat Animals) can be approximated. This process
+is outlined in Fig. \ref{fig:herdSize}.
 
 \section{Catchment creation methods} 
 
@@ -636,7 +640,6 @@ difference between the three methods is the way in which a cost-surface gets
 generated, which we will now examine.  All three methods currently used by LA
 require a \textbf{D}igital \textbf{E}levation \textbf{M}odel (DEM) to generate
 the cost surfaces.
-
 
 
   \subsubsection{Euclidean} \label{subsection:Euclidean} 
