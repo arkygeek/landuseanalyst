@@ -76,7 +76,7 @@ these peoples.
 
 \label{sec:EarlyAttempts} 
 
-In order to learn more about how people interacted with their land, it is very
+In order to learn more about how people interacted with their land, it is
 helpful to determine an approximate area of land needed to support settlement
 populations and it's likely distribution.  In order to do this, it is necessary
 to first know how much land would have been needed to produce enough food to
@@ -90,20 +90,20 @@ From a GIS point of view, one of the greatest challenges of this project was
 developing a method for finding the outer extent (or boundary), within which
 the combined area of suitable land satisfies the target area.  The usable land
 surrounding a settlement is almost certainly not going to contiguous, but
-rather be comprised of multiple, irregularly shaped polygons. A further
+rather comprised of multiple, irregularly shaped polygons. A further
 complication is the fact that some of the irregularly shaped polygons may
 be bisected one or more times by the 'boundary line'.  
 
-In late 2006, a BASH script was created running in a GRASS shell.
-
-This script found a specific area of classified, suitable land surrounding a
-point (Fig.\ref{fig:euclideanResults})  by starting at a point and moving
-outwards in a circle five meters at a time, checking each time to see if there
-was enough suitable land contained with the perimeter.  As soon as it was equal
-to or greater than the target area, the loop was ended, and the solution was
-deemed found.
 
 \section{Moving to a graphical user interface} \label{GUI} 
+
+In late 2006, a BASH script was created running in a GRASS shell. This script
+found a specific area of classified, suitable land surrounding a point
+(Fig.\ref{fig:euclideanResults})  by starting at a point and moving outwards in
+a circle five meters at a time, checking each time to see if there was enough
+suitable land contained with the perimeter.  As soon as it was equal to or
+greater than the target area, the loop was ended, and the solution was deemed
+found.
  
 The complexity of the animal and crop modelling made using BASH scripts very
 awkward.  While the BASH scripting approach worked well for a proof of concept,
@@ -142,14 +142,17 @@ the settlement needs.  Briefly, these can outlined as follows:
   be expressed as a percentage of the peoples' diet.  This is estimated using
   proportions based on archaeological evidence such as faunal and
   paleobotanical remains discovered from excavations.  
+  
   \item Calculating  calorie targets for the crops and animals identified above.
  
   \item Calculating production targets which fulfil the calorie targets.
   Production targets are calculated in kilograms, and take into account factors
   such as calories per kilogram of produce, and what percentage of an animals
   weight is usable as food.  
+  
   \item Calculating land area targets needed to satisfy the production targets.
   Each crop and animal is allocated a specific area target.  
+  
   \item Carrying out a spatial analysis of the land surrounding the settlement
   to find land suitable for each crop and animal that satisfies the area
   targets.  
