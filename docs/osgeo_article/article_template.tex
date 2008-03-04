@@ -29,10 +29,9 @@ Tiberias.
 Tiberias Down the Jordan Valley towards Shuna.} 
 \end{figure}
 
-We describe how the application logic for Landuse Analyst (LA) was prototyped as
-a
-BASH shell script calling various GRASS utilities, and then developed into a
-more flexible application with a graphical user interface.
+We describe how the application logic for Landuse Analyst (LA) was prototyped
+as a BASH shell script calling various GRASS utilities, and then developed into
+a more flexible application with a graphical user interface.
 
 \section{Background} For an archaeologist, understanding
 the relationship that existed between people in the past and their landscape is
@@ -272,7 +271,7 @@ Parameters form for setting the particulars of the crop.}}
     \end{figure}
 
 \section{Defining Crops}\index{Crops!Defining}Every crop has unique
-characteristics, and Landuse Analyst splits these defining qualities into two
+characteristics, and LA splits these defining qualities into two
 main areas.
   \subsection{Defining the Plants}\index{Crops!Plant Definition}First, there is
   the plant itself, which has seven input fields (see Fig.
@@ -308,7 +307,7 @@ main areas.
     of grazing land otherwise required to sustain the animals.  In order to
     know how much contribution the fallow land makes, it is necessary to know
     the food value of the fallow land.  Using the ratio of crop land to fallow
-    land along with the food value of the fallow land allows Landuse Analyst to
+    land along with the food value of the fallow land allows LA to
     accurately adjust the grazing land requirements for the animal herds.  How
     this is done is explained in detail in the following section.
 
@@ -350,7 +349,7 @@ complexity to the crop models because grazing fallow land adds fertiliser,
 potentially increasing yields.  This phenomenon can be factored in to Landuse
 Analyst by manually adjusting the expected yield of the affected crops.
 
-Version 0.1 of LandUse Analyst allows each animals' diet to include a percentage
+Version 0.1 of LA allows each animals' diet to include a percentage
 of their diet from fodder.  The amount is expressed as an overall percentage of
 their diet in terms of calories.  Furthermore, the model provides separate
 inputs for fodder (straw/chaff) and for grain.  When setting up the model for
@@ -360,11 +359,12 @@ is possible to see if there is enough fodder available for all of the animals
 using it.  If there is not enough, it tells the user in the output.
 
   \subsection{Animal Characteristics}
-  Landuse Analyst uses several input variables  to define an animal (see Fig. \ref{fig:animalManager}).
-Two item which are worth further discussion are the Common and Specific Land options.
+  LA uses several input variables  to define an animal (see Fig.
+  \ref{fig:animalManager}).  Two item which are worth further discussion are
+  the Common and Specific Land options.
       \begin{enumerate}
         \item \textit{\textbf{Common Land}} - Sometimes land is suitable for
-        grazing by more than one type of animal. LandUse Analyst allows you to
+        grazing by more than one type of animal. LA allows you to
         designate one suitability mask as common grazing land. Note that you
         can specify an animal to use both common land and specific land at the
         same time. If this is the case, equal preference is given to all
@@ -381,7 +381,7 @@ Two item which are worth further discussion are the Common and Specific Land opt
         distance!}.
         \item \textit{\textbf{Specific Land}} -Sometimes you may want to
         specify that land is suitable for grazing by only one type of animal.
-        LandUse Analyst allows you to designate a land suitability mask as
+        LA allows you to designate a land suitability mask as
         being unique to that animal.  Note that you can specify an animal to
         use both common land and specific land at the same time. For more
         detailed information on this, see the help section on Animal Common
@@ -403,7 +403,7 @@ already been worked out.  Units for input variables are: \textbf{WA}-days,
 The size of the herd required to sustain a particular amount of meat for a
 population is crucial for determining an area target for each type of animal
 raised.  An algorithm generic enough to make this calculation for any animal
-that has been defined in Landuse Analyst was created. By taking the Production
+that has been defined in LA was created. By taking the Production
 Target and several user inputs, the total number of adult females (Mothers) and
 animals being raised for meat (Meat Animals) can be approximated. This process
 is outlined in Fig. \ref{fig:herdSize}.
