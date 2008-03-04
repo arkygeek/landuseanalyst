@@ -33,45 +33,47 @@ We describe how the application logic for Landuse Analyst (LA) was prototyped
 as a BASH shell script calling various GRASS utilities, and then developed into
 a more flexible application with a graphical user interface.
 
-\section{Background} For an archaeologist, understanding
-the relationship that existed between people in the past and their landscape is
-very important.  People throughout time have relied on various plants and
-animals, wild or domestic, to provide them with the food they require to
-survive.  Regardless of the period in time being examined, a relationship
-exists between people and the space which they occupy.  A better understanding
-of this relationship can help to more confidently theorise about a range of
-issues in the reconstruction of past societies.  Imagine, for example, the
-relationship that nomadic hunter gatherers had with the land, and then compare
-that to  an artisan living in a settlement of several thousand people.  We can
-piece together clues revealed through a combination of archaeological surveys,
-ethnoarchaeology, written records, oral traditions, and excavations. The
-insight gained from these clues can offer a more concrete understanding of the
-relationship people had with their landscapes, allowing archaeologists to
-better understand topics such as social and economic organisation\footnote{In
-one sense, economic organisation can be thought of as the strategy used to
-collect and distribute resources.  In modern societies, urban centres rely upon
-the surplus production of agricultural commodities provided by farmers in the
-countryside.  This reliance necessitates a certain level of organisation
-between rural and urban people.  By applying this same logic in historical
-contexts, we can infer landuse patterns .}, as well as short and long term
-impacts communities might have had on the landscape.  An understanding of long
-term impacts of ancient humans on their landscape can be useful for modern day
-researchers by, for example, providing insight into the potential environmental
-impact of
-current human activities.
+\section{Background} 
 
-\section{Evidence} \label{sec:Evidence} By examining seeds, bones, and other
-items found at archaeological sites, archaeologists are able to determine 
-dietary habits. From the relative quantities found estimates can be made of the
-importance each food source would have had in the diet.  Specific agricultural
-practices
-can be detected in the archaeological record in a number of ways.  If the scale
-of production is known, crop selection, for example, can help indicate whether
-crops were being cultivated for subsistence use or for more commercial
-purposes\footnote{Sometimes, written accounts exist which can help to
-piece this together.}.  If there is evidence of surplus production of any
-particular crop or animal, this can be a possible indication that it was being
-grown commercially.  Other possible inferences include taxation, storage,
+For an archaeologist, understanding the relationship that existed between
+people in the past and their landscape is very important.  People throughout
+time have relied on various plants and animals, wild or domestic, to provide
+them with the food they require to survive.  Regardless of the period in time
+being examined, a relationship exists between people and the space which they
+occupy.  A better understanding of this relationship can help to more
+confidently theorise about a range of issues in the reconstruction of past
+societies.  Imagine, for example, the relationship that nomadic hunter
+gatherers had with the land, and then compare that to  an artisan living in a
+settlement of several thousand people.  We can piece together clues revealed
+through a combination of archaeological surveys, ethnoarchaeology, written
+records, oral traditions, and excavations. The insight gained from these clues
+can offer a more concrete understanding of the relationship people had with
+their landscapes, allowing archaeologists to better understand topics such as
+social and economic organisation\footnote{In one sense, economic organisation
+can be thought of as the strategy used to collect and distribute resources.  In
+modern societies, urban centres rely upon the surplus production of
+agricultural commodities provided by farmers in the countryside.  This reliance
+necessitates a certain level of organisation between rural and urban people.
+By applying this same logic in historical contexts, we can infer landuse
+patterns .}, as well as short and long term impacts communities might have had
+on the landscape.  An understanding of long term impacts of ancient humans on
+their landscape can be useful for modern day researchers by, for example,
+providing insight into the potential environmental impact of current human
+activities.
+
+\section{Evidence} \label{sec:Evidence} 
+
+By examining seeds, bones, and other items found at archaeological sites,
+archaeologists are able to determine dietary habits. From the relative
+quantities found estimates can be made of the importance each food source would
+have had in the diet.  Specific agricultural practices can be detected in the
+archaeological record in a number of ways.  If the scale of production is
+known, crop selection, for example, can help indicate whether crops were being
+cultivated for subsistence use or for more commercial
+purposes\footnote{Sometimes, written accounts exist which can help to piece
+this together.}.  If there is evidence of surplus production of any particular
+crop or animal, this can be a possible indication that it was being grown
+commercially.  Other possible inferences include taxation, storage,
 redistribution, indications of intensified farming, and craft specialisation,
 all of which can indicate increased economic complexity.  Through careful
 study, a better understanding of the land use habits and patterns of these
@@ -84,10 +86,11 @@ In order to learn more about how people interacted with their land, it is very
 helpful to determine an approximate area of land needed to support settlement
 populations and it's likely distribution.  In order to do this, it is necessary
 to first know how much land would have been needed to produce enough food to
-sustain the settlement.  Once a target for the area of land has been determined, the land surrounding the
-site must be classified as either suitable or unsuitable for each crop sown and
-each type of animal being raised.  Lastly, the area target can be used to query the land suitability classification map, searching for that area of
-land surrounding the site.
+sustain the settlement.  Once a target for the area of land has been
+determined, the land surrounding the site must be classified as either suitable
+or unsuitable for each crop sown and each type of animal being raised.  Lastly,
+the area target can be used to query the land suitability classification map,
+searching for that area of land surrounding the site.
 
 From a GIS point of view, one of the greatest challenges of this project was
 developing a method for finding the outer extent (or boundary), within which
@@ -371,8 +374,8 @@ using it.  If there is not enough, it tells the user in the output.
         animals grazing the common land. This is not always ideal, as it may
         have been the case that some animals were given preference to the
         common land if the other suitable land was further away than the other
-        animals using it\footnote{A workaround for this problem is that LandUse
-        Analyst produces classified maps of the land being used, so if it is
+        animals using it\footnote{A workaround for this problem is that LA
+        produces classified maps of the land being used, so if it is
         the case that you find one animal being forced to travel much further
         than others, you can simply change settings to balance this. This can
         be accomplished by removing the other animals one at a time from using
@@ -571,13 +574,13 @@ within the loop.  The loop works like this:
   \end{enumerate}
 
 By using this method, the \textit{maximum} number of steps in the loop is 17.
-This method of searching for the area targets made a huge difference in Landuse
-Analyst's speed\footnote{ a typical 'run' on a decent computer system is
-$\approx$ 2 to 3 minutes now, compared to up to two weeks using the original
-method.}, allowing users to now examine many different variations of an entire
-model quickly and easily even on an average computer system.  The resultant
-maps clearly show which land was likely to have been used, and for what purpose
-it was being used for\ref{fig:caseStudy}
+This method of searching for the area targets made a huge difference in LA's
+speed\footnote{ a typical 'run' on a decent computer system is $\approx$ 2 to 3
+minutes now, compared to up to two weeks using the original method.}, allowing
+users to now examine many different variations of an entire model quickly and
+easily even on an average computer system.  The resultant maps clearly show
+which land was likely to have been used, and for what purpose it was being used
+for\ref{fig:caseStudy}
  
   \begin{figure}[htbp] %Location
   \includegraphics[scale=0.225]{./images/LEB130007030FallowSlope.jpg}
