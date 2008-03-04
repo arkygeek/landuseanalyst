@@ -112,27 +112,21 @@ deemed found.
 The complexity of the animal and crop modelling made using BASH scripts very
 awkward.  While the BASH scripting approach worked well for a proof of concept,
 the implementation included a large number of hard coded variables and the
-solution 
-did not provide a flexible environment for experimentation. For example, adding,
-removing or even 
-editing different types of crops and animals to the analysis required heavy
-modifications 
-to the BASH script.  The BASH script approach approach also had poor reporting
-capabilities and offered little 'hand holding' to the user as the analysis was 
-carried out.
+solution did not provide a flexible environment for experimentation. For
+example, adding, removing or even editing different types of crops and animals
+to the analysis required heavy modifications to the BASH script.  The BASH
+script approach approach also had poor reporting capabilities and offered
+little 'hand holding' to the user as the analysis was carried out.
 
 Consequently we embarked on the development of a Graphical User Interface (GUI)
-based 
-application (see Fig. \ref{fig:la544}), written in C++ and Qt4. This programming
-environment decision was largely 
-motivated by a desire to capitalise on existing code bases from openModeller
-\footnote{openModeller is available at
-\url{http://openmodeller.sourceforge.net/}} 
-and Quantum GIS (QGIS)\footnote{QGIS is available at \url{http://qgis.org}}.  
-For invoking GRASS tools we opted to use QProcess to launch GRASS commands in 
-their own process and then implemented application logic to parse the results
-of 
-each command from stdout.
+based application (see Fig. \ref{fig:la544}), written in C++ and Qt4. This
+programming environment decision was largely motivated by a desire to
+capitalise on existing code bases from openModeller \footnote{openModeller is
+available at \url{http://openmodeller.sourceforge.net/}} and Quantum GIS
+(QGIS)\footnote{QGIS is available at \url{http://qgis.org}}.  For invoking
+GRASS tools we opted to use QProcess to launch GRASS commands in their own
+process and then implemented application logic to parse the results of each
+command from stdout.
 
 \begin{figure}[htbp] %Proof of Concept
   \includegraphics[scale=0.36]{./images/LanduseAnalyst544.jpg}
@@ -156,23 +150,20 @@ the settlement needs.  Briefly, these can outlined as follows:
  
   \item Calculating production targets which fulfil the calorie targets.
   Production targets are calculated in kilograms, and take into account factors
-such as 
-  calories per kilogram of produce, and what percentage of an animals weight is
-  usable as food.  
-  \item Calculating land area targets needed to satisfy the
-  production targets.  Each crop and animal is allocated a specific area
-  target.  
+  such as calories per kilogram of produce, and what percentage of an animals
+  weight is usable as food.  
+  \item Calculating land area targets needed to satisfy the production targets.
+  Each crop and animal is allocated a specific area target.  
   \item Carrying out a spatial analysis of the land surrounding the settlement
-to
-  find land suitable for each crop and animal that satisfies the area targets.  
+  to find land suitable for each crop and animal that satisfies the area
+  targets.  
   \end{enumerate}
 
 \subsection{Step 1: Determine calorie targets}
   \index{LA!Calorie targets}
   Calorie targets are the first level of calculations done by LA.  Calorie
-targets are determined 
-through a number of steps (see Fig. \ref{fig:dietDiagram}), which are as
-follows.
+  targets are determined through a number of steps (see Fig.
+  \ref{fig:dietDiagram}), which are as follows.
 
 
 \begin{figure}[ht] %dietDiagram
@@ -206,7 +197,7 @@ diagram of meat component of diet.}}
       \item \textbf{\textit{Basic Information}} - The user supplies LA with the
       population of the settlement, as well as the average daily calorific
       requirements of an average member of the population.  By multiplying
-      these figures together, the total number of calories required for the
+      these figures, the total number of calories required for the
       settlement is calculated (see Fig. \ref{fig:LADiet}).
 
       \item \textbf{\textit{Primary Dietary Components}} - This step works on
@@ -215,9 +206,12 @@ diagram of meat component of diet.}}
       \item \textbf{\textit{Detailed Dietary Components}} - At this step, the
       process gets split into two sections.  One section is for the Plant
       portion of the diet, and the other is for the Meat portion.
-      \item \textbf{\textit{Crop/Animal Contributions}} - This value tells LA that this individual
-      animal or crop comprises the indicated percentage of the calories being
-      supplied by tame sources, which is the value from the previous step. Remember that this is a portion of the \textit{tame crop} part of the diet! ( See Fig. \ref{fig:dietCropDiagram} and Fig. \ref{fig:dietMeatDiagram}).
+      \item \textbf{\textit{Crop/Animal Contributions}} - This value tells LA
+      that this individual animal or crop comprises the indicated percentage of
+      the calories being supplied by tame sources, which is the value from the
+      previous step. Remember that this is a portion of the \textit{tame crop}
+      part of the diet! ( See Fig. \ref{fig:dietCropDiagram} and Fig.
+      \ref{fig:dietMeatDiagram}).
     \end{enumerate}
 
 \begin{figure}[htbp]
@@ -235,8 +229,10 @@ diagram of meat component of diet.}}
   above.
 
   \subsubsection{Crops}
-The user must supply the food value for each crop.  This is expressed as calories per kg.  Using the calorie targets and
-the user supplied food value, the model calculates a production target for each crop that is necessary to meet these needs.
+The user must supply the food value for each crop.  This is expressed as
+calories per kg.  Using the calorie targets and the user supplied food value,
+the model calculates a production target for each crop that is necessary to
+meet these needs.
 
   \subsubsection{Animals}
 When animals get slaughtered, and only part of their carcasses are usable as
@@ -279,7 +275,8 @@ Parameters form for setting the particulars of the crop.}}
 characteristics, and Landuse Analyst splits these defining qualities into two
 main areas.
   \subsection{Defining the Plants}\index{Crops!Plant Definition}First, there is
-the plant itself, which has seven input fields (see Fig. \ref{fig:cropManager} .
+  the plant itself, which has seven input fields (see Fig.
+  \ref{fig:cropManager} .
 
       \begin{figure}[htbp]
         \includegraphics[scale=.6]{./images/cropManager.jpg}
@@ -290,30 +287,30 @@ the plant itself, which has seven input fields (see Fig. \ref{fig:cropManager} .
   \subsection{Crop Parameters}
   \label{cropParameters}
   Once you have defined the plants that are being grown as crops, Landuse
-Analyst needs to know the specifics of how each crop is being grown, as well as
-what portion of the settlement's diet it provides (see Fig.
-\ref{fig:cropParameters}).  It must also
-know what land is capable of growing each crop by selecting either Common or
-Specific Land Suitability masks (keeping in mind that if Specific Land is
-selected, the Raster Mask must be selected from the drop down list).  The two
-major entries, however, involve \textit{crop rotation} and the selection of
-\textit{suitability masks}.
+  Analyst needs to know the specifics of how each crop is being grown, as well
+  as what portion of the settlement's diet it provides (see Fig.
+  \ref{fig:cropParameters}).  It must also know what land is capable of growing
+  each crop by selecting either Common or Specific Land Suitability masks
+  (keeping in mind that if Specific Land is selected, the Raster Mask must be
+  selected from the drop down list).  The two major entries, however, involve
+  \textit{crop rotation} and the selection of \textit{suitability masks}.
 
     \subsection{Crop Rotation}
     \label{cropRotation}
     A common farming technique still used widely even today is the practise of
-resting your cropland every growing season or so.  This is called \textit{crop
-rotation} and is critical to the process of determining how much land is
-required for food production, as it can more than double the necessary area. 
+    resting your cropland every growing season or so.  This is called
+    \textit{crop rotation} and is critical to the process of determining how
+    much land is required for food production, as it can more than double the
+    necessary area. 
 
     Another important aspect of defining crop rotation concerns animals.  It is
-possible for animals to graze the fallow land, which will reduce the amount of
-grazing land otherwise required to sustain the animals.  In order to know how
-much contribution the fallow land makes, it is necessary to know the food value
-of the fallow land.  Using the ratio of crop land to fallow land along with the
-food value of the fallow land allows Landuse Analyst to accurately adjust the
-grazing land requirements for the animal herds.  How this is done is explained
-in detail in the following section.
+    possible for animals to graze the fallow land, which will reduce the amount
+    of grazing land otherwise required to sustain the animals.  In order to
+    know how much contribution the fallow land makes, it is necessary to know
+    the food value of the fallow land.  Using the ratio of crop land to fallow
+    land along with the food value of the fallow land allows Landuse Analyst to
+    accurately adjust the grazing land requirements for the animal herds.  How
+    this is done is explained in detail in the following section.
 
 \section{Animals}
 Animals are difficult to calculate area targets for because their land
@@ -367,25 +364,28 @@ using it.  If there is not enough, it tells the user in the output.
 Two item which are worth further discussion are the Common and Specific Land options.
       \begin{enumerate}
         \item \textit{\textbf{Common Land}} - Sometimes land is suitable for
-grazing by more than one type of animal. LandUse Analyst allows you to designate
-one suitability mask as common grazing land. Note that you can specify an animal
-to use both common land and specific land at the same time. If this is the case,
-equal preference is given to all animals grazing the common land. This is not
-always ideal, as it may have been the case that some animals were given
-preference to the common land if the other suitable land was further away than
-the other animals using it\footnote{A workaround for this problem is that
-LandUse Analyst produces classified maps of the land being used, so if it is the
-case that you find one animal being forced to travel much further than others,
-you can simply change settings to balance this. This can be accomplished by
-removing the other animals one at a time from using the common grazing land. It
-may be the case, however, that there is no ideal solution, and that they simply
-had to travel the extra distance!}.
-        \item \textit{\textbf{Specific Land}} -Sometimes you may want to specify
-that land is suitable for grazing by only one type of animal. LandUse Analyst
-allows you to designate a land suitability mask as being unique to that animal.
-Note that you can specify an animal to use both common land and specific land at
-the same time. For more detailed information on this, see the help section on
-Animal Common Land.   
+        grazing by more than one type of animal. LandUse Analyst allows you to
+        designate one suitability mask as common grazing land. Note that you
+        can specify an animal to use both common land and specific land at the
+        same time. If this is the case, equal preference is given to all
+        animals grazing the common land. This is not always ideal, as it may
+        have been the case that some animals were given preference to the
+        common land if the other suitable land was further away than the other
+        animals using it\footnote{A workaround for this problem is that LandUse
+        Analyst produces classified maps of the land being used, so if it is
+        the case that you find one animal being forced to travel much further
+        than others, you can simply change settings to balance this. This can
+        be accomplished by removing the other animals one at a time from using
+        the common grazing land. It may be the case, however, that there is no
+        ideal solution, and that they simply had to travel the extra
+        distance!}.
+        \item \textit{\textbf{Specific Land}} -Sometimes you may want to
+        specify that land is suitable for grazing by only one type of animal.
+        LandUse Analyst allows you to designate a land suitability mask as
+        being unique to that animal.  Note that you can specify an animal to
+        use both common land and specific land at the same time. For more
+        detailed information on this, see the help section on Animal Common
+        Land.   
 \end{enumerate}
 
 \begin{figure}[htbp]
@@ -502,21 +502,18 @@ supplied (soil) classification map.
 
 \section{Finding the land} 
 
-In order to find the suitable land required
-to produce enough food to sustain the settlement that is in closest proximity, 
-a conditional loop is used which defines the outer extent of the catchment
-area, 
-and then calculates the area of suitable land contained within it.  This process
-is identical for all
-analysis methods.  The earliest versions of LA started at the
-closest point to the site that could potentially solve the problem
-\footnote{The closest point, or minimum radius, is a perfect circle equal in
-area to the target.}, and then moved steadily outwards until the area target
-was found.  The amount to move outward in each step was a value provided by the
-user, and might have been a value like 30 (which in the case of walking
-distance meant 30 seconds, on  a cost surface of 20,000.  This would mean that
-potentially, there would have to be $\frac{20,000}{30}$ or nearly 7000
-iterations!)
+In order to find the suitable land required to produce enough food to sustain
+the settlement that is in closest proximity, a conditional loop is used which
+defines the outer extent of the catchment area, and then calculates the area of
+suitable land contained within it.  This process is identical for all analysis
+methods.  The earliest versions of LA started at the closest point to the site
+that could potentially solve the problem \footnote{The closest point, or
+minimum radius, is a perfect circle equal in area to the target.}, and then
+moved steadily outwards until the area target was found.  The amount to move
+outward in each step was a value provided by the user, and might have been a
+value like 30 (which in the case of walking distance meant 30 seconds, on  a
+cost surface of 20,000.  This would mean that potentially, there would have to
+be $\frac{20,000}{30}$ or nearly 7000 iterations!)
 The basic steps involved were:
 
    \begin{enumerate} 
@@ -525,9 +522,8 @@ The basic steps involved were:
    
    \item  Calculate the area of suitable land found within this boundary 
    
-   \item If the area of land required has been satisfied, write the results to a
-new
-   file for that item and exit the loop 
+   \item If the area of land required has been satisfied, write the results to
+   a new file for that item and exit the loop 
    
    \item  Increase the value of the analysis boundary 
    
