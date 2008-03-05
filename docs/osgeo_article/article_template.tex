@@ -6,11 +6,8 @@
 
 \title{LA} \subtitle{Identifying Landuse Catchments for 
 ancient settlements.}
-
 \author{by Jason Jorgenson and Tim Sutton}
-
 \maketitle
-
 \section{Introduction} \label{sec:Introduction}
   This paper describes a software application we are developing that automates
   the process of computing landuse requirements and identifying the land likely 
@@ -20,16 +17,13 @@ ancient settlements.}
   Jordan Valley.  The Jordan Valley is found in the Southern Levant, which is a name
   commonly used to refer to the geographic region broadly described as
   modern-day Israel, Palestine and Jordan, between the Dead Sea and Lake Tiberias.
-
 \begin{figure}[htbp] %Location
   \includegraphics[scale=0.17]{./images/ShunaGoogleEarth3D.jpg}
   % img42.jpg: 800x600 pixel, 72dpi, 28.22x21.17 cm, bb=0 0 800 600
   \caption{\label{fig:shunaGoogleEarth}\textit{Looking South-South-East from Lake
     Tiberias Down the Jordan Valley towards Shuna.}} 
 \end{figure}
-
 \section{Background} 
-
   For an archaeologist, understanding the relationship that existed between
   people in the past and their landscape is very important.  People throughout
   time have relied on various plants and animals, wild or domestic, to provide
@@ -43,7 +37,7 @@ ancient settlements.}
   understanding of the relationship people had with their landscapes, allowing
   archaeologists to better understand topics such as as short and long term
   impacts on the landscape, or social and economic organisation. 
-  
+
   An understanding of long term impacts of ancient humans on their landscape
   can be useful for modern day researchers by providing insight into the potential 
   environmental impact of current human activities. In modern societies, urban 
@@ -51,7 +45,7 @@ ancient settlements.}
   by farmers in the countryside.  This reliance necessitates a certain level of 
   organisation between rural and urban people.  By applying this same logic in 
   historical contexts, we can infer landuse patterns.
-  
+
   Through careful study, a better understanding of the land use habits and
   patterns of these populations can unlock many interesting facets of culture
   and lifestyle.  By examining seeds, bones, and other items found at archaeological
@@ -64,7 +58,6 @@ ancient settlements.}
   commercially.  Other possible inferences include taxation, storage, redistribution,
   intensified farming, and craft specialisation, all of which can indicate 
   increased economic complexity.
-
 \section{Process for computing landuse requirements} 
 \label{sec:EarlyAttempts} 
   To learn more about how people interacted with their land, it is
@@ -77,7 +70,6 @@ ancient settlements.}
   raised.  The final, resultant map which LA produces, is a compilation of individual
   maps from each crop and animal, for which sufficient suitable land has been
   identified to meet the settlement's production requirements.
-
 \section{Moving to a GUI} \label{GUI} 
   In late 2006, a BASH script was created running in a GRASS shell. This script
   found a specific area of classified, suitable land surrounding a point by
@@ -85,7 +77,7 @@ ancient settlements.}
   checking each time to see if there was enough suitable land contained within
   the perimeter. As soon as it was equal to or greater than the target area, the
   loop was ended, and the solution was deemed found.
-  
+
   The complexity of the animal and crop modelling made using BASH scripts very
   awkward.  While the BASH scripting approach worked well for a proof of
   concept, the implementation included a large number of hard coded variables and the
@@ -94,23 +86,21 @@ ancient settlements.}
   to the analysis required heavy modifications to the BASH script.  The BASH
   script approach also had poor reporting capabilities and offered
   little 'hand holding' to the user as the analysis was carried out.
-  
+
   Consequently we embarked on the development of a Graphical User Interface (GUI)
   based application (Figure \ref{fig:la544}), written in C++ and Qt4. This
   programming environment decision was largely motivated by a desire to
-  capitalise on existing code bases from openModeller \footnote{openModeller is
+  capitalise on existing code bases from openModeller\footnote{openModeller is
   available at \url{http://openmodeller.sourceforge.net/}} and Quantum GIS
   (QGIS)\footnote{QGIS is available at \url{http://qgis.org}}.  For invoking
   GRASS tools we opted to use QProcess to launch GRASS commands in their own
   process and then implemented application logic to parse the results of each
   command from stdout.
-
 \begin{figure}[htbp] %Proof of Concept
   \includegraphics[scale=0.36]{./images/LanduseAnalyst544.jpg}
    % img42.jpg: 800x600 pixel, 72dpi, 28.22x21.17 cm, bb=0 0 800 600
   \caption{\label{fig:la544}\textit{LA's primary interface}}
 \end{figure}
-
 \section{Analytical functionality} \label{sec:Analytical Functionality}
   LA includes various routines for calculating the amount of land 
   the settlement needs.  Briefly, these can be outlined as follows:
@@ -131,7 +121,6 @@ ancient settlements.}
       to find land suitable for each crop and animal that satisfies the area
       targets.
   \end{enumerate}
-
 \subsection{Determining calorie targets}
   Calorie targets are the first level of calculations done by LA and are
   determined through a number of steps (Figure \ref{fig:dietDiagram}), which
@@ -155,21 +144,18 @@ ancient settlements.}
         part of the diet! 
         (See Fig. \ref{fig:dietMeatDiagram} and Fig.\ref{fig:dietCropDiagram}).
     \end{enumerate}
-
 \begin{figure}[htbp] %dietDiagram
-  \includegraphics[scale=.32]{./images/dietDiagram.jpg}
+  \includegraphics[scale=.31]{./images/dietDiagram.jpg}
   % dietDiagram.jpg: 740x731 pixel, 72dpi, 26.10x25.78 cm, bb=0 0 740 731
   \caption{\label{fig:dietDiagram}\textit{Conceptual diagram of a settlement's
     diet composition.}}
 \end{figure}
-
 \begin{figure}[htbp] %dietMeatDiagram
   \includegraphics[scale=.23]{./images/fancyDietMeat.jpg}
   % dietDiagram.jpg: 740x731 pixel, 72dpi, 26.10x25.78 cm, bb=0 0 740 731
   \caption[Plant Portion of Diet]{\label{fig:dietMeatDiagram}Conceptual
     diagram of meat component of diet.}
 \end{figure}
-
 \begin{figure}[htbp] %dietCropDiagram
   \includegraphics[scale=.2]{./images/dietFancyCrops.jpg}
   \caption[Plant Portion of Diet]{\label{fig:dietCropDiagram}\textit{Conceptual
@@ -179,13 +165,11 @@ ancient settlements.}
     \textbf{Olives}\ $18\%$.  These numbers translate to those shown above after
     processing as in Fig. \ref{fig:dietDiagram}.}}
 \end{figure}
-
 \begin{figure}[htbp] %LADiet
   \includegraphics[scale=.355]{./images/LanduseAnalystDiet545.jpg}
   % LanduseAnalystDiet545.jpg: 638x417 pixel, 762dpi, 2.13x1.39 cm, bb=0 0 60 39
   \caption{\label{fig:LADiet}\textit{Diet Tab, LA}}
 \end{figure}
-
   \subsection{Determining Production Targets}
     Production targets are measures of weight, and represent how many Kg of each
     crop and animal must be produced to satisfy the calorie targets calculated
@@ -200,13 +184,11 @@ ancient settlements.}
       is supplied by the users when they define the animal in the Animal Manager
       form, expressed as the percentage of their live weight which is usable as food.
   \end{itemize}
-
   \subsection{Determining Area Targets}
   Once production targets are calculated, it is possible to calculate area
   targets for each crop and animal by looking at yield values for plants, and
   grazing requirements for animals.  As with Production Targets, Area Targets
   are quite simple to compute for crops, but get very complicated for animals.
-
 \section{Defining Characteristics}
  \subsection{Crops}
     A list of all crops that have been defined is found when the Crops tab is
@@ -217,30 +199,16 @@ ancient settlements.}
     the currently selected parameter.  The total of these percentages must be
     equal to $100\%$ before the model will run, and the current total is always
     visible in the bottom left hand corner of the form.
-
 \begin{figure}[htbp]
-    \includegraphics[scale=.366]{./images/LanduseAnalystCrops546.jpg}
+    \includegraphics[scale=.36]{./images/LanduseAnalystCrops546.jpg}
     \caption{\label{fig:crop}\textit{Crops Tab, LA Version 0.1 Revision 544}}
-\end{figure}
-
-\begin{figure}[htbp] %crop parameters
-  \includegraphics[scale=.28]{./images/cropParameters.jpg}
-  % cropParameters.jpg: 842x384 pixel, 762dpi, 2.81x1.28 cm, bb=0 0 80 36
-  \caption[Crop Parameters]{\label{fig:cropParameters}\textit{Crop
-    Parameters form for setting the particulars of the crop.}}
 \end{figure}
 
   \subsection{Defining Crops}\index{Crops!Defining}Every crop has unique
   characteristics, and LA splits these defining qualities into two
-  main areas.
+  main areas:  details of the plant and parameter settings.
     \subsubsection{Defining the Plants}LA uses seven input fields to define a
       plant (Fig.\ref{fig:cropManager}).
-
-\begin{figure}[htbp]
-  \includegraphics[scale=.6]{./images/cropManager.jpg}
-  % cropManager.jpg: 402x434 pixel, 762dpi, 1.34x1.45 cm, bb=0 0 38 41
-  \caption{\label{fig:cropManager}\textit{Crop Manager, LA}}
-\end{figure}
 
     \subsubsection{Crop Parameters}
     \label{cropParameters}
@@ -252,7 +220,6 @@ ancient settlements.}
       (keeping in mind that if Specific Land is selected, the Raster Mask must
       be selected from the drop down list).  The two major entries, however,
       involve \textit{crop rotation} and the selection of \textit{suitability masks}.
-
   \subsection{Crop Rotation}
   \label{cropRotation}
     A common farming technique still used widely even today is the practise of
@@ -262,7 +229,12 @@ ancient settlements.}
     as it can more than double the area target for a crop.  Complicated crop 
     rotations are possible in LA, and the process of setting this up are
     explained in detail in the Help section of the program itself.
-  
+
+\begin{figure}[htbp]
+  \includegraphics[scale=.59]{./images/cropManager.jpg}
+  % cropManager.jpg: 402x434 pixel, 762dpi, 1.34x1.45 cm, bb=0 0 38 41
+  \caption{\label{fig:cropManager}\textit{Crop Manager, LA}}
+\end{figure}
     Another important aspect of defining crop rotation concerns animals.  It is
     possible for animals to graze the fallow land, which will reduce the amount
     of grazing land otherwise required to sustain the animals.  In order to
@@ -272,6 +244,12 @@ ancient settlements.}
     accurately adjust the grazing land requirements for the animal herds.  How
     this is done is explained in detail in the following section.
 
+\begin{figure}[htbp] %crop parameters
+  \includegraphics[scale=.27]{./images/cropParameters.jpg}
+  % cropParameters.jpg: 842x384 pixel, 762dpi, 2.81x1.28 cm, bb=0 0 80 36
+  \caption[Crop Parameters]{\label{fig:cropParameters}\textit{Crop
+    Parameters form for setting the particulars of the crop.}}
+\end{figure}
   \subsection{Animals}
     Animals are difficult to calculate area targets for because their land
     requirements are largely based on their numbers, and a herd of adult
@@ -286,14 +264,13 @@ ancient settlements.}
     are the same, they require different amounts of feed depending on things
     like whether they are pregnant or lactating.  To further complicate the issue,
     not all land that can be grazed has the same food value to the animals.
-    
+
     LA does, however, address these issues.  One of the first things a user must
     do when using Landuse Analust is to define all of the crops and animals that
     the settlement used.  During this process the users provides information
     about aspects including (for animals) information
     relating to their dietary requirements, their reproduction cycle, and their
     grazing preferences.
-
     \subsubsection{Defining Animals}
     \label{definingAnimals}
       Animals present several challenges that plants do not.  For starters, a
@@ -310,20 +287,18 @@ ancient settlements.}
       potentially increasing yields.  This phenomenon can be factored in to
       Landuse Analyst by manually adjusting the expected yield of the affected
       crops.
-      
+
       Version 0.1 of LA allows animals to use fodder as food.  The amount of the
       contribution of fodder is expressed as an overall percentage of their diet
       in terms of calories.  Furthermore, the model provides separate inputs for
       fodder (straw/chaff) as well as straight grain.  When setting up the
       model, the user supplies fodder production levels for the crops, as well as
       caloric levels for the fodder.
-
 \begin{figure}[htbp]
-  \includegraphics[scale=.39]{./images/animalManager.jpg}
+  \includegraphics[scale=.38]{./images/animalManager.jpg}
   % cropManager.jpg: 402x434 pixel, 762dpi, 1.34x1.45 cm, bb=0 0 38 41
   \caption{\label{fig:animalManager}\textit{Animal Manager, LA}}
 \end{figure}
-
     \subsubsection{Animal Characteristics}
       LA uses several input variables  to define an animal (Fig.
       \ref{fig:animalManager}).  Two items which are worth further discussion
@@ -352,7 +327,6 @@ ancient settlements.}
           use both common land and specific land at the same time. For more
           detailed information on this, see the help section of LA.
       \end{itemize}
-
 \begin{figure}[htbp]
   \includegraphics[scale=.4]{./images/animalHerdSize.jpg}
   % animalHerdSize.jpg: 2371x3180 pixel, 300dpi, 20.07x26.92 cm, bb=0 0 569 763
@@ -363,7 +337,6 @@ ancient settlements.}
     \textbf{DR}-percentage, \textbf{GT}-days, \textbf{EC}-days,
     \textbf{LS}-years, \textbf{PT}-kg.}}
 \end{figure}
-
   \subsection{Herd Size Calculation}
     The size of the herd required to sustain a particular amount of meat for a
     population is crucial for determining an area target for each type of animal
@@ -372,7 +345,6 @@ ancient settlements.}
     Target and several user inputs, the total number of adult females (Mothers)
     and animals being raised for meat (Meat Animals) can be approximated. This
     process is outlined in Fig. \ref{fig:herdSize}.
-
 \section{Land Redesignation}
   Another notable feature of LA is land redesignation.  Land that is suitable
   for the production of crops is almost certainly suitable for grazing as well. 
@@ -380,7 +352,6 @@ ancient settlements.}
   area targets for all crops have been satisfied, all of the unallocated land
   previously classified for use by crops is redesignated as being suitable for
   common grazing land. 
-
 \section{Catchment creation methods} 
   When searching for land that meets the area targets, LA starts at
   the coordinates of the settlement and moves outward to a point where the land
@@ -390,7 +361,6 @@ ancient settlements.}
   generated, which we will now examine.  All three methods currently used by LA
   require a \textbf{D}igital \textbf{E}levation \textbf{M}odel (DEM) to generate
   the cost surfaces.
-
     \subsubsection{Euclidean} \label{subsubsection:Euclidean} 
       This method ignores all topographic features of the landscape when moving
       outwards from the site.  Essentially we are drawing circles around the site,
@@ -401,12 +371,10 @@ ancient settlements.}
       as a catchment area creation method in LA is to provide the user
       with the option of seeing the difference between this rather simplistic
       approach and the other two methods.
-
     \subsubsection{Path Distance}
       Path Distance is a cost surface creation method that looks at elevation data
       from a DEM and calculates distance from the site taking into account the
       extra distances travelled going up or down slopes.
-
     \subsubsection{Walking Time}\index{Walking Time}
       Walking Time is likely going to be the primary choice of the three methods of
       creating catchment areas in LA.  The cost surface that is
@@ -417,13 +385,11 @@ ancient settlements.}
       study\footnote{This number is currently hard coded. Future versions will
       allow the user to edit this value.} This creates a cost surface with values
       from $0$ to $18,000$ (Figure \ref{fig:rwalk}).  
-
 \begin{figure}[htbp] 
   \includegraphics[scale=0.29]{./images/rwalkShuna.jpg}
   %caption of the figure
   \caption{\label{fig:rwalk}\textit{LA generated this using the GRASS module r.walk.}}
 \end{figure}
-
 \section{Land suitability raster masks} 
   The land suitability masks must be binary rasters, meaning that the cells of
   the raster file only contain 0 or 1 (NULL values are currently not supported).
@@ -433,7 +399,7 @@ ancient settlements.}
   or Euclidean methods).  This selection layer (also a binary raster) grows in
   size until enough area is
   found within it's bounds - identifying the land to be analysed.
-  
+
   In the current version, the software gives the option using three different
   methods for landuse classification.  They are: 
   \begin{enumerate} 
@@ -452,7 +418,6 @@ ancient settlements.}
       land they consider too steep for use. In this case the program generated
       slope masks would be subtracted from the user supplied (soil) classification map.  
   \end{enumerate}
-  
 \begin{figure}[htbp] %Location
   \includegraphics[scale=0.225]{./images/landcatchment.jpg}
   % img42.jpg: 800x600 pixel, 72dpi, 28.22x21.17 cm, bb=0 0 800 600
@@ -460,7 +425,6 @@ ancient settlements.}
     surrounding Shuna using Euclidean method. The different shades represent
     different settlement populations.}}
 \end{figure}
-
 \section{Finding the land} 
   From a GIS point of view, one of the greatest challenges of this project was
   developing a method for finding the outer extent (or boundary), within which
@@ -469,7 +433,7 @@ ancient settlements.}
   rather comprised of multiple, irregularly shaped polygons. A further
   complication is the fact that some of the irregularly shaped polygons may
   be bisected one or more times by the 'boundary line'.
-  
+
   In order to find the suitable land required to produce enough food to sustain
   the settlement that is in closest proximity, a conditional loop is used which
   defines the outer extent of the catchment area, and then calculates the area of
@@ -483,7 +447,6 @@ ancient settlements.}
   cost surface of 20,000.  This would mean that potentially, there would have to
   be $\frac{20,000}{30}$ or nearly 7000 iterations!)
   The basic steps involved were:
-
   \begin{enumerate} 
     \item Set the initial boundary at which to start the analysis
     \item Calculate the area of suitable land found within this boundary 
@@ -492,7 +455,6 @@ ancient settlements.}
     \item Increase the value of the analysis boundary 
     \item Repeat the loop (starting at Step 2)
   \end{enumerate}
-
   This method proved extremely time consuming;  If even 3,500 loops, which is
   about half of the cost surface map, was required, and each loop took as little
   as 45 seconds, the computation time was nearly 44 hours.  Multiply this, then,
@@ -501,18 +463,17 @@ ancient settlements.}
   a modified binary search is now used.  This involved a somewhat different 
   approach.  Instead of using a step amount, a percentage is used.  This
   percentage value is called the \textit{Precision}.  
-  
+
   The area of land deemed by LA as equalling the current area target gets
   changed into a target range $\pm$ the precision value multiplied by the 
   target area. If a value of $5\%$ is entered, and the area target is 100
   hectares, LA accepts $100 \pm(\frac{100 \cdot 5\%}{2})$ (which is $97.5$
   to $102.5$ hectares) as the target area.  
-  
+
   The loop uses three terms, $CurrentMidValue$ $FirstValue$ and $LastValue$.
   At the beginning of the process, $FirstValue=0$ and $LastValue=18,000$
   which coincides with the full extent of the cost surface.  $CurrentMidValue$
   is calculated within the loop.  The loop works like this:
-
   \begin{enumerate} 
     \item Set the analysis boundary: $CurrentMidValue=\frac{FirstValue +
       LastValue}{2}$.  
@@ -529,32 +490,29 @@ ancient settlements.}
       done by making $FirstValue=CurrentMidValue$ and then returning back to step
       number one.  (Note $LastValue$ remains unchanged.) 
   \end{enumerate}
-
   By using this method, the \textit{maximum} number of steps in the loop is 17.
   This method of searching for the area targets made a huge difference in LA's
   speed.  A typical 'run' on a decent computer system is now $\approx$ 2 to 3
   minutes, compared days and weeks using the original method.  This allows a
   user to now examine many different variations of an entire model quickly and
   easily, even on an average computer system.
-  
+
   Finally, at the end of the process, LA produces maps which clearly show
   which land people in the settlement were likely to have been engaged with, and
   for what purpose they were using it (Figure \ref{fig:caseStudy}).
- 
 \begin{figure}[htbp] %Location
-  \includegraphics[scale=0.225]{./images/LEB130007030FallowSlope.jpg}
+  \includegraphics[scale=0.22]{./images/LEB130007030FallowSlope.jpg}
   \caption{\label{fig:caseStudy}\textit{Case Study: Shuna  Population 3000, EB1a. 
     Green is for growing crops, blue for grazing.  Walking Time was used to
     create the cost surface.}}
 \end{figure}
-
 \section{Future development} \label{FuturePlans} 
   LA is still in the early stages of its development and many
   improvements to usability and application capabilities are planned. That said,
   the application is already capable of producing useful results (though more
   testing is still needed) in a more flexible, user friendly and efficient
   manner than the original BASH prototype.
-  
+
   There are many routes that LA can take from this point with
   respect to it's future development; it can continue on as a standalone
   application, or turn into a plugin for another application like openModeller
@@ -564,7 +522,7 @@ ancient settlements.}
   experiment settings, where the model can be set to run a given number of times
   using different input variables, and report generation complete with graphs
   and maps. 
-  
+
   The network analysis feature will look at all contemporaneous sites in a given
   area, and examine production potential.  If a site can potentially produce
   excess meat, but falls short in cropland, it will look to neighboring sites to
@@ -575,7 +533,7 @@ ancient settlements.}
   have been.  Taking this further, one might look for places where these routes
   merge, or cross, which might be an indicator for a potential archaeological
   site which has yet to be discovered.
-  
+
   The current version of LA requires that every scenario be modelled
   manually and separately.  For example, one might wish to look at how adjusting
   the yield of crops would affect the land requirements to simulate drought
@@ -583,13 +541,13 @@ ancient settlements.}
   proportions of meat content to plant content.  With the experiment module, it
   will be possible to have the software automatically cycle through all of these
   different scenarios automatically.
-  
+
   Drawing much on the work done in openModeller, there is also the hope that it
   will be possible to have LA compile presentation quality reports,
   complete with spreadsheets and graphs.  This will be a great time saving
   feature.  In addition, this will provide a consistency that will make it much
   easier to systematically compare results with other users.
-  
+
   Anyone interested in knowing more about this project, or better yet, in
   contributing to it, please don't hesitate in contacting us.
 
