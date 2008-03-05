@@ -16,10 +16,10 @@ ancient settlements.}
   the process of computing landuse requirements and identifying the land likely 
   to have been engaged by the people living in ancient settlements.
   The useage of the LA application is illustrated in this text using an
-  archaeological site at Shuna (see Figure \ref{fig:shunaGoogleEarth}) in the Jordan
-  Valley.  The Jordan Valley is found in the Southern Levant, which is a name
-  commonly used to refer to the geographic region broadly described as modern-day
-  Israel, Palestine and Jordan, between the Dead Sea and Lake Tiberias.
+  archaeological site at Shuna (see Figure \ref{fig:shunaGoogleEarth}) in the
+  Jordan Valley.  The Jordan Valley is found in the Southern Levant, which is a name
+  commonly used to refer to the geographic region broadly described as
+  modern-day Israel, Palestine and Jordan, between the Dead Sea and Lake Tiberias.
 
 \begin{figure}[htbp] %Location
   \includegraphics[scale=0.17]{./images/ShunaGoogleEarth3D.jpg}
@@ -38,14 +38,14 @@ ancient settlements.}
   occupy.  A better understanding of this relationship can help to more
   confidently theorise about a range of issues in the reconstruction of past
   societies.  By piecing together clues gained through a combination of
-  archaeological surveys, ethnoarchaeology, written records, oral traditions, and
-  excavations, insights can be gained which can offer a more concrete
+  archaeological surveys, ethnoarchaeology, written records, oral traditions,
+  and excavations, insights can be gained which can offer a more concrete
   understanding of the relationship people had with their landscapes, allowing
   archaeologists to better understand topics such as as short and long term
   impacts on the landscape, or social and economic organisation. 
   
-  An understanding of long term impacts of ancient humans on their landscape can 
-  be useful for modern day researchers by providing insight into the potential 
+  An understanding of long term impacts of ancient humans on their landscape
+  can be useful for modern day researchers by providing insight into the potential 
   environmental impact of current human activities. In modern societies, urban 
   centres rely upon the surplus production of agricultural commodities provided 
   by farmers in the countryside.  This reliance necessitates a certain level of 
@@ -53,44 +53,42 @@ ancient settlements.}
   historical contexts, we can infer landuse patterns.
   
   Through careful study, a better understanding of the land use habits and
-  patterns of these populations can unlock many interesting facets of culture and 
-  lifestyle.  By examining seeds, bones, and other items found at archaeological
+  patterns of these populations can unlock many interesting facets of culture
+  and lifestyle.  By examining seeds, bones, and other items found at archaeological
   sites, archaeologists are able to determine dietary habits. From the relative
-  quantities found estimates can be made of the importance each food source would
-  have had in the diet.  The scale of production, for example, can help indicate 
-  whether crops were being cultivated for subsistence use or for more commercial 
-  purposes.  If there is evidence of surplus production of any particular crop or
-  animal, this can be a possible indication that it was being grown commercially.
-  Other possible inferences include taxation, storage, redistribution, indications
-  of intensified farming, and craft specialisation, all of which can indicate 
+  quantities found estimates can be made of the importance each food source
+  would have had in the diet.  The scale of production, for example, can help
+  indicate whether crops were being cultivated for subsistence use or for more
+  commercial purposes.  If there is evidence of surplus production of any particular crop
+  or animal, this can be a possible indication that it was being grown
+  commercially.  Other possible inferences include taxation, storage, redistribution,
+  intensified farming, and craft specialisation, all of which can indicate 
   increased economic complexity.
 
 \section{Process for computing landuse requirements} 
 \label{sec:EarlyAttempts} 
-
   To learn more about how people interacted with their land, it is
   helpful to determine the area of land needed to support settlement
   populations and its likely distribution.  To locate the land being used, it is
-  necessary to first know how \textit{much} land would have been needed to produce
-  enough food to sustain the settlement.  Once this target for the area of land
-  has been determined, the land surrounding the site must be classified as either
-  suitable or unsuitable for each crop sown and each type of animal being raised.  
-  The final, resultant map which LA produces, is a compilation of individual maps 
-  from each crop and animal, for which sufficient suitable land has been identified
-  to meet the settlement's production requirements.
+  necessary to first know how \textit{much} land would have been needed to
+  produce enough food to sustain the settlement.  Once this target for the area of land
+  has been determined, the land surrounding the site must be classified as
+  either suitable or unsuitable for each crop sown and each type of animal being
+  raised.  The final, resultant map which LA produces, is a compilation of individual
+  maps from each crop and animal, for which sufficient suitable land has been
+  identified to meet the settlement's production requirements.
 
 \section{Moving to a GUI} \label{GUI} 
-
   In late 2006, a BASH script was created running in a GRASS shell. This script
   found a specific area of classified, suitable land surrounding a point by
   starting at a point and moving outwards in a circle five meters at a time,
-  checking each time to see if there was enough suitable land contained within the
-  perimeter. As soon as it was equal to or greater than the target area, the loop
-  was ended, and the solution was deemed found.
+  checking each time to see if there was enough suitable land contained within
+  the perimeter. As soon as it was equal to or greater than the target area, the
+  loop was ended, and the solution was deemed found.
   
   The complexity of the animal and crop modelling made using BASH scripts very
-  awkward.  While the BASH scripting approach worked well for a proof of concept,
-  the implementation included a large number of hard coded variables and the
+  awkward.  While the BASH scripting approach worked well for a proof of
+  concept, the implementation included a large number of hard coded variables and the
   solution did not provide a flexible environment for experimentation. For
   example, adding, removing or even editing different types of crops and animals
   to the analysis required heavy modifications to the BASH script.  The BASH
@@ -136,8 +134,8 @@ ancient settlements.}
 
 \subsection{Determining calorie targets}
   Calorie targets are the first level of calculations done by LA and are
-determined through a number of steps (see Fig.  \ref{fig:dietDiagram}), which
-are as follows.
+  determined through a number of steps (see Fig.  \ref{fig:dietDiagram}), which
+  are as follows.
     \begin{enumerate}
       \item \textbf{\textit{Basic Information}} - The user supplies LA with the
         population of the settlement, as well as the average daily calorific
@@ -193,22 +191,21 @@ are as follows.
     crop and animal must be produced to satisfy the calorie targets calculated
     above.
   \begin{itemize}
-    \item \textbf{Crops} - The user must supply the food value for each crop.  This
-      is expressed as calories per kg.  Using the calorie targets and the user supplied
-      food value, the model calculates a production target for each crop that is necessary
-      to meet these needs.
-    \item \textbf{Animals} - When animals get slaughtered, and only part of their
-      carcasses are usable as
-      food.  This usable part of their live weight is supplied by the users when they
-      define the animal in the Animal Manager form, expressed as the percentage of
-      their live weight which is usable as food.
+    \item \textbf{Crops} - The user must supply the food value for each crop. 
+      This is expressed as calories per kg.  Using the calorie targets and the
+      user supplied food value, the model calculates a production target for each
+      crop that is necessary to meet these needs.
+    \item \textbf{Animals} - When animals get slaughtered, and only part of
+      their carcasses are usable as food.  This usable part of their live weight
+      is supplied by the users when they define the animal in the Animal Manager
+      form, expressed as the percentage of their live weight which is usable as food.
   \end{itemize}
 
   \subsection{Determining Area Targets}
   Once production targets are calculated, it is possible to calculate area
   targets for each crop and animal by looking at yield values for plants, and
-  grazing requirements for animals.  As with Production Targets, Area Targets are
-  quite simple to compute for crops, but get very complicated for animals.
+  grazing requirements for animals.  As with Production Targets, Area Targets
+  are quite simple to compute for crops, but get very complicated for animals.
 
 \section{Defining Characteristics}
  \subsection{Crops}
@@ -248,13 +245,13 @@ are as follows.
     \subsubsection{Crop Parameters}
     \label{cropParameters}
       Once you have defined the plants that are being grown as crops, Landuse
-      Analyst needs to know the specifics of how each crop is being grown, as well
-      as what portion of the settlement's diet it provides (see Fig.
-      \ref{fig:cropParameters}).  It must also know what land is capable of growing
-      each crop by selecting either Common or Specific Land Suitability masks
-      (keeping in mind that if Specific Land is selected, the Raster Mask must be
-      selected from the drop down list).  The two major entries, however, involve
-      \textit{crop rotation} and the selection of \textit{suitability masks}.
+      Analyst needs to know the specifics of how each crop is being grown, as
+      well as what portion of the settlement's diet it provides (see Fig.
+      \ref{fig:cropParameters}).  It must also know what land is capable of
+      growing each crop by selecting either Common or Specific Land Suitability masks
+      (keeping in mind that if Specific Land is selected, the Raster Mask must
+      be selected from the drop down list).  The two major entries, however,
+      involve \textit{crop rotation} and the selection of \textit{suitability masks}.
 
   \subsection{Crop Rotation}
   \label{cropRotation}
@@ -263,8 +260,8 @@ are as follows.
     \textit{crop rotation} (See Fig.  \ref{fig:cropParameters}) and is critical
     to the process of determining how much land is required for food production,
     as it can more than double the area target for a crop.  Complicated crop 
-    rotations are possible in LA, and the process of setting this up are explained
-    in detail in the Help section of the program itself.
+    rotations are possible in LA, and the process of setting this up are
+    explained in detail in the Help section of the program itself.
   
     Another important aspect of defining crop rotation concerns animals.  It is
     possible for animals to graze the fallow land, which will reduce the amount
@@ -279,40 +276,47 @@ are as follows.
     Animals are difficult to calculate area targets for because their land
     requirements are largely based on their numbers, and a herd of adult
     females large enough to sustain a steady supply of offspring with numbers
-    enough to keep the production targets met has to be added into the equation as
-    well.  In addition, animals can graze fallow crop land, eat fodder from
+    enough to keep the production targets met has to be added into the equation
+    as well.  In addition, animals can graze fallow crop land, eat fodder from
     the crops being grown, and graze other types of land.  LA takes these
     interactions into account in its computations.
-    Herd Size determination is perhaps the single most difficult calculation that
-    LA performs.  Added to the complexity of this is the problem that different
+    Herd Size determination is perhaps the single most difficult calculation
+    that LA performs.  Added to the complexity of this is the problem that different
     animals have different dietary requirements, and even further, even if they
-    are the same, they require different amounts of feed depending on things like
-    whether they are pregnant or lactating.  To further complicate the issue, not
-    all land that can be grazed has the same food value to the animals.
+    are the same, they require different amounts of feed depending on things
+    like whether they are pregnant or lactating.  To further complicate the issue,
+    not all land that can be grazed has the same food value to the animals.
     
-    LA does, however, address these issues.  One of the first things a user must do
-    when using Landuse Analust is to define all of the crops and animals that the
-    settlement used.  During this process the users provides information about
-    aspects including (for animals) information
+    LA does, however, address these issues.  One of the first things a user must
+    do when using Landuse Analust is to define all of the crops and animals that
+    the settlement used.  During this process the users provides information
+    about aspects including (for animals) information
     relating to their dietary requirements, their reproduction cycle, and their
     grazing preferences.
 
     \subsubsection{Defining Animals}
     \label{definingAnimals}
-      Animals present several challenges that plants do not.  For starters, a certain
-      number of females must be kept solely as breeding stock, and this number must be
-      calculated based upon production requirements.  Secondly, the possibility exists that
-      part of the animals' diet was from either straw/chaff left over from harvesting
-      crops, or directly from harvested grain.  In the case of grain being used as
-      feed, the amount used must be considered when determining the production targets
-      for the crops.  Thirdly, if crop rotation was happening and fallow land was
-      present, there is the possibility that this was used as grazing land, and would
-      therefore reduce the amount of natural grazing land required.  This also adds
+      Animals present several challenges that plants do not.  For starters, a
+      certain number of females must be kept solely as breeding stock, and this
+      number must be calculated based upon production requirements.  Secondly,
+      the possibility exists that part of the animals' diet was from either
+      straw/chaff left over from harvesting crops, or directly from harvested
+      grain.  In the case of grain being used as feed, the amount used must be
+      considered when determining the production targets for the crops. 
+      Thirdly,if crop rotation was happening and fallow land was present, there
+      is the possibility that this was used as grazing land, and would therefore
+      reduce the amount of natural grazing land required.  This also adds
       complexity to the crop models because grazing fallow land adds fertiliser,
-      potentially increasing yields.  This phenomenon can be factored in to Landuse
-      Analyst by manually adjusting the expected yield of the affected crops.
+      potentially increasing yields.  This phenomenon can be factored in to
+      Landuse Analyst by manually adjusting the expected yield of the affected
+      crops.
       
-      Version 0.1 of LA allows animals to use fodder as food.  The amount of the contribution of fodder is expressed as an overall percentage of their diet in terms of calories.  Furthermore, the model provides separate inputs for fodder (straw/chaff) as well as straight grain.  When setting up the model, the user supplies fodder production levels for the crops, as well as caloric levels for the fodder.
+      Version 0.1 of LA allows animals to use fodder as food.  The amount of the
+      contribution of fodder is expressed as an overall percentage of their diet
+      in terms of calories.  Furthermore, the model provides separate inputs for
+      fodder (straw/chaff) as well as straight grain.  When setting up the
+      model, the user supplies fodder production levels for the crops, as well as
+      caloric levels for the fodder.
 
 \begin{figure}[htbp]
   \includegraphics[scale=.39]{./images/animalManager.jpg}
@@ -322,8 +326,8 @@ are as follows.
 
     \subsubsection{Animal Characteristics}
       LA uses several input variables  to define an animal (see Fig.
-      \ref{fig:animalManager}).  Two items which are worth further discussion are
-      the Common and Specific Land options.
+      \ref{fig:animalManager}).  Two items which are worth further discussion
+      are the Common and Specific Land options.
       \begin{itemize}
         \item \textit{\textbf{Common Land}} - Sometimes land is suitable for
           grazing by more than one type of animal. LA allows you to
@@ -337,8 +341,8 @@ are as follows.
           produces classified maps of the land being used, so if it is
           the case that you find one animal being forced to travel much further
           than others, you can simply change the settings to balance this. This
-          can be accomplished by removing the other animals one at a time from using
-          the common grazing land. It may be the case, however, that there is no
+          can be accomplished by removing the other animals one at a time from
+          using the common grazing land. It may be the case, however, that there is no
           ideal solution, and that they simply had to travel the extra
           distance.)
         \item \textit{\textbf{Specific Land}} - Sometimes you may want to
@@ -365,15 +369,15 @@ are as follows.
     population is crucial for determining an area target for each type of animal
     raised.  An algorithm generic enough to make this calculation for any animal
     that has been defined in LA was created. By taking the Production
-    Target and several user inputs, the total number of adult females (Mothers) and
-    animals being raised for meat (Meat Animals) can be approximated. This process
-    is outlined in Fig. \ref{fig:herdSize}.
+    Target and several user inputs, the total number of adult females (Mothers)
+    and animals being raised for meat (Meat Animals) can be approximated. This
+    process is outlined in Fig. \ref{fig:herdSize}.
 
 \section{Land Redesignation}
-  Another notable feature of LA is land redesignation.  Land that is suitable for
-  the production of crops is almost certainly suitable for grazing as well.  For
-  this reason, LA performs all of the cropland functions first.  Once the area
-  targets for all crops have been satisfied, all of the unallocated land
+  Another notable feature of LA is land redesignation.  Land that is suitable
+  for the production of crops is almost certainly suitable for grazing as well. 
+  For this reason, LA performs all of the cropland functions first.  Once the
+  area targets for all crops have been satisfied, all of the unallocated land
   previously classified for use by crops is redesignated as being suitable for
   common grazing land. 
 
@@ -437,23 +441,24 @@ are as follows.
     \item  Use minimum and maximum slope values to create a classification map
       which will be used exclusively.  This can be done for common crop land and
       common grazing land independently.  For example, the user might stipulate
-      $0^\circ \leq m \leq 9^\circ$ for crops and $9^\circ < m \leq 15^\circ$ for
-      grazing land, where $m=slope$.  
-    \item  Using a combination of the two classification maps.  Slope can be chosen
-      to either add to or subtract from the user supplied map, or alternatively, the
-      user supplied map can either add to or subtract from the slope map.  This
-      combination of the two can be very useful if, for example, a user wishes to use
-      a soil classification map as the primary indication of landuse suitability, but
-      refine that map by taking out the land they consider too steep for use.  In
-      this case the program generated slope masks would be subtracted from the user
-      supplied (soil) classification map.  
+      $0^\circ \leq m \leq 9^\circ$ for crops and $9^\circ < m \leq 15^\circ$
+      for grazing land, where $m=slope$.  
+    \item  Using a combination of the two classification maps.  Slope can be
+      chosen to either add to or subtract from the user supplied map, or 
+      alternatively, the user supplied map can either add to or subtract from
+      the slope map.  This combination of the two can be very useful if, for 
+      example, a user wishes to use a soil classification map as the primary
+      indication of landuse suitability, but refine that map by taking out the
+      land they consider too steep for use. In this case the program generated
+      slope masks would be subtracted from the user supplied (soil) classification map.  
   \end{enumerate}
   
 \begin{figure}[htbp] %Location
   \includegraphics[scale=0.225]{./images/landcatchment.jpg}
   % img42.jpg: 800x600 pixel, 72dpi, 28.22x21.17 cm, bb=0 0 800 600
   \caption{\label{fig:landCatchment}Results which identified the suitable land
-    surrounding Shuna using Euclidean method. The different shades represent different
+    surrounding Shuna using Euclidean method. The different shades represent
+different
     settlement populations.}
 \end{figure}
 
@@ -495,19 +500,19 @@ are as follows.
   by the number of individual crops and animals in the model and the run time 
   suddenly needs to be expressed in days or weeks.  To increase the efficiency,
   a modified binary search is now used.  This involved a somewhat different 
-  approach.  Instead of using a step amount, a percentage is used.  This percentage
-  value is called the \textit{Precision}.  
+  approach.  Instead of using a step amount, a percentage is used.  This
+  percentage value is called the \textit{Precision}.  
   
-  The area of land deemed by LA as equalling the current area target gets changed into
-  a target range $\pm$ the precision value multiplied by the target area. 
-  If a value of $5\%$ is entered, and the area target is 100 hectares, LA 
-  accepts $100 \pm(\frac{100 \cdot 5\%}{2})$ (which is $97.5$ to $102.5$ hectares)
-  as the target area.  
+  The area of land deemed by LA as equalling the current area target gets
+  changed into a target range $\pm$ the precision value multiplied by the 
+  target area. If a value of $5\%$ is entered, and the area target is 100
+  hectares, LA accepts $100 \pm(\frac{100 \cdot 5\%}{2})$ (which is $97.5$
+  to $102.5$ hectares) as the target area.  
   
-  The loop uses three terms, $CurrentMidValue$ $FirstValue$ and $LastValue$ At the
-  beginning of the process, $FirstValue=0$ and $LastValue=18,000$ which coincides
-  with the full extent of the cost surface.  $CurrentMidValue$ is calculated
-  within the loop.  The loop works like this:
+  The loop uses three terms, $CurrentMidValue$ $FirstValue$ and $LastValue$ At
+  the beginning of the process, $FirstValue=0$ and $LastValue=18,000$ which
+  coincides with the full extent of the cost surface.  $CurrentMidValue$ is 
+  calculated within the loop.  The loop works like this:
 
   \begin{enumerate} 
     \item Set the analysis boundary: $CurrentMidValue=\frac{FirstValue +
@@ -517,13 +522,14 @@ are as follows.
     \item If the contained area falls within the target range, write the results
       to a new file and exit the loop 
     \item If the contained area is more than the maximum value in the target
-      range, set a halfway between $FirstValue$ and $CurrentMidValue$. This is done
-      by making $LastValue=CurrentMidValue$ and then returning back to step number
+      range, set a halfway between $FirstValue$ and $CurrentMidValue$. This is
+      done by making $LastValue=CurrentMidValue$ and then returning back to step
+      number
       one.  (Note $FirstValue$ remains unchanged.) 
     \item If the contained area is less than the minimum value in the target
-      range, set a halfway between $LastValue$ and $CurrentMidValue$. This is done
-      by making $FirstValue=CurrentMidValue$ and then returning back to step number
-      one.  (Note $LastValue$ remains unchanged.) 
+      range, set a halfway between $LastValue$ and $CurrentMidValue$. This is
+      done by making $FirstValue=CurrentMidValue$ and then returning back to step
+      number one.  (Note $LastValue$ remains unchanged.) 
   \end{enumerate}
 
   By using this method, the \textit{maximum} number of steps in the loop is 17.
@@ -534,32 +540,32 @@ are as follows.
   easily, even on an average computer system.
   
   Finally, at the end of the process, LA produces maps which clearly show
-  which land people in the settlement were likely to have been engaged with, and for
-  what purpose they were using it (See Fig. \ref{fig:caseStudy}).
+  which land people in the settlement were likely to have been engaged with, and
+  for what purpose they were using it (See Fig. \ref{fig:caseStudy}).
  
 \begin{figure}[htbp] %Location
   \includegraphics[scale=0.225]{./images/LEB130007030FallowSlope.jpg}
   \caption{\label{fig:caseStudy}Case Study: Shuna  Population 3000, EB1a. 
-    Green is for growing crops, blue for grazing.  Walking Time was used to create
-    the cost surface.}
+    Green is for growing crops, blue for grazing.  Walking Time was used to
+    create the cost surface.}
 \end{figure}
 
 \section{Future development} \label{FuturePlans} 
   LA is still in the early stages of its development and many
   improvements to usability and application capabilities are planned. That said,
   the application is already capable of producing useful results (though more
-  testing is still needed) in a more flexible, user friendly and efficient manner
-  than the original BASH prototype.
+  testing is still needed) in a more flexible, user friendly and efficient
+  manner than the original BASH prototype.
   
   There are many routes that LA can take from this point with
   respect to it's future development; it can continue on as a standalone
-  application, or turn into a plugin for another application like openModeller or
-  QGIS.  Before these decisions are made, however, the features in the current
+  application, or turn into a plugin for another application like openModeller
+  or QGIS.  Before these decisions are made, however, the features in the current
   version must be finalised and implemented.  Some features which are currently
   in the planning phase are network analysis  for inter-site relationships,
   experiment settings, where the model can be set to run a given number of times
-  using different input variables, and report generation complete with graphs and
-  maps. 
+  using different input variables, and report generation complete with graphs
+  and maps. 
   
   The network analysis feature will look at all contemporaneous sites in a given
   area, and examine production potential.  If a site can potentially produce
