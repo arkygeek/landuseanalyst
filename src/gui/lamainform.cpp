@@ -721,7 +721,7 @@ void LaMainForm::on_pushButtonRun_clicked()
   myModel.setName(lineEditSiteName->text());
   myModel.setPopulation(spinBoxPopulation->value());
   myModel.setPeriod(lineEditPeriod->text());
-  myModel.setProjection(comboBoxProjection->currentIndex());
+  //myModel.setProjection(comboBoxProjection->currentIndex());
   myModel.setEasting(lineEditEasting->text().toInt());
   myModel.setNorthing(lineEditNorthing->text().toInt());
   myModel.setEuclideanDistance(radioButtonEuclidean->isChecked());
@@ -825,7 +825,7 @@ void LaMainForm::on_pushButtonSave_clicked()
   myModel.setName(lineEditSiteName->text());
   myModel.setPopulation(spinBoxPopulation->value());
   myModel.setPeriod(lineEditPeriod->text());
-  myModel.setProjection(comboBoxProjection->currentIndex());
+  //myModel.setProjection(comboBoxProjection->currentIndex());
   myModel.setEasting(lineEditEasting->text().toInt());
   myModel.setNorthing(lineEditNorthing->text().toInt());
   myModel.setEuclideanDistance(radioButtonEuclidean->isChecked());
@@ -941,7 +941,7 @@ void LaMainForm::cropCalcClicked(QListWidgetItem * thepCurrentItem, QListWidgetI
   myModel.setName(lineEditSiteName->text());
   myModel.setPopulation(spinBoxPopulation->value());
   myModel.setPeriod(lineEditPeriod->text());
-  myModel.setProjection(comboBoxProjection->currentIndex());
+  //myModel.setProjection(comboBoxProjection->currentIndex());
   myModel.setEasting(lineEditEasting->text().toInt());
   myModel.setNorthing(lineEditNorthing->text().toInt());
   myModel.setEuclideanDistance(radioButtonEuclidean->isChecked());
@@ -1023,7 +1023,7 @@ void LaMainForm::animalCalcClicked(QListWidgetItem * thepCurrentItem, QListWidge
   myModel.setName(lineEditSiteName->text());
   myModel.setPopulation(spinBoxPopulation->value());
   myModel.setPeriod(lineEditPeriod->text());
-  myModel.setProjection(comboBoxProjection->currentIndex());
+  //myModel.setProjection(comboBoxProjection->currentIndex());
   myModel.setEasting(lineEditEasting->text().toInt());
   myModel.setNorthing(lineEditNorthing->text().toInt());
   myModel.setEuclideanDistance(radioButtonEuclidean->isChecked());

@@ -53,7 +53,6 @@ void LaGrassProcessLib::analyseModel(QString theRasterMask, int theAreaTarget)
   ////////////////////
 
   // binary search used
-
    // function:
    //   Searches sortedArray[first]..sortedArray[last] for key.
    // returns: index of the matching element if it finds key,
@@ -68,7 +67,8 @@ void LaGrassProcessLib::analyseModel(QString theRasterMask, int theAreaTarget)
    //                 transformed into the position to insert it.
    int myFirst = 0;
    int myLast=18000;
-   int myAreaTarget = 500; // change this to real value
+   // int myAreaTarget = 500; // change this to real value
+   
    LandFound mySearchStatus = NotEnough;
    int myCurrentlyContainedArea = 0;
 
@@ -80,7 +80,7 @@ void LaGrassProcessLib::analyseModel(QString theRasterMask, int theAreaTarget)
     //    r.stats -n -a fs=- input=cost.reclass > $TMP1
 
     // find out if the contained area is within acceptable range
-    mySearchStatus = getSearchStatus(myCurrentlyContainedArea, myAreaTarget);
+    mySearchStatus = getSearchStatus(myCurrentlyContainedArea, theAreaTarget);
 
     switch (mySearchStatus)
     {
