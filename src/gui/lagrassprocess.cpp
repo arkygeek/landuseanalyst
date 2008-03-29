@@ -311,7 +311,7 @@ void LaGrassProcess::toggleBusyProgressBar(bool theStatus)
   }
 }
 
-float LaGrassProcess::analyseModel(QString theItem, QString theRasterMask, int theAreaTarget)
+float LaGrassProcess::analyseModel(QString theItemName, QString theRasterMask, int theAreaTarget)
 {
   LaGrass myGrass;
    float myFirst = 0;
@@ -359,7 +359,7 @@ float LaGrassProcess::analyseModel(QString theItem, QString theRasterMask, int t
             // copy final raster to permanentRaster
             qDebug() << "TARGET FOUND!  Current is " << myCurrentlyContainedArea << "Actual Needed: " << myAreaTarget;
             qDebug() << "which falls within the precision range";
-            QString myRasterName = "RESULTS"+theItem;
+            QString myRasterName = "RESULTS"+theItemName+"Mid"+myMid+"Target"+theAreaTarget;
             myGrass.copyMap("tmpMask", myRasterName);
 
             updateCurrentProgress(myStatusCount);
