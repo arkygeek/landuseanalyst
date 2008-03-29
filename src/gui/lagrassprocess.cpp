@@ -359,7 +359,7 @@ float LaGrassProcess::analyseModel(QString theItemName, QString theRasterMask, i
             // copy final raster to permanentRaster
             qDebug() << "TARGET FOUND!  Current is " << myCurrentlyContainedArea << "Actual Needed: " << myAreaTarget;
             qDebug() << "which falls within the precision range";
-            QString myRasterName = "RESULTS"+theItemName+"Mid"+QString::number(myMid)+"Target"+QString::number(theAreaTarget);
+            QString myRasterName = "RESULTS"+theItemName+"Mid"+QString::number(static_cast<int>(myMid))+"Target"+QString::number(theAreaTarget);
             myGrass.copyMap("tmpMask", myRasterName);
 
             updateCurrentProgress(myStatusCount);
