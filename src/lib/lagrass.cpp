@@ -280,7 +280,7 @@ bool LaGrass::makeWalkCost(int theX, int theY, QString theDEM)
 
   QString myCommand = "r.walk";
   QStringList myArguments;
-  myArguments << "max_cost=100000"
+  myArguments << "max_cost=120000"
               << "elevation=" + myElevationMap
               << "friction=shunaFrictionMap4"// + myFrictionMap
               << "output=laWalkCost"

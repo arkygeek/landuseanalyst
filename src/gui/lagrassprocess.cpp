@@ -315,7 +315,7 @@ float LaGrassProcess::analyseModel(QString theItemName, QString theRasterMask, i
 {
   LaGrass myGrass;
    float myFirst = 0;
-   float myLast=100000;
+   float myLast=120000;
    int myAreaTarget = theAreaTarget;
    float myCurrentlyContainedArea = 0.0;
    int myPrecision = 5; // change this to real value
