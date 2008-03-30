@@ -359,7 +359,8 @@ float LaGrassProcess::analyseModel(QString theItemName, QString theRasterMask, i
             // copy final raster to permanentRaster
             qDebug() << "TARGET FOUND!  Current is " << myCurrentlyContainedArea << "Actual Needed: " << myAreaTarget;
             qDebug() << "which falls within the precision range";
-            QString myRasterName = "RESULTS"+theItemName+"Extent"+QString::number(static_cast<int>(myMid))+"Area"+QString::number(theAreaTarget);
+
+            QString myRasterName = generateFilename(theItemName, myMid, myAreaTarget);
             myGrass.copyMap("tmpMask", myRasterName);
 
             updateCurrentProgress(myStatusCount);
@@ -369,6 +370,35 @@ float LaGrassProcess::analyseModel(QString theItemName, QString theRasterMask, i
 
   }
   return myMid;
+}
+
+QString LaGrassProcess::generateFilename(QString theItemName, float theExtent, int theAreaTarget)
+{
+  QString myPeriod="";
+  QString myPopulation="";
+  QString myDietRatio="";
+  QString myPeriodSetting = cbPeriod->currentText();
+  QString myPopulationSetting = cbPopulation->currentText();
+  QString myDietRatioSetting = cbDietRatio->currentText();
+
+  if (myPeriodSetting == "Chalcolithic") {myPeriod = "Chalco";}
+  else if (myPeriodSetting == "EEB1") {myPeriod = "EEB1";}
+  else if (myPeriodSetting == "LEB1") {myPeriod = "LEB1";}
+
+  if (myPopulationSetting == "Max") {myPopulation = "MaxPop";}
+  else if (myPopulationSetting == "Min") {myPopulation = "MinPop";}
+
+  if (myDietRatioSetting == "70:30") {myDietRatio = "DR7030";}
+  else if (myDietRatioSetting == "80:20") {myDietRatio = "DR8020";}
+  else if (myDietRatioSetting == "90:10") {myDietRatio = "DR9010";}
+
+  QString myExtent = QString::number(static_cast<int>(theExtent));
+  QString myArea = QString::number(theAreaTarget);
+  
+  QString myDescriptor = myPeriod + myPopulation + myDietRatio;
+  QString myRasterName = theItemName + "_" + myDescriptor + "Extent" + myExtent + "Area" + myArea;
+  
+  return myRasterName;
 }
 
 LandFound LaGrassProcess::getSearchStatus(int theCurrentlyContainedArea, int theAreaTarget, int thePrecision)

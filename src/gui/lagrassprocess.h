@@ -58,6 +58,7 @@ class LaGrassProcess : public QDialog, private Ui::LaGrassProcessBase
     void toggleBusyProgressBar(bool theStatus);
     float analyseModel(QString theItem, QString theRasterMask, int theAreaTarget);
     LandFound getSearchStatus(int theCurrentlyContainedArea, int theAreaTarget, int thePrecision);
+    QString generateFilename(QString theItemName, float theExtent, int theAreaTarget);
   private slots:
 
   private:
