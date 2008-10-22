@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>586</width>
-    <height>662</height>
+    <width>594</width>
+    <height>696</height>
    </rect>
   </property>
   <property name="minimumSize" >
@@ -19,10 +19,11 @@
    <string>Grass Processing</string>
   </property>
   <property name="windowIcon" >
-   <iconset resource="../resources/resources.qrc" >:/la_icon_small.png</iconset>
+   <iconset resource="../resources/resources.qrc" >
+    <normaloff>:/la_icon_small.png</normaloff>:/la_icon_small.png</iconset>
   </property>
   <layout class="QGridLayout" >
-   <item rowspan="2" row="0" column="0" colspan="2" >
+   <item rowspan="2" row="0" column="0" >
     <widget class="QGroupBox" name="grpPreview" >
      <property name="sizePolicy" >
       <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
@@ -53,7 +54,7 @@
      </layout>
     </widget>
    </item>
-   <item row="0" column="2" colspan="2" >
+   <item row="0" column="1" colspan="2" >
     <widget class="QGroupBox" name="grpCurrentTarget" >
      <property name="sizePolicy" >
       <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
@@ -112,7 +113,7 @@
      </layout>
     </widget>
    </item>
-   <item row="1" column="2" colspan="2" >
+   <item row="1" column="1" colspan="2" >
     <widget class="QGroupBox" name="grpProgress" >
      <property name="sizePolicy" >
       <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
@@ -277,7 +278,7 @@
      </layout>
     </widget>
    </item>
-   <item row="2" column="0" colspan="4" >
+   <item row="2" column="0" colspan="3" >
     <widget class="QGroupBox" name="groupBox_2" >
      <property name="sizePolicy" >
       <sizepolicy vsizetype="Minimum" hsizetype="Expanding" >
@@ -310,9 +311,9 @@ p, li { white-space: pre-wrap; }
      </layout>
     </widget>
    </item>
-   <item row="3" column="0" >
+   <item rowspan="2" row="3" column="0" >
     <layout class="QGridLayout" >
-     <item row="0" column="0" colspan="3" >
+     <item row="0" column="0" colspan="4" >
       <widget class="QLabel" name="label_2" >
        <property name="text" >
         <string>Select the PERIOD, POPULATION, &amp; DIET RATIO.</string>
@@ -338,7 +339,7 @@ p, li { white-space: pre-wrap; }
        </item>
       </widget>
      </item>
-     <item row="1" column="1" >
+     <item row="1" column="1" colspan="2" >
       <widget class="QComboBox" name="cbPopulation" >
        <item>
         <property name="text" >
@@ -352,7 +353,7 @@ p, li { white-space: pre-wrap; }
        </item>
       </widget>
      </item>
-     <item row="1" column="2" >
+     <item row="1" column="3" >
       <widget class="QComboBox" name="cbDietRatio" >
        <item>
         <property name="text" >
@@ -371,25 +372,48 @@ p, li { white-space: pre-wrap; }
        </item>
       </widget>
      </item>
+     <item row="2" column="0" colspan="2" >
+      <widget class="QLabel" name="label_3" >
+       <property name="text" >
+        <string>Other text to include in filename:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2" colspan="2" >
+      <widget class="QLineEdit" name="leOtherText" />
+     </item>
     </layout>
    </item>
-   <item row="3" column="1" colspan="2" >
+   <item row="3" column="2" >
     <spacer>
      <property name="orientation" >
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Vertical</enum>
      </property>
-     <property name="sizeHint" >
+     <property name="sizeHint" stdset="0" >
       <size>
-       <width>71</width>
-       <height>30</height>
+       <width>20</width>
+       <height>40</height>
       </size>
      </property>
     </spacer>
    </item>
-   <item row="3" column="3" >
+   <item row="4" column="1" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>24</width>
+       <height>41</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="4" column="2" >
     <widget class="QDialogButtonBox" name="buttonBox" >
      <property name="standardButtons" >
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::NoButton|QDialogButtonBox::Ok</set>
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
      </property>
     </widget>
    </item>
@@ -422,12 +446,12 @@ p, li { white-space: pre-wrap; }
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>512</x>
-     <y>601</y>
+     <x>527</x>
+     <y>670</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>162</x>
-     <y>611</y>
+     <x>296</x>
+     <y>347</y>
     </hint>
    </hints>
   </connection>

@@ -41,6 +41,8 @@
   setupUi(this);
   readSettings();
 
+  //connect ( buttonBox, SIGNAL(rejected()), this, SLOT(reject()) );
+
   mAnimalAreaTargetsMap = thePairOfAreaTargetMaps.first;
   mCropAreaTargetsMap = thePairOfAreaTargetMaps.second;
   mDEM = (theRasterInfo.first).first;
@@ -262,10 +264,10 @@ void LaGrassProcess::setPbarOverallRange(int theOverall)
   pbarOverall->setValue(0);
 }
 
-void LaGrassProcess::reject()
-{
-  // abort the grass analysis
-}
+//void LaGrassProcess::reject()
+//{
+  // abort the grass analysis connect(pushButtonExit, SIGNAL(clicked()), qApp, SLOT(quit()));
+//}
 
 void LaGrassProcess::updateCurrentProgress(int theArea)
 {
@@ -377,9 +379,11 @@ QString LaGrassProcess::generateFilename(QString theItemName, float theExtent, i
   QString myPeriod="";
   QString myPopulation="";
   QString myDietRatio="";
+
   QString myPeriodSetting = cbPeriod->currentText();
   QString myPopulationSetting = cbPopulation->currentText();
   QString myDietRatioSetting = cbDietRatio->currentText();
+  QString myOtherText = leOtherText->text();
 
   if (myPeriodSetting == "Chalcolithic") {myPeriod = "Chalco";}
   else if (myPeriodSetting == "EEB1") {myPeriod = "EEB1";}
@@ -395,7 +399,7 @@ QString LaGrassProcess::generateFilename(QString theItemName, float theExtent, i
   QString myExtent = QString::number(static_cast<int>(theExtent));
   QString myArea = QString::number(theAreaTarget);
   
-  QString myDescriptor = myPeriod + myPopulation + myDietRatio;
+  QString myDescriptor = myOtherText + myPeriod + myPopulation + myDietRatio;
   QString myRasterName = theItemName + "_" + myDescriptor + "Extent" + myExtent + "Area" + myArea;
   
   return myRasterName;
