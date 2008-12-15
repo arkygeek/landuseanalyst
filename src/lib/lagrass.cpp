@@ -401,7 +401,7 @@ QString LaGrass::runCommand(QString theCommand,
     QString &theErrorLog /*=""*/)
 {
   #ifdef Q_OS_MACX
-  QString myProgram = "/Applications/GRASS.app/Contents/Resources/bin/" + theCommand;
+  QString myProgram = "/Applications/GRASS-6.3.app/Contents/MacOS/bin/" + theCommand;
   #else
   QString myProgram = "/usr/lib/grass/bin/" + theCommand;
   #endif
@@ -429,7 +429,7 @@ QString LaGrass::runCommand(QString theCommand,
   myArray = myProcess.readAll();
   theErrorLog.append(myArray);
   // get rid of some grass decorations...
-  qDebug() <<"GRASS> " << theCommand << theArguments;
+  qDebug() <<"GRASS> " << myProgram << theCommand << theArguments;
   qDebug() <<"Results: " << myLog;
   myLog.replace("----------------------------------------------","");
 
