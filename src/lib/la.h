@@ -48,4 +48,5 @@ enum Status {MoreThanEnoughToCompletelySatisfy, NotEnoughToCompletelySatisfy};
 enum LandBeingGrazed {Common, Unique};
 enum AreaUnits {Dunum, Hectare};
 enum LandFound {NotEnough, TooMuch, FoundTarget};
+enum EnergyType {KCalories, TDN};
 #endif //LA

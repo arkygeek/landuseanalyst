@@ -51,6 +51,7 @@ LaAnimalParameter::LaAnimalParameter(const LaAnimalParameter& theAnimalParameter
   mValueSpecificGrazingLand = theAnimalParameter.ValueSpecificGrazingLand();
   mValueCommonGrazingLand = theAnimalParameter.ValueCommonGrazingLand();
   mAreaUnits = theAnimalParameter.areaUnits();
+  mEnergyType = theAnimalParameter.energyType();
   mFodderUse = theAnimalParameter.fodderUse();
   mFoodSourceMap = theAnimalParameter.fodderSourceMap();
 
@@ -77,6 +78,7 @@ LaAnimalParameter& LaAnimalParameter::operator=(const LaAnimalParameter& theAnim
   mUseSpecificGrazingLand = theAnimalParameter.useSpecificGrazingLand();
   mUseCommonGrazingLand = theAnimalParameter.useCommonGrazingLand();
   mAreaUnits = theAnimalParameter.areaUnits();
+  mEnergyType = theAnimalParameter.energyType();
   mFodderUse = theAnimalParameter.fodderUse();
 
   // fodder stuff here
@@ -125,6 +127,11 @@ bool LaAnimalParameter::useCommonGrazingLand() const
 AreaUnits LaAnimalParameter::areaUnits() const
 {
   return mAreaUnits;
+}
+
+EnergyType LaAnimalParameter::energyType() const
+{
+  return mEnergyType;
 }
 
 bool LaAnimalParameter::fodderUse() const
@@ -186,6 +193,11 @@ void LaAnimalParameter::setAreaUnits(AreaUnits theAreaUnits)
   mAreaUnits=theAreaUnits;
 }
 
+void LaAnimalParameter::setEnergyType(EnergyType theEnergyType)
+{
+  mEnergyType=theEnergyType;
+}
+
 void LaAnimalParameter::setFodderUse(bool theBool)
 {
   mFodderUse=theBool;
@@ -241,7 +253,15 @@ bool LaAnimalParameter::fromXml(QString theXml)
   {
     mAreaUnits=Hectare;
   }
-
+QString myEnergyType = QString(myTopElement.firstChildElement("energyType").text());
+  if (myEnergyType == "KCalories")
+  {
+    mEnergyType=KCalories;
+  }
+  else if (myEnergyType == "TDN")
+  {
+    mEnergyType=TDN;
+  }
   mFodderUse=QString(myTopElement.firstChildElement("fodderUse").text()).toInt();
   // populate the fodder map
   mFoodSourceMap.clear();
@@ -308,6 +328,17 @@ QString LaAnimalParameter::toXml()
       myString+=QString("  <areaUnits>Hectare</areaUnits>\n");
       break;
   }
+
+  switch (mEnergyType)
+  {
+    case KCalories:
+      myString+=QString("  <energyType>KCalories</energyType>\n");
+      break;
+    case TDN:
+      myString+=QString("  <energyType>TDN</energyType\n");
+      break;
+  }
+
   myString+=QString("  <fodderUse>"+ QString::number(mFodderUse) +"</fodderUse>\n");
 
   if (mFodderUse)
@@ -372,6 +403,7 @@ QString LaAnimalParameter::toText()
   myString+=QString("foodValueOfCommonGrazingLand=>" + QString::number(mValueCommonGrazingLand) + "\n");
   myString+=QString("foodValueOfSpecificGrazingLand=>" + QString::number(mValueSpecificGrazingLand) + "\n");
   myString+=QString("areaUnits=>" + QString::number(mAreaUnits) + "\n");
+  myString+=QString("energyType=>" + QString::number(mEnergyType) + "\n");
   myString+=QString("fodderUse=>" + QString::number(mFodderUse) + "\n");
 
   if (mFodderUse)
@@ -419,6 +451,7 @@ QString LaAnimalParameter::toHtml()
   myString+="<tr><td>Use Specific Grazing Land:</td><td> " + QString::number(mUseSpecificGrazingLand) + "</td></tr>";
   myString+="<tr><td>Food Value Of Common Grazing Land:</td><td> " + QString::number(mValueCommonGrazingLand) + "</td></tr>";
   myString+="<tr><td>Food Value Of Specific Grazing Land:</td><td> " + QString::number(mValueSpecificGrazingLand) + "</td></tr>";
+  myString+="<tr><td>Energy Type:</td><td> "+ QString::number(mEnergyType) + "</td></tr>";
   myString+="<tr><td>Area Units:</td><td> "+ QString::number(mAreaUnits) + "</td></tr>";
 
 

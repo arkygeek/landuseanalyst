@@ -68,6 +68,9 @@ class LaAnimalParameter : public LaSerialisable, public LaGuid
     /** Selection between dunums and hectares
       */
     AreaUnits areaUnits() const;
+    /** Select between Calories and TDN for food value wrt animals
+      */
+    EnergyType energyType() const;
     /** If fallow is to be grazed, and if so, at either a
       * HIGH MED or LOW priority to it's access
       */
@@ -112,6 +115,7 @@ class LaAnimalParameter : public LaSerialisable, public LaGuid
       */
     void setFallowUsage(Priority thePriority);
     void setAreaUnits(AreaUnits theIndexValue);
+    void setEnergyType(EnergyType theEnergyType);
     void setRasterName(QString theRasterName);
     /** Return an xml representation of this layer
      * @NOTE this class inherits the serialisable interface so
@@ -159,6 +163,7 @@ class LaAnimalParameter : public LaSerialisable, public LaGuid
       */
     Priority mFallowUsage;
     AreaUnits mAreaUnits;
+    EnergyType mEnergyType;
     QString mRasterName;
 
 };
