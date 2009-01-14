@@ -66,9 +66,9 @@
   mSelectedCropsMap = thePair.first;
   mCommonGrazedLandTDN = thePair.second;
   mCommonGrazingLandAreaUnits = theAreaUnits;
-  sbCommonRasterTDN->setReadOnly(false);
-  sbCommonRasterTDN->setValue(mCommonGrazedLandTDN);
-  sbCommonRasterTDN->setReadOnly(true);
+  sbCommonRasterValue->setReadOnly(false);
+  sbCommonRasterValue->setValue(mCommonGrazedLandTDN);
+  sbCommonRasterValue->setReadOnly(true);
   connect(tblAnimalParameterProfiles, SIGNAL(cellClicked( int,int)),
       this, SLOT(cellClicked( int,int)));
   connect(cboAnimal, SIGNAL(currentIndexChanged( int)),
@@ -347,8 +347,8 @@ void LaAnimalParameterManager::showAnimalParameter()
   sbPercentTameMeat->setValue(mAnimalParameter.percentTameMeat());
   checkBoxCommonRaster->setChecked(mAnimalParameter.useCommonGrazingLand());
   checkBoxSpecificRaster->setChecked(mAnimalParameter.useSpecificGrazingLand());
-  sbSpecificRasterTDN->setValue(mAnimalParameter.TDNSpecificGrazingLand());
-  sbCommonRasterTDN->setValue(mCommonGrazedLandTDN);
+  sbSpecificRasterValue->setValue(mAnimalParameter.ValueSpecificGrazingLand());
+  sbCommonRasterValue->setValue(mCommonGrazedLandTDN);
   comboBoxAreaUnits->setCurrentIndex(mAnimalParameter.areaUnits());
   grpFodderUse->setChecked(mAnimalParameter.fodderUse());
 
@@ -477,8 +477,8 @@ void LaAnimalParameterManager::on_pbnApply_clicked()
     mAnimalParameter.setAreaUnits(myAreaUnits);
   }
 
-  mAnimalParameter.setTDNCommonGrazingLand(sbCommonRasterTDN->value());
-  mAnimalParameter.setTDNSpecificGrazingLand(sbSpecificRasterTDN->value());
+  mAnimalParameter.setValueCommonGrazingLand(sbCommonRasterValue->value());
+  mAnimalParameter.setValueSpecificGrazingLand(sbSpecificRasterValue->value());
   mAnimalParameter.setFodderUse(grpFodderUse->isChecked());
 
   // populate the fodder map from the table.

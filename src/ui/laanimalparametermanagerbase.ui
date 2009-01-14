@@ -25,9 +25,10 @@
    <string>Animal Parameter Manager</string>
   </property>
   <property name="windowIcon" >
-   <iconset resource="../resources/resources.qrc" >:/la_icon.png</iconset>
+   <iconset resource="../resources/resources.qrc" >
+    <normaloff>:/la_icon.png</normaloff>:/la_icon.png</iconset>
   </property>
-  <layout class="QGridLayout" >
+  <layout class="QGridLayout" name="gridLayout_2" >
    <item row="0" column="0" colspan="3" >
     <widget class="QGroupBox" name="grpProfiles" >
      <property name="whatsThis" >
@@ -41,42 +42,18 @@ p, li { white-space: pre-wrap; }
       <string>Available Animal Parameter Settings</string>
      </property>
      <layout class="QGridLayout" >
-      <property name="leftMargin" >
+      <property name="margin" >
        <number>9</number>
       </property>
-      <property name="topMargin" >
-       <number>9</number>
-      </property>
-      <property name="rightMargin" >
-       <number>9</number>
-      </property>
-      <property name="bottomMargin" >
-       <number>9</number>
-      </property>
-      <property name="horizontalSpacing" >
-       <number>6</number>
-      </property>
-      <property name="verticalSpacing" >
+      <property name="spacing" >
        <number>6</number>
       </property>
       <item rowspan="2" row="0" column="3" >
        <layout class="QGridLayout" >
-        <property name="leftMargin" >
+        <property name="margin" >
          <number>0</number>
         </property>
-        <property name="topMargin" >
-         <number>0</number>
-        </property>
-        <property name="rightMargin" >
-         <number>0</number>
-        </property>
-        <property name="bottomMargin" >
-         <number>0</number>
-        </property>
-        <property name="horizontalSpacing" >
-         <number>6</number>
-        </property>
-        <property name="verticalSpacing" >
+        <property name="spacing" >
          <number>6</number>
         </property>
         <item row="3" column="1" >
@@ -97,7 +74,8 @@ p, li { white-space: pre-wrap; }
            <string>...</string>
           </property>
           <property name="icon" >
-           <iconset resource="../resources/resources.qrc" >:/copy.png</iconset>
+           <iconset resource="../resources/resources.qrc" >
+            <normaloff>:/copy.png</normaloff>:/copy.png</iconset>
           </property>
          </widget>
         </item>
@@ -113,7 +91,8 @@ p, li { white-space: pre-wrap; }
            <string>...</string>
           </property>
           <property name="icon" >
-           <iconset resource="../resources/resources.qrc" >:/delete.png</iconset>
+           <iconset resource="../resources/resources.qrc" >
+            <normaloff>:/delete.png</normaloff>:/delete.png</iconset>
           </property>
          </widget>
         </item>
@@ -135,7 +114,8 @@ p, li { white-space: pre-wrap; }
            <string>...</string>
           </property>
           <property name="icon" >
-           <iconset resource="../resources/resources.qrc" >:/new.png</iconset>
+           <iconset resource="../resources/resources.qrc" >
+            <normaloff>:/new.png</normaloff>:/new.png</iconset>
           </property>
          </widget>
         </item>
@@ -167,7 +147,7 @@ Selected</string>
           <property name="orientation" >
            <enum>Qt::Vertical</enum>
           </property>
-          <property name="sizeHint" >
+          <property name="sizeHint" stdset="0" >
            <size>
             <width>20</width>
             <height>40</height>
@@ -218,7 +198,7 @@ p, li { white-space: pre-wrap; }
         <property name="orientation" >
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="sizeHint" >
+        <property name="sizeHint" stdset="0" >
          <size>
           <width>71</width>
           <height>27</height>
@@ -266,16 +246,7 @@ p, li { white-space: pre-wrap; }
         <property name="spacing" >
          <number>6</number>
         </property>
-        <property name="leftMargin" >
-         <number>0</number>
-        </property>
-        <property name="topMargin" >
-         <number>0</number>
-        </property>
-        <property name="rightMargin" >
-         <number>0</number>
-        </property>
-        <property name="bottomMargin" >
+        <property name="margin" >
          <number>0</number>
         </property>
         <item>
@@ -314,16 +285,7 @@ p, li { white-space: pre-wrap; }
         <property name="spacing" >
          <number>6</number>
         </property>
-        <property name="leftMargin" >
-         <number>0</number>
-        </property>
-        <property name="topMargin" >
-         <number>0</number>
-        </property>
-        <property name="rightMargin" >
-         <number>0</number>
-        </property>
-        <property name="bottomMargin" >
+        <property name="margin" >
          <number>0</number>
         </property>
         <item>
@@ -368,16 +330,7 @@ p, li { white-space: pre-wrap; }
         <property name="spacing" >
          <number>6</number>
         </property>
-        <property name="leftMargin" >
-         <number>0</number>
-        </property>
-        <property name="topMargin" >
-         <number>0</number>
-        </property>
-        <property name="rightMargin" >
-         <number>0</number>
-        </property>
-        <property name="bottomMargin" >
+        <property name="margin" >
          <number>0</number>
         </property>
         <item>
@@ -494,22 +447,10 @@ p, li { white-space: pre-wrap; }
       <bool>false</bool>
      </property>
      <layout class="QGridLayout" >
-      <property name="leftMargin" >
+      <property name="margin" >
        <number>9</number>
       </property>
-      <property name="topMargin" >
-       <number>9</number>
-      </property>
-      <property name="rightMargin" >
-       <number>9</number>
-      </property>
-      <property name="bottomMargin" >
-       <number>9</number>
-      </property>
-      <property name="horizontalSpacing" >
-       <number>6</number>
-      </property>
-      <property name="verticalSpacing" >
+      <property name="spacing" >
        <number>6</number>
       </property>
       <item row="0" column="0" >
@@ -575,22 +516,13 @@ p, li { white-space: pre-wrap; }
      <property name="title" >
       <string>Land Suitability Selection</string>
      </property>
-     <layout class="QGridLayout" >
-      <item row="0" column="0" colspan="2" >
+     <layout class="QGridLayout" name="gridLayout" >
+      <item row="0" column="0" colspan="3" >
        <layout class="QHBoxLayout" >
         <property name="spacing" >
          <number>6</number>
         </property>
-        <property name="leftMargin" >
-         <number>0</number>
-        </property>
-        <property name="topMargin" >
-         <number>0</number>
-        </property>
-        <property name="rightMargin" >
-         <number>0</number>
-        </property>
-        <property name="bottomMargin" >
+        <property name="margin" >
          <number>0</number>
         </property>
         <item>
@@ -607,7 +539,7 @@ p, li { white-space: pre-wrap; }
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="sbCommonRasterTDN" >
+         <widget class="QSpinBox" name="sbCommonRasterValue" >
           <property name="sizePolicy" >
            <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
             <horstretch>0</horstretch>
@@ -633,10 +565,10 @@ p, li { white-space: pre-wrap; }
            <bool>true</bool>
           </property>
           <property name="suffix" >
-           <string> Kg</string>
+           <string/>
           </property>
           <property name="prefix" >
-           <string>TDN </string>
+           <string/>
           </property>
           <property name="maximum" >
            <number>50000</number>
@@ -651,14 +583,14 @@ p, li { white-space: pre-wrap; }
         </item>
        </layout>
       </item>
-      <item row="1" column="0" colspan="2" >
+      <item rowspan="2" row="1" column="0" colspan="3" >
        <widget class="Line" name="line" >
         <property name="orientation" >
          <enum>Qt::Horizontal</enum>
         </property>
        </widget>
       </item>
-      <item row="2" column="0" >
+      <item row="3" column="0" colspan="2" >
        <widget class="QCheckBox" name="checkBoxSpecificRaster" >
         <property name="toolTip" >
          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
@@ -683,8 +615,8 @@ p, li { white-space: pre-wrap; }
         </property>
        </widget>
       </item>
-      <item row="2" column="1" >
-       <widget class="QSpinBox" name="sbSpecificRasterTDN" >
+      <item rowspan="2" row="2" column="2" >
+       <widget class="QSpinBox" name="sbSpecificRasterValue" >
         <property name="sizePolicy" >
          <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
           <horstretch>0</horstretch>
@@ -704,16 +636,16 @@ p, li { white-space: pre-wrap; }
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Note that this setting is the number of KCalories per land area unit available for grazing animals &lt;span style=" font-weight:600;">per year&lt;/span>.  This value applies to only the land selected in the unique raster mask file created for this animal.&lt;/p>&lt;/body>&lt;/html></string>
         </property>
         <property name="suffix" >
-         <string> Kg</string>
+         <string/>
         </property>
         <property name="prefix" >
-         <string>TDN </string>
+         <string/>
         </property>
         <property name="minimum" >
          <number>1</number>
         </property>
         <property name="maximum" >
-         <number>50000</number>
+         <number>500000</number>
         </property>
         <property name="singleStep" >
          <number>1</number>
@@ -723,7 +655,21 @@ p, li { white-space: pre-wrap; }
         </property>
        </widget>
       </item>
-      <item row="3" column="0" >
+      <item row="4" column="0" >
+       <widget class="QComboBox" name="comboBoxSpecificLandUnits" >
+        <item>
+         <property name="text" >
+          <string>KCalories</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>TDN</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="4" column="1" >
        <widget class="QLabel" name="label_5" >
         <property name="text" >
          <string>per  </string>
@@ -733,7 +679,7 @@ p, li { white-space: pre-wrap; }
         </property>
        </widget>
       </item>
-      <item row="3" column="1" >
+      <item row="4" column="2" >
        <widget class="QComboBox" name="comboBoxAreaUnits" >
         <property name="sizePolicy" >
          <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
@@ -768,19 +714,10 @@ p, li { white-space: pre-wrap; }
       </size>
      </property>
      <property name="title" >
-      <string>Portion of Tame Meat Diet</string>
+      <string>Portion of Domestic Meat Diet</string>
      </property>
      <layout class="QGridLayout" >
-      <property name="leftMargin" >
-       <number>3</number>
-      </property>
-      <property name="topMargin" >
-       <number>3</number>
-      </property>
-      <property name="rightMargin" >
-       <number>3</number>
-      </property>
-      <property name="bottomMargin" >
+      <property name="margin" >
        <number>3</number>
       </property>
       <item row="0" column="1" >
@@ -835,16 +772,7 @@ p, li { white-space: pre-wrap; }
      <property name="spacing" >
       <number>6</number>
      </property>
-     <property name="leftMargin" >
-      <number>0</number>
-     </property>
-     <property name="topMargin" >
-      <number>0</number>
-     </property>
-     <property name="rightMargin" >
-      <number>0</number>
-     </property>
-     <property name="bottomMargin" >
+     <property name="margin" >
       <number>0</number>
      </property>
      <item>
@@ -907,8 +835,8 @@ p, li { white-space: pre-wrap; }
   <tabstop>cboAnimal</tabstop>
   <tabstop>checkBoxSpecificRaster</tabstop>
   <tabstop>checkBoxCommonRaster</tabstop>
-  <tabstop>sbSpecificRasterTDN</tabstop>
-  <tabstop>sbCommonRasterTDN</tabstop>
+  <tabstop>sbSpecificRasterValue</tabstop>
+  <tabstop>sbCommonRasterValue</tabstop>
   <tabstop>comboBoxAreaUnits</tabstop>
   <tabstop>comboBoxFallowUsage</tabstop>
   <tabstop>pbnApply</tabstop>

@@ -134,7 +134,7 @@ void LaMainForm::readSettings()
   lineEditEasting->setText(mySettings.value("easting","").toString());
   lineEditNorthing->setText(mySettings.value("northing","").toString());
   sliderDiet->setValue(mySettings.value("percentPlantDiet","50").toInt());
-  sbCommonRasterTDN->setValue(mySettings.value("commonTDN","40").toInt());
+  sbCommonRasterValue->setValue(mySettings.value("commonTDN","40").toInt());
 }
 
 void LaMainForm::writeSettings()
@@ -150,7 +150,7 @@ void LaMainForm::writeSettings()
   mySettings.setValue("easting",lineEditEasting->text());
   mySettings.setValue("northing",lineEditNorthing->text());
   mySettings.setValue("percentPlantDiet",sliderDiet->value());
-  mySettings.setValue("commonTDN",sbCommonRasterTDN->value());
+  mySettings.setValue("commonTDN",sbCommonRasterValue->value());
 }
 
 void LaMainForm::on_spinBoxDailyCalories_valueChanged(int theValue)
@@ -273,7 +273,7 @@ void LaMainForm::on_pbnNewCropParameter_clicked()
 
 void LaMainForm::on_pbnNewAnimalParameter_clicked()
 {
-    int myCommonGrazingLandTDN = sbCommonRasterTDN->value();
+    int myCommonGrazingLandTDN = sbCommonRasterValue->value();
     QString myCommonGrazingLandAreaUnits = comboBoxAreaUnits->currentText();
     AreaUnits myAreaUnits = (myCommonGrazingLandAreaUnits == "Dunum") ? Dunum : Hectare;
     QPair<LaTripleMap, int> myPair;
@@ -738,7 +738,7 @@ void LaMainForm::on_pushButtonRun_clicked()
   QString mySelectedAreaUnit = QString(comboBoxAreaUnits->currentText());
   AreaUnits myAreaUnits = (mySelectedAreaUnit == "Dunum") ? Dunum:Hectare;
 
-  int myTDN = sbCommonRasterTDN->value();
+  int myTDN = sbCommonRasterValue->value();
   myModel.setCommonLandValue(myTDN, myAreaUnits);
 
   tbReport->setHtml(myModel.toHtml());
@@ -836,7 +836,7 @@ void LaMainForm::on_pushButtonSave_clicked()
   myModel.setCropPercent(sliderCrop->value());
   myModel.setMeatPercent(sliderMeat->value());
   myModel.setCaloriesPerPersonDaily(spinBoxDailyCalories->value());
-  myModel.setCommonLandValue(sbCommonRasterTDN->value(), myAreaUnits);
+  myModel.setCommonLandValue(sbCommonRasterValue->value(), myAreaUnits);
   myModel.toXmlFile( LaUtils::getModelOutputDir() +
       QDir::separator() + myModel.guid() + ".xml");
   writeSettings();
@@ -952,7 +952,7 @@ void LaMainForm::cropCalcClicked(QListWidgetItem * thepCurrentItem, QListWidgetI
   myModel.setCropPercent(sliderCrop->value());
   myModel.setMeatPercent(sliderMeat->value());
   myModel.setCaloriesPerPersonDaily(spinBoxDailyCalories->value());
-  myModel.setCommonLandValue(sbCommonRasterTDN->value(), myAreaUnits);
+  myModel.setCommonLandValue(sbCommonRasterValue->value(), myAreaUnits);
   tbReport->setHtml(myModel.toHtml());
   myModel.DoCalculations();
 
@@ -1036,8 +1036,8 @@ void LaMainForm::animalCalcClicked(QListWidgetItem * thepCurrentItem, QListWidge
   myModel.setCaloriesPerPersonDaily(spinBoxDailyCalories->value());
   QString myAreaUnitsText = (comboBoxAreaUnits->currentText());
   myModel.setCommonLandAreaUnits(myAreaUnits);
-  //myModel.setCommonLandValue(sbCommonRasterTDN->value());
-  myModel.setCommonLandValue(sbCommonRasterTDN->value(), myAreaUnits);
+  //myModel.setCommonLandValue(sbCommonRasterValue->value());
+  myModel.setCommonLandValue(sbCommonRasterValue->value(), myAreaUnits);
   tbReport->setHtml(myModel.toHtml());
   myModel.DoCalculations();
 

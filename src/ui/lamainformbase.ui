@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>638</width>
-    <height>628</height>
+    <width>1057</width>
+    <height>741</height>
    </rect>
   </property>
   <property name="sizePolicy" >
@@ -20,224 +20,14 @@
    <string>Landuse Analyst</string>
   </property>
   <property name="windowIcon" >
-   <iconset resource="../resources/resources.qrc" >:/la_icon_small.png</iconset>
+   <iconset resource="../resources/resources.qrc" >
+    <normaloff>:/la_icon_small.png</normaloff>:/la_icon_small.png</iconset>
   </property>
-  <layout class="QGridLayout" >
-   <property name="leftMargin" >
-    <number>9</number>
-   </property>
-   <property name="topMargin" >
-    <number>9</number>
-   </property>
-   <property name="rightMargin" >
-    <number>9</number>
-   </property>
-   <property name="bottomMargin" >
-    <number>9</number>
-   </property>
-   <property name="horizontalSpacing" >
-    <number>6</number>
-   </property>
-   <property name="verticalSpacing" >
-    <number>6</number>
-   </property>
-   <item row="1" column="2" >
-    <widget class="QLabel" name="label_3" >
-     <property name="toolTip" >
-      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">This is the sum of percent of diet figures for all of the crops being used in the model.  &lt;span style=" font-weight:600; font-style:italic; text-decoration: underline; color:#0000ff;">This must be 100%&lt;/span> to run!&lt;/p>&lt;/body>&lt;/html></string>
-     </property>
-     <property name="text" >
-      <string>  Crops:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="3" >
-    <widget class="QLabel" name="labelCropCheck" >
-     <property name="toolTip" >
-      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">This is the sum of percent of diet figures for all of the crops being used in the model.  &lt;span style=" font-weight:600; font-style:italic; text-decoration: underline; color:#0000ff;">This must be 100%&lt;/span> to run!&lt;/p>&lt;/body>&lt;/html></string>
-     </property>
-     <property name="text" >
-      <string>100%</string>
-     </property>
-     <property name="alignment" >
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0" colspan="9" >
-    <widget class="QProgressBar" name="progressBarCalcs" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="maximumSize" >
-      <size>
-       <width>16777215</width>
-       <height>10</height>
-      </size>
-     </property>
-     <property name="toolTip" >
-      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Shows when program is busy, or progress of tasks.&lt;/p>&lt;/body>&lt;/html></string>
-     </property>
-     <property name="value" >
-      <number>0</number>
-     </property>
-     <property name="textVisible" >
-      <bool>false</bool>
-     </property>
-     <property name="orientation" >
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="format" >
-      <string>%p%</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0" >
-    <widget class="QLabel" name="label_5" >
-     <property name="toolTip" >
-      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">This is the sum of percent of diet figures for all of the animals being used in the model.  &lt;span style=" font-weight:600; font-style:italic; text-decoration: underline; color:#0000ff;">This must be 100%&lt;/span> to run!&lt;/p>&lt;/body>&lt;/html></string>
-     </property>
-     <property name="text" >
-      <string>Animals:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1" >
-    <widget class="QLabel" name="labelAnimalCheck" >
-     <property name="toolTip" >
-      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">This is the sum of percent of diet figures for all of the animals being used in the model.  &lt;span style=" font-weight:600; font-style:italic; text-decoration: underline; color:#0000ff;">This must be 100%&lt;/span> to run!&lt;/p>&lt;/body>&lt;/html></string>
-     </property>
-     <property name="text" >
-      <string>100%</string>
-     </property>
-     <property name="alignment" >
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="4" >
-    <spacer>
-     <property name="orientation" >
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" >
-      <size>
-       <width>16</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="1" column="5" >
-    <widget class="QPushButton" name="pushButtonRun" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize" >
-      <size>
-       <width>0</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="toolTip" >
-      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Run the model.&lt;/p>&lt;/body>&lt;/html></string>
-     </property>
-     <property name="whatsThis" >
-      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Pressing Calculate! will attempt to run the model with the parameters you have chosen.  If there are any errors, this process will fail, and indicate to you what the problem was.  To be on the safe side, always save your model before attempting to Calculate! it.  All results will be saved if the model runs correctly.&lt;/p>&lt;/body>&lt;/html></string>
-     </property>
-     <property name="text" >
-      <string>Run</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="6" >
-    <widget class="QPushButton" name="pushButtonLoad" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize" >
-      <size>
-       <width>0</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="toolTip" >
-      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Load previously saved model parameters.&lt;/p>&lt;/body>&lt;/html></string>
-     </property>
-     <property name="text" >
-      <string>Load</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="7" >
-    <widget class="QPushButton" name="pushButtonSave" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="toolTip" >
-      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Save all settings of this model to a file&lt;/p>&lt;/body>&lt;/html></string>
-     </property>
-     <property name="text" >
-      <string>Save</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="8" >
-    <widget class="QPushButton" name="pushButtonExit" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text" >
-      <string>Exit</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0" colspan="9" >
+  <layout class="QGridLayout" name="gridLayout_6" >
+   <item row="0" column="0" >
     <widget class="QTabWidget" name="MainTabs" >
      <property name="sizePolicy" >
-      <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
+      <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -265,22 +55,10 @@ p, li { white-space: pre-wrap; }
        <string>Main</string>
       </attribute>
       <layout class="QGridLayout" >
-       <property name="leftMargin" >
+       <property name="margin" >
         <number>9</number>
        </property>
-       <property name="topMargin" >
-        <number>9</number>
-       </property>
-       <property name="rightMargin" >
-        <number>9</number>
-       </property>
-       <property name="bottomMargin" >
-        <number>9</number>
-       </property>
-       <property name="horizontalSpacing" >
-        <number>6</number>
-       </property>
-       <property name="verticalSpacing" >
+       <property name="spacing" >
         <number>6</number>
        </property>
        <item rowspan="2" row="0" column="0" >
@@ -323,22 +101,10 @@ p, li { white-space: pre-wrap; }
           <enum>QFrame::Raised</enum>
          </property>
          <layout class="QGridLayout" >
-          <property name="leftMargin" >
+          <property name="margin" >
            <number>9</number>
           </property>
-          <property name="topMargin" >
-           <number>9</number>
-          </property>
-          <property name="rightMargin" >
-           <number>9</number>
-          </property>
-          <property name="bottomMargin" >
-           <number>9</number>
-          </property>
-          <property name="horizontalSpacing" >
-           <number>6</number>
-          </property>
-          <property name="verticalSpacing" >
+          <property name="spacing" >
            <number>6</number>
           </property>
           <item row="0" column="0" >
@@ -403,22 +169,10 @@ p, li { white-space: pre-wrap; }
           <bool>false</bool>
          </property>
          <layout class="QGridLayout" >
-          <property name="leftMargin" >
+          <property name="margin" >
            <number>9</number>
           </property>
-          <property name="topMargin" >
-           <number>9</number>
-          </property>
-          <property name="rightMargin" >
-           <number>9</number>
-          </property>
-          <property name="bottomMargin" >
-           <number>9</number>
-          </property>
-          <property name="horizontalSpacing" >
-           <number>6</number>
-          </property>
-          <property name="verticalSpacing" >
+          <property name="spacing" >
            <number>6</number>
           </property>
           <item row="0" column="1" colspan="2" >
@@ -513,16 +267,7 @@ p, li { white-space: pre-wrap; }
             <property name="spacing" >
              <number>6</number>
             </property>
-            <property name="leftMargin" >
-             <number>0</number>
-            </property>
-            <property name="topMargin" >
-             <number>0</number>
-            </property>
-            <property name="rightMargin" >
-             <number>0</number>
-            </property>
-            <property name="bottomMargin" >
+            <property name="margin" >
              <number>0</number>
             </property>
             <item>
@@ -567,16 +312,7 @@ p, li { white-space: pre-wrap; }
             <property name="spacing" >
              <number>6</number>
             </property>
-            <property name="leftMargin" >
-             <number>0</number>
-            </property>
-            <property name="topMargin" >
-             <number>0</number>
-            </property>
-            <property name="rightMargin" >
-             <number>0</number>
-            </property>
-            <property name="bottomMargin" >
+            <property name="margin" >
              <number>0</number>
             </property>
             <item>
@@ -640,22 +376,10 @@ p, li { white-space: pre-wrap; }
           <string>Modelling Method</string>
          </property>
          <layout class="QGridLayout" >
-          <property name="leftMargin" >
+          <property name="margin" >
            <number>8</number>
           </property>
-          <property name="topMargin" >
-           <number>8</number>
-          </property>
-          <property name="rightMargin" >
-           <number>8</number>
-          </property>
-          <property name="bottomMargin" >
-           <number>8</number>
-          </property>
-          <property name="horizontalSpacing" >
-           <number>0</number>
-          </property>
-          <property name="verticalSpacing" >
+          <property name="spacing" >
            <number>0</number>
           </property>
           <item row="3" column="0" >
@@ -663,16 +387,7 @@ p, li { white-space: pre-wrap; }
             <property name="spacing" >
              <number>0</number>
             </property>
-            <property name="leftMargin" >
-             <number>0</number>
-            </property>
-            <property name="topMargin" >
-             <number>0</number>
-            </property>
-            <property name="rightMargin" >
-             <number>0</number>
-            </property>
-            <property name="bottomMargin" >
+            <property name="margin" >
              <number>0</number>
             </property>
             <item>
@@ -864,7 +579,7 @@ p, li { white-space: pre-wrap; }
          <property name="orientation" >
           <enum>Qt::Vertical</enum>
          </property>
-         <property name="sizeHint" >
+         <property name="sizeHint" stdset="0" >
           <size>
            <width>308</width>
            <height>83</height>
@@ -878,87 +593,396 @@ p, li { white-space: pre-wrap; }
       <attribute name="title" >
        <string>Diet</string>
       </attribute>
-      <layout class="QGridLayout" >
-       <property name="leftMargin" >
-        <number>9</number>
-       </property>
-       <property name="topMargin" >
-        <number>9</number>
-       </property>
-       <property name="rightMargin" >
-        <number>9</number>
-       </property>
-       <property name="bottomMargin" >
-        <number>9</number>
-       </property>
-       <property name="horizontalSpacing" >
-        <number>6</number>
-       </property>
-       <property name="verticalSpacing" >
-        <number>6</number>
-       </property>
+      <layout class="QGridLayout" name="gridLayout_7" >
        <item row="0" column="0" >
-        <layout class="QHBoxLayout" >
-         <property name="spacing" >
-          <number>6</number>
+        <widget class="QGroupBox" name="diet_comp_box" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
-         <property name="leftMargin" >
-          <number>0</number>
+         <property name="title" >
+          <string>Dietary Composition Percentages (Calories!)</string>
          </property>
-         <property name="topMargin" >
-          <number>0</number>
-         </property>
-         <property name="rightMargin" >
-          <number>0</number>
-         </property>
-         <property name="bottomMargin" >
-          <number>0</number>
-         </property>
-         <item>
-          <widget class="QGroupBox" name="diet_comp_box" >
-           <property name="sizePolicy" >
-            <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="title" >
-            <string>Dietary Composition Percentages (Calories!)</string>
-           </property>
-           <layout class="QGridLayout" >
-            <property name="leftMargin" >
-             <number>9</number>
-            </property>
-            <property name="topMargin" >
-             <number>9</number>
-            </property>
-            <property name="rightMargin" >
-             <number>9</number>
-            </property>
-            <property name="bottomMargin" >
-             <number>9</number>
-            </property>
-            <property name="horizontalSpacing" >
+         <layout class="QGridLayout" name="gridLayout_5" >
+          <item row="0" column="0" colspan="2" >
+           <layout class="QHBoxLayout" >
+            <property name="spacing" >
              <number>6</number>
             </property>
-            <property name="verticalSpacing" >
-             <number>6</number>
+            <property name="margin" >
+             <number>0</number>
             </property>
-            <item row="2" column="0" colspan="2" >
+            <item>
+             <widget class="QLabel" name="labelCropPercent" >
+              <property name="toolTip" >
+               <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The percentage of calories of the populations diet that is supplied by food that comes from plants.&lt;/p>&lt;/body>&lt;/html></string>
+              </property>
+              <property name="text" >
+               <string>50</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSlider" name="sliderDiet" >
+              <property name="toolTip" >
+               <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Adjust this slider to set the ratio of Plant:Meat plants in the diet (calories)&lt;/p>&lt;/body>&lt;/html></string>
+              </property>
+              <property name="whatsThis" >
+               <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Set the overall division in the diet as a ratio between calories provided by &lt;span style=" font-weight:600; color:#0000ff;">Plants&lt;/span> and calories provided by &lt;span style=" font-weight:600; color:#0000ff;">Meat&lt;/span> with the top slider. You can either click and drag with the mouse, or use the mouse wheel. As you slide it, you will see that the percentages for both are automatically adjusted. This setting includes food from both wild and tame sources.&lt;/p>
+&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The Plant to Meat Ratio is the primary distinction you must make when defining the settlements diet. This setting relies on the assumption that all food comes from either plants or animals, regardless of whether or not it is tame or wild. &lt;span style=" font-weight:600; color:#0000ff;">Note that this setting is based on calories&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+              </property>
+              <property name="maximum" >
+               <number>100</number>
+              </property>
+              <property name="singleStep" >
+               <number>1</number>
+              </property>
+              <property name="pageStep" >
+               <number>1</number>
+              </property>
+              <property name="value" >
+               <number>50</number>
+              </property>
+              <property name="sliderPosition" >
+               <number>50</number>
+              </property>
+              <property name="orientation" >
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="tickPosition" >
+               <enum>QSlider::TicksBothSides</enum>
+              </property>
+              <property name="tickInterval" >
+               <number>25</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="labelMeatPercent" >
+              <property name="toolTip" >
+               <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The percentage of calories of the populations diet that is supplied by food that comes from animals.&lt;/p>&lt;/body>&lt;/html></string>
+              </property>
+              <property name="text" >
+               <string>50</string>
+              </property>
+              <property name="alignment" >
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="1" column="0" >
+           <widget class="QGroupBox" name="groupplantpercent" >
+            <property name="title" >
+             <string>PLANT</string>
+            </property>
+            <layout class="QGridLayout" >
+             <property name="margin" >
+              <number>9</number>
+             </property>
+             <property name="spacing" >
+              <number>6</number>
+             </property>
+             <item row="1" column="1" >
+              <spacer>
+               <property name="orientation" >
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0" >
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="1" column="2" >
+              <widget class="QLabel" name="labelCropTamePercent" >
+               <property name="toolTip" >
+                <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The percentage of calories of the population's &lt;span style=" font-style:italic; text-decoration: underline;">plant&lt;/span> portion of the diet that is supplied by domesticated plants (crops).&lt;/p>&lt;/body>&lt;/html></string>
+               </property>
+               <property name="text" >
+                <string>90</string>
+               </property>
+               <property name="alignment" >
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0" colspan="3" >
+              <widget class="QSlider" name="sliderCrop" >
+               <property name="toolTip" >
+                <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Adjust this slider to set the ratio of Wild:Tame plants in the plant portion of the diet (calories)&lt;/p>&lt;/body>&lt;/html></string>
+               </property>
+               <property name="whatsThis" >
+                <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The Wild to Tame Ratio is the distinction you must make when defining the settlements plant or meat portion of the diet. This setting relies on the assumption that all of their food comes from either wild sources or tame sources. To adjust, simply move the slider left or right, or spin your mouse wheel. &lt;span style=" font-weight:600;">Note that this setting is based on calories&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+               </property>
+               <property name="maximum" >
+                <number>100</number>
+               </property>
+               <property name="singleStep" >
+                <number>1</number>
+               </property>
+               <property name="pageStep" >
+                <number>1</number>
+               </property>
+               <property name="value" >
+                <number>90</number>
+               </property>
+               <property name="sliderPosition" >
+                <number>90</number>
+               </property>
+               <property name="orientation" >
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="tickPosition" >
+                <enum>QSlider::TicksBelow</enum>
+               </property>
+               <property name="tickInterval" >
+                <number>25</number>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0" >
+              <widget class="QLabel" name="labelCropWildPercent" >
+               <property name="toolTip" >
+                <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The percentage of calories of the population's &lt;span style=" font-style:italic; text-decoration: underline;">plant&lt;/span> portion of the diet that is supplied by non-domesticated plants.&lt;/p>&lt;/body>&lt;/html></string>
+               </property>
+               <property name="text" >
+                <string>10</string>
+               </property>
+               <property name="alignment" >
+                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0" >
+              <widget class="QLabel" name="label_9" >
+               <property name="text" >
+                <string>Wild</string>
+               </property>
+               <property name="alignment" >
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2" >
+              <widget class="QLabel" name="label_11" >
+               <property name="text" >
+                <string>Domestic</string>
+               </property>
+               <property name="alignment" >
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1" >
+              <spacer>
+               <property name="orientation" >
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0" >
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="1" column="1" >
+           <widget class="QGroupBox" name="groupmeatpercent" >
+            <property name="layoutDirection" >
+             <enum>Qt::RightToLeft</enum>
+            </property>
+            <property name="title" >
+             <string>MEAT</string>
+            </property>
+            <layout class="QGridLayout" >
+             <property name="margin" >
+              <number>9</number>
+             </property>
+             <property name="spacing" >
+              <number>6</number>
+             </property>
+             <item row="0" column="0" >
+              <widget class="QLabel" name="label_14" >
+               <property name="text" >
+                <string>Domestic</string>
+               </property>
+               <property name="alignment" >
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1" >
+              <spacer>
+               <property name="orientation" >
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0" >
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="1" column="2" >
+              <widget class="QLabel" name="labelMeatWildPercent" >
+               <property name="toolTip" >
+                <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The percentage of calories of the population's &lt;span style=" font-style:italic; text-decoration: underline;">meat&lt;/span> portion of the diet that is supplied by non-domesticated animals.  (Hunting, fishing, scavenging, etc.)&lt;/p>&lt;/body>&lt;/html></string>
+               </property>
+               <property name="text" >
+                <string>10</string>
+               </property>
+               <property name="alignment" >
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2" >
+              <widget class="QLabel" name="label_13" >
+               <property name="text" >
+                <string>Wild</string>
+               </property>
+               <property name="alignment" >
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0" >
+              <widget class="QLabel" name="labelMeatTamePercent" >
+               <property name="toolTip" >
+                <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The percentage of calories of the population's &lt;span style=" font-style:italic; text-decoration: underline;">meat&lt;/span> portion of the diet that is supplied by domesticated animals.&lt;/p>&lt;/body>&lt;/html></string>
+               </property>
+               <property name="layoutDirection" >
+                <enum>Qt::LeftToRight</enum>
+               </property>
+               <property name="text" >
+                <string>90</string>
+               </property>
+               <property name="alignment" >
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0" colspan="3" >
+              <widget class="QSlider" name="sliderMeat" >
+               <property name="toolTip" >
+                <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Adjust this slider to set the ratio of Wild:Tame animals in the meat portion of the diet (calories)&lt;/p>&lt;/body>&lt;/html></string>
+               </property>
+               <property name="whatsThis" >
+                <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The Wild to Tame Ratio is the distinction you must make when defining the settlements plant or meat portion of the diet. This setting relies on the assumption that all of their food comes from either wild sources or tame sources. To adjust, simply move the slider left or right, or spin your mouse wheel. &lt;span style=" font-weight:600;">Note that this setting is based on calories&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+               </property>
+               <property name="layoutDirection" >
+                <enum>Qt::LeftToRight</enum>
+               </property>
+               <property name="maximum" >
+                <number>100</number>
+               </property>
+               <property name="singleStep" >
+                <number>1</number>
+               </property>
+               <property name="pageStep" >
+                <number>1</number>
+               </property>
+               <property name="value" >
+                <number>90</number>
+               </property>
+               <property name="sliderPosition" >
+                <number>90</number>
+               </property>
+               <property name="orientation" >
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="tickPosition" >
+                <enum>QSlider::TicksBelow</enum>
+               </property>
+               <property name="tickInterval" >
+                <number>25</number>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1" >
+              <spacer>
+               <property name="orientation" >
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0" >
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+            <zorder>label_14</zorder>
+            <zorder>labelMeatWildPercent</zorder>
+            <zorder>label_13</zorder>
+            <zorder>labelMeatTamePercent</zorder>
+            <zorder>sliderMeat</zorder>
+            <zorder>layoutWidget_2</zorder>
+           </widget>
+          </item>
+          <item row="2" column="0" colspan="2" >
+           <widget class="Line" name="line" >
+            <property name="orientation" >
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0" colspan="2" >
+           <layout class="QHBoxLayout" name="horizontalLayout" >
+            <item>
              <layout class="QHBoxLayout" >
               <property name="spacing" >
                <number>6</number>
               </property>
-              <property name="leftMargin" >
-               <number>0</number>
-              </property>
-              <property name="topMargin" >
-               <number>0</number>
-              </property>
-              <property name="rightMargin" >
-               <number>0</number>
-              </property>
-              <property name="bottomMargin" >
+              <property name="margin" >
                <number>0</number>
               </property>
               <item>
@@ -1017,196 +1041,65 @@ p, li { white-space: pre-wrap; }
               </item>
              </layout>
             </item>
-            <item row="1" column="0" >
-             <widget class="QGroupBox" name="groupplantpercent" >
-              <property name="title" >
-               <string>PLANT</string>
+            <item>
+             <widget class="Line" name="line_2" >
+              <property name="orientation" >
+               <enum>Qt::Vertical</enum>
               </property>
-              <layout class="QGridLayout" >
-               <property name="leftMargin" >
-                <number>9</number>
-               </property>
-               <property name="topMargin" >
-                <number>9</number>
-               </property>
-               <property name="rightMargin" >
-                <number>9</number>
-               </property>
-               <property name="bottomMargin" >
-                <number>9</number>
-               </property>
-               <property name="horizontalSpacing" >
-                <number>6</number>
-               </property>
-               <property name="verticalSpacing" >
-                <number>6</number>
-               </property>
-               <item row="1" column="1" >
-                <spacer>
-                 <property name="orientation" >
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                 <property name="sizeHint" >
-                  <size>
-                   <width>40</width>
-                   <height>20</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-               <item row="1" column="2" >
-                <widget class="QLabel" name="labelCropTamePercent" >
-                 <property name="toolTip" >
-                  <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The percentage of calories of the population's &lt;span style=" font-style:italic; text-decoration: underline;">plant&lt;/span> portion of the diet that is supplied by domesticated plants (crops).&lt;/p>&lt;/body>&lt;/html></string>
-                 </property>
-                 <property name="text" >
-                  <string>90</string>
-                 </property>
-                 <property name="alignment" >
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="0" colspan="3" >
-                <widget class="QSlider" name="sliderCrop" >
-                 <property name="toolTip" >
-                  <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Adjust this slider to set the ratio of Wild:Tame plants in the plant portion of the diet (calories)&lt;/p>&lt;/body>&lt;/html></string>
-                 </property>
-                 <property name="whatsThis" >
-                  <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The Wild to Tame Ratio is the distinction you must make when defining the settlements plant or meat portion of the diet. This setting relies on the assumption that all of their food comes from either wild sources or tame sources. To adjust, simply move the slider left or right, or spin your mouse wheel. &lt;span style=" font-weight:600;">Note that this setting is based on calories&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
-                 </property>
-                 <property name="maximum" >
-                  <number>100</number>
-                 </property>
-                 <property name="singleStep" >
-                  <number>1</number>
-                 </property>
-                 <property name="pageStep" >
-                  <number>1</number>
-                 </property>
-                 <property name="value" >
-                  <number>90</number>
-                 </property>
-                 <property name="sliderPosition" >
-                  <number>90</number>
-                 </property>
-                 <property name="orientation" >
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                 <property name="tickPosition" >
-                  <enum>QSlider::TicksBelow</enum>
-                 </property>
-                 <property name="tickInterval" >
-                  <number>25</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="0" >
-                <widget class="QLabel" name="labelCropWildPercent" >
-                 <property name="toolTip" >
-                  <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The percentage of calories of the population's &lt;span style=" font-style:italic; text-decoration: underline;">plant&lt;/span> portion of the diet that is supplied by non-domesticated plants.&lt;/p>&lt;/body>&lt;/html></string>
-                 </property>
-                 <property name="text" >
-                  <string>10</string>
-                 </property>
-                 <property name="alignment" >
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="0" >
-                <widget class="QLabel" name="label_9" >
-                 <property name="text" >
-                  <string>Wild</string>
-                 </property>
-                 <property name="alignment" >
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="2" >
-                <widget class="QLabel" name="label_11" >
-                 <property name="text" >
-                  <string>Tame</string>
-                 </property>
-                 <property name="alignment" >
-                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="1" >
-                <spacer>
-                 <property name="orientation" >
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                 <property name="sizeHint" >
-                  <size>
-                   <width>40</width>
-                   <height>20</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-              </layout>
              </widget>
             </item>
-            <item row="0" column="0" colspan="2" >
-             <layout class="QHBoxLayout" >
+            <item>
+             <layout class="QHBoxLayout" name="_2" >
               <property name="spacing" >
                <number>6</number>
               </property>
-              <property name="leftMargin" >
-               <number>0</number>
-              </property>
-              <property name="topMargin" >
-               <number>0</number>
-              </property>
-              <property name="rightMargin" >
-               <number>0</number>
-              </property>
-              <property name="bottomMargin" >
+              <property name="margin" >
                <number>0</number>
               </property>
               <item>
-               <widget class="QLabel" name="labelCropPercent" >
+               <widget class="QLabel" name="label6_2" >
                 <property name="toolTip" >
                  <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The percentage of calories of the populations diet that is supplied by food that comes from plants.&lt;/p>&lt;/body>&lt;/html></string>
-                </property>
-                <property name="text" >
-                 <string>50</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QSlider" name="sliderDiet" >
-                <property name="toolTip" >
-                 <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Adjust this slider to set the ratio of Plant:Meat plants in the diet (calories)&lt;/p>&lt;/body>&lt;/html></string>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Average requirements for each individual&lt;/p>&lt;/body>&lt;/html></string>
                 </property>
                 <property name="whatsThis" >
                  <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Set the overall division in the diet as a ratio between calories provided by &lt;span style=" font-weight:600; color:#0000ff;">Plants&lt;/span> and calories provided by &lt;span style=" font-weight:600; color:#0000ff;">Meat&lt;/span> with the top slider. You can either click and drag with the mouse, or use the mouse wheel. As you slide it, you will see that the percentages for both are automatically adjusted. This setting includes food from both wild and tame sources.&lt;/p>
-&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The Plant to Meat Ratio is the primary distinction you must make when defining the settlements diet. This setting relies on the assumption that all food comes from either plants or animals, regardless of whether or not it is tame or wild. &lt;span style=" font-weight:600; color:#0000ff;">Note that this setting is based on calories&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">This figure is an average only.  In the future, I hope to be able to implement a feature whereby the human population is modelled, and account for different requirements of men, adult women, pregnant women, lactating women, and children.&lt;/p>&lt;/body>&lt;/html></string>
+                </property>
+                <property name="text" >
+                 <string>Utilisation of Dairy Produce</string>
+                </property>
+                <property name="wordWrap" >
+                 <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QSpinBox" name="spinBoxDairyUtilisation" >
+                <property name="toolTip" >
+                 <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Set the average number of calories per day required per person&lt;/p>&lt;/body>&lt;/html></string>
+                </property>
+                <property name="whatsThis" >
+                 <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">In future versions of LandUse Analyst, the demographics of the human population will be modelled, but currently the user has to supply one figure for an average number of calories required by a single person on a daily basis.&lt;/p>&lt;/body>&lt;/html></string>
+                </property>
+                <property name="buttonSymbols" >
+                 <enum>QAbstractSpinBox::PlusMinus</enum>
+                </property>
+                <property name="suffix" >
+                 <string> % (of potential)</string>
+                </property>
+                <property name="minimum" >
+                 <number>1</number>
                 </property>
                 <property name="maximum" >
                  <number>100</number>
@@ -1214,586 +1107,322 @@ p, li { white-space: pre-wrap; }
                 <property name="singleStep" >
                  <number>1</number>
                 </property>
-                <property name="pageStep" >
-                 <number>1</number>
-                </property>
                 <property name="value" >
-                 <number>50</number>
-                </property>
-                <property name="sliderPosition" >
-                 <number>50</number>
-                </property>
-                <property name="orientation" >
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="tickPosition" >
-                 <enum>QSlider::TicksBothSides</enum>
-                </property>
-                <property name="tickInterval" >
-                 <number>25</number>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="labelMeatPercent" >
-                <property name="toolTip" >
-                 <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The percentage of calories of the populations diet that is supplied by food that comes from animals.&lt;/p>&lt;/body>&lt;/html></string>
-                </property>
-                <property name="text" >
-                 <string>50</string>
-                </property>
-                <property name="alignment" >
-                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 <number>100</number>
                 </property>
                </widget>
               </item>
              </layout>
             </item>
-            <item row="1" column="1" >
-             <widget class="QGroupBox" name="groupmeatpercent" >
-              <property name="layoutDirection" >
-               <enum>Qt::RightToLeft</enum>
-              </property>
-              <property name="title" >
-               <string>MEAT</string>
-              </property>
-              <layout class="QGridLayout" >
-               <property name="leftMargin" >
-                <number>9</number>
-               </property>
-               <property name="topMargin" >
-                <number>9</number>
-               </property>
-               <property name="rightMargin" >
-                <number>9</number>
-               </property>
-               <property name="bottomMargin" >
-                <number>9</number>
-               </property>
-               <property name="horizontalSpacing" >
-                <number>6</number>
-               </property>
-               <property name="verticalSpacing" >
-                <number>6</number>
-               </property>
-               <item row="0" column="0" >
-                <widget class="QLabel" name="label_14" >
-                 <property name="text" >
-                  <string>Tame</string>
-                 </property>
-                 <property name="alignment" >
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="1" >
-                <spacer>
-                 <property name="orientation" >
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                 <property name="sizeHint" >
-                  <size>
-                   <width>40</width>
-                   <height>20</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-               <item row="1" column="2" >
-                <widget class="QLabel" name="labelMeatWildPercent" >
-                 <property name="toolTip" >
-                  <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The percentage of calories of the population's &lt;span style=" font-style:italic; text-decoration: underline;">meat&lt;/span> portion of the diet that is supplied by non-domesticated animals.  (Hunting, fishing, scavenging, etc.)&lt;/p>&lt;/body>&lt;/html></string>
-                 </property>
-                 <property name="text" >
-                  <string>10</string>
-                 </property>
-                 <property name="alignment" >
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="2" >
-                <widget class="QLabel" name="label_13" >
-                 <property name="text" >
-                  <string>Wild</string>
-                 </property>
-                 <property name="alignment" >
-                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="0" >
-                <widget class="QLabel" name="labelMeatTamePercent" >
-                 <property name="toolTip" >
-                  <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The percentage of calories of the population's &lt;span style=" font-style:italic; text-decoration: underline;">meat&lt;/span> portion of the diet that is supplied by domesticated animals.&lt;/p>&lt;/body>&lt;/html></string>
-                 </property>
-                 <property name="layoutDirection" >
-                  <enum>Qt::LeftToRight</enum>
-                 </property>
-                 <property name="text" >
-                  <string>90</string>
-                 </property>
-                 <property name="alignment" >
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="0" colspan="3" >
-                <widget class="QSlider" name="sliderMeat" >
-                 <property name="toolTip" >
-                  <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Adjust this slider to set the ratio of Wild:Tame animals in the meat portion of the diet (calories)&lt;/p>&lt;/body>&lt;/html></string>
-                 </property>
-                 <property name="whatsThis" >
-                  <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The Wild to Tame Ratio is the distinction you must make when defining the settlements plant or meat portion of the diet. This setting relies on the assumption that all of their food comes from either wild sources or tame sources. To adjust, simply move the slider left or right, or spin your mouse wheel. &lt;span style=" font-weight:600;">Note that this setting is based on calories&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
-                 </property>
-                 <property name="layoutDirection" >
-                  <enum>Qt::LeftToRight</enum>
-                 </property>
-                 <property name="maximum" >
-                  <number>100</number>
-                 </property>
-                 <property name="singleStep" >
-                  <number>1</number>
-                 </property>
-                 <property name="pageStep" >
-                  <number>1</number>
-                 </property>
-                 <property name="value" >
-                  <number>90</number>
-                 </property>
-                 <property name="sliderPosition" >
-                  <number>90</number>
-                 </property>
-                 <property name="orientation" >
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                 <property name="tickPosition" >
-                  <enum>QSlider::TicksBelow</enum>
-                 </property>
-                 <property name="tickInterval" >
-                  <number>25</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="1" >
-                <spacer>
-                 <property name="orientation" >
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                 <property name="sizeHint" >
-                  <size>
-                   <width>40</width>
-                   <height>20</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-              </layout>
-             </widget>
-            </item>
-            <item row="3" column="0" colspan="2" >
-             <spacer>
-              <property name="orientation" >
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeHint" >
-               <size>
-                <width>20</width>
-                <height>40</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
            </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="groupBox_2" >
-           <property name="sizePolicy" >
-            <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize" >
-            <size>
-             <width>0</width>
-             <height>200</height>
-            </size>
-           </property>
-           <property name="whatsThis" >
-            <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+          </item>
+          <item row="4" column="1" >
+           <spacer>
+            <property name="orientation" >
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0" >
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="0" column="1" >
+        <widget class="QGroupBox" name="groupBox_2" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize" >
+          <size>
+           <width>0</width>
+           <height>200</height>
+          </size>
+         </property>
+         <property name="whatsThis" >
+          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">LandUse Analsyt needs area targets before it can determine landuse for a site. In order to calculate the area requirements for crops and animals, calorie targets must first be determined. The Diet section makes this task very straight forward. It is important to note that all dietary considerations in this program are based on calories (or in some cases KCalories).&lt;/p>
 &lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">With this in mind, the first step is to define their diets as a ratio between calories provided by &lt;span style=" font-weight:600;">Plants&lt;/span> and calories provided by &lt;span style=" font-weight:600;">Meat&lt;/span> with the top slider. You can either click and drag with the mouse, or use the mouse wheel. As you slide it, you will see that the percentages for both are automatically adjusted. This setting includes all sources of the diet.&lt;/p>
 &lt;p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The second level of adjustment is to set the proportions between tame and wild sources. This works the same way as the top slider. Things to consider when setting these sliders are fishing, hunting, wild plant foraging, etc.&lt;/p>
 &lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>&lt;/body>&lt;/html></string>
-           </property>
-           <property name="title" >
-            <string>Breakdown of Diet</string>
-           </property>
-           <layout class="QGridLayout" >
-            <property name="leftMargin" >
-             <number>9</number>
-            </property>
-            <property name="topMargin" >
-             <number>9</number>
-            </property>
-            <property name="rightMargin" >
-             <number>9</number>
-            </property>
-            <property name="bottomMargin" >
-             <number>9</number>
-            </property>
-            <property name="horizontalSpacing" >
-             <number>6</number>
-            </property>
-            <property name="verticalSpacing" >
-             <number>6</number>
-            </property>
-            <item row="8" column="0" >
-             <widget class="QLabel" name="label_20" >
-              <property name="text" >
-               <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:12pt; font-weight:600; font-style:italic;">KCalories Required:&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
-              </property>
-              <property name="alignment" >
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0" >
-             <layout class="QHBoxLayout" >
-              <property name="spacing" >
-               <number>6</number>
-              </property>
-              <property name="leftMargin" >
-               <number>0</number>
-              </property>
-              <property name="topMargin" >
-               <number>0</number>
-              </property>
-              <property name="rightMargin" >
-               <number>0</number>
-              </property>
-              <property name="bottomMargin" >
-               <number>0</number>
-              </property>
-              <item>
-               <widget class="QLabel" name="label_10" >
-                <property name="text" >
-                 <string>Settlement:</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="labelCaloriesSettlement" >
-                <property name="text" >
-                 <string>Adjust Diet Settings</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item row="0" column="0" >
-             <widget class="QLabel" name="label_4" >
-              <property name="text" >
-               <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+         </property>
+         <property name="title" >
+          <string>Breakdown of Diet</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_4" >
+          <item row="0" column="0" >
+           <widget class="QLabel" name="label_4" >
+            <property name="text" >
+             <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:11pt; font-weight:600; font-style:italic;">kCals required per Annum&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
-              </property>
-              <property name="alignment" >
-               <set>Qt::AlignCenter</set>
+            </property>
+            <property name="alignment" >
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" >
+           <layout class="QHBoxLayout" >
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_8" >
+              <property name="text" >
+               <string>Individual:</string>
               </property>
              </widget>
             </item>
-            <item row="10" column="0" >
-             <layout class="QHBoxLayout" >
-              <property name="spacing" >
-               <number>6</number>
-              </property>
-              <property name="leftMargin" >
-               <number>0</number>
-              </property>
-              <property name="topMargin" >
-               <number>0</number>
-              </property>
-              <property name="rightMargin" >
-               <number>0</number>
-              </property>
-              <property name="bottomMargin" >
-               <number>0</number>
-              </property>
-              <item>
-               <widget class="QLabel" name="label_21" >
-                <property name="text" >
-                 <string>Tame Meat:</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="labelCaloriesTameMeat" >
-                <property name="text" >
-                 <string>Adjust Diet Settings</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item row="7" column="0" >
-             <layout class="QHBoxLayout" >
-              <property name="spacing" >
-               <number>6</number>
-              </property>
-              <property name="leftMargin" >
-               <number>0</number>
-              </property>
-              <property name="topMargin" >
-               <number>0</number>
-              </property>
-              <property name="rightMargin" >
-               <number>0</number>
-              </property>
-              <property name="bottomMargin" >
-               <number>0</number>
-              </property>
-              <item>
-               <widget class="QLabel" name="label_19" >
-                <property name="text" >
-                 <string>Tame Meat:</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="labelPortionTameMeat" >
-                <property name="text" >
-                 <string>Adjust Diet Settings</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item row="9" column="0" >
-             <layout class="QHBoxLayout" >
-              <property name="spacing" >
-               <number>6</number>
-              </property>
-              <property name="leftMargin" >
-               <number>0</number>
-              </property>
-              <property name="topMargin" >
-               <number>0</number>
-              </property>
-              <property name="rightMargin" >
-               <number>0</number>
-              </property>
-              <property name="bottomMargin" >
-               <number>0</number>
-              </property>
-              <item>
-               <widget class="QLabel" name="label_23" >
-                <property name="text" >
-                 <string>Tame Crops:</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="labelCaloriesCrops" >
-                <property name="text" >
-                 <string>Adjust Diet Settings</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item row="4" column="0" >
-             <layout class="QHBoxLayout" >
-              <property name="spacing" >
-               <number>6</number>
-              </property>
-              <property name="leftMargin" >
-               <number>0</number>
-              </property>
-              <property name="topMargin" >
-               <number>0</number>
-              </property>
-              <property name="rightMargin" >
-               <number>0</number>
-              </property>
-              <property name="bottomMargin" >
-               <number>0</number>
-              </property>
-              <item>
-               <widget class="QLabel" name="label_12" >
-                <property name="text" >
-                 <string>All Plants:</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="labelPortionPlants" >
-                <property name="text" >
-                 <string>Adjust Diet Settings</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item row="1" column="0" >
-             <layout class="QHBoxLayout" >
-              <property name="spacing" >
-               <number>6</number>
-              </property>
-              <property name="leftMargin" >
-               <number>0</number>
-              </property>
-              <property name="topMargin" >
-               <number>0</number>
-              </property>
-              <property name="rightMargin" >
-               <number>0</number>
-              </property>
-              <property name="bottomMargin" >
-               <number>0</number>
-              </property>
-              <item>
-               <widget class="QLabel" name="label_8" >
-                <property name="text" >
-                 <string>Individual:</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="labelCaloriesIndividual" >
-                <property name="text" >
-                 <string>Adjust Diet Settings</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item row="6" column="0" >
-             <layout class="QHBoxLayout" >
-              <property name="spacing" >
-               <number>6</number>
-              </property>
-              <property name="leftMargin" >
-               <number>0</number>
-              </property>
-              <property name="topMargin" >
-               <number>0</number>
-              </property>
-              <property name="rightMargin" >
-               <number>0</number>
-              </property>
-              <property name="bottomMargin" >
-               <number>0</number>
-              </property>
-              <item>
-               <widget class="QLabel" name="label_18" >
-                <property name="text" >
-                 <string>Tame Crops:</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="labelPortionCrops" >
-                <property name="text" >
-                 <string>Adjust Diet Settings</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item row="3" column="0" >
-             <widget class="QLabel" name="label_15" >
+            <item>
+             <widget class="QLabel" name="labelCaloriesIndividual" >
               <property name="text" >
-               <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+               <string>Adjust Diet Settings</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="2" column="0" >
+           <layout class="QHBoxLayout" >
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_10" >
+              <property name="text" >
+               <string>Settlement:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="labelCaloriesSettlement" >
+              <property name="text" >
+               <string>Adjust Diet Settings</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="3" column="0" >
+           <widget class="QLabel" name="label_15" >
+            <property name="text" >
+             <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:12pt; font-weight:600; font-style:italic;">Contribution to diet&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
-              </property>
-              <property name="alignment" >
-               <set>Qt::AlignCenter</set>
+            </property>
+            <property name="alignment" >
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0" >
+           <layout class="QHBoxLayout" >
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_12" >
+              <property name="text" >
+               <string>All Plants:</string>
               </property>
              </widget>
             </item>
-            <item row="5" column="0" >
-             <layout class="QHBoxLayout" >
-              <property name="spacing" >
-               <number>6</number>
+            <item>
+             <widget class="QLabel" name="labelPortionPlants" >
+              <property name="text" >
+               <string>Adjust Diet Settings</string>
               </property>
-              <property name="leftMargin" >
-               <number>0</number>
-              </property>
-              <property name="topMargin" >
-               <number>0</number>
-              </property>
-              <property name="rightMargin" >
-               <number>0</number>
-              </property>
-              <property name="bottomMargin" >
-               <number>0</number>
-              </property>
-              <item>
-               <widget class="QLabel" name="label_16" >
-                <property name="text" >
-                 <string>All Meat:</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="labelPortionMeat" >
-                <property name="text" >
-                 <string>Adjust Diet Settings</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item row="11" column="0" >
-             <spacer>
-              <property name="orientation" >
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeHint" >
-               <size>
-                <width>20</width>
-                <height>40</height>
-               </size>
-              </property>
-             </spacer>
+             </widget>
             </item>
            </layout>
-          </widget>
-         </item>
-        </layout>
+          </item>
+          <item row="5" column="0" >
+           <layout class="QHBoxLayout" >
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_16" >
+              <property name="text" >
+               <string>All Meat:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="labelPortionMeat" >
+              <property name="text" >
+               <string>Adjust Diet Settings</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="6" column="0" >
+           <layout class="QHBoxLayout" >
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_18" >
+              <property name="text" >
+               <string>Crops:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="labelPortionCrops" >
+              <property name="text" >
+               <string>Adjust Diet Settings</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="7" column="0" >
+           <layout class="QHBoxLayout" >
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_19" >
+              <property name="text" >
+               <string>Meat:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="labelPortionTameMeat" >
+              <property name="text" >
+               <string>Adjust Diet Settings</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="8" column="0" >
+           <layout class="QHBoxLayout" name="_3" >
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_31" >
+              <property name="text" >
+               <string>Dairy:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="labelPortionDairy" >
+              <property name="text" >
+               <string>Adjust Diet Settings</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="9" column="0" >
+           <widget class="QLabel" name="label_20" >
+            <property name="text" >
+             <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:12pt; font-weight:600; font-style:italic;">KCalories Required:&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+            </property>
+            <property name="alignment" >
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="10" column="0" >
+           <layout class="QHBoxLayout" >
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_23" >
+              <property name="text" >
+               <string>Crops</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="labelCaloriesCrops" >
+              <property name="text" >
+               <string>Adjust Diet Settings</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="11" column="0" >
+           <layout class="QHBoxLayout" >
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_21" >
+              <property name="text" >
+               <string>Animals</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="labelCaloriesTameMeat" >
+              <property name="text" >
+               <string>Adjust Diet Settings</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
        </item>
        <item row="1" column="0" >
         <spacer>
          <property name="orientation" >
           <enum>Qt::Vertical</enum>
          </property>
-         <property name="sizeHint" >
+         <property name="sizeHint" stdset="0" >
           <size>
            <width>20</width>
            <height>40</height>
@@ -1818,16 +1447,7 @@ p, li { white-space: pre-wrap; }
            <property name="spacing" >
             <number>6</number>
            </property>
-           <property name="leftMargin" >
-            <number>0</number>
-           </property>
-           <property name="topMargin" >
-            <number>0</number>
-           </property>
-           <property name="rightMargin" >
-            <number>0</number>
-           </property>
-           <property name="bottomMargin" >
+           <property name="margin" >
             <number>0</number>
            </property>
            <item>
@@ -2047,7 +1667,7 @@ p, li { white-space: pre-wrap; }
       <attribute name="title" >
        <string>Animals</string>
       </attribute>
-      <layout class="QGridLayout" >
+      <layout class="QGridLayout" name="gridLayout_2" >
        <item row="0" column="0" colspan="2" >
         <widget class="QSplitter" name="splitter_3" >
          <property name="orientation" >
@@ -2055,22 +1675,10 @@ p, li { white-space: pre-wrap; }
          </property>
          <widget class="QWidget" name="layoutWidget" >
           <layout class="QGridLayout" >
-           <property name="leftMargin" >
+           <property name="margin" >
             <number>0</number>
            </property>
-           <property name="topMargin" >
-            <number>0</number>
-           </property>
-           <property name="rightMargin" >
-            <number>0</number>
-           </property>
-           <property name="bottomMargin" >
-            <number>0</number>
-           </property>
-           <property name="horizontalSpacing" >
-            <number>6</number>
-           </property>
-           <property name="verticalSpacing" >
+           <property name="spacing" >
             <number>6</number>
            </property>
            <item rowspan="2" row="0" column="0" >
@@ -2127,7 +1735,7 @@ p, li { white-space: pre-wrap; }
              <property name="orientation" >
               <enum>Qt::Vertical</enum>
              </property>
-             <property name="sizeHint" >
+             <property name="sizeHint" stdset="0" >
               <size>
                <width>20</width>
                <height>16</height>
@@ -2261,19 +1869,9 @@ p, li { white-space: pre-wrap; }
          <property name="title" >
           <string>Food Value of Common Grazing Land (Required)</string>
          </property>
-         <layout class="QGridLayout" >
+         <layout class="QGridLayout" name="gridLayout" >
           <item row="0" column="0" >
-           <widget class="QLabel" name="label_7" >
-            <property name="text" >
-             <string>TDN Common Grazed Land</string>
-            </property>
-            <property name="alignment" >
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1" >
-           <widget class="QSpinBox" name="sbCommonRasterTDN" >
+           <widget class="QSpinBox" name="sbCommonRasterValue" >
             <property name="toolTip" >
              <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
@@ -2293,7 +1891,7 @@ p, li { white-space: pre-wrap; }
              <enum>QAbstractSpinBox::PlusMinus</enum>
             </property>
             <property name="suffix" >
-             <string> Kg</string>
+             <string/>
             </property>
             <property name="minimum" >
              <number>1</number>
@@ -2309,10 +1907,27 @@ p, li { white-space: pre-wrap; }
             </property>
            </widget>
           </item>
+          <item row="0" column="1" >
+           <widget class="QComboBox" name="comboBoxCommonRasterUnits" >
+            <item>
+             <property name="text" >
+              <string>KCalories</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>TDN</string>
+             </property>
+            </item>
+           </widget>
+          </item>
           <item row="0" column="2" >
            <widget class="QLabel" name="label_28" >
             <property name="text" >
              <string>per</string>
+            </property>
+            <property name="alignment" >
+             <set>Qt::AlignCenter</set>
             </property>
            </widget>
           </item>
@@ -2345,7 +1960,7 @@ p, li { white-space: pre-wrap; }
           <item row="0" column="4" >
            <widget class="QLabel" name="label_27" >
             <property name="text" >
-             <string>per annum</string>
+             <string>(per annum)</string>
             </property>
            </widget>
           </item>
@@ -2357,16 +1972,7 @@ p, li { white-space: pre-wrap; }
          <property name="spacing" >
           <number>6</number>
          </property>
-         <property name="leftMargin" >
-          <number>0</number>
-         </property>
-         <property name="topMargin" >
-          <number>0</number>
-         </property>
-         <property name="rightMargin" >
-          <number>0</number>
-         </property>
-         <property name="bottomMargin" >
+         <property name="margin" >
           <number>0</number>
          </property>
          <item>
@@ -2466,7 +2072,7 @@ Selected</string>
             <item>
              <widget class="QListWidget" name="listWidgetCalculationsCrop" >
               <property name="sizePolicy" >
-               <sizepolicy vsizetype="Expanding" hsizetype="Fixed" >
+               <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
@@ -2495,7 +2101,7 @@ p, li { white-space: pre-wrap; }
           </widget>
           <widget class="QTextBrowser" name="textBrowserResultsCrop" >
            <property name="sizePolicy" >
-            <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+            <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -2542,7 +2148,7 @@ Selected</string>
             <item>
              <widget class="QListWidget" name="listWidgetCalculationsAnimal" >
               <property name="sizePolicy" >
-               <sizepolicy vsizetype="Expanding" hsizetype="Fixed" >
+               <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
@@ -2571,7 +2177,7 @@ p, li { white-space: pre-wrap; }
           </widget>
           <widget class="QTextBrowser" name="textBrowserResultsAnimals" >
            <property name="sizePolicy" >
-            <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+            <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -2593,7 +2199,7 @@ p, li { white-space: pre-wrap; }
          <property name="orientation" >
           <enum>Qt::Horizontal</enum>
          </property>
-         <property name="sizeHint" >
+         <property name="sizeHint" stdset="0" >
           <size>
            <width>341</width>
            <height>27</height>
@@ -2643,22 +2249,10 @@ p, li { white-space: pre-wrap; }
        <string>Results</string>
       </attribute>
       <layout class="QGridLayout" >
-       <property name="leftMargin" >
+       <property name="margin" >
         <number>9</number>
        </property>
-       <property name="topMargin" >
-        <number>9</number>
-       </property>
-       <property name="rightMargin" >
-        <number>9</number>
-       </property>
-       <property name="bottomMargin" >
-        <number>9</number>
-       </property>
-       <property name="horizontalSpacing" >
-        <number>6</number>
-       </property>
-       <property name="verticalSpacing" >
+       <property name="spacing" >
         <number>6</number>
        </property>
        <item row="0" column="0" >
@@ -2690,22 +2284,10 @@ p, li { white-space: pre-wrap; }
        <string>Log</string>
       </attribute>
       <layout class="QGridLayout" >
-       <property name="leftMargin" >
+       <property name="margin" >
         <number>9</number>
        </property>
-       <property name="topMargin" >
-        <number>9</number>
-       </property>
-       <property name="rightMargin" >
-        <number>9</number>
-       </property>
-       <property name="bottomMargin" >
-        <number>9</number>
-       </property>
-       <property name="horizontalSpacing" >
-        <number>6</number>
-       </property>
-       <property name="verticalSpacing" >
+       <property name="spacing" >
         <number>6</number>
        </property>
        <item row="0" column="0" >
@@ -2718,22 +2300,10 @@ p, li { white-space: pre-wrap; }
        <string>Help</string>
       </attribute>
       <layout class="QGridLayout" >
-       <property name="leftMargin" >
+       <property name="margin" >
         <number>9</number>
        </property>
-       <property name="topMargin" >
-        <number>9</number>
-       </property>
-       <property name="rightMargin" >
-        <number>9</number>
-       </property>
-       <property name="bottomMargin" >
-        <number>9</number>
-       </property>
-       <property name="horizontalSpacing" >
-        <number>6</number>
-       </property>
-       <property name="verticalSpacing" >
+       <property name="spacing" >
         <number>6</number>
        </property>
        <item row="0" column="0" >
@@ -2746,16 +2316,7 @@ p, li { white-space: pre-wrap; }
            <property name="spacing" >
             <number>1</number>
            </property>
-           <property name="leftMargin" >
-            <number>0</number>
-           </property>
-           <property name="topMargin" >
-            <number>0</number>
-           </property>
-           <property name="rightMargin" >
-            <number>0</number>
-           </property>
-           <property name="bottomMargin" >
+           <property name="margin" >
             <number>0</number>
            </property>
            <item>
@@ -3306,18 +2867,19 @@ p, li { white-space: pre-wrap; }
            </sizepolicy>
           </property>
           <property name="styleSheet" >
-           <string>&lt;CENTER></string>
+           <string notr="true" >&lt;CENTER></string>
           </property>
           <property name="html" >
-           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+           <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:10pt; font-weight:600;">To learn more about a feature or field in LandUse Analyst, you can do one of four things.&lt;/span>&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">1. &lt;span style=" font-size:10pt; color:#0000ff;">Hover over it&lt;/span> with your mouse arrow for a brief description&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">2. Click the &lt;span style=" font-size:12pt; font-weight:600; color:#0000ff;">?&lt;/span> in the top right of the main window and then click on the item you want detailed help for.&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"> Click anywhere to make the help box go away.&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">3. RIght Click on the thing you want help for.  If there is detailed help for it, you will see a &lt;span style=" font-weight:600; color:#0000ff;">What is this?&lt;/span> option that you can then click on.  Again, you can click anywhere to make the help box go away.&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">4. Go to the &lt;span style=" font-weight:600; color:#0000ff;">Help&lt;/span> &lt;span style=" font-weight:600; color:#0000ff;">Tab&lt;/span> and click on the item you want help with on the left for an even more detailed description of what things are and how they work&lt;/p>&lt;/body>&lt;/html></string>
+&lt;/style>&lt;/head>&lt;body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;">&lt;span style=" font-size:10pt; font-weight:600;">To learn more about a feature or field in LandUse Analyst, you can do one of four things.&lt;/span>&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;">1. &lt;span style=" font-size:10pt; color:#0000ff;">Hover over it&lt;/span> with your mouse arrow for a brief description&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;">2. Click the &lt;span style=" font-size:12pt; font-weight:600; color:#0000ff;">?&lt;/span> in the top right of the main window and then click on the item you want detailed help for.&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;"> Click anywhere to make the help box go away.&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;">3. RIght Click on the thing you want help for.  If there is detailed help for it, you will see a &lt;span style=" font-weight:600; color:#0000ff;">What is this?&lt;/span> option that you can then click on.  Again, you can click anywhere to make the help box go away.&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;">4. Go to the &lt;span style=" font-weight:600; color:#0000ff;">Help&lt;/span> &lt;span style=" font-weight:600; color:#0000ff;">Tab&lt;/span> and click on the item you want help with on the left for an even more detailed description of what things are and how they work&lt;/p>&lt;/body>&lt;/html></string>
           </property>
          </widget>
         </widget>
@@ -3325,6 +2887,216 @@ p, li { white-space: pre-wrap; }
       </layout>
      </widget>
     </widget>
+   </item>
+   <item row="1" column="0" >
+    <spacer name="spacer" >
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>308</width>
+       <height>17</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="2" column="0" >
+    <layout class="QGridLayout" name="gridLayout_3" >
+     <item row="0" column="0" >
+      <widget class="QLabel" name="label_5" >
+       <property name="toolTip" >
+        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">This is the sum of percent of diet figures for all of the animals being used in the model.  &lt;span style=" font-weight:600; font-style:italic; text-decoration: underline; color:#0000ff;">This must be 100%&lt;/span> to run!&lt;/p>&lt;/body>&lt;/html></string>
+       </property>
+       <property name="text" >
+        <string>Animals:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1" >
+      <widget class="QLabel" name="labelAnimalCheck" >
+       <property name="toolTip" >
+        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">This is the sum of percent of diet figures for all of the animals being used in the model.  &lt;span style=" font-weight:600; font-style:italic; text-decoration: underline; color:#0000ff;">This must be 100%&lt;/span> to run!&lt;/p>&lt;/body>&lt;/html></string>
+       </property>
+       <property name="text" >
+        <string>100%</string>
+       </property>
+       <property name="alignment" >
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2" >
+      <widget class="QLabel" name="label_3" >
+       <property name="toolTip" >
+        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">This is the sum of percent of diet figures for all of the crops being used in the model.  &lt;span style=" font-weight:600; font-style:italic; text-decoration: underline; color:#0000ff;">This must be 100%&lt;/span> to run!&lt;/p>&lt;/body>&lt;/html></string>
+       </property>
+       <property name="text" >
+        <string>  Crops:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="3" >
+      <widget class="QLabel" name="labelCropCheck" >
+       <property name="toolTip" >
+        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">This is the sum of percent of diet figures for all of the crops being used in the model.  &lt;span style=" font-weight:600; font-style:italic; text-decoration: underline; color:#0000ff;">This must be 100%&lt;/span> to run!&lt;/p>&lt;/body>&lt;/html></string>
+       </property>
+       <property name="text" >
+        <string>100%</string>
+       </property>
+       <property name="alignment" >
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="4" >
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0" >
+        <size>
+         <width>16</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="0" column="5" >
+      <widget class="QPushButton" name="pushButtonRun" >
+       <property name="sizePolicy" >
+        <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize" >
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="toolTip" >
+        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Run the model.&lt;/p>&lt;/body>&lt;/html></string>
+       </property>
+       <property name="whatsThis" >
+        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Pressing Calculate! will attempt to run the model with the parameters you have chosen.  If there are any errors, this process will fail, and indicate to you what the problem was.  To be on the safe side, always save your model before attempting to Calculate! it.  All results will be saved if the model runs correctly.&lt;/p>&lt;/body>&lt;/html></string>
+       </property>
+       <property name="text" >
+        <string>Run</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="6" >
+      <widget class="QPushButton" name="pushButtonLoad" >
+       <property name="sizePolicy" >
+        <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize" >
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="toolTip" >
+        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Load previously saved model parameters.&lt;/p>&lt;/body>&lt;/html></string>
+       </property>
+       <property name="text" >
+        <string>Load</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="7" >
+      <widget class="QPushButton" name="pushButtonSave" >
+       <property name="sizePolicy" >
+        <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip" >
+        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Save all settings of this model to a file&lt;/p>&lt;/body>&lt;/html></string>
+       </property>
+       <property name="text" >
+        <string>Save</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="8" >
+      <widget class="QPushButton" name="pushButtonExit" >
+       <property name="sizePolicy" >
+        <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text" >
+        <string>Exit</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0" colspan="9" >
+      <widget class="QProgressBar" name="progressBarCalcs" >
+       <property name="sizePolicy" >
+        <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize" >
+        <size>
+         <width>16777215</width>
+         <height>10</height>
+        </size>
+       </property>
+       <property name="toolTip" >
+        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Shows when program is busy, or progress of tasks.&lt;/p>&lt;/body>&lt;/html></string>
+       </property>
+       <property name="value" >
+        <number>0</number>
+       </property>
+       <property name="textVisible" >
+        <bool>false</bool>
+       </property>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="format" >
+        <string>%p%</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
@@ -3344,7 +3116,6 @@ p, li { white-space: pre-wrap; }
   <tabstop>pushButtonLoad</tabstop>
   <tabstop>pushButtonSave</tabstop>
   <tabstop>pushButtonExit</tabstop>
-  <tabstop>MainTabs</tabstop>
   <tabstop>sliderDiet</tabstop>
   <tabstop>sliderCrop</tabstop>
   <tabstop>sliderMeat</tabstop>
@@ -3357,7 +3128,7 @@ p, li { white-space: pre-wrap; }
   <tabstop>tblAnimals</tabstop>
   <tabstop>textBrowserAnimalDefinition</tabstop>
   <tabstop>cboCommonGrazingRaster</tabstop>
-  <tabstop>sbCommonRasterTDN</tabstop>
+  <tabstop>sbCommonRasterValue</tabstop>
   <tabstop>comboBoxAreaUnits</tabstop>
   <tabstop>pbnNewAnimal</tabstop>
   <tabstop>pbnNewAnimalParameter</tabstop>

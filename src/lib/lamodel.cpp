@@ -857,7 +857,7 @@ void LaModel::initialiseAreaTargetsAnimalsMap()
     logMessage("Animal: " + myAnimal.name().toLocal8Bit());
     AreaUnits mySpecificAreaUnits = myAnimalParameter.areaUnits();
 
-    float myTDNSpecific = LaUtils::convertAreaToHectares(mySpecificAreaUnits, myAnimalParameter.TDNSpecificGrazingLand());
+    float myTDNSpecific = LaUtils::convertAreaToHectares(mySpecificAreaUnits, myAnimalParameter.ValueSpecificGrazingLand());
 
     float myTDNCommon   = mCommonGrazingTDN;
     qDebug() << "   +++   myTDNSpecific = " << myTDNSpecific;
@@ -869,7 +869,7 @@ void LaModel::initialiseAreaTargetsAnimalsMap()
       logMessage("Animal Needs more Food!");
       // figure out how much grazing land is needed to supply this many calories
       LandBeingGrazed myLandBeingGrazed;
-      //int myTDNCommonGrazingLand = myAnimalParameter.TDNCommonGrazingLand();
+      //int myValueCommonGrazingLand = myAnimalParameter.ValueCommonGrazingLand();
 
       myLandBeingGrazed =  (myAnimalParameter.useCommonGrazingLand()==1) ? Common:Unique;
 

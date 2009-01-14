@@ -187,9 +187,9 @@ void LaAnimalManager::showAnimal()
   spinBoxKillWeight->setValue(mAnimal.killWeight());
   spinBoxGrowTime->setValue(mAnimal.growTime());
   spinBoxDeathRate->setValue(mAnimal.deathRate());
-  spinBoxTDNForGestating->setValue(mAnimal.gestating());
-  spinBoxTDNForLactating->setValue(mAnimal.lactating());
-  spinBoxTDNForJuvenile->setValue(mAnimal.juvenile());
+  spinBoxEnergyForPregnant->setValue(mAnimal.gestating());
+  spinBoxEnergyForLactating->setValue(mAnimal.lactating());
+  spinBoxEnergyForJuvenilePerKg->setValue(mAnimal.juvenile());
   spinBoxSexualMaturity->setValue(mAnimal.sexualMaturity());
   spinBoxBreedingLife->setValue(mAnimal.breedingExpectancy());
   spinBoxYoungPerBirth->setValue(mAnimal.youngPerBirth());
@@ -293,9 +293,9 @@ void LaAnimalManager::on_pbnApply_clicked()
   mAnimal.setKillWeight(spinBoxKillWeight->value());
   mAnimal.setGrowTime(spinBoxGrowTime->value());
   mAnimal.setDeathRate(spinBoxDeathRate->value());
-  mAnimal.setGestating(spinBoxTDNForGestating->value());
-  mAnimal.setLactating(spinBoxTDNForLactating->value());
-  mAnimal.setJuvenile(spinBoxTDNForJuvenile->value());
+  mAnimal.setGestating(spinBoxEnergyForPregnant->value());
+  mAnimal.setLactating(spinBoxEnergyForLactating->value());
+  mAnimal.setJuvenile(spinBoxEnergyForJuvenilePerKg->value());
   mAnimal.setSexualMaturity(spinBoxSexualMaturity->value());
   mAnimal.setBreedingExpectancy(spinBoxBreedingLife->value());
   mAnimal.setYoungPerBirth(spinBoxYoungPerBirth->value());
