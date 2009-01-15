@@ -253,7 +253,7 @@ bool LaAnimalParameter::fromXml(QString theXml)
   {
     mAreaUnits=Hectare;
   }
-QString myEnergyType = QString(myTopElement.firstChildElement("energyType").text());
+  QString myEnergyType = QString(myTopElement.firstChildElement("energyType").text());
   if (myEnergyType == "KCalories")
   {
     mEnergyType=KCalories;

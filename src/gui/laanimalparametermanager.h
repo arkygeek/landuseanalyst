@@ -65,6 +65,7 @@ class LaAnimalParameterManager : public QDialog, private Ui::LaAnimalParameterMa
       void readSettings();
       void writeSettings();
       void setFallowComboBox();
+      void setSpecificLandEnergyType();
       void populateFodder();
 
       /** @TODO move this into LaGuiUtils - a gui subclass of LaUtils */
@@ -76,7 +77,7 @@ class LaAnimalParameterManager : public QDialog, private Ui::LaAnimalParameterMa
       LaTripleMap mSelectedCropsMap;
       int mCommonGrazedLandTDN;
       AreaUnits mCommonGrazingLandAreaUnits;
-      EnergyType mSpecificLandEnergyType;
+      //EnergyType mSpecificLandEnergyType;
 };
 
 #endif //LAANIMALPARAMETERMANAGER_H

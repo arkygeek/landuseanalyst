@@ -656,18 +656,7 @@ p, li { white-space: pre-wrap; }
        </widget>
       </item>
       <item row="4" column="0" >
-       <widget class="QComboBox" name="comboBoxSpecificLandEnergyType" >
-        <item>
-         <property name="text" >
-          <string>KCalories</string>
-         </property>
-        </item>
-        <item>
-         <property name="text" >
-          <string>TDN</string>
-         </property>
-        </item>
-       </widget>
+       <widget class="QComboBox" name="comboBoxSpecificLandEnergyType" />
       </item>
       <item row="4" column="1" >
        <widget class="QLabel" name="label_5" >

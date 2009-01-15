@@ -95,9 +95,9 @@
   }
   comboBoxAreaUnits->addItem("Dunum");
   comboBoxAreaUnits->addItem("Hectare");
-  comboBoxSpecificLandEnergyType->addItem("KCalories");
-  comboBoxSpecificLandEnergyType->addItem("TDN");
-
+  //comboBoxSpecificLandEnergyType->addItem("KCalories");
+  //comboBoxSpecificLandEnergyType->addItem("TDN");
+  setSpecificLandEnergyType();
   setFallowComboBox();
   populateFodder();
   refreshAnimalParameterTable();
@@ -358,8 +358,15 @@ void LaAnimalParameterManager::showAnimalParameter()
 
   refreshFodderTable();
 
-
-
+  /*if (mAnimalParameter.energyType()==KCalories)
+  {
+    setComboToDefault(comboBoxSpecificLandEnergyType,tr("KCalories"));
+  }
+  else if (mAnimalParameter.energyType()==TDN)
+  {
+    setComboToDefault(comboBoxSpecificLandEnergyType,tr("TDN"));
+  }
+*/
   if (mAnimalParameter.fallowUsage()==High)
   {
     setComboToDefault(comboBoxFallowUsage,tr("High"));
@@ -601,3 +608,10 @@ void LaAnimalParameterManager::setFallowComboBox()
   comboBoxFallowUsage->addItem("MED Fallow Priority", "Medium");
   comboBoxFallowUsage->addItem("LOW Fallow Priority", "Low");
 }
+
+void LaAnimalParameterManager::setSpecificLandEnergyType()
+{
+  comboBoxSpecificLandEnergyType->addItem(/*"Use KCalories", */"KCalories");
+  comboBoxSpecificLandEnergyType->addItem(/*"Use TDN", */"TDN");
+}
+
