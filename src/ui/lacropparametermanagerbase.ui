@@ -413,7 +413,7 @@ p, li { white-space: pre-wrap; }
        </widget>
       </item>
       <item row="2" column="3" colspan="2" >
-       <widget class="QComboBox" name="comboBoxFallowEnergyType" >
+       <widget class="QComboBox" name="cbFallowEnergyType" >
         <property name="minimumSize" >
          <size>
           <width>0</width>
@@ -423,7 +423,7 @@ p, li { white-space: pre-wrap; }
        </widget>
       </item>
       <item row="2" column="5" >
-       <widget class="QComboBox" name="comboBoxAreaUnits" >
+       <widget class="QComboBox" name="cbAreaUnits" >
         <property name="sizePolicy" >
          <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
           <horstretch>0</horstretch>
@@ -746,7 +746,7 @@ p, li { white-space: pre-wrap; }
   <tabstop>checkBoxUseSpecificLand</tabstop>
   <tabstop>sbFallowRatio</tabstop>
   <tabstop>sbFallowValue</tabstop>
-  <tabstop>comboBoxAreaUnits</tabstop>
+  <tabstop>cbAreaUnits</tabstop>
   <tabstop>pbnApply</tabstop>
   <tabstop>pbnClose</tabstop>
  </tabstops>

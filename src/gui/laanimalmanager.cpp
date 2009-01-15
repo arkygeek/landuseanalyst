@@ -182,20 +182,20 @@ void LaAnimalManager::showAnimal()
 {
   leName->setText(mAnimal.name());
   leDescription->setText(mAnimal.description());
-  spinBoxMeatFoodValue->setValue(mAnimal.meatFoodValue());
-  spinBoxUsableMeatPercent->setValue(mAnimal.usableMeat());
-  spinBoxKillWeight->setValue(mAnimal.killWeight());
-  spinBoxGrowTime->setValue(mAnimal.growTime());
-  spinBoxDeathRate->setValue(mAnimal.deathRate());
-  spinBoxEnergyForPregnant->setValue(mAnimal.gestating());
-  spinBoxEnergyForLactating->setValue(mAnimal.lactating());
-  spinBoxEnergyForJuvenilePerKg->setValue(mAnimal.juvenile());
-  spinBoxSexualMaturity->setValue(mAnimal.sexualMaturity());
-  spinBoxBreedingLife->setValue(mAnimal.breedingExpectancy());
-  spinBoxYoungPerBirth->setValue(mAnimal.youngPerBirth());
-  spinBoxWeaningAge->setValue(mAnimal.weaningAge());
-  spinBoxGestationTime->setValue(mAnimal.gestationTime());
-  spinBoxEstrousCycleTime->setValue(mAnimal.estrousCycle());
+  sbMeatFoodValue->setValue(mAnimal.meatFoodValue());
+  sbUsableMeatPercent->setValue(mAnimal.usableMeat());
+  sbKillWeight->setValue(mAnimal.killWeight());
+  sbGrowTime->setValue(mAnimal.growTime());
+  sbDeathRate->setValue(mAnimal.deathRate());
+  sbEnergyForPregnant->setValue(mAnimal.gestating());
+  sbEnergyForLactating->setValue(mAnimal.lactating());
+  sbEnergyForJuvenilePerKg->setValue(mAnimal.juvenile());
+  sbSexualMaturity->setValue(mAnimal.sexualMaturity());
+  sbBreedingLife->setValue(mAnimal.breedingExpectancy());
+  sbYoungPerBirth->setValue(mAnimal.youngPerBirth());
+  sbWeaningAge->setValue(mAnimal.weaningAge());
+  sbGestationTime->setValue(mAnimal.gestationTime());
+  sbEstrousCycleTime->setValue(mAnimal.estrousCycle());
   lblAnimalPix->setPixmap(mAnimal.imageFile());
 }
 
@@ -288,20 +288,20 @@ void LaAnimalManager::on_pbnApply_clicked()
 {
   mAnimal.setName(leName->text());
   mAnimal.setDescription(leDescription->text());
-  mAnimal.setMeatFoodValue(spinBoxMeatFoodValue->value());
-  mAnimal.setUsableMeat(spinBoxUsableMeatPercent->value());
-  mAnimal.setKillWeight(spinBoxKillWeight->value());
-  mAnimal.setGrowTime(spinBoxGrowTime->value());
-  mAnimal.setDeathRate(spinBoxDeathRate->value());
-  mAnimal.setGestating(spinBoxEnergyForPregnant->value());
-  mAnimal.setLactating(spinBoxEnergyForLactating->value());
-  mAnimal.setJuvenile(spinBoxEnergyForJuvenilePerKg->value());
-  mAnimal.setSexualMaturity(spinBoxSexualMaturity->value());
-  mAnimal.setBreedingExpectancy(spinBoxBreedingLife->value());
-  mAnimal.setYoungPerBirth(spinBoxYoungPerBirth->value());
-  mAnimal.setWeaningAge(spinBoxWeaningAge->value());
-  mAnimal.setGestationTime(spinBoxGestationTime->value());
-  mAnimal.setEstrousCycle(spinBoxEstrousCycleTime->value());
+  mAnimal.setMeatFoodValue(sbMeatFoodValue->value());
+  mAnimal.setUsableMeat(sbUsableMeatPercent->value());
+  mAnimal.setKillWeight(sbKillWeight->value());
+  mAnimal.setGrowTime(sbGrowTime->value());
+  mAnimal.setDeathRate(sbDeathRate->value());
+  mAnimal.setGestating(sbEnergyForPregnant->value());
+  mAnimal.setLactating(sbEnergyForLactating->value());
+  mAnimal.setJuvenile(sbEnergyForJuvenilePerKg->value());
+  mAnimal.setSexualMaturity(sbSexualMaturity->value());
+  mAnimal.setBreedingExpectancy(sbBreedingLife->value());
+  mAnimal.setYoungPerBirth(sbYoungPerBirth->value());
+  mAnimal.setWeaningAge(sbWeaningAge->value());
+  mAnimal.setGestationTime(sbGestationTime->value());
+  mAnimal.setEstrousCycle(sbEstrousCycleTime->value());
   mAnimal.setImageFile(mImageFile);
   mAnimal.toXmlFile( LaUtils::userAnimalProfilesDirPath() +
       QDir::separator() + mAnimal.guid() + ".xml");

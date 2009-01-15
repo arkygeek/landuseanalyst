@@ -195,7 +195,7 @@ p, li { white-space: pre-wrap; }
            </widget>
           </item>
           <item row="2" column="1" >
-           <widget class="QSpinBox" name="spinBoxPopulation" >
+           <widget class="QSpinBox" name="sbPopulation" >
             <property name="sizePolicy" >
              <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
               <horstretch>0</horstretch>
@@ -413,7 +413,7 @@ p, li { white-space: pre-wrap; }
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="spinBoxModelPrecision" >
+             <widget class="QSpinBox" name="sbModelPrecision" >
               <property name="sizePolicy" >
                <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                 <horstretch>0</horstretch>
@@ -1009,7 +1009,7 @@ Person per Day</string>
                </widget>
               </item>
               <item>
-               <widget class="QSpinBox" name="spinBoxDailyCalories" >
+               <widget class="QSpinBox" name="sbDailyCalories" >
                 <property name="toolTip" >
                  <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
@@ -1079,7 +1079,7 @@ p, li { white-space: pre-wrap; }
                </widget>
               </item>
               <item>
-               <widget class="QSpinBox" name="spinBoxDairyUtilisation" >
+               <widget class="QSpinBox" name="sbDairyUtilisation" >
                 <property name="toolTip" >
                  <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
@@ -1921,7 +1921,7 @@ p, li { white-space: pre-wrap; }
            </widget>
           </item>
           <item row="0" column="3" >
-           <widget class="QComboBox" name="comboBoxAreaUnits" >
+           <widget class="QComboBox" name="cbAreaUnits" >
             <property name="sizePolicy" >
              <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
               <horstretch>0</horstretch>
@@ -3092,13 +3092,13 @@ p, li { white-space: pre-wrap; }
  <tabstops>
   <tabstop>lineEditSiteName</tabstop>
   <tabstop>lineEditPeriod</tabstop>
-  <tabstop>spinBoxPopulation</tabstop>
+  <tabstop>sbPopulation</tabstop>
   <tabstop>lineEditEasting</tabstop>
   <tabstop>lineEditNorthing</tabstop>
   <tabstop>radioButtonEuclidean</tabstop>
   <tabstop>radioButtonWalkingTime</tabstop>
   <tabstop>radioButtonPathDistance</tabstop>
-  <tabstop>spinBoxModelPrecision</tabstop>
+  <tabstop>sbModelPrecision</tabstop>
   <tabstop>cboMapSet</tabstop>
   <tabstop>cboDEM</tabstop>
   <tabstop>pushButtonRun</tabstop>
@@ -3108,7 +3108,7 @@ p, li { white-space: pre-wrap; }
   <tabstop>sliderDiet</tabstop>
   <tabstop>sliderCrop</tabstop>
   <tabstop>sliderMeat</tabstop>
-  <tabstop>spinBoxDailyCalories</tabstop>
+  <tabstop>sbDailyCalories</tabstop>
   <tabstop>tblCrops</tabstop>
   <tabstop>textBrowserCropDefinition</tabstop>
   <tabstop>cboCommonCropRaster</tabstop>
@@ -3118,7 +3118,7 @@ p, li { white-space: pre-wrap; }
   <tabstop>textBrowserAnimalDefinition</tabstop>
   <tabstop>cboCommonGrazingRaster</tabstop>
   <tabstop>sbCommonRasterValue</tabstop>
-  <tabstop>comboBoxAreaUnits</tabstop>
+  <tabstop>cbAreaUnits</tabstop>
   <tabstop>pbnNewAnimal</tabstop>
   <tabstop>pbnNewAnimalParameter</tabstop>
   <tabstop>listWidgetCalculationsCrop</tabstop>

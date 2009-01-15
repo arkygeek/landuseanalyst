@@ -5,7 +5,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>404</width>
+    <width>513</width>
     <height>366</height>
    </rect>
   </property>
@@ -28,7 +28,7 @@
    <item rowspan="5" row="1" column="2" colspan="3" >
     <widget class="QGroupBox" name="groupBoxFodderUse" >
      <property name="cursor" >
-      <cursor>0</cursor>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="whatsThis" >
       <string>Select Fodder if you believe the animals were fed grain to supplement their grazing.  You will then have to select how many kg of the selected grain you believe they fed each animal either every day, week, or month.</string>
@@ -90,7 +90,7 @@ p, li { white-space: pre-wrap; }
         <property name="orientation" >
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="sizeHint" >
+        <property name="sizeHint" stdset="0" >
          <size>
           <width>40</width>
           <height>20</height>
@@ -99,11 +99,9 @@ p, li { white-space: pre-wrap; }
        </spacer>
       </item>
       <item row="3" column="3" >
-       <widget class="QSpinBox" name="spinBoxFodderLentilsGrain" >
+       <widget class="QSpinBox" name="sbFodderLentilsGrain" >
         <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>4</hsizetype>
-          <vsizetype>0</vsizetype>
+         <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -123,11 +121,9 @@ p, li { white-space: pre-wrap; }
        </widget>
       </item>
       <item row="3" column="2" >
-       <widget class="QSpinBox" name="spinBoxFodderLentils" >
+       <widget class="QSpinBox" name="sbFodderLentils" >
         <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>4</hsizetype>
-          <vsizetype>0</vsizetype>
+         <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -141,11 +137,11 @@ p, li { white-space: pre-wrap; }
         <property name="suffix" >
          <string>%</string>
         </property>
-        <property name="maximum" >
-         <number>100</number>
-        </property>
         <property name="minimum" >
          <number>-3</number>
+        </property>
+        <property name="maximum" >
+         <number>100</number>
         </property>
        </widget>
       </item>
@@ -163,11 +159,9 @@ p, li { white-space: pre-wrap; }
        </widget>
       </item>
       <item row="2" column="3" >
-       <widget class="QSpinBox" name="spinBoxFodderBarleyGrain" >
+       <widget class="QSpinBox" name="sbFodderBarleyGrain" >
         <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>4</hsizetype>
-          <vsizetype>0</vsizetype>
+         <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -187,11 +181,9 @@ p, li { white-space: pre-wrap; }
        </widget>
       </item>
       <item row="2" column="2" >
-       <widget class="QSpinBox" name="spinBoxFodderBarley" >
+       <widget class="QSpinBox" name="sbFodderBarley" >
         <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>0</hsizetype>
-          <vsizetype>0</vsizetype>
+         <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -205,11 +197,11 @@ p, li { white-space: pre-wrap; }
         <property name="suffix" >
          <string>%</string>
         </property>
-        <property name="maximum" >
-         <number>100</number>
-        </property>
         <property name="minimum" >
          <number>-3</number>
+        </property>
+        <property name="maximum" >
+         <number>100</number>
         </property>
        </widget>
       </item>
@@ -227,11 +219,9 @@ p, li { white-space: pre-wrap; }
        </widget>
       </item>
       <item row="1" column="3" >
-       <widget class="QSpinBox" name="spinBoxFodderWheatGrain" >
+       <widget class="QSpinBox" name="sbFodderWheatGrain" >
         <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>0</hsizetype>
-          <vsizetype>0</vsizetype>
+         <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -251,11 +241,9 @@ p, li { white-space: pre-wrap; }
        </widget>
       </item>
       <item row="1" column="2" >
-       <widget class="QSpinBox" name="spinBoxFodderWheat" >
+       <widget class="QSpinBox" name="sbFodderWheat" >
         <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>0</hsizetype>
-          <vsizetype>0</vsizetype>
+         <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -269,11 +257,11 @@ p, li { white-space: pre-wrap; }
         <property name="suffix" >
          <string>%</string>
         </property>
-        <property name="maximum" >
-         <number>100</number>
-        </property>
         <property name="minimum" >
          <number>-3</number>
+        </property>
+        <property name="maximum" >
+         <number>100</number>
         </property>
        </widget>
       </item>
@@ -294,17 +282,15 @@ p, li { white-space: pre-wrap; }
     </widget>
    </item>
    <item row="5" column="0" colspan="2" >
-    <widget class="QComboBox" name="comboBoxFallowUsage" >
+    <widget class="QComboBox" name="cbFallowUsage" >
      <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>5</hsizetype>
-       <vsizetype>0</vsizetype>
+      <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
      <property name="cursor" >
-      <cursor>13</cursor>
+      <cursorShape>PointingHandCursor</cursorShape>
      </property>
      <property name="toolTip" >
       <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
@@ -335,7 +321,7 @@ p, li { white-space: pre-wrap; }
     </widget>
    </item>
    <item row="2" column="1" >
-    <widget class="QSpinBox" name="spinBoxUniqueRasterCalories" >
+    <widget class="QSpinBox" name="sbUniqueRasterCalories" >
      <property name="suffix" >
       <string> KCal</string>
      </property>
@@ -351,17 +337,15 @@ p, li { white-space: pre-wrap; }
     </widget>
    </item>
    <item row="4" column="0" colspan="2" >
-    <widget class="QComboBox" name="comboBoxGrazingUnits" >
+    <widget class="QComboBox" name="cbGrazingUnits" >
      <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>5</hsizetype>
-       <vsizetype>0</vsizetype>
+      <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
      <property name="cursor" >
-      <cursor>13</cursor>
+      <cursorShape>PointingHandCursor</cursorShape>
      </property>
      <property name="toolTip" >
       <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
@@ -383,7 +367,7 @@ p, li { white-space: pre-wrap; }
     </widget>
    </item>
    <item row="3" column="1" >
-    <widget class="QSpinBox" name="spinBoxCommonRasterCalories" >
+    <widget class="QSpinBox" name="sbCommonRasterCalories" >
      <property name="suffix" >
       <string> KCal</string>
      </property>
@@ -425,11 +409,9 @@ p, li { white-space: pre-wrap; }
     </widget>
    </item>
    <item row="1" column="1" >
-    <widget class="QSpinBox" name="spinBoxPercentOfTameMeat" >
+    <widget class="QSpinBox" name="sbPercentOfTameMeat" >
      <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>5</hsizetype>
-       <vsizetype>0</vsizetype>
+      <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -454,9 +436,7 @@ p, li { white-space: pre-wrap; }
    <item row="1" column="0" >
     <widget class="QLabel" name="labelPortionDiet" >
      <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>1</hsizetype>
-       <vsizetype>4</vsizetype>
+      <sizepolicy vsizetype="Maximum" hsizetype="Minimum" >
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -475,9 +455,7 @@ p, li { white-space: pre-wrap; }
    <item row="6" column="4" >
     <widget class="QPushButton" name="pbnClose" >
      <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>5</hsizetype>
-       <vsizetype>0</vsizetype>
+      <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -490,9 +468,7 @@ p, li { white-space: pre-wrap; }
    <item row="6" column="3" >
     <widget class="QPushButton" name="pbnApply" >
      <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>0</hsizetype>
-       <vsizetype>0</vsizetype>
+      <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -507,7 +483,7 @@ p, li { white-space: pre-wrap; }
      <property name="orientation" >
       <enum>Qt::Horizontal</enum>
      </property>
-     <property name="sizeHint" >
+     <property name="sizeHint" stdset="0" >
       <size>
        <width>391</width>
        <height>27</height>
@@ -562,7 +538,8 @@ p, li { white-space: pre-wrap; }
          <string>...</string>
         </property>
         <property name="icon" >
-         <iconset resource="../resources/resources.qrc" >:/new.png</iconset>
+         <iconset>
+          <normaloff>:/new.png</normaloff>:/new.png</iconset>
         </property>
        </widget>
       </item>
@@ -575,7 +552,8 @@ p, li { white-space: pre-wrap; }
          <string>...</string>
         </property>
         <property name="icon" >
-         <iconset resource="../resources/resources.qrc" >:/copy.png</iconset>
+         <iconset>
+          <normaloff>:/copy.png</normaloff>:/copy.png</iconset>
         </property>
        </widget>
       </item>
@@ -588,7 +566,8 @@ p, li { white-space: pre-wrap; }
          <string>...</string>
         </property>
         <property name="icon" >
-         <iconset resource="../resources/resources.qrc" >:/delete.png</iconset>
+         <iconset>
+          <normaloff>:/delete.png</normaloff>:/delete.png</iconset>
         </property>
        </widget>
       </item>
@@ -623,7 +602,7 @@ p, li { white-space: pre-wrap; }
         <property name="orientation" >
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="sizeHint" >
+        <property name="sizeHint" stdset="0" >
          <size>
           <width>71</width>
           <height>27</height>

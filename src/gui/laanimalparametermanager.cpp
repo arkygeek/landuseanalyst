@@ -93,10 +93,10 @@
     myIcon.addFile(":/localdata.png");
     cboAnimal->addItem(myName,myGuid);
   }
-  comboBoxAreaUnits->addItem("Dunum");
-  comboBoxAreaUnits->addItem("Hectare");
-  //comboBoxSpecificLandEnergyType->addItem("KCalories");
-  //comboBoxSpecificLandEnergyType->addItem("TDN");
+  cbAreaUnits->addItem("Dunum");
+  cbAreaUnits->addItem("Hectare");
+  //cbSpecificLandEnergyType->addItem("KCalories");
+  //cbSpecificLandEnergyType->addItem("TDN");
   setSpecificLandEnergyType();
   setFallowComboBox();
   populateFodder();
@@ -352,27 +352,27 @@ void LaAnimalParameterManager::showAnimalParameter()
   checkBoxSpecificRaster->setChecked(mAnimalParameter.useSpecificGrazingLand());
   sbSpecificRasterValue->setValue(mAnimalParameter.ValueSpecificGrazingLand());
   sbCommonRasterValue->setValue(mCommonGrazedLandTDN);
-  comboBoxAreaUnits->setCurrentIndex(mAnimalParameter.areaUnits());
-  comboBoxSpecificLandEnergyType->setCurrentIndex(mAnimalParameter.energyType());
+  cbAreaUnits->setCurrentIndex(mAnimalParameter.areaUnits());
+  cbSpecificLandEnergyType->setCurrentIndex(mAnimalParameter.energyType());
   grpFodderUse->setChecked(mAnimalParameter.fodderUse());
 
   refreshFodderTable();
 
   if (mAnimalParameter.fallowUsage()==High)
   {
-    setComboToDefault(comboBoxFallowUsage,tr("High"));
+    setComboToDefault(cbFallowUsage,tr("High"));
   }
   else if (mAnimalParameter.fallowUsage()==Medium)
   {
-    setComboToDefault(comboBoxFallowUsage,tr("Medium"));
+    setComboToDefault(cbFallowUsage,tr("Medium"));
   }
   else if (mAnimalParameter.fallowUsage()==Low)
   {
-    setComboToDefault(comboBoxFallowUsage,tr("Low"));
+    setComboToDefault(cbFallowUsage,tr("Low"));
   }
   else
   {
-    setComboToDefault(comboBoxFallowUsage,tr("None"));
+    setComboToDefault(cbFallowUsage,tr("None"));
   }
 
   //leRasterName->setText(mAnimalParameter.rasterName());
@@ -468,8 +468,8 @@ void LaAnimalParameterManager::on_pbnApply_clicked()
   mAnimalParameter.setUseCommonGrazingLand(checkBoxCommonRaster->isChecked());
   mAnimalParameter.setUseSpecificGrazingLand(checkBoxSpecificRaster->isChecked());
 
-  QString mySelectedAreaUnit = QString(comboBoxAreaUnits->currentText());
-  QString mySelectedEnergyType = QString(comboBoxSpecificLandEnergyType->currentText());
+  QString mySelectedAreaUnit = QString(cbAreaUnits->currentText());
+  QString mySelectedEnergyType = QString(cbSpecificLandEnergyType->currentText());
   AreaUnits myAreaUnits;
   EnergyType myEnergyType;
 
@@ -535,7 +535,7 @@ void LaAnimalParameterManager::on_pbnApply_clicked()
 
 
 
-  QString myFallowUsage = QString(comboBoxFallowUsage->currentText());
+  QString myFallowUsage = QString(cbFallowUsage->currentText());
   //setFallowComboBox();
   Priority myPriority;
   if (myFallowUsage == "HIGH Fallow Priority")
@@ -594,15 +594,15 @@ bool LaAnimalParameterManager::setComboToDefault(QComboBox * thepCombo, QString 
 
 void LaAnimalParameterManager::setFallowComboBox()
 {
-  comboBoxFallowUsage->addItem("Do Not Graze Fallow", "None");
-  comboBoxFallowUsage->addItem("HIGH Fallow Priority", "High");
-  comboBoxFallowUsage->addItem("MED Fallow Priority", "Medium");
-  comboBoxFallowUsage->addItem("LOW Fallow Priority", "Low");
+  cbFallowUsage->addItem("Do Not Graze Fallow", "None");
+  cbFallowUsage->addItem("HIGH Fallow Priority", "High");
+  cbFallowUsage->addItem("MED Fallow Priority", "Medium");
+  cbFallowUsage->addItem("LOW Fallow Priority", "Low");
 }
 
 void LaAnimalParameterManager::setSpecificLandEnergyType()
 {
-  comboBoxSpecificLandEnergyType->addItem(/*"Use KCalories", */"KCalories");
-  comboBoxSpecificLandEnergyType->addItem(/*"Use TDN", */"TDN");
+  cbSpecificLandEnergyType->addItem(/*"Use KCalories", */"KCalories");
+  cbSpecificLandEnergyType->addItem(/*"Use TDN", */"TDN");
 }
 

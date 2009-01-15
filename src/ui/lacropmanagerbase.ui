@@ -429,7 +429,7 @@ p, li { white-space: pre-wrap; }
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="comboBoxAreaUnits" >
+         <widget class="QComboBox" name="cbAreaUnits" >
           <property name="sizePolicy" >
            <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
             <horstretch>0</horstretch>
@@ -549,7 +549,7 @@ p, li { white-space: pre-wrap; }
        </widget>
       </item>
       <item row="7" column="5" >
-       <widget class="QComboBox" name="comboBoxFodderEnergyType" />
+       <widget class="QComboBox" name="cbFodderEnergyType" />
       </item>
      </layout>
      <zorder>label</zorder>
@@ -560,7 +560,7 @@ p, li { white-space: pre-wrap; }
      <zorder>line_2</zorder>
      <zorder>line</zorder>
      <zorder>sbCropFodderValue</zorder>
-     <zorder>comboBoxFodderEnergyType</zorder>
+     <zorder>cbFodderEnergyType</zorder>
     </widget>
    </item>
    <item row="2" column="0" >
@@ -635,7 +635,7 @@ p, li { white-space: pre-wrap; }
   <tabstop>sbCropCalories</tabstop>
   <tabstop>sbCropFodderProduction</tabstop>
   <tabstop>sbCropFodderValue</tabstop>
-  <tabstop>comboBoxAreaUnits</tabstop>
+  <tabstop>cbAreaUnits</tabstop>
   <tabstop>pbnApply</tabstop>
   <tabstop>pbnClose</tabstop>
  </tabstops>

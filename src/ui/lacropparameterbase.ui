@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>585</width>
-    <height>330</height>
+    <height>341</height>
    </rect>
   </property>
   <property name="minimumSize" >
@@ -30,7 +30,7 @@
      <property name="orientation" >
       <enum>Qt::Horizontal</enum>
      </property>
-     <property name="sizeHint" >
+     <property name="sizeHint" stdset="0" >
       <size>
        <width>361</width>
        <height>27</height>
@@ -85,7 +85,8 @@
          <string>...</string>
         </property>
         <property name="icon" >
-         <iconset resource="../resources/resources.qrc" >:/new.png</iconset>
+         <iconset>
+          <normaloff>:/new.png</normaloff>:/new.png</iconset>
         </property>
        </widget>
       </item>
@@ -98,7 +99,8 @@
          <string>...</string>
         </property>
         <property name="icon" >
-         <iconset resource="../resources/resources.qrc" >:/copy.png</iconset>
+         <iconset>
+          <normaloff>:/copy.png</normaloff>:/copy.png</iconset>
         </property>
        </widget>
       </item>
@@ -111,7 +113,8 @@
          <string>...</string>
         </property>
         <property name="icon" >
-         <iconset resource="../resources/resources.qrc" >:/delete.png</iconset>
+         <iconset>
+          <normaloff>:/delete.png</normaloff>:/delete.png</iconset>
         </property>
        </widget>
       </item>
@@ -146,7 +149,7 @@
         <property name="orientation" >
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="sizeHint" >
+        <property name="sizeHint" stdset="0" >
          <size>
           <width>71</width>
           <height>27</height>
@@ -172,9 +175,7 @@
       <item row="0" column="0" >
        <widget class="QLabel" name="labelPortionDiet" >
         <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>1</hsizetype>
-          <vsizetype>4</vsizetype>
+         <sizepolicy vsizetype="Maximum" hsizetype="Minimum" >
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -191,11 +192,9 @@
        </widget>
       </item>
       <item row="0" column="1" >
-       <widget class="QSpinBox" name="spinBoxPercentOfTameCrop" >
+       <widget class="QSpinBox" name="sbPercentOfTameCrop" >
         <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>0</hsizetype>
-          <vsizetype>0</vsizetype>
+         <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -220,9 +219,7 @@ p, li { white-space: pre-wrap; }
    <item row="2" column="0" >
     <widget class="QGroupBox" name="groupBoxSuitableLand" >
      <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>5</hsizetype>
-       <vsizetype>5</vsizetype>
+      <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -246,9 +243,7 @@ p, li { white-space: pre-wrap; }
       <item row="0" column="1" >
        <widget class="QCheckBox" name="checkBoxCommonRaster" >
         <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>0</hsizetype>
-          <vsizetype>0</vsizetype>
+         <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -264,9 +259,7 @@ p, li { white-space: pre-wrap; }
       <item row="0" column="0" >
        <widget class="QCheckBox" name="checkBoxUniqueRaster" >
         <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>0</hsizetype>
-          <vsizetype>0</vsizetype>
+         <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -285,9 +278,7 @@ p, li { white-space: pre-wrap; }
    <item rowspan="2" row="1" column="1" colspan="3" >
     <widget class="QGroupBox" name="groupBoxFallowUse" >
      <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>5</hsizetype>
-       <vsizetype>5</vsizetype>
+      <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -299,7 +290,7 @@ p, li { white-space: pre-wrap; }
       </size>
      </property>
      <property name="cursor" >
-      <cursor>0</cursor>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="whatsThis" >
       <string>Select Fodder if you believe the animals were fed grain to supplement their grazing.  You will then have to select how many kg of the selected grain you believe they fed each animal either every day, week, or month.</string>
@@ -329,7 +320,7 @@ p, li { white-space: pre-wrap; }
          <number>0</number>
         </property>
         <item row="1" column="1" >
-         <widget class="QDoubleSpinBox" name="spinBoxFallowRatio" >
+         <widget class="QDoubleSpinBox" name="sbFallowRatio" >
           <property name="toolTip" >
            <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
@@ -350,9 +341,7 @@ p, li { white-space: pre-wrap; }
         <item row="0" column="0" colspan="2" >
          <widget class="QLabel" name="labelFallow1" >
           <property name="sizePolicy" >
-           <sizepolicy>
-            <hsizetype>1</hsizetype>
-            <vsizetype>5</vsizetype>
+           <sizepolicy vsizetype="Preferred" hsizetype="Minimum" >
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -389,9 +378,7 @@ p, li { white-space: pre-wrap; }
       <item row="1" column="0" >
        <widget class="QLabel" name="labelFallow5" >
         <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>0</hsizetype>
-          <vsizetype>5</vsizetype>
+         <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -412,10 +399,10 @@ p, li { white-space: pre-wrap; }
       </item>
       <item row="0" column="2" colspan="2" >
        <layout class="QVBoxLayout" >
-        <property name="margin" >
+        <property name="spacing" >
          <number>0</number>
         </property>
-        <property name="spacing" >
+        <property name="margin" >
          <number>0</number>
         </property>
         <item>
@@ -430,18 +417,16 @@ p, li { white-space: pre-wrap; }
         </item>
         <item>
          <layout class="QHBoxLayout" >
-          <property name="margin" >
-           <number>0</number>
-          </property>
           <property name="spacing" >
            <number>6</number>
+          </property>
+          <property name="margin" >
+           <number>0</number>
           </property>
           <item>
            <widget class="QLabel" name="labelFallow4" >
             <property name="sizePolicy" >
-             <sizepolicy>
-              <hsizetype>1</hsizetype>
-              <vsizetype>5</vsizetype>
+             <sizepolicy vsizetype="Preferred" hsizetype="Minimum" >
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -455,20 +440,18 @@ p, li { white-space: pre-wrap; }
            </widget>
           </item>
           <item>
-           <widget class="QSpinBox" name="spinBoxFallowFoodValueToGrazers" >
+           <widget class="QSpinBox" name="sbFallowFoodValueToGrazers" >
             <property name="sizePolicy" >
-             <sizepolicy>
-              <hsizetype>0</hsizetype>
-              <vsizetype>0</vsizetype>
+             <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="maximum" >
-             <number>500</number>
-            </property>
             <property name="minimum" >
              <number>1</number>
+            </property>
+            <property name="maximum" >
+             <number>500</number>
             </property>
             <property name="value" >
              <number>8</number>
@@ -480,11 +463,9 @@ p, li { white-space: pre-wrap; }
        </layout>
       </item>
       <item row="1" column="3" >
-       <widget class="QComboBox" name="comboBoxAreaUnits" >
+       <widget class="QComboBox" name="cbAreaUnits" >
         <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>4</hsizetype>
-          <vsizetype>0</vsizetype>
+         <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -511,9 +492,7 @@ p, li { white-space: pre-wrap; }
       <item row="1" column="2" >
        <widget class="QLabel" name="labelFallow6" >
         <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>4</hsizetype>
-          <vsizetype>5</vsizetype>
+         <sizepolicy vsizetype="Preferred" hsizetype="Maximum" >
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -551,9 +530,7 @@ p, li { white-space: pre-wrap; }
    <item row="3" column="3" >
     <widget class="QPushButton" name="pbnClose" >
      <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>5</hsizetype>
-       <vsizetype>0</vsizetype>
+      <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -566,9 +543,7 @@ p, li { white-space: pre-wrap; }
    <item row="3" column="2" >
     <widget class="QPushButton" name="pbnApply" >
      <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>5</hsizetype>
-       <vsizetype>0</vsizetype>
+      <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>

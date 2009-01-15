@@ -45,10 +45,10 @@
   lblCropPix->setScaledContents(true);
   connect(tblCrops, SIGNAL(cellClicked( int,int)),
       this, SLOT(cellClicked( int,int)));
-  comboBoxAreaUnits->addItem("Dunum");
-  comboBoxAreaUnits->addItem("Hectare");
-  comboBoxFodderEnergyType->addItem("KCalories");
-  comboBoxFodderEnergyType->addItem("TDN");
+  cbAreaUnits->addItem("Dunum");
+  cbAreaUnits->addItem("Hectare");
+  cbFodderEnergyType->addItem("KCalories");
+  cbFodderEnergyType->addItem("TDN");
   refreshCropTable();
   //disable these buttons unless experimental is allowed
   pbnImport->setVisible(false);
@@ -196,8 +196,8 @@ void LaCropManager::showCrop()
   sbCropCalories->setValue(mCrop.cropCalories());
   sbCropFodderProduction->setValue(mCrop.fodderProduction());
   sbCropFodderValue->setValue(mCrop.fodderValue());
-  comboBoxAreaUnits->setCurrentIndex(mCrop.areaUnits());
-  comboBoxFodderEnergyType->setCurrentIndex(mCrop.cropFodderEnergyType());
+  cbAreaUnits->setCurrentIndex(mCrop.areaUnits());
+  cbFodderEnergyType->setCurrentIndex(mCrop.cropFodderEnergyType());
   lblCropPix->setPixmap(mCrop.imageFile());
 }
 
@@ -285,7 +285,7 @@ void LaCropManager::on_pbnApply_clicked()
   mCrop.setCropCalories(sbCropCalories->value());
   mCrop.setFodderProduction(sbCropFodderProduction->value());
   mCrop.setCropFodderValue(sbCropFodderValue->value());
-  QString mySelectedAreaUnit = QString(comboBoxAreaUnits->currentText());
+  QString mySelectedAreaUnit = QString(cbAreaUnits->currentText());
   AreaUnits myAreaUnits;
   if (mySelectedAreaUnit == "Dunum")
   {

@@ -394,7 +394,7 @@ p, li { white-space: pre-wrap; }
        </widget>
       </item>
       <item row="4" column="0" colspan="2" >
-       <widget class="QComboBox" name="comboBoxFallowUsage" >
+       <widget class="QComboBox" name="cbFallowUsage" >
         <property name="sizePolicy" >
          <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
           <horstretch>0</horstretch>
@@ -656,7 +656,7 @@ p, li { white-space: pre-wrap; }
        </widget>
       </item>
       <item row="4" column="0" >
-       <widget class="QComboBox" name="comboBoxSpecificLandEnergyType" />
+       <widget class="QComboBox" name="cbSpecificLandEnergyType" />
       </item>
       <item row="4" column="1" >
        <widget class="QLabel" name="label_5" >
@@ -669,7 +669,7 @@ p, li { white-space: pre-wrap; }
        </widget>
       </item>
       <item row="4" column="2" >
-       <widget class="QComboBox" name="comboBoxAreaUnits" >
+       <widget class="QComboBox" name="cbAreaUnits" >
         <property name="sizePolicy" >
          <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
           <horstretch>0</horstretch>
@@ -826,8 +826,8 @@ p, li { white-space: pre-wrap; }
   <tabstop>checkBoxCommonRaster</tabstop>
   <tabstop>sbSpecificRasterValue</tabstop>
   <tabstop>sbCommonRasterValue</tabstop>
-  <tabstop>comboBoxAreaUnits</tabstop>
-  <tabstop>comboBoxFallowUsage</tabstop>
+  <tabstop>cbAreaUnits</tabstop>
+  <tabstop>cbFallowUsage</tabstop>
   <tabstop>pbnApply</tabstop>
   <tabstop>pbnClose</tabstop>
  </tabstops>

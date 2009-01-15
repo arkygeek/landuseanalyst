@@ -80,8 +80,8 @@
       this, SLOT(on_cboCrop_changed( int)));
 
   // insert all area units into the comboBox
-  comboBoxAreaUnits->addItem("Dunum");
-  comboBoxAreaUnits->addItem("Hectare");
+  cbAreaUnits->addItem("Dunum");
+  cbAreaUnits->addItem("Hectare");
 
   refreshCropParameterTable();
 }
@@ -232,7 +232,7 @@ void LaCropParameterManager::showCropParameter()
   grpCropRotation->setChecked(mCropParameter.cropRotation());
   sbFallowRatio->setValue(mCropParameter.fallowRatio());
   sbFallowValue->setValue(mCropParameter.fallowTDN());
-  comboBoxAreaUnits->setCurrentIndex(mCropParameter.areaUnits());
+  cbAreaUnits->setCurrentIndex(mCropParameter.areaUnits());
   checkBoxUseCommonLand->setChecked(mCropParameter.useCommonLand());
   checkBoxUseSpecificLand->setChecked(mCropParameter.useSpecificLand());
   //cboRastere->setText(mCropParameter.rasterName());
@@ -313,7 +313,7 @@ void LaCropParameterManager::on_pbnApply_clicked()
   mCropParameter.setFallowRatio(sbFallowRatio->value());
   mCropParameter.setFallowValue(sbFallowValue->value());
 
-  QString mySelectedAreaUnit = QString(comboBoxAreaUnits->currentText());
+  QString mySelectedAreaUnit = QString(cbAreaUnits->currentText());
   AreaUnits myAreaUnits;
   if (mySelectedAreaUnit == "Dunum")
   {

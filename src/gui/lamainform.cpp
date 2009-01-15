@@ -86,10 +86,10 @@ LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
   listWidgetCalculationsAnimal->clear();
   loadAnimals();
   loadCrops();
-  comboBoxAreaUnits->addItem("Dunum");
-  comboBoxAreaUnits->addItem("Hectare");
-  comboBoxCommonLandEnergyType->addItem("KCalories");
-  comboBoxCommonLandEnergyType->addItem("TDN");
+  cbAreaUnits->addItem("Dunum");
+  cbAreaUnits->addItem("Hectare");
+  cbCommonLandEnergyType->addItem("KCalories");
+  cbCommonLandEnergyType->addItem("TDN");
 
   setDietLabels();
   /** See the qtdocs on signals and slots to understand below.
@@ -157,7 +157,7 @@ void LaMainForm::writeSettings()
   mySettings.setValue("commonTDN",sbCommonRasterValue->value());
 }
 
-void LaMainForm::on_spinBoxDailyCalories_valueChanged(int theValue)
+void LaMainForm::on_sbDailyCalories_valueChanged(int theValue)
 {
   setDietLabels();
 }
@@ -278,8 +278,8 @@ void LaMainForm::on_pbnNewCropParameter_clicked()
 void LaMainForm::on_pbnNewAnimalParameter_clicked()
 {
     int myCommonGrazingLandTDN = sbCommonRasterValue->value();
-    QString myComboBoxCommonLandEnergyType = comboBoxCommonLandEnergyType->currentText();
-    QString myCommonGrazingLandAreaUnits = comboBoxAreaUnits->currentText();
+    QString myComboBoxCommonLandEnergyType = cbCommonLandEnergyType->currentText();
+    QString myCommonGrazingLandAreaUnits = cbAreaUnits->currentText();
     AreaUnits myAreaUnits = (myCommonGrazingLandAreaUnits == "Dunum") ? Dunum : Hectare;
     EnergyType myEnergyType = (myComboBoxCommonLandEnergyType == "KCalories") ? KCalories : TDN;
     QPair<LaTripleMap, int> myPair;
@@ -564,8 +564,8 @@ void LaMainForm::setDietLabels()
   int myDietPercentPlant = (100-(sliderDiet->value()));
   float myTameCropPercentage = sliderCrop->value()*(myDietPercentPlant/100.);
   float myTameMeatPercentage = sliderMeat->value()*(myDietPercentMeat/100.);
-  int myCaloriesIndividual = spinBoxDailyCalories->value();
-  int myPopulation = spinBoxPopulation->value();
+  int myCaloriesIndividual = sbDailyCalories->value();
+  int myPopulation = sbPopulation->value();
 
   float mykCaloriesIndividualAnnual = (myCaloriesIndividual*365.)/1000.;
   float mykCaloriesSettlementAnnual = mykCaloriesIndividualAnnual*myPopulation;
@@ -725,23 +725,23 @@ void LaMainForm::on_pushButtonRun_clicked()
   myModel.setCrops(mySelectedCropsMap);
   // Populate the model with all the form data
   myModel.setName(lineEditSiteName->text());
-  myModel.setPopulation(spinBoxPopulation->value());
+  myModel.setPopulation(sbPopulation->value());
   myModel.setPeriod(lineEditPeriod->text());
-  //myModel.setProjection(comboBoxProjection->currentIndex());
+  //myModel.setProjection(cbProjection->currentIndex());
   myModel.setEasting(lineEditEasting->text().toInt());
   myModel.setNorthing(lineEditNorthing->text().toInt());
   myModel.setEuclideanDistance(radioButtonEuclidean->isChecked());
   myModel.setWalkingTime(radioButtonWalkingTime->isChecked());
   myModel.setPathDistance(radioButtonPathDistance->isChecked());
-  myModel.setPrecision(spinBoxModelPrecision->value());
+  myModel.setPrecision(sbModelPrecision->value());
   myModel.setDietPercent(sliderDiet->value());
   myModel.setCropPercent(sliderCrop->value());
   myModel.setMeatPercent(sliderMeat->value());
-  myModel.setCaloriesPerPersonDaily(spinBoxDailyCalories->value());
+  myModel.setCaloriesPerPersonDaily(sbDailyCalories->value());
 
   // the following adjusts the TDN value for use with hectares
   // which is the only output that is used.
-  QString mySelectedAreaUnit = QString(comboBoxAreaUnits->currentText());
+  QString mySelectedAreaUnit = QString(cbAreaUnits->currentText());
   AreaUnits myAreaUnits = (mySelectedAreaUnit == "Dunum") ? Dunum:Hectare;
 
   int myTDN = sbCommonRasterValue->value();
@@ -824,24 +824,24 @@ void LaMainForm::on_pushButtonLoad_clicked()
 void LaMainForm::on_pushButtonSave_clicked()
 {
   // Populate the model with all the form data
-  QString mySelectedAreaUnit = QString(comboBoxAreaUnits->currentText());
+  QString mySelectedAreaUnit = QString(cbAreaUnits->currentText());
   AreaUnits myAreaUnits = (mySelectedAreaUnit == "Dunum") ? Dunum:Hectare;
 
   LaModel myModel;
   myModel.setName(lineEditSiteName->text());
-  myModel.setPopulation(spinBoxPopulation->value());
+  myModel.setPopulation(sbPopulation->value());
   myModel.setPeriod(lineEditPeriod->text());
-  //myModel.setProjection(comboBoxProjection->currentIndex());
+  //myModel.setProjection(cbProjection->currentIndex());
   myModel.setEasting(lineEditEasting->text().toInt());
   myModel.setNorthing(lineEditNorthing->text().toInt());
   myModel.setEuclideanDistance(radioButtonEuclidean->isChecked());
   myModel.setWalkingTime(radioButtonWalkingTime->isChecked());
   myModel.setPathDistance(radioButtonPathDistance->isChecked());
-  myModel.setPrecision(spinBoxModelPrecision->value());
+  myModel.setPrecision(sbModelPrecision->value());
   myModel.setDietPercent(sliderDiet->value());
   myModel.setCropPercent(sliderCrop->value());
   myModel.setMeatPercent(sliderMeat->value());
-  myModel.setCaloriesPerPersonDaily(spinBoxDailyCalories->value());
+  myModel.setCaloriesPerPersonDaily(sbDailyCalories->value());
   myModel.setCommonLandValue(sbCommonRasterValue->value(), myAreaUnits);
   myModel.toXmlFile( LaUtils::getModelOutputDir() +
       QDir::separator() + myModel.guid() + ".xml");
@@ -941,23 +941,23 @@ void LaMainForm::cropCalcClicked(QListWidgetItem * thepCurrentItem, QListWidgetI
     }
   }
   myModel.setCrops(mySelectedCropsMap);
-  QString mySelectedAreaUnit = QString(comboBoxAreaUnits->currentText());
+  QString mySelectedAreaUnit = QString(cbAreaUnits->currentText());
   AreaUnits myAreaUnits = (mySelectedAreaUnit == "Dunum") ? Dunum:Hectare;
   // Populate the model with all the form data
   myModel.setName(lineEditSiteName->text());
-  myModel.setPopulation(spinBoxPopulation->value());
+  myModel.setPopulation(sbPopulation->value());
   myModel.setPeriod(lineEditPeriod->text());
-  //myModel.setProjection(comboBoxProjection->currentIndex());
+  //myModel.setProjection(cbProjection->currentIndex());
   myModel.setEasting(lineEditEasting->text().toInt());
   myModel.setNorthing(lineEditNorthing->text().toInt());
   myModel.setEuclideanDistance(radioButtonEuclidean->isChecked());
   myModel.setWalkingTime(radioButtonWalkingTime->isChecked());
   myModel.setPathDistance(radioButtonPathDistance->isChecked());
-  myModel.setPrecision(spinBoxModelPrecision->value());
+  myModel.setPrecision(sbModelPrecision->value());
   myModel.setDietPercent(sliderDiet->value());
   myModel.setCropPercent(sliderCrop->value());
   myModel.setMeatPercent(sliderMeat->value());
-  myModel.setCaloriesPerPersonDaily(spinBoxDailyCalories->value());
+  myModel.setCaloriesPerPersonDaily(sbDailyCalories->value());
   myModel.setCommonLandValue(sbCommonRasterValue->value(), myAreaUnits);
   tbReport->setHtml(myModel.toHtml());
   myModel.DoCalculations();
@@ -986,7 +986,7 @@ void LaMainForm::animalCalcClicked(QListWidgetItem * thepCurrentItem, QListWidge
   // show the user that the computer is thinking
   //progressBarCalcs->reset();
   //progressBarCalcs->setRange(0,0);
-  AreaUnits myAreaUnits = (comboBoxAreaUnits->currentText() == "Dunum") ? Dunum : Hectare;
+  AreaUnits myAreaUnits = (cbAreaUnits->currentText() == "Dunum") ? Dunum : Hectare;
 
   connect(&myModel, SIGNAL(message( QString )),
              this, SLOT(logMessage( QString )));
@@ -1024,23 +1024,23 @@ void LaMainForm::animalCalcClicked(QListWidgetItem * thepCurrentItem, QListWidge
     }
   }
   myModel.setCrops(mySelectedCropsMap);
-  QString mySelectedAreaUnit = QString(comboBoxAreaUnits->currentText());
+  QString mySelectedAreaUnit = QString(cbAreaUnits->currentText());
   // Populate the model with all the form data
   myModel.setName(lineEditSiteName->text());
-  myModel.setPopulation(spinBoxPopulation->value());
+  myModel.setPopulation(sbPopulation->value());
   myModel.setPeriod(lineEditPeriod->text());
-  //myModel.setProjection(comboBoxProjection->currentIndex());
+  //myModel.setProjection(cbProjection->currentIndex());
   myModel.setEasting(lineEditEasting->text().toInt());
   myModel.setNorthing(lineEditNorthing->text().toInt());
   myModel.setEuclideanDistance(radioButtonEuclidean->isChecked());
   myModel.setWalkingTime(radioButtonWalkingTime->isChecked());
   myModel.setPathDistance(radioButtonPathDistance->isChecked());
-  myModel.setPrecision(spinBoxModelPrecision->value());
+  myModel.setPrecision(sbModelPrecision->value());
   myModel.setDietPercent(sliderDiet->value());
   myModel.setCropPercent(sliderCrop->value());
   myModel.setMeatPercent(sliderMeat->value());
-  myModel.setCaloriesPerPersonDaily(spinBoxDailyCalories->value());
-  QString myAreaUnitsText = (comboBoxAreaUnits->currentText());
+  myModel.setCaloriesPerPersonDaily(sbDailyCalories->value());
+  QString myAreaUnitsText = (cbAreaUnits->currentText());
   myModel.setCommonLandAreaUnits(myAreaUnits);
   //myModel.setCommonLandValue(sbCommonRasterValue->value());
   myModel.setCommonLandValue(sbCommonRasterValue->value(), myAreaUnits);

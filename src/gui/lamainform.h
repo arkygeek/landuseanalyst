@@ -61,7 +61,7 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
     void on_pbnNewAnimal_clicked();
     void on_pbnNewCropParameter_clicked();
     void on_pbnNewAnimalParameter_clicked();
-    void on_spinBoxDailyCalories_valueChanged(int theValue);
+    void on_sbDailyCalories_valueChanged(int theValue);
     void on_pbnFallow_clicked();
     void on_cbDebug_clicked();
     void on_cboMapSet_currentIndexChanged();
