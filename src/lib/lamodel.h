@@ -32,7 +32,7 @@ class QString;
 #include <QString>
 #include <QMap>
 /**
-  * A class to represent an model
+  * A class to represent a model
   * @author Tim Sutton, Jason Jorgenson
   */
 
@@ -81,6 +81,7 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
     int meatPercent() const;
     /** TCalories per person per day */
     int caloriesPerPersonDaily() const;
+    /** */
     /** Food Value of the common grazing land */
     int foodValueCommonLand() const;
 

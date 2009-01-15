@@ -56,11 +56,12 @@ class LaCrop : public LaSerialisable, public LaGuid
     /** How many Kg of fodder is left for animal feed after harvesting */
     int fodderProduction() const;
     /** The food value in calories of 1 Kg of fodder */
-    int fodderCalories() const;
+    int fodderValue() const;
     /** All production levels based on either Kg/Dunum or Kg/Hectare
      *  0==Dunum 1==Hectare
      */
     AreaUnits areaUnits() const;
+    EnergyType cropFodderEnergyType() const;
     /** The image file associated with the animal */
     QString imageFile() const;
 
@@ -82,23 +83,32 @@ class LaCrop : public LaSerialisable, public LaGuid
      * @see cropYield()
      */
     void setCropYield(int theKg);
+    
     /** Set cropCalories as kg
      * @see cropCalories()
      */
     void setCropCalories(int theCalories);
+    
     /** Set the fodderProduction as Kg/area
      * @see fodderProduction()
      */
     void setFodderProduction(int theKg);
+    
     /** Set the fodderCalories with an integer
      * @see fodderCalories()
      */
-    void setFodderTDN(int theCalories);
+    void setCropFodderValue(int theValue);
+    
     /** Set the yieldUnits for area from index
      * @see yieldUnits()
      */
     void setAreaUnits(AreaUnits theAreaUnit);
-
+    
+    /** Set the fodderEnergyType 
+     * @see fodderEnergyType()
+     */
+    void setCropFodderEnergyType(EnergyType theFodderEnergyType);
+    
     /** Set the image file
      * @see imageFile()
      */
@@ -113,40 +123,56 @@ class LaCrop : public LaSerialisable, public LaGuid
     /** Return a plain text representation of this layer
      */
     QString toText();
+    
     /** Return a html text representation of this layer
      */
     QString toHtml();
+    
     /** Read this object from xml and return result as true for success, false for failure.
      * @see LaSerialisable
      * @NOTE this class inherits the serialisable interface so
      * it MUST implement this
      */
     bool fromXml(const QString theXml);
+    
   private:
     /** The name for this crop */
     QString mName;
+    
     /** The description for this animal */
     QString mDescription;
+    
     /** Set cropYield as Kg/area
      * @see cropYield()
      */
     int mCropYield;
+    
     /** Set cropCalories as kg
      * @see cropCalories()
      */
     int mCropCalories;
+    
     /** Set the fodderProduction as Kg/area
      * @see fodderProduction()
      */
     int mCropFodderProduction;
+    
     /** Set the fodderCalories with an integer
      * @see fodderCalories()
      */
-    int mCropFodderCalories;
+    int mCropFodderValue;
+    
     /** Set the yieldUnits for area from index
      * @see yieldUnits()
      */
     AreaUnits mAreaUnits;
+
+    /** Set the fodderEnergyType
+     * @see fodderEnergyType()
+     */
+    EnergyType mCropFodderEnergyType;
+
+    
     QString mImageFile;
 };
 

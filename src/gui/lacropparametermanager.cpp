@@ -231,7 +231,7 @@ void LaCropParameterManager::showCropParameter()
   sbPercentTameCrop->setValue(mCropParameter.percentTameCrop());
   grpCropRotation->setChecked(mCropParameter.cropRotation());
   sbFallowRatio->setValue(mCropParameter.fallowRatio());
-  sbFallowTDN->setValue(mCropParameter.fallowTDN());
+  sbFallowValue->setValue(mCropParameter.fallowTDN());
   comboBoxAreaUnits->setCurrentIndex(mCropParameter.areaUnits());
   checkBoxUseCommonLand->setChecked(mCropParameter.useCommonLand());
   checkBoxUseSpecificLand->setChecked(mCropParameter.useSpecificLand());
@@ -311,7 +311,7 @@ void LaCropParameterManager::on_pbnApply_clicked()
   mCropParameter.setPercentTameCrop(sbPercentTameCrop->value());
   mCropParameter.setCropRotation(grpCropRotation->isChecked());
   mCropParameter.setFallowRatio(sbFallowRatio->value());
-  mCropParameter.setFallowTDN(sbFallowTDN->value());
+  mCropParameter.setFallowValue(sbFallowValue->value());
 
   QString mySelectedAreaUnit = QString(comboBoxAreaUnits->currentText());
   AreaUnits myAreaUnits;

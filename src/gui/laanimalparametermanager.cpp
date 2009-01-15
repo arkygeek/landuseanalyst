@@ -358,15 +358,6 @@ void LaAnimalParameterManager::showAnimalParameter()
 
   refreshFodderTable();
 
-  /*if (mAnimalParameter.energyType()==KCalories)
-  {
-    setComboToDefault(comboBoxSpecificLandEnergyType,tr("KCalories"));
-  }
-  else if (mAnimalParameter.energyType()==TDN)
-  {
-    setComboToDefault(comboBoxSpecificLandEnergyType,tr("TDN"));
-  }
-*/
   if (mAnimalParameter.fallowUsage()==High)
   {
     setComboToDefault(comboBoxFallowUsage,tr("High"));

@@ -115,20 +115,20 @@ bool LaModel::pathDistance()      const { return mPathDistance;}
 int  LaModel::precision()         const { return mPrecision;}
 int  LaModel::dietPercent()       const { return mDietPercent;}
 int  LaModel::plantPercent()      const
-{
-  if (mPercentOfDietThatIsFromCrops < 0)
-  {
-    return 0;
-  }
-  else if (mPercentOfDietThatIsFromCrops > 100)
-  {
-    return 100;
-  }
-  else
-  {
-    return mPercentOfDietThatIsFromCrops;
-  }
-}
+    {
+      if (mPercentOfDietThatIsFromCrops < 0)
+      {
+        return 0;
+      }
+      else if (mPercentOfDietThatIsFromCrops > 100)
+      {
+        return 100;
+      }
+      else
+      {
+        return mPercentOfDietThatIsFromCrops;
+      }
+    }
 int LaModel::meatPercent() const { return mMeatPercent;}
 int LaModel::caloriesPerPersonDaily()                      const { return mCaloriesPerPersonDaily;          }
 int LaModel::foodValueCommonLand()                         const { return mCommonGrazingTDN;                }
@@ -940,7 +940,7 @@ void LaModel::allocateFallowGrazingLand()
   // for reduction due to grazing of fallow crop land
   // initialiseTDNMap();
 
-  int myTotalFallowTDN=0;
+  int myTotalFallowValue=0;
 
   // Count the Animals in each Priority Level and sum their calorie requirements
   QMapIterator<QString, QString > myAnimalIterator(mAnimalsMap);
@@ -1005,13 +1005,13 @@ void LaModel::allocateFallowGrazingLand()
     float myFallowArea = (myCropProductionTarget / myCropYield) * myFallowRatio;
 
     AreaUnits myFallowAreaUnits = myCropParameter.areaUnits();
-    int myFallowTDNBefore = myCropParameter.fallowTDN();
-    int myFallowTDN = LaUtils::convertAreaToHectares(myFallowAreaUnits, myFallowTDNBefore);
-    float myAvailableFallowTDN = myFallowRatio * myFallowArea * myFallowTDN;
+    int myFallowValueBefore = myCropParameter.fallowTDN();
+    int myFallowValue = LaUtils::convertAreaToHectares(myFallowAreaUnits, myFallowValueBefore);
+    float myAvailableFallowValue = myFallowRatio * myFallowArea * myFallowValue;
 
-    myTotalFallowTDN += static_cast<int>(myAvailableFallowTDN);
+    myTotalFallowValue += static_cast<int>(myAvailableFallowValue);
   } // while crop iterator
-  logMessage("Total Available Fallow Calories before adjustments: " + QString::number(myTotalFallowTDN).toLocal8Bit());
+  logMessage("Total Available Fallow Calories before adjustments: " + QString::number(myTotalFallowValue).toLocal8Bit());
 
   // The following three if statements process all of the animals which
   // utilize fallow cropland as grazing land.  It first checks that there
@@ -1019,30 +1019,30 @@ void LaModel::allocateFallowGrazingLand()
   // the animals fallow access priority
 
   // HIGH priority animals get allocated fallow cropland
-  if (myTotalFallowTDN > 0)
+  if (myTotalFallowValue > 0)
   {
     Priority myPriority = High;
-    int myLeftoverCalories = doTheFallowAllocation(myPriority, myTotalFallowTDN, myHighPriorityTDN);
+    int myLeftoverCalories = doTheFallowAllocation(myPriority, myTotalFallowValue, myHighPriorityTDN);
     logMessage("Remaining Fallow Calories after HIGH adjustments: " + QString::number(myLeftoverCalories).toLocal8Bit());
-    myTotalFallowTDN = myLeftoverCalories;
+    myTotalFallowValue = myLeftoverCalories;
   }
   // MEDIUM priority animals get allocated fallow cropland
-  if (myTotalFallowTDN > 0)
+  if (myTotalFallowValue > 0)
   {
     Priority myPriority = Medium;
-    int myLeftoverCalories = doTheFallowAllocation(myPriority, myTotalFallowTDN, myMediumPriorityTDN);
+    int myLeftoverCalories = doTheFallowAllocation(myPriority, myTotalFallowValue, myMediumPriorityTDN);
     logMessage("Remaining Fallow Calories after MED adjustments: " + QString::number(myLeftoverCalories).toLocal8Bit());
-    myTotalFallowTDN = myLeftoverCalories;
+    myTotalFallowValue = myLeftoverCalories;
   }
   // LOW priority animals get allocated fallow cropland
-  if (myTotalFallowTDN > 0)
+  if (myTotalFallowValue > 0)
   {
     Priority myPriority = Low;
-    int myLeftoverCalories = doTheFallowAllocation(myPriority, myTotalFallowTDN, myLowPriorityTDN);
+    int myLeftoverCalories = doTheFallowAllocation(myPriority, myTotalFallowValue, myLowPriorityTDN);
     logMessage("Remaining Fallow Calories after LOW adjustments: " + QString::number(myLeftoverCalories).toLocal8Bit());
-    myTotalFallowTDN = myLeftoverCalories;
+    myTotalFallowValue = myLeftoverCalories;
   }
-  //int myReturnValue = static_cast<int>(myTotalFallowTDN);
+  //int myReturnValue = static_cast<int>(myTotalFallowValue);
   //return myReturnValue;
 }
 
@@ -1058,7 +1058,7 @@ void LaModel::allocateFallowGrazingLand()
 int LaModel::doTheFallowAllocation
       (
         Priority thePriority,
-        int theAvailableFallowTDN,
+        int theAvailableFallowValue,
         int theTDNNeeded
       )
 {
@@ -1070,8 +1070,8 @@ int LaModel::doTheFallowAllocation
   //    food is required for the animals.  (fodder or grazing land)
   // 2. the result will be > 0, meaning that there is enough food value
   //    in the crop fallow to completely feed the animals.
-  float myTotalFallowTDN = theAvailableFallowTDN - theTDNNeeded;
-  qDebug() << "myTotalFallowTDN: "  << myTotalFallowTDN;
+  float myTotalFallowValue = theAvailableFallowValue - theTDNNeeded;
+  qDebug() << "myTotalFallowValue: "  << myTotalFallowValue;
   // set up the conditions for the fallow allocation...
   // there is either enough fallow to feed the animal completely
   // or not enough to feed them completely.  If there is enough,
@@ -1079,7 +1079,7 @@ int LaModel::doTheFallowAllocation
   // calories.  In other words, we won't be needing to graze them
   // on any other land besides the crop fallow.
   Status myFallowStatus;
-  myFallowStatus = (myTotalFallowTDN > 0) ? MoreThanEnoughToCompletelySatisfy : NotEnoughToCompletelySatisfy;
+  myFallowStatus = (myTotalFallowValue > 0) ? MoreThanEnoughToCompletelySatisfy : NotEnoughToCompletelySatisfy;
   QString myFallowStatusString = (myFallowStatus!=NotEnoughToCompletelySatisfy) ? "More than Enough" : "Not Enough";
   logMessage("Fallow Status: " + myFallowStatusString);
   qDebug () << "FallowStatus: " << myFallowStatus;
@@ -1107,7 +1107,7 @@ int LaModel::doTheFallowAllocation
               } //endif (fallowUsage(myAnimalGuid)
 
              } // while animal iterating
-             // myTotalFallowTDN += theTDNNeeded;
+             // myTotalFallowValue += theTDNNeeded;
              break;
           }
 
@@ -1130,11 +1130,11 @@ int LaModel::doTheFallowAllocation
               int myCurrentAnimalsTDN = mTDNMap.value( myAnimalGuid );
               logMessage("       Current Animal: " + myAnimal.name());
               qDebug() << "        theTDNNeeded: " << theTDNNeeded;
-              qDebug() << "        theAvailableFallowTDN: " << theAvailableFallowTDN;
+              qDebug() << "        theAvailableFallowValue: " << theAvailableFallowValue;
               qDebug() << "        myCurrentAnimalsTDN: " << myCurrentAnimalsTDN;
               if (myAnimalParameter.fallowUsage()==thePriority)
               {
-                double myAllottedTDN = ((myCurrentAnimalsTDN / static_cast<float>(theTDNNeeded)) * theAvailableFallowTDN);
+                double myAllottedTDN = ((myCurrentAnimalsTDN / static_cast<float>(theTDNNeeded)) * theAvailableFallowValue);
                 logMessage("Adjusting calories required by: " + myAnimal.name());
                 qDebug() << "myAllottedTDN: " << myAllottedTDN;
                 logMessage("Allotted TDN from fallow are: " + QString::number(myAllottedTDN));
@@ -1142,12 +1142,12 @@ int LaModel::doTheFallowAllocation
                 float myNewTDNTarget = mTDNMap.value(myAnimalGuid) - myAllottedTDN;
                 logMessage("New TDN target is: " + QString::number(myNewTDNTarget));
                 mTDNMap [myAnimalGuid] = static_cast<int>(myNewTDNTarget);
-                myTotalFallowTDN += static_cast<int>(myAllottedTDN);
+                myTotalFallowValue += static_cast<int>(myAllottedTDN);
               } // endif (fallowUsage(myAnimalGuid)==High)
 
             } // while animal iterating
-            logMessage("After allocation, total available TDN from fallow: " + QString::number(myTotalFallowTDN).toLocal8Bit());
-            myTotalFallowTDN = 0;
+            logMessage("After allocation, total available TDN from fallow: " + QString::number(myTotalFallowValue).toLocal8Bit());
+            myTotalFallowValue = 0;
             logMessage("WHICH HAS NOW BEEN SET TO 0");
             break;
           }
@@ -1155,7 +1155,7 @@ int LaModel::doTheFallowAllocation
     default:
           break;
   } //switch
-  return static_cast<int>(myTotalFallowTDN);
+  return static_cast<int>(myTotalFallowValue);
 }
 
 

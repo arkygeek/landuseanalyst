@@ -91,7 +91,7 @@ class LaCropParameter : public LaSerialisable, public LaGuid
     /** The food value, in calories, of a dunum/hectare
       * of fallow land
       */
-    void setFallowTDN(int theKg);
+    void setFallowValue(int theKg);
     /** Selects 0==dunums 1==hectares as units for area */
     void setAreaUnits(AreaUnits theAreaUnit);
     /** A flag indicating that the crop can be grown on
@@ -138,7 +138,7 @@ class LaCropParameter : public LaSerialisable, public LaGuid
     /** The food value, in calories, of a dunum/hectare
       * of fallow land
       */
-    int mFallowTDN;
+    int mFallowValue;
     /** Selects 0==dunums 1==hectares as units for area */
     AreaUnits mAreaUnits;
     /** A flag indicating that the crop can be grown on

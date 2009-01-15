@@ -28,7 +28,7 @@ LaCrop::LaCrop() : LaSerialisable(), LaGuid()
   mCropYield=60;
   mCropCalories=3000;
   mCropFodderProduction=50;
-  mCropFodderCalories=1000;
+  mCropFodderValue=1000;
 
 }
 LaCrop::~LaCrop()
@@ -45,7 +45,8 @@ LaCrop::LaCrop(const LaCrop& theCrop)
   mCropYield=theCrop.cropYield();
   mCropCalories=theCrop.cropCalories();
   mCropFodderProduction=theCrop.fodderProduction();
-  mCropFodderCalories=theCrop.fodderCalories();
+  mCropFodderValue=theCrop.fodderValue();
+  mCropFodderEnergyType=theCrop.cropFodderEnergyType();
   mAreaUnits=theCrop.areaUnits();
   mImageFile=theCrop.imageFile();
 }
@@ -60,7 +61,8 @@ LaCrop& LaCrop::operator=(const LaCrop& theCrop)
   mCropYield=theCrop.cropYield();
   mCropCalories=theCrop.cropCalories();
   mCropFodderProduction=theCrop.fodderProduction();
-  mCropFodderCalories=theCrop.fodderCalories();
+  mCropFodderValue=theCrop.fodderValue();
+  mCropFodderEnergyType=theCrop.cropFodderEnergyType();
   mAreaUnits=theCrop.areaUnits();
   mImageFile=theCrop.imageFile();
   return *this;
@@ -88,9 +90,13 @@ int LaCrop::fodderProduction() const
 {
   return mCropFodderProduction;
 }
-int LaCrop::fodderCalories() const
+int LaCrop::fodderValue() const
 {
-  return mCropFodderCalories;
+  return mCropFodderValue;
+}
+EnergyType LaCrop::cropFodderEnergyType() const
+{
+ return mCropFodderEnergyType; 
 }
 AreaUnits LaCrop::areaUnits() const
 {
@@ -122,9 +128,13 @@ void LaCrop::setFodderProduction(int theKg)
 {
   mCropFodderProduction=theKg;
 }
-void LaCrop::setFodderTDN(int theCalories)
+void LaCrop::setCropFodderValue(int theValue)
 {
-  mCropFodderCalories=theCalories;
+  mCropFodderValue=theValue;
+}
+void LaCrop::setCropFodderEnergyType(EnergyType theEnergyType)
+{
+  mCropFodderEnergyType=theEnergyType;
 }
 void LaCrop::setAreaUnits(AreaUnits theAreaUnit)
 {
@@ -153,8 +163,18 @@ bool LaCrop::fromXml(QString theXml)
   mCropYield=QString(myTopElement.firstChildElement("cropYield").text()).toInt();
   mCropCalories=QString(myTopElement.firstChildElement("cropCalories").text()).toInt();
   mCropFodderProduction=QString(myTopElement.firstChildElement("fodderProduction").text()).toInt();
-  mCropFodderCalories=QString(myTopElement.firstChildElement("fodderCalories").text()).toInt();
-  QString myAreaUnits = QString(myTopElement.firstChildElement("areaUnits").text());
+  mCropFodderValue=QString(myTopElement.firstChildElement("fodderCalories").text()).toInt();
+  QString myCropFodderEnergyType = QString(myTopElement.firstChildElement("cropFodderEnergyType").text());
+  if (myCropFodderEnergyType == "KCalories")
+  {
+    mCropFodderEnergyType=KCalories;
+  }
+  else if (myCropFodderEnergyType == "TDN")
+  {
+    mCropFodderEnergyType=TDN;
+  }
+  
+    QString myAreaUnits = QString(myTopElement.firstChildElement("areaUnits").text());
   if (myAreaUnits == "Dunum")
   {
     mAreaUnits=Dunum;
@@ -176,7 +196,18 @@ QString LaCrop::toXml()
   myString+=QString("  <cropYield>" + QString::number(mCropYield) + "</cropYield>\n");
   myString+=QString("  <cropCalories>" + QString::number(mCropCalories) + "</cropCalories>\n");
   myString+=QString("  <fodderProduction>" + QString::number(mCropFodderProduction) + "</fodderProduction>\n");
-  myString+=QString("  <fodderCalories>" + QString::number(mCropFodderCalories) + "</fodderCalories>\n");
+  myString+=QString("  <fodderCalories>" + QString::number(mCropFodderValue) + "</fodderCalories>\n");
+  
+  switch (mCropFodderEnergyType)
+  {
+    case KCalories:
+      myString+=QString("  <cropFodderEnergyType>KCalories</cropFodderEnergyType>\n");
+      break;
+    case TDN:
+      myString+=QString("  <cropFodderEnergyType>TDN</cropFodderEnergyType>\n");
+      break;
+  }
+  
   switch (mAreaUnits)
   {
     case Dunum:
@@ -200,7 +231,9 @@ QString LaCrop::toText()
   myString+=QString("cropYield=>" + QString::number(mCropYield) + "\n");
   myString+=QString("cropCalories=>" + QString::number(mCropCalories) + "\n");
   myString+=QString("fodderProduction=>" + QString::number(mCropFodderProduction) + "\n");
-  myString+=QString("fodderCalories=>" + QString::number(mCropFodderCalories) + "\n");
+  myString+=QString("fodderCalories=>" + QString::number(mCropFodderValue) + "\n");
+  QString myCropFodderEnergyType = (mCropFodderEnergyType==0) ? "KCalories" : "TDN";
+  myString+=QString("cropFodderEnergyType=>" + myCropFodderEnergyType + "\n");
   QString myUnits = (mAreaUnits==0) ? "Dunum" : "Hectare";
   myString+=QString("yieldUnits=>" + myUnits + "\n");
   return myString;
@@ -215,9 +248,11 @@ QString LaCrop::toHtml()
   myString+="<tr><td><b>Description: </b></td><td>" + mDescription + "</td></tr>";
   myString+="<tr><td><b>Avg Yield: </b></td><td>" + QString::number(mCropYield) + "</td></tr>";
   myString+="<tr><td><b>Cals/Kg: </b></td><td>" + QString::number(mCropCalories) + "</td></tr>";
+  QString myCropFodderEnergyType = (mCropFodderEnergyType==0) ? "KCalories" : "TDN";
   QString myUnits = (mAreaUnits==0) ? "Dunum" : "Hectare";
   myString+="<tr><td><b>Fodder (kg/" + myUnits + "): </b></td><td>" + QString::number(mCropFodderProduction) + "</td></tr>";
-  myString+="<tr><td><b>Fodder TDN/Kg: </b></td><td>" + QString::number(mCropFodderCalories) + "</td></tr>";
+  myString+="<tr><td><b>Fodder Value/Kg: </b></td><td>" + QString::number(mCropFodderValue) + "</td></tr>";
+  myString+="<tr><td><b>FodderEnergyType: </b></td><td>" + myCropFodderEnergyType + "</td></tr>";
   myString+="<tr><td><b>AreaUnits: </b></td><td>" + myUnits + "</td></tr>";
   myString+="</table>";
   return myString;
