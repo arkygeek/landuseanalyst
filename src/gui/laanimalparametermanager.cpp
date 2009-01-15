@@ -45,7 +45,7 @@
 #include <QtDebug>
 #include <QPair>
 
-  LaAnimalParameterManager::LaAnimalParameterManager(QPair<LaTripleMap, int> & thePair, AreaUnits & theAreaUnits, QWidget* parent, Qt::WFlags fl)
+  LaAnimalParameterManager::LaAnimalParameterManager(QPair<LaTripleMap, int> & thePair, AreaUnits & theAreaUnits, EnergyType & theEnergyType, QWidget* parent, Qt::WFlags fl)
 : QDialog(parent,fl)
 {
   //required by Qt4 to initialise the ui
@@ -95,6 +95,9 @@
   }
   comboBoxAreaUnits->addItem("Dunum");
   comboBoxAreaUnits->addItem("Hectare");
+  comboBoxSpecificLandEnergyType->addItem("KCalories");
+  comboBoxSpecificLandEnergyType->addItem("TDN");
+
   setFallowComboBox();
   populateFodder();
   refreshAnimalParameterTable();
@@ -350,9 +353,12 @@ void LaAnimalParameterManager::showAnimalParameter()
   sbSpecificRasterValue->setValue(mAnimalParameter.ValueSpecificGrazingLand());
   sbCommonRasterValue->setValue(mCommonGrazedLandTDN);
   comboBoxAreaUnits->setCurrentIndex(mAnimalParameter.areaUnits());
+  comboBoxSpecificLandEnergyType->setCurrentIndex(mAnimalParameter.energyType());
   grpFodderUse->setChecked(mAnimalParameter.fodderUse());
 
   refreshFodderTable();
+
+
 
   if (mAnimalParameter.fallowUsage()==High)
   {
@@ -465,7 +471,21 @@ void LaAnimalParameterManager::on_pbnApply_clicked()
   mAnimalParameter.setUseSpecificGrazingLand(checkBoxSpecificRaster->isChecked());
 
   QString mySelectedAreaUnit = QString(comboBoxAreaUnits->currentText());
+  QString mySelectedEnergyType = QString(comboBoxSpecificLandEnergyType->currentText());
   AreaUnits myAreaUnits;
+  EnergyType myEnergyType;
+
+  if (mySelectedEnergyType == "KCalories")
+  {
+    myEnergyType = KCalories;
+    mAnimalParameter.setEnergyType(myEnergyType);
+  }
+  else if (mySelectedEnergyType == "TDN")
+  {
+    myEnergyType = TDN;
+    mAnimalParameter.setEnergyType(myEnergyType);
+  }
+
   if (mySelectedAreaUnit == "Dunum")
   {
     myAreaUnits = Dunum;

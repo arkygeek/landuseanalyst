@@ -37,7 +37,7 @@ class LaAnimalParameterManager : public QDialog, private Ui::LaAnimalParameterMa
 {
   Q_OBJECT
   public:
-    LaAnimalParameterManager(QPair<LaTripleMap, int> & thePair, AreaUnits & theAreaUnits, QWidget* parent = 0, Qt::WFlags fl = 0 );
+    LaAnimalParameterManager(QPair<LaTripleMap, int> & thePair, AreaUnits & theAreaUnits, EnergyType & theEnergyType, QWidget* parent = 0, Qt::WFlags fl = 0 );
     ~LaAnimalParameterManager();
 
   public slots:
@@ -76,6 +76,7 @@ class LaAnimalParameterManager : public QDialog, private Ui::LaAnimalParameterMa
       LaTripleMap mSelectedCropsMap;
       int mCommonGrazedLandTDN;
       AreaUnits mCommonGrazingLandAreaUnits;
+      EnergyType mSpecificLandEnergyType;
 };
 
 #endif //LAANIMALPARAMETERMANAGER_H

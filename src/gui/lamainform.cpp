@@ -29,6 +29,7 @@
 #include "lamodelreports.h"
 #include "lagrass.h"
 #include "lagrassprocess.h"
+#include "la.h"
 
 //qt includes
 #include <QComboBox>
@@ -87,6 +88,9 @@ LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
   loadCrops();
   comboBoxAreaUnits->addItem("Dunum");
   comboBoxAreaUnits->addItem("Hectare");
+  comboBoxCommonLandEnergyType->addItem("KCalories");
+  comboBoxCommonLandEnergyType->addItem("TDN");
+
   setDietLabels();
   /** See the qtdocs on signals and slots to understand below.
    * we connect the currentItemChanged signal that a tree view emits when you
@@ -274,12 +278,14 @@ void LaMainForm::on_pbnNewCropParameter_clicked()
 void LaMainForm::on_pbnNewAnimalParameter_clicked()
 {
     int myCommonGrazingLandTDN = sbCommonRasterValue->value();
+    QString myComboBoxCommonLandEnergyType = comboBoxCommonLandEnergyType->currentText();
     QString myCommonGrazingLandAreaUnits = comboBoxAreaUnits->currentText();
     AreaUnits myAreaUnits = (myCommonGrazingLandAreaUnits == "Dunum") ? Dunum : Hectare;
+    EnergyType myEnergyType = (myComboBoxCommonLandEnergyType == "KCalories") ? KCalories : TDN;
     QPair<LaTripleMap, int> myPair;
     myPair.first=mCropsMap;
     myPair.second=myCommonGrazingLandTDN;
-    LaAnimalParameterManager myAnimalParameterManager(myPair, myAreaUnits);
+    LaAnimalParameterManager myAnimalParameterManager(myPair, myAreaUnits, myEnergyType);
     myAnimalParameterManager.exec();
     listWidgetCalculationsAnimal->clear();
     loadAnimals();

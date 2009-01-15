@@ -1908,18 +1908,7 @@ p, li { white-space: pre-wrap; }
            </widget>
           </item>
           <item row="0" column="1" >
-           <widget class="QComboBox" name="comboBoxCommonRasterUnits" >
-            <item>
-             <property name="text" >
-              <string>KCalories</string>
-             </property>
-            </item>
-            <item>
-             <property name="text" >
-              <string>TDN</string>
-             </property>
-            </item>
-           </widget>
+           <widget class="QComboBox" name="comboBoxCommonLandEnergyType" />
           </item>
           <item row="0" column="2" >
            <widget class="QLabel" name="label_28" >
