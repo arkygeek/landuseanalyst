@@ -75,7 +75,7 @@ class LaAnimalParameterManager : public QDialog, private Ui::LaAnimalParameterMa
       LaUtils::CropMap mCropMap;
       LaAnimalParameter mAnimalParameter;
       LaTripleMap mSelectedCropsMap;
-      int mCommonGrazedLandTDN;
+      int mCommonGrazedLandValue;
       AreaUnits mCommonGrazingLandAreaUnits;
       //EnergyType mSpecificLandEnergyType;
 };

@@ -174,7 +174,7 @@ void LaAnimalManager::selectAnimal(QString theFileName)
   QString myAnimalDir = LaUtils::userAnimalProfilesDirPath();
   LaAnimal myAnimal;
   myAnimal.fromXmlFile(myAnimalDir + QDir::separator() + theFileName);
-  mAnimal=myAnimal;
+  //mAnimal=myAnimal;
   showAnimal();
 }
 
@@ -187,6 +187,7 @@ void LaAnimalManager::showAnimal()
   sbKillWeight->setValue(mAnimal.killWeight());
   sbGrowTime->setValue(mAnimal.growTime());
   sbDeathRate->setValue(mAnimal.deathRate());
+  cbFeedEnergyType->setCurrentIndex(mAnimal.feedEnergyType());
   sbEnergyForPregnant->setValue(mAnimal.gestating());
   sbEnergyForLactating->setValue(mAnimal.lactating());
   sbEnergyForJuvenilePerKg->setValue(mAnimal.juvenile());
@@ -196,6 +197,12 @@ void LaAnimalManager::showAnimal()
   sbWeaningAge->setValue(mAnimal.weaningAge());
   sbGestationTime->setValue(mAnimal.gestationTime());
   sbEstrousCycleTime->setValue(mAnimal.estrousCycle());
+  sbLactationTime->setValue(mAnimal.lactationTime());
+  checkBoxMilk->setChecked(mAnimal.milk());
+  sbMilk->setValue(mAnimal.milkGramsPerDay());
+  sbMilkFoodValue->setValue(mAnimal.milkFoodValue());
+  checkBoxFleece->setChecked(mAnimal.fleece());
+  sbFleeceWeight->setValue(mAnimal.fleeceWeightKg());
   lblAnimalPix->setPixmap(mAnimal.imageFile());
 }
 
@@ -293,6 +300,21 @@ void LaAnimalManager::on_pbnApply_clicked()
   mAnimal.setKillWeight(sbKillWeight->value());
   mAnimal.setGrowTime(sbGrowTime->value());
   mAnimal.setDeathRate(sbDeathRate->value());
+  
+  QString mySelectedFeedEnergyType = QString(cbFeedEnergyType->currentText());
+  EnergyType myFeedEnergyType;
+
+  if (mySelectedFeedEnergyType == "KCalories")
+  {
+    myFeedEnergyType = KCalories;
+    mAnimal.setFeedEnergyType(myFeedEnergyType);
+  }
+  else if (mySelectedFeedEnergyType == "TDN")
+  {
+    myFeedEnergyType = TDN;
+    mAnimal.setFeedEnergyType(myFeedEnergyType);
+  }
+  
   mAnimal.setGestating(sbEnergyForPregnant->value());
   mAnimal.setLactating(sbEnergyForLactating->value());
   mAnimal.setJuvenile(sbEnergyForJuvenilePerKg->value());
@@ -302,6 +324,12 @@ void LaAnimalManager::on_pbnApply_clicked()
   mAnimal.setWeaningAge(sbWeaningAge->value());
   mAnimal.setGestationTime(sbGestationTime->value());
   mAnimal.setEstrousCycle(sbEstrousCycleTime->value());
+  mAnimal.setLactationTime(sbLactationTime->value());
+  mAnimal.setMilk(checkBoxMilk->checkState());
+  mAnimal.setMilkGramsPerDay(sbMilk->value());
+  mAnimal.setMilkFoodValue(sbMilkFoodValue->value());
+  mAnimal.setFleece(checkBoxFleece->checkState());
+  mAnimal.setFleeceWeightKg(sbFleeceWeight->value());
   mAnimal.setImageFile(mImageFile);
   mAnimal.toXmlFile( LaUtils::userAnimalProfilesDirPath() +
       QDir::separator() + mAnimal.guid() + ".xml");

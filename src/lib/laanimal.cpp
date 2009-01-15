@@ -30,9 +30,9 @@ LaAnimal::LaAnimal() : LaSerialisable(), LaGuid()
   mKillWeight=100;
   mGrowTime=10;
   mDeathRate=10;
-  mGestating=5000;
-  mLactating=5000;
-  mJuvenile=3500;
+  //mGestating=5000;
+  //mLactating=5000;
+  //mJuvenile=3500;
   mSexualMaturity=18;
   mBreedingExpectancy=5;
   mYoungPerBirth=1;
@@ -56,6 +56,7 @@ LaAnimal::LaAnimal(const LaAnimal& theAnimal)
   mKillWeight=theAnimal.killWeight();
   mGrowTime=theAnimal.growTime();
   mDeathRate=theAnimal.deathRate();
+  mFeedEnergyType=theAnimal.feedEnergyType();
   mGestating=theAnimal.gestating();
   mLactating=theAnimal.lactating();
   mJuvenile=theAnimal.juvenile();
@@ -65,6 +66,12 @@ LaAnimal::LaAnimal(const LaAnimal& theAnimal)
   mWeaningAge=theAnimal.weaningAge();
   mGestationTime=theAnimal.gestationTime();
   mEstrousCycle=theAnimal.estrousCycle();
+  mLactationTime=theAnimal.lactationTime();
+  mMilk=theAnimal.milk();
+  mMilkGramsPerDay=theAnimal.milkGramsPerDay();
+  mMilkFoodValue=theAnimal.milkFoodValue();
+  mFleece=theAnimal.fleece();
+  mFleeceWeightKg=theAnimal.fleeceWeightKg();
   mImageFile=theAnimal.imageFile();
 }
 
@@ -80,6 +87,7 @@ LaAnimal& LaAnimal::operator=(const LaAnimal& theAnimal)
   mKillWeight=theAnimal.killWeight();
   mGrowTime=theAnimal.growTime();
   mDeathRate=theAnimal.deathRate();
+  mFeedEnergyType=theAnimal.feedEnergyType();
   mGestating=theAnimal.gestating();
   mLactating=theAnimal.lactating();
   mJuvenile=theAnimal.juvenile();
@@ -89,6 +97,12 @@ LaAnimal& LaAnimal::operator=(const LaAnimal& theAnimal)
   mWeaningAge=theAnimal.weaningAge();
   mGestationTime=theAnimal.gestationTime();
   mEstrousCycle=theAnimal.estrousCycle();
+  mLactationTime=theAnimal.lactationTime();
+  mMilk=theAnimal.milk();
+  mMilkGramsPerDay=theAnimal.milkGramsPerDay();
+  mMilkFoodValue=theAnimal.milkFoodValue();
+  mFleece=theAnimal.fleece();
+  mFleeceWeightKg=theAnimal.fleeceWeightKg();
   mImageFile=theAnimal.imageFile();
   return *this;
 }
@@ -120,6 +134,10 @@ int LaAnimal::growTime() const
 int LaAnimal::deathRate() const
 {
   return mDeathRate;
+}
+EnergyType LaAnimal::feedEnergyType() const
+{
+ return mFeedEnergyType; 
 }
 int LaAnimal::gestating() const
 {
@@ -157,10 +175,37 @@ int LaAnimal::estrousCycle() const
 {
   return mEstrousCycle;
 }
+int LaAnimal::lactationTime() const
+{
+ return mLactationTime; 
+}
+
+bool LaAnimal::milk() const
+{
+  return mMilk;
+}
+int  LaAnimal::milkGramsPerDay() const
+{
+  return mMilkGramsPerDay;
+}
+int  LaAnimal::milkFoodValue() const
+{
+  return mMilkFoodValue;
+}
+bool LaAnimal::fleece() const
+{
+  return mFleece;
+}
+int  LaAnimal::fleeceWeightKg() const
+{
+  return mFleeceWeightKg;
+}
+
 QString LaAnimal::imageFile() const
 {
   return mImageFile;
 }
+
 void LaAnimal::setName(QString theName)
 {
   mName=theName;
@@ -191,6 +236,10 @@ void LaAnimal::setGrowTime(int theWeeks)
 void LaAnimal::setDeathRate(int thePercentage)
 {
   mDeathRate=thePercentage;
+}
+void LaAnimal::setFeedEnergyType(EnergyType theEnergyType)
+{
+  mFeedEnergyType=theEnergyType; 
 }
 void LaAnimal::setGestating(int theCalories)
 {
@@ -228,6 +277,33 @@ void LaAnimal::setEstrousCycle(int theDays)
 {
   mEstrousCycle=theDays;
 }
+
+void LaAnimal::setLactationTime (int theTime)
+{
+  mLactationTime = theTime; 
+}
+
+void LaAnimal::setMilk (bool theBool)
+{
+  mMilk = theBool;
+}
+void LaAnimal::setMilkGramsPerDay(int theMilkGrams)
+{
+  mMilkGramsPerDay = theMilkGrams;
+}
+void LaAnimal::setMilkFoodValue (int theMilkFoodValue)
+{
+  mMilkFoodValue = theMilkFoodValue;
+}
+void LaAnimal::setFleece (bool theFleeceBool)
+{
+  mFleece = theFleeceBool;
+}
+void LaAnimal::setFleeceWeightKg (int theFleeceWeight)
+{
+  mFleeceWeightKg = theFleeceWeight;
+}
+
 void LaAnimal::setImageFile(QString theImageFileName)
 {
   mImageFile=theImageFileName;
@@ -253,6 +329,16 @@ bool LaAnimal::fromXml(QString theXml)
   mKillWeight=QString(myTopElement.firstChildElement("killWeight").text()).toInt();
   mGrowTime=QString(myTopElement.firstChildElement("growTime").text()).toInt();
   mDeathRate=QString(myTopElement.firstChildElement("deathRate").text()).toInt();
+  
+  QString myFeedEnergyType = QString(myTopElement.firstChildElement("feedEnergyType").text());
+  if (myFeedEnergyType == "KCalories")
+  {
+    mFeedEnergyType=KCalories;
+  }
+  else if (myFeedEnergyType == "TDN")
+  {
+    mFeedEnergyType=TDN;
+  }
   mGestating=QString(myTopElement.firstChildElement("gestating").text()).toInt();
   mLactating=QString(myTopElement.firstChildElement("lactating").text()).toInt();
   mJuvenile=QString(myTopElement.firstChildElement("juvenile").text()).toInt();
@@ -262,6 +348,12 @@ bool LaAnimal::fromXml(QString theXml)
   mWeaningAge=QString(myTopElement.firstChildElement("weaningAge").text()).toInt();
   mGestationTime=QString(myTopElement.firstChildElement("gestationTime").text()).toInt();
   mEstrousCycle=QString(myTopElement.firstChildElement("estrousCycle").text()).toInt();
+  mLactationTime=QString(myTopElement.firstChildElement("lactationTime").text()).toInt();
+  mMilk=QString(myTopElement.firstChildElement("milk").text()).toInt();
+  mMilkGramsPerDay=QString(myTopElement.firstChildElement("milkGramsPerDay").text()).toInt();
+  mMilkFoodValue=QString(myTopElement.firstChildElement("milkFoodValue").text()).toInt();
+  mFleece=QString(myTopElement.firstChildElement("fleece").text()).toInt();
+  mFleeceWeightKg=QString(myTopElement.firstChildElement("fleeceWeightKg").text()).toInt();
   mImageFile=QString(myTopElement.firstChildElement("imageFile").text());
   return true;
 }
@@ -277,6 +369,17 @@ QString LaAnimal::toXml()
   myString+=QString("  <killWeight>" + QString::number(mKillWeight) + "</killWeight>\n");
   myString+=QString("  <growTime>" + QString::number(mGrowTime) + "</growTime>\n");
   myString+=QString("  <deathRate>" + QString::number(mDeathRate) + "</deathRate>\n");
+  
+  switch (mFeedEnergyType)
+  {
+    case KCalories:
+      myString+=QString("  <feedEnergyType>KCalories</feedEnergyType>\n");
+      break;
+    case TDN:
+      myString+=QString("  <feedEnergyType>TDN</feedEnergyType\n");
+      break;
+  }
+  
   myString+=QString("  <gestating>" + QString::number(mGestating) + "</gestating>\n");
   myString+=QString("  <lactating>" + QString::number(mLactating) + "</lactating>\n");
   myString+=QString("  <juvenile>" + QString::number(mJuvenile) + "</juvenile>\n");
@@ -286,6 +389,12 @@ QString LaAnimal::toXml()
   myString+=QString("  <weaningAge>" + QString::number(mWeaningAge) + "</weaningAge>\n");
   myString+=QString("  <gestationTime>" + QString::number(mGestationTime) + "</gestationTime>\n");
   myString+=QString("  <estrousCycle>" + QString::number(mEstrousCycle) + "</estrousCycle>\n");
+  myString+=QString("  <lactationTime>" + QString::number(mLactationTime) + "</lactationTime>\n");
+  myString+=QString("  <milk>" + QString::number(mMilk) + "</milk>\n");
+  myString+=QString("  <milkGramsPerDay>" + QString::number(mMilkGramsPerDay) + "</milkGramsPerDay>\n");
+  myString+=QString("  <milkFoodValue>" + QString::number(mMilkFoodValue) + "</milkFoodValue>\n");
+  myString+=QString("  <fleece>" + QString::number(mFleece) + "</fleece>\n");
+  myString+=QString("  <fleeceWeightKg>" + QString::number(mFleeceWeightKg) + "</fleeceWeightKg>\n");
   myString+=QString("  <imageFile>" + LaUtils::xmlEncode(mImageFile) + "</imageFile>\n");
   myString+=QString("</animal>\n");
   return myString;
@@ -302,6 +411,17 @@ QString LaAnimal::toText()
   myString+=QString("killWeight=>" + QString::number(mKillWeight) + "\n");
   myString+=QString("growTime=>" + QString::number(mGrowTime) + "\n");
   myString+=QString("deathRate=>" + QString::number(mDeathRate) + "\n");
+  
+  switch (mFeedEnergyType)
+  {
+    case KCalories:
+      myString+=QString("feedEnergyType=>KCalories\n");
+      break;
+    case TDN:
+      myString+=QString("feedEnergyType=>TDN\n");
+      break;
+  }
+  
   myString+=QString("gestating=>" + QString::number(mGestating) + "\n");
   myString+=QString("lactating=>" + QString::number(mLactating) + "\n");
   myString+=QString("juvenile=>" + QString::number(mJuvenile) + "\n");
@@ -311,6 +431,12 @@ QString LaAnimal::toText()
   myString+=QString("weaningAge=>" + QString::number(mWeaningAge) + "\n");
   myString+=QString("gestationTime=>" + QString::number(mGestationTime) + "\n");
   myString+=QString("estrousCycle=>" + QString::number(mEstrousCycle) + "\n");
+  myString+=QString("lactationTime=>" + QString::number(mLactationTime) + "\n");
+  myString+=QString("milk=>" + QString::number(mMilk) + "\n");
+  myString+=QString("milkGramsPerDay=>" + QString::number(mMilkGramsPerDay) + "\n");
+  myString+=QString("milkFoodValue=>" + QString::number(mMilkFoodValue) + "\n");
+  myString+=QString("fleece=>" + QString::number(mFleece) + "\n");
+  myString+=QString("fleeceWeightKg=>" + QString::number(mFleeceWeightKg) + "\n");
   return myString;
 }
 
@@ -333,8 +459,25 @@ QString LaAnimal::toHtml()
 
   myString+="<tr><td><b>Gestation Time:</b></td><td>" + QString::number(mGestationTime) + "</td></tr>";
   myString+="<tr><td><b>Estrous Cycle:</b></td><td>" + QString::number(mEstrousCycle) + "</td></tr>";
+  myString+="<tr><td><b>lactationTime:</b></td><td>" + QString::number(mLactationTime) + "</td></tr>";
+  myString+="<tr><td><b>milk:</b></td><td>" + QString::number(mMilk) + "</td></tr>";
+  myString+="<tr><td><b>milkGramsPerDay:</b></td><td>" + QString::number(mMilkGramsPerDay) + "</td></tr>";
+  myString+="<tr><td><b>milkFoodValue:</b></td><td>" + QString::number(mMilkFoodValue) + "</td></tr>";
+  myString+="<tr><td><b>fleece:</b></td><td>" + QString::number(mFleece) + "</td></tr>";
+  myString+="<tr><td><b>fleeceWeightKg:</b></td><td>" + QString::number(mFleeceWeightKg) + "</td></tr>";
   myString+="<tr><td></td><td>";
-  myString+="<tr><td><FONT COLOR=\"#0063F7\">TDN Requirements (Kg/yr)</FONT></td><td>";
+  myString+="<tr><td><FONT COLOR=\"#0063F7\">Feed Requirements (pa)</FONT></td><td>";
+  
+  switch (mFeedEnergyType)
+  {
+    case KCalories:
+      myString+="<tr><td><b>EnergyType:</b></td><td>KCalories</td></tr>";
+      break;
+    case TDN:
+      myString+="<tr><td><b>EnergyType:</b></td><td>TDN</td></tr>";
+      break;
+  }
+  
   myString+="<tr><td><b>Gestating Female:</b></td><td>" + QString::number(mGestating) + "</td></tr>";
   myString+="<tr><td><b>Lactating Female:</b></td><td>" + QString::number(mLactating) + "</td></tr>";
   myString+="<tr><td><b>Juveniles:</b></td><td>" + QString::number(mJuvenile) + "</td></tr>";

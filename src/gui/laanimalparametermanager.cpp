@@ -64,10 +64,10 @@
   //myGrass.getRasterList(myMapsetList);
   cboRaster->addItems(myList);
   mSelectedCropsMap = thePair.first;
-  mCommonGrazedLandTDN = thePair.second;
+  mCommonGrazedLandValue = thePair.second;
   mCommonGrazingLandAreaUnits = theAreaUnits;
   sbCommonRasterValue->setReadOnly(false);
-  sbCommonRasterValue->setValue(mCommonGrazedLandTDN);
+  sbCommonRasterValue->setValue(mCommonGrazedLandValue);
   sbCommonRasterValue->setReadOnly(true);
   connect(tblAnimalParameterProfiles, SIGNAL(cellClicked( int,int)),
       this, SLOT(cellClicked( int,int)));
@@ -351,7 +351,7 @@ void LaAnimalParameterManager::showAnimalParameter()
   checkBoxCommonRaster->setChecked(mAnimalParameter.useCommonGrazingLand());
   checkBoxSpecificRaster->setChecked(mAnimalParameter.useSpecificGrazingLand());
   sbSpecificRasterValue->setValue(mAnimalParameter.ValueSpecificGrazingLand());
-  sbCommonRasterValue->setValue(mCommonGrazedLandTDN);
+  sbCommonRasterValue->setValue(mCommonGrazedLandValue);
   cbAreaUnits->setCurrentIndex(mAnimalParameter.areaUnits());
   cbSpecificLandEnergyType->setCurrentIndex(mAnimalParameter.energyType());
   grpFodderUse->setChecked(mAnimalParameter.fodderUse());

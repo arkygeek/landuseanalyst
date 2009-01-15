@@ -21,6 +21,7 @@
 class QString;
 #include "laserialisable.h"
 #include "laguid.h"
+#include "la.h"
 #include <QString>
 /**
   * An class to represent an animal
@@ -57,6 +58,8 @@ class LaAnimal : public LaSerialisable, public LaGuid
     int growTime() const;
     /** The percentage of babies that die before being usable as either meat or breeding */
     int deathRate() const;
+    /** The energy type: KCalories or TDN */
+    EnergyType feedEnergyType() const;
     /** The number of calories a gestating female requires per day */
     int gestating() const;
     /** The number of calories a lactating female requires per day */
@@ -75,6 +78,18 @@ class LaAnimal : public LaSerialisable, public LaGuid
     int gestationTime() const;
     /** The number of days in the female estrous cycle */
     int estrousCycle() const;
+    /** The number of days the mothers can produce milk */
+    int lactationTime() const;
+    /** produces milk bool */
+    bool milk() const;
+    /** weight of milk in grams provided per day after weaning */
+    int milkGramsPerDay() const;
+    /** value, in kcalories, of milk per Kg */
+    int milkFoodValue() const;
+    /** provides a fleece bool */
+    bool fleece() const;
+    /** weight of fleece (average) per year */
+    int fleeceWeightKg() const;
     /** The image file associated with the animal */
     QString imageFile() const;
 
@@ -116,6 +131,11 @@ class LaAnimal : public LaSerialisable, public LaGuid
      * @see deathRate()
      */
     void setDeathRate(int thePercentage);
+    
+    /** Set the daily calories required for a gestating female
+     * @see feedEnergyType()
+     */
+    void setFeedEnergyType(EnergyType theFeedEnergyType);
 
     /** Set the daily calories required for a gestating female
      * @see gestating()
@@ -161,6 +181,37 @@ class LaAnimal : public LaSerialisable, public LaGuid
      * @see estrousCycle()
      */
     void setEstrousCycle(int theDays);
+    
+     /** Set the LactationTime in days
+     * @see lactationTime()
+      */
+    void setLactationTime (int theTime);
+    
+     /** Set the milk bool flag
+     * @see milk()
+      */
+    void setMilk (bool theBool);
+    
+    /** Set the Milk Production Per Day in grams
+     * @see milkGramsPerDay()
+     */
+    void setMilkGramsPerDay(int theMilkGrams);
+    
+    /** Set the food value of milk in KCals
+     * @see milkFoodValue()
+     */
+    void setMilkFoodValue (int theMilkFoodValue);
+    
+    /** Set the fleece bool flag
+     * @see fleece()
+     */
+    void setFleece (bool theFleeceBool);
+    
+    /** Set the fleece weight in Kg
+     * @see fleeceWeightKg()
+     */
+    void setFleeceWeightKg (int theFleeceWeight);
+
     /** Set the image file
      * @see imageFile()
      */
@@ -200,6 +251,8 @@ class LaAnimal : public LaSerialisable, public LaGuid
     int mGrowTime;
     /** The percentage of babies that die before being usable as either meat or breeding */
     int mDeathRate;
+    /** The feed Energy type: KCalories or TDN */
+    EnergyType mFeedEnergyType;
     /** The number of calories a gestating female requires per day */
     int mGestating;
     /** The number of calories a lactating female requires per day */
@@ -218,6 +271,19 @@ class LaAnimal : public LaSerialisable, public LaGuid
     int mGestationTime;
     /** The number of days in the female estrous cycle */
     int mEstrousCycle;
+    /** total length of lactation */
+    int mLactationTime;
+    /** flag for utilisation of milk */
+    bool mMilk;
+    /** milk production per mother per day in grams */
+    int mMilkGramsPerDay;
+    /** food value of milk per kg in KCalories */
+    int mMilkFoodValue;
+    /** flag for provision of a fleece from the animal */
+    bool mFleece;
+    /** the weight of the fleece, if available, in kg per annum */
+    int mFleeceWeightKg;
+    /** name of image file */
     QString mImageFile;
 };
 
