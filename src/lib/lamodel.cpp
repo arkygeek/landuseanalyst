@@ -611,15 +611,20 @@ int LaModel::getProductionTargetsCrops(QString theCropGuid, int theCalorieTarget
     QString myAnimalGuid = myAnimalIterator.key();
     LaAnimalParameter myAnimalParameter;
     LaFoodSourceMap myFoodSourceMap = myAnimalParameter.fodderSourceMap();
-
     LaFoodSource myFoodSource = myFoodSourceMap.value(myAnimalGuid);
     
     //int myFodderValue = myFoodSource.fodder();
-    int myGrainValue = myFoodSource.grain();
-    myAnimalsRequiredCalories+=myGrainValue;
+    int myGrainGrams = myFoodSource.grain(); //this gives me grams of grain per day
+      //int myFodderGrams = myFoodSource.fodder(); //this gives me grams of straw per day
+    //now I have to look up the food value of the grain and the straw from LaCrop
+    int myGrainValue = myCrop.cropCalories();
+      //int myFodderValue = myCrop.fodderValue();
+    // now I have to calculate how many calories this all works out to
+    int myTotalCaloriesFromGrain = myGrainGrams * 1000 * myGrainValue;
+    myAnimalsRequiredCalories+=myTotalCaloriesFromGrain;
   }
   mCalcsAnimalsMap.insert("Common Land", QString::number(mCommonGrazingLandAreaTarget));
-  int myCalorieTarget = theCalorieTarget;//+ myAnimalsRequiredCalories
+  int myCalorieTarget = theCalorieTarget + myAnimalsRequiredCalories;
   float myCropProductionTarget = myCalorieTarget / (myCrop.cropCalories() / 1000.); //kcalories
   int myReturnValue = static_cast<int>(myCropProductionTarget);
   ///@TODO remove this debugging stuff
