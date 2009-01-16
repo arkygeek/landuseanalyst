@@ -3,7 +3,9 @@
                              -------------------
     begin                : March 2006
     copyright            : (C) 2003 by Tim Sutton
+                         : (C) 2009 by Jason Jorgenson
     email                : tim@linfiniti.com
+                         : jjorgenson@gmail.com
  ***************************************************************************/
 
 /***************************************************************************
@@ -376,7 +378,7 @@ QString LaAnimal::toXml()
       myString+=QString("  <feedEnergyType>KCalories</feedEnergyType>\n");
       break;
     case TDN:
-      myString+=QString("  <feedEnergyType>TDN</feedEnergyType\n");
+      myString+=QString("  <feedEnergyType>TDN</feedEnergyType>\n");
       break;
   }
   

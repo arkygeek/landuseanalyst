@@ -174,7 +174,7 @@ void LaAnimalManager::selectAnimal(QString theFileName)
   QString myAnimalDir = LaUtils::userAnimalProfilesDirPath();
   LaAnimal myAnimal;
   myAnimal.fromXmlFile(myAnimalDir + QDir::separator() + theFileName);
-  //mAnimal=myAnimal;
+  mAnimal=myAnimal;
   showAnimal();
 }
 
