@@ -59,7 +59,7 @@ class LaCropParameter : public LaSerialisable, public LaGuid
     /** The food value, in calories, of a dunum/hectare
       * of fallow land
       */
-    int fallowTDN() const;
+    int fallowValue() const;
     /** Selects 0==dunums 1==hectares as units for area */
     AreaUnits areaUnits() const;
     /** A flag indicating that the crop can be grown on

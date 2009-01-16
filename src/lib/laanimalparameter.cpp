@@ -80,6 +80,7 @@ LaAnimalParameter& LaAnimalParameter::operator=(const LaAnimalParameter& theAnim
   mAreaUnits = theAnimalParameter.areaUnits();
   mEnergyType = theAnimalParameter.energyType();
   mFodderUse = theAnimalParameter.fodderUse();
+  mFoodSourceMap = theAnimalParameter.fodderSourceMap();
 
   // fodder stuff here
 
@@ -275,11 +276,13 @@ bool LaAnimalParameter::fromXml(QString theXml)
     QString myGuid = myFoodSourceElement.firstChildElement("fodderCropGuid").text();
     int myFodderStrawChaff = myFoodSourceElement.firstChildElement("fodderStrawChaff").text().toInt();
     int myGrain = myFoodSourceElement.firstChildElement("fodderGrain").text().toInt();
+    int myUsed = myFoodSourceElement.firstChildElement("fodderUse").text().toInt();
     LaFoodSource myFoodSource;
 
     // setup the data to insert into the map
     myFoodSource.setFodder(myFodderStrawChaff);
     myFoodSource.setGrain(myGrain);
+    myFoodSource.setUsed(myUsed);
     // insert data into map
     mFoodSourceMap.insert(myGuid,myFoodSource);
   } // end of for loop

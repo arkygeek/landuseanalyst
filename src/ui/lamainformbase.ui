@@ -835,16 +835,6 @@ p, li { white-space: pre-wrap; }
              <property name="spacing" >
               <number>6</number>
              </property>
-             <item row="0" column="0" >
-              <widget class="QLabel" name="label_14" >
-               <property name="text" >
-                <string>Domestic</string>
-               </property>
-               <property name="alignment" >
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
              <item row="1" column="1" >
               <spacer>
                <property name="orientation" >
@@ -857,6 +847,29 @@ p, li { white-space: pre-wrap; }
                 </size>
                </property>
               </spacer>
+             </item>
+             <item row="0" column="1" >
+              <spacer>
+               <property name="orientation" >
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0" >
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="0" column="0" >
+              <widget class="QLabel" name="label_14" >
+               <property name="text" >
+                <string>Domestic</string>
+               </property>
+               <property name="alignment" >
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
              </item>
              <item row="1" column="2" >
               <widget class="QLabel" name="labelMeatWildPercent" >
@@ -946,26 +959,7 @@ p, li { white-space: pre-wrap; }
                </property>
               </widget>
              </item>
-             <item row="0" column="1" >
-              <spacer>
-               <property name="orientation" >
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0" >
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
             </layout>
-            <zorder>label_14</zorder>
-            <zorder>labelMeatWildPercent</zorder>
-            <zorder>label_13</zorder>
-            <zorder>labelMeatTamePercent</zorder>
-            <zorder>sliderMeat</zorder>
-            <zorder>layoutWidget_2</zorder>
            </widget>
           </item>
           <item row="2" column="0" colspan="2" >
@@ -1079,7 +1073,7 @@ p, li { white-space: pre-wrap; }
                </widget>
               </item>
               <item>
-               <widget class="QSpinBox" name="sbDairyUtilisation" >
+               <widget class="QSpinBox" name="sbDairyUse" >
                 <property name="toolTip" >
                  <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
@@ -1908,7 +1902,7 @@ p, li { white-space: pre-wrap; }
            </widget>
           </item>
           <item row="0" column="1" >
-           <widget class="QComboBox" name="comboBoxCommonLandEnergyType" />
+           <widget class="QComboBox" name="cbCommonLandEnergyType" />
           </item>
           <item row="0" column="2" >
            <widget class="QLabel" name="label_28" >

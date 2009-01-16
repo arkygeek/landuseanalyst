@@ -75,8 +75,11 @@ LaModel::LaModel(const LaModel& theModel)
   mPercentOfDietThatIsFromCrops=theModel.plantPercent();
   mMeatPercent=theModel.meatPercent();
   mCaloriesPerPersonDaily=theModel.caloriesPerPersonDaily();
+  mDairyUse=theModel.dairyUse();
   mFallowStatus=theModel.fallowStatus();
   mFallowRatio=theModel.fallowRatio();
+  //mFodderMap=theModel.fodderMap();
+  //mHerdSize=theModel.herdSize();
 }
 
 LaModel& LaModel::operator=(const LaModel& theModel)
@@ -98,8 +101,12 @@ LaModel& LaModel::operator=(const LaModel& theModel)
   mPercentOfDietThatIsFromCrops=theModel.plantPercent();
   mMeatPercent=theModel.meatPercent();
   mCaloriesPerPersonDaily=theModel.caloriesPerPersonDaily();
+  mDairyUse=theModel.dairyUse();
   mFallowStatus=theModel.fallowStatus();
   mFallowRatio=theModel.fallowRatio();
+  //mFodderMap=theModel.fodderMap();
+
+  //mHerdSize=theModel.herdSize();
   return *this;
 }
 
@@ -129,20 +136,22 @@ int  LaModel::plantPercent()      const
         return mPercentOfDietThatIsFromCrops;
       }
     }
-int LaModel::meatPercent() const { return mMeatPercent;}
+int LaModel::meatPercent()                                 const { return mMeatPercent;                     }
+int LaModel::dairyUse()                                    const { return mDairyUse;                        }
 int LaModel::caloriesPerPersonDaily()                      const { return mCaloriesPerPersonDaily;          }
-int LaModel::foodValueCommonLand()                         const { return mCommonGrazingTDN;                }
+int LaModel::foodValueCommonLand()                         const { return mCommonGrazingValue;              }
 
-QMap <QString, int> LaModel::animalCalorieTargetsMap()     const { return mCaloriesProvidedByAnimalsMap;    }
-QMap <QString, int> LaModel::animalFeedRequirementsMap()   const { return mTDNMap;                          }
+QMap <QString, int> LaModel::animalCalorieTargetsMap()     const { return mCaloriesProvidedByMeatMap;       }
+QMap <QString, int> LaModel::animalFeedRequirementsMap()   const { return mValueMap;                        }
 QMap <QString, int> LaModel::animalProductionTargetsMap()  const { return mProductionRequiredAnimalsMap;    }
 QMap <QString, int> LaModel::animalAreaTargetsMap()        const { return mAreaTargetsAnimalsMap;           }
 QMap <QString, int> LaModel::cropCalorieTargetsMap()       const { return mCaloriesProvidedByCropsMap;      }
 QMap <QString, int> LaModel::cropProductionTargetsMap()    const { return mProductionRequiredCropsMap;      }
 QMap <QString, int> LaModel::cropAreaTargetsMap()          const { return mAreaTargetsCropsMap;             }
+//QMap <QString, LaFoodSourceMap> LaModel::fodderMap()          const { return mFodderMap;                       }
 
-QMap <QString, QString> LaModel::calcsAnimalsMap()               { return mCalcsAnimalsMap;}
-QMap <QString, QString> LaModel::calcsCropsMap()                 { return mCalcsCropsMap;}
+QMap <QString, QString> LaModel::calcsAnimalsMap()               { return mCalcsAnimalsMap;                 }
+QMap <QString, QString> LaModel::calcsCropsMap()                 { return mCalcsCropsMap;                   }
 
 void LaModel::setFallowStatus           (Status theStatus)       { mFallowStatus=theStatus;                 }
 void LaModel::setFallowRatio            (float theRatio)         { mFallowRatio=theRatio;                   }
@@ -160,11 +169,14 @@ void LaModel::setDietPercent            (int thePercent)         { mDietPercent=
 void LaModel::setCropPercent            (int thePercent)         { mPercentOfDietThatIsFromCrops=thePercent;}
 void LaModel::setMeatPercent            (int thePercent)         { mMeatPercent=thePercent;                 }
 void LaModel::setCaloriesPerPersonDaily (int theCalories)        { mCaloriesPerPersonDaily=theCalories;     }
+void LaModel::setDairyUse               (int thePercent)         { mDairyUse=thePercent;                    }
 void LaModel::setCommonLandAreaUnits    (AreaUnits theAreaUnits) { mCommonLandAreaUnits = theAreaUnits;     }
-void LaModel::setCommonLandValue        (int theTDN, AreaUnits theAreaUnits)
+
+void LaModel::setCommonLandValue        (int theValue, AreaUnits theAreaUnits)
 {
-  mCommonGrazingTDN = LaUtils::convertAreaToHectares(theAreaUnits, theTDN);
+  mCommonGrazingValue = LaUtils::convertAreaToHectares(theAreaUnits, theValue);
 }
+
 void LaModel::setAnimals(QMap<QString,QString> theAnimals)       { mAnimalsMap = theAnimals;}
 void LaModel::setCrops(QMap<QString,QString> theCrops)           { mCropsMap = theCrops;}
 
@@ -222,6 +234,7 @@ bool LaModel::fromXml(QString theXml)
   mPercentOfDietThatIsFromCrops=QString(myTopElement.firstChildElement("plantPercent").text()).toInt();
   mMeatPercent=QString(myTopElement.firstChildElement("meatPercent").text()).toInt();
   mCaloriesPerPersonDaily=QString(myTopElement.firstChildElement("caloriesPerPersonDaily").text()).toInt();
+  mDairyUse=QString(myTopElement.firstChildElement("dairyUse").text()).toInt();
   return true;
 }
 
@@ -244,6 +257,7 @@ QString LaModel::toXml()
   myString+=QString("  <plantPercent>" + QString::number(mPercentOfDietThatIsFromCrops) + "</plantPercent>\n");
   myString+=QString("  <meatPercent>" + QString::number(mMeatPercent) + "</meatPercent>\n");
   myString+=QString("  <caloriesPerPersonDaily>" + QString::number(mCaloriesPerPersonDaily) + "</caloriesPerPersonDaily>\n");
+  myString+=QString("  <dairyUse>" + QString::number(mDairyUse) + "</dairyUse>\n");
   myString+=QString("</model>\n");
   return myString;
 }
@@ -267,6 +281,7 @@ QString LaModel::toText()
   myString+=QString("plantPercent=>" + QString::number(mPercentOfDietThatIsFromCrops) + "\n");
   myString+=QString("meatPercent=>" + QString::number(mMeatPercent) + "\n");
   myString+=QString("caloriesPerPersonDaily=>" + QString::number(mCaloriesPerPersonDaily) + "\n");
+  myString+=QString("dairyUse=>" + QString::number(mDairyUse) + "\n");
   return myString;
 }
 
@@ -290,6 +305,7 @@ QString LaModel::toHtml()
   myString+="<br>Plant Percent: " + QString::number(mPercentOfDietThatIsFromCrops) + "</br>";
   myString+="<br>Meat Percent: " + QString::number(mMeatPercent) + "</br>";
   myString+="<br>Calories Per Person Daily: " + QString::number(mCaloriesPerPersonDaily) + "</br>";
+  myString+="<br>Dairy Use: " + QString::number(mDairyUse) + "</br>";
   //iterate through animals
   QMapIterator<QString, QString > myAnimalIterator(mAnimalsMap);
   while (myAnimalIterator.hasNext())
@@ -357,16 +373,17 @@ void LaModel::DoCalculations()
   //        available here -->  caloriesFromTameMeat();
 
   // Step 2
-  //        Calculate calorie targets for each crop and each animals
+  //        Calculate calorie targets for each crop and each animal
   //        (These results will be stored in a QMap)
+  initialiseCaloriesProvidedByMeatMap();
+  initialiseCaloriesProvidedByMilkMap();
   initialiseCaloriesProvidedByCropsMap();
-  initialiseCaloriesProvidedByAnimalsMap();
-
+  
   // Step 3
   //        Now we need to calculate how many calories the animals
   //          are going to need to stay alive.
   //        (These calculations are going to be stored in a QMap)
-  initialiseTDNMap();
+  initialiseValueMap();
 
   // Step 4
   //        Production targets must now be calculated for each animal and crop
@@ -421,6 +438,9 @@ void LaModel::DoCalculations()
   initialiseCalcsAnimalsMap();
   initialiseCalcsCropsMap();
 }
+
+
+
 void LaModel::adjustAnimalTargetsForFodder()
 {
   //logMessage("method ==> void LaModel::adjustAnimalTargetsForFodder()");
@@ -429,12 +449,12 @@ void LaModel::adjustAnimalTargetsForFodder()
 }
 int LaModel::caloriesFromCrops()
 {
-  //logMessage("method ==> int LaModel::caloriesFromCrops()");
-  float myDietComposition = 0.01 * ( 100 - mDietPercent );
+  float myCaloriesFromDairyProducts=caloriesFromDairyProducts();
+  float myCaloriesFromMeat=caloriesFromTameMeat();
   float myCropPercent = 0.01 * ( plantPercent() );
-  float myCropOverallContributionToDiet = myDietComposition * myCropPercent;
-  float myCalorieTarget = population() * (mCaloriesPerPersonDaily/1000.) * 365.; // kcalories
-  float myCropCalorieTarget = myCalorieTarget * myCropOverallContributionToDiet;
+  float myCaloriesFromAnimals = myCaloriesFromDairyProducts + myCaloriesFromMeat;
+  float myCalorieTarget = (population() * (mCaloriesPerPersonDaily/1000.) * 365.) - myCaloriesFromDairyProducts - myCaloriesFromAnimals; // kcalories
+  float myCropCalorieTarget = myCalorieTarget * myCropPercent;
   int myReturnValue = static_cast<int> (myCropCalorieTarget);
   logMessage("Overall Crop Calorie Target: " + QString::number(myReturnValue).toLocal8Bit());
   return myReturnValue;
@@ -448,6 +468,21 @@ int LaModel::caloriesFromTameMeat()
   float myCalorieTarget= population() * (mCaloriesPerPersonDaily/1000.) * 365.; // kcalories
   float myTameMeatCalorieTarget=myCalorieTarget * myAnimalOverallContributionToDiet;
   int myReturnValue = static_cast<int>(myTameMeatCalorieTarget);
+  //logMessage("method ==> int LaModel::caloriesFromTameMeat()");
+  logMessage("Overall Tame Meat Target: " + QString::number(myReturnValue).toLocal8Bit());
+  return myReturnValue;
+}
+
+int LaModel::caloriesFromMilk(QString theAnimalGuid) // need to know total number of mothers in the herd
+{
+  HerdSize myHerdSize=herdSize(theAnimalGuid); // myHerdSize.first==mothers myHerdSize.second==juveniles
+  LaAnimal myAnimal = LaUtils::getAnimal(theAnimalGuid);
+  float myDairyUse=0.01*dairyUse();
+  float myMothers;
+      
+  float myCaloriesFromMilk= myDairyUse * myMothers * myAnimal.milkGramsPerDay() * 365.0 * myAnimal.milkFoodValue(); // kcalories
+  
+  int myReturnValue = static_cast<int>(myCaloriesFromMilk);
   //logMessage("method ==> int LaModel::caloriesFromTameMeat()");
   logMessage("Overall Tame Meat Target: " + QString::number(myReturnValue).toLocal8Bit());
   return myReturnValue;
@@ -492,12 +527,36 @@ int LaModel::countAnimals()
 
   return myAnimalCounter;
 }
+int LaModel::caloriesFromDairyProducts()
+{
+  int myCalorieTotal=0;
+  //iterate through animals
+  QMapIterator<QString, QString > myAnimalIterator(mAnimalsMap);
+  while (myAnimalIterator.hasNext())
+  {
+    myAnimalIterator.next();
+    QString myAnimalGuid = myAnimalIterator.key();
+    QString myAnimalParameterGuid = myAnimalIterator.value();
+    LaAnimal myAnimal = LaUtils::getAnimal(myAnimalGuid);
+    LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(myAnimalParameterGuid);
+    myCalorieTotal+=myAnimal.milkFoodValue()*myAnimal.milkGramsPerDay()*1000;//converts grams to Kg (by *1000)
+  }
+  //logMessage("method ==> int LaModel::countAnimals()");
+  //logMessage("Animal Count: " + QString::number(myAnimalCounter).toLocal8Bit());
 
+  return myCalorieTotal;
+}
 int LaModel::caloriesProvidedByTheCrop(QString theCropParameterGuid)
 {
   LaCropParameter myCropParameter = LaUtils::getCropParameter(theCropParameterGuid);
-  float myCropPercent = 0.01 * myCropParameter.percentTameCrop();
-  float myCropCalorieTarget=caloriesFromCrops()*myCropPercent;
+  
+  float myCaloriesFromDairyProducts=caloriesFromDairyProducts();
+  float myCaloriesFromMeat=caloriesFromTameMeat();
+  float myCaloriesFromAnimals = myCaloriesFromDairyProducts + myCaloriesFromMeat;
+  float myCropPercent = 0.01 * ( plantPercent() );
+  float myCalorieTarget = (population() * (mCaloriesPerPersonDaily/1000.) * 365.) - myCaloriesFromDairyProducts - myCaloriesFromAnimals; // kcalories
+  float myCropCalorieTarget = myCalorieTarget * myCropPercent;
+
   int myReturnValue = static_cast<int>(myCropCalorieTarget);
   ///@TODO remove this debugging stuff
   //logMessage("method ==> int LaModel::caloriesProvidedByTheCrop(QString theCropParameterGuid)");
@@ -510,19 +569,34 @@ int LaModel::caloriesProvidedByTheCrop(QString theCropParameterGuid)
   return myReturnValue;
 }
 
-int LaModel::caloriesProvidedByTheAnimal(QString theAnimalParameterGuid)
+int LaModel::caloriesProvidedByTheMeatOfTheAnimal(QString theAnimalParameterGuid)
 {
   LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(theAnimalParameterGuid);
   float myAnimalPercent = 0.01 * myAnimalParameter.percentTameMeat();
   float myAnimalCalorieTarget = caloriesFromTameMeat() * myAnimalPercent;
   int myReturnValue = static_cast<int>(myAnimalCalorieTarget);
   ///@TODO remove this debugging stuff
-  logMessage("method ==> int LaModel::caloriesProvidedByTheAnimal(QString theAnimalParameterGuid)");
+  logMessage("method ==> int LaModel::caloriesProvidedByTheMeatOfTheAnimal(QString theAnimalParameterGuid)");
   logMessage("Animal Parameter Guid: " + myAnimalParameter.guid().toLocal8Bit());
   logMessage("Animal Parameter Name: " + myAnimalParameter.name().toLocal8Bit());
   logMessage("Calorie Target: " + QString::number(myReturnValue).toLocal8Bit());
   return myReturnValue;
 }
+
+int LaModel::caloriesProvidedByTheMilkOfTheAnimal(QString theAnimalParameterGuid , QString theAnimalGuid)
+{
+  LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(theAnimalParameterGuid);
+  float myDairyUse = 0.01 * mDairyUse;
+  float myMilkCalories = caloriesFromMilk(theAnimalGuid) * myDairyUse;
+  int myReturnValue = static_cast<int>(myMilkCalories);
+  ///@TODO remove this debugging stuff
+  logMessage("method ==> int LaModel::caloriesProvidedByMilk(QString theAnimalParameterGuid)");
+  logMessage("Animal Parameter Guid: " + myAnimalParameter.guid().toLocal8Bit());
+  logMessage("Animal Parameter Name: " + myAnimalParameter.name().toLocal8Bit());
+  logMessage("Calories from milk: " + QString::number(myReturnValue).toLocal8Bit());
+  return myReturnValue;
+}
+
 int LaModel::getProductionTargetsCrops(QString theCropGuid, int theCalorieTarget)
 {
   LaCrop myCrop = LaUtils::getCrop(theCropGuid);
@@ -574,10 +648,10 @@ int LaModel::getAreaTargetsCrops(QString theCropGuid, int theProductionTarget)
 return myReturnValue;
 }
 
-int LaModel::requiredTDN(QString theAnimalGuid)
+int LaModel::requiredValue(QString theAnimalGuid)
 { // this is the generic animal model
   LaAnimal myAnimal = LaUtils::getAnimal(theAnimalGuid);
-  float myAnimalProductionTarget = getProductionTargetsAnimals (theAnimalGuid, static_cast <int> (mCaloriesProvidedByAnimalsMap.value (theAnimalGuid)));
+  float myAnimalProductionTarget = getProductionTargetsAnimals (theAnimalGuid, static_cast <int> (mCaloriesProvidedByMeatMap.value (theAnimalGuid)));
 
 
   float myAnimalsRequired=(myAnimalProductionTarget / myAnimal.killWeight()) / (myAnimal.usableMeat()*.01);
@@ -594,15 +668,15 @@ int LaModel::requiredTDN(QString theAnimalGuid)
   float myTotalMales = myMalesStepOne+myMalesStepTwo;
   float myTotalFemales = myFemalesStepOne-myFemalesStepTwo;
   float myTotalJuveniles = myTotalMales+myTotalFemales;
-  float myTotalMothersTDNRequired = myTotalMothers * myAnimal.gestating();
-  float myTotalJuvenilesTDNRequired = myTotalJuveniles * myAnimal.juvenile();
-  float myTDNNeededToFeedAnimals = myTotalMothersTDNRequired + myTotalJuvenilesTDNRequired;
-  int myReturnValue = static_cast<int>(myTDNNeededToFeedAnimals);
+  float myTotalMothersValueRequired = myTotalMothers * myAnimal.gestating();
+  float myTotalJuvenilesValueRequired = myTotalJuveniles * myAnimal.juvenile();
+  float myValueNeededToFeedAnimals = myTotalMothersValueRequired + myTotalJuvenilesValueRequired;
+  int myReturnValue = static_cast<int>(myValueNeededToFeedAnimals);
 
   // log report
-  logMessage("method ==> int LaModel::requiredTDN(QString theAnimalGuid)");
+  logMessage("method ==> int LaModel::requiredValue(QString theAnimalGuid)");
   logMessage("animal prodn target = calorie target of animal / food value");
-  logMessage("mCaloriesProvidedByAnimalsMap.value(theAnimalGuid): " + QString::number(mCaloriesProvidedByAnimalsMap.value(theAnimalGuid)).toLocal8Bit());
+  logMessage("mCaloriesProvidedByMeatMap.value(theAnimalGuid): " + QString::number(mCaloriesProvidedByMeatMap.value(theAnimalGuid)).toLocal8Bit());
   logMessage("myAnimal.meatFoodValue(): " + QString::number(myAnimal.meatFoodValue()/1000.).toLocal8Bit());
   logMessage("myAnimalProductionTarget = " + QString::number(myAnimalProductionTarget).toLocal8Bit());
   logMessage("slaughter animals reqd: " + QString::number(myAnimalsRequired).toLocal8Bit());
@@ -619,14 +693,14 @@ int LaModel::requiredTDN(QString theAnimalGuid)
   logMessage("TotalMales = " + QString::number(myTotalMales).toLocal8Bit());
   logMessage("TotalFemales = " + QString::number(myTotalFemales).toLocal8Bit());
   logMessage("TotalJuveniles = " + QString::number(myTotalJuveniles).toLocal8Bit());
-  logMessage("Total Adult Females TDN(Kg) = " + QString::number (myTotalMothersTDNRequired).toLocal8Bit());
-  logMessage("Total Juveniles TDN(Kg) = " + QString::number (myTotalJuvenilesTDNRequired).toLocal8Bit());
-  logMessage("Total TDN (Kg) Needed To Feed Animals = " + QString::number(myTDNNeededToFeedAnimals).toLocal8Bit());
-  logMessage("method ==> int LaModel::requiredTDN(QString theAnimalGuid)");
+  logMessage("Total Adult Females Value(Kg) = " + QString::number (myTotalMothersValueRequired).toLocal8Bit());
+  logMessage("Total Juveniles Value(Kg) = " + QString::number (myTotalJuvenilesValueRequired).toLocal8Bit());
+  logMessage("Total Value (Kg) Needed To Feed Animals = " + QString::number(myValueNeededToFeedAnimals).toLocal8Bit());
+  logMessage("method ==> int LaModel::requiredValue(QString theAnimalGuid)");
   logMessage("Animal: " + myAnimal.name().toLocal8Bit());
   logMessage("Breeding Stock: " + QString::number(myTotalMothers).toLocal8Bit());
   logMessage("Juveniles: " + QString::number(myTotalJuveniles).toLocal8Bit());
-  logMessage("Kg TDN needed annually to feed the entire herd: " +
+  logMessage("Kg Value needed annually to feed the entire herd: " +
       QString::number(myReturnValue).toLocal8Bit());
   logMessage("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
   return myReturnValue;
@@ -648,13 +722,16 @@ QString LaModel::reportForCrop(QString theCropGuid)
 
   logMessage(myReport.toLocal8Bit());
   return myReport;
-
 }
-QString LaModel::reportForAnimal(QString theAnimalGuid)
+
+//HerdSize is typedef QPair <int AdultFemales , Juveniles>
+HerdSize LaModel::herdSize(QString theAnimalGuid) 
 { // this is the animal model calculation results
   QString myReport;
+  HerdSize myHerdSize;
   LaAnimal myAnimal = LaUtils::getAnimal(theAnimalGuid);
-  float myAnimalProductionTarget=getProductionTargetsAnimals( theAnimalGuid, static_cast <int>(mCaloriesProvidedByAnimalsMap.value(theAnimalGuid)));
+  
+  float myAnimalProductionTarget=getProductionTargetsAnimals( theAnimalGuid, static_cast <int>(mCaloriesProvidedByMeatMap.value(theAnimalGuid)));
   float myAnimalsRequired=(myAnimalProductionTarget / myAnimal.killWeight()) / (myAnimal.usableMeat()*.01);
   float myBirthsPerYear = 365.0 / (myAnimal.gestationTime() + myAnimal.estrousCycle() + (myAnimal.weaningAge() * 7.0));
   float myOffspringPerMotherYearly = myBirthsPerYear * myAnimal.youngPerBirth() * (1.0-(0.01*myAnimal.deathRate()));
@@ -669,13 +746,40 @@ QString LaModel::reportForAnimal(QString theAnimalGuid)
   float myTotalMales = myMalesStepOne+myMalesStepTwo;
   float myTotalFemales = myFemalesStepOne-myFemalesStepTwo;
   float myTotalJuveniles = myTotalMales+myTotalFemales;
-  float myTotalMothersTDNRequired = myTotalMothers * (myAnimal.gestating()/1000.) * 365.; // kcalories
-  float myTotalJuvenilesTDNRequired = myTotalJuveniles * (myAnimal.juvenile()/1000.) * 365.; // kcalories
-  float myTDNNeededToFeedAnimals = myTotalMothersTDNRequired + myTotalJuvenilesTDNRequired;
+  //float myTotalMothersValueRequired = myTotalMothers * (myAnimal.gestating()/1000.) * 365.;
+  //float myTotalJuvenilesValueRequired = myTotalJuveniles * (myAnimal.juvenile()/1000.) * 365.;
+  //float myValueNeededToFeedAnimals = myTotalMothersValueRequired + myTotalJuvenilesValueRequired;
+  myHerdSize.first = myTotalMothers;
+  myHerdSize.second = myTotalJuveniles;
+  return myHerdSize;
+}
+
+QString LaModel::reportForAnimal(QString theAnimalGuid)
+{ // this is the animal model calculation results
+  QString myReport;
+  LaAnimal myAnimal = LaUtils::getAnimal(theAnimalGuid);
+  float myAnimalProductionTarget=getProductionTargetsAnimals( theAnimalGuid, static_cast <int>(mCaloriesProvidedByMeatMap.value(theAnimalGuid)));
+  float myAnimalsRequired=(myAnimalProductionTarget / myAnimal.killWeight()) / (myAnimal.usableMeat()*.01);
+  float myBirthsPerYear = 365.0 / (myAnimal.gestationTime() + myAnimal.estrousCycle() + (myAnimal.weaningAge() * 7.0));
+  float myOffspringPerMotherYearly = myBirthsPerYear * myAnimal.youngPerBirth() * (1.0-(0.01*myAnimal.deathRate()));
+  float myMothersNeededStepOne = myAnimalsRequired/myOffspringPerMotherYearly;
+  float myMalesStepOne = (myMothersNeededStepOne * myOffspringPerMotherYearly)/2;
+  float myFemalesStepOne = myMalesStepOne;
+  float myMotherReplacementsPerYear = myMothersNeededStepOne/myAnimal.breedingExpectancy();
+  float myAdditionalMothers = (myMotherReplacementsPerYear/myOffspringPerMotherYearly)*2;
+  float myMalesStepTwo = (myAdditionalMothers*myOffspringPerMotherYearly)/2;
+  float myFemalesStepTwo = (myAdditionalMothers*myOffspringPerMotherYearly)/2;
+  float myTotalMothers = myMothersNeededStepOne+myAdditionalMothers;
+  float myTotalMales = myMalesStepOne+myMalesStepTwo;
+  float myTotalFemales = myFemalesStepOne-myFemalesStepTwo;//Changed to + because the culled mothers would be eaten
+  float myTotalJuveniles = myTotalMales+myTotalFemales;
+  float myTotalMothersValueRequired = myTotalMothers * (myAnimal.gestating()/1000.) * 365.; // kcalories
+  float myTotalJuvenilesValueRequired = myTotalJuveniles * (myAnimal.juvenile()/1000.) * 365.; // kcalories
+  float myValueNeededToFeedAnimals = myTotalMothersValueRequired + myTotalJuvenilesValueRequired;
 
   myReport += "Details for " + myAnimal.name();
   myReport += "\n";
-  myReport += "Calorie Target: " + QString::number(mCaloriesProvidedByAnimalsMap.value(theAnimalGuid));
+  myReport += "Calorie Target: " + QString::number(mCaloriesProvidedByMeatMap.value(theAnimalGuid));
   myReport += "\n";
   myReport += "Prod'n Target(Kg): " + QString::number(myAnimalProductionTarget);
   myReport += "\n";
@@ -689,11 +793,11 @@ QString LaModel::reportForAnimal(QString theAnimalGuid)
   myReport += "\n";
   myReport += "Juveniles: " + QString::number(myTotalJuveniles);
   myReport += "\n";
-  myReport += "TDN (Kg) Req'd Adult: " + QString::number(static_cast <int>(myTotalMothersTDNRequired));
+  myReport += "Value (Kg) Req'd Adult: " + QString::number(static_cast <int>(myTotalMothersValueRequired));
   myReport += "\n";
-  myReport += "TDN (Kg) Req'd Juveniles: " + QString::number(static_cast <int>(myTotalJuvenilesTDNRequired));
+  myReport += "Value (Kg) Req'd Juveniles: " + QString::number(static_cast <int>(myTotalJuvenilesValueRequired));
   myReport += "\n";
-  myReport += "Total TDN (Kg) Req'd: " + QString::number(static_cast <int> (myTDNNeededToFeedAnimals));
+  myReport += "Total Value (Kg) Req'd: " + QString::number(static_cast <int> (myValueNeededToFeedAnimals));
   myReport += "\n";
   myReport += "Area Target: " + QString::number(mAreaTargetsAnimalsMap.value(theAnimalGuid));
   myReport += "\n";
@@ -713,19 +817,35 @@ int LaModel::getFallowLandForACrop(QString theCropParameterGuid, int theAreaTarg
   return myReturnValue;
 }
 
-void LaModel::initialiseCaloriesProvidedByAnimalsMap()
+void LaModel::initialiseCaloriesProvidedByMeatMap()
 {
-  logMessage("method ==> void LaModel::initialiseCaloriesProvidedByAnimalsMap()");
-  mCaloriesProvidedByAnimalsMap.clear();
+  logMessage("method ==> void LaModel::initialiseCaloriesProvidedByMeatMap()");
+  mCaloriesProvidedByMeatMap.clear();
   QMapIterator<QString, QString > myAnimalIterator(mAnimalsMap);
   while (myAnimalIterator.hasNext())
   {
     myAnimalIterator.next();
     QString myAnimalGuid = myAnimalIterator.key();
     QString myAnimalParameterGuid = mAnimalsMap.value(myAnimalGuid);
-    mCaloriesProvidedByAnimalsMap.insert(myAnimalGuid,caloriesProvidedByTheAnimal(myAnimalParameterGuid));
+    mCaloriesProvidedByMeatMap.insert(myAnimalGuid,caloriesProvidedByTheMeatOfTheAnimal(myAnimalParameterGuid));
     logMessage("Animal Guid: " + myAnimalGuid.toLocal8Bit());
-    logMessage("Calories Provided: " + QString::number(caloriesProvidedByTheAnimal(myAnimalParameterGuid)).toLocal8Bit());
+    logMessage("Calories Providedby Meat: " + QString::number(caloriesProvidedByTheMeatOfTheAnimal(myAnimalParameterGuid)).toLocal8Bit());
+  }
+}
+
+void LaModel::initialiseCaloriesProvidedByMilkMap()
+{
+  logMessage("method ==> void LaModel::initialiseCaloriesProvidedByMilkMap()");
+  mCaloriesProvidedByMilkMap.clear();
+  QMapIterator<QString, QString > myAnimalIterator(mAnimalsMap);
+  while (myAnimalIterator.hasNext())
+  {
+    myAnimalIterator.next();
+    QString myAnimalGuid = myAnimalIterator.key();
+    QString myAnimalParameterGuid = mAnimalsMap.value(myAnimalGuid);
+    mCaloriesProvidedByMilkMap.insert(myAnimalGuid,caloriesProvidedByTheMilkOfTheAnimal(myAnimalGuid , myAnimalParameterGuid));
+    logMessage("Animal Guid: " + myAnimalGuid.toLocal8Bit());
+    logMessage("Calories Provided by Milk: " + QString::number(caloriesProvidedByTheMeatOfTheAnimal(myAnimalParameterGuid)).toLocal8Bit());
   }
 }
 
@@ -743,18 +863,40 @@ void LaModel::initialiseCaloriesProvidedByCropsMap()
   }
 }
 
-void LaModel::initialiseTDNMap()
+void LaModel::initialiseValueMap()
 {
-  logMessage("method ==> void LaModel::initialiseTDNMap()");
-  mTDNMap.clear();
+  logMessage("method ==> void LaModel::initialiseValueMap()");
+  mValueMap.clear();
   QMapIterator<QString, QString > myAnimalIterator(mAnimalsMap);
   while (myAnimalIterator.hasNext())
   {
     myAnimalIterator.next();
     QString myAnimalGuid = myAnimalIterator.key();
-    mTDNMap.insert(myAnimalGuid,requiredTDN(myAnimalGuid));
+    mValueMap.insert(myAnimalGuid,requiredValue(myAnimalGuid));
   }
 }
+
+void LaModel::initialiseFodderMap()
+{
+  mFodderMap.clear();
+  LaAnimalParameter myAnimalParameter;
+  LaFoodSourceMap myFoodSourceMap = myAnimalParameter.fodderSourceMap();
+  logMessage("method ==> void LaModel::initialiseFodderMap()");
+  
+  QMapIterator<QString, QString > myAnimalIterator(mAnimalsMap);
+  while (myAnimalIterator.hasNext())
+  {
+    myAnimalIterator.next();
+    QString myAnimalGuid = myAnimalIterator.key();
+    LaFoodSource myFoodSource = myFoodSourceMap.value(myAnimalGuid);
+    //int myFodderValue = myFoodSource.fodder();
+    //int myGrainValue = myFoodSource.grain();
+    //bool myUsed = myFoodSource.used();
+    mFodderMap.insert(myAnimalGuid,myFoodSourceMap);
+  }
+}
+
+
 
 void LaModel::initialiseProductionRequiredCropsMap()
 {
@@ -783,7 +925,7 @@ void LaModel::initialiseProductionRequiredAnimalsMap()
   {
     myAnimalIterator.next();
     QString myAnimalGuid = myAnimalIterator.key();
-    int myCalorieTarget = static_cast<int>(mCaloriesProvidedByAnimalsMap.value(myAnimalGuid));
+    int myCalorieTarget = static_cast<int>(mCaloriesProvidedByMeatMap.value(myAnimalGuid));
     mProductionRequiredAnimalsMap.insert(myAnimalGuid,getProductionTargetsAnimals(myAnimalGuid, myCalorieTarget));
   }
 }
@@ -842,9 +984,9 @@ void LaModel::initialiseCalcsAnimalsMap()
 void LaModel::initialiseAreaTargetsAnimalsMap()
 { // this also returns an area target for common land
   logMessage("method ==> void LaModel::initialiseAreaTargetsAnimalsMap()");
-  logMessage("Common Grazing Land TDN: " + QString::number(static_cast<int>(mCommonGrazingTDN)).toLocal8Bit());
+  logMessage("Common Grazing Land Value: " + QString::number(static_cast<int>(mCommonGrazingValue)).toLocal8Bit());
   mAreaTargetsAnimalsMap.clear();
-  mCommonGrazingLandTDNTarget= 0;
+  mCommonGrazingLandValueTarget= 0;
   //iterate through animals
   QMapIterator<QString, QString > myAnimalIterator(mAnimalsMap);
   while (myAnimalIterator.hasNext())
@@ -857,14 +999,14 @@ void LaModel::initialiseAreaTargetsAnimalsMap()
     logMessage("Animal: " + myAnimal.name().toLocal8Bit());
     AreaUnits mySpecificAreaUnits = myAnimalParameter.areaUnits();
 
-    float myTDNSpecific = LaUtils::convertAreaToHectares(mySpecificAreaUnits, myAnimalParameter.ValueSpecificGrazingLand());
+    float myValueSpecific = LaUtils::convertAreaToHectares(mySpecificAreaUnits, myAnimalParameter.ValueSpecificGrazingLand());
 
-    float myTDNCommon   = mCommonGrazingTDN;
-    qDebug() << "   +++   myTDNSpecific = " << myTDNSpecific;
-    qDebug() << "   +++   myTDNCommon   = " << mCommonGrazingTDN;
+    float myValueCommon   = mCommonGrazingValue;
+    qDebug() << "   +++   myValueSpecific = " << myValueSpecific;
+    qDebug() << "   +++   myValueCommon   = " << mCommonGrazingValue;
 
     // check to see if this animal needs any additional food
-    if (mTDNMap[myAnimalGuid] > 0) // yes, the animal needs more food
+    if (mValueMap[myAnimalGuid] > 0) // yes, the animal needs more food
     {
       logMessage("Animal Needs more Food!");
       // figure out how much grazing land is needed to supply this many calories
@@ -877,23 +1019,23 @@ void LaModel::initialiseAreaTargetsAnimalsMap()
       {
         case Common:
              {
-               logMessage("Animal is grazing Common Land so required TDN is added to common land TDN target");
-               mCommonGrazingLandTDNTarget += static_cast<int>(mTDNMap.value(myAnimalGuid));
-               logMessage("Cumulative TDN Target for Common Land: " + QString::number(mCommonGrazingLandTDNTarget));
-               float myCommonTarget = mTDNMap.value(myAnimalGuid) / myTDNCommon;
+               logMessage("Animal is grazing Common Land so required Value is added to common land Value target");
+               mCommonGrazingLandValueTarget += static_cast<int>(mValueMap.value(myAnimalGuid));
+               logMessage("Cumulative Value Target for Common Land: " + QString::number(mCommonGrazingLandValueTarget));
+               float myCommonTarget = mValueMap.value(myAnimalGuid) / myValueCommon;
                mAreaTargetsAnimalsMap[myAnimalGuid] = static_cast<int>(myCommonTarget);
                break;
              }
         case Unique:
              {
-               logMessage("Animal is grazing Unique Land so required TDN is divided by TDN of unique grazing land");
-               float myTarget1 = mTDNMap.value(myAnimalGuid) / myTDNSpecific;
+               logMessage("Animal is grazing Unique Land so required Value is divided by Value of unique grazing land");
+               float myTarget1 = mValueMap.value(myAnimalGuid) / myValueSpecific;
                mAreaTargetsAnimalsMap[myAnimalGuid] = static_cast<int>(myTarget1);
                logMessage("The Area Target is: " + QString::number(static_cast<int>(myTarget1)).toLocal8Bit());
                break;
              }
       }
-      //int myCaloriesNeeded = static_cast<int>(mTDNMap.value(myAnimalGuid));
+      //int myCaloriesNeeded = static_cast<int>(mValueMap.value(myAnimalGuid));
 
       //mProductionRequiredAnimalsMap.insert(myAnimalGuid,getProductionTargetsAnimals(myAnimalGuid, myProductionTarget));
     }
@@ -903,7 +1045,7 @@ void LaModel::initialiseAreaTargetsAnimalsMap()
       mAreaTargetsAnimalsMap[myAnimalGuid] = 0;
     }
     // CHECK FOR AREA UNIT CONVERSION HERE!
-    mCommonGrazingLandAreaTarget = mCommonGrazingLandTDNTarget / mCommonGrazingTDN;
+    mCommonGrazingLandAreaTarget = mCommonGrazingLandValueTarget / mCommonGrazingValue;
 
   }
     logMessage(" ");
@@ -933,12 +1075,12 @@ void LaModel::allocateFallowGrazingLand()
   // chicken and gooxe low.
 
   int myHighPriorityCount=0, myMediumPriorityCount=0, myLowPriorityCount=0;
-  int   myHighPriorityTDN=0;
-  int   myMediumPriorityTDN=0;
-  int   myLowPriorityTDN=0;
+  int   myHighPriorityValue=0;
+  int   myMediumPriorityValue=0;
+  int   myLowPriorityValue=0;
   // put starting caloric requirements of all used animals into a map
   // for reduction due to grazing of fallow crop land
-  // initialiseTDNMap();
+  // initialiseValueMap();
 
   int myTotalFallowValue=0;
 
@@ -956,15 +1098,15 @@ void LaModel::allocateFallowGrazingLand()
     {
       case  High:
             myHighPriorityCount++;
-            myHighPriorityTDN += requiredTDN(myAnimalGuid);
+            myHighPriorityValue += requiredValue(myAnimalGuid);
             break;
       case  Medium:
             myMediumPriorityCount++;
-            myMediumPriorityTDN += requiredTDN(myAnimalGuid);
+            myMediumPriorityValue += requiredValue(myAnimalGuid);
             break;
       case  Low:
             myLowPriorityCount++;
-            myLowPriorityTDN += requiredTDN(myAnimalGuid);
+            myLowPriorityValue += requiredValue(myAnimalGuid);
             break;
       case  None:
             break;
@@ -977,9 +1119,9 @@ void LaModel::allocateFallowGrazingLand()
   logMessage("Medium Priority Animals: " + QString::number(myMediumPriorityCount).toLocal8Bit() );
   logMessage("Low Priority Animals: " + QString::number(myLowPriorityCount).toLocal8Bit() );
 
-  logMessage("High Priority Animal Calorie requirements: " + QString::number(myHighPriorityTDN).toLocal8Bit() );
-  logMessage("Medium Priority Animal Calorie requirements: " + QString::number(myMediumPriorityTDN).toLocal8Bit() );
-  logMessage("Low Priority Animal Calorie requirements: " + QString::number(myLowPriorityTDN).toLocal8Bit() );
+  logMessage("High Priority Animal Calorie requirements: " + QString::number(myHighPriorityValue).toLocal8Bit() );
+  logMessage("Medium Priority Animal Calorie requirements: " + QString::number(myMediumPriorityValue).toLocal8Bit() );
+  logMessage("Low Priority Animal Calorie requirements: " + QString::number(myLowPriorityValue).toLocal8Bit() );
 
   //  iterate through crops to determine the total calories available to animals
   //  by grazing fallow crop land
@@ -1005,7 +1147,7 @@ void LaModel::allocateFallowGrazingLand()
     float myFallowArea = (myCropProductionTarget / myCropYield) * myFallowRatio;
 
     AreaUnits myFallowAreaUnits = myCropParameter.areaUnits();
-    int myFallowValueBefore = myCropParameter.fallowTDN();
+    int myFallowValueBefore = myCropParameter.fallowValue();
     int myFallowValue = LaUtils::convertAreaToHectares(myFallowAreaUnits, myFallowValueBefore);
     float myAvailableFallowValue = myFallowRatio * myFallowArea * myFallowValue;
 
@@ -1022,7 +1164,7 @@ void LaModel::allocateFallowGrazingLand()
   if (myTotalFallowValue > 0)
   {
     Priority myPriority = High;
-    int myLeftoverCalories = doTheFallowAllocation(myPriority, myTotalFallowValue, myHighPriorityTDN);
+    int myLeftoverCalories = doTheFallowAllocation(myPriority, myTotalFallowValue, myHighPriorityValue);
     logMessage("Remaining Fallow Calories after HIGH adjustments: " + QString::number(myLeftoverCalories).toLocal8Bit());
     myTotalFallowValue = myLeftoverCalories;
   }
@@ -1030,7 +1172,7 @@ void LaModel::allocateFallowGrazingLand()
   if (myTotalFallowValue > 0)
   {
     Priority myPriority = Medium;
-    int myLeftoverCalories = doTheFallowAllocation(myPriority, myTotalFallowValue, myMediumPriorityTDN);
+    int myLeftoverCalories = doTheFallowAllocation(myPriority, myTotalFallowValue, myMediumPriorityValue);
     logMessage("Remaining Fallow Calories after MED adjustments: " + QString::number(myLeftoverCalories).toLocal8Bit());
     myTotalFallowValue = myLeftoverCalories;
   }
@@ -1038,7 +1180,7 @@ void LaModel::allocateFallowGrazingLand()
   if (myTotalFallowValue > 0)
   {
     Priority myPriority = Low;
-    int myLeftoverCalories = doTheFallowAllocation(myPriority, myTotalFallowValue, myLowPriorityTDN);
+    int myLeftoverCalories = doTheFallowAllocation(myPriority, myTotalFallowValue, myLowPriorityValue);
     logMessage("Remaining Fallow Calories after LOW adjustments: " + QString::number(myLeftoverCalories).toLocal8Bit());
     myTotalFallowValue = myLeftoverCalories;
   }
@@ -1059,10 +1201,10 @@ int LaModel::doTheFallowAllocation
       (
         Priority thePriority,
         int theAvailableFallowValue,
-        int theTDNNeeded
+        int theValueNeeded
       )
 {
-  qDebug() << "TDN Map: " << mTDNMap;
+  qDebug() << "Value Map: " << mValueMap;
   // when the total number of calories needed by the animals
   // is taken away from the total available calories (from crop fallow),
   // there will be one of two results.
@@ -1070,7 +1212,7 @@ int LaModel::doTheFallowAllocation
   //    food is required for the animals.  (fodder or grazing land)
   // 2. the result will be > 0, meaning that there is enough food value
   //    in the crop fallow to completely feed the animals.
-  float myTotalFallowValue = theAvailableFallowValue - theTDNNeeded;
+  float myTotalFallowValue = theAvailableFallowValue - theValueNeeded;
   qDebug() << "myTotalFallowValue: "  << myTotalFallowValue;
   // set up the conditions for the fallow allocation...
   // there is either enough fallow to feed the animal completely
@@ -1103,18 +1245,18 @@ int LaModel::doTheFallowAllocation
 
               if (myAnimalParameter.fallowUsage()==thePriority)
               {
-                mTDNMap[myAnimalGuid] = 0;
+                mValueMap[myAnimalGuid] = 0;
               } //endif (fallowUsage(myAnimalGuid)
 
              } // while animal iterating
-             // myTotalFallowValue += theTDNNeeded;
+             // myTotalFallowValue += theValueNeeded;
              break;
           }
 
     case  NotEnoughToCompletelySatisfy:
           {
             logMessage("CASE: NotEnoughToCompletelySatisfy");
-            // because there ARE NO leftover TDN available to feed more critters, this
+            // because there ARE NO leftover Value available to feed more critters, this
             // shows that NOT ALL of the animals requirements are met with crop fallow
             // and therefore require more feed so their values in the QMap will be adjusted
             QMapIterator<QString, QString > myAnimalIterator(mAnimalsMap);
@@ -1127,26 +1269,26 @@ int LaModel::doTheFallowAllocation
               QString myAnimalParameterGuid = myAnimalIterator.value();
               LaAnimal myAnimal = LaUtils::getAnimal(myAnimalGuid);
               LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(myAnimalParameterGuid);
-              int myCurrentAnimalsTDN = mTDNMap.value( myAnimalGuid );
+              int myCurrentAnimalsValue = mValueMap.value( myAnimalGuid );
               logMessage("       Current Animal: " + myAnimal.name());
-              qDebug() << "        theTDNNeeded: " << theTDNNeeded;
+              qDebug() << "        theValueNeeded: " << theValueNeeded;
               qDebug() << "        theAvailableFallowValue: " << theAvailableFallowValue;
-              qDebug() << "        myCurrentAnimalsTDN: " << myCurrentAnimalsTDN;
+              qDebug() << "        myCurrentAnimalsValue: " << myCurrentAnimalsValue;
               if (myAnimalParameter.fallowUsage()==thePriority)
               {
-                double myAllottedTDN = ((myCurrentAnimalsTDN / static_cast<float>(theTDNNeeded)) * theAvailableFallowValue);
+                double myAllottedValue = ((myCurrentAnimalsValue / static_cast<float>(theValueNeeded)) * theAvailableFallowValue);
                 logMessage("Adjusting calories required by: " + myAnimal.name());
-                qDebug() << "myAllottedTDN: " << myAllottedTDN;
-                logMessage("Allotted TDN from fallow are: " + QString::number(myAllottedTDN));
-                logMessage("Original TDN target was: " + QString::number(mTDNMap.value(myAnimalGuid)));
-                float myNewTDNTarget = mTDNMap.value(myAnimalGuid) - myAllottedTDN;
-                logMessage("New TDN target is: " + QString::number(myNewTDNTarget));
-                mTDNMap [myAnimalGuid] = static_cast<int>(myNewTDNTarget);
-                myTotalFallowValue += static_cast<int>(myAllottedTDN);
+                qDebug() << "myAllottedValue: " << myAllottedValue;
+                logMessage("Allotted Value from fallow are: " + QString::number(myAllottedValue));
+                logMessage("Original Value target was: " + QString::number(mValueMap.value(myAnimalGuid)));
+                float myNewValueTarget = mValueMap.value(myAnimalGuid) - myAllottedValue;
+                logMessage("New Value target is: " + QString::number(myNewValueTarget));
+                mValueMap [myAnimalGuid] = static_cast<int>(myNewValueTarget);
+                myTotalFallowValue += static_cast<int>(myAllottedValue);
               } // endif (fallowUsage(myAnimalGuid)==High)
 
             } // while animal iterating
-            logMessage("After allocation, total available TDN from fallow: " + QString::number(myTotalFallowValue).toLocal8Bit());
+            logMessage("After allocation, total available Value from fallow: " + QString::number(myTotalFallowValue).toLocal8Bit());
             myTotalFallowValue = 0;
             logMessage("WHICH HAS NOW BEEN SET TO 0");
             break;
@@ -1221,7 +1363,7 @@ QString LaModel::toHtmlCalorieCropTargets()
 QString LaModel::toHtmlCalorieAnimalTargets()
 {
   // This method returns a QString for an xml file containing the calorie
-  // targets for each animal from mCaloriesProvidedByAnimalsMap
+  // targets for each animal from mCaloriesProvidedByMeatMap
 
   // Loop through the mCaloriesProvidedByAniamlsMap
   QString myString;
@@ -1239,7 +1381,7 @@ QString LaModel::toHtmlCalorieAnimalTargets()
   myString += QString("      kCalories\n");
   myString += QString("    </th>\n");
   myString += QString("  </tr>\n");
-  QMapIterator<QString, int> myAnimalIterator (mCaloriesProvidedByAnimalsMap);
+  QMapIterator<QString, int> myAnimalIterator (mCaloriesProvidedByMeatMap);
   while (myAnimalIterator.hasNext())
   {
     myAnimalIterator.next();

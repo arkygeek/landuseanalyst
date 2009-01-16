@@ -33,15 +33,16 @@ public:
   // accessors
   int grain() const;
   int fodder() const;
-
+  bool used() const;
+  
   // mutators
   void setGrain(int theValue);
   void setFodder(int theValue);
-
+  void setUsed(bool theBool);
 private:
   int mGrain;
   int mFodder;
-
+  bool mUsed;
 };
 
 #endif

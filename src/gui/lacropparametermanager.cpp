@@ -231,7 +231,7 @@ void LaCropParameterManager::showCropParameter()
   sbPercentTameCrop->setValue(mCropParameter.percentTameCrop());
   grpCropRotation->setChecked(mCropParameter.cropRotation());
   sbFallowRatio->setValue(mCropParameter.fallowRatio());
-  sbFallowValue->setValue(mCropParameter.fallowTDN());
+  sbFallowValue->setValue(mCropParameter.fallowValue());
   cbAreaUnits->setCurrentIndex(mCropParameter.areaUnits());
   checkBoxUseCommonLand->setChecked(mCropParameter.useCommonLand());
   checkBoxUseSpecificLand->setChecked(mCropParameter.useSpecificLand());

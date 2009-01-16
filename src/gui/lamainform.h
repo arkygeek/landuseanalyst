@@ -107,7 +107,7 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
     //    <animal guid <enabled, animalparamters guid>>
     LaTripleMap mAnimalsMap;
     LaTripleMap mCropsMap;
-    //int mCommonLandGrazingTDN;
+    //int mCommonLandGrazingValue;
     //QMap<QString,int> mSelectedCropsMap;
 };
 

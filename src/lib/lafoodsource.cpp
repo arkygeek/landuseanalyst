@@ -23,25 +23,24 @@
 LaFoodSource::LaFoodSource()
 {
 }
-
-
 LaFoodSource::~LaFoodSource()
 {
 }
 
 //accessors
 
-
 int LaFoodSource::grain() const
 {
   return mGrain;
 }
-
 int LaFoodSource::fodder() const
 {
   return mFodder;
 }
-
+bool LaFoodSource::used() const
+{
+ return mUsed; 
+}
 
 //mutators
 
@@ -49,9 +48,11 @@ void LaFoodSource::setGrain(int theValue)
 {
   mGrain = theValue;
 }
-
 void LaFoodSource::setFodder(int theValue)
 {
   mFodder = theValue;
 }
-
+void LaFoodSource::setUsed(bool theBool)
+{
+  mUsed = theBool;
+}

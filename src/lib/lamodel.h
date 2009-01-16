@@ -84,25 +84,33 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
     /** */
     /** Food Value of the common grazing land */
     int foodValueCommonLand() const;
-
+    /** Dairy Utilisation */
+    int dairyUse() const;
+    
     Status fallowStatus() const;
     float fallowRatio() const;
 
+    
     int caloriesFromCrops();
     int caloriesFromTameMeat();
+    int caloriesFromMilk(QString theAnimalGuid);
     int countCrops();
     int countAnimals();
+    int caloriesFromDairyProducts();
     int caloriesProvidedByTheCrop(QString theCropParameterGuid);
-    int caloriesProvidedByTheAnimal(QString theAnimalParameterGuid);
+    int caloriesProvidedByTheMeatOfTheAnimal(QString theAnimalParameterGuid);
+    int caloriesProvidedByTheMilkOfTheAnimal (QString theAnimalParameterGuid , QString theAnimalGuid);
     int getProductionTargetsCrops(QString theCropGuid, int theCalorieTarget);
     int getProductionTargetsAnimals(QString theAnimalGuid, int theCalorieTarget);
     int getAreaTargetsCrops(QString theCropGuid, int theProductionTarget);
     int getFallowLandForACrop(QString theCropParameterGuid, int theAreaTarget);
     void allocateFallowGrazingLand();
     void adjustAnimalTargetsForFodder();
-    int requiredTDN(QString theAnimalGuid);
+    int requiredValue(QString theAnimalGuid);
     int adjustAreaTargetsCrops();
     int doTheFallowAllocation(Priority, int, int);
+    HerdSize herdSize (QString theAnimalGuid);
+    
     QMap <QString, int> animalCalorieTargetsMap() const;
     QMap <QString, int> animalFeedRequirementsMap() const;
     QMap <QString, int> animalProductionTargetsMap() const;
@@ -112,6 +120,7 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
     QMap <QString, int> cropAreaTargetsMap() const;
     QMap <QString, QString> calcsCropsMap();
     QMap <QString, QString> calcsAnimalsMap();
+
     QString reportForAnimal(QString theAnimalGuid);
     QString reportForCrop(QString theCropGuid);
     QMap<QString, int> getAreaTargetsAnimalsMap();
@@ -191,12 +200,19 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
      */
     void setCaloriesPerPersonDaily(int theCaloriesPerPersonDaily);
 
-    /** Set the caloriesPerPersonDaily in Days
-     * @see caloriesPerPersonDaily()
+    /** Set the percent of dairy utilisation
+     * @see dairyUse()
      */
-    void setCommonLandValue(int theTDN, AreaUnits theAreaUnits);
+    void setDairyUse(int thePercent);
+    
+    /** Set food value of the common land
+     * @see commonLandValue()
+     */
+    void setCommonLandValue(int theValue, AreaUnits theAreaUnits);
 
     void setCommonLandAreaUnits(AreaUnits theAreaUnits);
+    
+    void setHerdSize(QString theAnimalGuid);
 
     /** Set the animals for this model
      * @param QMap<QString,QString> a list of animal guid and animal parameter guids
@@ -283,12 +299,20 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
   private:
     /** A map of calorie targets for animals.
      */
-    QMap <QString,int> mCaloriesProvidedByAnimalsMap;
+    QMap <QString,int> mCaloriesProvidedByMeatMap;
     /** Initialise the map of calories needing to be provided
      * by each individual animal.
      */
-    void initialiseCaloriesProvidedByAnimalsMap();
+    void initialiseCaloriesProvidedByMeatMap();
 
+    /** A map of calorie targets for animals.
+     */
+    QMap <QString,int> mCaloriesProvidedByMilkMap;
+    /** Initialise the map of calories  provided
+     * by milk.
+     */
+    void initialiseCaloriesProvidedByMilkMap();
+    
     /** A map of calorie targets for crops.
      */
     QMap <QString,int> mCaloriesProvidedByCropsMap;
@@ -344,12 +368,18 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
      * As we account for each resource (fallow, crop x, crop y etc)
      * we can remove it from the cumulative total.
      */
-    QMap <QString,int> mTDNMap;
+    QMap <QString,int> mValueMap;
     /** Initialise the cumulative calories map to the calories
      * required for each animal.
      */
-    void initialiseTDNMap();
-
+    void initialiseValueMap();
+    
+    QMap <QString, LaFoodSourceMap> mFodderMap; // QPair < StrawAndChaff , Grain >
+    /** Initialise the cumulative calories map to the calories
+     * required for each animal.
+     */
+    void initialiseFodderMap();
+    
     /** A map of all of the calculations for Animals
      */
     QMap <QString,QString> mCalcsAnimalsMap;
@@ -387,6 +417,8 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
     int mMeatPercent;
     /** The number of calories required per person per day (average) */
     int mCaloriesPerPersonDaily;
+    /** The percent of dairy utilisation by the settlement */
+    int mDairyUse;
     /** A map to hold the associated animals and their parameters */
     QMap<QString,QString> mAnimalsMap;
     /** A map to hold the associated crops and their parameters */
@@ -394,11 +426,13 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
     AreaUnits mCommonLandAreaUnits;
     Status mFallowStatus;
     float mFallowRatio;
-    int mCommonGrazingLandTDNTarget;
-    //int mCommonGrazingLandTDN;
-    int mCommonGrazingTDN;
+    int mCommonGrazingLandValueTarget;
+    //int mCommonGrazingLandValue;
+    int mCommonGrazingValue;
     int mCommonGrazingLandAreaTarget;
     int mCommonCropLand;
+    HerdSize mHerdSize;
+
 };
 #endif //LAMODEL_H
 

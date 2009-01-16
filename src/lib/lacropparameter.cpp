@@ -46,7 +46,7 @@ LaCropParameter::LaCropParameter(const LaCropParameter& theCropParameter)
   mPercentTameCrop=theCropParameter.percentTameCrop();
   mCropRotation = theCropParameter.cropRotation();
   mFallowRatio = theCropParameter.fallowRatio();
-  mFallowValue = theCropParameter.fallowTDN();
+  mFallowValue = theCropParameter.fallowValue();
   mAreaUnits = theCropParameter.areaUnits();
   mUseCommonLand = theCropParameter.useCommonLand();
   mUseSpecificLand = theCropParameter.useSpecificLand();
@@ -64,7 +64,7 @@ LaCropParameter& LaCropParameter::operator=(const LaCropParameter& theCropParame
   mPercentTameCrop=theCropParameter.percentTameCrop();
   mCropRotation = theCropParameter.cropRotation();
   mFallowRatio = theCropParameter.fallowRatio();
-  mFallowValue = theCropParameter.fallowTDN();
+  mFallowValue = theCropParameter.fallowValue();
   mAreaUnits = theCropParameter.areaUnits();
   mUseCommonLand = theCropParameter.useCommonLand();
   mUseSpecificLand = theCropParameter.useSpecificLand();
@@ -99,7 +99,7 @@ float LaCropParameter::fallowRatio() const
 {
   return mFallowRatio;
 }
-int LaCropParameter::fallowTDN() const
+int LaCropParameter::fallowValue() const
 {
   return mFallowValue;
 }
@@ -188,7 +188,7 @@ bool LaCropParameter::fromXml(QString theXml)
   mPercentTameCrop=QString(myTopElement.firstChildElement("percentTameCrop").text()).toFloat();
   mCropRotation=QString(myTopElement.firstChildElement("cropRotation").text()).toInt();
   mFallowRatio=QString(myTopElement.firstChildElement("fallowRatio").text()).toFloat();
-  mFallowValue=QString(myTopElement.firstChildElement("fallowTDN").text()).toInt();
+  mFallowValue=QString(myTopElement.firstChildElement("fallowValue").text()).toInt();
 
   QString myAreaUnits = QString(myTopElement.firstChildElement("areaUnits").text());
   if (myAreaUnits == "Dunum")
@@ -217,7 +217,7 @@ QString LaCropParameter::toXml()
   myString+=QString("  <percentTameCrop>" + QString::number(mPercentTameCrop) + "</percentTameCrop>\n");
   myString+=QString("  <cropRotation>" + QString::number(mCropRotation) + "</cropRotation>\n");
   myString+=QString("  <fallowRatio>" + QString::number(mFallowRatio) + "</fallowRatio>\n");
-  myString+=QString("  <fallowTDN>" + QString::number(mFallowValue) + "</fallowTDN>\n");
+  myString+=QString("  <fallowValue>" + QString::number(mFallowValue) + "</fallowValue>\n");
   myString+=QString("  <areaUnits>" + myUnits + "</areaUnits>\n");
   myString+=QString("  <useCommonLand>" + QString::number(mUseCommonLand) + "</useCommonLand>\n");
   myString+=QString("  <useSpecificLand>" + QString::number(mUseSpecificLand) + "</useSpecificLand>\n");
@@ -239,7 +239,7 @@ QString LaCropParameter::toText()
   myString+=QString("fallowRatio=>" + QString::number(mFallowRatio) + "\n");
 
   QString myUnits = (mAreaUnits==0) ? "Dunum" : "Hectare";
-  myString+=QString("fallowTDN kg/" + myUnits + "=>" + QString::number(mFallowValue) + "\n");
+  myString+=QString("fallowValue kg/" + myUnits + "=>" + QString::number(mFallowValue) + "\n");
   //myString+=QString("areaUnits=>" + QString::number(mAreaUnits) + "\n");
 
   QString myLandUsed = (mUseCommonLand==1) ? "Common" : "Specific";
@@ -263,7 +263,7 @@ QString LaCropParameter::toHtml()
   myString+="<tr><td><b>Percent Tame Crop Diet: </b></td><td>" + QString::number(mPercentTameCrop) + "</td></tr>";
   myString+="<tr><td><b>cropRotation: </b></td><td>" + myCropRotation + "</td></tr>";
   myString+="<tr><td><b>fallowRatio: </b></th><td>" + QString::number(mFallowRatio) + "</td></tr>";
-  myString+="<tr><td><b>Fallow TDN kg/" + myUnits + ": </b></td><td>" + QString::number(mFallowValue) + "</td></tr>";
+  myString+="<tr><td><b>Fallow Value kg/" + myUnits + ": </b></td><td>" + QString::number(mFallowValue) + "</td></tr>";
 
   myString+=("<tr><td><b>" + myLandUsed + " Land Raster: </b></td><td>" + myRasterName + "</td></tr>");
   myString+="</table>";

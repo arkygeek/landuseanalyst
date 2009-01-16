@@ -45,7 +45,7 @@
 #include <QtDebug>
 #include <QPair>
 
-  LaAnimalParameterManager::LaAnimalParameterManager(QPair<LaTripleMap, int> & thePair, AreaUnits & theAreaUnits, EnergyType & theEnergyType, QWidget* parent, Qt::WFlags fl)
+  LaAnimalParameterManager::LaAnimalParameterManager(QPair<LaTripleMap, int> & thePair,  AreaUnits & theAreaUnits, EnergyType & theEnergyType, QWidget* parent, Qt::WFlags fl)
 : QDialog(parent,fl)
 {
   //required by Qt4 to initialise the ui
@@ -210,9 +210,6 @@ void LaAnimalParameterManager::refreshAnimalParameterTable(QString theGuid)
 
 void LaAnimalParameterManager::populateFodder()
 {
-
-  qDebug() << "++==++ mCropsMap line 185" << mSelectedCropsMap;
-
   tblFodder->clear();
   tblFodder->setRowCount(0);
   tblFodder->setColumnCount(3);
