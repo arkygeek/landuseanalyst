@@ -273,7 +273,7 @@ bool LaAnimalParameter::fromXml(QString theXml)
     QDomElement myFoodSourceElement = myFoodSourceNode.toElement();
 
     // load the data from the xml into local variables
-    QString myGuid = myFoodSourceElement.firstChildElement("fodderCropGuid").text();
+    QString myCropGuid = myFoodSourceElement.firstChildElement("fodderCropGuid").text();
     int myFodderStrawChaff = myFoodSourceElement.firstChildElement("fodderStrawChaff").text().toInt();
     int myGrain = myFoodSourceElement.firstChildElement("fodderGrain").text().toInt();
     int myUsed = myFoodSourceElement.firstChildElement("fodderUse").text().toInt();
@@ -283,8 +283,9 @@ bool LaAnimalParameter::fromXml(QString theXml)
     myFoodSource.setFodder(myFodderStrawChaff);
     myFoodSource.setGrain(myGrain);
     myFoodSource.setUsed(myUsed);
+    myFoodSource.setCropGuid(myCropGuid);
     // insert data into map
-    mFoodSourceMap.insert(myGuid,myFoodSource);
+    mFoodSourceMap.insert(myCropGuid,myFoodSource);
   } // end of for loop
  //qDebug("Number of food sources restored from xml: " + QString::number(mFoodSourceMap.count()).toLocal8Bit());
 

@@ -600,7 +600,27 @@ int LaModel::caloriesProvidedByTheMilkOfTheAnimal(QString theAnimalParameterGuid
 int LaModel::getProductionTargetsCrops(QString theCropGuid, int theCalorieTarget)
 {
   LaCrop myCrop = LaUtils::getCrop(theCropGuid);
-  float myCropProductionTarget = theCalorieTarget / (myCrop.cropCalories() / 1000.); //kcalories
+  int myAnimalsRequiredCalories = 0;
+  //int myCropFoodValue = 0;
+  //int myFodderFoodValue= 0;
+  
+  QMapIterator<QString, QString > myAnimalIterator(mAnimalsMap);
+  while (myAnimalIterator.hasNext())
+  {
+    myAnimalIterator.next();
+    QString myAnimalGuid = myAnimalIterator.key();
+    LaAnimalParameter myAnimalParameter;
+    LaFoodSourceMap myFoodSourceMap = myAnimalParameter.fodderSourceMap();
+
+    LaFoodSource myFoodSource = myFoodSourceMap.value(myAnimalGuid);
+    
+    //int myFodderValue = myFoodSource.fodder();
+    int myGrainValue = myFoodSource.grain();
+    myAnimalsRequiredCalories+=myGrainValue;
+  }
+  mCalcsAnimalsMap.insert("Common Land", QString::number(mCommonGrazingLandAreaTarget));
+  int myCalorieTarget = theCalorieTarget;//+ myAnimalsRequiredCalories
+  float myCropProductionTarget = myCalorieTarget / (myCrop.cropCalories() / 1000.); //kcalories
   int myReturnValue = static_cast<int>(myCropProductionTarget);
   ///@TODO remove this debugging stuff
   logMessage("method ==> int LaModel::getProductionTargetsCrops(QString theCropGuid, int theCalorieTarget)");
@@ -875,29 +895,15 @@ void LaModel::initialiseValueMap()
     mValueMap.insert(myAnimalGuid,requiredValue(myAnimalGuid));
   }
 }
-
+/*
 void LaModel::initialiseFodderMap()
 {
   mFodderMap.clear();
-  LaAnimalParameter myAnimalParameter;
-  LaFoodSourceMap myFoodSourceMap = myAnimalParameter.fodderSourceMap();
-  logMessage("method ==> void LaModel::initialiseFodderMap()");
-  
-  QMapIterator<QString, QString > myAnimalIterator(mAnimalsMap);
-  while (myAnimalIterator.hasNext())
-  {
-    myAnimalIterator.next();
-    QString myAnimalGuid = myAnimalIterator.key();
-    LaFoodSource myFoodSource = myFoodSourceMap.value(myAnimalGuid);
-    //int myFodderValue = myFoodSource.fodder();
-    //int myGrainValue = myFoodSource.grain();
-    //bool myUsed = myFoodSource.used();
+
     mFodderMap.insert(myAnimalGuid,myFoodSourceMap);
   }
 }
-
-
-
+*/
 void LaModel::initialiseProductionRequiredCropsMap()
 {
   logMessage("method ==> void LaModel::initialiseProductionRequiredCropsMap()");

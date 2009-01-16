@@ -41,7 +41,10 @@ bool LaFoodSource::used() const
 {
  return mUsed; 
 }
-
+QString LaFoodSource::cropGuid() const
+{
+ return mCropGuid; 
+}
 //mutators
 
 void LaFoodSource::setGrain(int theValue)
@@ -55,4 +58,8 @@ void LaFoodSource::setFodder(int theValue)
 void LaFoodSource::setUsed(bool theBool)
 {
   mUsed = theBool;
+}
+void LaFoodSource::setCropGuid(QString theCropGuid)
+{
+  mCropGuid = theCropGuid;
 }

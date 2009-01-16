@@ -34,15 +34,17 @@ public:
   int grain() const;
   int fodder() const;
   bool used() const;
-  
+  QString cropGuid() const;
   // mutators
   void setGrain(int theValue);
   void setFodder(int theValue);
   void setUsed(bool theBool);
-private:
+  void setCropGuid(QString theCropGuid);
+  private:
   int mGrain;
   int mFodder;
   bool mUsed;
+  QString mCropGuid;
 };
 
 #endif
