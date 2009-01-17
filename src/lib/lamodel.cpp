@@ -610,11 +610,11 @@ int LaModel::getProductionTargetsCrops(QString theCropGuid, int theCalorieTarget
     myAnimalIterator.next();
     QString myAnimalGuid = myAnimalIterator.key();
     LaAnimalParameter myAnimalParameter;
-    LaFoodSourceMap myFoodSourceMap = myAnimalParameter.fodderSourceMap();
-    LaFoodSource myFoodSource = myFoodSourceMap.value(myAnimalGuid);
+    LaFoodSourceMap myFoodSourceMap = myAnimalParameter.fodderSourceMap();// this loads the map for the animal
+    //LaFoodSource myFoodSourceCropInfo = myFoodSourceMap.value(myAnimalGuid);
     
     //int myFodderValue = myFoodSource.fodder();
-    int myGrainGrams = myFoodSource.grain(); //this gives me grams of grain per day
+    int myGrainGrams = myFoodSourceMap.value(theCropGuid).grain(); //this gives me the 
       //int myFodderGrams = myFoodSource.fodder(); //this gives me grams of straw per day
     //now I have to look up the food value of the grain and the straw from LaCrop
     int myGrainValue = myCrop.cropCalories();
