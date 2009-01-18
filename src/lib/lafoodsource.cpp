@@ -37,6 +37,10 @@ int LaFoodSource::fodder() const
 {
   return mFodder;
 }
+int LaFoodSource::days() const
+{
+  return mDays;
+}
 bool LaFoodSource::used() const
 {
  return mUsed; 
@@ -54,6 +58,10 @@ void LaFoodSource::setGrain(int theValue)
 void LaFoodSource::setFodder(int theValue)
 {
   mFodder = theValue;
+}
+void LaFoodSource::setDays(int theValue)
+{
+  mDays = theValue;
 }
 void LaFoodSource::setUsed(bool theBool)
 {

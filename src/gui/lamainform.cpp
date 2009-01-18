@@ -97,7 +97,7 @@ LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
    * click on an item to a little method that sets the help viewer contents
    * appropriately. TS
    *
-   * Make sure this is the last stuff we do in the ctor! TS
+   * Make sure this is the last stuff we do in the constructor! TS
    */
   connect(treeHelp, SIGNAL(currentItemChanged(QTreeWidgetItem * ,QTreeWidgetItem *)),
       this, SLOT(helpItemClicked(QTreeWidgetItem * ,QTreeWidgetItem *)));
@@ -161,7 +161,10 @@ void LaMainForm::on_sbDailyCalories_valueChanged(int theValue)
 {
   setDietLabels();
 }
-
+void LaMainForm::on_sbDairyUse_valueChanged(int theValue)
+{
+  setDietLabels();
+}
 void LaMainForm::on_sliderMeat_valueChanged(int theValue)
 {
   QString myMinString = QString::number(100-theValue);
@@ -182,6 +185,9 @@ void LaMainForm::on_sliderDiet_valueChanged(int theValue)
 
 void LaMainForm::on_sliderCrop_valueChanged(int theValue)
 {
+  
+  
+  
   QString myMinString = QString::number(100-theValue);
   QString myMaxString = QString::number(theValue);
   labelCropWildPercent->setText(myMinString);
@@ -560,27 +566,60 @@ void LaMainForm::loadCrops()
 
 void LaMainForm::setDietLabels()
 {
-  int myDietPercentMeat = sliderDiet->value();
-  int myDietPercentPlant = (100-(sliderDiet->value()));
-  float myTameCropPercentage = sliderCrop->value()*(myDietPercentPlant/100.);
-  float myTameMeatPercentage = sliderMeat->value()*(myDietPercentMeat/100.);
+  /*  The problem here is that only the domestic meat value can be calculated until
+      the entire model is set up.  Therefore, unless both Crops and Animals total
+      100% these values are going to be bypassed and indicate to the user that they
+      have to do so.
+   */
+  
+  // variables needed for all calculations
   int myCaloriesIndividual = sbDailyCalories->value();
   int myPopulation = sbPopulation->value();
-
   float mykCaloriesIndividualAnnual = (myCaloriesIndividual*365.)/1000.;
   float mykCaloriesSettlementAnnual = mykCaloriesIndividualAnnual*myPopulation;
+  
+  //Meat Section  
+  int myDietPercentMeat = sliderDiet->value();
+    float myTameMeatPercentage = sliderMeat->value()*(myDietPercentMeat/100.);
 
-  float myTameCropkCalories = (myTameCropPercentage/100.)*mykCaloriesSettlementAnnual;
   float myTameAnimalkCalories = (myTameMeatPercentage/100.)*mykCaloriesSettlementAnnual;
-
-  labelCaloriesIndividual->setText(QString::number(mykCaloriesIndividualAnnual));
-  labelCaloriesSettlement->setText(QString::number(static_cast <int>(mykCaloriesSettlementAnnual)));
-  labelPortionPlants->setText(QString::number(myDietPercentPlant));
-  labelPortionMeat->setText(QString::number(myDietPercentMeat));
-  labelPortionCrops->setText(QString::number(static_cast <int>(myTameCropPercentage)));
-  labelPortionTameMeat->setText(QString::number(static_cast <int>(myTameMeatPercentage)));
-  labelCaloriesCrops->setText(QString::number(static_cast <int>(myTameCropkCalories)));
   labelCaloriesTameMeat->setText(QString::number(static_cast <int>(myTameAnimalkCalories)));
+
+  // set labels for the sliders etc
+  labelPortionMeat->setText(QString::number(myDietPercentMeat));
+  labelPortionTameMeat->setText(QString::number(static_cast <int>(myTameMeatPercentage)));
+  labelCaloriesSettlement->setText(QString::number(static_cast <int>(mykCaloriesSettlementAnnual)));
+
+  // set primary calculation levels based on population and daily requirements
+  labelCaloriesIndividual->setText(QString::number(mykCaloriesIndividualAnnual));
+  
+
+  //Crop and Dairy Section
+  if (labelCropCheck->text() != "100\%" or labelAnimalCheck->text() != "100\%")
+  { // the model is incomplete so calculations cannot be made
+    
+    labelPortionDairy->setText("Model not Completed");
+    labelCaloriesCrops->setText("Model not Completed");
+    labelPortionPlants->setText("Model not Completed");
+    labelPortionCrops->setText("Model not Completed");
+    return;
+  }
+  else // go ahead and do the calculations now
+  {
+    int myDairyCalories = getCalorieTargets();// QPair <crops,dairy>
+    float myCropCalories = mykCaloriesSettlementAnnual - myDairyCalories - myTameAnimalkCalories;
+    
+    float myCropPercentage =  myCropCalories / mykCaloriesSettlementAnnual;
+    float myDairyPercentage =  myDairyCalories / mykCaloriesSettlementAnnual;
+
+    //float myTameCropkCalories = (myTameCropPercentage/100.)*mykCaloriesSettlementAnnual;
+    //float myDairykCalories = 1.0; // implement this! 1.0 is temp only to test logic
+    //labelPortionPlants->setText(QString::number(myDietPercentPlant));
+    labelCaloriesCrops->setText(QString::number(static_cast <int>(myCropCalories)));
+    labelCaloriesDairy->setText(QString::number(static_cast <int>(myDairyCalories)));
+    labelPortionCrops->setText(QString::number(static_cast <int>(myCropPercentage)));
+    labelPortionDairy->setText(QString::number(static_cast <int>(myDairyPercentage)));
+  }
 }
 
 void LaMainForm::animalCellClicked(int theRow, int theColumn)
@@ -891,6 +930,86 @@ void LaMainForm::helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetI
   }
 }
 
+
+
+
+
+
+
+int LaMainForm::getCalorieTargets() //returns calorie target QPair <Crops , Dairy>
+{
+  LaModel myModel;
+  int myReturnValue;
+  connect(&myModel, SIGNAL(message( QString )),
+           this, SLOT(logMessage( QString )));
+  // Get a list of the selected animals
+  QMap<QString,QString> mySelectedAnimalsMap;
+  //  <animal guid <enabled, animalparamters guid>>
+  QMapIterator<QString, QPair<bool, QString> > myAnimalIterator(mAnimalsMap);
+  while (myAnimalIterator.hasNext())
+  {
+    myAnimalIterator.next();
+    QPair<bool,QString> myPair = myAnimalIterator.value();
+    QString myAnimalGuid = myAnimalIterator.key();
+    QString myAnimalParameterGuid = myPair.second;
+    bool mySelectedFlag = myPair.first;
+    if (mySelectedFlag)
+    {
+      mySelectedAnimalsMap.insert(myAnimalGuid,myAnimalParameterGuid);
+    }
+  }
+  myModel.setAnimals(mySelectedAnimalsMap);
+
+  // Get a list of the selected crops
+  QMap<QString,QString> mySelectedCropsMap;
+  //  <crop guid <enabled, cropparamters guid>>
+  QMapIterator<QString, QPair<bool, QString> > myCropIterator(mCropsMap);
+  while (myCropIterator.hasNext())
+  {
+    myCropIterator.next();
+    QPair<bool,QString> myPair = myCropIterator.value();
+    QString myCropGuid = myCropIterator.key();
+    QString myCropParameterGuid = myPair.second;
+    bool mySelectedFlag = myPair.first;
+    if (mySelectedFlag)
+    {
+      mySelectedCropsMap.insert(myCropGuid,myCropParameterGuid);
+    }
+  }
+  myModel.setCrops(mySelectedCropsMap);
+  QString mySelectedAreaUnit = QString(cbAreaUnits->currentText());
+  AreaUnits myAreaUnits = (mySelectedAreaUnit == "Dunum") ? Dunum:Hectare;
+  // Populate the model with all the form data
+  myModel.setName(lineEditSiteName->text());
+  myModel.setPopulation(sbPopulation->value());
+  myModel.setPeriod(lineEditPeriod->text());
+  //myModel.setProjection(cbProjection->currentIndex());
+  myModel.setEasting(lineEditEasting->text().toInt());
+  myModel.setNorthing(lineEditNorthing->text().toInt());
+  myModel.setEuclideanDistance(radioButtonEuclidean->isChecked());
+  myModel.setWalkingTime(radioButtonWalkingTime->isChecked());
+  myModel.setPathDistance(radioButtonPathDistance->isChecked());
+  myModel.setPrecision(sbModelPrecision->value());
+  myModel.setDietPercent(sliderDiet->value());
+  myModel.setCropPercent(sliderCrop->value());
+  myModel.setMeatPercent(sliderMeat->value());
+  myModel.setCaloriesPerPersonDaily(sbDailyCalories->value());
+  myModel.setCommonLandValue(sbCommonRasterValue->value(), myAreaUnits);
+  myModel.setDairyUse(sbDairyUse->value());
+  
+  int myTotalCaloriesFromDairy;
+  myTotalCaloriesFromDairy = myModel.getTotalCaloriesFromDairy();
+  
+  myReturnValue = myTotalCaloriesFromDairy;
+  return myReturnValue;
+}
+
+
+
+
+
+
+
 void LaMainForm::cropCalcClicked(QListWidgetItem * thepCurrentItem, QListWidgetItem * thepOldItem)
 {
   // zero trap to prevent seg faults
@@ -960,7 +1079,8 @@ void LaMainForm::cropCalcClicked(QListWidgetItem * thepCurrentItem, QListWidgetI
   myModel.setMeatPercent(sliderMeat->value());
   myModel.setCaloriesPerPersonDaily(sbDailyCalories->value());
   myModel.setCommonLandValue(sbCommonRasterValue->value(), myAreaUnits);
-  tbReport->setHtml(myModel.toHtml());
+  myModel.setDairyUse(sbDairyUse->value());
+   tbReport->setHtml(myModel.toHtml());
   myModel.DoCalculations();
 
   QString myGuid = thepCurrentItem->data(Qt::UserRole).toString();
@@ -1045,6 +1165,7 @@ void LaMainForm::animalCalcClicked(QListWidgetItem * thepCurrentItem, QListWidge
   myModel.setCommonLandAreaUnits(myAreaUnits);
   //myModel.setCommonLandValue(sbCommonRasterValue->value());
   myModel.setCommonLandValue(sbCommonRasterValue->value(), myAreaUnits);
+  myModel.setDairyUse(sbDairyUse->value());
   tbReport->setHtml(myModel.toHtml());
   myModel.DoCalculations();
 

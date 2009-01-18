@@ -476,15 +476,31 @@ int LaModel::caloriesFromTameMeat()
 int LaModel::caloriesFromMilk(QString theAnimalGuid) // need to know total number of mothers in the herd
 {
   HerdSize myHerdSize=herdSize(theAnimalGuid); // myHerdSize.first==mothers myHerdSize.second==juveniles
+  qDebug() << "HERDSIZE = " << myHerdSize;
+  
   LaAnimal myAnimal = LaUtils::getAnimal(theAnimalGuid);
+  
+  qDebug() << "theAnimalGuid = " << theAnimalGuid;
+  qDebug() << "AnimalName: = " << myAnimal.name();
+
   float myDairyUse=0.01*dairyUse();
-  float myMothers;
-      
-  float myCaloriesFromMilk= myDairyUse * myMothers * myAnimal.milkGramsPerDay() * 365.0 * myAnimal.milkFoodValue(); // kcalories
+  float myMothers = myHerdSize.first;
+  int myMilkGramsPerDay = myAnimal.milkGramsPerDay();
+  int myMilkFoodValue = myAnimal.milkFoodValue();
+  int myDaysLactating = myAnimal.lactationTime();
+    
+  qDebug() << "myMilkGramsPerDay = " << myMilkGramsPerDay;
+  qDebug() << "myMilkFoodValue = " << myMilkFoodValue;
+  qDebug() << "myDairyUse = " << myDairyUse;
+  qDebug() << "myMothers = " << myMothers;
+  qDebug() << "myDaysLactating = " << myDaysLactating;
+
+  float myCaloriesFromMilk= (myDairyUse * myMothers * myMilkGramsPerDay
+      * myDaysLactating * myMilkFoodValue)/1000.; // Mcalories
   
   int myReturnValue = static_cast<int>(myCaloriesFromMilk);
   //logMessage("method ==> int LaModel::caloriesFromTameMeat()");
-  logMessage("Overall Tame Meat Target: " + QString::number(myReturnValue).toLocal8Bit());
+  qDebug() << "Calories From Milk Return Value: " << myReturnValue;
   return myReturnValue;
 }
 
@@ -541,8 +557,8 @@ int LaModel::caloriesFromDairyProducts()
     LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(myAnimalParameterGuid);
     myCalorieTotal+=myAnimal.milkFoodValue()*myAnimal.milkGramsPerDay()*1000;//converts grams to Kg (by *1000)
   }
-  //logMessage("method ==> int LaModel::countAnimals()");
-  //logMessage("Animal Count: " + QString::number(myAnimalCounter).toLocal8Bit());
+  logMessage("method ==> int LaModel::caloriesFromDairyProducts()");
+  logMessage("myCalorieTotal: " + QString::number(myCalorieTotal).toLocal8Bit());
 
   return myCalorieTotal;
 }
@@ -554,8 +570,8 @@ int LaModel::caloriesProvidedByTheCrop(QString theCropParameterGuid)
   float myCaloriesFromMeat=caloriesFromTameMeat();
   float myCaloriesFromAnimals = myCaloriesFromDairyProducts + myCaloriesFromMeat;
   float myCropPercent = 0.01 * ( plantPercent() );
-  float myCalorieTarget = (population() * (mCaloriesPerPersonDaily/1000.) * 365.) - myCaloriesFromDairyProducts - myCaloriesFromAnimals; // kcalories
-  float myCropCalorieTarget = myCalorieTarget * myCropPercent;
+  float myCropCalorieTarget = (population() * (mCaloriesPerPersonDaily/1000.) * 365.) - (myCaloriesFromDairyProducts/1000.) - (myCaloriesFromAnimals/1000.); // kcalories
+  //float myCropCalorieTarget = myCalorieTarget * myCropPercent;
 
   int myReturnValue = static_cast<int>(myCropCalorieTarget);
   ///@TODO remove this debugging stuff
@@ -587,13 +603,19 @@ int LaModel::caloriesProvidedByTheMilkOfTheAnimal(QString theAnimalParameterGuid
 {
   LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(theAnimalParameterGuid);
   float myDairyUse = 0.01 * mDairyUse;
-  float myMilkCalories = caloriesFromMilk(theAnimalGuid) * myDairyUse;
+  int myCaloriesFromMilk = caloriesFromMilk(theAnimalGuid);
+  float myMilkCalories =  myCaloriesFromMilk * myDairyUse;
+  
   int myReturnValue = static_cast<int>(myMilkCalories);
   ///@TODO remove this debugging stuff
-  logMessage("method ==> int LaModel::caloriesProvidedByMilk(QString theAnimalParameterGuid)");
-  logMessage("Animal Parameter Guid: " + myAnimalParameter.guid().toLocal8Bit());
-  logMessage("Animal Parameter Name: " + myAnimalParameter.name().toLocal8Bit());
-  logMessage("Calories from milk: " + QString::number(myReturnValue).toLocal8Bit());
+  qDebug() << "   LaModel::caloriesProvidedByTheMilkOfTheAnimal(QString theAnimalParameterGuid , QString theAnimalGuid)" << myDairyUse;
+
+  qDebug() << "   myDairyUse: " << myDairyUse;
+  qDebug() << "   myMilkCalories: " << myMilkCalories;
+
+  qDebug() << "   Animal Parameter Guid: " << myAnimalParameter.guid();
+  qDebug() << "   Animal Parameter Name: " << myAnimalParameter.name();
+  qDebug() << "   Calories from milk: " << QString::number(myReturnValue);
   return myReturnValue;
 }
 
@@ -623,6 +645,7 @@ int LaModel::getProductionTargetsCrops(QString theCropGuid, int theCalorieTarget
     int myTotalCaloriesFromGrain = myGrainGrams * 1000 * myGrainValue;
     myAnimalsRequiredCalories+=myTotalCaloriesFromGrain;
   }
+  
   mCalcsAnimalsMap.insert("Common Land", QString::number(mCommonGrazingLandAreaTarget));
   int myCalorieTarget = theCalorieTarget + myAnimalsRequiredCalories;
   float myCropProductionTarget = myCalorieTarget / (myCrop.cropCalories() / 1000.); //kcalories
@@ -755,7 +778,6 @@ HerdSize LaModel::herdSize(QString theAnimalGuid)
   QString myReport;
   HerdSize myHerdSize;
   LaAnimal myAnimal = LaUtils::getAnimal(theAnimalGuid);
-  
   float myAnimalProductionTarget=getProductionTargetsAnimals( theAnimalGuid, static_cast <int>(mCaloriesProvidedByMeatMap.value(theAnimalGuid)));
   float myAnimalsRequired=(myAnimalProductionTarget / myAnimal.killWeight()) / (myAnimal.usableMeat()*.01);
   float myBirthsPerYear = 365.0 / (myAnimal.gestationTime() + myAnimal.estrousCycle() + (myAnimal.weaningAge() * 7.0));
@@ -776,6 +798,8 @@ HerdSize LaModel::herdSize(QString theAnimalGuid)
   //float myValueNeededToFeedAnimals = myTotalMothersValueRequired + myTotalJuvenilesValueRequired;
   myHerdSize.first = myTotalMothers;
   myHerdSize.second = myTotalJuveniles;
+  qDebug() << "LaModel::HerdSize: " << myHerdSize;
+
   return myHerdSize;
 }
 
@@ -830,6 +854,36 @@ QString LaModel::reportForAnimal(QString theAnimalGuid)
   return myReport;
 }
 
+int LaModel::getTotalCaloriesFromDairy()
+{  
+  //mCalcsAnimalsMap.clear();
+  //mCalcsCropsMap.clear();
+  initialiseCaloriesProvidedByMeatMap();
+  //initialiseCaloriesProvidedByMilkMap();
+  initialiseCaloriesProvidedByCropsMap();
+    
+  int myCalorieTotal = 0;
+  qDebug() << "method ==> void LaModel::getTotalCaloriesFromDairy()--------------------------------------------------";
+  initialiseCaloriesProvidedByMilkMap();
+  qDebug() << "Entering While Loop" ;
+
+  QMapIterator<QString, QString > myAnimalIterator(mAnimalsMap);
+  while (myAnimalIterator.hasNext())
+  {
+    myAnimalIterator.next();
+    QString myAnimalGuid = myAnimalIterator.key();
+    QString myAnimalParameterGuid = mAnimalsMap.value(myAnimalGuid);
+    myCalorieTotal += caloriesProvidedByTheMilkOfTheAnimal(myAnimalParameterGuid, myAnimalGuid);
+    qDebug() << " In While Loop";
+
+    qDebug() << " Animal Guid: " << myAnimalGuid;
+    qDebug() << " Calories Provided by Milk: " << caloriesProvidedByTheMilkOfTheAnimal(myAnimalParameterGuid, myAnimalGuid);
+  }
+  qDebug() << "Left WhileLoop DAIRY !!!!!!!!!!!!!!!: ";
+  qDebug() << "myCalorieTotal=================================" << myCalorieTotal;
+
+  return myCalorieTotal;
+}
 
 int LaModel::getFallowLandForACrop(QString theCropParameterGuid, int theAreaTarget)
 {
@@ -870,7 +924,7 @@ void LaModel::initialiseCaloriesProvidedByMilkMap()
     QString myAnimalParameterGuid = mAnimalsMap.value(myAnimalGuid);
     mCaloriesProvidedByMilkMap.insert(myAnimalGuid,caloriesProvidedByTheMilkOfTheAnimal(myAnimalGuid , myAnimalParameterGuid));
     logMessage("Animal Guid: " + myAnimalGuid.toLocal8Bit());
-    logMessage("Calories Provided by Milk: " + QString::number(caloriesProvidedByTheMeatOfTheAnimal(myAnimalParameterGuid)).toLocal8Bit());
+    logMessage("Calories Provided by Milk: " + QString::number(caloriesProvidedByTheMilkOfTheAnimal(myAnimalParameterGuid, myAnimalGuid)).toLocal8Bit());
   }
 }
 

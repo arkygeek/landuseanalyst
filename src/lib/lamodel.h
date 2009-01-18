@@ -103,6 +103,7 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
     int getProductionTargetsCrops(QString theCropGuid, int theCalorieTarget);
     int getProductionTargetsAnimals(QString theAnimalGuid, int theCalorieTarget);
     int getAreaTargetsCrops(QString theCropGuid, int theProductionTarget);
+    int getTotalCaloriesFromDairy();
     int getFallowLandForACrop(QString theCropParameterGuid, int theAreaTarget);
     void allocateFallowGrazingLand();
     void adjustAnimalTargetsForFodder();

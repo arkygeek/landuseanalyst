@@ -33,16 +33,19 @@ public:
   // accessors
   int grain() const;
   int fodder() const;
+  int days() const;
   bool used() const;
   QString cropGuid() const;
   // mutators
   void setGrain(int theValue);
   void setFodder(int theValue);
+  void setDays(int theValue);
   void setUsed(bool theBool);
   void setCropGuid(QString theCropGuid);
   private:
   int mGrain;
   int mFodder;
+  int mDays;
   bool mUsed;
   QString mCropGuid;
 };

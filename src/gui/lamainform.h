@@ -62,6 +62,7 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
     void on_pbnNewCropParameter_clicked();
     void on_pbnNewAnimalParameter_clicked();
     void on_sbDailyCalories_valueChanged(int theValue);
+    void on_sbDairyUse_valueChanged(int theValue);
     void on_pbnFallow_clicked();
     void on_cbDebug_clicked();
     void on_cboMapSet_currentIndexChanged();
@@ -96,6 +97,7 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
   private:
     void readSettings();
     void writeSettings();
+    int getCalorieTargets();
     // A simple helper / debug function to print the state of
     // animals and crops maps
     void debugChecks();

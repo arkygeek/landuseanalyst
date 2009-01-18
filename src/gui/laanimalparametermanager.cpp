@@ -206,13 +206,15 @@ void LaAnimalParameterManager::refreshAnimalParameterTable(QString theGuid)
   tblAnimalParameterProfiles->horizontalHeader()->hide();
   tblAnimalParameterProfiles->verticalHeader()->hide();
   tblAnimalParameterProfiles->horizontalHeader()->setResizeMode(1,QHeaderView::Stretch);
+  tblAnimalParameterProfiles->sortItems(1,Qt::AscendingOrder);
+
 }
 
 void LaAnimalParameterManager::populateFodder()
 {
   tblFodder->clear();
   tblFodder->setRowCount(0);
-  tblFodder->setColumnCount(3);
+  tblFodder->setColumnCount(4);
 
   int myCurrentRow=0;
   QMap<QString,LaCrop> myCropsMap;
@@ -257,21 +259,28 @@ void LaAnimalParameterManager::populateFodder()
     mypNameItem->setData(Qt::UserRole,myGuid);
     tblFodder->setItem(myCurrentRow, 0, mypNameItem);
     //mypNameItem->setIcon(myIcon);
-    //create a var to hold the percentage for each selected parameter
+    //create a var to hold the value for each selected parameter
     //add the crop parameters combo to the form
     QSpinBox * mypSpinFodder = new QSpinBox(this);
-    //mypSpinFodder->addItem(myParameterName,myParameterGuid);
     QSpinBox * mypSpinGrain = new QSpinBox(this);
+    QSpinBox * mypSpinDays = new QSpinBox(this);
+    
+    mypSpinGrain->setMaximum(10000);
+    mypSpinFodder->setMaximum(10000);
+    mypSpinDays->setMaximum(365);
 
     const int myDefaultFodderValue=0;
     const int myDefaultGrainValue=0;
+    const int myDefaultDaysValue=0;
 
     mypSpinFodder->setValue(myDefaultFodderValue);
     mypSpinGrain->setValue(myDefaultGrainValue);
+    mypSpinDays->setValue(myDefaultDaysValue);
 
     //myCropsMap[myGuid]=myValue;
     tblFodder->setCellWidget ( myCurrentRow, 1, mypSpinFodder);
     tblFodder->setCellWidget ( myCurrentRow, 2, mypSpinGrain);
+    tblFodder->setCellWidget ( myCurrentRow, 3, mypSpinDays);
 
     myCurrentRow++;
   }
@@ -279,6 +288,19 @@ void LaAnimalParameterManager::populateFodder()
 
 void LaAnimalParameterManager::refreshFodderTable(QString theGuid)
 {
+  QTableWidgetItem *mypCropHeaderItem = new QTableWidgetItem(tr("Crop"));
+  QTableWidgetItem *mypGrainHeaderItem = new QTableWidgetItem(tr("Grain"));
+  QTableWidgetItem *mypStrawHeaderItem = new QTableWidgetItem(tr("Straw"));
+  QTableWidgetItem *mypDaysHeaderItem = new QTableWidgetItem(tr("Days"));
+  mypCropHeaderItem->setTextAlignment(Qt::AlignVCenter);
+  mypGrainHeaderItem->setTextAlignment(Qt::AlignVCenter);
+  mypStrawHeaderItem->setTextAlignment(Qt::AlignVCenter);
+  mypDaysHeaderItem->setTextAlignment(Qt::AlignVCenter);
+  tblFodder->setHorizontalHeaderItem(0, mypCropHeaderItem);
+  tblFodder->setHorizontalHeaderItem(1, mypGrainHeaderItem);
+  tblFodder->setHorizontalHeaderItem(2, mypStrawHeaderItem); 
+  tblFodder->setHorizontalHeaderItem(3, mypDaysHeaderItem); 
+
   LaFoodSourceMap myFoodSourceMap = mAnimalParameter.fodderSourceMap();
   qDebug("Restoring " + QString::number(myFoodSourceMap.count()).toLocal8Bit()
     + " food sources into animal parameter.");
@@ -289,16 +311,20 @@ void LaAnimalParameterManager::refreshFodderTable(QString theGuid)
     qDebug("tblFodderGuid: " + myGuid.toLocal8Bit());
     QSpinBox * mypFodderSpinBox = qobject_cast <QSpinBox *> (tblFodder->cellWidget(myCurrentRow,1));
     QSpinBox * mypGrainSpinBox = qobject_cast <QSpinBox *> (tblFodder->cellWidget(myCurrentRow,2));
+    QSpinBox * mypDaysSpinBox = qobject_cast <QSpinBox *> (tblFodder->cellWidget(myCurrentRow,3));
     if (myFoodSourceMap.contains(myGuid))
     {
       LaFoodSource myFoodSource = myFoodSourceMap.value(myGuid);
       int myFodderValue = myFoodSource.fodder();
       int myGrainValue = myFoodSource.grain();
+      int myDaysValue = myFoodSource.days();
       ///@TODO remove this debug stuff
       qDebug("value from map for myFodderValue: " + QString::number(myFodderValue).toLocal8Bit());
       qDebug("value from map for myGrainValue: " + QString::number(myGrainValue).toLocal8Bit());
+      qDebug("value from map for myDaysValue: " + QString::number(myDaysValue).toLocal8Bit());
       mypFodderSpinBox->setValue(myFodderValue);
       mypGrainSpinBox->setValue(myGrainValue);
+      mypDaysSpinBox->setValue(myDaysValue);
       mypItem->setCheckState(Qt::Checked);
       qDebug("++++ Crop Guid in fodder Table: " + myGuid.toLocal8Bit());
       //Q_ASSERT(mySelectedCropsMap.contains(myGuid));
@@ -310,10 +336,13 @@ void LaAnimalParameterManager::refreshFodderTable(QString theGuid)
     {
       mypFodderSpinBox->setValue(0);
       mypGrainSpinBox->setValue(0);
+      mypDaysSpinBox->setValue(0);
       mypItem->setCheckState(Qt::Unchecked);
     }
-
+    tblFodder->sortItems(0,Qt::AscendingOrder);
   }
+
+
 }
 
 void LaAnimalParameterManager::cellClicked(int theRow, int theColumn)
@@ -502,15 +531,10 @@ void LaAnimalParameterManager::on_pbnApply_clicked()
   for (int myCurrentRow=0; myCurrentRow < myRowCount; ++myCurrentRow)
   {
 
-    QTableWidgetItem * mypNameWidget =
-      tblFodder->item(myCurrentRow,0);
-    QSpinBox * mypFodderSpinBox =
-      qobject_cast<QSpinBox *>
-      (tblFodder->cellWidget(myCurrentRow,1));
-    QSpinBox * mypGrainSpinBox =
-      qobject_cast<QSpinBox *>
-      (tblFodder->cellWidget(myCurrentRow,2));
-
+    QTableWidgetItem * mypNameWidget = tblFodder->item(myCurrentRow,0);
+    QSpinBox * mypFodderSpinBox = qobject_cast<QSpinBox *> (tblFodder->cellWidget(myCurrentRow,1));
+    QSpinBox * mypGrainSpinBox =  qobject_cast<QSpinBox *> (tblFodder->cellWidget(myCurrentRow,2));
+    QSpinBox * mypDaysSpinBox =  qobject_cast<QSpinBox *> (tblFodder->cellWidget(myCurrentRow,3));
     //dont bother doing anything further if the
     //first widget in the row is not checked
     if (!mypNameWidget->checkState())
@@ -518,8 +542,10 @@ void LaAnimalParameterManager::on_pbnApply_clicked()
       continue;
     }
     LaFoodSource myFoodSource;
+    myFoodSource.setUsed(grpFodderUse->isChecked());
     myFoodSource.setFodder(mypFodderSpinBox->value());
     myFoodSource.setGrain(mypGrainSpinBox->value());
+    myFoodSource.setDays(mypDaysSpinBox->value());
     QString myGuid = mypNameWidget->data(Qt::UserRole).toString();
 
     myFoodSourceMap.insert(myGuid, myFoodSource);
@@ -529,8 +555,6 @@ void LaAnimalParameterManager::on_pbnApply_clicked()
   qDebug("Inserting " + QString::number(myFoodSourceMap.count()).toLocal8Bit()
     + " food sources into animal parameter.");
   mAnimalParameter.setFodderData(myFoodSourceMap);
-
-
 
   QString myFallowUsage = QString(cbFallowUsage->currentText());
   //setFallowComboBox();
