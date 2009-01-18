@@ -19,6 +19,7 @@
 #include <QFile>
 #include <QString>
 #include <QTextStream>
+#include <QDebug>
 
 LaSerialisable::LaSerialisable()
 {
@@ -57,7 +58,8 @@ bool LaSerialisable::fromXmlFile(const QString theFileName)
   }
   else
   {
-    qDebug("Failed to open "  + theFileName.toLocal8Bit() + " for deserialisation ");
+    QString myError = "Failed to open "  + theFileName + " for deserialisation ";
+    qDebug() << myError;
     //@TODO Error handler!
     myResult=false;
   }

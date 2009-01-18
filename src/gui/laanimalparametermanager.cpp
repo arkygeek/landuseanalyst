@@ -152,7 +152,7 @@ void LaAnimalParameterManager::refreshAnimalParameterTable(QString theGuid)
     //qDebug(myAnimalParameter.toText().toLocal8Bit());
     if (theGuid.isEmpty())
     {
-      qDebug("No default active row was requested.Assigning to myAnimalParameter.guid()!");
+      qDebug() << "No default active row was requested.Assigning to myAnimalParameter.guid()!";
       theGuid=myAnimalParameter.guid();
     }
     if (myAnimalParameter.guid()==theGuid)
@@ -162,7 +162,8 @@ void LaAnimalParameterManager::refreshAnimalParameterTable(QString theGuid)
     // Insert new row ready to fill with details
     tblAnimalParameterProfiles->insertRow(myCurrentRow);
     QString myGuid = myAnimalParameter.guid();
-    qDebug ("Inserting animalParameter into table with guid: " + myGuid.toLocal8Bit());
+    qDebug () << "Inserting animalParameter into table with guid: " 
+      << myGuid.toLocal8Bit();
     // Add details to the new row
     QTableWidgetItem *mypFileNameItem= new QTableWidgetItem(myGuid);
     tblAnimalParameterProfiles->setItem(myCurrentRow, 0, mypFileNameItem);
@@ -302,13 +303,13 @@ void LaAnimalParameterManager::refreshFodderTable(QString theGuid)
   tblFodder->setHorizontalHeaderItem(3, mypDaysHeaderItem); 
   */
   LaFoodSourceMap myFoodSourceMap = mAnimalParameter.fodderSourceMap();
-  qDebug("Restoring " + QString::number(myFoodSourceMap.count()).toLocal8Bit()
-    + " food sources into animal parameter.");
+  qDebug() << "Restoring " <<  QString::number(myFoodSourceMap.count())
+    << " food sources into animal parameter.";
   for (int myCurrentRow=0; myCurrentRow < tblFodder->rowCount(); myCurrentRow++)
   {
     QTableWidgetItem * mypItem = tblFodder->item(myCurrentRow,0);
     QString myGuid = mypItem->data(Qt::UserRole).toString();
-    qDebug() << "************************************************tblFodderGuid: " << myGuid;
+    qDebug() << "tblFodderGuid: " << myGuid;
     QSpinBox * mypFodderSpinBox = qobject_cast <QSpinBox *> (tblFodder->cellWidget(myCurrentRow,1));
     QSpinBox * mypGrainSpinBox = qobject_cast <QSpinBox *> (tblFodder->cellWidget(myCurrentRow,2));
     QSpinBox * mypDaysSpinBox = qobject_cast <QSpinBox *> (tblFodder->cellWidget(myCurrentRow,3));
@@ -328,14 +329,17 @@ void LaAnimalParameterManager::refreshFodderTable(QString theGuid)
       int myGrainValue = myFoodSource.grain();
       int myDaysValue = myFoodSource.days();
       ///@TODO remove this debug stuff
-      qDebug("value from map for myFodderValue: " + QString::number(myFodderValue).toLocal8Bit());
-      qDebug("value from map for myGrainValue: " + QString::number(myGrainValue).toLocal8Bit());
-      qDebug("value from map for myDaysValue: " + QString::number(myDaysValue).toLocal8Bit());
+      qDebug() << " value from map for myFodderValue: " 
+        << QString::number(myFodderValue);
+      qDebug() << "value from map for myGrainValue: " 
+        << QString::number(myGrainValue);
+      qDebug() << "value from map for myDaysValue: " 
+        << QString::number(myDaysValue);
       mypFodderSpinBox->setValue(myFodderValue);
       mypGrainSpinBox->setValue(myGrainValue);
       mypDaysSpinBox->setValue(myDaysValue);
       mypItem->setCheckState(Qt::Checked);
-      qDebug("++++ Crop Guid in fodder Table: " + myGuid.toLocal8Bit());
+      qDebug() << "++++ Crop Guid in fodder Table: " << myGuid;
       //Q_ASSERT(mySelectedCropsMap.contains(myGuid));
       //QString myGuidFromSelectedMap = mySelectedCropsMap.value(myGuid);
       //qDebug("++-- Crop Guid from selected map: " + myGuidFromSelectedMap.toLocal8Bit());
@@ -372,8 +376,9 @@ void LaAnimalParameterManager::selectAnimalParameter(QString theFileName)
   //
   //for debuggin only:
   //
-  qDebug("-- Restoring " + QString::number(mAnimalParameter.fodderSourceMap().count()).toLocal8Bit()
-    + " food sources into animal parameter.");
+  qDebug() << "-- Restoring " 
+    << QString::number(mAnimalParameter.fodderSourceMap().count())
+    << " food sources into animal parameter.";
   // end of deub section
   showAnimalParameter();
 }
@@ -416,7 +421,7 @@ void LaAnimalParameterManager::showAnimalParameter()
 
 void LaAnimalParameterManager::on_toolNew_clicked()
 {
-  qDebug("New toolbutton clicked");
+  qDebug() << "New toolbutton clicked";
   LaAnimalParameter myAnimalParameter;
   myAnimalParameter.setGuid();
   mAnimalParameter = myAnimalParameter;
@@ -432,7 +437,7 @@ void LaAnimalParameterManager::resizeEvent ( QResizeEvent * theEvent )
 
 void LaAnimalParameterManager::on_toolCopy_clicked()
 {
-  qDebug("Copy toolbutton clicked");
+  qDebug() << "Copy toolbutton clicked";
   if (tblAnimalParameterProfiles->currentRow() < 0)
   {
     return;
@@ -463,7 +468,7 @@ void LaAnimalParameterManager::on_toolCopy_clicked()
 }
 void LaAnimalParameterManager::on_toolDelete_clicked()
 {
-  qDebug("Delete toolbutton clicked");
+  qDebug() << "Delete toolbutton clicked";
   if (tblAnimalParameterProfiles->currentRow() < 0)
   {
     return;
@@ -565,7 +570,9 @@ void LaAnimalParameterManager::on_pbnApply_clicked()
     //qDebug() << "myFoodSource.days: " << myFoodSource.days();
   }
 
-  qDebug() << "Inserting " << myFoodSourceMap.count() << " food sources into animal parameter.";
+  qDebug() << "Inserting " <<
+    QString::number(myFoodSourceMap.count())
+    << " food sources into animal parameter.";
   mAnimalParameter.setFodderData(myFoodSourceMap);
   //mFodderSourceMap = myFoodSourceMap;
   QString myFallowUsage = QString(cbFallowUsage->currentText());

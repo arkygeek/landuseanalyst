@@ -63,7 +63,7 @@ void LaGrassTest::getRasterList()
     //append the raster names in this mapet to our full list
     myList << myGrass.getRasterList(myIterator.next());
   }
-  qDebug("\n" + myList.join("\n").toLocal8Bit());
+  qDebug() << "\n" << myList.join("\n");
   QVERIFY(myList.count() > 0);
 }
 void LaGrassTest::createFrictionMap()

@@ -37,6 +37,7 @@
 #include <QListWidgetItem>
 #include <QLabel>
 #include <QPixmap>
+#include <QDebug>
   LaAnimalManager::LaAnimalManager(QWidget* parent, Qt::WFlags fl)
 : QDialog(parent,fl)
 {
@@ -100,7 +101,7 @@ void LaAnimalManager::refreshAnimalTable(QString theGuid)
   {
     myIterator.next();
     LaAnimal myAnimal = myIterator.value();
-    qDebug(myAnimal.toText().toLocal8Bit());
+    qDebug() << myAnimal.toText();
     if (theGuid.isEmpty())
     {
       //qDebug("No default active row was requested.Assigning to myAnimal.guid()!");;
@@ -113,7 +114,7 @@ void LaAnimalManager::refreshAnimalTable(QString theGuid)
     // Insert new row ready to fill with details
     tblAnimals->insertRow(myCurrentRow);
     QString myGuid = myAnimal.guid();
-    qDebug ("Inserting animal with guid: " + myGuid.toLocal8Bit());
+    qDebug () << "Inserting animal with guid: " + myGuid;
     // Add details to the new row
     QTableWidgetItem *mypFileNameItem= new QTableWidgetItem(myGuid);
     tblAnimals->setItem(myCurrentRow, 0, mypFileNameItem);
@@ -162,15 +163,15 @@ void LaAnimalManager::refreshAnimalTable(QString theGuid)
 void LaAnimalManager::cellClicked(int theRow, int theColumn)
 {
   //note we use the alg name not the id becuase user may have customised params
-  qDebug("LaAnimalManager::cellClicked");
+  qDebug() << "LaAnimalManager::cellClicked";
   QString myGuid = tblAnimals->item(tblAnimals->currentRow(),0)->text();
-  qDebug("Guid is: " + myGuid.toLocal8Bit());
+  qDebug() << "Guid is: " << myGuid;
   QString myFileName = myGuid + ".xml";
   selectAnimal(myFileName);
 }
 void LaAnimalManager::selectAnimal(QString theFileName)
 {
-  qDebug("selectAnimal Called : " + theFileName.toLocal8Bit());
+  qDebug() << "selectAnimal Called : " << theFileName.toLocal8Bit();
   QString myAnimalDir = LaUtils::userAnimalProfilesDirPath();
   LaAnimal myAnimal;
   myAnimal.fromXmlFile(myAnimalDir + QDir::separator() + theFileName);

@@ -35,6 +35,7 @@
 #include <QTableWidgetItem>
 #include <QFileDialog>
 #include <QListWidgetItem>
+#include <QDebug>
 
   LaCropManager::LaCropManager(QWidget* parent, Qt::WFlags fl)
 : QDialog(parent,fl)
@@ -109,10 +110,10 @@ void LaCropManager::refreshCropTable(QString theGuid)
   {
     myIterator.next();
     LaCrop myCrop = myIterator.value();
-    qDebug(myCrop.toText().toLocal8Bit());
+    qDebug() << myCrop.toText();
     if (theGuid.isEmpty())
     {
-      qDebug("No default active row was requested.Assigning to myCrop.guid()!");;
+      qDebug() << "No default active row was requested. Assigning to myCrop.guid()!";
       theGuid=myCrop.guid();
     }
     if (myCrop.guid()==theGuid)
@@ -122,7 +123,7 @@ void LaCropManager::refreshCropTable(QString theGuid)
     // Insert new row ready to fill with details
     tblCrops->insertRow(myCurrentRow);
     QString myGuid = myCrop.guid();
-    qDebug ("Inserting crop with guid: " + myGuid.toLocal8Bit());
+    qDebug () << "Inserting crop with guid: " << myGuid;
     // Add details to the new row
     QTableWidgetItem *mypFileNameItem= new QTableWidgetItem(myGuid);
     tblCrops->setItem(myCurrentRow, 0, mypFileNameItem);
@@ -171,15 +172,15 @@ void LaCropManager::refreshCropTable(QString theGuid)
 void LaCropManager::cellClicked(int theRow, int theColumn)
 {
   //note we use the alg name not the id because user may have customised params
-  qDebug("LaCropManager::cellClicked");
+  qDebug() << "LaCropManager::cellClicked";
   QString myGuid = tblCrops->item(tblCrops->currentRow(),0)->text();
-  qDebug("Guid is: " + myGuid.toLocal8Bit());
+  qDebug() << "Guid is: " <<  myGuid;
   QString myFileName = myGuid + ".xml";
   selectCrop(myFileName);
 }
 void LaCropManager::selectCrop(QString theFileName)
 {
-  qDebug("selectCrop Called : " + theFileName.toLocal8Bit());
+  qDebug() << "selectCrop Called : " << theFileName.toLocal8Bit();
   QString myCropDir = LaUtils::userCropProfilesDirPath();
   LaCrop myCrop;
   myCrop.fromXmlFile(myCropDir + QDir::separator() + theFileName);

@@ -92,10 +92,10 @@ bool LaGrass::copyMap(QString theOriginalRaster, QString theCopy)
   QString myCommand = "g.copy";
   QStringList myArguments;
   myArguments << "rast=" + theOriginalRaster + "," + theCopy;
-  qDebug(myCommand.toLocal8Bit() + "  " + myArguments.join(" ").toLocal8Bit());
+  qDebug() << myCommand.toLocal8Bit() << "  " << myArguments.join(" ");
   QString myErrorLog;
   QString myResult = runCommand(myCommand,myArguments,myErrorLog);
-  qDebug(myResult.toLocal8Bit());
+  qDebug() << myResult;
   if (myErrorLog.isEmpty())
   {
     return true;
@@ -109,13 +109,13 @@ bool LaGrass::copyMap(QString theOriginalRaster, QString theCopy)
 bool LaGrass::createFrictionMap(QString theBaseRaster,QString theOutputRaster)
 {
   //r.mapcalc "laFrictionMap = if(isnull(laDEM), null(), 1)"
-  QString myCommand = "r.mapcalc";
+  QString myCommand("r.mapcalc");
   QStringList myArguments;
   myArguments << theOutputRaster + " = if(isnull(" + theBaseRaster + "), null(), 1)";
-  qDebug(myCommand.toLocal8Bit() + "  " + myArguments.join(" ").toLocal8Bit());
+  qDebug() << myCommand << "  " << myArguments.join(" ");
   QString myErrorLog;
   QString myResult = runCommand(myCommand,myArguments,myErrorLog);
-  qDebug(myResult.toLocal8Bit());
+  qDebug() << myResult;
   if (myErrorLog.isEmpty())
   {
     return true;
@@ -131,10 +131,10 @@ bool LaGrass::createInverseMask(float theMin, QString theMaskRaster)
   QString myCommand = "r.mapcalc";
   QStringList myArguments;
   myArguments << "laCostMapReclassed=if(laWalkCost>" + QString::number(theMin) + ",1,0)";
-  qDebug(myCommand.toLocal8Bit() + "  " + myArguments.join(" ").toLocal8Bit());
+  qDebug() << myCommand << "  " << myArguments.join(" ");
   QString myErrorLog;
   QString myResult = runCommand(myCommand,myArguments,myErrorLog);
-  qDebug(myResult.toLocal8Bit());
+  qDebug() << myResult;
 
   createCombinedMask("laCostMapReclassed", theMaskRaster);
 
@@ -155,10 +155,10 @@ bool LaGrass::createMask(QString theCostSurface, QString theMaskRaster)
   QStringList myArguments;
   QString myMaskName = "tmpMask";
   myArguments << myMaskName + "=" + theCostSurface + "*" + theMaskRaster;
-  qDebug(myCommand.toLocal8Bit() + "  " + myArguments.join(" ").toLocal8Bit());
+  qDebug() << myCommand << "  " << myArguments.join(" ");
   QString myErrorLog;
   QString myResult = runCommand(myCommand,myArguments,myErrorLog);
-  qDebug(myResult.toLocal8Bit());
+  qDebug() << myResult.toLocal8Bit();
   if (myErrorLog.isEmpty())
   {
     return true;
@@ -175,10 +175,10 @@ bool LaGrass::createCombinedMask(QString theCostSurface, QString theMaskRaster)
   QStringList myArguments;
   QString myMaskName = "laLeftOver";
   myArguments << myMaskName + "=" + theCostSurface + "*" + theMaskRaster;
-  qDebug(myCommand.toLocal8Bit() + "  " + myArguments.join(" ").toLocal8Bit());
+  qDebug() << myCommand << "  " << myArguments.join(" ");
   QString myErrorLog;
   QString myResult = runCommand(myCommand,myArguments,myErrorLog);
-  qDebug(myResult.toLocal8Bit());
+  qDebug() << myResult.toLocal8Bit();
   if (myErrorLog.isEmpty())
   {
     return true;
@@ -203,18 +203,18 @@ bool LaGrass::mergeMaps(QString theLeftoversGoHere)
   QStringList myArguments;
   myArguments << "mergeTmp = if( isnull ( " + theLeftoversGoHere  + "),0," + theLeftoversGoHere + ")";
   QString myResult = runCommand(myCommand,myArguments,myErrorLog);
-  qDebug(myResult.toLocal8Bit());
+  qDebug() << myResult.toLocal8Bit();
 
   myArguments.clear();
  //+ if( isnull ( laLeftOver),0,laLeftOver)\'";
   myArguments << "laLeftOverTmp = if( isnull ( laLeftOver),0,laLeftOver)";
   myResult = runCommand(myCommand,myArguments,myErrorLog);
-  qDebug(myResult.toLocal8Bit());
+  qDebug() << myResult;
 
   myArguments.clear();
   myArguments << "laCombinedMasks = laLeftOverTmp + mergeTmp";
   myResult = runCommand(myCommand,myArguments,myErrorLog);
-  qDebug(myResult.toLocal8Bit());
+  qDebug() << myResult;
 
   // clean up temp files
   removeFile("mergeTmp");
@@ -237,10 +237,10 @@ float LaGrass::getArea(QString theLayerName)
   QString myCommand = "r.stats";
   QStringList myArguments;
   myArguments << "-a" << "-n" << "fs=," << "input="+theLayerName;
-  qDebug(myCommand.toLocal8Bit() + "  " + myArguments.join(" ").toLocal8Bit());
+  qDebug() << myCommand << "  " << myArguments.join(" ");
   QString myErrorLog;
   QString myResult = runCommand(myCommand,myArguments,myErrorLog);
-  qDebug(myResult.toLocal8Bit());
+  qDebug() << myResult;
   if (myErrorLog.isEmpty())
   {
     return 0;
@@ -292,7 +292,7 @@ bool LaGrass::makeWalkCost(int theX, int theY, QString theDEM)
               << "slope_factor=-0.2125"
               << "-k"
               << "--overwrite";
-  qDebug(myCommand.toLocal8Bit() + "  " + myArguments.join(" ").toLocal8Bit());
+  qDebug() << myCommand << "  " + myArguments.join(" ");
 
   QString myErrorLog;
   QString myResult = runCommand(myCommand,myArguments,myErrorLog);
@@ -354,10 +354,10 @@ bool LaGrass::reclass(QString theRaster, int theMax)
   QString myCommand = "r.mapcalc";
   QStringList myArguments;
   myArguments << "laCostMapReclassed=if(" + theRaster + "<" + QString::number(theMax) + ",1,0)";
-  qDebug(myCommand.toLocal8Bit() + "  " + myArguments.join(" ").toLocal8Bit());
+  qDebug() << myCommand << "  " <<  myArguments.join(" ");
   QString myErrorLog;
   QString myResult = runCommand(myCommand,myArguments,myErrorLog);
-  qDebug(myResult.toLocal8Bit());
+  qDebug() << myResult;
   if (myErrorLog.isEmpty())
   {
     return true;
@@ -373,10 +373,10 @@ bool LaGrass::removeFile(QString theFile)
   QString myCommand = "g.remove";
   QStringList myArguments;
   myArguments << "rast=" + theFile;
-  qDebug(myCommand.toLocal8Bit() + " " + myArguments.join(" ").toLocal8Bit());
+  qDebug() << myCommand << " " << myArguments.join(" ");
   QString myErrorLog;
   QString myResult = runCommand(myCommand,myArguments,myErrorLog);
-  qDebug(myResult.toLocal8Bit());
+  qDebug() << myResult;
   if (myErrorLog.isEmpty())
   {
     return true;
