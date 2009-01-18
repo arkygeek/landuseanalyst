@@ -302,6 +302,11 @@ void LaMainForm::on_pbnFallow_clicked()
   //not implemented
 }
 
+void LaMainForm::on_pbnWriteSampleData_clicked()
+{
+  //will write several xml files to disk of sample crop and animal entries along with their parameters
+}
+
 void LaMainForm::on_cboMapSet_currentIndexChanged()
 {
   LaGrass myGrass;

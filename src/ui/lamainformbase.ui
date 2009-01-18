@@ -24,7 +24,217 @@
     <normaloff>:/la_icon_small.png</normaloff>:/la_icon_small.png</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout_6" >
-   <item row="0" column="0" >
+   <item row="1" column="0" >
+    <spacer name="spacer" >
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>308</width>
+       <height>17</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="3" column="0" >
+    <layout class="QGridLayout" name="gridLayout_3" >
+     <item row="0" column="0" >
+      <widget class="QLabel" name="label_5" >
+       <property name="toolTip" >
+        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">This is the sum of percent of diet figures for all of the animals being used in the model.  &lt;span style=" font-weight:600; font-style:italic; text-decoration: underline; color:#0000ff;">This must be 100%&lt;/span> to run!&lt;/p>&lt;/body>&lt;/html></string>
+       </property>
+       <property name="text" >
+        <string>Animals:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1" >
+      <widget class="QLabel" name="labelAnimalCheck" >
+       <property name="toolTip" >
+        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">This is the sum of percent of diet figures for all of the animals being used in the model.  &lt;span style=" font-weight:600; font-style:italic; text-decoration: underline; color:#0000ff;">This must be 100%&lt;/span> to run!&lt;/p>&lt;/body>&lt;/html></string>
+       </property>
+       <property name="text" >
+        <string>100%</string>
+       </property>
+       <property name="alignment" >
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2" >
+      <widget class="QLabel" name="label_3" >
+       <property name="toolTip" >
+        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">This is the sum of percent of diet figures for all of the crops being used in the model.  &lt;span style=" font-weight:600; font-style:italic; text-decoration: underline; color:#0000ff;">This must be 100%&lt;/span> to run!&lt;/p>&lt;/body>&lt;/html></string>
+       </property>
+       <property name="text" >
+        <string>  Crops:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="3" >
+      <widget class="QLabel" name="labelCropCheck" >
+       <property name="toolTip" >
+        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">This is the sum of percent of diet figures for all of the crops being used in the model.  &lt;span style=" font-weight:600; font-style:italic; text-decoration: underline; color:#0000ff;">This must be 100%&lt;/span> to run!&lt;/p>&lt;/body>&lt;/html></string>
+       </property>
+       <property name="text" >
+        <string>100%</string>
+       </property>
+       <property name="alignment" >
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="4" >
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0" >
+        <size>
+         <width>16</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="0" column="5" >
+      <widget class="QPushButton" name="pushButtonRun" >
+       <property name="sizePolicy" >
+        <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize" >
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="toolTip" >
+        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Run the model.&lt;/p>&lt;/body>&lt;/html></string>
+       </property>
+       <property name="whatsThis" >
+        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Pressing Calculate! will attempt to run the model with the parameters you have chosen.  If there are any errors, this process will fail, and indicate to you what the problem was.  To be on the safe side, always save your model before attempting to Calculate! it.  All results will be saved if the model runs correctly.&lt;/p>&lt;/body>&lt;/html></string>
+       </property>
+       <property name="text" >
+        <string>Run</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="6" >
+      <widget class="QPushButton" name="pushButtonLoad" >
+       <property name="sizePolicy" >
+        <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize" >
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="toolTip" >
+        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Load previously saved model parameters.&lt;/p>&lt;/body>&lt;/html></string>
+       </property>
+       <property name="text" >
+        <string>Load</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="7" >
+      <widget class="QPushButton" name="pushButtonSave" >
+       <property name="sizePolicy" >
+        <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip" >
+        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Save all settings of this model to a file&lt;/p>&lt;/body>&lt;/html></string>
+       </property>
+       <property name="text" >
+        <string>Save</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="8" >
+      <widget class="QPushButton" name="pushButtonExit" >
+       <property name="sizePolicy" >
+        <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text" >
+        <string>Exit</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0" colspan="9" >
+      <widget class="QProgressBar" name="progressBarCalcs" >
+       <property name="sizePolicy" >
+        <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize" >
+        <size>
+         <width>16777215</width>
+         <height>10</height>
+        </size>
+       </property>
+       <property name="toolTip" >
+        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Shows when program is busy, or progress of tasks.&lt;/p>&lt;/body>&lt;/html></string>
+       </property>
+       <property name="value" >
+        <number>0</number>
+       </property>
+       <property name="textVisible" >
+        <bool>false</bool>
+       </property>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="format" >
+        <string>%p%</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="2" column="0" >
     <widget class="QTabWidget" name="MainTabs" >
      <property name="sizePolicy" >
       <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
@@ -2363,565 +2573,540 @@ p, li { white-space: pre-wrap; }
       <attribute name="title" >
        <string>Help</string>
       </attribute>
-      <layout class="QGridLayout" >
-       <property name="margin" >
-        <number>9</number>
-       </property>
-       <property name="spacing" >
-        <number>6</number>
-       </property>
-       <item row="0" column="0" >
+      <layout class="QGridLayout" name="gridLayout_9" >
+       <item row="0" column="0" colspan="3" >
         <widget class="QSplitter" name="splitter" >
          <property name="orientation" >
           <enum>Qt::Horizontal</enum>
          </property>
-         <widget class="QWidget" name="layoutWidget" >
-          <layout class="QVBoxLayout" >
-           <property name="spacing" >
-            <number>1</number>
+         <widget class="QTreeWidget" name="treeHelp" >
+          <property name="sizePolicy" >
+           <sizepolicy vsizetype="Expanding" hsizetype="Fixed" >
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize" >
+           <size>
+            <width>16777215</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <column>
+           <property name="text" >
+            <string>Help</string>
            </property>
-           <property name="margin" >
-            <number>0</number>
+          </column>
+          <item>
+           <property name="text" >
+            <string>Model</string>
            </property>
            <item>
-            <widget class="QTreeWidget" name="treeHelp" >
-             <property name="sizePolicy" >
-              <sizepolicy vsizetype="Expanding" hsizetype="Fixed" >
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="maximumSize" >
-              <size>
-               <width>16777215</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <column>
-              <property name="text" >
-               <string>Help</string>
-              </property>
-             </column>
-             <item>
-              <property name="text" >
-               <string>Model</string>
-              </property>
-              <item>
-               <property name="text" >
-                <string>Main</string>
-               </property>
-               <item>
-                <property name="text" >
-                 <string>Settlement Information</string>
-                </property>
-                <item>
-                 <property name="text" >
-                  <string>Site Name</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text" >
-                  <string>Population</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text" >
-                  <string>Period</string>
-                 </property>
-                </item>
-               </item>
-               <item>
-                <property name="text" >
-                 <string>Location</string>
-                </property>
-                <item>
-                 <property name="text" >
-                  <string>Easting</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text" >
-                  <string>Northing</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text" >
-                  <string>JADIS Database</string>
-                 </property>
-                </item>
-               </item>
-               <item>
-                <property name="text" >
-                 <string>Modelling Method</string>
-                </property>
-                <item>
-                 <property name="text" >
-                  <string>Euclidean</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text" >
-                  <string>Walking Time</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text" >
-                  <string>Path Distance</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text" >
-                  <string>Precision</string>
-                 </property>
-                </item>
-               </item>
-              </item>
-              <item>
-               <property name="text" >
-                <string>Diet</string>
-               </property>
-               <item>
-                <property name="text" >
-                 <string>Plant to Meat Ratio</string>
-                </property>
-               </item>
-               <item>
-                <property name="text" >
-                 <string>Wild to Tame Ratio</string>
-                </property>
-               </item>
-               <item>
-                <property name="text" >
-                 <string>Calories per person per day</string>
-                </property>
-               </item>
-               <item>
-                <property name="text" >
-                 <string>Breakdown</string>
-                </property>
-               </item>
-               <item>
-                <property name="text" >
-                 <string>Clear</string>
-                </property>
-               </item>
-              </item>
-              <item>
-               <property name="text" >
-                <string>Crops</string>
-               </property>
-               <item>
-                <property name="text" >
-                 <string>Using the Crop Interface</string>
-                </property>
-               </item>
-               <item>
-                <property name="text" >
-                 <string>Managing Crops</string>
-                </property>
-                <item>
-                 <property name="text" >
-                  <string>Clone a crop</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text" >
-                  <string>Create a new crop</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text" >
-                  <string>Saving crops</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text" >
-                  <string>Crop Descriptions</string>
-                 </property>
-                 <item>
-                  <property name="text" >
-                   <string>Crop Name</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text" >
-                   <string>Crop Notes</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text" >
-                   <string>Crop Yield</string>
-                  </property>
-                  <item>
-                   <property name="text" >
-                    <string>Crop Food Value</string>
-                   </property>
-                  </item>
-                 </item>
-                 <item>
-                  <property name="text" >
-                   <string>Fodder Yield</string>
-                  </property>
-                  <item>
-                   <property name="text" >
-                    <string>Crop Fodder Food Value</string>
-                   </property>
-                  </item>
-                 </item>
-                 <item>
-                  <property name="text" >
-                   <string>Crop Area Units</string>
-                  </property>
-                 </item>
-                </item>
-               </item>
-               <item>
-                <property name="text" >
-                 <string>Crop Parameters</string>
-                </property>
-                <item>
-                 <property name="text" >
-                  <string>Crop Parameter Description</string>
-                 </property>
-                 <item>
-                  <property name="text" >
-                   <string>Crop Parameter Name</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text" >
-                   <string>Crop Parameter Notes</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text" >
-                   <string>Linking to a crop</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text" >
-                   <string>Crop Portion of diet</string>
-                  </property>
-                 </item>
-                </item>
-                <item>
-                 <property name="text" >
-                  <string>Crop Suitability masks</string>
-                 </property>
-                 <item>
-                  <property name="text" >
-                   <string>Crop Masks Common</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text" >
-                   <string>Crop Masks Specific</string>
-                  </property>
-                 </item>
-                </item>
-                <item>
-                 <property name="text" >
-                  <string>Crop Rotation</string>
-                 </property>
-                 <item>
-                  <property name="text" >
-                   <string>Crop to Fallow Ratio</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text" >
-                   <string>Crop Fallow Food Value</string>
-                  </property>
-                 </item>
-                </item>
-               </item>
-              </item>
-              <item>
-               <property name="text" >
-                <string>Animals</string>
-               </property>
-               <item>
-                <property name="text" >
-                 <string>Using the Animals Interface</string>
-                </property>
-               </item>
-               <item>
-                <property name="text" >
-                 <string>Managing Animals</string>
-                </property>
-                <item>
-                 <property name="text" >
-                  <string>Clone an animal</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text" >
-                  <string>Create a new animal</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text" >
-                  <string>Saving animals</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text" >
-                  <string>Defining an animal</string>
-                 </property>
-                 <item>
-                  <property name="text" >
-                   <string>Animal Description</string>
-                  </property>
-                  <item>
-                   <property name="text" >
-                    <string>Animal Name</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text" >
-                    <string>Animal Notes</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text" >
-                    <string>Usable Meat</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text" >
-                    <string>Kill Weight</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text" >
-                    <string>Grow Time</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text" >
-                    <string>Death Rate</string>
-                   </property>
-                  </item>
-                 </item>
-                 <item>
-                  <property name="text" >
-                   <string>Reproduction</string>
-                  </property>
-                  <item>
-                   <property name="text" >
-                    <string>Sexual Maturity</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text" >
-                    <string>Breeding Life</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text" >
-                    <string>Young per birth</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text" >
-                    <string>Weaning Age</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text" >
-                    <string>Gestation Time</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text" >
-                    <string>Estrous cycle</string>
-                   </property>
-                  </item>
-                 </item>
-                 <item>
-                  <property name="text" >
-                   <string>Feeding Requirements</string>
-                  </property>
-                  <item>
-                   <property name="text" >
-                    <string>Calories per animal per day</string>
-                   </property>
-                   <item>
-                    <property name="text" >
-                     <string>While Gestating</string>
-                    </property>
-                   </item>
-                   <item>
-                    <property name="text" >
-                     <string>While Lactating</string>
-                    </property>
-                   </item>
-                   <item>
-                    <property name="text" >
-                     <string>Juveniles</string>
-                    </property>
-                   </item>
-                  </item>
-                 </item>
-                </item>
-               </item>
-               <item>
-                <property name="text" >
-                 <string>Animal Parameters</string>
-                </property>
-                <item>
-                 <property name="text" >
-                  <string>Setting Animal Parameters</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text" >
-                  <string>Animal Parameter Details</string>
-                 </property>
-                 <item>
-                  <property name="text" >
-                   <string>Animal Parameter Name</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text" >
-                   <string>Animal Parameter Notes</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text" >
-                   <string>Linking to an animal</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text" >
-                   <string>Portion of tame meat diet</string>
-                  </property>
-                 </item>
-                </item>
-                <item>
-                 <property name="text" >
-                  <string>Animal Land Suitability</string>
-                 </property>
-                 <item>
-                  <property name="text" >
-                   <string>Animal Specific Land</string>
-                  </property>
-                  <item>
-                   <property name="text" >
-                    <string>KCal setting</string>
-                   </property>
-                  </item>
-                 </item>
-                 <item>
-                  <property name="text" >
-                   <string>Animal Common Land</string>
-                  </property>
-                  <item>
-                   <property name="text" >
-                    <string>KCal setting</string>
-                   </property>
-                  </item>
-                 </item>
-                 <item>
-                  <property name="text" >
-                   <string>Selecting Area Units</string>
-                  </property>
-                 </item>
-                </item>
-                <item>
-                 <property name="text" >
-                  <string>Fodder as feed</string>
-                 </property>
-                 <item>
-                  <property name="text" >
-                   <string>Choosing feed</string>
-                  </property>
-                  <item>
-                   <property name="text" >
-                    <string>Fodder feed</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text" >
-                    <string>Grain feed</string>
-                   </property>
-                  </item>
-                 </item>
-                </item>
-                <item>
-                 <property name="text" >
-                  <string>Fallow Use</string>
-                 </property>
-                 <item>
-                  <property name="text" >
-                   <string>Grazing Fallow</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text" >
-                   <string>Fallow Priority</string>
-                  </property>
-                 </item>
-                </item>
-               </item>
-              </item>
-              <item>
-               <property name="text" >
-                <string>Calculations</string>
-               </property>
-              </item>
-              <item>
-               <property name="text" >
-                <string>Results</string>
-               </property>
-              </item>
-             </item>
-             <item>
-              <property name="text" >
-               <string>Requirements</string>
-              </property>
-              <item>
-               <property name="text" >
-                <string>File Preparation</string>
-               </property>
-               <item>
-                <property name="text" >
-                 <string>DEM</string>
-                </property>
-               </item>
-               <item>
-                <property name="text" >
-                 <string>Masks</string>
-                </property>
-                <item>
-                 <property name="text" >
-                  <string>Digitizing</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text" >
-                  <string>Naming</string>
-                 </property>
-                </item>
-               </item>
-              </item>
-              <item>
-               <property name="text" >
-                <string>Numbers</string>
-               </property>
-              </item>
-             </item>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="cbDebug" >
+            <property name="text" >
+             <string>Main</string>
+            </property>
+            <item>
              <property name="text" >
-              <string>Debugging Mode</string>
+              <string>Settlement Information</string>
              </property>
-            </widget>
+             <item>
+              <property name="text" >
+               <string>Site Name</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Population</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Period</string>
+              </property>
+             </item>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Location</string>
+             </property>
+             <item>
+              <property name="text" >
+               <string>Easting</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Northing</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>JADIS Database</string>
+              </property>
+             </item>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Modelling Method</string>
+             </property>
+             <item>
+              <property name="text" >
+               <string>Euclidean</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Walking Time</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Path Distance</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Precision</string>
+              </property>
+             </item>
+            </item>
            </item>
-          </layout>
+           <item>
+            <property name="text" >
+             <string>Diet</string>
+            </property>
+            <item>
+             <property name="text" >
+              <string>Plant to Meat Ratio</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Wild to Tame Ratio</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Calories per person per day</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Breakdown</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Clear</string>
+             </property>
+            </item>
+           </item>
+           <item>
+            <property name="text" >
+             <string>Crops</string>
+            </property>
+            <item>
+             <property name="text" >
+              <string>Using the Crop Interface</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Managing Crops</string>
+             </property>
+             <item>
+              <property name="text" >
+               <string>Clone a crop</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Create a new crop</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Saving crops</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Crop Descriptions</string>
+              </property>
+              <item>
+               <property name="text" >
+                <string>Crop Name</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Crop Notes</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Crop Yield</string>
+               </property>
+               <item>
+                <property name="text" >
+                 <string>Crop Food Value</string>
+                </property>
+               </item>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Fodder Yield</string>
+               </property>
+               <item>
+                <property name="text" >
+                 <string>Crop Fodder Food Value</string>
+                </property>
+               </item>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Crop Area Units</string>
+               </property>
+              </item>
+             </item>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Crop Parameters</string>
+             </property>
+             <item>
+              <property name="text" >
+               <string>Crop Parameter Description</string>
+              </property>
+              <item>
+               <property name="text" >
+                <string>Crop Parameter Name</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Crop Parameter Notes</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Linking to a crop</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Crop Portion of diet</string>
+               </property>
+              </item>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Crop Suitability masks</string>
+              </property>
+              <item>
+               <property name="text" >
+                <string>Crop Masks Common</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Crop Masks Specific</string>
+               </property>
+              </item>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Crop Rotation</string>
+              </property>
+              <item>
+               <property name="text" >
+                <string>Crop to Fallow Ratio</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Crop Fallow Food Value</string>
+               </property>
+              </item>
+             </item>
+            </item>
+           </item>
+           <item>
+            <property name="text" >
+             <string>Animals</string>
+            </property>
+            <item>
+             <property name="text" >
+              <string>Using the Animals Interface</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Managing Animals</string>
+             </property>
+             <item>
+              <property name="text" >
+               <string>Clone an animal</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Create a new animal</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Saving animals</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Defining an animal</string>
+              </property>
+              <item>
+               <property name="text" >
+                <string>Animal Description</string>
+               </property>
+               <item>
+                <property name="text" >
+                 <string>Animal Name</string>
+                </property>
+               </item>
+               <item>
+                <property name="text" >
+                 <string>Animal Notes</string>
+                </property>
+               </item>
+               <item>
+                <property name="text" >
+                 <string>Usable Meat</string>
+                </property>
+               </item>
+               <item>
+                <property name="text" >
+                 <string>Kill Weight</string>
+                </property>
+               </item>
+               <item>
+                <property name="text" >
+                 <string>Grow Time</string>
+                </property>
+               </item>
+               <item>
+                <property name="text" >
+                 <string>Death Rate</string>
+                </property>
+               </item>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Reproduction</string>
+               </property>
+               <item>
+                <property name="text" >
+                 <string>Sexual Maturity</string>
+                </property>
+               </item>
+               <item>
+                <property name="text" >
+                 <string>Breeding Life</string>
+                </property>
+               </item>
+               <item>
+                <property name="text" >
+                 <string>Young per birth</string>
+                </property>
+               </item>
+               <item>
+                <property name="text" >
+                 <string>Weaning Age</string>
+                </property>
+               </item>
+               <item>
+                <property name="text" >
+                 <string>Gestation Time</string>
+                </property>
+               </item>
+               <item>
+                <property name="text" >
+                 <string>Estrous cycle</string>
+                </property>
+               </item>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Feeding Requirements</string>
+               </property>
+               <item>
+                <property name="text" >
+                 <string>Calories per animal per day</string>
+                </property>
+                <item>
+                 <property name="text" >
+                  <string>While Gestating</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text" >
+                  <string>While Lactating</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text" >
+                  <string>Juveniles</string>
+                 </property>
+                </item>
+               </item>
+              </item>
+             </item>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Animal Parameters</string>
+             </property>
+             <item>
+              <property name="text" >
+               <string>Setting Animal Parameters</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Animal Parameter Details</string>
+              </property>
+              <item>
+               <property name="text" >
+                <string>Animal Parameter Name</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Animal Parameter Notes</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Linking to an animal</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Portion of tame meat diet</string>
+               </property>
+              </item>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Animal Land Suitability</string>
+              </property>
+              <item>
+               <property name="text" >
+                <string>Animal Specific Land</string>
+               </property>
+               <item>
+                <property name="text" >
+                 <string>KCal setting</string>
+                </property>
+               </item>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Animal Common Land</string>
+               </property>
+               <item>
+                <property name="text" >
+                 <string>KCal setting</string>
+                </property>
+               </item>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Selecting Area Units</string>
+               </property>
+              </item>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Fodder as feed</string>
+              </property>
+              <item>
+               <property name="text" >
+                <string>Choosing feed</string>
+               </property>
+               <item>
+                <property name="text" >
+                 <string>Fodder feed</string>
+                </property>
+               </item>
+               <item>
+                <property name="text" >
+                 <string>Grain feed</string>
+                </property>
+               </item>
+              </item>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Fallow Use</string>
+              </property>
+              <item>
+               <property name="text" >
+                <string>Grazing Fallow</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Fallow Priority</string>
+               </property>
+              </item>
+             </item>
+            </item>
+           </item>
+           <item>
+            <property name="text" >
+             <string>Calculations</string>
+            </property>
+           </item>
+           <item>
+            <property name="text" >
+             <string>Results</string>
+            </property>
+           </item>
+          </item>
+          <item>
+           <property name="text" >
+            <string>Requirements</string>
+           </property>
+           <item>
+            <property name="text" >
+             <string>File Preparation</string>
+            </property>
+            <item>
+             <property name="text" >
+              <string>DEM</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Masks</string>
+             </property>
+             <item>
+              <property name="text" >
+               <string>Digitizing</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Naming</string>
+              </property>
+             </item>
+            </item>
+           </item>
+           <item>
+            <property name="text" >
+             <string>Numbers</string>
+            </property>
+           </item>
+          </item>
          </widget>
          <widget class="QTextBrowser" name="textHelp" >
           <property name="sizePolicy" >
@@ -2948,219 +3133,36 @@ p, li { white-space: pre-wrap; }
          </widget>
         </widget>
        </item>
+       <item row="1" column="0" >
+        <widget class="QCheckBox" name="cbDebug" >
+         <property name="text" >
+          <string>Debugging Mode</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1" >
+        <spacer name="horizontalSpacer" >
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0" >
+          <size>
+           <width>748</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="2" >
+        <widget class="QPushButton" name="pbWriteSampleData" >
+         <property name="text" >
+          <string>Write Sample Data</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </widget>
-   </item>
-   <item row="1" column="0" >
-    <spacer name="spacer" >
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0" >
-      <size>
-       <width>308</width>
-       <height>17</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="2" column="0" >
-    <layout class="QGridLayout" name="gridLayout_3" >
-     <item row="0" column="0" >
-      <widget class="QLabel" name="label_5" >
-       <property name="toolTip" >
-        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">This is the sum of percent of diet figures for all of the animals being used in the model.  &lt;span style=" font-weight:600; font-style:italic; text-decoration: underline; color:#0000ff;">This must be 100%&lt;/span> to run!&lt;/p>&lt;/body>&lt;/html></string>
-       </property>
-       <property name="text" >
-        <string>Animals:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1" >
-      <widget class="QLabel" name="labelAnimalCheck" >
-       <property name="toolTip" >
-        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">This is the sum of percent of diet figures for all of the animals being used in the model.  &lt;span style=" font-weight:600; font-style:italic; text-decoration: underline; color:#0000ff;">This must be 100%&lt;/span> to run!&lt;/p>&lt;/body>&lt;/html></string>
-       </property>
-       <property name="text" >
-        <string>100%</string>
-       </property>
-       <property name="alignment" >
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="2" >
-      <widget class="QLabel" name="label_3" >
-       <property name="toolTip" >
-        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">This is the sum of percent of diet figures for all of the crops being used in the model.  &lt;span style=" font-weight:600; font-style:italic; text-decoration: underline; color:#0000ff;">This must be 100%&lt;/span> to run!&lt;/p>&lt;/body>&lt;/html></string>
-       </property>
-       <property name="text" >
-        <string>  Crops:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="3" >
-      <widget class="QLabel" name="labelCropCheck" >
-       <property name="toolTip" >
-        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">This is the sum of percent of diet figures for all of the crops being used in the model.  &lt;span style=" font-weight:600; font-style:italic; text-decoration: underline; color:#0000ff;">This must be 100%&lt;/span> to run!&lt;/p>&lt;/body>&lt;/html></string>
-       </property>
-       <property name="text" >
-        <string>100%</string>
-       </property>
-       <property name="alignment" >
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="4" >
-      <spacer>
-       <property name="orientation" >
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0" >
-        <size>
-         <width>16</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="0" column="5" >
-      <widget class="QPushButton" name="pushButtonRun" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize" >
-        <size>
-         <width>0</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="toolTip" >
-        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Run the model.&lt;/p>&lt;/body>&lt;/html></string>
-       </property>
-       <property name="whatsThis" >
-        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Pressing Calculate! will attempt to run the model with the parameters you have chosen.  If there are any errors, this process will fail, and indicate to you what the problem was.  To be on the safe side, always save your model before attempting to Calculate! it.  All results will be saved if the model runs correctly.&lt;/p>&lt;/body>&lt;/html></string>
-       </property>
-       <property name="text" >
-        <string>Run</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="6" >
-      <widget class="QPushButton" name="pushButtonLoad" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize" >
-        <size>
-         <width>0</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="toolTip" >
-        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Load previously saved model parameters.&lt;/p>&lt;/body>&lt;/html></string>
-       </property>
-       <property name="text" >
-        <string>Load</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="7" >
-      <widget class="QPushButton" name="pushButtonSave" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="toolTip" >
-        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Save all settings of this model to a file&lt;/p>&lt;/body>&lt;/html></string>
-       </property>
-       <property name="text" >
-        <string>Save</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="8" >
-      <widget class="QPushButton" name="pushButtonExit" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text" >
-        <string>Exit</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0" colspan="9" >
-      <widget class="QProgressBar" name="progressBarCalcs" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="maximumSize" >
-        <size>
-         <width>16777215</width>
-         <height>10</height>
-        </size>
-       </property>
-       <property name="toolTip" >
-        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Shows when program is busy, or progress of tasks.&lt;/p>&lt;/body>&lt;/html></string>
-       </property>
-       <property name="value" >
-        <number>0</number>
-       </property>
-       <property name="textVisible" >
-        <bool>false</bool>
-       </property>
-       <property name="orientation" >
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="format" >
-        <string>%p%</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
    </item>
   </layout>
  </widget>
