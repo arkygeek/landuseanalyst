@@ -263,6 +263,7 @@ bool LaAnimalParameter::fromXml(QString theXml)
   {
     mEnergyType=TDN;
   }
+  
   mFodderUse=QString(myTopElement.firstChildElement("fodderUse").text()).toInt();
   // populate the fodder map
   mFoodSourceMap.clear();
@@ -277,17 +278,19 @@ bool LaAnimalParameter::fromXml(QString theXml)
     int myFodderStrawChaff = myFoodSourceElement.firstChildElement("fodderStrawChaff").text().toInt();
     int myGrain = myFoodSourceElement.firstChildElement("fodderGrain").text().toInt();
     int myDays = myFoodSourceElement.firstChildElement("fodderDays").text().toInt();
-    int myUsed = myFoodSourceElement.firstChildElement("fodderUse").text().toInt();
+    //int myUsedInt = myFoodSourceElement.firstChildElement("fodderUse").text().toInt();
+    //bool myUsed = (myUsedInt == 0) ? 0:1;
     LaFoodSource myFoodSource;
 
     // setup the data to insert into the map
     myFoodSource.setFodder(myFodderStrawChaff);
     myFoodSource.setGrain(myGrain);
     myFoodSource.setDays(myDays);
-    myFoodSource.setUsed(myUsed);
+    //myFoodSource.setUsed(myUsed);
     myFoodSource.setCropGuid(myCropGuid);
     // insert data into map
     mFoodSourceMap.insert(myCropGuid,myFoodSource);
+    //mFodderSourceMap.insert(myCropGuid,myFoodSource);
   } // end of for loop
  //qDebug("Number of food sources restored from xml: " + QString::number(mFoodSourceMap.count()).toLocal8Bit());
 

@@ -42,7 +42,7 @@
 #include <QFileDialog>
 #include <QListWidgetItem>
 #include <QIcon>
-#include <QtDebug>
+#include <QDebug>
 #include <QPair>
 
   LaAnimalParameterManager::LaAnimalParameterManager(QPair<LaTripleMap, int> & thePair,  AreaUnits & theAreaUnits, EnergyType & theEnergyType, QWidget* parent, Qt::WFlags fl)
@@ -206,7 +206,7 @@ void LaAnimalParameterManager::refreshAnimalParameterTable(QString theGuid)
   tblAnimalParameterProfiles->horizontalHeader()->hide();
   tblAnimalParameterProfiles->verticalHeader()->hide();
   tblAnimalParameterProfiles->horizontalHeader()->setResizeMode(1,QHeaderView::Stretch);
-  tblAnimalParameterProfiles->sortItems(1,Qt::AscendingOrder);
+  //tblAnimalParameterProfiles->sortItems(1,Qt::AscendingOrder);
 
 }
 
@@ -288,7 +288,7 @@ void LaAnimalParameterManager::populateFodder()
 
 void LaAnimalParameterManager::refreshFodderTable(QString theGuid)
 {
-  QTableWidgetItem *mypCropHeaderItem = new QTableWidgetItem(tr("Crop"));
+  /*QTableWidgetItem *mypCropHeaderItem = new QTableWidgetItem(tr("Crop"));
   QTableWidgetItem *mypGrainHeaderItem = new QTableWidgetItem(tr("Grain"));
   QTableWidgetItem *mypStrawHeaderItem = new QTableWidgetItem(tr("Straw"));
   QTableWidgetItem *mypDaysHeaderItem = new QTableWidgetItem(tr("Days"));
@@ -300,7 +300,7 @@ void LaAnimalParameterManager::refreshFodderTable(QString theGuid)
   tblFodder->setHorizontalHeaderItem(1, mypGrainHeaderItem);
   tblFodder->setHorizontalHeaderItem(2, mypStrawHeaderItem); 
   tblFodder->setHorizontalHeaderItem(3, mypDaysHeaderItem); 
-
+  */
   LaFoodSourceMap myFoodSourceMap = mAnimalParameter.fodderSourceMap();
   qDebug("Restoring " + QString::number(myFoodSourceMap.count()).toLocal8Bit()
     + " food sources into animal parameter.");
@@ -308,10 +308,19 @@ void LaAnimalParameterManager::refreshFodderTable(QString theGuid)
   {
     QTableWidgetItem * mypItem = tblFodder->item(myCurrentRow,0);
     QString myGuid = mypItem->data(Qt::UserRole).toString();
-    qDebug("tblFodderGuid: " + myGuid.toLocal8Bit());
+    qDebug() << "************************************************tblFodderGuid: " << myGuid;
     QSpinBox * mypFodderSpinBox = qobject_cast <QSpinBox *> (tblFodder->cellWidget(myCurrentRow,1));
     QSpinBox * mypGrainSpinBox = qobject_cast <QSpinBox *> (tblFodder->cellWidget(myCurrentRow,2));
     QSpinBox * mypDaysSpinBox = qobject_cast <QSpinBox *> (tblFodder->cellWidget(myCurrentRow,3));
+    
+    ////////////////////////////////////////
+  //////////////////////
+//////////////
+  ////////////////
+    ////////////////////////////////
+    
+    
+    qDebug() << "Looking for ::::::::::::::::::::::::" << myGuid;
     if (myFoodSourceMap.contains(myGuid))
     {
       LaFoodSource myFoodSource = myFoodSourceMap.value(myGuid);
@@ -339,7 +348,7 @@ void LaAnimalParameterManager::refreshFodderTable(QString theGuid)
       mypDaysSpinBox->setValue(0);
       mypItem->setCheckState(Qt::Unchecked);
     }
-    tblFodder->sortItems(0,Qt::AscendingOrder);
+    //tblFodder->sortItems(0,Qt::AscendingOrder);
   }
 
 
@@ -354,6 +363,7 @@ void LaAnimalParameterManager::cellClicked(int theRow, int theColumn)
   QString myFileName = myGuid + ".xml";
   selectAnimalParameter(myFileName);
 }
+
 void LaAnimalParameterManager::selectAnimalParameter(QString theFileName)
 {
   //qDebug("selectAnimalParameter Called : " + theFileName.toLocal8Bit());
@@ -493,7 +503,7 @@ void LaAnimalParameterManager::on_pbnApply_clicked()
   mAnimalParameter.setPercentTameMeat(sbPercentTameMeat->value());
   mAnimalParameter.setUseCommonGrazingLand(checkBoxCommonRaster->isChecked());
   mAnimalParameter.setUseSpecificGrazingLand(checkBoxSpecificRaster->isChecked());
-
+  QString myAnimalParameterGuid = cboAnimal->itemData(cboAnimal->currentIndex(),Qt::UserRole).toString();
   QString mySelectedAreaUnit = QString(cbAreaUnits->currentText());
   QString mySelectedEnergyType = QString(cbSpecificLandEnergyType->currentText());
   AreaUnits myAreaUnits;
@@ -523,14 +533,14 @@ void LaAnimalParameterManager::on_pbnApply_clicked()
 
   mAnimalParameter.setValueCommonGrazingLand(sbCommonRasterValue->value());
   mAnimalParameter.setValueSpecificGrazingLand(sbSpecificRasterValue->value());
-  mAnimalParameter.setFodderUse(grpFodderUse->isChecked());
+  bool myFodderUse = grpFodderUse->isChecked();
+  mAnimalParameter.setFodderUse(myFodderUse);
 
   // populate the fodder map from the table.
   LaFoodSourceMap myFoodSourceMap;
   int myRowCount = tblFodder->rowCount();
   for (int myCurrentRow=0; myCurrentRow < myRowCount; ++myCurrentRow)
   {
-
     QTableWidgetItem * mypNameWidget = tblFodder->item(myCurrentRow,0);
     QSpinBox * mypFodderSpinBox = qobject_cast<QSpinBox *> (tblFodder->cellWidget(myCurrentRow,1));
     QSpinBox * mypGrainSpinBox =  qobject_cast<QSpinBox *> (tblFodder->cellWidget(myCurrentRow,2));
@@ -542,21 +552,27 @@ void LaAnimalParameterManager::on_pbnApply_clicked()
       continue;
     }
     LaFoodSource myFoodSource;
-    myFoodSource.setUsed(grpFodderUse->isChecked());
-    myFoodSource.setFodder(mypFodderSpinBox->value());
-    myFoodSource.setGrain(mypGrainSpinBox->value());
-    myFoodSource.setDays(mypDaysSpinBox->value());
+    myFoodSource.setUsed(grpFodderUse->isChecked());qDebug() << "grpFodderUse->isChecked(): " << grpFodderUse->isChecked();
+    myFoodSource.setFodder(mypFodderSpinBox->value());qDebug() << "mypFodderSpinBox->value(): " << mypFodderSpinBox->value();
+    myFoodSource.setGrain(mypGrainSpinBox->value());qDebug() << "mypGrainSpinBox->value(): " << mypGrainSpinBox->value();
+    myFoodSource.setDays(mypDaysSpinBox->value());qDebug() << "mypDaysSpinBox->value(): " << mypDaysSpinBox->value();
     QString myGuid = mypNameWidget->data(Qt::UserRole).toString();
 
     myFoodSourceMap.insert(myGuid, myFoodSource);
-
+    //qDebug() << "myFoodSourceMap: " << myFoodSourceMap;
+    //qDebug() << "myFoodSource.fodder: " << myFoodSource.fodder();
+    //qDebug() << "myFoodSource.grain: " << myFoodSource.grain();
+    //qDebug() << "myFoodSource.days: " << myFoodSource.days();
   }
 
-  qDebug("Inserting " + QString::number(myFoodSourceMap.count()).toLocal8Bit()
-    + " food sources into animal parameter.");
+  qDebug() << "Inserting " << myFoodSourceMap.count() << " food sources into animal parameter.";
   mAnimalParameter.setFodderData(myFoodSourceMap);
-
+  //mFodderSourceMap = myFoodSourceMap;
   QString myFallowUsage = QString(cbFallowUsage->currentText());
+  
+  
+  
+  
   //setFallowComboBox();
   Priority myPriority;
   if (myFallowUsage == "HIGH Fallow Priority")
@@ -582,8 +598,10 @@ void LaAnimalParameterManager::on_pbnApply_clicked()
   mAnimalParameter.setRasterName(cboRaster->currentText());
   mAnimalParameter.toXmlFile( LaUtils::userAnimalParameterProfilesDirPath() +
       QDir::separator() + mAnimalParameter.guid() + ".xml");
+  
+  refreshFodderTable(mAnimalParameter.guid());
   refreshAnimalParameterTable(mAnimalParameter.guid());
-  refreshFodderTable();
+
 }
 
 void LaAnimalParameterManager::setSelectedCropsMap(LaTripleMap theSelectedCropsMap)
