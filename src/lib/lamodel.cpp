@@ -632,7 +632,7 @@ int LaModel::getProductionTargetsCrops(QString theCropGuid, int theCalorieTarget
     myAnimalIterator.next();
     QString myAnimalGuid = myAnimalIterator.key();
     LaAnimalParameter myAnimalParameter;
-    LaFoodSourceMap myFoodSourceMap = myAnimalParameter.fodderSourceMap();// this loads the map for the animal
+    LaFoodSourceMap myFoodSourceMap = myAnimalParameter.animalFeedSourceMap();// this loads the map for the animal
     //LaFoodSource myFoodSourceCropInfo = myFoodSourceMap.value(myAnimalGuid);
     
     //int myFodderValue = myFoodSource.fodder();

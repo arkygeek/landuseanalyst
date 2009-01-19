@@ -57,8 +57,8 @@
   QStringList myMapsetList = myGrass.getMapsetList();
   QStringListIterator myIterator1(myMapsetList);
   while (myIterator1.hasNext())
-  {
-    //append the raster names in this mapet to our full list
+  {//append the raster names in this mapet to our full list
+    
     myList << myGrass.getRasterList(myIterator1.next());
   }
   //myGrass.getRasterList(myMapsetList);
@@ -79,12 +79,12 @@
   //disable these buttons unless experimental is allowed
   pbnImport->setVisible(false);
   pbnExport->setVisible(false);
-  //populate the animals combo
+  
   LaUtils::AnimalMap myAnimalsMap;
   myAnimalsMap = LaUtils::getAvailableAnimals();
   QMapIterator<QString, LaAnimal> myIterator(myAnimalsMap);
   while (myIterator.hasNext())
-  {
+  {//populate the animals combo
     myIterator.next();
     LaAnimal myAnimal = myIterator.value();
     QString myGuid = myAnimal.guid();
@@ -99,8 +99,8 @@
   //cbSpecificLandEnergyType->addItem("TDN");
   setSpecificLandEnergyType();
   setFallowComboBox();
+  refreshAnimalParameterTable(mAnimalParameter.guid());
   populateFodder();
-  refreshAnimalParameterTable();
 }
 
 LaAnimalParameterManager::~LaAnimalParameterManager()
@@ -126,22 +126,17 @@ void LaAnimalParameterManager::writeSettings()
 
 void LaAnimalParameterManager::refreshAnimalParameterTable(QString theGuid)
 {
-
   mAnimalParameterMap.clear();
   tblAnimalParameterProfiles->clear();
   tblAnimalParameterProfiles->setRowCount(0);
   tblAnimalParameterProfiles->setColumnCount(2);
-
-
-  //we do this in two passes
-  //in the first pass we populate a qmap with all the animal parameters
-  //we find....
+  // we do this in two passes
+  // in the first pass we populate a qmap with all the animal parameters
+  // we find....
   mAnimalParameterMap = LaUtils::getAvailableAnimalParameters();
-
   //the second pass populates the table
   //doing it from the map ensures that the rows
   //are sorted by animalparameter name
-
   int mySelectedRow=0;
   int myCurrentRow=0;
   QMapIterator<QString, LaAnimalParameter> myIterator(mAnimalParameterMap);
@@ -162,8 +157,7 @@ void LaAnimalParameterManager::refreshAnimalParameterTable(QString theGuid)
     // Insert new row ready to fill with details
     tblAnimalParameterProfiles->insertRow(myCurrentRow);
     QString myGuid = myAnimalParameter.guid();
-    qDebug () << "Inserting animalParameter into table with guid: " 
-      << myGuid.toLocal8Bit();
+    qDebug() << "Inserting animalParameter into table with guid: " << myGuid;
     // Add details to the new row
     QTableWidgetItem *mypFileNameItem= new QTableWidgetItem(myGuid);
     tblAnimalParameterProfiles->setItem(myCurrentRow, 0, mypFileNameItem);
@@ -208,7 +202,6 @@ void LaAnimalParameterManager::refreshAnimalParameterTable(QString theGuid)
   tblAnimalParameterProfiles->verticalHeader()->hide();
   tblAnimalParameterProfiles->horizontalHeader()->setResizeMode(1,QHeaderView::Stretch);
   //tblAnimalParameterProfiles->sortItems(1,Qt::AscendingOrder);
-
 }
 
 void LaAnimalParameterManager::populateFodder()
@@ -289,7 +282,8 @@ void LaAnimalParameterManager::populateFodder()
 
 void LaAnimalParameterManager::refreshFodderTable(QString theGuid)
 {
-  /*QTableWidgetItem *mypCropHeaderItem = new QTableWidgetItem(tr("Crop"));
+  //populateFodder();
+  QTableWidgetItem *mypCropHeaderItem = new QTableWidgetItem(tr("Crop"));
   QTableWidgetItem *mypGrainHeaderItem = new QTableWidgetItem(tr("Grain"));
   QTableWidgetItem *mypStrawHeaderItem = new QTableWidgetItem(tr("Straw"));
   QTableWidgetItem *mypDaysHeaderItem = new QTableWidgetItem(tr("Days"));
@@ -299,10 +293,11 @@ void LaAnimalParameterManager::refreshFodderTable(QString theGuid)
   mypDaysHeaderItem->setTextAlignment(Qt::AlignVCenter);
   tblFodder->setHorizontalHeaderItem(0, mypCropHeaderItem);
   tblFodder->setHorizontalHeaderItem(1, mypGrainHeaderItem);
-  tblFodder->setHorizontalHeaderItem(2, mypStrawHeaderItem); 
-  tblFodder->setHorizontalHeaderItem(3, mypDaysHeaderItem); 
-  */
-  LaFoodSourceMap myFoodSourceMap = mAnimalParameter.fodderSourceMap();
+  tblFodder->setHorizontalHeaderItem(2, mypStrawHeaderItem);
+  tblFodder->setHorizontalHeaderItem(3, mypDaysHeaderItem);
+
+  selectAnimalParameter(theGuid);
+  LaFoodSourceMap myFoodSourceMap = mAnimalParameter.animalFeedSourceMap();
   qDebug() << "Restoring " <<  QString::number(myFoodSourceMap.count())
     << " food sources into animal parameter.";
   for (int myCurrentRow=0; myCurrentRow < tblFodder->rowCount(); myCurrentRow++)
@@ -372,12 +367,13 @@ void LaAnimalParameterManager::selectAnimalParameter(QString theFileName)
 {
   //qDebug("selectAnimalParameter Called : " + theFileName.toLocal8Bit());
   QString myAnimalParameterDir = LaUtils::userAnimalParameterProfilesDirPath();
-  mAnimalParameter.fromXmlFile(myAnimalParameterDir + QDir::separator() + theFileName);
+  
+  mAnimalParameter.fromXml(myAnimalParameterDir + QDir::separator() + theFileName + ".xml");
   //
   //for debuggin only:
   //
   qDebug() << "-- Restoring " 
-    << QString::number(mAnimalParameter.fodderSourceMap().count())
+      << QString::number(mAnimalParameter.animalFeedSourceMap().count())
     << " food sources into animal parameter.";
   // end of deub section
   showAnimalParameter();
@@ -397,7 +393,7 @@ void LaAnimalParameterManager::showAnimalParameter()
   cbSpecificLandEnergyType->setCurrentIndex(mAnimalParameter.energyType());
   grpFodderUse->setChecked(mAnimalParameter.fodderUse());
 
-  refreshFodderTable();
+  //refreshFodderTable(mAnimalParameter.guid());
 
   if (mAnimalParameter.fallowUsage()==High)
   {
@@ -464,7 +460,7 @@ void LaAnimalParameterManager::on_toolCopy_clicked()
   myAnimalParameter.setName(tr("Copy of ") + myAnimalParameter.name());
   myAnimalParameter.toXmlFile(myNewFileName);
   refreshAnimalParameterTable(myAnimalParameter.guid());
-  refreshFodderTable();
+  refreshFodderTable(myAnimalParameter.guid());
 }
 void LaAnimalParameterManager::on_toolDelete_clicked()
 {
@@ -482,8 +478,8 @@ void LaAnimalParameterManager::on_toolDelete_clicked()
       QMessageBox::warning(this, tr("Landuse Analyst"),
       tr("Unable to delete file \n") + myFile.fileName());
     }
-    refreshAnimalParameterTable();
-    refreshFodderTable();
+    refreshAnimalParameterTable(myGuid);
+    refreshFodderTable(myGuid);
   }
 }
 
@@ -606,9 +602,8 @@ void LaAnimalParameterManager::on_pbnApply_clicked()
   mAnimalParameter.toXmlFile( LaUtils::userAnimalParameterProfilesDirPath() +
       QDir::separator() + mAnimalParameter.guid() + ".xml");
   
-  refreshFodderTable(mAnimalParameter.guid());
   refreshAnimalParameterTable(mAnimalParameter.guid());
-
+  refreshFodderTable(mAnimalParameter.guid());
 }
 
 void LaAnimalParameterManager::setSelectedCropsMap(LaTripleMap theSelectedCropsMap)

@@ -75,7 +75,7 @@ class LaAnimalParameter : public LaSerialisable, public LaGuid
       * HIGH MED or LOW priority to it's access
       */
     bool fodderUse() const;
-    LaFoodSourceMap fodderSourceMap() const;
+    LaFoodSourceMap animalFeedSourceMap() const;
 
     Priority fallowUsage() const;
     QString rasterName() const;
@@ -88,8 +88,10 @@ class LaAnimalParameter : public LaSerialisable, public LaGuid
     void setName(QString theName);
     /** Set the name for this set of animal model parameters */
     void setDescription(QString theDescription);
+    /** Set the guid of the animal parameter */
+    void setAnimalParameterGuid(QString theAnimalParameterGuid);
     /** Set the guid of the animal this set of params is associated with */
-    void setAnimalGuid(QString theGuid);
+    void setAnimalGuid(QString theAnimalGuid);
     /** Portion of the Tame Meat Diet (Percentage) */
     void setPercentTameMeat(float thePercentage);
 
@@ -129,12 +131,13 @@ class LaAnimalParameter : public LaSerialisable, public LaGuid
      * @NOTE this class inherits the serialisable interface so
      * it MUST implement this
      */
-    bool fromXml(const QString theXml);
+    bool fromXml(const QString theFileName);
   private:
     /** A name for this set of animal paremeters */
     QString mName;
     /** A name for this set of animal paremeters */
     QString mDescription;
+    QString mAnimalParameterGuid;
     /** The animal guid these parameters are associated with */
     QString mAnimalGuid;
     /** Portion of the Tame Meat Diet (Percentage) */
@@ -156,7 +159,7 @@ class LaAnimalParameter : public LaSerialisable, public LaGuid
     /** This QMap contains
       * <GUID of the crop, a bool of it used>,<fodder,grain>
       */
-    LaFoodSourceMap mFoodSourceMap;
+    LaFoodSourceMap mAnimalFeedSourceMap;
 
     /** If fallow is to be grazed, and if so, at either a
       * HIGH MED or LOW priority to it's access
