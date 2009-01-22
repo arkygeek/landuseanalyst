@@ -27,7 +27,7 @@ LaFoodSource::~LaFoodSource()
 {
 }
 
-//accessors
+  //accessors
 
 int LaFoodSource::grain() const
 {
@@ -49,7 +49,7 @@ QString LaFoodSource::cropGuid() const
 {
  return mCropGuid; 
 }
-//mutators
+  //mutators
 
 void LaFoodSource::setGrain(int theValue)
 {

@@ -26,7 +26,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "lamainform.h"
-//qt includes
+  //qt includes
 #include <QApplication>
 #include <QBitmap>
 #include <QFile>
@@ -36,7 +36,7 @@
 #include <QSplashScreen>
 #include <QString>
 #include <QStyle>
-//std includes
+  //std includes
 #ifdef Q_OS_MACX
 #include <ApplicationServices/ApplicationServices.h>
 #endif
@@ -45,26 +45,26 @@ int main(int argc, char *argv[])
 {
   QApplication  myApp(argc,argv);
 
-  //NOTE: make sure these lines stay after myApp init above
+    //NOTE: make sure these lines stay after myApp init above
   QCoreApplication::setOrganizationName("linfiniti.com");
   QCoreApplication::setOrganizationDomain("landuseanalyst.linfiniti.com");
   QCoreApplication::setApplicationName("LanduseAnalyst");
 
 #ifdef Q_WS_WIN
-  //for windows lets use plastique syle!
+    //for windows lets use plastique syle!
   QApplication::setStyle(new QPlastiqueStyle);
 #endif
 	
 #ifdef Q_OS_MACX
-  // Install OpenDocuments AppleEvent handler after application object is initialized
-  // but before any other event handling (including dialogs or splash screens) occurs.
-  // If an OpenDocuments event has been created before the application was launched,
-  // it must be handled before some other event handler runs and dismisses it as unknown.
-  // If run at startup, the handler will set either or both of myProjectFileName and myFileList.
-  //AEInstallEventHandler(kCoreEventClass, kAEOpenDocuments, openDocumentsAEHandler, 0, false);
+    // Install OpenDocuments AppleEvent handler after application object is initialized
+    // but before any other event handling (including dialogs or splash screens) occurs.
+    // If an OpenDocuments event has been created before the application was launched,
+    // it must be handled before some other event handler runs and dismisses it as unknown.
+    // If run at startup, the handler will set either or both of myProjectFileName and myFileList.
+    //AEInstallEventHandler(kCoreEventClass, kAEOpenDocuments, openDocumentsAEHandler, 0, false);
 
-  // If the QtCore framework is bundled with the application, clear the library search path
-  // and look for Qt plugins only within the application bundle.
+    // If the QtCore framework is bundled with the application, clear the library search path
+    // and look for Qt plugins only within the application bundle.
   QString bundledQtCore(QCoreApplication::applicationDirPath().append("/lib/QtCore.framework"));
   if (QFile::exists(bundledQtCore))
   {
@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
   }
 #endif
 
-	//dont display the splash on first run...
+	  //dont display the splash on first run...
   /*
 	QSettings mySettings;
 	if (mySettings.value("firstRun/firstRun",true).toBool()==false)
@@ -87,9 +87,9 @@ int main(int argc, char *argv[])
 		mypZintatu->show();
 		mypSplash->finish(mypZintatu);
 		delete mypSplash;
-		// note if the widget does not inherit qdialog
-		// (as in the case of our main window)
-		// you must call app exec!
+		  // note if the widget does not inherit qdialog
+		  // (as in the case of our main window)
+		  // you must call app exec!
 	}
 	else
 	{

@@ -41,16 +41,16 @@
   LaAnimalManager::LaAnimalManager(QWidget* parent, Qt::WFlags fl)
 : QDialog(parent,fl)
 {
-  //required by Qt4 to initialise the ui
+    //required by Qt4 to initialise the ui
   setupUi(this);
   readSettings();
   lblAnimalPix->setScaledContents(true);
   connect(tblAnimals, SIGNAL(cellClicked( int,int)),
       this, SLOT(cellClicked( int,int)));
-  //connect(pbnAnimalPic, SIGNAL(clicked()), this, SLOT(on_pbnAnimalPic_clicked()));
+    //connect(pbnAnimalPic, SIGNAL(clicked()), this, SLOT(on_pbnAnimalPic_clicked()));
 
   refreshAnimalTable();
-  //disable these buttons unless experimental is allowed
+    //disable these buttons unless experimental is allowed
   pbnImport->setVisible(false);
   pbnExport->setVisible(false);
 }
@@ -85,14 +85,14 @@ void LaAnimalManager::refreshAnimalTable(QString theGuid)
   tblAnimals->setColumnCount(2);
 
 
-  //we do this in two passes
-  //in the first pass we populate a qmap with all the layersets
-  //we find....
+    //we do this in two passes
+    //in the first pass we populate a qmap with all the layersets
+    //we find....
   mAnimalMap = LaUtils::getAvailableAnimals();
 
-  //the second pass populates the table
-  //doing it from the map ensures that the rows
-  //are sorted by layerset name
+    //the second pass populates the table
+    //doing it from the map ensures that the rows
+    //are sorted by layerset name
 
   int mySelectedRow=0;
   int myCurrentRow=0;
@@ -104,40 +104,40 @@ void LaAnimalManager::refreshAnimalTable(QString theGuid)
     qDebug() << myAnimal.toText();
     if (theGuid.isEmpty())
     {
-      //qDebug("No default active row was requested.Assigning to myAnimal.guid()!");;
+        //qDebug("No default active row was requested.Assigning to myAnimal.guid()!");;
       theGuid=myAnimal.guid();
     }
     if (myAnimal.guid()==theGuid)
     {
       mySelectedRow=myCurrentRow;
     }
-    // Insert new row ready to fill with details
+      // Insert new row ready to fill with details
     tblAnimals->insertRow(myCurrentRow);
     QString myGuid = myAnimal.guid();
-    qDebug () << "Inserting animal with guid: " + myGuid;
-    // Add details to the new row
+    qDebug ("Inserting animal with guid: " + myGuid.toLocal8Bit());
+      // Add details to the new row
     QTableWidgetItem *mypFileNameItem= new QTableWidgetItem(myGuid);
     tblAnimals->setItem(myCurrentRow, 0, mypFileNameItem);
     QTableWidgetItem *mypNameItem = new QTableWidgetItem(myAnimal.name());
     tblAnimals->setItem(myCurrentRow, 1, mypNameItem);
-    //display an icon indicating if the layerset is local or remote (e.g. terralib)
-    //LaAnimal::Origin myOrigin = myAnimal.origin();
-    //if (myOrigin==LaAnimal::USERPROFILE)
-    //{
+      //display an icon indicating if the layerset is local or remote (e.g. terralib)
+      //LaAnimal::Origin myOrigin = myAnimal.origin();
+      //if (myOrigin==LaAnimal::USERPROFILE)
+      //{
     QIcon myIcon;
     myIcon.addFile(":/localdata.png");
     mypNameItem->setIcon(myIcon);
-    //}
-    //else if (myOrigin==LaAnimal::ADAPTERPROFILE)
-    //{
-    //QIcon myIcon;
-    //myIcon.addFile(":/remotedata.png");
-    //mypNameItem->setIcon(myIcon);
-    //}
-    //else if (myOrigin==LaAnimal::UNDEFINED)
-    //{
-    //  mypNameItem->setTextColor(Qt::yellow);
-    //}
+      //}
+      //else if (myOrigin==LaAnimal::ADAPTERPROFILE)
+      //{
+      //QIcon myIcon;
+      //myIcon.addFile(":/remotedata.png");
+      //mypNameItem->setIcon(myIcon);
+      //}
+      //else if (myOrigin==LaAnimal::UNDEFINED)
+      //{
+      //  mypNameItem->setTextColor(Qt::yellow);
+      //}
     myCurrentRow++;
   }
 
@@ -162,7 +162,7 @@ void LaAnimalManager::refreshAnimalTable(QString theGuid)
 
 void LaAnimalManager::cellClicked(int theRow, int theColumn)
 {
-  //note we use the alg name not the id becuase user may have customised params
+    //note we use the alg name not the id becuase user may have customised params
   qDebug() << "LaAnimalManager::cellClicked";
   QString myGuid = tblAnimals->item(tblAnimals->currentRow(),0)->text();
   qDebug() << "Guid is: " << myGuid;
@@ -171,7 +171,7 @@ void LaAnimalManager::cellClicked(int theRow, int theColumn)
 }
 void LaAnimalManager::selectAnimal(QString theFileName)
 {
-  qDebug() << "selectAnimal Called : " << theFileName.toLocal8Bit();
+  qDebug() << "selectAnimal Called : " << theFileName;
   QString myAnimalDir = LaUtils::userAnimalProfilesDirPath();
   LaAnimal myAnimal;
   myAnimal.fromXmlFile(myAnimalDir + QDir::separator() + theFileName);
@@ -191,11 +191,13 @@ void LaAnimalManager::showAnimal()
   cbFeedEnergyType->setCurrentIndex(mAnimal.feedEnergyType());
   sbEnergyForPregnant->setValue(mAnimal.gestating());
   sbEnergyForLactating->setValue(mAnimal.lactating());
+  sbEnergyForMaintenance->setValue(mAnimal.maintenance());
   sbEnergyForJuvenilePerKg->setValue(mAnimal.juvenile());
   sbSexualMaturity->setValue(mAnimal.sexualMaturity());
   sbBreedingLife->setValue(mAnimal.breedingExpectancy());
   sbYoungPerBirth->setValue(mAnimal.youngPerBirth());
   sbWeaningAge->setValue(mAnimal.weaningAge());
+  sbWeaningWeight->setValue(mAnimal.weaningWeight());
   sbGestationTime->setValue(mAnimal.gestationTime());
   sbEstrousCycleTime->setValue(mAnimal.estrousCycle());
   sbLactationTime->setValue(mAnimal.lactationTime());
@@ -217,14 +219,14 @@ void LaAnimalManager::on_pbnAnimalPic_clicked()
 
 void LaAnimalManager::on_pushButtonLoad_clicked()
 {
-  //
+    //
   mAnimal.fromXmlFile("/tmp/animal.xml");
   showAnimal();
 }
 
 void LaAnimalManager::on_pushButtonSave_clicked()
 {
-  // not yet implemented
+    // not yet implemented
 }
 
 void LaAnimalManager::on_toolNew_clicked()
@@ -250,7 +252,7 @@ void LaAnimalManager::on_toolCopy_clicked()
   {
     return;
   }
-  //to clone, we get the algorithm guid that is currently selected
+    //to clone, we get the algorithm guid that is currently selected
   QString myGuid = tblAnimals->item(tblAnimals->currentRow(),0)->text();
   if (myGuid.isEmpty())
   {
@@ -266,7 +268,7 @@ void LaAnimalManager::on_toolCopy_clicked()
     myProfileName = tr("Copy ") + QString::number(myCount++) + " of " + myAnimal.name();
   }
   */
-  //assign this layerset its own guid
+    //assign this layerset its own guid
   myAnimal.setGuid();
   QString myNewFileName = LaUtils::userAnimalProfilesDirPath() + QDir::separator() + myAnimal.guid() + ".xml";
   myAnimal.setName(tr("Copy of ") + myAnimal.name());
@@ -318,11 +320,13 @@ void LaAnimalManager::on_pbnApply_clicked()
   
   mAnimal.setGestating(sbEnergyForPregnant->value());
   mAnimal.setLactating(sbEnergyForLactating->value());
+  mAnimal.setMaintenance(sbEnergyForMaintenance->value());
   mAnimal.setJuvenile(sbEnergyForJuvenilePerKg->value());
   mAnimal.setSexualMaturity(sbSexualMaturity->value());
   mAnimal.setBreedingExpectancy(sbBreedingLife->value());
   mAnimal.setYoungPerBirth(sbYoungPerBirth->value());
   mAnimal.setWeaningAge(sbWeaningAge->value());
+  mAnimal.setWeaningWeight(sbWeaningWeight->value());
   mAnimal.setGestationTime(sbGestationTime->value());
   mAnimal.setEstrousCycle(sbEstrousCycleTime->value());
   mAnimal.setLactationTime(sbLactationTime->value());

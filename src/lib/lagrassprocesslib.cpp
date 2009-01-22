@@ -37,61 +37,61 @@ LaGrassProcessLib::~LaGrassProcessLib()
 void LaGrassProcessLib::analyseModel(QString theRasterMask, int theAreaTarget)
 {
 
-  // get the area targets
+    // get the area targets
 
 
-    ///////////////////////
-   // Make Cost Surface //
-  ///////////////////////
+      //  //  //  //  //  //  //  //  //  //  ///
+     // Make Cost Surface   //
+    //  //  //  //  //  //  //  //  //  //  ///
 
-  // r.mapcalc "TimeOnlyFrictionMap=if(isnull(DEM), null(), 1)"
-  // r.walk max_cost=20000 elevation=dem_patched_filled@PERMANENT friction=theFrictionMap output=rwalkResultsSlopeMax20kFMap coordinate=744800,3611100 percent_memory=100 nseg=4 walk_coeff=0.72,6.0,1.9998,-1.9998 lambda=0 slope_factor=-0.2125 -k
+    // r.mapcalc "TimeOnlyFrictionMap=if(isnull(DEM), null(), 1)"
+    // r.walk max_cost=20000 elevation=dem_patched_filled@PERMANENT friction=theFrictionMap output=rwalkResultsSlopeMax20kFMap coordinate=744800,3611100 percent_memory=100 nseg=4 walk_coeff=0.72,6.0,1.9998,-1.9998 lambda=0 slope_factor=-0.2125 -k
 
 
-    ////////////////////
-   // find the land! //
-  ////////////////////
+      //  //  //  //  //  //  //  //  //  //
+     // find the land!   //
+    //  //  //  //  //  //  //  //  //  //
 
-  // binary search used
-   // function:
-   //   Searches sortedArray[first]..sortedArray[last] for key.
-   // returns: index of the matching element if it finds key,
-   //         otherwise  -(index where it could be inserted)-1.
-   // parameters:
-   //   sortedArray in  array of sorted (ascending) values.
-   //   first, last in  lower and upper subscript bounds
-   //   key         in  value to search for.
-   // returns:
-   //   index of key, or -insertion_position -1 if key is not
-   //                 in the array. This value can easily be
-   //                 transformed into the position to insert it.
+    // binary search used
+     // function:
+     //   Searches sortedArray[first]..sortedArray[last] for key.
+     // returns: index of the matching element if it finds key,
+     //         otherwise  -(index where it could be inserted)-1.
+     // parameters:
+     //   sortedArray in  array of sorted (ascending) values.
+     //   first, last in  lower and upper subscript bounds
+     //   key         in  value to search for.
+     // returns:
+     //   index of key, or -insertion_position -1 if key is not
+     //                 in the array. This value can easily be
+     //                 transformed into the position to insert it.
    int myFirst = 0;
    int myLast=18000;
-   int myAreaTarget = 1; // change this to real value
+   int myAreaTarget = 1;   // change this to real value
    
    LandFound mySearchStatus = NotEnough;
    int myCurrentlyContainedArea = 0;
 
    while (myFirst <= myLast)
   {
-    int myMid = (myFirst + myLast) / 2;  // compute mid point.
-    // reclass with 1 to midpoint and null beyond and then check results
-    //    echo "0 thru $step = 1" | r.reclass input=$cost output=cost.reclass --o
-    //    r.stats -n -a fs=- input=cost.reclass > $TMP1
+    int myMid = (myFirst + myLast) / 2;    // compute mid point.
+      // reclass with 1 to midpoint and null beyond and then check results
+      //    echo "0 thru $step = 1" | r.reclass input=$cost output=cost.reclass --o
+      //    r.stats -n -a fs=- input=cost.reclass > $TMP1
 
-    // find out if the contained area is within acceptable range
+      // find out if the contained area is within acceptable range
     mySearchStatus = getSearchStatus(myCurrentlyContainedArea, myAreaTarget);
 
     switch (mySearchStatus)
     {
       case NotEnough:
-            myFirst = myMid + 1;  // repeat search in top half.
+            myFirst = myMid + 1;    // repeat search in top half.
             break;;
       case TooMuch:
-            myLast = myMid - 1; // repeat search in bottom half.
+            myLast = myMid - 1;   // repeat search in bottom half.
             break;
       case FoundTarget:
-            // found it. break out of loop /////
+              // found it. break out of loop   //  ///
             myFirst = myLast+1;
             break;
     }
@@ -102,7 +102,7 @@ void LaGrassProcessLib::analyseModel(QString theRasterMask, int theAreaTarget)
 LandFound LaGrassProcessLib::getSearchStatus(int theCurrentlyContainedArea, int theAreaTarget)
 {
   LandFound myStatus;
-  int myPrecision=5;  //get the real value for precision
+  int myPrecision=5;    //get the real value for precision
   float myAcceptableRange=(theAreaTarget*myPrecision*0.01)/2.0;
   float myMinimumAcceptable = theAreaTarget - myAcceptableRange;
   float myMaximumAcceptable = theAreaTarget + myAcceptableRange;

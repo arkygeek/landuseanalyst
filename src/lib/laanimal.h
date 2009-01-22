@@ -40,9 +40,9 @@ class LaAnimal : public LaSerialisable, public LaGuid
     /** Assignement operator */
     LaAnimal& operator= (const LaAnimal& theAnimal);
 
-    //
-    // Accessors
-    //
+      //
+      // Accessors
+      //
 
     /** The name of this animal */
     QString name() const;
@@ -64,7 +64,9 @@ class LaAnimal : public LaSerialisable, public LaGuid
     int gestating() const;
     /** The number of calories a lactating female requires per day */
     int lactating() const;
-    /** The number of calories a juvenile requires per day */
+    /** The number of calories adult maintenance requires per day */
+    int maintenance() const;
+        /** The number of calories a juvenile requires per day */
     int juvenile() const;
     /** The life expectancy in years of the animal */
     int sexualMaturity() const;
@@ -74,6 +76,8 @@ class LaAnimal : public LaSerialisable, public LaGuid
     int youngPerBirth() const;
     /** The age in weeks at which babies stop suckling */
     int weaningAge() const;
+    /** The weight when babies stop suckling */
+    int weaningWeight() const;
     /** The number of days required for gestation */
     int gestationTime() const;
     /** The number of days in the female estrous cycle */
@@ -93,9 +97,9 @@ class LaAnimal : public LaSerialisable, public LaGuid
     /** The image file associated with the animal */
     QString imageFile() const;
 
-    //
-    // Mutators
-    //
+      //
+      // Mutators
+      //
 
     /** Set the animalName
      * @see name()
@@ -143,12 +147,17 @@ class LaAnimal : public LaSerialisable, public LaGuid
     void setGestating(int theCalories);
 
     /** Set the daily calories required for a lactating female
-     * @see UsableMeat()
+     * @see lactating()
      */
     void setLactating(int theCalories);
 
+    /** Set the daily calories required for adult maintenance
+     * @see maintenance()
+     */
+    void setMaintenance(int theCalories);
+
     /** Set the daily calories required for a juvenile
-     * @see UsableMeat()
+     * @see juvenile()
      */
     void setJuvenile(int theCalories);
 
@@ -170,8 +179,11 @@ class LaAnimal : public LaSerialisable, public LaGuid
     /** Set the weaningAge in weeks
      * @see weaningAge()
      */
-    void setWeaningAge(int theWeeks);
-
+    void setWeaningWeight(int theWeight);
+    /** Set the weaning weight
+     * @see weaningWeight()
+     */
+    void setWeaningAge(int theDays);
     /** Set the gestationTime in Days
      * @see gestationTime()
      */
@@ -257,6 +269,8 @@ class LaAnimal : public LaSerialisable, public LaGuid
     int mGestating;
     /** The number of calories a lactating female requires per day */
     int mLactating;
+    /** The number of calories adult maintenance requires per day */
+    int mMaintenance;
     /** The number of calories a juvenile requires per day */
     int mJuvenile;
     /** The life expectancy in years of the animal */
@@ -267,6 +281,8 @@ class LaAnimal : public LaSerialisable, public LaGuid
     int mYoungPerBirth;
     /** The age in weeks at which babies stop suckling */
     int mWeaningAge;
+    /** The weight when babies stop suckling */
+    int mWeaningWeight;
     /** The number of days required for gestation */
     int mGestationTime;
     /** The number of days in the female estrous cycle */
@@ -287,5 +303,5 @@ class LaAnimal : public LaSerialisable, public LaGuid
     QString mImageFile;
 };
 
-#endif //LAANIMAL_H
+#endif   //LAANIMAL_H
 

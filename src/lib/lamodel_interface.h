@@ -14,4 +14,4 @@ private:
 };
 
 
-#endif // __LAMODEL_INTERFACE_H
+#endif   // __LAMODEL_INTERFACE_H

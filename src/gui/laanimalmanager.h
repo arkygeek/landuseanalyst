@@ -20,9 +20,9 @@
 #ifndef LAANIMALMANAGER_H
 #define LAANIMALMANAGER_H
 
-//QT Includes
+  //QT Includes
 #include <QDialog>
-//Local Includes
+  //Local Includes
 #include <ui_laanimalmanagerbase.h>
 #include <laanimal.h>
 #include <lautils.h>
@@ -70,4 +70,4 @@ class LaAnimalManager : public QDialog, private Ui::LaAnimalManagerBase
       QString mImageFile;
 };
 
-#endif //LAANIMALFORMMAIN_H
+#endif   //LAANIMALFORMMAIN_H

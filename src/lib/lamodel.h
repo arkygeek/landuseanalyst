@@ -49,9 +49,9 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
     /** Assignement operator */
     LaModel& operator= (const LaModel& theModel);
 
-    //
-    // Accessors
-    //
+      //
+      // Accessors
+      //
 
     /** The name of this model */
     QString name() const;
@@ -86,7 +86,10 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
     int foodValueCommonLand() const;
     /** Dairy Utilisation */
     int dairyUse() const;
-    
+    bool baseOnPlants() const;
+    bool includeDairy() const;
+    bool limitDairy() const;
+    int limitDairyPercent() const;
     Status fallowStatus() const;
     float fallowRatio() const;
 
@@ -103,7 +106,6 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
     int getProductionTargetsCrops(QString theCropGuid, int theCalorieTarget);
     int getProductionTargetsAnimals(QString theAnimalGuid, int theCalorieTarget);
     int getAreaTargetsCrops(QString theCropGuid, int theProductionTarget);
-    int getTotalCaloriesFromDairy();
     int getFallowLandForACrop(QString theCropParameterGuid, int theAreaTarget);
     void allocateFallowGrazingLand();
     void adjustAnimalTargetsForFodder();
@@ -127,9 +129,9 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
     QMap<QString, int> getAreaTargetsAnimalsMap();
     QMap<QString, int> getAreaTargetsCropsMap();
 
-    //
-    // Mutators
-    //
+      //
+      // Mutators
+      //
 
     /** Set the modelName
      * @see name()
@@ -205,7 +207,10 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
      * @see dairyUse()
      */
     void setDairyUse(int thePercent);
-    
+    void setBaseOnPlants(bool theBool);
+    void setIncludeDairy(bool theBool);
+    void setLimitDairy(bool theBool);
+    void setLimitDairyPercent(int thePercent);
     /** Set food value of the common land
      * @see commonLandValue()
      */
@@ -231,7 +236,7 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
     void clearCalcMaps();
     void setFallowStatus(Status theStatus);
     void setFallowRatio(float theRatio);
-    //void setDoTheFallowAllocation(Priority, float, float);
+      //void setDoTheFallowAllocation(Priority, float, float);
     /** Return an xml representation of this layer
      * @NOTE this class inherits the serialisable interface so
      * it MUST implement this
@@ -375,7 +380,7 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
      */
     void initialiseValueMap();
     
-    QMap <QString, LaFoodSourceMap> mFodderMap; // QPair < StrawAndChaff , Grain >
+    QMap <QString, LaFoodSourceMap> mFodderMap;   // QPair < StrawAndChaff , Grain >
     /** Initialise the cumulative calories map to the calories
      * required for each animal.
      */
@@ -420,6 +425,16 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
     int mCaloriesPerPersonDaily;
     /** The percent of dairy utilisation by the settlement */
     int mDairyUse;
+
+    /** The percent of dairy utilisation by the settlement */
+    int mBaseOnPlants;
+    /** The percent of dairy utilisation by the settlement */
+    int mIncludeDairy;
+    /** The percent of dairy utilisation by the settlement */
+    int mLimitDairy;
+    /** The percent of dairy utilisation by the settlement */
+    int mLimitDairyPercentage;
+
     /** A map to hold the associated animals and their parameters */
     QMap<QString,QString> mAnimalsMap;
     /** A map to hold the associated crops and their parameters */
@@ -428,12 +443,12 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
     Status mFallowStatus;
     float mFallowRatio;
     int mCommonGrazingLandValueTarget;
-    //int mCommonGrazingLandValue;
+      //int mCommonGrazingLandValue;
     int mCommonGrazingValue;
     int mCommonGrazingLandAreaTarget;
     int mCommonCropLand;
     HerdSize mHerdSize;
 
 };
-#endif //LAMODEL_H
+#endif   //LAMODEL_H
 

@@ -20,9 +20,9 @@
 #ifndef LACROPMANAGER_H
 #define LACROPMANAGER_H
 
-//QT Includes
+  //QT Includes
 #include <QDialog>
-//Local Includes
+  //Local Includes
 #include <ui_lacropmanagerbase.h>
 #include <lacrop.h>
 #include <lautils.h>
@@ -63,4 +63,4 @@ class LaCropManager : public QDialog, private Ui::LaCropManagerBase
       QString mImageFile;
 };
 
-#endif //LACROPFORMMAIN_H
+#endif   //LACROPFORMMAIN_H

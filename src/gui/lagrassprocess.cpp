@@ -37,11 +37,11 @@
   LaGrassProcess::LaGrassProcess(LaRasterInfo theRasterInfo, QPair<int, int> theCoordinates, QPair<QMap<QString, int>, QMap<QString, int> > & thePairOfAreaTargetMaps, QWidget* parent, Qt::WFlags fl)
 : QDialog(parent,fl)
 {
-  //required by Qt4 to initialise the ui
+    //required by Qt4 to initialise the ui
   setupUi(this);
   readSettings();
 
-  //connect ( buttonBox, SIGNAL(rejected()), this, SLOT(reject()) );
+    //connect ( buttonBox, SIGNAL(rejected()), this, SLOT(reject()) );
 
   mAnimalAreaTargetsMap = thePairOfAreaTargetMaps.first;
   mCropAreaTargetsMap = thePairOfAreaTargetMaps.second;
@@ -83,10 +83,10 @@ void LaGrassProcess::writeSettings()
 
 void LaGrassProcess::accept()
 {
-  // first, we need to remove the items from the map
-  // that use Common Land, and then determine the
-  // number of items in the map to set the overall
-  // progress bar (number of steps)
+    // first, we need to remove the items from the map
+    // that use Common Land, and then determine the
+    // number of items in the map to set the overall
+    // progress bar (number of steps)
   float myMinimumCost = 0.;
   tbGrass->setText("Creating Cost Surface Raster...");
   tbGrass->repaint();
@@ -100,8 +100,8 @@ void LaGrassProcess::accept()
     myCropCounter.next();
     if (myCropCounter.key() != "CommonTarget")
     {
-      // check for use of common targets
-      // if it does not use common target then add to count
+        // check for use of common targets
+        // if it does not use common target then add to count
       QString myCropGuid = myCropCounter.key();
       QString myCropParameterGuid = myMainForm.getMatchingCropParameterGuid(myCropGuid);
       LaCropParameter myCropParameter = LaUtils::getCropParameter(myCropParameterGuid);
@@ -119,8 +119,8 @@ void LaGrassProcess::accept()
     myAnimalCounter.next();
     if (myAnimalCounter.key() != "CommonTarget")
     {
-      // check for use of common targets
-      // if it does not use common target then add to count
+        // check for use of common targets
+        // if it does not use common target then add to count
       QString myAnimalGuid = myAnimalCounter.key();
       QString myAnimalParameterGuid = myMainForm.getMatchingAnimalParameterGuid(myAnimalGuid);
       LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(myAnimalParameterGuid);
@@ -137,7 +137,7 @@ void LaGrassProcess::accept()
   int myNumberOfSearches = mCropAreaTargetsMap.size() + mAnimalAreaTargetsMap.size();
   setPbarOverallRange(myNumberOfSearches);
 
-  // create cost surface maps
+    // create cost surface maps
 
   LaGrass myGrass;
   int myEasting = mCoordinates.first;
@@ -155,11 +155,11 @@ void LaGrassProcess::accept()
     {
       LaCrop myCrop = LaUtils::getCrop(myCropIterator.key());
 
-      // set the images and area target label
+        // set the images and area target label
         lblGraphic->setPixmap(myCrop.imageFile());
         lblGraphic->repaint();
-        //lblPreview->setPixmap(convertedRasterFile);
-        //lblPreview->repaint();
+          //lblPreview->setPixmap(convertedRasterFile);
+          //lblPreview->repaint();
         lblAreaTarget->setText("Target:\n" + QString::number(myCropIterator.value()));
         lblAreaTarget->repaint();
 
@@ -173,11 +173,11 @@ void LaGrassProcess::accept()
       QString myCropRasterFile = myCropParameter.rasterName();
 
       setPbarTargetRange(17);
-      //for (int i=0; i<18; i++)
-      //{
-      //  pbarTarget->setValue(i);
-      //}
-      // go analyse the stuff...
+        //for (int i=0; i<18; i++)
+        //{
+        //  pbarTarget->setValue(i);
+        //}
+        // go analyse the stuff...
       qDebug() << "myAreaTarget: " << myAreaTarget;
       qDebug() << "myName: " << myName;
       analyseModel(myName, myCropRasterFile, myAreaTarget);
@@ -186,7 +186,7 @@ void LaGrassProcess::accept()
     }
     else
     {
-      //do stuff for commonTarget
+        //do stuff for commonTarget
         QString myCommonPixMap = ":/commonTarget.png";
         lblGraphic->setPixmap(myCommonPixMap);
         lblGraphic->repaint();
@@ -195,7 +195,7 @@ void LaGrassProcess::accept()
       myMinimumCost = analyseModel("commonCrop", mCommonCropRaster, myCropIterator.value());
       updateOverallProgress(myOverallProgress);
       myOverallProgress++;
-      myGrass.createInverseMask(myMinimumCost, mCommonCropRaster); // creates laLeftOver
+      myGrass.createInverseMask(myMinimumCost, mCommonCropRaster);   // creates laLeftOver
 
     }
   }
@@ -208,11 +208,11 @@ void LaGrassProcess::accept()
     {
       LaAnimal myAnimal = LaUtils::getAnimal(myAnimalIterator.key());
 
-      // set the images and area target label
+        // set the images and area target label
         lblGraphic->setPixmap(myAnimal.imageFile());
         lblGraphic->repaint();
-        //lblPreview->setPixmap(convertedRasterFile);
-        //lblPreview->repaint();
+          //lblPreview->setPixmap(convertedRasterFile);
+          //lblPreview->repaint();
         lblAreaTarget->setText("Target:\n" + QString::number(myAnimalIterator.value()));
         lblAreaTarget->repaint();
       QString myName = myAnimal.name();
@@ -222,9 +222,9 @@ void LaGrassProcess::accept()
       QString myAnimalRasterFile = myAnimalParameter.rasterName();
       setPbarTargetRange(17);
 
-      // go analyse the stuff...
+        // go analyse the stuff...
       int myAreaTarget = myAnimalIterator.value();
-      // hard coded to add the leftover mask to the common animal mask
+        // hard coded to add the leftover mask to the common animal mask
       myGrass.mergeMaps(myAnimalRasterFile);
 
       analyseModel(myName, "laCombinedMasks@" + mMapset, myAreaTarget);
@@ -233,14 +233,14 @@ void LaGrassProcess::accept()
     }
     else
     {
-      //do stuff for commonTarget
-      myGrass.mergeMaps(mCommonGrazingRaster); // creates laCombinedMasks
+        //do stuff for commonTarget
+      myGrass.mergeMaps(mCommonGrazingRaster);   // creates laCombinedMasks
         QString myCommonPixMap = ":/commonTarget.png";
         lblGraphic->setPixmap(myCommonPixMap);
         lblGraphic->repaint();
         lblAreaTarget->setText("Target:\n" + QString::number(myAnimalIterator.value()));
         lblAreaTarget->repaint();
-      // hard coded to add the leftover mask to the common animal mask
+        // hard coded to add the leftover mask to the common animal mask
       analyseModel("commonGrazing", "laCombinedMasks@" + mMapset, myAnimalIterator.value());
       updateOverallProgress(myOverallProgress);
       myOverallProgress++;
@@ -264,10 +264,10 @@ void LaGrassProcess::setPbarOverallRange(int theOverall)
   pbarOverall->setValue(0);
 }
 
-//void LaGrassProcess::reject()
-//{
-  // abort the grass analysis connect(pushButtonExit, SIGNAL(clicked()), qApp, SLOT(quit()));
-//}
+  //void LaGrassProcess::reject()
+  //{
+    // abort the grass analysis connect(pushButtonExit, SIGNAL(clicked()), qApp, SLOT(quit()));
+  //}
 
 void LaGrassProcess::updateCurrentProgress(int theArea)
 {
@@ -299,15 +299,15 @@ void LaGrassProcess::toggleBusyProgressBar(bool theStatus)
 {
   switch (theStatus)
   {
-    case true:  // turn it on
-                // set the progress bar to move (min,max = 0,0)
-                //pbarBusy->setMinimum(0);
+    case true:    // turn it on
+                  // set the progress bar to move (min,max = 0,0)
+                  //pbarBusy->setMinimum(0);
                 pbarBusy->setMaximum(0);
                 pbarBusy->repaint();
                 break;
-    case false: // shut it off
-                // set the progress bar to not move (min,max = 0,1)
-                //pbarBusy->setMinimum(0);
+    case false:   // shut it off
+                  // set the progress bar to not move (min,max = 0,1)
+                  //pbarBusy->setMinimum(0);
                 pbarBusy->setMaximum(1);
                 break;
   }
@@ -320,7 +320,7 @@ float LaGrassProcess::analyseModel(QString theItemName, QString theRasterMask, i
    float myLast=120000;
    int myAreaTarget = theAreaTarget;
    float myCurrentlyContainedArea = 0.0;
-   int myPrecision = 5; // change this to real value
+   int myPrecision = 5;   // change this to real value
    int myStatusCount = 0;
    LandFound mySearchStatus = NotEnough;
    float myMid;
@@ -332,17 +332,17 @@ float LaGrassProcess::analyseModel(QString theItemName, QString theRasterMask, i
   {
     updateCurrentProgress(myStatusCount);
     myStatusCount++;
-    myMid = (myFirst + myLast) / 2.;  // compute mid point.
-    // reclass with 1 to midpoint and null beyond and then check results
-    //    echo "0 thru $step = 1" | r.reclass input=$cost output=cost.reclass --o
-    //    r.stats -n -a fs=- input=cost.reclass > $TMP1
+    myMid = (myFirst + myLast) / 2.;    // compute mid point.
+      // reclass with 1 to midpoint and null beyond and then check results
+      //    echo "0 thru $step = 1" | r.reclass input=$cost output=cost.reclass --o
+      //    r.stats -n -a fs=- input=cost.reclass > $TMP1
     qDebug() << "midpoint value: " << myMid;
     qDebug() << "midpoint valueas int: " << static_cast<int>(myMid);
 
-    myGrass.reclass("laWalkCost", static_cast<int>(myMid)); // makes a raster called laCostMapReclassed
-    myGrass.createMask("laCostMapReclassed" , theRasterMask); // creates tmpMask
+    myGrass.reclass("laWalkCost", static_cast<int>(myMid));   // makes a raster called laCostMapReclassed
+    myGrass.createMask("laCostMapReclassed" , theRasterMask);   // creates tmpMask
     myCurrentlyContainedArea = myGrass.getArea("tmpMask");
-    // find out if the contained area is within acceptable range
+      // find out if the contained area is within acceptable range
 
     mySearchStatus = getSearchStatus(static_cast<int>(myCurrentlyContainedArea), myAreaTarget, myPrecision);
 
@@ -350,15 +350,15 @@ float LaGrassProcess::analyseModel(QString theItemName, QString theRasterMask, i
     {
       case NotEnough:
             qDebug() << "Not Close Enough. (low) Current is " << myCurrentlyContainedArea << "Needed: " << myAreaTarget;
-            myFirst = myMid + 1.;  // repeat search in top half.
+            myFirst = myMid + 1.;    // repeat search in top half.
             break;;
       case TooMuch:
             qDebug() << "Not Close Enough. (high) Current is " << myCurrentlyContainedArea << "Needed: " << myAreaTarget;
-            myLast = myMid - 1.; // repeat search in bottom half.
+            myLast = myMid - 1.;   // repeat search in bottom half.
             break;
       case FoundTarget:
-            // found it. break out of loop /////
-            // copy final raster to permanentRaster
+              // found it. break out of loop   //  ///
+              // copy final raster to permanentRaster
             qDebug() << "TARGET FOUND!  Current is " << myCurrentlyContainedArea << "Actual Needed: " << myAreaTarget;
             qDebug() << "which falls within the precision range";
 
@@ -408,7 +408,7 @@ QString LaGrassProcess::generateFilename(QString theItemName, float theExtent, i
 LandFound LaGrassProcess::getSearchStatus(int theCurrentlyContainedArea, int theAreaTarget, int thePrecision)
 {
   LandFound myStatus;
-  float myPrecision=5.;  //get the real value for precision
+  float myPrecision=5.;    //get the real value for precision
   float myAcceptableRange=(theAreaTarget*myPrecision*0.01)/2.0;
   float myMinimumAcceptable = theAreaTarget - myAcceptableRange;
   float myMaximumAcceptable = theAreaTarget + myAcceptableRange;

@@ -36,7 +36,7 @@ LaCrop::~LaCrop()
 
 }
 
-//copy constructor
+  //copy constructor
 LaCrop::LaCrop(const LaCrop& theCrop)
 {
   mName=theCrop.name();
@@ -53,7 +53,7 @@ LaCrop::LaCrop(const LaCrop& theCrop)
 
 LaCrop& LaCrop::operator=(const LaCrop& theCrop)
 {
-  if (this == &theCrop) return *this;   // Gracefully handle self assignment
+  if (this == &theCrop) return *this;     // Gracefully handle self assignment
 
   mName=theCrop.name();
   mDescription=theCrop.description();
@@ -146,18 +146,18 @@ void LaCrop::setImageFile(QString theImageFileName)
 }
 bool LaCrop::fromXml(QString theXml)
 {
-  //qDebug("Loading Crop from xml");
+    //qDebug("Loading Crop from xml");
   QDomDocument myDocument("mydocument");
   myDocument.setContent(theXml);
   QDomElement myTopElement = myDocument.firstChildElement("crop");
   if (myTopElement.isNull())
   {
-    //TODO - just make this a warning
-   //qDebug("top element could not be found!");
+      //TODO - just make this a warning
+     //qDebug("top element could not be found!");
   }
-  //qDebug("Crop::fromXml - guid found : " + myTopElement.attribute("guid").toLocal8Bit());
+    //qDebug("Crop::fromXml - guid found : " + myTopElement.attribute("guid").toLocal8Bit());
   setGuid(myTopElement.attribute("guid"));
-  //qDebug("Crop::fromXml - guid set to : " + guid().toLocal8Bit());
+    //qDebug("Crop::fromXml - guid set to : " + guid().toLocal8Bit());
   mName=LaUtils::xmlDecode(myTopElement.firstChildElement("name").text());
   mDescription=LaUtils::xmlDecode(myTopElement.firstChildElement("description").text());
   mCropYield=QString(myTopElement.firstChildElement("cropYield").text()).toInt();
@@ -243,7 +243,7 @@ QString LaCrop::toHtml()
 {
   QString myString;
   myString+="<h3>Details for " + LaUtils::xmlEncode(mName) + "</h3>";
-  //myString+="<p>GUID:" + guid() + "</p>";
+    //myString+="<p>GUID:" + guid() + "</p>";
   myString+="<table>";
   myString+="<tr><td><b>Description: </b></td><td>" + mDescription + "</td></tr>";
   myString+="<tr><td><b>Avg Yield: </b></td><td>" + QString::number(mCropYield) + "</td></tr>";

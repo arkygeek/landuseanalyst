@@ -49,4 +49,4 @@ class LaGrassProcessLib : public QObject
 
 };
 
-#endif //LAGRASSPROCESSLIB_H
+#endif   //LAGRASSPROCESSLIB_H

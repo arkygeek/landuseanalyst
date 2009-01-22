@@ -42,7 +42,7 @@
   LaCropParameterManager::LaCropParameterManager(QWidget* parent, Qt::WFlags fl)
 : QDialog(parent,fl)
 {
-  //required by Qt4 to initialise the ui
+    //required by Qt4 to initialise the ui
   setupUi(this);
   readSettings();
   connect(tblCropParameterProfiles, SIGNAL(cellClicked( int,int)),
@@ -53,16 +53,16 @@
   QStringListIterator myIterator1(myMapsetList);
   while (myIterator1.hasNext())
   {
-    //append the raster names in this mapet to our full list
+      //append the raster names in this mapet to our full list
     myList << myGrass.getRasterList(myIterator1.next());
   }
-  //myGrass.getRasterList(myMapsetList);
+    //myGrass.getRasterList(myMapsetList);
   cboRaster->addItems(myList);
-  //disable these buttons unless experimental is allowed
+    //disable these buttons unless experimental is allowed
   pbnImport->setVisible(false);
   pbnExport->setVisible(false);
   lblCropPic->setScaledContents(true);
- //populate the plants combo
+   //populate the plants combo
   LaUtils::CropMap myCropsMap;
   myCropsMap = LaUtils::getAvailableCrops();
   QMapIterator<QString, LaCrop> myIterator(myCropsMap);
@@ -79,7 +79,7 @@
   connect(cboCrop, SIGNAL(currentIndexChanged( int)),
       this, SLOT(on_cboCrop_changed( int)));
 
-  // insert all area units into the comboBox
+    // insert all area units into the comboBox
   cbAreaUnits->addItem("Dunum");
   cbAreaUnits->addItem("Hectare");
 
@@ -116,14 +116,14 @@ void LaCropParameterManager::refreshCropParameterTable(QString theGuid)
   tblCropParameterProfiles->setColumnCount(2);
 
 
-  //we do this in two passes
-  //in the first pass we populate a qmap with all the layersets
-  //we find....
+    //we do this in two passes
+    //in the first pass we populate a qmap with all the layersets
+    //we find....
   mCropParameterMap = LaUtils::getAvailableCropParameters();
 
-  //the second pass populates the table
-  //doing it from the map ensures that the rows
-  //are sorted by layerset name
+    //the second pass populates the table
+    //doing it from the map ensures that the rows
+    //are sorted by layerset name
 
   int mySelectedRow=0;
   int myCurrentRow=0;
@@ -132,43 +132,43 @@ void LaCropParameterManager::refreshCropParameterTable(QString theGuid)
   {
     myIterator.next();
     LaCropParameter myCropParameter = myIterator.value();
-    //qDebug(myCropParameter.toText().toLocal8Bit());
+      //qDebug(myCropParameter.toText().toLocal8Bit());
     if (theGuid.isEmpty())
     {
-     //qDebug("No default active row was requested.Assigning to myCropParameter.guid()!");;
+       //qDebug("No default active row was requested.Assigning to myCropParameter.guid()!");;
       theGuid=myCropParameter.guid();
     }
     if (myCropParameter.guid()==theGuid)
     {
       mySelectedRow=myCurrentRow;
     }
-    // Insert new row ready to fill with details
+      // Insert new row ready to fill with details
     tblCropParameterProfiles->insertRow(myCurrentRow);
     QString myGuid = myCropParameter.guid();
-   //qDebug ("Inserting crop parameter with guid: " + myGuid.toLocal8Bit());
-    // Add details to the new row
+     //qDebug ("Inserting crop parameter with guid: " + myGuid.toLocal8Bit());
+      // Add details to the new row
     QTableWidgetItem *mypFileNameItem= new QTableWidgetItem(myGuid);
     tblCropParameterProfiles->setItem(myCurrentRow, 0, mypFileNameItem);
     QTableWidgetItem *mypNameItem = new QTableWidgetItem(myCropParameter.name()  + "  (" + myCropParameter.description() + ")");
     tblCropParameterProfiles->setItem(myCurrentRow, 1, mypNameItem);
-    //display an icon indicating if the layerset is local or remote (e.g. terralib)
-    //LaCropParameter::Origin myOrigin = myCropParameter.origin();
-    //if (myOrigin==LaCropParameter::USERPROFILE)
-    //{
+      //display an icon indicating if the layerset is local or remote (e.g. terralib)
+      //LaCropParameter::Origin myOrigin = myCropParameter.origin();
+      //if (myOrigin==LaCropParameter::USERPROFILE)
+      //{
     QIcon myIcon;
     myIcon.addFile(":/localdata.png");
     mypNameItem->setIcon(myIcon);
-    //}
-    //else if (myOrigin==LaCropParameter::ADAPTERPROFILE)
-    //{
-    //QIcon myIcon;
-    //myIcon.addFile(":/remotedata.png");
-    //mypNameItem->setIcon(myIcon);
-    //}
-    //else if (myOrigin==LaCropParameter::UNDEFINED)
-    //{
-    //  mypNameItem->setTextColor(Qt::yellow);
-    //}
+      //}
+      //else if (myOrigin==LaCropParameter::ADAPTERPROFILE)
+      //{
+      //QIcon myIcon;
+      //myIcon.addFile(":/remotedata.png");
+      //mypNameItem->setIcon(myIcon);
+      //}
+      //else if (myOrigin==LaCropParameter::UNDEFINED)
+      //{
+      //  mypNameItem->setTextColor(Qt::yellow);
+      //}
     myCurrentRow++;
   }
 
@@ -202,10 +202,10 @@ void LaCropParameterManager::on_cboCrop_changed(int theIndex)
 
 void LaCropParameterManager::cellClicked(int theRow, int theColumn)
 {
-  //note we use the alg name not the id because user may have customised params
- //qDebug("LaCropParameterManager::cellClicked");
+    //note we use the alg name not the id because user may have customised params
+   //qDebug("LaCropParameterManager::cellClicked");
   QString myGuid = tblCropParameterProfiles->item(tblCropParameterProfiles->currentRow(),0)->text();
- //qDebug("Guid is: " + myGuid.toLocal8Bit());
+   //qDebug("Guid is: " + myGuid.toLocal8Bit());
   QString myFileName = myGuid + ".xml";
   selectCropParameter(myFileName);
   LaCrop myCrop = LaUtils::getCrop(cboCrop->itemData(cboCrop->currentIndex(),Qt::UserRole).toString());
@@ -214,7 +214,7 @@ void LaCropParameterManager::cellClicked(int theRow, int theColumn)
 }
 void LaCropParameterManager::selectCropParameter(QString theFileName)
 {
- //qDebug("selectCropParameter Called : " + theFileName.toLocal8Bit());
+   //qDebug("selectCropParameter Called : " + theFileName.toLocal8Bit());
   QString myCropParameterDir = LaUtils::userCropParameterProfilesDirPath();
   LaCropParameter myCropParameter;
   myCropParameter.fromXmlFile(myCropParameterDir + QDir::separator() + theFileName);
@@ -235,12 +235,12 @@ void LaCropParameterManager::showCropParameter()
   cbAreaUnits->setCurrentIndex(mCropParameter.areaUnits());
   checkBoxUseCommonLand->setChecked(mCropParameter.useCommonLand());
   checkBoxUseSpecificLand->setChecked(mCropParameter.useSpecificLand());
-  //cboRastere->setText(mCropParameter.rasterName());
+    //cboRastere->setText(mCropParameter.rasterName());
 }
 
 void LaCropParameterManager::on_toolNew_clicked()
 {
- //qDebug("New toolbutton clicked");
+   //qDebug("New toolbutton clicked");
   LaCropParameter myCropParameter;
   myCropParameter.setGuid();
   mCropParameter = myCropParameter;
@@ -256,12 +256,12 @@ void LaCropParameterManager::resizeEvent ( QResizeEvent * theEvent )
 
 void LaCropParameterManager::on_toolCopy_clicked()
 {
- //qDebug("Copy toolbutton clicked");
+   //qDebug("Copy toolbutton clicked");
   if (tblCropParameterProfiles->currentRow() < 0)
   {
     return;
   }
-  //to clone, we get the algorithm guid that is currently selected
+    //to clone, we get the algorithm guid that is currently selected
   QString myGuid = tblCropParameterProfiles->item(tblCropParameterProfiles->currentRow(),0)->text();
   if (myGuid.isEmpty())
   {
@@ -277,7 +277,7 @@ void LaCropParameterManager::on_toolCopy_clicked()
     myProfileName = tr("Copy ") + QString::number(myCount++) + " of " + myCropParameter.name();
   }
   */
-  //assign this layerset its own guid
+    //assign this layerset its own guid
   myCropParameter.setGuid();
   QString myNewFileName = LaUtils::userCropParameterProfilesDirPath() + QDir::separator() + myCropParameter.guid() + ".xml";
   myCropParameter.setName(tr("Copy of ") + myCropParameter.name());
@@ -286,7 +286,7 @@ void LaCropParameterManager::on_toolCopy_clicked()
 }
 void LaCropParameterManager::on_toolDelete_clicked()
 {
- //qDebug("Delete toolbutton clicked");
+   //qDebug("Delete toolbutton clicked");
   if (tblCropParameterProfiles->currentRow() < 0)
   {
     return;
@@ -337,7 +337,7 @@ bool LaCropParameterManager::setComboToDefault(QComboBox * thepCombo, QString th
 {
   if (!theDefault.isEmpty())
   {
-    //loop through list looking for a match
+      //loop through list looking for a match
     for ( int myCounter = 0; myCounter < thepCombo->count(); myCounter++ )
     {
       thepCombo->setCurrentIndex(myCounter);

@@ -44,5 +44,5 @@ private:
   QString mGuid;
 };
 
-#endif //LAGUID_H
+#endif   //LAGUID_H
 

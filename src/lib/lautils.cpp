@@ -17,7 +17,7 @@
 
 #include <QFileDialog>
 #ifdef Q_OS_MACX
-//for getting app bundle path
+  //for getting app bundle path
 #include <ApplicationServices/ApplicationServices.h>
 #endif
 
@@ -30,8 +30,8 @@ const QString LaUtils::userSettingsDirPath()
   QSettings mySettings;
   QString myPath=
       mySettings.value("dataDirs/dataDir", QDir::homePath() + QString("/.landuseAnalyst/") ).toString();
-  //  Make sure the users settings dir actually exists
-  ////qDebug("LaUtils::userSettingsDirPath() = " + myPath.toLocal8Bit());
+    //  Make sure the users settings dir actually exists
+    //  //qDebug("LaUtils::userSettingsDirPath() = " + myPath.toLocal8Bit());
   QDir().mkpath(myPath);
   return myPath;
 }
@@ -43,7 +43,7 @@ const QString LaUtils::getModelOutputDir()
 }
 const QString LaUtils::userAnimalProfilesDirPath()
 {
-  //alg profiles are always saved in the users home dir under .landuseAnalyst/
+    //alg profiles are always saved in the users home dir under .landuseAnalyst/
   QString myPath = QDir::homePath() + QString("/.landuseAnalyst/") +
     QDir::separator()+"animalProfiles"+QDir::separator();
   QDir().mkpath(myPath);
@@ -53,7 +53,7 @@ const QString LaUtils::userAnimalProfilesDirPath()
 
 const QString LaUtils::userCropProfilesDirPath()
 {
-  //alg profiles are always saved in the users home dir under .landuseAnalyst/
+    //alg profiles are always saved in the users home dir under .landuseAnalyst/
   QString myPath = QDir::homePath() + QString("/.landuseAnalyst/") +
     QDir::separator()+"cropProfiles"+QDir::separator();
   QDir().mkpath(myPath);
@@ -70,24 +70,24 @@ LaUtils::AnimalMap LaUtils::getAvailableAnimals()
   for (unsigned int i = 0; i < static_cast<unsigned int>(myList.size()); ++i)
   {
     QFileInfo myFileInfo = myList.at(i);
-    //Ignore directories
+      //Ignore directories
     if(myFileInfo.fileName() == "." ||myFileInfo.fileName() == ".." )
     {
       continue;
     }
-    //if the filename ends in .xml try to load it into our layerSets listing
+      //if the filename ends in .xml try to load it into our layerSets listing
     if(myFileInfo.completeSuffix()=="xml")
     {
-      ////qDebug("Loading animal: " + myList.at(i).absoluteFilePath().toLocal8Bit());
+        //  //qDebug("Loading animal: " + myList.at(i).absoluteFilePath().toLocal8Bit());
       LaAnimal myAnimal;
       myAnimal.fromXmlFile(myFileInfo.absoluteFilePath());
       if (myAnimal.name().isEmpty())
       {
-        //qDebug("Animal name was empty!");
+          //qDebug("Animal name was empty!");
         continue;
       }
-      ////qDebug("Adding " + myAnimal.name());
-      ////qDebug(myAnimal.toText().toLocal8Bit());
+        //  //qDebug("Adding " + myAnimal.name());
+        //  //qDebug(myAnimal.toText().toLocal8Bit());
       myMap[myAnimal.guid()]=myAnimal;
     }
   }
@@ -101,31 +101,31 @@ LaAnimal LaUtils::getAnimal(QString theGuid)
   for (unsigned int i = 0; i < static_cast<unsigned int>(myList.size()); ++i)
   {
     QFileInfo myFileInfo = myList.at(i);
-    //Ignore directories
+      //Ignore directories
     if(myFileInfo.fileName() == "." ||myFileInfo.fileName() == ".." )
     {
       continue;
     }
-    //if the filename ends in .xml try to load it into our layerSets listing
+      //if the filename ends in .xml try to load it into our layerSets listing
     if(myFileInfo.completeSuffix()=="xml")
     {
-      ////qDebug("Loading animal: " + myList.at(i).absoluteFilePath().toLocal8Bit());
+        //  //qDebug("Loading animal: " + myList.at(i).absoluteFilePath().toLocal8Bit());
       LaAnimal myAnimal;
       myAnimal.fromXmlFile(myFileInfo.absoluteFilePath());
       if (myAnimal.name().isEmpty())
       {
-        //qDebug("Animal name was empty!");
+          //qDebug("Animal name was empty!");
         continue;
       }
-      ////qDebug("Adding " + myAnimal.name());
-      ////qDebug(myAnimal.toText().toLocal8Bit());
+        //  //qDebug("Adding " + myAnimal.name());
+        //  //qDebug(myAnimal.toText().toLocal8Bit());
       if (myAnimal.guid()==theGuid)
       {
         return myAnimal;
       }
     }
   }
-  LaAnimal myAnimal; //blank animal
+  LaAnimal myAnimal;   //blank animal
   return myAnimal;
 }
 
@@ -138,25 +138,25 @@ LaUtils::CropMap LaUtils::getAvailableCrops()
   for (unsigned int i = 0; i < static_cast<unsigned int>(myList.size()); ++i)
   {
     QFileInfo myFileInfo = myList.at(i);
-    //Ignore directories
+      //Ignore directories
     if(myFileInfo.fileName() == "." ||myFileInfo.fileName() == ".." )
     {
       continue;
     }
-    //if the filename ends in .xml try to load it into our layerSets listing
+      //if the filename ends in .xml try to load it into our layerSets listing
     if(myFileInfo.completeSuffix()=="xml")
     {
-      ////qDebug("Loading crop: " + myList.at(i).absoluteFilePath().toLocal8Bit());
+        //  //qDebug("Loading crop: " + myList.at(i).absoluteFilePath().toLocal8Bit());
       LaCrop myCrop;
       myCrop.fromXmlFile(myFileInfo.absoluteFilePath());
       if (myCrop.name().isEmpty())
       {
-        //qDebug("Crop name was empty!");
+          //qDebug("Crop name was empty!");
         continue;
       }
-      ////qDebug("Adding " + myCrop.name());
+        //  //qDebug("Adding " + myCrop.name());
       myMap[myCrop.guid()]=myCrop;
-      ////qDebug(myCrop.toText().toLocal8Bit());
+        //  //qDebug(myCrop.toText().toLocal8Bit());
     }
   }
   return myMap;
@@ -170,36 +170,36 @@ LaCrop LaUtils::getCrop(QString theGuid)
   for (unsigned int i = 0; i < static_cast<unsigned int>(myList.size()); ++i)
   {
     QFileInfo myFileInfo = myList.at(i);
-    //Ignore directories
+      //Ignore directories
     if(myFileInfo.fileName() == "." ||myFileInfo.fileName() == ".." )
     {
       continue;
     }
-    //if the filename ends in .xml try to load it into our layerSets listing
+      //if the filename ends in .xml try to load it into our layerSets listing
     if(myFileInfo.completeSuffix()=="xml")
     {
-      ////qDebug("Loading crop: " + myList.at(i).absoluteFilePath().toLocal8Bit());
+        //  //qDebug("Loading crop: " + myList.at(i).absoluteFilePath().toLocal8Bit());
       LaCrop myCrop;
       myCrop.fromXmlFile(myFileInfo.absoluteFilePath());
       if (myCrop.name().isEmpty())
       {
-        //qDebug("Crop name was empty!");
+          //qDebug("Crop name was empty!");
         continue;
       }
-      ////qDebug("Adding " + myCrop.name());
-      ////qDebug(myCrop.toText().toLocal8Bit());
+        //  //qDebug("Adding " + myCrop.name());
+        //  //qDebug(myCrop.toText().toLocal8Bit());
       if (myCrop.guid()==theGuid)
       {
         return myCrop;
       }
     }
   }
-  LaCrop myCrop; //blank crop
+  LaCrop myCrop;   //blank crop
   return myCrop;
 }
 const QString LaUtils::userConversionTablesDirPath()
 {
-  // always saved in the users home dir under .landuseAnalyst/
+    // always saved in the users home dir under .landuseAnalyst/
   QString myPath = QDir::homePath() + QString("/.landuseAnalyst/") +
     QDir::separator()+"conversionTables"+QDir::separator();
   QDir().mkpath(myPath);
@@ -208,7 +208,7 @@ const QString LaUtils::userConversionTablesDirPath()
 
 const QString LaUtils::userAnimalParameterProfilesDirPath()
 {
-  //alg profiles are always saved in the users home dir under .landuseAnalyst/
+    //alg profiles are always saved in the users home dir under .landuseAnalyst/
   QString myPath = QDir::homePath() + QString("/.landuseAnalyst/") +
     QDir::separator()+"animalParameterProfiles"+QDir::separator();
   QDir().mkpath(myPath);
@@ -225,7 +225,7 @@ const QString LaUtils::userImagesDirPath()
 
 const QString LaUtils::userCropParameterProfilesDirPath()
 {
-  //alg profiles are always saved in the users home dir under .landuseAnalyst/
+    //alg profiles are always saved in the users home dir under .landuseAnalyst/
   QString myPath = QDir::homePath() + QString("/.landuseAnalyst/") +
     QDir::separator() + "cropParameterProfiles" + QDir::separator();
   QDir().mkpath(myPath);
@@ -234,15 +234,15 @@ const QString LaUtils::userCropParameterProfilesDirPath()
 
 int LaUtils::convertAreaToHectares(AreaUnits theAreaUnit, int theArea)
 {
-  // this may seem ridiculous to do it this way, but
-  // i plan to include other area units and this way
-  // it will make it very easy to work with in the future
-  // all need be done is add new units to la.h enum and enter
-  // into the following switch...
+    // this may seem ridiculous to do it this way, but
+    // i plan to include other area units and this way
+    // it will make it very easy to work with in the future
+    // all need be done is add new units to la.h enum and enter
+    // into the following switch...
 
   float myHectares = 0.;
 
-  switch (theAreaUnit)  // Dunum, Hectare
+  switch (theAreaUnit)    // Dunum, Hectare
   {
     case  Dunum:
       myHectares = theArea * 10.;
@@ -266,32 +266,32 @@ LaUtils::AnimalParameterMap LaUtils::getAvailableAnimalParameters()
   for (unsigned int i = 0; i < static_cast<unsigned int>(myList.size()); ++i)
   {
     QFileInfo myFileInfo = myList.at(i);
-    //Ignore directories
+      //Ignore directories
     if(myFileInfo.fileName() == "." ||myFileInfo.fileName() == ".." )
     {
       continue;
     }
-    //if the filename ends in .xml try to load it into our layerSets listing
+      //if the filename ends in .xml try to load it into our layerSets listing
     if(myFileInfo.completeSuffix()=="xml")
     {
-      ////qDebug("Loading animalParameter: " + myList.at(i).absoluteFilePath().toLocal8Bit());
+        //  //qDebug("Loading animalParameter: " + myList.at(i).absoluteFilePath().toLocal8Bit());
       LaAnimalParameter myAnimalParameter;
       myAnimalParameter.fromXmlFile(myFileInfo.absoluteFilePath());
       if (myAnimalParameter.name().isEmpty())
       {
-        //qDebug("AnimalParameter name was empty!");
+          //qDebug("AnimalParameter name was empty!");
         continue;
       }
-      ////qDebug("Adding " + myAnimalParameter.name());
-      ////qDebug(myAnimalParameter.toText().toLocal8Bit());
+        //  //qDebug("Adding " + myAnimalParameter.name());
+        //  //qDebug(myAnimalParameter.toText().toLocal8Bit());
       myMap[myAnimalParameter.guid()]=myAnimalParameter;
 
 
-      //for debug only...
+        //for debug only...
       ;
-      //qDebug(" ++ lautil  Restoring " +
-      //    QString::number(myAnimalParameter.fodderSourceMap().count()).toLocal8Bit()
-      //    + " food sources into animal parameter.");
+        //qDebug(" ++ lautil  Restoring " +
+        //    QString::number(myAnimalParameter.fodderSourceMap().count()).toLocal8Bit()
+        //    + " food sources into animal parameter.");
     }
   }
   return myMap;
@@ -305,24 +305,24 @@ LaAnimalParameter LaUtils::getAnimalParameter(QString theGuid)
   for (unsigned int i = 0; i < static_cast<unsigned int>(myList.size()); ++i)
   {
     QFileInfo myFileInfo = myList.at(i);
-    //Ignore directories
+      //Ignore directories
     if(myFileInfo.fileName() == "." ||myFileInfo.fileName() == ".." )
     {
       continue;
     }
-    //if the filename ends in .xml try to load it into our layerSets listing
+      //if the filename ends in .xml try to load it into our layerSets listing
     if(myFileInfo.completeSuffix()=="xml")
     {
-      ////qDebug("Loading animalParameter: " + myList.at(i).absoluteFilePath().toLocal8Bit());
+        //  //qDebug("Loading animalParameter: " + myList.at(i).absoluteFilePath().toLocal8Bit());
       LaAnimalParameter myAnimalParameter;
       myAnimalParameter.fromXmlFile(myFileInfo.absoluteFilePath());
       if (myAnimalParameter.name().isEmpty())
       {
-        //qDebug("AnimalParameter name was empty!");
+          //qDebug("AnimalParameter name was empty!");
         continue;
       }
-      ////qDebug("Adding " + myAnimalParameter.name());
-      ////qDebug(myAnimalParameter.toText().toLocal8Bit());
+        //  //qDebug("Adding " + myAnimalParameter.name());
+        //  //qDebug(myAnimalParameter.toText().toLocal8Bit());
       if (myAnimalParameter.guid()==theGuid)
       {
         return myAnimalParameter;
@@ -330,7 +330,7 @@ LaAnimalParameter LaUtils::getAnimalParameter(QString theGuid)
     }
   }
   LaAnimalParameter myAnimalParameter;
-  return myAnimalParameter; //retrun a blank one since no match found
+  return myAnimalParameter;   //retrun a blank one since no match found
 
 }
 
@@ -343,25 +343,25 @@ LaUtils::CropParameterMap LaUtils::getAvailableCropParameters()
   for (unsigned int i = 0; i < static_cast<unsigned int>(myList.size()); ++i)
   {
     QFileInfo myFileInfo = myList.at(i);
-    //Ignore directories
+      //Ignore directories
     if(myFileInfo.fileName() == "." ||myFileInfo.fileName() == ".." )
     {
       continue;
     }
-    //if the filename ends in .xml try to load it into our layerSets listing
+      //if the filename ends in .xml try to load it into our layerSets listing
     if(myFileInfo.completeSuffix()=="xml")
     {
-      ////qDebug("Loading cropParameter: " + myList.at(i).absoluteFilePath().toLocal8Bit());
+        //  //qDebug("Loading cropParameter: " + myList.at(i).absoluteFilePath().toLocal8Bit());
       LaCropParameter myCropParameter;
       myCropParameter.fromXmlFile(myFileInfo.absoluteFilePath());
       if (myCropParameter.name().isEmpty())
       {
-        ////qDebug("CropParameter name was empty!");
+          //  //qDebug("CropParameter name was empty!");
         continue;
       }
-      ////qDebug("Adding " + myCropParameter.name());
+        //  //qDebug("Adding " + myCropParameter.name());
       myMap[myCropParameter.guid()]=myCropParameter;
-      ////qDebug(myCropParameter.toText().toLocal8Bit());
+        //  //qDebug(myCropParameter.toText().toLocal8Bit());
     }
   }
   return myMap;
@@ -375,24 +375,24 @@ LaCropParameter LaUtils::getCropParameter(QString theGuid)
   for (unsigned int i = 0; i < static_cast<unsigned int>(myList.size()); ++i)
   {
     QFileInfo myFileInfo = myList.at(i);
-    //Ignore directories
+      //Ignore directories
     if(myFileInfo.fileName() == "." ||myFileInfo.fileName() == ".." )
     {
       continue;
     }
-    //if the filename ends in .xml try to load it into our layerSets listing
+      //if the filename ends in .xml try to load it into our layerSets listing
     if(myFileInfo.completeSuffix()=="xml")
     {
-      ////qDebug("Loading animalParameter: " + myList.at(i).absoluteFilePath().toLocal8Bit());
+        //  //qDebug("Loading animalParameter: " + myList.at(i).absoluteFilePath().toLocal8Bit());
       LaCropParameter myCropParameter;
       myCropParameter.fromXmlFile(myFileInfo.absoluteFilePath());
       if (myCropParameter.name().isEmpty())
       {
-        //qDebug("CropParameter name was empty!");
+          //qDebug("CropParameter name was empty!");
         continue;
       }
-      ////qDebug("Adding " + myCropParameter.name());
-      ////qDebug(myCropParameter.toText().toLocal8Bit());
+        //  //qDebug("Adding " + myCropParameter.name());
+        //  //qDebug(myCropParameter.toText().toLocal8Bit());
       if (myCropParameter.guid()==theGuid)
       {
         return myCropParameter;
@@ -400,16 +400,16 @@ LaCropParameter LaUtils::getCropParameter(QString theGuid)
     }
   }
   LaCropParameter myCropParameter;
-  return myCropParameter; //retrun a blank one since no match found
+  return myCropParameter;   //retrun a blank one since no match found
 
 }
 
 
 QStringList LaUtils::sortList(QStringList theList)
 {
-    //sort the taxon list alpabetically descending order
-    theList.sort(); //this sorts ascending!
-    //flip the sort order
+      //sort the taxon list alpabetically descending order
+    theList.sort();   //this sorts ascending!
+      //flip the sort order
     QStringList mySortedList;
     QStringList::Iterator myIterator= theList.end();
     while( myIterator!=theList.begin() )
@@ -422,7 +422,7 @@ QStringList LaUtils::sortList(QStringList theList)
 
 QStringList LaUtils::uniqueList(QStringList theList)
 {
-    //remove any duplicates from a sorted list
+      //remove any duplicates from a sorted list
     QStringList myUniqueList;
     QString myLast = "";
     QStringListIterator myIterator( theList );
@@ -438,7 +438,7 @@ QStringList LaUtils::uniqueList(QStringList theList)
     return myUniqueList;
 }
 
-//return a string list of all the experiment files
+  //return a string list of all the experiment files
 QStringList LaUtils::getExperimentsList()
 {
   QStringList myExperimentList;
@@ -447,33 +447,33 @@ QStringList LaUtils::getExperimentsList()
                       QString("/modelOutputs/");
   QDir myDirectory(myWorkDir);
   myDirectory.setFilter(QDir::Dirs | QDir::Files | QDir::NoSymLinks );
-  ////qDebug ("Current directory is: " +  myWorkDir.toAscii());
+    //  //qDebug ("Current directory is: " +  myWorkDir.toAscii());
   QFileInfoList myList = myDirectory.entryInfoList();
   for (unsigned int i = 0; i < static_cast<unsigned int>(myList.size()); ++i)
   {
     QFileInfo myFileInfo = myList.at(i);
-    ////qDebug("Get ExperimentsList Scanning : " + myFileInfo.fileName().toLocal8Bit());
+      //  //qDebug("Get ExperimentsList Scanning : " + myFileInfo.fileName().toLocal8Bit());
     if(myFileInfo.fileName() == "." ||myFileInfo.fileName() == ".." )
     {
       continue;
     }
-    //if this is an empty dir, just skip it...
+      //if this is an empty dir, just skip it...
     if (myFileInfo.absoluteDir().count() < 1)
     {
       continue;
     }
-    //todo - check that the file is a directory (it should be)
+      //todo - check that the file is a directory (it should be)
 
-    //Now look in each dir under the workdir for the xml experiment file
-    //the experiment file should be named <dir name>.xml
+      //Now look in each dir under the workdir for the xml experiment file
+      //the experiment file should be named <dir name>.xml
     QString myFile = myFileInfo.absolutePath() + QDir::separator()
                                  + myFileInfo.fileName() + QDir::separator()
                                  + myFileInfo.fileName() + ".xml";
-    ////qDebug("Get ExperimentsList Checking: " + myFile.toLocal8Bit());
+      //  //qDebug("Get ExperimentsList Checking: " + myFile.toLocal8Bit());
     if (QFile::exists(myFile))
     {
       myExperimentList << myFile;
-      ////qDebug("Get ExperimentsList Adding: " + myFile.toLocal8Bit());
+        //  //qDebug("Get ExperimentsList Adding: " + myFile.toLocal8Bit());
     }
   }
   return myExperimentList;
@@ -481,7 +481,7 @@ QStringList LaUtils::getExperimentsList()
 
 bool LaUtils::createTextFile(QString theFileName, QString theData)
 {
-  //create the txt file
+    //create the txt file
   QFile myFile( theFileName );
   if ( myFile.open( QIODevice::WriteOnly ) )
   {

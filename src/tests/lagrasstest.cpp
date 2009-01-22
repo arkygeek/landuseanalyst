@@ -19,6 +19,7 @@
  ***************************************************************************/
 #include <QtTest/QtTest>
 #include <QString>
+#include <QDebug>
 
 #include <lagrass.h>
 class LaGrassTest: public QObject
@@ -37,10 +38,10 @@ void LaGrassTest::runCommand()
   QString myCommand = "g.list";
   QStringList myArguments;
   myArguments << "type=rast";
-  //first test with no error log param
+    //first test with no error log param
   QString myResult = myGrass.runCommand(myCommand,myArguments);
   QVERIFY(!myResult.isEmpty());
-  //now test with error log
+    //now test with error log
   QString myErrors;
   myResult = myGrass.runCommand(myCommand,myArguments,myErrors);
   QVERIFY(!myResult.isEmpty());
@@ -60,10 +61,10 @@ void LaGrassTest::getRasterList()
   QStringListIterator myIterator(myMapsetList);
   while (myIterator.hasNext())
   {
-    //append the raster names in this mapet to our full list
+      //append the raster names in this mapet to our full list
     myList << myGrass.getRasterList(myIterator.next());
   }
-  qDebug() << "\n" << myList.join("\n");
+  qDebug() << "\n" << myList.join("\n").toLocal8Bit();
   QVERIFY(myList.count() > 0);
 }
 void LaGrassTest::createFrictionMap()
@@ -74,6 +75,3 @@ void LaGrassTest::createFrictionMap()
 
 QTEST_MAIN(LaGrassTest) 
 #include "moc_lagrasstest.cxx"
-  
-
-

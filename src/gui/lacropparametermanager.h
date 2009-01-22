@@ -20,10 +20,10 @@
 #ifndef LACROPPARAMETERMANAGER_H
 #define LACROPPARAMETERMANAGER_H
 
-//QT Includes
+  //QT Includes
 #include <QDialog>
 #include <QComboBox>
-//Local Includes
+  //Local Includes
 #include <ui_lacropparametermanagerbase.h>
 #include <lacropparameter.h>
 #include <lautils.h>
@@ -40,8 +40,8 @@ class LaCropParameterManager : public QDialog, private Ui::LaCropParameterManage
     ~LaCropParameterManager();
 
   public slots:
-    //void on_pushButtonLoad_clicked();
-    //void on_pushButtonSave_clicked();
+      //void on_pushButtonLoad_clicked();
+      //void on_pushButtonSave_clicked();
 
   private slots:
       void cellClicked(int theRow, int theColumn);
@@ -65,4 +65,4 @@ class LaCropParameterManager : public QDialog, private Ui::LaCropParameterManage
       bool setComboToDefault(QComboBox * thepCombo, QString theDefault);
 };
 
-#endif //LACROPFORMMAIN_H
+#endif   //LACROPFORMMAIN_H

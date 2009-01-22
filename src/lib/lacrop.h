@@ -41,9 +41,9 @@ class LaCrop : public LaSerialisable, public LaGuid
     /** Assignement operator */
     LaCrop& operator= (const LaCrop& theCrop);
 
-    //
-    // Accessors
-    //
+      //
+      // Accessors
+      //
 
     /** The name of this crop */
     QString name() const;
@@ -65,9 +65,9 @@ class LaCrop : public LaSerialisable, public LaGuid
     /** The image file associated with the animal */
     QString imageFile() const;
 
-    //
-    // Mutators
-    //
+      //
+      // Mutators
+      //
 
     /** Set the cropName
      * @see name()
@@ -176,5 +176,5 @@ class LaCrop : public LaSerialisable, public LaGuid
     QString mImageFile;
 };
 
-#endif //LACROP_H
+#endif   //LACROP_H
 

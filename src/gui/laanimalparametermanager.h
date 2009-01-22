@@ -20,9 +20,9 @@
 #ifndef LAANIMALPARAMETERMANAGER_H
 #define LAANIMALPARAMETERMANAGER_H
 
-//QT Includes
+  //QT Includes
 #include <QDialog>
-//Local Includes
+  //Local Includes
 #include <ui_laanimalparametermanagerbase.h>
 #include <laanimalparameter.h>
 #include <lautils.h>
@@ -41,8 +41,8 @@ class LaAnimalParameterManager : public QDialog, private Ui::LaAnimalParameterMa
     ~LaAnimalParameterManager();
 
   public slots:
-    //void on_pushButtonLoad_clicked();
-    //void on_pushButtonSave_clicked();
+      //void on_pushButtonLoad_clicked();
+      //void on_pushButtonSave_clicked();
     void setSelectedCropsMap(LaTripleMap theSelectedCropsMap);
 
   private slots:
@@ -77,7 +77,7 @@ class LaAnimalParameterManager : public QDialog, private Ui::LaAnimalParameterMa
       LaTripleMap mSelectedCropsMap;
       int mCommonGrazedLandValue;
       AreaUnits mCommonGrazingLandAreaUnits;
-      //EnergyType mSpecificLandEnergyType;
+        //EnergyType mSpecificLandEnergyType;
 };
 
-#endif //LAANIMALPARAMETERMANAGER_H
+#endif   //LAANIMALPARAMETERMANAGER_H

@@ -48,15 +48,15 @@
   LaAssemblageConversion::LaAssemblageConversion(QWidget* parent, Qt::WFlags fl)
 : QDialog(parent,fl)
 {
-  //required by Qt4 to initialise the ui
+    //required by Qt4 to initialise the ui
   setupUi(this);
   readSettings();
 
-//  connect(pbnInsert, SIGNAL(clicked()),
- //     this, SLOT(on_pbnInsert_clicked()));
+  //  connect(pbnInsert, SIGNAL(clicked()),
+   //     this, SLOT(on_pbnInsert_clicked()));
 
   tblAnimals->setColumnCount(5);
-  //populate the animals combo
+    //populate the animals combo
   LaUtils::AnimalMap myAnimalsMap;
   myAnimalsMap = LaUtils::getAvailableAnimals();
   QMapIterator<QString, LaAnimal> myIterator(myAnimalsMap);
@@ -72,8 +72,8 @@
   }
 }
 
-// Sallah: How?
-// Indy: I don't know, I'm making this up as I go.
+  // Sallah: How?
+  // Indy: I don't know, I'm making this up as I go.
 
 LaAssemblageConversion::~LaAssemblageConversion()
 {
@@ -98,14 +98,14 @@ void LaAssemblageConversion::writeSettings()
 
 void LaAssemblageConversion::resizeEvent ( QResizeEvent * theEvent )
 {
-  //tblAnimals->setColumnWidth(0,0);
-  //tblAnimals->setColumnWidth(1,tblAnimals->width());
+    //tblAnimals->setColumnWidth(0,0);
+    //tblAnimals->setColumnWidth(1,tblAnimals->width());
   tblAnimals->horizontalHeader()->setResizeMode(0,QHeaderView::Stretch);
 }
 
 void LaAssemblageConversion::on_pbnInsert_clicked()
 {
-  // add an animal to the table
+    // add an animal to the table
   qDebug() << "pbnInsert";
   int myRowCount = tblAnimals->rowCount();
 
@@ -113,7 +113,7 @@ void LaAssemblageConversion::on_pbnInsert_clicked()
   if (rbManual->isChecked() == true)
   {
     qDebug() << "manual is checked";
-    // add item to table from manual inputs
+      // add item to table from manual inputs
     tblAnimals->insertRow(myRowCount);
 
     QString myName = leAnimal->text();
@@ -133,11 +133,11 @@ void LaAssemblageConversion::on_pbnInsert_clicked()
 
     QTableWidgetItem *mypNumber= new QTableWidgetItem(QString::number(myNumber));
     tblAnimals->setItem(myRowCount, 1, mypNumber);
-    //tblAnimals->insertRow(myRowCount);
+      //tblAnimals->insertRow(myRowCount);
   }
   else if (rbAuto->isChecked() == true)
   {
-    // add item to table from pre-defined animals
+      // add item to table from pre-defined animals
     qDebug() << "auto is checked";
     LaAnimal myAnimal = LaUtils::getAnimal( cboAnimal->itemData( cboAnimal->currentIndex(), Qt::UserRole).toString());
     tblAnimals->insertRow(myRowCount);
@@ -173,16 +173,16 @@ void LaAssemblageConversion::on_pbnInsert_clicked()
 
 void LaAssemblageConversion::on_pbnCalculate_clicked()
 {
-  // calculate the percent of diet based on entries in tblAnimals
+    // calculate the percent of diet based on entries in tblAnimals
 
-  // iterate through the table and get a sum of the adjusted meat value
-  // which is the NISP * weight of usable meat * calories per kg
+    // iterate through the table and get a sum of the adjusted meat value
+    // which is the NISP * weight of usable meat * calories per kg
   float myAdjustmentSum = 0.0;
   float myContributionToDiet = 0.0;
-  // iterate through table
+    // iterate through table
   for (int myCurrentRow=0; myCurrentRow < tblAnimals->rowCount(); myCurrentRow++)
   {
-    //QTableWidgetItem * mypNameWidget        = tblAnimals->item(myCurrentRow,0);
+      //QTableWidgetItem * mypNameWidget        = tblAnimals->item(myCurrentRow,0);
     QTableWidgetItem * mypNumberWidget      = tblAnimals->item(myCurrentRow,1);
     QTableWidgetItem * mypUsableMeatWidget  = tblAnimals->item(myCurrentRow,2);
     QTableWidgetItem * mypCalsPerKgWidget   = tblAnimals->item(myCurrentRow,3);
@@ -190,10 +190,10 @@ void LaAssemblageConversion::on_pbnCalculate_clicked()
     myAdjustmentSum += (mypNumberWidget->text().toFloat())
                      * (mypUsableMeatWidget->text().toInt())
                      * (mypCalsPerKgWidget->text().toInt())
-                     * 0.001; // to keep figures within limits
+                     * 0.001;   // to keep figures within limits
     qDebug() << "row: " << myCurrentRow <<" Adjustment sum: " << myAdjustmentSum;
   }
-  // iterate table again, adding percentage contribution to diet
+    // iterate table again, adding percentage contribution to diet
   float myDebugSumCheck = 0.0;
   for (int myCurrentRow1=0; myCurrentRow1 < tblAnimals->rowCount(); myCurrentRow1++)
   {
@@ -206,7 +206,7 @@ void LaAssemblageConversion::on_pbnCalculate_clicked()
                      * (mypCalsPerKgWidget->text().toInt())
                      * 0.001)
                      / myAdjustmentSum)
-                     * 100.0; // to make it percent (ie. 10.56% instead of 0.1056)
+                     * 100.0;   // to make it percent (ie. 10.56% instead of 0.1056)
    myDebugSumCheck += myContributionToDiet;
     QTableWidgetItem *mypContributionToDiet= new QTableWidgetItem(QString::number(myContributionToDiet));
     tblAnimals->setItem(myCurrentRow1, 4, mypContributionToDiet);
@@ -251,14 +251,14 @@ void LaAssemblageConversion::on_pbnClearTable_clicked()
 
 void LaAssemblageConversion::refreshTable()
 {
-  //
+    //
 }
 
 bool LaAssemblageConversion::setComboToDefault(QComboBox * thepCombo, QString theDefault)
 {
   if (!theDefault.isEmpty())
   {
-    //loop through list looking for a match
+      //loop through list looking for a match
     for ( int myCounter = 0; myCounter < thepCombo->count(); myCounter++ )
     {
       thepCombo->setCurrentIndex(myCounter);

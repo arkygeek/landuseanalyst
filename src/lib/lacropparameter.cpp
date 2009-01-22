@@ -25,18 +25,18 @@ LaCropParameter::LaCropParameter() : LaSerialisable(), LaGuid()
   setGuid();
   mName="No Name Set";
   mDescription="Not Set";
-  //mCropYield=60;
-  //mCropCalories=3000;
-  //mCropFodderProduction=50;
-  //mCropFodderValue=1000;
-  //mYieldUnits=0;
+    //mCropYield=60;
+    //mCropCalories=3000;
+    //mCropFodderProduction=50;
+    //mCropFodderValue=1000;
+    //mYieldUnits=0;
 }
 LaCropParameter::~LaCropParameter()
 {
 
 }
 
-//copy constructor
+  //copy constructor
 LaCropParameter::LaCropParameter(const LaCropParameter& theCropParameter)
 {
   mName=theCropParameter.name();
@@ -55,7 +55,7 @@ LaCropParameter::LaCropParameter(const LaCropParameter& theCropParameter)
 
 LaCropParameter& LaCropParameter::operator=(const LaCropParameter& theCropParameter)
 {
-  if (this == &theCropParameter) return *this;   // Gracefully handle self assignment
+  if (this == &theCropParameter) return *this;     // Gracefully handle self assignment
 
   mName=theCropParameter.name();
   mDescription=theCropParameter.description();
@@ -170,18 +170,18 @@ void LaCropParameter::setRasterName(QString theRasterName)
 
 bool LaCropParameter::fromXml(QString theXml)
 {
-  //qDebug("Loading CropParameter from xml");
+    //qDebug("Loading CropParameter from xml");
   QDomDocument myDocument("mydocument");
   myDocument.setContent(theXml);
   QDomElement myTopElement = myDocument.firstChildElement("cropParameter");
   if (myTopElement.isNull())
   {
-    //TODO - just make this a warning
-   //qDebug("top element could not be found!");
+      //TODO - just make this a warning
+     //qDebug("top element could not be found!");
   }
-  //qDebug("CropParameter::fromXml - guid found : " + myTopElement.attribute("guid").toLocal8Bit());
+    //qDebug("CropParameter::fromXml - guid found : " + myTopElement.attribute("guid").toLocal8Bit());
   setGuid(myTopElement.attribute("guid"));
-  //qDebug("CropParameter::fromXml - guid set to : " + guid().toLocal8Bit());
+    //qDebug("CropParameter::fromXml - guid set to : " + guid().toLocal8Bit());
   mName=LaUtils::xmlDecode(myTopElement.firstChildElement("name").text());
   mDescription=LaUtils::xmlDecode(myTopElement.firstChildElement("description").text());
   mCropGuid=LaUtils::xmlDecode(myTopElement.firstChildElement("crop").text());
@@ -199,7 +199,7 @@ bool LaCropParameter::fromXml(QString theXml)
   {
     mAreaUnits=Hectare;
   }
-  //mAreaUnits=QString(myTopElement.firstChildElement("areaUnits").text()).toInt();
+    //mAreaUnits=QString(myTopElement.firstChildElement("areaUnits").text()).toInt();
   mUseCommonLand=QString(myTopElement.firstChildElement("useCommonLand").text()).toInt();
   mUseSpecificLand=QString(myTopElement.firstChildElement("useSpecificLand").text()).toInt();
   mRasterName=LaUtils::xmlDecode(myTopElement.firstChildElement("rasterName").text());
@@ -240,11 +240,11 @@ QString LaCropParameter::toText()
 
   QString myUnits = (mAreaUnits==0) ? "Dunum" : "Hectare";
   myString+=QString("fallowValue kg/" + myUnits + "=>" + QString::number(mFallowValue) + "\n");
-  //myString+=QString("areaUnits=>" + QString::number(mAreaUnits) + "\n");
+    //myString+=QString("areaUnits=>" + QString::number(mAreaUnits) + "\n");
 
   QString myLandUsed = (mUseCommonLand==1) ? "Common" : "Specific";
   myString+=QString("Landused=>" + myLandUsed + "\n");
-  //myString+=QString("useSpecificLand=>" + QString::number(mUseSpecificLand) + "\n");
+    //myString+=QString("useSpecificLand=>" + QString::number(mUseSpecificLand) + "\n");
   myString+=QString("rasterName=>" + LaUtils::xmlEncode(mRasterName) + "\n");
   return myString;
 }
@@ -257,7 +257,7 @@ QString LaCropParameter::toHtml()
   QString myRasterName = (mUseCommonLand==1) ? "LaCropCommonMask" : mRasterName;
 
   myString+="<h3 >Details for " + LaUtils::xmlEncode(mName) + "</h3>";
-  myString+="<table>";  //  myString+="<tr><td><b>GUID:</th><td>" + guid() + "</td></tr>";
+  myString+="<table>";    //  myString+="<tr><td><b>GUID:</th><td>" + guid() + "</td></tr>";
   myString+="<tr><td><b>Description: </b></td><td>" + mDescription + "</td></tr>";
   myString+="<tr><td><b>Raster Mask: </b></td><td>" + mRasterName + "</td></tr>";
   myString+="<tr><td><b>Percent Tame Crop Diet: </b></td><td>" + QString::number(mPercentTameCrop) + "</td></tr>";

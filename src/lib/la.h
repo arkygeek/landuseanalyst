@@ -19,10 +19,10 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-// Sallah: Indy, why does the floor move?
-//Indiana Jones: Give me your torch. [Sallah does, and Indy drops it in.]
-//               Snakes. Why'd it have to be snakes?
-//Sallah: Asps. Very dangerous. You go first.
+  // Sallah: Indy, why does the floor move?
+  //Indiana Jones: Give me your torch. [Sallah does, and Indy drops it in.]
+  //               Snakes. Why'd it have to be snakes?
+  //Sallah: Asps. Very dangerous. You go first.
 #ifndef LA
 #define LA
 
@@ -31,16 +31,16 @@
 #include <QString>
 #include <lafoodsource.h>
 
-//    <animal guid <enabled, animalparamters guid>>
-//    or
-//    <plant guid <enabled, animalparamters guid>>
+  //    <animal guid <enabled, animalparamters guid>>
+  //    or
+  //    <plant guid <enabled, animalparamters guid>>
 typedef QMap <QString,QPair<bool,QString> > LaTripleMap;
 
 typedef QPair <QPair<QString,QString>, QPair<QString,QString> > LaRasterInfo;
 
-//    LaFoodSource is a map < <Guid,enabled> , <Fodder,Grain> >
-//    or
-//    LaFoodSource is a map < <Guid,disabled> , <Fodder,Grain> >
+  //    LaFoodSource is a map < <Guid,enabled> , <Fodder,Grain> >
+  //    or
+  //    LaFoodSource is a map < <Guid,disabled> , <Fodder,Grain> >
 typedef QMap < QString, LaFoodSource > LaFoodSourceMap;
 typedef QPair <float,float> HerdSize;
 
@@ -50,4 +50,4 @@ enum LandBeingGrazed {Common, Unique};
 enum AreaUnits {Dunum, Hectare};
 enum LandFound {NotEnough, TooMuch, FoundTarget};
 enum EnergyType {KCalories, TDN};
-#endif //LA
+#endif   //LA

@@ -40,9 +40,9 @@ class LaCropParameter : public LaSerialisable, public LaGuid
     /** Assignement operator */
     LaCropParameter& operator= (const LaCropParameter& theCropParameter);
 
-    //
-    // Accessors
-    //
+      //
+      // Accessors
+      //
 
     /** Get the name for this set of crop model parameters */
     QString name() const;
@@ -72,9 +72,9 @@ class LaCropParameter : public LaSerialisable, public LaGuid
     bool useSpecificLand() const;
     QString rasterName() const;
 
-    //
-    // Mutators
-    //
+      //
+      // Mutators
+      //
 
     /** Set the name for this set of crop model parameters */
     void setName(QString theName);
@@ -152,5 +152,5 @@ class LaCropParameter : public LaSerialisable, public LaGuid
     QString mRasterName;
 };
 
-#endif //LACROPPARAMETER_H
+#endif   //LACROPPARAMETER_H
 

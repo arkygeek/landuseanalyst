@@ -26,7 +26,7 @@
 #include "lautils.h"
 #include "la.h"
 
-//copy constructor
+  //copy constructor
 LaModelReports::LaModelReports()
 {
 
@@ -40,5 +40,5 @@ LaModelReports::~LaModelReports()
 
 void LaModelReports::fallowTable()
 {
-  // implement me!
+    // implement me!
 }

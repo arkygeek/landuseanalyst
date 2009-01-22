@@ -48,5 +48,5 @@ public:
     virtual bool fromXmlFile(const QString theFileName);
 };
 
-#endif //LASERIALISABLE_H
+#endif   //LASERIALISABLE_H
 

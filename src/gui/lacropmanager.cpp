@@ -40,7 +40,7 @@
   LaCropManager::LaCropManager(QWidget* parent, Qt::WFlags fl)
 : QDialog(parent,fl)
 {
-  //required by Qt4 to initialise the ui
+    //required by Qt4 to initialise the ui
   setupUi(this);
   readSettings();
   lblCropPix->setScaledContents(true);
@@ -51,7 +51,7 @@
   cbFodderEnergyType->addItem("KCalories");
   cbFodderEnergyType->addItem("TDN");
   refreshCropTable();
-  //disable these buttons unless experimental is allowed
+    //disable these buttons unless experimental is allowed
   pbnImport->setVisible(false);
   pbnExport->setVisible(false);
 }
@@ -94,14 +94,14 @@ void LaCropManager::refreshCropTable(QString theGuid)
   tblCrops->setColumnCount(2);
 
 
-  //we do this in two passes
-  //in the first pass we populate a qmap with all the layersets
-  //we find....
+    //we do this in two passes
+    //in the first pass we populate a qmap with all the layersets
+    //we find....
   mCropMap = LaUtils::getAvailableCrops();
 
-  //the second pass populates the table
-  //doing it from the map ensures that the rows
-  //are sorted by layerset name
+    //the second pass populates the table
+    //doing it from the map ensures that the rows
+    //are sorted by layerset name
 
   int mySelectedRow=0;
   int myCurrentRow=0;
@@ -113,40 +113,40 @@ void LaCropManager::refreshCropTable(QString theGuid)
     qDebug() << myCrop.toText();
     if (theGuid.isEmpty())
     {
-      qDebug() << "No default active row was requested. Assigning to myCrop.guid()!";
+      qDebug() << "No default active row was requested.Assigning to myCrop.guid()!";
       theGuid=myCrop.guid();
     }
     if (myCrop.guid()==theGuid)
     {
       mySelectedRow=myCurrentRow;
     }
-    // Insert new row ready to fill with details
+      // Insert new row ready to fill with details
     tblCrops->insertRow(myCurrentRow);
     QString myGuid = myCrop.guid();
-    qDebug () << "Inserting crop with guid: " << myGuid;
-    // Add details to the new row
+    qDebug() << "Inserting crop with guid: " << myGuid;
+      // Add details to the new row
     QTableWidgetItem *mypFileNameItem= new QTableWidgetItem(myGuid);
     tblCrops->setItem(myCurrentRow, 0, mypFileNameItem);
     QTableWidgetItem *mypNameItem = new QTableWidgetItem(myCrop.name());
     tblCrops->setItem(myCurrentRow, 1, mypNameItem);
-    //display an icon indicating if the layerset is local or remote (e.g. terralib)
-    //LaCrop::Origin myOrigin = myCrop.origin();
-    //if (myOrigin==LaCrop::USERPROFILE)
-    //{
+      //display an icon indicating if the layerset is local or remote (e.g. terralib)
+      //LaCrop::Origin myOrigin = myCrop.origin();
+      //if (myOrigin==LaCrop::USERPROFILE)
+      //{
     QIcon myIcon;
     myIcon.addFile(":/localdata.png");
     mypNameItem->setIcon(myIcon);
-    //}
-    //else if (myOrigin==LaCrop::ADAPTERPROFILE)
-    //{
-    //QIcon myIcon;
-    //myIcon.addFile(":/remotedata.png");
-    //mypNameItem->setIcon(myIcon);
-    //}
-    //else if (myOrigin==LaCrop::UNDEFINED)
-    //{
-    //  mypNameItem->setTextColor(Qt::yellow);
-    //}
+      //}
+      //else if (myOrigin==LaCrop::ADAPTERPROFILE)
+      //{
+      //QIcon myIcon;
+      //myIcon.addFile(":/remotedata.png");
+      //mypNameItem->setIcon(myIcon);
+      //}
+      //else if (myOrigin==LaCrop::UNDEFINED)
+      //{
+      //  mypNameItem->setTextColor(Qt::yellow);
+      //}
     myCurrentRow++;
   }
 
@@ -171,16 +171,16 @@ void LaCropManager::refreshCropTable(QString theGuid)
 
 void LaCropManager::cellClicked(int theRow, int theColumn)
 {
-  //note we use the alg name not the id because user may have customised params
+    //note we use the alg name not the id because user may have customised params
   qDebug() << "LaCropManager::cellClicked";
   QString myGuid = tblCrops->item(tblCrops->currentRow(),0)->text();
-  qDebug() << "Guid is: " <<  myGuid;
+  qDebug() << "Guid is: " << myGuid;
   QString myFileName = myGuid + ".xml";
   selectCrop(myFileName);
 }
 void LaCropManager::selectCrop(QString theFileName)
 {
-  qDebug() << "selectCrop Called : " << theFileName.toLocal8Bit();
+  qDebug() << "selectCrop Called : " << theFileName;
   QString myCropDir = LaUtils::userCropProfilesDirPath();
   LaCrop myCrop;
   myCrop.fromXmlFile(myCropDir + QDir::separator() + theFileName);
@@ -204,7 +204,7 @@ void LaCropManager::showCrop()
 
 void LaCropManager::on_pushButtonLoad_clicked()
 {
-  //
+    //
   mCrop.fromXmlFile("/tmp/crop.xml");
   showCrop();
 }
@@ -215,7 +215,7 @@ void LaCropManager::on_pushButtonSave_clicked()
 }
 void LaCropManager::on_toolNew_clicked()
 {
-  qDebug("New toolbutton clicked");
+  qDebug() << "New toolbutton clicked";
   LaCrop myCrop;
   myCrop.setGuid();
   mCrop = myCrop;
@@ -231,12 +231,12 @@ void LaCropManager::resizeEvent ( QResizeEvent * theEvent )
 
 void LaCropManager::on_toolCopy_clicked()
 {
-  qDebug("Copy toolbutton clicked");
+  qDebug() << "Copy toolbutton clicked";
   if (tblCrops->currentRow() < 0)
   {
     return;
   }
-  //to clone, we get the algorithm guid that is currently selected
+    //to clone, we get the algorithm guid that is currently selected
   QString myGuid = tblCrops->item(tblCrops->currentRow(),0)->text();
   if (myGuid.isEmpty())
   {
@@ -252,7 +252,7 @@ void LaCropManager::on_toolCopy_clicked()
     myProfileName = tr("Copy ") + QString::number(myCount++) + " of " + myCrop.name();
   }
   */
-  //assign this layerset its own guid
+    //assign this layerset its own guid
   myCrop.setGuid();
   QString myNewFileName = LaUtils::userCropProfilesDirPath() + QDir::separator() + myCrop.guid() + ".xml";
   myCrop.setName(tr("Copy of ") + myCrop.name());
@@ -261,7 +261,7 @@ void LaCropManager::on_toolCopy_clicked()
 }
 void LaCropManager::on_toolDelete_clicked()
 {
-  qDebug("Delete toolbutton clicked");
+  qDebug() << "Delete toolbutton clicked";
   if (tblCrops->currentRow() < 0)
   {
     return;

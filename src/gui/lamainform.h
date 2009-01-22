@@ -20,11 +20,12 @@
 #ifndef mCommonGrazingLandValue
 #define mCommonGrazingLandValue
 
-//QT Includes
+  //QT Includes
 #include <QDialog>
 #include <QHash>
 #include <QPair>
-//Local Includes
+#include <QDebug>
+  //Local Includes
 #include <ui_lamainformbase.h>
 #include <lautils.h>
 #include <la.h>
@@ -32,7 +33,7 @@
 #include <laanimalparameter.h>
 
 
-//forward declarations
+  //forward declarations
 class QTreeWidgetItem;
 /**
   This is the main gui class
@@ -45,8 +46,10 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
     LaMainForm(QWidget* parent = 0, Qt::WFlags fl = 0 );
     ~LaMainForm();
   public slots:
+    double totalWeightFromLinearGrowth(float theDaysToGain, float theGainPerDay);
     void on_sliderMeat_valueChanged(int theValue);
     void on_sliderDiet_valueChanged(int theValue);
+    void on_sbDairyUse_valueChanged(int theValue);
     void on_sliderCrop_valueChanged(int theValue);
     QMap <QString, QString> getSelectedCrops();
     QPair <int, int> getSiteCoordinates();
@@ -61,9 +64,7 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
     void on_pbnNewAnimal_clicked();
     void on_pbnNewCropParameter_clicked();
     void on_pbnNewAnimalParameter_clicked();
-    void on_pbnWriteSampleData_clicked();
     void on_sbDailyCalories_valueChanged(int theValue);
-    void on_sbDairyUse_valueChanged(int theValue);
     void on_pbnFallow_clicked();
     void on_cbDebug_clicked();
     void on_cboMapSet_currentIndexChanged();
@@ -81,11 +82,11 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
     void logMessage(QString theString);
   private slots:
 
-    //Rene Belloq: You and I are very much alike. Archeology is our religion,
-    // yet we have both fallen from the pure faith. Our methods have not differed
-    // as much as you pretend. I am but a shadowy reflection of you. It would take
-    // only a nudge to make you like me. To push you out of the light.
-    //Indiana Jones: Now you're getting nasty.
+      //Rene Belloq: You and I are very much alike. Archeology is our religion,
+      // yet we have both fallen from the pure faith. Our methods have not differed
+      // as much as you pretend. I am but a shadowy reflection of you. It would take
+      // only a nudge to make you like me. To push you out of the light.
+      //Indiana Jones: Now you're getting nasty.
 
     void helpItemClicked(QTreeWidgetItem * thepCurrentItem, QTreeWidgetItem * thepOldItem);
     void writeResults(QString theText);
@@ -98,20 +99,20 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
   private:
     void readSettings();
     void writeSettings();
-    int getCalorieTargets();
-    // A simple helper / debug function to print the state of
-    // animals and crops maps
+      // A simple helper / debug function to print the state of
+      // animals and crops maps
     void debugChecks();
     void printCropsAndAnimals();
     /* Show html report in the animal tab for the animal and its associated param */
     void showAnimalDefinitionReport(LaAnimal &theAnimal, LaAnimalParameter &theAnimalParamter);
     void showCropDefinitionReport(LaCrop &theCrop, LaCropParameter &theCropParamter);
     bool setComboToDefault(QComboBox * thepCombo, QString theDefault);
-    //    <animal guid <enabled, animalparamters guid>>
+      //    <animal guid <enabled, animalparamters guid>>
     LaTripleMap mAnimalsMap;
     LaTripleMap mCropsMap;
-    //int mCommonLandGrazingValue;
-    //QMap<QString,int> mSelectedCropsMap;
+    double mWeightCounter;
+      //int mCommonLandGrazingValue;
+      //QMap<QString,int> mSelectedCropsMap;
 };
 
-#endif //LAMAINFORM_H
+#endif   //LAMAINFORM_H

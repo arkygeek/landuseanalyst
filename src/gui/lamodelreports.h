@@ -36,9 +36,9 @@ public:
 
     ~LaModelReports();
 
-    //
-    //// Accessors
-    //
+      //
+      //  // Accessors
+      //
 
     void fallowTable();
 };

@@ -20,10 +20,10 @@
 #ifndef LAASSEMBLAGECONVERSION_H
 #define LAASSEMBLAGECONVERSION_H
 
-//QT Includes
+  //QT Includes
 #include <QDialog>
 
-//Local Includes
+  //Local Includes
 #include <ui_laassemblageconversionbase.h>
 #include <laanimalparameter.h>
 #include <lautils.h>
@@ -62,7 +62,7 @@ class LaAssemblageConversion : public QDialog, private Ui::LaAssemblageConversio
       LaUtils::CropMap mCropMap;
       LaAnimalParameter mAnimalParameter;
 
-      //int mRowCount;
+        //int mRowCount;
 };
 
-#endif //LAASSEMBLAGECONVERSION_H
+#endif   //LAASSEMBLAGECONVERSION_H

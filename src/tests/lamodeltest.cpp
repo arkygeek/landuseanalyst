@@ -34,7 +34,7 @@ void LaModelTest::saveAndLoadModel()
 {
   LaModel myModel;
   QString myFileName;
-  //@TODO make this OS agnostic...
+    //@TODO make this OS agnostic...
   myFileName = "/tmp/" + myModel.guid() + ".xml";
   LaUtils::createTextFile( myFileName , myModel.toXml());
   LaModel myModel2;
@@ -46,7 +46,7 @@ void LaModelTest::run()
   QString myFileName = "/../../../test_data/modelOutputs/24a192e7-dbb8-4531-b1c5-b9b2718614a2.xml";
   LaModel myModel;
   myModel.fromXmlFile(myFileName);
-  //myModel.run();
+    //myModel.run();
 }
 
 QTEST_MAIN(LaModelTest) 

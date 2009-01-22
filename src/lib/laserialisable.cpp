@@ -40,7 +40,7 @@ bool LaSerialisable::toXmlFile(const QString theFileName)
   }
   else
   {
-    //@TODO Error handler!
+      //@TODO Error handler!
     myResult=false;
   }
   return myResult ;
@@ -58,9 +58,8 @@ bool LaSerialisable::fromXmlFile(const QString theFileName)
   }
   else
   {
-    QString myError = "Failed to open "  + theFileName + " for deserialisation ";
-    qDebug() << myError;
-    //@TODO Error handler!
+    qDebug() << "Failed to open "  << theFileName << " for deserialisation ";
+      //@TODO Error handler!
     myResult=false;
   }
   return myResult ;
