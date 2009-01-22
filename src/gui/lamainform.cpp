@@ -601,7 +601,7 @@ void LaMainForm::setDietLabels()
 //  float myDairyUtilisation = sbDairyUtilisation->value();
   
   float myKCaloriesIndividualAnnual = (myCaloriesIndividual*365.)/1000.;
-  float myMCaloriesSettlementAnnual = (myKCaloriesIndividualAnnual/1000.)*myPopulation;
+  //float myMCaloriesSettlementAnnual = (myKCaloriesIndividualAnnual/1000.)*myPopulation;
   //float myTameAnimalMCalories;// = (myTameMeatPercentage*.01)*myMCaloriesSettlementAnnual;
   float myWildAnimalMCalories;// = (myWildMeatPercentage*.01)*myMCaloriesSettlementAnnual;
 
@@ -780,7 +780,7 @@ void LaMainForm::setDietLabels()
         /////////////////////////////////
         //  Perform final calculations //
       /////////////////////////////////
-        float myTameAnimalMCalories;
+        //float myTameAnimalMCalories;
         float myDairyMCalories;// = (myDairyUtilisation*.01) * myDairyMCalorieCounter*1000.;
         //float myPlantsMCalories;// = (myMCaloriesSettlementAnnual - myDairyMCalories - myTameAnimalMCalories - myWildAnimalMCalories);
         float myDairyPercentage;// = (myDairyMCalories/myMCaloriesSettlementAnnual)*100.;
@@ -796,40 +796,22 @@ void LaMainForm::setDietLabels()
         {
           if  (myModel.includeDairy())
           {
-            myTameAnimalMCalories = (myTameMeatPercentage*.01) * (myMCaloriesSettlementAnnual - myDairyMCalories);
-            
-            qDebug() << "includeDairy myMCaloriesSettlementAnnual: " << myMCaloriesSettlementAnnual;
-            qDebug() << "                        myDairyMCalories: " << myDairyMCalories;
-            qDebug() << "                   myTameAnimalMCalories: " << myTameAnimalMCalories;
+//
           } // end includeDairy TRUE
           else
           {
-            myTameAnimalMCalories = (myTameMeatPercentage*.01)*myMCaloriesSettlementAnnual;
-            qDebug() << "DONT include Dairy myMCaloriesSettlementAnnual: " << myMCaloriesSettlementAnnual;
-            qDebug() << "                             myDairyMCalories : " << myDairyMCalories;
-            myTameAnimalMCalories = (myTameMeatPercentage*.01)*myMCaloriesSettlementAnnual;
-            qDebug() << "                   myTameAnimalMCalories: " << myTameAnimalMCalories;
+//
           } // end includeDairy FALSE
         }// end baseOnPlants TRUE
         else // base the calculations on meat (or meat & dairy) first and derive plant contribution
         {
           if  (myModel.includeDairy())
               { // base the calculations on meat & Dairy
-                myWildAnimalMCalories = (myWildMeatPercentage*.01) * (myMCaloriesSettlementAnnual - myDairyMCalories);
-                myTameAnimalMCalories = (myTameMeatPercentage*.01) * (myMCaloriesSettlementAnnual - myDairyMCalories);
-                qDebug() << "includeDairy myMCaloriesSettlementAnnual: " << myMCaloriesSettlementAnnual;
-                qDebug() << "                        myDairyMCalories: " << myDairyMCalories;
-                qDebug() << "                   myTameAnimalMCalories: " << myTameAnimalMCalories;
-                qDebug() << "                   myWildAnimalMCalories: " << myWildAnimalMCalories;
+//
               } // end includeDairy TRUE
           else
               { // base the calculations on meat
-                myWildAnimalMCalories = (myWildMeatPercentage*.01) * (myMCaloriesSettlementAnnual);
-                myTameAnimalMCalories = (myTameMeatPercentage*.01)*(myMCaloriesSettlementAnnual);
-                qDebug() << "DONT include Dairy myMCaloriesSettlementAnnual: " << myMCaloriesSettlementAnnual;
-                qDebug() << "                             myDairyMCalories : " << myDairyMCalories;
-                myTameAnimalMCalories = (myTameMeatPercentage*.01)*myMCaloriesSettlementAnnual;
-                qDebug() << "                   myTameAnimalMCalories: " << myTameAnimalMCalories;
+//
               } // end includeDairy FALSE
         }// end baseOnPlants FALSE
 

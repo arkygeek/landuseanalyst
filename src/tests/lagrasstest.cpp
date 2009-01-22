@@ -75,3 +75,4 @@ void LaGrassTest::createFrictionMap()
 
 QTEST_MAIN(LaGrassTest) 
 #include "moc_lagrasstest.cxx"
+
