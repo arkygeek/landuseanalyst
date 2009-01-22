@@ -85,7 +85,7 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
     /** Food Value of the common grazing land */
     int foodValueCommonLand() const;
     /** Dairy Utilisation */
-    int dairyUse() const;
+    int dairyUtilisation() const;
     bool baseOnPlants() const;
     bool includeDairy() const;
     bool limitDairy() const;
@@ -105,6 +105,7 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
     int caloriesProvidedByTheMilkOfTheAnimal (QString theAnimalParameterGuid , QString theAnimalGuid);
     int getProductionTargetsCrops(QString theCropGuid, int theCalorieTarget);
     int getProductionTargetsAnimals(QString theAnimalGuid, int theCalorieTarget);
+    //int getAdjustedProductionTargetsAnimals(QString theAnimalGuid, int theCalorieTarget);
     int getAreaTargetsCrops(QString theCropGuid, int theProductionTarget);
     int getFallowLandForACrop(QString theCropParameterGuid, int theAreaTarget);
     void allocateFallowGrazingLand();
@@ -204,9 +205,9 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
     void setCaloriesPerPersonDaily(int theCaloriesPerPersonDaily);
 
     /** Set the percent of dairy utilisation
-     * @see dairyUse()
+     * @see dairyUtilisation()
      */
-    void setDairyUse(int thePercent);
+    void setDairyUtilisation(int thePercent);
     void setBaseOnPlants(bool theBool);
     void setIncludeDairy(bool theBool);
     void setLimitDairy(bool theBool);
@@ -424,12 +425,12 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
     /** The number of calories required per person per day (average) */
     int mCaloriesPerPersonDaily;
     /** The percent of dairy utilisation by the settlement */
-    int mDairyUse;
+    int mDairyUtilisation;
 
     /** The percent of dairy utilisation by the settlement */
     int mBaseOnPlants;
     /** The percent of dairy utilisation by the settlement */
-    int mIncludeDairy;
+    bool mIncludeDairy;
     /** The percent of dairy utilisation by the settlement */
     int mLimitDairy;
     /** The percent of dairy utilisation by the settlement */

@@ -279,7 +279,7 @@ p, li { white-space: pre-wrap; }
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex" >
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="main_tab" >
       <attribute name="title" >
@@ -1338,7 +1338,7 @@ p, li { white-space: pre-wrap; }
                </widget>
               </item>
               <item>
-               <widget class="QSpinBox" name="sbDairyUse" >
+               <widget class="QSpinBox" name="sbDairyUtilisation" >
                 <property name="sizePolicy" >
                  <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
                   <horstretch>0</horstretch>

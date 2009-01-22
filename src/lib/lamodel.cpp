@@ -75,7 +75,7 @@ LaModel::LaModel(const LaModel& theModel)
   mPercentOfDietThatIsFromCrops=theModel.plantPercent();
   mMeatPercent=theModel.meatPercent();
   mCaloriesPerPersonDaily=theModel.caloriesPerPersonDaily();
-  mDairyUse=theModel.dairyUse();
+  mDairyUtilisation=theModel.dairyUtilisation();
   mBaseOnPlants=theModel.baseOnPlants();
   mIncludeDairy=theModel.includeDairy();
   mLimitDairy=theModel.limitDairy();
@@ -105,7 +105,7 @@ LaModel& LaModel::operator=(const LaModel& theModel)
   mPercentOfDietThatIsFromCrops=theModel.plantPercent();
   mMeatPercent=theModel.meatPercent();
   mCaloriesPerPersonDaily=theModel.caloriesPerPersonDaily();
-  mDairyUse=theModel.dairyUse();
+  mDairyUtilisation=theModel.dairyUtilisation();
   mBaseOnPlants=theModel.baseOnPlants();
   mIncludeDairy=theModel.includeDairy();
   mLimitDairy=theModel.limitDairy();
@@ -145,7 +145,7 @@ int  LaModel::plantPercent()      const
       }
     }
 int LaModel::meatPercent()                                 const { return mMeatPercent;                     }
-int LaModel::dairyUse()                                    const { return mDairyUse;                        }
+int LaModel::dairyUtilisation()                                    const { return mDairyUtilisation;                        }
 int LaModel::caloriesPerPersonDaily()                      const { return mCaloriesPerPersonDaily;          }
 
 bool LaModel::baseOnPlants()                               const { return mBaseOnPlants;                    }
@@ -189,7 +189,7 @@ void LaModel::setIncludeDairy           (bool theBool)           { mIncludeDairy
 void LaModel::setLimitDairy             (bool theBool)           { mLimitDairy=theBool;                     }
 void LaModel::setLimitDairyPercent      (int thePercent)         { mLimitDairyPercentage=thePercent;        }
 
-void LaModel::setDairyUse               (int thePercent)         { mDairyUse=thePercent;                    }
+void LaModel::setDairyUtilisation               (int thePercent)         { mDairyUtilisation=thePercent;                    }
 void LaModel::setCommonLandAreaUnits    (AreaUnits theAreaUnits) { mCommonLandAreaUnits = theAreaUnits;     }
 
 void LaModel::setCommonLandValue        (int theValue, AreaUnits theAreaUnits)
@@ -260,7 +260,7 @@ bool LaModel::fromXml(QString theXml)
   mLimitDairy=QString(myTopElement.firstChildElement("limitDairy").text()).toInt();
   mLimitDairyPercentage=QString(myTopElement.firstChildElement("limitDairyPercent").text()).toInt();
   
-  mDairyUse=QString(myTopElement.firstChildElement("dairyUse").text()).toInt();
+  mDairyUtilisation=QString(myTopElement.firstChildElement("dairyUtilisation").text()).toInt();
   return true;
 }
 
@@ -289,7 +289,7 @@ QString LaModel::toXml()
   myString+=QString("  <limitDairy>" + QString::number(mLimitDairy) + "</limitDairy>\n");
   myString+=QString("  <limitDairyPercent>" + QString::number(mLimitDairyPercentage) + "</limitDairyPercent>\n");
 
-  myString+=QString("  <dairyUse>" + QString::number(mDairyUse) + "</dairyUse>\n");
+  myString+=QString("  <dairyUtilisation>" + QString::number(mDairyUtilisation) + "</dairyUtilisation>\n");
   myString+=QString("</model>\n");
   return myString;
 }
@@ -319,7 +319,7 @@ QString LaModel::toText()
   myString+=QString("limitDairy=>" + QString::number(mLimitDairy) + "\n");
   myString+=QString("limitDairyPercent=>" + QString::number(mLimitDairyPercentage) + "\n");
   
-  myString+=QString("dairyUse=>" + QString::number(mDairyUse) + "\n");
+  myString+=QString("dairyUtilisation=>" + QString::number(mDairyUtilisation) + "\n");
   return myString;
 }
 
@@ -349,7 +349,7 @@ QString LaModel::toHtml()
   myString+="<br>LimitDairy=>" + QString::number(mLimitDairy) + "</br>";
   myString+="<br>LimitDairyPercent=>" + QString::number(mLimitDairyPercentage) + "</br>";
   
-  myString+="<br>Dairy Use: " + QString::number(mDairyUse) + "</br>";
+  myString+="<br>Dairy Use: " + QString::number(mDairyUtilisation) + "</br>";
     //iterate through animals
   QMapIterator<QString, QString > myAnimalIterator(mAnimalsMap);
   while (myAnimalIterator.hasNext())
@@ -521,10 +521,10 @@ int LaModel::caloriesFromMilk(QString theAnimalGuid)   // need to know total num
 {
   HerdSize myHerdSize=herdSize(theAnimalGuid);   // myHerdSize.first==mothers myHerdSize.second==juveniles
   LaAnimal myAnimal = LaUtils::getAnimal(theAnimalGuid);
-  float myDairyUse=0.01*dairyUse();
+  float myDairyUtilisation = 0.01 * mDairyUtilisation;
   float myMothers;
       
-  float myCaloriesFromMilk= myDairyUse * myMothers * myAnimal.milkGramsPerDay() * 365.0 * myAnimal.milkFoodValue();   // kcalories
+  float myCaloriesFromMilk = myDairyUtilisation * myMothers * (myAnimal.milkGramsPerDay() * .001) * (myAnimal.lactationTime()-myAnimal.weaningAge()) * myAnimal.milkFoodValue();   // kcalories
   
   int myReturnValue = static_cast<int>(myCaloriesFromMilk);
     //logMessage("method ==> int LaModel::caloriesFromTameMeat()");
@@ -630,8 +630,8 @@ int LaModel::caloriesProvidedByTheMeatOfTheAnimal(QString theAnimalParameterGuid
 int LaModel::caloriesProvidedByTheMilkOfTheAnimal(QString theAnimalParameterGuid , QString theAnimalGuid)
 {
   LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(theAnimalParameterGuid);
-  float myDairyUse = 0.01 * mDairyUse;
-  float myMilkCalories = caloriesFromMilk(theAnimalGuid) * myDairyUse;
+  float myDairyUtilisation = 0.01 * mDairyUtilisation;
+  float myMilkCalories = caloriesFromMilk(theAnimalGuid) * myDairyUtilisation;
   int myReturnValue = static_cast<int>(myMilkCalories);
     ///@TODO remove this debugging stuff
   logMessage("method ==> int LaModel::caloriesProvidedByMilk(QString theAnimalParameterGuid)");
@@ -679,12 +679,94 @@ int LaModel::getProductionTargetsCrops(QString theCropGuid, int theCalorieTarget
   return myReturnValue;
 }
 
+/*int LaModel::getAdjustedProductionTargetsAnimals(QString theAnimalGuid, int theCalorieTarget)
+{
+  LaAnimal myAnimal = LaUtils::getAnimal(theAnimalGuid);
+  float myFoodValue;
+  qDebug() << "state of mIncludeDairy in  getProductionTargetsAnimals: " << mIncludeDairy;
+  if (mIncludeDairy)
+  {    // adjust the milk calories to correspond to value per kg of each live weight animal
+    float myDairyUtilisation = 0.01 * mDairyUtilisation;
+    float myMilkKgPerDay = myAnimal.milkGramsPerDay() * 0.001;
+    float myMilkFoodValue = myAnimal.milkFoodValue();
+    int myLactationTime = myAnimal.lactationTime();
+    int myWeaningAge = myAnimal.weaningAge();
+    int myKillWeight = myAnimal.killWeight();
+
+    qDebug() << "myDairyUtilisation " << myDairyUtilisation;
+    qDebug() << "myMilkKgPerDay " << myMilkKgPerDay;
+    qDebug() << "myMilkFoodValue " << myMilkFoodValue;
+    qDebug() << "myLactationTime " << myLactationTime;
+    qDebug() << "myWeaningAge " << myWeaningAge;
+    qDebug() << "myKillWeight " << myKillWeight;
+
+    float myPotentialMCaloriesFromMilk = myMilkKgPerDay * myMilkFoodValue * (myLactationTime - myWeaningAge);
+      qDebug() << "myPotentialMCaloriesFromMilk " << myPotentialMCaloriesFromMilk;
+    float myMilkMCalories = myPotentialMCaloriesFromMilk * myDairyUtilisation;
+      qDebug() << "myMilkMCalories " << myMilkMCalories;
+    float myAdjustedValueForMilk = (myMilkMCalories / myKillWeight);
+      qDebug() << "myAdjustedValueForMilk " << myAdjustedValueForMilk;
+    float myMeatFoodValue = myAnimal.meatFoodValue();
+      qDebug() << "myMeatFoodValue " << myMeatFoodValue;
+    myFoodValue = (myMeatFoodValue + myAdjustedValueForMilk) / 1000.;
+      qDebug() << "Adjusting meat value from " << myMeatFoodValue << " to " << myFoodValue;
+  }
+  else
+  {  // no adjustment for dairy use
+    myFoodValue = (myAnimal.meatFoodValue() / 1000.);
+  }
+  
+  float myAnimalProductionTarget = (theCalorieTarget / myFoodValue) / (0.01 * myAnimal.usableMeat());
+  int myReturnValue = static_cast<int>(myAnimalProductionTarget);
+    ///@TODO remove this debugging stuff
+  logMessage("method ==> int LaModel::getProductionTargetsAnimals(QString theAnimalGuid, int theCalorieTarget)");
+  logMessage("Animal Guid: " + myAnimal.guid().toLocal8Bit());
+  logMessage("Animal Name: " + myAnimal.name().toLocal8Bit());
+  logMessage("Production Target: " + QString::number(myReturnValue).toLocal8Bit());
+  return myReturnValue;
+}*/
+
 int LaModel::getProductionTargetsAnimals(QString theAnimalGuid, int theCalorieTarget)
 {
   LaAnimal myAnimal = LaUtils::getAnimal(theAnimalGuid);
-  float myFoodValue = (myAnimal.meatFoodValue()/1000.); // determine the contribution from dairy and add to this value
-  //float myDairyValueToAttach = 0.; // calculate milk value and add it to the food value of 
-  float myAnimalProductionTarget = (theCalorieTarget / myFoodValue) / (0.01 * myAnimal.usableMeat());   // kcalories
+  int myFoodValue;
+  qDebug() << "-----------<======8888888888888888888======>----------";
+  qDebug() << "state of mIncludeDairy in getProductionTargetsAnimals: " << mIncludeDairy;
+  if (mIncludeDairy)
+  {    // adjust the milk calories to correspond to value per kg of each live weight animal
+    float myDairyUtilisation = 0.01 * mDairyUtilisation;
+    float myMilkKgPerDay = myAnimal.milkGramsPerDay() * 0.001;
+    float myMilkFoodValue = myAnimal.milkFoodValue();
+    float myLactationTime = myAnimal.lactationTime();
+    float myWeaningAge = myAnimal.weaningAge();
+    float myKillWeight = myAnimal.killWeight();
+
+    qDebug() << "myDairyUtilisation " << myDairyUtilisation;
+    qDebug() << "myMilkKgPerDay " << myMilkKgPerDay;
+    qDebug() << "myMilkFoodValue " << myMilkFoodValue;
+    qDebug() << "myLactationTime " << myLactationTime;
+    qDebug() << "myWeaningAge " << myWeaningAge;
+    qDebug() << "myKillWeight " << myKillWeight;
+
+    float myPotentialMCaloriesFromMilk = myMilkKgPerDay * myMilkFoodValue * (myLactationTime - myWeaningAge);
+    float myMilkMCalories = myPotentialMCaloriesFromMilk * myDairyUtilisation;
+    float myAdjustedValueForMilk = (myMilkMCalories / myKillWeight);
+    float myMeatFoodValue = myAnimal.meatFoodValue();
+    myFoodValue = (myMeatFoodValue + myAdjustedValueForMilk);
+    
+    qDebug() << "myPotentialMCaloriesFromMilk " << myPotentialMCaloriesFromMilk;
+    qDebug() << "myMilkMCalories " << myMilkMCalories;
+    qDebug() << "myAdjustedValueForMilk " << myAdjustedValueForMilk;
+    qDebug() << "myMeatFoodValue " << myMeatFoodValue;
+    
+    qDebug() << "Adjusting meat value from " << myMeatFoodValue << " to " << myFoodValue;
+ }
+  else
+  {  // no adjustment for dairy use
+    myFoodValue = (myAnimal.meatFoodValue());
+  }
+  
+  float myAnimalProductionTarget = (theCalorieTarget / myFoodValue) / (0.01 * myAnimal.usableMeat());
   int myReturnValue = static_cast<int>(myAnimalProductionTarget);
     ///@TODO remove this debugging stuff
   logMessage("method ==> int LaModel::getProductionTargetsAnimals(QString theAnimalGuid, int theCalorieTarget)");
@@ -802,18 +884,10 @@ HerdSize LaModel::herdSize(QString theAnimalGuid)
   HerdSize myHerdSize;
   LaAnimal myAnimal = LaUtils::getAnimal(theAnimalGuid);
   float myAnimalsRequired;
-  // here would be the place to insert logic that would consider milk production as included in meat contribution
   
   float myAnimalProductionTarget=getProductionTargetsAnimals( theAnimalGuid, static_cast <int>(mCaloriesProvidedByMeatMap.value(theAnimalGuid)));
-  if (mIncludeDairy)
-  {
-    //mMeatPercent*.01*myAnimal.meatFoodValue()
-    myAnimalsRequired=(myAnimalProductionTarget / myAnimal.killWeight()) / (myAnimal.usableMeat()*.01);
-  }
-  else
-  {
-    myAnimalsRequired=(myAnimalProductionTarget / myAnimal.killWeight()) / (myAnimal.usableMeat()*.01);
-  }
+  
+  myAnimalsRequired=(myAnimalProductionTarget / myAnimal.killWeight()) / (myAnimal.usableMeat()*.01);
   float myBirthsPerYear = 365.0 / (myAnimal.gestationTime() + myAnimal.estrousCycle() + myAnimal.weaningAge());
   float myOffspringPerMotherYearly = myBirthsPerYear * myAnimal.youngPerBirth() * (1.0-(0.01*myAnimal.deathRate()));
   float myMothersNeededStepOne = myAnimalsRequired/myOffspringPerMotherYearly;

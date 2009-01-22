@@ -49,7 +49,7 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
     double totalWeightFromLinearGrowth(float theDaysToGain, float theGainPerDay);
     void on_sliderMeat_valueChanged(int theValue);
     void on_sliderDiet_valueChanged(int theValue);
-    void on_sbDairyUse_valueChanged(int theValue);
+    void on_sbDairyUtilisation_valueChanged(int theValue);
     void on_sliderCrop_valueChanged(int theValue);
     QMap <QString, QString> getSelectedCrops();
     QPair <int, int> getSiteCoordinates();
