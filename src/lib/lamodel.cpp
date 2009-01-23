@@ -760,13 +760,13 @@ int LaModel::getProductionTargetsAnimals(QString theAnimalGuid, int theCalorieTa
     qDebug() << "myMeatFoodValue " << myMeatFoodValue;
     
     qDebug() << "Adjusting meat value from " << myMeatFoodValue << " to " << myFoodValue;
- }
+  }
   else
   {  // no adjustment for dairy use
-    myFoodValue = (myAnimal.meatFoodValue());
+    myFoodValue = static_cast<float>(myAnimal.meatFoodValue());
   }
-  
-  float myAnimalProductionTarget = (theCalorieTarget / myFoodValue) / (0.01 * myAnimal.usableMeat());
+  qDebug() << "theCalorieTarget= " << theCalorieTarget;
+  float myAnimalProductionTarget = (theCalorieTarget / myFoodValue) / (0.01 * (static_cast<float>(myAnimal.usableMeat())));
   int myReturnValue = static_cast<int>(myAnimalProductionTarget);
     ///@TODO remove this debugging stuff
   logMessage("method ==> int LaModel::getProductionTargetsAnimals(QString theAnimalGuid, int theCalorieTarget)");
@@ -888,15 +888,15 @@ HerdSize LaModel::herdSize(QString theAnimalGuid)
   float myAnimalProductionTarget=getProductionTargetsAnimals( theAnimalGuid, static_cast <int>(mCaloriesProvidedByMeatMap.value(theAnimalGuid)));
   
   myAnimalsRequired=(myAnimalProductionTarget / myAnimal.killWeight()) / (myAnimal.usableMeat()*.01);
-  float myBirthsPerYear = 365.0 / (myAnimal.gestationTime() + myAnimal.estrousCycle() + myAnimal.weaningAge());
-  float myOffspringPerMotherYearly = myBirthsPerYear * myAnimal.youngPerBirth() * (1.0-(0.01*myAnimal.deathRate()));
+  float myBirthsPerYear = 365.0 / (static_cast<float>(myAnimal.gestationTime()) + static_cast<float>(myAnimal.estrousCycle()) + static_cast<float>(myAnimal.weaningAge()));
+  float myOffspringPerMotherYearly = myBirthsPerYear * (static_cast<float>(myAnimal.youngPerBirth())) * (1.0-(0.01*(static_cast<float>(myAnimal.deathRate()))));
   float myMothersNeededStepOne = myAnimalsRequired/myOffspringPerMotherYearly;
-  float myMalesStepOne = (myMothersNeededStepOne * myOffspringPerMotherYearly)/2;
+  float myMalesStepOne = (myMothersNeededStepOne * myOffspringPerMotherYearly)/2.;
   float myFemalesStepOne = myMalesStepOne;
-  float myMotherReplacementsPerYear = myMothersNeededStepOne/myAnimal.breedingExpectancy();
-  float myAdditionalMothers = (myMotherReplacementsPerYear/myOffspringPerMotherYearly)*2;
-  float myMalesStepTwo = (myAdditionalMothers*myOffspringPerMotherYearly)/2;
-  float myFemalesStepTwo = (myAdditionalMothers*myOffspringPerMotherYearly)/2;
+  float myMotherReplacementsPerYear = myMothersNeededStepOne/static_cast<float>(myAnimal.breedingExpectancy());
+  float myAdditionalMothers = (myMotherReplacementsPerYear/myOffspringPerMotherYearly)*2.;
+  float myMalesStepTwo = (myAdditionalMothers*myOffspringPerMotherYearly)/2.;
+  float myFemalesStepTwo = (myAdditionalMothers*myOffspringPerMotherYearly)/2.;
   float myTotalMothers = myMothersNeededStepOne+myAdditionalMothers;
   float myTotalMales = myMalesStepOne+myMalesStepTwo;
   float myTotalFemales = myFemalesStepOne-myFemalesStepTwo;
