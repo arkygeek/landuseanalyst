@@ -334,7 +334,7 @@ p, li { white-space: pre-wrap; }
          <set>Qt::AlignRight</set>
         </property>
         <property name="suffix" >
-         <string> Mths</string>
+         <string> Weeks</string>
         </property>
         <property name="prefix" >
          <string/>

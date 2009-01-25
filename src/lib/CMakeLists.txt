@@ -13,6 +13,7 @@ SET(LA_CORE_SRCS
   lamodel.cpp
   lagrass.cpp
   lagrassprocesslib.cpp
+  ladietlabels.cpp
   )
 #headers that dont need to be MOCs but that may be distributed etc later
 SET(LA_CORE_OTHER_HDRS
@@ -25,6 +26,7 @@ SET(LA_CORE_OTHER_HDRS
   lafoodsource.h
   laserialisable.h
   version.h
+  ladietlabels.h
   )
 #headers that need to be mocd
 SET(LA_CORE_MOC_HDRS

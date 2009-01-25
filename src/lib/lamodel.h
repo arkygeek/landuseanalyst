@@ -86,49 +86,101 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
     int foodValueCommonLand() const;
     /** Dairy Utilisation */
     int dairyUtilisation() const;
+    /** a bool to indicate whether the diet ratios
+      * will be based on plants or animals.
+      * If te bool is TRUE it is based on plants
+      */
     bool baseOnPlants() const;
+    /** this bool, if true, will consider dairy as
+      * part of meat when doing the diet calculations
+      */
     bool includeDairy() const;
+    /** this bool will impose an overall limit on
+      * the portion of the diet that can be based
+      * on dairy products
+      */
     bool limitDairy() const;
+    /** this is the maximum percent of the diet that
+      * dairy products can be
+      * @SEE includeDairy()
+      */
     int limitDairyPercent() const;
+    /** animals can be assigned an access to fallow
+     * grazing land from 0 to 3,, 0 being not allowed to graze,
+     * and then a three levels of preference
+     */
     Status fallowStatus() const;
+    /** the ratio of sown land to fallow land
+      */
     float fallowRatio() const;
-
-    
+    /** this will calculate how many calories crops will provide */
     int caloriesFromCrops();
+    /** this calculates how many calories will come from tame meat */
     int caloriesFromTameMeat();
+    /** this calculates how many calories will come from mailk products */
     int caloriesFromMilk(QString theAnimalGuid);
+    /** this returns the number of different crops being modeled */
     int countCrops();
+    /** this returns the number of different animals being modelled */
     int countAnimals();
+    /** this returns the calories from dairy produced by the herd of an animal */
     int caloriesFromDairyProducts();
+    /** holder */
     int caloriesProvidedByTheCrop(QString theCropParameterGuid);
+    /** holder */
     int caloriesProvidedByTheMeatOfTheAnimal(QString theAnimalParameterGuid);
+    /** holder */
     int caloriesProvidedByTheMilkOfTheAnimal (QString theAnimalParameterGuid , QString theAnimalGuid);
+    /** holder */
     int getProductionTargetsCrops(QString theCropGuid, int theCalorieTarget);
+    /** holder */
     int getProductionTargetsAnimals(QString theAnimalGuid, int theCalorieTarget);
+    /** holder */
     //int getAdjustedProductionTargetsAnimals(QString theAnimalGuid, int theCalorieTarget);
     int getAreaTargetsCrops(QString theCropGuid, int theProductionTarget);
+    /** holder */
     int getFallowLandForACrop(QString theCropParameterGuid, int theAreaTarget);
+    /** holder */
     void allocateFallowGrazingLand();
+    /** holder */
     void adjustAnimalTargetsForFodder();
+    /** holder */
     int requiredValue(QString theAnimalGuid);
+    /** holder */
     int adjustAreaTargetsCrops();
+    /** holder */
     int doTheFallowAllocation(Priority, int, int);
-    HerdSize herdSize (QString theAnimalGuid);
+    /** holder */
+    HerdSize calculateHerdSize (QString theAnimalGuid);
+    /** holder */
     
     QMap <QString, int> animalCalorieTargetsMap() const;
+    /** holder */
     QMap <QString, int> animalFeedRequirementsMap() const;
+    /** holder */
     QMap <QString, int> animalProductionTargetsMap() const;
+    /** holder */
     QMap <QString, int> animalAreaTargetsMap() const;
+    /** holder */
     QMap <QString, int> cropCalorieTargetsMap() const;
+    /** holder */
     QMap <QString, int> cropProductionTargetsMap() const;
+    /** holder */
     QMap <QString, int> cropAreaTargetsMap() const;
+    /** holder */
     QMap <QString, QString> calcsCropsMap();
+    /** holder */
     QMap <QString, QString> calcsAnimalsMap();
+    /** holder */
 
     QString reportForAnimal(QString theAnimalGuid);
+    /** holder */
     QString reportForCrop(QString theCropGuid);
+    /** holder */
     QMap<QString, int> getAreaTargetsAnimalsMap();
+    /** holder */
     QMap<QString, int> getAreaTargetsCropsMap();
+    /** holder */
 
       //
       // Mutators
@@ -208,17 +260,35 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
      * @see dairyUtilisation()
      */
     void setDairyUtilisation(int thePercent);
+    /** Set the holder
+     * @see holder()
+     */
     void setBaseOnPlants(bool theBool);
+    /** Set the holder
+     * @see holder()
+     */
     void setIncludeDairy(bool theBool);
+    /** Set the holder
+     * @see holder()
+     */
     void setLimitDairy(bool theBool);
+    /** Set the holder
+     * @see holder()
+     */
     void setLimitDairyPercent(int thePercent);
     /** Set food value of the common land
      * @see commonLandValue()
      */
     void setCommonLandValue(int theValue, AreaUnits theAreaUnits);
 
+    /** Set the holder
+     * @see holder()
+     */
     void setCommonLandAreaUnits(AreaUnits theAreaUnits);
     
+    /** Set the holder
+     * @see holder()
+     */
     void setHerdSize(QString theAnimalGuid);
 
     /** Set the animals for this model
@@ -231,11 +301,27 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
      */
     void setCrops(QMap<QString,QString>);
 
-    /** Perform calcs
+    void doCalcsPlantsFirstIncludeDairy ();
+    void doCalcsPlantsFirstDairySeperate ();
+    void doCalcsAnimalsFirstIncludeDiary ();
+    void doCalcsAnimalsFirstDairySeparate ();
+    
+    /** Perform calculations
      */
     void DoCalculations();
+
+    float countTotalCaloriesFromDairy();
+    /** Clear all mpas holding results of calculations
+     * @see clearCalcMaps()
+     */
     void clearCalcMaps();
+    /** Set the holder
+     * @see holder()
+     */
     void setFallowStatus(Status theStatus);
+    /** Set the holder
+     * @see holder()
+     */
     void setFallowRatio(float theRatio);
       //void setDoTheFallowAllocation(Priority, float, float);
     /** Return an xml representation of this layer
@@ -437,17 +523,25 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
     int mLimitDairyPercentage;
 
     /** A map to hold the associated animals and their parameters */
-    QMap<QString,QString> mAnimalsMap;
+    QMap <QString,QString> mAnimalsMap;
     /** A map to hold the associated crops and their parameters */
-    QMap<QString,QString> mCropsMap;
+    QMap <QString,QString> mCropsMap;
+    /** holder */
     AreaUnits mCommonLandAreaUnits;
+    /** holder */
     Status mFallowStatus;
+    /** holder */
     float mFallowRatio;
+    /** holder */
     int mCommonGrazingLandValueTarget;
+    /** holder */
       //int mCommonGrazingLandValue;
     int mCommonGrazingValue;
+    /** holder */
     int mCommonGrazingLandAreaTarget;
+    /** holder */
     int mCommonCropLand;
+    /** holder */
     HerdSize mHerdSize;
 
 };

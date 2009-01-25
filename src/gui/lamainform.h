@@ -43,7 +43,16 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
 {
   Q_OBJECT;
   public:
+  /**
+    * The Main form gui of LA.  Sets up the required clot connections
+    * as well as initializing the GUI.
+    * @param parent
+    * @param fl
+    */
     LaMainForm(QWidget* parent = 0, Qt::WFlags fl = 0 );
+    /**
+     * No idea what to put here
+     */
     ~LaMainForm();
   public slots:
     double totalWeightFromLinearGrowth(float theDaysToGain, float theGainPerDay);
@@ -77,6 +86,11 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
     /** Refresh the crops list, remembering which were checked
      * from before */
     void loadCrops();
+    /**
+     * Set's the model.  All data comes from the mainForm except for the map
+     * of crops and animals which are being used. 
+     */
+    void setModel();
     void setDietLabels();
     /** Slot to log any messages from classes we are listening
      * to.
@@ -99,7 +113,11 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
     void animalCellChanged(int theRow, int theColumn);
     void cropCellClicked(int theRow, int theColumn);
     void cropCellChanged(int theRow, int theColumn);
-  private:
+    private:
+
+    /**
+     * Restore controls to their last used values
+     */
     void readSettings();
     void writeSettings();
       // A simple helper / debug function to print the state of
@@ -114,8 +132,8 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
     LaTripleMap mAnimalsMap;
     LaTripleMap mCropsMap;
     double mWeightCounter;
-      //int mCommonLandGrazingValue;
-      //QMap<QString,int> mSelectedCropsMap;
+    QMap <QString,QString> mSelectedAnimalsMap;
+    QMap <QString,QString> mSelectedCropsMap;
 };
 
 #endif   //LAMAINFORM_H

@@ -40,6 +40,7 @@ typedef QPair <QPair<QString,QString>, QPair<QString,QString> > LaRasterInfo;
 typedef QMap < QString, LaFoodSource > LaFoodSourceMap;
 typedef QPair <float,float> HerdSize;
 
+
 enum Priority {None, High, Medium, Low};
 enum Status {MoreThanEnoughToCompletelySatisfy, NotEnoughToCompletelySatisfy};
 enum LandBeingGrazed {Common, Unique};

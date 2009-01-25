@@ -129,32 +129,17 @@ bool LaModel::walkingTime()       const { return mWalkingTime;}
 bool LaModel::pathDistance()      const { return mPathDistance;}
 int  LaModel::precision()         const { return mPrecision;}
 int  LaModel::dietPercent()       const { return mDietPercent;}
-int  LaModel::plantPercent()      const
-    {
-      if (mPercentOfDietThatIsFromCrops < 0)
-      {
-        return 0;
-      }
-      else if (mPercentOfDietThatIsFromCrops > 100)
-      {
-        return 100;
-      }
-      else
-      {
-        return mPercentOfDietThatIsFromCrops;
-      }
-    }
+int  LaModel::plantPercent()      const { if (mPercentOfDietThatIsFromCrops < 0) {return 0;}
+                                          else if (mPercentOfDietThatIsFromCrops > 100) {return 100;}
+                                          else {return mPercentOfDietThatIsFromCrops;}                      }
 int LaModel::meatPercent()                                 const { return mMeatPercent;                     }
-int LaModel::dairyUtilisation()                                    const { return mDairyUtilisation;                        }
+int LaModel::dairyUtilisation()                                    const { return mDairyUtilisation;        }
 int LaModel::caloriesPerPersonDaily()                      const { return mCaloriesPerPersonDaily;          }
-
 bool LaModel::baseOnPlants()                               const { return mBaseOnPlants;                    }
 bool LaModel::includeDairy()                               const { return mIncludeDairy;                    }
 bool LaModel::limitDairy()                                 const { return mLimitDairy;                      }
 int  LaModel::limitDairyPercent()                          const { return mLimitDairyPercentage;            }
-
 int LaModel::foodValueCommonLand()                         const { return mCommonGrazingValue;              }
-
 QMap <QString, int> LaModel::animalCalorieTargetsMap()     const { return mCaloriesProvidedByMeatMap;       }
 QMap <QString, int> LaModel::animalFeedRequirementsMap()   const { return mValueMap;                        }
 QMap <QString, int> LaModel::animalProductionTargetsMap()  const { return mProductionRequiredAnimalsMap;    }
@@ -162,11 +147,8 @@ QMap <QString, int> LaModel::animalAreaTargetsMap()        const { return mAreaT
 QMap <QString, int> LaModel::cropCalorieTargetsMap()       const { return mCaloriesProvidedByCropsMap;      }
 QMap <QString, int> LaModel::cropProductionTargetsMap()    const { return mProductionRequiredCropsMap;      }
 QMap <QString, int> LaModel::cropAreaTargetsMap()          const { return mAreaTargetsCropsMap;             }
-  //QMap <QString, LaFoodSourceMap> LaModel::fodderMap()          const { return mFodderMap;                       }
-
 QMap <QString, QString> LaModel::calcsAnimalsMap()               { return mCalcsAnimalsMap;                 }
 QMap <QString, QString> LaModel::calcsCropsMap()                 { return mCalcsCropsMap;                   }
-
 void LaModel::setFallowStatus           (Status theStatus)       { mFallowStatus=theStatus;                 }
 void LaModel::setFallowRatio            (float theRatio)         { mFallowRatio=theRatio;                   }
 void LaModel::setName                   (QString theName)        { mName=theName;                           }
@@ -183,22 +165,41 @@ void LaModel::setDietPercent            (int thePercent)         { mDietPercent=
 void LaModel::setCropPercent            (int thePercent)         { mPercentOfDietThatIsFromCrops=thePercent;}
 void LaModel::setMeatPercent            (int thePercent)         { mMeatPercent=thePercent;                 }
 void LaModel::setCaloriesPerPersonDaily (int theCalories)        { mCaloriesPerPersonDaily=theCalories;     }
-
 void LaModel::setBaseOnPlants           (bool theBool)           { mBaseOnPlants=theBool;                   }
 void LaModel::setIncludeDairy           (bool theBool)           { mIncludeDairy=theBool;                   }
 void LaModel::setLimitDairy             (bool theBool)           { mLimitDairy=theBool;                     }
 void LaModel::setLimitDairyPercent      (int thePercent)         { mLimitDairyPercentage=thePercent;        }
-
-void LaModel::setDairyUtilisation               (int thePercent)         { mDairyUtilisation=thePercent;                    }
+void LaModel::setDairyUtilisation               (int thePercent)         { mDairyUtilisation=thePercent;    }
 void LaModel::setCommonLandAreaUnits    (AreaUnits theAreaUnits) { mCommonLandAreaUnits = theAreaUnits;     }
-
 void LaModel::setCommonLandValue        (int theValue, AreaUnits theAreaUnits)
+     { mCommonGrazingValue = LaUtils::convertAreaToHectares        ( theAreaUnits, theValue );              }
+void LaModel::setAnimals(QMap<QString,QString> theAnimals)       { mAnimalsMap = theAnimals;}
+void LaModel::setCrops(QMap<QString,QString> theCrops)           { mCropsMap = theCrops;                    }
+
+void LaModel::doCalcsPlantsFirstIncludeDairy(){/**/}
+
+void LaModel::doCalcsPlantsFirstDairySeperate(){/**/}
+
+void LaModel::doCalcsAnimalsFirstIncludeDiary()
 {
-  mCommonGrazingValue = LaUtils::convertAreaToHectares(theAreaUnits, theValue);
+  /*float myDairyUtilisation;
+  float myDairyMCalories = (myDairyUtilisation) * myDairyMCalorieCounter;
+  float myDairyPortionPct = myDairyMCalories / myMCaloriesSettlementAnnual;
+  float myPercentOfCalorieTarget = myMCaloriesSettlementAnnual * myDietPercentMeat;
+  float myAnimalCalsMinusDairyBit = myPercentOfCalorieTarget - myDairyMCalories;
+  float myWildAnimalMCalories = myAnimalCalsMinusDairyBit * myWildMeatPercentage;
+  float myTameAnimalMCalories = myAnimalCalsMinusDairyBit * myTameMeatPercentage;
+  float myWildAnimalPortionPct = myWildAnimalMCalories / myMCaloriesSettlementAnnual;
+  float myTameMeatPortionPct = myTameAnimalMCalories / myMCaloriesSettlementAnnual;
+  float myPlantsPortionPct = 1. - myAnimalPortionPct;
+  float myCropsPortionPct = myPlantsPortionPct * myCropPercentage;
+  float myWildPlantsPortionPct = myPlantsPortionPct * myWildPlantsPercentage;
+  float myCropMCalories = myMCaloriesSettlementAnnual * myCropsPortionPct;
+  float myWildPlantsMCalories = myMCaloriesSettlementAnnual * myWildPlantsPortionPct;
+*/
 }
 
-void LaModel::setAnimals(QMap<QString,QString> theAnimals)       { mAnimalsMap = theAnimals;}
-void LaModel::setCrops(QMap<QString,QString> theCrops)           { mCropsMap = theCrops;}
+void LaModel::doCalcsAnimalsFirstDairySeparate(){/**/}
 
 bool LaModel::fromXml(QString theXml)
 {
@@ -394,12 +395,116 @@ QString LaModel::toHtml()
   return myString;
 }
 
-      //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  ///
-     //                                           //
-    //  The 'GUTS' of this class follow below    //
-   //                                           //
-  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  ///
+      //
+     //
+    //  The 'GUTS' of this class follow below
+   //
+  //
 
+/**
+ * counts the potential calories available for human consumption from all animals
+ * @param theSelectedAnimalsMap 
+ * @return 
+ */
+float LaModel::countTotalCaloriesFromDairy()
+{
+  float myDairyMCalorieCounter = 0.0;
+  LaFoodSourceMap myHerdMCalorieCounterMap;
+  QMap <QString,QString> mySelectedAnimalsMap = mAnimalsMap;
+  QMapIterator <QString,QString> myNextAnimalIterator(mySelectedAnimalsMap);
+  while (myNextAnimalIterator.hasNext())
+  {
+    myNextAnimalIterator.next();
+    QString myAnimalGuid = myNextAnimalIterator.key();
+    QString myAnimalParameterGuid = myNextAnimalIterator.value();
+    LaAnimal myAnimal = LaUtils::getAnimal(myAnimalGuid);
+    LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(myAnimalParameterGuid);
+    HerdSize myHerdSize;
+    myHerdSize = calculateHerdSize(myAnimalGuid);
+    // this will be adjusted for dairy inclusion if selected ^^
+    
+                // calories required for Juveniles
+    float myNumberOfJuveniles = myHerdSize.second;
+    float myJuvenilesPerKg = myAnimal.juvenile(); //daily caloric requirements (per kg)
+    float myJuvenilesGrowTime = myAnimal.growTime() * 7.; // (converted to) age in days of animal at slaughter
+    float myJuvenilesKillWeight = myAnimal.killWeight(); // weight in kg of animal when slaughtered
+    float myWeaningWeight = myAnimal.weaningWeight();
+    float myWeaningAge = myAnimal.weaningAge();
+    float myDaysToGain = myJuvenilesGrowTime - myAnimal.weaningAge();
+                // arithmetic progression used to get calories required to
+                // get an animal from weaning to slaughter
+    float myTotalJuvenileKg = (myWeaningWeight+myJuvenilesKillWeight)*((static_cast<float>(myDaysToGain))/2.);
+    float myJuvenileKCalories = (myJuvenilesPerKg * myTotalJuvenileKg)/1000.;
+    float myJuvenileHerdRequiresMCalories = (myJuvenileKCalories * myNumberOfJuveniles)/1000.;
+
+    qDebug() << "Juvenile Weaning Weight: " << myWeaningWeight;
+    qDebug() << "Juvenile Kill Weight: " << myJuvenilesKillWeight;
+    qDebug() << "Juvenile Grow Time: " << myJuvenilesGrowTime;
+    qDebug() << "Juvenile Weaning Age: " << myWeaningAge;
+    qDebug() << "Juvenile Total Kg: " << myTotalJuvenileKg;
+    qDebug() << "Juvenile Total KCalories per individual: " << myJuvenileKCalories;
+    qDebug() << "Juvenile Herd Requires MCalories per year: " << myJuvenileHerdRequiresMCalories;
+
+                // calories required for adult females
+                // as they are either lactating, pregnant or on a maintenance diet
+                // their requirements are:
+                //  whileLactatingCaloriesRequired * daysLactating +
+                //   whilePregnantCaloriesRequired * daysPregnant  +
+                //    whileOnMaintenanceCaloriesRequired * daysOnMaintenanceRations
+    float myNumberOfAdultFemales = myHerdSize.first;
+                // don't forget that the birthing cycle might not be yearly. must adjust for that
+                // because I need yearly calorie targets so will adjust the time to be a function
+                // of the cycle
+    float myBirthingEventsPerYear = 365.0 / static_cast<float>((myAnimal.gestationTime()) + static_cast<float>(myAnimal.estrousCycle()) + static_cast<float>(myAnimal.weaningAge()));
+    float myAdultFemalesGestatingNeeds = static_cast<float>(myAnimal.gestating());
+    float myAdultFemalesGestationTime = static_cast<float>(myAnimal.gestationTime()) * myBirthingEventsPerYear;
+    float myAdultFemalesLactatingNeeds = static_cast<float>(myAnimal.lactating());
+    float myAdultFemalesLactationTime = static_cast<float>(myAnimal.lactationTime()) * myBirthingEventsPerYear;
+    float myAdultFemalesMaintenanceNeeds = myAnimal.maintenance();
+    float myAdultFemalesMaintenanceTime = (365.*myBirthingEventsPerYear) - myAdultFemalesGestationTime - myAdultFemalesLactationTime;
+
+    float myGestatingRequiresKCalories = (myAdultFemalesGestatingNeeds * myAdultFemalesGestationTime)/1000.;
+    float myLactatingRequiresKCalories = (myAdultFemalesLactatingNeeds * myAdultFemalesLactationTime)/1000.;
+    float myMaintenanceRequiresKCalories = (myAdultFemalesMaintenanceNeeds * myAdultFemalesMaintenanceTime)/1000.;
+
+    float myGestatingHerdRequiresMCalories   = (myGestatingRequiresKCalories   * myNumberOfAdultFemales)/1000.;
+    float myLactatingHerdRequiresMCalories   = (myLactatingRequiresKCalories   * myNumberOfAdultFemales)/1000.;
+    float myMaintenanceHerdRequiresMCalories = (myMaintenanceRequiresKCalories * myNumberOfAdultFemales)/1000.;
+
+    float myHerdRequires = myJuvenileHerdRequiresMCalories + myGestatingHerdRequiresMCalories + myLactatingHerdRequiresMCalories + myMaintenanceHerdRequiresMCalories;
+
+    qDebug() << "Herd Size: Mothers,Juveniles" << myHerdSize;
+    qDebug() << "Gestating Individual Requires MCalories per year: " << myGestatingRequiresKCalories;
+    qDebug() << "Lactating Individual Requires MCalories per year: " << myLactatingRequiresKCalories;
+    qDebug() << "Maintenance Individual Requires MCalories per year: " << myMaintenanceRequiresKCalories;
+    qDebug() << "Gestating Herd Requires MCalories per year: " << myGestatingHerdRequiresMCalories;
+    qDebug() << "Lactating Herd Requires MCalories per year: " << myLactatingRequiresKCalories;
+    qDebug() << "Maintenance Herd Requires MCalories per year: " << myMaintenanceHerdRequiresMCalories;
+    qDebug() << "myHerdRequires MCalories per Year: " << myHerdRequires;
+    bool myGrazingSupplementedFlag = static_cast<float>(myAnimalParameter.fodderUse());
+
+    if (myGrazingSupplementedFlag)
+    {
+                     // here i can get the additional calories needed from the crops
+                     // to feed the animals by cycling through the crops used as feed
+                     // and  inserting into the myHerdMCalorieCounterMap
+    }
+
+    float myMilkKgPerDay = myAnimal.milkGramsPerDay() / 1000.;
+    float myMilkFoodValue = myAnimal.milkFoodValue();
+    float myDaysOfMilking = myAnimal.lactationTime() - myWeaningAge;
+    float myKCaloriesFromMilk = (myNumberOfAdultFemales * myDaysOfMilking
+        * myMilkFoodValue * myMilkKgPerDay)/1000.;
+    float myMCaloriesFromMilk = myKCaloriesFromMilk/1000.;
+    myDairyMCalorieCounter += myMCaloriesFromMilk;
+                
+    qDebug() << "Adding " << myKCaloriesFromMilk
+        << " KCalories to total KCalories from milk which is now at: "
+        << myDairyMCalorieCounter << "MCalories";
+  }
+  
+  return myDairyMCalorieCounter;
+}
 void LaModel::clearCalcMaps()
 {
   mCalcsAnimalsMap.clear();
@@ -483,8 +588,6 @@ void LaModel::DoCalculations()
   initialiseCalcsCropsMap();
 }
 
-
-
 void LaModel::adjustAnimalTargetsForFodder()
 {
     //logMessage("method ==> void LaModel::adjustAnimalTargetsForFodder()");
@@ -519,7 +622,7 @@ int LaModel::caloriesFromTameMeat()
 
 int LaModel::caloriesFromMilk(QString theAnimalGuid)   // need to know total number of mothers in the herd
 {
-  HerdSize myHerdSize=herdSize(theAnimalGuid);   // myHerdSize.first==mothers myHerdSize.second==juveniles
+  HerdSize myHerdSize=calculateHerdSize(theAnimalGuid);   // myHerdSize.first==mothers myHerdSize.second==juveniles
   LaAnimal myAnimal = LaUtils::getAnimal(theAnimalGuid);
   float myDairyUtilisation = 0.01 * mDairyUtilisation;
   float myMothers;
@@ -679,53 +782,6 @@ int LaModel::getProductionTargetsCrops(QString theCropGuid, int theCalorieTarget
   return myReturnValue;
 }
 
-/*int LaModel::getAdjustedProductionTargetsAnimals(QString theAnimalGuid, int theCalorieTarget)
-{
-  LaAnimal myAnimal = LaUtils::getAnimal(theAnimalGuid);
-  float myFoodValue;
-  qDebug() << "state of mIncludeDairy in  getProductionTargetsAnimals: " << mIncludeDairy;
-  if (mIncludeDairy)
-  {    // adjust the milk calories to correspond to value per kg of each live weight animal
-    float myDairyUtilisation = 0.01 * mDairyUtilisation;
-    float myMilkKgPerDay = myAnimal.milkGramsPerDay() * 0.001;
-    float myMilkFoodValue = myAnimal.milkFoodValue();
-    int myLactationTime = myAnimal.lactationTime();
-    int myWeaningAge = myAnimal.weaningAge();
-    int myKillWeight = myAnimal.killWeight();
-
-    qDebug() << "myDairyUtilisation " << myDairyUtilisation;
-    qDebug() << "myMilkKgPerDay " << myMilkKgPerDay;
-    qDebug() << "myMilkFoodValue " << myMilkFoodValue;
-    qDebug() << "myLactationTime " << myLactationTime;
-    qDebug() << "myWeaningAge " << myWeaningAge;
-    qDebug() << "myKillWeight " << myKillWeight;
-
-    float myPotentialMCaloriesFromMilk = myMilkKgPerDay * myMilkFoodValue * (myLactationTime - myWeaningAge);
-      qDebug() << "myPotentialMCaloriesFromMilk " << myPotentialMCaloriesFromMilk;
-    float myMilkMCalories = myPotentialMCaloriesFromMilk * myDairyUtilisation;
-      qDebug() << "myMilkMCalories " << myMilkMCalories;
-    float myAdjustedValueForMilk = (myMilkMCalories / myKillWeight);
-      qDebug() << "myAdjustedValueForMilk " << myAdjustedValueForMilk;
-    float myMeatFoodValue = myAnimal.meatFoodValue();
-      qDebug() << "myMeatFoodValue " << myMeatFoodValue;
-    myFoodValue = (myMeatFoodValue + myAdjustedValueForMilk) / 1000.;
-      qDebug() << "Adjusting meat value from " << myMeatFoodValue << " to " << myFoodValue;
-  }
-  else
-  {  // no adjustment for dairy use
-    myFoodValue = (myAnimal.meatFoodValue() / 1000.);
-  }
-  
-  float myAnimalProductionTarget = (theCalorieTarget / myFoodValue) / (0.01 * myAnimal.usableMeat());
-  int myReturnValue = static_cast<int>(myAnimalProductionTarget);
-    ///@TODO remove this debugging stuff
-  logMessage("method ==> int LaModel::getProductionTargetsAnimals(QString theAnimalGuid, int theCalorieTarget)");
-  logMessage("Animal Guid: " + myAnimal.guid().toLocal8Bit());
-  logMessage("Animal Name: " + myAnimal.name().toLocal8Bit());
-  logMessage("Production Target: " + QString::number(myReturnValue).toLocal8Bit());
-  return myReturnValue;
-}*/
-
 int LaModel::getProductionTargetsAnimals(QString theAnimalGuid, int theCalorieTarget)
 {
   LaAnimal myAnimal = LaUtils::getAnimal(theAnimalGuid);
@@ -878,7 +934,7 @@ QString LaModel::reportForCrop(QString theCropGuid)
 }
 
   //HerdSize is typedef QPair <float AdultFemales , float Juveniles>
-HerdSize LaModel::herdSize(QString theAnimalGuid) 
+HerdSize LaModel::calculateHerdSize(QString theAnimalGuid)
 {   // this is the animal model calculation results
   QString myReport;
   HerdSize myHerdSize;
@@ -1202,7 +1258,7 @@ Status LaModel::fallowStatus() const
 
 float LaModel::fallowRatio() const
 {
-  return mFallowStatus;
+  return mFallowRatio;
 }
 
 void LaModel::allocateFallowGrazingLand()
@@ -1338,12 +1394,9 @@ void LaModel::allocateFallowGrazingLand()
 
 } */
 
-int LaModel::doTheFallowAllocation
-      (
-        Priority thePriority,
-        int theAvailableFallowValue,
-        int theValueNeeded
-      )
+int LaModel::doTheFallowAllocation (Priority thePriority,
+                                    int theAvailableFallowValue,
+                                    int theValueNeeded)
 {
   qDebug() << "Value Map: " << mValueMap;
     // when the total number of calories needed by the animals
@@ -1443,9 +1496,9 @@ int LaModel::doTheFallowAllocation
 
 
 
-    //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //
+    //
    // The following is all for generating reports on calculation results   //
-  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //
+  //
 
 QString LaModel::toHtmlCalorieCropTargets()
 {
