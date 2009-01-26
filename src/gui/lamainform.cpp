@@ -30,6 +30,7 @@
 #include "lagrass.h"
 #include "lagrassprocess.h"
 #include "la.h"
+#include "ladietlabels.h"
 
   //qt includes
 #include <QComboBox>
@@ -717,12 +718,7 @@ void LaMainForm::setModel()
 
 void LaMainForm::setDietLabels()
 {
-  float myCaloriesIndividual = sbDailyCalories->value();
-  float myPopulation = sbPopulation->value();
-
-  float myKCaloriesIndividualAnnual = (myCaloriesIndividual*365.)/1000.;
-  float myMCaloriesSettlementAnnual = (myKCaloriesIndividualAnnual/1000.)*myPopulation;
-
+  LaDietLabels myDietLabels;
   LaModel myModel;
   setModel();
   if (labelCropCheck->text() != "100\%" or labelAnimalCheck->text() != "100\%")
@@ -735,27 +731,64 @@ void LaMainForm::setDietLabels()
         {
           if  (myModel.includeDairy())
           {
-            myModel.doCalcsPlantsFirstIncludeDairy();
+            myDietLabels=myModel.doCalcsPlantsFirstIncludeDairy();
+            qDebug() << "doCalcsPlantsFirstIncludeDairy";
           }
           else
           {
-            myModel.doCalcsPlantsFirstDairySeperate();
+            myDietLabels=myModel.doCalcsPlantsFirstDairySeperate();
+            qDebug() << "doCalcsPlantsFirstDairySeperate";
           }
         }
         else
         {
           if  (myModel.includeDairy())
-              {
-                myModel.doCalcsAnimalsFirstIncludeDiary();
-              }
+          {
+            myDietLabels=myModel.doCalcsAnimalsFirstIncludeDiary();
+            qDebug() << "doCalcsAnimalsFirstIncludeDiary";
+          }
           else
-              {
-                myModel.doCalcsAnimalsFirstDairySeparate();;
-              }
+          {
+            myDietLabels=myModel.doCalcsAnimalsFirstDairySeparate();
+            qDebug() << "doCalcsAnimalsFirstDairySeparate";
+          }
         }
       }
-  labelCaloriesIndividual->setText(QString::number(myKCaloriesIndividualAnnual));
-  labelCaloriesSettlement->setText(QString::number(myMCaloriesSettlementAnnual));
+
+  float myDairyMCalories = myDietLabels.dairyMCalories();
+  float myCropMCalories = myDietLabels.cropMCalories();
+  float myWildAnimalMCalories = myDietLabels.wildAnimalMCalories();
+  float myWildPlantsMCalories = myDietLabels.wildPlantsMCalories();
+  float myDairyPortionPct = myDietLabels.dairyPortionPct();
+  float myTameMeatPortionPct = myDietLabels.tameMeatPortionPct();
+  float myCropsPortionPct = myDietLabels.cropsPortionPct();
+  float myWildAnimalPortionPct = myDietLabels.wildAnimalPortionPct();
+  float myWildPlantsPortionPct = myDietLabels.wildPlantsPortionPct();
+  float myPlantsPortionPct = myDietLabels.plantsPortionPct();
+  float myAnimalPortionPct = myDietLabels.animalPortionPct();
+  float myKiloCaloriesIndividualAnnual = myDietLabels.kiloCaloriesIndividualAnnual();
+  float myMegaCaloriesSettlementAnnual = myDietLabels.megaCaloriesSettlementAnnual();
+
+  labelCaloriesIndividual->setText(QString::number(myKiloCaloriesIndividualAnnual));
+  labelCaloriesSettlement->setText(QString::number(myMegaCaloriesSettlementAnnual));
+
+  labelPortionPlants->setText(QString::number(myPlantsPortionPct));
+  labelPortionMeat->setText(QString::number(myAnimalPortionPct));
+  labelPortionAllDairy->setText(QString::number(myDairyPortionPct));
+
+  labelPortionCrops->setText(QString::number(myCropsPortionPct));
+  labelPortionTameMeat->setText(QString::number(myTameMeatPortionPct));
+  labelPortionDairy->setText(QString::number(myDairyPortionPct));
+
+  labelPortionWildMeat->setText(QString::number(myWildAnimalPortionPct));
+  labelPortionWildPlants->setText(QString::number(myWildPlantsPortionPct));
+
+  labelCaloriesCrops->setText(QString::number(myCropMCalories));
+  labelCaloriesTameMeat->setText(QString::number(myTameMeatPortionPct));
+  labelCaloriesDairy->setText(QString::number(myDairyMCalories));
+
+  labelCaloriesWildMeat->setText(QString::number(myWildAnimalMCalories));
+  labelCaloriesWildPlants->setText(QString::number(myWildPlantsMCalories));
 }
 
 /**

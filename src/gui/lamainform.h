@@ -31,7 +31,7 @@
 #include <la.h>
 #include <laanimal.h>
 #include <laanimalparameter.h>
-
+#include "ladietlabels.h"
 
   //forward declarations
 class QTreeWidgetItem;

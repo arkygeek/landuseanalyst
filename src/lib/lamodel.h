@@ -28,6 +28,7 @@ class QString;
 #include "laserialisable.h"
 #include "laguid.h"
 #include "la.h"
+#include "ladietlabels.h"
 
 #include <QString>
 #include <QMap>
@@ -301,10 +302,10 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
      */
     void setCrops(QMap<QString,QString>);
 
-    void doCalcsPlantsFirstIncludeDairy ();
-    void doCalcsPlantsFirstDairySeperate ();
-    void doCalcsAnimalsFirstIncludeDiary ();
-    void doCalcsAnimalsFirstDairySeparate ();
+    LaDietLabels doCalcsPlantsFirstIncludeDairy ();
+    LaDietLabels doCalcsPlantsFirstDairySeperate ();
+    LaDietLabels doCalcsAnimalsFirstIncludeDiary ();
+    LaDietLabels doCalcsAnimalsFirstDairySeparate ();
     
     /** Perform calculations
      */

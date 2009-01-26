@@ -24,7 +24,7 @@
 #include "lamodel.h"
 #include "lautils.h"
 #include "la.h"
-
+#include "ladietlabels.h"
 
 #include <QSettings>
 #include <QTreeWidget>
@@ -176,12 +176,9 @@ void LaModel::setCommonLandValue        (int theValue, AreaUnits theAreaUnits)
 void LaModel::setAnimals(QMap<QString,QString> theAnimals)       { mAnimalsMap = theAnimals;}
 void LaModel::setCrops(QMap<QString,QString> theCrops)           { mCropsMap = theCrops;                    }
 
-void LaModel::doCalcsPlantsFirstIncludeDairy(){/**/}
-
-void LaModel::doCalcsPlantsFirstDairySeperate(){/**/}
-
-void LaModel::doCalcsAnimalsFirstIncludeDiary()
+LaDietLabels LaModel::doCalcsPlantsFirstIncludeDairy()
 {
+  LaDietLabels myDietLabels;
   /*float myDairyUtilisation;
   float myDairyMCalories = (myDairyUtilisation) * myDairyMCalorieCounter;
   float myDairyPortionPct = myDairyMCalories / myMCaloriesSettlementAnnual;
@@ -196,10 +193,176 @@ void LaModel::doCalcsAnimalsFirstIncludeDiary()
   float myWildPlantsPortionPct = myPlantsPortionPct * myWildPlantsPercentage;
   float myCropMCalories = myMCaloriesSettlementAnnual * myCropsPortionPct;
   float myWildPlantsMCalories = myMCaloriesSettlementAnnual * myWildPlantsPortionPct;
-*/
+  */
+  float myDairyMCalories =1.0;
+  float myCropMCalories =2.0;
+  float myWildAnimalMCalories =3.0;
+  float myWildPlantsMCalories =4.0;
+  float myDairyPortionPct =5.0;
+  float myTameMeatPortionPct =6.0;
+  float myCropsPortionPct =7.0;
+  float myWildAnimalPortionPct =8.0;
+  float myWildPlantsPortionPct =9.0;
+  float myPlantsPortionPct =10.0;
+  float myAnimalPortionPct =11.0;
+  float myKiloCaloriesIndividualAnnual =12.0;
+  float myMegaCaloriesSettlementAnnual =13.0;
+  myDietLabels.setDairyMCalories(myDairyMCalories);
+  myDietLabels.setCropMCalories(myCropMCalories);
+  myDietLabels.setWildAnimalMCalories(myWildAnimalMCalories);
+  myDietLabels.setWildPlantsMCalories(myWildPlantsMCalories);
+  myDietLabels.setDairyPortionPct(myDairyPortionPct);
+  myDietLabels.setTameMeatPortionPct(myTameMeatPortionPct);
+  myDietLabels.setCropsPortionPct(myCropsPortionPct);
+  myDietLabels.setWildAnimalPortionPct(myWildAnimalPortionPct);
+  myDietLabels.setWildPlantsPortionPct(myWildPlantsPortionPct);
+  myDietLabels.setPlantsPortionPct(myPlantsPortionPct);
+  myDietLabels.setAnimalPortionPct(myAnimalPortionPct);
+  myDietLabels.setKiloCaloriesIndividualAnnual(myKiloCaloriesIndividualAnnual);
+  myDietLabels.setMegaCaloriesSettlementAnnual(myMegaCaloriesSettlementAnnual);
+  return myDietLabels;
 }
 
-void LaModel::doCalcsAnimalsFirstDairySeparate(){/**/}
+LaDietLabels LaModel::doCalcsPlantsFirstDairySeperate()
+{
+  LaDietLabels myDietLabels;
+  /*float myDairyUtilisation;
+  float myDairyMCalories = (myDairyUtilisation) * myDairyMCalorieCounter;
+  float myDairyPortionPct = myDairyMCalories / myMCaloriesSettlementAnnual;
+  float myPercentOfCalorieTarget = myMCaloriesSettlementAnnual * myDietPercentMeat;
+  float myAnimalCalsMinusDairyBit = myPercentOfCalorieTarget - myDairyMCalories;
+  float myWildAnimalMCalories = myAnimalCalsMinusDairyBit * myWildMeatPercentage;
+  float myTameAnimalMCalories = myAnimalCalsMinusDairyBit * myTameMeatPercentage;
+  float myWildAnimalPortionPct = myWildAnimalMCalories / myMCaloriesSettlementAnnual;
+  float myTameMeatPortionPct = myTameAnimalMCalories / myMCaloriesSettlementAnnual;
+  float myPlantsPortionPct = 1. - myAnimalPortionPct;
+  float myCropsPortionPct = myPlantsPortionPct * myCropPercentage;
+  float myWildPlantsPortionPct = myPlantsPortionPct * myWildPlantsPercentage;
+  float myCropMCalories = myMCaloriesSettlementAnnual * myCropsPortionPct;
+  float myWildPlantsMCalories = myMCaloriesSettlementAnnual * myWildPlantsPortionPct;
+  */
+  float myDairyMCalories =11.0;
+  float myCropMCalories =12.0;
+  float myWildAnimalMCalories =13.0;
+  float myWildPlantsMCalories =14.0;
+  float myDairyPortionPct =15.0;
+  float myTameMeatPortionPct =16.0;
+  float myCropsPortionPct =17.0;
+  float myWildAnimalPortionPct =18.0;
+  float myWildPlantsPortionPct =19.0;
+  float myPlantsPortionPct =110.0;
+  float myAnimalPortionPct =111.0;
+  float myKiloCaloriesIndividualAnnual =112.0;
+  float myMegaCaloriesSettlementAnnual =113.0;
+  myDietLabels.setDairyMCalories(myDairyMCalories);
+  myDietLabels.setCropMCalories(myCropMCalories);
+  myDietLabels.setWildAnimalMCalories(myWildAnimalMCalories);
+  myDietLabels.setWildPlantsMCalories(myWildPlantsMCalories);
+  myDietLabels.setDairyPortionPct(myDairyPortionPct);
+  myDietLabels.setTameMeatPortionPct(myTameMeatPortionPct);
+  myDietLabels.setCropsPortionPct(myCropsPortionPct);
+  myDietLabels.setWildAnimalPortionPct(myWildAnimalPortionPct);
+  myDietLabels.setWildPlantsPortionPct(myWildPlantsPortionPct);
+  myDietLabels.setPlantsPortionPct(myPlantsPortionPct);
+  myDietLabels.setAnimalPortionPct(myAnimalPortionPct);
+  myDietLabels.setKiloCaloriesIndividualAnnual(myKiloCaloriesIndividualAnnual);
+  myDietLabels.setMegaCaloriesSettlementAnnual(myMegaCaloriesSettlementAnnual);
+  return myDietLabels;
+}
+
+LaDietLabels LaModel::doCalcsAnimalsFirstIncludeDiary()
+{
+  LaDietLabels myDietLabels;
+  /*float myDairyUtilisation;
+  float myDairyMCalories = (myDairyUtilisation) * myDairyMCalorieCounter;
+  float myDairyPortionPct = myDairyMCalories / myMCaloriesSettlementAnnual;
+  float myPercentOfCalorieTarget = myMCaloriesSettlementAnnual * myDietPercentMeat;
+  float myAnimalCalsMinusDairyBit = myPercentOfCalorieTarget - myDairyMCalories;
+  float myWildAnimalMCalories = myAnimalCalsMinusDairyBit * myWildMeatPercentage;
+  float myTameAnimalMCalories = myAnimalCalsMinusDairyBit * myTameMeatPercentage;
+  float myWildAnimalPortionPct = myWildAnimalMCalories / myMCaloriesSettlementAnnual;
+  float myTameMeatPortionPct = myTameAnimalMCalories / myMCaloriesSettlementAnnual;
+  float myPlantsPortionPct = 1. - myAnimalPortionPct;
+  float myCropsPortionPct = myPlantsPortionPct * myCropPercentage;
+  float myWildPlantsPortionPct = myPlantsPortionPct * myWildPlantsPercentage;
+  float myCropMCalories = myMCaloriesSettlementAnnual * myCropsPortionPct;
+  float myWildPlantsMCalories = myMCaloriesSettlementAnnual * myWildPlantsPortionPct;
+  */
+  float myDairyMCalories =21.0;
+  float myCropMCalories =22.0;
+  float myWildAnimalMCalories =23.0;
+  float myWildPlantsMCalories =24.0;
+  float myDairyPortionPct =25.0;
+  float myTameMeatPortionPct =26.0;
+  float myCropsPortionPct =27.0;
+  float myWildAnimalPortionPct =28.0;
+  float myWildPlantsPortionPct =29.0;
+  float myPlantsPortionPct =210.0;
+  float myAnimalPortionPct =211.0;
+  float myKiloCaloriesIndividualAnnual =212.0;
+  float myMegaCaloriesSettlementAnnual =213.0;
+  myDietLabels.setDairyMCalories(myDairyMCalories);
+  myDietLabels.setCropMCalories(myCropMCalories);
+  myDietLabels.setWildAnimalMCalories(myWildAnimalMCalories);
+  myDietLabels.setWildPlantsMCalories(myWildPlantsMCalories);
+  myDietLabels.setDairyPortionPct(myDairyPortionPct);
+  myDietLabels.setTameMeatPortionPct(myTameMeatPortionPct);
+  myDietLabels.setCropsPortionPct(myCropsPortionPct);
+  myDietLabels.setWildAnimalPortionPct(myWildAnimalPortionPct);
+  myDietLabels.setWildPlantsPortionPct(myWildPlantsPortionPct);
+  myDietLabels.setPlantsPortionPct(myPlantsPortionPct);
+  myDietLabels.setAnimalPortionPct(myAnimalPortionPct);
+  myDietLabels.setKiloCaloriesIndividualAnnual(myKiloCaloriesIndividualAnnual);
+  myDietLabels.setMegaCaloriesSettlementAnnual(myMegaCaloriesSettlementAnnual);
+  return myDietLabels;
+}
+
+LaDietLabels LaModel::doCalcsAnimalsFirstDairySeparate()
+{
+  LaDietLabels myDietLabels;
+  /*float myDairyUtilisation;
+  float myDairyMCalories = (myDairyUtilisation) * myDairyMCalorieCounter;
+  float myDairyPortionPct = myDairyMCalories / myMCaloriesSettlementAnnual;
+  float myPercentOfCalorieTarget = myMCaloriesSettlementAnnual * myDietPercentMeat;
+  float myAnimalCalsMinusDairyBit = myPercentOfCalorieTarget - myDairyMCalories;
+  float myWildAnimalMCalories = myAnimalCalsMinusDairyBit * myWildMeatPercentage;
+  float myTameAnimalMCalories = myAnimalCalsMinusDairyBit * myTameMeatPercentage;
+  float myWildAnimalPortionPct = myWildAnimalMCalories / myMCaloriesSettlementAnnual;
+  float myTameMeatPortionPct = myTameAnimalMCalories / myMCaloriesSettlementAnnual;
+  float myPlantsPortionPct = 1. - myAnimalPortionPct;
+  float myCropsPortionPct = myPlantsPortionPct * myCropPercentage;
+  float myWildPlantsPortionPct = myPlantsPortionPct * myWildPlantsPercentage;
+  float myCropMCalories = myMCaloriesSettlementAnnual * myCropsPortionPct;
+  float myWildPlantsMCalories = myMCaloriesSettlementAnnual * myWildPlantsPortionPct;
+  */
+  float myDairyMCalories =31.0;
+  float myCropMCalories =32.0;
+  float myWildAnimalMCalories =33.0;
+  float myWildPlantsMCalories =34.0;
+  float myDairyPortionPct =35.0;
+  float myTameMeatPortionPct =36.0;
+  float myCropsPortionPct =37.0;
+  float myWildAnimalPortionPct =38.0;
+  float myWildPlantsPortionPct =39.0;
+  float myPlantsPortionPct =310.0;
+  float myAnimalPortionPct =311.0;
+  float myKiloCaloriesIndividualAnnual =312.0;
+  float myMegaCaloriesSettlementAnnual =313.0;
+  myDietLabels.setDairyMCalories(myDairyMCalories);
+  myDietLabels.setCropMCalories(myCropMCalories);
+  myDietLabels.setWildAnimalMCalories(myWildAnimalMCalories);
+  myDietLabels.setWildPlantsMCalories(myWildPlantsMCalories);
+  myDietLabels.setDairyPortionPct(myDairyPortionPct);
+  myDietLabels.setTameMeatPortionPct(myTameMeatPortionPct);
+  myDietLabels.setCropsPortionPct(myCropsPortionPct);
+  myDietLabels.setWildAnimalPortionPct(myWildAnimalPortionPct);
+  myDietLabels.setWildPlantsPortionPct(myWildPlantsPortionPct);
+  myDietLabels.setPlantsPortionPct(myPlantsPortionPct);
+  myDietLabels.setAnimalPortionPct(myAnimalPortionPct);
+  myDietLabels.setKiloCaloriesIndividualAnnual(myKiloCaloriesIndividualAnnual);
+  myDietLabels.setMegaCaloriesSettlementAnnual(myMegaCaloriesSettlementAnnual);
+  return myDietLabels;
+}
 
 bool LaModel::fromXml(QString theXml)
 {
