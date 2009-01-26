@@ -57,7 +57,7 @@
 <a name="l00031"></a>00031 <span class="preprocessor">#include &lt;<a class="code" href="la_8h.html">la.h</a>&gt;</span>
 <a name="l00032"></a>00032 <span class="preprocessor">#include &lt;<a class="code" href="laanimal_8h.html">laanimal.h</a>&gt;</span>
 <a name="l00033"></a>00033 <span class="preprocessor">#include &lt;<a class="code" href="laanimalparameter_8h.html">laanimalparameter.h</a>&gt;</span>
-<a name="l00034"></a>00034 
+<a name="l00034"></a>00034 <span class="preprocessor">#include "<a class="code" href="ladietlabels_8h.html">ladietlabels.h</a>"</span>
 <a name="l00035"></a>00035 
 <a name="l00036"></a>00036   <span class="comment">//forward declarations</span>
 <a name="l00037"></a>00037 <span class="keyword">class </span>QTreeWidgetItem;
@@ -95,47 +95,48 @@
 <a name="l00082"></a>00082     <span class="keywordtype">void</span> <a class="code" href="classLaMainForm.html#33206adc6bc86f3b9d1b5d5ab4c9e690">on_cboMapSet_currentIndexChanged</a>();
 <a name="l00085"></a>00085     <span class="keywordtype">void</span> <a class="code" href="classLaMainForm.html#24c1d965173ef16dcae46a89f2e6c0e1">loadAnimals</a>();
 <a name="l00088"></a>00088     <span class="keywordtype">void</span> <a class="code" href="classLaMainForm.html#e849f794758604dc070defcfb35bd42c">loadCrops</a>();
-<a name="l00089"></a>00089     <span class="keywordtype">void</span> <a class="code" href="classLaMainForm.html#1abce250147e1e9412e5df728aabd88b">setDietLabels</a>();
-<a name="l00094"></a>00094     <span class="keywordtype">void</span> <a class="code" href="classLaMainForm.html#acbb34fde5ae5de769a5f49cf49237fa">logMessage</a>(QString theString);
-<a name="l00095"></a>00095   <span class="keyword">private</span> slots:
-<a name="l00096"></a>00096 
-<a name="l00097"></a>00097       <span class="comment">//Rene Belloq: You and I are very much alike. Archeology is our religion,</span>
-<a name="l00098"></a>00098       <span class="comment">// yet we have both fallen from the pure faith. Our methods have not differed</span>
-<a name="l00099"></a>00099       <span class="comment">// as much as you pretend. I am but a shadowy reflection of you. It would take</span>
-<a name="l00100"></a>00100       <span class="comment">// only a nudge to make you like me. To push you out of the light.</span>
-<a name="l00101"></a>00101       <span class="comment">//Indiana Jones: Now you're getting nasty.</span>
-<a name="l00102"></a>00102 
-<a name="l00103"></a>00103     <span class="keywordtype">void</span> <a class="code" href="classLaMainForm.html#076c4ef3b09f55c995169bf1d6145347">helpItemClicked</a>(QTreeWidgetItem * thepCurrentItem, QTreeWidgetItem * thepOldItem);
-<a name="l00104"></a>00104     <span class="keywordtype">void</span> <a class="code" href="classLaMainForm.html#d15d0c76acf846c9a41783b268dca325">writeResults</a>(QString theText);
-<a name="l00105"></a>00105     <span class="keywordtype">void</span> <a class="code" href="classLaMainForm.html#196c01db18626978fda5f27a26b77334">cropCalcClicked</a>(QListWidgetItem * thepCurrentItem, QListWidgetItem * thepOldItem);
-<a name="l00106"></a>00106     <span class="keywordtype">void</span> <a class="code" href="classLaMainForm.html#76dc78137d056694ea36bde5652b7faf">animalCalcClicked</a>(QListWidgetItem * thepCurrentItem, QListWidgetItem * thepOldItem);
-<a name="l00107"></a>00107     <span class="keywordtype">void</span> <a class="code" href="classLaMainForm.html#c9f7b04b7ccd3078ad6479f54fb64aa6">animalCellClicked</a>(<span class="keywordtype">int</span> theRow, <span class="keywordtype">int</span> theColumn);
-<a name="l00108"></a>00108     <span class="keywordtype">void</span> <a class="code" href="classLaMainForm.html#4a3596e1cd7c53a2000ba110c94b3aae">animalCellChanged</a>(<span class="keywordtype">int</span> theRow, <span class="keywordtype">int</span> theColumn);
-<a name="l00109"></a>00109     <span class="keywordtype">void</span> <a class="code" href="classLaMainForm.html#c471b87b9dcd56d6d5180c74206bec73">cropCellClicked</a>(<span class="keywordtype">int</span> theRow, <span class="keywordtype">int</span> theColumn);
-<a name="l00110"></a>00110     <span class="keywordtype">void</span> <a class="code" href="classLaMainForm.html#cc174496fa1b47dbd13440a2340a37bd">cropCellChanged</a>(<span class="keywordtype">int</span> theRow, <span class="keywordtype">int</span> theColumn);
-<a name="l00111"></a>00111     <span class="keyword">private</span>:
-<a name="l00112"></a>00112 
-<a name="l00116"></a>00116     <span class="keywordtype">void</span> <a class="code" href="classLaMainForm.html#1041a61026a9fbb5549bbe538279a2e6">readSettings</a>();
-<a name="l00117"></a>00117     <span class="keywordtype">void</span> <a class="code" href="classLaMainForm.html#fa256126592a486ac3a4575e12fb18e7">writeSettings</a>();
-<a name="l00118"></a>00118       <span class="comment">// A simple helper / debug function to print the state of</span>
-<a name="l00119"></a>00119       <span class="comment">// animals and crops maps</span>
-<a name="l00120"></a>00120     <span class="keywordtype">void</span> <a class="code" href="classLaMainForm.html#7fb6d922588be5d48c3bda9dd31cdbc3">debugChecks</a>();
-<a name="l00121"></a>00121     <span class="keywordtype">void</span> <a class="code" href="classLaMainForm.html#20c9ea11c03ab3b43f318b8753a3f274">printCropsAndAnimals</a>();
-<a name="l00122"></a>00122     <span class="comment">/* Show html report in the animal tab for the animal and its associated param */</span>
-<a name="l00123"></a>00123     <span class="keywordtype">void</span> <a class="code" href="classLaMainForm.html#8e0e3226dd89f0b6d9dfcbb3c75d83ca">showAnimalDefinitionReport</a>(<a class="code" href="classLaAnimal.html">LaAnimal</a> &amp;theAnimal, <a class="code" href="classLaAnimalParameter.html">LaAnimalParameter</a> &amp;theAnimalParamter);
-<a name="l00124"></a>00124     <span class="keywordtype">void</span> <a class="code" href="classLaMainForm.html#8e0c243ee7f8f01db73d7577f79bc55d">showCropDefinitionReport</a>(<a class="code" href="classLaCrop.html">LaCrop</a> &amp;theCrop, <a class="code" href="classLaCropParameter.html">LaCropParameter</a> &amp;theCropParamter);
-<a name="l00125"></a>00125     <span class="keywordtype">bool</span> <a class="code" href="classLaMainForm.html#545a7512bc9d14f4ebee101c93c2272c">setComboToDefault</a>(QComboBox * thepCombo, QString theDefault);
-<a name="l00126"></a>00126       <span class="comment">//    &lt;animal guid &lt;enabled, animalparamters guid&gt;&gt;</span>
-<a name="l00127"></a><a class="code" href="classLaMainForm.html#d6e0150e0845d22562f0c290babf94a8">00127</a>     <a class="code" href="la_8h.html#7fb71c75b479ea3a2bcd4909eb906865">LaTripleMap</a> <a class="code" href="classLaMainForm.html#d6e0150e0845d22562f0c290babf94a8">mAnimalsMap</a>;
-<a name="l00128"></a><a class="code" href="classLaMainForm.html#e52967be09fab6a73defcb8a1a3e1c72">00128</a>     <a class="code" href="la_8h.html#7fb71c75b479ea3a2bcd4909eb906865">LaTripleMap</a> <a class="code" href="classLaMainForm.html#e52967be09fab6a73defcb8a1a3e1c72">mCropsMap</a>;
-<a name="l00129"></a><a class="code" href="classLaMainForm.html#b608eda26e934c5b02a69b04611a26f7">00129</a>     <span class="keywordtype">double</span> <a class="code" href="classLaMainForm.html#b608eda26e934c5b02a69b04611a26f7">mWeightCounter</a>;
-<a name="l00130"></a>00130       <span class="comment">//int mCommonLandGrazingValue;</span>
-<a name="l00131"></a>00131       <span class="comment">//QMap&lt;QString,int&gt; mSelectedCropsMap;</span>
-<a name="l00132"></a>00132 };
-<a name="l00133"></a>00133 
-<a name="l00134"></a>00134 <span class="preprocessor">#endif   //LAMAINFORM_H</span>
+<a name="l00093"></a>00093     <span class="keywordtype">void</span> <a class="code" href="classLaMainForm.html#a110e2f2e955a3ea1b0517c6a4c38bc6">setModel</a>();
+<a name="l00094"></a>00094     <span class="keywordtype">void</span> <a class="code" href="classLaMainForm.html#1abce250147e1e9412e5df728aabd88b">setDietLabels</a>();
+<a name="l00099"></a>00099     <span class="keywordtype">void</span> <a class="code" href="classLaMainForm.html#acbb34fde5ae5de769a5f49cf49237fa">logMessage</a>(QString theString);
+<a name="l00100"></a>00100   <span class="keyword">private</span> slots:
+<a name="l00101"></a>00101 
+<a name="l00102"></a>00102       <span class="comment">//Rene Belloq: You and I are very much alike. Archeology is our religion,</span>
+<a name="l00103"></a>00103       <span class="comment">// yet we have both fallen from the pure faith. Our methods have not differed</span>
+<a name="l00104"></a>00104       <span class="comment">// as much as you pretend. I am but a shadowy reflection of you. It would take</span>
+<a name="l00105"></a>00105       <span class="comment">// only a nudge to make you like me. To push you out of the light.</span>
+<a name="l00106"></a>00106       <span class="comment">//Indiana Jones: Now you're getting nasty.</span>
+<a name="l00107"></a>00107 
+<a name="l00108"></a>00108     <span class="keywordtype">void</span> <a class="code" href="classLaMainForm.html#076c4ef3b09f55c995169bf1d6145347">helpItemClicked</a>(QTreeWidgetItem * thepCurrentItem, QTreeWidgetItem * thepOldItem);
+<a name="l00109"></a>00109     <span class="keywordtype">void</span> <a class="code" href="classLaMainForm.html#d15d0c76acf846c9a41783b268dca325">writeResults</a>(QString theText);
+<a name="l00110"></a>00110     <span class="keywordtype">void</span> <a class="code" href="classLaMainForm.html#196c01db18626978fda5f27a26b77334">cropCalcClicked</a>(QListWidgetItem * thepCurrentItem, QListWidgetItem * thepOldItem);
+<a name="l00111"></a>00111     <span class="keywordtype">void</span> <a class="code" href="classLaMainForm.html#76dc78137d056694ea36bde5652b7faf">animalCalcClicked</a>(QListWidgetItem * thepCurrentItem, QListWidgetItem * thepOldItem);
+<a name="l00112"></a>00112     <span class="keywordtype">void</span> <a class="code" href="classLaMainForm.html#c9f7b04b7ccd3078ad6479f54fb64aa6">animalCellClicked</a>(<span class="keywordtype">int</span> theRow, <span class="keywordtype">int</span> theColumn);
+<a name="l00113"></a>00113     <span class="keywordtype">void</span> <a class="code" href="classLaMainForm.html#4a3596e1cd7c53a2000ba110c94b3aae">animalCellChanged</a>(<span class="keywordtype">int</span> theRow, <span class="keywordtype">int</span> theColumn);
+<a name="l00114"></a>00114     <span class="keywordtype">void</span> <a class="code" href="classLaMainForm.html#c471b87b9dcd56d6d5180c74206bec73">cropCellClicked</a>(<span class="keywordtype">int</span> theRow, <span class="keywordtype">int</span> theColumn);
+<a name="l00115"></a>00115     <span class="keywordtype">void</span> <a class="code" href="classLaMainForm.html#cc174496fa1b47dbd13440a2340a37bd">cropCellChanged</a>(<span class="keywordtype">int</span> theRow, <span class="keywordtype">int</span> theColumn);
+<a name="l00116"></a>00116     <span class="keyword">private</span>:
+<a name="l00117"></a>00117 
+<a name="l00121"></a>00121     <span class="keywordtype">void</span> <a class="code" href="classLaMainForm.html#1041a61026a9fbb5549bbe538279a2e6">readSettings</a>();
+<a name="l00122"></a>00122     <span class="keywordtype">void</span> <a class="code" href="classLaMainForm.html#fa256126592a486ac3a4575e12fb18e7">writeSettings</a>();
+<a name="l00123"></a>00123       <span class="comment">// A simple helper / debug function to print the state of</span>
+<a name="l00124"></a>00124       <span class="comment">// animals and crops maps</span>
+<a name="l00125"></a>00125     <span class="keywordtype">void</span> <a class="code" href="classLaMainForm.html#7fb6d922588be5d48c3bda9dd31cdbc3">debugChecks</a>();
+<a name="l00126"></a>00126     <span class="keywordtype">void</span> <a class="code" href="classLaMainForm.html#20c9ea11c03ab3b43f318b8753a3f274">printCropsAndAnimals</a>();
+<a name="l00127"></a>00127     <span class="comment">/* Show html report in the animal tab for the animal and its associated param */</span>
+<a name="l00128"></a>00128     <span class="keywordtype">void</span> <a class="code" href="classLaMainForm.html#8e0e3226dd89f0b6d9dfcbb3c75d83ca">showAnimalDefinitionReport</a>(<a class="code" href="classLaAnimal.html">LaAnimal</a> &amp;theAnimal, <a class="code" href="classLaAnimalParameter.html">LaAnimalParameter</a> &amp;theAnimalParamter);
+<a name="l00129"></a>00129     <span class="keywordtype">void</span> <a class="code" href="classLaMainForm.html#8e0c243ee7f8f01db73d7577f79bc55d">showCropDefinitionReport</a>(<a class="code" href="classLaCrop.html">LaCrop</a> &amp;theCrop, <a class="code" href="classLaCropParameter.html">LaCropParameter</a> &amp;theCropParamter);
+<a name="l00130"></a>00130     <span class="keywordtype">bool</span> <a class="code" href="classLaMainForm.html#545a7512bc9d14f4ebee101c93c2272c">setComboToDefault</a>(QComboBox * thepCombo, QString theDefault);
+<a name="l00131"></a>00131       <span class="comment">//    &lt;animal guid &lt;enabled, animalparamters guid&gt;&gt;</span>
+<a name="l00132"></a><a class="code" href="classLaMainForm.html#d6e0150e0845d22562f0c290babf94a8">00132</a>     <a class="code" href="la_8h.html#7fb71c75b479ea3a2bcd4909eb906865">LaTripleMap</a> <a class="code" href="classLaMainForm.html#d6e0150e0845d22562f0c290babf94a8">mAnimalsMap</a>;
+<a name="l00133"></a><a class="code" href="classLaMainForm.html#e52967be09fab6a73defcb8a1a3e1c72">00133</a>     <a class="code" href="la_8h.html#7fb71c75b479ea3a2bcd4909eb906865">LaTripleMap</a> <a class="code" href="classLaMainForm.html#e52967be09fab6a73defcb8a1a3e1c72">mCropsMap</a>;
+<a name="l00134"></a><a class="code" href="classLaMainForm.html#b608eda26e934c5b02a69b04611a26f7">00134</a>     <span class="keywordtype">double</span> <a class="code" href="classLaMainForm.html#b608eda26e934c5b02a69b04611a26f7">mWeightCounter</a>;
+<a name="l00135"></a><a class="code" href="classLaMainForm.html#1cc2899a2584d624e9c6a3850252257d">00135</a>     QMap &lt;QString,QString&gt; <a class="code" href="classLaMainForm.html#1cc2899a2584d624e9c6a3850252257d">mSelectedAnimalsMap</a>;
+<a name="l00136"></a><a class="code" href="classLaMainForm.html#44a9798057f3d5fba899b488fbcf7dca">00136</a>     QMap &lt;QString,QString&gt; <a class="code" href="classLaMainForm.html#44a9798057f3d5fba899b488fbcf7dca">mSelectedCropsMap</a>;
+<a name="l00137"></a>00137 };
+<a name="l00138"></a>00138 
+<a name="l00139"></a>00139 <span class="preprocessor">#endif   //LAMAINFORM_H</span>
 </pre></div></div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Sat Jan 24 19:44:57 2009 for Landuse Analyst by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Mon Jan 26 17:11:26 2009 for Landuse Analyst by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>
