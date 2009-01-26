@@ -1,0 +1,11 @@
+<area shape="rect" href="$classLaModel.html#d050dcca8d5f1efb68b1c84ccee13cb9" title="LaModel::caloriesFromTameMeat" alt="" coords="207,54,420,78">
+<area shape="rect" href="$classLaModel.html#c2393b3ef80b76a86bb545ac40c7ae5d" title="LaModel::LaModel" alt="" coords="249,102,377,126">
+<area shape="rect" href="$classLaModel.html#673dc93808d288604d80c96526989c11" title="LaModel::operator=" alt="" coords="247,150,380,174">
+<area shape="rect" href="$classLaModel.html#4a138338d90a88dd27f3493e5914ab31" title="LaModel::caloriesFromCrops" alt="" coords="535,6,721,30">
+<area shape="rect" href="$classLaModel.html#4cd484b26bcad25b9a94067f175a3049" title="LaModel::caloriesProvidedByTheCrop" alt="" coords="508,54,748,78">
+<area shape="rect" href="$classLaModel.html#71cac09822d4c19bee91cfb8845ff68a" title="LaModel::caloriesProvidedByTheMeatOfTheAnimal" alt="" coords="469,102,787,126">
+<area shape="rect" href="$classLaModel.html#26b9bb0973294e864b680633f27fce75" title="LaModel::allocateFallowGrazingLand" alt="" coords="868,6,1100,30">
+<area shape="rect" href="$classLaModel.html#e9867f7eb061ea3e6753f1769936d60a" title="LaModel::DoCalculations" alt="" coords="1181,78,1347,102">
+<area shape="rect" href="$classLaModel.html#e09cb35b64dcb272de8768495b1c302d" title="LaModel::initialiseCaloriesProvidedByCropsMap" alt="" coords="835,54,1133,78">
+<area shape="rect" href="$classLaModel.html#fbbbfe448366f2d5630586763e7a6be7" title="LaModel::initialiseCaloriesProvidedByMeatMap" alt="" coords="837,102,1131,126">
+<area shape="rect" href="$classLaModel.html#0f85a2f08e31c6964ed22f449249714a" title="LaModel::initialiseCaloriesProvidedByMilkMap" alt="" coords="840,150,1128,174">

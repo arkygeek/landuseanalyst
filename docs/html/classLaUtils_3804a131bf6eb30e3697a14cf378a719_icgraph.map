@@ -1,0 +1,17 @@
+<area shape="rect" href="$classLaUtils.html#d50cf3269efc4c7298768ce78b56c610" title="LaUtils::getAvailableCropParameters" alt="" coords="357,104,592,128">
+<area shape="rect" href="$classLaUtils.html#946206fd47158b870a8f0caa1235d693" title="LaUtils::getCropParameter" alt="" coords="388,249,561,273">
+<area shape="rect" href="$classLaCropParameterManager.html#7e035a7ec1c7c73585b96322bea89228" title="LaCropParameterManager::selectCropParameter" alt="" coords="324,297,625,321">
+<area shape="rect" href="$classLaCropParameterManager.html#b03dc717dc83331b062983151e4e22a6" title="LaCropParameterManager::refreshCropParameterTable" alt="" coords="675,5,1013,29">
+<area shape="rect" href="$classLaCropParameterManager.html#2d482f07c62d895adc8a3d60567d1cee" title="LaCropParameterManager::LaCropParameterManager" alt="" coords="1063,5,1393,29">
+<area shape="rect" href="$classLaModel.html#26b9bb0973294e864b680633f27fce75" title="LaModel::allocateFallowGrazingLand" alt="" coords="1112,55,1344,79">
+<area shape="rect" href="$classLaModel.html#4cd484b26bcad25b9a94067f175a3049" title="LaModel::caloriesProvidedByTheCrop" alt="" coords="724,104,964,128">
+<area shape="rect" href="$classLaModel.html#56e297d885a15e3b68dfa6fd8a1d15eb" title="LaModel::countCrops" alt="" coords="772,152,916,176">
+<area shape="rect" href="$classLaModel.html#be5540f9ee8a2b962b8001712dcebdfc" title="LaModel::getAreaTargetsCrops" alt="" coords="744,200,944,224">
+<area shape="rect" href="$classLaModel.html#11255142af29d655b2715b07226a840c" title="LaModel::initialiseAreaTargetsCropsMap" alt="" coords="1101,200,1355,224">
+<area shape="rect" href="$classLaModel.html#9d6d7750fe2eaf5116d8b8c4edc922a6" title="LaModel::getFallowLandForACrop" alt="" coords="736,299,952,323">
+<area shape="rect" href="$classLaModel.html#e4d9b8377d7b2becccf6233c5d9090ac" title="LaModel::toHtml" alt="" coords="787,347,901,371">
+<area shape="rect" href="$classLaModel.html#642659ce7818ab6b66aff8396026906d" title="LaModel::toHtmlAreaCropTargets" alt="" coords="737,395,951,419">
+<area shape="rect" href="$classLaModel.html#80e3dab60470a6d264c22cc8c4fa30fd" title="LaModel::toHtmlCalorieCropTargets" alt="" coords="731,443,957,467">
+<area shape="rect" href="$classLaModel.html#774f3e7edd4c3d7f8ead5afa1f4cdda9" title="LaModel::toHtmlProductionCropTargets" alt="" coords="720,491,968,515">
+<area shape="rect" href="$classLaModel.html#e9867f7eb061ea3e6753f1769936d60a" title="LaModel::DoCalculations" alt="" coords="1443,104,1608,128">
+<area shape="rect" href="$classLaModel.html#e09cb35b64dcb272de8768495b1c302d" title="LaModel::initialiseCaloriesProvidedByCropsMap" alt="" coords="1079,104,1377,128">

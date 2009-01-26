@@ -1,0 +1,6 @@
+<area shape="rect" href="$classLaModel.html#26b9bb0973294e864b680633f27fce75" title="LaModel::allocateFallowGrazingLand" alt="" coords="439,6,671,30">
+<area shape="rect" href="$classLaModel.html#be5540f9ee8a2b962b8001712dcebdfc" title="LaModel::getAreaTargetsCrops" alt="" coords="179,54,379,78">
+<area shape="rect" href="$classLaCrop.html#bfe4f644cd5d2e0d2781354183d5066a" title="LaCrop::LaCrop" alt="" coords="223,102,335,126">
+<area shape="rect" href="$classLaCrop.html#98b8bfc7c30de16cbbbfb5573a270c68" title="LaCrop::operator=" alt="" coords="216,150,341,174">
+<area shape="rect" href="$classLaModel.html#e9867f7eb061ea3e6753f1769936d60a" title="LaModel::DoCalculations" alt="" coords="731,30,896,54">
+<area shape="rect" href="$classLaModel.html#11255142af29d655b2715b07226a840c" title="LaModel::initialiseAreaTargetsCropsMap" alt="" coords="428,54,681,78">
