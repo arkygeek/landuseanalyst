@@ -36,6 +36,10 @@ float LaDietLabels::cropMCalories() const
 {
   return mCropMCalories;
 }
+float LaDietLabels::animalMCalories() const
+{
+  return mAnimalMCalories;
+}
 float LaDietLabels::wildAnimalMCalories() const
 {
   return mWildAnimalMCalories;
@@ -80,6 +84,10 @@ float LaDietLabels::megaCaloriesSettlementAnnual() const
 {
   return mMegaCaloriesSettlementAnnual;
 }
+float LaDietLabels::dairySurplusMCalories() const
+{
+  return mDairySurplusMCalories;
+}
 
   //mutators
 
@@ -90,6 +98,10 @@ void LaDietLabels::setDairyMCalories(float theDairyMCalories)
 void LaDietLabels::setCropMCalories(float theCropMCalories)
 {
   mCropMCalories = theCropMCalories;
+}
+void LaDietLabels::setAnimalMCalories(float theAnimalMCalories)
+{
+  mAnimalMCalories = theAnimalMCalories;
 }
 void LaDietLabels::setWildAnimalMCalories(float theWildAnimalMCalorie)
 {
@@ -134,4 +146,8 @@ void LaDietLabels::setKiloCaloriesIndividualAnnual(float theKiloCaloriesIndividu
 void LaDietLabels::setMegaCaloriesSettlementAnnual(float theMegaCaloriesSettlementAnnua)
 {
   mMegaCaloriesSettlementAnnual = theMegaCaloriesSettlementAnnua;
+}
+void LaDietLabels::setDairySurplusMCalories(float theDairySurplus)
+{
+  mDairySurplusMCalories = theDairySurplus;
 }

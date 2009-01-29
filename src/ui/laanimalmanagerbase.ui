@@ -1194,7 +1194,7 @@ p, li { white-space: pre-wrap; }
          <set>Qt::AlignRight</set>
         </property>
         <property name="suffix" >
-         <string> Kg</string>
+         <string> g</string>
         </property>
         <property name="prefix" >
          <string/>

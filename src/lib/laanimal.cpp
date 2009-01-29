@@ -32,7 +32,7 @@ LaAnimal::LaAnimal() : LaSerialisable(), LaGuid()
   mKillWeight=100;
   mGrowTime=10;
   mDeathRate=10;
-    //mGestating=5000;
+    //mGestating=5000;//
     //mLactating=5000;
     //mJuvenile=3500;
   mSexualMaturity=18;

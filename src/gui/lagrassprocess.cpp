@@ -34,7 +34,7 @@
 #include <QSettings>
 #include <QtDebug>
 
-  LaGrassProcess::LaGrassProcess(LaRasterInfo theRasterInfo, QPair<int, int> theCoordinates, QPair<QMap<QString, int>, QMap<QString, int> > & thePairOfAreaTargetMaps, QWidget* parent, Qt::WFlags fl)
+  LaGrassProcess::LaGrassProcess(LaRasterInfo theRasterInfo, QPair<float, float> theCoordinates, QPair<QMap<QString, float>, QMap<QString, float> > & thePairOfAreaTargetMaps, QWidget* parent, Qt::WFlags fl)
 : QDialog(parent,fl)
 {
     //required by Qt4 to initialise the ui
@@ -94,7 +94,7 @@ void LaGrassProcess::accept()
   int myOverallProgress = 1;
 
   LaMainForm myMainForm;
-  QMapIterator<QString, int > myCropCounter(mCropAreaTargetsMap);
+  QMapIterator<QString, float > myCropCounter(mCropAreaTargetsMap);
   while (myCropCounter.hasNext())
   {
     myCropCounter.next();
@@ -113,7 +113,7 @@ void LaGrassProcess::accept()
       }
     }
   }
-  QMapIterator<QString, int > myAnimalCounter(mAnimalAreaTargetsMap);
+  QMapIterator<QString, float > myAnimalCounter(mAnimalAreaTargetsMap);
   while (myAnimalCounter.hasNext())
   {
     myAnimalCounter.next();
@@ -147,7 +147,7 @@ void LaGrassProcess::accept()
   tbGrass->append("Cost Surface Generation complete.");
   tbGrass->repaint();
 
-  QMapIterator<QString, int > myCropIterator(mCropAreaTargetsMap);
+  QMapIterator<QString, float > myCropIterator(mCropAreaTargetsMap);
   while (myCropIterator.hasNext())
   {
     myCropIterator.next();
@@ -200,7 +200,7 @@ void LaGrassProcess::accept()
     }
   }
 
-  QMapIterator<QString, int > myAnimalIterator(mAnimalAreaTargetsMap);
+  QMapIterator<QString, float > myAnimalIterator(mAnimalAreaTargetsMap);
   while (myAnimalIterator.hasNext())
   {
     myAnimalIterator.next();

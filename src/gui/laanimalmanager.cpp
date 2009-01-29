@@ -37,7 +37,7 @@
 #include <QListWidgetItem>
 #include <QLabel>
 #include <QPixmap>
-#include <QDebug>
+#include <QDebug> 
   LaAnimalManager::LaAnimalManager(QWidget* parent, Qt::WFlags fl)
 : QDialog(parent,fl)
 {
@@ -54,7 +54,7 @@
   pbnImport->setVisible(false);
   pbnExport->setVisible(false);
 }
-
+//
 LaAnimalManager::~LaAnimalManager()
 {
   writeSettings();

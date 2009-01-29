@@ -33,6 +33,7 @@ public:
   // accessors
   float dairyMCalories() const;
   float cropMCalories() const;
+  float animalMCalories() const;
   float wildAnimalMCalories() const;
   float wildPlantsMCalories() const;
   float dairyPortionPct() const;
@@ -44,10 +45,11 @@ public:
   float animalPortionPct() const;
   float kiloCaloriesIndividualAnnual() const;
   float megaCaloriesSettlementAnnual() const;
-
+  float dairySurplusMCalories() const;
   // mutators
   void setDairyMCalories (float theDairyMCalories);
   void setCropMCalories (float theCropMCalories);
+  void setAnimalMCalories (float theAnimalMCalories);
   void setWildAnimalMCalories (float theWildAnimalMCalorie);
   void setWildPlantsMCalories (float theWildPlantsMCalories);
   void setDairyPortionPct (float theDairyPortionPct);
@@ -59,10 +61,11 @@ public:
   void setAnimalPortionPct (float theAnimalPortionPct);
   void setKiloCaloriesIndividualAnnual (float theKCaloriesIndividualAnnual);
   void setMegaCaloriesSettlementAnnual (float theMCaloriesSettlementAnnua);
-
+  void setDairySurplusMCalories (float theDairySurplusMCalories);
   private:
   float mDairyMCalories;
   float mCropMCalories;
+  float mAnimalMCalories;
   float mWildAnimalMCalories;
   float mWildPlantsMCalories;
   float mDairyPortionPct;
@@ -74,6 +77,7 @@ public:
   float mAnimalPortionPct;
   float mKiloCaloriesIndividualAnnual;
   float mMegaCaloriesSettlementAnnual;
+  float mDairySurplusMCalories;
 };
 
 #endif
