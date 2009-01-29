@@ -58,8 +58,10 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
     double totalWeightFromLinearGrowth(float theDaysToGain, float theGainPerDay);
     void on_sliderMeat_valueChanged(int theValue);
     void on_cboxIncludeDairy_clicked(bool theBool);
-    void on_cboxBaseOnPlants_clicked(bool theBool);
     void on_cboxLimitDairy_clicked(bool theBool);
+
+    void on_cboxBaseOnPlants_clicked(bool theBool);
+    void on_sbLimitDairyPercent_valueChanged(int theValue);
     void on_sliderDiet_valueChanged(int theValue);
     void on_sbDairyUtilisation_valueChanged(int theValue);
     void on_sliderCrop_valueChanged(int theValue);

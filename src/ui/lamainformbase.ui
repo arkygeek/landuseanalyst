@@ -37,6 +37,32 @@
      </property>
     </spacer>
    </item>
+   <item row="2" column="4" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>224</width>
+       <height>37</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="2" column="6" >
+    <spacer name="spacer_2" >
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>223</width>
+       <height>37</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
    <item row="2" column="0" >
     <widget class="QLabel" name="label_5" >
      <property name="toolTip" >
@@ -95,19 +121,6 @@ p, li { white-space: pre-wrap; }
      </property>
     </widget>
    </item>
-   <item row="2" column="4" >
-    <spacer>
-     <property name="orientation" >
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0" >
-      <size>
-       <width>224</width>
-       <height>37</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
    <item row="2" column="5" >
     <widget class="QLabel" name="label_7" >
      <property name="font" >
@@ -119,19 +132,6 @@ p, li { white-space: pre-wrap; }
       <string>Copyright 2008 Jason Jorgenson</string>
      </property>
     </widget>
-   </item>
-   <item row="2" column="6" >
-    <spacer name="spacer_2" >
-     <property name="orientation" >
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0" >
-      <size>
-       <width>223</width>
-       <height>37</height>
-      </size>
-     </property>
-    </spacer>
    </item>
    <item row="2" column="7" >
     <widget class="QPushButton" name="pushButtonRun" >
@@ -825,6 +825,32 @@ p, li { white-space: pre-wrap; }
        <string>Diet</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_6" >
+       <item row="1" column="0" >
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0" >
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="2" column="1" >
+        <spacer name="verticalSpacer" >
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0" >
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
        <item row="0" column="0" >
         <widget class="QGroupBox" name="diet_comp_box" >
          <property name="sizePolicy" >
@@ -1419,7 +1445,7 @@ p, li { white-space: pre-wrap; }
            </spacer>
           </item>
           <item row="5" column="1" >
-           <widget class="QLabel" name="labelSurplusDairy" >
+           <widget class="QLabel" name="labelDairySurplus" >
             <property name="text" >
              <string>Surplus Dairy Produced</string>
             </property>
@@ -1455,51 +1481,6 @@ p, li { white-space: pre-wrap; }
           <string>Breakdown of Diet</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_4" >
-          <item row="0" column="0" >
-           <widget class="QLabel" name="label_4" >
-            <property name="text" >
-             <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
-&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;">&lt;span style=" font-size:11pt; font-weight:600; font-style:italic;">Calories required Annum&lt;/span>&lt;span style=" font-size:11pt; font-weight:600; font-style:italic; vertical-align:super;">-1&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
-            </property>
-            <property name="alignment" >
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0" >
-           <layout class="QHBoxLayout" >
-            <property name="spacing" >
-             <number>6</number>
-            </property>
-            <property name="margin" >
-             <number>0</number>
-            </property>
-            <item>
-             <widget class="QLabel" name="label_8" >
-              <property name="text" >
-               <string>Individual:</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="labelCaloriesIndividual" >
-              <property name="text" >
-               <string>Adjust Diet Settings</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_36" >
-              <property name="text" >
-               <string>kCals</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
           <item row="2" column="0" >
            <layout class="QHBoxLayout" >
             <property name="spacing" >
@@ -1530,20 +1511,6 @@ p, li { white-space: pre-wrap; }
              </widget>
             </item>
            </layout>
-          </item>
-          <item row="3" column="0" >
-           <widget class="QLabel" name="label_15" >
-            <property name="text" >
-             <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
-&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;">&lt;span style=" font-size:12pt; font-weight:600; font-style:italic;">Contribution to Diet&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
-            </property>
-            <property name="alignment" >
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
           </item>
           <item row="4" column="0" >
            <layout class="QHBoxLayout" >
@@ -1631,13 +1598,6 @@ p, li { white-space: pre-wrap; }
              </widget>
             </item>
            </layout>
-          </item>
-          <item row="7" column="0" >
-           <widget class="Line" name="line_5" >
-            <property name="orientation" >
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
           </item>
           <item row="8" column="0" >
            <layout class="QHBoxLayout" >
@@ -1732,13 +1692,6 @@ p, li { white-space: pre-wrap; }
             </item>
            </layout>
           </item>
-          <item row="11" column="0" >
-           <widget class="Line" name="line_7" >
-            <property name="orientation" >
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
           <item row="12" column="0" >
            <layout class="QHBoxLayout" name="horizontalLayout_6" >
             <item>
@@ -1788,20 +1741,6 @@ p, li { white-space: pre-wrap; }
              </widget>
             </item>
            </layout>
-          </item>
-          <item row="14" column="0" >
-           <widget class="QLabel" name="label_20" >
-            <property name="text" >
-             <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
-&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;">&lt;span style=" font-size:12pt; font-weight:600; font-style:italic;">Calories Supplied by:&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
-            </property>
-            <property name="alignment" >
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
           </item>
           <item row="15" column="0" >
            <layout class="QHBoxLayout" >
@@ -1890,13 +1829,6 @@ p, li { white-space: pre-wrap; }
             </item>
            </layout>
           </item>
-          <item row="18" column="0" >
-           <widget class="Line" name="line_4" >
-            <property name="orientation" >
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
           <item row="19" column="0" >
            <layout class="QHBoxLayout" name="horizontalLayout_3" >
             <item>
@@ -1947,50 +1879,111 @@ p, li { white-space: pre-wrap; }
             </item>
            </layout>
           </item>
+          <item row="0" column="0" >
+           <widget class="QLabel" name="label_4" >
+            <property name="text" >
+             <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;">&lt;span style=" font-size:11pt; font-weight:600; font-style:italic;">Calories required Annum&lt;/span>&lt;span style=" font-size:11pt; font-weight:600; font-style:italic; vertical-align:super;">-1&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+            </property>
+            <property name="alignment" >
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0" >
+           <widget class="QLabel" name="label_15" >
+            <property name="text" >
+             <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;">&lt;span style=" font-size:12pt; font-weight:600; font-style:italic;">Contribution to Diet&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+            </property>
+            <property name="alignment" >
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="0" >
+           <widget class="Line" name="line_5" >
+            <property name="orientation" >
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="14" column="0" >
+           <widget class="QLabel" name="label_20" >
+            <property name="text" >
+             <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;">&lt;span style=" font-size:12pt; font-weight:600; font-style:italic;">Calories Supplied by:&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+            </property>
+            <property name="alignment" >
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="18" column="0" >
+           <widget class="Line" name="line_4" >
+            <property name="orientation" >
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="11" column="0" >
+           <widget class="Line" name="line_7" >
+            <property name="orientation" >
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" >
+           <layout class="QHBoxLayout" >
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_8" >
+              <property name="text" >
+               <string>Individual:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="labelCaloriesIndividual" >
+              <property name="text" >
+               <string>Adjust Diet Settings</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_36" >
+              <property name="text" >
+               <string>kCals</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
          </layout>
          <zorder>label_4</zorder>
          <zorder>label_15</zorder>
-         <zorder>line_3</zorder>
          <zorder>line_5</zorder>
          <zorder>label_20</zorder>
          <zorder>line_4</zorder>
-         <zorder>line_6</zorder>
-         <zorder>labelPortionAllDairy</zorder>
-         <zorder>label_54</zorder>
-         <zorder>label_55</zorder>
          <zorder>line_7</zorder>
          <zorder></zorder>
         </widget>
        </item>
-       <item row="1" column="0" >
-        <spacer>
-         <property name="orientation" >
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0" >
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="2" column="1" >
-        <spacer name="verticalSpacer" >
-         <property name="orientation" >
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0" >
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
       </layout>
-      <zorder>diet_comp_box</zorder>
-      <zorder>groupBox_2</zorder>
      </widget>
      <widget class="QWidget" name="crops_tab" >
       <attribute name="title" >
@@ -3438,17 +3431,6 @@ p, li { white-space: pre-wrap; }
     </widget>
    </item>
   </layout>
-  <zorder>label_5</zorder>
-  <zorder>labelAnimalCheck</zorder>
-  <zorder>label_3</zorder>
-  <zorder>labelCropCheck</zorder>
-  <zorder>label_7</zorder>
-  <zorder>pushButtonRun</zorder>
-  <zorder>pushButtonLoad</zorder>
-  <zorder>pushButtonSave</zorder>
-  <zorder>pushButtonExit</zorder>
-  <zorder>progressBarCalcs</zorder>
-  <zorder>MainTabs</zorder>
  </widget>
  <tabstops>
   <tabstop>lineEditSiteName</tabstop>

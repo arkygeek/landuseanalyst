@@ -177,7 +177,10 @@ void LaMainForm::on_cboxIncludeDairy_clicked(bool theBool)
 {
   setDietLabels();
 }
-
+void LaMainForm::on_sbLimitDairyPercent_valueChanged(int theValue)
+{
+  setDietLabels();
+}
 void LaMainForm::on_cboxBaseOnPlants_clicked(bool theBool)
 {
   setDietLabels();
@@ -741,7 +744,7 @@ void LaMainForm::setDietLabels()
     }
   }
 
-  myModel.setAnimals(mSelectedAnimalsMap);
+  myModel.setAnimals(mSelectedAnimalsMap);//
   myModel.setCrops(mSelectedCropsMap);
   myModel.setName(lineEditSiteName->text());
   myModel.setPopulation(sbPopulation->value());
@@ -761,7 +764,7 @@ void LaMainForm::setDietLabels()
   myModel.setCommonLandValue(myCommonRasterValue, myAreaUnits);
   myModel.setBaseOnPlants(cboxBaseOnPlants->isChecked());
   myModel.setIncludeDairy(cboxIncludeDairy->isChecked());
-  myModel.setLimitDairy(cboxIncludeDairy->isChecked());
+  myModel.setLimitDairy(cboxLimitDairy->isChecked());
   myModel.setLimitDairyPercent(sbLimitDairyPercent->value());
   myModel.setDairyUtilisation(sbDairyUtilisation->value());
   myModel.setCommonLandValue(sbCommonRasterValue->value(), myAreaUnits);
@@ -823,7 +826,7 @@ void LaMainForm::setDietLabels()
   float myAnimalPortionPct = myDietLabels.animalPortionPct();
   float myKiloCaloriesIndividualAnnual = myDietLabels.kiloCaloriesIndividualAnnual();
   float myMegaCaloriesSettlementAnnual = myDietLabels.megaCaloriesSettlementAnnual();
-
+  float myDairySurplusMCalories = myDietLabels.dairySurplusMCalories();
   labelCaloriesIndividual->setText(QString::number(myKiloCaloriesIndividualAnnual));
   labelCaloriesSettlement->setText(QString::number(myMegaCaloriesSettlementAnnual));
 
@@ -844,6 +847,16 @@ void LaMainForm::setDietLabels()
 
   labelCaloriesWildMeat->setText(QString::number(myWildAnimalMCalories));
   labelCaloriesWildPlants->setText(QString::number(myWildPlantsMCalories));
+  if (myDairySurplusMCalories > 0.)
+    {
+       labelDairySurplus->setText("Dairy Surplus produced! "
+                                  + QString::number(myDairySurplusMCalories)
+                                  + " MCalories");
+    }
+  else
+    {
+       labelDairySurplus->setText("No Surplus Dairy Produced");
+    }
 }
 
 /**

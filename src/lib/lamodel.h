@@ -524,7 +524,7 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
     /** The percent of dairy utilisation by the settlement */
     bool mIncludeDairy;
     /** The percent of dairy utilisation by the settlement */
-    float mLimitDairy;
+    bool mLimitDairy;
     /** The percent of dairy utilisation by the settlement */
     float mLimitDairyPercentage;
 

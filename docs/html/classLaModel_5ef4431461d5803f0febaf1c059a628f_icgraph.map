@@ -1,7 +1,0 @@
-<area shape="rect" href="$classLaModel.html#4a138338d90a88dd27f3493e5914ab31" title="LaModel::caloriesFromCrops" alt="" coords="232,6,419,30">
-<area shape="rect" href="$classLaModel.html#4cd484b26bcad25b9a94067f175a3049" title="LaModel::caloriesProvidedByTheCrop" alt="" coords="205,54,445,78">
-<area shape="rect" href="$classLaModel.html#c2393b3ef80b76a86bb545ac40c7ae5d" title="LaModel::LaModel" alt="" coords="261,102,389,126">
-<area shape="rect" href="$classLaModel.html#673dc93808d288604d80c96526989c11" title="LaModel::operator=" alt="" coords="259,150,392,174">
-<area shape="rect" href="$classLaModel.html#26b9bb0973294e864b680633f27fce75" title="LaModel::allocateFallowGrazingLand" alt="" coords="527,6,759,30">
-<area shape="rect" href="$classLaModel.html#e9867f7eb061ea3e6753f1769936d60a" title="LaModel::DoCalculations" alt="" coords="840,30,1005,54">
-<area shape="rect" href="$classLaModel.html#e09cb35b64dcb272de8768495b1c302d" title="LaModel::initialiseCaloriesProvidedByCropsMap" alt="" coords="493,54,792,78">

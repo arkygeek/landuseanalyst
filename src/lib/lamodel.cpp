@@ -732,7 +732,7 @@ LaDietLabels LaModel::doCalcsPlantsFirstDairySeperate()
  *   5. The Percent of the Plants that are domestic sources (crops)
  * @return 
  */
-LaDietLabels LaModel::doCalcsAnimalsFirstIncludeDiary()
+LaDietLabels LaModel::doCalcsAnimalsFirstIncludeDiary() // working :-)
 {
   LaDietLabels myDietLabels;
   LaAnimal myAnimal;
@@ -855,19 +855,19 @@ LaDietLabels LaModel::doCalcsAnimalsFirstDairySeparate()
   float myDairyMCalorieCounter = 0.0;
   float myTameMeatMCalorieCounter = 0.0;
   float myWildMeatMCalorieCounter = 0.0;
-  QMap <QString,QString> mySelectedAnimalsMap = mAnimalsMap;
-
+  float myCropMCalorieCounter = 0.0;
+  float myDairySurplusMCalorieCounter = 0.0;
+  float c12= mPercentOfDietThatIsFromCrops;
   float c1 = 1. - mMeatPercent;
   float c8 = mDairyUtilisation;
   float c10= mPopulation;
   float c11= mCaloriesPerPersonDaily;
-  float c14= c10*c11*365.;
   float c15= mDietPercent;
-  float c12= mPercentOfDietThatIsFromCrops;
-  float e15= c14*c15;
-  float c23= e15*(1.-c1);
+  float c14o= myMegaCaloriesSettlementAnnual*1000000.;
+  //float e15o= myMegaCaloriesSettlementAnnual;
+  QMap <QString,QString> mySelectedAnimalsMap = mAnimalsMap;
 
-  float myDairySurplusMCalorieCounter;
+
   //float c17=1.-mMeatPercent;
   //float c18=mMeatPercent;
 
@@ -888,19 +888,50 @@ LaDietLabels LaModel::doCalcsAnimalsFirstDairySeparate()
     float c5 = myAnimal.weaningAge();
     float c6 = myAnimal.killWeight();
     float c7 = myAnimal.usableMeat()*.01;
-    float e2 = c2*c3*(c4-c5);
-    float e3 = e2*c8;
     float c9 = myAnimal.meatFoodValue();
+    float c13= myAnimalParameter.percentTameMeat()*.01;
+    float c14= c10*c11*365.;
+    float e15= c14*c15*c13;
     float e10= c9*c7*c6;
     float e7 = (e15*(1.-c1))/e10;
+    float e2 = c2*c3*(c4-c5);
+    float e3 = e2*c8;
+    float e5 = e3/c6;
+    float c18= 1.-c1;
+    float c16= e7*e3;
+    float c17= 1.-c18;
+    float c19= (mLimitDairy) ? mLimitDairyPercentage:1.;
+    float d20= c19*c14;
+    float d21= (e7*e3>d20) ? (e3*e7)-d20:0.;
     float c22= e15*c1;
-    float c21= ((e7*e3)+c22+c23>c14)?(c14-c22-c23):(e7*e3);
-    float d21= ((e3*e7)+c22+c23>c14)?((e3*e7)+c22+c23-c14):0.;
+    float c23 = e15*(1.-c1);
+    float c21;
+    if (d20+c22+c23>c14)
+    {
+      c21 = c14-c22-c23;
+    }
+    else
+    {
+      c21 = ((e7*e3)>d20) ? d20:(e7*e3);
+    }
+    float c24 = (c21+c22+c23<c14) ? (c14-c23-c22-c21)*(1.-c12):0.;
+    float c25 = (c21+c22+c23<c14) ? (c14-c23-c22-c21)*(c12):0.;
+
+    float c27 = c21/c14;
+    float c28 = c22/c14;
+    float c29 = c23/c14;
+    float c30 = c24/c14;
+    float c31 = c25/c14;
+
+
 
     myDairySurplusMCalorieCounter += d21;
     myDairyMCalorieCounter    += c21;
     myWildMeatMCalorieCounter += c22;
     myTameMeatMCalorieCounter += c23;
+    myCropMCalorieCounter     += c24;
+      qDebug() << "mLimitDairy (bool) = " << mLimitDairy;
+      qDebug() << "mLimitDairyPercentage= " << mLimitDairyPercentage;
       qDebug() << "c1 = " << c1;
       qDebug() << "c2 = " << c2;
       qDebug() << "c3 = " << c3;
@@ -908,45 +939,70 @@ LaDietLabels LaModel::doCalcsAnimalsFirstDairySeparate()
       qDebug() << "c5 = " << c5;
       qDebug() << "c6 = " << c6;
       qDebug() << "c7 = " << c7;
+      qDebug() << "c9 = " << c9;
+      qDebug() << "c10 = " << c10;
+      qDebug() << "c11 = " << c11;
+      qDebug() << "c12 = " << c12;
+      qDebug() << "c13 = " << c13;
+      qDebug() << "c15 = " << c15;
       qDebug() << "c14 = " << c14;
+      qDebug() << "c15 = " << c15;
+      qDebug() << "c16 = " << c16;
+      qDebug() << "c17 = " << c17;
+      qDebug() << "c19 = " << c19;
+
+      qDebug() << "c21 = " << c21;
+      qDebug() << "c22 = " << c22;
+      qDebug() << "c23 = " << c23;
+      qDebug() << "c24 = " << c24;
+      qDebug() << "c25 = " << c25;
+
+      qDebug() << "c27 = " << c27;
+      qDebug() << "c28 = " << c28;
+      qDebug() << "c29 = " << c29;
+      qDebug() << "c30 = " << c30;
+      qDebug() << "c31 = " << c31;
+
+      qDebug() << "d20 = " << d20;
+      qDebug() << "d21 = " << d21;
+
       qDebug() << "e2 = " << e2;
       qDebug() << "e3 = " << e3;
+      qDebug() << "e5 = " << e5;
+      qDebug() << "e7 = " << e7;
       qDebug() << "e10 = " << e10;
       qDebug() << "e15 = " << e15;
-      qDebug() << "e7 = " << e7;
-      qDebug() << "d21 = " << d21;
   }
 
-  float d21= myDairySurplusMCalorieCounter;
-  float c21= (d21>0.)?0.:myDairyMCalorieCounter-myDairySurplusMCalorieCounter;
-  float c24= (d21=0.)?((c14-c23-myWildMeatMCalorieCounter-c21)*(1.-c12)):0.;;
-  float c25= (d21=0.)?((c14-c23-myWildMeatMCalorieCounter-c21)*(c12)):0.;
-  float c30=c24/c14;
-  float c31=c25/c14;
+  float c24o= (myDairyMCalorieCounter+myWildMeatMCalorieCounter+myTameMeatMCalorieCounter<c14o) ? ((c14o-myTameMeatMCalorieCounter-myWildMeatMCalorieCounter-myDairyMCalorieCounter)*(1.-c12)):0.;
+  float c25o= (myDairyMCalorieCounter+myWildMeatMCalorieCounter+myTameMeatMCalorieCounter<c14o) ? ((c14o-myTameMeatMCalorieCounter-myWildMeatMCalorieCounter-myDairyMCalorieCounter)*(c12)):0.;
+  float c30o=c24o/c14o;
+  float c31o=c25o/c14o;
 
-  float c28=(myWildMeatMCalorieCounter)/c14;
-  float c29=(myTameMeatMCalorieCounter)/c14;
-  float c27=myDairyMCalorieCounter/c14;
-    qDebug() << "c27 = " << c27;
-    qDebug() << "c28 = " << c28;
-    qDebug() << "c29 = " << c29;
+  float c28o=(myWildMeatMCalorieCounter)/c14o;
+  float c29o=(myTameMeatMCalorieCounter)/c14o;
+  float c27o=myDairyMCalorieCounter/c14o;
+    qDebug() << "c27o = " << c27o;
+    qDebug() << "c28o = " << c28o;
+    qDebug() << "c29o = " << c29o;
 
   myDietLabels.setDairyMCalories(myDairyMCalorieCounter*.001*.001);
-  myDietLabels.setCropMCalories(c25*.001*.001);
-  myDietLabels.setWildAnimalMCalories(myWildMeatMCalorieCounter*.001*.001);
+  myDietLabels.setCropMCalories(c25o*.001*.001);
   myDietLabels.setAnimalMCalories(myTameMeatMCalorieCounter*.001*.001);
-  myDietLabels.setWildPlantsMCalories(c24*.001*.001);
-  myDietLabels.setDairyPortionPct(c27*100.);
-  myDietLabels.setTameMeatPortionPct(c29*100.);
-  myDietLabels.setCropsPortionPct(c31*100.);
-  myDietLabels.setWildAnimalPortionPct(c28*100.);
-  myDietLabels.setWildPlantsPortionPct(c30*100.);
-  myDietLabels.setAnimalPortionPct(mDietPercent*100.-c27*100.);
+  myDietLabels.setWildAnimalMCalories(myWildMeatMCalorieCounter*.001*.001);
+  myDietLabels.setWildPlantsMCalories(c24o*.001*.001);
+  myDietLabels.setDairyPortionPct(c27o*100.);
+  myDietLabels.setTameMeatPortionPct(c29o*100.);
+  myDietLabels.setCropsPortionPct(c31o*100.);
+  myDietLabels.setWildAnimalPortionPct(c28o*100.);
+  myDietLabels.setWildPlantsPortionPct(c30o*100.);
+  myDietLabels.setAnimalPortionPct(mDietPercent*100.-c27o*100.);
   myDietLabels.setPlantsPortionPct((1.-mDietPercent)*100.);
   myDietLabels.setKiloCaloriesIndividualAnnual(myKiloCaloriesIndividualAnnual);
   myDietLabels.setMegaCaloriesSettlementAnnual(myMegaCaloriesSettlementAnnual);
   myDietLabels.setDairySurplusMCalories(myDairySurplusMCalorieCounter*.001*.001);
   return myDietLabels;
+
 }
 
 QMap<QString, float> LaModel::getAreaTargetsAnimalsMapPFID ()
