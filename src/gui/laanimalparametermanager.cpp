@@ -42,7 +42,7 @@
 #include <QFileDialog>
 #include <QListWidgetItem>
 #include <QIcon>
-#include <QtDebug>
+#include <QDebug>
 #include <QPair>
 
   LaAnimalParameterManager::LaAnimalParameterManager(QPair<LaTripleMap, int> & thePair,  AreaUnits & theAreaUnits, EnergyType & theEnergyType, QWidget* parent, Qt::WFlags fl)
@@ -289,13 +289,11 @@ void LaAnimalParameterManager::populateFodder()
 void LaAnimalParameterManager::refreshFodderTable(QString theGuid)
 {
   LaFoodSourceMap myFoodSourceMap = mAnimalParameter.fodderSourceMap();
-  qDebug("Restoring " + QString::number(myFoodSourceMap.count()).toLocal8Bit()
-    + " food sources into animal parameter.");
-  for (int myCurrentRow=0; myCurrentRow < tblFodder->rowCount(); myCurrentRow++)
+    for (int myCurrentRow=0; myCurrentRow < tblFodder->rowCount(); myCurrentRow++)
   {
     QTableWidgetItem * mypItem = tblFodder->item(myCurrentRow,0);
     QString myGuid = mypItem->data(Qt::UserRole).toString();
-    qDebug("tblFodderGuid: " + myGuid.toLocal8Bit());
+    qDebug() << "tblFodderGuid: " << myGuid;
     QSpinBox * mypFodderSpinBox = qobject_cast <QSpinBox *> (tblFodder->cellWidget(myCurrentRow,1));
     QSpinBox * mypGrainSpinBox = qobject_cast <QSpinBox *> (tblFodder->cellWidget(myCurrentRow,2));
     QSpinBox * mypDaysSpinBox = qobject_cast <QSpinBox *> (tblFodder->cellWidget(myCurrentRow,3));

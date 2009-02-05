@@ -824,11 +824,11 @@ void LaMainForm::setDietLabels()
   float myWildPlantsPortionPct = myDietLabels.wildPlantsPortionPct();
   float myPlantsPortionPct = myDietLabels.plantsPortionPct();
   float myAnimalPortionPct = myDietLabels.animalPortionPct();
-  float myKiloCaloriesIndividualAnnual = myDietLabels.kiloCaloriesIndividualAnnual();
-  float myMegaCaloriesSettlementAnnual = myDietLabels.megaCaloriesSettlementAnnual();
+  float myMCalsIndividualAnnual = myDietLabels.kiloCaloriesIndividualAnnual();
+  float myMCalsSettlementAnnual = myDietLabels.megaCaloriesSettlementAnnual();
   float myDairySurplusMCalories = myDietLabels.dairySurplusMCalories();
-  labelCaloriesIndividual->setText(QString::number(myKiloCaloriesIndividualAnnual));
-  labelCaloriesSettlement->setText(QString::number(myMegaCaloriesSettlementAnnual));
+  labelCaloriesIndividual->setText(QString::number(myMCalsIndividualAnnual));
+  labelCaloriesSettlement->setText(QString::number(myMCalsSettlementAnnual));
 
   labelPortionPlants->setText(QString::number(myPlantsPortionPct));
   labelPortionMeat->setText(QString::number(myAnimalPortionPct));

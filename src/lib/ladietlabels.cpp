@@ -78,11 +78,11 @@ float LaDietLabels::animalPortionPct() const
 }
 float LaDietLabels::kiloCaloriesIndividualAnnual() const
 {
-  return mKiloCaloriesIndividualAnnual;
+  return mMCalsIndividualAnnual;
 }
 float LaDietLabels::megaCaloriesSettlementAnnual() const
 {
-  return mMegaCaloriesSettlementAnnual;
+  return mMCalsSettlementAnnual;
 }
 float LaDietLabels::dairySurplusMCalories() const
 {
@@ -139,13 +139,13 @@ void LaDietLabels::setAnimalPortionPct(float theAnimalPortionPct)
 {
   mAnimalPortionPct = theAnimalPortionPct;
 }
-void LaDietLabels::setKiloCaloriesIndividualAnnual(float theKiloCaloriesIndividualAnnual)
+void LaDietLabels::setMCalsIndividualAnnual(float theMCalsIndividualAnnual)
 {
-  mKiloCaloriesIndividualAnnual = theKiloCaloriesIndividualAnnual;
+  mMCalsIndividualAnnual = theMCalsIndividualAnnual;
 }
-void LaDietLabels::setMegaCaloriesSettlementAnnual(float theMegaCaloriesSettlementAnnua)
+void LaDietLabels::setMCalsSettlementAnnual(float theMegaCaloriesSettlementAnnua)
 {
-  mMegaCaloriesSettlementAnnual = theMegaCaloriesSettlementAnnua;
+  mMCalsSettlementAnnual = theMegaCaloriesSettlementAnnua;
 }
 void LaDietLabels::setDairySurplusMCalories(float theDairySurplus)
 {

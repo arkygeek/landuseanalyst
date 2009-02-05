@@ -59,8 +59,8 @@ public:
   void setWildPlantsPortionPct (float theWildPlantsPortionPct);
   void setPlantsPortionPct (float thePlantsPortionPct);
   void setAnimalPortionPct (float theAnimalPortionPct);
-  void setKiloCaloriesIndividualAnnual (float theKCaloriesIndividualAnnual);
-  void setMegaCaloriesSettlementAnnual (float theMCaloriesSettlementAnnua);
+  void setMCalsIndividualAnnual (float theKCaloriesIndividualAnnual);
+  void setMCalsSettlementAnnual (float theMCaloriesSettlementAnnua);
   void setDairySurplusMCalories (float theDairySurplusMCalories);
   private:
   float mDairyMCalories;
@@ -75,8 +75,8 @@ public:
   float mWildPlantsPortionPct;
   float mPlantsPortionPct;
   float mAnimalPortionPct;
-  float mKiloCaloriesIndividualAnnual;
-  float mMegaCaloriesSettlementAnnual;
+  float mMCalsIndividualAnnual;
+  float mMCalsSettlementAnnual;
   float mDairySurplusMCalories;
 };
 
