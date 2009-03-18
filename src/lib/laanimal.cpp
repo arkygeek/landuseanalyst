@@ -66,6 +66,9 @@ LaAnimal::LaAnimal(const LaAnimal& theAnimal)
   mJuvenile=theAnimal.juvenile();
   mSexualMaturity=theAnimal.sexualMaturity();
   mBreedingExpectancy=theAnimal.breedingExpectancy();
+  mConceptionEfficiency=theAnimal.conceptionEfficiency();
+  mFemalesToMales=theAnimal.femalesPerMale();
+  mAdultWeight=theAnimal.adultWeight();
   mYoungPerBirth=theAnimal.youngPerBirth();
   mWeaningAge=theAnimal.weaningAge();
   mWeaningWeight=theAnimal.weaningWeight();
@@ -102,6 +105,9 @@ LaAnimal& LaAnimal::operator=(const LaAnimal& theAnimal)
   mYoungPerBirth=theAnimal.youngPerBirth();
   mWeaningAge=theAnimal.weaningAge();
   mWeaningWeight=theAnimal.weaningWeight();
+  mConceptionEfficiency=theAnimal.conceptionEfficiency();
+  mFemalesToMales=theAnimal.femalesPerMale();
+  mAdultWeight=theAnimal.adultWeight();
   mGestationTime=theAnimal.gestationTime();
   mEstrousCycle=theAnimal.estrousCycle();
   mLactationTime=theAnimal.lactationTime();
@@ -169,6 +175,20 @@ int LaAnimal::sexualMaturity() const
 int LaAnimal::breedingExpectancy() const
 {
   return mBreedingExpectancy;
+}
+int LaAnimal::conceptionEfficiency() const
+{
+  return mConceptionEfficiency;
+}
+
+int LaAnimal::femalesPerMale() const
+{
+  return mFemalesToMales;
+}
+
+int LaAnimal::adultWeight() const
+{
+  return mAdultWeight;
 }
 int LaAnimal::youngPerBirth() const
 {
@@ -280,6 +300,18 @@ void LaAnimal::setBreedingExpectancy(int theYears)
 {
   mBreedingExpectancy=theYears;
 }
+void LaAnimal::setConceptionEfficiency(int thePercentage)
+{
+  mConceptionEfficiency=thePercentage;
+}
+void LaAnimal::setFemalesToMales(int theInt)
+{
+  mFemalesToMales=theInt;
+}
+void LaAnimal::setAdultWeight(int theKg)
+{
+  mAdultWeight=theKg;
+}
 void LaAnimal::setYoungPerBirth(int theInteger)
 {
   mYoungPerBirth=theInteger;
@@ -350,6 +382,9 @@ bool LaAnimal::fromXml(QString theXml)
   mMeatFoodValue=QString(myTopElement.firstChildElement("meatFoodValue").text()).toInt();
   mUsableMeat=QString(myTopElement.firstChildElement("usableMeat").text()).toInt();
   mKillWeight=QString(myTopElement.firstChildElement("killWeight").text()).toInt();
+  mAdultWeight=QString(myTopElement.firstChildElement("adultWeight").text()).toInt();
+  mConceptionEfficiency=QString(myTopElement.firstChildElement("conceptionEfficiency").text()).toInt();
+  mFemalesToMales=QString(myTopElement.firstChildElement("femalesToMales").text()).toInt();
   mGrowTime=QString(myTopElement.firstChildElement("growTime").text()).toInt();
   mDeathRate=QString(myTopElement.firstChildElement("deathRate").text()).toInt();
   
@@ -392,6 +427,9 @@ QString LaAnimal::toXml()
   myString+=QString("  <meatFoodValue>" + QString::number(mMeatFoodValue) + "</meatFoodValue>\n");
   myString+=QString("  <usableMeat>" + QString::number(mUsableMeat) + "</usableMeat>\n");
   myString+=QString("  <killWeight>" + QString::number(mKillWeight) + "</killWeight>\n");
+  myString+=QString("  <adultWeight>" + QString::number(mAdultWeight) + "</adultWeight>\n");
+  myString+=QString("  <conceptionEfficiency>" + QString::number(mConceptionEfficiency) + "</conceptionEfficiency>\n");
+  myString+=QString("  <femalesToMales>" + QString::number(mFemalesToMales) + "</femalesToMales>\n");
   myString+=QString("  <growTime>" + QString::number(mGrowTime) + "</growTime>\n");
   myString+=QString("  <deathRate>" + QString::number(mDeathRate) + "</deathRate>\n");
   
@@ -436,6 +474,9 @@ QString LaAnimal::toText()
   myString+=QString("meatFoodValue=>" + QString::number(mMeatFoodValue) + "\n");
   myString+=QString("usableMeat=>" + QString::number(mUsableMeat) + "\n");
   myString+=QString("killWeight=>" + QString::number(mKillWeight) + "\n");
+  myString+=QString("adultWeight=>" + QString::number(mAdultWeight) + "\n");
+  myString+=QString("conceptionEfficiency=>" + QString::number(mConceptionEfficiency) + "\n");
+  myString+=QString("femalesToMales=>" + QString::number(mFemalesToMales) + "\n");
   myString+=QString("growTime=>" + QString::number(mGrowTime) + "\n");
   myString+=QString("deathRate=>" + QString::number(mDeathRate) + "\n");
   
@@ -484,6 +525,10 @@ QString LaAnimal::toHtml()
   myString+="<tr><td><b>Weaning Age:</b></td><td>" + QString::number(mWeaningAge) + "</td></tr>";
   myString+="<tr><td><b>Weaning Weight:</b></td><td>" + QString::number(mWeaningWeight) + "</td></tr>";
   myString+="<tr><td><b>Kill Weight (Kg):</b></td><td>" + QString::number(mKillWeight) + "</td></tr>";
+  
+  myString+="<tr><td><b>Adult Weight (Kg):</b></td><td>" + QString::number(mAdultWeight) + "</td></tr>";
+  myString+="<tr><td><b>Conception Efficiency(Percent):</b></td><td>" + QString::number(mConceptionEfficiency) + "</td></tr>";
+  myString+="<tr><td><b>Females to Males (Breeding):</b></td><td>" + QString::number(mFemalesToMales) + "</td></tr>";
   myString+="<tr><td><b>Grow Time:</b></td><td>" + QString::number(mGrowTime) + "</td></tr>";
   myString+="<tr><td><b>Death Rate (%):</b></td><td>" + QString::number(mDeathRate) + "</td></tr>";
 

@@ -1,7 +1,11 @@
 project(landuseanalyst) # the name of your project
+cmake_minimum_required(VERSION 2.4)
 
-cmake_minimum_required(VERSION 2.4.0)
-
+if(COMMAND cmake_policy)
+        cmake_policy(SET CMP0003 OLD)
+        cmake_policy(SET CMP0005 OLD)
+endif(COMMAND cmake_policy)
+cmake_policy(SET CMP0006 OLD)
 SET (ENABLE_TESTS TRUE CACHE BOOL "Build unit tests (use 'make test' to run them")
 SET (PEDANTIC TRUE CACHE BOOL "Treat warnings as errors")
 
@@ -34,9 +38,9 @@ ELSE (WIN32)
     SET (LIB_DIR    ${CMAKE_INSTALL_PREFIX}/lib)
     SET (DATA_DIR   ${CMAKE_INSTALL_PREFIX}/share/qgis)
     SET (PLUGIN_DIR ${CMAKE_INSTALL_PREFIX}/lib/qgis)
-    ADD_DEFINITIONS(-DPREFIX=\\"${CMAKE_INSTALL_PREFIX}\\")
-    ADD_DEFINITIONS(-DPLUGINPATH=\\"${PLUGIN_DIR}\\")
-    ADD_DEFINITIONS(-DPKGDATAPATH=\\"${DATA_DIR}\\")
+    ADD_DEFINITIONS(-DPREFIX=\\${CMAKE_INSTALL_PREFIX}\\)
+    ADD_DEFINITIONS(-DPLUGINPATH=\\${PLUGIN_DIR}\\)
+    ADD_DEFINITIONS(-DPKGDATAPATH=\\${DATA_DIR}\\)
   ENDIF (UNIX AND NOT APPLE)
 
 ENDIF (WIN32)

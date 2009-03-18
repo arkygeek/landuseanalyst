@@ -54,6 +54,8 @@ class LaAnimal : public LaSerialisable, public LaGuid
     int usableMeat() const;
     /** The weight in kg at which the animals are slaughtered */
     int killWeight() const;
+    /** The weight of an adult */
+    int adultWeight() const;
     /** The number of weeks from birth it takes to attain slaughtering weight */
     int growTime() const;
     /** The percentage of babies that die before being usable as either meat or breeding */
@@ -72,6 +74,10 @@ class LaAnimal : public LaSerialisable, public LaGuid
     int sexualMaturity() const;
     /** The number of years a female will reliably produce offspring */
     int breedingExpectancy() const;
+    /** Conception rate or breeding efficiency */
+    int conceptionEfficiency() const;
+    /** The number of breeding females per breeding male */
+    int femalesPerMale() const;
     /** The average number of young produced per pregnancy */
     int youngPerBirth() const;
     /** The age in weeks at which babies stop suckling */
@@ -130,7 +136,24 @@ class LaAnimal : public LaSerialisable, public LaGuid
      * @see growTime()
      */
     void setGrowTime(int theWeeks);
-
+  
+  
+    /** Set adultWeight as kg
+     * @see adultWeight()
+     */
+    void setAdultWeight(int theKg);
+    
+    /** Set conceptionEfficiency as a percentage
+     * @see conceptionEfficiency()
+     */
+    void setConceptionEfficiency(int thePercentage);
+    
+    /** Set femalesToMales as an integer
+     * @see femalesToMales()
+     */
+    void setFemalesToMales(int theInt);
+  
+  
     /** Set the deathRate as a percentage
      * @see deathRate()
      */
@@ -279,6 +302,12 @@ class LaAnimal : public LaSerialisable, public LaGuid
     int mBreedingExpectancy;
     /** The average number of young produced per pregnancy */
     int mYoungPerBirth;
+    /** the weight of an adult */
+    int mAdultWeight;
+    /** the conception efficiency or the percent of breeding females that get pregnant per year */
+    int mConceptionEfficiency;
+    /** females To Males in the breeding herd */
+    int mFemalesToMales;  
     /** The age in weeks at which babies stop suckling */
     int mWeaningAge;
     /** The weight when babies stop suckling */
@@ -301,6 +330,12 @@ class LaAnimal : public LaSerialisable, public LaGuid
     int mFleeceWeightKg;
     /** name of image file */
     QString mImageFile;
+
+  
+  
+  
+  
+  
 };
 
 #endif   //LAANIMAL_H

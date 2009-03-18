@@ -1,3 +1,9 @@
+cmake_minimum_required(VERSION 2.4)
+cmake_policy(SET CMP0006 OLD)
+if(COMMAND cmake_policy)
+        cmake_policy(SET CMP0003 OLD)
+        cmake_policy(SET CMP0005 OLD)
+endif(COMMAND cmake_policy)
 # the next line sets up include and link directories and defines some variables that we will use.
 # you can modify the behavior by setting some variables, e.g.
 #   set(QT_USE_OPENGL TRUE)

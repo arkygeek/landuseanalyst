@@ -1,0 +1,1397 @@
+// !$*UTF8*$!
+{
+       archiveVersion = 1;
+       classes = {
+       };
+       objectVersion = 42;
+       objects = {
+
+/* Begin PBXAggregateTarget section */
+              6C1C506C1C506C1C50000000 /* ALL_BUILD */ = {
+                     isa = PBXAggregateTarget;
+                     buildConfigurationList = 6C2B806C2B806C2B80000000 /* Build configuration list for PBXAggregateTarget "ALL_BUILD" */;
+                     buildPhases = (
+                            6C1E306C1E306C1E30000000 /* CMake ReRun */,
+                            6C25406C25406C2540000000 /* CMake Rules */,
+                     );
+                     buildSettings = {
+                            GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+                            GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+                            GCC_OPTIMIZATION_LEVEL = 0;
+                            GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)\"'";
+                            GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+                            INSTALL_PATH = "";
+                            OTHER_CFLAGS = "   -Wall -Werror";
+                            OTHER_LDFLAGS = "";
+                            OTHER_REZFLAGS = "";
+                            PREBINDING = NO;
+                            PRODUCT_NAME = ALL_BUILD;
+                            SECTORDER_FLAGS = "";
+                            USE_HEADERMAP = NO;
+                            WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+                     };
+                     dependencies = (
+                            65F39065F39065F390000000 /* PBXTargetDependency */,
+                            669770669770669770000000 /* PBXTargetDependency */,
+                     );
+                     name = ALL_BUILD;
+                     productName = ALL_BUILD;
+              };
+              6C97006C97006C9700000000 /* install */ = {
+                     isa = PBXAggregateTarget;
+                     buildConfigurationList = 6CA6306CA6306CA630000000 /* Build configuration list for PBXAggregateTarget "install" */;
+                     buildPhases = (
+                            6C98A06C98A06C98A0000000 /* CMake ReRun */,
+                            6C9FA06C9FA06C9FA0000000 /* CMake PostBuild Rules */,
+                     );
+                     buildSettings = {
+                            GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+                            GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+                            GCC_OPTIMIZATION_LEVEL = 0;
+                            GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)\"'";
+                            GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+                            INSTALL_PATH = "";
+                            OTHER_CFLAGS = "   -Wall -Werror";
+                            OTHER_LDFLAGS = "";
+                            OTHER_REZFLAGS = "";
+                            PREBINDING = NO;
+                            PRODUCT_NAME = install;
+                            SECTORDER_FLAGS = "";
+                            USE_HEADERMAP = NO;
+                            WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+                     };
+                     dependencies = (
+                            101AA00101AA00101AA00000 /* PBXTargetDependency */,
+                     );
+                     name = install;
+                     productName = install;
+              };
+              6D07106D07106D0710000000 /* uninstall */ = {
+                     isa = PBXAggregateTarget;
+                     buildConfigurationList = 6D16406D16406D1640000000 /* Build configuration list for PBXAggregateTarget "uninstall" */;
+                     buildPhases = (
+                            6D08F06D08F06D08F0000000 /* CMake ReRun */,
+                            6D10006D10006D1000000000 /* CMake Rules */,
+                     );
+                     buildSettings = {
+                            GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+                            GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+                            GCC_OPTIMIZATION_LEVEL = 0;
+                            GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)\"'";
+                            GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+                            INSTALL_PATH = "";
+                            OTHER_CFLAGS = "   -Wall -Werror";
+                            OTHER_LDFLAGS = "";
+                            OTHER_REZFLAGS = "";
+                            PREBINDING = NO;
+                            PRODUCT_NAME = uninstall;
+                            SECTORDER_FLAGS = "";
+                            USE_HEADERMAP = NO;
+                            WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+                     };
+                     dependencies = (
+                     );
+                     name = uninstall;
+                     productName = uninstall;
+              };
+/* End PBXAggregateTarget section */
+
+/* Begin PBXBuildFile section */
+6D77D06D77D06D77D0000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/laanimal.cpp */ = {isa = PBXBuildFile; fileRef = 6D72006D72006D7200000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/laanimal.cpp */; settings = { COMPILER_FLAGS = ""; }; };
+6D82606D82606D8260000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/laanimalparameter.cpp */ = {isa = PBXBuildFile; fileRef = 6D7EE06D7EE06D7EE0000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/laanimalparameter.cpp */; settings = { COMPILER_FLAGS = ""; }; };
+6D8D306D8D306D8D30000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/laguid.cpp */ = {isa = PBXBuildFile; fileRef = 6D89A06D89A06D89A0000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/laguid.cpp */; settings = { COMPILER_FLAGS = ""; }; };
+6D97D06D97D06D97D0000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/lacrop.cpp */ = {isa = PBXBuildFile; fileRef = 6D94406D94406D9440000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/lacrop.cpp */; settings = { COMPILER_FLAGS = ""; }; };
+6DA2806DA2806DA280000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/lacropparameter.cpp */ = {isa = PBXBuildFile; fileRef = 6D9EE06D9EE06D9EE0000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/lacropparameter.cpp */; settings = { COMPILER_FLAGS = ""; }; };
+6DAD606DAD606DAD60000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/lafoodsource.cpp */ = {isa = PBXBuildFile; fileRef = 6DA9E06DA9E06DA9E0000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/lafoodsource.cpp */; settings = { COMPILER_FLAGS = ""; }; };
+6DB8306DB8306DB830000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/laserialisable.cpp */ = {isa = PBXBuildFile; fileRef = 6DB4A06DB4A06DB4A0000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/laserialisable.cpp */; settings = { COMPILER_FLAGS = ""; }; };
+6DC2D06DC2D06DC2D0000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/lautils.cpp */ = {isa = PBXBuildFile; fileRef = 6DBF406DBF406DBF40000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/lautils.cpp */; settings = { COMPILER_FLAGS = ""; }; };
+6DCD606DCD606DCD60000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/lamodel.cpp */ = {isa = PBXBuildFile; fileRef = 6DC9E06DC9E06DC9E0000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/lamodel.cpp */; settings = { COMPILER_FLAGS = ""; }; };
+6DD8506DD8506DD850000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/lagrass.cpp */ = {isa = PBXBuildFile; fileRef = 6DD4C06DD4C06DD4C0000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/lagrass.cpp */; settings = { COMPILER_FLAGS = ""; }; };
+6DE7806DE7806DE780000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/lagrassprocesslib.cpp */ = {isa = PBXBuildFile; fileRef = 6DDF606DDF606DDF60000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/lagrassprocesslib.cpp */; settings = { COMPILER_FLAGS = ""; }; };
+6DEE006DEE006DEE00000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/ladietlabels.cpp */ = {isa = PBXBuildFile; fileRef = 6DEA306DEA306DEA30000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/ladietlabels.cpp */; settings = { COMPILER_FLAGS = ""; }; };
+6DF8C06DF8C06DF8C0000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/moc_lamodel.cxx */ = {isa = PBXBuildFile; fileRef = 6DF5106DF5106DF510000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/moc_lamodel.cxx */; settings = { COMPILER_FLAGS = ""; }; };
+6E03806E03806E0380000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/moc_lagrass.cxx */ = {isa = PBXBuildFile; fileRef = 6DFFD06DFFD06DFFD0000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/moc_lagrass.cxx */; settings = { COMPILER_FLAGS = ""; }; };
+6E12906E12906E1290000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/moc_lagrassprocesslib.cxx */ = {isa = PBXBuildFile; fileRef = 6E0A906E0A906E0A90000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/moc_lagrassprocesslib.cxx */; settings = { COMPILER_FLAGS = ""; }; };
+6E19206E19206E1920000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/CMakeLists.txt */ = {isa = PBXBuildFile; fileRef = 6E15B06E15B06E15B0000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/CMakeLists.txt */; settings = { COMPILER_FLAGS = ""; }; };
+6E24006E24006E2400000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/moc_lamodel.cxx.rule */ = {isa = PBXBuildFile; fileRef = 6E20306E20306E2030000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/moc_lamodel.cxx.rule */; settings = { COMPILER_FLAGS = ""; }; };
+6E33306E33306E3330000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/moc_lagrass.cxx.rule */ = {isa = PBXBuildFile; fileRef = 6E2B206E2B206E2B20000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/moc_lagrass.cxx.rule */; settings = { COMPILER_FLAGS = ""; }; };
+6E3DC06E3DC06E3DC0000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/moc_lagrassprocesslib.cxx.rule */ = {isa = PBXBuildFile; fileRef = 6E35E06E35E06E35E0000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/moc_lagrassprocesslib.cxx.rule */; settings = { COMPILER_FLAGS = ""; }; };
+6EF8506EF8506EF850000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/main.cpp */ = {isa = PBXBuildFile; fileRef = 6EF5B06EF5B06EF5B0000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/main.cpp */; settings = { COMPILER_FLAGS = ""; }; };
+6F02D06F02D06F02D0000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/lamainform.cpp */ = {isa = PBXBuildFile; fileRef = 6EFF606EFF606EFF60000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/lamainform.cpp */; settings = { COMPILER_FLAGS = ""; }; };
+6F0D706F0D706F0D70000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/lacropmanager.cpp */ = {isa = PBXBuildFile; fileRef = 6F09C06F09C06F09C0000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/lacropmanager.cpp */; settings = { COMPILER_FLAGS = ""; }; };
+6F16606F16606F1660000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/lacropparametermanager.cpp */ = {isa = PBXBuildFile; fileRef = 6F14C06F14C06F14C0000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/lacropparametermanager.cpp */; settings = { COMPILER_FLAGS = ""; }; };
+6F23306F23306F2330000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/laanimalmanager.cpp */ = {isa = PBXBuildFile; fileRef = 6F1F806F1F806F1F80000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/laanimalmanager.cpp */; settings = { COMPILER_FLAGS = ""; }; };
+6F2C206F2C206F2C20000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/laanimalparametermanager.cpp */ = {isa = PBXBuildFile; fileRef = 6F2A406F2A406F2A40000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/laanimalparametermanager.cpp */; settings = { COMPILER_FLAGS = ""; }; };
+6F37206F37206F3720000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/laassemblageconversion.cpp */ = {isa = PBXBuildFile; fileRef = 6F35606F35606F3560000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/laassemblageconversion.cpp */; settings = { COMPILER_FLAGS = ""; }; };
+6F43B06F43B06F43B0000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/lagrassprocess.cpp */ = {isa = PBXBuildFile; fileRef = 6F40406F40406F4040000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/lagrassprocess.cpp */; settings = { COMPILER_FLAGS = ""; }; };
+6F4E606F4E606F4E60000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/ui_lamainformbase.h */ = {isa = PBXBuildFile; fileRef = 6F4AF06F4AF06F4AF0000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/ui_lamainformbase.h */; settings = { COMPILER_FLAGS = ""; }; };
+6F59106F59106F5910000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/ui_lacropmanagerbase.h */ = {isa = PBXBuildFile; fileRef = 6F55A06F55A06F55A0000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/ui_lacropmanagerbase.h */; settings = { COMPILER_FLAGS = ""; }; };
+6F62106F62106F6210000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/ui_lacropparametermanagerbase.h */ = {isa = PBXBuildFile; fileRef = 6F60506F60506F6050000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/ui_lacropparametermanagerbase.h */; settings = { COMPILER_FLAGS = ""; }; };
+6F6D206F6D206F6D20000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/ui_laanimalmanagerbase.h */ = {isa = PBXBuildFile; fileRef = 6F6B606F6B606F6B60000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/ui_laanimalmanagerbase.h */; settings = { COMPILER_FLAGS = ""; }; };
+6F78106F78106F7810000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/ui_laanimalparametermanagerbase.h */ = {isa = PBXBuildFile; fileRef = 6F76506F76506F7650000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/ui_laanimalparametermanagerbase.h */; settings = { COMPILER_FLAGS = ""; }; };
+6F83206F83206F8320000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/ui_laassemblageconversionbase.h */ = {isa = PBXBuildFile; fileRef = 6F81606F81606F8160000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/ui_laassemblageconversionbase.h */; settings = { COMPILER_FLAGS = ""; }; };
+6F94306F94306F9430000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/ui_lagrassprocessbase.h */ = {isa = PBXBuildFile; fileRef = 6F8C606F8C606F8C60000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/ui_lagrassprocessbase.h */; settings = { COMPILER_FLAGS = ""; }; };
+6F9B006F9B006F9B00000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_lamainform.cxx */ = {isa = PBXBuildFile; fileRef = 6F97506F97506F9750000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_lamainform.cxx */; settings = { COMPILER_FLAGS = ""; }; };
+6FA5A06FA5A06FA5A0000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_lacropmanager.cxx */ = {isa = PBXBuildFile; fileRef = 6FA2106FA2106FA210000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_lacropmanager.cxx */; settings = { COMPILER_FLAGS = ""; }; };
+6FAEC06FAEC06FAEC0000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_lacropparametermanager.cxx */ = {isa = PBXBuildFile; fileRef = 6FACE06FACE06FACE0000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_lacropparametermanager.cxx */; settings = { COMPILER_FLAGS = ""; }; };
+6FBFD06FBFD06FBFD0000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_laanimalmanager.cxx */ = {isa = PBXBuildFile; fileRef = 6FB8006FB8006FB800000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_laanimalmanager.cxx */; settings = { COMPILER_FLAGS = ""; }; };
+100048010004801000480000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_laanimalparametermanager.cxx */ = {isa = PBXBuildFile; fileRef = 10002B010002B010002B0000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_laanimalparametermanager.cxx */; settings = { COMPILER_FLAGS = ""; }; };
+1000F501000F501000F50000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_laassemblageconversion.cxx */ = {isa = PBXBuildFile; fileRef = 1000D701000D701000D70000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_laassemblageconversion.cxx */; settings = { COMPILER_FLAGS = ""; }; };
+100209010020901002090000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_lagrassprocess.cxx */ = {isa = PBXBuildFile; fileRef = 100186010018601001860000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_lagrassprocess.cxx */; settings = { COMPILER_FLAGS = ""; }; };
+100271010027101002710000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/qrc_resources.cxx */ = {isa = PBXBuildFile; fileRef = 100235010023501002350000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/qrc_resources.cxx */; settings = { COMPILER_FLAGS = ""; }; };
+100324010032401003240000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/CMakeLists.txt */ = {isa = PBXBuildFile; fileRef = 1002E201002E201002E20000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/CMakeLists.txt */; settings = { COMPILER_FLAGS = ""; }; };
+1003D101003D101003D10000 /* /Users/arkygeek/devel/landuseanalyst/src/ui/lamainformbase.ui */ = {isa = PBXBuildFile; fileRef = 100395010039501003950000 /* /Users/arkygeek/devel/landuseanalyst/src/ui/lamainformbase.ui */; settings = { COMPILER_FLAGS = ""; }; };
+1004C501004C501004C50000 /* /Users/arkygeek/devel/landuseanalyst/src/ui/lacropmanagerbase.ui */ = {isa = PBXBuildFile; fileRef = 100442010044201004420000 /* /Users/arkygeek/devel/landuseanalyst/src/ui/lacropmanagerbase.ui */; settings = { COMPILER_FLAGS = ""; }; };
+100510010051001005100000 /* /Users/arkygeek/devel/landuseanalyst/src/ui/lacropparametermanagerbase.ui */ = {isa = PBXBuildFile; fileRef = 1004EF01004EF01004EF0000 /* /Users/arkygeek/devel/landuseanalyst/src/ui/lacropparametermanagerbase.ui */; settings = { COMPILER_FLAGS = ""; }; };
+100623010062301006230000 /* /Users/arkygeek/devel/landuseanalyst/src/ui/laanimalmanagerbase.ui */ = {isa = PBXBuildFile; fileRef = 10059D010059D010059D0000 /* /Users/arkygeek/devel/landuseanalyst/src/ui/laanimalmanagerbase.ui */; settings = { COMPILER_FLAGS = ""; }; };
+10066C010066C010066C0000 /* /Users/arkygeek/devel/landuseanalyst/src/ui/laanimalparametermanagerbase.ui */ = {isa = PBXBuildFile; fileRef = 10064F010064F010064F0000 /* /Users/arkygeek/devel/landuseanalyst/src/ui/laanimalparametermanagerbase.ui */; settings = { COMPILER_FLAGS = ""; }; };
+10071C010071C010071C0000 /* /Users/arkygeek/devel/landuseanalyst/src/ui/laassemblageconversionbase.ui */ = {isa = PBXBuildFile; fileRef = 1006FF01006FF01006FF0000 /* /Users/arkygeek/devel/landuseanalyst/src/ui/laassemblageconversionbase.ui */; settings = { COMPILER_FLAGS = ""; }; };
+10082C010082C010082C0000 /* /Users/arkygeek/devel/landuseanalyst/src/ui/lagrassprocessbase.ui */ = {isa = PBXBuildFile; fileRef = 1007AC01007AC01007AC0000 /* /Users/arkygeek/devel/landuseanalyst/src/ui/lagrassprocessbase.ui */; settings = { COMPILER_FLAGS = ""; }; };
+1008D901008D901008D90000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_lamainform.cxx.rule */ = {isa = PBXBuildFile; fileRef = 100858010085801008580000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_lamainform.cxx.rule */; settings = { COMPILER_FLAGS = ""; }; };
+100929010092901009290000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_lacropmanager.cxx.rule */ = {isa = PBXBuildFile; fileRef = 10090C010090C010090C0000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_lacropmanager.cxx.rule */; settings = { COMPILER_FLAGS = ""; }; };
+1009DB01009DB01009DB0000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_lacropparametermanager.cxx.rule */ = {isa = PBXBuildFile; fileRef = 1009BA01009BA01009BA0000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_lacropparametermanager.cxx.rule */; settings = { COMPILER_FLAGS = ""; }; };
+100A8E0100A8E0100A8E0000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_laanimalmanager.cxx.rule */ = {isa = PBXBuildFile; fileRef = 100A700100A700100A700000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_laanimalmanager.cxx.rule */; settings = { COMPILER_FLAGS = ""; }; };
+100B3E0100B3E0100B3E0000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_laanimalparametermanager.cxx.rule */ = {isa = PBXBuildFile; fileRef = 100B1D0100B1D0100B1D0000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_laanimalparametermanager.cxx.rule */; settings = { COMPILER_FLAGS = ""; }; };
+100BF10100BF10100BF10000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_laassemblageconversion.cxx.rule */ = {isa = PBXBuildFile; fileRef = 100BD40100BD40100BD40000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_laassemblageconversion.cxx.rule */; settings = { COMPILER_FLAGS = ""; }; };
+100CA10100CA10100CA10000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_lagrassprocess.cxx.rule */ = {isa = PBXBuildFile; fileRef = 100C800100C800100C800000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_lagrassprocess.cxx.rule */; settings = { COMPILER_FLAGS = ""; }; };
+100D6F0100D6F0100D6F0000 /* /Users/arkygeek/devel/landuseanalyst/src/resources/resources.qrc */ = {isa = PBXBuildFile; fileRef = 100D300100D300100D300000 /* /Users/arkygeek/devel/landuseanalyst/src/resources/resources.qrc */; settings = { COMPILER_FLAGS = ""; }; };
+100E340100E340100E340000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/CMakeFiles/landuseanalyst.dir/Info.plist */ = {isa = PBXBuildFile; fileRef = 100DE70100DE70100DE70000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/CMakeFiles/landuseanalyst.dir/Info.plist */; settings = { COMPILER_FLAGS = ""; }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXBuildStyle section */
+              6B6B306B6B306B6B30000000 /*  */ = {
+                     isa = PBXBuildStyle;
+              };
+              6B14D06B14D06B14D0000000 /* Debug */ = {
+                     isa = PBXBuildStyle;
+                     buildSettings = {
+                            COPY_PHASE_STRIP = NO;
+                     };
+                     name = Debug;
+              };
+              6B80406B80406B8040000000 /* Release */ = {
+                     isa = PBXBuildStyle;
+                     buildSettings = {
+                            COPY_PHASE_STRIP = NO;
+                     };
+                     name = Release;
+              };
+              6B8C706B8C706B8C70000000 /* MinSizeRel */ = {
+                     isa = PBXBuildStyle;
+                     buildSettings = {
+                            COPY_PHASE_STRIP = NO;
+                     };
+                     name = MinSizeRel;
+              };
+              6B77F06B77F06B77F0000000 /* RelWithDebInfo */ = {
+                     isa = PBXBuildStyle;
+                     buildSettings = {
+                            COPY_PHASE_STRIP = NO;
+                     };
+                     name = RelWithDebInfo;
+              };
+/* End PBXBuildStyle section */
+
+/* Begin PBXContainerItemProxy section */
+              101A760101A760101A760000 /* PBXContainerItemProxy */ = {
+                     isa = PBXContainerItemProxy;
+                     containerPortal = 6BFF006BFF006BFF00000000 /* Project object */;
+                     proxyType = 1;
+                     remoteGlobalIDString = 6E5B406E5B406E5B40000000;
+                     remoteInfo = la_core;
+              };
+              65F62065F62065F620000000 /* PBXContainerItemProxy */ = {
+                     isa = PBXContainerItemProxy;
+                     containerPortal = 6BFF006BFF006BFF00000000 /* Project object */;
+                     proxyType = 1;
+                     remoteGlobalIDString = 10105D010105D010105D0000;
+                     remoteInfo = landuseanalyst;
+              };
+              669BF0669BF0669BF0000000 /* PBXContainerItemProxy */ = {
+                     isa = PBXContainerItemProxy;
+                     containerPortal = 6BFF006BFF006BFF00000000 /* Project object */;
+                     proxyType = 1;
+                     remoteGlobalIDString = 6C1C506C1C506C1C50000000;
+                     remoteInfo = ALL_BUILD;
+              };
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+6C85A06C85A06C85A0000000 /* /Users/arkygeek/devel/landuseanalyst/CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.text"; name = "CMakeLists.txt"; path = "/Users/arkygeek/devel/landuseanalyst/CMakeLists.txt"; sourceTree = "<absolute>"; };
+6D72006D72006D7200000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/laanimal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.cpp.cpp"; name = "laanimal.cpp"; path = "/Users/arkygeek/devel/landuseanalyst/src/lib/laanimal.cpp"; sourceTree = "<absolute>"; };
+6D7EE06D7EE06D7EE0000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/laanimalparameter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.cpp.cpp"; name = "laanimalparameter.cpp"; path = "/Users/arkygeek/devel/landuseanalyst/src/lib/laanimalparameter.cpp"; sourceTree = "<absolute>"; };
+6D89A06D89A06D89A0000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/laguid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.cpp.cpp"; name = "laguid.cpp"; path = "/Users/arkygeek/devel/landuseanalyst/src/lib/laguid.cpp"; sourceTree = "<absolute>"; };
+6D94406D94406D9440000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/lacrop.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.cpp.cpp"; name = "lacrop.cpp"; path = "/Users/arkygeek/devel/landuseanalyst/src/lib/lacrop.cpp"; sourceTree = "<absolute>"; };
+6D9EE06D9EE06D9EE0000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/lacropparameter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.cpp.cpp"; name = "lacropparameter.cpp"; path = "/Users/arkygeek/devel/landuseanalyst/src/lib/lacropparameter.cpp"; sourceTree = "<absolute>"; };
+6DA9E06DA9E06DA9E0000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/lafoodsource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.cpp.cpp"; name = "lafoodsource.cpp"; path = "/Users/arkygeek/devel/landuseanalyst/src/lib/lafoodsource.cpp"; sourceTree = "<absolute>"; };
+6DB4A06DB4A06DB4A0000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/laserialisable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.cpp.cpp"; name = "laserialisable.cpp"; path = "/Users/arkygeek/devel/landuseanalyst/src/lib/laserialisable.cpp"; sourceTree = "<absolute>"; };
+6DBF406DBF406DBF40000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/lautils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.cpp.cpp"; name = "lautils.cpp"; path = "/Users/arkygeek/devel/landuseanalyst/src/lib/lautils.cpp"; sourceTree = "<absolute>"; };
+6DC9E06DC9E06DC9E0000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/lamodel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.cpp.cpp"; name = "lamodel.cpp"; path = "/Users/arkygeek/devel/landuseanalyst/src/lib/lamodel.cpp"; sourceTree = "<absolute>"; };
+6DD4C06DD4C06DD4C0000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/lagrass.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.cpp.cpp"; name = "lagrass.cpp"; path = "/Users/arkygeek/devel/landuseanalyst/src/lib/lagrass.cpp"; sourceTree = "<absolute>"; };
+6DDF606DDF606DDF60000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/lagrassprocesslib.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.cpp.cpp"; name = "lagrassprocesslib.cpp"; path = "/Users/arkygeek/devel/landuseanalyst/src/lib/lagrassprocesslib.cpp"; sourceTree = "<absolute>"; };
+6DEA306DEA306DEA30000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/ladietlabels.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.cpp.cpp"; name = "ladietlabels.cpp"; path = "/Users/arkygeek/devel/landuseanalyst/src/lib/ladietlabels.cpp"; sourceTree = "<absolute>"; };
+6DF5106DF5106DF510000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/moc_lamodel.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.cpp.cpp"; name = "moc_lamodel.cxx"; path = "/Users/arkygeek/devel/landuseanalyst/src/lib/moc_lamodel.cxx"; sourceTree = "<absolute>"; };
+6DFFD06DFFD06DFFD0000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/moc_lagrass.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.cpp.cpp"; name = "moc_lagrass.cxx"; path = "/Users/arkygeek/devel/landuseanalyst/src/lib/moc_lagrass.cxx"; sourceTree = "<absolute>"; };
+6E0A906E0A906E0A90000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/moc_lagrassprocesslib.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.cpp.cpp"; name = "moc_lagrassprocesslib.cxx"; path = "/Users/arkygeek/devel/landuseanalyst/src/lib/moc_lagrassprocesslib.cxx"; sourceTree = "<absolute>"; };
+6E15B06E15B06E15B0000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.text"; name = "CMakeLists.txt"; path = "/Users/arkygeek/devel/landuseanalyst/src/lib/CMakeLists.txt"; sourceTree = "<absolute>"; };
+6E20306E20306E2030000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/moc_lamodel.cxx.rule */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode; name = "moc_lamodel.cxx.rule"; path = "/Users/arkygeek/devel/landuseanalyst/src/lib/moc_lamodel.cxx.rule"; sourceTree = "<absolute>"; };
+6E2B206E2B206E2B20000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/moc_lagrass.cxx.rule */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode; name = "moc_lagrass.cxx.rule"; path = "/Users/arkygeek/devel/landuseanalyst/src/lib/moc_lagrass.cxx.rule"; sourceTree = "<absolute>"; };
+6E35E06E35E06E35E0000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/moc_lagrassprocesslib.cxx.rule */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode; name = "moc_lagrassprocesslib.cxx.rule"; path = "/Users/arkygeek/devel/landuseanalyst/src/lib/moc_lagrassprocesslib.cxx.rule"; sourceTree = "<absolute>"; };
+6EDE406EDE406EDE40000000 /* la_core */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; path = "libla_core.dylib"; refType = 0; sourceTree = BUILT_PRODUCTS_DIR; };
+6EF5B06EF5B06EF5B0000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.cpp.cpp"; name = "main.cpp"; path = "/Users/arkygeek/devel/landuseanalyst/src/gui/main.cpp"; sourceTree = "<absolute>"; };
+6EFF606EFF606EFF60000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/lamainform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.cpp.cpp"; name = "lamainform.cpp"; path = "/Users/arkygeek/devel/landuseanalyst/src/gui/lamainform.cpp"; sourceTree = "<absolute>"; };
+6F09C06F09C06F09C0000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/lacropmanager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.cpp.cpp"; name = "lacropmanager.cpp"; path = "/Users/arkygeek/devel/landuseanalyst/src/gui/lacropmanager.cpp"; sourceTree = "<absolute>"; };
+6F14C06F14C06F14C0000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/lacropparametermanager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.cpp.cpp"; name = "lacropparametermanager.cpp"; path = "/Users/arkygeek/devel/landuseanalyst/src/gui/lacropparametermanager.cpp"; sourceTree = "<absolute>"; };
+6F1F806F1F806F1F80000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/laanimalmanager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.cpp.cpp"; name = "laanimalmanager.cpp"; path = "/Users/arkygeek/devel/landuseanalyst/src/gui/laanimalmanager.cpp"; sourceTree = "<absolute>"; };
+6F2A406F2A406F2A40000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/laanimalparametermanager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.cpp.cpp"; name = "laanimalparametermanager.cpp"; path = "/Users/arkygeek/devel/landuseanalyst/src/gui/laanimalparametermanager.cpp"; sourceTree = "<absolute>"; };
+6F35606F35606F3560000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/laassemblageconversion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.cpp.cpp"; name = "laassemblageconversion.cpp"; path = "/Users/arkygeek/devel/landuseanalyst/src/gui/laassemblageconversion.cpp"; sourceTree = "<absolute>"; };
+6F40406F40406F4040000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/lagrassprocess.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.cpp.cpp"; name = "lagrassprocess.cpp"; path = "/Users/arkygeek/devel/landuseanalyst/src/gui/lagrassprocess.cpp"; sourceTree = "<absolute>"; };
+6F4AF06F4AF06F4AF0000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/ui_lamainformbase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.cpp.h"; name = "ui_lamainformbase.h"; path = "/Users/arkygeek/devel/landuseanalyst/src/gui/ui_lamainformbase.h"; sourceTree = "<absolute>"; };
+6F55A06F55A06F55A0000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/ui_lacropmanagerbase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.cpp.h"; name = "ui_lacropmanagerbase.h"; path = "/Users/arkygeek/devel/landuseanalyst/src/gui/ui_lacropmanagerbase.h"; sourceTree = "<absolute>"; };
+6F60506F60506F6050000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/ui_lacropparametermanagerbase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.cpp.h"; name = "ui_lacropparametermanagerbase.h"; path = "/Users/arkygeek/devel/landuseanalyst/src/gui/ui_lacropparametermanagerbase.h"; sourceTree = "<absolute>"; };
+6F6B606F6B606F6B60000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/ui_laanimalmanagerbase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.cpp.h"; name = "ui_laanimalmanagerbase.h"; path = "/Users/arkygeek/devel/landuseanalyst/src/gui/ui_laanimalmanagerbase.h"; sourceTree = "<absolute>"; };
+6F76506F76506F7650000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/ui_laanimalparametermanagerbase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.cpp.h"; name = "ui_laanimalparametermanagerbase.h"; path = "/Users/arkygeek/devel/landuseanalyst/src/gui/ui_laanimalparametermanagerbase.h"; sourceTree = "<absolute>"; };
+6F81606F81606F8160000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/ui_laassemblageconversionbase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.cpp.h"; name = "ui_laassemblageconversionbase.h"; path = "/Users/arkygeek/devel/landuseanalyst/src/gui/ui_laassemblageconversionbase.h"; sourceTree = "<absolute>"; };
+6F8C606F8C606F8C60000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/ui_lagrassprocessbase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.cpp.h"; name = "ui_lagrassprocessbase.h"; path = "/Users/arkygeek/devel/landuseanalyst/src/gui/ui_lagrassprocessbase.h"; sourceTree = "<absolute>"; };
+6F97506F97506F9750000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_lamainform.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.cpp.cpp"; name = "moc_lamainform.cxx"; path = "/Users/arkygeek/devel/landuseanalyst/src/gui/moc_lamainform.cxx"; sourceTree = "<absolute>"; };
+6FA2106FA2106FA210000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_lacropmanager.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.cpp.cpp"; name = "moc_lacropmanager.cxx"; path = "/Users/arkygeek/devel/landuseanalyst/src/gui/moc_lacropmanager.cxx"; sourceTree = "<absolute>"; };
+6FACE06FACE06FACE0000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_lacropparametermanager.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.cpp.cpp"; name = "moc_lacropparametermanager.cxx"; path = "/Users/arkygeek/devel/landuseanalyst/src/gui/moc_lacropparametermanager.cxx"; sourceTree = "<absolute>"; };
+6FB8006FB8006FB800000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_laanimalmanager.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.cpp.cpp"; name = "moc_laanimalmanager.cxx"; path = "/Users/arkygeek/devel/landuseanalyst/src/gui/moc_laanimalmanager.cxx"; sourceTree = "<absolute>"; };
+10002B010002B010002B0000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_laanimalparametermanager.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.cpp.cpp"; name = "moc_laanimalparametermanager.cxx"; path = "/Users/arkygeek/devel/landuseanalyst/src/gui/moc_laanimalparametermanager.cxx"; sourceTree = "<absolute>"; };
+1000D701000D701000D70000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_laassemblageconversion.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.cpp.cpp"; name = "moc_laassemblageconversion.cxx"; path = "/Users/arkygeek/devel/landuseanalyst/src/gui/moc_laassemblageconversion.cxx"; sourceTree = "<absolute>"; };
+100186010018601001860000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_lagrassprocess.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.cpp.cpp"; name = "moc_lagrassprocess.cxx"; path = "/Users/arkygeek/devel/landuseanalyst/src/gui/moc_lagrassprocess.cxx"; sourceTree = "<absolute>"; };
+100235010023501002350000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/qrc_resources.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.cpp.cpp"; name = "qrc_resources.cxx"; path = "/Users/arkygeek/devel/landuseanalyst/src/gui/qrc_resources.cxx"; sourceTree = "<absolute>"; };
+1002E201002E201002E20000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.text"; name = "CMakeLists.txt"; path = "/Users/arkygeek/devel/landuseanalyst/src/gui/CMakeLists.txt"; sourceTree = "<absolute>"; };
+100395010039501003950000 /* /Users/arkygeek/devel/landuseanalyst/src/ui/lamainformbase.ui */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode; name = "lamainformbase.ui"; path = "/Users/arkygeek/devel/landuseanalyst/src/ui/lamainformbase.ui"; sourceTree = "<absolute>"; };
+100442010044201004420000 /* /Users/arkygeek/devel/landuseanalyst/src/ui/lacropmanagerbase.ui */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode; name = "lacropmanagerbase.ui"; path = "/Users/arkygeek/devel/landuseanalyst/src/ui/lacropmanagerbase.ui"; sourceTree = "<absolute>"; };
+1004EF01004EF01004EF0000 /* /Users/arkygeek/devel/landuseanalyst/src/ui/lacropparametermanagerbase.ui */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode; name = "lacropparametermanagerbase.ui"; path = "/Users/arkygeek/devel/landuseanalyst/src/ui/lacropparametermanagerbase.ui"; sourceTree = "<absolute>"; };
+10059D010059D010059D0000 /* /Users/arkygeek/devel/landuseanalyst/src/ui/laanimalmanagerbase.ui */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode; name = "laanimalmanagerbase.ui"; path = "/Users/arkygeek/devel/landuseanalyst/src/ui/laanimalmanagerbase.ui"; sourceTree = "<absolute>"; };
+10064F010064F010064F0000 /* /Users/arkygeek/devel/landuseanalyst/src/ui/laanimalparametermanagerbase.ui */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode; name = "laanimalparametermanagerbase.ui"; path = "/Users/arkygeek/devel/landuseanalyst/src/ui/laanimalparametermanagerbase.ui"; sourceTree = "<absolute>"; };
+1006FF01006FF01006FF0000 /* /Users/arkygeek/devel/landuseanalyst/src/ui/laassemblageconversionbase.ui */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode; name = "laassemblageconversionbase.ui"; path = "/Users/arkygeek/devel/landuseanalyst/src/ui/laassemblageconversionbase.ui"; sourceTree = "<absolute>"; };
+1007AC01007AC01007AC0000 /* /Users/arkygeek/devel/landuseanalyst/src/ui/lagrassprocessbase.ui */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode; name = "lagrassprocessbase.ui"; path = "/Users/arkygeek/devel/landuseanalyst/src/ui/lagrassprocessbase.ui"; sourceTree = "<absolute>"; };
+100858010085801008580000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_lamainform.cxx.rule */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode; name = "moc_lamainform.cxx.rule"; path = "/Users/arkygeek/devel/landuseanalyst/src/gui/moc_lamainform.cxx.rule"; sourceTree = "<absolute>"; };
+10090C010090C010090C0000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_lacropmanager.cxx.rule */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode; name = "moc_lacropmanager.cxx.rule"; path = "/Users/arkygeek/devel/landuseanalyst/src/gui/moc_lacropmanager.cxx.rule"; sourceTree = "<absolute>"; };
+1009BA01009BA01009BA0000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_lacropparametermanager.cxx.rule */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode; name = "moc_lacropparametermanager.cxx.rule"; path = "/Users/arkygeek/devel/landuseanalyst/src/gui/moc_lacropparametermanager.cxx.rule"; sourceTree = "<absolute>"; };
+100A700100A700100A700000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_laanimalmanager.cxx.rule */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode; name = "moc_laanimalmanager.cxx.rule"; path = "/Users/arkygeek/devel/landuseanalyst/src/gui/moc_laanimalmanager.cxx.rule"; sourceTree = "<absolute>"; };
+100B1D0100B1D0100B1D0000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_laanimalparametermanager.cxx.rule */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode; name = "moc_laanimalparametermanager.cxx.rule"; path = "/Users/arkygeek/devel/landuseanalyst/src/gui/moc_laanimalparametermanager.cxx.rule"; sourceTree = "<absolute>"; };
+100BD40100BD40100BD40000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_laassemblageconversion.cxx.rule */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode; name = "moc_laassemblageconversion.cxx.rule"; path = "/Users/arkygeek/devel/landuseanalyst/src/gui/moc_laassemblageconversion.cxx.rule"; sourceTree = "<absolute>"; };
+100C800100C800100C800000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_lagrassprocess.cxx.rule */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode; name = "moc_lagrassprocess.cxx.rule"; path = "/Users/arkygeek/devel/landuseanalyst/src/gui/moc_lagrassprocess.cxx.rule"; sourceTree = "<absolute>"; };
+100D300100D300100D300000 /* /Users/arkygeek/devel/landuseanalyst/src/resources/resources.qrc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode; name = "resources.qrc"; path = "/Users/arkygeek/devel/landuseanalyst/src/resources/resources.qrc"; sourceTree = "<absolute>"; };
+100DE70100DE70100DE70000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/CMakeFiles/landuseanalyst.dir/Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.text.plist"; name = "Info.plist"; path = "/Users/arkygeek/devel/landuseanalyst/src/gui/CMakeFiles/landuseanalyst.dir/Info.plist"; sourceTree = "<absolute>"; };
+101927010192701019270000 /* landuseanalyst */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; path = landuseanalyst; refType = 0; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+              6B82F06B82F06B82F0000000  = {
+                     isa = PBXGroup;
+                     children = (
+                            6B86106B86106B8610000000 /* Sources */,
+                            6B8F206B8F206B8F20000000 /* Resources */,
+                            6BC5E06BC5E06BC5E0000000 /* Products */,
+                     );
+                     sourceTree = "<group>";
+              };
+              6B86106B86106B8610000000 /* Sources */ = {
+                     isa = PBXGroup;
+                     children = (
+                            6B95306B95306B9530000000 /* ALL_BUILD */,
+                            6BA0D06BA0D06BA0D0000000 /* uninstall */,
+                            6BABD06BABD06BABD0000000 /* la_core */,
+                            6BC6806BC6806BC680000000 /* landuseanalyst */,
+                     );
+                     name = Sources;
+                     sourceTree = "<group>";
+              };
+              6B8F206B8F206B8F20000000 /* Resources */ = {
+                     isa = PBXGroup;
+                     children = (
+                     );
+                     name = Resources;
+                     sourceTree = "<group>";
+              };
+              6B95306B95306B9530000000 /* ALL_BUILD */ = {
+                     isa = PBXGroup;
+                     children = (
+                            6B9BF06B9BF06B9BF0000000 /* CMake Rules */,
+                            6C85A06C85A06C85A0000000 /* /Users/arkygeek/devel/landuseanalyst/CMakeLists.txt */,
+                     );
+                     name = ALL_BUILD;
+                     sourceTree = "<group>";
+              };
+              6B9BF06B9BF06B9BF0000000 /* CMake Rules */ = {
+                     isa = PBXGroup;
+                     children = (
+                     );
+                     name = "CMake Rules";
+                     sourceTree = "<group>";
+              };
+              6BA0D06BA0D06BA0D0000000 /* uninstall */ = {
+                     isa = PBXGroup;
+                     children = (
+                            6BA6C06BA6C06BA6C0000000 /* CMake Rules */,
+                            6C85A06C85A06C85A0000000 /* /Users/arkygeek/devel/landuseanalyst/CMakeLists.txt */,
+                     );
+                     name = uninstall;
+                     sourceTree = "<group>";
+              };
+              6BA6C06BA6C06BA6C0000000 /* CMake Rules */ = {
+                     isa = PBXGroup;
+                     children = (
+                     );
+                     name = "CMake Rules";
+                     sourceTree = "<group>";
+              };
+              6BABD06BABD06BABD0000000 /* la_core */ = {
+                     isa = PBXGroup;
+                     children = (
+                            6BAFA06BAFA06BAFA0000000 /* Source Files */,
+                            6BBD406BBD406BBD40000000 /* CMake Rules */,
+                            6E15B06E15B06E15B0000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/CMakeLists.txt */,
+                     );
+                     name = la_core;
+                     sourceTree = "<group>";
+              };
+              6BAFA06BAFA06BAFA0000000 /* Source Files */ = {
+                     isa = PBXGroup;
+                     children = (
+                            6D72006D72006D7200000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/laanimal.cpp */,
+                            6D7EE06D7EE06D7EE0000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/laanimalparameter.cpp */,
+                            6D89A06D89A06D89A0000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/laguid.cpp */,
+                            6D94406D94406D9440000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/lacrop.cpp */,
+                            6D9EE06D9EE06D9EE0000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/lacropparameter.cpp */,
+                            6DA9E06DA9E06DA9E0000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/lafoodsource.cpp */,
+                            6DB4A06DB4A06DB4A0000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/laserialisable.cpp */,
+                            6DBF406DBF406DBF40000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/lautils.cpp */,
+                            6DC9E06DC9E06DC9E0000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/lamodel.cpp */,
+                            6DD4C06DD4C06DD4C0000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/lagrass.cpp */,
+                            6DDF606DDF606DDF60000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/lagrassprocesslib.cpp */,
+                            6DEA306DEA306DEA30000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/ladietlabels.cpp */,
+                            6DF5106DF5106DF510000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/moc_lamodel.cxx */,
+                            6DFFD06DFFD06DFFD0000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/moc_lagrass.cxx */,
+                            6E0A906E0A906E0A90000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/moc_lagrassprocesslib.cxx */,
+                     );
+                     name = "Source Files";
+                     sourceTree = "<group>";
+              };
+              6BBD406BBD406BBD40000000 /* CMake Rules */ = {
+                     isa = PBXGroup;
+                     children = (
+                            6E20306E20306E2030000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/moc_lamodel.cxx.rule */,
+                            6E2B206E2B206E2B20000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/moc_lagrass.cxx.rule */,
+                            6E35E06E35E06E35E0000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/moc_lagrassprocesslib.cxx.rule */,
+                     );
+                     name = "CMake Rules";
+                     sourceTree = "<group>";
+              };
+              6BC6806BC6806BC680000000 /* landuseanalyst */ = {
+                     isa = PBXGroup;
+                     children = (
+                            6BCA906BCA906BCA90000000 /* Source Files */,
+                            6BD1D06BD1D06BD1D0000000 /* Header Files */,
+                            6BE8A06BE8A06BE8A0000000 /* CMake Rules */,
+                            6BF8E06BF8E06BF8E0000000 /* Resources */,
+                            1002E201002E201002E20000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/CMakeLists.txt */,
+                            100395010039501003950000 /* /Users/arkygeek/devel/landuseanalyst/src/ui/lamainformbase.ui */,
+                            100442010044201004420000 /* /Users/arkygeek/devel/landuseanalyst/src/ui/lacropmanagerbase.ui */,
+                            1004EF01004EF01004EF0000 /* /Users/arkygeek/devel/landuseanalyst/src/ui/lacropparametermanagerbase.ui */,
+                            10059D010059D010059D0000 /* /Users/arkygeek/devel/landuseanalyst/src/ui/laanimalmanagerbase.ui */,
+                            10064F010064F010064F0000 /* /Users/arkygeek/devel/landuseanalyst/src/ui/laanimalparametermanagerbase.ui */,
+                            1006FF01006FF01006FF0000 /* /Users/arkygeek/devel/landuseanalyst/src/ui/laassemblageconversionbase.ui */,
+                            1007AC01007AC01007AC0000 /* /Users/arkygeek/devel/landuseanalyst/src/ui/lagrassprocessbase.ui */,
+                            100D300100D300100D300000 /* /Users/arkygeek/devel/landuseanalyst/src/resources/resources.qrc */,
+                     );
+                     name = landuseanalyst;
+                     sourceTree = "<group>";
+              };
+              6BCA906BCA906BCA90000000 /* Source Files */ = {
+                     isa = PBXGroup;
+                     children = (
+                            6EF5B06EF5B06EF5B0000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/main.cpp */,
+                            6EFF606EFF606EFF60000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/lamainform.cpp */,
+                            6F09C06F09C06F09C0000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/lacropmanager.cpp */,
+                            6F14C06F14C06F14C0000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/lacropparametermanager.cpp */,
+                            6F1F806F1F806F1F80000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/laanimalmanager.cpp */,
+                            6F2A406F2A406F2A40000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/laanimalparametermanager.cpp */,
+                            6F35606F35606F3560000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/laassemblageconversion.cpp */,
+                            6F40406F40406F4040000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/lagrassprocess.cpp */,
+                            6F97506F97506F9750000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_lamainform.cxx */,
+                            6FA2106FA2106FA210000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_lacropmanager.cxx */,
+                            6FACE06FACE06FACE0000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_lacropparametermanager.cxx */,
+                            6FB8006FB8006FB800000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_laanimalmanager.cxx */,
+                            10002B010002B010002B0000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_laanimalparametermanager.cxx */,
+                            1000D701000D701000D70000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_laassemblageconversion.cxx */,
+                            100186010018601001860000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_lagrassprocess.cxx */,
+                            100235010023501002350000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/qrc_resources.cxx */,
+                     );
+                     name = "Source Files";
+                     sourceTree = "<group>";
+              };
+              6BD1D06BD1D06BD1D0000000 /* Header Files */ = {
+                     isa = PBXGroup;
+                     children = (
+                            6F4AF06F4AF06F4AF0000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/ui_lamainformbase.h */,
+                            6F55A06F55A06F55A0000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/ui_lacropmanagerbase.h */,
+                            6F60506F60506F6050000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/ui_lacropparametermanagerbase.h */,
+                            6F6B606F6B606F6B60000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/ui_laanimalmanagerbase.h */,
+                            6F76506F76506F7650000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/ui_laanimalparametermanagerbase.h */,
+                            6F81606F81606F8160000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/ui_laassemblageconversionbase.h */,
+                            6F8C606F8C606F8C60000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/ui_lagrassprocessbase.h */,
+                     );
+                     name = "Header Files";
+                     sourceTree = "<group>";
+              };
+              6BE8A06BE8A06BE8A0000000 /* CMake Rules */ = {
+                     isa = PBXGroup;
+                     children = (
+                            100858010085801008580000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_lamainform.cxx.rule */,
+                            10090C010090C010090C0000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_lacropmanager.cxx.rule */,
+                            1009BA01009BA01009BA0000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_lacropparametermanager.cxx.rule */,
+                            100A700100A700100A700000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_laanimalmanager.cxx.rule */,
+                            100B1D0100B1D0100B1D0000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_laanimalparametermanager.cxx.rule */,
+                            100BD40100BD40100BD40000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_laassemblageconversion.cxx.rule */,
+                            100C800100C800100C800000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_lagrassprocess.cxx.rule */,
+                     );
+                     name = "CMake Rules";
+                     sourceTree = "<group>";
+              };
+              6BF8E06BF8E06BF8E0000000 /* Resources */ = {
+                     isa = PBXGroup;
+                     children = (
+                            100DE70100DE70100DE70000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/CMakeFiles/landuseanalyst.dir/Info.plist */,
+                     );
+                     name = Resources;
+                     sourceTree = "<group>";
+              };
+              6BC5E06BC5E06BC5E0000000 /* Products */ = {
+                     isa = PBXGroup;
+                     children = (
+                            6EDE406EDE406EDE40000000 /* la_core */,
+                            101927010192701019270000 /* landuseanalyst */,
+                     );
+                     name = Products;
+                     sourceTree = "<group>";
+              };
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+              6E5B406E5B406E5B40000000 /* libla_core.dylib */ = {
+                     isa = PBXNativeTarget;
+                     buildConfigurationList = 6E5E306E5E306E5E30000000 /* Build configuration list for PBXNativeTarget "la_core" */;
+                     buildPhases = (
+                            6E45006E45006E4500000000 /* CMake ReRun */,
+                            6E4D506E4D506E4D50000000 /* CMake Rules */,
+                            6E40906E40906E4090000000 /* Sources */,
+                            6E54006E54006E5400000000 /* CMake PostBuild Rules */,
+                     );
+                     buildRules = (
+                     );
+                     buildSettings = {
+                            DYLIB_COMPATIBILITY_VERSION = "1.0.0";
+                            DYLIB_CURRENT_VERSION = "1.0.0";
+                            EXECUTABLE_PREFIX = lib;
+                            EXECUTABLE_SUFFIX = ".dylib";
+                            FRAMEWORK_SEARCH_PATHS = "/Library/Frameworks ";
+                            GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+                            GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+                            GCC_OPTIMIZATION_LEVEL = 0;
+                            GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)\"' 'la_core_EXPORTS' 'QT_DLL' 'QT_GUI_LIB' 'QT_XML_LIB' 'QT_CORE_LIB'";
+                            GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+                            HEADER_SEARCH_PATHS = "/Library/Frameworks/QtGui.framework/Headers /Library/Frameworks/QtXml.framework/Headers /Library/Frameworks/QtCore.framework/Headers /Users/arkygeek/devel/landuseanalyst/src/lib ";
+                            INSTALL_PATH = /Users/arkygeek/apps;
+                            LIBRARY_STYLE = DYNAMIC;
+                            OTHER_CFLAGS = "-fPIC   -Wall -Werror -F/Library/Frameworks";
+                            OTHER_CPLUSPLUSFLAGS = "-fPIC   -Wall -Werror -F/Library/Frameworks";
+                            OTHER_LDFLAGS = " -dynamiclib -headerpad_max_install_names";
+                            OTHER_REZFLAGS = "";
+                            PREBINDING = NO;
+                            PRODUCT_NAME = la_core;
+                            SECTORDER_FLAGS = "";
+                            SYMROOT = /Users/arkygeek/apps;
+                            USE_HEADERMAP = NO;
+                            WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+                     };
+                     dependencies = (
+                     );
+                     name = "libla_core.dylib";
+                     productName = "libla_core.dylib";
+                     productReference = 6EDE406EDE406EDE40000000 /* la_core */;
+                     productType = "com.apple.product-type.library.dynamic";
+              };
+              10105D010105D010105D0000 /* landuseanalyst */ = {
+                     isa = PBXNativeTarget;
+                     buildConfigurationList = 100EF70100EF70100EF70000 /* Build configuration list for PBXNativeTarget "landuseanalyst" */;
+                     buildPhases = (
+                            100EEF0100EEF0100EEF0000 /* CMake ReRun */,
+                            100F7F0100F7F0100F7F0000 /* CMake Rules */,
+                            100E8E0100E8E0100E8E0000 /* Sources */,
+                            100FEA0100FEA0100FEA0000 /* CMake PostBuild Rules */,
+                     );
+                     buildRules = (
+                     );
+                     buildSettings = {
+                            EXECUTABLE_PREFIX = "";
+                            EXECUTABLE_SUFFIX = "";
+                            FRAMEWORK_SEARCH_PATHS = "/Library/Frameworks ";
+                            GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+                            GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+                            GCC_OPTIMIZATION_LEVEL = 0;
+                            GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)\"' 'QT_DLL' 'QT_GUI_LIB' 'QT_XML_LIB' 'QT_CORE_LIB'";
+                            GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+                            HEADER_SEARCH_PATHS = "/Library/Frameworks/QtGui.framework/Headers /Library/Frameworks/QtXml.framework/Headers /Library/Frameworks/QtCore.framework/Headers /Users/arkygeek/devel/landuseanalyst/src/gui /Users/arkygeek/devel/landuseanalyst/src/gui/../lib ";
+                            INFOPLIST_FILE = "/Users/arkygeek/devel/landuseanalyst/src/gui/CMakeFiles/landuseanalyst.dir/Info.plist";
+                            INSTALL_PATH = "";
+                            OTHER_CFLAGS = "   -Wall -Werror -F/Library/Frameworks";
+                            OTHER_CPLUSPLUSFLAGS = "   -Wall -Werror -F/Library/Frameworks";
+                            OTHER_LDFLAGS = " -Wl,-search_paths_first -headerpad_max_install_names";
+                            OTHER_REZFLAGS = "";
+                            PREBINDING = NO;
+                            PRODUCT_NAME = landuseanalyst;
+                            SECTORDER_FLAGS = "";
+                            SYMROOT = /Users/arkygeek/apps;
+                            USE_HEADERMAP = NO;
+                            WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+                     };
+                     dependencies = (
+                            65F39065F39065F390000000 /* PBXTargetDependency */,
+                     );
+                     name = landuseanalyst;
+                     productName = landuseanalyst;
+                     productReference = 101927010192701019270000 /* landuseanalyst */;
+                     productType = "com.apple.product-type.application";
+              };
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+              6BFF006BFF006BFF00000000 /* Project object */ = {
+                     isa = PBXProject;
+                     buildConfigurationList = 6C04C06C04C06C04C0000000 /* Build configuration list for PBXProject  "landuseanalyst" */;
+                     buildSettings = {
+                     };
+                     buildStyles = (
+                            6B14D06B14D06B14D0000000 /* Debug */,
+                            6B80406B80406B8040000000 /* Release */,
+                            6B8C706B8C706B8C70000000 /* MinSizeRel */,
+                            6B77F06B77F06B77F0000000 /* RelWithDebInfo */,
+                     );
+                     hasScannedForEncodings = 0;
+                     mainGroup = 6B82F06B82F06B82F0000000;
+                     projectRoot = /Users/arkygeek/devel/landuseanalyst;
+                     targets = (
+                            6C1C506C1C506C1C50000000 /* ALL_BUILD */,
+                            6C97006C97006C9700000000 /* install */,
+                            6D07106D07106D0710000000 /* uninstall */,
+                            6E5B406E5B406E5B40000000 /* libla_core.dylib */,
+                            10105D010105D010105D0000 /* landuseanalyst */,
+                     );
+              };
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+              6C14706C14706C1470000000 /*  */ = {
+                     isa = PBXShellScriptBuildPhase;
+                     buildActionMask = 2147483647;
+                     files = (
+                     );
+                     inputPaths = (
+                     );
+                     outputPaths = (
+                     );
+                     runOnlyForDeploymentPostprocessing = 0;
+                     shellPath = /bin/sh;
+                     shellScript = "# shell script goes here
+exit 0";
+              };
+              6C1E306C1E306C1E30000000 /* CMake ReRun */ = {
+                     isa = PBXShellScriptBuildPhase;
+                     buildActionMask = 2147483647;
+                     files = (
+                     );
+                     name = "CMake ReRun";
+                     runOnlyForDeploymentPostprocessing = 0;
+                     shellPath = /bin/sh;
+                     shellScript = "make -C /Users/arkygeek/devel/landuseanalyst -f /Users/arkygeek/devel/landuseanalyst/CMakeScripts/ReRunCMake.make";
+              };
+              6C25406C25406C2540000000 /* CMake Rules */ = {
+                     isa = PBXShellScriptBuildPhase;
+                     buildActionMask = 2147483647;
+                     files = (
+                     );
+                     name = "CMake Rules";
+                     runOnlyForDeploymentPostprocessing = 0;
+                     shellPath = /bin/sh;
+                     shellScript = "make -C /Users/arkygeek/devel/landuseanalyst -f /Users/arkygeek/devel/landuseanalyst/CMakeScripts/ALL_BUILD_cmakeRulesBuildPhase.make$CONFIGURATION all";
+              };
+              6C8E406C8E406C8E40000000 /*  */ = {
+                     isa = PBXShellScriptBuildPhase;
+                     buildActionMask = 2147483647;
+                     files = (
+                     );
+                     inputPaths = (
+                     );
+                     outputPaths = (
+                     );
+                     runOnlyForDeploymentPostprocessing = 0;
+                     shellPath = /bin/sh;
+                     shellScript = "# shell script goes here
+exit 0";
+              };
+              6C98A06C98A06C98A0000000 /* CMake ReRun */ = {
+                     isa = PBXShellScriptBuildPhase;
+                     buildActionMask = 2147483647;
+                     files = (
+                     );
+                     name = "CMake ReRun";
+                     runOnlyForDeploymentPostprocessing = 0;
+                     shellPath = /bin/sh;
+                     shellScript = "make -C /Users/arkygeek/devel/landuseanalyst -f /Users/arkygeek/devel/landuseanalyst/CMakeScripts/ReRunCMake.make";
+              };
+              6C9FA06C9FA06C9FA0000000 /* CMake PostBuild Rules */ = {
+                     isa = PBXShellScriptBuildPhase;
+                     buildActionMask = 2147483647;
+                     files = (
+                     );
+                     name = "CMake PostBuild Rules";
+                     runOnlyForDeploymentPostprocessing = 0;
+                     shellPath = /bin/sh;
+                     shellScript = "make -C /Users/arkygeek/devel/landuseanalyst -f /Users/arkygeek/devel/landuseanalyst/CMakeScripts/install_postBuildPhase.make$CONFIGURATION all";
+              };
+              6D00406D00406D0040000000 /*  */ = {
+                     isa = PBXShellScriptBuildPhase;
+                     buildActionMask = 2147483647;
+                     files = (
+                     );
+                     inputPaths = (
+                     );
+                     outputPaths = (
+                     );
+                     runOnlyForDeploymentPostprocessing = 0;
+                     shellPath = /bin/sh;
+                     shellScript = "# shell script goes here
+exit 0";
+              };
+              6D08F06D08F06D08F0000000 /* CMake ReRun */ = {
+                     isa = PBXShellScriptBuildPhase;
+                     buildActionMask = 2147483647;
+                     files = (
+                     );
+                     name = "CMake ReRun";
+                     runOnlyForDeploymentPostprocessing = 0;
+                     shellPath = /bin/sh;
+                     shellScript = "make -C /Users/arkygeek/devel/landuseanalyst -f /Users/arkygeek/devel/landuseanalyst/CMakeScripts/ReRunCMake.make";
+              };
+              6D10006D10006D1000000000 /* CMake Rules */ = {
+                     isa = PBXShellScriptBuildPhase;
+                     buildActionMask = 2147483647;
+                     files = (
+                     );
+                     name = "CMake Rules";
+                     runOnlyForDeploymentPostprocessing = 0;
+                     shellPath = /bin/sh;
+                     shellScript = "make -C /Users/arkygeek/devel/landuseanalyst -f /Users/arkygeek/devel/landuseanalyst/CMakeScripts/uninstall_cmakeRulesBuildPhase.make$CONFIGURATION all";
+              };
+              6E45006E45006E4500000000 /* CMake ReRun */ = {
+                     isa = PBXShellScriptBuildPhase;
+                     buildActionMask = 2147483647;
+                     files = (
+                     );
+                     name = "CMake ReRun";
+                     runOnlyForDeploymentPostprocessing = 0;
+                     shellPath = /bin/sh;
+                     shellScript = "make -C /Users/arkygeek/devel/landuseanalyst -f /Users/arkygeek/devel/landuseanalyst/CMakeScripts/ReRunCMake.make";
+              };
+              6E4D506E4D506E4D50000000 /* CMake Rules */ = {
+                     isa = PBXShellScriptBuildPhase;
+                     buildActionMask = 2147483647;
+                     files = (
+                     );
+                     name = "CMake Rules";
+                     runOnlyForDeploymentPostprocessing = 0;
+                     shellPath = /bin/sh;
+                     shellScript = "make -C /Users/arkygeek/devel/landuseanalyst/src/lib -f /Users/arkygeek/devel/landuseanalyst/src/lib/CMakeScripts/la_core_cmakeRulesBuildPhase.make$CONFIGURATION all";
+              };
+              6E54006E54006E5400000000 /* CMake PostBuild Rules */ = {
+                     isa = PBXShellScriptBuildPhase;
+                     buildActionMask = 2147483647;
+                     files = (
+                     );
+                     name = "CMake PostBuild Rules";
+                     runOnlyForDeploymentPostprocessing = 0;
+                     shellPath = /bin/sh;
+                     shellScript = "make -C /Users/arkygeek/devel/landuseanalyst/src/lib -f /Users/arkygeek/devel/landuseanalyst/src/lib/CMakeScripts/la_core_postBuildPhase.make$CONFIGURATION all";
+              };
+              100EEF0100EEF0100EEF0000 /* CMake ReRun */ = {
+                     isa = PBXShellScriptBuildPhase;
+                     buildActionMask = 2147483647;
+                     files = (
+                     );
+                     name = "CMake ReRun";
+                     runOnlyForDeploymentPostprocessing = 0;
+                     shellPath = /bin/sh;
+                     shellScript = "make -C /Users/arkygeek/devel/landuseanalyst -f /Users/arkygeek/devel/landuseanalyst/CMakeScripts/ReRunCMake.make";
+              };
+              100F7F0100F7F0100F7F0000 /* CMake Rules */ = {
+                     isa = PBXShellScriptBuildPhase;
+                     buildActionMask = 2147483647;
+                     files = (
+                     );
+                     name = "CMake Rules";
+                     runOnlyForDeploymentPostprocessing = 0;
+                     shellPath = /bin/sh;
+                     shellScript = "make -C /Users/arkygeek/devel/landuseanalyst/src/gui -f /Users/arkygeek/devel/landuseanalyst/src/gui/CMakeScripts/landuseanalyst_cmakeRulesBuildPhase.make$CONFIGURATION all";
+              };
+              100FEA0100FEA0100FEA0000 /* CMake PostBuild Rules */ = {
+                     isa = PBXShellScriptBuildPhase;
+                     buildActionMask = 2147483647;
+                     files = (
+                     );
+                     name = "CMake PostBuild Rules";
+                     runOnlyForDeploymentPostprocessing = 0;
+                     shellPath = /bin/sh;
+                     shellScript = "make -C /Users/arkygeek/devel/landuseanalyst/src/gui -f /Users/arkygeek/devel/landuseanalyst/src/gui/CMakeScripts/landuseanalyst_postBuildPhase.make$CONFIGURATION all";
+              };
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+              6E40906E40906E4090000000 /* Sources */ = {
+                     isa = PBXSourcesBuildPhase;
+                     buildActionMask = 2147483647;
+                     files = (
+                            6D77D06D77D06D77D0000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/laanimal.cpp */,
+                            6D82606D82606D8260000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/laanimalparameter.cpp */,
+                            6D8D306D8D306D8D30000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/laguid.cpp */,
+                            6D97D06D97D06D97D0000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/lacrop.cpp */,
+                            6DA2806DA2806DA280000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/lacropparameter.cpp */,
+                            6DAD606DAD606DAD60000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/lafoodsource.cpp */,
+                            6DB8306DB8306DB830000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/laserialisable.cpp */,
+                            6DC2D06DC2D06DC2D0000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/lautils.cpp */,
+                            6DCD606DCD606DCD60000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/lamodel.cpp */,
+                            6DD8506DD8506DD850000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/lagrass.cpp */,
+                            6DE7806DE7806DE780000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/lagrassprocesslib.cpp */,
+                            6DEE006DEE006DEE00000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/ladietlabels.cpp */,
+                            6DF8C06DF8C06DF8C0000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/moc_lamodel.cxx */,
+                            6E03806E03806E0380000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/moc_lagrass.cxx */,
+                            6E12906E12906E1290000000 /* /Users/arkygeek/devel/landuseanalyst/src/lib/moc_lagrassprocesslib.cxx */,
+                     );
+                     runOnlyForDeploymentPostprocessing = 0;
+              };
+              100E8E0100E8E0100E8E0000 /* Sources */ = {
+                     isa = PBXSourcesBuildPhase;
+                     buildActionMask = 2147483647;
+                     files = (
+                            6EF8506EF8506EF850000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/main.cpp */,
+                            6F02D06F02D06F02D0000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/lamainform.cpp */,
+                            6F0D706F0D706F0D70000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/lacropmanager.cpp */,
+                            6F16606F16606F1660000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/lacropparametermanager.cpp */,
+                            6F23306F23306F2330000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/laanimalmanager.cpp */,
+                            6F2C206F2C206F2C20000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/laanimalparametermanager.cpp */,
+                            6F37206F37206F3720000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/laassemblageconversion.cpp */,
+                            6F43B06F43B06F43B0000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/lagrassprocess.cpp */,
+                            6F9B006F9B006F9B00000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_lamainform.cxx */,
+                            6FA5A06FA5A06FA5A0000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_lacropmanager.cxx */,
+                            6FAEC06FAEC06FAEC0000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_lacropparametermanager.cxx */,
+                            6FBFD06FBFD06FBFD0000000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_laanimalmanager.cxx */,
+                            100048010004801000480000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_laanimalparametermanager.cxx */,
+                            1000F501000F501000F50000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_laassemblageconversion.cxx */,
+                            100209010020901002090000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/moc_lagrassprocess.cxx */,
+                            100271010027101002710000 /* /Users/arkygeek/devel/landuseanalyst/src/gui/qrc_resources.cxx */,
+                     );
+                     runOnlyForDeploymentPostprocessing = 0;
+              };
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+              65F39065F39065F390000000 /* PBXTargetDependency */ = {
+                     isa = PBXTargetDependency;
+                     target = 6E5B406E5B406E5B40000000 /* libla_core.dylib */;
+                     targetProxy = 101A760101A760101A760000 /* PBXContainerItemProxy */;
+              };
+              669770669770669770000000 /* PBXTargetDependency */ = {
+                     isa = PBXTargetDependency;
+                     target = 10105D010105D010105D0000 /* landuseanalyst */;
+                     targetProxy = 65F62065F62065F620000000 /* PBXContainerItemProxy */;
+              };
+              101AA00101AA00101AA00000 /* PBXTargetDependency */ = {
+                     isa = PBXTargetDependency;
+                     target = 6C1C506C1C506C1C50000000 /* ALL_BUILD */;
+                     targetProxy = 669BF0669BF0669BF0000000 /* PBXContainerItemProxy */;
+              };
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+              6C05A06C05A06C05A0000000 /* Debug */ = {
+                     isa = XCBuildConfiguration;
+                     buildSettings = {
+                            ARCHS = "ppc i386 ";
+                            SDKROOT = "/Developer/SDKs/MacOSX10.5.sdk";
+                     };
+                     name = Debug;
+              };
+              6C07606C07606C0760000000 /* Release */ = {
+                     isa = XCBuildConfiguration;
+                     buildSettings = {
+                            ARCHS = "ppc i386 ";
+                            SDKROOT = "/Developer/SDKs/MacOSX10.5.sdk";
+                     };
+                     name = Release;
+              };
+              6C09106C09106C0910000000 /* MinSizeRel */ = {
+                     isa = XCBuildConfiguration;
+                     buildSettings = {
+                            ARCHS = "ppc i386 ";
+                            SDKROOT = "/Developer/SDKs/MacOSX10.5.sdk";
+                     };
+                     name = MinSizeRel;
+              };
+              6C0B906C0B906C0B90000000 /* RelWithDebInfo */ = {
+                     isa = XCBuildConfiguration;
+                     buildSettings = {
+                            ARCHS = "ppc i386 ";
+                            SDKROOT = "/Developer/SDKs/MacOSX10.5.sdk";
+                     };
+                     name = RelWithDebInfo;
+              };
+              6C31A06C31A06C31A0000000 /* Debug */ = {
+                     isa = XCBuildConfiguration;
+                     buildSettings = {
+                            GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+                            GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+                            GCC_OPTIMIZATION_LEVEL = 0;
+                            GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)\"'";
+                            GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+                            INSTALL_PATH = "";
+                            OTHER_CFLAGS = "   -Wall -Werror";
+                            OTHER_LDFLAGS = "";
+                            OTHER_REZFLAGS = "";
+                            PREBINDING = NO;
+                            PRODUCT_NAME = ALL_BUILD;
+                            SECTORDER_FLAGS = "";
+                            USE_HEADERMAP = NO;
+                            WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+                     };
+                     name = Debug;
+              };
+              6C42906C42906C4290000000 /* Release */ = {
+                     isa = XCBuildConfiguration;
+                     buildSettings = {
+                            GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+                            GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+                            GCC_OPTIMIZATION_LEVEL = 0;
+                            GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)\"'";
+                            GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+                            INSTALL_PATH = "";
+                            OTHER_CFLAGS = "   -Wall -Werror";
+                            OTHER_LDFLAGS = "";
+                            OTHER_REZFLAGS = "";
+                            PREBINDING = NO;
+                            PRODUCT_NAME = ALL_BUILD;
+                            SECTORDER_FLAGS = "";
+                            USE_HEADERMAP = NO;
+                            WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+                     };
+                     name = Release;
+              };
+              6C53906C53906C5390000000 /* MinSizeRel */ = {
+                     isa = XCBuildConfiguration;
+                     buildSettings = {
+                            GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+                            GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+                            GCC_OPTIMIZATION_LEVEL = 0;
+                            GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)\"'";
+                            GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+                            INSTALL_PATH = "";
+                            OTHER_CFLAGS = "   -Wall -Werror";
+                            OTHER_LDFLAGS = "";
+                            OTHER_REZFLAGS = "";
+                            PREBINDING = NO;
+                            PRODUCT_NAME = ALL_BUILD;
+                            SECTORDER_FLAGS = "";
+                            USE_HEADERMAP = NO;
+                            WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+                     };
+                     name = MinSizeRel;
+              };
+              6C63306C63306C6330000000 /* RelWithDebInfo */ = {
+                     isa = XCBuildConfiguration;
+                     buildSettings = {
+                            GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+                            GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+                            GCC_OPTIMIZATION_LEVEL = 0;
+                            GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)\"'";
+                            GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+                            INSTALL_PATH = "";
+                            OTHER_CFLAGS = "   -Wall -Werror";
+                            OTHER_LDFLAGS = "";
+                            OTHER_REZFLAGS = "";
+                            PREBINDING = NO;
+                            PRODUCT_NAME = ALL_BUILD;
+                            SECTORDER_FLAGS = "";
+                            USE_HEADERMAP = NO;
+                            WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+                     };
+                     name = RelWithDebInfo;
+              };
+              6CAC206CAC206CAC20000000 /* Debug */ = {
+                     isa = XCBuildConfiguration;
+                     buildSettings = {
+                            GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+                            GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+                            GCC_OPTIMIZATION_LEVEL = 0;
+                            GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)\"'";
+                            GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+                            INSTALL_PATH = "";
+                            OTHER_CFLAGS = "   -Wall -Werror";
+                            OTHER_LDFLAGS = "";
+                            OTHER_REZFLAGS = "";
+                            PREBINDING = NO;
+                            PRODUCT_NAME = install;
+                            SECTORDER_FLAGS = "";
+                            USE_HEADERMAP = NO;
+                            WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+                     };
+                     name = Debug;
+              };
+              6CBD106CBD106CBD10000000 /* Release */ = {
+                     isa = XCBuildConfiguration;
+                     buildSettings = {
+                            GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+                            GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+                            GCC_OPTIMIZATION_LEVEL = 0;
+                            GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)\"'";
+                            GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+                            INSTALL_PATH = "";
+                            OTHER_CFLAGS = "   -Wall -Werror";
+                            OTHER_LDFLAGS = "";
+                            OTHER_REZFLAGS = "";
+                            PREBINDING = NO;
+                            PRODUCT_NAME = install;
+                            SECTORDER_FLAGS = "";
+                            USE_HEADERMAP = NO;
+                            WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+                     };
+                     name = Release;
+              };
+              6CCE106CCE106CCE10000000 /* MinSizeRel */ = {
+                     isa = XCBuildConfiguration;
+                     buildSettings = {
+                            GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+                            GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+                            GCC_OPTIMIZATION_LEVEL = 0;
+                            GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)\"'";
+                            GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+                            INSTALL_PATH = "";
+                            OTHER_CFLAGS = "   -Wall -Werror";
+                            OTHER_LDFLAGS = "";
+                            OTHER_REZFLAGS = "";
+                            PREBINDING = NO;
+                            PRODUCT_NAME = install;
+                            SECTORDER_FLAGS = "";
+                            USE_HEADERMAP = NO;
+                            WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+                     };
+                     name = MinSizeRel;
+              };
+              6CDDB06CDDB06CDDB0000000 /* RelWithDebInfo */ = {
+                     isa = XCBuildConfiguration;
+                     buildSettings = {
+                            GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+                            GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+                            GCC_OPTIMIZATION_LEVEL = 0;
+                            GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)\"'";
+                            GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+                            INSTALL_PATH = "";
+                            OTHER_CFLAGS = "   -Wall -Werror";
+                            OTHER_LDFLAGS = "";
+                            OTHER_REZFLAGS = "";
+                            PREBINDING = NO;
+                            PRODUCT_NAME = install;
+                            SECTORDER_FLAGS = "";
+                            USE_HEADERMAP = NO;
+                            WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+                     };
+                     name = RelWithDebInfo;
+              };
+              6D1C706D1C706D1C70000000 /* Debug */ = {
+                     isa = XCBuildConfiguration;
+                     buildSettings = {
+                            GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+                            GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+                            GCC_OPTIMIZATION_LEVEL = 0;
+                            GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)\"'";
+                            GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+                            INSTALL_PATH = "";
+                            OTHER_CFLAGS = "   -Wall -Werror";
+                            OTHER_LDFLAGS = "";
+                            OTHER_REZFLAGS = "";
+                            PREBINDING = NO;
+                            PRODUCT_NAME = uninstall;
+                            SECTORDER_FLAGS = "";
+                            USE_HEADERMAP = NO;
+                            WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+                     };
+                     name = Debug;
+              };
+              6D2D606D2D606D2D60000000 /* Release */ = {
+                     isa = XCBuildConfiguration;
+                     buildSettings = {
+                            GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+                            GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+                            GCC_OPTIMIZATION_LEVEL = 0;
+                            GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)\"'";
+                            GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+                            INSTALL_PATH = "";
+                            OTHER_CFLAGS = "   -Wall -Werror";
+                            OTHER_LDFLAGS = "";
+                            OTHER_REZFLAGS = "";
+                            PREBINDING = NO;
+                            PRODUCT_NAME = uninstall;
+                            SECTORDER_FLAGS = "";
+                            USE_HEADERMAP = NO;
+                            WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+                     };
+                     name = Release;
+              };
+              6D3E606D3E606D3E60000000 /* MinSizeRel */ = {
+                     isa = XCBuildConfiguration;
+                     buildSettings = {
+                            GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+                            GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+                            GCC_OPTIMIZATION_LEVEL = 0;
+                            GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)\"'";
+                            GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+                            INSTALL_PATH = "";
+                            OTHER_CFLAGS = "   -Wall -Werror";
+                            OTHER_LDFLAGS = "";
+                            OTHER_REZFLAGS = "";
+                            PREBINDING = NO;
+                            PRODUCT_NAME = uninstall;
+                            SECTORDER_FLAGS = "";
+                            USE_HEADERMAP = NO;
+                            WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+                     };
+                     name = MinSizeRel;
+              };
+              6D4E006D4E006D4E00000000 /* RelWithDebInfo */ = {
+                     isa = XCBuildConfiguration;
+                     buildSettings = {
+                            GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+                            GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+                            GCC_OPTIMIZATION_LEVEL = 0;
+                            GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)\"'";
+                            GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+                            INSTALL_PATH = "";
+                            OTHER_CFLAGS = "   -Wall -Werror";
+                            OTHER_LDFLAGS = "";
+                            OTHER_REZFLAGS = "";
+                            PREBINDING = NO;
+                            PRODUCT_NAME = uninstall;
+                            SECTORDER_FLAGS = "";
+                            USE_HEADERMAP = NO;
+                            WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+                     };
+                     name = RelWithDebInfo;
+              };
+              6E61706E61706E6170000000 /* Debug */ = {
+                     isa = XCBuildConfiguration;
+                     buildSettings = {
+                            DYLIB_COMPATIBILITY_VERSION = "1.0.0";
+                            DYLIB_CURRENT_VERSION = "1.0.0";
+                            EXECUTABLE_PREFIX = lib;
+                            EXECUTABLE_SUFFIX = ".dylib";
+                            FRAMEWORK_SEARCH_PATHS = "/Library/Frameworks ";
+                            GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+                            GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+                            GCC_OPTIMIZATION_LEVEL = 0;
+                            GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)\"' 'la_core_EXPORTS' 'QT_DLL' 'QT_GUI_LIB' 'QT_XML_LIB' 'QT_CORE_LIB' 'QT_DEBUG'";
+                            GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+                            HEADER_SEARCH_PATHS = "/Library/Frameworks/QtGui.framework/Headers /Library/Frameworks/QtXml.framework/Headers /Library/Frameworks/QtCore.framework/Headers /Users/arkygeek/devel/landuseanalyst/src/lib ";
+                            INSTALL_PATH = /Users/arkygeek/apps/Debug;
+                            LIBRARY_SEARCH_PATHS = "";
+                            LIBRARY_STYLE = DYNAMIC;
+                            OTHER_CFLAGS = "   -fPIC   -Wall -Werror -F/Library/Frameworks";
+                            OTHER_CPLUSPLUSFLAGS = "   -fPIC   -Wall -Werror -F/Library/Frameworks";
+                            OTHER_LDFLAGS = " -dynamiclib -headerpad_max_install_names -framework QtGui -framework Carbon -framework AppKit -framework QtXml -framework QtCore /usr/lib/libz.dylib -framework ApplicationServices";
+                            OTHER_REZFLAGS = "";
+                            PREBINDING = NO;
+                            PRODUCT_NAME = la_core;
+                            SECTORDER_FLAGS = "";
+                            SYMROOT = /Users/arkygeek/apps;
+                            USE_HEADERMAP = NO;
+                            WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+                     };
+                     name = Debug;
+              };
+              6E6E406E6E406E6E40000000 /* Release */ = {
+                     isa = XCBuildConfiguration;
+                     buildSettings = {
+                            DYLIB_COMPATIBILITY_VERSION = "1.0.0";
+                            DYLIB_CURRENT_VERSION = "1.0.0";
+                            EXECUTABLE_PREFIX = lib;
+                            EXECUTABLE_SUFFIX = ".dylib";
+                            FRAMEWORK_SEARCH_PATHS = "/Library/Frameworks ";
+                            GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+                            GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+                            GCC_OPTIMIZATION_LEVEL = 3;
+                            GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)\"' 'la_core_EXPORTS' 'QT_DLL' 'QT_GUI_LIB' 'QT_XML_LIB' 'QT_CORE_LIB' 'QT_NO_DEBUG'";
+                            GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+                            HEADER_SEARCH_PATHS = "/Library/Frameworks/QtGui.framework/Headers /Library/Frameworks/QtXml.framework/Headers /Library/Frameworks/QtCore.framework/Headers /Users/arkygeek/devel/landuseanalyst/src/lib ";
+                            INSTALL_PATH = /Users/arkygeek/apps/Release;
+                            LIBRARY_SEARCH_PATHS = "";
+                            LIBRARY_STYLE = DYNAMIC;
+                            OTHER_CFLAGS = "    -DNDEBUG -fPIC   -Wall -Werror -F/Library/Frameworks";
+                            OTHER_CPLUSPLUSFLAGS = "    -DNDEBUG -fPIC   -Wall -Werror -F/Library/Frameworks";
+                            OTHER_LDFLAGS = " -dynamiclib -headerpad_max_install_names -framework QtGui -framework Carbon -framework AppKit -framework QtXml -framework QtCore /usr/lib/libz.dylib -framework ApplicationServices";
+                            OTHER_REZFLAGS = "";
+                            PREBINDING = NO;
+                            PRODUCT_NAME = la_core;
+                            SECTORDER_FLAGS = "";
+                            SYMROOT = /Users/arkygeek/apps;
+                            USE_HEADERMAP = NO;
+                            WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+                     };
+                     name = Release;
+              };
+              6E89F06E89F06E89F0000000 /* MinSizeRel */ = {
+                     isa = XCBuildConfiguration;
+                     buildSettings = {
+                            DYLIB_COMPATIBILITY_VERSION = "1.0.0";
+                            DYLIB_CURRENT_VERSION = "1.0.0";
+                            EXECUTABLE_PREFIX = lib;
+                            EXECUTABLE_SUFFIX = ".dylib";
+                            FRAMEWORK_SEARCH_PATHS = "/Library/Frameworks ";
+                            GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+                            GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+                            GCC_OPTIMIZATION_LEVEL = s;
+                            GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)\"' 'la_core_EXPORTS' 'QT_DLL' 'QT_GUI_LIB' 'QT_XML_LIB' 'QT_CORE_LIB' 'QT_NO_DEBUG'";
+                            GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+                            HEADER_SEARCH_PATHS = "/Library/Frameworks/QtGui.framework/Headers /Library/Frameworks/QtXml.framework/Headers /Library/Frameworks/QtCore.framework/Headers /Users/arkygeek/devel/landuseanalyst/src/lib ";
+                            INSTALL_PATH = /Users/arkygeek/apps/MinSizeRel;
+                            LIBRARY_SEARCH_PATHS = "";
+                            LIBRARY_STYLE = DYNAMIC;
+                            OTHER_CFLAGS = "    -DNDEBUG -fPIC   -Wall -Werror -F/Library/Frameworks";
+                            OTHER_CPLUSPLUSFLAGS = "    -DNDEBUG -fPIC   -Wall -Werror -F/Library/Frameworks";
+                            OTHER_LDFLAGS = " -dynamiclib -headerpad_max_install_names -framework QtGui -framework Carbon -framework AppKit -framework QtXml -framework QtCore /usr/lib/libz.dylib -framework ApplicationServices";
+                            OTHER_REZFLAGS = "";
+                            PREBINDING = NO;
+                            PRODUCT_NAME = la_core;
+                            SECTORDER_FLAGS = "";
+                            SYMROOT = /Users/arkygeek/apps;
+                            USE_HEADERMAP = NO;
+                            WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+                     };
+                     name = MinSizeRel;
+              };
+              6EA5906EA5906EA590000000 /* RelWithDebInfo */ = {
+                     isa = XCBuildConfiguration;
+                     buildSettings = {
+                            DYLIB_COMPATIBILITY_VERSION = "1.0.0";
+                            DYLIB_CURRENT_VERSION = "1.0.0";
+                            EXECUTABLE_PREFIX = lib;
+                            EXECUTABLE_SUFFIX = ".dylib";
+                            FRAMEWORK_SEARCH_PATHS = "/Library/Frameworks ";
+                            GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+                            GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+                            GCC_OPTIMIZATION_LEVEL = 2;
+                            GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)\"' 'la_core_EXPORTS' 'QT_DLL' 'QT_GUI_LIB' 'QT_XML_LIB' 'QT_CORE_LIB' 'QT_NO_DEBUG'";
+                            GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+                            HEADER_SEARCH_PATHS = "/Library/Frameworks/QtGui.framework/Headers /Library/Frameworks/QtXml.framework/Headers /Library/Frameworks/QtCore.framework/Headers /Users/arkygeek/devel/landuseanalyst/src/lib ";
+                            INSTALL_PATH = /Users/arkygeek/apps/RelWithDebInfo;
+                            LIBRARY_SEARCH_PATHS = "";
+                            LIBRARY_STYLE = DYNAMIC;
+                            OTHER_CFLAGS = "       -fPIC   -Wall -Werror -F/Library/Frameworks";
+                            OTHER_CPLUSPLUSFLAGS = "       -fPIC   -Wall -Werror -F/Library/Frameworks";
+                            OTHER_LDFLAGS = " -dynamiclib -headerpad_max_install_names -framework QtGui -framework Carbon -framework AppKit -framework QtXml -framework QtCore /usr/lib/libz.dylib -framework ApplicationServices";
+                            OTHER_REZFLAGS = "";
+                            PREBINDING = NO;
+                            PRODUCT_NAME = la_core;
+                            SECTORDER_FLAGS = "";
+                            SYMROOT = /Users/arkygeek/apps;
+                            USE_HEADERMAP = NO;
+                            WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+                     };
+                     name = RelWithDebInfo;
+              };
+              1010AB01010AB01010AB0000 /* Debug */ = {
+                     isa = XCBuildConfiguration;
+                     buildSettings = {
+                            EXECUTABLE_PREFIX = "";
+                            EXECUTABLE_SUFFIX = "";
+                            FRAMEWORK_SEARCH_PATHS = "/Library/Frameworks ";
+                            GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+                            GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+                            GCC_OPTIMIZATION_LEVEL = 0;
+                            GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)\"' 'QT_DLL' 'QT_GUI_LIB' 'QT_XML_LIB' 'QT_CORE_LIB' 'QT_DEBUG'";
+                            GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+                            HEADER_SEARCH_PATHS = "/Library/Frameworks/QtGui.framework/Headers /Library/Frameworks/QtXml.framework/Headers /Library/Frameworks/QtCore.framework/Headers /Users/arkygeek/devel/landuseanalyst/src/gui /Users/arkygeek/devel/landuseanalyst/src/gui/../lib ";
+                            INFOPLIST_FILE = "/Users/arkygeek/devel/landuseanalyst/src/gui/CMakeFiles/landuseanalyst.dir/Info.plist";
+                            INSTALL_PATH = "";
+                            LIBRARY_SEARCH_PATHS = "";
+                            OTHER_CFLAGS = "     -Wall -Werror -F/Library/Frameworks";
+                            OTHER_CPLUSPLUSFLAGS = "     -Wall -Werror -F/Library/Frameworks";
+                            OTHER_LDFLAGS = " -Wl,-search_paths_first -headerpad_max_install_names -framework QtGui -framework Carbon -framework AppKit -framework QtXml -framework QtCore /usr/lib/libz.dylib -framework ApplicationServices /Users/arkygeek/apps/Debug/libla_core.dylib -framework QtGui -framework Carbon -framework AppKit -framework QtXml -framework QtCore /usr/lib/libz.dylib -framework ApplicationServices";
+                            OTHER_REZFLAGS = "";
+                            PREBINDING = NO;
+                            PRODUCT_NAME = landuseanalyst;
+                            SECTORDER_FLAGS = "";
+                            SYMROOT = /Users/arkygeek/apps;
+                            USE_HEADERMAP = NO;
+                            WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+                     };
+                     name = Debug;
+              };
+              65FB0065FB0065FB00000000 /* Release */ = {
+                     isa = XCBuildConfiguration;
+                     buildSettings = {
+                            EXECUTABLE_PREFIX = "";
+                            EXECUTABLE_SUFFIX = "";
+                            FRAMEWORK_SEARCH_PATHS = "/Library/Frameworks ";
+                            GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+                            GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+                            GCC_OPTIMIZATION_LEVEL = 3;
+                            GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)\"' 'QT_DLL' 'QT_GUI_LIB' 'QT_XML_LIB' 'QT_CORE_LIB' 'QT_NO_DEBUG'";
+                            GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+                            HEADER_SEARCH_PATHS = "/Library/Frameworks/QtGui.framework/Headers /Library/Frameworks/QtXml.framework/Headers /Library/Frameworks/QtCore.framework/Headers /Users/arkygeek/devel/landuseanalyst/src/gui /Users/arkygeek/devel/landuseanalyst/src/gui/../lib ";
+                            INFOPLIST_FILE = "/Users/arkygeek/devel/landuseanalyst/src/gui/CMakeFiles/landuseanalyst.dir/Info.plist";
+                            INSTALL_PATH = "";
+                            LIBRARY_SEARCH_PATHS = "";
+                            OTHER_CFLAGS = "    -DNDEBUG   -Wall -Werror -F/Library/Frameworks";
+                            OTHER_CPLUSPLUSFLAGS = "    -DNDEBUG   -Wall -Werror -F/Library/Frameworks";
+                            OTHER_LDFLAGS = " -Wl,-search_paths_first -headerpad_max_install_names -framework QtGui -framework Carbon -framework AppKit -framework QtXml -framework QtCore /usr/lib/libz.dylib -framework ApplicationServices /Users/arkygeek/apps/Release/libla_core.dylib -framework QtGui -framework Carbon -framework AppKit -framework QtXml -framework QtCore /usr/lib/libz.dylib -framework ApplicationServices";
+                            OTHER_REZFLAGS = "";
+                            PREBINDING = NO;
+                            PRODUCT_NAME = landuseanalyst;
+                            SECTORDER_FLAGS = "";
+                            SYMROOT = /Users/arkygeek/apps;
+                            USE_HEADERMAP = NO;
+                            WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+                     };
+                     name = Release;
+              };
+              65FBE065FBE065FBE0000000 /* MinSizeRel */ = {
+                     isa = XCBuildConfiguration;
+                     buildSettings = {
+                            EXECUTABLE_PREFIX = "";
+                            EXECUTABLE_SUFFIX = "";
+                            FRAMEWORK_SEARCH_PATHS = "/Library/Frameworks ";
+                            GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+                            GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+                            GCC_OPTIMIZATION_LEVEL = s;
+                            GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)\"' 'QT_DLL' 'QT_GUI_LIB' 'QT_XML_LIB' 'QT_CORE_LIB' 'QT_NO_DEBUG'";
+                            GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+                            HEADER_SEARCH_PATHS = "/Library/Frameworks/QtGui.framework/Headers /Library/Frameworks/QtXml.framework/Headers /Library/Frameworks/QtCore.framework/Headers /Users/arkygeek/devel/landuseanalyst/src/gui /Users/arkygeek/devel/landuseanalyst/src/gui/../lib ";
+                            INFOPLIST_FILE = "/Users/arkygeek/devel/landuseanalyst/src/gui/CMakeFiles/landuseanalyst.dir/Info.plist";
+                            INSTALL_PATH = "";
+                            LIBRARY_SEARCH_PATHS = "";
+                            OTHER_CFLAGS = "    -DNDEBUG   -Wall -Werror -F/Library/Frameworks";
+                            OTHER_CPLUSPLUSFLAGS = "    -DNDEBUG   -Wall -Werror -F/Library/Frameworks";
+                            OTHER_LDFLAGS = " -Wl,-search_paths_first -headerpad_max_install_names -framework QtGui -framework Carbon -framework AppKit -framework QtXml -framework QtCore /usr/lib/libz.dylib -framework ApplicationServices /Users/arkygeek/apps/MinSizeRel/libla_core.dylib -framework QtGui -framework Carbon -framework AppKit -framework QtXml -framework QtCore /usr/lib/libz.dylib -framework ApplicationServices";
+                            OTHER_REZFLAGS = "";
+                            PREBINDING = NO;
+                            PRODUCT_NAME = landuseanalyst;
+                            SECTORDER_FLAGS = "";
+                            SYMROOT = /Users/arkygeek/apps;
+                            USE_HEADERMAP = NO;
+                            WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+                     };
+                     name = MinSizeRel;
+              };
+              1015D301015D301015D30000 /* RelWithDebInfo */ = {
+                     isa = XCBuildConfiguration;
+                     buildSettings = {
+                            EXECUTABLE_PREFIX = "";
+                            EXECUTABLE_SUFFIX = "";
+                            FRAMEWORK_SEARCH_PATHS = "/Library/Frameworks ";
+                            GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+                            GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+                            GCC_OPTIMIZATION_LEVEL = 2;
+                            GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)\"' 'QT_DLL' 'QT_GUI_LIB' 'QT_XML_LIB' 'QT_CORE_LIB' 'QT_NO_DEBUG'";
+                            GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+                            HEADER_SEARCH_PATHS = "/Library/Frameworks/QtGui.framework/Headers /Library/Frameworks/QtXml.framework/Headers /Library/Frameworks/QtCore.framework/Headers /Users/arkygeek/devel/landuseanalyst/src/gui /Users/arkygeek/devel/landuseanalyst/src/gui/../lib ";
+                            INFOPLIST_FILE = "/Users/arkygeek/devel/landuseanalyst/src/gui/CMakeFiles/landuseanalyst.dir/Info.plist";
+                            INSTALL_PATH = "";
+                            LIBRARY_SEARCH_PATHS = "";
+                            OTHER_CFLAGS = "         -Wall -Werror -F/Library/Frameworks";
+                            OTHER_CPLUSPLUSFLAGS = "         -Wall -Werror -F/Library/Frameworks";
+                            OTHER_LDFLAGS = " -Wl,-search_paths_first -headerpad_max_install_names -framework QtGui -framework Carbon -framework AppKit -framework QtXml -framework QtCore /usr/lib/libz.dylib -framework ApplicationServices /Users/arkygeek/apps/RelWithDebInfo/libla_core.dylib -framework QtGui -framework Carbon -framework AppKit -framework QtXml -framework QtCore /usr/lib/libz.dylib -framework ApplicationServices";
+                            OTHER_REZFLAGS = "";
+                            PREBINDING = NO;
+                            PRODUCT_NAME = landuseanalyst;
+                            SECTORDER_FLAGS = "";
+                            SYMROOT = /Users/arkygeek/apps;
+                            USE_HEADERMAP = NO;
+                            WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+                     };
+                     name = RelWithDebInfo;
+              };
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+              6C04C06C04C06C04C0000000 /* Build configuration list for PBXProject  "landuseanalyst" */ = {
+                     isa = XCConfigurationList;
+                     buildConfigurations = (
+                            6C05A06C05A06C05A0000000 /* Debug */,
+                            6C07606C07606C0760000000 /* Release */,
+                            6C09106C09106C0910000000 /* MinSizeRel */,
+                            6C0B906C0B906C0B90000000 /* RelWithDebInfo */,
+                     );
+                     defaultConfigurationIsVisible = 0;
+                     defaultConfigurationName = Debug;
+              };
+              6C2B806C2B806C2B80000000 /* Build configuration list for PBXAggregateTarget "ALL_BUILD" */ = {
+                     isa = XCConfigurationList;
+                     buildConfigurations = (
+                            6C31A06C31A06C31A0000000 /* Debug */,
+                            6C42906C42906C4290000000 /* Release */,
+                            6C53906C53906C5390000000 /* MinSizeRel */,
+                            6C63306C63306C6330000000 /* RelWithDebInfo */,
+                     );
+                     defaultConfigurationIsVisible = 0;
+                     defaultConfigurationName = Debug;
+              };
+              6CA6306CA6306CA630000000 /* Build configuration list for PBXAggregateTarget "install" */ = {
+                     isa = XCConfigurationList;
+                     buildConfigurations = (
+                            6CAC206CAC206CAC20000000 /* Debug */,
+                            6CBD106CBD106CBD10000000 /* Release */,
+                            6CCE106CCE106CCE10000000 /* MinSizeRel */,
+                            6CDDB06CDDB06CDDB0000000 /* RelWithDebInfo */,
+                     );
+                     defaultConfigurationIsVisible = 0;
+                     defaultConfigurationName = Debug;
+              };
+              6D16406D16406D1640000000 /* Build configuration list for PBXAggregateTarget "uninstall" */ = {
+                     isa = XCConfigurationList;
+                     buildConfigurations = (
+                            6D1C706D1C706D1C70000000 /* Debug */,
+                            6D2D606D2D606D2D60000000 /* Release */,
+                            6D3E606D3E606D3E60000000 /* MinSizeRel */,
+                            6D4E006D4E006D4E00000000 /* RelWithDebInfo */,
+                     );
+                     defaultConfigurationIsVisible = 0;
+                     defaultConfigurationName = Debug;
+              };
+              6E5E306E5E306E5E30000000 /* Build configuration list for PBXNativeTarget "la_core" */ = {
+                     isa = XCConfigurationList;
+                     buildConfigurations = (
+                            6E61706E61706E6170000000 /* Debug */,
+                            6E6E406E6E406E6E40000000 /* Release */,
+                            6E89F06E89F06E89F0000000 /* MinSizeRel */,
+                            6EA5906EA5906EA590000000 /* RelWithDebInfo */,
+                     );
+                     defaultConfigurationIsVisible = 0;
+                     defaultConfigurationName = Debug;
+              };
+              100EF70100EF70100EF70000 /* Build configuration list for PBXNativeTarget "landuseanalyst" */ = {
+                     isa = XCConfigurationList;
+                     buildConfigurations = (
+                            1010AB01010AB01010AB0000 /* Debug */,
+                            65FB0065FB0065FB00000000 /* Release */,
+                            65FBE065FBE065FBE0000000 /* MinSizeRel */,
+                            1015D301015D301015D30000 /* RelWithDebInfo */,
+                     );
+                     defaultConfigurationIsVisible = 0;
+                     defaultConfigurationName = Debug;
+              };
+/* End XCConfigurationList section */
+       };
+       rootObject = 6BFF006BFF006BFF00000000 /* Project object */;
+}

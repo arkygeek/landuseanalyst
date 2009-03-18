@@ -1,3 +1,9 @@
+cmake_minimum_required(VERSION 2.4)
+cmake_policy(SET CMP0006 OLD)
+if(COMMAND cmake_policy)
+        cmake_policy(SET CMP0003 OLD)
+        cmake_policy(SET CMP0005 OLD)
+endif(COMMAND cmake_policy)
 #############################################################
 # sources
 

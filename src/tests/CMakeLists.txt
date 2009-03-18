@@ -1,3 +1,9 @@
+if(COMMAND cmake_policy) 
+        cmake_policy(SET CMP0003 OLD) 
+        cmake_policy(SET CMP0005 OLD) 
+endif(COMMAND cmake_policy)  
+cmake_policy(SET CMP0006 OLD)
+
 set(QT_USE_CORE TRUE)
 set(QT_USE_GUI TRUE)
 set(QT_USE_QTTEST TRUE)

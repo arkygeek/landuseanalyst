@@ -198,7 +198,7 @@ float LaModel::fallowRatio() const
 float LaModel::requiredValue(QString theAnimalGuid)
 {   // this is the generic animal model
   LaAnimal myAnimal = LaUtils::getAnimal(theAnimalGuid);
-  float myAnimalProductionTarget;// = getProductionTargetsAnimals (theAnimalGuid, static_cast <float> (mCaloriesProvidedByMeatMap.value (theAnimalGuid)));
+  float myAnimalProductionTarget = 1;//getProductionTargetsAnimals (theAnimalGuid, static_cast <float> (mCaloriesProvidedByMeatMap.value (theAnimalGuid)));
   float myAnimalsRequired=(myAnimalProductionTarget / myAnimal.killWeight()) / (myAnimal.usableMeat()*.01);
   float myBirthsPerYear = 365.0 / (myAnimal.gestationTime() + myAnimal.estrousCycle() + myAnimal.weaningAge());
   float myOffspringPerMotherYearly = myBirthsPerYear * myAnimal.youngPerBirth() * (1.0-(0.01*myAnimal.deathRate()));
@@ -656,7 +656,7 @@ LaDietLabels LaModel::doCalcsPlantsFirstDairySeperate()
 
 
 
-  float  myDairyMCalories = myDairyCounter; // sum of all dairy cals from all animals
+  /*float  myDairyMCalories = myDairyCounter; // sum of all dairy cals from all animals
   float  myCropMCalories; // sum of all crop cals from all crops
   float  myTameMeatMCalories = myMeatCounter;
   float  myWildAnimalMCalories; // calories to come from wild animals
@@ -685,7 +685,7 @@ LaDietLabels LaModel::doCalcsPlantsFirstDairySeperate()
   myDietLabels.setAnimalPortionPct(myAllMeatPortionPct*100.);
   myDietLabels.setPlantsPortionPct(myPlantsPortionPct*100.);
   myDietLabels.setMCalsIndividualAnnual(myMCalsIndividualAnnual);
-  myDietLabels.setMCalsSettlementAnnual(myMCalsSettlementAnnual);
+  myDietLabels.setMCalsSettlementAnnual(myMCalsSettlementAnnual);*/
   return myDietLabels;
 }
 
@@ -824,27 +824,37 @@ LaDietLabels LaModel::doCalcsAnimalsFirstDairySeparate()
 {
   LaDietLabels myDietLabels;
   LaAnimal myAnimal;
-  float myMCalsIndividualAnnual = mCaloriesPerPersonDaily * 365.0;
+  float myMCalsIndividualAnnual = mCaloriesPerPersonDaily * 365.0 * .001;
+        qDebug() << "myMCalsIndividualAnnual = " << myMCalsIndividualAnnual;
   float myMCalsSettlementAnnual = (myMCalsIndividualAnnual) * mPopulation;
+        qDebug() << "myMCalsSettlementAnnual = " << myMCalsSettlementAnnual;  
   float myDairyMCalorieCounter = 0.0;
+        qDebug() << "myDairyMCalorieCounter = " << myDairyMCalorieCounter;  
+
   float myTameMeatMCalorieCounter = 0.0;
-  float myWildMeatMCalorieCounter = 0.0;
-  float myCropMCalorieCounter = 0.0;
-  float myDairySurplusMCalorieCounter = 0.0;
-  float c12= mPercentOfDietThatIsFromCrops;
-  float c1 = 1. - mMeatPercent;
-  float c8 = mDairyUtilisation;
-  float c10= mPopulation;
-  float c11= mCaloriesPerPersonDaily;
-  float c15= mDietPercent;
-  float c14o= myMCalsSettlementAnnual*1000000.;
-  //float e15o= myMCalsSettlementAnnual;
+  qDebug() << "myTameMeatMCalorieCounter = " << myTameMeatMCalorieCounter;
+
+  //float myCropMCalorieCounter = 0.0;
+  //float myDairySurplusMCalorieCounter = 0.0;
+  //float myPercentOfDietFromCrops = mPercentOfDietThatIsFromCrops * .01;
+  //float myPercentOfDietFromMeatSources = 1. - myPercentOfDietFromCrops;
+  float myWildMeatPortion = (1. - mMeatPercent); // wild meat percent
+  qDebug() << "myWildMeatPortion = " << myWildMeatPortion;
+  float myDomesticMeatPortion = mMeatPercent; // domestic meat percent
+  qDebug() << "myDomesticMeatPortion = " << myDomesticMeatPortion;
+  float myDairyUtilization = mDairyUtilisation;
+  qDebug() << "myDairyUtilization = " << myDairyUtilization;
+  float myDairyLimitPercent = mLimitDairyPercentage;
+  qDebug() << "myDairyLimitPercent = " << myDairyLimitPercent;
+  bool myLimitDairyBool = mLimitDairy;
+  qDebug() << "myLimitDairyBool = " << myLimitDairyBool;
+  //float myPopulation = mPopulation;
+  //float myMCaloriesPerPersonDaily = mCaloriesPerPersonDaily * .001;
+  float myPlantPercent = 1. - mDietPercent; // @TODO mDietPercent is a bad var name 
+  qDebug() << "myPlantPercent = " << myPlantPercent;
+  
   QMap <QString,QString> mySelectedAnimalsMap = mAnimalsMap;
-
-
-  //float c17=1.-mMeatPercent;
-  //float c18=mMeatPercent;
-
+// -------------- Looping through the animals ---------------
   QMapIterator <QString,QString> myNextAnimalIterator(mySelectedAnimalsMap);
   while (myNextAnimalIterator.hasNext())
   {
@@ -853,128 +863,136 @@ LaDietLabels LaModel::doCalcsAnimalsFirstDairySeparate()
     QString myAnimalParameterGuid = myNextAnimalIterator.value();
     LaAnimal myAnimal = LaUtils::getAnimal(myAnimalGuid);
     LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter( myAnimalParameterGuid );
+    qDebug() << "--------==--------------------------------------------==-------";
+    qDebug() << "--------==        Looping through the animals         ==-------";
+    qDebug() << "--------==--------------------------------------------==-------";
 
-    // adjust the milk calories to correspond to value
-    // per kg of each live weight animal
-    float c2 = myAnimal.milkGramsPerDay()*.001;
-    float c3 = myAnimal.milkFoodValue();
-    float c4 = myAnimal.lactationTime();
-    float c5 = myAnimal.weaningAge();
-    float c6 = myAnimal.killWeight();
-    float c7 = myAnimal.usableMeat()*.01;
-    float c9 = myAnimal.meatFoodValue();
-    float c13= myAnimalParameter.percentTameMeat()*.01;
-    float c14= c10*c11*365.;
-    float e15= c14*c15*c13;
-    float e10= c9*c7*c6;
-    float e7 = (e15*(1.-c1))/e10;
-    float e2 = c2*c3*(c4-c5);
-    float e3 = e2*c8;
-    float e5 = e3/c6;
-    float c18= 1.-c1;
-    float c16= e7*e3;
-    float c17= 1.-c18;
-    float c19= (mLimitDairy) ? mLimitDairyPercentage:1.;
-    float d20= c19*c14;
-    float d21= (e7*e3>d20) ? (e3*e7)-d20:0.;
-    float c22= e15*c1;
-    float c23 = e15*(1.-c1);
-    float c21;
-    if (d20+c22+c23>c14)
-    {
-      c21 = c14-c22-c23;
-    }
-    else
-    {
-      c21 = ((e7*e3)>d20) ? d20:(e7*e3);
-    }
-    float c24 = (c21+c22+c23<c14) ? (c14-c23-c22-c21)*(1.-c12):0.;
-    float c25 = (c21+c22+c23<c14) ? (c14-c23-c22-c21)*(c12):0.;
-
-    float c27 = c21/c14;
-    float c28 = c22/c14;
-    float c29 = c23/c14;
-    float c30 = c24/c14;
-    float c31 = c25/c14;
-
-
-
-    myDairySurplusMCalorieCounter += d21;
-    myDairyMCalorieCounter    += c21;
-    myWildMeatMCalorieCounter += c22;
-    myTameMeatMCalorieCounter += c23;
-    myCropMCalorieCounter     += c24;
-      qDebug() << "mLimitDairy (bool) = " << mLimitDairy;
-      qDebug() << "mLimitDairyPercentage= " << mLimitDairyPercentage;
-      qDebug() << "c1 = " << c1;
-      qDebug() << "c2 = " << c2;
-      qDebug() << "c3 = " << c3;
-      qDebug() << "c4 = " << c4;
-      qDebug() << "c5 = " << c5;
-      qDebug() << "c6 = " << c6;
-      qDebug() << "c7 = " << c7;
-      qDebug() << "c9 = " << c9;
-      qDebug() << "c10 = " << c10;
-      qDebug() << "c11 = " << c11;
-      qDebug() << "c12 = " << c12;
-      qDebug() << "c13 = " << c13;
-      qDebug() << "c15 = " << c15;
-      qDebug() << "c14 = " << c14;
-      qDebug() << "c15 = " << c15;
-      qDebug() << "c16 = " << c16;
-      qDebug() << "c17 = " << c17;
-      qDebug() << "c19 = " << c19;
-
-      qDebug() << "c21 = " << c21;
-      qDebug() << "c22 = " << c22;
-      qDebug() << "c23 = " << c23;
-      qDebug() << "c24 = " << c24;
-      qDebug() << "c25 = " << c25;
-
-      qDebug() << "c27 = " << c27;
-      qDebug() << "c28 = " << c28;
-      qDebug() << "c29 = " << c29;
-      qDebug() << "c30 = " << c30;
-      qDebug() << "c31 = " << c31;
-
-      qDebug() << "d20 = " << d20;
-      qDebug() << "d21 = " << d21;
-
-      qDebug() << "e2 = " << e2;
-      qDebug() << "e3 = " << e3;
-      qDebug() << "e5 = " << e5;
-      qDebug() << "e7 = " << e7;
-      qDebug() << "e10 = " << e10;
-      qDebug() << "e15 = " << e15;
+    
+    float myMilkKgPerDay = myAnimal.milkGramsPerDay() * .001;
+    qDebug() << "myMilkKgPerDay = " << myMilkKgPerDay;
+    float myMilkFoodValue = myAnimal.milkFoodValue() * .001;
+    qDebug() << "myMilkFoodValue = " << myMilkFoodValue;
+    float myLactationTime = myAnimal.lactationTime();
+    qDebug() << "myLactationTime = " << myLactationTime;
+    float myWeaningAge = myAnimal.weaningAge();
+    qDebug() << "myWeaningAge = " << myWeaningAge;
+    float myKillWeight = myAnimal.killWeight();
+    qDebug() << "myKillWeight = " << myKillWeight;
+    float myUsablePortionOfAnimal = myAnimal.usableMeat()*.01;
+    qDebug() << "myUsablePortionOfAnimal = " << myUsablePortionOfAnimal;
+    float myAdultWeight = myAnimal.adultWeight();
+    qDebug() << "myAdultWeight = " << myAdultWeight;
+    float myFemalesToMales = myAnimal.femalesPerMale();
+    qDebug() << "myFemalesToMales = " << myFemalesToMales;
+    //float myConceptionEfficiency = myAnimal.conceptionEfficiency() * .01;
+    float myMeatValueMCal = myAnimal.meatFoodValue() * .001;
+    qDebug() << "myMeatValueMCal = " << myMeatValueMCal;
+    float mySexualMaturity = myAnimal.sexualMaturity(); // in months
+    qDebug() << "mySexualMaturity = " << mySexualMaturity;
+    float myBreedingYears = myAnimal.breedingExpectancy(); // in years
+    qDebug() << "myBreedingYears = " << myBreedingYears;
+    
+    float myAnimalContributionToMeatPortion = myAnimalParameter.percentTameMeat() * .01; // B2
+    qDebug() << "myAnimalContributionToMeatPortion = " << myAnimalContributionToMeatPortion;
+    float myAnimalMCalTarget = myAnimalContributionToMeatPortion * myMCalsSettlementAnnual * mDietPercent * mMeatPercent; // B3
+    qDebug() << "myAnimalMCalTarget = " << myAnimalMCalTarget;
+    float myPotentialDairyPerOffspring = myMilkKgPerDay * myMilkFoodValue * (myLactationTime - myWeaningAge); // B4
+    qDebug() << "myPotentialDairyPerOffspring = " << myPotentialDairyPerOffspring;
+    float myValuePerOffspring = myKillWeight * myUsablePortionOfAnimal * myMeatValueMCal; // B5
+    qDebug() << "myValuePerOffspring = " << myValuePerOffspring;
+    float myActualDairyValueOfOffspring = myPotentialDairyPerOffspring * myDairyUtilization; // B6
+    qDebug() << "myActualDairyValueOfOffspring = " << myActualDairyValueOfOffspring;
+    float myCulledMothersValue = myAdultWeight * myMeatValueMCal * myUsablePortionOfAnimal * (1. / ((mySexualMaturity / 12.) + myBreedingYears)); // B7
+    qDebug() << "myCulledMothersValue = " << myCulledMothersValue;
+    float myCulledAdultMalesValue = myCulledMothersValue / myFemalesToMales; // B8
+    qDebug() << "myCulledAdultMalesValue = " << myCulledAdultMalesValue;
+    float myFinalOffspringValue = myValuePerOffspring + myCulledMothersValue + myCulledAdultMalesValue; // B9  + myActualDairyValueOfOffspring  add this to include dairy with meat
+    qDebug() << "myFinalOffspringValue = " << myFinalOffspringValue;
+    float myOffspringNeededPerYear = myAnimalMCalTarget / myFinalOffspringValue; // B11
+    qDebug() << "myOffspringNeededPerYear = " << myOffspringNeededPerYear;
+    float myMCalsFromTheMeat = myOffspringNeededPerYear * myFinalOffspringValue; // B12
+        qDebug() << "myMCalsFromTheMeat = " << myMCalsFromTheMeat;
+    float myMCalsUtilizedFromDairy = myActualDairyValueOfOffspring * myOffspringNeededPerYear;  // B14
+    qDebug() << "myMCalsUtilizedFromDairy = " << myMCalsUtilizedFromDairy;
+    
+    myTameMeatMCalorieCounter += myMCalsFromTheMeat; 
+        qDebug() << "myTameMeatMCalorieCounter = " << myTameMeatMCalorieCounter; 
+    myDairyMCalorieCounter += myMCalsUtilizedFromDairy;
+        qDebug() << "myDairyMCalorieCounter = " << myDairyMCalorieCounter;     
   }
 
-  float c24o= (myDairyMCalorieCounter+myWildMeatMCalorieCounter+myTameMeatMCalorieCounter<c14o) ? ((c14o-myTameMeatMCalorieCounter-myWildMeatMCalorieCounter-myDairyMCalorieCounter)*(1.-c12)):0.;
-  float c25o= (myDairyMCalorieCounter+myWildMeatMCalorieCounter+myTameMeatMCalorieCounter<c14o) ? ((c14o-myTameMeatMCalorieCounter-myWildMeatMCalorieCounter-myDairyMCalorieCounter)*(c12)):0.;
-  float c30o=c24o/c14o;
-  float c31o=c25o/c14o;
-
-  float c28o=(myWildMeatMCalorieCounter)/c14o;
-  float c29o=(myTameMeatMCalorieCounter)/c14o;
-  float c27o=myDairyMCalorieCounter/c14o;
-    qDebug() << "c27o = " << c27o;
-    qDebug() << "c28o = " << c28o;
-    qDebug() << "c29o = " << c29o;
-
-  myDietLabels.setDairyMCalories(myDairyMCalorieCounter*.001*.001);
-  myDietLabels.setCropMCalories(c25o*.001*.001);
-  myDietLabels.setAnimalMCalories(myTameMeatMCalorieCounter*.001*.001);
-  myDietLabels.setWildAnimalMCalories(myWildMeatMCalorieCounter*.001*.001);
-  myDietLabels.setWildPlantsMCalories(c24o*.001*.001);
-  myDietLabels.setDairyPortionPct(c27o*100.);
-  myDietLabels.setTameMeatPortionPct(c29o*100.);
-  myDietLabels.setCropsPortionPct(c31o*100.);
-  myDietLabels.setWildAnimalPortionPct(c28o*100.);
-  myDietLabels.setWildPlantsPortionPct(c30o*100.);
-  myDietLabels.setAnimalPortionPct(mDietPercent*100.-c27o*100.);
-  myDietLabels.setPlantsPortionPct((1.-mDietPercent)*100.);
+  // ----------- Dairy Portion to be calculated ------------
+  // ------ the check should be: SUM(B11..B15) == 1.0 ------
+  
+  // limit the dairy.  if no limit the limit is 100 percent
+  float myDairyLimit = myLimitDairyBool ? myDairyLimitPercent : 1.; // B22
+  qDebug() << "myDairyLimit = " << myDairyLimit;
+  
+  float myDomesticMeatPercent = myTameMeatMCalorieCounter / myMCalsSettlementAnnual;  // B11
+  qDebug() << "myDomesticMeatPercent = " << myDomesticMeatPercent;
+  float myWildMeatPercent = myWildMeatPortion * mDietPercent; // B13
+  qDebug() << "myWildMeatPercent = " << myWildMeatPercent;
+  
+  bool myLimitSatisfies = ( myDomesticMeatPercent + myWildMeatPercent + myDairyLimit) > 1. ? TRUE:FALSE; // B21 -- BOOL --
+  qDebug() << "myLimitSatisfies = " << myLimitSatisfies;
+  float myNewLimit = myLimitSatisfies ? (1. - myDomesticMeatPercent - myWildMeatPercent) : myDairyLimit; // B20
+  qDebug() << "myNewLimit = " << myNewLimit;
+  bool myPotentialDairyLessThanLimitBool = (myDairyMCalorieCounter / myMCalsSettlementAnnual) < myDairyLimit ? TRUE:FALSE; // B19 -- BOOL --
+  qDebug() << "myPotentialDairyLessThanLimitBool = " << myPotentialDairyLessThanLimitBool;
+  float myNewDairy = myPotentialDairyLessThanLimitBool ? myDairyMCalorieCounter : myNewLimit * myMCalsSettlementAnnual; // B18
+  qDebug() << "myNewDairy = " << myNewDairy;
+  float myOverallDairyPercent = myNewDairy / myMCalsSettlementAnnual; // B12 and B8
+  qDebug() << "myOverallDairyPercent = " << myOverallDairyPercent;
+  
+  // --- To get the final Crops and Wild Plants percent, we need to get the overall Meat and Dairy First ---
+  float myOverallMeatPercent = myWildMeatPercent + myDomesticMeatPercent; // B7
+  qDebug() << "myOverallMeatPercent = " << myOverallMeatPercent;
+  float myOverallPlantPercent = 1. - myOverallMeatPercent - myOverallDairyPercent; // B6
+  qDebug() << "myOverallPlantPercent = " << myOverallPlantPercent;
+  float myOverallCropPercent = myOverallPlantPercent * myPlantPercent; // B14
+  qDebug() << "myOverallCropPercent = " << myOverallCropPercent;
+  float myOverallWildPlantPercent = myOverallPlantPercent * ( 1. - myPlantPercent); // B15
+  qDebug() << "myOverallWildPlantPercent = " << myOverallWildPlantPercent;
+  
+  float myOverallDomesticMeatMCals = myTameMeatMCalorieCounter; // B25
+  qDebug() << "myOverallDomesticMeatMCals = " << myOverallDomesticMeatMCals;
+  float myOverallDairyMCals = myOverallDairyPercent * myMCalsSettlementAnnual; // B26
+  qDebug() << "myOverallDairyMCals = " << myOverallDairyMCals;
+  float myOverallWildMeatMCals = myWildMeatPercent * myMCalsSettlementAnnual; // B27
+  qDebug() << "myOverallWildMeatMCals = " << myOverallWildMeatMCals;
+  float myOverallCropsMCals = myOverallCropPercent * myMCalsSettlementAnnual; // B28
+  qDebug() << "myOverallCropsMCals = " << myOverallCropsMCals;
+  float myOverallWildPlantsMCals = myOverallWildPlantPercent * myMCalsSettlementAnnual; // B29
+  qDebug() << "myOverallWildPlantsMCals = " << myOverallWildPlantsMCals;
+  float myOverallMeatMCals = myOverallWildMeatMCals + myOverallDomesticMeatMCals;
+  qDebug() << "myOverallMeatMCals = " << myOverallMeatMCals;
+  
+  float myFirstDairySurplusBool = myDairyMCalorieCounter - myOverallDairyMCals;
+  qDebug() << "myFirstDairySurplusBool = " << myFirstDairySurplusBool;
+  float myOVerallDairySurplusMCals = myFirstDairySurplusBool > 0 ? myFirstDairySurplusBool : 0;
+  qDebug() << "myOVerallDairySurplusMCals = " << myOVerallDairySurplusMCals;
+  qDebug() << "***********************************************************************";
+  qDebug() << "**                                                                   **";
+  qDebug() << "**                         Starting Again                            **";
+  qDebug() << "**                                                                   **";
+  qDebug() << "***********************************************************************";
+  
+  // ----------- Set the Diet Labels in preparation for return -------------
+  myDietLabels.setDairyMCalories(myOverallDairyMCals);
+  myDietLabels.setCropMCalories(myOverallCropsMCals);
+  myDietLabels.setAnimalMCalories(myOverallMeatMCals);
+  myDietLabels.setWildAnimalMCalories(myOverallWildMeatMCals);
+  myDietLabels.setWildPlantsMCalories(myOverallWildPlantsMCals);
+  myDietLabels.setDairyPortionPct(myOverallDairyPercent*100.);
+  myDietLabels.setTameMeatPortionPct(myDomesticMeatPercent*100.);
+  myDietLabels.setCropsPortionPct(myOverallCropPercent*100.);
+  myDietLabels.setWildAnimalPortionPct(myWildMeatPercent*100.);
+  myDietLabels.setWildPlantsPortionPct(myOverallWildPlantPercent*100.);
+  myDietLabels.setAnimalPortionPct(myOverallMeatPercent*100.);
+  myDietLabels.setPlantsPortionPct(myOverallPlantPercent*100.);
   myDietLabels.setMCalsIndividualAnnual(myMCalsIndividualAnnual);
   myDietLabels.setMCalsSettlementAnnual(myMCalsSettlementAnnual);
-  myDietLabels.setDairySurplusMCalories(myDairySurplusMCalorieCounter*.001*.001);
+  myDietLabels.setDairySurplusMCalories(myOVerallDairySurplusMCals);
   return myDietLabels;
 
 }

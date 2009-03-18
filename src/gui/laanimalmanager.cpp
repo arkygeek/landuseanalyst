@@ -186,6 +186,9 @@ void LaAnimalManager::showAnimal()
   sbMeatFoodValue->setValue(mAnimal.meatFoodValue());
   sbUsableMeatPercent->setValue(mAnimal.usableMeat());
   sbKillWeight->setValue(mAnimal.killWeight());
+  sbAdultWeight->setValue(mAnimal.adultWeight());
+  sbConceptionEfficiency->setValue(mAnimal.conceptionEfficiency());
+  sbFemalesToMales->setValue(mAnimal.femalesPerMale());
   sbGrowTime->setValue(mAnimal.growTime());
   sbDeathRate->setValue(mAnimal.deathRate());
   cbFeedEnergyType->setCurrentIndex(mAnimal.feedEnergyType());
@@ -301,6 +304,9 @@ void LaAnimalManager::on_pbnApply_clicked()
   mAnimal.setMeatFoodValue(sbMeatFoodValue->value());
   mAnimal.setUsableMeat(sbUsableMeatPercent->value());
   mAnimal.setKillWeight(sbKillWeight->value());
+  mAnimal.setAdultWeight(sbAdultWeight->value());
+  mAnimal.setConceptionEfficiency(sbConceptionEfficiency->value());
+  mAnimal.setFemalesToMales(sbFemalesToMales->value());
   mAnimal.setGrowTime(sbGrowTime->value());
   mAnimal.setDeathRate(sbDeathRate->value());
   

@@ -1,0 +1,5 @@
+/Users/arkygeek/apps/libla_core.dylib
+/Users/arkygeek/apps/landuseanalyst.app/Contents/Info.plist
+/Users/arkygeek/apps/landuseanalyst.app/Contents/MacOS/landuseanalyst
+/Users/arkygeek/apps/landuseanalyst.app/Contents/PkgInfo
+/Users/arkygeek/apps/landuseanalyst.app/Contents/Resources/landuseanalyst.icns

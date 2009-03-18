@@ -400,11 +400,11 @@ QString LaGrass::runCommand(QString theCommand,
     QStringList theArguments,
     QString &theErrorLog /*=""*/)
 {
-  #ifdef Q_OS_MACX
-  QString myProgram = "/Applications/GRASS-6.3.app/Contents/MacOS/bin/" + theCommand;
-  #else
-  QString myProgram = "/usr/lib/grass/bin/" + theCommand;
-  #endif
+  //#ifdef Q_OS_MACX
+  QString myProgram = "/Applications/GRASS-6.4.app/Contents/MacOS/bin/" + theCommand;
+  //#else
+  //QString myProgram = "/usr/lib/grass/bin/" + theCommand;
+  //#endif
     //windows users can wallow in self pity for now...
 
   QProcess myProcess;
