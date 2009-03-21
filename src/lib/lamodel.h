@@ -132,11 +132,11 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
     /** holder */
     float caloriesProvidedByTheMilkOfTheAnimal (QString theAnimalParameterGuid , QString theAnimalGuid);
     /** holder */
-    //float getProductionTargetsCrops(QString theCropGuid, float theCalorieTarget);
+    float getProductionTargetsCrops(QString theCropGuid, float theCalorieTarget);
     /** holder */
-    //float getProductionTargetsAnimals(QString theAnimalGuid, float theCalorieTarget);
+    float getProductionTargetsAnimals(QString theAnimalGuid, float theCalorieTarget);
     /** holder */
-    //float getAdjustedProductionTargetsAnimals(QString theAnimalGuid, float theCalorieTarget);
+    float getAdjustedProductionTargetsAnimals(QString theAnimalGuid, float theCalorieTarget);
     float getAreaTargetsCrops(QString theCropGuid, float theProductionTarget);
     /** holder */
     float getFallowLandForACrop(QString theCropParameterGuid, float theAreaTarget);
@@ -305,6 +305,8 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
     LaDietLabels doCalcsPlantsFirstDairySeperate ();
     LaDietLabels doCalcsAnimalsFirstIncludeDiary ();
     LaDietLabels doCalcsAnimalsFirstDairySeparate ();
+  
+    void doCalculations();
 
     QMap<QString, float> getAreaTargetsAnimalsMapAFID ();
     QMap<QString, float> getAreaTargetsAnimalsMapAFDS ();

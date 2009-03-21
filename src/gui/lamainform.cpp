@@ -1109,21 +1109,19 @@ void LaMainForm::on_pushButtonRun_clicked()
         }
       }
 
-    progressBarCalcs->setValue(3);
+  progressBarCalcs->setValue(3);
   tbReport->append(myModel.toHtmlCalorieCropTargets());
-    progressBarCalcs->setValue(4);
+  progressBarCalcs->setValue(4);
   tbReport->append(myModel.toHtmlCalorieAnimalTargets());
-    progressBarCalcs->setValue(5);
+  progressBarCalcs->setValue(5);
   tbReport->append(myModel.toHtmlProductionCropTargets());
-    progressBarCalcs->setValue(6);
+  progressBarCalcs->setValue(6);
   tbReport->append(myModel.toHtmlProductionAnimalTargets());
-    progressBarCalcs->setValue(7);
+  progressBarCalcs->setValue(7);
   tbReport->append(myModel.toHtmlAreaCropTargets());
-    progressBarCalcs->setValue(8);
+  progressBarCalcs->setValue(8);
   tbReport->append(myModel.toHtmlAreaAnimalTargets());
-    progressBarCalcs->setValue(9);
-
-
+  progressBarCalcs->setValue(9);
 
   QString myDEM = cboDEM->currentText();
   QString myMapset = cboMapSet->currentText();
@@ -1333,7 +1331,7 @@ void LaMainForm::cropCalcClicked(QListWidgetItem * thepCurrentItem, QListWidgetI
 }
 
 /**
- * When an animal in the lissst is clicked, this function is run.
+ * When an animal in the list is clicked, this function is run.
  * It then sets up LaModel, performs the calculations, and returns
  * the results which are displayed via a signal slot as a logMessage
  * @param thepCurrentItem 
