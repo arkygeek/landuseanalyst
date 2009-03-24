@@ -50,7 +50,7 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
     * @param fl
     */
     LaMainForm(QWidget* parent = 0, Qt::WFlags fl = 0 );
-    /**
+    /**  
      * No idea what to put here
      */
     ~LaMainForm();
@@ -59,7 +59,6 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
     void on_sliderMeat_valueChanged(int theValue);
     void on_cboxIncludeDairy_clicked(bool theBool);
     void on_cboxLimitDairy_clicked(bool theBool);
-
     void on_cboxBaseOnPlants_clicked(bool theBool);
     void on_sbLimitDairyPercent_valueChanged(int theValue);
     void on_sliderDiet_valueChanged(int theValue);
@@ -83,7 +82,7 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
     void on_cbDebug_clicked();
     void on_cboMapSet_currentIndexChanged();
     /** Refresh the animals list, remembering which were checked
-     * from before */
+     * from before */ 
     void loadAnimals();
     /** Refresh the crops list, remembering which were checked
      * from before */
@@ -92,13 +91,14 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
      * Set's the model.  All data comes from the mainForm except for the map
      * of crops and animals which are being used. 
      */
-    void setModel();
     void setDietLabels();
     /** Slot to log any messages from classes we are listening
      * to.
      * @param QString containing the message.
      */
     void logMessage(QString theString);
+    void setModel();
+
   private slots:
 
       //Rene Belloq: You and I are very much alike. Archeology is our religion,
@@ -112,9 +112,11 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
     void cropCalcClicked(QListWidgetItem * thepCurrentItem, QListWidgetItem * thepOldItem);
     void animalCalcClicked(QListWidgetItem * thepCurrentItem, QListWidgetItem * thepOldItem);
     void animalCellClicked(int theRow, int theColumn);
-    void animalCellChanged(int theRow, int theColumn);
+    void animalCalcSelectionChanged(int theRow, int theColumn);
     void cropCellClicked(int theRow, int theColumn);
-    void cropCellChanged(int theRow, int theColumn);
+    void cropCalcSelectionChanged(int theRow, int theColumn);
+  
+  
     private:
 
     /**
@@ -131,8 +133,8 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
     void showCropDefinitionReport(LaCrop &theCrop, LaCropParameter &theCropParamter);
     bool setComboToDefault(QComboBox * thepCombo, QString theDefault);
       //    <animal guid <enabled, animalparamters guid>>
-    LaTripleMap mAnimalsMap;
-    LaTripleMap mCropsMap;
+    LaTripleMap mAnimalsMap; // map of all animals and their associated targets
+    LaTripleMap mCropsMap; // map of all crops and their associated targets
     double mWeightCounter;
     QMap <QString,QString> mSelectedAnimalsMap;
     QMap <QString,QString> mSelectedCropsMap;

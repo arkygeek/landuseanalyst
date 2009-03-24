@@ -50,7 +50,7 @@
 #include <QString>
 
 /**
- * The Main form gui of LA.  Sets up the required clot connections
+ * The Main form gui of LA.  Sets up the required slot connections
  * as well as initializing the GUI.
  * @param parent
  * @param fl
@@ -116,11 +116,11 @@ LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
   connect(tblAnimals, SIGNAL(cellClicked( int,int)),
       this, SLOT(animalCellClicked( int,int)));
   connect(tblAnimals, SIGNAL(cellChanged( int,int)),
-      this, SLOT(animalCellChanged( int,int)));
+      this, SLOT(animalCalcSelectionChanged( int,int)));
   connect(tblCrops, SIGNAL(cellClicked( int,int)),
       this, SLOT(cropCellClicked( int,int)));
   connect(tblCrops, SIGNAL(cellChanged( int,int)),
-      this, SLOT(cropCellChanged( int,int)));
+      this, SLOT(cropCalcSelectionChanged( int,int)));
   connect(cbDebug, SIGNAL(clicked()),
       this, SLOT(on_cbDebug_clicked()));
 }
@@ -689,7 +689,6 @@ void LaMainForm::setModel()
   myModel.setLimitDairyPercent(sbLimitDairyPercent->value());
   myModel.setDairyUtilisation(sbDairyUtilisation->value());
   myModel.setCommonLandValue(sbCommonRasterValue->value(), myAreaUnits);
-  myModel.setName(lineEditSiteName->text());
   myModel.setPopulation(sbPopulation->value());
   myModel.setPeriod(lineEditPeriod->text());
   myModel.setEasting(lineEditEasting->text().toInt());
@@ -768,7 +767,6 @@ void LaMainForm::setDietLabels()
   myModel.setLimitDairyPercent(sbLimitDairyPercent->value());
   myModel.setDairyUtilisation(sbDairyUtilisation->value());
   myModel.setCommonLandValue(sbCommonRasterValue->value(), myAreaUnits);
-  myModel.setName(lineEditSiteName->text());
   myModel.setPopulation(sbPopulation->value());
   myModel.setPeriod(lineEditPeriod->text());
   myModel.setEasting(lineEditEasting->text().toInt());
@@ -859,13 +857,6 @@ void LaMainForm::setDietLabels()
     }
 }
 
-/**
- * total weight from all of the juveniles over their lifetime
- * assuming linear weight gain from weaning to slaughter.
- * @param theDaysToGain 
- * @param theGainPerDay 
- * @return 
- */
 double LaMainForm::totalWeightFromLinearGrowth(float theDaysToGain, float theGainPerDay)
 {
   if (theDaysToGain > 0)
@@ -906,7 +897,7 @@ void LaMainForm::animalCellClicked(int theRow, int theColumn)
   loadAnimals();
 }
 
-void LaMainForm::animalCellChanged(int theRow, int theColumn)
+void LaMainForm::animalCalcSelectionChanged(int theRow, int theColumn)
 {
     //listWidgetCalculationsAnimal->clear();
   QTableWidgetItem* mypItem = tblAnimals->item(tblAnimals->currentRow(),1);
@@ -951,7 +942,7 @@ void LaMainForm::cropCellClicked(int theRow, int theColumn)
   //         a permanent addition to this archaeological find. Who knows? In a
   //         thousand years, even you may be worth something.
 
-void LaMainForm::cropCellChanged(int theRow, int theColumn)
+void LaMainForm::cropCalcSelectionChanged(int theRow, int theColumn)
 {
   QTableWidgetItem* mypItem = tblCrops->item(tblCrops->currentRow(),1);
   if (mypItem)
@@ -1053,7 +1044,6 @@ void LaMainForm::on_pushButtonRun_clicked()
   myModel.setLimitDairyPercent(sbLimitDairyPercent->value());
   myModel.setDairyUtilisation(sbDairyUtilisation->value());
   myModel.setCommonLandValue(sbCommonRasterValue->value(), myAreaUnits);
-  myModel.setName(lineEditSiteName->text());
   myModel.setPopulation(sbPopulation->value());
   myModel.setPeriod(lineEditPeriod->text());
   myModel.setEasting(lineEditEasting->text().toInt());
@@ -1229,7 +1219,6 @@ void LaMainForm::cropCalcClicked(QListWidgetItem * thepCurrentItem, QListWidgetI
 {
     // zero trap to prevent seg faults
   if (thepCurrentItem==0) {return;}
-
     // ensure that the crops and animals are both at 100%
   LaModel myModel;
   if (labelCropCheck->text() != "100\%" or labelAnimalCheck->text() != "100\%")
@@ -1241,9 +1230,17 @@ void LaMainForm::cropCalcClicked(QListWidgetItem * thepCurrentItem, QListWidgetI
 
   connect(&myModel, SIGNAL(message( QString )),
              this, SLOT(logMessage( QString )));
-    // Get a list of the selected animals
-  QMap<QString,QString> mySelectedAnimalsMap;
-    //  <animal guid <enabled, animalparamters guid>>
+  
+  LaDietLabels myDietLabels;
+  //LaModel myModel;
+  mSelectedCropsMap.clear();
+  mSelectedAnimalsMap.clear();
+  QString mySelectedAreaUnit = QString(cbAreaUnits->currentText());
+  int myCommonRasterValue = sbCommonRasterValue->value();
+  AreaUnits myAreaUnits = (mySelectedAreaUnit == "Dunum") ? Dunum:Hectare;
+  
+  // Get a list of the selected animals
+  // <animal guid <enabled, animalparamters guid>>
   QMapIterator<QString, QPair<bool, QString> > myAnimalIterator(mAnimalsMap);
   while (myAnimalIterator.hasNext())
   {
@@ -1254,14 +1251,13 @@ void LaMainForm::cropCalcClicked(QListWidgetItem * thepCurrentItem, QListWidgetI
     bool mySelectedFlag = myPair.first;
     if (mySelectedFlag)
     {
-      mySelectedAnimalsMap.insert(myAnimalGuid,myAnimalParameterGuid);
+      mSelectedAnimalsMap.insert(myAnimalGuid,myAnimalParameterGuid);
     }
   }
-  myModel.setAnimals(mySelectedAnimalsMap);
-
-    // Get a list of the selected crops
+  
+  // Get a list of the selected crops
   QMap<QString,QString> mySelectedCropsMap;
-    //  <crop guid <enabled, cropparamters guid>>
+  // <crop guid <enabled, cropparamters guid>>
   QMapIterator<QString, QPair<bool, QString> > myCropIterator(mCropsMap);
   while (myCropIterator.hasNext())
   {
@@ -1272,12 +1268,12 @@ void LaMainForm::cropCalcClicked(QListWidgetItem * thepCurrentItem, QListWidgetI
     bool mySelectedFlag = myPair.first;
     if (mySelectedFlag)
     {
-      mySelectedCropsMap.insert(myCropGuid,myCropParameterGuid);
+      mSelectedCropsMap.insert(myCropGuid,myCropParameterGuid);
     }
   }
-  myModel.setCrops(mySelectedCropsMap);
-  myModel.setAnimals(mySelectedAnimalsMap);
-  myModel.setCrops(mySelectedCropsMap);
+  
+  myModel.setAnimals(mSelectedAnimalsMap);//
+  myModel.setCrops(mSelectedCropsMap);
   myModel.setName(lineEditSiteName->text());
   myModel.setPopulation(sbPopulation->value());
   myModel.setPeriod(lineEditPeriod->text());
@@ -1292,11 +1288,29 @@ void LaMainForm::cropCalcClicked(QListWidgetItem * thepCurrentItem, QListWidgetI
   myModel.setMeatPercent(sliderMeat->value());
   myModel.setCaloriesPerPersonDaily(sbDailyCalories->value());
   myModel.setDairyUtilisation(sbDairyUtilisation->value());
-
+  myModel.setCommonLandAreaUnits(myAreaUnits);
+  myModel.setCommonLandValue(myCommonRasterValue, myAreaUnits);
+  myModel.setBaseOnPlants(cboxBaseOnPlants->isChecked());
+  myModel.setIncludeDairy(cboxIncludeDairy->isChecked());
+  myModel.setLimitDairy(cboxLimitDairy->isChecked());
+  myModel.setLimitDairyPercent(sbLimitDairyPercent->value());
+  myModel.setDairyUtilisation(sbDairyUtilisation->value());
+  myModel.setCommonLandValue(sbCommonRasterValue->value(), myAreaUnits);
+  myModel.setPopulation(sbPopulation->value());
+  myModel.setPeriod(lineEditPeriod->text());
+  myModel.setEasting(lineEditEasting->text().toInt());
+  myModel.setNorthing(lineEditNorthing->text().toInt());
+  myModel.setEuclideanDistance(radioButtonEuclidean->isChecked());
+  myModel.setWalkingTime(radioButtonWalkingTime->isChecked());
+  myModel.setPathDistance(radioButtonPathDistance->isChecked());
+  myModel.setPrecision(sbModelPrecision->value());
+  
+  
+  
   // the following adjusts the Value value for use with hectares
   // which is the only output that is used.
-  QString mySelectedAreaUnit = QString(cbAreaUnits->currentText());
-  AreaUnits myAreaUnits = (mySelectedAreaUnit == "Dunum") ? Dunum:Hectare;
+  mySelectedAreaUnit = QString(cbAreaUnits->currentText());
+  myAreaUnits = (mySelectedAreaUnit == "Dunum") ? Dunum:Hectare;
   int myValue = sbCommonRasterValue->value();
   myModel.setCommonLandAreaUnits(myAreaUnits);
   myModel.setCommonLandValue(myValue, myAreaUnits);
@@ -1307,12 +1321,8 @@ void LaMainForm::cropCalcClicked(QListWidgetItem * thepCurrentItem, QListWidgetI
   myModel.setLimitDairyPercent(sbLimitDairyPercent->value());
   myModel.setDairyUtilisation(sbDairyUtilisation->value());
   myModel.setCommonLandValue(sbCommonRasterValue->value(), myAreaUnits);
-
-
-  myModel.setName(lineEditSiteName->text());
   myModel.setPopulation(sbPopulation->value());
   myModel.setPeriod(lineEditPeriod->text());
-    //myModel.setProjection(cbProjection->currentIndex());
   myModel.setEasting(lineEditEasting->text().toInt());
   myModel.setNorthing(lineEditNorthing->text().toInt());
   myModel.setEuclideanDistance(radioButtonEuclidean->isChecked());
@@ -1320,14 +1330,81 @@ void LaMainForm::cropCalcClicked(QListWidgetItem * thepCurrentItem, QListWidgetI
   myModel.setPathDistance(radioButtonPathDistance->isChecked());
   myModel.setPrecision(sbModelPrecision->value());
   
-  tbReport->setHtml(myModel.toHtml());
-  //myModel.DoCalculations();
+  
+  
+  
+  
+  
+  
+  if (labelCropCheck->text() != "100\%" or labelAnimalCheck->text() != "100\%")
+  {
+    return;
+  }
+  else
+  {
+    if (cboxBaseOnPlants->isChecked())
+    {
+      if  (cboxIncludeDairy->isChecked())
+      {
+        myDietLabels=myModel.doCalcsPlantsFirstIncludeDairy();
+        qDebug() << "doCalcsPlantsFirstIncludeDairy";
+      }
+      else
+      {
+        myDietLabels=myModel.doCalcsPlantsFirstDairySeperate();
+        qDebug() << "doCalcsPlantsFirstDairySeperate";
+      }
+    }
+    else
+    {
+      if  (cboxIncludeDairy->isChecked())
+      {
+        myDietLabels=myModel.doCalcsAnimalsFirstIncludeDiary();
+        qDebug() << "doCalcsAnimalsFirstIncludeDiary";
+      }
+      else
+      {
+        myDietLabels=myModel.doCalcsAnimalsFirstDairySeparate();
+        qDebug() << "doCalcsAnimalsFirstDairySeparate";
+      }
+    }
+  }
+  
+  /*
+  float myDairyMCalories = myDietLabels.dairyMCalories();
+  float myCropMCalories = myDietLabels.cropMCalories();
+  float myAnimalMCalories = myDietLabels.animalMCalories();
+  float myWildAnimalMCalories = myDietLabels.wildAnimalMCalories();
+  float myWildPlantsMCalories = myDietLabels.wildPlantsMCalories();
+  float myDairyPortionPct = myDietLabels.dairyPortionPct();
+  float myTameMeatPortionPct = myDietLabels.tameMeatPortionPct();
+  float myCropsPortionPct = myDietLabels.cropsPortionPct();
+  float myWildAnimalPortionPct = myDietLabels.wildAnimalPortionPct();
+  float myWildPlantsPortionPct = myDietLabels.wildPlantsPortionPct();
+  float myPlantsPortionPct = myDietLabels.plantsPortionPct();
+  float myAnimalPortionPct = myDietLabels.animalPortionPct();
+  float myMCalsIndividualAnnual = myDietLabels.kiloCaloriesIndividualAnnual();
+  float myMCalsSettlementAnnual = myDietLabels.megaCaloriesSettlementAnnual();
+  float myDairySurplusMCalories = myDietLabels.dairySurplusMCalories();
+  */
+  
+  
 
+  
+  tbReport->setHtml(myModel.toHtml());
+  
   QString myGuid = thepCurrentItem->data(Qt::UserRole).toString();
   LaCrop myCrop = LaUtils::getCrop(myGuid);
   lblCropPicCalcs->setPixmap(myCrop.imageFile());
   QMap <QString, QString> myCalcsMap = myModel.calcsCropsMap();
-  textBrowserResultsCrop->setText(myCalcsMap.value(myGuid));
+  QPair <QString,float> myReportPair;
+  LaReportMap myReportMap = myDietLabels.cropCalcsReportMap();
+  myReportPair = myReportMap.value(myGuid);
+  QString myReportString;
+  myReportString = myReportPair.first; 
+  textBrowserResultsCrop->setText(myReportString);
+  
+
 }
 
 /**
@@ -1349,27 +1426,182 @@ void LaMainForm::animalCalcClicked(QListWidgetItem * thepCurrentItem, QListWidge
     tbReport->append("I am NOT going to do anything until they are!");
     return;
   }
-
-  // show the user that the computer is thinking
-  //progressBarCalcs->reset();
-  //progressBarCalcs->setRange(0,0);
-  //AreaUnits myAreaUnits = (cbAreaUnits->currentText() == "Dunum") ? Dunum : Hectare;
-
+  
   connect(&myModel, SIGNAL(message( QString )),
-             this, SLOT(logMessage( QString )));
+          this, SLOT(logMessage( QString )));
+  
+  LaDietLabels myDietLabels;
+  //LaModel myModel;
+  mSelectedCropsMap.clear();
+  mSelectedAnimalsMap.clear();
+  QString mySelectedAreaUnit = QString(cbAreaUnits->currentText());
+  int myCommonRasterValue = sbCommonRasterValue->value();
+  AreaUnits myAreaUnits = (mySelectedAreaUnit == "Dunum") ? Dunum:Hectare;
+  
   // Get a list of the selected animals
-  QMap<QString,QString> mySelectedAnimalsMap;
   // <animal guid <enabled, animalparamters guid>>
-  setModel();
+  QMapIterator<QString, QPair<bool, QString> > myAnimalIterator(mAnimalsMap);
+  while (myAnimalIterator.hasNext())
+  {
+    myAnimalIterator.next();
+    QPair<bool,QString> myPair = myAnimalIterator.value();
+    QString myAnimalGuid = myAnimalIterator.key();
+    QString myAnimalParameterGuid = myPair.second;
+    bool mySelectedFlag = myPair.first;
+    if (mySelectedFlag)
+    {
+      mSelectedAnimalsMap.insert(myAnimalGuid,myAnimalParameterGuid);
+    }
+  }
+  
+  // Get a list of the selected crops
+  QMap<QString,QString> mySelectedCropsMap;
+  // <crop guid <enabled, cropparamters guid>>
+  QMapIterator<QString, QPair<bool, QString> > myCropIterator(mCropsMap);
+  while (myCropIterator.hasNext())
+  {
+    myCropIterator.next();
+    QPair<bool,QString> myPair = myCropIterator.value();
+    QString myCropGuid = myCropIterator.key();
+    QString myCropParameterGuid = myPair.second;
+    bool mySelectedFlag = myPair.first;
+    if (mySelectedFlag)
+    {
+      mSelectedCropsMap.insert(myCropGuid,myCropParameterGuid);
+    }
+  }
+  
+  myModel.setAnimals(mSelectedAnimalsMap);//
+  myModel.setCrops(mSelectedCropsMap);
+  myModel.setName(lineEditSiteName->text());
+  myModel.setPopulation(sbPopulation->value());
+  myModel.setPeriod(lineEditPeriod->text());
+  myModel.setEasting(lineEditEasting->text().toInt());
+  myModel.setNorthing(lineEditNorthing->text().toInt());
+  myModel.setEuclideanDistance(radioButtonEuclidean->isChecked());
+  myModel.setWalkingTime(radioButtonWalkingTime->isChecked());
+  myModel.setPathDistance(radioButtonPathDistance->isChecked());
+  myModel.setPrecision(sbModelPrecision->value());
+  myModel.setDietPercent(sliderDiet->value());
+  myModel.setCropPercent(sliderCrop->value());
+  myModel.setMeatPercent(sliderMeat->value());
+  myModel.setCaloriesPerPersonDaily(sbDailyCalories->value());
+  myModel.setDairyUtilisation(sbDairyUtilisation->value());
+  myModel.setCommonLandAreaUnits(myAreaUnits);
+  myModel.setCommonLandValue(myCommonRasterValue, myAreaUnits);
+  myModel.setBaseOnPlants(cboxBaseOnPlants->isChecked());
+  myModel.setIncludeDairy(cboxIncludeDairy->isChecked());
+  myModel.setLimitDairy(cboxLimitDairy->isChecked());
+  myModel.setLimitDairyPercent(sbLimitDairyPercent->value());
+  myModel.setDairyUtilisation(sbDairyUtilisation->value());
+  myModel.setCommonLandValue(sbCommonRasterValue->value(), myAreaUnits);
+  myModel.setPopulation(sbPopulation->value());
+  myModel.setPeriod(lineEditPeriod->text());
+  myModel.setEasting(lineEditEasting->text().toInt());
+  myModel.setNorthing(lineEditNorthing->text().toInt());
+  myModel.setEuclideanDistance(radioButtonEuclidean->isChecked());
+  myModel.setWalkingTime(radioButtonWalkingTime->isChecked());
+  myModel.setPathDistance(radioButtonPathDistance->isChecked());
+  myModel.setPrecision(sbModelPrecision->value());
+  
+  
+  
+  // the following adjusts the Value value for use with hectares
+  // which is the only output that is used.
+  mySelectedAreaUnit = QString(cbAreaUnits->currentText());
+  myAreaUnits = (mySelectedAreaUnit == "Dunum") ? Dunum:Hectare;
+  int myValue = sbCommonRasterValue->value();
+  myModel.setCommonLandAreaUnits(myAreaUnits);
+  myModel.setCommonLandValue(myValue, myAreaUnits);
+  
+  myModel.setBaseOnPlants(cboxBaseOnPlants->isChecked());
+  myModel.setIncludeDairy(cboxIncludeDairy->isChecked());
+  myModel.setLimitDairy(cboxIncludeDairy->isChecked());
+  myModel.setLimitDairyPercent(sbLimitDairyPercent->value());
+  myModel.setDairyUtilisation(sbDairyUtilisation->value());
+  myModel.setCommonLandValue(sbCommonRasterValue->value(), myAreaUnits);
+  myModel.setPopulation(sbPopulation->value());
+  myModel.setPeriod(lineEditPeriod->text());
+  myModel.setEasting(lineEditEasting->text().toInt());
+  myModel.setNorthing(lineEditNorthing->text().toInt());
+  myModel.setEuclideanDistance(radioButtonEuclidean->isChecked());
+  myModel.setWalkingTime(radioButtonWalkingTime->isChecked());
+  myModel.setPathDistance(radioButtonPathDistance->isChecked());
+  myModel.setPrecision(sbModelPrecision->value());
+  
+  
+  
+  
+  
+  
+  
+  if (labelCropCheck->text() != "100\%" or labelAnimalCheck->text() != "100\%")
+  {
+    return;
+  }
+  else
+  {
+    if (cboxBaseOnPlants->isChecked())
+    {
+      if  (cboxIncludeDairy->isChecked())
+      {
+        myDietLabels=myModel.doCalcsPlantsFirstIncludeDairy();
+        qDebug() << "doCalcsPlantsFirstIncludeDairy";
+      }
+      else
+      {
+        myDietLabels=myModel.doCalcsPlantsFirstDairySeperate();
+        qDebug() << "doCalcsPlantsFirstDairySeperate";
+      }
+    }
+    else
+    {
+      if  (cboxIncludeDairy->isChecked())
+      {
+        myDietLabels=myModel.doCalcsAnimalsFirstIncludeDiary();
+        qDebug() << "doCalcsAnimalsFirstIncludeDiary";
+      }
+      else
+      {
+        myDietLabels=myModel.doCalcsAnimalsFirstDairySeparate();
+        qDebug() << "doCalcsAnimalsFirstDairySeparate";
+      }
+    }
+  }
+  
+  /*
+   float myDairyMCalories = myDietLabels.dairyMCalories();
+   float myCropMCalories = myDietLabels.cropMCalories();
+   float myAnimalMCalories = myDietLabels.animalMCalories();
+   float myWildAnimalMCalories = myDietLabels.wildAnimalMCalories();
+   float myWildPlantsMCalories = myDietLabels.wildPlantsMCalories();
+   float myDairyPortionPct = myDietLabels.dairyPortionPct();
+   float myTameMeatPortionPct = myDietLabels.tameMeatPortionPct();
+   float myCropsPortionPct = myDietLabels.cropsPortionPct();
+   float myWildAnimalPortionPct = myDietLabels.wildAnimalPortionPct();
+   float myWildPlantsPortionPct = myDietLabels.wildPlantsPortionPct();
+   float myPlantsPortionPct = myDietLabels.plantsPortionPct();
+   float myAnimalPortionPct = myDietLabels.animalPortionPct();
+   float myMCalsIndividualAnnual = myDietLabels.kiloCaloriesIndividualAnnual();
+   float myMCalsSettlementAnnual = myDietLabels.megaCaloriesSettlementAnnual();
+   float myDairySurplusMCalories = myDietLabels.dairySurplusMCalories();
+   */
+  
+  
+  
   
   tbReport->setHtml(myModel.toHtml());
-  //myModel.DoCalculations();
 
   QString myGuid = thepCurrentItem->data(Qt::UserRole).toString();
   LaAnimal myAnimal = LaUtils::getAnimal(myGuid);
   lblAnimalPicCalcs->setPixmap(myAnimal.imageFile());
   QMap <QString, QString> myCalcsMap = myModel.calcsAnimalsMap();
-  textBrowserResultsAnimals->setText(myCalcsMap.value(myGuid));
+  QPair <QString,float> myReportPair;
+  LaReportMap myReportMap = myDietLabels.animalCalcsReportMap();
+  myReportPair = myReportMap.value(myGuid);
+  QString myReportString;
+  myReportString = myReportPair.first; 
+  textBrowserResultsAnimals->setText(myReportString);
   progressBarCalcs->setMaximum(100);
 }
 

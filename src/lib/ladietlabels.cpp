@@ -16,7 +16,13 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+
+
+#include <QString>
+#include <QMap>
+#include <QPair>
 #include "ladietlabels.h"
+#include "la.h"
 
 LaDietLabels::LaDietLabels()
 {
@@ -88,6 +94,14 @@ float LaDietLabels::dairySurplusMCalories() const
 {
   return mDairySurplusMCalories;
 }
+LaReportMap LaDietLabels::cropCalcsReportMap() const
+{
+  return mCropCalcsReportMap;
+}
+LaReportMap LaDietLabels::animalCalcsReportMap() const
+{
+  return mAnimalCalcsReportMap;
+}
 
   //mutators
 
@@ -150,4 +164,12 @@ void LaDietLabels::setMCalsSettlementAnnual(float theMegaCaloriesSettlementAnnua
 void LaDietLabels::setDairySurplusMCalories(float theDairySurplus)
 {
   mDairySurplusMCalories = theDairySurplus;
+}
+void LaDietLabels::setCropCalcsReportMap(LaReportMap theCropCalcsReportMap) 
+{
+  mCropCalcsReportMap = theCropCalcsReportMap;
+}
+void LaDietLabels::setAnimalCalcsReportMap(LaReportMap theAnimalCalcsReportMap) 
+{
+  mAnimalCalcsReportMap = theAnimalCalcsReportMap;
 }

@@ -18,10 +18,11 @@
  ***************************************************************************/
 #ifndef LADIETLABELS_H
 #define LADIETLABELS_H
-#include <QString>
+#include "la.h"
+
 /**
  * This class represents all of the required data for setting labels in the diet tab.
- *
+ * touch
  * @author Jason Jorgenson
  */
 class LaDietLabels{
@@ -46,7 +47,11 @@ public:
   float kiloCaloriesIndividualAnnual() const;
   float megaCaloriesSettlementAnnual() const;
   float dairySurplusMCalories() const;
+  LaReportMap cropCalcsReportMap() const;
+  LaReportMap animalCalcsReportMap() const;
+
   // mutators
+
   void setDairyMCalories (float theDairyMCalories);
   void setCropMCalories (float theCropMCalories);
   void setAnimalMCalories (float theAnimalMCalories);
@@ -62,7 +67,11 @@ public:
   void setMCalsIndividualAnnual (float theKCaloriesIndividualAnnual);
   void setMCalsSettlementAnnual (float theMCaloriesSettlementAnnua);
   void setDairySurplusMCalories (float theDairySurplusMCalories);
+  void setCropCalcsReportMap (LaReportMap theCropCalcsReportMap); 
+  void setAnimalCalcsReportMap (LaReportMap theAnimalCalcsReportMap); 
+  
   private:
+  
   float mDairyMCalories;
   float mCropMCalories;
   float mAnimalMCalories;
@@ -78,6 +87,8 @@ public:
   float mMCalsIndividualAnnual;
   float mMCalsSettlementAnnual;
   float mDairySurplusMCalories;
+  LaReportMap mAnimalCalcsReportMap;
+  LaReportMap mCropCalcsReportMap;
 };
 
 #endif

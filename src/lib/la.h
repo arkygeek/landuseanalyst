@@ -39,7 +39,7 @@ typedef QMap <QString,QPair<bool,QString> > LaTripleMap;
 typedef QPair <QPair<QString,QString>, QPair<QString,QString> > LaRasterInfo;
 typedef QMap < QString, LaFoodSource > LaFoodSourceMap;
 typedef QPair <float,float> HerdSize;
-
+typedef QMap <QString,QPair<QString,float> > LaReportMap;
 
 enum Priority {None, High, Medium, Low};
 enum Status {MoreThanEnoughToCompletelySatisfy, NotEnoughToCompletelySatisfy};
