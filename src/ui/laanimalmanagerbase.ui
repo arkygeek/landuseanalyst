@@ -648,7 +648,7 @@ p, li { white-space: pre-wrap; }
          <set>Qt::AlignRight</set>
         </property>
         <property name="suffix" >
-         <string> Kg</string>
+         <string>  %</string>
         </property>
         <property name="prefix" >
          <string/>
@@ -1121,7 +1121,7 @@ p, li { white-space: pre-wrap; }
          <widget class="QComboBox" name="cbFeedEnergyType" >
           <item>
            <property name="text" >
-            <string>KCalories</string>
+            <string>MCalories</string>
            </property>
           </item>
           <item>
@@ -1352,7 +1352,7 @@ p, li { white-space: pre-wrap; }
          <string/>
         </property>
         <property name="maximum" >
-         <number>1000</number>
+         <number>100000</number>
         </property>
         <property name="value" >
          <number>18</number>

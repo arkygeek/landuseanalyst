@@ -20,16 +20,15 @@
    <string>Landuse Analyst</string>
   </property>
   <property name="windowIcon" >
-   <iconset resource="../resources/resources.qrc" >
-    <normaloff>:/la_icon_small.png</normaloff>:/la_icon_small.png</iconset>
+   <iconset resource="../resources/resources.qrc" >:/la_icon_small.png</iconset>
   </property>
-  <layout class="QGridLayout" name="gridLayout_3" >
+  <layout class="QGridLayout" >
    <item row="1" column="0" colspan="11" >
-    <spacer name="spacer" >
+    <spacer>
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
      </property>
-     <property name="sizeHint" stdset="0" >
+     <property name="sizeHint" >
       <size>
        <width>308</width>
        <height>17</height>
@@ -42,7 +41,7 @@
      <property name="orientation" >
       <enum>Qt::Horizontal</enum>
      </property>
-     <property name="sizeHint" stdset="0" >
+     <property name="sizeHint" >
       <size>
        <width>224</width>
        <height>37</height>
@@ -51,11 +50,11 @@
     </spacer>
    </item>
    <item row="2" column="6" >
-    <spacer name="spacer_2" >
+    <spacer>
      <property name="orientation" >
       <enum>Qt::Horizontal</enum>
      </property>
-     <property name="sizeHint" stdset="0" >
+     <property name="sizeHint" >
       <size>
        <width>223</width>
        <height>37</height>
@@ -286,12 +285,6 @@ p, li { white-space: pre-wrap; }
        <string>Main</string>
       </attribute>
       <layout class="QGridLayout" >
-       <property name="margin" >
-        <number>9</number>
-       </property>
-       <property name="spacing" >
-        <number>6</number>
-       </property>
        <item rowspan="2" row="0" column="0" >
         <widget class="QFrame" name="frame_2" >
          <property name="sizePolicy" >
@@ -332,12 +325,6 @@ p, li { white-space: pre-wrap; }
           <enum>QFrame::Raised</enum>
          </property>
          <layout class="QGridLayout" >
-          <property name="margin" >
-           <number>9</number>
-          </property>
-          <property name="spacing" >
-           <number>6</number>
-          </property>
           <item row="0" column="0" >
            <widget class="QLabel" name="label_17" >
             <property name="sizePolicy" >
@@ -400,12 +387,6 @@ p, li { white-space: pre-wrap; }
           <bool>false</bool>
          </property>
          <layout class="QGridLayout" >
-          <property name="margin" >
-           <number>9</number>
-          </property>
-          <property name="spacing" >
-           <number>6</number>
-          </property>
           <item row="0" column="1" colspan="2" >
            <widget class="QLineEdit" name="lineEditSiteName" >
             <property name="sizePolicy" >
@@ -495,12 +476,6 @@ p, li { white-space: pre-wrap; }
           </item>
           <item row="1" column="2" >
            <layout class="QHBoxLayout" >
-            <property name="spacing" >
-             <number>6</number>
-            </property>
-            <property name="margin" >
-             <number>0</number>
-            </property>
             <item>
              <widget class="QLabel" name="label_6" >
               <property name="toolTip" >
@@ -540,12 +515,6 @@ p, li { white-space: pre-wrap; }
           </item>
           <item row="2" column="2" >
            <layout class="QHBoxLayout" >
-            <property name="spacing" >
-             <number>6</number>
-            </property>
-            <property name="margin" >
-             <number>0</number>
-            </property>
             <item>
              <widget class="QLabel" name="label_22" >
               <property name="toolTip" >
@@ -607,18 +576,27 @@ p, li { white-space: pre-wrap; }
           <string>Modelling Method</string>
          </property>
          <layout class="QGridLayout" >
-          <property name="margin" >
+          <property name="leftMargin" >
            <number>8</number>
           </property>
-          <property name="spacing" >
+          <property name="topMargin" >
+           <number>8</number>
+          </property>
+          <property name="rightMargin" >
+           <number>8</number>
+          </property>
+          <property name="bottomMargin" >
+           <number>8</number>
+          </property>
+          <property name="horizontalSpacing" >
+           <number>0</number>
+          </property>
+          <property name="verticalSpacing" >
            <number>0</number>
           </property>
           <item row="3" column="0" >
            <layout class="QHBoxLayout" >
             <property name="spacing" >
-             <number>0</number>
-            </property>
-            <property name="margin" >
              <number>0</number>
             </property>
             <item>
@@ -810,7 +788,7 @@ p, li { white-space: pre-wrap; }
          <property name="orientation" >
           <enum>Qt::Vertical</enum>
          </property>
-         <property name="sizeHint" stdset="0" >
+         <property name="sizeHint" >
           <size>
            <width>308</width>
            <height>83</height>
@@ -824,13 +802,13 @@ p, li { white-space: pre-wrap; }
       <attribute name="title" >
        <string>Diet</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout_6" >
+      <layout class="QGridLayout" >
        <item row="1" column="0" >
         <spacer>
          <property name="orientation" >
           <enum>Qt::Vertical</enum>
          </property>
-         <property name="sizeHint" stdset="0" >
+         <property name="sizeHint" >
           <size>
            <width>20</width>
            <height>40</height>
@@ -839,11 +817,11 @@ p, li { white-space: pre-wrap; }
         </spacer>
        </item>
        <item row="2" column="1" >
-        <spacer name="verticalSpacer" >
+        <spacer>
          <property name="orientation" >
           <enum>Qt::Vertical</enum>
          </property>
-         <property name="sizeHint" stdset="0" >
+         <property name="sizeHint" >
           <size>
            <width>20</width>
            <height>40</height>
@@ -862,22 +840,25 @@ p, li { white-space: pre-wrap; }
          <property name="title" >
           <string>Dietary Composition Percentages (Calories!)</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout_5" >
+         <layout class="QGridLayout" >
           <item row="0" column="0" colspan="2" >
-           <layout class="QHBoxLayout" name="horizontalLayout_8" >
+           <layout class="QHBoxLayout" >
             <item>
              <widget class="QCheckBox" name="cboxBaseOnPlants" >
+              <property name="enabled" >
+               <bool>false</bool>
+              </property>
               <property name="text" >
                <string>Base Calcs on Plant Percentage</string>
               </property>
              </widget>
             </item>
             <item>
-             <spacer name="horizontalSpacer" >
+             <spacer>
               <property name="orientation" >
                <enum>Qt::Horizontal</enum>
               </property>
-              <property name="sizeHint" stdset="0" >
+              <property name="sizeHint" >
                <size>
                 <width>40</width>
                 <height>20</height>
@@ -887,6 +868,9 @@ p, li { white-space: pre-wrap; }
             </item>
             <item>
              <widget class="QCheckBox" name="cboxIncludeDairy" >
+              <property name="enabled" >
+               <bool>false</bool>
+              </property>
               <property name="layoutDirection" >
                <enum>Qt::RightToLeft</enum>
               </property>
@@ -899,12 +883,6 @@ p, li { white-space: pre-wrap; }
           </item>
           <item row="1" column="0" colspan="2" >
            <layout class="QHBoxLayout" >
-            <property name="spacing" >
-             <number>6</number>
-            </property>
-            <property name="margin" >
-             <number>0</number>
-            </property>
             <item>
              <widget class="QLabel" name="labelCropPercent" >
               <property name="toolTip" >
@@ -984,18 +962,12 @@ p, li { white-space: pre-wrap; }
              <string>PLANT</string>
             </property>
             <layout class="QGridLayout" >
-             <property name="margin" >
-              <number>9</number>
-             </property>
-             <property name="spacing" >
-              <number>6</number>
-             </property>
              <item row="1" column="1" >
               <spacer>
                <property name="orientation" >
                 <enum>Qt::Horizontal</enum>
                </property>
-               <property name="sizeHint" stdset="0" >
+               <property name="sizeHint" >
                 <size>
                  <width>40</width>
                  <height>20</height>
@@ -1100,7 +1072,7 @@ p, li { white-space: pre-wrap; }
                <property name="orientation" >
                 <enum>Qt::Horizontal</enum>
                </property>
-               <property name="sizeHint" stdset="0" >
+               <property name="sizeHint" >
                 <size>
                  <width>40</width>
                  <height>20</height>
@@ -1120,18 +1092,12 @@ p, li { white-space: pre-wrap; }
              <string>MEAT</string>
             </property>
             <layout class="QGridLayout" >
-             <property name="margin" >
-              <number>9</number>
-             </property>
-             <property name="spacing" >
-              <number>6</number>
-             </property>
              <item row="1" column="1" >
               <spacer>
                <property name="orientation" >
                 <enum>Qt::Horizontal</enum>
                </property>
-               <property name="sizeHint" stdset="0" >
+               <property name="sizeHint" >
                 <size>
                  <width>40</width>
                  <height>20</height>
@@ -1144,7 +1110,7 @@ p, li { white-space: pre-wrap; }
                <property name="orientation" >
                 <enum>Qt::Horizontal</enum>
                </property>
-               <property name="sizeHint" stdset="0" >
+               <property name="sizeHint" >
                 <size>
                  <width>40</width>
                  <height>20</height>
@@ -1261,15 +1227,9 @@ p, li { white-space: pre-wrap; }
            </widget>
           </item>
           <item row="4" column="0" colspan="2" >
-           <layout class="QHBoxLayout" name="horizontalLayout" >
+           <layout class="QHBoxLayout" >
             <item>
              <layout class="QHBoxLayout" >
-              <property name="spacing" >
-               <number>6</number>
-              </property>
-              <property name="margin" >
-               <number>0</number>
-              </property>
               <item>
                <widget class="QLabel" name="label6" >
                 <property name="toolTip" >
@@ -1334,13 +1294,7 @@ p, li { white-space: pre-wrap; }
              </widget>
             </item>
             <item>
-             <layout class="QHBoxLayout" name="_2" >
-              <property name="spacing" >
-               <number>6</number>
-              </property>
-              <property name="margin" >
-               <number>0</number>
-              </property>
+             <layout class="QHBoxLayout" >
               <item>
                <widget class="QLabel" name="label6_2" >
                 <property name="toolTip" >
@@ -1436,7 +1390,7 @@ p, li { white-space: pre-wrap; }
             <property name="orientation" >
              <enum>Qt::Vertical</enum>
             </property>
-            <property name="sizeHint" stdset="0" >
+            <property name="sizeHint" >
              <size>
               <width>20</width>
               <height>40</height>
@@ -1480,15 +1434,9 @@ p, li { white-space: pre-wrap; }
          <property name="title" >
           <string>Breakdown of Diet</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout_4" >
+         <layout class="QGridLayout" >
           <item row="2" column="0" >
            <layout class="QHBoxLayout" >
-            <property name="spacing" >
-             <number>6</number>
-            </property>
-            <property name="margin" >
-             <number>0</number>
-            </property>
             <item>
              <widget class="QLabel" name="label_10" >
               <property name="text" >
@@ -1514,12 +1462,6 @@ p, li { white-space: pre-wrap; }
           </item>
           <item row="4" column="0" >
            <layout class="QHBoxLayout" >
-            <property name="spacing" >
-             <number>6</number>
-            </property>
-            <property name="margin" >
-             <number>0</number>
-            </property>
             <item>
              <widget class="QLabel" name="label_12" >
               <property name="text" >
@@ -1545,12 +1487,6 @@ p, li { white-space: pre-wrap; }
           </item>
           <item row="5" column="0" >
            <layout class="QHBoxLayout" >
-            <property name="spacing" >
-             <number>6</number>
-            </property>
-            <property name="margin" >
-             <number>0</number>
-            </property>
             <item>
              <widget class="QLabel" name="label_16" >
               <property name="text" >
@@ -1575,7 +1511,7 @@ p, li { white-space: pre-wrap; }
            </layout>
           </item>
           <item row="6" column="0" >
-           <layout class="QHBoxLayout" name="horizontalLayout_7" >
+           <layout class="QHBoxLayout" >
             <item>
              <widget class="QLabel" name="label_54" >
               <property name="text" >
@@ -1601,12 +1537,6 @@ p, li { white-space: pre-wrap; }
           </item>
           <item row="8" column="0" >
            <layout class="QHBoxLayout" >
-            <property name="spacing" >
-             <number>6</number>
-            </property>
-            <property name="margin" >
-             <number>0</number>
-            </property>
             <item>
              <widget class="QLabel" name="label_18" >
               <property name="text" >
@@ -1632,12 +1562,6 @@ p, li { white-space: pre-wrap; }
           </item>
           <item row="9" column="0" >
            <layout class="QHBoxLayout" >
-            <property name="spacing" >
-             <number>6</number>
-            </property>
-            <property name="margin" >
-             <number>0</number>
-            </property>
             <item>
              <widget class="QLabel" name="label_19" >
               <property name="text" >
@@ -1662,13 +1586,7 @@ p, li { white-space: pre-wrap; }
            </layout>
           </item>
           <item row="10" column="0" >
-           <layout class="QHBoxLayout" name="_3" >
-            <property name="spacing" >
-             <number>6</number>
-            </property>
-            <property name="margin" >
-             <number>0</number>
-            </property>
+           <layout class="QHBoxLayout" >
             <item>
              <widget class="QLabel" name="label_31" >
               <property name="text" >
@@ -1693,7 +1611,7 @@ p, li { white-space: pre-wrap; }
            </layout>
           </item>
           <item row="12" column="0" >
-           <layout class="QHBoxLayout" name="horizontalLayout_6" >
+           <layout class="QHBoxLayout" >
             <item>
              <widget class="QLabel" name="label_51" >
               <property name="text" >
@@ -1718,7 +1636,7 @@ p, li { white-space: pre-wrap; }
            </layout>
           </item>
           <item row="13" column="0" >
-           <layout class="QHBoxLayout" name="horizontalLayout_5" >
+           <layout class="QHBoxLayout" >
             <item>
              <widget class="QLabel" name="label_53" >
               <property name="text" >
@@ -1744,12 +1662,6 @@ p, li { white-space: pre-wrap; }
           </item>
           <item row="15" column="0" >
            <layout class="QHBoxLayout" >
-            <property name="spacing" >
-             <number>6</number>
-            </property>
-            <property name="margin" >
-             <number>0</number>
-            </property>
             <item>
              <widget class="QLabel" name="label_23" >
               <property name="text" >
@@ -1775,12 +1687,6 @@ p, li { white-space: pre-wrap; }
           </item>
           <item row="16" column="0" >
            <layout class="QHBoxLayout" >
-            <property name="spacing" >
-             <number>6</number>
-            </property>
-            <property name="margin" >
-             <number>0</number>
-            </property>
             <item>
              <widget class="QLabel" name="label_21" >
               <property name="text" >
@@ -1805,7 +1711,7 @@ p, li { white-space: pre-wrap; }
            </layout>
           </item>
           <item row="17" column="0" >
-           <layout class="QHBoxLayout" name="horizontalLayout_2" >
+           <layout class="QHBoxLayout" >
             <item>
              <widget class="QLabel" name="label_35" >
               <property name="text" >
@@ -1830,7 +1736,7 @@ p, li { white-space: pre-wrap; }
            </layout>
           </item>
           <item row="19" column="0" >
-           <layout class="QHBoxLayout" name="horizontalLayout_3" >
+           <layout class="QHBoxLayout" >
             <item>
              <widget class="QLabel" name="label_46" >
               <property name="text" >
@@ -1855,7 +1761,7 @@ p, li { white-space: pre-wrap; }
            </layout>
           </item>
           <item row="20" column="0" >
-           <layout class="QHBoxLayout" name="horizontalLayout_4" >
+           <layout class="QHBoxLayout" >
             <item>
              <widget class="QLabel" name="label_48" >
               <property name="text" >
@@ -1944,12 +1850,6 @@ p, li { white-space: pre-wrap; }
           </item>
           <item row="1" column="0" >
            <layout class="QHBoxLayout" >
-            <property name="spacing" >
-             <number>6</number>
-            </property>
-            <property name="margin" >
-             <number>0</number>
-            </property>
             <item>
              <widget class="QLabel" name="label_8" >
               <property name="text" >
@@ -1974,13 +1874,6 @@ p, li { white-space: pre-wrap; }
            </layout>
           </item>
          </layout>
-         <zorder>label_4</zorder>
-         <zorder>label_15</zorder>
-         <zorder>line_5</zorder>
-         <zorder>label_20</zorder>
-         <zorder>line_4</zorder>
-         <zorder>line_7</zorder>
-         <zorder></zorder>
         </widget>
        </item>
       </layout>
@@ -1997,12 +1890,6 @@ p, li { white-space: pre-wrap; }
          </property>
          <widget class="QWidget" name="layoutWidget" >
           <layout class="QHBoxLayout" >
-           <property name="spacing" >
-            <number>6</number>
-           </property>
-           <property name="margin" >
-            <number>0</number>
-           </property>
            <item>
             <widget class="QTableWidget" name="tblCrops" >
              <property name="toolTip" >
@@ -2220,7 +2107,7 @@ p, li { white-space: pre-wrap; }
       <attribute name="title" >
        <string>Animals</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout_2" >
+      <layout class="QGridLayout" >
        <item row="0" column="0" colspan="2" >
         <widget class="QSplitter" name="splitter_3" >
          <property name="orientation" >
@@ -2228,12 +2115,6 @@ p, li { white-space: pre-wrap; }
          </property>
          <widget class="QWidget" name="layoutWidget" >
           <layout class="QGridLayout" >
-           <property name="margin" >
-            <number>0</number>
-           </property>
-           <property name="spacing" >
-            <number>6</number>
-           </property>
            <item rowspan="2" row="0" column="0" >
             <widget class="QTableWidget" name="tblAnimals" >
              <property name="toolTip" >
@@ -2288,7 +2169,7 @@ p, li { white-space: pre-wrap; }
              <property name="orientation" >
               <enum>Qt::Vertical</enum>
              </property>
-             <property name="sizeHint" stdset="0" >
+             <property name="sizeHint" >
               <size>
                <width>20</width>
                <height>16</height>
@@ -2422,7 +2303,7 @@ p, li { white-space: pre-wrap; }
          <property name="title" >
           <string>Food Value of Common Grazing Land (Required)</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout" >
+         <layout class="QGridLayout" >
           <item row="0" column="0" >
            <widget class="QSpinBox" name="sbCommonRasterValue" >
             <property name="toolTip" >
@@ -2511,12 +2392,6 @@ p, li { white-space: pre-wrap; }
        </item>
        <item row="3" column="1" >
         <layout class="QVBoxLayout" >
-         <property name="spacing" >
-          <number>6</number>
-         </property>
-         <property name="margin" >
-          <number>0</number>
-         </property>
          <item>
           <widget class="QPushButton" name="pbnNewAnimal" >
            <property name="sizePolicy" >
@@ -2741,7 +2616,7 @@ p, li { white-space: pre-wrap; }
          <property name="orientation" >
           <enum>Qt::Horizontal</enum>
          </property>
-         <property name="sizeHint" stdset="0" >
+         <property name="sizeHint" >
           <size>
            <width>341</width>
            <height>27</height>
@@ -2791,12 +2666,6 @@ p, li { white-space: pre-wrap; }
        <string>Results</string>
       </attribute>
       <layout class="QGridLayout" >
-       <property name="margin" >
-        <number>9</number>
-       </property>
-       <property name="spacing" >
-        <number>6</number>
-       </property>
        <item row="0" column="0" >
         <widget class="QSplitter" name="splitter_6" >
          <property name="orientation" >
@@ -2826,12 +2695,6 @@ p, li { white-space: pre-wrap; }
        <string>Log</string>
       </attribute>
       <layout class="QGridLayout" >
-       <property name="margin" >
-        <number>9</number>
-       </property>
-       <property name="spacing" >
-        <number>6</number>
-       </property>
        <item row="0" column="0" >
         <widget class="QTextBrowser" name="tbLogs" />
        </item>
@@ -2842,12 +2705,6 @@ p, li { white-space: pre-wrap; }
        <string>Help</string>
       </attribute>
       <layout class="QGridLayout" >
-       <property name="margin" >
-        <number>9</number>
-       </property>
-       <property name="spacing" >
-        <number>6</number>
-       </property>
        <item row="0" column="0" >
         <widget class="QSplitter" name="splitter" >
          <property name="orientation" >
@@ -2857,9 +2714,6 @@ p, li { white-space: pre-wrap; }
           <layout class="QVBoxLayout" >
            <property name="spacing" >
             <number>1</number>
-           </property>
-           <property name="margin" >
-            <number>0</number>
            </property>
            <item>
             <widget class="QTreeWidget" name="treeHelp" >
@@ -3409,13 +3263,12 @@ p, li { white-space: pre-wrap; }
            </sizepolicy>
           </property>
           <property name="styleSheet" >
-           <string notr="true" >&lt;CENTER></string>
+           <string>&lt;CENTER></string>
           </property>
           <property name="html" >
-           <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
-&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;">
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Lucida Grande'; font-size:13pt; font-weight:400; font-style:normal;">
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;">&lt;span style=" font-size:10pt; font-weight:600;">To learn more about a feature or field in LandUse Analyst, you can do one of four things.&lt;/span>&lt;/p>
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;">1. &lt;span style=" font-size:10pt; color:#0000ff;">Hover over it&lt;/span> with your mouse arrow for a brief description&lt;/p>
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;">2. Click the &lt;span style=" font-size:12pt; font-weight:600; color:#0000ff;">?&lt;/span> in the top right of the main window and then click on the item you want detailed help for.&lt;/p>

@@ -141,7 +141,7 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
     /** holder */
     float getFallowLandForACrop(QString theCropParameterGuid, float theAreaTarget);
     /** holder */
-    void allocateFallowGrazingLand();
+    void allocateFallowGrazingLand(float theFallowMCalsAvailable, QMap <QString,float> theAnimalMCalRequirementMap);
     /** holder */
     void adjustAnimalTargetsForFodder();
     /** holder */
@@ -551,7 +551,7 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
     float mCommonCropLand;
     /** holder */
     HerdSize mHerdSize;
-
+    QMap <QString, QPair<QString,float> > mAnimalCalcReport;
 };
 #endif   //LAMODEL_H
 
