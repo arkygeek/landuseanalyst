@@ -1072,14 +1072,56 @@ void LaMainForm::on_pushButtonRun_clicked()
           if  (cboxIncludeDairy->isChecked())
           {
             myDietLabels=myModel.doCalcsPlantsFirstIncludeDairy();
-            myAnimalTargetsMap = myModel.getAreaTargetsAnimalsMapPFID();
-            myCropsTargetsMap = myModel.getAreaTargetsCropsMapPFID();
+            LaReportMap myAnimalReportMap = myDietLabels.animalCalcsReportMap();
+            LaReportMap myCropReportMap = myDietLabels.cropCalcsReportMap();
+            
+            // iterate therough the animal calcs report map and transfer the relevant info to a new map
+            QMapIterator<QString, QPair<QString,float> > myAnimalReportIterator(myAnimalReportMap);
+            while (myAnimalReportIterator.hasNext())
+            {
+              myAnimalReportIterator.next();
+              QPair<QString, float> myPair = myAnimalReportIterator.value();
+              float myTarget = myPair.second;
+              QString myAnimalGuid = myAnimalReportIterator.key();
+              myAnimalTargetsMap.insert(myAnimalGuid,myTarget);
+            }
+            // iterate therough the crop calcs report map and transfer the relevant info to a new map
+            QMapIterator<QString, QPair<QString,float> > myCropReportIterator(myCropReportMap);
+            while (myCropReportIterator.hasNext())
+            {
+              myCropReportIterator.next();
+              QPair<QString, float> myPair = myCropReportIterator.value();
+              float myTarget = myPair.second;
+              QString myCropGuid = myCropReportIterator.key();
+              myCropsTargetsMap.insert(myCropGuid,myTarget);
+            }
           }
           else
           {
             myDietLabels=myModel.doCalcsPlantsFirstDairySeperate();
-            myAnimalTargetsMap = myModel.getAreaTargetsAnimalsMapPFDS();
-            myCropsTargetsMap = myModel.getAreaTargetsCropsMapPFDS();
+            LaReportMap myAnimalReportMap = myDietLabels.animalCalcsReportMap();
+            LaReportMap myCropReportMap = myDietLabels.cropCalcsReportMap();
+            
+            // iterate therough the animal calcs report map and transfer the relevant info to a new map
+            QMapIterator<QString, QPair<QString,float> > myAnimalReportIterator(myAnimalReportMap);
+            while (myAnimalReportIterator.hasNext())
+            {
+              myAnimalReportIterator.next();
+              QPair<QString, float> myPair = myAnimalReportIterator.value();
+              float myTarget = myPair.second;
+              QString myAnimalGuid = myAnimalReportIterator.key();
+              myAnimalTargetsMap.insert(myAnimalGuid,myTarget);
+            }
+            // iterate therough the crop calcs report map and transfer the relevant info to a new map
+            QMapIterator<QString, QPair<QString,float> > myCropReportIterator(myCropReportMap);
+            while (myCropReportIterator.hasNext())
+            {
+              myCropReportIterator.next();
+              QPair<QString, float> myPair = myCropReportIterator.value();
+              float myTarget = myPair.second;
+              QString myCropGuid = myCropReportIterator.key();
+              myCropsTargetsMap.insert(myCropGuid,myTarget);
+            }
           }
         }
         else
@@ -1087,14 +1129,56 @@ void LaMainForm::on_pushButtonRun_clicked()
           if  (cboxIncludeDairy->isChecked())
           {
             myDietLabels=myModel.doCalcsAnimalsFirstIncludeDiary();
-            myAnimalTargetsMap = myModel.getAreaTargetsAnimalsMapAFID();
-            myCropsTargetsMap = myModel.getAreaTargetsCropsMapAFID();
+            LaReportMap myAnimalReportMap = myDietLabels.animalCalcsReportMap();
+            LaReportMap myCropReportMap = myDietLabels.cropCalcsReportMap();
+            
+            // iterate therough the animal calcs report map and transfer the relevant info to a new map
+            QMapIterator<QString, QPair<QString,float> > myAnimalReportIterator(myAnimalReportMap);
+            while (myAnimalReportIterator.hasNext())
+            {
+              myAnimalReportIterator.next();
+              QPair<QString, float> myPair = myAnimalReportIterator.value();
+              float myTarget = myPair.second;
+              QString myAnimalGuid = myAnimalReportIterator.key();
+              myAnimalTargetsMap.insert(myAnimalGuid,myTarget);
+            }
+            // iterate therough the crop calcs report map and transfer the relevant info to a new map
+            QMapIterator<QString, QPair<QString,float> > myCropReportIterator(myCropReportMap);
+            while (myCropReportIterator.hasNext())
+            {
+              myCropReportIterator.next();
+              QPair<QString, float> myPair = myCropReportIterator.value();
+              float myTarget = myPair.second;
+              QString myCropGuid = myCropReportIterator.key();
+              myCropsTargetsMap.insert(myCropGuid,myTarget);
+            }
           }
           else
           {
             myDietLabels=myModel.doCalcsAnimalsFirstDairySeparate();
-            myAnimalTargetsMap = myModel.getAreaTargetsAnimalsMapAFDS();
-            myCropsTargetsMap = myModel.getAreaTargetsCropsMapAFDS();
+            LaReportMap myAnimalReportMap = myDietLabels.animalCalcsReportMap();
+            LaReportMap myCropReportMap = myDietLabels.cropCalcsReportMap();
+            
+            // iterate therough the animal calcs report map and transfer the relevant info to a new map
+            QMapIterator<QString, QPair<QString,float> > myAnimalReportIterator(myAnimalReportMap);
+            while (myAnimalReportIterator.hasNext())
+            {
+              myAnimalReportIterator.next();
+              QPair<QString, float> myPair = myAnimalReportIterator.value();
+              float myTarget = myPair.second;
+              QString myAnimalGuid = myAnimalReportIterator.key();
+              myAnimalTargetsMap.insert(myAnimalGuid,myTarget);
+            }
+            // iterate therough the crop calcs report map and transfer the relevant info to a new map
+            QMapIterator<QString, QPair<QString,float> > myCropReportIterator(myCropReportMap);
+            while (myCropReportIterator.hasNext())
+            {
+              myCropReportIterator.next();
+              QPair<QString, float> myPair = myCropReportIterator.value();
+              float myTarget = myPair.second;
+              QString myCropGuid = myCropReportIterator.key();
+              myCropsTargetsMap.insert(myCropGuid,myTarget);
+            }
           }
         }
       }
