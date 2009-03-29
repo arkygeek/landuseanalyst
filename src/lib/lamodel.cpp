@@ -386,7 +386,9 @@ void LaModel::allocateFallowGrazingLand(float theFallowMCalsAvailable, QMap <QSt
     {
       case  High:
             myHighPriorityCount++;
-            myHighPriorityValue += theAnimalMCalRequirementMap.value(myAnimalGuid); 
+            logMessage("Animal: " + myAnimal.name() );
+            logMessage("      : " + QString::number(mValueMap.value(myAnimalGuid)).toLocal8Bit() );
+            myHighPriorityValue += mValueMap.value(myAnimalGuid); 
             break;
       case  Medium:
             myMediumPriorityCount++;
@@ -422,7 +424,7 @@ void LaModel::allocateFallowGrazingLand(float theFallowMCalsAvailable, QMap <QSt
   if (myTotalFallowValue > 0)
   {
     Priority myPriority = High;
-    float myLeftoverCalories = doTheFallowAllocation(myPriority, myTotalFallowValue, myHighPriorityValue);
+    float myLeftoverCalories = doTheFallowAllocation(myPriority, myTotalFallowValue, myHighPriorityValue, myHighPriorityCount);
     logMessage("Remaining Fallow Calories after HIGH adjustments: " + QString::number(myLeftoverCalories).toLocal8Bit());
     myTotalFallowValue = myLeftoverCalories;
   }
@@ -430,7 +432,7 @@ void LaModel::allocateFallowGrazingLand(float theFallowMCalsAvailable, QMap <QSt
   if (myTotalFallowValue > 0)
   {
     Priority myPriority = Medium;
-    float myLeftoverCalories = doTheFallowAllocation(myPriority, myTotalFallowValue, myMediumPriorityValue);
+    float myLeftoverCalories = doTheFallowAllocation(myPriority, myTotalFallowValue, myMediumPriorityValue, myHighPriorityCount);
     logMessage("Remaining Fallow Calories after MED adjustments: " + QString::number(myLeftoverCalories).toLocal8Bit());
     myTotalFallowValue = myLeftoverCalories;
   }
@@ -438,7 +440,7 @@ void LaModel::allocateFallowGrazingLand(float theFallowMCalsAvailable, QMap <QSt
   if (myTotalFallowValue > 0)
   {
     Priority myPriority = Low;
-    float myLeftoverCalories = doTheFallowAllocation(myPriority, myTotalFallowValue, myLowPriorityValue);
+    float myLeftoverCalories = doTheFallowAllocation(myPriority, myTotalFallowValue, myLowPriorityValue, myHighPriorityCount);
     logMessage("Remaining Fallow Calories after LOW adjustments: " + QString::number(myLeftoverCalories).toLocal8Bit());
     myTotalFallowValue = myLeftoverCalories;
   }
@@ -449,7 +451,7 @@ void LaModel::allocateFallowGrazingLand(float theFallowMCalsAvailable, QMap <QSt
 
 float LaModel::doTheFallowAllocation (Priority thePriority,
                                     float theAvailableFallowValue,
-                                    float theValueNeeded)
+                                    float theValueNeeded, float theNumberOfAnimals)
 {
   qDebug() << "Value Map: " << mValueMap;
     // when the total number of calories needed by the animals
@@ -523,7 +525,7 @@ float LaModel::doTheFallowAllocation (Priority thePriority,
               qDebug() << "        myCurrentAnimalsValue: " << myCurrentAnimalsValue;
               if (myAnimalParameter.fallowUsage()==thePriority)
               {
-                double myAllottedValue = ((myCurrentAnimalsValue / static_cast<float>(theValueNeeded)) * theAvailableFallowValue);
+                double myAllottedValue = /*(myCurrentAnimalsValue / static_cast<float>(theValueNeeded)) */ theAvailableFallowValue/theNumberOfAnimals;
                 logMessage("Adjusting calories required by: " + myAnimal.name());
                 qDebug() << "myAllottedValue: " << myAllottedValue;
                 logMessage("Allotted Value from fallow are: " + QString::number(myAllottedValue));
@@ -884,6 +886,7 @@ LaDietLabels LaModel::doCalcsAnimalsFirstDairySeparate()  // working :-)
   //float myPopulation = mPopulation;
   //float myMCaloriesPerPersonDaily = mCaloriesPerPersonDaily * .001;
   float myPlantPercent = 1. - mDietPercent; // @TODO mDietPercent is a bad var name 
+  float myDomesticCropPortion = mPercentOfDietThatIsFromCrops;
   
   qDebug() << "myMCalsIndividualAnnual = " << myMCalsIndividualAnnual;
   qDebug() << "myMCalsSettlementAnnual = " << myMCalsSettlementAnnual;
@@ -911,12 +914,13 @@ LaDietLabels LaModel::doCalcsAnimalsFirstDairySeparate()  // working :-)
     LaAnimal myAnimal = LaUtils::getAnimal(myAnimalGuid);
     LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter( myAnimalParameterGuid );
     float myAdditionalMCalCounter = 0.;
+    float myAdditionalMCalCounter1 = 0.;
 
     float myMilkKgPerDay = myAnimal.milkGramsPerDay() * .001; // entered as Grams so need to convert to kg
     float myMilkFoodValue = myAnimal.milkFoodValue() * .001;
     float myLactationTime = myAnimal.lactationTime();
     float myWeaningAge = myAnimal.weaningAge();
-    float myGestatingTime = myAnimal.gestating();
+    float myGestatingTime = myAnimal.gestationTime();
     float myEstrousCycle = myAnimal.estrousCycle();
     float myBabiesPerBirth = myAnimal.youngPerBirth();
     
@@ -935,7 +939,11 @@ LaDietLabels LaModel::doCalcsAnimalsFirstDairySeparate()  // working :-)
     float myPotentialDairyPerOffspring = myMilkKgPerDay * myMilkFoodValue * (myLactationTime - myWeaningAge); // B4
     float myValuePerOffspring = myKillWeight * myUsablePortionOfAnimal * myMeatValueMCal; // B5
     float myActualDairyValueOfOffspring = myPotentialDairyPerOffspring * myDairyUtilization; // B6
-    float myCulledMothersValue = myAdultWeight * myMeatValueMCal * myUsablePortionOfAnimal * (1. / ((mySexualMaturity / 12.) + myBreedingYears)); // B7
+    
+    float myBirthingEventsPerYear1 = 365. / (myWeaningAge + myGestatingTime + myEstrousCycle + myLactationTime); // B21
+    float myBirthingEventsPerYear = myBirthingEventsPerYear1 < 1. ? 1.:myBirthingEventsPerYear1;
+    float myCulledMothersValue1 = (myAdultWeight * myMeatValueMCal * myUsablePortionOfAnimal * (1. / ((mySexualMaturity / 12.) + myBreedingYears)));
+    float myCulledMothersValue = myCulledMothersValue1 / (myBabiesPerBirth * myBirthingEventsPerYear); // B7
     float myCulledAdultMalesValue = myCulledMothersValue / myFemalesToMales; // B8
     float myFinalOffspringValue = myValuePerOffspring + myCulledMothersValue + myCulledAdultMalesValue; // B9  + myActualDairyValueOfOffspring  add this to include dairy with meat
     float myOffspringNeededPerYear = myAnimalMCalTarget / myFinalOffspringValue; // B11
@@ -955,7 +963,7 @@ LaDietLabels LaModel::doCalcsAnimalsFirstDairySeparate()  // working :-)
     //
     //   !!! remember that this needs adjustment later for fodder fallow and grain
     //
-    float myBirthingEventsPerYear = 365. / (myWeaningAge + myGestatingTime + myEstrousCycle); // B21
+
     float myOffspringPerMotherPerYear = myBirthingEventsPerYear * myBabiesPerBirth * (1. - myDeathRate) * myConceptionEfficiency; // B22
     float myMothersNeededStepOne = myOffspringNeededPerYear / myOffspringPerMotherPerYear; // B23
     float myMalesStepOne = myMothersNeededStepOne * myOffspringPerMotherPerYear * 0.5; // B24
@@ -975,19 +983,82 @@ LaDietLabels LaModel::doCalcsAnimalsFirstDairySeparate()  // working :-)
     float myFeedForMaintenance = myAnimal.maintenance() * .001;
     float myFeedForOffspringPerKg = myAnimal.juvenile() * .001;
     
-    float myGestatingMCals = myOffspringNeededPerYear * myGestatingTime * myFeedForGestating;
-    float myLactatingMCals = myOffspringNeededPerYear * myLactationTime * myFeedForLactating;
-    float myDaysForMaintenance = myGestatingTime + myLactationTime < 0 ? 0 : myGestatingTime + myLactationTime ;
-    float myDryMothers = myTotalMothers - myOffspringNeededPerYear < 0 ? 0 : myTotalMothers - myOffspringNeededPerYear;
+    float myGestatingMCals = myTotalOffspring * myGestatingTime * myFeedForGestating;
+    
+    float myLactatingMCals = myTotalOffspring * myLactationTime * myFeedForLactating;
+    float myDaysForMaintenance = (365 - (myGestatingTime + myLactationTime) < 0) ? 0 : (365 - (myGestatingTime + myLactationTime));
+
+
+    float myDryMothers = myTotalMothers - myTotalOffspring < 0 ? 0 : myTotalMothers - myTotalOffspring;
     float myDryMothersMCals = (myDryMothers * 365. * myFeedForMaintenance);
-    float myOtherMaintenanceMCals = myDaysForMaintenance * myOffspringNeededPerYear * myFeedForMaintenance;
+    float myOtherMaintenanceMCals = myDaysForMaintenance * myTotalOffspring * myFeedForMaintenance;
     float myMaintenanceMCals = myDryMothersMCals + myOtherMaintenanceMCals;
+    
     float myAdultMalesMCals = myBreedingMalesRequired * myFeedForMaintenance * 365.;
     float myOffspringMCals = myTotalOffspring * myKillWeight * myFeedForOffspringPerKg * (365. - myWeaningAge);
     
-   
+    QString myAnimalReport = QString("myMilkKgPerDay = " + QString::number(myMilkKgPerDay) + "\n");
+    myAnimalReport += QString("myMilkFoodValue = " + QString::number(myMilkFoodValue) + "\n");
+    myAnimalReport += QString("myLactationTime = " + QString::number(myLactationTime) + "\n");
+    myAnimalReport += QString("myWeaningAge = " + QString::number(myWeaningAge) + "\n");
+    myAnimalReport += QString("myKillWeight = " + QString::number(myKillWeight) + "\n");
+    myAnimalReport += QString("myUsablePortionOfAnimal = " + QString::number(myUsablePortionOfAnimal) + "\n");
+    myAnimalReport += QString("myAdultWeight = " + QString::number(myAdultWeight) + "\n");
+    myAnimalReport += QString("myFemalesToMales = " + QString::number(myFemalesToMales) + "\n");
+    myAnimalReport += QString("myMeatValueMCal = " + QString::number(myMeatValueMCal) + "\n");
+    myAnimalReport += QString("mySexualMaturity = " + QString::number(mySexualMaturity) + "\n");
+    myAnimalReport += QString("myBreedingYears = " + QString::number(myBreedingYears) + "\n");
+    myAnimalReport += QString("myAnimalContributionToMeatPortion = " + QString::number(myAnimalContributionToMeatPortion) + "\n");
+    myAnimalReport += QString("myAnimalMCalTarget = " + QString::number(myAnimalMCalTarget) + "\n");
+    myAnimalReport += QString("myPotentialDairyPerOffspring = " + QString::number(myPotentialDairyPerOffspring) + "\n");
+    myAnimalReport += QString("myValuePerOffspring = " + QString::number(myValuePerOffspring) + "\n");
+    myAnimalReport += QString("myActualDairyValueOfOffspring = " + QString::number(myActualDairyValueOfOffspring) + "\n");
+    myAnimalReport += QString("myCulledMothersValue = " + QString::number(myCulledMothersValue) + "\n");
+    myAnimalReport += QString("myCulledAdultMalesValue = " + QString::number(myCulledAdultMalesValue) + "\n");
+    myAnimalReport += QString("myFinalOffspringValue = " + QString::number(myFinalOffspringValue) + "\n");
+    myAnimalReport += QString("myOffspringNeededPerYear = " + QString::number(myOffspringNeededPerYear) + "\n");
+    myAnimalReport += QString("myMCalsFromTheMeat = " + QString::number(myMCalsFromTheMeat) + "\n");
+    myAnimalReport += QString("myMCalsUtilizedFromDairy = " + QString::number(myMCalsUtilizedFromDairy) + "\n");
+    myAnimalReport += QString("myTameMeatMCalorieCounter = " + QString::number(myTameMeatMCalorieCounter) + "\n");
+    myAnimalReport += QString("myDairyMCalorieCounter = " + QString::number(myDairyMCalorieCounter) + "\n");
+    myAnimalReport += QString("\n");
+    myAnimalReport += QString("myBirthingEventsPerYear = " + QString::number(myBirthingEventsPerYear) + "\n");
+    myAnimalReport += QString("myOffspringPerMotherPerYear = " + QString::number(myOffspringPerMotherPerYear) + "\n");
+    myAnimalReport += QString("myMothersNeededStepOne = " + QString::number(myMothersNeededStepOne) + "\n");
+    myAnimalReport += QString("myMalesStepOne = " + QString::number(myMalesStepOne) + "\n");
+    myAnimalReport += QString("myFemalesStepOne = " + QString::number(myFemalesStepOne) + "\n");
+    myAnimalReport += QString("myReplacementMothersPerYear = " + QString::number(myReplacementMothersPerYear) + "\n");
+    myAnimalReport += QString("myBreedingMalesRequired = " + QString::number(myBreedingMalesRequired) + "\n");
+    myAnimalReport += QString("myAdditionalMothers = " + QString::number(myAdditionalMothers) + "\n");
+    myAnimalReport += QString("myMalesStepTwo = " + QString::number(myMalesStepTwo) + "\n");
+    myAnimalReport += QString("myFemalesStepTwo = " + QString::number(myFemalesStepTwo) + "\n");
+    myAnimalReport += QString("\n");
+    myAnimalReport += QString("myTotalMothers = " + QString::number(myTotalMothers) + "\n");
+    myAnimalReport += QString("myTotalMaleOffspring = " + QString::number(myTotalMaleOffspring) + "\n");
+    myAnimalReport += QString("myTotalFemaleOffspring = " + QString::number(myTotalFemaleOffspring) + "\n");
+    myAnimalReport += QString("myTotalOffspring = " + QString::number(myTotalOffspring) + "\n");
+    myAnimalReport += QString("myFeedForGestating = " + QString::number(myFeedForGestating) + "\n");
+    myAnimalReport += QString("myFeedForLactating = " + QString::number(myFeedForLactating) + "\n");
+    myAnimalReport += QString("myFeedForMaintenance = " + QString::number(myFeedForMaintenance) + "\n");
+    myAnimalReport += QString("myFeedForOffspringPerKg = " + QString::number(myFeedForOffspringPerKg) + "\n");
+    myAnimalReport += QString("myGestatingMCals = " + QString::number(myGestatingMCals) + "\n");
+    myAnimalReport += QString("myLactatingMCals = " + QString::number(myLactatingMCals) + "\n");
+    myAnimalReport += QString("myDaysForMaintenance = " + QString::number(myDaysForMaintenance) + "\n");
+    myAnimalReport += QString("myGestatingTime = " + QString::number(myGestatingTime) + "\n");
+    myAnimalReport += QString("myLactationTime = " + QString::number(myLactationTime) + "\n");
+    myAnimalReport += QString("myDryMothers = " + QString::number(myDryMothers) + "\n");
+    myAnimalReport += QString("myDryMothersMCals = " + QString::number(myDryMothersMCals) + "\n");
+    myAnimalReport += QString("myOtherMaintenanceMCals = " + QString::number(myOtherMaintenanceMCals) + "\n");
+    myAnimalReport += QString("myMaintenanceMCals = " + QString::number(myMaintenanceMCals) + "\n");
+    myAnimalReport += QString("myAdultMalesMCals = " + QString::number(myAdultMalesMCals) + "\n");
+    myAnimalReport += QString("myOffspringMCals = " + QString::number(myOffspringMCals) + "\n");
+
+
+
 
     
+    
+    qDebug() << myAnimal.name();
     qDebug() << "myMilkKgPerDay = " << myMilkKgPerDay;
     qDebug() << "myMilkFoodValue = " << myMilkFoodValue;
     qDebug() << "myLactationTime = " << myLactationTime;
@@ -1024,6 +1095,12 @@ LaDietLabels LaModel::doCalcsAnimalsFirstDairySeparate()  // working :-)
     qDebug() << "myAdditionalMothers = " << myAdditionalMothers;
     qDebug() << "myMalesStepTwo = " << myMalesStepTwo;
     qDebug() << "myFemalesStepTwo = " << myFemalesStepTwo;
+    qDebug() << "         ++         ++         ";
+    qDebug() << "+++++++++++++++++++++++++++++++";
+    qDebug() << "           ++  +  ++           ";
+    qDebug() << "+++++++++++++++++++++++++++++++";
+    qDebug() << "         ++         ++         ";
+    
     qDebug() << "myTotalMothers = " << myTotalMothers;
     qDebug() << "myTotalMaleOffspring = " << myTotalMaleOffspring;
     qDebug() << "myTotalFemaleOffspring = " << myTotalFemaleOffspring;
@@ -1037,16 +1114,14 @@ LaDietLabels LaModel::doCalcsAnimalsFirstDairySeparate()  // working :-)
     qDebug() << "myGestatingMCals = " << myGestatingMCals;
     qDebug() << "myLactatingMCals = " << myLactatingMCals;
     qDebug() << "myDaysForMaintenance = " << myDaysForMaintenance;
+    qDebug() << "________------~~~~ Number of days gestating: " << myGestatingTime;
+    qDebug() << "________------~~~~ Number of days lactating: " << myLactationTime;
     qDebug() << "myDryMothers = " << myDryMothers;
     qDebug() << "myDryMothersMCals = " << myDryMothersMCals;
     qDebug() << "myOtherMaintenanceMCals = " << myOtherMaintenanceMCals;
     qDebug() << "myMaintenanceMCals = " << myMaintenanceMCals;
     qDebug() << "myAdultMalesMCals = " << myAdultMalesMCals;
     qDebug() << "myOffspringMCals = "   << myOffspringMCals;
-    
-    
-    
-    
     
     // still looping through the animals here....
     
@@ -1058,12 +1133,12 @@ LaDietLabels LaModel::doCalcsAnimalsFirstDairySeparate()  // working :-)
       qDebug() << "    ----==--------------------------------------------==----";
       myNextCrop.next();
       QString myCropGuid = myNextCrop.key();
-
+      
       LaFoodSource myFoodSource = myFoodSourceMap.value(myCropGuid);
       float myGrain = myFoodSource.grain() * .001;
       float myFodder = myFoodSource.fodder() * .001;
       float myDays = myFoodSource.days();
-      float myGrainToAdd = myGrain * myDays * myOffspringNeededPerYear;
+      float myGrainToAdd = myGrain * myDays * myTotalOffspring;
       float myGrainTotal = myFoodSourceMapCounter.value(myCropGuid) + myGrainToAdd;
       qDebug() << "        myGrain = " << myGrain;
       qDebug() << "        myFodder = " << myFodder;
@@ -1072,7 +1147,8 @@ LaDietLabels LaModel::doCalcsAnimalsFirstDairySeparate()  // working :-)
       qDebug() << "  previous value of the fodder counter: " << myFoodSourceMapCounter.value(myCropGuid);
 
       myFoodSourceMapCounter.insert(myCropGuid,myGrainTotal);
-      
+      qDebug() << "  -------> next value of the fodder counter: " << myFoodSourceMapCounter.value(myCropGuid);
+
       qDebug() << "Additional MCal counter original Value: " << myAdditionalMCalCounter;
       LaCrop myCrop = LaUtils::getCrop(myCropGuid);
       float myFoodValueOfCrop = myCrop.cropCalories() * .001;
@@ -1081,13 +1157,14 @@ LaDietLabels LaModel::doCalcsAnimalsFirstDairySeparate()  // working :-)
       qDebug() << "Food Value of the Fodder: " << myFoodValueofFodder;
 
       float myGrainMCal = myGrainToAdd * myFoodValueOfCrop;
-      float myFodderMCal = myFodder * myDays * myFoodValueofFodder * myOffspringNeededPerYear;
+      float myFodderMCal = myFodder * myDays * myFoodValueofFodder * myTotalOffspring;
+      myAdditionalMCalCounter1 += myFodderMCal;
       myAdditionalMCalCounter += myGrainMCal + myFodderMCal; // ok, I wimped out here...  
       // myFodderMCal really should be checked to make sure that there is actually enough 
       // straw and chaff produced from the crop to cover the requested amount. 
       qDebug() << " myGrainMCal = " << myGrainMCal;
       qDebug() << " myFodderMCal = " << myFodderMCal;
-      qDebug() << " Crop Guid: " << myCropGuid;
+      qDebug() << " Crop Name: " << myCrop.name();
       qDebug() << " value to add grain: " << myGrainToAdd;
       qDebug() << " Value now of the fodder counter: " << myFoodSourceMapCounter.value(myCropGuid);
       qDebug() << " myFoodSourceMapCounter = " << myFoodSourceMapCounter;
@@ -1102,8 +1179,13 @@ LaDietLabels LaModel::doCalcsAnimalsFirstDairySeparate()  // working :-)
     // the next line adjusts for the grain contribution
     float myAnimalHerdMCalsRequired = myAnimalHerdMCalsRequired1 - myAdditionalMCalCounter;
     qDebug() << "  ---- AnimalHerd MCals Required *AFTER* accounting for grain feeding: " << myAnimalHerdMCalsRequired;
+    myAnimalReport += QString("myAnimalHerdMCalsRequired1 = " + QString::number(myAnimalHerdMCalsRequired1) + "\n");
+    myAnimalReport += QString("myAnimalHerdMCalsRequired = " + QString::number(myAnimalHerdMCalsRequired) + "\n");
+    myAnimalReport += QString(".........................\n");
+    myAnimalReport += QString(".        Summary        .\n");
+    myAnimalReport += QString(".........................\n");
 
-    QString myAnimalReport = QString("MCal Target = " + QString::number(myMCalsFromTheMeat) + "\n");
+    myAnimalReport += QString("MCal Target = " + QString::number(myMCalsFromTheMeat) + "\n");
     myAnimalReport += QString("Dairy Contribution = " + QString::number(myMCalsUtilizedFromDairy) + "\n");
     myAnimalReport += QString("Meat Percent = " + QString::number(myMeatPercent*100.) + "\% \n");
     myAnimalReport += QString("Dairy Percent = " + QString::number(myDairyPercent*100.) + "\% \n");
@@ -1142,7 +1224,7 @@ LaDietLabels LaModel::doCalcsAnimalsFirstDairySeparate()  // working :-)
   // --- To get the final Crops and Wild Plants percent, we need to get the overall Meat and Dairy First ---
   float myOverallMeatPercent = myWildMeatPercent + myDomesticMeatPercent; // B7
   float myOverallPlantPercent = 1. - myOverallMeatPercent - myOverallDairyPercent; // B6
-  float myOverallCropPercent = myOverallPlantPercent * myPlantPercent; // B14
+  float myOverallCropPercent = myOverallPlantPercent * myDomesticCropPortion; // B14
   float myOverallWildPlantPercent = myOverallPlantPercent * ( 1. - myPlantPercent); // B15
   float myOverallDomesticMeatMCals = myTameMeatMCalorieCounter; // B25
   float myOverallDairyMCals = myOverallDairyPercent * myMCalsSettlementAnnual; // B26
@@ -1153,7 +1235,13 @@ LaDietLabels LaModel::doCalcsAnimalsFirstDairySeparate()  // working :-)
   float myFirstDairySurplusBool = myDairyMCalorieCounter - myOverallDairyMCals;
   float myOVerallDairySurplusMCals = myFirstDairySurplusBool > 0 ? myFirstDairySurplusBool : 0;
   float myMCalsFromFallowCounter = 0.;
-  
+  //QString myCropReport = QString("myOverallPlantPercent = " + QString::number(myOverallPlantPercent) + "\n");
+  //myCropReport += QString("myDomesticCropPortion = " + QString::number(myDomesticCropPortion) + "\n");
+  //myCropReport += QString("myOverallCropPercent = " + QString::number(myOverallCropPercent) + "\n");
+  //myCropReport += QString("myOverallMeatPercent = " + QString::number(myOverallMeatPercent) + "\n");
+  //myCropReport += QString("myOverallDairyPercent = " + QString::number(myOverallDairyPercent) + "\n");
+  //myCropReport += QString("----- = " );//+ QString::number(HOLDER) + "\n");
+
   // now that we have dairy contributions calculated we can calculate targets for crops
   QMap <QString,QString> mySelectedCropsMap = mCropsMap;
   
@@ -1171,46 +1259,74 @@ LaDietLabels LaModel::doCalcsAnimalsFirstDairySeparate()  // working :-)
     LaCropParameter myCropParameter = LaUtils::getCropParameter( myCropParameterGuid );
     
     float myCropPortion = myCropParameter.percentTameCrop() * .01;
-    float myCropFoodValue = myCrop.cropCalories();
-    qDebug() << "myCropPortion= " << myCropPortion;
-    qDebug() << "myCropFoodValue= " << myCropFoodValue;
-    float myCropPercent = myCropPortion * myOverallCropPercent;
+    qDebug() << "          myCropPortion = " << myCropPortion;
+    float myCropFoodValue = myCrop.cropCalories() * .001;
+    qDebug() << "          myCropFoodValue = " <<  myCropFoodValue;
+    float myCropPercent = myCropPortion /* * myOverallPlantPercent */ * myOverallCropPercent;
+    qDebug() << "          myOverallCropPercent = " << myOverallCropPercent;
+    qDebug() << "          myCropPercent = " << myCropPercent;
     float myMCalsFromTheCrop = myCropPercent * myMCalsSettlementAnnual;
-    qDebug() << "myCropPercent= " << myCropPercent;
-    qDebug() << "myMCalsFromTheCrop= " << myMCalsFromTheCrop;
-     
-    QString myCropReport = QString("MCals People = " + QString::number(myMCalsFromTheCrop) + "\n");
-    float myKgForPeople = myMCalsFromTheCrop / (myCropFoodValue * .001);
-    myCropReport += QString("Kg for People = " + QString::number(myKgForPeople) + "\n");
-    float myAnimalMcalsAdd = myFoodSourceMapCounter.value(myCropGuid);
-    myCropReport += QString("KG for Critters = " + QString::number(myAnimalMcalsAdd) + "\n");
-    float myAdjustedTarget = myKgForPeople + myAnimalMcalsAdd; 
-    myCropReport += QString("Percent of Diet = " + QString::number(myCropPercent * 100.) + "\% \n");
-    qDebug() << "myKgForPeople= " << myKgForPeople;
-    float myCropAreaTargetPeople = myKgForPeople / myCrop.cropYield();
-    myCropReport += QString("Area Target People: " + QString::number(myCropAreaTargetPeople) + "\n");
+    float myKgForPeople = myMCalsFromTheCrop / (myCropFoodValue);
 
-    
-    qDebug() << "myAnimalsMcalsAdd= " << myAnimalMcalsAdd;
-    float myCropAreaTargetAnimals = myAnimalMcalsAdd / myCrop.cropYield();
-    myCropReport += QString("Area Target Animal: " + QString::number(myCropAreaTargetAnimals) + "\n");
-
-    
-    float myCropAreaTarget = myAdjustedTarget / myCrop.cropYield();
-    qDebug() << "my Area Target: " << myCropAreaTarget;
-    myCropReport += QString("Area Target is " + QString::number(myCropAreaTarget) + "\n");
-    QPair <QString,float> myReportAndAreaTarget;
+    float myAnimalKgAdd = myFoodSourceMapCounter.value(myCropGuid);
+    float myAdjustedTarget = myKgForPeople + myAnimalKgAdd; 
+    float myCropYield = myCrop.areaUnits() == Dunum ? myCrop.cropYield()*10. : myCrop.cropYield();
+    float myCropAreaTargetPeople = myKgForPeople / myCropYield;
+    float myCropAreaTargetAnimals = myAnimalKgAdd / myCropYield;
     
     float myRatio = myCropParameter.fallowRatio();
-    float myFallowArea = myRatio * myCropAreaTarget;
-    float myFallowMCals = myFallowArea * myCropParameter.fallowValue();
+    float myFallowValue = myCropParameter.fallowValue();
+    float myCropAreaTarget1 = myAdjustedTarget / myCropYield;
+    float myCropAreaTarget = myCropAreaTarget1 * (myRatio + 1.);
+
+    float myFallowArea = myRatio * myCropAreaTarget1;
+    float myFallowMCals = myFallowArea * myFallowValue;
+
     
     myMCalsFromFallowCounter += myFallowMCals;
-    myCropReport += QString("MCals from Fallow: " + QString::number(myFallowMCals) + "\n");
-    qDebug() << "MCals from Fallow = " << myFallowMCals;
-
-    qDebug() << "MCals total from Fallow Counter= " << myMCalsFromFallowCounter;
+        
+    QString myCropReport = QString("MCals People = " + QString::number(myMCalsFromTheCrop) + "\n");
+    myCropReport += QString("myCropPortion = " + QString::number(myCropPortion) + "\n");
+    myCropReport += QString("myCropFoodValue = " + QString::number(myCropFoodValue) + "\n");
+    myCropReport += QString("myOverallCropPercent = " + QString::number(myOverallCropPercent) + "\n");
+    myCropReport += QString("myCropPercent = " + QString::number(myCropPercent) + "\n");
+    myCropReport += QString("myMCalsFromTheCrop = " + QString::number(myMCalsFromTheCrop) + "\n");
     
+    myCropReport += QString("myAnimalKgAdd = " + QString::number(myAnimalKgAdd) + "\n");
+    myCropReport += QString("myAdjustedTarget = " + QString::number(myAdjustedTarget) + "\n");
+    myCropReport += QString("myCrop.cropYield() = " + QString::number(myCrop.cropYield()) + "\n");
+    myCropReport += QString("myCropYield = " + QString::number(myCropYield) + "\n");
+
+    myCropReport += QString("myCropAreaTargetPeople = " + QString::number(myCropAreaTargetPeople) + "\n");
+    myCropReport += QString("myCropAreaTargetAnimals = " + QString::number(myCropAreaTargetAnimals) + "\n");
+    myCropReport += QString("myCropAreaTarget = " + QString::number(myCropAreaTarget) + "\n");
+    myCropReport += QString("\n");
+
+    
+    
+    
+    myCropReport += QString("Kg for People = " + QString::number(myKgForPeople) + "\n");
+    myCropReport += QString("KG for Animals = " + QString::number(myAnimalKgAdd) + "\n");
+    myCropReport += QString("Percent of Diet = " + QString::number(myCropPercent * 100.) + "\% \n");
+    myCropReport += QString("Area Target People: " + QString::number(myCropAreaTargetPeople) + "\n");
+    myCropReport += QString("Area Target Animal: " + QString::number(myCropAreaTargetAnimals) + "\n");
+    myCropReport += QString("Area Target is " + QString::number(myCropAreaTarget) + "\n");
+    myCropReport += QString("myFallowValue =  " + QString::number(myFallowValue) + "\n");
+
+    myCropReport += QString("MCals from Fallow: " + QString::number(myFallowMCals) + "\n");
+
+    qDebug() << "______ myCropPortion= " << myCropPortion;
+    qDebug() << "______ myCropFoodValue= " << myCropFoodValue;
+    qDebug() << "______ myCropPercent= " << myCropPercent;
+    qDebug() << "______ myMCalsFromTheCrop= " << myMCalsFromTheCrop;
+    qDebug() << "______ myKgForPeople= " << myKgForPeople;
+    qDebug() << "______ myAnimalsKgAdd= " << myAnimalKgAdd;
+    qDebug() << "______ my Area Target: " << myCropAreaTarget;
+    qDebug() << "______ MCals from Fallow = " << myFallowMCals;
+    qDebug() << "______ MCals total from Fallow Counter= " << myMCalsFromFallowCounter;
+    
+    QPair <QString,float> myReportAndAreaTarget;
+
     myReportAndAreaTarget.first = myCropReport;
     myReportAndAreaTarget.second = myCropAreaTarget;
     myCropCalcsReportMap.insert(myCropGuid,myReportAndAreaTarget);

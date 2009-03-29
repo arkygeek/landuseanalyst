@@ -149,7 +149,7 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
     /** holder */
     float adjustAreaTargetsCrops();
     /** holder */
-    float doTheFallowAllocation(Priority, float, float);
+    float doTheFallowAllocation(Priority, float, float, float);
     /** holder */
     //HerdSize calculateHerdSize (QString theAnimalGuid);
     /** holder */
