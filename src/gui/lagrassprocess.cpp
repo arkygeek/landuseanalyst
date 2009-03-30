@@ -92,7 +92,8 @@ void LaGrassProcess::accept()
   tbGrass->repaint();
   toggleBusyProgressBar(true);
   int myOverallProgress = 1;
-
+  qDebug() << "\nmCropAreaTargetsMap\n" << mCropAreaTargetsMap;
+  qDebug() << "\nmAnimalAreaTargetsMap\n" << mAnimalAreaTargetsMap;
   LaMainForm myMainForm;
   QMapIterator<QString, float > myCropCounter(mCropAreaTargetsMap);
   while (myCropCounter.hasNext())

@@ -1095,6 +1095,8 @@ void LaMainForm::on_pushButtonRun_clicked()
               QString myCropGuid = myCropReportIterator.key();
               myCropsTargetsMap.insert(myCropGuid,myTarget);
             }
+            qDebug() << "\n\n\nFINAL ANIMAL AREA TARGET MAP \n" << myAnimalTargetsMap;
+            qDebug() << "\n\n\nFINAL CROPS AREA TARGET MAP \n" << myCropsTargetsMap;
           }
           else
           {
@@ -1123,6 +1125,8 @@ void LaMainForm::on_pushButtonRun_clicked()
               myCropsTargetsMap.insert(myCropGuid,myTarget);
             }
           }
+          qDebug() << "\n\n\nFINAL ANIMAL AREA TARGET MAP \n" << myAnimalTargetsMap;
+          qDebug() << "\n\n\nFINAL CROPS AREA TARGET MAP \n" << myCropsTargetsMap;
         }
         else
         {
@@ -1152,6 +1156,8 @@ void LaMainForm::on_pushButtonRun_clicked()
               QString myCropGuid = myCropReportIterator.key();
               myCropsTargetsMap.insert(myCropGuid,myTarget);
             }
+            qDebug() << "\n\n\nFINAL ANIMAL AREA TARGET MAP \n" << myAnimalTargetsMap;
+            qDebug() << "\n\n\nFINAL CROPS AREA TARGET MAP \n" << myCropsTargetsMap;
           }
           else
           {
@@ -1179,6 +1185,8 @@ void LaMainForm::on_pushButtonRun_clicked()
               QString myCropGuid = myCropReportIterator.key();
               myCropsTargetsMap.insert(myCropGuid,myTarget);
             }
+            qDebug() << "\n\n\nFINAL ANIMAL AREA TARGET MAP \n" << myAnimalTargetsMap;
+            qDebug() << "\n\n\nFINAL CROPS AREA TARGET MAP \n" << myCropsTargetsMap;
           }
         }
       }
