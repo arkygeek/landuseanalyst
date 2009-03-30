@@ -1056,8 +1056,8 @@ void LaMainForm::on_pushButtonRun_clicked()
   
   tbReport->setHtml(myModel.toHtml());
     progressBarCalcs->setValue(2);
-  QMap<QString, float> myAnimalTargetsMap;
-  QMap<QString, float> myCropsTargetsMap;
+  QMap<QString, int> myAnimalTargetsMap;
+  QMap<QString, int> myCropsTargetsMap;
 
 
   if ( labelCropCheck->text() != "100\%"
@@ -1081,7 +1081,7 @@ void LaMainForm::on_pushButtonRun_clicked()
             {
               myAnimalReportIterator.next();
               QPair<QString, float> myPair = myAnimalReportIterator.value();
-              float myTarget = myPair.second;
+              int myTarget = static_cast<int>(myPair.second);
               QString myAnimalGuid = myAnimalReportIterator.key();
               myAnimalTargetsMap.insert(myAnimalGuid,myTarget);
             }
@@ -1091,7 +1091,7 @@ void LaMainForm::on_pushButtonRun_clicked()
             {
               myCropReportIterator.next();
               QPair<QString, float> myPair = myCropReportIterator.value();
-              float myTarget = myPair.second;
+              int myTarget = static_cast<int>(myPair.second);
               QString myCropGuid = myCropReportIterator.key();
               myCropsTargetsMap.insert(myCropGuid,myTarget);
             }
@@ -1110,7 +1110,7 @@ void LaMainForm::on_pushButtonRun_clicked()
             {
               myAnimalReportIterator.next();
               QPair<QString, float> myPair = myAnimalReportIterator.value();
-              float myTarget = myPair.second;
+              int myTarget = static_cast<int>(myPair.second);
               QString myAnimalGuid = myAnimalReportIterator.key();
               myAnimalTargetsMap.insert(myAnimalGuid,myTarget);
             }
@@ -1120,7 +1120,7 @@ void LaMainForm::on_pushButtonRun_clicked()
             {
               myCropReportIterator.next();
               QPair<QString, float> myPair = myCropReportIterator.value();
-              float myTarget = myPair.second;
+              int myTarget = static_cast<int>(myPair.second);
               QString myCropGuid = myCropReportIterator.key();
               myCropsTargetsMap.insert(myCropGuid,myTarget);
             }
@@ -1142,7 +1142,7 @@ void LaMainForm::on_pushButtonRun_clicked()
             {
               myAnimalReportIterator.next();
               QPair<QString, float> myPair = myAnimalReportIterator.value();
-              float myTarget = myPair.second;
+              int myTarget = static_cast<int>(myPair.second);
               QString myAnimalGuid = myAnimalReportIterator.key();
               myAnimalTargetsMap.insert(myAnimalGuid,myTarget);
             }
@@ -1152,7 +1152,7 @@ void LaMainForm::on_pushButtonRun_clicked()
             {
               myCropReportIterator.next();
               QPair<QString, float> myPair = myCropReportIterator.value();
-              float myTarget = myPair.second;
+              int myTarget = static_cast<int>(myPair.second);
               QString myCropGuid = myCropReportIterator.key();
               myCropsTargetsMap.insert(myCropGuid,myTarget);
             }
@@ -1171,7 +1171,7 @@ void LaMainForm::on_pushButtonRun_clicked()
             {
               myAnimalReportIterator.next();
               QPair<QString, float> myPair = myAnimalReportIterator.value();
-              float myTarget = myPair.second;
+              int myTarget = static_cast<int>(myPair.second);
               QString myAnimalGuid = myAnimalReportIterator.key();
               myAnimalTargetsMap.insert(myAnimalGuid,myTarget);
             }
@@ -1181,7 +1181,7 @@ void LaMainForm::on_pushButtonRun_clicked()
             {
               myCropReportIterator.next();
               QPair<QString, float> myPair = myCropReportIterator.value();
-              float myTarget = myPair.second;
+              int myTarget = static_cast<int>(myPair.second);
               QString myCropGuid = myCropReportIterator.key();
               myCropsTargetsMap.insert(myCropGuid,myTarget);
             }
@@ -1190,7 +1190,38 @@ void LaMainForm::on_pushButtonRun_clicked()
           }
         }
       }
-
+  
+  	  int myCommonCropLand = 0;		
+  	  QMapIterator<QString, int > myCrop2Iterator(myCropsTargetsMap);		
+  	  while (myCrop2Iterator.hasNext())		
+    	  {		
+      	    myCrop2Iterator.next();		
+      	    QString myCropGuid = myCrop2Iterator.key();		
+      	    int myAreaTarget = myCrop2Iterator.value();		
+      	    QString myCropParameterGuid = mSelectedCropsMap.value(myCropGuid);		
+      	    LaCropParameter myCropParameter = LaUtils::getCropParameter(myCropParameterGuid);		
+      			myCommonCropLand = (myCropParameter.useCommonLand() == true) ? myCommonCropLand + myAreaTarget : myCommonCropLand;		
+    	  }		
+  	  myCropsTargetsMap.insert("CommonTarget",myCommonCropLand);  
+  
+  int myCommonGrazingLand = 0;		
+  QMapIterator<QString, int > myAnimal2Iterator(myAnimalTargetsMap);		
+  while (myAnimal2Iterator.hasNext())		
+  {		
+    myAnimal2Iterator.next();		
+    QString myAnimalGuid = myAnimal2Iterator.key();		
+    int myAreaTarget = myAnimal2Iterator.value();		
+    QString myAnimalParameterGuid = mSelectedAnimalsMap.value(myAnimalGuid);		
+    LaAnimalParameter myAnimalParameter = LaUtils::getAnimalParameter(myAnimalParameterGuid);		
+    myCommonGrazingLand = (myAnimalParameter.useCommonGrazingLand() == true) ? myCommonGrazingLand + myAreaTarget : myCommonGrazingLand;		
+  }		
+  myAnimalTargetsMap.insert("CommonTarget",myCommonGrazingLand);    
+  
+  
+  
+  
+  
+  
   progressBarCalcs->setValue(3);
   tbReport->append(myModel.toHtmlCalorieCropTargets());
   progressBarCalcs->setValue(4);
@@ -1221,13 +1252,13 @@ void LaMainForm::on_pushButtonRun_clicked()
   myRasterInfo.first = myDEMandMapset;
   myRasterInfo.second = myCropAndGrazingRasters;
 
-  QPair <float, float> myCoordinates;
+  QPair <int, int> myCoordinates;
     QString myEasting = lineEditEasting->text();
     QString myNorthing = lineEditNorthing->text();
     myCoordinates.first = myEasting.toInt();
     myCoordinates.second = myNorthing.toInt();
 
-  QPair<QMap<QString, float>, QMap<QString, float> > myPairOfAreaTargetMaps;
+  QPair<QMap<QString, int>, QMap<QString, int> > myPairOfAreaTargetMaps;
     myPairOfAreaTargetMaps.first=myAnimalTargetsMap;
     myPairOfAreaTargetMaps.second=myCropsTargetsMap;
 

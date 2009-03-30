@@ -34,7 +34,7 @@
 #include <QSettings>
 #include <QtDebug>
 
-  LaGrassProcess::LaGrassProcess(LaRasterInfo theRasterInfo, QPair<float, float> theCoordinates, QPair<QMap<QString, float>, QMap<QString, float> > & thePairOfAreaTargetMaps, QWidget* parent, Qt::WFlags fl)
+  LaGrassProcess::LaGrassProcess(LaRasterInfo theRasterInfo, QPair<int, int> theCoordinates, QPair<QMap<QString, int>, QMap<QString, int> > & thePairOfAreaTargetMaps, QWidget* parent, Qt::WFlags fl)
 : QDialog(parent,fl)
 {
     //required by Qt4 to initialise the ui
@@ -95,7 +95,7 @@ void LaGrassProcess::accept()
   qDebug() << "\nmCropAreaTargetsMap\n" << mCropAreaTargetsMap;
   qDebug() << "\nmAnimalAreaTargetsMap\n" << mAnimalAreaTargetsMap;
   LaMainForm myMainForm;
-  QMapIterator<QString, float > myCropCounter(mCropAreaTargetsMap);
+  QMapIterator<QString, int > myCropCounter(mCropAreaTargetsMap);
   while (myCropCounter.hasNext())
   {
     myCropCounter.next();
@@ -114,7 +114,7 @@ void LaGrassProcess::accept()
       }
     }
   }
-  QMapIterator<QString, float > myAnimalCounter(mAnimalAreaTargetsMap);
+  QMapIterator<QString, int > myAnimalCounter(mAnimalAreaTargetsMap);
   while (myAnimalCounter.hasNext())
   {
     myAnimalCounter.next();
@@ -137,7 +137,7 @@ void LaGrassProcess::accept()
 
   int myNumberOfSearches = mCropAreaTargetsMap.size() + mAnimalAreaTargetsMap.size();
   setPbarOverallRange(myNumberOfSearches);
-
+  qDebug() << "Number of Searches: " << myNumberOfSearches;
     // create cost surface maps
 
   LaGrass myGrass;
@@ -147,8 +147,9 @@ void LaGrassProcess::accept()
 
   tbGrass->append("Cost Surface Generation complete.");
   tbGrass->repaint();
-
-  QMapIterator<QString, float > myCropIterator(mCropAreaTargetsMap);
+  qDebug() << "\nCropAreaTargetsMap is: \n" << mCropAreaTargetsMap;
+  
+  QMapIterator<QString, int > myCropIterator(mCropAreaTargetsMap);
   while (myCropIterator.hasNext())
   {
     myCropIterator.next();
@@ -201,7 +202,7 @@ void LaGrassProcess::accept()
     }
   }
 
-  QMapIterator<QString, float > myAnimalIterator(mAnimalAreaTargetsMap);
+  QMapIterator<QString, int > myAnimalIterator(mAnimalAreaTargetsMap);
   while (myAnimalIterator.hasNext())
   {
     myAnimalIterator.next();
@@ -318,7 +319,7 @@ float LaGrassProcess::analyseModel(QString theItemName, QString theRasterMask, i
 {
   LaGrass myGrass;
    float myFirst = 0;
-   float myLast=120000;
+   float myLast=100000;
    int myAreaTarget = theAreaTarget;
    float myCurrentlyContainedArea = 0.0;
    int myPrecision = 5;   // change this to real value

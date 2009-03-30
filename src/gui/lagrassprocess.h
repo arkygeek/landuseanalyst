@@ -37,7 +37,7 @@ class LaGrassProcess : public QDialog, private Ui::LaGrassProcessBase
 {
   Q_OBJECT
   public:
-    LaGrassProcess(LaRasterInfo theRasterInfo, QPair<float, float> theCoordinates, QPair<QMap<QString, float>, QMap<QString, float> > & thePairOfAreaTargetMaps, QWidget* parent = 0, Qt::WFlags fl = 0 );
+    LaGrassProcess(LaRasterInfo theRasterInfo, QPair<int, int> theCoordinates, QPair<QMap<QString, int>, QMap<QString, int> > & thePairOfAreaTargetMaps, QWidget* parent = 0, Qt::WFlags fl = 0 );
     ~LaGrassProcess();
 
 
@@ -68,9 +68,9 @@ class LaGrassProcess : public QDialog, private Ui::LaGrassProcessBase
       int mCurrentAreaTarget;
       int mSearches;
 
-      QMap <QString, float> mCropAreaTargetsMap;
-      QMap <QString, float> mAnimalAreaTargetsMap;
-      QPair <float, float> mCoordinates;
+      QMap <QString, int> mCropAreaTargetsMap;
+      QMap <QString, int> mAnimalAreaTargetsMap;
+      QPair <int, int> mCoordinates;
       QString mDEM;
       QString mCommonGrazingRaster;
       QString mCommonCropRaster;
