@@ -44,6 +44,8 @@ LaCropParameter::LaCropParameter(const LaCropParameter& theCropParameter)
   setGuid(theCropParameter.guid());
   setCropGuid(theCropParameter.cropGuid());
   mPercentTameCrop=theCropParameter.percentTameCrop();
+  mSpoilage=theCropParameter.spoilage();
+  mReseed=theCropParameter.reseed();
   mCropRotation = theCropParameter.cropRotation();
   mFallowRatio = theCropParameter.fallowRatio();
   mFallowValue = theCropParameter.fallowValue();
@@ -62,6 +64,8 @@ LaCropParameter& LaCropParameter::operator=(const LaCropParameter& theCropParame
   setGuid(theCropParameter.guid());
   setCropGuid(theCropParameter.cropGuid());
   mPercentTameCrop=theCropParameter.percentTameCrop();
+  mSpoilage=theCropParameter.spoilage();
+  mReseed=theCropParameter.reseed();
   mCropRotation = theCropParameter.cropRotation();
   mFallowRatio = theCropParameter.fallowRatio();
   mFallowValue = theCropParameter.fallowValue();
@@ -90,6 +94,14 @@ QString LaCropParameter::cropGuid() const
 float LaCropParameter::percentTameCrop() const
 {
   return mPercentTameCrop;
+}
+float LaCropParameter::spoilage() const
+{
+  return mSpoilage;
+}
+float LaCropParameter::reseed() const
+{
+  return mReseed;
 }
 bool LaCropParameter::cropRotation() const
 {
@@ -137,6 +149,14 @@ void LaCropParameter::setCropGuid(QString theGuid)
 void LaCropParameter::setPercentTameCrop(float thePercentage)
 {
   mPercentTameCrop=thePercentage;
+}
+void LaCropParameter::setSpoilage(float thePercentage)
+{
+  mSpoilage=thePercentage;
+}
+void LaCropParameter::setReseed(float thePercentage)
+{
+  mReseed=thePercentage;
 }
 void LaCropParameter::setCropRotation(bool theFlag)
 {
@@ -186,6 +206,8 @@ bool LaCropParameter::fromXml(QString theXml)
   mDescription=LaUtils::xmlDecode(myTopElement.firstChildElement("description").text());
   mCropGuid=LaUtils::xmlDecode(myTopElement.firstChildElement("crop").text());
   mPercentTameCrop=QString(myTopElement.firstChildElement("percentTameCrop").text()).toFloat();
+  mSpoilage=QString(myTopElement.firstChildElement("spoilage").text()).toFloat();
+  mReseed=QString(myTopElement.firstChildElement("reseed").text()).toFloat();
   mCropRotation=QString(myTopElement.firstChildElement("cropRotation").text()).toInt();
   mFallowRatio=QString(myTopElement.firstChildElement("fallowRatio").text()).toFloat();
   mFallowValue=QString(myTopElement.firstChildElement("fallowValue").text()).toInt();
@@ -215,6 +237,8 @@ QString LaCropParameter::toXml()
   myString+=QString("  <description>" + LaUtils::xmlEncode(mDescription) + "</description>\n");
   myString+=QString("  <crop>" + LaUtils::xmlEncode(mCropGuid) + "</crop>\n");
   myString+=QString("  <percentTameCrop>" + QString::number(mPercentTameCrop) + "</percentTameCrop>\n");
+  myString+=QString("  <spoilage>" + QString::number(mSpoilage) + "</spoilage>\n");
+  myString+=QString("  <reseed>" + QString::number(mReseed) + "</reseed>\n");
   myString+=QString("  <cropRotation>" + QString::number(mCropRotation) + "</cropRotation>\n");
   myString+=QString("  <fallowRatio>" + QString::number(mFallowRatio) + "</fallowRatio>\n");
   myString+=QString("  <fallowValue>" + QString::number(mFallowValue) + "</fallowValue>\n");
@@ -234,6 +258,8 @@ QString LaCropParameter::toText()
   myString+=QString("description=>" + LaUtils::xmlEncode(mDescription) + "\n");
   myString+=QString("crop=>" + mCropGuid + "\n");
   myString+=QString("percentTameCrop=>" + QString::number(mPercentTameCrop) + "\n");
+  myString+=QString("spoilage=>" + QString::number(mSpoilage) + "\n");
+  myString+=QString("reseed=>" + QString::number(mReseed) + "\n");
   QString myCropRotation = (mCropRotation==0) ? "None" : "Used";
   myString+=QString("cropRotation=>" + myCropRotation + "\n");
   myString+=QString("fallowRatio=>" + QString::number(mFallowRatio) + "\n");
@@ -261,6 +287,8 @@ QString LaCropParameter::toHtml()
   myString+="<tr><td><b>Description: </b></td><td>" + mDescription + "</td></tr>";
   myString+="<tr><td><b>Raster Mask: </b></td><td>" + mRasterName + "</td></tr>";
   myString+="<tr><td><b>Percent Tame Crop Diet: </b></td><td>" + QString::number(mPercentTameCrop) + "</td></tr>";
+  myString+="<tr><td><b>Percent of Spoilage: </b></td><td>" + QString::number(mSpoilage) + "</td></tr>";
+  myString+="<tr><td><b>Percent for reseeding: </b></td><td>" + QString::number(mReseed) + "</td></tr>";
   myString+="<tr><td><b>cropRotation: </b></td><td>" + myCropRotation + "</td></tr>";
   myString+="<tr><td><b>fallowRatio: </b></th><td>" + QString::number(mFallowRatio) + "</td></tr>";
   myString+="<tr><td><b>Fallow Value kg/" + myUnits + ": </b></td><td>" + QString::number(mFallowValue) + "</td></tr>";

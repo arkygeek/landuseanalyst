@@ -229,6 +229,8 @@ void LaCropParameterManager::showCropParameter()
   leDescription->setText(mCropParameter.description());
   setComboToDefault(cboCrop, mCropParameter.cropGuid());
   sbPercentTameCrop->setValue(mCropParameter.percentTameCrop());
+  sbSpoilage->setValue(mCropParameter.spoilage());
+  sbReseed->setValue(mCropParameter.reseed());
   grpCropRotation->setChecked(mCropParameter.cropRotation());
   sbFallowRatio->setValue(mCropParameter.fallowRatio());
   sbFallowValue->setValue(mCropParameter.fallowValue());
@@ -309,6 +311,8 @@ void LaCropParameterManager::on_pbnApply_clicked()
   mCropParameter.setDescription(leDescription->text());
   mCropParameter.setCropGuid(cboCrop->itemData(cboCrop->currentIndex(),Qt::UserRole).toString());
   mCropParameter.setPercentTameCrop(sbPercentTameCrop->value());
+  mCropParameter.setSpoilage(sbSpoilage->value());
+  mCropParameter.setReseed(sbReseed->value());
   mCropParameter.setCropRotation(grpCropRotation->isChecked());
   mCropParameter.setFallowRatio(sbFallowRatio->value());
   mCropParameter.setFallowValue(sbFallowValue->value());

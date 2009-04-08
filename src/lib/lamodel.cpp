@@ -525,7 +525,7 @@ float LaModel::doTheFallowAllocation (Priority thePriority,
               qDebug() << "        myCurrentAnimalsValue: " << myCurrentAnimalsValue;
               if (myAnimalParameter.fallowUsage()==thePriority)
               {
-                double myAllottedValue = /*(myCurrentAnimalsValue / static_cast<float>(theValueNeeded)) */ theAvailableFallowValue/theNumberOfAnimals;
+                double myAllottedValue = (myCurrentAnimalsValue / theValueNeeded) * theAvailableFallowValue;//theNumberOfAnimals;
                 logMessage("Adjusting calories required by: " + myAnimal.name());
                 qDebug() << "myAllottedValue: " << myAllottedValue;
                 logMessage("Allotted Value from fallow are: " + QString::number(myAllottedValue));
@@ -1266,10 +1266,24 @@ LaDietLabels LaModel::doCalcsAnimalsFirstDairySeparate()  // working :-)
     qDebug() << "          myOverallCropPercent = " << myOverallCropPercent;
     qDebug() << "          myCropPercent = " << myCropPercent;
     float myMCalsFromTheCrop = myCropPercent * myMCalsSettlementAnnual;
-    float myKgForPeople = myMCalsFromTheCrop / (myCropFoodValue);
-
-    float myAnimalKgAdd = myFoodSourceMapCounter.value(myCropGuid);
-    float myAdjustedTarget = myKgForPeople + myAnimalKgAdd; 
+    
+    float myKgForPeople1 = myMCalsFromTheCrop / (myCropFoodValue);
+    float myAnimalKgAdd1 = myFoodSourceMapCounter.value(myCropGuid);
+    
+    // adjust for spoilage and reseeding here
+    float mySpoilagePercent = myCropParameter.spoilage() * .01;
+    float myReseedPercent = myCropParameter.reseed() * .01;  
+    
+    float myKgForPeopleReseed = (myKgForPeople1 * myReseedPercent);
+    float myKgForPeopleSpoilage = (myKgForPeople1 * mySpoilagePercent);
+    float myKgForPeople = myKgForPeopleReseed + myKgForPeopleSpoilage + myKgForPeople1;
+    
+    float myAnimalKgAddReseed = (myAnimalKgAdd1 * myReseedPercent);
+    float myAnimalKgAddSpoilage = (myAnimalKgAdd1 * mySpoilagePercent);
+    float myAnimalKgAdd = myAnimalKgAddReseed + myAnimalKgAddSpoilage + myAnimalKgAdd1;
+    
+    float myAdjustedTarget = myKgForPeople + myAnimalKgAdd;
+  
     float myCropYield = myCrop.areaUnits() == Dunum ? myCrop.cropYield()*10. : myCrop.cropYield();
     float myCropAreaTargetPeople = myKgForPeople / myCropYield;
     float myCropAreaTargetAnimals = myAnimalKgAdd / myCropYield;
@@ -1297,8 +1311,18 @@ LaDietLabels LaModel::doCalcsAnimalsFirstDairySeparate()  // working :-)
     myCropReport += QString("myCrop.cropYield() = " + QString::number(myCrop.cropYield()) + "\n");
     myCropReport += QString("myCropYield = " + QString::number(myCropYield) + "\n");
 
-    myCropReport += QString("myCropAreaTargetPeople = " + QString::number(myCropAreaTargetPeople) + "\n");
-    myCropReport += QString("myCropAreaTargetAnimals = " + QString::number(myCropAreaTargetAnimals) + "\n");
+    myCropReport += QString("Crop Production People before adjusting= " + QString::number(myKgForPeople1) + "\n");
+    myCropReport += QString("Extra Kg to account for spoilage= " + QString::number(myKgForPeopleSpoilage) + "\n");
+    myCropReport += QString("Extra Kg to account for reseeding= " + QString::number(myKgForPeopleReseed) + "\n");
+    myCropReport += QString("Crop Production People after adjusting= " + QString::number(myKgForPeople) + "\n");
+    myCropReport += QString("Crop Production Animal before adjusting= " + QString::number(myAnimalKgAdd1) + "\n");
+    myCropReport += QString("Extra Kg to account for spoilage= " + QString::number(myAnimalKgAddSpoilage) + "\n");
+    myCropReport += QString("Extra Kg to account for reseeding= " + QString::number(myAnimalKgAddReseed) + "\n");
+    myCropReport += QString("Crop Production Animal after adjusting= " + QString::number(myAnimalKgAdd) + "\n");
+    
+    myCropReport += QString("myCropAreaTarget People = " + QString::number(myCropAreaTargetPeople) + "\n");
+    myCropReport += QString("myCropAreaTarget Animals= " + QString::number(myCropAreaTargetAnimals) + "\n");
+
     myCropReport += QString("myCropAreaTarget = " + QString::number(myCropAreaTarget) + "\n");
     myCropReport += QString("\n");
 
