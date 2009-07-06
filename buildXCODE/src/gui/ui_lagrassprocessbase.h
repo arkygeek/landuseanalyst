@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading ui file 'lagrassprocessbase.ui'
 **
-** Created: Mon Mar 16 19:50:21 2009
+** Created: Thu Apr 9 10:03:09 2009
 **      by: Qt User Interface Compiler version 4.4.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling ui file!
@@ -49,25 +49,24 @@ public:
     QGroupBox *groupBox_2;
     QGridLayout *gridLayout4;
     QTextBrowser *tbGrass;
-    QGridLayout *gridLayout5;
+    QSpacerItem *spacerItem;
     QLabel *label_2;
     QComboBox *cbPeriod;
     QComboBox *cbPopulation;
     QComboBox *cbDietRatio;
+    QComboBox *cbDairy;
+    QComboBox *cbAnimalsFed;
     QLabel *label_3;
     QLineEdit *leOtherText;
-    QSpacerItem *spacerItem;
-    QSpacerItem *spacerItem1;
     QDialogButtonBox *buttonBox;
 
     void setupUi(QDialog *LaGrassProcessBase)
     {
     if (LaGrassProcessBase->objectName().isEmpty())
         LaGrassProcessBase->setObjectName(QString::fromUtf8("LaGrassProcessBase"));
-    LaGrassProcessBase->resize(594, 696);
+    LaGrassProcessBase->resize(593, 763);
     LaGrassProcessBase->setMinimumSize(QSize(0, 400));
-    QIcon icon;
-    icon.addPixmap(QPixmap(QString::fromUtf8(":/la_icon_small.png")), QIcon::Normal, QIcon::Off);
+    const QIcon icon = QIcon(QString::fromUtf8(":/la_icon_small.png"));
     LaGrassProcessBase->setWindowIcon(icon);
     gridLayout = new QGridLayout(LaGrassProcessBase);
     gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
@@ -92,7 +91,7 @@ public:
     gridLayout1->addWidget(lblPreview, 0, 0, 1, 1);
 
 
-    gridLayout->addWidget(grpPreview, 0, 0, 2, 1);
+    gridLayout->addWidget(grpPreview, 0, 0, 3, 4);
 
     grpCurrentTarget = new QGroupBox(LaGrassProcessBase);
     grpCurrentTarget->setObjectName(QString::fromUtf8("grpCurrentTarget"));
@@ -121,7 +120,7 @@ public:
     gridLayout2->addWidget(lblCurrentArea, 1, 0, 1, 1);
 
 
-    gridLayout->addWidget(grpCurrentTarget, 0, 1, 1, 2);
+    gridLayout->addWidget(grpCurrentTarget, 0, 4, 1, 2);
 
     grpProgress = new QGroupBox(LaGrassProcessBase);
     grpProgress->setObjectName(QString::fromUtf8("grpProgress"));
@@ -190,7 +189,7 @@ public:
     gridLayout3->addWidget(pbarOverall, 5, 0, 1, 1);
 
 
-    gridLayout->addWidget(grpProgress, 1, 1, 1, 2);
+    gridLayout->addWidget(grpProgress, 1, 4, 1, 2);
 
     groupBox_2 = new QGroupBox(LaGrassProcessBase);
     groupBox_2->setObjectName(QString::fromUtf8("groupBox_2"));
@@ -209,56 +208,57 @@ public:
     gridLayout4->addWidget(tbGrass, 0, 0, 1, 1);
 
 
-    gridLayout->addWidget(groupBox_2, 2, 0, 1, 3);
+    gridLayout->addWidget(groupBox_2, 3, 0, 1, 6);
 
-    gridLayout5 = new QGridLayout();
-    gridLayout5->setObjectName(QString::fromUtf8("gridLayout5"));
+    spacerItem = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+    gridLayout->addItem(spacerItem, 4, 5, 1, 1);
+
     label_2 = new QLabel(LaGrassProcessBase);
     label_2->setObjectName(QString::fromUtf8("label_2"));
 
-    gridLayout5->addWidget(label_2, 0, 0, 1, 4);
+    gridLayout->addWidget(label_2, 5, 0, 1, 6);
 
     cbPeriod = new QComboBox(LaGrassProcessBase);
     cbPeriod->setObjectName(QString::fromUtf8("cbPeriod"));
 
-    gridLayout5->addWidget(cbPeriod, 1, 0, 1, 1);
+    gridLayout->addWidget(cbPeriod, 6, 0, 1, 1);
 
     cbPopulation = new QComboBox(LaGrassProcessBase);
     cbPopulation->setObjectName(QString::fromUtf8("cbPopulation"));
 
-    gridLayout5->addWidget(cbPopulation, 1, 1, 1, 2);
+    gridLayout->addWidget(cbPopulation, 6, 1, 1, 1);
 
     cbDietRatio = new QComboBox(LaGrassProcessBase);
     cbDietRatio->setObjectName(QString::fromUtf8("cbDietRatio"));
 
-    gridLayout5->addWidget(cbDietRatio, 1, 3, 1, 1);
+    gridLayout->addWidget(cbDietRatio, 6, 2, 1, 1);
+
+    cbDairy = new QComboBox(LaGrassProcessBase);
+    cbDairy->setObjectName(QString::fromUtf8("cbDairy"));
+
+    gridLayout->addWidget(cbDairy, 6, 3, 1, 2);
+
+    cbAnimalsFed = new QComboBox(LaGrassProcessBase);
+    cbAnimalsFed->setObjectName(QString::fromUtf8("cbAnimalsFed"));
+
+    gridLayout->addWidget(cbAnimalsFed, 6, 5, 1, 1);
 
     label_3 = new QLabel(LaGrassProcessBase);
     label_3->setObjectName(QString::fromUtf8("label_3"));
 
-    gridLayout5->addWidget(label_3, 2, 0, 1, 2);
+    gridLayout->addWidget(label_3, 7, 0, 1, 2);
 
     leOtherText = new QLineEdit(LaGrassProcessBase);
     leOtherText->setObjectName(QString::fromUtf8("leOtherText"));
 
-    gridLayout5->addWidget(leOtherText, 2, 2, 1, 2);
-
-
-    gridLayout->addLayout(gridLayout5, 3, 0, 2, 1);
-
-    spacerItem = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-    gridLayout->addItem(spacerItem, 3, 2, 1, 1);
-
-    spacerItem1 = new QSpacerItem(24, 41, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-    gridLayout->addItem(spacerItem1, 4, 1, 1, 1);
+    gridLayout->addWidget(leOtherText, 7, 2, 1, 3);
 
     buttonBox = new QDialogButtonBox(LaGrassProcessBase);
     buttonBox->setObjectName(QString::fromUtf8("buttonBox"));
-    buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
+    buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::NoButton|QDialogButtonBox::Ok);
 
-    gridLayout->addWidget(buttonBox, 4, 2, 1, 1);
+    gridLayout->addWidget(buttonBox, 7, 5, 1, 1);
 
 
     retranslateUi(LaGrassProcessBase);
@@ -272,7 +272,7 @@ public:
     {
     LaGrassProcessBase->setWindowTitle(QApplication::translate("LaGrassProcessBase", "Grass Processing", 0, QApplication::UnicodeUTF8));
     grpPreview->setTitle(QApplication::translate("LaGrassProcessBase", "Preview", 0, QApplication::UnicodeUTF8));
-    lblPreview->setText(QApplication::translate("LaGrassProcessBase", "No Preview Currently Available", 0, QApplication::UnicodeUTF8));
+    lblPreview->setText(QApplication::translate("LaGrassProcessBase", "Preview feature not available in Beta Version", 0, QApplication::UnicodeUTF8));
     grpCurrentTarget->setTitle(QApplication::translate("LaGrassProcessBase", "Current Target", 0, QApplication::UnicodeUTF8));
     lblGraphic->setText(QApplication::translate("LaGrassProcessBase", "No Graphic", 0, QApplication::UnicodeUTF8));
     lblCurrentArea->setText(QApplication::translate("LaGrassProcessBase", "123456", 0, QApplication::UnicodeUTF8));
@@ -308,9 +308,20 @@ public:
     );
     cbDietRatio->clear();
     cbDietRatio->insertItems(0, QStringList()
-     << QApplication::translate("LaGrassProcessBase", "70:30", 0, QApplication::UnicodeUTF8)
-     << QApplication::translate("LaGrassProcessBase", "80:20", 0, QApplication::UnicodeUTF8)
-     << QApplication::translate("LaGrassProcessBase", "90:10", 0, QApplication::UnicodeUTF8)
+     << QApplication::translate("LaGrassProcessBase", "Meat 10%", 0, QApplication::UnicodeUTF8)
+     << QApplication::translate("LaGrassProcessBase", "Meat 20%", 0, QApplication::UnicodeUTF8)
+     << QApplication::translate("LaGrassProcessBase", "Meat 30%", 0, QApplication::UnicodeUTF8)
+    );
+    cbDairy->clear();
+    cbDairy->insertItems(0, QStringList()
+     << QApplication::translate("LaGrassProcessBase", "Dairy 100%", 0, QApplication::UnicodeUTF8)
+     << QApplication::translate("LaGrassProcessBase", "Dairy 50%", 0, QApplication::UnicodeUTF8)
+     << QApplication::translate("LaGrassProcessBase", "No Dairy", 0, QApplication::UnicodeUTF8)
+    );
+    cbAnimalsFed->clear();
+    cbAnimalsFed->insertItems(0, QStringList()
+     << QApplication::translate("LaGrassProcessBase", "Animals Fed", 0, QApplication::UnicodeUTF8)
+     << QApplication::translate("LaGrassProcessBase", "Animals Not Fed", 0, QApplication::UnicodeUTF8)
     );
     label_3->setText(QApplication::translate("LaGrassProcessBase", "Other text to include in filename:", 0, QApplication::UnicodeUTF8));
     Q_UNUSED(LaGrassProcessBase);

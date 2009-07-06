@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading ui file 'lamainformbase.ui'
 **
-** Created: Mon Mar 16 19:50:20 2009
+** Created: Wed Mar 25 15:53:07 2009
 **      by: Qt User Interface Compiler version 4.4.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling ui file!
@@ -44,10 +44,10 @@ QT_BEGIN_NAMESPACE
 class Ui_LaMainFormBase
 {
 public:
-    QGridLayout *gridLayout_3;
-    QSpacerItem *spacer;
+    QGridLayout *gridLayout;
     QSpacerItem *spacerItem;
-    QSpacerItem *spacer_2;
+    QSpacerItem *spacerItem1;
+    QSpacerItem *spacerItem2;
     QLabel *label_5;
     QLabel *labelAnimalCheck;
     QLabel *label_3;
@@ -60,13 +60,13 @@ public:
     QProgressBar *progressBarCalcs;
     QTabWidget *MainTabs;
     QWidget *main_tab;
-    QGridLayout *gridLayout;
-    QFrame *frame_2;
     QGridLayout *gridLayout1;
+    QFrame *frame_2;
+    QGridLayout *gridLayout2;
     QLabel *label_17;
     QLabel *lblVersion;
     QGroupBox *groupBoxManualSiteEntry;
-    QGridLayout *gridLayout2;
+    QGridLayout *gridLayout3;
     QLineEdit *lineEditSiteName;
     QSpinBox *sbPopulation;
     QLineEdit *lineEditPeriod;
@@ -80,7 +80,7 @@ public:
     QLabel *label_22;
     QLineEdit *lineEditNorthing;
     QGroupBox *model_method_box;
-    QGridLayout *gridLayout3;
+    QGridLayout *gridLayout4;
     QHBoxLayout *hboxLayout2;
     QLabel *label_2;
     QSpinBox *sbModelPrecision;
@@ -88,114 +88,114 @@ public:
     QRadioButton *radioButtonWalkingTime;
     QRadioButton *radioButtonEuclidean;
     QGroupBox *gbxGrass;
-    QGridLayout *gridLayout4;
+    QGridLayout *gridLayout5;
     QLabel *lblGrass;
     QLabel *label_29;
     QComboBox *cboMapSet;
     QLabel *label_24;
     QComboBox *cboDEM;
-    QSpacerItem *spacerItem1;
+    QSpacerItem *spacerItem3;
     QWidget *diet_tab;
-    QGridLayout *gridLayout_6;
-    QSpacerItem *spacerItem2;
-    QSpacerItem *verticalSpacer;
+    QGridLayout *gridLayout6;
+    QSpacerItem *spacerItem4;
+    QSpacerItem *spacerItem5;
     QGroupBox *diet_comp_box;
-    QGridLayout *gridLayout_5;
-    QHBoxLayout *horizontalLayout_8;
-    QCheckBox *cboxBaseOnPlants;
-    QSpacerItem *horizontalSpacer;
-    QCheckBox *cboxIncludeDairy;
+    QGridLayout *gridLayout7;
     QHBoxLayout *hboxLayout3;
+    QCheckBox *cboxBaseOnPlants;
+    QSpacerItem *spacerItem6;
+    QCheckBox *cboxIncludeDairy;
+    QHBoxLayout *hboxLayout4;
     QLabel *labelCropPercent;
     QSlider *sliderDiet;
     QLabel *labelMeatPercent;
     QGroupBox *groupplantpercent;
-    QGridLayout *gridLayout5;
-    QSpacerItem *spacerItem3;
+    QGridLayout *gridLayout8;
+    QSpacerItem *spacerItem7;
     QLabel *labelCropTamePercent;
     QSlider *sliderCrop;
     QLabel *labelCropWildPercent;
     QLabel *label_9;
     QLabel *label_11;
-    QSpacerItem *spacerItem4;
+    QSpacerItem *spacerItem8;
     QGroupBox *groupmeatpercent;
-    QGridLayout *gridLayout6;
-    QSpacerItem *spacerItem5;
-    QSpacerItem *spacerItem6;
+    QGridLayout *gridLayout9;
+    QSpacerItem *spacerItem9;
+    QSpacerItem *spacerItem10;
     QLabel *label_14;
     QLabel *labelMeatWildPercent;
     QLabel *label_13;
     QLabel *labelMeatTamePercent;
     QSlider *sliderMeat;
     QFrame *line;
-    QHBoxLayout *horizontalLayout;
-    QHBoxLayout *hboxLayout4;
+    QHBoxLayout *hboxLayout5;
+    QHBoxLayout *hboxLayout6;
     QLabel *label6;
     QSpinBox *sbDailyCalories;
     QFrame *line_2;
-    QHBoxLayout *_2;
+    QHBoxLayout *hboxLayout7;
     QLabel *label6_2;
     QSpinBox *sbDairyUtilisation;
     QFrame *line_8;
     QCheckBox *cboxLimitDairy;
     QSpinBox *sbLimitDairyPercent;
-    QSpacerItem *spacerItem7;
+    QSpacerItem *spacerItem11;
     QLabel *labelDairySurplus;
     QGroupBox *groupBox_2;
-    QGridLayout *gridLayout_4;
-    QHBoxLayout *hboxLayout5;
+    QGridLayout *gridLayout10;
+    QHBoxLayout *hboxLayout8;
     QLabel *label_10;
     QLabel *labelCaloriesSettlement;
     QLabel *label_37;
-    QHBoxLayout *hboxLayout6;
+    QHBoxLayout *hboxLayout9;
     QLabel *label_12;
     QLabel *labelPortionPlants;
     QLabel *label_38;
-    QHBoxLayout *hboxLayout7;
+    QHBoxLayout *hboxLayout10;
     QLabel *label_16;
     QLabel *labelPortionMeat;
     QLabel *label_39;
-    QHBoxLayout *horizontalLayout_7;
+    QHBoxLayout *hboxLayout11;
     QLabel *label_54;
     QLabel *labelPortionAllDairy;
     QLabel *label_55;
-    QHBoxLayout *hboxLayout8;
+    QHBoxLayout *hboxLayout12;
     QLabel *label_18;
     QLabel *labelPortionCrops;
     QLabel *label_40;
-    QHBoxLayout *hboxLayout9;
+    QHBoxLayout *hboxLayout13;
     QLabel *label_19;
     QLabel *labelPortionTameMeat;
     QLabel *label_41;
-    QHBoxLayout *_3;
+    QHBoxLayout *hboxLayout14;
     QLabel *label_31;
     QLabel *labelPortionDairy;
     QLabel *label_42;
-    QHBoxLayout *horizontalLayout_6;
+    QHBoxLayout *hboxLayout15;
     QLabel *label_51;
     QLabel *labelPortionWildMeat;
     QLabel *label_50;
-    QHBoxLayout *horizontalLayout_5;
+    QHBoxLayout *hboxLayout16;
     QLabel *label_53;
     QLabel *labelPortionWildPlants;
     QLabel *label_52;
-    QHBoxLayout *hboxLayout10;
+    QHBoxLayout *hboxLayout17;
     QLabel *label_23;
     QLabel *labelCaloriesCrops;
     QLabel *label_43;
-    QHBoxLayout *hboxLayout11;
+    QHBoxLayout *hboxLayout18;
     QLabel *label_21;
     QLabel *labelCaloriesTameMeat;
     QLabel *label_44;
-    QHBoxLayout *horizontalLayout_2;
+    QHBoxLayout *hboxLayout19;
     QLabel *label_35;
     QLabel *labelCaloriesDairy;
     QLabel *label_45;
-    QHBoxLayout *horizontalLayout_3;
+    QHBoxLayout *hboxLayout20;
     QLabel *label_46;
     QLabel *labelCaloriesWildMeat;
     QLabel *label_47;
-    QHBoxLayout *horizontalLayout_4;
+    QHBoxLayout *hboxLayout21;
     QLabel *label_48;
     QLabel *labelCaloriesWildPlants;
     QLabel *label_49;
@@ -205,25 +205,25 @@ public:
     QLabel *label_20;
     QFrame *line_4;
     QFrame *line_7;
-    QHBoxLayout *hboxLayout12;
+    QHBoxLayout *hboxLayout22;
     QLabel *label_8;
     QLabel *labelCaloriesIndividual;
     QLabel *label_36;
     QWidget *crops_tab;
-    QGridLayout *gridLayout7;
+    QGridLayout *gridLayout11;
     QSplitter *splitter_7;
     QWidget *layoutWidget;
-    QHBoxLayout *hboxLayout13;
+    QHBoxLayout *hboxLayout23;
     QTableWidget *tblCrops;
     QLabel *lblCropPix;
     QTextBrowser *textBrowserCropDefinition;
     QGroupBox *gbCustomCropMask;
-    QGridLayout *gridLayout8;
+    QGridLayout *gridLayout12;
     QLabel *label_26;
     QComboBox *cboCommonCropRaster;
     QGroupBox *gbSlopeMaskCropLand;
-    QGridLayout *gridLayout9;
-    QHBoxLayout *hboxLayout14;
+    QGridLayout *gridLayout13;
+    QHBoxLayout *hboxLayout24;
     QLabel *label_30;
     QDoubleSpinBox *dsbMinSlopeCropMask;
     QLabel *label_32;
@@ -231,26 +231,26 @@ public:
     QPushButton *pbnNewCropParameter;
     QPushButton *pbnNewCrop;
     QWidget *animals_tab;
-    QGridLayout *gridLayout_2;
+    QGridLayout *gridLayout14;
     QSplitter *splitter_3;
     QWidget *layoutWidget1;
-    QGridLayout *gridLayout10;
+    QGridLayout *gridLayout15;
     QTableWidget *tblAnimals;
-    QSpacerItem *spacerItem8;
+    QSpacerItem *spacerItem12;
     QLabel *lblAnimalPix;
     QTextBrowser *textBrowserAnimalDefinition;
     QGroupBox *gbCustomMaskGrazingLand;
-    QGridLayout *gridLayout11;
+    QGridLayout *gridLayout16;
     QLabel *label_25;
     QComboBox *cboCommonGrazingRaster;
     QGroupBox *gbGenerateMaskGrazingLand;
-    QGridLayout *gridLayout12;
+    QGridLayout *gridLayout17;
     QLabel *label_33;
     QDoubleSpinBox *dsbMinimumSlopeGrazingMask;
     QLabel *label_34;
     QDoubleSpinBox *dsbMaximumSlopeGrazingMask;
     QGroupBox *gbFoodValue;
-    QGridLayout *gridLayout13;
+    QGridLayout *gridLayout18;
     QSpinBox *sbCommonRasterValue;
     QComboBox *cbCommonLandEnergyType;
     QLabel *label_28;
@@ -260,7 +260,7 @@ public:
     QPushButton *pbnNewAnimal;
     QPushButton *pbnNewAnimalParameter;
     QWidget *results_tab;
-    QGridLayout *gridLayout14;
+    QGridLayout *gridLayout19;
     QSplitter *splitter_5;
     QSplitter *splitter_2;
     QWidget *layoutWidget2;
@@ -274,21 +274,21 @@ public:
     QLabel *lblAnimalPicCalcs;
     QListWidget *listWidgetCalculationsAnimal;
     QTextBrowser *textBrowserResultsAnimals;
-    QSpacerItem *spacerItem9;
+    QSpacerItem *spacerItem13;
     QPushButton *pbnTargets;
     QPushButton *pbnFallow;
     QPushButton *pbnHerds;
     QPushButton *pbnText;
     QPushButton *pbnHtml;
     QWidget *tab;
-    QGridLayout *gridLayout15;
+    QGridLayout *gridLayout20;
     QSplitter *splitter_6;
     QTextBrowser *tbReport;
     QWidget *tabLogs;
-    QGridLayout *gridLayout16;
+    QGridLayout *gridLayout21;
     QTextBrowser *tbLogs;
     QWidget *help_tab;
-    QGridLayout *gridLayout17;
+    QGridLayout *gridLayout22;
     QSplitter *splitter;
     QWidget *layoutWidget4;
     QVBoxLayout *vboxLayout4;
@@ -306,44 +306,43 @@ public:
     sizePolicy.setVerticalStretch(0);
     sizePolicy.setHeightForWidth(LaMainFormBase->sizePolicy().hasHeightForWidth());
     LaMainFormBase->setSizePolicy(sizePolicy);
-    QIcon icon;
-    icon.addPixmap(QPixmap(QString::fromUtf8(":/la_icon_small.png")), QIcon::Normal, QIcon::Off);
+    const QIcon icon = QIcon(QString::fromUtf8(":/la_icon_small.png"));
     LaMainFormBase->setWindowIcon(icon);
-    gridLayout_3 = new QGridLayout(LaMainFormBase);
-    gridLayout_3->setObjectName(QString::fromUtf8("gridLayout_3"));
-    spacer = new QSpacerItem(308, 17, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    gridLayout = new QGridLayout(LaMainFormBase);
+    gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
+    spacerItem = new QSpacerItem(308, 17, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-    gridLayout_3->addItem(spacer, 1, 0, 1, 11);
+    gridLayout->addItem(spacerItem, 1, 0, 1, 11);
 
-    spacerItem = new QSpacerItem(224, 37, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    spacerItem1 = new QSpacerItem(224, 37, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-    gridLayout_3->addItem(spacerItem, 2, 4, 1, 1);
+    gridLayout->addItem(spacerItem1, 2, 4, 1, 1);
 
-    spacer_2 = new QSpacerItem(223, 37, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    spacerItem2 = new QSpacerItem(223, 37, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-    gridLayout_3->addItem(spacer_2, 2, 6, 1, 1);
+    gridLayout->addItem(spacerItem2, 2, 6, 1, 1);
 
     label_5 = new QLabel(LaMainFormBase);
     label_5->setObjectName(QString::fromUtf8("label_5"));
 
-    gridLayout_3->addWidget(label_5, 2, 0, 1, 1);
+    gridLayout->addWidget(label_5, 2, 0, 1, 1);
 
     labelAnimalCheck = new QLabel(LaMainFormBase);
     labelAnimalCheck->setObjectName(QString::fromUtf8("labelAnimalCheck"));
     labelAnimalCheck->setAlignment(Qt::AlignCenter);
 
-    gridLayout_3->addWidget(labelAnimalCheck, 2, 1, 1, 1);
+    gridLayout->addWidget(labelAnimalCheck, 2, 1, 1, 1);
 
     label_3 = new QLabel(LaMainFormBase);
     label_3->setObjectName(QString::fromUtf8("label_3"));
 
-    gridLayout_3->addWidget(label_3, 2, 2, 1, 1);
+    gridLayout->addWidget(label_3, 2, 2, 1, 1);
 
     labelCropCheck = new QLabel(LaMainFormBase);
     labelCropCheck->setObjectName(QString::fromUtf8("labelCropCheck"));
     labelCropCheck->setAlignment(Qt::AlignCenter);
 
-    gridLayout_3->addWidget(labelCropCheck, 2, 3, 1, 1);
+    gridLayout->addWidget(labelCropCheck, 2, 3, 1, 1);
 
     label_7 = new QLabel(LaMainFormBase);
     label_7->setObjectName(QString::fromUtf8("label_7"));
@@ -351,7 +350,7 @@ public:
     font.setPointSize(8);
     label_7->setFont(font);
 
-    gridLayout_3->addWidget(label_7, 2, 5, 1, 1);
+    gridLayout->addWidget(label_7, 2, 5, 1, 1);
 
     pushButtonRun = new QPushButton(LaMainFormBase);
     pushButtonRun->setObjectName(QString::fromUtf8("pushButtonRun"));
@@ -359,7 +358,7 @@ public:
     pushButtonRun->setSizePolicy(sizePolicy);
     pushButtonRun->setMinimumSize(QSize(0, 0));
 
-    gridLayout_3->addWidget(pushButtonRun, 2, 7, 1, 1);
+    gridLayout->addWidget(pushButtonRun, 2, 7, 1, 1);
 
     pushButtonLoad = new QPushButton(LaMainFormBase);
     pushButtonLoad->setObjectName(QString::fromUtf8("pushButtonLoad"));
@@ -367,21 +366,21 @@ public:
     pushButtonLoad->setSizePolicy(sizePolicy);
     pushButtonLoad->setMinimumSize(QSize(0, 0));
 
-    gridLayout_3->addWidget(pushButtonLoad, 2, 8, 1, 1);
+    gridLayout->addWidget(pushButtonLoad, 2, 8, 1, 1);
 
     pushButtonSave = new QPushButton(LaMainFormBase);
     pushButtonSave->setObjectName(QString::fromUtf8("pushButtonSave"));
     sizePolicy.setHeightForWidth(pushButtonSave->sizePolicy().hasHeightForWidth());
     pushButtonSave->setSizePolicy(sizePolicy);
 
-    gridLayout_3->addWidget(pushButtonSave, 2, 9, 1, 1);
+    gridLayout->addWidget(pushButtonSave, 2, 9, 1, 1);
 
     pushButtonExit = new QPushButton(LaMainFormBase);
     pushButtonExit->setObjectName(QString::fromUtf8("pushButtonExit"));
     sizePolicy.setHeightForWidth(pushButtonExit->sizePolicy().hasHeightForWidth());
     pushButtonExit->setSizePolicy(sizePolicy);
 
-    gridLayout_3->addWidget(pushButtonExit, 2, 10, 1, 1);
+    gridLayout->addWidget(pushButtonExit, 2, 10, 1, 1);
 
     progressBarCalcs = new QProgressBar(LaMainFormBase);
     progressBarCalcs->setObjectName(QString::fromUtf8("progressBarCalcs"));
@@ -395,7 +394,7 @@ public:
     progressBarCalcs->setTextVisible(false);
     progressBarCalcs->setOrientation(Qt::Horizontal);
 
-    gridLayout_3->addWidget(progressBarCalcs, 3, 0, 1, 11);
+    gridLayout->addWidget(progressBarCalcs, 3, 0, 1, 11);
 
     MainTabs = new QTabWidget(LaMainFormBase);
     MainTabs->setObjectName(QString::fromUtf8("MainTabs"));
@@ -406,14 +405,8 @@ public:
     MainTabs->setTabShape(QTabWidget::Rounded);
     main_tab = new QWidget();
     main_tab->setObjectName(QString::fromUtf8("main_tab"));
-    gridLayout = new QGridLayout(main_tab);
-#ifndef Q_OS_MAC
-    gridLayout->setSpacing(6);
-#endif
-#ifndef Q_OS_MAC
-    gridLayout->setMargin(9);
-#endif
-    gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
+    gridLayout1 = new QGridLayout(main_tab);
+    gridLayout1->setObjectName(QString::fromUtf8("gridLayout1"));
     frame_2 = new QFrame(main_tab);
     frame_2->setObjectName(QString::fromUtf8("frame_2"));
     sizePolicy.setHeightForWidth(frame_2->sizePolicy().hasHeightForWidth());
@@ -421,14 +414,8 @@ public:
     frame_2->setMinimumSize(QSize(222, 230));
     frame_2->setFrameShape(QFrame::StyledPanel);
     frame_2->setFrameShadow(QFrame::Raised);
-    gridLayout1 = new QGridLayout(frame_2);
-#ifndef Q_OS_MAC
-    gridLayout1->setSpacing(6);
-#endif
-#ifndef Q_OS_MAC
-    gridLayout1->setMargin(9);
-#endif
-    gridLayout1->setObjectName(QString::fromUtf8("gridLayout1"));
+    gridLayout2 = new QGridLayout(frame_2);
+    gridLayout2->setObjectName(QString::fromUtf8("gridLayout2"));
     label_17 = new QLabel(frame_2);
     label_17->setObjectName(QString::fromUtf8("label_17"));
     sizePolicy.setHeightForWidth(label_17->sizePolicy().hasHeightForWidth());
@@ -436,16 +423,16 @@ public:
     label_17->setPixmap(QPixmap(QString::fromUtf8(":/la_icon.png")));
     label_17->setScaledContents(false);
 
-    gridLayout1->addWidget(label_17, 0, 0, 1, 1);
+    gridLayout2->addWidget(label_17, 0, 0, 1, 1);
 
     lblVersion = new QLabel(frame_2);
     lblVersion->setObjectName(QString::fromUtf8("lblVersion"));
     lblVersion->setAlignment(Qt::AlignCenter);
 
-    gridLayout1->addWidget(lblVersion, 1, 0, 1, 1);
+    gridLayout2->addWidget(lblVersion, 1, 0, 1, 1);
 
 
-    gridLayout->addWidget(frame_2, 0, 0, 2, 1);
+    gridLayout1->addWidget(frame_2, 0, 0, 2, 1);
 
     groupBoxManualSiteEntry = new QGroupBox(main_tab);
     groupBoxManualSiteEntry->setObjectName(QString::fromUtf8("groupBoxManualSiteEntry"));
@@ -456,14 +443,8 @@ public:
     groupBoxManualSiteEntry->setSizePolicy(sizePolicy2);
     groupBoxManualSiteEntry->setCheckable(false);
     groupBoxManualSiteEntry->setChecked(false);
-    gridLayout2 = new QGridLayout(groupBoxManualSiteEntry);
-#ifndef Q_OS_MAC
-    gridLayout2->setSpacing(6);
-#endif
-#ifndef Q_OS_MAC
-    gridLayout2->setMargin(9);
-#endif
-    gridLayout2->setObjectName(QString::fromUtf8("gridLayout2"));
+    gridLayout3 = new QGridLayout(groupBoxManualSiteEntry);
+    gridLayout3->setObjectName(QString::fromUtf8("gridLayout3"));
     lineEditSiteName = new QLineEdit(groupBoxManualSiteEntry);
     lineEditSiteName->setObjectName(QString::fromUtf8("lineEditSiteName"));
     QSizePolicy sizePolicy3(QSizePolicy::Preferred, QSizePolicy::Fixed);
@@ -472,7 +453,7 @@ public:
     sizePolicy3.setHeightForWidth(lineEditSiteName->sizePolicy().hasHeightForWidth());
     lineEditSiteName->setSizePolicy(sizePolicy3);
 
-    gridLayout2->addWidget(lineEditSiteName, 0, 1, 1, 2);
+    gridLayout3->addWidget(lineEditSiteName, 0, 1, 1, 2);
 
     sbPopulation = new QSpinBox(groupBoxManualSiteEntry);
     sbPopulation->setObjectName(QString::fromUtf8("sbPopulation"));
@@ -484,7 +465,7 @@ public:
     sbPopulation->setSingleStep(1);
     sbPopulation->setValue(500);
 
-    gridLayout2->addWidget(sbPopulation, 2, 1, 1, 1);
+    gridLayout3->addWidget(sbPopulation, 2, 1, 1, 1);
 
     lineEditPeriod = new QLineEdit(groupBoxManualSiteEntry);
     lineEditPeriod->setObjectName(QString::fromUtf8("lineEditPeriod"));
@@ -494,30 +475,26 @@ public:
     sizePolicy4.setHeightForWidth(lineEditPeriod->sizePolicy().hasHeightForWidth());
     lineEditPeriod->setSizePolicy(sizePolicy4);
 
-    gridLayout2->addWidget(lineEditPeriod, 1, 1, 1, 1);
+    gridLayout3->addWidget(lineEditPeriod, 1, 1, 1, 1);
 
     textLabel2_4 = new QLabel(groupBoxManualSiteEntry);
     textLabel2_4->setObjectName(QString::fromUtf8("textLabel2_4"));
     textLabel2_4->setWordWrap(false);
 
-    gridLayout2->addWidget(textLabel2_4, 0, 0, 1, 1);
+    gridLayout3->addWidget(textLabel2_4, 0, 0, 1, 1);
 
     label = new QLabel(groupBoxManualSiteEntry);
     label->setObjectName(QString::fromUtf8("label"));
 
-    gridLayout2->addWidget(label, 1, 0, 1, 1);
+    gridLayout3->addWidget(label, 1, 0, 1, 1);
 
     label5 = new QLabel(groupBoxManualSiteEntry);
     label5->setObjectName(QString::fromUtf8("label5"));
     label5->setWordWrap(false);
 
-    gridLayout2->addWidget(label5, 2, 0, 1, 1);
+    gridLayout3->addWidget(label5, 2, 0, 1, 1);
 
     hboxLayout = new QHBoxLayout();
-#ifndef Q_OS_MAC
-    hboxLayout->setSpacing(6);
-#endif
-    hboxLayout->setMargin(0);
     hboxLayout->setObjectName(QString::fromUtf8("hboxLayout"));
     label_6 = new QLabel(groupBoxManualSiteEntry);
     label_6->setObjectName(QString::fromUtf8("label_6"));
@@ -530,13 +507,9 @@ public:
     hboxLayout->addWidget(lineEditEasting);
 
 
-    gridLayout2->addLayout(hboxLayout, 1, 2, 1, 1);
+    gridLayout3->addLayout(hboxLayout, 1, 2, 1, 1);
 
     hboxLayout1 = new QHBoxLayout();
-#ifndef Q_OS_MAC
-    hboxLayout1->setSpacing(6);
-#endif
-    hboxLayout1->setMargin(0);
     hboxLayout1->setObjectName(QString::fromUtf8("hboxLayout1"));
     label_22 = new QLabel(groupBoxManualSiteEntry);
     label_22->setObjectName(QString::fromUtf8("label_22"));
@@ -549,24 +522,22 @@ public:
     hboxLayout1->addWidget(lineEditNorthing);
 
 
-    gridLayout2->addLayout(hboxLayout1, 2, 2, 1, 1);
+    gridLayout3->addLayout(hboxLayout1, 2, 2, 1, 1);
 
 
-    gridLayout->addWidget(groupBoxManualSiteEntry, 0, 1, 1, 1);
+    gridLayout1->addWidget(groupBoxManualSiteEntry, 0, 1, 1, 1);
 
     model_method_box = new QGroupBox(main_tab);
     model_method_box->setObjectName(QString::fromUtf8("model_method_box"));
     sizePolicy.setHeightForWidth(model_method_box->sizePolicy().hasHeightForWidth());
     model_method_box->setSizePolicy(sizePolicy);
-    gridLayout3 = new QGridLayout(model_method_box);
-    gridLayout3->setSpacing(0);
-    gridLayout3->setMargin(8);
-    gridLayout3->setObjectName(QString::fromUtf8("gridLayout3"));
+    gridLayout4 = new QGridLayout(model_method_box);
+    gridLayout4->setObjectName(QString::fromUtf8("gridLayout4"));
+    gridLayout4->setHorizontalSpacing(0);
+    gridLayout4->setVerticalSpacing(0);
+    gridLayout4->setContentsMargins(8, 8, 8, 8);
     hboxLayout2 = new QHBoxLayout();
     hboxLayout2->setSpacing(0);
-#ifndef Q_OS_MAC
-    hboxLayout2->setMargin(0);
-#endif
     hboxLayout2->setObjectName(QString::fromUtf8("hboxLayout2"));
     label_2 = new QLabel(model_method_box);
     label_2->setObjectName(QString::fromUtf8("label_2"));
@@ -586,39 +557,39 @@ public:
     hboxLayout2->addWidget(sbModelPrecision);
 
 
-    gridLayout3->addLayout(hboxLayout2, 3, 0, 1, 1);
+    gridLayout4->addLayout(hboxLayout2, 3, 0, 1, 1);
 
     radioButtonPathDistance = new QRadioButton(model_method_box);
     radioButtonPathDistance->setObjectName(QString::fromUtf8("radioButtonPathDistance"));
 
-    gridLayout3->addWidget(radioButtonPathDistance, 2, 0, 1, 1);
+    gridLayout4->addWidget(radioButtonPathDistance, 2, 0, 1, 1);
 
     radioButtonWalkingTime = new QRadioButton(model_method_box);
     radioButtonWalkingTime->setObjectName(QString::fromUtf8("radioButtonWalkingTime"));
     radioButtonWalkingTime->setChecked(true);
 
-    gridLayout3->addWidget(radioButtonWalkingTime, 1, 0, 1, 1);
+    gridLayout4->addWidget(radioButtonWalkingTime, 1, 0, 1, 1);
 
     radioButtonEuclidean = new QRadioButton(model_method_box);
     radioButtonEuclidean->setObjectName(QString::fromUtf8("radioButtonEuclidean"));
     radioButtonEuclidean->setChecked(false);
 
-    gridLayout3->addWidget(radioButtonEuclidean, 0, 0, 1, 1);
+    gridLayout4->addWidget(radioButtonEuclidean, 0, 0, 1, 1);
 
 
-    gridLayout->addWidget(model_method_box, 0, 2, 1, 1);
+    gridLayout1->addWidget(model_method_box, 0, 2, 1, 1);
 
     gbxGrass = new QGroupBox(main_tab);
     gbxGrass->setObjectName(QString::fromUtf8("gbxGrass"));
-    gridLayout4 = new QGridLayout(gbxGrass);
-    gridLayout4->setObjectName(QString::fromUtf8("gridLayout4"));
+    gridLayout5 = new QGridLayout(gbxGrass);
+    gridLayout5->setObjectName(QString::fromUtf8("gridLayout5"));
     lblGrass = new QLabel(gbxGrass);
     lblGrass->setObjectName(QString::fromUtf8("lblGrass"));
     lblGrass->setMaximumSize(QSize(80, 80));
     lblGrass->setPixmap(QPixmap(QString::fromUtf8(":/icona_grass.gif")));
     lblGrass->setScaledContents(true);
 
-    gridLayout4->addWidget(lblGrass, 0, 0, 2, 1);
+    gridLayout5->addWidget(lblGrass, 0, 0, 2, 1);
 
     label_29 = new QLabel(gbxGrass);
     label_29->setObjectName(QString::fromUtf8("label_29"));
@@ -628,12 +599,12 @@ public:
     sizePolicy5.setHeightForWidth(label_29->sizePolicy().hasHeightForWidth());
     label_29->setSizePolicy(sizePolicy5);
 
-    gridLayout4->addWidget(label_29, 0, 1, 1, 1);
+    gridLayout5->addWidget(label_29, 0, 1, 1, 1);
 
     cboMapSet = new QComboBox(gbxGrass);
     cboMapSet->setObjectName(QString::fromUtf8("cboMapSet"));
 
-    gridLayout4->addWidget(cboMapSet, 0, 2, 1, 1);
+    gridLayout5->addWidget(cboMapSet, 0, 2, 1, 1);
 
     label_24 = new QLabel(gbxGrass);
     label_24->setObjectName(QString::fromUtf8("label_24"));
@@ -641,32 +612,32 @@ public:
     label_24->setSizePolicy(sizePolicy5);
     label_24->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
-    gridLayout4->addWidget(label_24, 1, 1, 1, 1);
+    gridLayout5->addWidget(label_24, 1, 1, 1, 1);
 
     cboDEM = new QComboBox(gbxGrass);
     cboDEM->setObjectName(QString::fromUtf8("cboDEM"));
 
-    gridLayout4->addWidget(cboDEM, 1, 2, 1, 1);
+    gridLayout5->addWidget(cboDEM, 1, 2, 1, 1);
 
 
-    gridLayout->addWidget(gbxGrass, 1, 1, 1, 2);
+    gridLayout1->addWidget(gbxGrass, 1, 1, 1, 2);
 
-    spacerItem1 = new QSpacerItem(308, 83, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    spacerItem3 = new QSpacerItem(308, 83, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-    gridLayout->addItem(spacerItem1, 2, 1, 1, 1);
+    gridLayout1->addItem(spacerItem3, 2, 1, 1, 1);
 
     MainTabs->addTab(main_tab, QString());
     diet_tab = new QWidget();
     diet_tab->setObjectName(QString::fromUtf8("diet_tab"));
-    gridLayout_6 = new QGridLayout(diet_tab);
-    gridLayout_6->setObjectName(QString::fromUtf8("gridLayout_6"));
-    spacerItem2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    gridLayout6 = new QGridLayout(diet_tab);
+    gridLayout6->setObjectName(QString::fromUtf8("gridLayout6"));
+    spacerItem4 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-    gridLayout_6->addItem(spacerItem2, 1, 0, 1, 1);
+    gridLayout6->addItem(spacerItem4, 1, 0, 1, 1);
 
-    verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    spacerItem5 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-    gridLayout_6->addItem(verticalSpacer, 2, 1, 1, 1);
+    gridLayout6->addItem(spacerItem5, 2, 1, 1, 1);
 
     diet_comp_box = new QGroupBox(diet_tab);
     diet_comp_box->setObjectName(QString::fromUtf8("diet_comp_box"));
@@ -675,38 +646,36 @@ public:
     sizePolicy6.setVerticalStretch(0);
     sizePolicy6.setHeightForWidth(diet_comp_box->sizePolicy().hasHeightForWidth());
     diet_comp_box->setSizePolicy(sizePolicy6);
-    gridLayout_5 = new QGridLayout(diet_comp_box);
-    gridLayout_5->setObjectName(QString::fromUtf8("gridLayout_5"));
-    horizontalLayout_8 = new QHBoxLayout();
-    horizontalLayout_8->setObjectName(QString::fromUtf8("horizontalLayout_8"));
+    gridLayout7 = new QGridLayout(diet_comp_box);
+    gridLayout7->setObjectName(QString::fromUtf8("gridLayout7"));
+    hboxLayout3 = new QHBoxLayout();
+    hboxLayout3->setObjectName(QString::fromUtf8("hboxLayout3"));
     cboxBaseOnPlants = new QCheckBox(diet_comp_box);
     cboxBaseOnPlants->setObjectName(QString::fromUtf8("cboxBaseOnPlants"));
+    cboxBaseOnPlants->setEnabled(false);
 
-    horizontalLayout_8->addWidget(cboxBaseOnPlants);
+    hboxLayout3->addWidget(cboxBaseOnPlants);
 
-    horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    spacerItem6 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-    horizontalLayout_8->addItem(horizontalSpacer);
+    hboxLayout3->addItem(spacerItem6);
 
     cboxIncludeDairy = new QCheckBox(diet_comp_box);
     cboxIncludeDairy->setObjectName(QString::fromUtf8("cboxIncludeDairy"));
+    cboxIncludeDairy->setEnabled(false);
     cboxIncludeDairy->setLayoutDirection(Qt::RightToLeft);
 
-    horizontalLayout_8->addWidget(cboxIncludeDairy);
+    hboxLayout3->addWidget(cboxIncludeDairy);
 
 
-    gridLayout_5->addLayout(horizontalLayout_8, 0, 0, 1, 2);
+    gridLayout7->addLayout(hboxLayout3, 0, 0, 1, 2);
 
-    hboxLayout3 = new QHBoxLayout();
-#ifndef Q_OS_MAC
-    hboxLayout3->setSpacing(6);
-#endif
-    hboxLayout3->setMargin(0);
-    hboxLayout3->setObjectName(QString::fromUtf8("hboxLayout3"));
+    hboxLayout4 = new QHBoxLayout();
+    hboxLayout4->setObjectName(QString::fromUtf8("hboxLayout4"));
     labelCropPercent = new QLabel(diet_comp_box);
     labelCropPercent->setObjectName(QString::fromUtf8("labelCropPercent"));
 
-    hboxLayout3->addWidget(labelCropPercent);
+    hboxLayout4->addWidget(labelCropPercent);
 
     sliderDiet = new QSlider(diet_comp_box);
     sliderDiet->setObjectName(QString::fromUtf8("sliderDiet"));
@@ -719,36 +688,30 @@ public:
     sliderDiet->setTickPosition(QSlider::TicksBothSides);
     sliderDiet->setTickInterval(25);
 
-    hboxLayout3->addWidget(sliderDiet);
+    hboxLayout4->addWidget(sliderDiet);
 
     labelMeatPercent = new QLabel(diet_comp_box);
     labelMeatPercent->setObjectName(QString::fromUtf8("labelMeatPercent"));
     labelMeatPercent->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
-    hboxLayout3->addWidget(labelMeatPercent);
+    hboxLayout4->addWidget(labelMeatPercent);
 
 
-    gridLayout_5->addLayout(hboxLayout3, 1, 0, 1, 2);
+    gridLayout7->addLayout(hboxLayout4, 1, 0, 1, 2);
 
     groupplantpercent = new QGroupBox(diet_comp_box);
     groupplantpercent->setObjectName(QString::fromUtf8("groupplantpercent"));
-    gridLayout5 = new QGridLayout(groupplantpercent);
-#ifndef Q_OS_MAC
-    gridLayout5->setSpacing(6);
-#endif
-#ifndef Q_OS_MAC
-    gridLayout5->setMargin(9);
-#endif
-    gridLayout5->setObjectName(QString::fromUtf8("gridLayout5"));
-    spacerItem3 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    gridLayout8 = new QGridLayout(groupplantpercent);
+    gridLayout8->setObjectName(QString::fromUtf8("gridLayout8"));
+    spacerItem7 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-    gridLayout5->addItem(spacerItem3, 1, 1, 1, 1);
+    gridLayout8->addItem(spacerItem7, 1, 1, 1, 1);
 
     labelCropTamePercent = new QLabel(groupplantpercent);
     labelCropTamePercent->setObjectName(QString::fromUtf8("labelCropTamePercent"));
     labelCropTamePercent->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
-    gridLayout5->addWidget(labelCropTamePercent, 1, 2, 1, 1);
+    gridLayout8->addWidget(labelCropTamePercent, 1, 2, 1, 1);
 
     sliderCrop = new QSlider(groupplantpercent);
     sliderCrop->setObjectName(QString::fromUtf8("sliderCrop"));
@@ -761,76 +724,70 @@ public:
     sliderCrop->setTickPosition(QSlider::TicksBelow);
     sliderCrop->setTickInterval(25);
 
-    gridLayout5->addWidget(sliderCrop, 2, 0, 1, 3);
+    gridLayout8->addWidget(sliderCrop, 2, 0, 1, 3);
 
     labelCropWildPercent = new QLabel(groupplantpercent);
     labelCropWildPercent->setObjectName(QString::fromUtf8("labelCropWildPercent"));
     labelCropWildPercent->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
 
-    gridLayout5->addWidget(labelCropWildPercent, 1, 0, 1, 1);
+    gridLayout8->addWidget(labelCropWildPercent, 1, 0, 1, 1);
 
     label_9 = new QLabel(groupplantpercent);
     label_9->setObjectName(QString::fromUtf8("label_9"));
     label_9->setAlignment(Qt::AlignCenter);
 
-    gridLayout5->addWidget(label_9, 0, 0, 1, 1);
+    gridLayout8->addWidget(label_9, 0, 0, 1, 1);
 
     label_11 = new QLabel(groupplantpercent);
     label_11->setObjectName(QString::fromUtf8("label_11"));
     label_11->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
-    gridLayout5->addWidget(label_11, 0, 2, 1, 1);
+    gridLayout8->addWidget(label_11, 0, 2, 1, 1);
 
-    spacerItem4 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    spacerItem8 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-    gridLayout5->addItem(spacerItem4, 0, 1, 1, 1);
+    gridLayout8->addItem(spacerItem8, 0, 1, 1, 1);
 
 
-    gridLayout_5->addWidget(groupplantpercent, 2, 0, 1, 1);
+    gridLayout7->addWidget(groupplantpercent, 2, 0, 1, 1);
 
     groupmeatpercent = new QGroupBox(diet_comp_box);
     groupmeatpercent->setObjectName(QString::fromUtf8("groupmeatpercent"));
     groupmeatpercent->setLayoutDirection(Qt::RightToLeft);
-    gridLayout6 = new QGridLayout(groupmeatpercent);
-#ifndef Q_OS_MAC
-    gridLayout6->setSpacing(6);
-#endif
-#ifndef Q_OS_MAC
-    gridLayout6->setMargin(9);
-#endif
-    gridLayout6->setObjectName(QString::fromUtf8("gridLayout6"));
-    spacerItem5 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    gridLayout9 = new QGridLayout(groupmeatpercent);
+    gridLayout9->setObjectName(QString::fromUtf8("gridLayout9"));
+    spacerItem9 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-    gridLayout6->addItem(spacerItem5, 1, 1, 1, 1);
+    gridLayout9->addItem(spacerItem9, 1, 1, 1, 1);
 
-    spacerItem6 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    spacerItem10 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-    gridLayout6->addItem(spacerItem6, 0, 1, 1, 1);
+    gridLayout9->addItem(spacerItem10, 0, 1, 1, 1);
 
     label_14 = new QLabel(groupmeatpercent);
     label_14->setObjectName(QString::fromUtf8("label_14"));
     label_14->setAlignment(Qt::AlignCenter);
 
-    gridLayout6->addWidget(label_14, 0, 0, 1, 1);
+    gridLayout9->addWidget(label_14, 0, 0, 1, 1);
 
     labelMeatWildPercent = new QLabel(groupmeatpercent);
     labelMeatWildPercent->setObjectName(QString::fromUtf8("labelMeatWildPercent"));
     labelMeatWildPercent->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
-    gridLayout6->addWidget(labelMeatWildPercent, 1, 2, 1, 1);
+    gridLayout9->addWidget(labelMeatWildPercent, 1, 2, 1, 1);
 
     label_13 = new QLabel(groupmeatpercent);
     label_13->setObjectName(QString::fromUtf8("label_13"));
     label_13->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
-    gridLayout6->addWidget(label_13, 0, 2, 1, 1);
+    gridLayout9->addWidget(label_13, 0, 2, 1, 1);
 
     labelMeatTamePercent = new QLabel(groupmeatpercent);
     labelMeatTamePercent->setObjectName(QString::fromUtf8("labelMeatTamePercent"));
     labelMeatTamePercent->setLayoutDirection(Qt::LeftToRight);
     labelMeatTamePercent->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
-    gridLayout6->addWidget(labelMeatTamePercent, 1, 0, 1, 1);
+    gridLayout9->addWidget(labelMeatTamePercent, 1, 0, 1, 1);
 
     sliderMeat = new QSlider(groupmeatpercent);
     sliderMeat->setObjectName(QString::fromUtf8("sliderMeat"));
@@ -844,33 +801,27 @@ public:
     sliderMeat->setTickPosition(QSlider::TicksBelow);
     sliderMeat->setTickInterval(25);
 
-    gridLayout6->addWidget(sliderMeat, 2, 0, 1, 3);
+    gridLayout9->addWidget(sliderMeat, 2, 0, 1, 3);
 
 
-    gridLayout_5->addWidget(groupmeatpercent, 2, 1, 1, 1);
+    gridLayout7->addWidget(groupmeatpercent, 2, 1, 1, 1);
 
     line = new QFrame(diet_comp_box);
     line->setObjectName(QString::fromUtf8("line"));
     line->setFrameShape(QFrame::HLine);
     line->setFrameShadow(QFrame::Sunken);
 
-    gridLayout_5->addWidget(line, 3, 0, 1, 2);
+    gridLayout7->addWidget(line, 3, 0, 1, 2);
 
-    horizontalLayout = new QHBoxLayout();
-    horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
-    hboxLayout4 = new QHBoxLayout();
-#ifndef Q_OS_MAC
-    hboxLayout4->setSpacing(6);
-#endif
-#ifndef Q_OS_MAC
-    hboxLayout4->setMargin(0);
-#endif
-    hboxLayout4->setObjectName(QString::fromUtf8("hboxLayout4"));
+    hboxLayout5 = new QHBoxLayout();
+    hboxLayout5->setObjectName(QString::fromUtf8("hboxLayout5"));
+    hboxLayout6 = new QHBoxLayout();
+    hboxLayout6->setObjectName(QString::fromUtf8("hboxLayout6"));
     label6 = new QLabel(diet_comp_box);
     label6->setObjectName(QString::fromUtf8("label6"));
     label6->setWordWrap(false);
 
-    hboxLayout4->addWidget(label6);
+    hboxLayout6->addWidget(label6);
 
     sbDailyCalories = new QSpinBox(diet_comp_box);
     sbDailyCalories->setObjectName(QString::fromUtf8("sbDailyCalories"));
@@ -880,29 +831,25 @@ public:
     sbDailyCalories->setSingleStep(1);
     sbDailyCalories->setValue(2500);
 
-    hboxLayout4->addWidget(sbDailyCalories);
+    hboxLayout6->addWidget(sbDailyCalories);
 
 
-    horizontalLayout->addLayout(hboxLayout4);
+    hboxLayout5->addLayout(hboxLayout6);
 
     line_2 = new QFrame(diet_comp_box);
     line_2->setObjectName(QString::fromUtf8("line_2"));
     line_2->setFrameShape(QFrame::VLine);
     line_2->setFrameShadow(QFrame::Sunken);
 
-    horizontalLayout->addWidget(line_2);
+    hboxLayout5->addWidget(line_2);
 
-    _2 = new QHBoxLayout();
-#ifndef Q_OS_MAC
-    _2->setSpacing(6);
-#endif
-    _2->setMargin(0);
-    _2->setObjectName(QString::fromUtf8("_2"));
+    hboxLayout7 = new QHBoxLayout();
+    hboxLayout7->setObjectName(QString::fromUtf8("hboxLayout7"));
     label6_2 = new QLabel(diet_comp_box);
     label6_2->setObjectName(QString::fromUtf8("label6_2"));
     label6_2->setWordWrap(false);
 
-    _2->addWidget(label6_2);
+    hboxLayout7->addWidget(label6_2);
 
     sbDairyUtilisation = new QSpinBox(diet_comp_box);
     sbDairyUtilisation->setObjectName(QString::fromUtf8("sbDairyUtilisation"));
@@ -916,454 +863,406 @@ public:
     sbDairyUtilisation->setSingleStep(1);
     sbDairyUtilisation->setValue(100);
 
-    _2->addWidget(sbDairyUtilisation);
+    hboxLayout7->addWidget(sbDairyUtilisation);
 
     line_8 = new QFrame(diet_comp_box);
     line_8->setObjectName(QString::fromUtf8("line_8"));
     line_8->setFrameShape(QFrame::VLine);
     line_8->setFrameShadow(QFrame::Sunken);
 
-    _2->addWidget(line_8);
+    hboxLayout7->addWidget(line_8);
 
     cboxLimitDairy = new QCheckBox(diet_comp_box);
     cboxLimitDairy->setObjectName(QString::fromUtf8("cboxLimitDairy"));
 
-    _2->addWidget(cboxLimitDairy);
+    hboxLayout7->addWidget(cboxLimitDairy);
 
     sbLimitDairyPercent = new QSpinBox(diet_comp_box);
     sbLimitDairyPercent->setObjectName(QString::fromUtf8("sbLimitDairyPercent"));
     sbLimitDairyPercent->setMaximum(100);
 
-    _2->addWidget(sbLimitDairyPercent);
+    hboxLayout7->addWidget(sbLimitDairyPercent);
 
 
-    horizontalLayout->addLayout(_2);
+    hboxLayout5->addLayout(hboxLayout7);
 
 
-    gridLayout_5->addLayout(horizontalLayout, 4, 0, 1, 2);
+    gridLayout7->addLayout(hboxLayout5, 4, 0, 1, 2);
 
-    spacerItem7 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    spacerItem11 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-    gridLayout_5->addItem(spacerItem7, 6, 1, 1, 1);
+    gridLayout7->addItem(spacerItem11, 6, 1, 1, 1);
 
     labelDairySurplus = new QLabel(diet_comp_box);
     labelDairySurplus->setObjectName(QString::fromUtf8("labelDairySurplus"));
 
-    gridLayout_5->addWidget(labelDairySurplus, 5, 1, 1, 1);
+    gridLayout7->addWidget(labelDairySurplus, 5, 1, 1, 1);
 
 
-    gridLayout_6->addWidget(diet_comp_box, 0, 0, 1, 1);
+    gridLayout6->addWidget(diet_comp_box, 0, 0, 1, 1);
 
     groupBox_2 = new QGroupBox(diet_tab);
     groupBox_2->setObjectName(QString::fromUtf8("groupBox_2"));
     sizePolicy.setHeightForWidth(groupBox_2->sizePolicy().hasHeightForWidth());
     groupBox_2->setSizePolicy(sizePolicy);
     groupBox_2->setMinimumSize(QSize(0, 200));
-    gridLayout_4 = new QGridLayout(groupBox_2);
-    gridLayout_4->setObjectName(QString::fromUtf8("gridLayout_4"));
-    hboxLayout5 = new QHBoxLayout();
-#ifndef Q_OS_MAC
-    hboxLayout5->setSpacing(6);
-#endif
-#ifndef Q_OS_MAC
-    hboxLayout5->setMargin(0);
-#endif
-    hboxLayout5->setObjectName(QString::fromUtf8("hboxLayout5"));
+    gridLayout10 = new QGridLayout(groupBox_2);
+    gridLayout10->setObjectName(QString::fromUtf8("gridLayout10"));
+    hboxLayout8 = new QHBoxLayout();
+    hboxLayout8->setObjectName(QString::fromUtf8("hboxLayout8"));
     label_10 = new QLabel(groupBox_2);
     label_10->setObjectName(QString::fromUtf8("label_10"));
 
-    hboxLayout5->addWidget(label_10);
+    hboxLayout8->addWidget(label_10);
 
     labelCaloriesSettlement = new QLabel(groupBox_2);
     labelCaloriesSettlement->setObjectName(QString::fromUtf8("labelCaloriesSettlement"));
 
-    hboxLayout5->addWidget(labelCaloriesSettlement);
+    hboxLayout8->addWidget(labelCaloriesSettlement);
 
     label_37 = new QLabel(groupBox_2);
     label_37->setObjectName(QString::fromUtf8("label_37"));
 
-    hboxLayout5->addWidget(label_37);
+    hboxLayout8->addWidget(label_37);
 
 
-    gridLayout_4->addLayout(hboxLayout5, 2, 0, 1, 1);
+    gridLayout10->addLayout(hboxLayout8, 2, 0, 1, 1);
 
-    hboxLayout6 = new QHBoxLayout();
-#ifndef Q_OS_MAC
-    hboxLayout6->setSpacing(6);
-#endif
-    hboxLayout6->setMargin(0);
-    hboxLayout6->setObjectName(QString::fromUtf8("hboxLayout6"));
+    hboxLayout9 = new QHBoxLayout();
+    hboxLayout9->setObjectName(QString::fromUtf8("hboxLayout9"));
     label_12 = new QLabel(groupBox_2);
     label_12->setObjectName(QString::fromUtf8("label_12"));
 
-    hboxLayout6->addWidget(label_12);
+    hboxLayout9->addWidget(label_12);
 
     labelPortionPlants = new QLabel(groupBox_2);
     labelPortionPlants->setObjectName(QString::fromUtf8("labelPortionPlants"));
 
-    hboxLayout6->addWidget(labelPortionPlants);
+    hboxLayout9->addWidget(labelPortionPlants);
 
     label_38 = new QLabel(groupBox_2);
     label_38->setObjectName(QString::fromUtf8("label_38"));
 
-    hboxLayout6->addWidget(label_38);
+    hboxLayout9->addWidget(label_38);
 
 
-    gridLayout_4->addLayout(hboxLayout6, 4, 0, 1, 1);
+    gridLayout10->addLayout(hboxLayout9, 4, 0, 1, 1);
 
-    hboxLayout7 = new QHBoxLayout();
-#ifndef Q_OS_MAC
-    hboxLayout7->setSpacing(6);
-#endif
-    hboxLayout7->setMargin(0);
-    hboxLayout7->setObjectName(QString::fromUtf8("hboxLayout7"));
+    hboxLayout10 = new QHBoxLayout();
+    hboxLayout10->setObjectName(QString::fromUtf8("hboxLayout10"));
     label_16 = new QLabel(groupBox_2);
     label_16->setObjectName(QString::fromUtf8("label_16"));
 
-    hboxLayout7->addWidget(label_16);
+    hboxLayout10->addWidget(label_16);
 
     labelPortionMeat = new QLabel(groupBox_2);
     labelPortionMeat->setObjectName(QString::fromUtf8("labelPortionMeat"));
 
-    hboxLayout7->addWidget(labelPortionMeat);
+    hboxLayout10->addWidget(labelPortionMeat);
 
     label_39 = new QLabel(groupBox_2);
     label_39->setObjectName(QString::fromUtf8("label_39"));
 
-    hboxLayout7->addWidget(label_39);
+    hboxLayout10->addWidget(label_39);
 
 
-    gridLayout_4->addLayout(hboxLayout7, 5, 0, 1, 1);
+    gridLayout10->addLayout(hboxLayout10, 5, 0, 1, 1);
 
-    horizontalLayout_7 = new QHBoxLayout();
-    horizontalLayout_7->setObjectName(QString::fromUtf8("horizontalLayout_7"));
+    hboxLayout11 = new QHBoxLayout();
+    hboxLayout11->setObjectName(QString::fromUtf8("hboxLayout11"));
     label_54 = new QLabel(groupBox_2);
     label_54->setObjectName(QString::fromUtf8("label_54"));
 
-    horizontalLayout_7->addWidget(label_54);
+    hboxLayout11->addWidget(label_54);
 
     labelPortionAllDairy = new QLabel(groupBox_2);
     labelPortionAllDairy->setObjectName(QString::fromUtf8("labelPortionAllDairy"));
 
-    horizontalLayout_7->addWidget(labelPortionAllDairy);
+    hboxLayout11->addWidget(labelPortionAllDairy);
 
     label_55 = new QLabel(groupBox_2);
     label_55->setObjectName(QString::fromUtf8("label_55"));
 
-    horizontalLayout_7->addWidget(label_55);
+    hboxLayout11->addWidget(label_55);
 
 
-    gridLayout_4->addLayout(horizontalLayout_7, 6, 0, 1, 1);
+    gridLayout10->addLayout(hboxLayout11, 6, 0, 1, 1);
 
-    hboxLayout8 = new QHBoxLayout();
-#ifndef Q_OS_MAC
-    hboxLayout8->setSpacing(6);
-#endif
-    hboxLayout8->setMargin(0);
-    hboxLayout8->setObjectName(QString::fromUtf8("hboxLayout8"));
+    hboxLayout12 = new QHBoxLayout();
+    hboxLayout12->setObjectName(QString::fromUtf8("hboxLayout12"));
     label_18 = new QLabel(groupBox_2);
     label_18->setObjectName(QString::fromUtf8("label_18"));
 
-    hboxLayout8->addWidget(label_18);
+    hboxLayout12->addWidget(label_18);
 
     labelPortionCrops = new QLabel(groupBox_2);
     labelPortionCrops->setObjectName(QString::fromUtf8("labelPortionCrops"));
 
-    hboxLayout8->addWidget(labelPortionCrops);
+    hboxLayout12->addWidget(labelPortionCrops);
 
     label_40 = new QLabel(groupBox_2);
     label_40->setObjectName(QString::fromUtf8("label_40"));
 
-    hboxLayout8->addWidget(label_40);
+    hboxLayout12->addWidget(label_40);
 
 
-    gridLayout_4->addLayout(hboxLayout8, 8, 0, 1, 1);
+    gridLayout10->addLayout(hboxLayout12, 8, 0, 1, 1);
 
-    hboxLayout9 = new QHBoxLayout();
-#ifndef Q_OS_MAC
-    hboxLayout9->setSpacing(6);
-#endif
-    hboxLayout9->setMargin(0);
-    hboxLayout9->setObjectName(QString::fromUtf8("hboxLayout9"));
+    hboxLayout13 = new QHBoxLayout();
+    hboxLayout13->setObjectName(QString::fromUtf8("hboxLayout13"));
     label_19 = new QLabel(groupBox_2);
     label_19->setObjectName(QString::fromUtf8("label_19"));
 
-    hboxLayout9->addWidget(label_19);
+    hboxLayout13->addWidget(label_19);
 
     labelPortionTameMeat = new QLabel(groupBox_2);
     labelPortionTameMeat->setObjectName(QString::fromUtf8("labelPortionTameMeat"));
 
-    hboxLayout9->addWidget(labelPortionTameMeat);
+    hboxLayout13->addWidget(labelPortionTameMeat);
 
     label_41 = new QLabel(groupBox_2);
     label_41->setObjectName(QString::fromUtf8("label_41"));
 
-    hboxLayout9->addWidget(label_41);
+    hboxLayout13->addWidget(label_41);
 
 
-    gridLayout_4->addLayout(hboxLayout9, 9, 0, 1, 1);
+    gridLayout10->addLayout(hboxLayout13, 9, 0, 1, 1);
 
-    _3 = new QHBoxLayout();
-#ifndef Q_OS_MAC
-    _3->setSpacing(6);
-#endif
-    _3->setMargin(0);
-    _3->setObjectName(QString::fromUtf8("_3"));
+    hboxLayout14 = new QHBoxLayout();
+    hboxLayout14->setObjectName(QString::fromUtf8("hboxLayout14"));
     label_31 = new QLabel(groupBox_2);
     label_31->setObjectName(QString::fromUtf8("label_31"));
 
-    _3->addWidget(label_31);
+    hboxLayout14->addWidget(label_31);
 
     labelPortionDairy = new QLabel(groupBox_2);
     labelPortionDairy->setObjectName(QString::fromUtf8("labelPortionDairy"));
 
-    _3->addWidget(labelPortionDairy);
+    hboxLayout14->addWidget(labelPortionDairy);
 
     label_42 = new QLabel(groupBox_2);
     label_42->setObjectName(QString::fromUtf8("label_42"));
 
-    _3->addWidget(label_42);
+    hboxLayout14->addWidget(label_42);
 
 
-    gridLayout_4->addLayout(_3, 10, 0, 1, 1);
+    gridLayout10->addLayout(hboxLayout14, 10, 0, 1, 1);
 
-    horizontalLayout_6 = new QHBoxLayout();
-    horizontalLayout_6->setObjectName(QString::fromUtf8("horizontalLayout_6"));
+    hboxLayout15 = new QHBoxLayout();
+    hboxLayout15->setObjectName(QString::fromUtf8("hboxLayout15"));
     label_51 = new QLabel(groupBox_2);
     label_51->setObjectName(QString::fromUtf8("label_51"));
 
-    horizontalLayout_6->addWidget(label_51);
+    hboxLayout15->addWidget(label_51);
 
     labelPortionWildMeat = new QLabel(groupBox_2);
     labelPortionWildMeat->setObjectName(QString::fromUtf8("labelPortionWildMeat"));
 
-    horizontalLayout_6->addWidget(labelPortionWildMeat);
+    hboxLayout15->addWidget(labelPortionWildMeat);
 
     label_50 = new QLabel(groupBox_2);
     label_50->setObjectName(QString::fromUtf8("label_50"));
 
-    horizontalLayout_6->addWidget(label_50);
+    hboxLayout15->addWidget(label_50);
 
 
-    gridLayout_4->addLayout(horizontalLayout_6, 12, 0, 1, 1);
+    gridLayout10->addLayout(hboxLayout15, 12, 0, 1, 1);
 
-    horizontalLayout_5 = new QHBoxLayout();
-    horizontalLayout_5->setObjectName(QString::fromUtf8("horizontalLayout_5"));
+    hboxLayout16 = new QHBoxLayout();
+    hboxLayout16->setObjectName(QString::fromUtf8("hboxLayout16"));
     label_53 = new QLabel(groupBox_2);
     label_53->setObjectName(QString::fromUtf8("label_53"));
 
-    horizontalLayout_5->addWidget(label_53);
+    hboxLayout16->addWidget(label_53);
 
     labelPortionWildPlants = new QLabel(groupBox_2);
     labelPortionWildPlants->setObjectName(QString::fromUtf8("labelPortionWildPlants"));
 
-    horizontalLayout_5->addWidget(labelPortionWildPlants);
+    hboxLayout16->addWidget(labelPortionWildPlants);
 
     label_52 = new QLabel(groupBox_2);
     label_52->setObjectName(QString::fromUtf8("label_52"));
 
-    horizontalLayout_5->addWidget(label_52);
+    hboxLayout16->addWidget(label_52);
 
 
-    gridLayout_4->addLayout(horizontalLayout_5, 13, 0, 1, 1);
+    gridLayout10->addLayout(hboxLayout16, 13, 0, 1, 1);
 
-    hboxLayout10 = new QHBoxLayout();
-#ifndef Q_OS_MAC
-    hboxLayout10->setSpacing(6);
-#endif
-    hboxLayout10->setMargin(0);
-    hboxLayout10->setObjectName(QString::fromUtf8("hboxLayout10"));
+    hboxLayout17 = new QHBoxLayout();
+    hboxLayout17->setObjectName(QString::fromUtf8("hboxLayout17"));
     label_23 = new QLabel(groupBox_2);
     label_23->setObjectName(QString::fromUtf8("label_23"));
 
-    hboxLayout10->addWidget(label_23);
+    hboxLayout17->addWidget(label_23);
 
     labelCaloriesCrops = new QLabel(groupBox_2);
     labelCaloriesCrops->setObjectName(QString::fromUtf8("labelCaloriesCrops"));
 
-    hboxLayout10->addWidget(labelCaloriesCrops);
+    hboxLayout17->addWidget(labelCaloriesCrops);
 
     label_43 = new QLabel(groupBox_2);
     label_43->setObjectName(QString::fromUtf8("label_43"));
 
-    hboxLayout10->addWidget(label_43);
+    hboxLayout17->addWidget(label_43);
 
 
-    gridLayout_4->addLayout(hboxLayout10, 15, 0, 1, 1);
+    gridLayout10->addLayout(hboxLayout17, 15, 0, 1, 1);
 
-    hboxLayout11 = new QHBoxLayout();
-#ifndef Q_OS_MAC
-    hboxLayout11->setSpacing(6);
-#endif
-    hboxLayout11->setMargin(0);
-    hboxLayout11->setObjectName(QString::fromUtf8("hboxLayout11"));
+    hboxLayout18 = new QHBoxLayout();
+    hboxLayout18->setObjectName(QString::fromUtf8("hboxLayout18"));
     label_21 = new QLabel(groupBox_2);
     label_21->setObjectName(QString::fromUtf8("label_21"));
 
-    hboxLayout11->addWidget(label_21);
+    hboxLayout18->addWidget(label_21);
 
     labelCaloriesTameMeat = new QLabel(groupBox_2);
     labelCaloriesTameMeat->setObjectName(QString::fromUtf8("labelCaloriesTameMeat"));
 
-    hboxLayout11->addWidget(labelCaloriesTameMeat);
+    hboxLayout18->addWidget(labelCaloriesTameMeat);
 
     label_44 = new QLabel(groupBox_2);
     label_44->setObjectName(QString::fromUtf8("label_44"));
 
-    hboxLayout11->addWidget(label_44);
+    hboxLayout18->addWidget(label_44);
 
 
-    gridLayout_4->addLayout(hboxLayout11, 16, 0, 1, 1);
+    gridLayout10->addLayout(hboxLayout18, 16, 0, 1, 1);
 
-    horizontalLayout_2 = new QHBoxLayout();
-    horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
+    hboxLayout19 = new QHBoxLayout();
+    hboxLayout19->setObjectName(QString::fromUtf8("hboxLayout19"));
     label_35 = new QLabel(groupBox_2);
     label_35->setObjectName(QString::fromUtf8("label_35"));
 
-    horizontalLayout_2->addWidget(label_35);
+    hboxLayout19->addWidget(label_35);
 
     labelCaloriesDairy = new QLabel(groupBox_2);
     labelCaloriesDairy->setObjectName(QString::fromUtf8("labelCaloriesDairy"));
 
-    horizontalLayout_2->addWidget(labelCaloriesDairy);
+    hboxLayout19->addWidget(labelCaloriesDairy);
 
     label_45 = new QLabel(groupBox_2);
     label_45->setObjectName(QString::fromUtf8("label_45"));
 
-    horizontalLayout_2->addWidget(label_45);
+    hboxLayout19->addWidget(label_45);
 
 
-    gridLayout_4->addLayout(horizontalLayout_2, 17, 0, 1, 1);
+    gridLayout10->addLayout(hboxLayout19, 17, 0, 1, 1);
 
-    horizontalLayout_3 = new QHBoxLayout();
-    horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
+    hboxLayout20 = new QHBoxLayout();
+    hboxLayout20->setObjectName(QString::fromUtf8("hboxLayout20"));
     label_46 = new QLabel(groupBox_2);
     label_46->setObjectName(QString::fromUtf8("label_46"));
 
-    horizontalLayout_3->addWidget(label_46);
+    hboxLayout20->addWidget(label_46);
 
     labelCaloriesWildMeat = new QLabel(groupBox_2);
     labelCaloriesWildMeat->setObjectName(QString::fromUtf8("labelCaloriesWildMeat"));
 
-    horizontalLayout_3->addWidget(labelCaloriesWildMeat);
+    hboxLayout20->addWidget(labelCaloriesWildMeat);
 
     label_47 = new QLabel(groupBox_2);
     label_47->setObjectName(QString::fromUtf8("label_47"));
 
-    horizontalLayout_3->addWidget(label_47);
+    hboxLayout20->addWidget(label_47);
 
 
-    gridLayout_4->addLayout(horizontalLayout_3, 19, 0, 1, 1);
+    gridLayout10->addLayout(hboxLayout20, 19, 0, 1, 1);
 
-    horizontalLayout_4 = new QHBoxLayout();
-    horizontalLayout_4->setObjectName(QString::fromUtf8("horizontalLayout_4"));
+    hboxLayout21 = new QHBoxLayout();
+    hboxLayout21->setObjectName(QString::fromUtf8("hboxLayout21"));
     label_48 = new QLabel(groupBox_2);
     label_48->setObjectName(QString::fromUtf8("label_48"));
 
-    horizontalLayout_4->addWidget(label_48);
+    hboxLayout21->addWidget(label_48);
 
     labelCaloriesWildPlants = new QLabel(groupBox_2);
     labelCaloriesWildPlants->setObjectName(QString::fromUtf8("labelCaloriesWildPlants"));
 
-    horizontalLayout_4->addWidget(labelCaloriesWildPlants);
+    hboxLayout21->addWidget(labelCaloriesWildPlants);
 
     label_49 = new QLabel(groupBox_2);
     label_49->setObjectName(QString::fromUtf8("label_49"));
 
-    horizontalLayout_4->addWidget(label_49);
+    hboxLayout21->addWidget(label_49);
 
 
-    gridLayout_4->addLayout(horizontalLayout_4, 20, 0, 1, 1);
+    gridLayout10->addLayout(hboxLayout21, 20, 0, 1, 1);
 
     label_4 = new QLabel(groupBox_2);
     label_4->setObjectName(QString::fromUtf8("label_4"));
     label_4->setAlignment(Qt::AlignCenter);
 
-    gridLayout_4->addWidget(label_4, 0, 0, 1, 1);
+    gridLayout10->addWidget(label_4, 0, 0, 1, 1);
 
     label_15 = new QLabel(groupBox_2);
     label_15->setObjectName(QString::fromUtf8("label_15"));
     label_15->setAlignment(Qt::AlignCenter);
 
-    gridLayout_4->addWidget(label_15, 3, 0, 1, 1);
+    gridLayout10->addWidget(label_15, 3, 0, 1, 1);
 
     line_5 = new QFrame(groupBox_2);
     line_5->setObjectName(QString::fromUtf8("line_5"));
     line_5->setFrameShape(QFrame::HLine);
     line_5->setFrameShadow(QFrame::Sunken);
 
-    gridLayout_4->addWidget(line_5, 7, 0, 1, 1);
+    gridLayout10->addWidget(line_5, 7, 0, 1, 1);
 
     label_20 = new QLabel(groupBox_2);
     label_20->setObjectName(QString::fromUtf8("label_20"));
     label_20->setAlignment(Qt::AlignCenter);
 
-    gridLayout_4->addWidget(label_20, 14, 0, 1, 1);
+    gridLayout10->addWidget(label_20, 14, 0, 1, 1);
 
     line_4 = new QFrame(groupBox_2);
     line_4->setObjectName(QString::fromUtf8("line_4"));
     line_4->setFrameShape(QFrame::HLine);
     line_4->setFrameShadow(QFrame::Sunken);
 
-    gridLayout_4->addWidget(line_4, 18, 0, 1, 1);
+    gridLayout10->addWidget(line_4, 18, 0, 1, 1);
 
     line_7 = new QFrame(groupBox_2);
     line_7->setObjectName(QString::fromUtf8("line_7"));
     line_7->setFrameShape(QFrame::HLine);
     line_7->setFrameShadow(QFrame::Sunken);
 
-    gridLayout_4->addWidget(line_7, 11, 0, 1, 1);
+    gridLayout10->addWidget(line_7, 11, 0, 1, 1);
 
-    hboxLayout12 = new QHBoxLayout();
-#ifndef Q_OS_MAC
-    hboxLayout12->setSpacing(6);
-#endif
-    hboxLayout12->setMargin(0);
-    hboxLayout12->setObjectName(QString::fromUtf8("hboxLayout12"));
+    hboxLayout22 = new QHBoxLayout();
+    hboxLayout22->setObjectName(QString::fromUtf8("hboxLayout22"));
     label_8 = new QLabel(groupBox_2);
     label_8->setObjectName(QString::fromUtf8("label_8"));
 
-    hboxLayout12->addWidget(label_8);
+    hboxLayout22->addWidget(label_8);
 
     labelCaloriesIndividual = new QLabel(groupBox_2);
     labelCaloriesIndividual->setObjectName(QString::fromUtf8("labelCaloriesIndividual"));
 
-    hboxLayout12->addWidget(labelCaloriesIndividual);
+    hboxLayout22->addWidget(labelCaloriesIndividual);
 
     label_36 = new QLabel(groupBox_2);
     label_36->setObjectName(QString::fromUtf8("label_36"));
 
-    hboxLayout12->addWidget(label_36);
+    hboxLayout22->addWidget(label_36);
 
 
-    gridLayout_4->addLayout(hboxLayout12, 1, 0, 1, 1);
+    gridLayout10->addLayout(hboxLayout22, 1, 0, 1, 1);
 
-    label_4->raise();
-    label_15->raise();
-    line_5->raise();
-    label_20->raise();
-    line_4->raise();
-    line_7->raise();
 
-    gridLayout_6->addWidget(groupBox_2, 0, 1, 2, 1);
+    gridLayout6->addWidget(groupBox_2, 0, 1, 2, 1);
 
     MainTabs->addTab(diet_tab, QString());
     crops_tab = new QWidget();
     crops_tab->setObjectName(QString::fromUtf8("crops_tab"));
-    gridLayout7 = new QGridLayout(crops_tab);
-    gridLayout7->setObjectName(QString::fromUtf8("gridLayout7"));
+    gridLayout11 = new QGridLayout(crops_tab);
+    gridLayout11->setObjectName(QString::fromUtf8("gridLayout11"));
     splitter_7 = new QSplitter(crops_tab);
     splitter_7->setObjectName(QString::fromUtf8("splitter_7"));
     splitter_7->setOrientation(Qt::Vertical);
     layoutWidget = new QWidget(splitter_7);
     layoutWidget->setObjectName(QString::fromUtf8("layoutWidget"));
-    hboxLayout13 = new QHBoxLayout(layoutWidget);
-#ifndef Q_OS_MAC
-    hboxLayout13->setSpacing(6);
-#endif
-    hboxLayout13->setMargin(0);
-    hboxLayout13->setObjectName(QString::fromUtf8("hboxLayout13"));
-    hboxLayout13->setContentsMargins(0, 0, 0, 0);
+    hboxLayout23 = new QHBoxLayout(layoutWidget);
+    hboxLayout23->setObjectName(QString::fromUtf8("hboxLayout23"));
+    hboxLayout23->setContentsMargins(0, 0, 0, 0);
     tblCrops = new QTableWidget(layoutWidget);
     if (tblCrops->columnCount() < 3)
         tblCrops->setColumnCount(3);
@@ -1379,7 +1278,7 @@ public:
     tblCrops->setSelectionBehavior(QAbstractItemView::SelectRows);
     tblCrops->setShowGrid(false);
 
-    hboxLayout13->addWidget(tblCrops);
+    hboxLayout23->addWidget(tblCrops);
 
     lblCropPix = new QLabel(layoutWidget);
     lblCropPix->setObjectName(QString::fromUtf8("lblCropPix"));
@@ -1387,7 +1286,7 @@ public:
     lblCropPix->setMaximumSize(QSize(128, 128));
     lblCropPix->setAlignment(Qt::AlignCenter);
 
-    hboxLayout13->addWidget(lblCropPix);
+    hboxLayout23->addWidget(lblCropPix);
 
     splitter_7->addWidget(layoutWidget);
     textBrowserCropDefinition = new QTextBrowser(splitter_7);
@@ -1399,57 +1298,57 @@ public:
     textBrowserCropDefinition->setSizePolicy(sizePolicy8);
     splitter_7->addWidget(textBrowserCropDefinition);
 
-    gridLayout7->addWidget(splitter_7, 0, 0, 1, 2);
+    gridLayout11->addWidget(splitter_7, 0, 0, 1, 2);
 
     gbCustomCropMask = new QGroupBox(crops_tab);
     gbCustomCropMask->setObjectName(QString::fromUtf8("gbCustomCropMask"));
     gbCustomCropMask->setCheckable(true);
     gbCustomCropMask->setChecked(false);
-    gridLayout8 = new QGridLayout(gbCustomCropMask);
-    gridLayout8->setObjectName(QString::fromUtf8("gridLayout8"));
+    gridLayout12 = new QGridLayout(gbCustomCropMask);
+    gridLayout12->setObjectName(QString::fromUtf8("gridLayout12"));
     label_26 = new QLabel(gbCustomCropMask);
     label_26->setObjectName(QString::fromUtf8("label_26"));
     sizePolicy5.setHeightForWidth(label_26->sizePolicy().hasHeightForWidth());
     label_26->setSizePolicy(sizePolicy5);
 
-    gridLayout8->addWidget(label_26, 0, 0, 1, 1);
+    gridLayout12->addWidget(label_26, 0, 0, 1, 1);
 
     cboCommonCropRaster = new QComboBox(gbCustomCropMask);
     cboCommonCropRaster->setObjectName(QString::fromUtf8("cboCommonCropRaster"));
 
-    gridLayout8->addWidget(cboCommonCropRaster, 0, 1, 1, 1);
+    gridLayout12->addWidget(cboCommonCropRaster, 0, 1, 1, 1);
 
 
-    gridLayout7->addWidget(gbCustomCropMask, 1, 0, 1, 2);
+    gridLayout11->addWidget(gbCustomCropMask, 1, 0, 1, 2);
 
     gbSlopeMaskCropLand = new QGroupBox(crops_tab);
     gbSlopeMaskCropLand->setObjectName(QString::fromUtf8("gbSlopeMaskCropLand"));
     gbSlopeMaskCropLand->setCheckable(true);
-    gridLayout9 = new QGridLayout(gbSlopeMaskCropLand);
-    gridLayout9->setObjectName(QString::fromUtf8("gridLayout9"));
-    hboxLayout14 = new QHBoxLayout();
-    hboxLayout14->setObjectName(QString::fromUtf8("hboxLayout14"));
+    gridLayout13 = new QGridLayout(gbSlopeMaskCropLand);
+    gridLayout13->setObjectName(QString::fromUtf8("gridLayout13"));
+    hboxLayout24 = new QHBoxLayout();
+    hboxLayout24->setObjectName(QString::fromUtf8("hboxLayout24"));
     label_30 = new QLabel(gbSlopeMaskCropLand);
     label_30->setObjectName(QString::fromUtf8("label_30"));
 
-    hboxLayout14->addWidget(label_30);
+    hboxLayout24->addWidget(label_30);
 
     dsbMinSlopeCropMask = new QDoubleSpinBox(gbSlopeMaskCropLand);
     dsbMinSlopeCropMask->setObjectName(QString::fromUtf8("dsbMinSlopeCropMask"));
     dsbMinSlopeCropMask->setButtonSymbols(QAbstractSpinBox::PlusMinus);
 
-    hboxLayout14->addWidget(dsbMinSlopeCropMask);
+    hboxLayout24->addWidget(dsbMinSlopeCropMask);
 
     label_32 = new QLabel(gbSlopeMaskCropLand);
     label_32->setObjectName(QString::fromUtf8("label_32"));
 
-    hboxLayout14->addWidget(label_32);
+    hboxLayout24->addWidget(label_32);
 
 
-    gridLayout9->addLayout(hboxLayout14, 0, 0, 1, 1);
+    gridLayout13->addLayout(hboxLayout24, 0, 0, 1, 1);
 
 
-    gridLayout7->addWidget(gbSlopeMaskCropLand, 2, 0, 1, 1);
+    gridLayout11->addWidget(gbSlopeMaskCropLand, 2, 0, 1, 1);
 
     vboxLayout = new QVBoxLayout();
     vboxLayout->setObjectName(QString::fromUtf8("vboxLayout"));
@@ -1468,25 +1367,21 @@ public:
     vboxLayout->addWidget(pbnNewCrop);
 
 
-    gridLayout7->addLayout(vboxLayout, 2, 1, 1, 1);
+    gridLayout11->addLayout(vboxLayout, 2, 1, 1, 1);
 
     MainTabs->addTab(crops_tab, QString());
     animals_tab = new QWidget();
     animals_tab->setObjectName(QString::fromUtf8("animals_tab"));
-    gridLayout_2 = new QGridLayout(animals_tab);
-    gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
+    gridLayout14 = new QGridLayout(animals_tab);
+    gridLayout14->setObjectName(QString::fromUtf8("gridLayout14"));
     splitter_3 = new QSplitter(animals_tab);
     splitter_3->setObjectName(QString::fromUtf8("splitter_3"));
     splitter_3->setOrientation(Qt::Vertical);
     layoutWidget1 = new QWidget(splitter_3);
     layoutWidget1->setObjectName(QString::fromUtf8("layoutWidget1"));
-    gridLayout10 = new QGridLayout(layoutWidget1);
-#ifndef Q_OS_MAC
-    gridLayout10->setSpacing(6);
-#endif
-    gridLayout10->setMargin(0);
-    gridLayout10->setObjectName(QString::fromUtf8("gridLayout10"));
-    gridLayout10->setContentsMargins(0, 0, 0, 0);
+    gridLayout15 = new QGridLayout(layoutWidget1);
+    gridLayout15->setObjectName(QString::fromUtf8("gridLayout15"));
+    gridLayout15->setContentsMargins(0, 0, 0, 0);
     tblAnimals = new QTableWidget(layoutWidget1);
     if (tblAnimals->columnCount() < 4)
         tblAnimals->setColumnCount(4);
@@ -1504,11 +1399,11 @@ public:
     tblAnimals->setSelectionBehavior(QAbstractItemView::SelectRows);
     tblAnimals->setShowGrid(false);
 
-    gridLayout10->addWidget(tblAnimals, 0, 0, 2, 1);
+    gridLayout15->addWidget(tblAnimals, 0, 0, 2, 1);
 
-    spacerItem8 = new QSpacerItem(20, 16, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    spacerItem12 = new QSpacerItem(20, 16, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-    gridLayout10->addItem(spacerItem8, 1, 1, 1, 1);
+    gridLayout15->addItem(spacerItem12, 1, 1, 1, 1);
 
     lblAnimalPix = new QLabel(layoutWidget1);
     lblAnimalPix->setObjectName(QString::fromUtf8("lblAnimalPix"));
@@ -1516,45 +1411,45 @@ public:
     lblAnimalPix->setMaximumSize(QSize(128, 128));
     lblAnimalPix->setAlignment(Qt::AlignCenter);
 
-    gridLayout10->addWidget(lblAnimalPix, 0, 1, 1, 1);
+    gridLayout15->addWidget(lblAnimalPix, 0, 1, 1, 1);
 
     splitter_3->addWidget(layoutWidget1);
     textBrowserAnimalDefinition = new QTextBrowser(splitter_3);
     textBrowserAnimalDefinition->setObjectName(QString::fromUtf8("textBrowserAnimalDefinition"));
     splitter_3->addWidget(textBrowserAnimalDefinition);
 
-    gridLayout_2->addWidget(splitter_3, 0, 0, 1, 2);
+    gridLayout14->addWidget(splitter_3, 0, 0, 1, 2);
 
     gbCustomMaskGrazingLand = new QGroupBox(animals_tab);
     gbCustomMaskGrazingLand->setObjectName(QString::fromUtf8("gbCustomMaskGrazingLand"));
     gbCustomMaskGrazingLand->setCheckable(true);
     gbCustomMaskGrazingLand->setChecked(false);
-    gridLayout11 = new QGridLayout(gbCustomMaskGrazingLand);
-    gridLayout11->setObjectName(QString::fromUtf8("gridLayout11"));
+    gridLayout16 = new QGridLayout(gbCustomMaskGrazingLand);
+    gridLayout16->setObjectName(QString::fromUtf8("gridLayout16"));
     label_25 = new QLabel(gbCustomMaskGrazingLand);
     label_25->setObjectName(QString::fromUtf8("label_25"));
     sizePolicy5.setHeightForWidth(label_25->sizePolicy().hasHeightForWidth());
     label_25->setSizePolicy(sizePolicy5);
 
-    gridLayout11->addWidget(label_25, 0, 0, 1, 1);
+    gridLayout16->addWidget(label_25, 0, 0, 1, 1);
 
     cboCommonGrazingRaster = new QComboBox(gbCustomMaskGrazingLand);
     cboCommonGrazingRaster->setObjectName(QString::fromUtf8("cboCommonGrazingRaster"));
 
-    gridLayout11->addWidget(cboCommonGrazingRaster, 0, 1, 1, 1);
+    gridLayout16->addWidget(cboCommonGrazingRaster, 0, 1, 1, 1);
 
 
-    gridLayout_2->addWidget(gbCustomMaskGrazingLand, 1, 0, 1, 2);
+    gridLayout14->addWidget(gbCustomMaskGrazingLand, 1, 0, 1, 2);
 
     gbGenerateMaskGrazingLand = new QGroupBox(animals_tab);
     gbGenerateMaskGrazingLand->setObjectName(QString::fromUtf8("gbGenerateMaskGrazingLand"));
     gbGenerateMaskGrazingLand->setCheckable(true);
-    gridLayout12 = new QGridLayout(gbGenerateMaskGrazingLand);
-    gridLayout12->setObjectName(QString::fromUtf8("gridLayout12"));
+    gridLayout17 = new QGridLayout(gbGenerateMaskGrazingLand);
+    gridLayout17->setObjectName(QString::fromUtf8("gridLayout17"));
     label_33 = new QLabel(gbGenerateMaskGrazingLand);
     label_33->setObjectName(QString::fromUtf8("label_33"));
 
-    gridLayout12->addWidget(label_33, 0, 0, 1, 1);
+    gridLayout17->addWidget(label_33, 0, 0, 1, 1);
 
     dsbMinimumSlopeGrazingMask = new QDoubleSpinBox(gbGenerateMaskGrazingLand);
     dsbMinimumSlopeGrazingMask->setObjectName(QString::fromUtf8("dsbMinimumSlopeGrazingMask"));
@@ -1562,27 +1457,27 @@ public:
     dsbMinimumSlopeGrazingMask->setSingleStep(0.01);
     dsbMinimumSlopeGrazingMask->setValue(8);
 
-    gridLayout12->addWidget(dsbMinimumSlopeGrazingMask, 0, 1, 1, 1);
+    gridLayout17->addWidget(dsbMinimumSlopeGrazingMask, 0, 1, 1, 1);
 
     label_34 = new QLabel(gbGenerateMaskGrazingLand);
     label_34->setObjectName(QString::fromUtf8("label_34"));
 
-    gridLayout12->addWidget(label_34, 0, 2, 1, 1);
+    gridLayout17->addWidget(label_34, 0, 2, 1, 1);
 
     dsbMaximumSlopeGrazingMask = new QDoubleSpinBox(gbGenerateMaskGrazingLand);
     dsbMaximumSlopeGrazingMask->setObjectName(QString::fromUtf8("dsbMaximumSlopeGrazingMask"));
     dsbMaximumSlopeGrazingMask->setButtonSymbols(QAbstractSpinBox::PlusMinus);
     dsbMaximumSlopeGrazingMask->setValue(13);
 
-    gridLayout12->addWidget(dsbMaximumSlopeGrazingMask, 0, 3, 1, 1);
+    gridLayout17->addWidget(dsbMaximumSlopeGrazingMask, 0, 3, 1, 1);
 
 
-    gridLayout_2->addWidget(gbGenerateMaskGrazingLand, 2, 0, 1, 2);
+    gridLayout14->addWidget(gbGenerateMaskGrazingLand, 2, 0, 1, 2);
 
     gbFoodValue = new QGroupBox(animals_tab);
     gbFoodValue->setObjectName(QString::fromUtf8("gbFoodValue"));
-    gridLayout13 = new QGridLayout(gbFoodValue);
-    gridLayout13->setObjectName(QString::fromUtf8("gridLayout13"));
+    gridLayout18 = new QGridLayout(gbFoodValue);
+    gridLayout18->setObjectName(QString::fromUtf8("gridLayout18"));
     sbCommonRasterValue = new QSpinBox(gbFoodValue);
     sbCommonRasterValue->setObjectName(QString::fromUtf8("sbCommonRasterValue"));
     sbCommonRasterValue->setButtonSymbols(QAbstractSpinBox::PlusMinus);
@@ -1591,18 +1486,18 @@ public:
     sbCommonRasterValue->setSingleStep(1);
     sbCommonRasterValue->setValue(8);
 
-    gridLayout13->addWidget(sbCommonRasterValue, 0, 0, 1, 1);
+    gridLayout18->addWidget(sbCommonRasterValue, 0, 0, 1, 1);
 
     cbCommonLandEnergyType = new QComboBox(gbFoodValue);
     cbCommonLandEnergyType->setObjectName(QString::fromUtf8("cbCommonLandEnergyType"));
 
-    gridLayout13->addWidget(cbCommonLandEnergyType, 0, 1, 1, 1);
+    gridLayout18->addWidget(cbCommonLandEnergyType, 0, 1, 1, 1);
 
     label_28 = new QLabel(gbFoodValue);
     label_28->setObjectName(QString::fromUtf8("label_28"));
     label_28->setAlignment(Qt::AlignCenter);
 
-    gridLayout13->addWidget(label_28, 0, 2, 1, 1);
+    gridLayout18->addWidget(label_28, 0, 2, 1, 1);
 
     cbAreaUnits = new QComboBox(gbFoodValue);
     cbAreaUnits->setObjectName(QString::fromUtf8("cbAreaUnits"));
@@ -1610,21 +1505,17 @@ public:
     cbAreaUnits->setSizePolicy(sizePolicy2);
     cbAreaUnits->setCursor(QCursor(Qt::PointingHandCursor));
 
-    gridLayout13->addWidget(cbAreaUnits, 0, 3, 1, 1);
+    gridLayout18->addWidget(cbAreaUnits, 0, 3, 1, 1);
 
     label_27 = new QLabel(gbFoodValue);
     label_27->setObjectName(QString::fromUtf8("label_27"));
 
-    gridLayout13->addWidget(label_27, 0, 4, 1, 1);
+    gridLayout18->addWidget(label_27, 0, 4, 1, 1);
 
 
-    gridLayout_2->addWidget(gbFoodValue, 3, 0, 1, 1);
+    gridLayout14->addWidget(gbFoodValue, 3, 0, 1, 1);
 
     vboxLayout1 = new QVBoxLayout();
-#ifndef Q_OS_MAC
-    vboxLayout1->setSpacing(6);
-#endif
-    vboxLayout1->setMargin(0);
     vboxLayout1->setObjectName(QString::fromUtf8("vboxLayout1"));
     pbnNewAnimal = new QPushButton(animals_tab);
     pbnNewAnimal->setObjectName(QString::fromUtf8("pbnNewAnimal"));
@@ -1641,13 +1532,13 @@ public:
     vboxLayout1->addWidget(pbnNewAnimalParameter);
 
 
-    gridLayout_2->addLayout(vboxLayout1, 3, 1, 1, 1);
+    gridLayout14->addLayout(vboxLayout1, 3, 1, 1, 1);
 
     MainTabs->addTab(animals_tab, QString());
     results_tab = new QWidget();
     results_tab->setObjectName(QString::fromUtf8("results_tab"));
-    gridLayout14 = new QGridLayout(results_tab);
-    gridLayout14->setObjectName(QString::fromUtf8("gridLayout14"));
+    gridLayout19 = new QGridLayout(results_tab);
+    gridLayout19->setObjectName(QString::fromUtf8("gridLayout19"));
     splitter_5 = new QSplitter(results_tab);
     splitter_5->setObjectName(QString::fromUtf8("splitter_5"));
     splitter_5->setOrientation(Qt::Horizontal);
@@ -1717,48 +1608,42 @@ public:
     splitter_4->addWidget(textBrowserResultsAnimals);
     splitter_5->addWidget(splitter_4);
 
-    gridLayout14->addWidget(splitter_5, 0, 0, 1, 6);
+    gridLayout19->addWidget(splitter_5, 0, 0, 1, 6);
 
-    spacerItem9 = new QSpacerItem(341, 27, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    spacerItem13 = new QSpacerItem(341, 27, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-    gridLayout14->addItem(spacerItem9, 1, 0, 1, 1);
+    gridLayout19->addItem(spacerItem13, 1, 0, 1, 1);
 
     pbnTargets = new QPushButton(results_tab);
     pbnTargets->setObjectName(QString::fromUtf8("pbnTargets"));
 
-    gridLayout14->addWidget(pbnTargets, 1, 1, 1, 1);
+    gridLayout19->addWidget(pbnTargets, 1, 1, 1, 1);
 
     pbnFallow = new QPushButton(results_tab);
     pbnFallow->setObjectName(QString::fromUtf8("pbnFallow"));
 
-    gridLayout14->addWidget(pbnFallow, 1, 2, 1, 1);
+    gridLayout19->addWidget(pbnFallow, 1, 2, 1, 1);
 
     pbnHerds = new QPushButton(results_tab);
     pbnHerds->setObjectName(QString::fromUtf8("pbnHerds"));
 
-    gridLayout14->addWidget(pbnHerds, 1, 3, 1, 1);
+    gridLayout19->addWidget(pbnHerds, 1, 3, 1, 1);
 
     pbnText = new QPushButton(results_tab);
     pbnText->setObjectName(QString::fromUtf8("pbnText"));
 
-    gridLayout14->addWidget(pbnText, 1, 4, 1, 1);
+    gridLayout19->addWidget(pbnText, 1, 4, 1, 1);
 
     pbnHtml = new QPushButton(results_tab);
     pbnHtml->setObjectName(QString::fromUtf8("pbnHtml"));
 
-    gridLayout14->addWidget(pbnHtml, 1, 5, 1, 1);
+    gridLayout19->addWidget(pbnHtml, 1, 5, 1, 1);
 
     MainTabs->addTab(results_tab, QString());
     tab = new QWidget();
     tab->setObjectName(QString::fromUtf8("tab"));
-    gridLayout15 = new QGridLayout(tab);
-#ifndef Q_OS_MAC
-    gridLayout15->setSpacing(6);
-#endif
-#ifndef Q_OS_MAC
-    gridLayout15->setMargin(9);
-#endif
-    gridLayout15->setObjectName(QString::fromUtf8("gridLayout15"));
+    gridLayout20 = new QGridLayout(tab);
+    gridLayout20->setObjectName(QString::fromUtf8("gridLayout20"));
     splitter_6 = new QSplitter(tab);
     splitter_6->setObjectName(QString::fromUtf8("splitter_6"));
     splitter_6->setOrientation(Qt::Horizontal);
@@ -1768,35 +1653,23 @@ public:
     tbReport->setSizePolicy(sizePolicy);
     splitter_6->addWidget(tbReport);
 
-    gridLayout15->addWidget(splitter_6, 0, 0, 1, 1);
+    gridLayout20->addWidget(splitter_6, 0, 0, 1, 1);
 
     MainTabs->addTab(tab, QString());
     tabLogs = new QWidget();
     tabLogs->setObjectName(QString::fromUtf8("tabLogs"));
-    gridLayout16 = new QGridLayout(tabLogs);
-#ifndef Q_OS_MAC
-    gridLayout16->setSpacing(6);
-#endif
-#ifndef Q_OS_MAC
-    gridLayout16->setMargin(9);
-#endif
-    gridLayout16->setObjectName(QString::fromUtf8("gridLayout16"));
+    gridLayout21 = new QGridLayout(tabLogs);
+    gridLayout21->setObjectName(QString::fromUtf8("gridLayout21"));
     tbLogs = new QTextBrowser(tabLogs);
     tbLogs->setObjectName(QString::fromUtf8("tbLogs"));
 
-    gridLayout16->addWidget(tbLogs, 0, 0, 1, 1);
+    gridLayout21->addWidget(tbLogs, 0, 0, 1, 1);
 
     MainTabs->addTab(tabLogs, QString());
     help_tab = new QWidget();
     help_tab->setObjectName(QString::fromUtf8("help_tab"));
-    gridLayout17 = new QGridLayout(help_tab);
-#ifndef Q_OS_MAC
-    gridLayout17->setSpacing(6);
-#endif
-#ifndef Q_OS_MAC
-    gridLayout17->setMargin(9);
-#endif
-    gridLayout17->setObjectName(QString::fromUtf8("gridLayout17"));
+    gridLayout22 = new QGridLayout(help_tab);
+    gridLayout22->setObjectName(QString::fromUtf8("gridLayout22"));
     splitter = new QSplitter(help_tab);
     splitter->setObjectName(QString::fromUtf8("splitter"));
     splitter->setOrientation(Qt::Horizontal);
@@ -1804,7 +1677,6 @@ public:
     layoutWidget4->setObjectName(QString::fromUtf8("layoutWidget4"));
     vboxLayout4 = new QVBoxLayout(layoutWidget4);
     vboxLayout4->setSpacing(1);
-    vboxLayout4->setMargin(0);
     vboxLayout4->setObjectName(QString::fromUtf8("vboxLayout4"));
     vboxLayout4->setContentsMargins(0, 0, 0, 0);
     treeHelp = new QTreeWidget(layoutWidget4);
@@ -1967,14 +1839,13 @@ public:
     sizePolicy11.setVerticalStretch(0);
     sizePolicy11.setHeightForWidth(textHelp->sizePolicy().hasHeightForWidth());
     textHelp->setSizePolicy(sizePolicy11);
-    textHelp->setStyleSheet(QString::fromUtf8("<CENTER>"));
     splitter->addWidget(textHelp);
 
-    gridLayout17->addWidget(splitter, 0, 0, 1, 1);
+    gridLayout22->addWidget(splitter, 0, 0, 1, 1);
 
     MainTabs->addTab(help_tab, QString());
 
-    gridLayout_3->addWidget(MainTabs, 0, 0, 1, 11);
+    gridLayout->addWidget(MainTabs, 0, 0, 1, 11);
 
     QWidget::setTabOrder(lineEditSiteName, lineEditPeriod);
     QWidget::setTabOrder(lineEditPeriod, sbPopulation);
@@ -2972,18 +2843,18 @@ public:
 
     treeHelp->setSortingEnabled(__sortingEnabled);
     cbDebug->setText(QApplication::translate("LaMainFormBase", "Debugging Mode", 0, QApplication::UnicodeUTF8));
-    textHelp->setHtml(QApplication::translate("LaMainFormBase", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+    textHelp->setStyleSheet(QApplication::translate("LaMainFormBase", "<CENTER>", 0, QApplication::UnicodeUTF8));
+    textHelp->setHtml(QApplication::translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-family:'Lucida Grande'; font-size:13pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><span style=\" font-size:10pt; font-weight:600;\">To learn more about a feature or field in LandUse Analyst, you can do one of four things.</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\">1. <span style=\" font-size:10pt; color:#0000ff;\">Hover over it</span> with your mouse arrow for a brief description</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px;"
-        " -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\">2. Click the <span style=\" font-size:12pt; font-weight:600; color:#0000ff;\">?</span> in the top right of the main window and then click on the item you want detailed help for.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\">2. Click the <span s"
+        "tyle=\" font-size:12pt; font-weight:600; color:#0000ff;\">?</span> in the top right of the main window and then click on the item you want detailed help for.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"> Click anywhere to make the help box go away.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\">3. RIght Click on the thing you want help for.  If there is detailed help for it, you will see a <span style=\" font-weight:600; color:#0000ff;\">What is this?</span> option that you can then click on.  Again, you can click anywhere to make the help box go away.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-in"
-        "dent:0px; font-family:'Sans Serif'; font-size:9pt;\">4. Go to the <span style=\" font-weight:600; color:#0000ff;\">Help</span> <span style=\" font-weight:600; color:#0000ff;\">Tab</span> and click on the item you want help with on the left for an even more detailed description of what things are and how they work</p></body></html>", 0, QApplication::UnicodeUTF8));
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\">4. Go to the <span style=\" font-weight:600; col"
+        "or:#0000ff;\">Help</span> <span style=\" font-weight:600; color:#0000ff;\">Tab</span> and click on the item you want help with on the left for an even more detailed description of what things are and how they work</p></body></html>", 0, QApplication::UnicodeUTF8));
     MainTabs->setTabText(MainTabs->indexOf(help_tab), QApplication::translate("LaMainFormBase", "Help", 0, QApplication::UnicodeUTF8));
     Q_UNUSED(LaMainFormBase);
     } // retranslateUi

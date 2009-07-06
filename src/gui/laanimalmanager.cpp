@@ -101,7 +101,7 @@ void LaAnimalManager::refreshAnimalTable(QString theGuid)
   {
     myIterator.next();
     LaAnimal myAnimal = myIterator.value();
-    qDebug() << myAnimal.toText();
+   // qDebug()JASONDIDTHIS<< myAnimal.toText();
     if (theGuid.isEmpty())
     {
         //qDebug("No default active row was requested.Assigning to myAnimal.guid()!");;
@@ -163,15 +163,15 @@ void LaAnimalManager::refreshAnimalTable(QString theGuid)
 void LaAnimalManager::cellClicked(int theRow, int theColumn)
 {
     //note we use the alg name not the id becuase user may have customised params
-  qDebug() << "LaAnimalManager::cellClicked";
+ // qDebug()JASONDIDTHIS<< "LaAnimalManager::cellClicked";
   QString myGuid = tblAnimals->item(tblAnimals->currentRow(),0)->text();
-  qDebug() << "Guid is: " << myGuid;
+ // qDebug()JASONDIDTHIS<< "Guid is: " << myGuid;
   QString myFileName = myGuid + ".xml";
   selectAnimal(myFileName);
 }
 void LaAnimalManager::selectAnimal(QString theFileName)
 {
-  qDebug() << "selectAnimal Called : " << theFileName;
+ // qDebug()JASONDIDTHIS<< "selectAnimal Called : " << theFileName;
   QString myAnimalDir = LaUtils::userAnimalProfilesDirPath();
   LaAnimal myAnimal;
   myAnimal.fromXmlFile(myAnimalDir + QDir::separator() + theFileName);

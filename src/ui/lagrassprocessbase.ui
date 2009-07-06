@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>594</width>
-    <height>696</height>
+    <width>593</width>
+    <height>763</height>
    </rect>
   </property>
   <property name="minimumSize" >
@@ -19,11 +19,10 @@
    <string>Grass Processing</string>
   </property>
   <property name="windowIcon" >
-   <iconset resource="../resources/resources.qrc" >
-    <normaloff>:/la_icon_small.png</normaloff>:/la_icon_small.png</iconset>
+   <iconset resource="../resources/resources.qrc" >:/la_icon_small.png</iconset>
   </property>
   <layout class="QGridLayout" >
-   <item rowspan="2" row="0" column="0" >
+   <item rowspan="3" row="0" column="0" colspan="4" >
     <widget class="QGroupBox" name="grpPreview" >
      <property name="sizePolicy" >
       <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
@@ -44,7 +43,7 @@
          </sizepolicy>
         </property>
         <property name="text" >
-         <string>No Preview Currently Available</string>
+         <string>Preview feature not available in Beta Version</string>
         </property>
         <property name="alignment" >
          <set>Qt::AlignCenter</set>
@@ -54,7 +53,7 @@
      </layout>
     </widget>
    </item>
-   <item row="0" column="1" colspan="2" >
+   <item row="0" column="4" colspan="2" >
     <widget class="QGroupBox" name="grpCurrentTarget" >
      <property name="sizePolicy" >
       <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
@@ -113,7 +112,7 @@
      </layout>
     </widget>
    </item>
-   <item row="1" column="1" colspan="2" >
+   <item row="1" column="4" colspan="2" >
     <widget class="QGroupBox" name="grpProgress" >
      <property name="sizePolicy" >
       <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
@@ -278,7 +277,7 @@
      </layout>
     </widget>
    </item>
-   <item row="2" column="0" colspan="3" >
+   <item row="3" column="0" colspan="6" >
     <widget class="QGroupBox" name="groupBox_2" >
      <property name="sizePolicy" >
       <sizepolicy vsizetype="Minimum" hsizetype="Expanding" >
@@ -311,85 +310,12 @@ p, li { white-space: pre-wrap; }
      </layout>
     </widget>
    </item>
-   <item rowspan="2" row="3" column="0" >
-    <layout class="QGridLayout" >
-     <item row="0" column="0" colspan="4" >
-      <widget class="QLabel" name="label_2" >
-       <property name="text" >
-        <string>Select the PERIOD, POPULATION, &amp; DIET RATIO.</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0" >
-      <widget class="QComboBox" name="cbPeriod" >
-       <item>
-        <property name="text" >
-         <string>Chalcolithic</string>
-        </property>
-       </item>
-       <item>
-        <property name="text" >
-         <string>EEB1</string>
-        </property>
-       </item>
-       <item>
-        <property name="text" >
-         <string>LEB1</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-     <item row="1" column="1" colspan="2" >
-      <widget class="QComboBox" name="cbPopulation" >
-       <item>
-        <property name="text" >
-         <string>Max</string>
-        </property>
-       </item>
-       <item>
-        <property name="text" >
-         <string>Min</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-     <item row="1" column="3" >
-      <widget class="QComboBox" name="cbDietRatio" >
-       <item>
-        <property name="text" >
-         <string>70:30</string>
-        </property>
-       </item>
-       <item>
-        <property name="text" >
-         <string>80:20</string>
-        </property>
-       </item>
-       <item>
-        <property name="text" >
-         <string>90:10</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-     <item row="2" column="0" colspan="2" >
-      <widget class="QLabel" name="label_3" >
-       <property name="text" >
-        <string>Other text to include in filename:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="2" colspan="2" >
-      <widget class="QLineEdit" name="leOtherText" />
-     </item>
-    </layout>
-   </item>
-   <item row="3" column="2" >
+   <item row="4" column="5" >
     <spacer>
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
      </property>
-     <property name="sizeHint" stdset="0" >
+     <property name="sizeHint" >
       <size>
        <width>20</width>
        <height>40</height>
@@ -397,23 +323,112 @@ p, li { white-space: pre-wrap; }
      </property>
     </spacer>
    </item>
-   <item row="4" column="1" >
-    <spacer>
-     <property name="orientation" >
-      <enum>Qt::Horizontal</enum>
+   <item row="5" column="0" colspan="6" >
+    <widget class="QLabel" name="label_2" >
+     <property name="text" >
+      <string>Select the PERIOD, POPULATION, &amp; DIET RATIO.</string>
      </property>
-     <property name="sizeHint" stdset="0" >
-      <size>
-       <width>24</width>
-       <height>41</height>
-      </size>
-     </property>
-    </spacer>
+    </widget>
    </item>
-   <item row="4" column="2" >
+   <item row="6" column="0" >
+    <widget class="QComboBox" name="cbPeriod" >
+     <item>
+      <property name="text" >
+       <string>Chalcolithic</string>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>EEB1</string>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>LEB1</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="6" column="1" >
+    <widget class="QComboBox" name="cbPopulation" >
+     <item>
+      <property name="text" >
+       <string>Max</string>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>Min</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="6" column="2" >
+    <widget class="QComboBox" name="cbDietRatio" >
+     <item>
+      <property name="text" >
+       <string>Meat 10%</string>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>Meat 20%</string>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>Meat 30%</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="6" column="3" colspan="2" >
+    <widget class="QComboBox" name="cbDairy" >
+     <item>
+      <property name="text" >
+       <string>Dairy 100%</string>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>Dairy 50%</string>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>No Dairy</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="6" column="5" >
+    <widget class="QComboBox" name="cbAnimalsFed" >
+     <item>
+      <property name="text" >
+       <string>Animals Fed</string>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>Animals Not Fed</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="7" column="0" colspan="2" >
+    <widget class="QLabel" name="label_3" >
+     <property name="text" >
+      <string>Other text to include in filename:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="2" colspan="3" >
+    <widget class="QLineEdit" name="leOtherText" />
+   </item>
+   <item row="7" column="5" >
     <widget class="QDialogButtonBox" name="buttonBox" >
      <property name="standardButtons" >
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::NoButton|QDialogButtonBox::Ok</set>
      </property>
     </widget>
    </item>

@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'lamodel.h'
 **
-** Created: Mon Mar 16 19:50:01 2009
+** Created: Sun Mar 29 14:40:28 2009
 **      by: The Qt Meta Object Compiler version 59 (Qt 4.4.3)
 **
 ** WARNING! All changes made in this file will be lost!

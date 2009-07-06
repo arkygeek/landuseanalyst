@@ -106,13 +106,13 @@ void LaAssemblageConversion::resizeEvent ( QResizeEvent * theEvent )
 void LaAssemblageConversion::on_pbnInsert_clicked()
 {
     // add an animal to the table
-  qDebug() << "pbnInsert";
+ // qDebug()JASONDIDTHIS<< "pbnInsert";
   int myRowCount = tblAnimals->rowCount();
 
-  qDebug() << "rowCount: " << myRowCount;
+ // qDebug()JASONDIDTHIS<< "rowCount: " << myRowCount;
   if (rbManual->isChecked() == true)
   {
-    qDebug() << "manual is checked";
+   // qDebug()JASONDIDTHIS<< "manual is checked";
       // add item to table from manual inputs
     tblAnimals->insertRow(myRowCount);
 
@@ -123,7 +123,7 @@ void LaAssemblageConversion::on_pbnInsert_clicked()
 
     QTableWidgetItem *mypNameItem = new QTableWidgetItem(myName);
     tblAnimals->setItem(myRowCount, 0, mypNameItem);
-    qDebug() << "myName = " << myName;
+   // qDebug()JASONDIDTHIS<< "myName = " << myName;
 
     QTableWidgetItem *mypUsableMeatItem= new QTableWidgetItem(QString::number(myUsableMeat));
     tblAnimals->setItem(myRowCount, 2, mypUsableMeatItem);
@@ -138,7 +138,7 @@ void LaAssemblageConversion::on_pbnInsert_clicked()
   else if (rbAuto->isChecked() == true)
   {
       // add item to table from pre-defined animals
-    qDebug() << "auto is checked";
+   // qDebug()JASONDIDTHIS<< "auto is checked";
     LaAnimal myAnimal = LaUtils::getAnimal( cboAnimal->itemData( cboAnimal->currentIndex(), Qt::UserRole).toString());
     tblAnimals->insertRow(myRowCount);
 
@@ -151,7 +151,7 @@ void LaAssemblageConversion::on_pbnInsert_clicked()
 
     QTableWidgetItem *mypNameItem = new QTableWidgetItem(myName);
     tblAnimals->setItem(myRowCount, 0, mypNameItem);
-    qDebug() << "myName = " << myName;
+   // qDebug()JASONDIDTHIS<< "myName = " << myName;
 
     QTableWidgetItem *mypUsableMeatItem= new QTableWidgetItem(QString::number(myUsableMeat));
     tblAnimals->setItem(myRowCount, 2, mypUsableMeatItem);
@@ -165,7 +165,7 @@ void LaAssemblageConversion::on_pbnInsert_clicked()
   }
   else
     {
-      qDebug() << "nothing selected, just returning";
+     // qDebug()JASONDIDTHIS<< "nothing selected, just returning";
       return;
     }
   return;
@@ -191,7 +191,7 @@ void LaAssemblageConversion::on_pbnCalculate_clicked()
                      * (mypUsableMeatWidget->text().toInt())
                      * (mypCalsPerKgWidget->text().toInt())
                      * 0.001;   // to keep figures within limits
-    qDebug() << "row: " << myCurrentRow <<" Adjustment sum: " << myAdjustmentSum;
+   // qDebug()JASONDIDTHIS<< "row: " << myCurrentRow <<" Adjustment sum: " << myAdjustmentSum;
   }
     // iterate table again, adding percentage contribution to diet
   float myDebugSumCheck = 0.0;
@@ -210,9 +210,9 @@ void LaAssemblageConversion::on_pbnCalculate_clicked()
    myDebugSumCheck += myContributionToDiet;
     QTableWidgetItem *mypContributionToDiet= new QTableWidgetItem(QString::number(myContributionToDiet));
     tblAnimals->setItem(myCurrentRow1, 4, mypContributionToDiet);
-    qDebug() << "debug sum check: " << myDebugSumCheck;
+   // qDebug()JASONDIDTHIS<< "debug sum check: " << myDebugSumCheck;
   }
-  qDebug() << "Final debug sum (should be 100) : " << myDebugSumCheck;
+ // qDebug()JASONDIDTHIS<< "Final debug sum (should be 100) : " << myDebugSumCheck;
 
 
 }

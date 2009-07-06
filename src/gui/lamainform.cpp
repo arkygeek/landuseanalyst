@@ -787,12 +787,12 @@ void LaMainForm::setDietLabels()
           if  (cboxIncludeDairy->isChecked())
           {
             myDietLabels=myModel.doCalcsPlantsFirstIncludeDairy();
-            qDebug() << "doCalcsPlantsFirstIncludeDairy";
+           // qDebug()JASON << "doCalcsPlantsFirstIncludeDairy";
           }
           else
           {
             myDietLabels=myModel.doCalcsPlantsFirstDairySeperate();
-            qDebug() << "doCalcsPlantsFirstDairySeperate";
+           // qDebug()JASON << "doCalcsPlantsFirstDairySeperate";
           }
         }
         else
@@ -800,12 +800,12 @@ void LaMainForm::setDietLabels()
           if  (cboxIncludeDairy->isChecked())
           {
             myDietLabels=myModel.doCalcsAnimalsFirstIncludeDiary();
-            qDebug() << "doCalcsAnimalsFirstIncludeDiary";
+           // qDebug()JASON << "doCalcsAnimalsFirstIncludeDiary";
           }
           else
           {
             myDietLabels=myModel.doCalcsAnimalsFirstDairySeparate();
-            qDebug() << "doCalcsAnimalsFirstDairySeparate";
+           // qDebug()JASON << "doCalcsAnimalsFirstDairySeparate";
           }
         }
       }
@@ -1095,8 +1095,8 @@ void LaMainForm::on_pushButtonRun_clicked()
               QString myCropGuid = myCropReportIterator.key();
               myCropsTargetsMap.insert(myCropGuid,myTarget);
             }
-            qDebug() << "\n\n\nFINAL ANIMAL AREA TARGET MAP \n" << myAnimalTargetsMap;
-            qDebug() << "\n\n\nFINAL CROPS AREA TARGET MAP \n" << myCropsTargetsMap;
+           // qDebug()JASON << "\n\n\nFINAL ANIMAL AREA TARGET MAP \n" << myAnimalTargetsMap;
+           // qDebug()JASON << "\n\n\nFINAL CROPS AREA TARGET MAP \n" << myCropsTargetsMap;
           }
           else
           {
@@ -1125,8 +1125,8 @@ void LaMainForm::on_pushButtonRun_clicked()
               myCropsTargetsMap.insert(myCropGuid,myTarget);
             }
           }
-          qDebug() << "\n\n\nFINAL ANIMAL AREA TARGET MAP \n" << myAnimalTargetsMap;
-          qDebug() << "\n\n\nFINAL CROPS AREA TARGET MAP \n" << myCropsTargetsMap;
+         // qDebug()JASON << "\n\n\nFINAL ANIMAL AREA TARGET MAP \n" << myAnimalTargetsMap;
+         // qDebug()JASON << "\n\n\nFINAL CROPS AREA TARGET MAP \n" << myCropsTargetsMap;
         }
         else
         {
@@ -1156,8 +1156,8 @@ void LaMainForm::on_pushButtonRun_clicked()
               QString myCropGuid = myCropReportIterator.key();
               myCropsTargetsMap.insert(myCropGuid,myTarget);
             }
-            qDebug() << "\n\n\nFINAL ANIMAL AREA TARGET MAP \n" << myAnimalTargetsMap;
-            qDebug() << "\n\n\nFINAL CROPS AREA TARGET MAP \n" << myCropsTargetsMap;
+           // qDebug()JASON << "\n\n\nFINAL ANIMAL AREA TARGET MAP \n" << myAnimalTargetsMap;
+           // qDebug()JASON << "\n\n\nFINAL CROPS AREA TARGET MAP \n" << myCropsTargetsMap;
           }
           else
           {
@@ -1185,8 +1185,8 @@ void LaMainForm::on_pushButtonRun_clicked()
               QString myCropGuid = myCropReportIterator.key();
               myCropsTargetsMap.insert(myCropGuid,myTarget);
             }
-            qDebug() << "\n\n\nFINAL ANIMAL AREA TARGET MAP \n" << myAnimalTargetsMap;
-            qDebug() << "\n\n\nFINAL CROPS AREA TARGET MAP \n" << myCropsTargetsMap;
+           // qDebug()JASON << "\n\n\nFINAL ANIMAL AREA TARGET MAP \n" << myAnimalTargetsMap;
+           // qDebug()JASON << "\n\n\nFINAL CROPS AREA TARGET MAP \n" << myCropsTargetsMap;
           }
         }
       }
@@ -1470,12 +1470,12 @@ void LaMainForm::cropCalcClicked(QListWidgetItem * thepCurrentItem, QListWidgetI
       if  (cboxIncludeDairy->isChecked())
       {
         myDietLabels=myModel.doCalcsPlantsFirstIncludeDairy();
-        qDebug() << "doCalcsPlantsFirstIncludeDairy";
+       // qDebug()JASON << "doCalcsPlantsFirstIncludeDairy";
       }
       else
       {
         myDietLabels=myModel.doCalcsPlantsFirstDairySeperate();
-        qDebug() << "doCalcsPlantsFirstDairySeperate";
+       // qDebug()JASON << "doCalcsPlantsFirstDairySeperate";
       }
     }
     else
@@ -1483,12 +1483,12 @@ void LaMainForm::cropCalcClicked(QListWidgetItem * thepCurrentItem, QListWidgetI
       if  (cboxIncludeDairy->isChecked())
       {
         myDietLabels=myModel.doCalcsAnimalsFirstIncludeDiary();
-        qDebug() << "doCalcsAnimalsFirstIncludeDiary";
+       // qDebug()JASON << "doCalcsAnimalsFirstIncludeDiary";
       }
       else
       {
         myDietLabels=myModel.doCalcsAnimalsFirstDairySeparate();
-        qDebug() << "doCalcsAnimalsFirstDairySeparate";
+       // qDebug()JASON << "doCalcsAnimalsFirstDairySeparate";
       }
     }
   }
@@ -1669,12 +1669,12 @@ void LaMainForm::animalCalcClicked(QListWidgetItem * thepCurrentItem, QListWidge
       if  (cboxIncludeDairy->isChecked())
       {
         myDietLabels=myModel.doCalcsPlantsFirstIncludeDairy();
-        qDebug() << "doCalcsPlantsFirstIncludeDairy";
+       // qDebug()JASON << "doCalcsPlantsFirstIncludeDairy";
       }
       else
       {
         myDietLabels=myModel.doCalcsPlantsFirstDairySeperate();
-        qDebug() << "doCalcsPlantsFirstDairySeperate";
+       // qDebug()JASON << "doCalcsPlantsFirstDairySeperate";
       }
     }
     else
@@ -1682,12 +1682,12 @@ void LaMainForm::animalCalcClicked(QListWidgetItem * thepCurrentItem, QListWidge
       if  (cboxIncludeDairy->isChecked())
       {
         myDietLabels=myModel.doCalcsAnimalsFirstIncludeDiary();
-        qDebug() << "doCalcsAnimalsFirstIncludeDiary";
+       // qDebug()JASON << "doCalcsAnimalsFirstIncludeDiary";
       }
       else
       {
         myDietLabels=myModel.doCalcsAnimalsFirstDairySeparate();
-        qDebug() << "doCalcsAnimalsFirstDairySeparate";
+       // qDebug()JASON << "doCalcsAnimalsFirstDairySeparate";
       }
     }
   }

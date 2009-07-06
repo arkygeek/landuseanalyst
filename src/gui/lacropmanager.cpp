@@ -110,10 +110,10 @@ void LaCropManager::refreshCropTable(QString theGuid)
   {
     myIterator.next();
     LaCrop myCrop = myIterator.value();
-    qDebug() << myCrop.toText();
+   // qDebug()JASONDIDTHIS<< myCrop.toText();
     if (theGuid.isEmpty())
     {
-      qDebug() << "No default active row was requested.Assigning to myCrop.guid()!";
+     // qDebug()JASONDIDTHIS<< "No default active row was requested.Assigning to myCrop.guid()!";
       theGuid=myCrop.guid();
     }
     if (myCrop.guid()==theGuid)
@@ -123,7 +123,7 @@ void LaCropManager::refreshCropTable(QString theGuid)
       // Insert new row ready to fill with details
     tblCrops->insertRow(myCurrentRow);
     QString myGuid = myCrop.guid();
-    qDebug() << "Inserting crop with guid: " << myGuid;
+   // qDebug()JASONDIDTHIS<< "Inserting crop with guid: " << myGuid;
       // Add details to the new row
     QTableWidgetItem *mypFileNameItem= new QTableWidgetItem(myGuid);
     tblCrops->setItem(myCurrentRow, 0, mypFileNameItem);
@@ -172,15 +172,15 @@ void LaCropManager::refreshCropTable(QString theGuid)
 void LaCropManager::cellClicked(int theRow, int theColumn)
 {
     //note we use the alg name not the id because user may have customised params
-  qDebug() << "LaCropManager::cellClicked";
+ // qDebug()JASONDIDTHIS<< "LaCropManager::cellClicked";
   QString myGuid = tblCrops->item(tblCrops->currentRow(),0)->text();
-  qDebug() << "Guid is: " << myGuid;
+ // qDebug()JASONDIDTHIS<< "Guid is: " << myGuid;
   QString myFileName = myGuid + ".xml";
   selectCrop(myFileName);
 }
 void LaCropManager::selectCrop(QString theFileName)
 {
-  qDebug() << "selectCrop Called : " << theFileName;
+ // qDebug()JASONDIDTHIS<< "selectCrop Called : " << theFileName;
   QString myCropDir = LaUtils::userCropProfilesDirPath();
   LaCrop myCrop;
   myCrop.fromXmlFile(myCropDir + QDir::separator() + theFileName);
@@ -215,7 +215,7 @@ void LaCropManager::on_pushButtonSave_clicked()
 }
 void LaCropManager::on_toolNew_clicked()
 {
-  qDebug() << "New toolbutton clicked";
+ // qDebug()JASONDIDTHIS<< "New toolbutton clicked";
   LaCrop myCrop;
   myCrop.setGuid();
   mCrop = myCrop;
@@ -231,7 +231,7 @@ void LaCropManager::resizeEvent ( QResizeEvent * theEvent )
 
 void LaCropManager::on_toolCopy_clicked()
 {
-  qDebug() << "Copy toolbutton clicked";
+ // qDebug()JASONDIDTHIS<< "Copy toolbutton clicked";
   if (tblCrops->currentRow() < 0)
   {
     return;
@@ -261,7 +261,7 @@ void LaCropManager::on_toolCopy_clicked()
 }
 void LaCropManager::on_toolDelete_clicked()
 {
-  qDebug() << "Delete toolbutton clicked";
+ // qDebug()JASONDIDTHIS<< "Delete toolbutton clicked";
   if (tblCrops->currentRow() < 0)
   {
     return;

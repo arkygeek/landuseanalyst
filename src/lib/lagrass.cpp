@@ -112,10 +112,10 @@ bool LaGrass::createFrictionMap(QString theBaseRaster,QString theOutputRaster)
   QString myCommand = "r.mapcalc";
   QStringList myArguments;
   myArguments << theOutputRaster + " = if(isnull(" + theBaseRaster + "), null(), 1)";
-  qDebug() << myCommand << "  " << myArguments.join(" ");
+ // qDebug()JASONDIDTHIS<< myCommand << "  " << myArguments.join(" ");
   QString myErrorLog;
   QString myResult = runCommand(myCommand,myArguments,myErrorLog);
-  qDebug() << myResult;
+ // qDebug()JASONDIDTHIS<< myResult;
   if (myErrorLog.isEmpty())
   {
     return true;
@@ -131,10 +131,10 @@ bool LaGrass::createInverseMask(float theMin, QString theMaskRaster)
   QString myCommand = "r.mapcalc";
   QStringList myArguments;
   myArguments << "laCostMapReclassed=if(laWalkCost>" + QString::number(theMin) + ",1,0)";
-  qDebug() << myCommand << "  " << myArguments.join(" ");
+ // qDebug()JASONDIDTHIS<< myCommand << "  " << myArguments.join(" ");
   QString myErrorLog;
   QString myResult = runCommand(myCommand,myArguments,myErrorLog);
-  qDebug() << myResult;
+ // qDebug()JASONDIDTHIS<< myResult;
 
   createCombinedMask("laCostMapReclassed", theMaskRaster);
 
@@ -155,10 +155,10 @@ bool LaGrass::createMask(QString theCostSurface, QString theMaskRaster)
   QStringList myArguments;
   QString myMaskName = "tmpMask";
   myArguments << myMaskName + "=" + theCostSurface + "*" + theMaskRaster;
-  qDebug() << myCommand << "  " << myArguments.join(" ");
+ // qDebug()JASONDIDTHIS<< myCommand << "  " << myArguments.join(" ");
   QString myErrorLog;
   QString myResult = runCommand(myCommand,myArguments,myErrorLog);
-  qDebug() << myResult;
+ // qDebug()JASONDIDTHIS<< myResult;
   if (myErrorLog.isEmpty())
   {
     return true;
@@ -175,10 +175,10 @@ bool LaGrass::createCombinedMask(QString theCostSurface, QString theMaskRaster)
   QStringList myArguments;
   QString myMaskName = "laLeftOver";
   myArguments << myMaskName + "=" + theCostSurface + "*" + theMaskRaster;
-  qDebug() << myCommand << "  " << myArguments.join(" ");
+ // qDebug()JASONDIDTHIS<< myCommand << "  " << myArguments.join(" ");
   QString myErrorLog;
   QString myResult = runCommand(myCommand,myArguments,myErrorLog);
-  qDebug() << myResult;
+ // qDebug()JASONDIDTHIS<< myResult;
   if (myErrorLog.isEmpty())
   {
     return true;
@@ -203,18 +203,18 @@ bool LaGrass::mergeMaps(QString theLeftoversGoHere)
   QStringList myArguments;
   myArguments << "mergeTmp = if( isnull ( " + theLeftoversGoHere  + "),0," + theLeftoversGoHere + ")";
   QString myResult = runCommand(myCommand,myArguments,myErrorLog);
-  qDebug() << myResult;
+ // qDebug()JASONDIDTHIS<< myResult;
 
   myArguments.clear();
    //+ if( isnull ( laLeftOver),0,laLeftOver)\'";
   myArguments << "laLeftOverTmp = if( isnull ( laLeftOver),0,laLeftOver)";
   myResult = runCommand(myCommand,myArguments,myErrorLog);
-  qDebug() << myResult;
+ // qDebug()JASONDIDTHIS<< myResult;
 
   myArguments.clear();
   myArguments << "laCombinedMasks = laLeftOverTmp + mergeTmp";
   myResult = runCommand(myCommand,myArguments,myErrorLog);
-  qDebug() << myResult;
+ // qDebug()JASONDIDTHIS<< myResult;
 
     // clean up temp files
   removeFile("mergeTmp");
@@ -237,32 +237,32 @@ float LaGrass::getArea(QString theLayerName)
   QString myCommand = "r.stats";
   QStringList myArguments;
   myArguments << "-a" << "-n" << "fs=," << "input="+theLayerName;
-  qDebug() << myCommand << "  " << myArguments.join(" ");
+ // qDebug()JASONDIDTHIS<< myCommand << "  " << myArguments.join(" ");
   QString myErrorLog;
   QString myResult = runCommand(myCommand,myArguments,myErrorLog);
-  qDebug() << myResult;
+ // qDebug()JASONDIDTHIS<< myResult;
   if (myErrorLog.isEmpty())
   {
     return 0;
   }
   else
   {
-    qDebug() << "myResult: " << myResult;
+   // qDebug()JASONDIDTHIS<< "myResult: " << myResult;
     myResult = myResult.simplified();
-    qDebug() << "myResult.simplified(): " << myResult;
+   // qDebug()JASONDIDTHIS<< "myResult.simplified(): " << myResult;
       //put each line of output into a list entry
     QStringList myList = myResult.split(QRegExp("\\s+"));
-    qDebug() << "myList: " << myList;
+   // qDebug()JASONDIDTHIS<< "myList: " << myList;
      // if (myList.count() < 1)
       //{
         //row should be like 3,32323 (class,area)
       QStringList myList2 = myList.at(1).split((","));
-      qDebug() << "myList2: " << myList2;
+     // qDebug()JASONDIDTHIS<< "myList2: " << myList2;
         //if (myList2.count() < 1)
         //{
           //get only area
         float myArea = myList2.at(1).toFloat() * 0.0001;   // adjust for hectares
-        qDebug() << "Area (returnValue): " << myArea;
+       // qDebug()JASONDIDTHIS<< "Area (returnValue): " << myArea;
         return myArea;
         //}
       //}
@@ -292,7 +292,7 @@ bool LaGrass::makeWalkCost(int theX, int theY, QString theDEM)
               << "slope_factor=-0.2125"
               << "-k"
               << "--overwrite";
-  qDebug() << myCommand << "  " << myArguments.join(" ");
+ // qDebug()JASONDIDTHIS<< myCommand << "  " << myArguments.join(" ");
 
   QString myErrorLog;
   QString myResult = runCommand(myCommand,myArguments,myErrorLog);
@@ -349,15 +349,15 @@ void LaGrass::writeMetaData(QStringList theMetaData)
 
 bool LaGrass::reclass(QString theRaster, int theMax)
 {
-  qDebug() << "reclass invoked";
+ // qDebug()JASONDIDTHIS<< "reclass invoked";
     //r.mapcalc "laFrictionMap = if(isnull(laDEM), null(), 1)"
   QString myCommand = "r.mapcalc";
   QStringList myArguments;
   myArguments << "laCostMapReclassed=if(" + theRaster + "<" + QString::number(theMax) + ",1,0)";
-  qDebug() << myCommand << "  " << myArguments.join(" ");
+ // qDebug()JASONDIDTHIS<< myCommand << "  " << myArguments.join(" ");
   QString myErrorLog;
   QString myResult = runCommand(myCommand,myArguments,myErrorLog);
-  qDebug() << myResult;
+ // qDebug()JASONDIDTHIS<< myResult;
   if (myErrorLog.isEmpty())
   {
     return true;
@@ -373,10 +373,10 @@ bool LaGrass::removeFile(QString theFile)
   QString myCommand = "g.remove";
   QStringList myArguments;
   myArguments << "rast=" + theFile;
-  qDebug() << myCommand << " " << myArguments.join(" ");
+ // qDebug()JASONDIDTHIS<< myCommand << " " << myArguments.join(" ");
   QString myErrorLog;
   QString myResult = runCommand(myCommand,myArguments,myErrorLog);
-  qDebug() << myResult;
+ // qDebug()JASONDIDTHIS<< myResult;
   if (myErrorLog.isEmpty())
   {
     return true;
@@ -431,8 +431,8 @@ QString LaGrass::runCommand(QString theCommand,
   myArray = myProcess.readAll();
   theErrorLog.append(myArray);
     // get rid of some grass decorations...
-  qDebug() <<"GRASS> " << myProgram << theCommand << theArguments;
-  qDebug() <<"Results: " << myLog;
+ // qDebug()JASONDIDTHIS<<"GRASS> " << myProgram << theCommand << theArguments;
+ // qDebug()JASONDIDTHIS<<"Results: " << myLog;
   myLog.replace("----------------------------------------------","");
 
   return myLog;

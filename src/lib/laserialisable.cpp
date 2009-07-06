@@ -58,7 +58,7 @@ bool LaSerialisable::fromXmlFile(const QString theFileName)
   }
   else
   {
-    qDebug() << "Failed to open "  << theFileName << " for deserialisation ";
+   // qDebug()JASONDIDTHIS<< "Failed to open "  << theFileName << " for deserialisation ";
       //@TODO Error handler!
     myResult=false;
   }

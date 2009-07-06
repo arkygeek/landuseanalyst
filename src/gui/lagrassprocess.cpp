@@ -92,8 +92,8 @@ void LaGrassProcess::accept()
   tbGrass->repaint();
   toggleBusyProgressBar(true);
   int myOverallProgress = 1;
-  qDebug() << "\nmCropAreaTargetsMap\n" << mCropAreaTargetsMap;
-  qDebug() << "\nmAnimalAreaTargetsMap\n" << mAnimalAreaTargetsMap;
+ // qDebug()JASONDIDTHIS<< "\nmCropAreaTargetsMap\n" << mCropAreaTargetsMap;
+ // qDebug()JASONDIDTHIS<< "\nmAnimalAreaTargetsMap\n" << mAnimalAreaTargetsMap;
   LaMainForm myMainForm;
   QMapIterator<QString, int > myCropCounter(mCropAreaTargetsMap);
   while (myCropCounter.hasNext())
@@ -109,7 +109,7 @@ void LaGrassProcess::accept()
       bool myCommonLandUsed = myCropParameter.useCommonLand();
       if (myCommonLandUsed)
       {
-        qDebug() << "removing from area map: "  << myCropGuid;
+       // qDebug()JASONDIDTHIS<< "removing from area map: "  << myCropGuid;
         mCropAreaTargetsMap.remove(myCropGuid);
       }
     }
@@ -128,7 +128,7 @@ void LaGrassProcess::accept()
       bool myCommonLandUsed = myAnimalParameter.useCommonGrazingLand();
       if (myCommonLandUsed)
       {
-        qDebug() << "removing from area map: "  << myAnimalGuid;
+       // qDebug()JASONDIDTHIS<< "removing from area map: "  << myAnimalGuid;
         mAnimalAreaTargetsMap.remove(myAnimalGuid);
       }
     }
@@ -138,16 +138,17 @@ void LaGrassProcess::accept()
   int myNumberOfSearches = mCropAreaTargetsMap.size() + mAnimalAreaTargetsMap.size();
   setPbarOverallRange(myNumberOfSearches);
   qDebug() << "Number of Searches: " << myNumberOfSearches;
+ // qDebug()JASONDIDTHIS<< "Number of Searches: " << myNumberOfSearches;
     // create cost surface maps
 
   LaGrass myGrass;
-  int myEasting = mCoordinates.first;
-  int myNorthing = mCoordinates.second;
-  myGrass.makeWalkCost(myEasting, myNorthing, mDEM);
+  //int myEasting = mCoordinates.first;
+  //int myNorthing = mCoordinates.second;
+  //myGrass.makeWalkCost(myEasting, myNorthing, mDEM);
 
   tbGrass->append("Cost Surface Generation complete.");
   tbGrass->repaint();
-  qDebug() << "\nCropAreaTargetsMap is: \n" << mCropAreaTargetsMap;
+ // qDebug()JASONDIDTHIS<< "\nCropAreaTargetsMap is: \n" << mCropAreaTargetsMap;
   
   QMapIterator<QString, int > myCropIterator(mCropAreaTargetsMap);
   while (myCropIterator.hasNext())
@@ -180,8 +181,8 @@ void LaGrassProcess::accept()
         //  pbarTarget->setValue(i);
         //}
         // go analyse the stuff...
-      qDebug() << "myAreaTarget: " << myAreaTarget;
-      qDebug() << "myName: " << myName;
+     // qDebug()JASONDIDTHIS<< "myAreaTarget: " << myAreaTarget;
+     // qDebug()JASONDIDTHIS<< "myName: " << myName;
       analyseModel(myName, myCropRasterFile, myAreaTarget);
       updateOverallProgress(myOverallProgress);
       myOverallProgress++;
@@ -271,15 +272,17 @@ void LaGrassProcess::setPbarOverallRange(int theOverall)
     // abort the grass analysis connect(pushButtonExit, SIGNAL(clicked()), qApp, SLOT(quit()));
   //}
 
-void LaGrassProcess::updateCurrentProgress(int theArea)
+void LaGrassProcess::updateCurrentProgress(int theStep)
 {
-  pbarTarget->setValue(theArea);
-  lblCurrentArea->setText(QString::number(theArea));
+  pbarTarget->setValue(theStep);
+  qDebug() << "Completed Step " << theStep;
+  lblCurrentArea->setText(QString::number(theStep));
 }
 
 void LaGrassProcess::updateOverallProgress(int theStep)
 {
   pbarOverall->setValue(theStep);
+  qDebug() << "Completed Search # " << theStep;
 }
 
 void LaGrassProcess::writeGrassMessage(QString theGrassMessage)
@@ -333,13 +336,14 @@ float LaGrassProcess::analyseModel(QString theItemName, QString theRasterMask, i
    while (myFirst <= myLast)
   {
     updateCurrentProgress(myStatusCount);
+    //qDebug() << "On step " << myStatusCount;
     myStatusCount++;
     myMid = (myFirst + myLast) / 2.;    // compute mid point.
       // reclass with 1 to midpoint and null beyond and then check results
       //    echo "0 thru $step = 1" | r.reclass input=$cost output=cost.reclass --o
       //    r.stats -n -a fs=- input=cost.reclass > $TMP1
-    qDebug() << "midpoint value: " << myMid;
-    qDebug() << "midpoint valueas int: " << static_cast<int>(myMid);
+   // qDebug()JASONDIDTHIS<< "midpoint value: " << myMid;
+   // qDebug()JASONDIDTHIS<< "midpoint valueas int: " << static_cast<int>(myMid);
 
     myGrass.reclass("laWalkCost", static_cast<int>(myMid));   // makes a raster called laCostMapReclassed
     myGrass.createMask("laCostMapReclassed" , theRasterMask);   // creates tmpMask
@@ -351,18 +355,18 @@ float LaGrassProcess::analyseModel(QString theItemName, QString theRasterMask, i
     switch (mySearchStatus)
     {
       case NotEnough:
-            qDebug() << "Not Close Enough. (low) Current is " << myCurrentlyContainedArea << "Needed: " << myAreaTarget;
+           qDebug() << "     (low) Current is " << myCurrentlyContainedArea << " but I need " << myAreaTarget;
             myFirst = myMid + 1.;    // repeat search in top half.
             break;;
       case TooMuch:
-            qDebug() << "Not Close Enough. (high) Current is " << myCurrentlyContainedArea << "Needed: " << myAreaTarget;
+           qDebug() << "     (high) Current is " << myCurrentlyContainedArea << " but I need " << myAreaTarget;
             myLast = myMid - 1.;   // repeat search in bottom half.
             break;
       case FoundTarget:
               // found it. break out of loop   //  ///
               // copy final raster to permanentRaster
-            qDebug() << "TARGET FOUND!  Current is " << myCurrentlyContainedArea << "Actual Needed: " << myAreaTarget;
-            qDebug() << "which falls within the precision range";
+           qDebug() << "     ** TARGET FOUND! **  Contained Area is " << myCurrentlyContainedArea;
+           // qDebug()JASONDIDTHIS<< "which falls within the precision range";
 
             QString myRasterName = generateFilename(theItemName, myMid, myAreaTarget);
             myGrass.copyMap("tmpMask", myRasterName);
@@ -381,10 +385,14 @@ QString LaGrassProcess::generateFilename(QString theItemName, float theExtent, i
   QString myPeriod="";
   QString myPopulation="";
   QString myDietRatio="";
+  QString myDairy="";
+  QString myAnimalsFed="";
 
   QString myPeriodSetting = cbPeriod->currentText();
   QString myPopulationSetting = cbPopulation->currentText();
   QString myDietRatioSetting = cbDietRatio->currentText();
+  QString myDairySetting = cbDairy->currentText();
+  QString myAnimalsFedSetting = cbAnimalsFed->currentText();
   QString myOtherText = leOtherText->text();
 
   if (myPeriodSetting == "Chalcolithic") {myPeriod = "Chalco";}
@@ -394,14 +402,21 @@ QString LaGrassProcess::generateFilename(QString theItemName, float theExtent, i
   if (myPopulationSetting == "Max") {myPopulation = "MaxPop";}
   else if (myPopulationSetting == "Min") {myPopulation = "MinPop";}
 
-  if (myDietRatioSetting == "70:30") {myDietRatio = "DR7030";}
-  else if (myDietRatioSetting == "80:20") {myDietRatio = "DR8020";}
-  else if (myDietRatioSetting == "90:10") {myDietRatio = "DR9010";}
-
+  if (myDairySetting == "Dairy 100%") {myDairy = "Dairy100";}
+  else if (myDairySetting == "Dairy 50%") {myDairy = "Dairy50";}
+  else if (myDairySetting == "No Dairy") {myDairy = "Dairy0";}
+  
+  if (myDietRatioSetting == "Meat 30%") {myDietRatio = "Meat30";}
+  else if (myDietRatioSetting == "Meat 20%") {myDietRatio = "Meat20";}
+  else if (myDietRatioSetting == "Meat 10%") {myDietRatio = "Meat10";}
+  
+  if (myAnimalsFedSetting == "Animals Fed") {myAnimalsFed = "fed";}
+  else if (myAnimalsFedSetting == "Animals Not Fed") {myAnimalsFed = "notFed";}
+  
   QString myExtent = QString::number(static_cast<int>(theExtent));
   QString myArea = QString::number(theAreaTarget);
   
-  QString myDescriptor = myOtherText + myPeriod + myPopulation + myDietRatio;
+  QString myDescriptor =  myPeriod + myPopulation + myDietRatio + myDairy + myAnimalsFed + myOtherText;
   QString myRasterName = theItemName + "_" + myDescriptor + "Extent" + myExtent + "Area" + myArea;
   
   return myRasterName;
@@ -414,20 +429,20 @@ LandFound LaGrassProcess::getSearchStatus(int theCurrentlyContainedArea, int the
   float myAcceptableRange=(theAreaTarget*myPrecision*0.01)/2.0;
   float myMinimumAcceptable = theAreaTarget - myAcceptableRange;
   float myMaximumAcceptable = theAreaTarget + myAcceptableRange;
-  qDebug() << "myAcceptableRange:" << myAcceptableRange;
-  qDebug() << "myMinimumAcceptable:" << myMinimumAcceptable;
-  qDebug() << "myMaximumAcceptable:" << myMaximumAcceptable;
+ // qDebug()JASONDIDTHIS<< "myAcceptableRange:" << myAcceptableRange;
+ // qDebug()JASONDIDTHIS<< "myMinimumAcceptable:" << myMinimumAcceptable;
+ // qDebug()JASONDIDTHIS<< "myMaximumAcceptable:" << myMaximumAcceptable;
   if (theCurrentlyContainedArea >= myMinimumAcceptable)
     {
-      qDebug() << "the currently contained area of " << theCurrentlyContainedArea << "is >= the MIN target of " << theAreaTarget;
+     // qDebug()JASONDIDTHIS<< "the currently contained area of " << theCurrentlyContainedArea << "is >= the MIN target of " << theAreaTarget;
       if (theCurrentlyContainedArea <= myMaximumAcceptable)
       {
-      qDebug() << "the currently contained area of " << theCurrentlyContainedArea << "is also <= the MAX target of " << theAreaTarget;
+     // qDebug()JASONDIDTHIS<< "the currently contained area of " << theCurrentlyContainedArea << "is also <= the MAX target of " << theAreaTarget;
         myStatus = FoundTarget;
       }
       else
       {
-      qDebug() << "the currently contained area of " << theCurrentlyContainedArea << "is > the MAX target of " << theAreaTarget;
+     // qDebug()JASONDIDTHIS<< "the currently contained area of " << theCurrentlyContainedArea << "is > the MAX target of " << theAreaTarget;
         myStatus = TooMuch;
       }
 
@@ -435,7 +450,7 @@ LandFound LaGrassProcess::getSearchStatus(int theCurrentlyContainedArea, int the
     }
   else
     {
-      qDebug() << "the currently contained area of " << theCurrentlyContainedArea << "is < the MIN target of " << theAreaTarget;
+     // qDebug()JASONDIDTHIS<< "the currently contained area of " << theCurrentlyContainedArea << "is < the MIN target of " << theAreaTarget;
       myStatus = NotEnough;
     }
 

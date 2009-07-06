@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading ui file 'lacropparametermanagerbase.ui'
 **
-** Created: Mon Mar 16 19:50:21 2009
+** Created: Tue Apr 7 19:36:12 2009
 **      by: Qt User Interface Compiler version 4.4.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling ui file!
@@ -34,10 +34,10 @@ QT_BEGIN_NAMESPACE
 class Ui_LaCropParameterManagerBase
 {
 public:
-    QGridLayout *gridLayout_3;
-    QGroupBox *grpProfiles;
     QGridLayout *gridLayout;
+    QGroupBox *grpProfiles;
     QGridLayout *gridLayout1;
+    QGridLayout *gridLayout2;
     QToolButton *toolDelete;
     QToolButton *toolCopy;
     QSpacerItem *spacerItem;
@@ -50,7 +50,7 @@ public:
     QLabel *label;
     QLineEdit *leName;
     QGroupBox *grpCropRotation;
-    QGridLayout *gridLayout2;
+    QGridLayout *gridLayout3;
     QLabel *labelFallow1;
     QLabel *labelFallow3;
     QDoubleSpinBox *sbFallowRatio;
@@ -59,21 +59,24 @@ public:
     QSpinBox *sbFallowValue;
     QComboBox *cbFallowEnergyType;
     QComboBox *cbAreaUnits;
-    QLabel *labelFallow6;
     QLabel *label_4;
     QLineEdit *leDescription;
     QHBoxLayout *hboxLayout;
     QLabel *label_2;
     QComboBox *cboCrop;
     QGroupBox *groupBoxSuitableLand;
-    QGridLayout *gridLayout_2;
+    QGridLayout *gridLayout4;
     QCheckBox *checkBoxUseCommonLand;
     QCheckBox *checkBoxUseSpecificLand;
     QLabel *label_3;
     QComboBox *cboRaster;
-    QHBoxLayout *horizontalLayout;
     QLabel *labelPortionDiet;
     QDoubleSpinBox *sbPercentTameCrop;
+    QLabel *labelPortionDiet_2;
+    QSpinBox *sbReseed;
+    QLabel *labelPortionDiet_3;
+    QSpinBox *sbSpoilage;
+    QSpacerItem *spacerItem2;
     QPushButton *pbnApply;
     QPushButton *pbnClose;
 
@@ -81,50 +84,35 @@ public:
     {
     if (LaCropParameterManagerBase->objectName().isEmpty())
         LaCropParameterManagerBase->setObjectName(QString::fromUtf8("LaCropParameterManagerBase"));
-    LaCropParameterManagerBase->resize(488, 419);
+    LaCropParameterManagerBase->resize(520, 583);
     LaCropParameterManagerBase->setMinimumSize(QSize(0, 0));
-    QIcon icon;
-    icon.addPixmap(QPixmap(QString::fromUtf8(":/la_icon_small.png")), QIcon::Normal, QIcon::Off);
+    const QIcon icon = QIcon(QString::fromUtf8(":/la_icon_small.png"));
     LaCropParameterManagerBase->setWindowIcon(icon);
-    gridLayout_3 = new QGridLayout(LaCropParameterManagerBase);
-    gridLayout_3->setObjectName(QString::fromUtf8("gridLayout_3"));
+    gridLayout = new QGridLayout(LaCropParameterManagerBase);
+    gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
     grpProfiles = new QGroupBox(LaCropParameterManagerBase);
     grpProfiles->setObjectName(QString::fromUtf8("grpProfiles"));
-    gridLayout = new QGridLayout(grpProfiles);
-#ifndef Q_OS_MAC
-    gridLayout->setSpacing(6);
-#endif
-#ifndef Q_OS_MAC
-    gridLayout->setMargin(9);
-#endif
-    gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
-    gridLayout1 = new QGridLayout();
-#ifndef Q_OS_MAC
-    gridLayout1->setSpacing(6);
-#endif
-#ifndef Q_OS_MAC
-    gridLayout1->setMargin(0);
-#endif
+    gridLayout1 = new QGridLayout(grpProfiles);
     gridLayout1->setObjectName(QString::fromUtf8("gridLayout1"));
+    gridLayout2 = new QGridLayout();
+    gridLayout2->setObjectName(QString::fromUtf8("gridLayout2"));
     toolDelete = new QToolButton(grpProfiles);
     toolDelete->setObjectName(QString::fromUtf8("toolDelete"));
-    QIcon icon1;
-    icon1.addPixmap(QPixmap(QString::fromUtf8(":/delete.png")), QIcon::Normal, QIcon::Off);
+    const QIcon icon1 = QIcon(QString::fromUtf8(":/delete.png"));
     toolDelete->setIcon(icon1);
 
-    gridLayout1->addWidget(toolDelete, 2, 2, 1, 1);
+    gridLayout2->addWidget(toolDelete, 2, 2, 1, 1);
 
     toolCopy = new QToolButton(grpProfiles);
     toolCopy->setObjectName(QString::fromUtf8("toolCopy"));
-    QIcon icon2;
-    icon2.addPixmap(QPixmap(QString::fromUtf8(":/copy.png")), QIcon::Normal, QIcon::Off);
+    const QIcon icon2 = QIcon(QString::fromUtf8(":/copy.png"));
     toolCopy->setIcon(icon2);
 
-    gridLayout1->addWidget(toolCopy, 2, 1, 1, 1);
+    gridLayout2->addWidget(toolCopy, 2, 1, 1, 1);
 
     spacerItem = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-    gridLayout1->addItem(spacerItem, 1, 1, 1, 1);
+    gridLayout2->addItem(spacerItem, 1, 1, 1, 1);
 
     lblCropPic = new QLabel(grpProfiles);
     lblCropPic->setObjectName(QString::fromUtf8("lblCropPic"));
@@ -132,34 +120,33 @@ public:
     lblCropPic->setMaximumSize(QSize(100, 100));
     lblCropPic->setAlignment(Qt::AlignCenter);
 
-    gridLayout1->addWidget(lblCropPic, 0, 0, 1, 3);
+    gridLayout2->addWidget(lblCropPic, 0, 0, 1, 3);
 
     toolNew = new QToolButton(grpProfiles);
     toolNew->setObjectName(QString::fromUtf8("toolNew"));
-    QIcon icon3;
-    icon3.addPixmap(QPixmap(QString::fromUtf8(":/new.png")), QIcon::Normal, QIcon::Off);
+    const QIcon icon3 = QIcon(QString::fromUtf8(":/new.png"));
     toolNew->setIcon(icon3);
 
-    gridLayout1->addWidget(toolNew, 2, 0, 1, 1);
+    gridLayout2->addWidget(toolNew, 2, 0, 1, 1);
 
 
-    gridLayout->addLayout(gridLayout1, 0, 3, 2, 1);
+    gridLayout1->addLayout(gridLayout2, 0, 3, 2, 1);
 
     pbnImport = new QPushButton(grpProfiles);
     pbnImport->setObjectName(QString::fromUtf8("pbnImport"));
     pbnImport->setMinimumSize(QSize(80, 0));
 
-    gridLayout->addWidget(pbnImport, 1, 0, 1, 1);
+    gridLayout1->addWidget(pbnImport, 1, 0, 1, 1);
 
     pbnExport = new QPushButton(grpProfiles);
     pbnExport->setObjectName(QString::fromUtf8("pbnExport"));
     pbnExport->setMinimumSize(QSize(80, 0));
 
-    gridLayout->addWidget(pbnExport, 1, 1, 1, 1);
+    gridLayout1->addWidget(pbnExport, 1, 1, 1, 1);
 
     spacerItem1 = new QSpacerItem(71, 27, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-    gridLayout->addItem(spacerItem1, 1, 2, 1, 1);
+    gridLayout1->addItem(spacerItem1, 1, 2, 1, 1);
 
     tblCropParameterProfiles = new QTableWidget(grpProfiles);
     if (tblCropParameterProfiles->columnCount() < 2)
@@ -173,20 +160,20 @@ public:
     tblCropParameterProfiles->setSelectionMode(QAbstractItemView::SingleSelection);
     tblCropParameterProfiles->setSelectionBehavior(QAbstractItemView::SelectRows);
 
-    gridLayout->addWidget(tblCropParameterProfiles, 0, 0, 1, 3);
+    gridLayout1->addWidget(tblCropParameterProfiles, 0, 0, 1, 3);
 
 
-    gridLayout_3->addWidget(grpProfiles, 0, 0, 1, 4);
+    gridLayout->addWidget(grpProfiles, 0, 0, 1, 6);
 
     label = new QLabel(LaCropParameterManagerBase);
     label->setObjectName(QString::fromUtf8("label"));
 
-    gridLayout_3->addWidget(label, 1, 0, 1, 1);
+    gridLayout->addWidget(label, 1, 0, 1, 1);
 
     leName = new QLineEdit(LaCropParameterManagerBase);
     leName->setObjectName(QString::fromUtf8("leName"));
 
-    gridLayout_3->addWidget(leName, 1, 1, 1, 1);
+    gridLayout->addWidget(leName, 1, 1, 1, 1);
 
     grpCropRotation = new QGroupBox(LaCropParameterManagerBase);
     grpCropRotation->setObjectName(QString::fromUtf8("grpCropRotation"));
@@ -198,22 +185,22 @@ public:
     grpCropRotation->setMinimumSize(QSize(227, 100));
     grpCropRotation->setCheckable(true);
     grpCropRotation->setChecked(false);
-    gridLayout2 = new QGridLayout(grpCropRotation);
-    gridLayout2->setObjectName(QString::fromUtf8("gridLayout2"));
+    gridLayout3 = new QGridLayout(grpCropRotation);
+    gridLayout3->setObjectName(QString::fromUtf8("gridLayout3"));
     labelFallow1 = new QLabel(grpCropRotation);
     labelFallow1->setObjectName(QString::fromUtf8("labelFallow1"));
     sizePolicy.setHeightForWidth(labelFallow1->sizePolicy().hasHeightForWidth());
     labelFallow1->setSizePolicy(sizePolicy);
     labelFallow1->setAlignment(Qt::AlignCenter);
 
-    gridLayout2->addWidget(labelFallow1, 0, 0, 1, 1);
+    gridLayout3->addWidget(labelFallow1, 0, 0, 1, 1);
 
     labelFallow3 = new QLabel(grpCropRotation);
     labelFallow3->setObjectName(QString::fromUtf8("labelFallow3"));
     labelFallow3->setLayoutDirection(Qt::LeftToRight);
     labelFallow3->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
-    gridLayout2->addWidget(labelFallow3, 0, 1, 1, 1);
+    gridLayout3->addWidget(labelFallow3, 0, 1, 1, 1);
 
     sbFallowRatio = new QDoubleSpinBox(grpCropRotation);
     sbFallowRatio->setObjectName(QString::fromUtf8("sbFallowRatio"));
@@ -222,7 +209,7 @@ public:
     sbFallowRatio->setSingleStep(0.25);
     sbFallowRatio->setValue(1);
 
-    gridLayout2->addWidget(sbFallowRatio, 0, 2, 1, 2);
+    gridLayout3->addWidget(sbFallowRatio, 0, 2, 1, 1);
 
     labelFallow5 = new QLabel(grpCropRotation);
     labelFallow5->setObjectName(QString::fromUtf8("labelFallow5"));
@@ -230,13 +217,13 @@ public:
     labelFallow5->setSizePolicy(sizePolicy);
     labelFallow5->setAlignment(Qt::AlignCenter);
 
-    gridLayout2->addWidget(labelFallow5, 0, 4, 1, 2);
+    gridLayout3->addWidget(labelFallow5, 0, 3, 1, 2);
 
     labelFallow2 = new QLabel(grpCropRotation);
     labelFallow2->setObjectName(QString::fromUtf8("labelFallow2"));
     labelFallow2->setAlignment(Qt::AlignCenter);
 
-    gridLayout2->addWidget(labelFallow2, 1, 0, 1, 6);
+    gridLayout3->addWidget(labelFallow2, 1, 0, 1, 5);
 
     sbFallowValue = new QSpinBox(grpCropRotation);
     sbFallowValue->setObjectName(QString::fromUtf8("sbFallowValue"));
@@ -251,13 +238,13 @@ public:
     sbFallowValue->setSingleStep(10);
     sbFallowValue->setValue(500);
 
-    gridLayout2->addWidget(sbFallowValue, 2, 0, 1, 3);
+    gridLayout3->addWidget(sbFallowValue, 2, 0, 1, 2);
 
     cbFallowEnergyType = new QComboBox(grpCropRotation);
     cbFallowEnergyType->setObjectName(QString::fromUtf8("cbFallowEnergyType"));
     cbFallowEnergyType->setMinimumSize(QSize(0, 22));
 
-    gridLayout2->addWidget(cbFallowEnergyType, 2, 3, 1, 2);
+    gridLayout3->addWidget(cbFallowEnergyType, 2, 2, 1, 2);
 
     cbAreaUnits = new QComboBox(grpCropRotation);
     cbAreaUnits->setObjectName(QString::fromUtf8("cbAreaUnits"));
@@ -265,40 +252,26 @@ public:
     cbAreaUnits->setSizePolicy(sizePolicy);
     cbAreaUnits->setMinimumSize(QSize(0, 22));
 
-    gridLayout2->addWidget(cbAreaUnits, 2, 5, 1, 1);
-
-    labelFallow6 = new QLabel(grpCropRotation);
-    labelFallow6->setObjectName(QString::fromUtf8("labelFallow6"));
-    sizePolicy.setHeightForWidth(labelFallow6->sizePolicy().hasHeightForWidth());
-    labelFallow6->setSizePolicy(sizePolicy);
-    labelFallow6->setTextFormat(Qt::AutoText);
-    labelFallow6->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
-    labelFallow6->setWordWrap(false);
-
-    gridLayout2->addWidget(labelFallow6, 3, 4, 1, 1);
+    gridLayout3->addWidget(cbAreaUnits, 2, 4, 1, 1);
 
 
-    gridLayout_3->addWidget(grpCropRotation, 1, 2, 4, 2);
+    gridLayout->addWidget(grpCropRotation, 1, 2, 4, 4);
 
     label_4 = new QLabel(LaCropParameterManagerBase);
     label_4->setObjectName(QString::fromUtf8("label_4"));
     sizePolicy.setHeightForWidth(label_4->sizePolicy().hasHeightForWidth());
     label_4->setSizePolicy(sizePolicy);
 
-    gridLayout_3->addWidget(label_4, 2, 0, 1, 1);
+    gridLayout->addWidget(label_4, 2, 0, 1, 1);
 
     leDescription = new QLineEdit(LaCropParameterManagerBase);
     leDescription->setObjectName(QString::fromUtf8("leDescription"));
     sizePolicy.setHeightForWidth(leDescription->sizePolicy().hasHeightForWidth());
     leDescription->setSizePolicy(sizePolicy);
 
-    gridLayout_3->addWidget(leDescription, 2, 1, 1, 1);
+    gridLayout->addWidget(leDescription, 2, 1, 1, 1);
 
     hboxLayout = new QHBoxLayout();
-#ifndef Q_OS_MAC
-    hboxLayout->setSpacing(6);
-#endif
-    hboxLayout->setMargin(0);
     hboxLayout->setObjectName(QString::fromUtf8("hboxLayout"));
     label_2 = new QLabel(LaCropParameterManagerBase);
     label_2->setObjectName(QString::fromUtf8("label_2"));
@@ -314,29 +287,29 @@ public:
     hboxLayout->addWidget(cboCrop);
 
 
-    gridLayout_3->addLayout(hboxLayout, 3, 0, 1, 2);
+    gridLayout->addLayout(hboxLayout, 3, 0, 1, 2);
 
     groupBoxSuitableLand = new QGroupBox(LaCropParameterManagerBase);
     groupBoxSuitableLand->setObjectName(QString::fromUtf8("groupBoxSuitableLand"));
     sizePolicy.setHeightForWidth(groupBoxSuitableLand->sizePolicy().hasHeightForWidth());
     groupBoxSuitableLand->setSizePolicy(sizePolicy);
     groupBoxSuitableLand->setMinimumSize(QSize(115, 0));
-    gridLayout_2 = new QGridLayout(groupBoxSuitableLand);
-    gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
+    gridLayout4 = new QGridLayout(groupBoxSuitableLand);
+    gridLayout4->setObjectName(QString::fromUtf8("gridLayout4"));
     checkBoxUseCommonLand = new QCheckBox(groupBoxSuitableLand);
     checkBoxUseCommonLand->setObjectName(QString::fromUtf8("checkBoxUseCommonLand"));
     sizePolicy.setHeightForWidth(checkBoxUseCommonLand->sizePolicy().hasHeightForWidth());
     checkBoxUseCommonLand->setSizePolicy(sizePolicy);
     checkBoxUseCommonLand->setChecked(true);
 
-    gridLayout_2->addWidget(checkBoxUseCommonLand, 0, 0, 1, 2);
+    gridLayout4->addWidget(checkBoxUseCommonLand, 0, 0, 1, 2);
 
     checkBoxUseSpecificLand = new QCheckBox(groupBoxSuitableLand);
     checkBoxUseSpecificLand->setObjectName(QString::fromUtf8("checkBoxUseSpecificLand"));
     sizePolicy.setHeightForWidth(checkBoxUseSpecificLand->sizePolicy().hasHeightForWidth());
     checkBoxUseSpecificLand->setSizePolicy(sizePolicy);
 
-    gridLayout_2->addWidget(checkBoxUseSpecificLand, 0, 2, 1, 1);
+    gridLayout4->addWidget(checkBoxUseSpecificLand, 1, 0, 1, 2);
 
     label_3 = new QLabel(groupBoxSuitableLand);
     label_3->setObjectName(QString::fromUtf8("label_3"));
@@ -344,18 +317,16 @@ public:
     label_3->setMargin(0);
     label_3->setTextInteractionFlags(Qt::NoTextInteraction);
 
-    gridLayout_2->addWidget(label_3, 1, 0, 1, 1);
+    gridLayout4->addWidget(label_3, 2, 0, 1, 1);
 
     cboRaster = new QComboBox(groupBoxSuitableLand);
     cboRaster->setObjectName(QString::fromUtf8("cboRaster"));
 
-    gridLayout_2->addWidget(cboRaster, 1, 1, 1, 2);
+    gridLayout4->addWidget(cboRaster, 2, 1, 1, 1);
 
 
-    gridLayout_3->addWidget(groupBoxSuitableLand, 4, 0, 3, 2);
+    gridLayout->addWidget(groupBoxSuitableLand, 4, 0, 4, 2);
 
-    horizontalLayout = new QHBoxLayout();
-    horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
     labelPortionDiet = new QLabel(LaCropParameterManagerBase);
     labelPortionDiet->setObjectName(QString::fromUtf8("labelPortionDiet"));
     sizePolicy.setHeightForWidth(labelPortionDiet->sizePolicy().hasHeightForWidth());
@@ -363,7 +334,7 @@ public:
     labelPortionDiet->setFrameShape(QFrame::NoFrame);
     labelPortionDiet->setAlignment(Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft);
 
-    horizontalLayout->addWidget(labelPortionDiet);
+    gridLayout->addWidget(labelPortionDiet, 5, 2, 1, 2);
 
     sbPercentTameCrop = new QDoubleSpinBox(LaCropParameterManagerBase);
     sbPercentTameCrop->setObjectName(QString::fromUtf8("sbPercentTameCrop"));
@@ -372,10 +343,41 @@ public:
     sbPercentTameCrop->setMaximum(100);
     sbPercentTameCrop->setSingleStep(0.01);
 
-    horizontalLayout->addWidget(sbPercentTameCrop);
+    gridLayout->addWidget(sbPercentTameCrop, 5, 4, 1, 2);
 
+    labelPortionDiet_2 = new QLabel(LaCropParameterManagerBase);
+    labelPortionDiet_2->setObjectName(QString::fromUtf8("labelPortionDiet_2"));
+    sizePolicy.setHeightForWidth(labelPortionDiet_2->sizePolicy().hasHeightForWidth());
+    labelPortionDiet_2->setSizePolicy(sizePolicy);
+    labelPortionDiet_2->setFrameShape(QFrame::NoFrame);
+    labelPortionDiet_2->setAlignment(Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft);
 
-    gridLayout_3->addLayout(horizontalLayout, 5, 2, 1, 2);
+    gridLayout->addWidget(labelPortionDiet_2, 6, 2, 1, 3);
+
+    sbReseed = new QSpinBox(LaCropParameterManagerBase);
+    sbReseed->setObjectName(QString::fromUtf8("sbReseed"));
+    sbReseed->setMaximum(100);
+
+    gridLayout->addWidget(sbReseed, 6, 5, 1, 1);
+
+    labelPortionDiet_3 = new QLabel(LaCropParameterManagerBase);
+    labelPortionDiet_3->setObjectName(QString::fromUtf8("labelPortionDiet_3"));
+    sizePolicy.setHeightForWidth(labelPortionDiet_3->sizePolicy().hasHeightForWidth());
+    labelPortionDiet_3->setSizePolicy(sizePolicy);
+    labelPortionDiet_3->setFrameShape(QFrame::NoFrame);
+    labelPortionDiet_3->setAlignment(Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft);
+
+    gridLayout->addWidget(labelPortionDiet_3, 7, 2, 1, 3);
+
+    sbSpoilage = new QSpinBox(LaCropParameterManagerBase);
+    sbSpoilage->setObjectName(QString::fromUtf8("sbSpoilage"));
+    sbSpoilage->setMaximum(100);
+
+    gridLayout->addWidget(sbSpoilage, 7, 5, 1, 1);
+
+    spacerItem2 = new QSpacerItem(181, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+    gridLayout->addItem(spacerItem2, 8, 0, 1, 2);
 
     pbnApply = new QPushButton(LaCropParameterManagerBase);
     pbnApply->setObjectName(QString::fromUtf8("pbnApply"));
@@ -385,14 +387,14 @@ public:
     sizePolicy2.setHeightForWidth(pbnApply->sizePolicy().hasHeightForWidth());
     pbnApply->setSizePolicy(sizePolicy2);
 
-    gridLayout_3->addWidget(pbnApply, 6, 2, 1, 1);
+    gridLayout->addWidget(pbnApply, 8, 2, 1, 1);
 
     pbnClose = new QPushButton(LaCropParameterManagerBase);
     pbnClose->setObjectName(QString::fromUtf8("pbnClose"));
     sizePolicy2.setHeightForWidth(pbnClose->sizePolicy().hasHeightForWidth());
     pbnClose->setSizePolicy(sizePolicy2);
 
-    gridLayout_3->addWidget(pbnClose, 6, 3, 1, 1);
+    gridLayout->addWidget(pbnClose, 8, 3, 1, 3);
 
     QWidget::setTabOrder(tblCropParameterProfiles, pbnImport);
     QWidget::setTabOrder(pbnImport, pbnExport);
@@ -572,15 +574,6 @@ public:
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">1 hectare = 10,000 square meters</p></body></html>", 0, QApplication::UnicodeUTF8));
 #endif // QT_NO_TOOLTIP
 
-
-#ifndef QT_NO_TOOLTIP
-    labelFallow6->setToolTip(QApplication::translate("LaCropParameterManagerBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Weeks from birth to kill weight</p></body></html>", 0, QApplication::UnicodeUTF8));
-#endif // QT_NO_TOOLTIP
-
-    labelFallow6->setText(QApplication::translate("LaCropParameterManagerBase", "*per ", 0, QApplication::UnicodeUTF8));
     label_4->setText(QApplication::translate("LaCropParameterManagerBase", "Notes:", 0, QApplication::UnicodeUTF8));
 
 #ifndef QT_NO_WHATSTHIS
@@ -648,6 +641,10 @@ public:
 "Mask", 0, QApplication::UnicodeUTF8));
     labelPortionDiet->setText(QApplication::translate("LaCropParameterManagerBase", "Portion of Tame Plant Diet", 0, QApplication::UnicodeUTF8));
     sbPercentTameCrop->setSuffix(QApplication::translate("LaCropParameterManagerBase", "%", 0, QApplication::UnicodeUTF8));
+    labelPortionDiet_2->setText(QApplication::translate("LaCropParameterManagerBase", "Percent of harvest to re-seed", 0, QApplication::UnicodeUTF8));
+    sbReseed->setSuffix(QApplication::translate("LaCropParameterManagerBase", "%", 0, QApplication::UnicodeUTF8));
+    labelPortionDiet_3->setText(QApplication::translate("LaCropParameterManagerBase", "Percent of harvest to spoilage", 0, QApplication::UnicodeUTF8));
+    sbSpoilage->setSuffix(QApplication::translate("LaCropParameterManagerBase", "%", 0, QApplication::UnicodeUTF8));
 
 #ifndef QT_NO_TOOLTIP
     pbnApply->setToolTip(QApplication::translate("LaCropParameterManagerBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"

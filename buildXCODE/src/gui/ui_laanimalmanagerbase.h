@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading ui file 'laanimalmanagerbase.ui'
 **
-** Created: Tue Mar 17 14:45:16 2009
+** Created: Wed Mar 25 15:53:07 2009
 **      by: Qt User Interface Compiler version 4.4.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling ui file!
@@ -639,7 +639,7 @@ public:
     sizePolicy2.setHeightForWidth(sbMilk->sizePolicy().hasHeightForWidth());
     sbMilk->setSizePolicy(sizePolicy2);
     sbMilk->setAlignment(Qt::AlignRight);
-    sbMilk->setMaximum(1000);
+    sbMilk->setMaximum(100000);
     sbMilk->setValue(18);
 
     gridLayout6->addWidget(sbMilk, 0, 1, 1, 1);
@@ -965,7 +965,7 @@ public:
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Animals can be slaughtered for butchering at any weight, but LandUse Analyst needs to know the average weight of the animals when they are slaughtered. This is their <span style=\" font-weight:600;\">live weight.</span></p></body></html>", 0, QApplication::UnicodeUTF8));
 #endif // QT_NO_WHATSTHIS
 
-    sbConceptionEfficiency->setSuffix(QApplication::translate("LaAnimalManagerBase", " Kg", 0, QApplication::UnicodeUTF8));
+    sbConceptionEfficiency->setSuffix(QApplication::translate("LaAnimalManagerBase", "  %", 0, QApplication::UnicodeUTF8));
     sbConceptionEfficiency->setPrefix(QString());
     label_5->setText(QApplication::translate("LaAnimalManagerBase", "Young / birth", 0, QApplication::UnicodeUTF8));
 
@@ -1144,7 +1144,7 @@ public:
     label_13->setText(QApplication::translate("LaAnimalManagerBase", "Select Units", 0, QApplication::UnicodeUTF8));
     cbFeedEnergyType->clear();
     cbFeedEnergyType->insertItems(0, QStringList()
-     << QApplication::translate("LaAnimalManagerBase", "KCalories", 0, QApplication::UnicodeUTF8)
+     << QApplication::translate("LaAnimalManagerBase", "MCalories", 0, QApplication::UnicodeUTF8)
      << QApplication::translate("LaAnimalManagerBase", "TDN", 0, QApplication::UnicodeUTF8)
     );
     labelFeedRequirements2->setText(QApplication::translate("LaAnimalManagerBase", "Pregnant Female", 0, QApplication::UnicodeUTF8));

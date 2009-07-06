@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'lamainform.h'
 **
-** Created: Mon Mar 16 19:50:21 2009
+** Created: Mon Mar 23 07:01:50 2009
 **      by: The Qt Meta Object Compiler version 59 (Qt 4.4.3)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -57,16 +57,16 @@ static const uint qt_meta_data_LaMainForm[] = {
      929,   11,   11,   11, 0x0a,
      943,   11,   11,   11, 0x0a,
      955,   11,   11,   11, 0x0a,
-     966,   11,   11,   11, 0x0a,
-     992,  982,   11,   11, 0x0a,
+     981,  971,   11,   11, 0x0a,
+    1001,   11,   11,   11, 0x0a,
     1040, 1012,   11,   11, 0x08,
     1099, 1091,   11,   11, 0x08,
     1121, 1012,   11,   11, 0x08,
     1172, 1012,   11,   11, 0x08,
     1242, 1225,   11,   11, 0x08,
     1269, 1225,   11,   11, 0x08,
-    1296, 1225,   11,   11, 0x08,
-    1321, 1225,   11,   11, 0x08,
+    1305, 1225,   11,   11, 0x08,
+    1330, 1225,   11,   11, 0x08,
 
        0        // eod
 };
@@ -97,17 +97,17 @@ static const char qt_meta_stringdata_LaMainForm[] = {
     "on_sbDailyCalories_valueChanged(int)\0"
     "on_pbnFallow_clicked()\0on_cbDebug_clicked()\0"
     "on_cboMapSet_currentIndexChanged()\0"
-    "loadAnimals()\0loadCrops()\0setModel()\0"
-    "setDietLabels()\0theString\0logMessage(QString)\0"
+    "loadAnimals()\0loadCrops()\0setDietLabels()\0"
+    "theString\0logMessage(QString)\0setModel()\0"
     "thepCurrentItem,thepOldItem\0"
     "helpItemClicked(QTreeWidgetItem*,QTreeWidgetItem*)\0"
     "theText\0writeResults(QString)\0"
     "cropCalcClicked(QListWidgetItem*,QListWidgetItem*)\0"
     "animalCalcClicked(QListWidgetItem*,QListWidgetItem*)\0"
     "theRow,theColumn\0animalCellClicked(int,int)\0"
-    "animalCellChanged(int,int)\0"
+    "animalCalcSelectionChanged(int,int)\0"
     "cropCellClicked(int,int)\0"
-    "cropCellChanged(int,int)\0"
+    "cropCalcSelectionChanged(int,int)\0"
 };
 
 const QMetaObject LaMainForm::staticMetaObject = {
@@ -170,17 +170,17 @@ int LaMainForm::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         case 25: on_cboMapSet_currentIndexChanged(); break;
         case 26: loadAnimals(); break;
         case 27: loadCrops(); break;
-        case 28: setModel(); break;
-        case 29: setDietLabels(); break;
-        case 30: logMessage((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 28: setDietLabels(); break;
+        case 29: logMessage((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 30: setModel(); break;
         case 31: helpItemClicked((*reinterpret_cast< QTreeWidgetItem*(*)>(_a[1])),(*reinterpret_cast< QTreeWidgetItem*(*)>(_a[2]))); break;
         case 32: writeResults((*reinterpret_cast< QString(*)>(_a[1]))); break;
         case 33: cropCalcClicked((*reinterpret_cast< QListWidgetItem*(*)>(_a[1])),(*reinterpret_cast< QListWidgetItem*(*)>(_a[2]))); break;
         case 34: animalCalcClicked((*reinterpret_cast< QListWidgetItem*(*)>(_a[1])),(*reinterpret_cast< QListWidgetItem*(*)>(_a[2]))); break;
         case 35: animalCellClicked((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
-        case 36: animalCellChanged((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
+        case 36: animalCalcSelectionChanged((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
         case 37: cropCellClicked((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
-        case 38: cropCellChanged((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
+        case 38: cropCalcSelectionChanged((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
         }
         _id -= 39;
     }
