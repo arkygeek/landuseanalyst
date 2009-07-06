@@ -114,7 +114,7 @@ void LaAnimalManager::refreshAnimalTable(QString theGuid)
       // Insert new row ready to fill with details
     tblAnimals->insertRow(myCurrentRow);
     QString myGuid = myAnimal.guid();
-    qDebug ("Inserting animal with guid: " + myGuid.toLocal8Bit());
+    qDebug() << "Inserting animal with guid: " << myGuid;
       // Add details to the new row
     QTableWidgetItem *mypFileNameItem= new QTableWidgetItem(myGuid);
     tblAnimals->setItem(myCurrentRow, 0, mypFileNameItem);

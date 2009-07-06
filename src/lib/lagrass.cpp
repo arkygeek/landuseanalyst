@@ -280,15 +280,15 @@ bool LaGrass::makeWalkCost(int theX, int theY, QString theDEM)
 
   QString myCommand = "r.walk";
   QStringList myArguments;
-  myArguments << "max_cost=100000"
+  myArguments << "max_cost=40000"
               << "elevation=" + myElevationMap
-              << "friction=shunaFrictionMap4"  // + myFrictionMap
+              << "friction=frictionMap"  // + myFrictionMap
               << "output=laWalkCost"
               << "coordinate=" + QString::number(theX) + "," + QString::number(theY)
               << "percent_memory=100"
               << "nseg=4"
               << "walk_coeff=0.72,6.0,1.9998,-1.999"
-              << "lambda=1"
+              << "lambda=0.75"
               << "slope_factor=-0.2125"
               << "-k"
               << "--overwrite";
@@ -403,7 +403,9 @@ QString LaGrass::runCommand(QString theCommand,
   #ifdef Q_OS_MACX
   QString myProgram = "/Applications/GRASS-6.4.app/Contents/MacOS/bin/" + theCommand;
   #else
+  //QString myProgram = "/usr/lib/grass/bin/" + theCommand;
   QString myProgram = "/usr/lib/grass/bin/" + theCommand;
+
   #endif
     //windows users can wallow in self pity for now...
 
