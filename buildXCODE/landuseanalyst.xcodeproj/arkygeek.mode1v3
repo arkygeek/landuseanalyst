@@ -216,7 +216,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3FAEFF9E1002004D005AC10A</string>
+						<string>3FAEFFB9100205A1005AC10A</string>
 						<key>history</key>
 						<array>
 							<string>3F26F7A60F8F9B5200E1FCA5</string>
@@ -269,8 +269,6 @@
 			<key>Layout</key>
 			<array>
 				<dict>
-					<key>BecomeActive</key>
-					<true/>
 					<key>ContentConfiguration</key>
 					<dict>
 						<key>PBXBottomSmartGroupGIDs</key>
@@ -321,6 +319,9 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
+									<integer>24</integer>
+									<integer>23</integer>
+									<integer>1</integer>
 									<integer>0</integer>
 								</array>
 							</array>
@@ -357,12 +358,14 @@
 					<key>Dock</key>
 					<array>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>lagrass.cpp</string>
+								<string>lagrassprocess.cpp</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -370,11 +373,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>lagrass.cpp</string>
+										<string>lagrassprocess.cpp</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>3FAEFF9B1002004D005AC10A</string>
+										<string>3FAEFFB8100205A1005AC10A</string>
 										<key>history</key>
 										<array>
 											<string>3F806DDB0F78EEF500F92884</string>
@@ -389,9 +392,9 @@
 											<string>3F05675E0F81013300C6F161</string>
 											<string>3F22DCFB0F8C7F1500A856C4</string>
 											<string>3F22DCFC0F8C7F1500A856C4</string>
-											<string>3F42C46C0F8CCD190023F491</string>
 											<string>3F26F7A20F8F9B5200E1FCA5</string>
-											<string>3F26F7A50F8F9B5200E1FCA5</string>
+											<string>3FAEFFB5100205A1005AC10A</string>
+											<string>3FAEFFB6100205A1005AC10A</string>
 										</array>
 										<key>prevStack</key>
 										<array>
@@ -410,6 +413,7 @@
 											<string>3F1600650F8092D1004683A8</string>
 											<string>3F0567610F81013300C6F161</string>
 											<string>3F22DCFF0F8C7F1500A856C4</string>
+											<string>3FAEFFB7100205A1005AC10A</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -603,13 +607,13 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>3FAEFFA71002004D005AC10A</string>
 		<string>3FAEFFA81002004D005AC10A</string>
 		<string>3FAEFFA91002004D005AC10A</string>
 		<string>1C78EAAD065D492600B07095</string>
 		<string>1CD10A99069EF8BA00B06720</string>
 		<string>3F3BF1BA0F6EE68400608738</string>
 		<string>3F26F79F0F8DF79200E1FCA5</string>
+		<string>1C530D57069F1CE1000CFCEE</string>
 		<string>/Users/arkygeek/devel/landuseanalyst/buildXCODE/landuseanalyst.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
@@ -843,12 +847,14 @@
 							<key>Dock</key>
 							<array>
 								<dict>
+									<key>BecomeActive</key>
+									<true/>
 									<key>ContentConfiguration</key>
 									<dict>
 										<key>PBXProjectModuleGUID</key>
 										<string>1CDD528C0622207200134675</string>
 										<key>PBXProjectModuleLabel</key>
-										<string></string>
+										<string>lagrassprocess.cpp</string>
 										<key>StatusBarVisibility</key>
 										<true/>
 									</dict>
@@ -869,8 +875,6 @@
 							<string>206pt</string>
 						</dict>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -906,8 +910,8 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D57069F1CE1000CFCEE</string>
-				<string>3F42C4880F8CCF750023F491</string>
-				<string>3F42C4890F8CCF750023F491</string>
+				<string>3FAEFFBA100205A1005AC10A</string>
+				<string>3FAEFFBB100205A1005AC10A</string>
 				<string>1CDD528C0622207200134675</string>
 				<string>1CD0528E0623707200166675</string>
 			</array>
@@ -916,7 +920,7 @@
 			<key>WindowToolGUID</key>
 			<string>1C530D57069F1CE1000CFCEE</string>
 			<key>WindowToolIsVisible</key>
-			<false/>
+			<true/>
 		</dict>
 		<dict>
 			<key>Identifier</key>
