@@ -1,6 +1,6 @@
 # Landuse Analyst
 
-##  How we will collabordte
+##  How we will collaborate
 
 Please submit a pull request from your private branch to the developer branch.
 
