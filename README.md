@@ -1,5 +1,9 @@
 # Landuse Analyst
 
+##  How we will collaborate
+
+Please submit all pull requests from the Developer Branch
+
 ## Project Authors
 
 Jason Jorgenson
@@ -7,7 +11,7 @@ Tim Sutton
 
 ## Build Notes (QMAKE)
 
-```
+```BASH
 export QTDIR=/usr/local/Trolltech/Qt-4.2.2/
 export PATH=$QTDIR/bin/:$PATH
 qmake
