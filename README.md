@@ -1,8 +1,8 @@
 # Landuse Analyst
 
-##  How we will collaborate
+##  How we will collabordte
 
-Please submit all pull requests from the Developer Branch
+Please submit a pull request from your private branch to the developer branch.
 
 ## Project Authors
 
