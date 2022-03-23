@@ -18,7 +18,7 @@ from qgis.PyQt.QtGui import QIcon
 
 
 
-class LanduseAnalystDialogTest(unittest.TestCase):
+class LaMainFormTest(unittest.TestCase):
     """Test rerources work."""
 
     def setUp(self):

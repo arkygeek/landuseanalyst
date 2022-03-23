@@ -16,18 +16,18 @@ import unittest
 
 from qgis.PyQt.QtGui import QDialogButtonBox, QDialog
 
-from landuse_analyst_dialog import LanduseAnalystDialog
+from landuse_analyst_dialog import LaMainForm
 
 from utilities import get_qgis_app
 QGIS_APP = get_qgis_app()
 
 
-class LanduseAnalystDialogTest(unittest.TestCase):
+class LaMainFormTest(unittest.TestCase):
     """Test dialog works."""
 
     def setUp(self):
         """Runs before each test."""
-        self.dialog = LanduseAnalystDialog(None)
+        self.dialog = LaMainForm(None)
 
     def tearDown(self):
         """Runs after each test."""
@@ -49,7 +49,7 @@ class LanduseAnalystDialogTest(unittest.TestCase):
         self.assertEqual(result, QDialog.Rejected)
 
 if __name__ == "__main__":
-    suite = unittest.makeSuite(LanduseAnalystDialogTest)
+    suite = unittest.makeSuite(LaMainFormTest)
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
 
