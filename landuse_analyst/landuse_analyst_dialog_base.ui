@@ -3332,9 +3332,6 @@ p, li { white-space: pre-wrap; }
   <tabstop>cbDebug</tabstop>
   <tabstop>textHelp</tabstop>
  </tabstops>
- <resources>
-  <include location="resources.qrc"/>
-  <include location="resources/resources.qrc"/>
- </resources>
+ <resources />
  <connections/>
 </ui>
