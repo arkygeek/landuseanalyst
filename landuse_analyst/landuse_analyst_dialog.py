@@ -32,13 +32,17 @@ FORM_CLASS, _ = uic.loadUiType(os.path.join(
     os.path.dirname(__file__), 'landuse_analyst_dialog_base.ui'))
 
 
-class LaMainForm(QtWidgets.QDialog, FORM_CLASS):
+class landuseAnalystDialogBase(QtWidgets.QDialog, FORM_CLASS):
     def __init__(self, parent=None):
         """Constructor."""
-        super(LaMainForm, self).__init__(parent)
+        super(landuseAnalystDialogBase, self).__init__(parent)
         # Set up the user interface from Designer through FORM_CLASS.
         # After self.setupUi() you can access any designer object by doing
         # self.<objectname>, and you can use autoconnect slots - see
         # http://qt-project.org/doc/qt-4.8/designer-using-a-ui-file.html
         # #widgets-and-dialogs-with-auto-connect
         self.setupUi(self)
+        self.pushButtonExit.clicked.connect(self.exit_program)
+
+    def exit_program(self):
+        print("Hello World!")

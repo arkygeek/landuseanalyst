@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>Jason Jorgenson</author>
- <class>LaMainFormBase</class>
- <widget class="QDialog" name="LaMainFormBase">
+ <class>landuseAnalystDialogBase</class>
+ <widget class="QDialog" name="landuseAnalystDialogBase">
   <property name="geometry">
    <rect>
     <x>0</x>
