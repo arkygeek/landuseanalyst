@@ -34,15 +34,16 @@ import os
 from PyQt5 import QtWidgets, uic
 from enum import Enum
 # import la
+# from la import AreaUnits
 
 # This loads your .ui file so that PyQt can populate your plugin with the elements from Qt Designer
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
     os.path.dirname(__file__), 'landuse_analyst_dialog_base.ui'))
 
 
-class AreaUnits(Enum):
-    Dunum = "Dunum"
-    Hectare = "Hectare"
+# class AreaUnits(Enum):
+#     Dunum = "Dunum"
+#     Hectare = "Hectare"
 
 class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
     def __init__(self, parent=None):
@@ -107,6 +108,8 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
 
         # the diet slider works yay!
         self.sliderDiet.valueChanged.connect(self.on_sliderDiet_valueChanged)
+        self.sliderMeat.valueChanged.connect(self.on_sliderMeat_valueChanged)
+        self.sliderCrop.valueChanged.connect(self.on_sliderCrop_valueChanged)
 
         # the following, sadly, does NOT work
         # self.connect(self.treeHelp, Qt.Core.SIGNAL(currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem * )),
@@ -148,6 +151,19 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         self.labelCropPercent.setText(myMaxString)
         # setDietLabels()
 
+    def on_sliderMeat_valueChanged(self,  theValue):
+        myMinString = str(theValue)
+        myMaxString = str(100-theValue)
+        self.labelMeatWildPercent.setText(myMinString)
+        self.labelMeatTamePercent.setText(myMaxString)
+        # setDietLabels()
+
+    def on_sliderCrop_valueChanged(self,  theValue):
+        myMinString = str(theValue)
+        myMaxString = str(100-theValue)
+        self.labelCropWildPercent.setText(myMinString)
+        self.labelCropTamePercent.setText(myMaxString)
+        # setDietLabels()
 
     # Set's the model.  All data comes from the mainForm except for the map
     # of crops and animals which are being generated here.
