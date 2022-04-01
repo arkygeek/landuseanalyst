@@ -23,38 +23,47 @@
 """
 
 import os
+import sys
 
+from PyQt5.QtCore import QObject,  pyqtSignal
+
+# from PyQt5.QtCore import uic
+# from PyQt5.QtCore import QtWidgets
 from qgis.PyQt import uic
 from qgis.PyQt import QtWidgets
+
+from enum import Enum
+# import la
 
 # This loads your .ui file so that PyQt can populate your plugin with the elements from Qt Designer
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
     os.path.dirname(__file__), 'landuse_analyst_dialog_base.ui'))
 
+# class AreaUnits(Enum):
+#     Dunum = "Dunum"
+#     Hectare = "Hectare"
 
 class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
     def __init__(self, parent=None):
         """Constructor."""
         super(LaMainFormBase, self).__init__(parent)
-        # Set up the user interface from Designer through FORM_CLASS.
-        # After self.setupUi() you can access any designer object by doing
-        # self.<objectname>, and you can use autoconnect slots - see
-        # http://qt-project.org/doc/qt-4.8/designer-using-a-ui-file.html
-        # #widgets-and-dialogs-with-auto-connect
+
+        """ Set up the user interface from Designer through FORM_CLASS.
+        After self.setupUi() you can access any designer object by doing
+        self.<objectname>, and you can use autoconnect slots - see
+        http://qt-project.org/doc/qt-4.8/designer-using-a-ui-file.html
+        #widgets-and-dialogs-with-auto-connect
+        """
         self.setupUi(self)
-        self.pushButtonExit.clicked.connect(self.exit_program)
-        # cbAreaUnits needs to be populated with two values. Let's add Dunums and Hectares for now
-        self.cbAreaUnits.addItem("Dunums")
-        self.cbAreaUnits.addItem("Hectares")
-        # success! now to look for a systematic way to go about this...
+        # self.pushButtonExit.clicked.connect(self.exit_program)
+        # QObject.connect(self.pushButtonExit, QObject.SIGNAL.clicked()), QtWidgets. qApp, SLOT(quit()))
+
         # https://stackoverflow.com/questions/27676034/pyqt-place-scaled-image-in-centre-of-label
         self.lblCropPix.setScaledContents(True)
         self.lblAnimalPix.setScaledContents(True)
         self.lblCropPicCalcs.setScaledContents(True)
         self.lblAnimalPicCalcs.setScaledContents(True)
-
-        """
-        setting the resize-mode for each column:
+        """ setting the resize-mode for each column:
         The first section must stretch to take up the available space,
         whilst the last two sections just resize to their contents:
 
@@ -80,54 +89,30 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         self.listWidgetCalculationsAnimal.clear()
         # loadAnimals()
         # loadCrops()
-        # cbAreaUnits.addItem("Dunum")
-        # cbAreaUnits.addItem("Hectare")
+
+        # cbAreaUnits needs to be populated with two values. Let's add Dunums and Hectares for now
+        self.cbAreaUnits.addItem("Dunum")
+        self.cbAreaUnits.addItem("Hectare")
         self.cbCommonLandEnergyType.addItem("KCalories")
         self.cbCommonLandEnergyType.addItem("TDN")
 
+        self.sliderDiet.valueChanged.connect(self.on_sliderDiet_valueChanged)
+
+        # connect(treeHelp, SIGNAL(currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem * )),
+        #         this, SLOT(helpItemClicked(QTreeWidgetItem * , QTreeWidgetItem * )))
 
 
         """
-        QStringList myWholeList
-        LaGrass myGrass
-        QStringList myMapsetList = myGrass.getMapsetList()
-        cboMapSet.addItems(myMapsetList)
-        QStringListIterator myIterator(myMapsetList)
-        while (myIterator.hasNext())
-        {
-            //append the raster names in this mapet to our full list
-            myWholeList << myGrass.getRasterList(myIterator.next())
-        }
-        QString myMapset = cboMapSet.currentText()
-        QStringList myList = myGrass.getRasterList(myMapset)
-        cboDEM.addItems(myList)
-        cboCommonGrazingRaster.addItems(myList)
-        cboCommonCropRaster.addItems(myList)
 
-            //cboDEM.addItems(myGrass.getRasterList("
-        lblVersion.setText(QString("Version: %1").arg(VERSION) + " " + QString("$Revision$").replace("$",""))
-        tblAnimals.horizontalHeader().hide()
-        tblAnimals.verticalHeader().hide()
-        tblAnimals.horizontalHeader().setResizeMode(2,QHeaderView::Stretch)
-        tblCrops.horizontalHeader().hide()
-        tblCrops.verticalHeader().hide()
-        tblCrops.horizontalHeader().setResizeMode(2,QHeaderView::Stretch)
-        listWidgetCalculationsAnimal.clear()
-        loadAnimals()
-        loadCrops()
-        cbAreaUnits.addItem("Dunum")
-        cbAreaUnits.addItem("Hectare")
-        cbCommonLandEnergyType.addItem("KCalories")
-        cbCommonLandEnergyType.addItem("TDN")
+        QStringList myWholeList
 
         setDietLabels()
-        /** See the qtdocs on signals and slots to understand below.
-        * we connect the currentItemChanged signal that a tree view emits when you
-        * click on an item to a little method that sets the help viewer contents
-        * appropriately. TS
-        *
-        * Make sure this is the last stuff we do in the ctor! TS
-        */
+        # See the qtdocs on signals and slots to understand below.
+        # we connect the currentItemChanged signal that a tree view emits when you
+        # click on an item to a little method that sets the help viewer contents
+        # appropriately. TS
+        # Make sure this is the last stuff we do in the ctor! TS
+
         connect(treeHelp, SIGNAL(currentItemChanged(QTreeWidgetItem * ,QTreeWidgetItem *)),
             this, SLOT(helpItemClicked(QTreeWidgetItem * ,QTreeWidgetItem *)))
         connect(listWidgetCalculationsCrop, SIGNAL(currentItemChanged(QListWidgetItem * ,QListWidgetItem *)),
@@ -146,16 +131,27 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         connect(cbDebug, SIGNAL(clicked()),
             this, SLOT(on_cbDebug_clicked())) """
 
-        self.sliderDiet.valueChanged.connect(self.on_sliderDiet_valueChanged)
-
-
-    def exit_program(self):
-        print("Hello World!")
-
-
     def on_sliderDiet_valueChanged(self,  theValue):
         myMinString = str(theValue)
         myMaxString = str(100-theValue)
         self.labelMeatPercent.setText(myMinString)
         self.labelCropPercent.setText(myMaxString)
         # setDietLabels()
+
+
+    #
+    # Set's the model.  All data comes from the mainForm except for the map
+    # of crops and animals which are being generated here.
+    #
+    def setModel(self, *args):
+        # mSelectedCropsMap.clear();
+        # mSelectedAnimalsMap.clear();
+        mySelectedAreaUnit = str(self.cbAreaUnits.currentText())
+        myCommonRasterValue = int(self.sbCommonRasterValue.value())
+
+        # a = (b == true ? "123": "456")
+        # a = '123' if b else '456'
+
+        # TODO this is quick and dirty
+        myAreaUnits = 'Dunum' if mySelectedAreaUnit else 'Hectare'
+        print(myAreaUnits, myCommonRasterValue)
