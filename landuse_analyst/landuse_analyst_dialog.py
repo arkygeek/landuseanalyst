@@ -23,15 +23,15 @@
 """
 
 import os
-import sys
+# import sys
 
-from PyQt5.QtCore import QObject,  pyqtSignal
-
+# from PyQt5.QtCore import QObject,  pyqtSignal,
+# import PyQt5.QtCore
 # from PyQt5.QtCore import uic
 # from PyQt5.QtCore import QtWidgets
-from qgis.PyQt import uic
-from qgis.PyQt import QtWidgets
-
+# from qgis.PyQt import uic
+# from qgis.PyQt import QtWidgets
+from PyQt5 import QtWidgets, uic
 from enum import Enum
 # import la
 
@@ -39,9 +39,10 @@ from enum import Enum
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
     os.path.dirname(__file__), 'landuse_analyst_dialog_base.ui'))
 
-# class AreaUnits(Enum):
-#     Dunum = "Dunum"
-#     Hectare = "Hectare"
+
+class AreaUnits(Enum):
+    Dunum = "Dunum"
+    Hectare = "Hectare"
 
 class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
     def __init__(self, parent=None):
@@ -55,29 +56,33 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         #widgets-and-dialogs-with-auto-connect
         """
         self.setupUi(self)
+
+        # everything below this Jason did
+
         # self.pushButtonExit.clicked.connect(self.exit_program)
         # QObject.connect(self.pushButtonExit, QObject.SIGNAL.clicked()), QtWidgets. qApp, SLOT(quit()))
 
+        # notes for how to do this from:
         # https://stackoverflow.com/questions/27676034/pyqt-place-scaled-image-in-centre-of-label
         self.lblCropPix.setScaledContents(True)
         self.lblAnimalPix.setScaledContents(True)
         self.lblCropPicCalcs.setScaledContents(True)
         self.lblAnimalPicCalcs.setScaledContents(True)
-        """ setting the resize-mode for each column:
-        The first section must stretch to take up the available space,
-        whilst the last two sections just resize to their contents:
+        """ NOTES for setting the resize-mode for each column:
+            The first section must stretch to take up the available space,
+            whilst the last two sections just resize to their contents:
 
-        PyQt4:
-        header = self.table.horizontalHeader()
-        header.setResizeMode(0, QtGui.QHeaderView.Stretch)
-        header.setResizeMode(1, QtGui.QHeaderView.ResizeToContents)
-        header.setResizeMode(2, QtGui.QHeaderView.ResizeToContents)
+            PyQt4:
+            header = self.table.horizontalHeader()
+            header.setResizeMode(0, QtGui.QHeaderView.Stretch)
+            header.setResizeMode(1, QtGui.QHeaderView.ResizeToContents)
+            header.setResizeMode(2, QtGui.QHeaderView.ResizeToContents)
 
-        PyQt5:
-        header = self.table.horizontalHeader()
-        header.setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
-        header.setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeToContents)
-        header.setSectionResizeMode(2, QtWidgets.QHeaderView.ResizeToContents)
+            PyQt5:
+            header = self.table.horizontalHeader()
+            header.setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
+            header.setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeToContents)
+            header.setSectionResizeMode(2, QtWidgets.QHeaderView.ResizeToContents)
         """
 
         self.tblAnimals.horizontalHeader().hide()
@@ -87,23 +92,28 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         self.tblCrops.verticalHeader().hide()
         self.tblCrops.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView. Stretch)
         self.listWidgetCalculationsAnimal.clear()
+
+        # the following should load from xml files that define animals and crops but prob will do now
+        # with either JSON or storage in the database
         # loadAnimals()
         # loadCrops()
 
         # cbAreaUnits needs to be populated with two values. Let's add Dunums and Hectares for now
         self.cbAreaUnits.addItem("Dunum")
         self.cbAreaUnits.addItem("Hectare")
+
         self.cbCommonLandEnergyType.addItem("KCalories")
         self.cbCommonLandEnergyType.addItem("TDN")
 
+        # the diet slider works yay!
         self.sliderDiet.valueChanged.connect(self.on_sliderDiet_valueChanged)
 
-        # connect(treeHelp, SIGNAL(currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem * )),
+        # the following, sadly, does NOT work
+        # self.connect(self.treeHelp, Qt.Core.SIGNAL(currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem * )),
         #         this, SLOT(helpItemClicked(QTreeWidgetItem * , QTreeWidgetItem * )))
 
 
         """
-
         QStringList myWholeList
 
         setDietLabels()
@@ -139,19 +149,15 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         # setDietLabels()
 
 
-    #
     # Set's the model.  All data comes from the mainForm except for the map
     # of crops and animals which are being generated here.
-    #
     def setModel(self, *args):
-        # mSelectedCropsMap.clear();
-        # mSelectedAnimalsMap.clear();
+        self.mSelectedCropsMap.clear()
+        self.mSelectedAnimalsMap.clear()
         mySelectedAreaUnit = str(self.cbAreaUnits.currentText())
         myCommonRasterValue = int(self.sbCommonRasterValue.value())
-
         # a = (b == true ? "123": "456")
         # a = '123' if b else '456'
-
         # TODO this is quick and dirty
         myAreaUnits = 'Dunum' if mySelectedAreaUnit else 'Hectare'
         print(myAreaUnits, myCommonRasterValue)
