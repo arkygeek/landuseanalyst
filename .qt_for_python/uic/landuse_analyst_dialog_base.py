@@ -11,19 +11,19 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_landuseAnalystDialogBase(object):
-    def setupUi(self, landuseAnalystDialogBase):
-        landuseAnalystDialogBase.setObjectName("landuseAnalystDialogBase")
-        landuseAnalystDialogBase.resize(1089, 783)
+class Ui_LaMainFormBase(object):
+    def setupUi(self, LaMainFormBase):
+        LaMainFormBase.setObjectName("LaMainFormBase")
+        LaMainFormBase.resize(1089, 783)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(landuseAnalystDialogBase.sizePolicy().hasHeightForWidth())
-        landuseAnalystDialogBase.setSizePolicy(sizePolicy)
+        sizePolicy.setHeightForWidth(LaMainFormBase.sizePolicy().hasHeightForWidth())
+        LaMainFormBase.setSizePolicy(sizePolicy)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(":/la_icon_small.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        landuseAnalystDialogBase.setWindowIcon(icon)
-        self.gridlayout = QtWidgets.QGridLayout(landuseAnalystDialogBase)
+        LaMainFormBase.setWindowIcon(icon)
+        self.gridlayout = QtWidgets.QGridLayout(LaMainFormBase)
         self.gridlayout.setObjectName("gridlayout")
         spacerItem = QtWidgets.QSpacerItem(308, 17, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.gridlayout.addItem(spacerItem, 1, 0, 1, 11)
@@ -31,27 +31,27 @@ class Ui_landuseAnalystDialogBase(object):
         self.gridlayout.addItem(spacerItem1, 2, 4, 1, 1)
         spacerItem2 = QtWidgets.QSpacerItem(223, 37, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.gridlayout.addItem(spacerItem2, 2, 6, 1, 1)
-        self.label_5 = QtWidgets.QLabel(landuseAnalystDialogBase)
+        self.label_5 = QtWidgets.QLabel(LaMainFormBase)
         self.label_5.setObjectName("label_5")
         self.gridlayout.addWidget(self.label_5, 2, 0, 1, 1)
-        self.labelAnimalCheck = QtWidgets.QLabel(landuseAnalystDialogBase)
+        self.labelAnimalCheck = QtWidgets.QLabel(LaMainFormBase)
         self.labelAnimalCheck.setAlignment(QtCore.Qt.AlignCenter)
         self.labelAnimalCheck.setObjectName("labelAnimalCheck")
         self.gridlayout.addWidget(self.labelAnimalCheck, 2, 1, 1, 1)
-        self.label_3 = QtWidgets.QLabel(landuseAnalystDialogBase)
+        self.label_3 = QtWidgets.QLabel(LaMainFormBase)
         self.label_3.setObjectName("label_3")
         self.gridlayout.addWidget(self.label_3, 2, 2, 1, 1)
-        self.labelCropCheck = QtWidgets.QLabel(landuseAnalystDialogBase)
+        self.labelCropCheck = QtWidgets.QLabel(LaMainFormBase)
         self.labelCropCheck.setAlignment(QtCore.Qt.AlignCenter)
         self.labelCropCheck.setObjectName("labelCropCheck")
         self.gridlayout.addWidget(self.labelCropCheck, 2, 3, 1, 1)
-        self.label_7 = QtWidgets.QLabel(landuseAnalystDialogBase)
+        self.label_7 = QtWidgets.QLabel(LaMainFormBase)
         font = QtGui.QFont()
         font.setPointSize(8)
         self.label_7.setFont(font)
         self.label_7.setObjectName("label_7")
         self.gridlayout.addWidget(self.label_7, 2, 5, 1, 1)
-        self.pushButtonRun = QtWidgets.QPushButton(landuseAnalystDialogBase)
+        self.pushButtonRun = QtWidgets.QPushButton(LaMainFormBase)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -60,7 +60,7 @@ class Ui_landuseAnalystDialogBase(object):
         self.pushButtonRun.setMinimumSize(QtCore.QSize(0, 0))
         self.pushButtonRun.setObjectName("pushButtonRun")
         self.gridlayout.addWidget(self.pushButtonRun, 2, 7, 1, 1)
-        self.pushButtonLoad = QtWidgets.QPushButton(landuseAnalystDialogBase)
+        self.pushButtonLoad = QtWidgets.QPushButton(LaMainFormBase)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -69,7 +69,7 @@ class Ui_landuseAnalystDialogBase(object):
         self.pushButtonLoad.setMinimumSize(QtCore.QSize(0, 0))
         self.pushButtonLoad.setObjectName("pushButtonLoad")
         self.gridlayout.addWidget(self.pushButtonLoad, 2, 8, 1, 1)
-        self.pushButtonSave = QtWidgets.QPushButton(landuseAnalystDialogBase)
+        self.pushButtonSave = QtWidgets.QPushButton(LaMainFormBase)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -77,7 +77,7 @@ class Ui_landuseAnalystDialogBase(object):
         self.pushButtonSave.setSizePolicy(sizePolicy)
         self.pushButtonSave.setObjectName("pushButtonSave")
         self.gridlayout.addWidget(self.pushButtonSave, 2, 9, 1, 1)
-        self.pushButtonExit = QtWidgets.QPushButton(landuseAnalystDialogBase)
+        self.pushButtonExit = QtWidgets.QPushButton(LaMainFormBase)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -85,7 +85,7 @@ class Ui_landuseAnalystDialogBase(object):
         self.pushButtonExit.setSizePolicy(sizePolicy)
         self.pushButtonExit.setObjectName("pushButtonExit")
         self.gridlayout.addWidget(self.pushButtonExit, 2, 10, 1, 1)
-        self.progressBarCalcs = QtWidgets.QProgressBar(landuseAnalystDialogBase)
+        self.progressBarCalcs = QtWidgets.QProgressBar(LaMainFormBase)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -97,7 +97,7 @@ class Ui_landuseAnalystDialogBase(object):
         self.progressBarCalcs.setOrientation(QtCore.Qt.Horizontal)
         self.progressBarCalcs.setObjectName("progressBarCalcs")
         self.gridlayout.addWidget(self.progressBarCalcs, 3, 0, 1, 11)
-        self.MainTabs = QtWidgets.QTabWidget(landuseAnalystDialogBase)
+        self.MainTabs = QtWidgets.QTabWidget(LaMainFormBase)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -1182,104 +1182,104 @@ class Ui_landuseAnalystDialogBase(object):
         self.MainTabs.addTab(self.help_tab, "")
         self.gridlayout.addWidget(self.MainTabs, 0, 0, 1, 11)
 
-        self.retranslateUi(landuseAnalystDialogBase)
+        self.retranslateUi(LaMainFormBase)
         self.MainTabs.setCurrentIndex(0)
-        QtCore.QMetaObject.connectSlotsByName(landuseAnalystDialogBase)
-        landuseAnalystDialogBase.setTabOrder(self.lineEditSiteName, self.lineEditPeriod)
-        landuseAnalystDialogBase.setTabOrder(self.lineEditPeriod, self.sbPopulation)
-        landuseAnalystDialogBase.setTabOrder(self.sbPopulation, self.lineEditEasting)
-        landuseAnalystDialogBase.setTabOrder(self.lineEditEasting, self.lineEditNorthing)
-        landuseAnalystDialogBase.setTabOrder(self.lineEditNorthing, self.radioButtonEuclidean)
-        landuseAnalystDialogBase.setTabOrder(self.radioButtonEuclidean, self.radioButtonWalkingTime)
-        landuseAnalystDialogBase.setTabOrder(self.radioButtonWalkingTime, self.radioButtonPathDistance)
-        landuseAnalystDialogBase.setTabOrder(self.radioButtonPathDistance, self.sbModelPrecision)
-        landuseAnalystDialogBase.setTabOrder(self.sbModelPrecision, self.cboMapSet)
-        landuseAnalystDialogBase.setTabOrder(self.cboMapSet, self.cboDEM)
-        landuseAnalystDialogBase.setTabOrder(self.cboDEM, self.pushButtonRun)
-        landuseAnalystDialogBase.setTabOrder(self.pushButtonRun, self.pushButtonLoad)
-        landuseAnalystDialogBase.setTabOrder(self.pushButtonLoad, self.pushButtonSave)
-        landuseAnalystDialogBase.setTabOrder(self.pushButtonSave, self.pushButtonExit)
-        landuseAnalystDialogBase.setTabOrder(self.pushButtonExit, self.sliderDiet)
-        landuseAnalystDialogBase.setTabOrder(self.sliderDiet, self.sliderCrop)
-        landuseAnalystDialogBase.setTabOrder(self.sliderCrop, self.sliderMeat)
-        landuseAnalystDialogBase.setTabOrder(self.sliderMeat, self.sbDailyCalories)
-        landuseAnalystDialogBase.setTabOrder(self.sbDailyCalories, self.tblCrops)
-        landuseAnalystDialogBase.setTabOrder(self.tblCrops, self.textBrowserCropDefinition)
-        landuseAnalystDialogBase.setTabOrder(self.textBrowserCropDefinition, self.cboCommonCropRaster)
-        landuseAnalystDialogBase.setTabOrder(self.cboCommonCropRaster, self.pbnNewCrop)
-        landuseAnalystDialogBase.setTabOrder(self.pbnNewCrop, self.pbnNewCropParameter)
-        landuseAnalystDialogBase.setTabOrder(self.pbnNewCropParameter, self.tblAnimals)
-        landuseAnalystDialogBase.setTabOrder(self.tblAnimals, self.textBrowserAnimalDefinition)
-        landuseAnalystDialogBase.setTabOrder(self.textBrowserAnimalDefinition, self.cboCommonGrazingRaster)
-        landuseAnalystDialogBase.setTabOrder(self.cboCommonGrazingRaster, self.sbCommonRasterValue)
-        landuseAnalystDialogBase.setTabOrder(self.sbCommonRasterValue, self.cbAreaUnits)
-        landuseAnalystDialogBase.setTabOrder(self.cbAreaUnits, self.pbnNewAnimal)
-        landuseAnalystDialogBase.setTabOrder(self.pbnNewAnimal, self.pbnNewAnimalParameter)
-        landuseAnalystDialogBase.setTabOrder(self.pbnNewAnimalParameter, self.listWidgetCalculationsCrop)
-        landuseAnalystDialogBase.setTabOrder(self.listWidgetCalculationsCrop, self.textBrowserResultsCrop)
-        landuseAnalystDialogBase.setTabOrder(self.textBrowserResultsCrop, self.listWidgetCalculationsAnimal)
-        landuseAnalystDialogBase.setTabOrder(self.listWidgetCalculationsAnimal, self.textBrowserResultsAnimals)
-        landuseAnalystDialogBase.setTabOrder(self.textBrowserResultsAnimals, self.pbnTargets)
-        landuseAnalystDialogBase.setTabOrder(self.pbnTargets, self.pbnFallow)
-        landuseAnalystDialogBase.setTabOrder(self.pbnFallow, self.pbnHerds)
-        landuseAnalystDialogBase.setTabOrder(self.pbnHerds, self.pbnText)
-        landuseAnalystDialogBase.setTabOrder(self.pbnText, self.pbnHtml)
-        landuseAnalystDialogBase.setTabOrder(self.pbnHtml, self.tbReport)
-        landuseAnalystDialogBase.setTabOrder(self.tbReport, self.tbLogs)
-        landuseAnalystDialogBase.setTabOrder(self.tbLogs, self.treeHelp)
-        landuseAnalystDialogBase.setTabOrder(self.treeHelp, self.cbDebug)
-        landuseAnalystDialogBase.setTabOrder(self.cbDebug, self.textHelp)
+        QtCore.QMetaObject.connectSlotsByName(LaMainFormBase)
+        LaMainFormBase.setTabOrder(self.lineEditSiteName, self.lineEditPeriod)
+        LaMainFormBase.setTabOrder(self.lineEditPeriod, self.sbPopulation)
+        LaMainFormBase.setTabOrder(self.sbPopulation, self.lineEditEasting)
+        LaMainFormBase.setTabOrder(self.lineEditEasting, self.lineEditNorthing)
+        LaMainFormBase.setTabOrder(self.lineEditNorthing, self.radioButtonEuclidean)
+        LaMainFormBase.setTabOrder(self.radioButtonEuclidean, self.radioButtonWalkingTime)
+        LaMainFormBase.setTabOrder(self.radioButtonWalkingTime, self.radioButtonPathDistance)
+        LaMainFormBase.setTabOrder(self.radioButtonPathDistance, self.sbModelPrecision)
+        LaMainFormBase.setTabOrder(self.sbModelPrecision, self.cboMapSet)
+        LaMainFormBase.setTabOrder(self.cboMapSet, self.cboDEM)
+        LaMainFormBase.setTabOrder(self.cboDEM, self.pushButtonRun)
+        LaMainFormBase.setTabOrder(self.pushButtonRun, self.pushButtonLoad)
+        LaMainFormBase.setTabOrder(self.pushButtonLoad, self.pushButtonSave)
+        LaMainFormBase.setTabOrder(self.pushButtonSave, self.pushButtonExit)
+        LaMainFormBase.setTabOrder(self.pushButtonExit, self.sliderDiet)
+        LaMainFormBase.setTabOrder(self.sliderDiet, self.sliderCrop)
+        LaMainFormBase.setTabOrder(self.sliderCrop, self.sliderMeat)
+        LaMainFormBase.setTabOrder(self.sliderMeat, self.sbDailyCalories)
+        LaMainFormBase.setTabOrder(self.sbDailyCalories, self.tblCrops)
+        LaMainFormBase.setTabOrder(self.tblCrops, self.textBrowserCropDefinition)
+        LaMainFormBase.setTabOrder(self.textBrowserCropDefinition, self.cboCommonCropRaster)
+        LaMainFormBase.setTabOrder(self.cboCommonCropRaster, self.pbnNewCrop)
+        LaMainFormBase.setTabOrder(self.pbnNewCrop, self.pbnNewCropParameter)
+        LaMainFormBase.setTabOrder(self.pbnNewCropParameter, self.tblAnimals)
+        LaMainFormBase.setTabOrder(self.tblAnimals, self.textBrowserAnimalDefinition)
+        LaMainFormBase.setTabOrder(self.textBrowserAnimalDefinition, self.cboCommonGrazingRaster)
+        LaMainFormBase.setTabOrder(self.cboCommonGrazingRaster, self.sbCommonRasterValue)
+        LaMainFormBase.setTabOrder(self.sbCommonRasterValue, self.cbAreaUnits)
+        LaMainFormBase.setTabOrder(self.cbAreaUnits, self.pbnNewAnimal)
+        LaMainFormBase.setTabOrder(self.pbnNewAnimal, self.pbnNewAnimalParameter)
+        LaMainFormBase.setTabOrder(self.pbnNewAnimalParameter, self.listWidgetCalculationsCrop)
+        LaMainFormBase.setTabOrder(self.listWidgetCalculationsCrop, self.textBrowserResultsCrop)
+        LaMainFormBase.setTabOrder(self.textBrowserResultsCrop, self.listWidgetCalculationsAnimal)
+        LaMainFormBase.setTabOrder(self.listWidgetCalculationsAnimal, self.textBrowserResultsAnimals)
+        LaMainFormBase.setTabOrder(self.textBrowserResultsAnimals, self.pbnTargets)
+        LaMainFormBase.setTabOrder(self.pbnTargets, self.pbnFallow)
+        LaMainFormBase.setTabOrder(self.pbnFallow, self.pbnHerds)
+        LaMainFormBase.setTabOrder(self.pbnHerds, self.pbnText)
+        LaMainFormBase.setTabOrder(self.pbnText, self.pbnHtml)
+        LaMainFormBase.setTabOrder(self.pbnHtml, self.tbReport)
+        LaMainFormBase.setTabOrder(self.tbReport, self.tbLogs)
+        LaMainFormBase.setTabOrder(self.tbLogs, self.treeHelp)
+        LaMainFormBase.setTabOrder(self.treeHelp, self.cbDebug)
+        LaMainFormBase.setTabOrder(self.cbDebug, self.textHelp)
 
-    def retranslateUi(self, landuseAnalystDialogBase):
+    def retranslateUi(self, LaMainFormBase):
         _translate = QtCore.QCoreApplication.translate
-        landuseAnalystDialogBase.setWindowTitle(_translate("landuseAnalystDialogBase", "Landuse Analyst"))
-        self.label_5.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        LaMainFormBase.setWindowTitle(_translate("LaMainFormBase", "Landuse Analyst"))
+        self.label_5.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This is the sum of percent of diet figures for all of the animals being used in the model.  <span style=\" font-weight:600; font-style:italic; text-decoration: underline; color:#0000ff;\">This must be 100%</span> to run!</p></body></html>"))
-        self.label_5.setText(_translate("landuseAnalystDialogBase", "Animals:"))
-        self.labelAnimalCheck.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.label_5.setText(_translate("LaMainFormBase", "Animals:"))
+        self.labelAnimalCheck.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This is the sum of percent of diet figures for all of the animals being used in the model.  <span style=\" font-weight:600; font-style:italic; text-decoration: underline; color:#0000ff;\">This must be 100%</span> to run!</p></body></html>"))
-        self.labelAnimalCheck.setText(_translate("landuseAnalystDialogBase", "100%"))
-        self.label_3.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.labelAnimalCheck.setText(_translate("LaMainFormBase", "100%"))
+        self.label_3.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This is the sum of percent of diet figures for all of the crops being used in the model.  <span style=\" font-weight:600; font-style:italic; text-decoration: underline; color:#0000ff;\">This must be 100%</span> to run!</p></body></html>"))
-        self.label_3.setText(_translate("landuseAnalystDialogBase", "  Crops:"))
-        self.labelCropCheck.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.label_3.setText(_translate("LaMainFormBase", "  Crops:"))
+        self.labelCropCheck.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This is the sum of percent of diet figures for all of the crops being used in the model.  <span style=\" font-weight:600; font-style:italic; text-decoration: underline; color:#0000ff;\">This must be 100%</span> to run!</p></body></html>"))
-        self.labelCropCheck.setText(_translate("landuseAnalystDialogBase", "100%"))
-        self.label_7.setText(_translate("landuseAnalystDialogBase", "Copyright 2008 Jason Jorgenson"))
-        self.pushButtonRun.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.labelCropCheck.setText(_translate("LaMainFormBase", "100%"))
+        self.label_7.setText(_translate("LaMainFormBase", "Copyright 2008 Jason Jorgenson"))
+        self.pushButtonRun.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Run the model.</p></body></html>"))
-        self.pushButtonRun.setWhatsThis(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.pushButtonRun.setWhatsThis(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Pressing Calculate! will attempt to run the model with the parameters you have chosen.  If there are any errors, this process will fail, and indicate to you what the problem was.  To be on the safe side, always save your model before attempting to Calculate! it.  All results will be saved if the model runs correctly.</p></body></html>"))
-        self.pushButtonRun.setText(_translate("landuseAnalystDialogBase", "Run"))
-        self.pushButtonLoad.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.pushButtonRun.setText(_translate("LaMainFormBase", "Run"))
+        self.pushButtonLoad.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Load previously saved model parameters.</p></body></html>"))
-        self.pushButtonLoad.setText(_translate("landuseAnalystDialogBase", "Load"))
-        self.pushButtonSave.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.pushButtonLoad.setText(_translate("LaMainFormBase", "Load"))
+        self.pushButtonSave.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Save all settings of this model to a file</p></body></html>"))
-        self.pushButtonSave.setText(_translate("landuseAnalystDialogBase", "Save"))
-        self.pushButtonExit.setText(_translate("landuseAnalystDialogBase", "Exit"))
-        self.progressBarCalcs.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.pushButtonSave.setText(_translate("LaMainFormBase", "Save"))
+        self.pushButtonExit.setText(_translate("LaMainFormBase", "Exit"))
+        self.progressBarCalcs.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Shows when program is busy, or progress of tasks.</p></body></html>"))
-        self.progressBarCalcs.setFormat(_translate("landuseAnalystDialogBase", "%p%"))
-        self.frame_2.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.progressBarCalcs.setFormat(_translate("LaMainFormBase", "%p%"))
+        self.frame_2.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt; font-weight:600;\">To learn more about a feature or field in LandUse Analyst, you can do one of four things.</span></p>\n"
@@ -1288,568 +1288,568 @@ class Ui_landuseAnalystDialogBase(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"> Click anywhere to make the help box go away.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">3. RIght Click on the thing you want help for.  If there is detailed help for it, you will see a <span style=\" font-weight:600; color:#0000ff;\">What is this?</span> option that you can then click on.  Again, you can click anywhere to make the help box go away.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">4. Go to the <span style=\" font-weight:600; color:#0000ff;\">Help</span> <span style=\" font-weight:600; color:#0000ff;\">Tab</span> and click on the item you want help with on the left for an even more detailed description of what things are and how they work</p></body></html>"))
-        self.frame_2.setWhatsThis(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.frame_2.setWhatsThis(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Landuse Analyst is a program that attempts to identify how much of the land surrounding an archaeological site would have been needed to sustain its population. <a href=\"http://www.arkygeek.com/\"><span style=\" text-decoration: underline; color:#0000ff;\">Land Analyst</span></a>, is Free Open Source Software (FOSS). That means that this program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version. </p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. </p></body></html>"))
-        self.lblVersion.setText(_translate("landuseAnalystDialogBase", "Version: 99.99"))
-        self.groupBoxManualSiteEntry.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.lblVersion.setText(_translate("LaMainFormBase", "Version: 99.99"))
+        self.groupBoxManualSiteEntry.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The information entered here will be inserted as Meta-Data into the resulting maps.  However, Name and Period are optional.</p></body></html>"))
-        self.groupBoxManualSiteEntry.setWhatsThis(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.groupBoxManualSiteEntry.setWhatsThis(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The name of the site, it\'s period, and the estimated population.</p></body></html>"))
-        self.groupBoxManualSiteEntry.setTitle(_translate("landuseAnalystDialogBase", "Settlement Information"))
-        self.lineEditSiteName.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.groupBoxManualSiteEntry.setTitle(_translate("LaMainFormBase", "Settlement Information"))
+        self.lineEditSiteName.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Enter the name of the site you are modelling here. </p></body></html>"))
-        self.lineEditSiteName.setText(_translate("landuseAnalystDialogBase", "Shuna"))
-        self.sbPopulation.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.lineEditSiteName.setText(_translate("LaMainFormBase", "Shuna"))
+        self.sbPopulation.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Estimated population of the settlement (required)</p></body></html>"))
-        self.textLabel2_4.setText(_translate("landuseAnalystDialogBase", "Name:"))
-        self.label.setText(_translate("landuseAnalystDialogBase", "Period"))
-        self.label5.setText(_translate("landuseAnalystDialogBase", "Pop\'n"))
-        self.label_6.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.textLabel2_4.setText(_translate("LaMainFormBase", "Name:"))
+        self.label.setText(_translate("LaMainFormBase", "Period"))
+        self.label5.setText(_translate("LaMainFormBase", "Pop\'n"))
+        self.label_6.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Easting</p></body></html>"))
-        self.label_6.setText(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.label_6.setText(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt; font-weight:600;\">E</span></p></body></html>"))
-        self.lineEditEasting.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.lineEditEasting.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Easting (required)</p></body></html>"))
-        self.lineEditEasting.setWhatsThis(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.lineEditEasting.setWhatsThis(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The Easting of the site. Be sure you are using the same coordinate system as you do when creating your land suitability mask files!</p></body></html>"))
-        self.lineEditEasting.setText(_translate("landuseAnalystDialogBase", "744800"))
-        self.label_22.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.lineEditEasting.setText(_translate("LaMainFormBase", "744800"))
+        self.label_22.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Northing</p></body></html>"))
-        self.label_22.setText(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.label_22.setText(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt; font-weight:600;\">N</span></p></body></html>"))
-        self.lineEditNorthing.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.lineEditNorthing.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Northing (required)</p></body></html>"))
-        self.lineEditNorthing.setWhatsThis(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.lineEditNorthing.setWhatsThis(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The Northing of the site. Be sure you are using the same coordinate system as you do when creating your land suitability mask files!</p></body></html>"))
-        self.lineEditNorthing.setText(_translate("landuseAnalystDialogBase", "3611100"))
-        self.model_method_box.setWhatsThis(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.lineEditNorthing.setText(_translate("LaMainFormBase", "3611100"))
+        self.model_method_box.setWhatsThis(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">LandUse Analyst currently offers three types of analysis. Here you select which one you want to use.</p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Euclidean method starts looking for suitable land at the site and moves outwards from that point \'as the crow flies\'. In other words, using Euclidean geometry (or even more simply, it draws circles!)</p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Walking Time method uses the same basic principle except that it moves outward from the site based on walking time instead of distance. This method is probably the most realistic scenario to run, but it is interesting to compare the results of the three different methods.</p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Path Distance is very similar to Eucidean, except that this method considers topography when calculating distance from the site.</p></body></html>"))
-        self.model_method_box.setTitle(_translate("landuseAnalystDialogBase", "Modelling Method"))
-        self.label_2.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.model_method_box.setTitle(_translate("LaMainFormBase", "Modelling Method"))
+        self.label_2.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The smaller the value, the longer it will take to calculate the results!</p></body></html>"))
-        self.label_2.setWhatsThis(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.label_2.setWhatsThis(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Landuse Analyst finds suitable land contained with a boundary around the site. This boundary is different for each modelling method, but the process is identical. Once this boundary has been determined, it looks inside and calcualtes the total area of suitable land and compares it to the Area Target. If the area of suitable land contained within this boundary falls within the range set by Model Precision, it has found the solution. If it is under this range, however, the boundary is moved outwards, and the process repeats until enough suitable land has been found.</p></body></html>"))
-        self.label_2.setText(_translate("landuseAnalystDialogBase", "Precision: "))
-        self.sbModelPrecision.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.label_2.setText(_translate("LaMainFormBase", "Precision: "))
+        self.sbModelPrecision.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The smaller the value, the longer it will take to calculate the results!</p></body></html>"))
-        self.sbModelPrecision.setWhatsThis(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.sbModelPrecision.setWhatsThis(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Landuse Analyst finds suitable land contained with a boundary around the site. This boundary is different for each modelling method, but the process is identical. Once this boundary has been determined, it looks inside and calcualtes the total area of suitable land and compares it to the Area Target. If the area of suitable land contained within this boundary falls within the range set by Model Precision, it has found the solution. If it is under this range, however, the boundary is moved outwards, and the process repeats until enough suitable land has been found.</p></body></html>"))
-        self.radioButtonPathDistance.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.radioButtonPathDistance.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Calculate catchment by growing distance based on path distance (considers topography)</p></body></html>"))
-        self.radioButtonPathDistance.setWhatsThis(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.radioButtonPathDistance.setWhatsThis(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">When Path Distance is selected, a cost map for the area is created that calculates how far it is  to all areas of the map from the site.  This is very similar to Eucidean, except that path distance considers topography.  The program then calculates area contained within a certain distance of the site.  If the derived area is insufficient to support the population, the distance is increased, and it tries again.  This repeats until the required area is contained.</p></body></html>"))
-        self.radioButtonPathDistance.setText(_translate("landuseAnalystDialogBase", "Path Distance"))
-        self.radioButtonWalkingTime.setToolTip(_translate("landuseAnalystDialogBase", "Calculate catchment by growing distance based on walking time"))
-        self.radioButtonWalkingTime.setWhatsThis(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.radioButtonPathDistance.setText(_translate("LaMainFormBase", "Path Distance"))
+        self.radioButtonWalkingTime.setToolTip(_translate("LaMainFormBase", "Calculate catchment by growing distance based on walking time"))
+        self.radioButtonWalkingTime.setWhatsThis(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">When Walking Time is selected, a cost map for the area is created that predicts how long it takes to get to any area on the map from the settlement.  The program then calculates the suitable area contained within the time it takes to walk.  If the derived area is insufficient to support the population, the walking time is increased, and it tries again.  This repeats until the required area is contained.  This method is probably the most realistic scenario to run, but it is interesting to compare the results of the three different methods.</p></body></html>"))
-        self.radioButtonWalkingTime.setText(_translate("landuseAnalystDialogBase", "Walking Time"))
-        self.radioButtonEuclidean.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.radioButtonWalkingTime.setText(_translate("LaMainFormBase", "Walking Time"))
+        self.radioButtonEuclidean.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Calculate catchment by growing distance based on distance from the site (\'as the crow flies\')</p></body></html>"))
-        self.radioButtonEuclidean.setWhatsThis(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.radioButtonEuclidean.setWhatsThis(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">When Euclidean is selected, a cost map for the area is created that calculates how far it is  to all areas of the map from the site.  This distance does NOT consider topography.  In other words, it is simply as the crow flies.  The program then calculates area contained within a certain distance of the site.  If the derived area is insufficient to support the population, the distance is increased, and it tries again.  This repeats until the required area is contained.</p></body></html>"))
-        self.radioButtonEuclidean.setText(_translate("landuseAnalystDialogBase", "Euclidean"))
-        self.label_29.setText(_translate("landuseAnalystDialogBase", "Mapset:"))
-        self.label_24.setText(_translate("landuseAnalystDialogBase", "DEM: "))
-        self.MainTabs.setTabText(self.MainTabs.indexOf(self.main_tab), _translate("landuseAnalystDialogBase", "Main"))
-        self.diet_comp_box.setTitle(_translate("landuseAnalystDialogBase", "Dietary Composition Percentages (Calories!)"))
-        self.cboxBaseOnPlants.setText(_translate("landuseAnalystDialogBase", "Base Calcs on Plant Percentage"))
-        self.cboxIncludeDairy.setText(_translate("landuseAnalystDialogBase", "Include Calories from Dairy"))
-        self.labelCropPercent.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.radioButtonEuclidean.setText(_translate("LaMainFormBase", "Euclidean"))
+        self.label_29.setText(_translate("LaMainFormBase", "Mapset:"))
+        self.label_24.setText(_translate("LaMainFormBase", "DEM: "))
+        self.MainTabs.setTabText(self.MainTabs.indexOf(self.main_tab), _translate("LaMainFormBase", "Main"))
+        self.diet_comp_box.setTitle(_translate("LaMainFormBase", "Dietary Composition Percentages (Calories!)"))
+        self.cboxBaseOnPlants.setText(_translate("LaMainFormBase", "Base Calcs on Plant Percentage"))
+        self.cboxIncludeDairy.setText(_translate("LaMainFormBase", "Include Calories from Dairy"))
+        self.labelCropPercent.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The percentage of calories of the populations diet that is supplied by food that comes from plants.</p></body></html>"))
-        self.labelCropPercent.setText(_translate("landuseAnalystDialogBase", "50"))
-        self.sliderDiet.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.labelCropPercent.setText(_translate("LaMainFormBase", "50"))
+        self.sliderDiet.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Adjust this slider to set the ratio of Plant:Meat plants in the diet (calories)</p></body></html>"))
-        self.sliderDiet.setWhatsThis(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.sliderDiet.setWhatsThis(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Set the overall division in the diet as a ratio between calories provided by <span style=\" font-weight:600; color:#0000ff;\">Plants</span> and calories provided by <span style=\" font-weight:600; color:#0000ff;\">Meat</span> with the top slider. You can either click and drag with the mouse, or use the mouse wheel. As you slide it, you will see that the percentages for both are automatically adjusted. This setting includes food from both wild and tame sources.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The Plant to Meat Ratio is the primary distinction you must make when defining the settlements diet. This setting relies on the assumption that all food comes from either plants or animals, regardless of whether or not it is tame or wild. <span style=\" font-weight:600; color:#0000ff;\">Note that this setting is based on calories</span></p></body></html>"))
-        self.labelMeatPercent.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.labelMeatPercent.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The percentage of calories of the populations diet that is supplied by food that comes from animals.</p></body></html>"))
-        self.labelMeatPercent.setText(_translate("landuseAnalystDialogBase", "50"))
-        self.groupplantpercent.setTitle(_translate("landuseAnalystDialogBase", "PLANT"))
-        self.labelCropTamePercent.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.labelMeatPercent.setText(_translate("LaMainFormBase", "50"))
+        self.groupplantpercent.setTitle(_translate("LaMainFormBase", "PLANT"))
+        self.labelCropTamePercent.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The percentage of calories of the population\'s <span style=\" font-style:italic; text-decoration: underline;\">plant</span> portion of the diet that is supplied by domesticated plants (crops).</p></body></html>"))
-        self.labelCropTamePercent.setText(_translate("landuseAnalystDialogBase", "90"))
-        self.sliderCrop.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.labelCropTamePercent.setText(_translate("LaMainFormBase", "90"))
+        self.sliderCrop.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Adjust this slider to set the ratio of Wild:Tame plants in the plant portion of the diet (calories)</p></body></html>"))
-        self.sliderCrop.setWhatsThis(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.sliderCrop.setWhatsThis(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The Wild to Tame Ratio is the distinction you must make when defining the settlements plant or meat portion of the diet. This setting relies on the assumption that all of their food comes from either wild sources or tame sources. To adjust, simply move the slider left or right, or spin your mouse wheel. <span style=\" font-weight:600;\">Note that this setting is based on calories</span></p></body></html>"))
-        self.labelCropWildPercent.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.labelCropWildPercent.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The percentage of calories of the population\'s <span style=\" font-style:italic; text-decoration: underline;\">plant</span> portion of the diet that is supplied by non-domesticated plants.</p></body></html>"))
-        self.labelCropWildPercent.setText(_translate("landuseAnalystDialogBase", "10"))
-        self.label_9.setText(_translate("landuseAnalystDialogBase", "Wild"))
-        self.label_11.setText(_translate("landuseAnalystDialogBase", "Domestic"))
-        self.groupmeatpercent.setTitle(_translate("landuseAnalystDialogBase", "MEAT"))
-        self.label_14.setText(_translate("landuseAnalystDialogBase", "Domestic"))
-        self.labelMeatWildPercent.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.labelCropWildPercent.setText(_translate("LaMainFormBase", "10"))
+        self.label_9.setText(_translate("LaMainFormBase", "Wild"))
+        self.label_11.setText(_translate("LaMainFormBase", "Domestic"))
+        self.groupmeatpercent.setTitle(_translate("LaMainFormBase", "MEAT"))
+        self.label_14.setText(_translate("LaMainFormBase", "Domestic"))
+        self.labelMeatWildPercent.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The percentage of calories of the population\'s <span style=\" font-style:italic; text-decoration: underline;\">meat</span> portion of the diet that is supplied by non-domesticated animals.  (Hunting, fishing, scavenging, etc.)</p></body></html>"))
-        self.labelMeatWildPercent.setText(_translate("landuseAnalystDialogBase", "10"))
-        self.label_13.setText(_translate("landuseAnalystDialogBase", "Wild"))
-        self.labelMeatTamePercent.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.labelMeatWildPercent.setText(_translate("LaMainFormBase", "10"))
+        self.label_13.setText(_translate("LaMainFormBase", "Wild"))
+        self.labelMeatTamePercent.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The percentage of calories of the population\'s <span style=\" font-style:italic; text-decoration: underline;\">meat</span> portion of the diet that is supplied by domesticated animals.</p></body></html>"))
-        self.labelMeatTamePercent.setText(_translate("landuseAnalystDialogBase", "90"))
-        self.sliderMeat.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.labelMeatTamePercent.setText(_translate("LaMainFormBase", "90"))
+        self.sliderMeat.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Adjust this slider to set the ratio of Wild:Tame animals in the meat portion of the diet (calories)</p></body></html>"))
-        self.sliderMeat.setWhatsThis(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.sliderMeat.setWhatsThis(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The Wild to Tame Ratio is the distinction you must make when defining the settlements plant or meat portion of the diet. This setting relies on the assumption that all of their food comes from either wild sources or tame sources. To adjust, simply move the slider left or right, or spin your mouse wheel. <span style=\" font-weight:600;\">Note that this setting is based on calories</span></p></body></html>"))
-        self.label6.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.label6.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Average requirements for each individual</p></body></html>"))
-        self.label6.setWhatsThis(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.label6.setWhatsThis(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This figure is an average only.  In the future, I hope to be able to implement a feature whereby the human population is modelled, and account for different requirements of men, adult women, pregnant women, lactating women, and children.</p></body></html>"))
-        self.label6.setText(_translate("landuseAnalystDialogBase", "Calories per\n"
+        self.label6.setText(_translate("LaMainFormBase", "Calories per\n"
 "Person per Day"))
-        self.sbDailyCalories.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.sbDailyCalories.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Set the average number of calories per day required per person</p></body></html>"))
-        self.sbDailyCalories.setWhatsThis(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.sbDailyCalories.setWhatsThis(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">In future versions of LandUse Analyst, the demographics of the human population will be modelled, but currently the user has to supply one figure for an average number of calories required by a single person on a daily basis.</p></body></html>"))
-        self.label6_2.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.label6_2.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Average requirements for each individual</p></body></html>"))
-        self.label6_2.setWhatsThis(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.label6_2.setWhatsThis(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This figure is an average only.  In the future, I hope to be able to implement a feature whereby the human population is modelled, and account for different requirements of men, adult women, pregnant women, lactating women, and children.</p></body></html>"))
-        self.label6_2.setText(_translate("landuseAnalystDialogBase", "Dairy Use"))
-        self.sbDairyUtilisation.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.label6_2.setText(_translate("LaMainFormBase", "Dairy Use"))
+        self.sbDairyUtilisation.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Set the average number of calories per day required per person</p></body></html>"))
-        self.sbDairyUtilisation.setWhatsThis(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.sbDairyUtilisation.setWhatsThis(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">In future versions of LandUse Analyst, the demographics of the human population will be modelled, but currently the user has to supply one figure for an average number of calories required by a single person on a daily basis.</p></body></html>"))
-        self.sbDairyUtilisation.setSuffix(_translate("landuseAnalystDialogBase", " %"))
-        self.cboxLimitDairy.setText(_translate("landuseAnalystDialogBase", "Limit to"))
-        self.sbLimitDairyPercent.setToolTip(_translate("landuseAnalystDialogBase", "If selected, dairy products cannot contribute more than this percentage towards the overall diet.  If this level is achieved, surplus will be reported"))
-        self.sbLimitDairyPercent.setSuffix(_translate("landuseAnalystDialogBase", "%"))
-        self.labelDairySurplus.setText(_translate("landuseAnalystDialogBase", "Surplus Dairy Produced"))
-        self.groupBox_2.setWhatsThis(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.sbDairyUtilisation.setSuffix(_translate("LaMainFormBase", " %"))
+        self.cboxLimitDairy.setText(_translate("LaMainFormBase", "Limit to"))
+        self.sbLimitDairyPercent.setToolTip(_translate("LaMainFormBase", "If selected, dairy products cannot contribute more than this percentage towards the overall diet.  If this level is achieved, surplus will be reported"))
+        self.sbLimitDairyPercent.setSuffix(_translate("LaMainFormBase", "%"))
+        self.labelDairySurplus.setText(_translate("LaMainFormBase", "Surplus Dairy Produced"))
+        self.groupBox_2.setWhatsThis(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">LandUse Analsyt needs area targets before it can determine landuse for a site. In order to calculate the area requirements for crops and animals, calorie targets must first be determined. The Diet section makes this task very straight forward. It is important to note that all dietary considerations in this program are based on calories (or in some cases KCalories).</p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">With this in mind, the first step is to define their diets as a ratio between calories provided by <span style=\" font-weight:600;\">Plants</span> and calories provided by <span style=\" font-weight:600;\">Meat</span> with the top slider. You can either click and drag with the mouse, or use the mouse wheel. As you slide it, you will see that the percentages for both are automatically adjusted. This setting includes all sources of the diet.</p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The second level of adjustment is to set the proportions between tame and wild sources. This works the same way as the top slider. Things to consider when setting these sliders are fishing, hunting, wild plant foraging, etc.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"></p></body></html>"))
-        self.groupBox_2.setTitle(_translate("landuseAnalystDialogBase", "Breakdown of Diet"))
-        self.label_10.setText(_translate("landuseAnalystDialogBase", "Settlement:"))
-        self.labelCaloriesSettlement.setText(_translate("landuseAnalystDialogBase", "Adjust Diet Settings"))
-        self.label_37.setText(_translate("landuseAnalystDialogBase", "MCals"))
-        self.label_12.setText(_translate("landuseAnalystDialogBase", "All Plants:"))
-        self.labelPortionPlants.setText(_translate("landuseAnalystDialogBase", "Adjust Diet Settings"))
-        self.label_38.setText(_translate("landuseAnalystDialogBase", "%"))
-        self.label_16.setText(_translate("landuseAnalystDialogBase", "All Meat:"))
-        self.labelPortionMeat.setText(_translate("landuseAnalystDialogBase", "Adjust Diet Settings"))
-        self.label_39.setText(_translate("landuseAnalystDialogBase", "%"))
-        self.label_54.setText(_translate("landuseAnalystDialogBase", "All Dairy"))
-        self.labelPortionAllDairy.setText(_translate("landuseAnalystDialogBase", "Adjust Diet Settings"))
-        self.label_55.setText(_translate("landuseAnalystDialogBase", "%"))
-        self.label_18.setText(_translate("landuseAnalystDialogBase", "Domestic Crops:"))
-        self.labelPortionCrops.setText(_translate("landuseAnalystDialogBase", "Adjust Diet Settings"))
-        self.label_40.setText(_translate("landuseAnalystDialogBase", "%"))
-        self.label_19.setText(_translate("landuseAnalystDialogBase", "Domestic Meat:"))
-        self.labelPortionTameMeat.setText(_translate("landuseAnalystDialogBase", "Adjust Diet Settings"))
-        self.label_41.setText(_translate("landuseAnalystDialogBase", "%"))
-        self.label_31.setText(_translate("landuseAnalystDialogBase", "Dairy Products:"))
-        self.labelPortionDairy.setText(_translate("landuseAnalystDialogBase", "Adjust Diet Settings"))
-        self.label_42.setText(_translate("landuseAnalystDialogBase", "%"))
-        self.label_51.setText(_translate("landuseAnalystDialogBase", "Wild Meat: "))
-        self.labelPortionWildMeat.setText(_translate("landuseAnalystDialogBase", "Adjust Diet Settings"))
-        self.label_50.setText(_translate("landuseAnalystDialogBase", "%"))
-        self.label_53.setText(_translate("landuseAnalystDialogBase", "Wild Plants: "))
-        self.labelPortionWildPlants.setText(_translate("landuseAnalystDialogBase", "Adjust Diet Settings"))
-        self.label_52.setText(_translate("landuseAnalystDialogBase", "%"))
-        self.label_23.setText(_translate("landuseAnalystDialogBase", "Domestic Crops"))
-        self.labelCaloriesCrops.setText(_translate("landuseAnalystDialogBase", "Adjust Diet Settings"))
-        self.label_43.setText(_translate("landuseAnalystDialogBase", "MCals"))
-        self.label_21.setText(_translate("landuseAnalystDialogBase", "Domestic Meat"))
-        self.labelCaloriesTameMeat.setText(_translate("landuseAnalystDialogBase", "Adjust Diet Settings"))
-        self.label_44.setText(_translate("landuseAnalystDialogBase", "MCals"))
-        self.label_35.setText(_translate("landuseAnalystDialogBase", "Dairy Products"))
-        self.labelCaloriesDairy.setText(_translate("landuseAnalystDialogBase", "Adjust Diet Settings"))
-        self.label_45.setText(_translate("landuseAnalystDialogBase", "MCals"))
-        self.label_46.setText(_translate("landuseAnalystDialogBase", "Wild Meat"))
-        self.labelCaloriesWildMeat.setText(_translate("landuseAnalystDialogBase", "Adjust Diet Settings"))
-        self.label_47.setText(_translate("landuseAnalystDialogBase", "MCals"))
-        self.label_48.setText(_translate("landuseAnalystDialogBase", "Wild Plants"))
-        self.labelCaloriesWildPlants.setText(_translate("landuseAnalystDialogBase", "Adjust Diet Settings"))
-        self.label_49.setText(_translate("landuseAnalystDialogBase", "MCals"))
-        self.label_4.setText(_translate("landuseAnalystDialogBase", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+        self.groupBox_2.setTitle(_translate("LaMainFormBase", "Breakdown of Diet"))
+        self.label_10.setText(_translate("LaMainFormBase", "Settlement:"))
+        self.labelCaloriesSettlement.setText(_translate("LaMainFormBase", "Adjust Diet Settings"))
+        self.label_37.setText(_translate("LaMainFormBase", "MCals"))
+        self.label_12.setText(_translate("LaMainFormBase", "All Plants:"))
+        self.labelPortionPlants.setText(_translate("LaMainFormBase", "Adjust Diet Settings"))
+        self.label_38.setText(_translate("LaMainFormBase", "%"))
+        self.label_16.setText(_translate("LaMainFormBase", "All Meat:"))
+        self.labelPortionMeat.setText(_translate("LaMainFormBase", "Adjust Diet Settings"))
+        self.label_39.setText(_translate("LaMainFormBase", "%"))
+        self.label_54.setText(_translate("LaMainFormBase", "All Dairy"))
+        self.labelPortionAllDairy.setText(_translate("LaMainFormBase", "Adjust Diet Settings"))
+        self.label_55.setText(_translate("LaMainFormBase", "%"))
+        self.label_18.setText(_translate("LaMainFormBase", "Domestic Crops:"))
+        self.labelPortionCrops.setText(_translate("LaMainFormBase", "Adjust Diet Settings"))
+        self.label_40.setText(_translate("LaMainFormBase", "%"))
+        self.label_19.setText(_translate("LaMainFormBase", "Domestic Meat:"))
+        self.labelPortionTameMeat.setText(_translate("LaMainFormBase", "Adjust Diet Settings"))
+        self.label_41.setText(_translate("LaMainFormBase", "%"))
+        self.label_31.setText(_translate("LaMainFormBase", "Dairy Products:"))
+        self.labelPortionDairy.setText(_translate("LaMainFormBase", "Adjust Diet Settings"))
+        self.label_42.setText(_translate("LaMainFormBase", "%"))
+        self.label_51.setText(_translate("LaMainFormBase", "Wild Meat: "))
+        self.labelPortionWildMeat.setText(_translate("LaMainFormBase", "Adjust Diet Settings"))
+        self.label_50.setText(_translate("LaMainFormBase", "%"))
+        self.label_53.setText(_translate("LaMainFormBase", "Wild Plants: "))
+        self.labelPortionWildPlants.setText(_translate("LaMainFormBase", "Adjust Diet Settings"))
+        self.label_52.setText(_translate("LaMainFormBase", "%"))
+        self.label_23.setText(_translate("LaMainFormBase", "Domestic Crops"))
+        self.labelCaloriesCrops.setText(_translate("LaMainFormBase", "Adjust Diet Settings"))
+        self.label_43.setText(_translate("LaMainFormBase", "MCals"))
+        self.label_21.setText(_translate("LaMainFormBase", "Domestic Meat"))
+        self.labelCaloriesTameMeat.setText(_translate("LaMainFormBase", "Adjust Diet Settings"))
+        self.label_44.setText(_translate("LaMainFormBase", "MCals"))
+        self.label_35.setText(_translate("LaMainFormBase", "Dairy Products"))
+        self.labelCaloriesDairy.setText(_translate("LaMainFormBase", "Adjust Diet Settings"))
+        self.label_45.setText(_translate("LaMainFormBase", "MCals"))
+        self.label_46.setText(_translate("LaMainFormBase", "Wild Meat"))
+        self.labelCaloriesWildMeat.setText(_translate("LaMainFormBase", "Adjust Diet Settings"))
+        self.label_47.setText(_translate("LaMainFormBase", "MCals"))
+        self.label_48.setText(_translate("LaMainFormBase", "Wild Plants"))
+        self.labelCaloriesWildPlants.setText(_translate("LaMainFormBase", "Adjust Diet Settings"))
+        self.label_49.setText(_translate("LaMainFormBase", "MCals"))
+        self.label_4.setText(_translate("LaMainFormBase", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'DejaVu Sans\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'Sans Serif\'; font-size:9pt;\"><span style=\" font-size:11pt; font-weight:600; font-style:italic;\">Calories required Annum</span><span style=\" font-size:11pt; font-weight:600; font-style:italic; vertical-align:super;\">-1</span></p></body></html>"))
-        self.label_15.setText(_translate("landuseAnalystDialogBase", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+        self.label_15.setText(_translate("LaMainFormBase", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'DejaVu Sans\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'Sans Serif\'; font-size:9pt;\"><span style=\" font-size:12pt; font-weight:600; font-style:italic;\">Contribution to Diet</span></p></body></html>"))
-        self.label_20.setText(_translate("landuseAnalystDialogBase", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+        self.label_20.setText(_translate("LaMainFormBase", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'DejaVu Sans\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'Sans Serif\'; font-size:9pt;\"><span style=\" font-size:12pt; font-weight:600; font-style:italic;\">Calories Supplied by:</span></p></body></html>"))
-        self.label_8.setText(_translate("landuseAnalystDialogBase", "Individual:"))
-        self.labelCaloriesIndividual.setText(_translate("landuseAnalystDialogBase", "Adjust Diet Settings"))
-        self.label_36.setText(_translate("landuseAnalystDialogBase", "kCals"))
-        self.MainTabs.setTabText(self.MainTabs.indexOf(self.diet_tab), _translate("landuseAnalystDialogBase", "Diet"))
-        self.tblCrops.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.label_8.setText(_translate("LaMainFormBase", "Individual:"))
+        self.labelCaloriesIndividual.setText(_translate("LaMainFormBase", "Adjust Diet Settings"))
+        self.label_36.setText(_translate("LaMainFormBase", "kCals"))
+        self.MainTabs.setTabText(self.MainTabs.indexOf(self.diet_tab), _translate("LaMainFormBase", "Diet"))
+        self.tblCrops.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The crop selected here will be displayed below.  If the crop is to be included in the model, it must be checked off on left.  The model parameters must also be defined and linked to each crop being modelled.</p></body></html>"))
-        self.tblCrops.setWhatsThis(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.tblCrops.setWhatsThis(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The Crop Interface has been designed to be very simple and easy to use. The top section lists all of the defined crops, and selecting one will display its settings in the two lower sections. The lower sections are divided into the crop definition details on the left, and the model parameter settings for the currently selected crop on the right.</p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">If you wish to edit either the crop or its parameters, you simply click on the Manage button below the display areas.</p></body></html>"))
         item = self.tblCrops.horizontalHeaderItem(0)
-        item.setText(_translate("landuseAnalystDialogBase", "Use?"))
+        item.setText(_translate("LaMainFormBase", "Use?"))
         item = self.tblCrops.horizontalHeaderItem(1)
-        item.setText(_translate("landuseAnalystDialogBase", "Crop"))
+        item.setText(_translate("LaMainFormBase", "Crop"))
         item = self.tblCrops.horizontalHeaderItem(2)
-        item.setText(_translate("landuseAnalystDialogBase", "Parameters"))
-        self.lblCropPix.setText(_translate("landuseAnalystDialogBase", "No Graphic\n"
+        item.setText(_translate("LaMainFormBase", "Parameters"))
+        self.lblCropPix.setText(_translate("LaMainFormBase", "No Graphic\n"
 "Selected"))
-        self.textBrowserCropDefinition.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.textBrowserCropDefinition.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Select a crop above to refresh this window</p></body></html>"))
-        self.gbCustomCropMask.setTitle(_translate("landuseAnalystDialogBase", "Use Custom Suitability Mask for Common Cropland"))
-        self.label_26.setText(_translate("landuseAnalystDialogBase", "Common Crop Land Raster Mask"))
-        self.gbSlopeMaskCropLand.setTitle(_translate("landuseAnalystDialogBase", "Generate Suitability Mask for Common Cropland"))
-        self.label_30.setText(_translate("landuseAnalystDialogBase", "If the slope is less than"))
-        self.dsbMinSlopeCropMask.setSuffix(_translate("landuseAnalystDialogBase", " degrees"))
-        self.label_32.setText(_translate("landuseAnalystDialogBase", "consider it ok for crop use"))
-        self.pbnNewCropParameter.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.gbCustomCropMask.setTitle(_translate("LaMainFormBase", "Use Custom Suitability Mask for Common Cropland"))
+        self.label_26.setText(_translate("LaMainFormBase", "Common Crop Land Raster Mask"))
+        self.gbSlopeMaskCropLand.setTitle(_translate("LaMainFormBase", "Generate Suitability Mask for Common Cropland"))
+        self.label_30.setText(_translate("LaMainFormBase", "If the slope is less than"))
+        self.dsbMinSlopeCropMask.setSuffix(_translate("LaMainFormBase", " degrees"))
+        self.label_32.setText(_translate("LaMainFormBase", "consider it ok for crop use"))
+        self.pbnNewCropParameter.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Open the Crop Parameter Manager</p></body></html>"))
-        self.pbnNewCropParameter.setWhatsThis(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.pbnNewCropParameter.setWhatsThis(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">In order to enable LandUse Analyst to model crops, several details must be supplied. Crop Parameter Manager asks for these specifics. As with Crop Manager, it is possible to have more than one parameter named the same thing. Again, just enter a descriptor in the Notes: field.</p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">To define different parameters for the same crop, follow the same procedure as for defining multiple crops with the same name. Let\'s say you want to have two parameters set up for Wheat as an example. The Name: field is Wheat for both, but in Notes: field, enter Optimistic for one, and Conservative for the other. Then adjust the parameters as you wish for each. Even though the name is the same, the parameters are saved uniquely. Having multiple parameters can be useful for setting up different scenarios, such as drought years, diease, catastrophic events, etc. Eventually, LandUse Analyst will have the ability to model over time, and will have these types of scenarios incorporated into the model.</p></body></html>"))
-        self.pbnNewCropParameter.setText(_translate("landuseAnalystDialogBase", "Set Parameters"))
-        self.pbnNewCrop.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.pbnNewCropParameter.setText(_translate("LaMainFormBase", "Set Parameters"))
+        self.pbnNewCrop.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Open the Crop Manager</p></body></html>"))
-        self.pbnNewCrop.setWhatsThis(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.pbnNewCrop.setWhatsThis(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Pressing this button will open up the Crop Manager.  There, you can create new crops from scratch, or clone previously defined crops to make changes to.  You can also delete crops if you wish.</p></body></html>"))
-        self.pbnNewCrop.setText(_translate("landuseAnalystDialogBase", "Manage Crops"))
-        self.MainTabs.setTabText(self.MainTabs.indexOf(self.crops_tab), _translate("landuseAnalystDialogBase", "Crops"))
-        self.tblAnimals.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.pbnNewCrop.setText(_translate("LaMainFormBase", "Manage Crops"))
+        self.MainTabs.setTabText(self.MainTabs.indexOf(self.crops_tab), _translate("LaMainFormBase", "Crops"))
+        self.tblAnimals.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The animal selected here will be displayed below.  If the animal is to be included in the model, it must be checked off on left.  The model parameters must also be defined and linked to each animal being modelled.</p></body></html>"))
-        self.tblAnimals.setWhatsThis(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.tblAnimals.setWhatsThis(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The Animal Interface has been designed to be very simple and easy to use. The top section lists all of the defined animals, and selecting one will display its settings in the two lower sections. The lower sections are divided into the animal definition details on the left, and the model parameter settings for the currently selected animal on the right.</p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">If you wish to edit either the animal or its parameters, you simply click on the Manage button below the display areas.</p></body></html>"))
         item = self.tblAnimals.horizontalHeaderItem(0)
-        item.setText(_translate("landuseAnalystDialogBase", "Use?"))
+        item.setText(_translate("LaMainFormBase", "Use?"))
         item = self.tblAnimals.horizontalHeaderItem(1)
-        item.setText(_translate("landuseAnalystDialogBase", "Animal"))
+        item.setText(_translate("LaMainFormBase", "Animal"))
         item = self.tblAnimals.horizontalHeaderItem(2)
-        item.setText(_translate("landuseAnalystDialogBase", "Parameters"))
+        item.setText(_translate("LaMainFormBase", "Parameters"))
         item = self.tblAnimals.horizontalHeaderItem(3)
-        item.setText(_translate("landuseAnalystDialogBase", "Percentage"))
-        self.lblAnimalPix.setText(_translate("landuseAnalystDialogBase", "No Graphic\n"
+        item.setText(_translate("LaMainFormBase", "Percentage"))
+        self.lblAnimalPix.setText(_translate("LaMainFormBase", "No Graphic\n"
 "Selected"))
-        self.textBrowserAnimalDefinition.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.textBrowserAnimalDefinition.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Select an animal above to refresh this window</p></body></html>"))
-        self.gbCustomMaskGrazingLand.setTitle(_translate("landuseAnalystDialogBase", "Use Custom Suitability mask for Common Grazing Land"))
-        self.label_25.setText(_translate("landuseAnalystDialogBase", "Select Mask: "))
-        self.gbGenerateMaskGrazingLand.setTitle(_translate("landuseAnalystDialogBase", "Generate Suitability Mask for Common Grazing Land"))
-        self.label_33.setText(_translate("landuseAnalystDialogBase", "Slope is greater than "))
-        self.dsbMinimumSlopeGrazingMask.setSuffix(_translate("landuseAnalystDialogBase", " degrees"))
-        self.label_34.setText(_translate("landuseAnalystDialogBase", "and less than"))
-        self.dsbMaximumSlopeGrazingMask.setSuffix(_translate("landuseAnalystDialogBase", " degrees"))
-        self.gbFoodValue.setTitle(_translate("landuseAnalystDialogBase", "Food Value of Common Grazing Land (Required)"))
-        self.sbCommonRasterValue.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.gbCustomMaskGrazingLand.setTitle(_translate("LaMainFormBase", "Use Custom Suitability mask for Common Grazing Land"))
+        self.label_25.setText(_translate("LaMainFormBase", "Select Mask: "))
+        self.gbGenerateMaskGrazingLand.setTitle(_translate("LaMainFormBase", "Generate Suitability Mask for Common Grazing Land"))
+        self.label_33.setText(_translate("LaMainFormBase", "Slope is greater than "))
+        self.dsbMinimumSlopeGrazingMask.setSuffix(_translate("LaMainFormBase", " degrees"))
+        self.label_34.setText(_translate("LaMainFormBase", "and less than"))
+        self.dsbMaximumSlopeGrazingMask.setSuffix(_translate("LaMainFormBase", " degrees"))
+        self.gbFoodValue.setTitle(_translate("LaMainFormBase", "Food Value of Common Grazing Land (Required)"))
+        self.sbCommonRasterValue.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Food Value of grazing land in Kilo Calories</p></body></html>"))
-        self.sbCommonRasterValue.setWhatsThis(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.sbCommonRasterValue.setWhatsThis(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600; color:#0000ff;\">This value </span><span style=\" font-weight:600; font-style:italic; text-decoration: underline; color:#0000ff;\">MUST</span><span style=\" font-weight:600; color:#0000ff;\"> be the same for all animals grazing common land.</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Sometimes land is suitable for grazing by more than one type of animal. LandUse Analyst allows you to designate one suitability mask as common grazing land. Note that you can specify an animal to use both common land and specific land at the same time. If this is the case, equal preference is given to all animals grazing the common land. This is not always ideal, as it may have been the case that some animals were given preference to the common land if the other suitable land was further away than the other animals using it.</p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">A workaround for this problem is that LandUse Analyst produces classified maps of the land being used, so if it is the case that you find one animal being forced to travel much further than others, you can simply change settings to balance this. This can be accomplished by removing the other animals one at a time from using the common grazing land. It may be the case, however, that there is no ideal solution, and that they simply had to travel the extra distance!</p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Note that this setting is the number of KCalories per land area unit available for grazing animals <span style=\" font-weight:600;\">per year</span>.  This value applies to all of the land selected in the common raster mask file.</p></body></html>"))
-        self.label_28.setText(_translate("landuseAnalystDialogBase", "per"))
-        self.cbAreaUnits.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.label_28.setText(_translate("LaMainFormBase", "per"))
+        self.cbAreaUnits.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">1 dunum = 1000 square meters</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">1 hectare = 10,000 square meters</p></body></html>"))
-        self.cbAreaUnits.setWhatsThis(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.cbAreaUnits.setWhatsThis(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Select either Dunums or Hectares. This option is merely for convenience, to accomodate data that is available based on the two different units. (Basically I just got sick of having to convert between the two all the time! :P)</p></body></html>"))
-        self.label_27.setText(_translate("landuseAnalystDialogBase", "(per annum)"))
-        self.pbnNewAnimal.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.label_27.setText(_translate("LaMainFormBase", "(per annum)"))
+        self.pbnNewAnimal.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Open the Animal Manager</p></body></html>"))
-        self.pbnNewAnimal.setWhatsThis(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.pbnNewAnimal.setWhatsThis(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">By pressing on the Manage Animals... button you will be brought to the Animal Manager. Here, you can create new animals from scratch, or clone previously defined animals to make changes to. You can also delete animals if you wish. </p></body></html>"))
-        self.pbnNewAnimal.setText(_translate("landuseAnalystDialogBase", "Manage Animals"))
-        self.pbnNewAnimalParameter.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.pbnNewAnimal.setText(_translate("LaMainFormBase", "Manage Animals"))
+        self.pbnNewAnimalParameter.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Open the Animal Parameter Manager</p></body></html>"))
-        self.pbnNewAnimalParameter.setWhatsThis(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.pbnNewAnimalParameter.setWhatsThis(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">In order to enable LandUse Analyst to model animals, several details must be supplied. Animal Parameter Manager asks for the specific information about the animal which tells the program how the animal was fed, and how big a part of the settlements diet it was. As with Animal Manager, it is possible to have more than one parameter named the same thing. Again, just enter a descriptor in the Notes: field.</p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">To define different parameters for the same animal, follow the same procedure as for defining multiple animals with the same name. Let\'s say you want to have two parameters set up for cows as an example. The Name: field is Cow for both, but in Notes: field, enter Optimistic for one, and Conservative for the other. Then adjust the parameters as you wish for each. Even though the name is the same, the parameters are saved uniquely. Having multiple parameters can be useful for setting up different scenarios, such as drought years, diease, catastrophic events, etc. Eventually, LandUse Analyst will have the ability to model over time, and will ahve these types of scenarios incorporated into the model.</p></body></html>"))
-        self.pbnNewAnimalParameter.setText(_translate("landuseAnalystDialogBase", "Set Parameters"))
-        self.MainTabs.setTabText(self.MainTabs.indexOf(self.animals_tab), _translate("landuseAnalystDialogBase", "Animals"))
-        self.lblCropPicCalcs.setText(_translate("landuseAnalystDialogBase", "No Image\n"
+        self.pbnNewAnimalParameter.setText(_translate("LaMainFormBase", "Set Parameters"))
+        self.MainTabs.setTabText(self.MainTabs.indexOf(self.animals_tab), _translate("LaMainFormBase", "Animals"))
+        self.lblCropPicCalcs.setText(_translate("LaMainFormBase", "No Image\n"
 "Selected"))
-        self.listWidgetCalculationsCrop.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.listWidgetCalculationsCrop.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Select which crop you want to see the calculations for.</p></body></html>"))
-        self.listWidgetCalculationsCrop.setWhatsThis(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.listWidgetCalculationsCrop.setWhatsThis(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">To see the Calorie, Production, and Area targets for all of the crops and animals being modelled, simply select them from the list, and the results will be displayed in the area to the right. This information is meant to give the user an opportunity to make sure that the target look feasible before running the model (which can be very time consuming).</p></body></html>"))
-        self.textBrowserResultsCrop.setWhatsThis(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.textBrowserResultsCrop.setWhatsThis(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">To see the Calorie, Production, and Area targets for a crop simply select it from the list on the left, and the results will be displayed in the area to the right.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This information is meant to give you an opportunity to make sure that the targets look feasible before running the model (which can be very time consuming).</p></body></html>"))
-        self.lblAnimalPicCalcs.setText(_translate("landuseAnalystDialogBase", "No Image\n"
+        self.lblAnimalPicCalcs.setText(_translate("LaMainFormBase", "No Image\n"
 "Selected"))
-        self.listWidgetCalculationsAnimal.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.listWidgetCalculationsAnimal.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Select which animal you want to see the calculations for.</p></body></html>"))
-        self.listWidgetCalculationsAnimal.setWhatsThis(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.listWidgetCalculationsAnimal.setWhatsThis(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">To see the Calorie, Production, and Area targets for all of the crops and animals being modelled, simply select them from the list, and the results will be displayed in the area to the right. This information is meant to give the user an opportunity to make sure that the target look feasible before running the model (which can be very time consuming).</p></body></html>"))
-        self.textBrowserResultsAnimals.setWhatsThis(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.textBrowserResultsAnimals.setWhatsThis(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">To see the Calorie, Production, and Area targets for an animal simply select it from the list on the left, and the results will be displayed in the area to the right.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This information is meant to give you an opportunity to make sure that the targets look feasible before running the model (which can be very time consuming).</p></body></html>"))
-        self.pbnTargets.setText(_translate("landuseAnalystDialogBase", "Targets"))
-        self.pbnFallow.setText(_translate("landuseAnalystDialogBase", "Fallow"))
-        self.pbnHerds.setText(_translate("landuseAnalystDialogBase", "Herds"))
-        self.pbnText.setText(_translate("landuseAnalystDialogBase", "Text Report"))
-        self.pbnHtml.setText(_translate("landuseAnalystDialogBase", "HTML"))
-        self.MainTabs.setTabText(self.MainTabs.indexOf(self.results_tab), _translate("landuseAnalystDialogBase", "Calculations"))
-        self.tbReport.setToolTip(_translate("landuseAnalystDialogBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.pbnTargets.setText(_translate("LaMainFormBase", "Targets"))
+        self.pbnFallow.setText(_translate("LaMainFormBase", "Fallow"))
+        self.pbnHerds.setText(_translate("LaMainFormBase", "Herds"))
+        self.pbnText.setText(_translate("LaMainFormBase", "Text Report"))
+        self.pbnHtml.setText(_translate("LaMainFormBase", "HTML"))
+        self.MainTabs.setTabText(self.MainTabs.indexOf(self.results_tab), _translate("LaMainFormBase", "Calculations"))
+        self.tbReport.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The results produced by running the model are displayed here.  This feature, however, is not yet implemented in the Alpha version of LandUse Analyst, but is planned for the Initial Release.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"></p></body></html>"))
-        self.MainTabs.setTabText(self.MainTabs.indexOf(self.tab), _translate("landuseAnalystDialogBase", "Results"))
-        self.MainTabs.setTabText(self.MainTabs.indexOf(self.tabLogs), _translate("landuseAnalystDialogBase", "Log"))
-        self.treeHelp.headerItem().setText(0, _translate("landuseAnalystDialogBase", "Help"))
+        self.MainTabs.setTabText(self.MainTabs.indexOf(self.tab), _translate("LaMainFormBase", "Results"))
+        self.MainTabs.setTabText(self.MainTabs.indexOf(self.tabLogs), _translate("LaMainFormBase", "Log"))
+        self.treeHelp.headerItem().setText(0, _translate("LaMainFormBase", "Help"))
         __sortingEnabled = self.treeHelp.isSortingEnabled()
         self.treeHelp.setSortingEnabled(False)
-        self.treeHelp.topLevelItem(0).setText(0, _translate("landuseAnalystDialogBase", "Model"))
-        self.treeHelp.topLevelItem(0).child(0).setText(0, _translate("landuseAnalystDialogBase", "Main"))
-        self.treeHelp.topLevelItem(0).child(0).child(0).setText(0, _translate("landuseAnalystDialogBase", "Settlement Information"))
-        self.treeHelp.topLevelItem(0).child(0).child(0).child(0).setText(0, _translate("landuseAnalystDialogBase", "Site Name"))
-        self.treeHelp.topLevelItem(0).child(0).child(0).child(1).setText(0, _translate("landuseAnalystDialogBase", "Population"))
-        self.treeHelp.topLevelItem(0).child(0).child(0).child(2).setText(0, _translate("landuseAnalystDialogBase", "Period"))
-        self.treeHelp.topLevelItem(0).child(0).child(1).setText(0, _translate("landuseAnalystDialogBase", "Location"))
-        self.treeHelp.topLevelItem(0).child(0).child(1).child(0).setText(0, _translate("landuseAnalystDialogBase", "Easting"))
-        self.treeHelp.topLevelItem(0).child(0).child(1).child(1).setText(0, _translate("landuseAnalystDialogBase", "Northing"))
-        self.treeHelp.topLevelItem(0).child(0).child(1).child(2).setText(0, _translate("landuseAnalystDialogBase", "JADIS Database"))
-        self.treeHelp.topLevelItem(0).child(0).child(2).setText(0, _translate("landuseAnalystDialogBase", "Modelling Method"))
-        self.treeHelp.topLevelItem(0).child(0).child(2).child(0).setText(0, _translate("landuseAnalystDialogBase", "Euclidean"))
-        self.treeHelp.topLevelItem(0).child(0).child(2).child(1).setText(0, _translate("landuseAnalystDialogBase", "Walking Time"))
-        self.treeHelp.topLevelItem(0).child(0).child(2).child(2).setText(0, _translate("landuseAnalystDialogBase", "Path Distance"))
-        self.treeHelp.topLevelItem(0).child(0).child(2).child(3).setText(0, _translate("landuseAnalystDialogBase", "Precision"))
-        self.treeHelp.topLevelItem(0).child(1).setText(0, _translate("landuseAnalystDialogBase", "Diet"))
-        self.treeHelp.topLevelItem(0).child(1).child(0).setText(0, _translate("landuseAnalystDialogBase", "Plant to Meat Ratio"))
-        self.treeHelp.topLevelItem(0).child(1).child(1).setText(0, _translate("landuseAnalystDialogBase", "Wild to Tame Ratio"))
-        self.treeHelp.topLevelItem(0).child(1).child(2).setText(0, _translate("landuseAnalystDialogBase", "Calories per person per day"))
-        self.treeHelp.topLevelItem(0).child(1).child(3).setText(0, _translate("landuseAnalystDialogBase", "Breakdown"))
-        self.treeHelp.topLevelItem(0).child(1).child(4).setText(0, _translate("landuseAnalystDialogBase", "Clear"))
-        self.treeHelp.topLevelItem(0).child(2).setText(0, _translate("landuseAnalystDialogBase", "Crops"))
-        self.treeHelp.topLevelItem(0).child(2).child(0).setText(0, _translate("landuseAnalystDialogBase", "Using the Crop Interface"))
-        self.treeHelp.topLevelItem(0).child(2).child(1).setText(0, _translate("landuseAnalystDialogBase", "Managing Crops"))
-        self.treeHelp.topLevelItem(0).child(2).child(1).child(0).setText(0, _translate("landuseAnalystDialogBase", "Clone a crop"))
-        self.treeHelp.topLevelItem(0).child(2).child(1).child(1).setText(0, _translate("landuseAnalystDialogBase", "Create a new crop"))
-        self.treeHelp.topLevelItem(0).child(2).child(1).child(2).setText(0, _translate("landuseAnalystDialogBase", "Saving crops"))
-        self.treeHelp.topLevelItem(0).child(2).child(1).child(3).setText(0, _translate("landuseAnalystDialogBase", "Crop Descriptions"))
-        self.treeHelp.topLevelItem(0).child(2).child(1).child(3).child(0).setText(0, _translate("landuseAnalystDialogBase", "Crop Name"))
-        self.treeHelp.topLevelItem(0).child(2).child(1).child(3).child(1).setText(0, _translate("landuseAnalystDialogBase", "Crop Notes"))
-        self.treeHelp.topLevelItem(0).child(2).child(1).child(3).child(2).setText(0, _translate("landuseAnalystDialogBase", "Crop Yield"))
-        self.treeHelp.topLevelItem(0).child(2).child(1).child(3).child(2).child(0).setText(0, _translate("landuseAnalystDialogBase", "Crop Food Value"))
-        self.treeHelp.topLevelItem(0).child(2).child(1).child(3).child(3).setText(0, _translate("landuseAnalystDialogBase", "Fodder Yield"))
-        self.treeHelp.topLevelItem(0).child(2).child(1).child(3).child(3).child(0).setText(0, _translate("landuseAnalystDialogBase", "Crop Fodder Food Value"))
-        self.treeHelp.topLevelItem(0).child(2).child(1).child(3).child(4).setText(0, _translate("landuseAnalystDialogBase", "Crop Area Units"))
-        self.treeHelp.topLevelItem(0).child(2).child(2).setText(0, _translate("landuseAnalystDialogBase", "Crop Parameters"))
-        self.treeHelp.topLevelItem(0).child(2).child(2).child(0).setText(0, _translate("landuseAnalystDialogBase", "Crop Parameter Description"))
-        self.treeHelp.topLevelItem(0).child(2).child(2).child(0).child(0).setText(0, _translate("landuseAnalystDialogBase", "Crop Parameter Name"))
-        self.treeHelp.topLevelItem(0).child(2).child(2).child(0).child(1).setText(0, _translate("landuseAnalystDialogBase", "Crop Parameter Notes"))
-        self.treeHelp.topLevelItem(0).child(2).child(2).child(0).child(2).setText(0, _translate("landuseAnalystDialogBase", "Linking to a crop"))
-        self.treeHelp.topLevelItem(0).child(2).child(2).child(0).child(3).setText(0, _translate("landuseAnalystDialogBase", "Crop Portion of diet"))
-        self.treeHelp.topLevelItem(0).child(2).child(2).child(1).setText(0, _translate("landuseAnalystDialogBase", "Crop Suitability masks"))
-        self.treeHelp.topLevelItem(0).child(2).child(2).child(1).child(0).setText(0, _translate("landuseAnalystDialogBase", "Crop Masks Common"))
-        self.treeHelp.topLevelItem(0).child(2).child(2).child(1).child(1).setText(0, _translate("landuseAnalystDialogBase", "Crop Masks Specific"))
-        self.treeHelp.topLevelItem(0).child(2).child(2).child(2).setText(0, _translate("landuseAnalystDialogBase", "Crop Rotation"))
-        self.treeHelp.topLevelItem(0).child(2).child(2).child(2).child(0).setText(0, _translate("landuseAnalystDialogBase", "Crop to Fallow Ratio"))
-        self.treeHelp.topLevelItem(0).child(2).child(2).child(2).child(1).setText(0, _translate("landuseAnalystDialogBase", "Crop Fallow Food Value"))
-        self.treeHelp.topLevelItem(0).child(3).setText(0, _translate("landuseAnalystDialogBase", "Animals"))
-        self.treeHelp.topLevelItem(0).child(3).child(0).setText(0, _translate("landuseAnalystDialogBase", "Using the Animals Interface"))
-        self.treeHelp.topLevelItem(0).child(3).child(1).setText(0, _translate("landuseAnalystDialogBase", "Managing Animals"))
-        self.treeHelp.topLevelItem(0).child(3).child(1).child(0).setText(0, _translate("landuseAnalystDialogBase", "Clone an animal"))
-        self.treeHelp.topLevelItem(0).child(3).child(1).child(1).setText(0, _translate("landuseAnalystDialogBase", "Create a new animal"))
-        self.treeHelp.topLevelItem(0).child(3).child(1).child(2).setText(0, _translate("landuseAnalystDialogBase", "Saving animals"))
-        self.treeHelp.topLevelItem(0).child(3).child(1).child(3).setText(0, _translate("landuseAnalystDialogBase", "Defining an animal"))
-        self.treeHelp.topLevelItem(0).child(3).child(1).child(3).child(0).setText(0, _translate("landuseAnalystDialogBase", "Animal Description"))
-        self.treeHelp.topLevelItem(0).child(3).child(1).child(3).child(0).child(0).setText(0, _translate("landuseAnalystDialogBase", "Animal Name"))
-        self.treeHelp.topLevelItem(0).child(3).child(1).child(3).child(0).child(1).setText(0, _translate("landuseAnalystDialogBase", "Animal Notes"))
-        self.treeHelp.topLevelItem(0).child(3).child(1).child(3).child(0).child(2).setText(0, _translate("landuseAnalystDialogBase", "Usable Meat"))
-        self.treeHelp.topLevelItem(0).child(3).child(1).child(3).child(0).child(3).setText(0, _translate("landuseAnalystDialogBase", "Kill Weight"))
-        self.treeHelp.topLevelItem(0).child(3).child(1).child(3).child(0).child(4).setText(0, _translate("landuseAnalystDialogBase", "Grow Time"))
-        self.treeHelp.topLevelItem(0).child(3).child(1).child(3).child(0).child(5).setText(0, _translate("landuseAnalystDialogBase", "Death Rate"))
-        self.treeHelp.topLevelItem(0).child(3).child(1).child(3).child(1).setText(0, _translate("landuseAnalystDialogBase", "Reproduction"))
-        self.treeHelp.topLevelItem(0).child(3).child(1).child(3).child(1).child(0).setText(0, _translate("landuseAnalystDialogBase", "Sexual Maturity"))
-        self.treeHelp.topLevelItem(0).child(3).child(1).child(3).child(1).child(1).setText(0, _translate("landuseAnalystDialogBase", "Breeding Life"))
-        self.treeHelp.topLevelItem(0).child(3).child(1).child(3).child(1).child(2).setText(0, _translate("landuseAnalystDialogBase", "Young per birth"))
-        self.treeHelp.topLevelItem(0).child(3).child(1).child(3).child(1).child(3).setText(0, _translate("landuseAnalystDialogBase", "Weaning Age"))
-        self.treeHelp.topLevelItem(0).child(3).child(1).child(3).child(1).child(4).setText(0, _translate("landuseAnalystDialogBase", "Gestation Time"))
-        self.treeHelp.topLevelItem(0).child(3).child(1).child(3).child(1).child(5).setText(0, _translate("landuseAnalystDialogBase", "Estrous cycle"))
-        self.treeHelp.topLevelItem(0).child(3).child(1).child(3).child(2).setText(0, _translate("landuseAnalystDialogBase", "Feeding Requirements"))
-        self.treeHelp.topLevelItem(0).child(3).child(1).child(3).child(2).child(0).setText(0, _translate("landuseAnalystDialogBase", "Calories per animal per day"))
-        self.treeHelp.topLevelItem(0).child(3).child(1).child(3).child(2).child(0).child(0).setText(0, _translate("landuseAnalystDialogBase", "While Gestating"))
-        self.treeHelp.topLevelItem(0).child(3).child(1).child(3).child(2).child(0).child(1).setText(0, _translate("landuseAnalystDialogBase", "While Lactating"))
-        self.treeHelp.topLevelItem(0).child(3).child(1).child(3).child(2).child(0).child(2).setText(0, _translate("landuseAnalystDialogBase", "Juveniles"))
-        self.treeHelp.topLevelItem(0).child(3).child(2).setText(0, _translate("landuseAnalystDialogBase", "Animal Parameters"))
-        self.treeHelp.topLevelItem(0).child(3).child(2).child(0).setText(0, _translate("landuseAnalystDialogBase", "Setting Animal Parameters"))
-        self.treeHelp.topLevelItem(0).child(3).child(2).child(1).setText(0, _translate("landuseAnalystDialogBase", "Animal Parameter Details"))
-        self.treeHelp.topLevelItem(0).child(3).child(2).child(1).child(0).setText(0, _translate("landuseAnalystDialogBase", "Animal Parameter Name"))
-        self.treeHelp.topLevelItem(0).child(3).child(2).child(1).child(1).setText(0, _translate("landuseAnalystDialogBase", "Animal Parameter Notes"))
-        self.treeHelp.topLevelItem(0).child(3).child(2).child(1).child(2).setText(0, _translate("landuseAnalystDialogBase", "Linking to an animal"))
-        self.treeHelp.topLevelItem(0).child(3).child(2).child(1).child(3).setText(0, _translate("landuseAnalystDialogBase", "Portion of tame meat diet"))
-        self.treeHelp.topLevelItem(0).child(3).child(2).child(2).setText(0, _translate("landuseAnalystDialogBase", "Animal Land Suitability"))
-        self.treeHelp.topLevelItem(0).child(3).child(2).child(2).child(0).setText(0, _translate("landuseAnalystDialogBase", "Animal Specific Land"))
-        self.treeHelp.topLevelItem(0).child(3).child(2).child(2).child(0).child(0).setText(0, _translate("landuseAnalystDialogBase", "KCal setting"))
-        self.treeHelp.topLevelItem(0).child(3).child(2).child(2).child(1).setText(0, _translate("landuseAnalystDialogBase", "Animal Common Land"))
-        self.treeHelp.topLevelItem(0).child(3).child(2).child(2).child(1).child(0).setText(0, _translate("landuseAnalystDialogBase", "KCal setting"))
-        self.treeHelp.topLevelItem(0).child(3).child(2).child(2).child(2).setText(0, _translate("landuseAnalystDialogBase", "Selecting Area Units"))
-        self.treeHelp.topLevelItem(0).child(3).child(2).child(3).setText(0, _translate("landuseAnalystDialogBase", "Fodder as feed"))
-        self.treeHelp.topLevelItem(0).child(3).child(2).child(3).child(0).setText(0, _translate("landuseAnalystDialogBase", "Choosing feed"))
-        self.treeHelp.topLevelItem(0).child(3).child(2).child(3).child(0).child(0).setText(0, _translate("landuseAnalystDialogBase", "Fodder feed"))
-        self.treeHelp.topLevelItem(0).child(3).child(2).child(3).child(0).child(1).setText(0, _translate("landuseAnalystDialogBase", "Grain feed"))
-        self.treeHelp.topLevelItem(0).child(3).child(2).child(4).setText(0, _translate("landuseAnalystDialogBase", "Fallow Use"))
-        self.treeHelp.topLevelItem(0).child(3).child(2).child(4).child(0).setText(0, _translate("landuseAnalystDialogBase", "Grazing Fallow"))
-        self.treeHelp.topLevelItem(0).child(3).child(2).child(4).child(1).setText(0, _translate("landuseAnalystDialogBase", "Fallow Priority"))
-        self.treeHelp.topLevelItem(0).child(4).setText(0, _translate("landuseAnalystDialogBase", "Calculations"))
-        self.treeHelp.topLevelItem(0).child(5).setText(0, _translate("landuseAnalystDialogBase", "Results"))
-        self.treeHelp.topLevelItem(1).setText(0, _translate("landuseAnalystDialogBase", "Requirements"))
-        self.treeHelp.topLevelItem(1).child(0).setText(0, _translate("landuseAnalystDialogBase", "File Preparation"))
-        self.treeHelp.topLevelItem(1).child(0).child(0).setText(0, _translate("landuseAnalystDialogBase", "DEM"))
-        self.treeHelp.topLevelItem(1).child(0).child(1).setText(0, _translate("landuseAnalystDialogBase", "Masks"))
-        self.treeHelp.topLevelItem(1).child(0).child(1).child(0).setText(0, _translate("landuseAnalystDialogBase", "Digitizing"))
-        self.treeHelp.topLevelItem(1).child(0).child(1).child(1).setText(0, _translate("landuseAnalystDialogBase", "Naming"))
-        self.treeHelp.topLevelItem(1).child(1).setText(0, _translate("landuseAnalystDialogBase", "Numbers"))
+        self.treeHelp.topLevelItem(0).setText(0, _translate("LaMainFormBase", "Model"))
+        self.treeHelp.topLevelItem(0).child(0).setText(0, _translate("LaMainFormBase", "Main"))
+        self.treeHelp.topLevelItem(0).child(0).child(0).setText(0, _translate("LaMainFormBase", "Settlement Information"))
+        self.treeHelp.topLevelItem(0).child(0).child(0).child(0).setText(0, _translate("LaMainFormBase", "Site Name"))
+        self.treeHelp.topLevelItem(0).child(0).child(0).child(1).setText(0, _translate("LaMainFormBase", "Population"))
+        self.treeHelp.topLevelItem(0).child(0).child(0).child(2).setText(0, _translate("LaMainFormBase", "Period"))
+        self.treeHelp.topLevelItem(0).child(0).child(1).setText(0, _translate("LaMainFormBase", "Location"))
+        self.treeHelp.topLevelItem(0).child(0).child(1).child(0).setText(0, _translate("LaMainFormBase", "Easting"))
+        self.treeHelp.topLevelItem(0).child(0).child(1).child(1).setText(0, _translate("LaMainFormBase", "Northing"))
+        self.treeHelp.topLevelItem(0).child(0).child(1).child(2).setText(0, _translate("LaMainFormBase", "JADIS Database"))
+        self.treeHelp.topLevelItem(0).child(0).child(2).setText(0, _translate("LaMainFormBase", "Modelling Method"))
+        self.treeHelp.topLevelItem(0).child(0).child(2).child(0).setText(0, _translate("LaMainFormBase", "Euclidean"))
+        self.treeHelp.topLevelItem(0).child(0).child(2).child(1).setText(0, _translate("LaMainFormBase", "Walking Time"))
+        self.treeHelp.topLevelItem(0).child(0).child(2).child(2).setText(0, _translate("LaMainFormBase", "Path Distance"))
+        self.treeHelp.topLevelItem(0).child(0).child(2).child(3).setText(0, _translate("LaMainFormBase", "Precision"))
+        self.treeHelp.topLevelItem(0).child(1).setText(0, _translate("LaMainFormBase", "Diet"))
+        self.treeHelp.topLevelItem(0).child(1).child(0).setText(0, _translate("LaMainFormBase", "Plant to Meat Ratio"))
+        self.treeHelp.topLevelItem(0).child(1).child(1).setText(0, _translate("LaMainFormBase", "Wild to Tame Ratio"))
+        self.treeHelp.topLevelItem(0).child(1).child(2).setText(0, _translate("LaMainFormBase", "Calories per person per day"))
+        self.treeHelp.topLevelItem(0).child(1).child(3).setText(0, _translate("LaMainFormBase", "Breakdown"))
+        self.treeHelp.topLevelItem(0).child(1).child(4).setText(0, _translate("LaMainFormBase", "Clear"))
+        self.treeHelp.topLevelItem(0).child(2).setText(0, _translate("LaMainFormBase", "Crops"))
+        self.treeHelp.topLevelItem(0).child(2).child(0).setText(0, _translate("LaMainFormBase", "Using the Crop Interface"))
+        self.treeHelp.topLevelItem(0).child(2).child(1).setText(0, _translate("LaMainFormBase", "Managing Crops"))
+        self.treeHelp.topLevelItem(0).child(2).child(1).child(0).setText(0, _translate("LaMainFormBase", "Clone a crop"))
+        self.treeHelp.topLevelItem(0).child(2).child(1).child(1).setText(0, _translate("LaMainFormBase", "Create a new crop"))
+        self.treeHelp.topLevelItem(0).child(2).child(1).child(2).setText(0, _translate("LaMainFormBase", "Saving crops"))
+        self.treeHelp.topLevelItem(0).child(2).child(1).child(3).setText(0, _translate("LaMainFormBase", "Crop Descriptions"))
+        self.treeHelp.topLevelItem(0).child(2).child(1).child(3).child(0).setText(0, _translate("LaMainFormBase", "Crop Name"))
+        self.treeHelp.topLevelItem(0).child(2).child(1).child(3).child(1).setText(0, _translate("LaMainFormBase", "Crop Notes"))
+        self.treeHelp.topLevelItem(0).child(2).child(1).child(3).child(2).setText(0, _translate("LaMainFormBase", "Crop Yield"))
+        self.treeHelp.topLevelItem(0).child(2).child(1).child(3).child(2).child(0).setText(0, _translate("LaMainFormBase", "Crop Food Value"))
+        self.treeHelp.topLevelItem(0).child(2).child(1).child(3).child(3).setText(0, _translate("LaMainFormBase", "Fodder Yield"))
+        self.treeHelp.topLevelItem(0).child(2).child(1).child(3).child(3).child(0).setText(0, _translate("LaMainFormBase", "Crop Fodder Food Value"))
+        self.treeHelp.topLevelItem(0).child(2).child(1).child(3).child(4).setText(0, _translate("LaMainFormBase", "Crop Area Units"))
+        self.treeHelp.topLevelItem(0).child(2).child(2).setText(0, _translate("LaMainFormBase", "Crop Parameters"))
+        self.treeHelp.topLevelItem(0).child(2).child(2).child(0).setText(0, _translate("LaMainFormBase", "Crop Parameter Description"))
+        self.treeHelp.topLevelItem(0).child(2).child(2).child(0).child(0).setText(0, _translate("LaMainFormBase", "Crop Parameter Name"))
+        self.treeHelp.topLevelItem(0).child(2).child(2).child(0).child(1).setText(0, _translate("LaMainFormBase", "Crop Parameter Notes"))
+        self.treeHelp.topLevelItem(0).child(2).child(2).child(0).child(2).setText(0, _translate("LaMainFormBase", "Linking to a crop"))
+        self.treeHelp.topLevelItem(0).child(2).child(2).child(0).child(3).setText(0, _translate("LaMainFormBase", "Crop Portion of diet"))
+        self.treeHelp.topLevelItem(0).child(2).child(2).child(1).setText(0, _translate("LaMainFormBase", "Crop Suitability masks"))
+        self.treeHelp.topLevelItem(0).child(2).child(2).child(1).child(0).setText(0, _translate("LaMainFormBase", "Crop Masks Common"))
+        self.treeHelp.topLevelItem(0).child(2).child(2).child(1).child(1).setText(0, _translate("LaMainFormBase", "Crop Masks Specific"))
+        self.treeHelp.topLevelItem(0).child(2).child(2).child(2).setText(0, _translate("LaMainFormBase", "Crop Rotation"))
+        self.treeHelp.topLevelItem(0).child(2).child(2).child(2).child(0).setText(0, _translate("LaMainFormBase", "Crop to Fallow Ratio"))
+        self.treeHelp.topLevelItem(0).child(2).child(2).child(2).child(1).setText(0, _translate("LaMainFormBase", "Crop Fallow Food Value"))
+        self.treeHelp.topLevelItem(0).child(3).setText(0, _translate("LaMainFormBase", "Animals"))
+        self.treeHelp.topLevelItem(0).child(3).child(0).setText(0, _translate("LaMainFormBase", "Using the Animals Interface"))
+        self.treeHelp.topLevelItem(0).child(3).child(1).setText(0, _translate("LaMainFormBase", "Managing Animals"))
+        self.treeHelp.topLevelItem(0).child(3).child(1).child(0).setText(0, _translate("LaMainFormBase", "Clone an animal"))
+        self.treeHelp.topLevelItem(0).child(3).child(1).child(1).setText(0, _translate("LaMainFormBase", "Create a new animal"))
+        self.treeHelp.topLevelItem(0).child(3).child(1).child(2).setText(0, _translate("LaMainFormBase", "Saving animals"))
+        self.treeHelp.topLevelItem(0).child(3).child(1).child(3).setText(0, _translate("LaMainFormBase", "Defining an animal"))
+        self.treeHelp.topLevelItem(0).child(3).child(1).child(3).child(0).setText(0, _translate("LaMainFormBase", "Animal Description"))
+        self.treeHelp.topLevelItem(0).child(3).child(1).child(3).child(0).child(0).setText(0, _translate("LaMainFormBase", "Animal Name"))
+        self.treeHelp.topLevelItem(0).child(3).child(1).child(3).child(0).child(1).setText(0, _translate("LaMainFormBase", "Animal Notes"))
+        self.treeHelp.topLevelItem(0).child(3).child(1).child(3).child(0).child(2).setText(0, _translate("LaMainFormBase", "Usable Meat"))
+        self.treeHelp.topLevelItem(0).child(3).child(1).child(3).child(0).child(3).setText(0, _translate("LaMainFormBase", "Kill Weight"))
+        self.treeHelp.topLevelItem(0).child(3).child(1).child(3).child(0).child(4).setText(0, _translate("LaMainFormBase", "Grow Time"))
+        self.treeHelp.topLevelItem(0).child(3).child(1).child(3).child(0).child(5).setText(0, _translate("LaMainFormBase", "Death Rate"))
+        self.treeHelp.topLevelItem(0).child(3).child(1).child(3).child(1).setText(0, _translate("LaMainFormBase", "Reproduction"))
+        self.treeHelp.topLevelItem(0).child(3).child(1).child(3).child(1).child(0).setText(0, _translate("LaMainFormBase", "Sexual Maturity"))
+        self.treeHelp.topLevelItem(0).child(3).child(1).child(3).child(1).child(1).setText(0, _translate("LaMainFormBase", "Breeding Life"))
+        self.treeHelp.topLevelItem(0).child(3).child(1).child(3).child(1).child(2).setText(0, _translate("LaMainFormBase", "Young per birth"))
+        self.treeHelp.topLevelItem(0).child(3).child(1).child(3).child(1).child(3).setText(0, _translate("LaMainFormBase", "Weaning Age"))
+        self.treeHelp.topLevelItem(0).child(3).child(1).child(3).child(1).child(4).setText(0, _translate("LaMainFormBase", "Gestation Time"))
+        self.treeHelp.topLevelItem(0).child(3).child(1).child(3).child(1).child(5).setText(0, _translate("LaMainFormBase", "Estrous cycle"))
+        self.treeHelp.topLevelItem(0).child(3).child(1).child(3).child(2).setText(0, _translate("LaMainFormBase", "Feeding Requirements"))
+        self.treeHelp.topLevelItem(0).child(3).child(1).child(3).child(2).child(0).setText(0, _translate("LaMainFormBase", "Calories per animal per day"))
+        self.treeHelp.topLevelItem(0).child(3).child(1).child(3).child(2).child(0).child(0).setText(0, _translate("LaMainFormBase", "While Gestating"))
+        self.treeHelp.topLevelItem(0).child(3).child(1).child(3).child(2).child(0).child(1).setText(0, _translate("LaMainFormBase", "While Lactating"))
+        self.treeHelp.topLevelItem(0).child(3).child(1).child(3).child(2).child(0).child(2).setText(0, _translate("LaMainFormBase", "Juveniles"))
+        self.treeHelp.topLevelItem(0).child(3).child(2).setText(0, _translate("LaMainFormBase", "Animal Parameters"))
+        self.treeHelp.topLevelItem(0).child(3).child(2).child(0).setText(0, _translate("LaMainFormBase", "Setting Animal Parameters"))
+        self.treeHelp.topLevelItem(0).child(3).child(2).child(1).setText(0, _translate("LaMainFormBase", "Animal Parameter Details"))
+        self.treeHelp.topLevelItem(0).child(3).child(2).child(1).child(0).setText(0, _translate("LaMainFormBase", "Animal Parameter Name"))
+        self.treeHelp.topLevelItem(0).child(3).child(2).child(1).child(1).setText(0, _translate("LaMainFormBase", "Animal Parameter Notes"))
+        self.treeHelp.topLevelItem(0).child(3).child(2).child(1).child(2).setText(0, _translate("LaMainFormBase", "Linking to an animal"))
+        self.treeHelp.topLevelItem(0).child(3).child(2).child(1).child(3).setText(0, _translate("LaMainFormBase", "Portion of tame meat diet"))
+        self.treeHelp.topLevelItem(0).child(3).child(2).child(2).setText(0, _translate("LaMainFormBase", "Animal Land Suitability"))
+        self.treeHelp.topLevelItem(0).child(3).child(2).child(2).child(0).setText(0, _translate("LaMainFormBase", "Animal Specific Land"))
+        self.treeHelp.topLevelItem(0).child(3).child(2).child(2).child(0).child(0).setText(0, _translate("LaMainFormBase", "KCal setting"))
+        self.treeHelp.topLevelItem(0).child(3).child(2).child(2).child(1).setText(0, _translate("LaMainFormBase", "Animal Common Land"))
+        self.treeHelp.topLevelItem(0).child(3).child(2).child(2).child(1).child(0).setText(0, _translate("LaMainFormBase", "KCal setting"))
+        self.treeHelp.topLevelItem(0).child(3).child(2).child(2).child(2).setText(0, _translate("LaMainFormBase", "Selecting Area Units"))
+        self.treeHelp.topLevelItem(0).child(3).child(2).child(3).setText(0, _translate("LaMainFormBase", "Fodder as feed"))
+        self.treeHelp.topLevelItem(0).child(3).child(2).child(3).child(0).setText(0, _translate("LaMainFormBase", "Choosing feed"))
+        self.treeHelp.topLevelItem(0).child(3).child(2).child(3).child(0).child(0).setText(0, _translate("LaMainFormBase", "Fodder feed"))
+        self.treeHelp.topLevelItem(0).child(3).child(2).child(3).child(0).child(1).setText(0, _translate("LaMainFormBase", "Grain feed"))
+        self.treeHelp.topLevelItem(0).child(3).child(2).child(4).setText(0, _translate("LaMainFormBase", "Fallow Use"))
+        self.treeHelp.topLevelItem(0).child(3).child(2).child(4).child(0).setText(0, _translate("LaMainFormBase", "Grazing Fallow"))
+        self.treeHelp.topLevelItem(0).child(3).child(2).child(4).child(1).setText(0, _translate("LaMainFormBase", "Fallow Priority"))
+        self.treeHelp.topLevelItem(0).child(4).setText(0, _translate("LaMainFormBase", "Calculations"))
+        self.treeHelp.topLevelItem(0).child(5).setText(0, _translate("LaMainFormBase", "Results"))
+        self.treeHelp.topLevelItem(1).setText(0, _translate("LaMainFormBase", "Requirements"))
+        self.treeHelp.topLevelItem(1).child(0).setText(0, _translate("LaMainFormBase", "File Preparation"))
+        self.treeHelp.topLevelItem(1).child(0).child(0).setText(0, _translate("LaMainFormBase", "DEM"))
+        self.treeHelp.topLevelItem(1).child(0).child(1).setText(0, _translate("LaMainFormBase", "Masks"))
+        self.treeHelp.topLevelItem(1).child(0).child(1).child(0).setText(0, _translate("LaMainFormBase", "Digitizing"))
+        self.treeHelp.topLevelItem(1).child(0).child(1).child(1).setText(0, _translate("LaMainFormBase", "Naming"))
+        self.treeHelp.topLevelItem(1).child(1).setText(0, _translate("LaMainFormBase", "Numbers"))
         self.treeHelp.setSortingEnabled(__sortingEnabled)
-        self.cbDebug.setText(_translate("landuseAnalystDialogBase", "Debugging Mode"))
-        self.textHelp.setStyleSheet(_translate("landuseAnalystDialogBase", "<CENTER>"))
-        self.textHelp.setHtml(_translate("landuseAnalystDialogBase", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+        self.cbDebug.setText(_translate("LaMainFormBase", "Debugging Mode"))
+        self.textHelp.setStyleSheet(_translate("LaMainFormBase", "<CENTER>"))
+        self.textHelp.setHtml(_translate("LaMainFormBase", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'.SF NS Text\'; font-size:13pt; font-weight:400; font-style:normal;\">\n"
@@ -1859,4 +1859,4 @@ class Ui_landuseAnalystDialogBase(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Sans Serif\'; font-size:9pt;\"> Click anywhere to make the help box go away.</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Sans Serif\'; font-size:9pt;\">3. RIght Click on the thing you want help for.  If there is detailed help for it, you will see a </span><span style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:600; color:#0000ff;\">What is this?</span><span style=\" font-family:\'Sans Serif\'; font-size:9pt;\"> option that you can then click on.  Again, you can click anywhere to make the help box go away.</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Sans Serif\'; font-size:9pt;\">4. Go to the </span><span style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:600; color:#0000ff;\">Help</span><span style=\" font-family:\'Sans Serif\'; font-size:9pt;\"> </span><span style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:600; color:#0000ff;\">Tab</span><span style=\" font-family:\'Sans Serif\'; font-size:9pt;\"> and click on the item you want help with on the left for an even more detailed description of what things are and how they work</span></p></body></html>"))
-        self.MainTabs.setTabText(self.MainTabs.indexOf(self.help_tab), _translate("landuseAnalystDialogBase", "Help"))
+        self.MainTabs.setTabText(self.MainTabs.indexOf(self.help_tab), _translate("LaMainFormBase", "Help"))
