@@ -26,7 +26,7 @@ import os
 # import sys
 
 # from PyQt5.QtCore import QObject,  pyqtSignal,
-# import PyQt5.QtCore
+import PyQt5
 # from PyQt5.QtCore import uic
 # from PyQt5.QtCore import QtWidgets
 # from qgis.PyQt import uic
@@ -41,9 +41,9 @@ FORM_CLASS, _ = uic.loadUiType(os.path.join(
     os.path.dirname(__file__), 'landuse_analyst_dialog_base.ui'))
 
 
-# class AreaUnits(Enum):
-#     Dunum = "Dunum"
-#     Hectare = "Hectare"
+class AreaUnits(Enum):
+    Dunum = "Dunum"
+    Hectare = "Hectare"
 
 class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
     def __init__(self, parent=None):
@@ -59,7 +59,6 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         self.setupUi(self)
 
         # everything below this Jason did
-
         # self.pushButtonExit.clicked.connect(self.exit_program)
         # QObject.connect(self.pushButtonExit, QObject.SIGNAL.clicked()), QtWidgets. qApp, SLOT(quit()))
 
@@ -112,7 +111,7 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         self.sliderCrop.valueChanged.connect(self.on_sliderCrop_valueChanged)
 
         # the following, sadly, does NOT work
-        # self.connect(self.treeHelp, Qt.Core.SIGNAL(currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem * )),
+        # connect(self.treeHelp, QtCore.SIGNAL(currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem * )),
         #         this, SLOT(helpItemClicked(QTreeWidgetItem * , QTreeWidgetItem * )))
 
 
@@ -170,10 +169,10 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
     def setModel(self, *args):
         self.mSelectedCropsMap.clear()
         self.mSelectedAnimalsMap.clear()
-        mySelectedAreaUnit = str(self.cbAreaUnits.currentText())
+        mySelectedAreaUnit = AreaUnits(self.cbAreaUnits.currentText())
         myCommonRasterValue = int(self.sbCommonRasterValue.value())
         # a = (b == true ? "123": "456")
         # a = '123' if b else '456'
         # TODO this is quick and dirty
         myAreaUnits = 'Dunum' if mySelectedAreaUnit else 'Hectare'
-        print(myAreaUnits, myCommonRasterValue)
+        print(AreaUnits, myAreaUnits, myCommonRasterValue)
