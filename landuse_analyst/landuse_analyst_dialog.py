@@ -31,7 +31,9 @@ import os
 # from PyQt5.QtCore import QtWidgets
 # from qgis.PyQt import uic
 # from qgis.PyQt import QtWidgets
-from PyQt5 import QtWidgets, uic
+import PyQt5
+from PyQt5 import QtWidgets, uic, QtCore
+# from PyQt5 import QFile, QIODevice, QTextStream
 from enum import Enum
 # import la
 # from la import AreaUnits
@@ -111,12 +113,9 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         self.sliderMeat.valueChanged.connect(self.on_sliderMeat_valueChanged)
         self.sliderCrop.valueChanged.connect(self.on_sliderCrop_valueChanged)
 
-        # the following, sadly, does NOT work
-        # self.connect(self.treeHelp, Qt.Core.SIGNAL(currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem * )),
-        #         this, SLOT(helpItemClicked(QTreeWidgetItem * , QTreeWidgetItem * )))
+        self.treeHelp.currentItemChanged.connect(self.current_item_changed)
 
-
-        """
+        """ this is c++ code that needs translation
         QStringList myWholeList
 
         setDietLabels()
@@ -144,12 +143,26 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         connect(cbDebug, SIGNAL(clicked()),
             this, SLOT(on_cbDebug_clicked())) """
 
+    @QtCore.pyqtSlot(QtWidgets.QTreeWidgetItem, QtWidgets.QTreeWidgetItem)
+    def current_item_changed(self, theCurrentItem, previous):
+        # print('\ntheCurrentItem: {}, \nprevious: {}'.format(theCurrentItem.text(0), previous))
+
+        self.tbReport.append("Item clicked in help browser: " + theCurrentItem.text(0))
+
+        myQFile = PyQt5.QtCore.QFile(":/" + theCurrentItem.text(0) + ".html")
+        myQFile.open(PyQt5.QtCore.QFile.ReadOnly | PyQt5.QtCore.QFile.Text)
+        istream = PyQt5.QtCore.QTextStream(myQFile)
+        self.textHelp.setHtml(istream.readAll())
+        myQFile.close()
+
+
     def on_sliderDiet_valueChanged(self,  theValue):
         myMinString = str(theValue)
         myMaxString = str(100-theValue)
         self.labelMeatPercent.setText(myMinString)
         self.labelCropPercent.setText(myMaxString)
         # setDietLabels()
+
 
     def on_sliderMeat_valueChanged(self,  theValue):
         myMinString = str(theValue)
@@ -158,12 +171,14 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         self.labelMeatTamePercent.setText(myMaxString)
         # setDietLabels()
 
+
     def on_sliderCrop_valueChanged(self,  theValue):
         myMinString = str(theValue)
         myMaxString = str(100-theValue)
         self.labelCropWildPercent.setText(myMinString)
         self.labelCropTamePercent.setText(myMaxString)
         # setDietLabels()
+
 
     # Set's the model.  All data comes from the mainForm except for the map
     # of crops and animals which are being generated here.
