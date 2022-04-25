@@ -27,7 +27,7 @@ tags=python, archaeology, modelling, landuse
 
 homepage=http://github.com/arkygeek/landuseanalyst
 category=Plugins
-icon=resources/la_icon_small.png
+icon=:/la_icon_small.png
 # experimental flag
 experimental=True
 
