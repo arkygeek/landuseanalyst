@@ -23,14 +23,6 @@
 """
 
 import os
-# import sys
-
-# from PyQt5.QtCore import QObject,  pyqtSignal,
-# import PyQt5.QtCore
-# from PyQt5.QtCore import uic
-# from PyQt5.QtCore import QtWidgets
-# from qgis.PyQt import uic
-# from qgis.PyQt import QtWidgets
 import PyQt5
 from PyQt5 import QtWidgets, uic, QtCore
 # from PyQt5 import QFile, QIODevice, QTextStream
@@ -40,7 +32,8 @@ from enum import Enum
 
 # This loads your .ui file so that PyQt can populate your plugin with the elements from Qt Designer
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
-    os.path.dirname(__file__), 'landuse_analyst_dialog_base.ui'))
+    # os.path.dirname(__file__), 'landuse_analyst_dialog_base.ui'))
+    os.path.dirname(__file__), 'src/ui/lamainformbase.ui'))
 
 
 # class AreaUnits(Enum):
