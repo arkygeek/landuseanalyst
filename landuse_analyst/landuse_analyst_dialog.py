@@ -14,9 +14,9 @@
 
 /***************************************************************************
  *                                                                         *
- *   This program is free software you can redistribute it and/or modify  *
+ *   This program is free software you can redistribute it and/or modify   *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation either version 2 of the License, or     *
+ *   the Free Software Foundation either version 2 of the License, or      *
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
@@ -29,9 +29,9 @@ from enum import Enum
 from qgis.PyQt.QtCore import QFile, QIODevice, QTextStream
 
 
-# This loads your .ui file so that PyQt can populate your plugin with the elements from Qt Designer
+# This loads your .ui file so that PyQt can
+# populate your plugin with the elements from Qt Designer
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
-    # os.path.dirname(__file__), 'landuse_analyst_dialog_base.ui'))
     os.path.dirname(__file__), 'lamainformbase.ui'))
 
 
@@ -50,11 +50,8 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
 
         # everything below this Jason did
 
-        # self.pushButtonExit.clicked.connect(self.exit_program)
-        # QObject.connect(self.pushButtonExit, QObject.SIGNAL.clicked()), QtWidgets. qApp, SLOT(quit()))
+        self.pushButtonExit.clicked.connect(self.close)
 
-        # notes for how to do this from:
-        # https://stackoverflow.com/questions/27676034/pyqt-place-scaled-image-in-centre-of-label
         self.lblCropPix.setScaledContents(True)
         self.lblAnimalPix.setScaledContents(True)
         self.lblCropPicCalcs.setScaledContents(True)
@@ -84,8 +81,9 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         self.tblCrops.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView. Stretch)
         self.listWidgetCalculationsAnimal.clear()
 
-        # the following should load from xml files that define animals and crops
-        # but probably will do now with either JSON or storage in the database
+        # the following SHOULD load from XML files that define animals and crops
+        # but probably will use either JSON, or store it in a database
+        
         # loadAnimals()
         # loadCrops()
 
