@@ -23,22 +23,17 @@
 """
 
 import os
-import PyQt5
-from PyQt5 import QtWidgets, uic, QtCore
-# from PyQt5 import QFile, QIODevice, QTextStream
+# from qgis.PyQt import PyQt5
+from qgis.PyQt import QtWidgets, uic, QtCore
 from enum import Enum
-# import la
-# from la import AreaUnits
+from qgis.PyQt.QtCore import QFile, QIODevice, QTextStream
+
 
 # This loads your .ui file so that PyQt can populate your plugin with the elements from Qt Designer
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
     # os.path.dirname(__file__), 'landuse_analyst_dialog_base.ui'))
-    os.path.dirname(__file__), 'src/ui/lamainformbase.ui'))
+    os.path.dirname(__file__), 'lamainformbase.ui'))
 
-
-# class AreaUnits(Enum):
-#     Dunum = "Dunum"
-#     Hectare = "Hectare"
 
 class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
     def __init__(self, parent=None):
@@ -89,19 +84,19 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         self.tblCrops.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView. Stretch)
         self.listWidgetCalculationsAnimal.clear()
 
-        # the following should load from xml files that define animals and crops but prob will do now
-        # with either JSON or storage in the database
+        # the following should load from xml files that define animals and crops
+        # but probably will do now with either JSON or storage in the database
         # loadAnimals()
         # loadCrops()
 
-        # cbAreaUnits needs to be populated with two values. Let's add Dunums and Hectares for now
+        # cbAreaUnits needs populating with values; Dunums & Hectares for now...
         self.cbAreaUnits.addItem("Dunum")
         self.cbAreaUnits.addItem("Hectare")
 
         self.cbCommonLandEnergyType.addItem("KCalories")
         self.cbCommonLandEnergyType.addItem("TDN")
 
-        # the diet slider works yay!
+        # the diet sliders get connected here
         self.sliderDiet.valueChanged.connect(self.on_sliderDiet_valueChanged)
         self.sliderMeat.valueChanged.connect(self.on_sliderMeat_valueChanged)
         self.sliderCrop.valueChanged.connect(self.on_sliderCrop_valueChanged)
@@ -138,13 +133,11 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
 
     @QtCore.pyqtSlot(QtWidgets.QTreeWidgetItem, QtWidgets.QTreeWidgetItem)
     def current_item_changed(self, theCurrentItem, previous):
-        # print('\ntheCurrentItem: {}, \nprevious: {}'.format(theCurrentItem.text(0), previous))
-
         self.tbReport.append("Item clicked in help browser: " + theCurrentItem.text(0))
+        myQFile = QFile(":/" + theCurrentItem.text(0) + ".html")
+        myQFile.open(QFile.ReadOnly | QFile.Text)
+        istream = QTextStream(myQFile)
 
-        myQFile = PyQt5.QtCore.QFile(":/" + theCurrentItem.text(0) + ".html")
-        myQFile.open(PyQt5.QtCore.QFile.ReadOnly | PyQt5.QtCore.QFile.Text)
-        istream = PyQt5.QtCore.QTextStream(myQFile)
         self.textHelp.setHtml(istream.readAll())
         myQFile.close()
 
@@ -173,15 +166,14 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         # setDietLabels()
 
 
-    # Set's the model.  All data comes from the mainForm except for the map
-    # of crops and animals which are being generated here.
+    # Set's the model.  All data comes from laMainForm EXCEPT for
+    # the map of crops and animals, which are being generated here.
     def setModel(self, *args):
         self.mSelectedCropsMap.clear()
         self.mSelectedAnimalsMap.clear()
         mySelectedAreaUnit = str(self.cbAreaUnits.currentText())
         myCommonRasterValue = int(self.sbCommonRasterValue.value())
-        # a = (b == true ? "123": "456")
-        # a = '123' if b else '456'
+
         # TODO this is quick and dirty
         myAreaUnits = 'Dunum' if mySelectedAreaUnit else 'Hectare'
         print(myAreaUnits, myCommonRasterValue)

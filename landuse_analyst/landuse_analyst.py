@@ -16,7 +16,7 @@
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
+ *   the Free Software Foundation; either version 3 of the License, or     *
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
@@ -27,9 +27,8 @@ from qgis.PyQt.QtWidgets import QAction
 
 # Initialize Qt resources from file resources.py
 from .resources import *
-# Import the code for the dialog
-from .landuse_analyst_dialog import LaMainFormBase
 import os.path
+from .landuse_analyst_dialog import LaMainFormBase  # Import dialog code
 
 
 class LanduseAnalyst:
@@ -45,15 +44,16 @@ class LanduseAnalyst:
         """
         # Save reference to the QGIS interface
         self.iface = iface
+
         # initialize plugin directory
         self.plugin_dir = os.path.dirname(__file__)
+
         # initialize locale
         locale = QSettings().value('locale/userLocale')[0:2]
         locale_path = os.path.join(
             self.plugin_dir,
             'i18n',
             'LanduseAnalyst_{}.qm'.format(locale))
-
         if os.path.exists(locale_path):
             self.translator = QTranslator()
             self.translator.load(locale_path)
