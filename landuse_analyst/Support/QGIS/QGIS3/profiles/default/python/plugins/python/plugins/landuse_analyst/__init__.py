@@ -22,7 +22,7 @@
  ***************************************************************************/
  This script initializes the plugin, making it known to QGIS.
 """
-from .landuse_analyst_dialog import LaMainFormBase
+
 
 # noinspection PyPep8Naming
 def classFactory(iface):  # pylint: disable=invalid-name
@@ -32,5 +32,5 @@ def classFactory(iface):  # pylint: disable=invalid-name
     :type iface: QgsInterface
     """
     #
-    from .lamainform import LanduseAnalyst
+    from .landuse_analyst import LanduseAnalyst
     return LanduseAnalyst(iface)

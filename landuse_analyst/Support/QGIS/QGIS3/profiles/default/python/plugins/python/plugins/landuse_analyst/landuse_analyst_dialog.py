@@ -14,26 +14,36 @@
 
 /***************************************************************************
  *                                                                         *
- *   This program is free software you can redistribute it and/or modify   *
+ *   This program is free software you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation either version 2 of the License, or      *
+ *   the Free Software Foundation either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 """
 
 import os
-# from qgis.PyQt import PyQt5
-from qgis.PyQt import QtWidgets, uic, QtCore
+# import sys
+
+# from PyQt5.QtCore import QObject,  pyqtSignal,
+# import PyQt5.QtCore
+# from PyQt5.QtCore import uic
+# from PyQt5.QtCore import QtWidgets
+# from qgis.PyQt import uic
+# from qgis.PyQt import QtWidgets
+from PyQt5 import QtWidgets, uic
 from enum import Enum
-from qgis.PyQt.QtCore import QFile, QIODevice, QTextStream
+# import la
+# from la import AreaUnits
 
-
-# This loads your .ui file so that PyQt can
-# populate your plugin with the elements from Qt Designer
+# This loads your .ui file so that PyQt can populate your plugin with the elements from Qt Designer
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
-    os.path.dirname(__file__), 'lamainformbase.ui'))
+    os.path.dirname(__file__), 'landuse_analyst_dialog_base.ui'))
 
+
+# class AreaUnits(Enum):
+#     Dunum = "Dunum"
+#     Hectare = "Hectare"
 
 class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
     def __init__(self, parent=None):
@@ -50,8 +60,11 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
 
         # everything below this Jason did
 
-        self.pushButtonExit.clicked.connect(self.close)
+        # self.pushButtonExit.clicked.connect(self.exit_program)
+        # QObject.connect(self.pushButtonExit, QObject.SIGNAL.clicked()), QtWidgets. qApp, SLOT(quit()))
 
+        # notes for how to do this from:
+        # https://stackoverflow.com/questions/27676034/pyqt-place-scaled-image-in-centre-of-label
         self.lblCropPix.setScaledContents(True)
         self.lblAnimalPix.setScaledContents(True)
         self.lblCropPicCalcs.setScaledContents(True)
@@ -81,27 +94,29 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         self.tblCrops.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView. Stretch)
         self.listWidgetCalculationsAnimal.clear()
 
-        # the following SHOULD load from XML files that define animals and crops
-        # but probably will use either JSON, or store it in a database
-
+        # the following should load from xml files that define animals and crops but prob will do now
+        # with either JSON or storage in the database
         # loadAnimals()
         # loadCrops()
 
-        # cbAreaUnits needs populating with values; Dunums & Hectares for now...
+        # cbAreaUnits needs to be populated with two values. Let's add Dunums and Hectares for now
         self.cbAreaUnits.addItem("Dunum")
         self.cbAreaUnits.addItem("Hectare")
 
         self.cbCommonLandEnergyType.addItem("KCalories")
         self.cbCommonLandEnergyType.addItem("TDN")
 
-        # the diet sliders get connected here
+        # the diet slider works yay!
         self.sliderDiet.valueChanged.connect(self.on_sliderDiet_valueChanged)
         self.sliderMeat.valueChanged.connect(self.on_sliderMeat_valueChanged)
         self.sliderCrop.valueChanged.connect(self.on_sliderCrop_valueChanged)
 
-        self.treeHelp.currentItemChanged.connect(self.current_item_changed)
+        # the following, sadly, does NOT work
+        # self.connect(self.treeHelp, Qt.Core.SIGNAL(currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem * )),
+        #         this, SLOT(helpItemClicked(QTreeWidgetItem * , QTreeWidgetItem * )))
 
-        """ this is c++ code that needs translation
+
+        """
         QStringList myWholeList
 
         setDietLabels()
@@ -129,24 +144,12 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         connect(cbDebug, SIGNAL(clicked()),
             this, SLOT(on_cbDebug_clicked())) """
 
-    @QtCore.pyqtSlot(QtWidgets.QTreeWidgetItem, QtWidgets.QTreeWidgetItem)
-    def current_item_changed(self, theCurrentItem, previous):
-        self.tbReport.append("Item clicked in help browser: " + theCurrentItem.text(0))
-        myQFile = QFile(":/" + theCurrentItem.text(0) + ".html")
-        myQFile.open(QFile.ReadOnly | QFile.Text)
-        istream = QTextStream(myQFile)
-
-        self.textHelp.setHtml(istream.readAll())
-        myQFile.close()
-
-
     def on_sliderDiet_valueChanged(self,  theValue):
         myMinString = str(theValue)
         myMaxString = str(100-theValue)
         self.labelMeatPercent.setText(myMinString)
         self.labelCropPercent.setText(myMaxString)
         # setDietLabels()
-
 
     def on_sliderMeat_valueChanged(self,  theValue):
         myMinString = str(theValue)
@@ -155,7 +158,6 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         self.labelMeatTamePercent.setText(myMaxString)
         # setDietLabels()
 
-
     def on_sliderCrop_valueChanged(self,  theValue):
         myMinString = str(theValue)
         myMaxString = str(100-theValue)
@@ -163,15 +165,15 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         self.labelCropTamePercent.setText(myMaxString)
         # setDietLabels()
 
-
-    # Set's the model.  All data comes from laMainForm EXCEPT for
-    # the map of crops and animals, which are being generated here.
+    # Set's the model.  All data comes from the mainForm except for the map
+    # of crops and animals which are being generated here.
     def setModel(self, *args):
         self.mSelectedCropsMap.clear()
         self.mSelectedAnimalsMap.clear()
-        mySelectedAreaUnit = AreaUnits(self.cbAreaUnits.currentText())
+        mySelectedAreaUnit = str(self.cbAreaUnits.currentText())
         myCommonRasterValue = int(self.sbCommonRasterValue.value())
-
+        # a = (b == true ? "123": "456")
+        # a = '123' if b else '456'
         # TODO this is quick and dirty
         myAreaUnits = 'Dunum' if mySelectedAreaUnit else 'Hectare'
-        print(AreaUnits, myAreaUnits, myCommonRasterValue)
+        print(myAreaUnits, myCommonRasterValue)
