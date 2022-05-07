@@ -28,7 +28,7 @@ from qgis.PyQt.QtWidgets import QAction
 # Initialize Qt resources from file resources.py
 from .resources import *
 # Import the code for the dialog
-from .landuse_analyst_dialog import LaMainFormBase
+from .lamainformbase import LaMainFormBase
 import os.path
 
 

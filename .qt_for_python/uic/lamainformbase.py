@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/Users/arkygeek/devcode/landuseanalyst/cppArchive/src/ui/lamainformbase.ui'
+# Form implementation generated from reading ui file '/Users/arkygeek/devcode/landuseanalyst/landuse_analyst/lamainformbase.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.6
 #
@@ -21,10 +21,45 @@ class Ui_LaMainFormBase(object):
         sizePolicy.setHeightForWidth(LaMainFormBase.sizePolicy().hasHeightForWidth())
         LaMainFormBase.setSizePolicy(sizePolicy)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(":/la_icon_small.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(":/resourcesl/a_icon_small.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         LaMainFormBase.setWindowIcon(icon)
         self.gridlayout = QtWidgets.QGridLayout(LaMainFormBase)
         self.gridlayout.setObjectName("gridlayout")
+        spacerItem = QtWidgets.QSpacerItem(308, 17, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.gridlayout.addItem(spacerItem, 1, 0, 1, 11)
+        spacerItem1 = QtWidgets.QSpacerItem(224, 37, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridlayout.addItem(spacerItem1, 2, 4, 1, 1)
+        spacerItem2 = QtWidgets.QSpacerItem(223, 37, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridlayout.addItem(spacerItem2, 2, 6, 1, 1)
+        self.label_5 = QtWidgets.QLabel(LaMainFormBase)
+        self.label_5.setObjectName("label_5")
+        self.gridlayout.addWidget(self.label_5, 2, 0, 1, 1)
+        self.labelAnimalCheck = QtWidgets.QLabel(LaMainFormBase)
+        self.labelAnimalCheck.setAlignment(QtCore.Qt.AlignCenter)
+        self.labelAnimalCheck.setObjectName("labelAnimalCheck")
+        self.gridlayout.addWidget(self.labelAnimalCheck, 2, 1, 1, 1)
+        self.label_3 = QtWidgets.QLabel(LaMainFormBase)
+        self.label_3.setObjectName("label_3")
+        self.gridlayout.addWidget(self.label_3, 2, 2, 1, 1)
+        self.labelCropCheck = QtWidgets.QLabel(LaMainFormBase)
+        self.labelCropCheck.setAlignment(QtCore.Qt.AlignCenter)
+        self.labelCropCheck.setObjectName("labelCropCheck")
+        self.gridlayout.addWidget(self.labelCropCheck, 2, 3, 1, 1)
+        self.label_7 = QtWidgets.QLabel(LaMainFormBase)
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        self.label_7.setFont(font)
+        self.label_7.setObjectName("label_7")
+        self.gridlayout.addWidget(self.label_7, 2, 5, 1, 1)
+        self.pushButtonRun = QtWidgets.QPushButton(LaMainFormBase)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.pushButtonRun.sizePolicy().hasHeightForWidth())
+        self.pushButtonRun.setSizePolicy(sizePolicy)
+        self.pushButtonRun.setMinimumSize(QtCore.QSize(0, 0))
+        self.pushButtonRun.setObjectName("pushButtonRun")
+        self.gridlayout.addWidget(self.pushButtonRun, 2, 7, 1, 1)
         self.pushButtonLoad = QtWidgets.QPushButton(LaMainFormBase)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -34,6 +69,22 @@ class Ui_LaMainFormBase(object):
         self.pushButtonLoad.setMinimumSize(QtCore.QSize(0, 0))
         self.pushButtonLoad.setObjectName("pushButtonLoad")
         self.gridlayout.addWidget(self.pushButtonLoad, 2, 8, 1, 1)
+        self.pushButtonSave = QtWidgets.QPushButton(LaMainFormBase)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.pushButtonSave.sizePolicy().hasHeightForWidth())
+        self.pushButtonSave.setSizePolicy(sizePolicy)
+        self.pushButtonSave.setObjectName("pushButtonSave")
+        self.gridlayout.addWidget(self.pushButtonSave, 2, 9, 1, 1)
+        self.pushButtonExit = QtWidgets.QPushButton(LaMainFormBase)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.pushButtonExit.sizePolicy().hasHeightForWidth())
+        self.pushButtonExit.setSizePolicy(sizePolicy)
+        self.pushButtonExit.setObjectName("pushButtonExit")
+        self.gridlayout.addWidget(self.pushButtonExit, 2, 10, 1, 1)
         self.progressBarCalcs = QtWidgets.QProgressBar(LaMainFormBase)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
@@ -46,57 +97,6 @@ class Ui_LaMainFormBase(object):
         self.progressBarCalcs.setOrientation(QtCore.Qt.Horizontal)
         self.progressBarCalcs.setObjectName("progressBarCalcs")
         self.gridlayout.addWidget(self.progressBarCalcs, 3, 0, 1, 11)
-        self.pushButtonSave = QtWidgets.QPushButton(LaMainFormBase)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.pushButtonSave.sizePolicy().hasHeightForWidth())
-        self.pushButtonSave.setSizePolicy(sizePolicy)
-        self.pushButtonSave.setObjectName("pushButtonSave")
-        self.gridlayout.addWidget(self.pushButtonSave, 2, 9, 1, 1)
-        spacerItem = QtWidgets.QSpacerItem(308, 17, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.gridlayout.addItem(spacerItem, 1, 0, 1, 11)
-        spacerItem1 = QtWidgets.QSpacerItem(224, 37, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.gridlayout.addItem(spacerItem1, 2, 4, 1, 1)
-        self.labelAnimalCheck = QtWidgets.QLabel(LaMainFormBase)
-        self.labelAnimalCheck.setAlignment(QtCore.Qt.AlignCenter)
-        self.labelAnimalCheck.setObjectName("labelAnimalCheck")
-        self.gridlayout.addWidget(self.labelAnimalCheck, 2, 1, 1, 1)
-        self.label_3 = QtWidgets.QLabel(LaMainFormBase)
-        self.label_3.setObjectName("label_3")
-        self.gridlayout.addWidget(self.label_3, 2, 2, 1, 1)
-        self.pushButtonRun = QtWidgets.QPushButton(LaMainFormBase)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.pushButtonRun.sizePolicy().hasHeightForWidth())
-        self.pushButtonRun.setSizePolicy(sizePolicy)
-        self.pushButtonRun.setMinimumSize(QtCore.QSize(0, 0))
-        self.pushButtonRun.setObjectName("pushButtonRun")
-        self.gridlayout.addWidget(self.pushButtonRun, 2, 7, 1, 1)
-        self.labelCropCheck = QtWidgets.QLabel(LaMainFormBase)
-        self.labelCropCheck.setAlignment(QtCore.Qt.AlignCenter)
-        self.labelCropCheck.setObjectName("labelCropCheck")
-        self.gridlayout.addWidget(self.labelCropCheck, 2, 3, 1, 1)
-        self.label_5 = QtWidgets.QLabel(LaMainFormBase)
-        self.label_5.setObjectName("label_5")
-        self.gridlayout.addWidget(self.label_5, 2, 0, 1, 1)
-        self.pushButtonExit = QtWidgets.QPushButton(LaMainFormBase)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.pushButtonExit.sizePolicy().hasHeightForWidth())
-        self.pushButtonExit.setSizePolicy(sizePolicy)
-        self.pushButtonExit.setObjectName("pushButtonExit")
-        self.gridlayout.addWidget(self.pushButtonExit, 2, 10, 1, 1)
-        self.label_7 = QtWidgets.QLabel(LaMainFormBase)
-        font = QtGui.QFont()
-        font.setPointSize(8)
-        self.label_7.setFont(font)
-        self.label_7.setObjectName("label_7")
-        self.gridlayout.addWidget(self.label_7, 2, 5, 1, 1)
-        spacerItem2 = QtWidgets.QSpacerItem(223, 37, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.gridlayout.addItem(spacerItem2, 2, 6, 1, 1)
         self.MainTabs = QtWidgets.QTabWidget(LaMainFormBase)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
@@ -1233,21 +1233,11 @@ class Ui_LaMainFormBase(object):
     def retranslateUi(self, LaMainFormBase):
         _translate = QtCore.QCoreApplication.translate
         LaMainFormBase.setWindowTitle(_translate("LaMainFormBase", "Landuse Analyst"))
-        self.pushButtonLoad.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.label_5.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Load previously saved model parameters.</p></body></html>"))
-        self.pushButtonLoad.setText(_translate("LaMainFormBase", "Load"))
-        self.progressBarCalcs.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Shows when program is busy, or progress of tasks.</p></body></html>"))
-        self.progressBarCalcs.setFormat(_translate("LaMainFormBase", "%p%"))
-        self.pushButtonSave.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Save all settings of this model to a file</p></body></html>"))
-        self.pushButtonSave.setText(_translate("LaMainFormBase", "Save"))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This is the sum of percent of diet figures for all of the animals being used in the model.  <span style=\" font-weight:600; font-style:italic; text-decoration: underline; color:#0000ff;\">This must be 100%</span> to run!</p></body></html>"))
+        self.label_5.setText(_translate("LaMainFormBase", "Animals:"))
         self.labelAnimalCheck.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
@@ -1258,6 +1248,12 @@ class Ui_LaMainFormBase(object):
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This is the sum of percent of diet figures for all of the crops being used in the model.  <span style=\" font-weight:600; font-style:italic; text-decoration: underline; color:#0000ff;\">This must be 100%</span> to run!</p></body></html>"))
         self.label_3.setText(_translate("LaMainFormBase", "  Crops:"))
+        self.labelCropCheck.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This is the sum of percent of diet figures for all of the crops being used in the model.  <span style=\" font-weight:600; font-style:italic; text-decoration: underline; color:#0000ff;\">This must be 100%</span> to run!</p></body></html>"))
+        self.labelCropCheck.setText(_translate("LaMainFormBase", "100%"))
+        self.label_7.setText(_translate("LaMainFormBase", "Copyright 2008 Jason Jorgenson"))
         self.pushButtonRun.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
@@ -1267,18 +1263,22 @@ class Ui_LaMainFormBase(object):
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Pressing Calculate! will attempt to run the model with the parameters you have chosen.  If there are any errors, this process will fail, and indicate to you what the problem was.  To be on the safe side, always save your model before attempting to Calculate! it.  All results will be saved if the model runs correctly.</p></body></html>"))
         self.pushButtonRun.setText(_translate("LaMainFormBase", "Run"))
-        self.labelCropCheck.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.pushButtonLoad.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This is the sum of percent of diet figures for all of the crops being used in the model.  <span style=\" font-weight:600; font-style:italic; text-decoration: underline; color:#0000ff;\">This must be 100%</span> to run!</p></body></html>"))
-        self.labelCropCheck.setText(_translate("LaMainFormBase", "100%"))
-        self.label_5.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Load previously saved model parameters.</p></body></html>"))
+        self.pushButtonLoad.setText(_translate("LaMainFormBase", "Load"))
+        self.pushButtonSave.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This is the sum of percent of diet figures for all of the animals being used in the model.  <span style=\" font-weight:600; font-style:italic; text-decoration: underline; color:#0000ff;\">This must be 100%</span> to run!</p></body></html>"))
-        self.label_5.setText(_translate("LaMainFormBase", "Animals:"))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Save all settings of this model to a file</p></body></html>"))
+        self.pushButtonSave.setText(_translate("LaMainFormBase", "Save"))
         self.pushButtonExit.setText(_translate("LaMainFormBase", "Exit"))
-        self.label_7.setText(_translate("LaMainFormBase", "Copyright 2008 Jason Jorgenson"))
+        self.progressBarCalcs.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Shows when program is busy, or progress of tasks.</p></body></html>"))
+        self.progressBarCalcs.setFormat(_translate("LaMainFormBase", "%p%"))
         self.frame_2.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
@@ -1860,4 +1860,3 @@ class Ui_LaMainFormBase(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Sans Serif\'; font-size:9pt;\">3. RIght Click on the thing you want help for.  If there is detailed help for it, you will see a </span><span style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:600; color:#0000ff;\">What is this?</span><span style=\" font-family:\'Sans Serif\'; font-size:9pt;\"> option that you can then click on.  Again, you can click anywhere to make the help box go away.</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Sans Serif\'; font-size:9pt;\">4. Go to the </span><span style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:600; color:#0000ff;\">Help</span><span style=\" font-family:\'Sans Serif\'; font-size:9pt;\"> </span><span style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:600; color:#0000ff;\">Tab</span><span style=\" font-family:\'Sans Serif\'; font-size:9pt;\"> and click on the item you want help with on the left for an even more detailed description of what things are and how they work</span></p></body></html>"))
         self.MainTabs.setTabText(self.MainTabs.indexOf(self.help_tab), _translate("LaMainFormBase", "Help"))
-import resources_rc

@@ -32,5 +32,5 @@ def classFactory(iface):  # pylint: disable=invalid-name
     :type iface: QgsInterface
     """
     #
-    from .landuse_analyst import LanduseAnalyst
+    from .lamainform import LanduseAnalyst
     return LanduseAnalyst(iface)

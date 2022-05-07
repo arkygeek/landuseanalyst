@@ -22,7 +22,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="resources/resources.qrc">
-    <normaloff>:/la_icon_small.png</normaloff>:/la_icon_small.png</iconset>
+    <normaloff>:/resourcesl/a_icon_small.png</normaloff>:/resources/la_icon_small.png</iconset>
   </property>
   <layout class="QGridLayout">
    <item row="1" column="0" colspan="11">

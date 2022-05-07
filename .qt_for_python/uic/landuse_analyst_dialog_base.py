@@ -21,7 +21,7 @@ class Ui_LaMainFormBase(object):
         sizePolicy.setHeightForWidth(LaMainFormBase.sizePolicy().hasHeightForWidth())
         LaMainFormBase.setSizePolicy(sizePolicy)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(":/la_icon_small.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(":/resourcesl/a_icon_small.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         LaMainFormBase.setWindowIcon(icon)
         self.gridlayout = QtWidgets.QGridLayout(LaMainFormBase)
         self.gridlayout.setObjectName("gridlayout")
