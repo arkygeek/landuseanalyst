@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
     //for windows lets use plastique syle!
   QApplication::setStyle(new QPlastiqueStyle);
 #endif
-	
+
 #ifdef Q_OS_MACX
     // Install OpenDocuments AppleEvent handler after application object is initialized
     // but before any other event handling (including dialogs or splash screens) occurs.
@@ -110,4 +110,3 @@ bool bundleclicked(int argc, char *argv[])
 {
   return ( argc > 1 && memcmp(argv[1], "-psn_", 5) == 0 );
 }
-

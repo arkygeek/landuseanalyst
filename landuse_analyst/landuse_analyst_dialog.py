@@ -22,12 +22,12 @@
  ***************************************************************************/
 """
 
-import os
-# from qgis.PyQt import PyQt5
-from qgis.PyQt import QtWidgets, uic, QtCore
-from enum import Enum
-from qgis.PyQt.QtCore import QFile, QIODevice, QTextStream
+from qgis.PyQt import(QtWidgets,
+                      uic,
+                      QtCore)
+from qgis.PyQt.QtCore import QFile, QTextStream
 
+import os
 
 # This loads your .ui file so that PyQt can
 # populate your plugin with the elements from Qt Designer
@@ -37,7 +37,8 @@ FORM_CLASS, _ = uic.loadUiType(os.path.join(
 
 class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
     def __init__(self, parent=None):
-        """Constructor."""
+        """Constructor for LaMainFormBase (.ui file)"""
+
         super(LaMainFormBase, self).__init__(parent)
 
         """ Set up the user interface from Designer through FORM_CLASS.
@@ -50,8 +51,10 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
 
         # everything below this Jason did
 
+        # make the Exit button work
         self.pushButtonExit.clicked.connect(self.close)
 
+        # set labels that for pix to scaled so images display properly
         self.lblCropPix.setScaledContents(True)
         self.lblAnimalPix.setScaledContents(True)
         self.lblCropPicCalcs.setScaledContents(True)
@@ -78,12 +81,12 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         self.tblAnimals.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView.Stretch)
         self.tblCrops.horizontalHeader().hide()
         self.tblCrops.verticalHeader().hide()
-        self.tblCrops.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView. Stretch)
+        self.tblCrops.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView.Stretch)
         self.listWidgetCalculationsAnimal.clear()
 
         # the following SHOULD load from XML files that define animals and crops
         # but probably will use either JSON, or store it in a database
-        
+
         # loadAnimals()
         # loadCrops()
 

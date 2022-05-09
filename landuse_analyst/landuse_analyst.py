@@ -21,13 +21,16 @@
  *                                                                         *
  ***************************************************************************/
 """
+# third party imports
 from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction
 
-# Initialize Qt resources from file resources.py
-from .resources import *
+# import of 'built-ins'
 import os.path
+
+# local pkg imports
+from .resources import *  # Initialize Qt resources from file resources.py
 from .landuse_analyst_dialog import LaMainFormBase  # Import dialog code
 
 

@@ -7,7 +7,6 @@ Please submit all pull requests from the Developer Branch
 ## Project Authors
 
 Jason Jorgenson
-Tim Sutton
 
 ## Build Notes (QMAKE)
 

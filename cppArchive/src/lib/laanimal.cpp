@@ -150,7 +150,7 @@ int LaAnimal::deathRate() const
 }
 EnergyType LaAnimal::feedEnergyType() const
 {
- return mFeedEnergyType; 
+ return mFeedEnergyType;
 }
 int LaAnimal::gestating() const
 {
@@ -212,7 +212,7 @@ int LaAnimal::estrousCycle() const
 }
 int LaAnimal::lactationTime() const
 {
- return mLactationTime; 
+ return mLactationTime;
 }
 
 bool LaAnimal::milk() const
@@ -274,7 +274,7 @@ void LaAnimal::setDeathRate(int thePercentage)
 }
 void LaAnimal::setFeedEnergyType(EnergyType theEnergyType)
 {
-  mFeedEnergyType=theEnergyType; 
+  mFeedEnergyType=theEnergyType;
 }
 void LaAnimal::setGestating(int theCalories)
 {
@@ -335,7 +335,7 @@ void LaAnimal::setEstrousCycle(int theDays)
 
 void LaAnimal::setLactationTime (int theTime)
 {
-  mLactationTime = theTime; 
+  mLactationTime = theTime;
 }
 
 void LaAnimal::setMilk (bool theBool)
@@ -387,7 +387,7 @@ bool LaAnimal::fromXml(QString theXml)
   mFemalesToMales=QString(myTopElement.firstChildElement("femalesToMales").text()).toInt();
   mGrowTime=QString(myTopElement.firstChildElement("growTime").text()).toInt();
   mDeathRate=QString(myTopElement.firstChildElement("deathRate").text()).toInt();
-  
+
   QString myFeedEnergyType = QString(myTopElement.firstChildElement("feedEnergyType").text());
   if (myFeedEnergyType == "KCalories")
   {
@@ -432,7 +432,7 @@ QString LaAnimal::toXml()
   myString+=QString("  <femalesToMales>" + QString::number(mFemalesToMales) + "</femalesToMales>\n");
   myString+=QString("  <growTime>" + QString::number(mGrowTime) + "</growTime>\n");
   myString+=QString("  <deathRate>" + QString::number(mDeathRate) + "</deathRate>\n");
-  
+
   switch (mFeedEnergyType)
   {
     case KCalories:
@@ -442,7 +442,7 @@ QString LaAnimal::toXml()
       myString+=QString("  <feedEnergyType>TDN</feedEnergyType>\n");
       break;
   }
-  
+
   myString+=QString("  <gestating>" + QString::number(mGestating) + "</gestating>\n");
   myString+=QString("  <lactating>" + QString::number(mLactating) + "</lactating>\n");
   myString+=QString("  <maintenance>" + QString::number(mMaintenance) + "</maintenance>\n");
@@ -479,7 +479,7 @@ QString LaAnimal::toText()
   myString+=QString("femalesToMales=>" + QString::number(mFemalesToMales) + "\n");
   myString+=QString("growTime=>" + QString::number(mGrowTime) + "\n");
   myString+=QString("deathRate=>" + QString::number(mDeathRate) + "\n");
-  
+
   switch (mFeedEnergyType)
   {
     case KCalories:
@@ -489,7 +489,7 @@ QString LaAnimal::toText()
       myString+=QString("feedEnergyType=>TDN\n");
       break;
   }
-  
+
   myString+=QString("gestating=>" + QString::number(mGestating) + "\n");
   myString+=QString("lactating=>" + QString::number(mLactating) + "\n");
   myString+=QString("maintenance=>" + QString::number(mMaintenance) + "\n");
@@ -525,7 +525,7 @@ QString LaAnimal::toHtml()
   myString+="<tr><td><b>Weaning Age:</b></td><td>" + QString::number(mWeaningAge) + "</td></tr>";
   myString+="<tr><td><b>Weaning Weight:</b></td><td>" + QString::number(mWeaningWeight) + "</td></tr>";
   myString+="<tr><td><b>Kill Weight (Kg):</b></td><td>" + QString::number(mKillWeight) + "</td></tr>";
-  
+
   myString+="<tr><td><b>Adult Weight (Kg):</b></td><td>" + QString::number(mAdultWeight) + "</td></tr>";
   myString+="<tr><td><b>Conception Efficiency(Percent):</b></td><td>" + QString::number(mConceptionEfficiency) + "</td></tr>";
   myString+="<tr><td><b>Females to Males (Breeding):</b></td><td>" + QString::number(mFemalesToMales) + "</td></tr>";
@@ -542,7 +542,7 @@ QString LaAnimal::toHtml()
   myString+="<tr><td><b>fleeceWeightKg:</b></td><td>" + QString::number(mFleeceWeightKg) + "</td></tr>";
   myString+="<tr><td></td><td>";
   myString+="<tr><td><FONT COLOR=\"#0063F7\">Feed Requirements (pa)</FONT></td><td>";
-  
+
   switch (mFeedEnergyType)
   {
     case KCalories:
@@ -552,7 +552,7 @@ QString LaAnimal::toHtml()
       myString+="<tr><td><b>EnergyType:</b></td><td>TDN</td></tr>";
       break;
   }
-  
+
   myString+="<tr><td><b>Gestating Female:</b></td><td>" + QString::number(mGestating) + "</td></tr>";
   myString+="<tr><td><b>Lactating Female:</b></td><td>" + QString::number(mLactating) + "</td></tr>";
   myString+="<tr><td><b>Adult Maintenance:</b></td><td>" + QString::number(mMaintenance) + "</td></tr>";
