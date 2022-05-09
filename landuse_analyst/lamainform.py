@@ -31,7 +31,7 @@ import os.path
 
 # local pkg imports
 from .resources import *  # Initialize Qt resources from file resources.py
-from .landuse_analyst_dialog import LaMainFormBase  # Import dialog code
+from .lamainformbase import LaMainFormBase  # Import dialog code
 
 
 class LanduseAnalyst:
