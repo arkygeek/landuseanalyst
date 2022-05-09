@@ -172,9 +172,9 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
     def setModel(self, *args):
         self.mSelectedCropsMap.clear()
         self.mSelectedAnimalsMap.clear()
-        mySelectedAreaUnit = str(self.cbAreaUnits.currentText())
+        mySelectedAreaUnit = AreaUnits(self.cbAreaUnits.currentText())
         myCommonRasterValue = int(self.sbCommonRasterValue.value())
 
         # TODO this is quick and dirty
         myAreaUnits = 'Dunum' if mySelectedAreaUnit else 'Hectare'
-        print(myAreaUnits, myCommonRasterValue)
+        print(AreaUnits, myAreaUnits, myCommonRasterValue)
