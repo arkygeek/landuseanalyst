@@ -3,15 +3,15 @@
 #include <QString>
 #include <lafoodsource.h>
 from enum import Enum
-from PyQt5.QtCore import QMap, QString, QPair
+# from PyQt5.QtCore import QMap, QString, QPair
 from typing import List, NewType
 
 
 # typedef QMap < QString, QPair < bool, QString > > LaTripleMap
-LaTripleMap = NewType("LaTripleMap", QMap(QString(), QPair(bool, QString())))
+# LaTripleMap = NewType("LaTripleMap", QMap(QString(), QPair(bool, QString())))
 
 # typedef QPair < QPair < QString, QString > , QPair < QString, QString > > LaRasterInfo
-LaRasterInfo = NewType("LaRasterInfo", QMap((QPair(QString(), QString())), (QPair(QString(), QString()))))
+# LaRasterInfo = NewType("LaRasterInfo", QMap((QPair(QString(), QString())), (QPair(QString(), QString()))))
 
 # typedef QMap < QString, LaFoodSource > LaFoodSourceMap
 # typedef QPair < float, float > HerdSize

@@ -16,12 +16,9 @@
 </HEAD>
 <BODY LANG="en-GB" DIR="LTR">
 <P CLASS="western"><IMG SRC=":/helpDocs/laHelpHeader.png" ALIGN=LEFT>
-<tr><td><b>Crop Suitability Masks</b></tr></td>
+<tr><td><b>Crop Suitability Masks</b>
 <p>In order for LandUse Analyst to create landuse maps, you must first create land suitability files to tell it what land is suitable for use by the crops and the crops.  These files can be produced manually or automatically, but at the moment both must be done with external tools like QGis or GRASS.  Future versions of Landuse Analyst will have the required features of these programs incorporated into it, but for now this step must be done externally.  </p>
-<tr><td><b>Manual Classification</b></tr></td>
+<tr><td><b>Manual Classification</b>
 <p>To create classification maps, you must create binary raster files.  These files must must be in native GRASS format.  (The easiest way to do this is to use <A HREF="http://qgis.org/"><U><FONT COLOR="#0000ff">QGis</FONT></U></A>.)  Essentially, you load a geo-referenced map or image of the area around your site into QGis and then classify it.  Classifying is simply done by tracing around the land you deem suitable and giving it a name.  So for example, you might have an area of land that you want to classify as being suitable for growing olives.  You basically need to 'paint' or cover all the bits which are suitable, so you might end up with several painted bits (polygons).  <b>It is important that polygons do not overlap.  Land can only be designated for one use in this step!</b> Overlapping polygons will produce unreliable results.  There are ways to combine use though.  For crops, you can select land that is sutable for more than one crop.  This is referred to in LanUse Analyst as Common Land.  For animals, it is called Common Grazing Land.</p>
-<tr><td><b>Automatic Classification</b></tr></td>
+<tr><td><b>Automatic Classification</b>
 This is quite an advanced method, but I will briefly explain how it works.  It is possible to analyze geo-referenced images to determine soil types, current land use, and even basic geology.  Typically, high resolution aerial photographs or satellite images are used.  Then you can use methods such as textural or spectral analysis to determine classification.  It is very important to point out that this method is going to classify based only on modern day landscapes, and should therefore probably only be used as a tool for helping to determine what the paleolandscape was.</p>
-</P>
-</BODY>
-</HTML>

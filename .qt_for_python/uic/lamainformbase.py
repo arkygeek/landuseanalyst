@@ -21,70 +21,27 @@ class Ui_LaMainFormBase(object):
         sizePolicy.setHeightForWidth(LaMainFormBase.sizePolicy().hasHeightForWidth())
         LaMainFormBase.setSizePolicy(sizePolicy)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(":/resources/la_icon_small.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(":/la_icon_small.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         LaMainFormBase.setWindowIcon(icon)
         self.gridlayout = QtWidgets.QGridLayout(LaMainFormBase)
         self.gridlayout.setObjectName("gridlayout")
-        spacerItem = QtWidgets.QSpacerItem(308, 17, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.gridlayout.addItem(spacerItem, 1, 0, 1, 11)
-        spacerItem1 = QtWidgets.QSpacerItem(224, 37, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.gridlayout.addItem(spacerItem1, 2, 4, 1, 1)
-        spacerItem2 = QtWidgets.QSpacerItem(223, 37, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.gridlayout.addItem(spacerItem2, 2, 6, 1, 1)
-        self.label_5 = QtWidgets.QLabel(LaMainFormBase)
-        self.label_5.setObjectName("label_5")
-        self.gridlayout.addWidget(self.label_5, 2, 0, 1, 1)
-        self.labelAnimalCheck = QtWidgets.QLabel(LaMainFormBase)
-        self.labelAnimalCheck.setAlignment(QtCore.Qt.AlignCenter)
-        self.labelAnimalCheck.setObjectName("labelAnimalCheck")
-        self.gridlayout.addWidget(self.labelAnimalCheck, 2, 1, 1, 1)
-        self.label_3 = QtWidgets.QLabel(LaMainFormBase)
-        self.label_3.setObjectName("label_3")
-        self.gridlayout.addWidget(self.label_3, 2, 2, 1, 1)
-        self.labelCropCheck = QtWidgets.QLabel(LaMainFormBase)
-        self.labelCropCheck.setAlignment(QtCore.Qt.AlignCenter)
-        self.labelCropCheck.setObjectName("labelCropCheck")
-        self.gridlayout.addWidget(self.labelCropCheck, 2, 3, 1, 1)
         self.label_7 = QtWidgets.QLabel(LaMainFormBase)
         font = QtGui.QFont()
         font.setPointSize(8)
         self.label_7.setFont(font)
         self.label_7.setObjectName("label_7")
         self.gridlayout.addWidget(self.label_7, 2, 5, 1, 1)
-        self.pushButtonRun = QtWidgets.QPushButton(LaMainFormBase)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.pushButtonRun.sizePolicy().hasHeightForWidth())
-        self.pushButtonRun.setSizePolicy(sizePolicy)
-        self.pushButtonRun.setMinimumSize(QtCore.QSize(0, 0))
-        self.pushButtonRun.setObjectName("pushButtonRun")
-        self.gridlayout.addWidget(self.pushButtonRun, 2, 7, 1, 1)
-        self.pushButtonLoad = QtWidgets.QPushButton(LaMainFormBase)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.pushButtonLoad.sizePolicy().hasHeightForWidth())
-        self.pushButtonLoad.setSizePolicy(sizePolicy)
-        self.pushButtonLoad.setMinimumSize(QtCore.QSize(0, 0))
-        self.pushButtonLoad.setObjectName("pushButtonLoad")
-        self.gridlayout.addWidget(self.pushButtonLoad, 2, 8, 1, 1)
-        self.pushButtonSave = QtWidgets.QPushButton(LaMainFormBase)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.pushButtonSave.sizePolicy().hasHeightForWidth())
-        self.pushButtonSave.setSizePolicy(sizePolicy)
-        self.pushButtonSave.setObjectName("pushButtonSave")
-        self.gridlayout.addWidget(self.pushButtonSave, 2, 9, 1, 1)
-        self.pushButtonExit = QtWidgets.QPushButton(LaMainFormBase)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.pushButtonExit.sizePolicy().hasHeightForWidth())
-        self.pushButtonExit.setSizePolicy(sizePolicy)
-        self.pushButtonExit.setObjectName("pushButtonExit")
-        self.gridlayout.addWidget(self.pushButtonExit, 2, 10, 1, 1)
+        self.labelAnimalCheck = QtWidgets.QLabel(LaMainFormBase)
+        self.labelAnimalCheck.setAlignment(QtCore.Qt.AlignCenter)
+        self.labelAnimalCheck.setObjectName("labelAnimalCheck")
+        self.gridlayout.addWidget(self.labelAnimalCheck, 2, 1, 1, 1)
+        self.labelCropCheck = QtWidgets.QLabel(LaMainFormBase)
+        self.labelCropCheck.setAlignment(QtCore.Qt.AlignCenter)
+        self.labelCropCheck.setObjectName("labelCropCheck")
+        self.gridlayout.addWidget(self.labelCropCheck, 2, 3, 1, 1)
+        self.label_3 = QtWidgets.QLabel(LaMainFormBase)
+        self.label_3.setObjectName("label_3")
+        self.gridlayout.addWidget(self.label_3, 2, 2, 1, 1)
         self.progressBarCalcs = QtWidgets.QProgressBar(LaMainFormBase)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
@@ -97,6 +54,49 @@ class Ui_LaMainFormBase(object):
         self.progressBarCalcs.setOrientation(QtCore.Qt.Horizontal)
         self.progressBarCalcs.setObjectName("progressBarCalcs")
         self.gridlayout.addWidget(self.progressBarCalcs, 3, 0, 1, 11)
+        self.pushButtonLoad = QtWidgets.QPushButton(LaMainFormBase)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.pushButtonLoad.sizePolicy().hasHeightForWidth())
+        self.pushButtonLoad.setSizePolicy(sizePolicy)
+        self.pushButtonLoad.setMinimumSize(QtCore.QSize(0, 0))
+        self.pushButtonLoad.setObjectName("pushButtonLoad")
+        self.gridlayout.addWidget(self.pushButtonLoad, 2, 8, 1, 1)
+        self.pushButtonRun = QtWidgets.QPushButton(LaMainFormBase)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.pushButtonRun.sizePolicy().hasHeightForWidth())
+        self.pushButtonRun.setSizePolicy(sizePolicy)
+        self.pushButtonRun.setMinimumSize(QtCore.QSize(0, 0))
+        self.pushButtonRun.setObjectName("pushButtonRun")
+        self.gridlayout.addWidget(self.pushButtonRun, 2, 7, 1, 1)
+        self.pushButtonExit = QtWidgets.QPushButton(LaMainFormBase)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.pushButtonExit.sizePolicy().hasHeightForWidth())
+        self.pushButtonExit.setSizePolicy(sizePolicy)
+        self.pushButtonExit.setObjectName("pushButtonExit")
+        self.gridlayout.addWidget(self.pushButtonExit, 2, 10, 1, 1)
+        self.pushButtonSave = QtWidgets.QPushButton(LaMainFormBase)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.pushButtonSave.sizePolicy().hasHeightForWidth())
+        self.pushButtonSave.setSizePolicy(sizePolicy)
+        self.pushButtonSave.setObjectName("pushButtonSave")
+        self.gridlayout.addWidget(self.pushButtonSave, 2, 9, 1, 1)
+        spacerItem = QtWidgets.QSpacerItem(308, 17, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.gridlayout.addItem(spacerItem, 1, 0, 1, 11)
+        spacerItem1 = QtWidgets.QSpacerItem(224, 37, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridlayout.addItem(spacerItem1, 2, 4, 1, 1)
+        self.label_5 = QtWidgets.QLabel(LaMainFormBase)
+        self.label_5.setObjectName("label_5")
+        self.gridlayout.addWidget(self.label_5, 2, 0, 1, 1)
+        spacerItem2 = QtWidgets.QSpacerItem(223, 37, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridlayout.addItem(spacerItem2, 2, 6, 1, 1)
         self.MainTabs = QtWidgets.QTabWidget(LaMainFormBase)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
@@ -1046,18 +1046,12 @@ class Ui_LaMainFormBase(object):
         self.MainTabs.addTab(self.tabLogs, "")
         self.help_tab = QtWidgets.QWidget()
         self.help_tab.setObjectName("help_tab")
-        self.gridlayout22 = QtWidgets.QGridLayout(self.help_tab)
-        self.gridlayout22.setObjectName("gridlayout22")
-        self.splitter = QtWidgets.QSplitter(self.help_tab)
-        self.splitter.setOrientation(QtCore.Qt.Horizontal)
-        self.splitter.setObjectName("splitter")
-        self.layoutWidget4 = QtWidgets.QWidget(self.splitter)
-        self.layoutWidget4.setObjectName("layoutWidget4")
-        self.vboxlayout4 = QtWidgets.QVBoxLayout(self.layoutWidget4)
-        self.vboxlayout4.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout = QtWidgets.QGridLayout(self.help_tab)
+        self.gridLayout.setObjectName("gridLayout")
+        self.vboxlayout4 = QtWidgets.QVBoxLayout()
         self.vboxlayout4.setSpacing(1)
         self.vboxlayout4.setObjectName("vboxlayout4")
-        self.treeHelp = QtWidgets.QTreeWidget(self.layoutWidget4)
+        self.treeHelp = QtWidgets.QTreeWidget(self.help_tab)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -1168,17 +1162,27 @@ class Ui_LaMainFormBase(object):
         item_3 = QtWidgets.QTreeWidgetItem(item_2)
         item_1 = QtWidgets.QTreeWidgetItem(item_0)
         self.vboxlayout4.addWidget(self.treeHelp)
-        self.cbDebug = QtWidgets.QCheckBox(self.layoutWidget4)
+        self.cbDebug = QtWidgets.QCheckBox(self.help_tab)
         self.cbDebug.setObjectName("cbDebug")
         self.vboxlayout4.addWidget(self.cbDebug)
-        self.textHelp = QtWidgets.QTextBrowser(self.splitter)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        self.gridLayout.addLayout(self.vboxlayout4, 0, 0, 1, 1)
+        self.verticalLayout = QtWidgets.QVBoxLayout()
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.helpHeaderLabel = QtWidgets.QLabel(self.help_tab)
+        self.helpHeaderLabel.setText("")
+        self.helpHeaderLabel.setPixmap(QtGui.QPixmap(":/laHelpHeader.png"))
+        self.helpHeaderLabel.setScaledContents(True)
+        self.helpHeaderLabel.setObjectName("helpHeaderLabel")
+        self.verticalLayout.addWidget(self.helpHeaderLabel)
+        self.textHelp = QtWidgets.QTextBrowser(self.help_tab)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(255)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.textHelp.sizePolicy().hasHeightForWidth())
         self.textHelp.setSizePolicy(sizePolicy)
         self.textHelp.setObjectName("textHelp")
-        self.gridlayout22.addWidget(self.splitter, 0, 0, 1, 1)
+        self.verticalLayout.addWidget(self.textHelp)
+        self.gridLayout.addLayout(self.verticalLayout, 0, 1, 1, 1)
         self.MainTabs.addTab(self.help_tab, "")
         self.gridlayout.addWidget(self.MainTabs, 0, 0, 1, 11)
 
@@ -1233,27 +1237,32 @@ class Ui_LaMainFormBase(object):
     def retranslateUi(self, LaMainFormBase):
         _translate = QtCore.QCoreApplication.translate
         LaMainFormBase.setWindowTitle(_translate("LaMainFormBase", "Landuse Analyst"))
-        self.label_5.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This is the sum of percent of diet figures for all of the animals being used in the model.  <span style=\" font-weight:600; font-style:italic; text-decoration: underline; color:#0000ff;\">This must be 100%</span> to run!</p></body></html>"))
-        self.label_5.setText(_translate("LaMainFormBase", "Animals:"))
+        self.label_7.setText(_translate("LaMainFormBase", "Copyright 2008 Jason Jorgenson"))
         self.labelAnimalCheck.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This is the sum of percent of diet figures for all of the animals being used in the model.  <span style=\" font-weight:600; font-style:italic; text-decoration: underline; color:#0000ff;\">This must be 100%</span> to run!</p></body></html>"))
         self.labelAnimalCheck.setText(_translate("LaMainFormBase", "100%"))
-        self.label_3.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This is the sum of percent of diet figures for all of the crops being used in the model.  <span style=\" font-weight:600; font-style:italic; text-decoration: underline; color:#0000ff;\">This must be 100%</span> to run!</p></body></html>"))
-        self.label_3.setText(_translate("LaMainFormBase", "  Crops:"))
         self.labelCropCheck.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This is the sum of percent of diet figures for all of the crops being used in the model.  <span style=\" font-weight:600; font-style:italic; text-decoration: underline; color:#0000ff;\">This must be 100%</span> to run!</p></body></html>"))
         self.labelCropCheck.setText(_translate("LaMainFormBase", "100%"))
-        self.label_7.setText(_translate("LaMainFormBase", "Copyright 2008 Jason Jorgenson"))
+        self.label_3.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This is the sum of percent of diet figures for all of the crops being used in the model.  <span style=\" font-weight:600; font-style:italic; text-decoration: underline; color:#0000ff;\">This must be 100%</span> to run!</p></body></html>"))
+        self.label_3.setText(_translate("LaMainFormBase", "  Crops:"))
+        self.progressBarCalcs.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Shows when program is busy, or progress of tasks.</p></body></html>"))
+        self.progressBarCalcs.setFormat(_translate("LaMainFormBase", "%p%"))
+        self.pushButtonLoad.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Load previously saved model parameters.</p></body></html>"))
+        self.pushButtonLoad.setText(_translate("LaMainFormBase", "Load"))
         self.pushButtonRun.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
@@ -1263,26 +1272,21 @@ class Ui_LaMainFormBase(object):
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Pressing Calculate! will attempt to run the model with the parameters you have chosen.  If there are any errors, this process will fail, and indicate to you what the problem was.  To be on the safe side, always save your model before attempting to Calculate! it.  All results will be saved if the model runs correctly.</p></body></html>"))
         self.pushButtonRun.setText(_translate("LaMainFormBase", "Run"))
-        self.pushButtonLoad.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Load previously saved model parameters.</p></body></html>"))
-        self.pushButtonLoad.setText(_translate("LaMainFormBase", "Load"))
+        self.pushButtonExit.setText(_translate("LaMainFormBase", "Exit"))
         self.pushButtonSave.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Save all settings of this model to a file</p></body></html>"))
         self.pushButtonSave.setText(_translate("LaMainFormBase", "Save"))
-        self.pushButtonExit.setText(_translate("LaMainFormBase", "Exit"))
-        self.progressBarCalcs.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+        self.label_5.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Shows when program is busy, or progress of tasks.</p></body></html>"))
-        self.progressBarCalcs.setFormat(_translate("LaMainFormBase", "%p%"))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This is the sum of percent of diet figures for all of the animals being used in the model.  <span style=\" font-weight:600; font-style:italic; text-decoration: underline; color:#0000ff;\">This must be 100%</span> to run!</p></body></html>"))
+        self.label_5.setText(_translate("LaMainFormBase", "Animals:"))
         self.frame_2.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt; font-weight:600;\">To learn more about a feature or field in LandUse Analyst, you can do one of four things.</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt; font-weight:600;\">To learn more about a feature or field in Landuse Analyst, you can do one of four things.</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">1. <span style=\" font-size:10pt; color:#0000ff;\">Hover over it</span> with your mouse arrow for a brief description (like you are doing now to see this)</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">2. Click the <span style=\" font-size:12pt; font-weight:600; color:#0000ff;\">?</span> in the top right of the main window and then click on the item you want detailed help for.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"> Click anywhere to make the help box go away.</p>\n"
@@ -1353,7 +1357,7 @@ class Ui_LaMainFormBase(object):
         self.model_method_box.setWhatsThis(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">LandUse Analyst currently offers three types of analysis. Here you select which one you want to use.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Landuse Analyst currently offers three types of analysis. Here you select which one you want to use.</p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Euclidean method starts looking for suitable land at the site and moves outwards from that point \'as the crow flies\'. In other words, using Euclidean geometry (or even more simply, it draws circles!)</p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Walking Time method uses the same basic principle except that it moves outward from the site based on walking time instead of distance. This method is probably the most realistic scenario to run, but it is interesting to compare the results of the three different methods.</p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Path Distance is very similar to Eucidean, except that this method considers topography when calculating distance from the site.</p></body></html>"))
@@ -1484,7 +1488,7 @@ class Ui_LaMainFormBase(object):
         self.sbDailyCalories.setWhatsThis(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">In future versions of LandUse Analyst, the demographics of the human population will be modelled, but currently the user has to supply one figure for an average number of calories required by a single person on a daily basis.</p></body></html>"))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">In future versions of Landuse Analyst, the demographics of the human population will be modelled, but currently the user has to supply one figure for an average number of calories required by a single person on a daily basis.</p></body></html>"))
         self.label6_2.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
@@ -1501,7 +1505,7 @@ class Ui_LaMainFormBase(object):
         self.sbDairyUtilisation.setWhatsThis(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">In future versions of LandUse Analyst, the demographics of the human population will be modelled, but currently the user has to supply one figure for an average number of calories required by a single person on a daily basis.</p></body></html>"))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">In future versions of Landuse Analyst, the demographics of the human population will be modelled, but currently the user has to supply one figure for an average number of calories required by a single person on a daily basis.</p></body></html>"))
         self.sbDairyUtilisation.setSuffix(_translate("LaMainFormBase", " %"))
         self.cboxLimitDairy.setText(_translate("LaMainFormBase", "Limit to"))
         self.sbLimitDairyPercent.setToolTip(_translate("LaMainFormBase", "If selected, dairy products cannot contribute more than this percentage towards the overall diet.  If this level is achieved, surplus will be reported"))
@@ -1610,8 +1614,8 @@ class Ui_LaMainFormBase(object):
         self.pbnNewCropParameter.setWhatsThis(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">In order to enable LandUse Analyst to model crops, several details must be supplied. Crop Parameter Manager asks for these specifics. As with Crop Manager, it is possible to have more than one parameter named the same thing. Again, just enter a descriptor in the Notes: field.</p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">To define different parameters for the same crop, follow the same procedure as for defining multiple crops with the same name. Let\'s say you want to have two parameters set up for Wheat as an example. The Name: field is Wheat for both, but in Notes: field, enter Optimistic for one, and Conservative for the other. Then adjust the parameters as you wish for each. Even though the name is the same, the parameters are saved uniquely. Having multiple parameters can be useful for setting up different scenarios, such as drought years, diease, catastrophic events, etc. Eventually, LandUse Analyst will have the ability to model over time, and will have these types of scenarios incorporated into the model.</p></body></html>"))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">In order to enable Landuse Analyst to model crops, several details must be supplied. Crop Parameter Manager asks for these specifics. As with Crop Manager, it is possible to have more than one parameter named the same thing. Again, just enter a descriptor in the Notes: field.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">To define different parameters for the same crop, follow the same procedure as for defining multiple crops with the same name. Let\'s say you want to have two parameters set up for Wheat as an example. The Name: field is Wheat for both, but in Notes: field, enter Optimistic for one, and Conservative for the other. Then adjust the parameters as you wish for each. Even though the name is the same, the parameters are saved uniquely. Having multiple parameters can be useful for setting up different scenarios, such as drought years, diease, catastrophic events, etc. Eventually, Landuse Analyst will have the ability to model over time, and will have these types of scenarios incorporated into the model.</p></body></html>"))
         self.pbnNewCropParameter.setText(_translate("LaMainFormBase", "Set Parameters"))
         self.pbnNewCrop.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
@@ -1662,8 +1666,8 @@ class Ui_LaMainFormBase(object):
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600; color:#0000ff;\">This value </span><span style=\" font-weight:600; font-style:italic; text-decoration: underline; color:#0000ff;\">MUST</span><span style=\" font-weight:600; color:#0000ff;\"> be the same for all animals grazing common land.</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Sometimes land is suitable for grazing by more than one type of animal. LandUse Analyst allows you to designate one suitability mask as common grazing land. Note that you can specify an animal to use both common land and specific land at the same time. If this is the case, equal preference is given to all animals grazing the common land. This is not always ideal, as it may have been the case that some animals were given preference to the common land if the other suitable land was further away than the other animals using it.</p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">A workaround for this problem is that LandUse Analyst produces classified maps of the land being used, so if it is the case that you find one animal being forced to travel much further than others, you can simply change settings to balance this. This can be accomplished by removing the other animals one at a time from using the common grazing land. It may be the case, however, that there is no ideal solution, and that they simply had to travel the extra distance!</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Sometimes land is suitable for grazing by more than one type of animal. Landuse Analyst allows you to designate one suitability mask as common grazing land. Note that you can specify an animal to use both common land and specific land at the same time. If this is the case, equal preference is given to all animals grazing the common land. This is not always ideal, as it may have been the case that some animals were given preference to the common land if the other suitable land was further away than the other animals using it.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">A workaround for this problem is that Landuse Analyst produces classified maps of the land being used, so if it is the case that you find one animal being forced to travel much further than others, you can simply change settings to balance this. This can be accomplished by removing the other animals one at a time from using the common grazing land. It may be the case, however, that there is no ideal solution, and that they simply had to travel the extra distance!</p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Note that this setting is the number of KCalories per land area unit available for grazing animals <span style=\" font-weight:600;\">per year</span>.  This value applies to all of the land selected in the common raster mask file.</p></body></html>"))
         self.label_28.setText(_translate("LaMainFormBase", "per"))
         self.cbAreaUnits.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
@@ -1692,8 +1696,8 @@ class Ui_LaMainFormBase(object):
         self.pbnNewAnimalParameter.setWhatsThis(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">In order to enable LandUse Analyst to model animals, several details must be supplied. Animal Parameter Manager asks for the specific information about the animal which tells the program how the animal was fed, and how big a part of the settlements diet it was. As with Animal Manager, it is possible to have more than one parameter named the same thing. Again, just enter a descriptor in the Notes: field.</p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">To define different parameters for the same animal, follow the same procedure as for defining multiple animals with the same name. Let\'s say you want to have two parameters set up for cows as an example. The Name: field is Cow for both, but in Notes: field, enter Optimistic for one, and Conservative for the other. Then adjust the parameters as you wish for each. Even though the name is the same, the parameters are saved uniquely. Having multiple parameters can be useful for setting up different scenarios, such as drought years, diease, catastrophic events, etc. Eventually, LandUse Analyst will have the ability to model over time, and will ahve these types of scenarios incorporated into the model.</p></body></html>"))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">In order to enable Landuse Analyst to model animals, several details must be supplied. Animal Parameter Manager asks for the specific information about the animal which tells the program how the animal was fed, and how big a part of the settlements diet it was. As with Animal Manager, it is possible to have more than one parameter named the same thing. Again, just enter a descriptor in the Notes: field.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">To define different parameters for the same animal, follow the same procedure as for defining multiple animals with the same name. Let\'s say you want to have two parameters set up for cows as an example. The Name: field is Cow for both, but in Notes: field, enter Optimistic for one, and Conservative for the other. Then adjust the parameters as you wish for each. Even though the name is the same, the parameters are saved uniquely. Having multiple parameters can be useful for setting up different scenarios, such as drought years, diease, catastrophic events, etc. Eventually, Landuse Analyst will have the ability to model over time, and will ahve these types of scenarios incorporated into the model.</p></body></html>"))
         self.pbnNewAnimalParameter.setText(_translate("LaMainFormBase", "Set Parameters"))
         self.MainTabs.setTabText(self.MainTabs.indexOf(self.animals_tab), _translate("LaMainFormBase", "Animals"))
         self.lblCropPicCalcs.setText(_translate("LaMainFormBase", "No Image\n"
@@ -1737,7 +1741,7 @@ class Ui_LaMainFormBase(object):
         self.tbReport.setToolTip(_translate("LaMainFormBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The results produced by running the model are displayed here.  This feature, however, is not yet implemented in the Alpha version of LandUse Analyst, but is planned for the Initial Release.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The results produced by running the model are displayed here.  This feature, however, is not yet implemented in the Alpha version of Landuse Analyst, but is planned for the Initial Release.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"></p></body></html>"))
         self.MainTabs.setTabText(self.MainTabs.indexOf(self.tab), _translate("LaMainFormBase", "Results"))
         self.MainTabs.setTabText(self.MainTabs.indexOf(self.tabLogs), _translate("LaMainFormBase", "Log"))
@@ -1852,8 +1856,8 @@ class Ui_LaMainFormBase(object):
         self.textHelp.setHtml(_translate("LaMainFormBase", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'.AppleSystemUIFont\'; font-size:13pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Sans Serif\'; font-size:10pt; font-weight:600;\">To learn more about a feature or field in LandUse Analyst, you can do one of four things.</span></p>\n"
+"</style></head><body style=\" font-family:\'.SF NS Text\'; font-size:13pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Sans Serif\'; font-size:10pt; font-weight:600;\">To learn more about a feature or field in Landuse Analyst, you can do one of four things.</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Sans Serif\'; font-size:9pt;\">1. </span><span style=\" font-family:\'Sans Serif\'; font-size:10pt; color:#0000ff;\">Hover over it</span><span style=\" font-family:\'Sans Serif\'; font-size:9pt;\"> with your mouse arrow for a brief description</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Sans Serif\'; font-size:9pt;\">2. Click the </span><span style=\" font-family:\'Sans Serif\'; font-size:12pt; font-weight:600; color:#0000ff;\">?</span><span style=\" font-family:\'Sans Serif\'; font-size:9pt;\"> in the top right of the main window and then click on the item you want detailed help for.</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Sans Serif\'; font-size:9pt;\"> Click anywhere to make the help box go away.</span></p>\n"

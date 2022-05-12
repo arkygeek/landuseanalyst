@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/Users/arkygeek/dev/QGisPlugins/landuseanalyst/cppArchive/src/ui/lacropparametermanagerbase.ui'
+# Form implementation generated from reading ui file '/Users/arkygeek/devcode/landuseanalyst/landuse_analyst/ui/lacropparametermanagerbase.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.6
 #
@@ -347,8 +347,8 @@ class Ui_LaCropParameterManagerBase(object):
         self.tblCropParameterProfiles.setWhatsThis(_translate("LaCropParameterManagerBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">In order to enable LandUse Analyst to model crops, several details must be supplied. Crop Parameter Manager asks for these specifics. As with Crop Manager, it is possible to have more than one parameter named the same thing. Again, just enter a descriptor in the Notes: field.</p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">To define different parameters for the same crop, follow the same procedure as for defining multiple crops with the same name. Let\'s say you want to have two parameters set up for Wheat as an example. The Name: field is Wheat for both, but in Notes: field, enter Optimistic for one, and Conservative for the other. Then adjust the parameters as you wish for each. Even though the name is the same, the parameters are saved uniquely. Having multiple parameters can be useful for setting up different scenarios, such as drought years, diease, catastrophic events, etc. Eventually, LandUse Analyst will have the ability to model over time, and will have these types of scenarios incorporated into the model.</p></body></html>"))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">In order to enable Landuse Analyst to model crops, several details must be supplied. Crop Parameter Manager asks for these specifics. As with Crop Manager, it is possible to have more than one parameter named the same thing. Again, just enter a descriptor in the Notes: field.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">To define different parameters for the same crop, follow the same procedure as for defining multiple crops with the same name. Let\'s say you want to have two parameters set up for Wheat as an example. The Name: field is Wheat for both, but in Notes: field, enter Optimistic for one, and Conservative for the other. Then adjust the parameters as you wish for each. Even though the name is the same, the parameters are saved uniquely. Having multiple parameters can be useful for setting up different scenarios, such as drought years, diease, catastrophic events, etc. Eventually, Landuse Analyst will have the ability to model over time, and will have these types of scenarios incorporated into the model.</p></body></html>"))
         item = self.tblCropParameterProfiles.horizontalHeaderItem(0)
         item.setText(_translate("LaCropParameterManagerBase", "FileName"))
         item = self.tblCropParameterProfiles.horizontalHeaderItem(1)
@@ -357,7 +357,7 @@ class Ui_LaCropParameterManagerBase(object):
         self.leName.setWhatsThis(_translate("LaCropParameterManagerBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Enter the name of the crop parameter you are defining in this field. You do not need a unique name. You can have, for example, 10 different crop parameters defined, all named \"Jericho\". LandUse Analyst uses a special method of saving the crop to eliminate the issue of duplicate filenames. This way, you can have, for example, conservative and optimistic settings for each crop at a site. </p></body></html>"))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Enter the name of the crop parameter you are defining in this field. You do not need a unique name. You can have, for example, 10 different crop parameters defined, all named \"Jericho\". Landuse Analyst uses a special method of saving the crop to eliminate the issue of duplicate filenames. This way, you can have, for example, conservative and optimistic settings for each crop at a site. </p></body></html>"))
         self.grpCropRotation.setWhatsThis(_translate("LaCropParameterManagerBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
@@ -392,7 +392,7 @@ class Ui_LaCropParameterManagerBase(object):
         self.sbFallowValue.setWhatsThis(_translate("LaCropParameterManagerBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">If the selected crop is being grown in a rotation, producing fallow land, that land can be grazed. LandUse Analyst needs to know how many calories this land can give grazing animals per year. These numbers are in KCalories per dunum/hectare. (you can select the area units)</p></body></html>"))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">If the selected crop is being grown in a rotation, producing fallow land, that land can be grazed. Landuse Analyst needs to know how many calories this land can give grazing animals per year. These numbers are in KCalories per dunum/hectare. (you can select the area units)</p></body></html>"))
         self.cbAreaUnits.setToolTip(_translate("LaCropParameterManagerBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
@@ -402,7 +402,7 @@ class Ui_LaCropParameterManagerBase(object):
         self.leDescription.setWhatsThis(_translate("LaCropParameterManagerBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Because LandUse Analyst allows more than one type of parameter to be defined, the Notes: field allows you to give a brief description of the the parameter. For example, you may have two \"Shuna\" parameters defined, and the Notes: fields could contain \"Conservative\" and \"Optimistic\" to distinguish between them.</p></body></html>"))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Because Landuse Analyst allows more than one type of parameter to be defined, the Notes: field allows you to give a brief description of the the parameter. For example, you may have two \"Shuna\" parameters defined, and the Notes: fields could contain \"Conservative\" and \"Optimistic\" to distinguish between them.</p></body></html>"))
         self.label_2.setText(_translate("LaCropParameterManagerBase", "Crop:"))
         self.cboCrop.setToolTip(_translate("LaCropParameterManagerBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
@@ -415,19 +415,19 @@ class Ui_LaCropParameterManagerBase(object):
         self.groupBoxSuitableLand.setWhatsThis(_translate("LaCropParameterManagerBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">In order for LandUse Analyst to create landuse maps, you must first create land suitability files to tell it what land is suitable for use by the crops and the crops. These files can be produced manually or automatically, but at the moment both must be done with external tools like QGis or GRASS. Future versions of Landuse Analyst will have the required features of these programs incorporated into it, but for now this step must be done externally. </p></body></html>"))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">In order for Landuse Analyst to create landuse maps, you must first create land suitability files to tell it what land is suitable for use by the crops and the crops. These files can be produced manually or automatically, but at the moment both must be done with external tools like QGis or GRASS. Future versions of Landuse Analyst will have the required features of these programs incorporated into it, but for now this step must be done externally. </p></body></html>"))
         self.groupBoxSuitableLand.setTitle(_translate("LaCropParameterManagerBase", "Suitability Masks"))
         self.checkBoxUseCommonLand.setToolTip(_translate("LaCropParameterManagerBase", "binary raster named: pigmask"))
         self.checkBoxUseCommonLand.setWhatsThis(_translate("LaCropParameterManagerBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Sometimes land is suitable for growing more than one type of crop. LandUse Analyst allows you to designate one suitability mask as common. Note that you can specify a crop to use both common land and specific land at the same time. If this is the case, equal preference is given to all crops using the common land.</p></body></html>"))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Sometimes land is suitable for growing more than one type of crop. Landuse Analyst allows you to designate one suitability mask as common. Note that you can specify a crop to use both common land and specific land at the same time. If this is the case, equal preference is given to all crops using the common land.</p></body></html>"))
         self.checkBoxUseCommonLand.setText(_translate("LaCropParameterManagerBase", "Common Land"))
         self.checkBoxUseSpecificLand.setToolTip(_translate("LaCropParameterManagerBase", "binary raster named: pigmask"))
         self.checkBoxUseSpecificLand.setWhatsThis(_translate("LaCropParameterManagerBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Sometimes you may want to specify that land is suitable for growing only one type of crop. LandUse Analyst allows you to designate a land suitability mask as being unique to a certain crop. Note that you can specify a crop to use both common land and specific land at the same time. For more detailed information on this, see the help section on Crop Masks Common.</p></body></html>"))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Sometimes you may want to specify that land is suitable for growing only one type of crop. Landuse Analyst allows you to designate a land suitability mask as being unique to a certain crop. Note that you can specify a crop to use both common land and specific land at the same time. For more detailed information on this, see the help section on Crop Masks Common.</p></body></html>"))
         self.checkBoxUseSpecificLand.setText(_translate("LaCropParameterManagerBase", "Specific Land"))
         self.label_3.setText(_translate("LaCropParameterManagerBase", "Raster\n"
 "Mask"))
@@ -444,7 +444,7 @@ class Ui_LaCropParameterManagerBase(object):
         self.pbnApply.setWhatsThis(_translate("LaCropParameterManagerBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">After completing all fields to define a parameter, you <span style=\" font-weight:600;\">MUST</span> click the Apply button to save it. The name does not have to be unique, as LandUse Analyst has a special way of saving parameters to allow for duplicate parameter names. It is helpful, however, to utilize the Notes field to distinguish between same-named parameter definitions.</p></body></html>"))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">After completing all fields to define a parameter, you <span style=\" font-weight:600;\">MUST</span> click the Apply button to save it. The name does not have to be unique, as Landuse Analyst has a special way of saving parameters to allow for duplicate parameter names. It is helpful, however, to utilize the Notes field to distinguish between same-named parameter definitions.</p></body></html>"))
         self.pbnApply.setText(_translate("LaCropParameterManagerBase", "Apply"))
         self.pbnClose.setToolTip(_translate("LaCropParameterManagerBase", "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
