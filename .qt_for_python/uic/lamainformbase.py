@@ -14,14 +14,14 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_LaMainFormBase(object):
     def setupUi(self, LaMainFormBase):
         LaMainFormBase.setObjectName("LaMainFormBase")
-        LaMainFormBase.resize(1089, 783)
+        LaMainFormBase.resize(1090, 783)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(LaMainFormBase.sizePolicy().hasHeightForWidth())
         LaMainFormBase.setSizePolicy(sizePolicy)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(":/resourcesl/a_icon_small.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(":/resources/la_icon_small.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         LaMainFormBase.setWindowIcon(icon)
         self.gridlayout = QtWidgets.QGridLayout(LaMainFormBase)
         self.gridlayout.setObjectName("gridlayout")
@@ -1852,7 +1852,7 @@ class Ui_LaMainFormBase(object):
         self.textHelp.setHtml(_translate("LaMainFormBase", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'.SF NS Text\'; font-size:13pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-family:\'.AppleSystemUIFont\'; font-size:13pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Sans Serif\'; font-size:10pt; font-weight:600;\">To learn more about a feature or field in LandUse Analyst, you can do one of four things.</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Sans Serif\'; font-size:9pt;\">1. </span><span style=\" font-family:\'Sans Serif\'; font-size:10pt; color:#0000ff;\">Hover over it</span><span style=\" font-family:\'Sans Serif\'; font-size:9pt;\"> with your mouse arrow for a brief description</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Sans Serif\'; font-size:9pt;\">2. Click the </span><span style=\" font-family:\'Sans Serif\'; font-size:12pt; font-weight:600; color:#0000ff;\">?</span><span style=\" font-family:\'Sans Serif\'; font-size:9pt;\"> in the top right of the main window and then click on the item you want detailed help for.</span></p>\n"
