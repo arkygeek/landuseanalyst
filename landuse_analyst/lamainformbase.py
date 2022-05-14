@@ -56,7 +56,9 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         # make the form's buttons work
         self.pushButtonExit.clicked.connect(self.close)
         self.pbnNewCrop.clicked.connect(self.on_clicked_pbnNewCrop)
-
+        self.pbnNewCropParameter.clicked.connect(self.on_clicked_pbnNewCropParameter)
+        self.pbnNewAnimal.clicked.connect(self.on_clicked_pbnNewAnimal)
+        self.pbnNewAnimalParameter.clicked.connect(self.on_clicked_pbnNewAnimalParameter)
 
         # set labels that for pix to scaled so images display properly
         self.lblCropPix.setScaledContents(True)
@@ -150,10 +152,20 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
 
 
     def on_clicked_pbnNewCrop(self):
-        qDebug("open window")
-        print("open window printed")
+        print("open Manage Crops window printed")
         self.tbReport.append("Manage Crops button clicked")
+        
+    def on_clicked_pbnNewCropParameter(self):
+        print("open Crop Parameters window")
+        self.tbReport.append("Manage Crop Parameters button clicked")
 
+    def on_clicked_pbnNewAnimal(self):
+        print("open Manage Animals window printed")
+        self.tbReport.append("Manage Animals button clicked")
+        
+    def on_clicked_pbnNewAnimalParameter(self):
+        print("open Animal Parameters window")
+        self.tbReport.append("Manage Animal Parameters button clicked")
 
     def on_sliderDiet_valueChanged(self,  theValue):
         myMinString = str(theValue)
