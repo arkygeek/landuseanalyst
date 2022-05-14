@@ -19,13 +19,15 @@
 from qgis.PyQt import QtWidgets
 from qgis.PyQt import uic
 from qgis.PyQt import QtCore
-
-from qgis.PyQt.QtCore import QFile
+from qgis.PyQt.QtWidgets import QDialog
+from qgis.PyQt.QtCore import QFile, qDebug
 from qgis.PyQt.QtCore import QTextStream
 
 import os
 
 from .lib.la import *  # my own classes
+from .ui.lacropmanagerbase import LaCropManagerBase
+
 
 # This loads your .ui file so that PyQt can
 # populate your plugin with the elements from Qt Designer
@@ -34,6 +36,8 @@ FORM_CLASS, _ = uic.loadUiType(os.path.join(
 
 
 class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
+    pass
+
     def __init__(self, parent=None):
         """Constructor for LaMainFormBase (.ui file)"""
 
@@ -49,8 +53,10 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
 
         # everything below this Jason did
 
-        # make the Exit button work
+        # make the form's buttons work
         self.pushButtonExit.clicked.connect(self.close)
+        self.pbnNewCrop.clicked.connect(self.on_clicked_pbnNewCrop)
+
 
         # set labels that for pix to scaled so images display properly
         self.lblCropPix.setScaledContents(True)
@@ -84,14 +90,12 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
 
         # the following SHOULD load from XML files that define animals and crops
         # but probably will use either JSON, or store it in a database
-
         # loadAnimals()
         # loadCrops()
 
         # cbAreaUnits needs populating with values; Dunums & Hectares for now...
         self.cbAreaUnits.addItem("Dunum")
         self.cbAreaUnits.addItem("Hectare")
-
         self.cbCommonLandEnergyType.addItem("KCalories")
         self.cbCommonLandEnergyType.addItem("TDN")
 
@@ -130,7 +134,10 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         connect(cbDebug, SIGNAL(clicked()),
             this, SLOT(on_cbDebug_clicked())) """
 
-    # this reads loads and displays help file corresponding to selected item in helpTree
+        # This is the end of the constructor
+
+
+    # read/load/display help file corresponding to selected item in helpTree
     @QtCore.pyqtSlot(QtWidgets.QTreeWidgetItem, QtWidgets.QTreeWidgetItem)
     def current_item_changed(self, theCurrentItem, thePreviousItem):
         self.tbReport.append("Item clicked in help browser: " + theCurrentItem.text(0))
@@ -140,6 +147,12 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
 
         self.textHelp.setHtml(istream.readAll())
         myQFile.close()
+
+
+    def on_clicked_pbnNewCrop(self):
+        qDebug("open window")
+        print("open window printed")
+        self.tbReport.append("Manage Crops button clicked")
 
 
     def on_sliderDiet_valueChanged(self,  theValue):
