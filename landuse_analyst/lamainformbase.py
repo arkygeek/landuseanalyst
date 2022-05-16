@@ -99,30 +99,38 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         self.listWidgetCalculationsAnimal.clear()
         # endregion
         
+        # region LOAD CROPS AND ANIMALS
         # the following SHOULD load from XML files that define animals and crops
         # but probably will use either JSON, or store it in a database
         # The following could possibly come from utils? - JJ
-        
+
         # loadAnimals()
         # loadCrops()
+        # endregion
 
+        # region COMBO BOX ITEMS LOADED
         # cbAreaUnits needs populating with values; Dunums & Hectares for now...
         self.cbAreaUnits.addItem("Dunum")
         self.cbAreaUnits.addItem("Hectare")
         self.cbCommonLandEnergyType.addItem("KCalories")
         self.cbCommonLandEnergyType.addItem("TDN")
-
+        # endregion
+        
+        # region DIET SLIDERS CONNECTED
         # the diet sliders get connected here
         self.sliderDiet.valueChanged.connect(self.on_sliderDiet_valueChanged)
         self.sliderMeat.valueChanged.connect(self.on_sliderMeat_valueChanged)
         self.sliderCrop.valueChanged.connect(self.on_sliderCrop_valueChanged)
-
+        # endregion
+        
+        # connect the change in tree to it's def
         self.treeHelp.currentItemChanged.connect(self.current_item_changed)
 
         """ this is c++ code that needs translation
         QStringList myWholeList
 
-        setDietLabels()
+        setDietLabels()  # <-- This is actually the modelling here!
+         
         # See the qtdocs on signals and slots to understand below.
         # we connect the currentItemChanged signal that a tree view emits when you
         # click on an item to a little method that sets the help viewer contents
@@ -145,8 +153,8 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         connect(tblCrops, SIGNAL(cellChanged( int,int)),
             this, SLOT(cropCalcSelectionChanged( int,int)))
         connect(cbDebug, SIGNAL(clicked()),
-            this, SLOT(on_cbDebug_clicked())) """
-
+            this, SLOT(on_cbDebug_clicked())) 
+        """
         # This is the end of the constructor
 
 
