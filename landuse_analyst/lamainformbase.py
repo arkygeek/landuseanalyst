@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# #region HEADER
 """****************************************************************
  LanduseAnalyst - A QGIS plugin for determining the extent of the catchment area
  of a settlement (with respect to required land needed for food production).
@@ -15,19 +16,21 @@
    the Free Software Foundation; either version 3 of the License, or
    (at your option) any later version.
 ***************************************************************"""
+# #endregion
 
+# # region imports
 from qgis.PyQt import QtWidgets
 from qgis.PyQt import uic
 from qgis.PyQt import QtCore
 from qgis.PyQt.QtWidgets import QDialog
-from qgis.PyQt.QtCore import QFile, qDebug
+from qgis.PyQt.QtCore import QFile
 from qgis.PyQt.QtCore import QTextStream
 
 import os
 
 from .lib.la import *  # my own classes
 from .ui.lacropmanagerbase import LaCropManagerBase
-
+# #endregion
 
 # This loads your .ui file so that PyQt can
 # populate your plugin with the elements from Qt Designer
@@ -40,7 +43,6 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
 
     def __init__(self, parent=None):
         """Constructor for LaMainFormBase (.ui file)"""
-
         super(LaMainFormBase, self).__init__(parent)
 
         """ Set up the user interface from Designer through FORM_CLASS.
@@ -51,20 +53,25 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         """
         self.setupUi(self)
 
-        # everything below this Jason did
+        # NOTE everything below this Jason did
 
         # make the form's buttons work
+        # region PUSH BUTTONS
         self.pushButtonExit.clicked.connect(self.close)
         self.pbnNewCrop.clicked.connect(self.on_clicked_pbnNewCrop)
         self.pbnNewCropParameter.clicked.connect(self.on_clicked_pbnNewCropParameter)
         self.pbnNewAnimal.clicked.connect(self.on_clicked_pbnNewAnimal)
         self.pbnNewAnimalParameter.clicked.connect(self.on_clicked_pbnNewAnimalParameter)
-
+        #endregion
+        
         # set labels that for pix to scaled so images display properly
-        self.lblCropPix.setScaledContents(True)
+        # region INIT_PIXMAP_SCALING
+        self.lblCropPix.setScaledContents(True)  
         self.lblAnimalPix.setScaledContents(True)
         self.lblCropPicCalcs.setScaledContents(True)
-        self.lblAnimalPicCalcs.setScaledContents(True)
+        self.lblAnimalPicCalcs.setScaledContents(True) 
+        #endregion
+        
         """ NOTES for setting the resize-mode for each column:
             The first section must stretch to take up the available space,
             whilst the last two sections just resize to their contents:
@@ -82,6 +89,7 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
             header.setSectionResizeMode(2, QtWidgets.QHeaderView.ResizeToContents)
         """
 
+        # region PREPARE FORM DISPLAY PANELS
         self.tblAnimals.horizontalHeader().hide()
         self.tblAnimals.verticalHeader().hide()
         self.tblAnimals.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView.Stretch)
@@ -89,9 +97,12 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         self.tblCrops.verticalHeader().hide()
         self.tblCrops.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView.Stretch)
         self.listWidgetCalculationsAnimal.clear()
-
+        # endregion
+        
         # the following SHOULD load from XML files that define animals and crops
         # but probably will use either JSON, or store it in a database
+        # The following could possibly come from utils? - JJ
+        
         # loadAnimals()
         # loadCrops()
 
@@ -154,6 +165,17 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
     def on_clicked_pbnNewCrop(self):
         print("open Manage Crops window printed")
         self.tbReport.append("Manage Crops button clicked")
+        
+        Ui_CropManagerBase, _ = uic.loadUiType(
+            os.path.join(
+                os.path.dirname(__file__), 
+                'ui/lacropmanagerbase.ui'
+                )
+            )
+        
+        super(LaCropManagerBase, self).__init__()
+        self.setupUi(self)
+        
         
     def on_clicked_pbnNewCropParameter(self):
         print("open Crop Parameters window")
