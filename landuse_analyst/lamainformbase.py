@@ -34,8 +34,10 @@ from .ui.lacropmanagerbase import LaCropManagerBase
 
 # This loads your .ui file so that PyQt can
 # populate your plugin with the elements from Qt Designer
-FORM_CLASS, _ = uic.loadUiType(os.path.join(
-    os.path.dirname(__file__), 'lamainformbase.ui'))
+FORM_CLASS, _ = uic.loadUiType(
+                    os.path.join(
+                        os.path.dirname(__file__), 
+                        'lamainformbase.ui'))
 
 
 class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
@@ -170,39 +172,42 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         myQFile.close()
 
 
-    def on_clicked_pbnNewCrop(self):
+    def on_clicked_pbnNewCrop(self, parent=None):
         print("open Manage Crops window printed")
         self.tbReport.append("Manage Crops button clicked")
         
         Ui_CropManagerBase, _ = uic.loadUiType(
             os.path.join(
                 os.path.dirname(__file__), 
-                'ui/lacropmanagerbase.ui'
-                )
-            )
+                'ui/lacropmanagerbase.ui'))
         
-        super(LaCropManagerBase, self).__init__()
-        self.setupUi(self)
-        
-        
+        super(self, Ui_CropManagerBase).__init__(parent)
+        self.setupUi(Ui_CropManagerBase)
+        Ui_CropManagerBase.show()
+        Ui_CropManagerBase.exec()
+
+
     def on_clicked_pbnNewCropParameter(self):
         print("open Crop Parameters window")
         self.tbReport.append("Manage Crop Parameters button clicked")
 
+
     def on_clicked_pbnNewAnimal(self):
         print("open Manage Animals window printed")
         self.tbReport.append("Manage Animals button clicked")
+
         
     def on_clicked_pbnNewAnimalParameter(self):
         print("open Animal Parameters window")
         self.tbReport.append("Manage Animal Parameters button clicked")
+
 
     def on_sliderDiet_valueChanged(self,  theValue):
         myMinString = str(theValue)
         myMaxString = str(100-theValue)
         self.labelMeatPercent.setText(myMinString)
         self.labelCropPercent.setText(myMaxString)
-        # setDietLabels()
+        # setDietLabels()  # recalculates model (to update the diet labels!)s
 
 
     def on_sliderMeat_valueChanged(self,  theValue):
@@ -210,7 +215,7 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         myMaxString = str(100-theValue)
         self.labelMeatWildPercent.setText(myMinString)
         self.labelMeatTamePercent.setText(myMaxString)
-        # setDietLabels()
+        # setDietLabels()  # recalculates model (to update the diet labels!)
 
 
     def on_sliderCrop_valueChanged(self,  theValue):
@@ -218,7 +223,7 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         myMaxString = str(100-theValue)
         self.labelCropWildPercent.setText(myMinString)
         self.labelCropTamePercent.setText(myMaxString)
-        # setDietLabels()
+        # setDietLabels()  # recalculates model (to update the diet labels!)
 
 
     # Set's the model.  All data comes from laMainForm EXCEPT for

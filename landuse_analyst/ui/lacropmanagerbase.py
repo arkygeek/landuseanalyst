@@ -36,7 +36,7 @@ from qgis.PyQt.QtCore import Qt, QPoint, QRect, QObject, QEvent, pyqtSignal, pyq
 class LaCropManagerBase(QWidget):
 	def __init__(self, parent=None):
 		super().__init__(parent=parent) # Call the inherited classes __init__ method
-		self.ui = uic.loadUi("landuse_analyst/ui/lacropmanagerbase.ui", self) # Load the .ui file
+		self.ui = uic.loadUi("lacropmanagerbase.ui", self) # Load the .ui file
 
 
 		self.initUI()
