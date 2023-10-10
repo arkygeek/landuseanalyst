@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# #region HEADER
 """****************************************************************
  LanduseAnalyst - A QGIS plugin for determining the extent of the catchment area
  of a settlement (with respect to required land needed for food production).
@@ -15,24 +16,28 @@
    the Free Software Foundation; either version 3 of the License, or
    (at your option) any later version.
 ***************************************************************"""
+# #endregion
 
+# # region imports
 from qgis.PyQt import QtWidgets
 from qgis.PyQt import uic
 from qgis.PyQt import QtCore
 from qgis.PyQt.QtWidgets import QDialog
-from qgis.PyQt.QtCore import QFile, qDebug
+from qgis.PyQt.QtCore import QFile
 from qgis.PyQt.QtCore import QTextStream
 
 import os
 
 from .lib.la import *  # my own classes
 from .ui.lacropmanagerbase import LaCropManagerBase
-
+# #endregion
 
 # This loads your .ui file so that PyQt can
 # populate your plugin with the elements from Qt Designer
-FORM_CLASS, _ = uic.loadUiType(os.path.join(
-    os.path.dirname(__file__), 'lamainformbase.ui'))
+FORM_CLASS, _ = uic.loadUiType(
+                    os.path.join(
+                        os.path.dirname(__file__),
+                        'lamainformbase.ui'))
 
 
 class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
@@ -40,7 +45,6 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
 
     def __init__(self, parent=None):
         """Constructor for LaMainFormBase (.ui file)"""
-
         super(LaMainFormBase, self).__init__(parent)
 
         """ Set up the user interface from Designer through FORM_CLASS.
@@ -51,18 +55,25 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         """
         self.setupUi(self)
 
-        # everything below this Jason did
+        # NOTE everything below this Jason did
 
         # make the form's buttons work
+        # region PUSH BUTTONS
         self.pushButtonExit.clicked.connect(self.close)
         self.pbnNewCrop.clicked.connect(self.on_clicked_pbnNewCrop)
-
+        self.pbnNewCropParameter.clicked.connect(self.on_clicked_pbnNewCropParameter)
+        self.pbnNewAnimal.clicked.connect(self.on_clicked_pbnNewAnimal)
+        self.pbnNewAnimalParameter.clicked.connect(self.on_clicked_pbnNewAnimalParameter)
+        #endregion
 
         # set labels that for pix to scaled so images display properly
+        # region INIT_PIXMAP_SCALING
         self.lblCropPix.setScaledContents(True)
         self.lblAnimalPix.setScaledContents(True)
         self.lblCropPicCalcs.setScaledContents(True)
         self.lblAnimalPicCalcs.setScaledContents(True)
+        #endregion
+
         """ NOTES for setting the resize-mode for each column:
             The first section must stretch to take up the available space,
             whilst the last two sections just resize to their contents:
@@ -80,6 +91,7 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
             header.setSectionResizeMode(2, QtWidgets.QHeaderView.ResizeToContents)
         """
 
+        # region PREPARE FORM DISPLAY PANELS
         self.tblAnimals.horizontalHeader().hide()
         self.tblAnimals.verticalHeader().hide()
         self.tblAnimals.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView.Stretch)
@@ -87,29 +99,40 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         self.tblCrops.verticalHeader().hide()
         self.tblCrops.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView.Stretch)
         self.listWidgetCalculationsAnimal.clear()
+        # endregion
 
+        # region LOAD CROPS AND ANIMALS
         # the following SHOULD load from XML files that define animals and crops
         # but probably will use either JSON, or store it in a database
+        # The following could possibly come from utils? - JJ
+
         # loadAnimals()
         # loadCrops()
+        # endregion
 
+        # region COMBO BOX ITEMS LOADED
         # cbAreaUnits needs populating with values; Dunums & Hectares for now...
         self.cbAreaUnits.addItem("Dunum")
         self.cbAreaUnits.addItem("Hectare")
         self.cbCommonLandEnergyType.addItem("KCalories")
         self.cbCommonLandEnergyType.addItem("TDN")
+        # endregion
 
+        # region DIET SLIDERS CONNECTED
         # the diet sliders get connected here
         self.sliderDiet.valueChanged.connect(self.on_sliderDiet_valueChanged)
         self.sliderMeat.valueChanged.connect(self.on_sliderMeat_valueChanged)
         self.sliderCrop.valueChanged.connect(self.on_sliderCrop_valueChanged)
+        # endregion
 
+        # connect the change in tree to it's def
         self.treeHelp.currentItemChanged.connect(self.current_item_changed)
 
         """ this is c++ code that needs translation
         QStringList myWholeList
 
-        setDietLabels()
+        setDietLabels()  # <-- This is actually the modelling here!
+
         # See the qtdocs on signals and slots to understand below.
         # we connect the currentItemChanged signal that a tree view emits when you
         # click on an item to a little method that sets the help viewer contents
@@ -164,10 +187,34 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         myQFile.close()
 
 
-    def on_clicked_pbnNewCrop(self):
-        qDebug("open window")
-        print("open window printed")
+    def on_clicked_pbnNewCrop(self, parent=None):
+        print("open Manage Crops window printed")
         self.tbReport.append("Manage Crops button clicked")
+
+        Ui_CropManagerBase, _ = uic.loadUiType(
+            os.path.join(
+                os.path.dirname(__file__),
+                'ui/lacropmanagerbase.ui'))
+
+        super(self, Ui_CropManagerBase).__init__(parent)
+        self.setupUi(Ui_CropManagerBase)
+        Ui_CropManagerBase.show()
+        Ui_CropManagerBase.exec()
+
+
+    def on_clicked_pbnNewCropParameter(self):
+        print("open Crop Parameters window")
+        self.tbReport.append("Manage Crop Parameters button clicked")
+
+
+    def on_clicked_pbnNewAnimal(self):
+        print("open Manage Animals window printed")
+        self.tbReport.append("Manage Animals button clicked")
+
+
+    def on_clicked_pbnNewAnimalParameter(self):
+        print("open Animal Parameters window")
+        self.tbReport.append("Manage Animal Parameters button clicked")
 
 
     def on_sliderDiet_valueChanged(self,  theValue):
@@ -175,7 +222,7 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         myMaxString = str(100-theValue)
         self.labelMeatPercent.setText(myMinString)
         self.labelCropPercent.setText(myMaxString)
-        # setDietLabels()
+        # setDietLabels()  # recalculates model (to update the diet labels!)s
 
 
     def on_sliderMeat_valueChanged(self,  theValue):
@@ -183,7 +230,7 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         myMaxString = str(100-theValue)
         self.labelMeatWildPercent.setText(myMinString)
         self.labelMeatTamePercent.setText(myMaxString)
-        # setDietLabels()
+        # setDietLabels()  # recalculates model (to update the diet labels!)
 
 
     def on_sliderCrop_valueChanged(self,  theValue):
@@ -191,7 +238,7 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         myMaxString = str(100-theValue)
         self.labelCropWildPercent.setText(myMinString)
         self.labelCropTamePercent.setText(myMaxString)
-        # setDietLabels()
+        # setDietLabels()  # recalculates model (to update the diet labels!)
 
 
     # Set's the model.  All data comes from laMainForm EXCEPT for
