@@ -49,3 +49,9 @@ class laanimalparameterbase(QWidget):
 
 	def __str__(self):
  		return
+
+
+
+
+
+

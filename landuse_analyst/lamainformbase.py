@@ -132,7 +132,22 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         connect(tblCrops, SIGNAL(cellChanged( int,int)),
             this, SLOT(cropCalcSelectionChanged( int,int)))
         connect(cbDebug, SIGNAL(clicked()),
-            this, SLOT(on_cbDebug_clicked())) """
+            this, SLOT(on_cbDebug_clicked()))
+
+        # the above code (roughly) ported to python is shown below - Jason
+
+        # Connect signals to slots
+        self.treeHelp.currentItemChanged.connect(self.helpItemClicked)
+        self.listWidgetCalculationsCrop.currentItemChanged.connect(self.cropCalcClicked)
+        self.listWidgetCalculationsAnimal.currentItemChanged.connect(self.animalCalcClicked)
+        self.pushButtonExit.clicked.connect(qApp.quit)  #not right
+        self.tblAnimals.cellClicked.connect(self.animalCellClicked)
+        self.tblAnimals.cellChanged.connect(self.animalCalcSelectionChanged)
+        self.tblCrops.cellClicked.connect(self.cropCellClicked)
+        self.tblCrops.cellChanged.connect(self.cropCalcSelectionChanged)
+        self.cbDebug.clicked.connect(self.on_cbDebug_clicked)
+
+        """
 
         # This is the end of the constructor
 
