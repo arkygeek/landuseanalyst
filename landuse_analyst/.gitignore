@@ -1,9 +1,5 @@
-.DS_Store
-*/.DS_Store
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
-__pycache__
 *.py[cod]
 *$py.class
 
@@ -18,7 +14,6 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
 lib64/
 parts/
 sdist/
@@ -129,5 +124,13 @@ venv.bak/
 .dmypy.json
 dmypy.json
 
+# Pyre type checker
+.pyre/
+resources/example_projects/tour.gpkg
+resources/example_projects/tour.gpkg-shm
+resources/example_projects/tour.gpkg-wal
+resources/example_projects/farm_scene.qgz
+resources/img/logo/animation-workbench-logo.svg.2022_03_09_22_56_44.0.svg
+resources/example_projects/farm_scene.qgz
+resources/synfig/*.png
 .qt_for_python
-landuse_analyst/gui/__pycache__/

@@ -1,0 +1,16 @@
+{
+  "python.analysis.extraPaths": [
+    "/Applications/QGIS.app/Contents/Resources/python",
+    "./landuse_analyst/Support/QGIS/QGIS3/profiles/default/python/plugins/python/plugins/landuse_analyst"
+  ],
+  "python.formatting.provider": "black",
+  "maptz.regionfolder": {
+    "[python]": {        
+        "defaultFoldStartRegex": "\\#[\\s]*#region\\(collapsed\\)[\\s]*(.*)",
+        "foldEnd": "# #endregion",
+        "foldEndRegex": "\\#[\\s]*#endregion",
+        "foldStart": "# #region [NAME]",
+        "foldStartRegex": "\\#[\\s]*#region[\\s]*(.*)"
+    }
+  }
+}
