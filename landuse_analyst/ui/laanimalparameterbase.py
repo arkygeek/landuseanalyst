@@ -30,7 +30,7 @@ from PyQt5.QtGui import QPainter, QBrush, QPen, QColor, QFont, QIcon
 from PyQt5.QtCore import Qt, QPoint, QRect, QObject, QEvent, pyqtSignal, pyqtSlot, QSize, QDir
 
 ## IMPORTS:
-# from landuse_analyst.ui import laanimalparameterbase
+from landuse_analyst.ui import laanimalparameterbase
 
 
 class laanimalparameterbase(QWidget):
@@ -49,9 +49,3 @@ class laanimalparameterbase(QWidget):
 
 	def __str__(self):
  		return
-
-
-
-
-
-

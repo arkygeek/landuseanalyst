@@ -29,8 +29,8 @@ from PyQt5.QtWidgets import QApplication, QFileSystemModel, QTreeView, QWidget, 
 from PyQt5.QtGui import QPainter, QBrush, QPen, QColor, QFont, QIcon
 from PyQt5.QtCore import Qt, QPoint, QRect, QObject, QEvent, pyqtSignal, pyqtSlot, QSize, QDir
 
-## IMPORTS:
-# from landuse_analyst.ui import laReportTargets
+# IMPORTS:
+from landuse_analyst.ui import laReportTargets
 
 
 class laReportTargets(QWidget):

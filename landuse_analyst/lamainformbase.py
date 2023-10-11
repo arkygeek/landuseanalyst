@@ -30,7 +30,7 @@ import os
 
 from .lib.la import *  # my own classes
 from .ui.lacropmanagerbase import LaCropManagerBase
-# #endregion
+#endregion
 
 # This loads your .ui file so that PyQt can
 # populate your plugin with the elements from Qt Designer

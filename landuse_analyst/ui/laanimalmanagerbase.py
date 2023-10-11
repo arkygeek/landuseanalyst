@@ -20,7 +20,7 @@
 
 import sys
 from datetime import datetime, timezone, timedelta
-# import numpy as np
+import numpy as np
 from enum import Enum
 
 from PyQt5 import QtGui, QtWidgets, uic

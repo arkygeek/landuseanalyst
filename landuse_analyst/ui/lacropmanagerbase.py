@@ -20,7 +20,7 @@
 
 import sys
 from datetime import datetime, timezone, timedelta
-# import numpy as np
+import numpy as np
 from enum import Enum
 
 from qgis.PyQt import QtGui, QtWidgets, uic
@@ -30,7 +30,7 @@ from qgis.PyQt.QtGui import QPainter, QBrush, QPen, QColor, QFont, QIcon
 from qgis.PyQt.QtCore import Qt, QPoint, QRect, QObject, QEvent, pyqtSignal, pyqtSlot, QSize, QDir
 
 ## IMPORTS:
-# from landuse_analyst.ui import lacropmanagerbase
+from landuse_analyst.ui import lacropmanagerbase
 
 
 class LaCropManagerBase(QWidget):
