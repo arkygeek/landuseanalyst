@@ -28,5 +28,5 @@ def classFactory(iface):  # pylint: disable=invalid-name
     :type iface: QgsInterface
     """
     #
-    from .gui.lamainform import  LaMainForm
+    from la.gui.lamainform import  LaMainForm
     return LaMainForm(iface)

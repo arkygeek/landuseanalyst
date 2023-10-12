@@ -1,7 +1,34 @@
+"""
+lamodelreports.py - Contains the LaModelReport and LaModelReportTableModel classes.
+
+Author: [Your Name]
+Date created: [DD/MM/YYYY]
+Python Version: [X.Y.Z]
+PyQt5 Version: [X.Y.Z]
+
+Description: This file contains the LaModelReport and LaModelReportTableModel
+             classes, and are used to manage and display reports in the Landuse
+             Analyst plugin for QGIS.
+
+Classes:
+- LaModelReport: Represents a single report, with a name and description.
+- LaModelReportTableModel: A table model used to display a list of LaModelReport objects.
+
+Usage: This file is used by other modules in the Land Use Analyst plugin to manage and display reports.
+
+Notes: This file requires PyQt5 to be installed.
+
+Issues: None known.
+
+License: [Your license information (if applicable)]
+"""
+
+
 from PyQt5.QtCore import Qt, QModelIndex, QAbstractTableModel
 from PyQt5.QtGui import QBrush, QColor
 
-from lib.la import 
+from la.lib.lamodel import LaModel
+from la.gui.lamainform import LaMainForm
 
 
 class LaModelReportTableModel(QAbstractTableModel):
@@ -62,7 +89,7 @@ class LaModelReportTableModel(QAbstractTableModel):
         return self.reports[index]
 
 
-class LaModelReports:
+class LaModelReport:
     def __init__(self):
         self.reports = []
 
@@ -81,26 +108,3 @@ class LaModelReports:
 
     def getReportTableModel(self):
         return LaModelReportTableModel()
-
-"""
-
-LaModelReports class is rewritten in Python using PyQt5.
-
-The LaModelReportTableModel class is also included as a subclass of
-    QAbstractTableModel that provides the model for the model report table view.
-
-LaModelReportTableModel class defines the necessary methods for a table model,
-    including rowCount, columnCount, data, headerData, addReport, removeReport,
-    and getReport.
-
-    These methods are used to populate the model report table view with data and
-    manage the model report data.
-
-The LaModelReports class defines the necessary methods for managing the model
-    report data, including addReport, removeReport, getReport, getReportCount,
-    and getReportTableModel.
-
-    These methods are used to add, remove, and retrieve model report data from
-    the reports list, as well as to retrieve the model report table model.
-
-"""

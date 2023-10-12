@@ -1,7 +1,7 @@
 import sys
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtCore import QCoreApplication, QFile
-from lamainform import LaMainForm
+from la.gui.lamainform import LaMainForm
 
 # the following two imports should be enabled if splashscreen is enabled
 # from PyQt5.QtWidgets import QSplashScreen
