@@ -1,5 +1,5 @@
 # laanimalparameter.py
-from PyQt5.QtCore import QObject, pyqtProperty, pyqtSignal, pyqtSlot, Qt
+from qgis.PyQt.QtCore import QObject, pyqtProperty, pyqtSignal, pyqtSlot, Qt
 from la.lib.laserialisable import LaSerialisable
 from la.lib.laguid import LaGuid
 from la.lib.la import La

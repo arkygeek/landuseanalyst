@@ -17,14 +17,22 @@ from qgis.PyQt.QtWidgets import (QAction, QCheckBox, QComboBox, QHeaderView,
 
 # Importing all resources from the la.resources module
 from la.resources import *
+# Importing all classes from the la.gui module using a wildcard import
+from la.gui import *
 
-# Importing various classes from the la.gui module
-from la.gui.lamodelreport import LaModelReport
+# Importing all classes from the la.ui module using a wildcard import
+from la.ui import *
 
-# Importing various classes from the la.ui module
-from la.ui.lamainformbase import LaMainFormBase
+# Importing all classes from the la.lib module using a wildcard import
+from la.lib import *
 
-# Importing various classes from the la.lib module
+# # Importing various classes from the la.gui module
+# from la.gui.lamodelreport import LaModelReport
+
+# # Importing various classes from the la.ui module
+# from la.ui.lamainformbase import LaMainFormBase
+
+# # Importing various classes from the la.lib module
 from la.lib.laanimal import LaAnimal
 from la.lib.laanimalparameter import LaAnimalParameter
 from la.lib.lacrop import LaCrop
@@ -426,9 +434,9 @@ class LanduseAnalyst(QMainWindow):
 
 
 
-# from PyQt5.QtCore import Qt, QSettings, QTranslator, QCoreApplication
-# from PyQt5.QtGui import QIcon
-# from PyQt5.QtWidgets import QAction, QMainWindow, QFileDialog, QMessageBox
+# from qgis.PyQt.QtCore import Qt, QSettings, QTranslator, QCoreApplication
+# from qgis.PyQt.QtGui import QIcon
+# from qgis.PyQt.QtWidgets import QAction, QMainWindow, QFileDialog, QMessageBox
 
 # from la.ui.lamainformbase import LaMainFormBase
 # from la.gui.lacropmanager import LaCropManager

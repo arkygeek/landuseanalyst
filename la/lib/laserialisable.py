@@ -1,5 +1,5 @@
 # laserialisable.py
-from PyQt5.QtCore import QObject, pyqtProperty, pyqtSignal, pyqtSlot, Qt
+from qgis.PyQt.QtCore import QObject, pyqtProperty, pyqtSignal, pyqtSlot, Qt
 import pickle
 
 class LaSerialisable(QObject):

@@ -23,11 +23,11 @@ from datetime import datetime, timezone, timedelta
 import numpy as np
 from enum import Enum
 
-from PyQt5 import QtGui, QtWidgets, uic
-from PyQt5.QtWidgets import QMessageBox, QToolTip, QStackedWidget, QHBoxLayout, QVBoxLayout, QSplitter, QFormLayout, QLabel, QFrame, QPushButton, QTableWidget, QTableWidgetItem
-from PyQt5.QtWidgets import QApplication, QFileSystemModel, QTreeView, QWidget, QHeaderView
-from PyQt5.QtGui import QPainter, QBrush, QPen, QColor, QFont, QIcon
-from PyQt5.QtCore import Qt, QPoint, QRect, QObject, QEvent, pyqtSignal, pyqtSlot, QSize, QDir
+from qgis.PyQt import QtGui, QtWidgets, uic
+from qgis.PyQt.QtWidgets import QMessageBox, QToolTip, QStackedWidget, QHBoxLayout, QVBoxLayout, QSplitter, QFormLayout, QLabel, QFrame, QPushButton, QTableWidget, QTableWidgetItem
+from qgis.PyQt.QtWidgets import QApplication, QFileSystemModel, QTreeView, QWidget, QHeaderView
+from qgis.PyQt.QtGui import QPainter, QBrush, QPen, QColor, QFont, QIcon
+from qgis.PyQt.QtCore import Qt, QPoint, QRect, QObject, QEvent, pyqtSignal, pyqtSlot, QSize, QDir
 
 ## IMPORTS:
 from la.ui.laanimalparameterbase import laanimalparameterbase

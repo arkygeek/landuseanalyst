@@ -1,6 +1,6 @@
 # lamodel.py
-from PyQt5.QtCore import QObject, pyqtProperty, pyqtSignal, pyqtSlot, Qt
-from PyQt5.QtWidgets import QDialog
+from qgis.PyQt.QtCore import QObject, pyqtProperty, pyqtSignal, pyqtSlot, Qt
+from qgis.PyQt.QtWidgets import QDialog
 from typing import Dict, List, Tuple
 from la.lib.la import La
 from la.lib.laserialisable import LaSerialisable

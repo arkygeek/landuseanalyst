@@ -9,11 +9,11 @@ Author: [Jason Jorgenson]
 Date created: [12-OCT-2023]
 """
 
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QDialog, QTreeWidgetItem, QSpinBox
-from PyQt5.uic import loadUi
-from lib.laanimalparameter import LaAnimalParameter
-from lib.lautils import LaUtils
+from qgis.PyQt.QtCore import Qt
+from qgis.PyQt.QtWidgets import QDialog, QTreeWidgetItem, QSpinBox
+from qgis.PyQt.uic import loadUi
+from la.lib.laanimalparameter import LaAnimalParameter
+from la.lib.lautils import LaUtils
 from la.ui.laanimalparametermanagerbase import laanimalparametermanagerbase
 
 

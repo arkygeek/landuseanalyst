@@ -25,13 +25,13 @@
 import os
 # import sys
 
-# from PyQt5.QtCore import QObject,  pyqtSignal,
-# import PyQt5.QtCore
-# from PyQt5.QtCore import uic
-# from PyQt5.QtCore import QtWidgets
+# from qgis.PyQt.QtCore import QObject,  pyqtSignal,
+# import qgis.PyQt.QtCore
+# from qgis.PyQt.QtCore import uic
+# from qgis.PyQt.QtCore import QtWidgets
 # from qgis.PyQt import uic
 # from qgis.PyQt import QtWidgets
-from PyQt5 import QtWidgets, uic
+from qgis.PyQt import QtWidgets, uic
 from enum import Enum
 # import la
 # from la import AreaUnits

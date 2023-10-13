@@ -24,8 +24,8 @@ License: [Your license information (if applicable)]
 """
 
 
-from PyQt5.QtCore import Qt, QModelIndex, QAbstractTableModel
-from PyQt5.QtGui import QBrush, QColor
+from qgis.PyQt.QtCore import Qt, QModelIndex, QAbstractTableModel
+from qgis.PyQt.QtGui import QBrush, QColor
 
 # from la.gui.lamainform import LaMainForm
 from la.lib.lamodel import LaModel

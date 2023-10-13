@@ -1,5 +1,5 @@
-from PyQt5.QtCore import Qt, QModelIndex, QAbstractTableModel
-from PyQt5.QtGui import QBrush, QColor
+from qgis.PyQt.QtCore import Qt, QModelIndex, QAbstractTableModel
+from qgis.PyQt.QtGui import QBrush, QColor
 
 from la.lib.laanimal import LaAnimal
 

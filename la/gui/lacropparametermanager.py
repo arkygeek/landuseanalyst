@@ -1,7 +1,7 @@
-from PyQt5.QtCore import Qt, QModelIndex, QAbstractTableModel
-from PyQt5.QtGui import QBrush, QColor
+from qgis.PyQt.QtCore import Qt, QModelIndex, QAbstractTableModel
+from qgis.PyQt.QtGui import QBrush, QColor
 
-from ..lib.la import LaCropParameter
+from la.lib.lacropparameter import LaCropParameter
 
 
 class LaCropParameterTableModel(QAbstractTableModel):

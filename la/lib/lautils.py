@@ -14,8 +14,8 @@ import sys
 import random
 import string
 from qgis.PyQt.QtWidgets import QMessageBox
-from PyQt5.QtCore import QFile, QTextStream
-from PyQt5.QtGui import QColor
+from qgis.PyQt.QtCore import QFile, QTextStream
+from qgis.PyQt.QtGui import QColor
 from la.lib.laanimalparameter import LaAnimalParameter
 
 

@@ -4,8 +4,8 @@ from PyQt5.QtCore import QCoreApplication, QFile
 from la.gui.lamainform import LanduseAnalyst
 
 # the following two imports should be enabled if splashscreen is enabled
-# from PyQt5.QtWidgets import QSplashScreen
-# from PyQt5.QtGui import QPixmap
+# from qgis.PyQt.QtWidgets import QSplashScreen
+# from qgis.PyQt.QtGui import QPixmap
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

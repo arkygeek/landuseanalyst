@@ -1,5 +1,5 @@
 # lagrass.py
-from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot, Qt
+from qgis.PyQt.QtCore import QObject, pyqtSignal, pyqtSlot, Qt
 from typing import Dict, List, Tuple
 from la.lib.la import La
 from la.lib.ladietlabels import LaDietLabels
