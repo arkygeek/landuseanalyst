@@ -13,9 +13,10 @@ import os
 import sys
 import random
 import string
-from PyQt5.QtCore import Qt, QFile, QTextStream
+from qgis.PyQt.QtWidgets import QMessageBox
+from PyQt5.QtCore import QFile, QTextStream
 from PyQt5.QtGui import QColor
-from .laanimalparameter import LaAnimalParameter
+from la.lib.laanimalparameter import LaAnimalParameter
 
 
 class LaUtils:

@@ -1,7 +1,7 @@
 from PyQt5.QtCore import Qt, QModelIndex, QAbstractTableModel
 from PyQt5.QtGui import QBrush, QColor
 
-from ..lib.la import LaAnimal
+from la.lib.laanimal import LaAnimal
 
 
 class LaAnimalTableModel(QAbstractTableModel):

@@ -1,102 +1,122 @@
-# FILEPATH: /Users/arkygeek/dev/QGisPlugins/landuseanalyst/cppArchive/src/gui/lamainform.cpp
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QMainWindow, QLabel, QSpinBox, QLineEdit, QRadioButton,\
-                          QCheckBox, QTextBrowser, QProgressBar, QPushButton,\
-                          QComboBox, QTableWidget, QTableWidgetItem, QHeaderView
+# Importing the necessary types for type hinting
+from typing import Dict, List, Tuple
+
+# Importing the QWebEngineView widget from PyQt5
 from PyQt5.QtWebEngineWidgets import QWebEngineView
-from typing import Dict, Tuple, List
-from la.lib.lamodel import LaModel
-from la.lib.lautils import LaUtils
+
+# Importing various Qt classes from qgis.PyQt.QtCore and qgis.PyQt.QtGui
+from qgis.PyQt.QtCore import Qt, QSettings, QTranslator, QCoreApplication
+from qgis.PyQt.QtGui import QIcon, QPixmap
+
+# Importing various Qt widgets from qgis.PyQt.QtWidgets
+from qgis.PyQt.QtWidgets import (QAction, QCheckBox, QComboBox, QHeaderView,
+                                 QLabel, QLineEdit, QMainWindow, QProgressBar,
+                                 QPushButton, QRadioButton, QSlider, QSpinBox,
+                                 QTableWidget, QTableWidgetItem, QTextBrowser,
+                                 QTextEdit, QTreeWidget)
+
+# Importing all resources from the la.resources module
+from la.resources import *
+
+# Importing various classes from the la.gui module
+from la.gui.lamodelreport import LaModelReport
+
+# Importing various classes from the la.ui module
+from la.ui.lamainformbase import LaMainFormBase
+
+# Importing various classes from the la.lib module
 from la.lib.laanimal import LaAnimal
-from la.lib.lacrop import LaCrop
 from la.lib.laanimalparameter import LaAnimalParameter
+from la.lib.lacrop import LaCrop
 from la.lib.lacropparameter import LaCropParameter
 from la.lib.ladietlabels import LaDietLabels
-from la.gui.lamodelreports import LaModelReport
+from la.lib.lamodel import LaModel
+from la.lib.lautils import LaUtils
 
-
-from la.ui.lamainformbase import LaMainFormBase
-from la.gui.lamainform import LaMainForm
-from la.lib.version import VERSION
-# class LaMainForm(QMainWindow, LaMainFormBase):
-#     def __init__(self, parent=None):
-#         super().__init__(parent)
-#         self.setupUi(self)
-
-class LaMainForm(QMainWindow, LaMainFormBase):
-  def __init__(self, parent=None):
-    super().__init__(parent)
-    # self.setWindowTitle("Land Use Analyst")
-    # self.setGeometry(100, 100, 800, 600)
-    self.setupUi(self)
-    self.myModel = LaModel()
-    self.mAnimalsMap = {}
-    self.mCropsMap = {}
-    self.initUI()
+class LanduseAnalyst(QMainWindow):
+  def __init__(self, iface):
+      super().__init__()
+      self.iface = iface
+      self.myModel = LaModel()
+      self.mAnimalsMap = {}
+      self.mCropsMap = {}
+      self.initUI()
+      # self.setupUi(self)
 
   def initUI(self):
     # create widgets
+    self.cbAreaUnits = QComboBox(self)
+    self.treeWidget = QTreeWidget(self)
+    self.treeWidget.setHeaderLabels(["Parameter", "Value"])
+    self.treeWidget.setColumnWidth(0, 200)
+    self.treeWidget.setColumnWidth(1, 100)
+    self.cbAreaUnits.addItem("Dunum")
+    self.cbAreaUnits.addItem("Hectare")
+    self.cbCommonLandEnergyType = QComboBox(self)
+    self.cbCommonLandEnergyType.addItem("KCalories")
+    self.cbCommonLandEnergyType.addItem("TDN")
+    self.sliderDiet = QSlider(Qt.Horizontal, self)
+    self.sliderDiet.setRange(0, 100)
+    self.sliderDiet.setValue(50)
+    self.sliderMeat = QSlider(Qt.Horizontal, self)
+    self.sliderMeat.setRange(0, 100)
+    self.sliderMeat.setValue(50)
+    self.sliderCrop = QSlider(Qt.Horizontal, self)
+    self.sliderCrop.setRange(0, 100)
+    self.sliderCrop.setValue(50)
+    self.sliderDiet.valueChanged.connect(self.on_sliderDiet_valueChanged)
+    self.sliderMeat.valueChanged.connect(self.on_sliderMeat_valueChanged)
+    self.sliderCrop.valueChanged.connect(self.on_sliderCrop_valueChanged)
+    self.treeWidget.currentItemChanged.connect(self.current_item_changed)
+
     self.sbPopulation = QSpinBox(self)
     self.sbPopulation.setRange(1, 1000000)
     self.sbPopulation.setValue(1000)
     self.lineEditPeriod = QLineEdit(self)
-    self.lineEditEasting = QLineEdit(self)
-    self.lineEditNorthing = QLineEdit(self)
-    self.radioButtonEuclidean = QRadioButton("Euclidean Distance", self)
-    self.radioButtonWalkingTime = QRadioButton("Walking Time", self)
-    self.radioButtonPathDistance = QRadioButton("Path Distance", self)
-    self.sbModelPrecision = QSpinBox(self)
-    self.sbModelPrecision.setRange(1, 100)
-    self.sbModelPrecision.setValue(10)
-    self.labelCropCheck = QLabel("100%", self)
-    self.labelAnimalCheck = QLabel("100%", self)
-    self.cboxBaseOnPlants = QCheckBox("Base on Plants", self)
-    self.cboxIncludeDairy = QCheckBox("Include Dairy", self)
-    self.tbReport = QTextBrowser(self)
-    self.lblAnimalPicCalcs = QLabel(self)
-    self.textBrowserResultsAnimals = QTextBrowser(self)
-    self.progressBarCalcs = QProgressBar(self)
-    self.tbLogs = QTextBrowser(self)
-    self.textBrowserAnimalDefinition = QWebEngineView(self)
-    self.textBrowserCropDefinition = QWebEngineView(self)
-    self.btnCalculate = QPushButton("Calculate", self)
-    self.btnCalculate.clicked.connect(self.calculate)
-    self.btnPrintCropsAndAnimals = QPushButton("Print Crops and Animals", self)
-    self.btnPrintCropsAndAnimals.clicked.connect(self.printCropsAndAnimals)
 
-    # set widget positions and sizes
-    self.sbPopulation.setGeometry(20, 20, 100, 20)
-    self.lineEditPeriod.setGeometry(20, 50, 100, 20)
-    self.lineEditEasting.setGeometry(20, 80, 100, 20)
-    self.lineEditNorthing.setGeometry(20, 110, 100, 20)
-    self.radioButtonEuclidean.setGeometry(20, 140, 150, 20)
-    self.radioButtonWalkingTime.setGeometry(20, 170, 150, 20)
-    self.radioButtonPathDistance.setGeometry(20, 200, 150, 20)
-    self.sbModelPrecision.setGeometry(20, 230, 100, 20)
-    self.labelCropCheck.setGeometry(20, 260, 100, 20)
-    self.labelAnimalCheck.setGeometry(20, 290, 100, 20)
-    self.cboxBaseOnPlants.setGeometry(20, 320, 150, 20)
-    self.cboxIncludeDairy.setGeometry(20, 350, 150, 20)
-    self.tbReport.setGeometry(20, 380, 400, 200)
-    self.lblAnimalPicCalcs.setGeometry(450, 20, 300, 200)
-    self.textBrowserResultsAnimals.setGeometry(450, 230, 300, 200)
-    self.progressBarCalcs.setGeometry(20, 590, 400, 20)
-    self.tbLogs.setGeometry(450, 440, 300, 170)
-    self.textBrowserAnimalDefinition.setGeometry(20, 440, 400, 170)
-    self.textBrowserCropDefinition.setGeometry(20, 440, 400, 170)
-    self.btnCalculate.setGeometry(20, 520, 100, 30)
-    self.btnPrintCropsAndAnimals.setGeometry(20, 560, 150, 30)
+    # create actions
+    self.actionNew = QAction("New", self)
+    self.actionNew.setShortcut("Ctrl+N")
+    self.actionNew.triggered.connect(self.newFile)
 
     # set widget properties
+    self.tbReport = QTextEdit(self)
     self.tbReport.setReadOnly(True)
+    self.tbLogs = QTextEdit(self)
     self.tbLogs.setReadOnly(True)
+    self.textBrowserAnimalDefinition = QTextBrowser(self)
     self.textBrowserAnimalDefinition.setHtml("")
+    self.textBrowserCropDefinition = QTextBrowser(self)
     self.textBrowserCropDefinition.setHtml("")
 
     # set layout
     self.tbReport.moveCursor(self.tbReport.textCursor().End)
     self.tbLogs.moveCursor(self.tbLogs.textCursor().End)
+
+  def on_sliderDiet_valueChanged(self, value):
+    myMinString = str(value)
+    myMaxString = str(100 - value)
+    self.labelMeatPercent = QLabel(self)
+    self.labelMeatPercent.setText(myMinString)
+    self.labelCropPercent = QLabel(self)
+    self.labelCropPercent.setText(myMaxString)
+    self.setDietLabels()
+
+  def current_item_changed(self, current, previous):
+    # TODO: Implement current_item_changed functionality
+    pass
+
+  def on_sliderMeat_valueChanged(self, value):
+    # TODO: Implement slider value changed functionality
+    pass
+
+  def on_sliderCrop_valueChanged(self, value):
+    # TODO: Implement slider value changed functionality
+    pass
+
+  def newFile(self):
+    # TODO: Implement new file functionality
+    pass
 
   def calculate(self):
     self.myModel.setPopulation(self.sbPopulation.value())
@@ -145,7 +165,10 @@ class LaMainForm(QMainWindow, LaMainFormBase):
         mySelectedFlag = myPair[0]
         myAnimalParameterGuid = myPair[1]
         myText = "Animal <" + myAnimalGuid.toLocal8Bit() + " , <"
-        mySelectedFlag ? myText += "true," : myText += "false,"
+        if mySelectedFlag:
+          myText += "true,"
+        else:
+          myText += "false,"
         myText += myAnimalParameterGuid.toLocal8Bit()
         myText += "> >"
         self.tbLogs.append(myText)
@@ -160,7 +183,10 @@ class LaMainForm(QMainWindow, LaMainFormBase):
         mySelectedFlag = myPair[0]
         myCropParameterGuid = myPair[1]
         myText = "Crop <" + myCropGuid.toLocal8Bit() + " , <"
-        mySelectedFlag ? myText += "true," : myText += "false,"
+        if mySelectedFlag:
+          myText += "true,"
+        else:
+          myText += "false,"
         myText += myCropParameterGuid.toLocal8Bit()
         myText += "> >"
         self.tbLogs.append(myText)
@@ -202,11 +228,189 @@ class LaMainForm(QMainWindow, LaMainFormBase):
     self.textBrowserCropDefinition.setHtml(myHtml)
 
 
+  def openFile(self):
+      # TODO: Implement open file functionality
+      pass
+
+  def saveFile(self):
+      # TODO: Implement save file functionality
+      pass
+
+  def saveFileAs(self):
+      # TODO: Implement save file as functionality
+      pass
+
+  def showPreferences(self):
+      preferences = LaPreferences(self)
+      preferences.exec_()
+      self.loadSettings()
+
+  def showAbout(self):
+      about = LaAbout(self)
+      about.exec_()
+
+  def closeEvent(self, event):
+      # Save the settings
+      self.saveSettings()
+
+      # Confirm exit
+      reply = QMessageBox.question(self, "Exit", "Are you sure you want to exit?",
+                                    QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+      if reply == QMessageBox.Yes:
+          event.accept()
+      else:
+          event.ignore()
+
+  def loadSettings(self):
+      # Load the language settings
+      language = self.settings.value("language", "en")
+      translator = QTranslator()
+      translator.load(f":/translations/landuseanalyst_{language}.qm")
+      QCoreApplication.installTranslator(translator)
+
+  def saveSettings(self):
+    # Save the language settings
+    language = QCoreApplication.translate("LaMainForm", "English")
+    if QCoreApplication.translate("LaMainForm", "French") in self.languageComboBox.currentText():
+        language = "fr"
+    self.settings.setValue("language", language)
 
 
 
 
 
+  # noinspection PyMethodMayBeStatic
+  def tr(self, message):
+      """Get the translation for a string using Qt translation API.
+
+      We implement this ourselves since we do not inherit QObject.
+
+      :param message: String for translation.
+      :type message: str, QString
+
+      :returns: Translated version of message.
+      :rtype: QString
+      """
+      # noinspection PyTypeChecker,PyArgumentList,PyCallByClass
+      return QCoreApplication.translate('LanduseAnalyst', message)
+
+
+  def add_action(
+      self,
+      icon_path,
+      text,
+      callback,
+      enabled_flag=True,
+      add_to_menu=True,
+      add_to_toolbar=True,
+      status_tip=None,
+      whats_this=None,
+      parent=None):
+      """Add a toolbar icon to the toolbar.
+
+      :param icon_path: Path to the icon for this action. Can be a resource
+          path (e.g. ':/plugins/foo/bar.png') or a normal file system path.
+      :type icon_path: str
+
+      :param text: Text that should be shown in menu items for this action.
+      :type text: str
+
+      :param callback: Function to be called when the action is triggered.
+      :type callback: function
+
+      :param enabled_flag: A flag indicating if the action should be enabled
+          by default. Defaults to True.
+      :type enabled_flag: bool
+
+      :param add_to_menu: Flag indicating whether the action should also
+          be added to the menu. Defaults to True.
+      :type add_to_menu: bool
+
+      :param add_to_toolbar: Flag indicating whether the action should also
+          be added to the toolbar. Defaults to True.
+      :type add_to_toolbar: bool
+
+      :param status_tip: Optional text to show in a popup when mouse pointer
+          hovers over the action.
+      :type status_tip: str
+
+      :param parent: Parent widget for the new action. Defaults None.
+      :type parent: QWidget
+
+      :param whats_this: Optional text to show in the status bar when the
+          mouse pointer hovers over the action.
+
+      :returns: The action that was created. Note that the action is also
+          added to self.actions list.
+      :rtype: QAction
+      """
+
+      icon = QIcon(icon_path)
+      action = QAction(icon, text, parent)
+      action.triggered.connect(callback)
+      action.setEnabled(enabled_flag)
+
+      if status_tip is not None:
+          action.setStatusTip(status_tip)
+
+      if whats_this is not None:
+          action.setWhatsThis(whats_this)
+
+      if add_to_toolbar:
+          # Adds plugin icon to Plugins toolbar
+          self.iface.addToolBarIcon(action)
+
+      if add_to_menu:
+          self.iface.addPluginToMenu(
+              self.menu,
+              action)
+
+      self.actions.append(action)
+
+      return action
+
+  def initGui(self):
+      """Create the menu entries and toolbar icons inside the QGIS GUI."""
+
+      icon_path = ':/la_icon_small.png'
+      self.add_action(
+          icon_path,
+          text=self.tr(u'Model archaeological site'),
+          callback=self.run,
+          parent=self.iface.mainWindow())
+
+      # will be set False in run()
+      self.first_start = True
+
+
+  def unload(self):
+      """Removes the plugin menu item and icon from QGIS GUI."""
+      for action in self.actions:
+          self.iface.removePluginMenu(
+              self.tr(u'&Landuse Analyst'),
+              action)
+          self.iface.removeToolBarIcon(action)
+
+
+  def run(self):
+      """Run method that performs all the real work"""
+
+      # Create the dialog with elements (after translation) and keep reference
+      # Only create GUI ONCE in callback, so that it will only load when the plugin is started
+      if self.first_start == True:
+          self.first_start = False
+          self.dlg = LaMainFormBase()
+
+      # show the dialog
+      self.dlg.show()
+      # Run the dialog event loop
+      result = self.dlg.exec_()
+      # See if OK was pressed
+      if result:
+          # Do something useful here - delete the line containing pass and
+          # substitute with your code.
+          print("thisIsOutput")
+          pass
 
 
 

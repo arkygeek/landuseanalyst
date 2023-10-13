@@ -1,7 +1,7 @@
 import sys
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtCore import QCoreApplication, QFile
-from la.gui.lamainform import LaMainForm
+from la.gui.lamainform import LanduseAnalyst
 
 # the following two imports should be enabled if splashscreen is enabled
 # from PyQt5.QtWidgets import QSplashScreen
@@ -53,6 +53,6 @@ if __name__ == '__main__':
     #     mypZintatu = ZintatuForm()
     #     mypZintatu.show()
     ''
-    mypForm = LaMainForm()
+    mypForm = LanduseAnalyst()
     mypForm.show()
     sys.exit(app.exec_())

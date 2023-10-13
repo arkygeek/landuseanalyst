@@ -30,7 +30,7 @@ from PyQt5.QtGui import QPainter, QBrush, QPen, QColor, QFont, QIcon
 from PyQt5.QtCore import Qt, QPoint, QRect, QObject, QEvent, pyqtSignal, pyqtSlot, QSize, QDir
 
 ## IMPORTS:
-from la.ui import laanimalparameterbase
+from la.ui.laanimalparameterbase import laanimalparameterbase
 
 
 class laanimalparameterbase(QWidget):

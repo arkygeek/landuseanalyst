@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QAction, QMainWindow
 
 from .gui.lacropmanager import LaCropManager
 # from landuse_analyst import LaPreferencess
-from .gui.lamodelreports import LaModelReports
+from .gui.lamodelreport import LaModelReports
 
 
 class LaMainForm(QMainWindow):

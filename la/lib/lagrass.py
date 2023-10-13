@@ -1,8 +1,8 @@
 # lagrass.py
 from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot, Qt
 from typing import Dict, List, Tuple
-from la import La
-from ladietlabels import LaDietLabels
+from la.lib.la import La
+from la.lib.ladietlabels import LaDietLabels
 
 class LaGrass(QObject):
     def __init__(self, parent=None):

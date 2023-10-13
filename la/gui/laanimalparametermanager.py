@@ -14,10 +14,10 @@ from PyQt5.QtWidgets import QDialog, QTreeWidgetItem, QSpinBox
 from PyQt5.uic import loadUi
 from lib.laanimalparameter import LaAnimalParameter
 from lib.lautils import LaUtils
-from ui.ui_laanimalparametermanagerbase import Ui_LaAnimalParameterManagerBase
+from la.ui.laanimalparametermanagerbase import laanimalparametermanagerbase
 
 
-class LaAnimalParameterManager(QDialog, Ui_LaAnimalParameterManagerBase):
+class LaAnimalParameterManager(QDialog, laanimalparametermanagerbase):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setupUi(self)

@@ -9,7 +9,7 @@ Author: [Your Name]
 Date created: [Date]
 """
 
-from .lafoodsource import LaFoodSource
+from la.lib.lafoodsource import LaFoodSource
 
 from enum import Enum
 from typing import Tuple

@@ -1,6 +1,6 @@
 # ladietlabels.py
 from PyQt5.QtCore import QObject, pyqtProperty, pyqtSignal, pyqtSlot, Qt
-from laserialisable import LaSerialisable
+from la.lib.laserialisable import LaSerialisable
 from la.lib.laguid import LaGuid
 
 class LaDietLabels(LaSerialisable, LaGuid):
