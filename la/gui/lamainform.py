@@ -33,13 +33,23 @@ from la.lib import *
 # from la.ui.lamainformbase import LaMainFormBase
 
 # # Importing various classes from the la.lib module
-from la.lib.laanimal import LaAnimal
-from la.lib.laanimalparameter import LaAnimalParameter
-from la.lib.lacrop import LaCrop
-from la.lib.lacropparameter import LaCropParameter
-from la.lib.ladietlabels import LaDietLabels
-from la.lib.lamodel import LaModel
-from la.lib.lautils import LaUtils
+from la.lib.la import *
+from la.lib.laanimal import *
+from la.lib.laanimalparameter import *
+from la.lib.lacrop import *
+from la.lib.lacropparameter import *
+from la.lib.ladietlabels import *
+from la.lib.lafoodsource import *
+from la.lib.lagrass import *
+from la.lib.lagrassprocesslib import *
+from la.lib.laguid import *
+from la.lib.lamodel_interface import *
+from la.lib.laserialisable import *
+from la.lib.lautils import *
+from la.lib.version import *
+
+
+
 
 class LanduseAnalyst(QMainWindow):
   def __init__(self, iface):
@@ -48,8 +58,31 @@ class LanduseAnalyst(QMainWindow):
       self.myModel = LaModel()
       self.mAnimalsMap = {}
       self.mCropsMap = {}
+      self.menu = None  # Define the menu attribute
       self.initUI()
       # self.setupUi(self)
+      # Set up the menu actions
+      self.actionNew.triggered.connect(self.newFile)
+      self.actionOpen.triggered.connect(self.openFile)
+      self.actionSave.triggered.connect(self.saveFile)
+      self.actionSaveAs.triggered.connect(self.saveFileAs)
+      self.actionPreferences.triggered.connect(self.showPreferences)
+      self.actionAbout.triggered.connect(self.showAbout)
+      self.m
+      # Set up the toolbar actions
+      self.actionNewToolbar.triggered.connect(self.newFile)
+      self.actionOpenToolbar.triggered.connect(self.openFile)
+      self.actionSaveToolbar.triggered.connect(self.saveFile)
+
+      # Set up the status bar
+      self.statusBar().showMessage("Ready")
+
+      # Set up the window icon
+      self.setWindowIcon(QIcon(":/icons/landuseanalyst.png"))
+
+      # Set up the settings
+      # self.settings = QSettings("Linfiniti", "LandUseAnalyst")
+      self.loadSettings()
 
   def initUI(self):
     # create widgets
