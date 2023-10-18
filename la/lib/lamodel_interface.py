@@ -1,7 +1,9 @@
+import pickle, json
+
 # lamodel_interface.py
-from qgis.PyQt.QtCore import QObject, pyqtSignal, pyqtSlot, Qt
+from qgis.PyQt.QtCore import QObject, pyqtSignal, pyqtSlot, QByteArray
 from typing import Dict, List, Tuple
-from lib.la import La
+from .la import La
 from lib.ladietlabels import LaDietLabels
 
 class LaModelInterface(QObject):
@@ -28,21 +30,31 @@ class LaModelInterface(QObject):
     def removeDiet(self, guid: str):
         pass
 
-    @pyqtSlot(result=Dict[str, La])
-    def getDiets(self) -> Dict[str, La]:
-        pass
+    @pyqtSlot(result=QByteArray)
+    def getDiets(self) -> QByteArray:
+        """
+        Returns a QByteArray representation of the La instance's diets attribute.
+        """
+        instance = La()
+        byte_string = pickle.dumps(instance.__dict__)
+        return QByteArray(byte_string)
 
     @pyqtSlot(str, LaDietLabels)
     def addDietLabel(self, guid: str, label: LaDietLabels):
         pass
 
-    @pyqtSlot(str, LaDietLabels)
-    def removeDietLabel(self, guid: str, label: LaDietLabels):
+    @pyqtSlot(str, QByteArray)
+    def removeDietLabel(self, guid: str, label: QByteArray):
+        label_dict = json.loads(label.data().decode())
+        # Now label_dict is a dictionary representation of an instance of LaDietLabels
         pass
 
-    @pyqtSlot(str, result=List[LaDietLabels])
-    def getDietLabels(self, guid: str) -> List[LaDietLabels]:
-        pass
+    @pyqtSlot(str, result=QByteArray)
+    def getDietLabels(self, guid: str) -> QByteArray:
+        labels = [LaDietLabels(), LaDietLabels()]  # Replace with your actual data
+        labels_dicts = [label.__dict__ for label in labels]
+        json_string = json.dumps(labels_dicts)
+        return QByteArray(json_string.encode())
 
     @pyqtSlot(str, str, result=LaDietLabels)
     def getDietLabel(self, guid: str, name: str) -> LaDietLabels:
