@@ -30,7 +30,7 @@ from qgis.PyQt.QtGui import QPainter, QBrush, QPen, QColor, QFont, QIcon
 from qgis.PyQt.QtCore import Qt, QPoint, QRect, QObject, QEvent, pyqtSignal, pyqtSlot, QSize, QDir
 
 ## IMPORTS:
-from la.ui.laanimalparameterbase import laanimalparameterbase
+# from ui.laanimalparameterbase import laanimalparameterbase
 
 
 class laanimalparameterbase(QWidget):

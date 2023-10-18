@@ -1,6 +1,6 @@
 import sys
-from PyQt5.QtWidgets import QApplication
-from PyQt5.QtCore import QCoreApplication, QFile
+from qgis.PyQt.QtWidgets import QApplication
+from qgis.PyQt.QtCore import QCoreApplication, QFile
 from la.gui.lamainform import LanduseAnalyst
 
 # the following two imports should be enabled if splashscreen is enabled

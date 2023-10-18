@@ -1,13 +1,13 @@
 # lagrass.py
 
 # Import guard to prevent circular imports
-if __name__ == "__main__":
-  from gui.lamainform import LanduseAnalyst
-else:
-  from .la.gui.lamainform import LanduseAnalyst
+# if __name__ == "__main__":
+#   from gui.lamainform import LaMainForm
+# else:
+# from gui.lamainform import LaMainForm
 
 from typing import Dict, List, Tuple
-from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot
+from qgis.PyQt.QtCore import QObject, pyqtSignal, pyqtSlot
 
 class LaGrass(QObject):
     message = pyqtSignal(str)

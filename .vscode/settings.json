@@ -12,5 +12,6 @@
         "foldStart": "# #region [NAME]",
         "foldStartRegex": "\\#[\\s]*#region[\\s]*(.*)"
     }
-  }
+  },
+  "editor.fontFamily": "Fira Code iScript",
 }

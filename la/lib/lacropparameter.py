@@ -1,7 +1,7 @@
 # lacropparameter.py
 from qgis.PyQt.QtCore import QObject, pyqtProperty, pyqtSignal, pyqtSlot, Qt
-from la.lib.laserialisable import LaSerialisable
-from la.lib.laguid import LaGuid
+from lib.laserialisable import LaSerialisable
+from lib.laguid import LaGuid
 
 class LaCropParameter(LaSerialisable, LaGuid):
     def __init__(self):

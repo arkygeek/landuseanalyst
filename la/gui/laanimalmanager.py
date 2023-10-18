@@ -1,7 +1,7 @@
 from qgis.PyQt.QtCore import Qt, QModelIndex, QAbstractTableModel
 from qgis.PyQt.QtGui import QBrush, QColor
 
-from la.lib.laanimal import LaAnimal
+from lib.laanimal import LaAnimal
 
 
 class LaAnimalTableModel(QAbstractTableModel):

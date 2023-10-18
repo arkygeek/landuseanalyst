@@ -16,7 +16,7 @@ import string
 from qgis.PyQt.QtWidgets import QMessageBox
 from qgis.PyQt.QtCore import QFile, QTextStream
 from qgis.PyQt.QtGui import QColor
-from la.lib.laanimalparameter import LaAnimalParameter
+from lib.laanimalparameter import LaAnimalParameter
 
 
 class LaUtils:

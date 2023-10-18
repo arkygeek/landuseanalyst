@@ -12,9 +12,9 @@ Date created: [12-OCT-2023]
 from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtWidgets import QDialog, QTreeWidgetItem, QSpinBox
 from qgis.PyQt.uic import loadUi
-from la.lib.laanimalparameter import LaAnimalParameter
-from la.lib.lautils import LaUtils
-from la.ui.laanimalparametermanagerbase import laanimalparametermanagerbase
+from lib.laanimalparameter import LaAnimalParameter
+from lib.lautils import LaUtils
+from ui.laanimalparametermanagerbase import laanimalparametermanagerbase
 
 
 class LaAnimalParameterManager(QDialog, laanimalparametermanagerbase):

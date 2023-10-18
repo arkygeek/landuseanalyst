@@ -2,10 +2,10 @@
 from qgis.PyQt.QtCore import QObject, pyqtProperty, pyqtSignal, pyqtSlot, Qt
 from qgis.PyQt.QtWidgets import QDialog
 from typing import Dict, List, Tuple
-from la.lib.la import La
-from la.lib.laserialisable import LaSerialisable
-from la.lib.laguid import LaGuid
-from la.lib.ladietlabels import LaDietLabels
+from lib.la import La
+from lib.laserialisable import LaSerialisable
+from lib.laguid import LaGuid
+from lib.ladietlabels import LaDietLabels
 
 class LaModel(QDialog, LaSerialisable, LaGuid):
     def __init__(self, parent=None):

@@ -28,8 +28,8 @@ from qgis.PyQt.QtCore import Qt, QModelIndex, QAbstractTableModel
 from qgis.PyQt.QtGui import QBrush, QColor
 
 # from la.gui.lamainform import LaMainForm
-from la.lib.lamodel import LaModel
-from la.gui.lamodelreporttablemodel import LaModelReportTableModel
+from lib.lamodel import LaModel
+from gui.lamodelreporttablemodel import LaModelReportTableModel
 
 
 

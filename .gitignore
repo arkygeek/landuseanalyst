@@ -129,4 +129,4 @@ venv.bak/
 dmypy.json
 
 .qt_for_python
-landuse_analyst/gui/__pycache__/
+la/gui/__pycache__/

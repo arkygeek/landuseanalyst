@@ -31,8 +31,8 @@ from qgis.PyQt.QtCore import QTextStream
 
 import os
 
-from la.lib.la import *  # my own classes
-from la.ui.lacropmanagerbase import LaCropManagerBase
+from lib.la import *  # my own classes
+from ui.lacropmanagerbase import LaCropManagerBase
 # endregion
 
 # This loads your .ui file so that PyQt can

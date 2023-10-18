@@ -1,8 +1,8 @@
 # lagrassprocesslib.py
 from qgis.PyQt.QtCore import QObject
 from typing import Dict, List, Tuple
-from la.lib.la import La
-from la.lib.ladietlabels import LaDietLabels
+from lib.la import La
+from lib.ladietlabels import LaDietLabels
 
 class LaGrassProcessLib(QObject):
     def __init__(self, parent=None):

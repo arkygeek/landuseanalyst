@@ -1,57 +1,61 @@
-# Importing the necessary types for type hinting
+# Standard library imports
 from typing import Dict, List, Tuple
 
-# Importing the QWebEngineView widget from PyQt5
-from PyQt5.QtWebEngineWidgets import QWebEngineView
-
-# Importing various Qt classes from qgis.PyQt.QtCore and qgis.PyQt.QtGui
+# Third-party imports
+from PySide6.QtWebEngineWidgets import QWebEngineView
+from PyQt5.QtWebKitWidgets import QWebView
 from qgis.PyQt.QtCore import Qt, QSettings, QTranslator, QCoreApplication
 from qgis.PyQt.QtGui import QIcon, QPixmap
-
-# Importing various Qt widgets from qgis.PyQt.QtWidgets
 from qgis.PyQt.QtWidgets import (QAction, QCheckBox, QComboBox, QHeaderView,
                                  QLabel, QLineEdit, QMainWindow, QProgressBar,
                                  QPushButton, QRadioButton, QSlider, QSpinBox,
                                  QTableWidget, QTableWidgetItem, QTextBrowser,
-                                 QTextEdit, QTreeWidget)
+                                 QTextEdit, QTreeWidget, QMessageBox)
 
-# Importing all resources from the la.resources module
-from la.resources import *
-# Importing all classes from the la.gui module using a wildcard import
-from la.gui import *
+# Local application/library specific imports
+# from lib.la import La 
+# from resources import *
 
-# Importing all classes from the la.ui module using a wildcard import
-from la.ui import *
+from gui.lamodelreport import LaModelReport
+from gui.lamodelreporttablemodel import LaModelReportTableModel
+from gui.lacropmanager import LaCropManager
+from gui.lacropparametermanager import LaCropParameterManager
+from gui.laassemblageconversion import LaAssemblageConversion
+from gui.lagrassprocess import LaGrassProcess
+from gui.laanimalmanager import LaAnimalManager
+from gui.laanimalparametermanager import LaAnimalParameterManager
 
-# Importing all classes from the la.lib module using a wildcard import
-from la.lib import *
+from ui.lamainformbase import LaMainFormBase
+from ui.laanimalmanagerbase import laanimalmanagerbase
+from ui.laanimalparametermanagerbase import laanimalparametermanagerbase
+from ui.laanimalparameterbase import laanimalparameterbase
+from ui.laassemblageconversionbase import laassemblageconversionbase
+from ui.lacropmanagerbase import LaCropManagerBase
+from ui.lacropparameterbase import lacropparameterbase
+from ui.lacropparametermanagerbase import lacropparametermanagerbase
+from ui.laexperimentbase import laexperimentbase
+from ui.lagrassprocessbase import lagrassprocessbase
+from ui.laReportFallow import laReportFallow
+from ui.laReportHerds import laReportHerds
+from ui.laReportTargets import laReportTargets
 
-# # Importing various classes from the la.gui module
-# from la.gui.lamodelreport import LaModelReport
+from lib.la import La
+from lib.laanimal import LaAnimal
+from lib.laanimalparameter import LaAnimalParameter
+from lib.lacrop import LaCrop
+from lib.lacropparameter import LaCropParameter
+from lib.ladietlabels import LaDietLabels
+from lib.lafoodsource import LaFoodSource
+from lib.lagrass import LaGrass
+from lib.lagrassprocesslib import LaGrassProcessLib
+from lib.laguid import LaGuid
+from lib.lamodel import LaModel
+from lib.lamodel_interface import LaModelInterface
+from lib.laserialisable import LaSerialisable
+from lib.lautils import LaUtils
+from lib.version import VERSION
 
-# # Importing various classes from the la.ui module
-# from la.ui.lamainformbase import LaMainFormBase
-
-# # Importing various classes from the la.lib module
-from la.lib.la import *
-from la.lib.laanimal import *
-from la.lib.laanimalparameter import *
-from la.lib.lacrop import *
-from la.lib.lacropparameter import *
-from la.lib.ladietlabels import *
-from la.lib.lafoodsource import *
-from la.lib.lagrass import *
-from la.lib.lagrassprocesslib import *
-from la.lib.laguid import *
-from la.lib.lamodel_interface import *
-from la.lib.laserialisable import *
-from la.lib.lautils import *
-from la.lib.version import *
-
-
-
-
-class LanduseAnalyst(QMainWindow):
+class LaMainForm(QMainWindow):
   def __init__(self, iface):
       super().__init__()
       self.iface = iface
@@ -190,7 +194,7 @@ class LanduseAnalyst(QMainWindow):
     self.lblAnimalPicCalcs.setPixmap(QPixmap(myAnimal.imageFile()))
     myCalcsMap = self.myModel.calcsAnimalsMap()
     myReportPair: Tuple[str, float]
-    myReportMap: LaReportMap = self.myDietLabels.animalCalcsReportMap()
+    myReportMap: La.LaReportMap = self.myDietLabels.animalCalcsReportMap()
     myReportPair = myReportMap.value(myGuid)
     myReportString = myReportPair.first
     self.textBrowserResultsAnimals.setText(myReportString)
@@ -281,14 +285,14 @@ class LanduseAnalyst(QMainWindow):
       # TODO: Implement save file as functionality
       pass
 
-  def showPreferences(self):
-      preferences = LaPreferences(self)
-      preferences.exec_()
-      self.loadSettings()
+  # def showPreferences(self):
+  #     preferences = LaPreferences(self)
+  #     preferences.exec_()
+  #     self.loadSettings()
 
-  def showAbout(self):
-      about = LaAbout(self)
-      about.exec_()
+  # def showAbout(self):
+  #     about = LaAbout(self)
+  #     about.exec_()
 
   def closeEvent(self, event):
       # Save the settings
@@ -471,8 +475,8 @@ class LanduseAnalyst(QMainWindow):
 # from qgis.PyQt.QtGui import QIcon
 # from qgis.PyQt.QtWidgets import QAction, QMainWindow, QFileDialog, QMessageBox
 
-# from la.ui.lamainformbase import LaMainFormBase
-# from la.gui.lacropmanager import LaCropManager
+# from ui.lamainformbase import LaMainFormBase
+# from gui.lacropmanager import LaCropManager
 
 
 # class LaMainForm(QMainWindow, LaMainFormBase):

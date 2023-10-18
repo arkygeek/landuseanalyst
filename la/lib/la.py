@@ -9,76 +9,53 @@ Author: [Your Name]
 Date created: [Date]
 """
 
-from la.lib.lafoodsource import LaFoodSource
+from lib.lafoodsource import LaFoodSource
 
-from enum import Enum
 from typing import Tuple
+from typing import Dict
+# Python 3.9
 from typing import Dict, Tuple
 
-class Priority(Enum):
-    NONE = 0
-    HIGH = 1
-    MEDIUM = 2
-    LOW = 3
-
-
-class Status(Enum):
-    MORE_THAN_ENOUGH_TO_COMPLETELY_SATISFY = 0
-    NOT_ENOUGH_TO_COMPLETELY_SATISFY = 1
-
-
-class LandBeingGrazed(Enum):
-    COMMON = 0
-    UNIQUE = 1
-
-
-class AreaUnits(Enum):
-    DUNUM = 0
-    HECTARE = 1
-
-
-class LandFound(Enum):
-    NOT_ENOUGH = 0
-    TOO_MUCH = 1
-    FOUND_TARGET = 2
-
-
-class EnergyType(Enum):
-    KCALORIES = 0
-    TDN = 1
-
 class La:
-    """
-    The La class defines various enums and typedefs used throughout the simulation.
-    """
-    LaTripleMap: Dict[str, Tuple[bool, str]]
-    LaRasterInfo: Tuple[Tuple[str, str], Tuple[str, str]]
-    LaFoodSourceMap: Dict[str, LaFoodSource]
-    HerdSize: Tuple[float, float]
-    LaReportMap: Dict[str, Tuple[str, float]]
+    # Equivalent to QMap<QString,QPair<bool,QString>>
+    LaTripleMap: Dict[str, Tuple[bool, str]] = {}
 
+    # Equivalent to QPair<QPair<QString,QString>, QPair<QString,QString>>
+    LaRasterInfo: Tuple[Tuple[str, str], Tuple[str, str]] = (("",""),("",""))
 
-# class La:
-#     """
-#     The La class defines various enums and typedefs used throughout the simulation.
-#     """
-#     LaTripleMap = QMap[QString, QPair[bool, QString]]
-#     LaRasterInfo = QPair[QPair[QString, QString], QPair[QString, QString]]
-#     LaFoodSourceMap = QMap[QString, LaFoodSource]
-#     HerdSize = Tuple[float, float]
-#     LaReportMap = QMap[QString, QPair[QString, float]]
+    # Equivalent to QMap<QString, LaFoodSource>
+    LaFoodSourceMap: Dict[str, LaFoodSource] = {}
 
+    # Equivalent to QPair<float,float>
+    HerdSize: Tuple[float, float] = (0.0, 0.0)
 
-"""
+    # Equivalent to QMap<QString,QPair<QString,float>>
+    LaReportMap: Dict[str, Tuple[str, float]] = {}
 
-In this modified code, the contents of la.h are rewritten into PyQt5.
+# Equivalent to enum types
+class Priority:
+    None_ = 0
+    High = 1
+    Medium = 2
+    Low = 3
 
-The various enums and typedefs are defined as classes using the Enum and Tuple
-    types from the Python standard library.
+class Status:
+    MoreThanEnoughToCompletelySatisfy = 0
+    NotEnoughToCompletelySatisfy = 1
 
-The La class is defined to contain the various enums and typedefs, and the
-    necessary imports are included at the beginning of the file.
+class LandBeingGrazed:
+    Common = 0
+    Unique = 1
 
-A file comment header provides a brief description of the file and its contents.
+class AreaUnits:
+    Dunum = 0
+    Hectare = 1
 
-"""
+class LandFound:
+    NotEnough = 0
+    TooMuch = 1
+    FoundTarget = 2
+
+class EnergyType:
+    KCalories = 0
+    TDN = 1
