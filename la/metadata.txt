@@ -5,7 +5,7 @@
 [general]
 name=Landuse Analyst
 qgisMinimumVersion=3.0
-description=Archaeological modelling
+description=Site catchment modelling
 version=0.1
 author=Dr. Jason S. Jorgenson
 email=jjorgenson@gmail.com

@@ -14,9 +14,30 @@ import sys
 import random
 import string
 from qgis.PyQt.QtWidgets import QMessageBox
-from qgis.PyQt.QtCore import QFile, QTextStream
+from qgis.PyQt.QtCore import QFile, QTextStream, QObject
 from qgis.PyQt.QtGui import QColor
 from lib.laanimalparameter import LaAnimalParameter
+
+
+from qgis.PyQt.QtCore import QObject, pyqtSignal
+
+
+class LaMessageBus(QObject):
+    """Super minimal implementation of a message bus.
+
+    Allows communication between unrelated parts of the plugin.
+    """
+
+    """The signal that passes the message."""
+    messaged = pyqtSignal(str)
+
+
+# Modules are evaluated only once, therefore it works as a poor man version of singleton.
+message_bus = MessageBus()
+
+
+
+
 
 
 class LaUtils:

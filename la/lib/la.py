@@ -9,7 +9,7 @@ Author: [Your Name]
 Date created: [Date]
 """
 
-from lib.lafoodsource import LaFoodSource
+from la.lib.lafoodsource import LaFoodSource
 
 from typing import Tuple
 from typing import Dict

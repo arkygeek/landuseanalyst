@@ -25,9 +25,9 @@ from qgis.PyQt.QtWidgets import QAction
 import os.path
 
 # local pkg imports
-# from .resources import *  # Initialize Qt resources from file resources.py
+from la.resources import *  # Initialize Qt resources from file resources.py
 # from .resources import * # Initialize Qt resources from file resources.py
-from ui.lamainformbase import LaMainFormBase  # Import dialog code
+from la.ui.lamainformbase import LaMainFormBase  # Import dialog code
 
 
 class LanduseAnalyst:

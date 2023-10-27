@@ -31,8 +31,23 @@ from qgis.PyQt.QtCore import QTextStream
 
 import os
 
-from lib.la import *  # my own classes
-from ui.lacropmanagerbase import LaCropManagerBase
+from la.lib.la import (
+    La, LaFoodSource, LandFound, LandBeingGrazed
+) # my own classes
+# from la.ui.lamainformbase import LaMainFormBase
+from la.ui.laanimalmanagerbase import laanimalmanagerbase
+from la.ui.laanimalparametermanagerbase import laanimalparametermanagerbase
+from la.ui.laanimalparameterbase import laanimalparameterbase
+from la.ui.laassemblageconversionbase import laassemblageconversionbase
+from la.ui.lacropmanagerbase import LaCropManagerBase
+from la.ui.lacropparameterbase import lacropparameterbase
+from la.ui.lacropparametermanagerbase import lacropparametermanagerbase
+from la.ui.laexperimentbase import laexperimentbase
+from la.ui.lagrassprocessbase import lagrassprocessbase
+from la.ui.laReportFallow import laReportFallow
+from la.ui.laReportHerds import laReportHerds
+from la.ui.laReportTargets import laReportTargets
+
 # endregion
 
 # This loads your .ui file so that PyQt can

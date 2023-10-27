@@ -1,6 +1,7 @@
 """
 LanduseAnalyst plugin for QGIS
 """
+
 # def classFactory(iface):
 #     """
 #     Load LanduseAnalyst class from file LanduseAnalyst.
@@ -9,12 +10,12 @@ LanduseAnalyst plugin for QGIS
 #     """
 #     return LaMainForm(iface)
 
-from qgis.PyQt.QtCore import Qt
-from qgis.PyQt.QtWidgets import QApplication
-QApplication.setAttribute(Qt.AA_ShareOpenGLContexts)
+# from qgis.PyQt.QtCore import Qt
+# from qgis.PyQt.QtWidgets import QApplication
+# QApplication.setAttribute(Qt.AA_ShareOpenGLContexts)
 
+# import qgis.utils
 # This initializes the plugin and makes it known to QGIS.
-from gui.lamainform import LaMainForm
 
 # noinspection PyPep8Naming
 def classFactory(iface):  # pylint: disable=invalid-name
@@ -23,4 +24,5 @@ def classFactory(iface):  # pylint: disable=invalid-name
     :param iface: A QGIS interface instance.
     :type iface: QgsInterface
     """
-    return LaMainForm(iface)
+    from la.landuse_analyst import LanduseAnalyst
+    return LanduseAnalyst(iface)
