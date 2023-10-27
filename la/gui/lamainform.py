@@ -6,7 +6,7 @@ from PySide6.QtWebEngineWidgets import QWebEngineView
 from PyQt5.QtWebKitWidgets import QWebView
 from qgis.PyQt.QtCore import Qt, QSettings, QTranslator, QCoreApplication
 from qgis.PyQt.QtGui import QIcon, QPixmap
-from qgis.PyQt.QtWidgets import (QAction, QCheckBox, QComboBox, QHeaderView,
+from qgis.PyQt.QtWidgets import (QAction, QCheckBox, QComboBox, QDialog ,QHeaderView,
                                  QLabel, QLineEdit, QMainWindow, QProgressBar,
                                  QPushButton, QRadioButton, QSlider, QSpinBox,
                                  QTableWidget, QTableWidgetItem, QTextBrowser,
@@ -25,23 +25,22 @@ from la.gui.lagrassprocess import LaGrassProcess
 from la.gui.laanimalmanager import LaAnimalManager
 from la.gui.laanimalparametermanager import LaAnimalParameterManager
 
-# from la.ui.lamainformbase import LaMainFormBase
-# from la.ui.laanimalmanagerbase import laanimalmanagerbase
-# from la.ui.laanimalparametermanagerbase import laanimalparametermanagerbase
-# from la.ui.laanimalparameterbase import laanimalparameterbase
-# from la.ui.laassemblageconversionbase import laassemblageconversionbase
-# from la.ui.lacropmanagerbase import LaCropManagerBase
-# from la.ui.lacropparameterbase import lacropparameterbase
-# from la.ui.lacropparametermanagerbase import lacropparametermanagerbase
-# from la.ui.laexperimentbase import laexperimentbase
-# from la.ui.lagrassprocessbase import lagrassprocessbase
-# from la.ui.laReportFallow import laReportFallow
-# from la.ui.laReportHerds import laReportHerds
-# from la.ui.laReportTargets import laReportTargets
+from la.ui.lamainformbase import LaMainFormBase
+from la.ui.laanimalmanagerbase import laanimalmanagerbase
+from la.ui.laanimalparametermanagerbase import laanimalparametermanagerbase
+from la.ui.laanimalparameterbase import laanimalparameterbase
+from la.ui.laassemblageconversionbase import laassemblageconversionbase
+from la.ui.lacropmanagerbase import LaCropManagerBase
+from la.ui.lacropparameterbase import lacropparameterbase
+from la.ui.lacropparametermanagerbase import lacropparametermanagerbase
+from la.ui.laexperimentbase import laexperimentbase
+from la.ui.lagrassprocessbase import lagrassprocessbase
+from la.ui.laReportFallow import laReportFallow
+from la.ui.laReportHerds import laReportHerds
+from la.ui.laReportTargets import laReportTargets
 
-from la.lib.la import (
-    La, Priority, Status, LandBeingGrazed, AreaUnits, LandFound,
-)
+from la.lib.lautils import LaUtils, LaMessageBus 
+
 from la.lib.laanimal import LaAnimal
 from la.lib.laanimalparameter import LaAnimalParameter
 from la.lib.lacrop import LaCrop
@@ -56,6 +55,7 @@ from la.lib.lamodel_interface import LaModelInterface
 from la.lib.laserialisable import LaSerialisable
 from la.lib.lautils import LaUtils, LaMessageBus
 from la.lib.version import VERSION
+from la.lib.la import La
 
 class LaMainForm(QMainWindow):
   def __init__(self, iface):
@@ -74,7 +74,7 @@ class LaMainForm(QMainWindow):
       self.actionSaveAs.triggered.connect(self.saveFileAs)
       self.actionPreferences.triggered.connect(self.showPreferences)
       self.actionAbout.triggered.connect(self.showAbout)
-      self.m
+      
       # Set up the toolbar actions
       self.actionNewToolbar.triggered.connect(self.newFile)
       self.actionOpenToolbar.triggered.connect(self.openFile)

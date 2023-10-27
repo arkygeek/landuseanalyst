@@ -1,7 +1,7 @@
 from qgis.PyQt.QtCore import Qt, QModelIndex, QAbstractTableModel
 from qgis.PyQt.QtGui import QBrush, QColor
 
-from lib.lacrop import LaCrop
+from la.lib.lacrop import LaCrop
 
 
 class LaCropTableModel(QAbstractTableModel):

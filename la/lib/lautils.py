@@ -13,10 +13,10 @@ import os
 import sys
 import random
 import string
-from qgis.PyQt.QtWidgets import QMessageBox
+from qgis.PyQt.QtWidgets import QMessageBox, QColorDialog, QInputDialog
 from qgis.PyQt.QtCore import QFile, QTextStream, QObject
 from qgis.PyQt.QtGui import QColor
-from lib.laanimalparameter import LaAnimalParameter
+from la.lib.laanimalparameter import LaAnimalParameter
 
 
 from qgis.PyQt.QtCore import QObject, pyqtSignal
@@ -33,7 +33,7 @@ class LaMessageBus(QObject):
 
 
 # Modules are evaluated only once, therefore it works as a poor man version of singleton.
-message_bus = MessageBus()
+message_bus = LaMessageBus()
 
 
 

@@ -31,10 +31,15 @@ from qgis.PyQt.QtCore import QTextStream
 
 import os
 
+from la.lib.lautils import (
+    LaMessageBus, LaUtils
+)
+
+# myAreaUnits = LaUtils.AreaUnits()
+
 from la.lib.la import (
     La, LaFoodSource, LandFound, LandBeingGrazed
 ) # my own classes
-# from la.ui.lamainformbase import LaMainFormBase
 from la.ui.laanimalmanagerbase import laanimalmanagerbase
 from la.ui.laanimalparametermanagerbase import laanimalparametermanagerbase
 from la.ui.laanimalparameterbase import laanimalparameterbase
@@ -205,19 +210,18 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         myQFile.close()
 
 
-    def on_clicked_pbnNewCrop(self, parent=None):
+    def on_clicked_pbnNewCrop(self):
         print("open Manage Crops window printed")
         self.tbReport.append("Manage Crops button clicked")
 
-        Ui_CropManagerBase, _ = uic.loadUiType(
+        Ui_LaCropManagerBase, QDialog = uic.loadUiType(
             os.path.join(
                 os.path.dirname(__file__),
-                'ui/lacropmanagerbase.ui'))
+                'lacropmanagerbase.ui'))
 
-        super(self, Ui_CropManagerBase).__init__(parent)
-        self.setupUi(Ui_CropManagerBase)
-        Ui_CropManagerBase.show()
-        Ui_CropManagerBase.exec()
+        crop_manager = LaCropManagerBase()
+        crop_manager.show()
+        crop_manager.exec_()
 
 
     def on_clicked_pbnNewCropParameter(self):
@@ -264,9 +268,9 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
     def setModel(self, *args):
         self.mSelectedCropsMap.clear()
         self.mSelectedAnimalsMap.clear()
-        mySelectedAreaUnit = AreaUnits(self.cbAreaUnits.currentText())
+        mySelectedAreaUnit = LaUtils.AreaUnits(self.cbAreaUnits.currentText())
         myCommonRasterValue = int(self.sbCommonRasterValue.value())
 
         # TODO this is quick and dirty
         myAreaUnits = 'Dunum' if mySelectedAreaUnit else 'Hectare'
-        print(AreaUnits, myAreaUnits, myCommonRasterValue)
+        print(mySelectedAreaUnit, myAreaUnits, myCommonRasterValue)

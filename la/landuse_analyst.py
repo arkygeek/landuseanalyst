@@ -25,8 +25,9 @@ from qgis.PyQt.QtWidgets import QAction
 import os.path
 
 # local pkg imports
+
+# the following line for resources is required
 from la.resources import *  # Initialize Qt resources from file resources.py
-# from .resources import * # Initialize Qt resources from file resources.py
 from la.ui.lamainformbase import LaMainFormBase  # Import dialog code
 
 
@@ -52,6 +53,7 @@ class LanduseAnalyst:
                         'i18n',
                         'LanduseAnalyst_{}.qm'.format(locale)
                         )
+        print(locale_path)
         if os.path.exists(locale_path):
             self.translator = QTranslator()
             self.translator.load(locale_path)
