@@ -1,12 +1,16 @@
 from qgis.PyQt.QtCore import Qt, QModelIndex, QAbstractTableModel
-from qgis.PyQt.QtGui import QBrush, QColor
+from qgis.PyQt.QtGui import QBrush, QColor, QPixmap
+from qgis.PyQt.QtWidgets import QLabel
 
 from la.lib.lacrop import LaCrop
+from la.lib.lautils import LaUtils
 
 
 class LaCropTableModel(QAbstractTableModel):
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.lblCropPix = QLabel(self)
+        self.mImageFile = None
         self.crops = []
 
     def rowCount(self, parent=QModelIndex()):
@@ -61,6 +65,9 @@ class LaCropTableModel(QAbstractTableModel):
     def getCrop(self, index):
         return self.crops[index]
 
+     
+
+
 
 class LaCropManager:
     def __init__(self, parent=None):
@@ -82,6 +89,12 @@ class LaCropManager:
 
     def getCropTableModel(self):
         return LaCropTableModel(self.parent)
+    
+    def on_pbnCropPic_clicked(self):
+        myUtils = LaUtils()
+        myFile = myUtils.openGraphicFile()
+        self.lblCropPix.setPixmap(QPixmap(myFile))
+        self.mImageFile = myFile  
 
 """
 
