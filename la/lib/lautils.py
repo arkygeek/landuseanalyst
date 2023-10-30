@@ -9,25 +9,29 @@ Author: [Your Name]
 Date created: [Date]
 """
 
+# Importing necessary modules
 import os
 import sys
 import shutil
 import random
 import string
 
+# Importing typing for type hinting
 from typing import Dict, List, Tuple
 
+# Importing necessary PyQt5 modules
 from qgis.PyQt.QtWidgets import QMessageBox, QColorDialog, QInputDialog, QFileDialog
 from qgis.PyQt.QtCore import QFile, QTextStream, QObject, QDir, QSettings
 from qgis.PyQt.QtGui import QColor
+
+# Importing custom classes
 from la.lib.laanimalparameter import LaAnimalParameter
 from la.lib.laanimal import LaAnimal
 from la.lib.lacrop import LaCrop
 from la.lib.lacropparameter import LaCropParameter
 
-
+# Importing necessary PyQt5 modules
 from qgis.PyQt.QtCore import QObject, pyqtSignal
-
 
 class LaMessageBus(QObject):
     """Super minimal implementation of a message bus.
@@ -42,33 +46,70 @@ message_bus = LaMessageBus()
 
 
 class LaUtils:
+    """
+    A utility class for Land Use Analyst.
+
+    This class provides various static methods for getting and manipulating data directories, animal and crop profiles,
+    conversion tables, animal and crop parameter profiles, and images. It also provides methods for encoding and decoding
+    XML strings, sorting and removing duplicates from lists, and creating text files.
+    """
+
+        
     @staticmethod
     def userSettingsDirPath() -> str:
+        """
+        Returns the path to the user settings directory.
+
+        If the directory does not exist, it is created.
+
+        :return: A string representing the path to the user settings directory.
+        """
+        # Get the user settings directory path from QSettings
         mySettings = QSettings()
-        myPath = mySettings.value("dataDirs/dataDir", os.path.expanduser("~/.landuseAnalyst/"))
+        myPath = mySettings.value(
+            "dataDirs/dataDir", 
+            os.path.expanduser("~/.landuseAnalyst/"))
+        # Create the directory if it does not exist
         os.makedirs(myPath, exist_ok=True)
+        # Return the path to the user settings directory
         return myPath
 
     @staticmethod
     def getModelOutputDir() -> str:
+        """
+        Returns the path to the model outputs directory.
+        If the directory does not exist, it is created.
+        """
         myPath = os.path.join(LaUtils.userSettingsDirPath(), "modelOutputs")
         os.makedirs(myPath, exist_ok=True)
         return myPath
 
     @staticmethod
     def userAnimalProfilesDirPath() -> str:
+        """
+        Returns the path to the animal profiles directory.
+        If the directory does not exist, it is created.
+        """
         myPath = os.path.expanduser("~/.landuseAnalyst/animalProfiles")
         os.makedirs(myPath, exist_ok=True)
         return myPath
-    
+
     @staticmethod
     def userCropProfilesDirPath() -> str:
+        """
+        Returns the path to the crop profiles directory.
+        If the directory does not exist, it is created.
+        """
         myPath = os.path.expanduser("~/.landuseAnalyst/cropProfiles")
         os.makedirs(myPath, exist_ok=True)
         return myPath
-    
+
     @staticmethod
     def getAvailableAnimals() -> Dict[str, LaAnimal]:
+        """
+        Returns a dictionary of available animals.
+        The keys are the GUIDs of the animals, and the values are the animal objects.
+        """
         myMap = {}
         myDirectory = QDir(LaUtils.userAnimalProfilesDirPath())
         myList = myDirectory.entryInfoList(QDir.Dirs | QDir.Files | QDir.NoSymLinks)
@@ -84,9 +125,16 @@ class LaUtils:
                     continue
                 myMap[myAnimal.guid()] = myAnimal
         return myMap
-    
+
     @staticmethod
     def getAnimal(theGuid: str) -> LaAnimal:
+        """
+        Returns an animal object with the given GUID.
+        If no such animal exists, returns a blank animal.
+
+        :return: An animal object.
+        :rtype: LaAnimal
+        """
         myDirectory = QDir(LaUtils.userAnimalProfilesDirPath())
         myList = myDirectory.entryInfoList(QDir.Dirs | QDir.Files | QDir.NoSymLinks)
         for myFileInfo in myList:
@@ -102,42 +150,60 @@ class LaUtils:
                 if myAnimal.guid() == theGuid:
                     return myAnimal
         return LaAnimal()  # Return a blank animal if no match is found
-    
-    @staticmethod
-    def getAvailableCrops() -> Dict[str, LaCrop]:
-        myMap = {}
-        myDirectory = QDir(LaUtils.userCropProfilesDirPath())
-        myList = myDirectory.entryInfoList(QDir.Dirs | QDir.Files | QDir.NoSymLinks)
-        for myFileInfo in myList:
-            # Ignore directories
-            if myFileInfo.fileName() in [".", ".."]:
-                continue
-            # if the filename ends in .xml try to load it into our layerSets listing
-            if myFileInfo.completeSuffix() == "xml":
-                myCrop = LaCrop()
-                myCrop.fromXmlFile(myFileInfo.absoluteFilePath())
-                if myCrop.name() == "":
-                    continue
-                myMap[myCrop.guid()] = myCrop
-        return myMap
+            
+    class LaUtils:
+        @staticmethod
+        def getAvailableCrops() -> Dict[str, LaCrop]:
+            """
+            Returns a dictionary of available crops, where the keys are the 
+            crop GUIDs and the values are LaCrop objects.
 
-    @staticmethod
-    def getCrop(theGuid) -> LaCrop:
-        myDirectory = QDir(LaUtils.userCropProfilesDirPath())
-        myList = myDirectory.entryInfoList(QDir.Dirs | QDir.Files | QDir.NoSymLinks)
-        for myFileInfo in myList:
-            # Ignore directories
-            if myFileInfo.fileName() in [".", ".."]:
-                continue
-            # if the filename ends in .xml try to load it into our layerSets listing
-            if myFileInfo.completeSuffix() == "xml":
-                myCrop = LaCrop()
-                myCrop.fromXmlFile(myFileInfo.absoluteFilePath())
-                if myCrop.name() == "":
+            :return: A dictionary of available crops.
+            :rtype: Dict[str, LaCrop]
+            """
+            myMap = {}
+            myDirectory = QDir(LaUtils.userCropProfilesDirPath())
+            myList = myDirectory.entryInfoList(QDir.Dirs | QDir.Files | QDir.NoSymLinks)
+            for myFileInfo in myList:
+                # Ignore directories
+                if myFileInfo.fileName() in [".", ".."]:
                     continue
-                if myCrop.guid() == theGuid:
-                    return myCrop
-        return LaCrop()  # Return a blank crop if no match is found
+                # if the filename ends in .xml try to load it into our layerSets listing
+                if myFileInfo.completeSuffix() == "xml":
+                    myCrop = LaCrop()
+                    myCrop.fromXmlFile(myFileInfo.absoluteFilePath())
+                    if myCrop.name() == "":
+                        continue
+                    myMap[myCrop.guid()] = myCrop
+            return myMap
+
+    class LaUtils:
+        @staticmethod
+        def getCrop(theGuid: str) -> LaCrop:
+            """
+            This method searches for a crop with the specified GUID in the user's crop profiles directory.
+            If a matching crop is found, it is returned as a LaCrop object. Otherwise, a blank LaCrop object is returned.
+
+            :param theGuid: The GUID of the crop to search for.
+            :type theGuid: str
+            :return: The LaCrop object with the specified GUID, or a blank LaCrop object if no match is found.
+            :rtype: LaCrop
+            """
+            myDirectory = QDir(LaUtils.userCropProfilesDirPath())
+            myList = myDirectory.entryInfoList(QDir.Dirs | QDir.Files | QDir.NoSymLinks)
+            for myFileInfo in myList:
+                # Ignore directories
+                if myFileInfo.fileName() in [".", ".."]:
+                    continue
+                # if the filename ends in .xml try to load it into our layerSets listing
+                if myFileInfo.completeSuffix() == "xml":
+                    myCrop = LaCrop()
+                    myCrop.fromXmlFile(myFileInfo.absoluteFilePath())
+                    if myCrop.name() == "":
+                        continue
+                    if myCrop.guid() == theGuid:
+                        return myCrop
+            return LaCrop()  # Return a blank crop if no match is found
     
     @staticmethod
     def userConversionTablesDirPath() -> str:
@@ -310,7 +376,12 @@ class LaUtils:
 
     @staticmethod
     def getStandardCss() -> str:
-        myStyle = ".glossy{ background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #616161, stop: 0.5 #505050, stop: 0.6 #434343, stop:1 #656565); color: white; padding-left: 4px; border: 1px solid #6c6c6c; }"
+        myStyle = ".glossy{"
+        myStyle += "  background-color: qlineargradient("
+        myStyle += "    x1:0, y1:0, x2:0, y2:1, stop:0 #616161,"
+        myStyle += "    stop: 0.5 #505050, stop: 0.6 #434343, stop:1 #656565);"
+        myStyle += "  color: white; padding-left: 4px; "
+        myStyle += "  border: 1px solid #6c6c6c; }"
         myStyle += "body {background: white;}"
         myStyle += "h1 {font-size : 22pt; color: #0063F7; }"
         myStyle += "h2 {font-size : 18pt; color: #0063F7; }"
@@ -318,37 +389,15 @@ class LaUtils:
         myStyle += ".cellHeader {color:#466aa5; font-size : 12pt;}"
         myStyle += ".parameterHeader {font-weight: bold;}"
         myStyle += ".largeCell {color:#000000; font-size : 12pt;}"
-        myStyle += ".table {" \
-                    "  border-width: 1px 1px 1px 1px;" \
-                    "  border-spacing: 2px;" \
-                    "  border-style: solid solid solid solid;" \
-                    "  border-color: black black black black;" \
-                    "  border-collapse: separate;" \
-                    "  background-color: white;" \
-                    "}"
+        myStyle += ".table {"
+        myStyle += "  border-width: 1px 1px 1px 1px;"
+        myStyle += "  border-spacing: 2px;"
+        myStyle += "  border-style: solid solid solid solid;"
+        myStyle += "  border-color: black black black black;"
+        myStyle += "  border-collapse: separate;"
+        myStyle += "  background-color: white;"
+        myStyle += "}"
         return myStyle
-
-    @staticmethod
-    def openGraphicFile() -> str:
-        myHomePath = os.path.expanduser("~")
-        myFileName, _ = QFileDialog.getOpenFileName(None, "Choose an image", myHomePath, "Images (*.png *.xpm *.jpg)")
-        myName = os.path.basename(myFileName)
-        myDestinationFilePathName = os.path.join(LaUtils.userImagesDirPath(), myName)
-        shutil.copy(myFileName, myDestinationFilePathName)
-        return myDestinationFilePathName
-
-    @staticmethod
-    def saveFile() -> str:
-        # myHomePath: str = os.path.expanduser("~")
-        myFileName: str
-        _ : str
-        myFileName, _ = QFileDialog.getSaveFileName(None, "Choose a file name", LaUtils.userConversionTablesDirPath(), "*.csv")
-        myName: str = os.path.basename(myFileName)
-        myDestinationFilePathName: str = os.path.join(LaUtils.userConversionTablesDirPath(), myName)
-        return myDestinationFilePathName
-
-        
-
 
     @staticmethod
     def getAnimalParameters():
@@ -462,21 +511,49 @@ class LaUtils:
         Returns the path to the directory containing the application executable.
         """
         return os.path.dirname(sys.argv[0])
-    
+
     @staticmethod
-    def openGraphicFile():
+    def openGraphicFile() -> str:
+        """
+        Opens a file dialog to choose an image file and copies it to the user's images directory.
+
+        Returns:
+        str: The file path of the copied image file.
+        """
         myHomePath = os.path.expanduser("~")
         myFileName, _ = QFileDialog.getOpenFileName(
-                            None, 
-                            "Choose an image", 
-                            myHomePath, 
+                            None,
+                            "Choose an image",
+                            myHomePath,
                             "Images (*.png *.xpm *.jpg)"
                         )
         myName = os.path.basename(myFileName)
-        myDestinationFilePathName = os.path.join(LaUtils.userImagesDirPath(), myName)
+        myDestinationFilePathName = os.path.join(
+                                        LaUtils.userImagesDirPath(), 
+                                        myName
+                                    )
         shutil.copy(myFileName, myDestinationFilePathName)
         return myDestinationFilePathName
 
+    @staticmethod
+    def saveFile() -> str:
+        # myHomePath: str = os.path.expanduser("~")
+        myFileName: str
+        _ : str
+        myFileName, _ = QFileDialog.getSaveFileName(
+                            None, 
+                            "Choose a file name", 
+                            LaUtils.userConversionTablesDirPath(), 
+                            "*.csv"
+                            )
+        myName: str = os.path.basename(myFileName)
+        myDestinationFilePathName: str = os.path.join(LaUtils.userConversionTablesDirPath(), myName)
+        return myDestinationFilePathName
+
+        
+
+
+    
 
 """
 
