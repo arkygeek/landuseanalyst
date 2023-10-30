@@ -1,23 +1,39 @@
-if(COMMAND cmake_policy) 
-        cmake_policy(SET CMP0003 OLD) 
-        cmake_policy(SET CMP0005 OLD) 
-endif(COMMAND cmake_policy)  
-cmake_policy(SET CMP0006 OLD)
+cmake_minimum_required(VERSION 3.10)
 
-set(QT_USE_CORE TRUE)
-set(QT_USE_GUI TRUE)
-set(QT_USE_QTTEST TRUE)
-include(${QT_USE_FILE})
+# if(COMMAND cmake_policy) 
+#         cmake_policy(SET CMP0003 OLD) 
+#         cmake_policy(SET CMP0005 OLD) 
+# endif(COMMAND cmake_policy)  
+# cmake_policy(SET CMP0006 OLD)
+
+if(COMMAND cmake_policy)
+  cmake_policy(SET CMP0003 NEW)
+  cmake_policy(SET CMP0005 NEW)
+endif(COMMAND cmake_policy)
+cmake_policy(SET CMP0006 NEW)
+
+# set(QT_USE_CORE TRUE)
+# set(QT_USE_GUI TRUE)
+# set(QT_USE_QTTEST TRUE)
+# include(${QT_USE_FILE})
+
+find_package(Qt5 COMPONENTS Core Gui Test REQUIRED)
+
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTORCC ON)
+
+
 #####################################################
 # Don't forget to include output directory, otherwise
 # the UI file won't be wrapped!
 INCLUDE_DIRECTORIES(
-  ${QT_INCLUDE_DIR}
-# binary make output dirs for uics and mocs
+  ${Qt5Core_INCLUDE_DIRS}
+  ${Qt5Gui_INCLUDE_DIRS}
+  ${Qt5Widgets_INCLUDE_DIRS}
   ${CMAKE_CURRENT_BINARY_DIR}
   ${CMAKE_CURRENT_BINARY_DIR}/..
   ${CMAKE_CURRENT_BINARY_DIR}/../ui
-# source dirs
   ${CMAKE_CURRENT_SOURCE_DIR} 
   ${CMAKE_CURRENT_SOURCE_DIR}/..
   ${CMAKE_CURRENT_SOURCE_DIR}/../lib
@@ -28,7 +44,7 @@ INCLUDE_DIRECTORIES(
   #${QGIS_INCLUDE_DIR}
   #${PROJ_INCLUDE_DIR}
   #${GEOS_INCLUDE_DIR}
-  )
+)
 
 # expect that classes are being IMPORTED for the exe
 IF (WIN32)
@@ -78,7 +94,8 @@ ADD_DEFINITIONS(-DTEST_DATA_DIR="\\"${TEST_DATA_DIR}\\"")
 MESSAGE ("Test Install Dir: ${LA_TEST_DIR}")
 SET(modeltest_SRCS lamodeltest.cpp)
 SET(modeltest_MOC_CPPS lamodeltest.cpp)
-QT4_WRAP_CPP(modeltest_MOC_SRCS ${modeltest_MOC_CPPS})
+# QT4_WRAP_CPP(modeltest_MOC_SRCS ${modeltest_MOC_CPPS})
+SET(CMAKE_AUTOMOC ON)
 ADD_CUSTOM_TARGET(modeltestmoc ALL DEPENDS ${modeltest_MOC_SRCS})
 ADD_EXECUTABLE(modeltest ${modeltest_SRCS})
 ADD_DEPENDENCIES(modeltest modeltestmoc)
@@ -89,7 +106,8 @@ ADD_TEST(model ${LA_TEST_DIR}/modeltest)
 # grass test
 SET(grasstest_SRCS lagrasstest.cpp)
 SET(grasstest_MOC_CPPS lagrasstest.cpp)
-QT4_WRAP_CPP(grasstest_MOC_SRCS ${grasstest_MOC_CPPS})
+# QT4_WR.P_CPP(grasstest_MOC_SRCS ${grasstest_MOC_CPPS})
+set(CMAKE_AUTOMOC ON)
 ADD_CUSTOM_TARGET(grasstestmoc ALL DEPENDS ${grasstest_MOC_SRCS})
 ADD_EXECUTABLE(grasstest ${grasstest_SRCS})
 ADD_DEPENDENCIES(grasstest grasstestmoc)

@@ -14,4 +14,9 @@
     }
   },
   "editor.fontFamily": "Fira Code iScript",
+  "C_Cpp.errorSquiggles": "enabled",
+  "files.associations": {
+    "qsplitter": "cpp",
+    "qheaderview": "cpp"
+  },
 }

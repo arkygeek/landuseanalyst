@@ -1,5 +1,5 @@
 /***************************************************************************
-                          laanimal.h  -  An animal class
+                           laanimal.h  -  An animal class
                              -------------------
     begin                : March 2006
     copyright            : (C) 2003 by Tim Sutton

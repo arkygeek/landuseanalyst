@@ -1,18 +1,17 @@
-cmake_minimum_required(VERSION 2.4)
-cmake_policy(SET CMP0006 OLD)
-if(COMMAND cmake_policy)
-        cmake_policy(SET CMP0003 OLD)
-        cmake_policy(SET CMP0005 OLD)
-endif(COMMAND cmake_policy)
-# the next line sets up include and link directories and defines some variables that we will use.
-# you can modify the behavior by setting some variables, e.g.
-#   set(QT_USE_OPENGL TRUE)
-# -> this will cause cmake to include and link against the OpenGL module
-set(QT_USE_CORE TRUE)
-set(QT_USE_GUI TRUE)
-include(${QT_USE_FILE})
+cmake_minimum_required(VERSION 3.10)
 
-# the variable "landuseanalyst_SRCS" contains all .cpp files of this project
+if(COMMAND cmake_policy)
+    cmake_policy(SET CMP0003 NEW)
+    cmake_policy(SET CMP0005 NEW)
+endif(COMMAND cmake_policy)
+cmake_policy(SET CMP0006 NEW)
+
+find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
+
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTORCC ON)
+
 set(landuseanalyst_SRCS
     main.cpp
     lamainform.cpp
@@ -22,49 +21,24 @@ set(landuseanalyst_SRCS
     laanimalparametermanager.cpp
     laassemblageconversion.cpp
     lagrassprocess.cpp
-   )
-SET(landuseanalyst_UIS
-    ../ui/lamainformbase.ui
-    ../ui/lacropmanagerbase.ui
-    ../ui/lacropparametermanagerbase.ui
-    ../ui/laanimalmanagerbase.ui
-    ../ui/laanimalparametermanagerbase.ui
-    ../ui/laassemblageconversionbase.ui
-    ../ui/lagrassprocessbase.ui
-    )
-SET(landuseanalyst_MOC_HDRS
-    lamainform.h
-    lacropmanager.h
-    lacropparametermanager.h
-    laanimalmanager.h
-    laanimalparametermanager.h
-    laassemblageconversion.h
-    lagrassprocess.h
-    )
-SET(landuseanalyst_RCCS
-    ../resources/resources.qrc
-    )
+)
 
-# tell cmake to create .moc files for all files in the variable landuseanalyst_SRCS that require such a file.
-# note: this assumes that you use #include "header.moc" in your files
-qt4_automoc(${landuseanalyst_SRCS})
+add_executable(landuseanalyst
+    ${landuseanalyst_SRCS}
+)
 
-# tell cmake to create ui_ files for everything specified in landuseanalyst_UIS
-QT4_WRAP_UI(landuseanalyst_UIS_H ${landuseanalyst_UIS})
+target_link_libraries(landuseanalyst
+     Qt5::Core
+     Qt5::Gui
+     Qt5::Widgets
+     la_core
+)
 
-#tell cmake to generate moc_ files for everything specified in landuseanalyst_MOCS
-QT4_WRAP_CPP(landuseanalyst_MOC_SRCS ${landuseanalyst_MOC_HDRS})
-
-# tell cmake to generate resources
-QT4_ADD_RESOURCES(landuseanalyst_RCC_SRCS ${landuseanalyst_RCCS})
-
-# Don't forget to include output directory, otherwise
-# the UI file won't be wrapped!
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/../lib
-    )
+)
 
 # application icon
 IF (WIN32)
@@ -89,9 +63,6 @@ IF( APPLE )
   add_executable(landuseanalyst
                MACOSX_BUNDLE
                ${landuseanalyst_SRCS}
-               ${landuseanalyst_UIS_H}
-               ${landuseanalyst_MOC_SRCS}
-               ${landuseanalyst_RCC_SRCS}
                )
   # For Mac OS X, the executable must be at the root of the bundle's executable folder
   INSTALL(TARGETS landuseanalyst RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX})
@@ -101,27 +72,13 @@ ELSE( NOT APPLE )
     IF (CMAKE_BUILD_TYPE MATCHES Debug)
       add_executable(landuseanalyst
         ${landuseanalyst_SRCS}
-        ${landuseanalyst_UIS_H}
-        ${landuseanalyst_MOC_SRCS}
-        ${landuseanalyst_RCC_SRCS}
         )
     ELSE (CMAKE_BUILD_TYPE MATCHES Debug)
       #adding win32 below indicates no console display should be done
       add_executable(landuseanalyst WIN32
         ${landuseanalyst_SRCS}
-        ${landuseanalyst_UIS_H}
-        ${landuseanalyst_MOC_SRCS}
-        ${landuseanalyst_RCC_SRCS}
         )
-      ADD_EXECUTABLE(landuseanalyst WIN32 ${landuseanalyst_SRCS})
     ENDIF (CMAKE_BUILD_TYPE MATCHES Debug)
-  ELSE (WIN32)
-    add_executable(landuseanalyst
-      ${landuseanalyst_SRCS}
-      ${landuseanalyst_UIS_H}
-      ${landuseanalyst_MOC_SRCS}
-      ${landuseanalyst_RCC_SRCS}
-      )
   ENDIF (WIN32)
   INSTALL(TARGETS landuseanalyst RUNTIME DESTINATION ${BIN_DIR})
 ENDIF( APPLE )

@@ -55,7 +55,7 @@
  * @param parent
  * @param fl
  */
-LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
+LaMainForm::LaMainForm(QWidget* parent, Qt::WindowFlags fl)
   : QDialog(parent,fl)
 {
     //required by Qt4 to initialise the ui
@@ -86,10 +86,10 @@ LaMainForm::LaMainForm(QWidget* parent, Qt::WFlags fl)
   lblVersion->setText(QString("Version: %1").arg(VERSION) + " " + QString("$Revision$").replace("$",""));
   tblAnimals->horizontalHeader()->hide();
   tblAnimals->verticalHeader()->hide();
-  tblAnimals->horizontalHeader()->setResizeMode(2,QHeaderView::Stretch);
+  tblAnimals->horizontalHeader()->setSectionResizeMode(2,QHeaderView::Stretch);
   tblCrops->horizontalHeader()->hide();
   tblCrops->verticalHeader()->hide();
-  tblCrops->horizontalHeader()->setResizeMode(2,QHeaderView::Stretch);
+  tblCrops->horizontalHeader()->setSectionResizeMode(2,QHeaderView::Stretch);
   listWidgetCalculationsAnimal->clear();
   loadAnimals();
   loadCrops();

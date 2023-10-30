@@ -1,11 +1,11 @@
 project(landuseanalyst) # the name of your project
-cmake_minimum_required(VERSION 2.4)
+cmake_minimum_required(VERSION 3.10)
 
 if(COMMAND cmake_policy)
-        cmake_policy(SET CMP0003 OLD)
-        cmake_policy(SET CMP0005 OLD)
+    cmake_policy(SET CMP0003 NEW)
+    cmake_policy(SET CMP0005 NEW)
 endif(COMMAND cmake_policy)
-cmake_policy(SET CMP0006 OLD)
+cmake_policy(SET CMP0006 NEW)
 SET (ENABLE_TESTS TRUE CACHE BOOL "Build unit tests (use 'make test' to run them")
 SET (PEDANTIC TRUE CACHE BOOL "Treat warnings as errors")
 
@@ -46,10 +46,12 @@ ELSE (WIN32)
 ENDIF (WIN32)
 
 #############################################################
-# search for Qt4
+# search for Qt5
+find_package(Qt5 COMPONENTS Core Gui Xml REQUIRED)
 
-find_package(Qt4 REQUIRED) # find and setup Qt4 for this project
-SET( QT_USE_QTXML      TRUE )
+# search for Qt4
+# find_package(Qt4 REQUIRED) # find and setup Qt4 for this project
+# SET( QT_USE_QTXML      TRUE )
 #SET( QT_USE_QTNETWORK  TRUE )
 #SET( QT_USE_QTSVG      TRUE )
 #SET( QT_USE_QTSQL    TRUE )

@@ -18,7 +18,7 @@
 #include <QFileDialog>
 #ifdef Q_OS_MACX
   //for getting app bundle path
-#include <ApplicationServices/ApplicationServices.h>
+#include <ApplicationServices.h>
 #endif
 
 

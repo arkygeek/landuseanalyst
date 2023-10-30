@@ -49,7 +49,7 @@ class LaMainForm : public QDialog, private Ui::LaMainFormBase
     * @param parent
     * @param fl
     */
-    LaMainForm(QWidget* parent = 0, Qt::WFlags fl = 0 );
+    LaMainForm(QWidget* parent = 0, Qt::WindowFlags fl = 0 );
     /**  
      * No idea what to put here
      */

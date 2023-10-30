@@ -38,7 +38,7 @@ class LaAnimalManager : public QDialog, private Ui::LaAnimalManagerBase
   public:
     /** @TODO document this properly
       */
-    LaAnimalManager(QWidget* parent = 0, Qt::WFlags fl = 0 );
+    LaAnimalManager(QWidget* parent = 0, Qt::WindowFlags fl = 0 );
     ~LaAnimalManager();
 
   public slots:

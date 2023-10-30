@@ -17,8 +17,8 @@
  *                                                                         *
  ***************************************************************************/
 #include <QString>
-#include <QDomDocument>
-#include <QDomElement>
+#include <QtXml/QDomDocument>
+#include <QtXml/QDomElement>
 #include "laanimal.h"
 #include "lautils.h"
 
