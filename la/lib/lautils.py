@@ -292,8 +292,15 @@ class LaUtils:
         :rtype: Dict[str, LaAnimalParameter]
         """
         myMap: Dict[str, LaAnimalParameter] = {}
-        myDirectory: QDir = QDir(LaUtils.userAnimalParameterProfilesDirPath())
+        myDirectory: QDir = QDir(LaUtils.userCropProfilesDirPath())
+        
+        """ 
+        In PyQt5, there is no specific QFileInfoList class. Given that the
+        QDir.entryInfoList() method returns a Python list of QFileInfo objects, 
+        you only need to import QFileInfo from PyQt5.QtCore
+        """
         myList: List[QFileInfo] = myDirectory.entryInfoList(QDir.Dirs | QDir.Files | QDir.NoSymLinks)
+
         for myFileInfo in myList:
             # Ignore directories
             if myFileInfo.fileName() in [".", ".."]:
