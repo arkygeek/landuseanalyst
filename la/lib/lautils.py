@@ -9,40 +9,41 @@ Author: [Your Name]
 Date created: [Date]
 """
 
-# Importing necessary modules
+# Standard library imports
 import os
 import sys
 import shutil
 import random
 import string
-
-# Importing typing for type hinting
 from typing import Dict, List, Tuple
 
-# Importing necessary PyQt5 modules
-from qgis.PyQt.QtWidgets import QMessageBox, QColorDialog, QInputDialog, QFileDialog
-from qgis.PyQt.QtCore import QFile, QTextStream, QObject, QDir, QSettings, QFileInfo
+# Third party imports
+from qgis.PyQt.QtWidgets import (
+    QMessageBox, QColorDialog, QInputDialog, QFileDialog, QWidget)
+from qgis.PyQt.QtCore import (
+    QFile, QTextStream, QObject, QDir, QSettings, QFileInfo, QObject, pyqtSignal)
 from qgis.PyQt.QtGui import QColor
 
-# Importing custom classes
+# Local application imports
 from la.lib.laanimalparameter import LaAnimalParameter
 from la.lib.laanimal import LaAnimal
 from la.lib.lacrop import LaCrop
 from la.lib.lacropparameter import LaCropParameter
 
-# Importing necessary PyQt5 modules
-from qgis.PyQt.QtCore import QObject, pyqtSignal
-
 class LaMessageBus(QObject):
     """Super minimal implementation of a message bus.
     Allows communication between unrelated parts of the plugin.
+
+    This class inherits from QObject and provides a PyQt signal for message passing.
+
+    Attributes:
+        messaged (pyqtSignal): The signal that passes the message. Emits a string.
     """
     # The signal that passes the message.
-    messaged = pyqtSignal(str)
-
+    messaged: pyqtSignal = pyqtSignal(str)
 
 # Modules are evaluated only once, therefore it works as a poor man version of singleton.
-message_bus = LaMessageBus()
+message_bus: LaMessageBus = LaMessageBus()
 
 
 class LaUtils:
@@ -54,7 +55,6 @@ class LaUtils:
     XML strings, sorting and removing duplicates from lists, and creating text files.
     """
 
-        
     @staticmethod
     def userSettingsDirPath() -> str:
         """
@@ -286,19 +286,25 @@ class LaUtils:
     
     @staticmethod
     def getAvailableAnimalParameters() -> Dict[str, LaAnimalParameter]:
-        """
-        This method returns a dictionary of available animal parameters.
+        """Returns a dictionary of available animal parameters.
+
+        This method scans the directory returned by `userCropProfilesDirPath()`
+        for XML files, each of which is expected to define an animal parameter.
+        Each file is parsed into an `LaAnimalParameter` object.
+
+        Returns:
+        A dictionary mapping the GUIDs of the animal parameters to the
+        corresponding `LaAnimalParameter` objects. If no animal parameters
+        are found, returns an empty dictionary.
+
         :return: A dictionary of available animal parameters.
         :rtype: Dict[str, LaAnimalParameter]
         """
         myMap: Dict[str, LaAnimalParameter] = {}
         myDirectory: QDir = QDir(LaUtils.userCropProfilesDirPath())
-        
-        """ 
-        In PyQt5, there is no specific QFileInfoList class. Given that the
-        QDir.entryInfoList() method returns a Python list of QFileInfo objects, 
-        you only need to import QFileInfo from PyQt5.QtCore
-        """
+        # In PyQt5, there is no specific QFileInfoList class. Given that the
+        # QDir.entryInfoList() method returns a Python list of QFileInfo objects, 
+        # you only need to import QFileInfo from QtCore
         myList: List[QFileInfo] = myDirectory.entryInfoList(QDir.Dirs | QDir.Files | QDir.NoSymLinks)
 
         for myFileInfo in myList:
@@ -316,13 +322,34 @@ class LaUtils:
     
     @staticmethod
     def getAnimalParameter(theGuid: str) -> LaAnimalParameter:
-        myDirectory = QDir(LaUtils.userAnimalParameterProfilesDirPath())
-        myList = myDirectory.entryInfoList(QDir.Dirs | QDir.Files | QDir.NoSymLinks)
+        """Returns an animal parameter with the given GUID.
+
+        This method scans the directory returned by `userAnimalParameterProfilesDirPath()`
+        for XML files, each of which is expected to define an animal parameter.
+        Each file is parsed into an `LaAnimalParameter` object. If an animal parameter
+        with a matching GUID is found, it is returned.
+
+        If no animal parameter with the given GUID is found, this method returns a blank
+        `LaAnimalParameter` object.
+
+        Args:
+            theGuid (str): The GUID of the animal parameter to retrieve.
+
+        Returns:
+            LaAnimalParameter: The animal parameter with the given GUID, or a blank
+            `LaAnimalParameter` object if no such animal parameter is found.
+        
+        :param theGuid: The GUID of the animal parameter to retrieve.
+        :type theGuid: str
+
+        :return: The animal parameter with the given GUID, or a blank `LaAnimalParameter` object.
+        :rtype: LaAnimalParameter
+        """
+        myDirectory: QDir = QDir(LaUtils.userAnimalParameterProfilesDirPath())
+        myList: List[QFileInfo] = myDirectory.entryInfoList(QDir.Dirs | QDir.Files | QDir.NoSymLinks)
         for myFileInfo in myList:
-            # Ignore directories
             if myFileInfo.fileName() in [".", ".."]:
                 continue
-            # if the filename ends in .xml try to load it into our layerSets listing
             if myFileInfo.completeSuffix() == "xml":
                 myAnimalParameter = LaAnimalParameter()
                 myAnimalParameter.fromXmlFile(myFileInfo.absoluteFilePath())
@@ -334,9 +361,23 @@ class LaUtils:
     
     @staticmethod
     def getAvailableCropParameters() -> Dict[str, LaCropParameter]:
-        myMap = {}
-        myDirectory = QDir(LaUtils.userCropParameterProfilesDirPath())
-        myList = myDirectory.entryInfoList(QDir.Dirs | QDir.Files | QDir.NoSymLinks)
+        """ Returns a dictionary of available crop parameters.
+
+        This method scans the directory returned by `userCropParameterProfilesDirPath()`
+        for XML files, each of which is expected to define a crop parameter.
+        Each file is parsed into an `LaCropParameter` object. 
+
+        Returns:
+            A dictionary mapping the GUIDs of the crop parameters to the
+            corresponding `LaCropParameter` objects. If no crop parameters
+            are found, returns an empty dictionary.
+
+        :return: A dictionary of available crop parameters.
+        :rtype: Dict[str, LaCropParameter]
+        """
+        myMap: Dict [str, LaCropParameter] = {}
+        myDirectory: QDir = QDir(LaUtils.userCropParameterProfilesDirPath())
+        myList: List(QFileInfo) = myDirectory.entryInfoList(QDir.Dirs | QDir.Files | QDir.NoSymLinks)
         for myFileInfo in myList:
             # Ignore directories
             if myFileInfo.fileName() in [".", ".."]:
@@ -352,8 +393,30 @@ class LaUtils:
     
     @staticmethod
     def getCropParameter(theGuid: str) -> LaCropParameter:
-        myDirectory = QDir(LaUtils.userCropParameterProfilesDirPath())
-        myList = myDirectory.entryInfoList(QDir.Dirs | QDir.Files | QDir.NoSymLinks)
+        """Returns a crop parameter with the given GUID.
+
+        This method scans the directory returned by `userCropParameterProfilesDirPath()`
+        for XML files, each of which is expected to define a crop parameter.
+        Each file is parsed into an `LaCropParameter` object. If a crop parameter
+        with a matching GUID is found, it is returned.
+
+        If no crop parameter with the given GUID is found, this method returns a blank
+        `LaCropParameter` object.
+
+        Args:
+            theGuid (str): The GUID of the crop parameter to retrieve.
+
+        Returns:
+            LaCropParameter: The crop parameter with the given GUID, or a blank
+            `LaCropParameter` object if no such crop parameter is found.
+
+        :param theGuid: The GUID of the crop parameter to retrieve.
+        :type theGuid: str
+        :return: The crop parameter with the given GUID, or a blank `LaCropParameter` object.
+        :rtype: LaCropParameter
+        """
+        myDirectory: QDir = QDir(LaUtils.userCropParameterProfilesDirPath())
+        myList: List(QFileInfo) = myDirectory.entryInfoList(QDir.Dirs | QDir.Files | QDir.NoSymLinks)
         for myFileInfo in myList:
             # Ignore directories
             if myFileInfo.fileName() in [".", ".."]:
@@ -370,17 +433,51 @@ class LaUtils:
     
     @staticmethod
     def sortList(theList: List[str]) -> List[str]:
+        """Sorts a list of strings in descending alphabetical order.
+
+        This method sorts the input list in ascending alphabetical order first,
+        then reverses the order of the list to achieve descending alphabetical order.
+
+        Args:
+            theList (List[str]): The list of strings to sort.
+
+        Returns:
+            List[str]: The input list sorted in descending alphabetical order.
+
+        :param theList: The list of strings to sort.
+        :type theList: List[str]
+        :return: The input list sorted in descending alphabetical order.
+        :rtype: List[str]
+        """
         # sort the taxon list alphabetically descending order
         theList.sort()  # this sorts ascending!
+        # TODO use :reverse option of sort() method instead of reversing the list
         # flip the sort order
-        mySortedList = theList[::-1]
+        mySortedList: List[str] = theList[::-1]
         return mySortedList
 
     @staticmethod
     def uniqueList(theList: List[str]) -> List[str]:
+        """Returns a list with duplicates removed from the input list.
+
+        This method iterates over the input list and adds each item to a new list
+        only if it's not the same as the last item added. This effectively removes
+        duplicates from the list, but only if the input list is sorted.
+
+        Args:
+            theList (List[str]): The list from which to remove duplicates.
+
+        Returns:
+            List[str]: A new list with duplicates removed.
+
+        :param theList: The list from which to remove duplicates.
+        :type theList: List[str]
+        :return: A new list with duplicates removed.
+        :rtype: List[str]
+        """
         # remove any duplicates from a sorted list
-        myUniqueList = []
-        myLast = ""
+        myUniqueList: List[str] = []
+        myLast: str = ""
         for myCurrent in theList:
             if myCurrent != myLast:
                 myUniqueList.append(myCurrent)
@@ -389,8 +486,21 @@ class LaUtils:
     
     @staticmethod
     def getExperimentsList() -> List[str]:
-        myExperimentList = []
-        myWorkDir = os.path.expanduser("~/.landuseAnalyst/modelOutputs/")
+        """Returns a list of all experiment XML files in the model outputs directory.
+
+        This method scans the directory returned by `os.path.expanduser("~/.landuseAnalyst/modelOutputs/")`
+        for XML files, each of which is expected to define an experiment.
+        Each file's path is added to a list.
+
+        Returns:
+            List[str]: A list of the paths of all experiment XML files in the model outputs directory.
+            If no experiment files are found, returns an empty list.
+
+        :return: A list of the paths of all experiment XML files.
+        :rtype: List[str]
+        """
+        myExperimentList: List[str] = []
+        myWorkDir: str = os.path.expanduser("~/.landuseAnalyst/modelOutputs/")
         for root, dirs, files in os.walk(myWorkDir):
             for file in files:
                 if file.endswith(".xml"):
@@ -399,6 +509,27 @@ class LaUtils:
     
     @staticmethod
     def createTextFile(theFileName: str, theData: str) -> bool:
+        """Creates a text file with the given name and writes the given data to it.
+
+        This method attempts to open a file with the given name in write mode.
+        If successful, it writes the given data to the file and returns True.
+        If an error occurs (such as if the file cannot be opened), it returns False.
+
+        Args:
+            theFileName (str): The name of the file to create.
+            theData (str): The data to write to the file.
+
+        Returns:
+            bool: True if the file was successfully created and the data was written to it,
+            False otherwise.
+
+        :param theFileName: The name of the file to create.
+        :type theFileName: str
+        :param theData: The data to write to the file.
+        :type theData: str
+        :return: True if the file was successfully created and the data was written to it, False otherwise.
+        :rtype: bool
+        """
         # create the txt file
         try:
             with open(theFileName, 'w') as myFile:
@@ -409,21 +540,67 @@ class LaUtils:
         
     @staticmethod
     def xmlEncode(theString: str) -> str:
-        theString = theString.replace("<", "&lt;")
-        theString = theString.replace(">", "&gt;")
-        theString = theString.replace("&", "&amp;")
-        return theString
+        """Encodes a string for use in XML.
+
+        This method replaces certain characters in the input string with their
+        corresponding XML entities to prevent them from being interpreted as XML markup.
+        Specifically, it replaces "<" with "&lt;", ">" with "&gt;", and "&" with "&amp;".
+
+        Args:
+            theString (str): The string to encode.
+
+        Returns:
+            myEncodedString: The encoded string.
+
+        :param theString: The string to encode.
+        :type theString: str
+        :return: The encoded string.
+        :rtype: str
+        """
+        myEncodedString = theString.replace("<", "&lt;")
+        myEncodedString = myEncodedString.replace(">", "&gt;")
+        myEncodedString = myEncodedString.replace("&", "&amp;")
+        return myEncodedString
 
     @staticmethod
     def xmlDecode(theString: str) -> str:
-        theString = theString.replace("&lt;", "<")
-        theString = theString.replace("&gt;", ">")
-        theString = theString.replace("&amp;", "&")
-        return theString
+        """Decodes a string from XML encoding.
+
+        This method replaces certain XML entities in the input string with their
+        corresponding characters. Specifically, it replaces "&lt;" with "<", 
+        "&gt;" with ">", and "&amp;" with "&".
+
+        Args:
+            theString (str): The string to decode.
+
+        Returns:
+            myString: The decoded string.
+
+        :param theString: The string to decode.
+        :type theString: str
+        :return: The decoded string.
+        :rtype: str
+        """
+        myDecodedString: str = theString.replace("&lt;", "<")
+        myDecodedString = myDecodedString.replace("&gt;", ">")
+        myDecodedString = myDecodedString.replace("&amp;", "&")
+        return myDecodedString
 
     @staticmethod
     def getStandardCss() -> str:
-        myStyle = ".glossy{"
+        """Returns a string of standard CSS styles.
+
+        This method generates a string of CSS styles that can be used to style a webpage or a GUI.
+        The styles include definitions for a glossy gradient background, text colors, font sizes,
+        table styles, and more.
+
+        Returns:
+            str: A string of CSS styles.
+
+        :return: A string of CSS styles.
+        :rtype: str
+        """
+        myStyle: str = ".glossy{"
         myStyle += "  background-color: qlineargradient("
         myStyle += "    x1:0, y1:0, x2:0, y2:1, stop:0 #616161,"
         myStyle += "    stop: 0.5 #505050, stop: 0.6 #434343, stop:1 #656565);"
@@ -447,171 +624,327 @@ class LaUtils:
         return myStyle
 
     @staticmethod
-    def getAnimalParameters():
+    def getAnimalParameters() -> List[LaAnimalParameter]:
+        """Returns a list of all animal parameters.
+
+        This method retrieves all instances of `LaAnimalParameter` by calling the `getInstances` method
+        of the `LaAnimalParameter` class.
+
+        Returns:
+            List[LaAnimalParameter]: A list of all `LaAnimalParameter` instances.
+
+        :return: A list of all `LaAnimalParameter` instances.
+        :rtype: List[LaAnimalParameter]
         """
-        Returns a list of all animal parameters.
-        """
-        return LaAnimalParameter.getInstances()
+        myList: List[LaAnimalParameter] = LaAnimalParameter.getInstances()
+        return myList
 
     @staticmethod
-    def addAnimalParameter(animalParameter):
+    def addAnimalParameter(theAnimalParameter: LaAnimalParameter) -> None:
+        """Adds a new animal parameter.
+
+        This method saves a new instance of `LaAnimalParameter` by calling the `save` method
+        of the `LaAnimalParameter` instance.
+
+        Args:
+            animalParameter (LaAnimalParameter): The `LaAnimalParameter` instance to save.
+
+        :param theAnimalParameter: The `LaAnimalParameter` instance to save.
+        :type theAnimalParameter: LaAnimalParameter
         """
-        Adds a new animal parameter.
-        """
-        animalParameter.save()
+        theAnimalParameter.save()
 
     @staticmethod
-    def removeAnimalParameter(name):
+    def removeAnimalParameter(theName: str) -> None:
+        """Removes an animal parameter by name.
+
+        This method retrieves an instance of `LaAnimalParameter` by its name by calling the 
+        `getInstanceByName` method of the `LaAnimalParameter` class. If such an instance exists, 
+        it is removed by calling its `remove` method.
+
+        Args:
+            theName (str): The name of the `LaAnimalParameter` instance to remove.
+
+        :param theName: The name of the `LaAnimalParameter` instance to remove.
+        :type theName: str
         """
-        Removes an animal parameter by name.
-        """
-        animalParameter = LaAnimalParameter.getInstanceByName(name)
-        if animalParameter is not None:
-            animalParameter.remove()
+        myAnimalParameter: LaAnimalParameter = LaAnimalParameter.getInstanceByName(theName)
+        if myAnimalParameter is not None:
+            myAnimalParameter.remove()
 
     @staticmethod
-    def editAnimalParameter(animalParameter):
+    def editAnimalParameter(theAnimalParameter: LaAnimalParameter) -> None:
+        """Edits an existing animal parameter by saving changes.
+
+        This method saves changes to an existing instance of `LaAnimalParameter` by calling the 
+        `save` method of the `LaAnimalParameter` instance.
+
+        Args:
+            theAnimalParameter (LaAnimalParameter): The `LaAnimalParameter` instance to edit and save.
+
+        :param theAnimalParameter: The `LaAnimalParameter` instance to edit and save.
+        :type theAnimalParameter: LaAnimalParameter
         """
-        Edits an existing animal parameter.
-        """
-        animalParameter.save()
+        theAnimalParameter.save()
 
     @staticmethod
-    def showInputDialog(parent, title, text=""):
-        """
-        Shows an input dialog and returns the entered text and a boolean indicating whether
+    def showInputDialog(theParent: QWidget, theTitle: str, theText: str = "") -> Tuple[str, bool]:
+        """Shows an input dialog and returns the entered text and a boolean indicating whether
         the OK button was pressed.
+
+        This method creates a `QInputDialog` with the given parent and title, and an optional
+        initial text value. It sets the input mode to text input, and the OK and Cancel button
+        texts to "OK" and "Cancel", respectively. It then executes the dialog and returns the
+        entered text and a boolean indicating whether the OK button was pressed.
+
+        Args:
+            parent (QWidget): The parent widget of the dialog.
+            title (str): The title of the dialog.
+            text (str, optional): The initial text value of the dialog. Defaults to "".
+
+        Returns:
+            Tuple[str, bool]: A tuple where the first element is the entered text and the second
+            element is a boolean indicating whether the OK button was pressed.
+
+        :param parent: The parent widget of the dialog.
+        :type parent: QWidget
+        :param title: The title of the dialog.
+        :type title: str
+        :param text: The initial text value of the dialog. Defaults to "".
+        :type text: str
+        :return: A tuple where the first element is the entered text and the second element is a boolean indicating whether the OK button was pressed.
+        :rtype: Tuple[str, bool]
         """
         print("showInputDialog")
-        inputDialog = QInputDialog(parent)
-        inputDialog.setWindowTitle(title)
-        inputDialog.setTextValue(text)
-        inputDialog.setLabelText(title)
-        inputDialog.setInputMode(QInputDialog.TextInput)
-        inputDialog.setOkButtonText("OK")
-        inputDialog.setCancelButtonText("Cancel")
-        if inputDialog.exec_() == QInputDialog.Accepted:
-            return inputDialog.textValue(), True
+        myInputDialog: QInputDialog = QInputDialog(theParent)
+        myInputDialog.setWindowTitle(theTitle)
+        myInputDialog.setTextValue(theText)
+        myInputDialog.setLabelText(theTitle)
+        myInputDialog.setInputMode(QInputDialog.TextInput)
+        myInputDialog.setOkButtonText("OK")
+        myInputDialog.setCancelButtonText("Cancel")
+        if myInputDialog.exec_() == QInputDialog.Accepted:
+            return myInputDialog.textValue(), True
         else:
             return "", False
 
     @staticmethod
-    def showMessageBox(parent, title, text, icon=QMessageBox.Information):
+    def showMessageBox(
+            theParent: QWidget, 
+            theTitle: str, 
+            text: str, 
+            theIcon: QMessageBox.Icon = QMessageBox.Information
+        ) -> None:
+        """Shows a message box with the specified title, text, and icon.
+
+        This method creates a `QMessageBox` with the given parent, title, text, and icon.
+        It sets the standard buttons to OK and then executes the message box.
+
+        Args:
+            theParent (QWidget): The parent widget of the message box.
+            ttheTitle (str): The title of the message box.
+            theText (str): The text of the message box.
+            theIcon (QMessageBox.Icon, optional): The icon of the message box. Defaults to QMessageBox.Information.
+
+        :param parent: The parent widget of the message box.
+        :type parent: QWidget
+        :param title: The title of the message box.
+        :type title: str
+        :param text: The text of the message box.
+        :type text: str
+        :param icon: The icon of the message box. Defaults to QMessageBox.Information.
+        :type icon: QMessageBox.Icon
         """
-        Shows a message box with the specified title, text, and icon.
-        """
-        messageBox = QMessageBox(parent)
-        messageBox.setWindowTitle(title)
-        messageBox.setText(text)
-        messageBox.setIcon(icon)
-        messageBox.setStandardButtons(QMessageBox.Ok)
-        messageBox.exec_()
+        myMessageBox: QMessageBox = QMessageBox(theParent)
+        myMessageBox.setWindowTitle(theTitle)
+        myMessageBox.setText(text)
+        myMessageBox.setIcon(theIcon)
+        myMessageBox.setStandardButtons(QMessageBox.Ok)
+        myMessageBox.exec_()
 
     @staticmethod
-    def showColorDialog(parent, title, color=QColor()):
+    def showColorDialog(
+            theParent: QWidget, 
+            theTitle: str, 
+            theColor: QColor = QColor()
+        ) -> QColor:
+        """Shows a color dialog and returns the selected color.
+
+        This method creates a `QColorDialog` with the given parent and title, and an optional
+        initial color. It sets the current color to the given color and then executes the dialog.
+        If the user presses the OK button, it returns the selected color. If the user presses
+        the Cancel button or closes the dialog, it returns the initial color.
+
+        Args:
+            theParent (QWidget): The parent widget of the dialog.
+            theTitle (str): The title of the dialog.
+            theColor (QColor, optional): The initial color of the dialog. Defaults to QColor().
+
+        Returns:
+            QColor: The selected color if the OK button was pressed, otherwise the initial color.
+
+        :param theParent: The parent widget of the dialog.
+        :type theParent: QWidget
+        :param theTitle: The title of the dialog.
+        :type theTitle: str
+        :param theColor: The initial color of the dialog. Defaults to QColor().
+        :type theColor: QColor
+        :return: The selected color if the OK button was pressed, otherwise the initial color.
+        :rtype: QColor
         """
-        Shows a color dialog and returns the selected color.
-        """
-        colorDialog = QColorDialog(parent)
-        colorDialog.setWindowTitle(title)
-        colorDialog.setCurrentColor(color)
-        if colorDialog.exec_() == QColorDialog.Accepted:
-            return colorDialog.selectedColor()
+        myColorDialog: QColorDialog = QColorDialog(theParent)
+        myColorDialog.setWindowTitle(theTitle)
+        myColorDialog.setCurrentColor(theColor)
+        if myColorDialog.exec_() == QColorDialog.Accepted:
+            return myColorDialog.selectedColor()
         else:
-            return color
+            return theColor
 
     @staticmethod
-    def generateGuid():
+    def generateGuid() -> str:
+        """Generates a new GUID.
+
+        This method generates a new globally unique identifier (GUID) string. 
+        The GUID is composed of 16 characters, each of which is a randomly 
+        chosen uppercase letter or digit.
+
+        Returns:
+            str: The generated GUID.
+
+        :return: The generated GUID.
+        :rtype: str
         """
-        Generates a new GUID.
-        """
-        return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(16))
+        myNewGuid: str = ''.join(
+            random.choice(
+                string.ascii_uppercase + string.digits
+            ) for _ in range(16)
+        )
+        return  myNewGuid
 
     @staticmethod
-    def saveToFile(filename, data):
+    def saveToFile(theFilename: str, theData: str) -> None:
+        """Saves data to a file with the specified filename.
+
+        This method creates a `QFile` with the given filename and opens it for writing. If the file
+        is successfully opened, it creates a `QTextStream` for the file and writes the data to the file.
+        After writing the data, it closes the file.
+
+        Args:
+            theFilename (str): The name of the file to write to.
+            theData (str): The data to write to the file.
+
+        :param theFilename: The name of the file to write to.
+        :type theFilename: str
+        :param theData: The data to write to the file.
+        :type theData: str
         """
-        Saves data to a file with the specified filename.
-        """
-        file = QFile(filename)
-        if file.open(QFile.WriteOnly | QFile.Text):
-            stream = QTextStream(file)
-            stream << data
-            file.close()
+        myFile: QFile = QFile(theFilename)
+        if myFile.open(QFile.WriteOnly | QFile.Text):
+            myStream: QTextStream = QTextStream(myFile)
+            myStream << theData
+            myFile.close()
 
     @staticmethod
-    def loadFromFile(filename):
+    def loadFromFile(theFilename: str) -> str:
+        """Loads data from a file with the specified filename.
+
+        This method creates a `QFile` with the given filename and opens it for reading. If the file
+        is successfully opened, it creates a `QTextStream` for the file and reads all data from the file.
+        After reading the data, it closes the file and returns the data. If the file cannot be opened,
+        it returns an empty string.
+
+        Args:
+            theFilename (str): The name of the file to read from.
+
+        Returns:
+            str: The data read from the file, or an empty string if the file could not be opened.
+
+        :param theFilename: The name of the file to read from.
+        :type theFilename: str
+        :return: The data read from the file, or an empty string if the file could not be opened.
+        :rtype: str
         """
-        Loads data from a file with the specified filename.
-        """
-        file = QFile(filename)
-        if file.open(QFile.ReadOnly | QFile.Text):
-            stream = QTextStream(file)
-            data = stream.readAll()
-            file.close()
-            return data
+        myFile: QFile = QFile(theFilename)
+        if myFile.open(QFile.ReadOnly | QFile.Text):
+            myStream: QTextStream = QTextStream(myFile)
+            myData: str = myStream.readAll()
+            myFile.close()
+            return myData
         else:
             return ""
 
     @staticmethod
-    def getApplicationDirPath():
+    def getApplicationDirPath() -> str:
+        """Returns the path to the directory containing the application executable.
+
+        This method retrieves the path to the directory containing the application executable.
+        It uses the `os.path.dirname` function with the first command line argument, which is
+        typically the path of the script that was invoked.
+
+        Returns:
+            str: The path to the directory containing the application executable.
+
+        :return: The path to the directory containing the application executable.
+        :rtype: str
         """
-        Returns the path to the directory containing the application executable.
-        """
-        return os.path.dirname(sys.argv[0])
+        myOsPath: str = os.path.dirname(sys.argv[0])
+        return myOsPath
 
     @staticmethod
     def openGraphicFile() -> str:
-        """
-        Opens a file dialog to choose an image file and copies it to the user's images directory.
+        """Opens a file dialog to choose an image file and copies it to the user's images directory.
+
+        This method opens a file dialog that starts at the user's home directory and filters for image files.
+        The user can choose an image file to open. The method then copies the chosen file to the user's images
+        directory and returns the file path of the copied image file.
 
         Returns:
-        str: The file path of the copied image file.
+            str: The file path of the copied image file.
+
+        :return: The file path of the copied image file.
+        :rtype: str
         """
-        myHomePath = os.path.expanduser("~")
+        myHomePath: str = os.path.expanduser("~")
+        myFileName: str
+        # Since we're only interested in the file name and not the filter, 
+        # we can ignore the second element with _
         myFileName, _ = QFileDialog.getOpenFileName(
                             None,
                             "Choose an image",
                             myHomePath,
                             "Images (*.png *.xpm *.jpg)"
                         )
-        myName = os.path.basename(myFileName)
-        myDestinationFilePathName = os.path.join(
-                                        LaUtils.userImagesDirPath(), 
-                                        myName
-                                    )
+        myName: str = os.path.basename(myFileName)
+        myDestinationFilePathName: str = os.path.join(
+                                            LaUtils.userImagesDirPath(), 
+                                            myName
+                                        )
         shutil.copy(myFileName, myDestinationFilePathName)
         return myDestinationFilePathName
 
     @staticmethod
     def saveFile() -> str:
-        # myHomePath: str = os.path.expanduser("~")
+        """Opens a file dialog to choose a file name and returns the selected file path.
+
+        This method opens a file dialog that starts at the user's conversion tables directory 
+        and filters for CSV files. The user can choose a file name to save. The method then 
+        returns the file path of the chosen file.
+
+        Returns:
+            str: The file path of the chosen file.
+
+        :return: The file path of the chosen file.
+        :rtype: str
+        """
         myFileName: str
-        _ : str
+        # Since we're only interested in the file name and not the filter, 
+        # we can ignore the second element with _
         myFileName, _ = QFileDialog.getSaveFileName(
                             None, 
                             "Choose a file name", 
                             LaUtils.userConversionTablesDirPath(), 
                             "*.csv"
-                            )
+                        )
         myName: str = os.path.basename(myFileName)
         myDestinationFilePathName: str = os.path.join(LaUtils.userConversionTablesDirPath(), myName)
         return myDestinationFilePathName
-
-        
-
-
-    
-
-"""
-
-In this modified code, the contents of lautils.cpp and lautils.h are combined
-    into a single Python file.
-
-The LaUtils class is implemented using PyQt5, and includes methods for managing
-    animal parameters, showing input and message dialogs, generating GUIDs,
-    and reading and writing data to files.
-
-The necessary imports are included at the beginning of the file, and a file
-    comment header provides a brief description of the file and its contents.
-
-"""
