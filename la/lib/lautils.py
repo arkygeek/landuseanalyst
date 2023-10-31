@@ -21,7 +21,7 @@ from typing import Dict, List, Tuple
 
 # Importing necessary PyQt5 modules
 from qgis.PyQt.QtWidgets import QMessageBox, QColorDialog, QInputDialog, QFileDialog
-from qgis.PyQt.QtCore import QFile, QTextStream, QObject, QDir, QSettings
+from qgis.PyQt.QtCore import QFile, QTextStream, QObject, QDir, QSettings, QFileInfo
 from qgis.PyQt.QtGui import QColor
 
 # Importing custom classes
@@ -59,10 +59,11 @@ class LaUtils:
     def userSettingsDirPath() -> str:
         """
         Returns the path to the user settings directory.
-
         If the directory does not exist, it is created.
-
+        :param thePath: A string representing the path to the user settings directory.
+        :type thePath: str
         :return: A string representing the path to the user settings directory.
+        :rtype: str
         """
         # Get the user settings directory path from QSettings
         mySettings = QSettings()
@@ -79,6 +80,8 @@ class LaUtils:
         """
         Returns the path to the model outputs directory.
         If the directory does not exist, it is created.
+        :return: A string representing the path to the model outputs directory.
+        :rtype: str
         """
         myPath = os.path.join(LaUtils.userSettingsDirPath(), "modelOutputs")
         os.makedirs(myPath, exist_ok=True)
@@ -89,6 +92,8 @@ class LaUtils:
         """
         Returns the path to the animal profiles directory.
         If the directory does not exist, it is created.
+        :return: A string representing the path to the animal profiles directory.
+        :rtype: str
         """
         myPath = os.path.expanduser("~/.landuseAnalyst/animalProfiles")
         os.makedirs(myPath, exist_ok=True)
@@ -99,6 +104,8 @@ class LaUtils:
         """
         Returns the path to the crop profiles directory.
         If the directory does not exist, it is created.
+        :return: A string representing the path to the crop profiles directory.
+        :rtype: str
         """
         myPath = os.path.expanduser("~/.landuseAnalyst/cropProfiles")
         os.makedirs(myPath, exist_ok=True)
@@ -109,6 +116,8 @@ class LaUtils:
         """
         Returns a dictionary of available animals.
         The keys are the GUIDs of the animals, and the values are the animal objects.
+        :return: A dictionary of available animals.
+        :rtype: Dict[str, LaAnimal]
         """
         myMap = {}
         myDirectory = QDir(LaUtils.userAnimalProfilesDirPath())
@@ -131,7 +140,8 @@ class LaUtils:
         """
         Returns an animal object with the given GUID.
         If no such animal exists, returns a blank animal.
-
+        :param theGuid: The GUID of the animal to return.
+        :type theGuid: str
         :return: An animal object.
         :rtype: LaAnimal
         """
@@ -151,86 +161,111 @@ class LaUtils:
                     return myAnimal
         return LaAnimal()  # Return a blank animal if no match is found
             
-    class LaUtils:
-        @staticmethod
-        def getAvailableCrops() -> Dict[str, LaCrop]:
-            """
-            Returns a dictionary of available crops, where the keys are the 
-            crop GUIDs and the values are LaCrop objects.
-
-            :return: A dictionary of available crops.
-            :rtype: Dict[str, LaCrop]
-            """
-            myMap = {}
-            myDirectory = QDir(LaUtils.userCropProfilesDirPath())
-            myList = myDirectory.entryInfoList(QDir.Dirs | QDir.Files | QDir.NoSymLinks)
-            for myFileInfo in myList:
-                # Ignore directories
-                if myFileInfo.fileName() in [".", ".."]:
+    
+    @staticmethod
+    def getAvailableCrops() -> Dict[str, LaCrop]:
+        """
+        Returns a dictionary of available crops, where the keys are the 
+        crop GUIDs and the values are LaCrop objects.
+        :return: A dictionary of available crops.
+        :rtype: Dict[str, LaCrop]
+        """
+        myMap = {}
+        myDirectory = QDir(LaUtils.userCropProfilesDirPath())
+        myList = myDirectory.entryInfoList(QDir.Dirs | QDir.Files | QDir.NoSymLinks)
+        for myFileInfo in myList:
+            # Ignore directories
+            if myFileInfo.fileName() in [".", ".."]:
+                continue
+            # if the filename ends in .xml try to load it into our layerSets listing
+            if myFileInfo.completeSuffix() == "xml":
+                myCrop = LaCrop()
+                myCrop.fromXmlFile(myFileInfo.absoluteFilePath())
+                if myCrop.name() == "":
                     continue
-                # if the filename ends in .xml try to load it into our layerSets listing
-                if myFileInfo.completeSuffix() == "xml":
-                    myCrop = LaCrop()
-                    myCrop.fromXmlFile(myFileInfo.absoluteFilePath())
-                    if myCrop.name() == "":
-                        continue
-                    myMap[myCrop.guid()] = myCrop
-            return myMap
+                myMap[myCrop.guid()] = myCrop
+        return myMap
 
-    class LaUtils:
-        @staticmethod
-        def getCrop(theGuid: str) -> LaCrop:
-            """
-            This method searches for a crop with the specified GUID in the user's crop profiles directory.
-            If a matching crop is found, it is returned as a LaCrop object. Otherwise, a blank LaCrop object is returned.
-
-            :param theGuid: The GUID of the crop to search for.
-            :type theGuid: str
-            :return: The LaCrop object with the specified GUID, or a blank LaCrop object if no match is found.
-            :rtype: LaCrop
-            """
-            myDirectory = QDir(LaUtils.userCropProfilesDirPath())
-            myList = myDirectory.entryInfoList(QDir.Dirs | QDir.Files | QDir.NoSymLinks)
-            for myFileInfo in myList:
-                # Ignore directories
-                if myFileInfo.fileName() in [".", ".."]:
+    @staticmethod
+    def getCrop(theGuid: str) -> LaCrop:
+        """
+        This method searches for a crop with the specified GUID in the user's crop profiles directory.
+        If a matching crop is found, it is returned as a LaCrop object. Otherwise, a blank LaCrop object is returned.
+        :param theGuid: The GUID of the crop to search for.
+        :type theGuid: str
+        :return: The LaCrop object with the specified GUID, or a blank LaCrop object if no match is found.
+        :rtype: LaCrop
+        """
+        myDirectory = QDir(LaUtils.userCropProfilesDirPath())
+        myList = myDirectory.entryInfoList(QDir.Dirs | QDir.Files | QDir.NoSymLinks)
+        for myFileInfo in myList:
+            # Ignore directories
+            if myFileInfo.fileName() in [".", ".."]:
+                continue
+            # if the filename ends in .xml try to load it into our layerSets listing
+            if myFileInfo.completeSuffix() == "xml":
+                myCrop = LaCrop()
+                myCrop.fromXmlFile(myFileInfo.absoluteFilePath())
+                if myCrop.name() == "":
                     continue
-                # if the filename ends in .xml try to load it into our layerSets listing
-                if myFileInfo.completeSuffix() == "xml":
-                    myCrop = LaCrop()
-                    myCrop.fromXmlFile(myFileInfo.absoluteFilePath())
-                    if myCrop.name() == "":
-                        continue
-                    if myCrop.guid() == theGuid:
-                        return myCrop
-            return LaCrop()  # Return a blank crop if no match is found
+                if myCrop.guid() == theGuid:
+                    return myCrop
+        return LaCrop()  # Return a blank crop if no match is found
     
     @staticmethod
     def userConversionTablesDirPath() -> str:
+        """
+        Returns the path to the user's conversion tables directory.
+        If the directory does not exist, it will be created.
+        :return: The path to the user's conversion tables directory.
+        :rtype: str
+        """
         myPath = os.path.expanduser("~/.landuseAnalyst/conversionTables")
-        os.makedirs(myPath, exist_ok=True)
+        os.makedirs(myPath, exist_ok=True) # create directory if it doesn't exist
         return myPath
 
     @staticmethod
     def userAnimalParameterProfilesDirPath() -> str:
+        """ 
+        Returns the path to the user's animal parameter profiles directory.
+        :return: The path to the user's animal parameter profiles directory.
+        :rtype: str
+        """
         myPath = os.path.expanduser("~/.landuseAnalyst/animalParameterProfiles")
         os.makedirs(myPath, exist_ok=True)
         return myPath
 
     @staticmethod
     def userImagesDirPath() -> str:
+        """ 
+        Returns the path to the user's images directory. 
+        :return: The path to the user's images directory.
+        :rtype: str
+        """
         myPath = os.path.expanduser("~/.landuseAnalyst/images")
         os.makedirs(myPath, exist_ok=True)
         return myPath
 
     @staticmethod
     def userCropParameterProfilesDirPath() -> str:
+        """
+        Returns the path to the user's crop parameter profiles directory.
+        :return: The path to the user's crop parameter profiles directory.
+        :rtype: str
+        """
         myPath = os.path.expanduser("~/.landuseAnalyst/cropParameterProfiles")
         os.makedirs(myPath, exist_ok=True)
         return myPath
     
     @staticmethod
     def convertAreaToHectares(theAreaUnit: str, theArea: float) -> int:
+        """
+        The method converts an area in the specified area unit to hectares.
+        :param theAreaUnit: The area unit name to use for conversion. 
+        :type theAreaUnit: str
+        :return: The area in hectares.
+        :rtype: int
+        """
         # this may seem ridiculous to do it this way, but
         # i plan to include other area units and this way
         # it will make it very easy to work with in the future
@@ -251,9 +286,14 @@ class LaUtils:
     
     @staticmethod
     def getAvailableAnimalParameters() -> Dict[str, LaAnimalParameter]:
-        myMap = {}
-        myDirectory = QDir(LaUtils.userAnimalParameterProfilesDirPath())
-        myList = myDirectory.entryInfoList(QDir.Dirs | QDir.Files | QDir.NoSymLinks)
+        """
+        This method returns a dictionary of available animal parameters.
+        :return: A dictionary of available animal parameters.
+        :rtype: Dict[str, LaAnimalParameter]
+        """
+        myMap: Dict[str, LaAnimalParameter] = {}
+        myDirectory: QDir = QDir(LaUtils.userAnimalParameterProfilesDirPath())
+        myList: List[QFileInfo] = myDirectory.entryInfoList(QDir.Dirs | QDir.Files | QDir.NoSymLinks)
         for myFileInfo in myList:
             # Ignore directories
             if myFileInfo.fileName() in [".", ".."]:
