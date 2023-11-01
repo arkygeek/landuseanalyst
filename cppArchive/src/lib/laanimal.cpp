@@ -363,6 +363,7 @@ void LaAnimal::setImageFile(QString theImageFileName)
 {
   mImageFile=theImageFileName;
 }
+
 bool LaAnimal::fromXml(QString theXml)
 {
     //qDebug("Loading animal from xml");

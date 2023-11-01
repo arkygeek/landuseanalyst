@@ -5,7 +5,6 @@ from qgis.PyQt.QtWidgets import QLabel
 from la.lib.lacrop import LaCrop
 from la.lib.lautils import LaUtils
 
-
 class LaCropTableModel(QAbstractTableModel):
     def __init__(self, parent=None):
         super().__init__(parent)

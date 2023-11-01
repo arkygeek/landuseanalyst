@@ -1,32 +1,34 @@
 # lafoodsource.py
 class LaFoodSource:
     def __init__(self):
-        self.mGrain = 0
-        self.mFodder = 0
-        self.mDays = 0
-        self.mUsed = False
-        self.mCropGuid = ""
+        self._grain = 0
+        self._fodder = 0
+        self._days = 0
+        self._used = False
+        self._cropGuid = ""
 
     def __del__(self):
         pass
 
     # accessors
+    @property
     def grain(self):
         return self.mGrain
 
     def fodder(self):
-        return self.mFodder
+        return self._fodder
 
     def days(self):
-        return self.mDays
+        return self._days
 
     def used(self):
-        return self.mUsed
+        return self._used
 
     def cropGuid(self):
-        return self.mCropGuid
+        return self._cropGuid
 
     # mutators
+    @grain.setter
     def setGrain(self, theValue):
         self.mGrain = theValue
 
