@@ -4,41 +4,146 @@ from la.lib.laserialisable import LaSerialisable
 from la.lib.laguid import LaGuid
 
 class LaCrop(LaSerialisable, LaGuid):
-    def __init__(self):
-        super().__init__()
-        self._name = ""
-        self._description = ""
-        self._cropType = ""
-        self._plantingDate = ""
-        self._harvestDate = ""
-        self._yieldValue = 0
+    """
+    A class representing a crop.
+
+    Attributes:
+        mName (str): The name of the crop.
+        mDescription (str): The description of the crop.
+        mCropYield (int): The yield of the crop.
+        mCropCalories (int): The calories of the crop.
+        mCropFodderProduction (int): The fodder production of the crop.
+        mCropFodderValue (int): The fodder value of the crop.
+        mCropFodderEnergyType (str): The energy type of the crop fodder.
+        mAreaUnits (str): The area units of the crop.
+        mImageFile (str): The image file of the crop.
+    """
+
+    class LACrop:
+        def __init__(self, theCrop=None):
+            """
+            Initializes a new instance of the LACrop class.
+
+            Args:
+                theCrop (LACrop, optional): An existing LACrop object to copy. Defaults to None.
+            """
+            super().__init__()
+            if theCrop is None:
+                self.setGuid()
+                self.mName = "No Name Set"
+                self.mDescription = "Not Set"
+                self.mCropYield = 60
+                self.mCropCalories = 3000
+                self.mCropFodderProduction = 50
+                self.mCropFodderValue = 1000
+            else:
+                self.mName = theCrop.name
+                self.mDescription = theCrop.description
+                self.setGuid(theCrop.guid)
+                self.mCropYield = theCrop.cropYield
+                self.mCropCalories = theCrop.cropCalories
+                self.mCropFodderProduction = theCrop.fodderProduction
+                self.mCropFodderValue = theCrop.fodderValue
+                self.mCropFodderEnergyType = theCrop.cropFodderEnergyType
+                self.mAreaUnits = theCrop.areaUnits
+                self.mImageFile = theCrop.imageFile
 
     def __del__(self):
         pass
 
-    def __copy__(self):
-        return LaCrop(self)
+    def __eq__(self, theCrop: 'LaCrop') -> bool:
+        """Compare two LaCrop objects for equality.
+        Args:
+            theCrop (LaCrop): The LaCrop object to compare against.
+        Returns:
+            bool: True if the two objects are equal, False otherwise.
+        :param theCrop: the crop to compare against
+        :paramtype theCrop: LaCrop
+        :return: True if the two objects are equal, False otherwise
+        :rtype: bool
+        """
+        return self.mName == theCrop.name and \
+                self.mDescription == theCrop.description and \
+                self.guid == theCrop.guid and \
+                self.mCropYield == theCrop.cropYield and \
+                self.mCropCalories == theCrop.cropCalories and \
+                self.mCropFodderProduction == theCrop.fodderProduction and \
+                self.mCropFodderValue == theCrop.fodderValue and \
+                self.mCropFodderEnergyType == theCrop.cropFodderEnergyType and \
+                self.mAreaUnits == theCrop.areaUnits and \
+                self.mImageFile == theCrop.imageFile
+        
+    def __copy__(self) -> 'LaCrop':
+        myNewCrop: LaCrop = LaCrop()
+        myNewCrop.mName = self.mName
+        myNewCrop.mDescription = self.mDescription
+        myNewCrop.setGuid(self.guid)
+        myNewCrop.mCropYield = self.mCropYield
+        myNewCrop.mCropCalories = self.mCropCalories
+        myNewCrop.mCropFodderProduction = self.mCropFodderProduction
+        myNewCrop.mCropFodderValue = self.mCropFodderValue
+        myNewCrop.mCropFodderEnergyType = self.mCropFodderEnergyType
+        myNewCrop.mAreaUnits = self.mAreaUnits
+        myNewCrop.mImageFile = self.mImageFile
+        return myNewCrop
 
     def __deepcopy__(self, memo):
         return LaCrop(self)
 
-    def name(self):
-        return self._name
+    @property
+    def name(self) -> str:
+        """
+        Returns the name of the crop.
+        """
+        return self.mName
 
-    def description(self):
-        return self._description
+    @property
+    def description(self) -> str:
+        """
+        Returns the description of the crop.
+        """
+        return self.mDescription
 
-    def cropType(self):
-        return self._cropType
+    @property
+    def cropYield(self) -> int:
+        """
+        Returns the crop yield of the current crop object.
 
-    def plantingDate(self):
-        return self._plantingDate
+        :return: float
+        """
+        return self.mCropYield
 
-    def harvestDate(self):
-        return self._harvestDate
+    @property
+    def cropCalories(self) -> int:
+        """
+        Returns the number of calories in 1 Kg of that part of the crop which is eaten (ie. the grain or fruit)
+        """
+        return self.mCropCalories
 
-    def yieldValue(self):
-        return self._yieldValue
+    @property
+    def fodderProduction(self) -> int:
+        """
+        When harvesting crops, the chaff and straw (fodder) can be saved and
+        used as feed for animals. Landuse Analyst needs to know the food value
+        of this fodder. This is expressed as number of calories per Kg.
+        """
+        return self.mCropFodderProduction
+
+    @property
+    def fodderValue(self):
+        return self.mCropFodderValue
+
+    @property
+    def cropFodderEnergyType(self):
+        return self.mCropFodderEnergyType
+
+    @property
+    def areaUnits(self):
+        return self.mAreaUnits
+
+    @property
+    def imageFile(self):
+        return self.mImageFile
 
     def setName(self, name):
         self._name = name

@@ -5,6 +5,7 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "/usr/share/qt5"
+                "/u"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",

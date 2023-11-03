@@ -1,3 +1,5 @@
+find_package(Qt5 COMPONENTS Core Gui Widgets Xml REQUIRED) # Add Xml here
+
 cmake_minimum_required(VERSION 3.10)
 
 if(COMMAND cmake_policy)
@@ -6,7 +8,7 @@ if(COMMAND cmake_policy)
 endif(COMMAND cmake_policy)
 cmake_policy(SET CMP0006 NEW)
 
-find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
+find_package(Qt5 COMPONENTS Core Gui Xml Widgets REQUIRED)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
@@ -28,11 +30,13 @@ add_executable(landuseanalyst
 )
 
 target_link_libraries(landuseanalyst
-     Qt5::Core
-     Qt5::Gui
-     Qt5::Widgets
-     la_core
+Qt5::Core
+Qt5::Gui
+Qt5::Widgets
+Qt5::Xml
+la_core
 )
+
 
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}

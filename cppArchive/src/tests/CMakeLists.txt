@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
+find_package(Qt5 COMPONENTS Core Gui Widgets Xml REQUIRED) # Add Xml here
 
 # if(COMMAND cmake_policy) 
 #         cmake_policy(SET CMP0003 OLD) 
