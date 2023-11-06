@@ -10,12 +10,12 @@ from la.gui.laanimalmanager import LaAnimalManager
 from la.gui.laanimalparametermanager import LaAnimalParameterManager
 
 from la.ui.lamainformbase import LaMainFormBase
-from la.ui.laanimalmanagerbase import laanimalmanagerbase
-from la.ui.laanimalparametermanagerbase import laanimalparametermanagerbase
-from la.ui.laanimalparameterbase import laanimalparameterbase
+from la.ui.laanimalmanagerbase import LaAnimalManagerBase
+from la.ui.laanimalparametermanagerbase import LaAnimalParameterManagerBase
+from la.ui.laanimalparameterbase import LaAnimalParameterBase
 from la.ui.laassemblageconversionbase import laassemblageconversionbase
-from la.ui.lacropmanagerbase import LaCropManagerBase
-from la.ui.lacropparameterbase import lacropparameterbase
+from la.ui.lacropmanagerbase import LaCropProfileManagerBase
+from la.ui.lacropparameterbase import LaCropParameterManagerBase
 from la.ui.lacropparametermanagerbase import lacropparametermanagerbase
 from la.ui.laexperimentbase import laexperimentbase
 from la.ui.lagrassprocessbase import lagrassprocessbase

@@ -163,7 +163,7 @@ class LanduseAnalyst:
         icon_path = ':/la_icon_small.png'
         self.add_action(
             icon_path,
-            text=self.tr(u'Model archaeological site'),
+            text=self.tr(u'Model archaeological site catchement areas'),
             callback=self.run,
             parent=self.iface.mainWindow())
 

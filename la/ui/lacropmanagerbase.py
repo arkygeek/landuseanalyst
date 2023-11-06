@@ -27,13 +27,13 @@ from la.lib.lautils import LaUtils
 from la.gui.lacropmanager import LaCropManager
 # from qgis.PyQt.QtWidgets import 
 
-Ui_LaCropManagerBase, _ = loadUiType(
-    os.path.join(os.path.dirname(__file__), "../ui/lacropmanagerbase.ui")
+Ui_LaCropProfileManagerBase, _ = loadUiType(
+    os.path.join(os.path.dirname(__file__), "../ui/lacropprofilemanagerbase.ui")
 )
 
-class LaCropManagerBase(QDialog, Ui_LaCropManagerBase):
+class LaCropProfileManagerBase(QDialog, Ui_LaCropProfileManagerBase):
     def __init__(self, parent=None, flags=Qt.WindowFlags()):
-        super(LaCropManagerBase, self).__init__(parent, flags)
+        super(LaCropProfileManagerBase, self).__init__(parent, flags)
         self.setupUi(self)
         self.readSettings()
         self.lblCropPix.setScaledContents(True)

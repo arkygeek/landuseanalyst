@@ -4,26 +4,74 @@ from la.lib.laserialisable import LaSerialisable
 from la.lib.laguid import LaGuid
 
 class LaCropParameter(LaSerialisable, LaGuid):
-    def __init__(self):
+    def __init__(self, theCropParameter=None):
+        """
+        Initializes a new instance of the LaCropParameter class.
+        
+        Args:
+            theCropParameter (LaCropParameter, optional): An existing LaCropParameter object to copy. Defaults to None.
+        """
         super().__init__()
-        self._name = ""
-        self._description = ""
-        self._value = ""
+        if theCropParameter is None:
+            self.setGuid()
+            self._name = "No Name Set"
+            self._description = "Not Set"
+        else:
+            self._name = theCropParameter.name
+            self._description = theCropParameter.description
+            self._guid = theCropParameter.guid
+            self._cropGuid = theCropParameter.cropGuid
+            self._percentTameCrop = theCropParameter.percentTameCrop
+            self._spoilage = theCropParameter.spoilage
+            self._reseed = theCropParameter.reseed
+            self._cropRotation = theCropParameter.cropRotation
+            self._fallowRatio = theCropParameter.fallowRatio
+            self._fallowValue = theCropParameter.fallowValue
+            self._areaUnits = theCropParameter.areaUnits
+            self._useCommonLand = theCropParameter.useCommonLand
+            self._useSpecificLand = theCropParameter.useSpecificLand
+            self._rasterName = theCropParameter.rasterName
+
 
     def __del__(self):
         pass
 
-    def __copy__(self):
-        return LaCropParameter(self)
+    def __copy__(self) -> 'LaCropParameter':
+        myNewCropParameter: LaCropParameter = LaCropParameter()
+        myNewCropParameter._name = self._name
+        myNewCropParameter._description = self._description
+        myNewCropParameter._cropGuid = self._cropGuid
+        myNewCropParameter._percentTameCrop = self._percentTameCrop
+        myNewCropParameter._spoilage = self._spoilage
+        myNewCropParameter._reseed = self._reseed
+        myNewCropParameter._cropRotation = self._cropRotation
+        myNewCropParameter._fallowRatio = self._fallowRatio
+        myNewCropParameter._fallowValue = self._fallowValue
+        myNewCropParameter._areaUnits = self._areaUnits
+        myNewCropParameter._useCommonLand = self._useCommonLand
+        myNewCropParameter._useSpecificLand = self._useSpecificLand
+        myNewCropParameter._rasterName = self._rasterName
+        return myNewCropParameter
+    
 
     def __deepcopy__(self, memo):
         return LaCropParameter(self)
 
-    def name(self):
+    @property
+    def name(self) -> str:
         return self._name
 
-    def description(self):
+    @name.setter
+    def name(self, theName: str) -> None:
+        self._name = theName
+    
+    @property
+    def description(self) -> str:
         return self._description
+
+    @description.setter
+    def description(self, theDescription):
+        self._description = theDescription  
 
     def value(self):
         return self._value

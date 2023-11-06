@@ -63,8 +63,9 @@ class LaCropParameterTableModel(QAbstractTableModel):
 
 
 class LaCropParameterManager:
-    def __init__(self):
+    def __init__(self, parent=None):
         self.parameters = []
+        self.parent = parent
 
     def addParameter(self, name, description):
         parameter = LaCropParameter(name, description)

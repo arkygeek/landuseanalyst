@@ -34,7 +34,7 @@ from qgis.PyQt.QtCore import Qt, QPoint, QRect, QObject, QEvent, pyqtSignal, pyq
 # from landuse_analyst import laanimalmanagerbase  # <-- this CAN be resolved
 
 
-class laanimalmanagerbase(QWidget):
+class LaAnimalManagerBase(QWidget):
 	def __init__(self, parent=None):
 		super().__init__(parent=parent)  # Call the inherited classes __init__ method
 		self.ui = uic.loadUi("landuse_analyst/ui/laanimalmanagerbase.ui", self)  # Load the .ui file

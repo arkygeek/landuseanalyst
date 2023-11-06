@@ -1,4 +1,6 @@
 # lacrop.py
+from typing import Optional, Type
+
 from qgis.PyQt.QtCore import QObject, pyqtProperty, pyqtSignal, pyqtSlot, Qt
 from la.lib.laserialisable import LaSerialisable
 from la.lib.laguid import LaGuid
@@ -19,16 +21,20 @@ class LaCrop(LaSerialisable, LaGuid):
         mImageFile (str): The image file of the crop.
     """
 
-    class LACrop:
-        def __init__(self, theCrop=None):
+    class LaCrop:
+        def __init__(self, theCrop: Optional[Type['LaCrop']] = None):
             """
-            Initializes a new instance of the LACrop class.
+            Initializes a new instance of the LaCrop class.
+
+            The LaCrop class represents a crop that can be grown in a simulation. This class contains information about the crop's name, description, yield, and other properties.
+
+            Note that the class name is used as a string in the type hint for the `theCrop` parameter. This is necessary because the class definition hasn't been fully parsed yet when the type hint is evaluated. The `Type` type hint is used to refer to the class itself.
 
             Args:
-                theCrop (LACrop, optional): An existing LACrop object to copy. Defaults to None.
+                theCrop (Optional[Type['LaCrop']]): An existing LaCrop object to copy. If provided, the new instance will be a copy of the existing object. If not provided, the new instance will be initialized with default values.
             """
             super().__init__()
-            if theCrop is None:
+            if theCrop is None: # If NO crop is provided, initialize with default values.
                 self.setGuid()
                 self.mName = "No Name Set"
                 self.mDescription = "Not Set"
@@ -36,7 +42,7 @@ class LaCrop(LaSerialisable, LaGuid):
                 self.mCropCalories = 3000
                 self.mCropFodderProduction = 50
                 self.mCropFodderValue = 1000
-            else:
+            else: # If a crop IS provided, copy the values from the existing crop.
                 self.mName = theCrop.name
                 self.mDescription = theCrop.description
                 self.setGuid(theCrop.guid)
@@ -250,107 +256,3 @@ class LaCrop(LaSerialisable, LaGuid):
 # The Python version of the class does not require an implementation file, as the properties
 # and slots are defined using decorators in the class definition.
 
-# from this c++ code:
-
-"""
-# lacrop.cpp
-#include "lacrop.h"
-
-LaCrop::LaCrop()
-{
-    _name = "";
-    _description = "";
-    _cropType = "";
-    _plantingDate = "";
-    _harvestDate = "";
-    _yieldValue = 0;
-}
-
-LaCrop::~LaCrop()
-{
-}
-
-LaCrop::LaCrop(const LaCrop &other)
-{
-    _name = other._name;
-    _description = other._description;
-    _cropType = other._cropType;
-    _plantingDate = other._plantingDate;
-    _harvestDate = other._harvestDate;
-    _yieldValue = other._yieldValue;
-}
-
-LaCrop &LaCrop::operator=(const LaCrop &other)
-{
-    if (this != &other) {
-        _name = other._name;
-        _description = other._description;
-        _cropType = other._cropType;
-        _plantingDate = other._plantingDate;
-        _harvestDate = other._harvestDate;
-        _yieldValue = other._yieldValue;
-    }
-    return *this;
-}
-
-QString LaCrop::name() const
-{
-    return _name;
-}
-
-QString LaCrop::description() const
-{
-    return _description;
-}
-
-QString LaCrop::cropType() const
-{
-    return _cropType;
-}
-
-QString LaCrop::plantingDate() const
-{
-    return _plantingDate;
-}
-
-QString LaCrop::harvestDate() const
-{
-    return _harvestDate;
-}
-
-int LaCrop::yieldValue() const
-{
-    return _yieldValue;
-}
-
-void LaCrop::setName(const QString &name)
-{
-    _name = name;
-}
-
-void LaCrop::setDescription(const QString &description)
-{
-    _description = description;
-}
-
-void LaCrop::setCropType(const QString &cropType)
-{
-    _cropType = cropType;
-}
-
-void LaCrop::setPlantingDate(const QString &plantingDate)
-{
-    _plantingDate = plantingDate;
-}
-
-void LaCrop::setHarvestDate(const QString &harvestDate)
-{
-    _harvestDate = harvestDate;
-}
-
-void LaCrop::setYieldValue(int yieldValue)
-{
-    _yieldValue = yieldValue;
-}
-
-"""

@@ -18,29 +18,35 @@
 
 # lacropparameterbase.py  from lacropparameterbase.ui
 
-import sys
-from datetime import datetime, timezone, timedelta
-import numpy as np
-from enum import Enum
+import os
 
-from qgis.PyQt import QtGui, QtWidgets, uic
-from qgis.PyQt.QtWidgets import QMessageBox, QToolTip, QStackedWidget, QHBoxLayout, QVBoxLayout, QSplitter, QFormLayout, QLabel, QFrame, QPushButton, QTableWidget, QTableWidgetItem
-from qgis.PyQt.QtWidgets import QApplication, QFileSystemModel, QTreeView, QWidget, QHeaderView
-from qgis.PyQt.QtGui import QPainter, QBrush, QPen, QColor, QFont, QIcon
-from qgis.PyQt.QtCore import Qt, QPoint, QRect, QObject, QEvent, pyqtSignal, pyqtSlot, QSize, QDir
+from qgis.PyQt import uic
+from qgis.PyQt.QtWidgets import QDialog
+from qgis.PyQt.uic import loadUiType
+
+from qgis.PyQt.QtCore import Qt
 
 ## IMPORTS:
-from la.gui.lacropparametermanager import LaCropParameterManager
 
+Ui_LaCropParameterBase, _ = loadUiType(
+	os.path.join(os.path.dirname(__file__), "../ui/lacropparameterbase.ui"))
 
-class lacropparameterbase(QWidget):
-	def __init__(self, parent=None):
-		super().__init__(parent=parent) # Call the inherited classes __init__ method
-		self.ui = uic.loadUi("landuse_analyst/ui/lacropparameterbase.ui", self) # Load the .ui file
-
-
-		self.initUI()
-		self.show() # Show the GUI
+class LaCropParameterManagerBase(QDialog, Ui_LaCropParameterBase):
+	def __init__(self, parent=None, flags=Qt.WindowFlags()):
+		super(LaCropParameterManagerBase, self).__init__(parent, flags)
+		self.setupUi(self)
+		self.readSettings()
+		self.lblCropParameterName.setText("Crop Parameter Name")
+		self.lblCropParameterDescription.setText("Crop Parameter Description")
+		self.lblCropParameterGuid.setText("Crop Parameter Guid")
+		self.sbPercentTameCrop.setValue(0.0)
+		self.sbSpoilage.setValue(0.0)
+		self.sbReseed.setValue(0.0)
+		self.sbCropRotation.setValue(0.0)
+		self.sbFallowRatio.setValue(0.0)
+		self.checkBoxUseCommonLand.setChecked(False)
+		self.checkBoxUseSpecificLand.setChecked(False)
+		self.lblRasterName.setText("Raster Name")
 
 
 	def initUI(self):

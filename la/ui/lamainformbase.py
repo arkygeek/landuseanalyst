@@ -40,12 +40,12 @@ from la.lib.lautils import (
 from la.lib.la import (
     La, LaFoodSource, LandFound, LandBeingGrazed
 ) # my own classes
-from la.ui.laanimalmanagerbase import laanimalmanagerbase
-from la.ui.laanimalparametermanagerbase import laanimalparametermanagerbase
-from la.ui.laanimalparameterbase import laanimalparameterbase
+from la.ui.laanimalmanagerbase import LaAnimalManagerBase
+from la.ui.laanimalparametermanagerbase import LaAnimalParameterManagerBase
+from la.ui.laanimalparameterbase import LaAnimalParameterBase
 from la.ui.laassemblageconversionbase import laassemblageconversionbase
-from la.ui.lacropmanagerbase import LaCropManagerBase
-from la.ui.lacropparameterbase import lacropparameterbase
+from la.ui.lacropmanagerbase import LaCropProfileManagerBase
+from la.ui.lacropparameterbase import LaCropParameterManagerBase
 from la.ui.lacropparametermanagerbase import lacropparametermanagerbase
 from la.ui.laexperimentbase import laexperimentbase
 from la.ui.lagrassprocessbase import lagrassprocessbase
@@ -217,9 +217,9 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         Ui_LaCropManagerBase, QDialog = uic.loadUiType(
             os.path.join(
                 os.path.dirname(__file__),
-                'lacropmanagerbase.ui'))
+                'lacropprofilemanagerbase.ui'))
 
-        crop_manager = LaCropManagerBase()
+        crop_manager = LaCropProfileManagerBase()
         crop_manager.show()
         crop_manager.exec_()
 

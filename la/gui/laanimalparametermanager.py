@@ -14,10 +14,10 @@ from qgis.PyQt.QtWidgets import QDialog, QTreeWidgetItem, QSpinBox
 from qgis.PyQt.uic import loadUi
 from lib.laanimalparameter import LaAnimalParameter
 from lib.lautils import LaUtils
-from ui.laanimalparametermanagerbase import laanimalparametermanagerbase
+from ui.laanimalparametermanagerbase import LaAnimalParameterManagerBase
 
 
-class LaAnimalParameterManager(QDialog, laanimalparametermanagerbase):
+class LaAnimalParameterManager(QDialog, LaAnimalParameterManagerBase):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setupUi(self)

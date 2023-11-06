@@ -33,7 +33,7 @@ from qgis.PyQt.QtCore import Qt, QPoint, QRect, QObject, QEvent, pyqtSignal, pyq
 # from gui.laanimalparametermanager import laanimalparametermanager
 
 
-class laanimalparametermanagerbase(QWidget):
+class LaAnimalParameterManagerBase(QWidget):
 	def __init__(self, parent=None):
 		super().__init__(parent=parent) # Call the inherited classes __init__ method
 		self.ui = uic.loadUi("landuse_analyst/ui/laanimalparametermanagerbase.ui", self) # Load the .ui file
