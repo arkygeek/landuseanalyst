@@ -14,9 +14,9 @@ from la.ui.laanimalmanagerbase import LaAnimalManagerBase
 from la.ui.laanimalparametermanagerbase import LaAnimalParameterManagerBase
 from la.ui.laanimalparameterbase import LaAnimalParameterBase
 from la.ui.laassemblageconversionbase import laassemblageconversionbase
-from la.ui.lacropmanagerbase import LaCropProfileManagerBase
-from la.ui.lacropparameterbase import LaCropParameterManagerBase
-from la.ui.lacropparametermanagerbase import lacropparametermanagerbase
+from la.ui.lacropmanagerbase import LaCropManagerBase
+from la.ui.lacropparameterbase import LaCropParameterBase
+from la.ui.lacropparametermanagerbase import LaCropParameterManagerBase
 from la.ui.laexperimentbase import laexperimentbase
 from la.ui.lagrassprocessbase import lagrassprocessbase
 from la.ui.laReportFallow import laReportFallow

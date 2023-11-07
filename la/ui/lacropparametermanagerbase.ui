@@ -20,7 +20,7 @@
    <string>Crop Parameter Manager</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../resources/resources.qrc">
+   <iconset resource="../resources.qrc">
     <normaloff>:/la_icon_small.png</normaloff>:/la_icon_small.png</iconset>
   </property>
   <layout class="QGridLayout">
@@ -44,7 +44,7 @@ p, li { white-space: pre-wrap; }
            <string>...</string>
           </property>
           <property name="icon">
-           <iconset resource="../resources/resources.qrc">
+           <iconset resource="../resources.qrc">
             <normaloff>:/delete.png</normaloff>:/delete.png</iconset>
           </property>
          </widget>
@@ -67,7 +67,7 @@ p, li { white-space: pre-wrap; }
            <string>...</string>
           </property>
           <property name="icon">
-           <iconset resource="../resources/resources.qrc">
+           <iconset resource="../resources.qrc">
             <normaloff>:/copy.png</normaloff>:/copy.png</iconset>
           </property>
          </widget>
@@ -126,7 +126,7 @@ p, li { white-space: pre-wrap; }
            <string>...</string>
           </property>
           <property name="icon">
-           <iconset resource="../resources/resources.qrc">
+           <iconset resource="../resources.qrc">
             <normaloff>:/new.png</normaloff>:/new.png</iconset>
           </property>
          </widget>
@@ -773,7 +773,7 @@ p, li { white-space: pre-wrap; }
   <tabstop>pbnClose</tabstop>
  </tabstops>
  <resources>
-  <include location="../resources/resources.qrc"/>
+  <include location="../resources.qrc"/>
  </resources>
  <connections>
   <connection>

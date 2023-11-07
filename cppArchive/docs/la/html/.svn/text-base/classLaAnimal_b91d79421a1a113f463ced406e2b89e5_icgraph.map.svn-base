@@ -1,0 +1,15 @@
+<area shape="rect" href="$classLaModel.html#432c194de81423c6a656a428562fcab4" title="LaModel::calculateHerdSize" alt="" coords="491,75,675,99">
+<area shape="rect" href="$classLaModel.html#e37a2ee784ea6e3b4ae58a87a832a25c" title="LaModel::countTotalCaloriesFromDairy" alt="" coords="723,25,968,49">
+<area shape="rect" href="$classLaModel.html#818c8f0014d674d97bf64bf7330fa085" title="LaModel::getProductionTargetsAnimals" alt="" coords="195,125,443,149">
+<area shape="rect" href="$classLaModel.html#4855f683b262351b662555bcf1c6e943" title="LaModel::reportForAnimal" alt="" coords="497,175,668,199">
+<area shape="rect" href="$classLaModel.html#e63d081ac852fa5e8547e9e670271573" title="LaModel::requiredValue" alt="" coords="505,225,660,249">
+<area shape="rect" href="$classLaAnimal.html#4e935aed13bb4951ab098d8445fde7f0" title="LaAnimal::LaAnimal" alt="" coords="251,275,387,299">
+<area shape="rect" href="$classLaAnimal.html#eda26d91d704aa2f544c8f84ba447e98" title="LaAnimal::operator=" alt="" coords="249,323,388,347">
+<area shape="rect" href="$classLaModel.html#8dfc516f791f8bd9eb0e03ce0e228902" title="LaModel::caloriesFromMilk" alt="" coords="757,75,933,99">
+<area shape="rect" href="$classLaModel.html#e45aff82c64593a44635adcbe6bbd8e8" title="LaModel::caloriesProvidedByTheMilkOfTheAnimal" alt="" coords="1016,76,1328,100">
+<area shape="rect" href="$classLaModel.html#0f85a2f08e31c6964ed22f449249714a" title="LaModel::initialiseCaloriesProvidedByMilkMap" alt="" coords="1376,76,1664,100">
+<area shape="rect" href="$classLaModel.html#e9867f7eb061ea3e6753f1769936d60a" title="LaModel::DoCalculations" alt="" coords="1712,175,1877,199">
+<area shape="rect" href="$classLaModel.html#acd746a9c50de3eaeb78dacccf2dde27" title="LaModel::initialiseProductionRequiredAnimalsMap" alt="" coords="1017,124,1327,148">
+<area shape="rect" href="$classLaModel.html#6a7dbdae3b2106255cb5914f5f46a2c7" title="LaModel::initialiseCalcsAnimalsMap" alt="" coords="1405,175,1635,199">
+<area shape="rect" href="$classLaModel.html#26b9bb0973294e864b680633f27fce75" title="LaModel::allocateFallowGrazingLand" alt="" coords="1056,225,1288,249">
+<area shape="rect" href="$classLaModel.html#98a138ed590909e6ae2f4a9e92c0ac64" title="LaModel::initialiseValueMap" alt="" coords="1429,275,1611,299">

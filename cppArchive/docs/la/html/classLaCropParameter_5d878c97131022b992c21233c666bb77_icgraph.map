@@ -1,0 +1,12 @@
+<area shape="rect" href="$classLaUtils.html#d50cf3269efc4c7298768ce78b56c610" title="LaUtils::getAvailableCropParameters" alt="" coords="251,5,485,29">
+<area shape="rect" href="$classLaCropParameterManager.html#b03dc717dc83331b062983151e4e22a6" title="LaCropParameterManager::refreshCropParameterTable" alt="" coords="568,5,907,29">
+<area shape="rect" href="$classLaUtils.html#946206fd47158b870a8f0caa1235d693" title="LaUtils::getCropParameter" alt="" coords="281,104,455,128">
+<area shape="rect" href="$classLaCropParameter.html#2567085b1ef5bb21ceb3cade80236bf7" title="LaCropParameter::LaCropParameter" alt="" coords="252,152,484,176">
+<area shape="rect" href="$classLaCropParameter.html#5d9396164e5d2cecdd1c9e69f3325fb6" title="LaCropParameter::operator=" alt="" coords="276,200,460,224">
+<area shape="rect" href="$classLaCropParameterManager.html#7e035a7ec1c7c73585b96322bea89228" title="LaCropParameterManager::selectCropParameter" alt="" coords="217,248,519,272">
+<area shape="rect" href="$classLaCropParameterManager.html#2d482f07c62d895adc8a3d60567d1cee" title="LaCropParameterManager::LaCropParameterManager" alt="" coords="956,5,1287,29">
+<area shape="rect" href="$classLaModel.html#26b9bb0973294e864b680633f27fce75" title="LaModel::allocateFallowGrazingLand" alt="" coords="621,53,853,77">
+<area shape="rect" href="$classLaModel.html#e4d9b8377d7b2becccf6233c5d9090ac" title="LaModel::toHtml" alt="" coords="680,101,795,125">
+<area shape="rect" href="$classLaModel.html#642659ce7818ab6b66aff8396026906d" title="LaModel::toHtmlAreaCropTargets" alt="" coords="631,149,844,173">
+<area shape="rect" href="$classLaModel.html#80e3dab60470a6d264c22cc8c4fa30fd" title="LaModel::toHtmlCalorieCropTargets" alt="" coords="624,197,851,221">
+<area shape="rect" href="$classLaModel.html#774f3e7edd4c3d7f8ead5afa1f4cdda9" title="LaModel::toHtmlProductionCropTargets" alt="" coords="613,245,861,269">

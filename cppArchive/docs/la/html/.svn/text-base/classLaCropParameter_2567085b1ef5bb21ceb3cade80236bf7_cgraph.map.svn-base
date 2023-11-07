@@ -1,0 +1,14 @@
+<area shape="rect" href="$classLaCropParameter.html#f8752990db82261e2009f6355b087e39" title="LaCropParameter::areaUnits" alt="" coords="309,6,493,30">
+<area shape="rect" href="$classLaCropParameter.html#d26ff1e490ab1e357d01096f4ecb3def" title="LaCropParameter::cropGuid" alt="" coords="311,54,492,78">
+<area shape="rect" href="$classLaCropParameter.html#dc308cb99cbdf03b5b8ff92f316a2a4a" title="LaCropParameter::cropRotation" alt="" coords="300,102,503,126">
+<area shape="rect" href="$classLaCropParameter.html#352d07db810789022c747cea40906e26" title="LaCropParameter::description" alt="" coords="305,150,497,174">
+<area shape="rect" href="$classLaCropParameter.html#dddc142e0b01d6e2da81d050b68aa774" title="LaCropParameter::fallowRatio" alt="" coords="305,198,497,222">
+<area shape="rect" href="$classLaCropParameter.html#a40a7248485d1c6abf0b8c9a5db77ec3" title="LaCropParameter::fallowValue" alt="" coords="304,246,499,270">
+<area shape="rect" href="$classLaGuid.html#38e7b78e2ef37526ffb1bad6af4cf745" title="LaGuid::guid" alt="" coords="355,294,448,318">
+<area shape="rect" href="$classLaCropParameter.html#5d878c97131022b992c21233c666bb77" title="LaCropParameter::name" alt="" coords="320,342,483,366">
+<area shape="rect" href="$classLaCropParameter.html#431530fc1021ce00db44ee1c6a1dc8bd" title="LaCropParameter::percentTameCrop" alt="" coords="285,390,517,414">
+<area shape="rect" href="$classLaCropParameter.html#54c7939364f6006eb166582b5da46bc9" title="LaCropParameter::rasterName" alt="" coords="303,438,500,462">
+<area shape="rect" href="$classLaCropParameter.html#c0e9151293ca07ceee12235f8f0cd3d0" title="LaCropParameter::setCropGuid" alt="" coords="300,486,503,510">
+<area shape="rect" href="$classLaGuid.html#baf1a3fdc9aad8f76c1c0f8175fd5591" title="LaGuid::setGuid" alt="" coords="344,534,459,558">
+<area shape="rect" href="$classLaCropParameter.html#0023afc628569b3a58e6dbafea23dcf6" title="LaCropParameter::useCommonLand" alt="" coords="285,582,517,606">
+<area shape="rect" href="$classLaCropParameter.html#a591cb486790bac344271d845bb487cd" title="LaCropParameter::useSpecificLand" alt="" coords="288,630,515,654">

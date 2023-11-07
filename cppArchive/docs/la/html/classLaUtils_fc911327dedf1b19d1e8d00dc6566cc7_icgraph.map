@@ -1,0 +1,13 @@
+<area shape="rect" href="$classLaUtils.html#11f60f81b93a26a0c14d5812a68e6b16" title="LaUtils::getAvailableCrops" alt="" coords="267,78,440,102">
+<area shape="rect" href="$classLaUtils.html#7f444ecadda6970730d87db2d166091e" title="LaUtils::getCrop" alt="" coords="296,222,411,246">
+<area shape="rect" href="$classLaCropManager.html#56a826d4b5a67aeaf70ff3cf9e6a3a59" title="LaCropManager::selectCrop" alt="" coords="263,270,444,294">
+<area shape="rect" href="$classLaCropParameterManager.html#2d482f07c62d895adc8a3d60567d1cee" title="LaCropParameterManager::LaCropParameterManager" alt="" coords="495,6,825,30">
+<area shape="rect" href="$classLaAnimalParameterManager.html#23b4783b792997c1a318097f7b6fdd3c" title="LaAnimalParameterManager::populateFodder" alt="" coords="519,54,801,78">
+<area shape="rect" href="$classLaCropManager.html#69a6331d3cdc279d2d1e2094d59c5962" title="LaCropManager::refreshCropTable" alt="" coords="551,102,769,126">
+<area shape="rect" href="$classLaAnimalParameterManager.html#741afc2ceb5a2fefdc8157ff0139c299" title="LaAnimalParameterManager::LaAnimalParameterManager" alt="" coords="875,54,1232,78">
+<area shape="rect" href="$classLaCropManager.html#d67b73f7c7032655cef1da1899f6b576" title="LaCropManager::LaCropManager" alt="" coords="948,102,1159,126">
+<area shape="rect" href="$classLaModel.html#26b9bb0973294e864b680633f27fce75" title="LaModel::allocateFallowGrazingLand" alt="" coords="544,150,776,174">
+<area shape="rect" href="$classLaModel.html#e4d9b8377d7b2becccf6233c5d9090ac" title="LaModel::toHtml" alt="" coords="603,198,717,222">
+<area shape="rect" href="$classLaModel.html#642659ce7818ab6b66aff8396026906d" title="LaModel::toHtmlAreaCropTargets" alt="" coords="553,246,767,270">
+<area shape="rect" href="$classLaModel.html#80e3dab60470a6d264c22cc8c4fa30fd" title="LaModel::toHtmlCalorieCropTargets" alt="" coords="547,294,773,318">
+<area shape="rect" href="$classLaModel.html#774f3e7edd4c3d7f8ead5afa1f4cdda9" title="LaModel::toHtmlProductionCropTargets" alt="" coords="536,342,784,366">

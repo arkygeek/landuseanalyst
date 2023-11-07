@@ -18,29 +18,22 @@
 
 # lacropparametermanagerbase.py from lacropparametermanagerbase.ui
 
-import sys
-from datetime import datetime, timezone, timedelta
-import numpy as np
-from enum import Enum
+import os
 
-from qgis.PyQt import QtGui, QtWidgets, uic
-from qgis.PyQt.QtWidgets import QMessageBox, QToolTip, QStackedWidget, QHBoxLayout, QVBoxLayout, QSplitter, QFormLayout, QLabel, QFrame, QPushButton, QTableWidget, QTableWidgetItem
-from qgis.PyQt.QtWidgets import QApplication, QFileSystemModel, QTreeView, QWidget, QHeaderView
-from qgis.PyQt.QtGui import QPainter, QBrush, QPen, QColor, QFont, QIcon
-from qgis.PyQt.QtCore import Qt, QPoint, QRect, QObject, QEvent, pyqtSignal, pyqtSlot, QSize, QDir
+from qgis.PyQt.uic import loadUiType
 
+from qgis.PyQt.QtWidgets import QDialog, QWidget
+from qgis.PyQt.QtCore import Qt
 ## IMPORTS:
+from la.gui.lacropparametermanager import LaCropParameterManager
+# from la.resources_rc import *
 # from la.ui.lacropparametermanagerbase import lacropparametermanagerbase
+Ui_LaCropParameterManagerBase, _ = loadUiType(os.path.join(os.path.dirname(__file__),"lacropparametermanagerbase.ui"))
 
-
-class lacropparametermanagerbase(QWidget):
-	def __init__(self, parent=None):
-		super().__init__(parent=parent) # Call the inherited classes __init__ method
-		self.ui = uic.loadUi("landuse_analyst/ui/lacropparametermanagerbase.ui", self) # Load the .ui file
-
-
-		self.initUI()
-		self.show() # Show the GUI
+class LaCropParameterManagerBase(QWidget, Ui_LaCropParameterManagerBase):
+	def __init__(self, parent=None, flags=Qt.WindowFlags()):
+		super(LaCropParameterManagerBase, self).__init__(parent, flags)
+		self.setupUi(self)
 
 
 	def initUI(self):

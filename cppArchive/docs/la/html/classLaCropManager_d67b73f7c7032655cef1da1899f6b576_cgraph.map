@@ -1,0 +1,10 @@
+<area shape="rect" href="$classLaCropManager.html#3d6201d0218c267e0227d2bd2d5fe079" title="LaCropManager::readSettings" alt="" coords="280,79,472,103">
+<area shape="rect" href="$classLaCropManager.html#69a6331d3cdc279d2d1e2094d59c5962" title="LaCropManager::refreshCropTable" alt="" coords="267,127,485,151">
+<area shape="rect" href="$classLaUtils.html#11f60f81b93a26a0c14d5812a68e6b16" title="LaUtils::getAvailableCrops" alt="" coords="535,52,708,76">
+<area shape="rect" href="$classLaGuid.html#38e7b78e2ef37526ffb1bad6af4cf745" title="LaGuid::guid" alt="" coords="815,152,908,176">
+<area shape="rect" href="$classLaCrop.html#e2c84ed6c0c693b3edc22e0de658c275" title="LaCrop::name" alt="" coords="811,102,912,126">
+<area shape="rect" href="$classLaCrop.html#8501b1b27ee47a5cd10f87ac4dc1207f" title="LaCrop::toText" alt="" coords="569,202,673,226">
+<area shape="rect" href="$classLaSerialisable.html#2442a25a3044b53a6a34f1e2387d35c0" title="LaSerialisable::fromXmlFile" alt="" coords="772,54,951,78">
+<area shape="rect" href="$classLaUtils.html#fc911327dedf1b19d1e8d00dc6566cc7" title="LaUtils::userCropProfilesDirPath" alt="" coords="757,6,965,30">
+<area shape="rect" href="$classLaSerialisable.html#442dee3c693fc9d4e180bbe319015a45" title="LaSerialisable::fromXml" alt="" coords="1013,54,1173,78">
+<area shape="rect" href="$classLaUtils.html#03e257f78a463d90da9ac1bf8ceaec59" title="LaUtils::xmlEncode" alt="" coords="795,202,928,226">

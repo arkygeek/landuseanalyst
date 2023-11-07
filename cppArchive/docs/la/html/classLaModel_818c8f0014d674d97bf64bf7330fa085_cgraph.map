@@ -1,0 +1,14 @@
+<area shape="rect" href="$classLaUtils.html#31401524c3416531ef439851cd69cd21" title="LaUtils::getAnimal" alt="" coords="332,88,460,112">
+<area shape="rect" href="$classLaGuid.html#38e7b78e2ef37526ffb1bad6af4cf745" title="LaGuid::guid" alt="" coords="603,5,696,29">
+<area shape="rect" href="$classLaAnimal.html#e1ff383858093056914370f969a2304a" title="LaAnimal::name" alt="" coords="592,149,707,173">
+<area shape="rect" href="$classLaAnimal.html#b91d79421a1a113f463ced406e2b89e5" title="LaAnimal::killWeight" alt="" coords="327,187,465,211">
+<area shape="rect" href="$classLaAnimal.html#d68b0eee8228151e81ba937c7715a300" title="LaAnimal::lactationTime" alt="" coords="316,235,476,259">
+<area shape="rect" href="$classLaModel.html#0c721507f11831e4ddc824c700123635" title="LaModel::logMessage" alt="" coords="323,283,469,307">
+<area shape="rect" href="$classLaAnimal.html#6dfb7834ca39edc82b12419273e4bd98" title="LaAnimal::meatFoodValue" alt="" coords="309,331,483,355">
+<area shape="rect" href="$classLaAnimal.html#60b8c9abf2c857227ea81d694eec18b6" title="LaAnimal::milkFoodValue" alt="" coords="312,379,480,403">
+<area shape="rect" href="$classLaAnimal.html#918d84cabe24ef0714339a54b0663d3f" title="LaAnimal::milkGramsPerDay" alt="" coords="301,427,491,451">
+<area shape="rect" href="$classLaAnimal.html#39c4b917e82cc0e55040ac3b7bb405db" title="LaAnimal::usableMeat" alt="" coords="321,475,471,499">
+<area shape="rect" href="$classLaAnimal.html#2f81a4cfb201673bb23bfb9d1098c7b9" title="LaAnimal::weaningAge" alt="" coords="320,523,472,547">
+<area shape="rect" href="$classLaSerialisable.html#2442a25a3044b53a6a34f1e2387d35c0" title="LaSerialisable::fromXmlFile" alt="" coords="560,53,739,77">
+<area shape="rect" href="$classLaUtils.html#4efbb82253462579bce5c3cf486a4d82" title="LaUtils::userAnimalProfilesDirPath" alt="" coords="539,101,760,125">
+<area shape="rect" href="$classLaSerialisable.html#442dee3c693fc9d4e180bbe319015a45" title="LaSerialisable::fromXml" alt="" coords="808,53,968,77">

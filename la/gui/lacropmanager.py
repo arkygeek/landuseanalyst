@@ -66,8 +66,6 @@ class LaCropTableModel(QAbstractTableModel):
 
      
 
-
-
 class LaCropManager:
     def __init__(self, parent=None):
         self.crops = []

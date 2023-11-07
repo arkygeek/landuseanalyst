@@ -44,9 +44,9 @@ from la.ui.laanimalmanagerbase import LaAnimalManagerBase
 from la.ui.laanimalparametermanagerbase import LaAnimalParameterManagerBase
 from la.ui.laanimalparameterbase import LaAnimalParameterBase
 from la.ui.laassemblageconversionbase import laassemblageconversionbase
-from la.ui.lacropmanagerbase import LaCropProfileManagerBase
-from la.ui.lacropparameterbase import LaCropParameterManagerBase
-from la.ui.lacropparametermanagerbase import lacropparametermanagerbase
+from la.ui.lacropmanagerbase import LaCropManagerBase
+from la.ui.lacropparameterbase import LaCropParameterBase
+from la.ui.lacropparametermanagerbase import LaCropParameterManagerBase
 from la.ui.laexperimentbase import laexperimentbase
 from la.ui.lagrassprocessbase import lagrassprocessbase
 from la.ui.laReportFallow import laReportFallow
@@ -214,12 +214,12 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         print("open Manage Crops window printed")
         self.tbReport.append("Manage Crops button clicked")
 
-        Ui_LaCropManagerBase, QDialog = uic.loadUiType(
+        Ui_LaCropProfileManagerBase, QDialog = uic.loadUiType(
             os.path.join(
                 os.path.dirname(__file__),
                 'lacropprofilemanagerbase.ui'))
 
-        crop_manager = LaCropProfileManagerBase()
+        crop_manager = LaCropManagerBase()
         crop_manager.show()
         crop_manager.exec_()
 

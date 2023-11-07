@@ -20,20 +20,21 @@
 
 import os
 
-from qgis.PyQt import uic
-from qgis.PyQt.QtWidgets import QDialog
-from qgis.PyQt.uic import loadUiType
-
 from qgis.PyQt.QtCore import Qt
+from qgis.PyQt.uic import loadUiType
+from qgis.PyQt.QtWidgets import QDialog
 
 ## IMPORTS:
 
 Ui_LaCropParameterBase, _ = loadUiType(
-	os.path.join(os.path.dirname(__file__), "../ui/lacropparameterbase.ui"))
+	os.path.join(os.path.dirname(__file__), 
+	"../ui/lacropparameterbase.ui"
+	)
+)
 
-class LaCropParameterManagerBase(QDialog, Ui_LaCropParameterBase):
+class LaCropParameterBase(QDialog, Ui_LaCropParameterBase):
 	def __init__(self, parent=None, flags=Qt.WindowFlags()):
-		super(LaCropParameterManagerBase, self).__init__(parent, flags)
+		super(LaCropParameterBase, self).__init__(parent, flags)
 		self.setupUi(self)
 		self.readSettings()
 		self.lblCropParameterName.setText("Crop Parameter Name")
