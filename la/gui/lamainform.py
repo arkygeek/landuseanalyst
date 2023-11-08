@@ -1,60 +1,29 @@
 # Standard library imports
-from typing import Dict, List, Tuple
+from typing import Tuple
 
 # Third-party imports
-from PySide6.QtWebEngineWidgets import QWebEngineView
-from PyQt5.QtWebKitWidgets import QWebView
-from qgis.PyQt.QtCore import Qt, QSettings, QTranslator, QCoreApplication
+from qgis.PyQt.QtCore import Qt, QTranslator, QCoreApplication
 from qgis.PyQt.QtGui import QIcon, QPixmap
-from qgis.PyQt.QtWidgets import (QAction, QCheckBox, QComboBox, QDialog ,QHeaderView,
-                                 QLabel, QLineEdit, QMainWindow, QProgressBar,
-                                 QPushButton, QRadioButton, QSlider, QSpinBox,
-                                 QTableWidget, QTableWidgetItem, QTextBrowser,
+from qgis.PyQt.QtWidgets import (QAction, QComboBox, QLabel, QLineEdit, QMainWindow, QSlider, QSpinBox,
+                                 QTextBrowser,
                                  QTextEdit, QTreeWidget, QMessageBox)
 
 # Local application/library specific imports
 # from lib.la import La 
 from la.resources_rc import *
 
-from la.gui.lamodelreport import LaModelReport
-from la.gui.lamodelreporttablemodel import LaModelReportTableModel
-from la.gui.lacropmanager import LaCropManager
-from la.gui.lacropparametermanager import LaCropParameterManager
-from la.gui.laassemblageconversion import LaAssemblageConversion
-from la.gui.lagrassprocess import LaGrassProcess
-from la.gui.laanimalmanager import LaAnimalManager
-from la.gui.laanimalparametermanager import LaAnimalParameterManager
 
 from la.ui.lamainformbase import LaMainFormBase
-from la.ui.laanimalmanagerbase import LaAnimalManagerBase
-from la.ui.laanimalparametermanagerbase import LaAnimalParameterManagerBase
-from la.ui.laanimalparameterbase import LaAnimalParameterBase
-from la.ui.laassemblageconversionbase import laassemblageconversionbase
-from la.ui.lacropmanagerbase import LaCropManagerBase
 # from la.ui.lacropparameterbase import LaCropParameterManagerBase
-from la.ui.lacropparametermanagerbase import LaCropParameterManagerBase
-from la.ui.laexperimentbase import laexperimentbase
-from la.ui.lagrassprocessbase import lagrassprocessbase
-from la.ui.laReportFallow import laReportFallow
-from la.ui.laReportHerds import laReportHerds
-from la.ui.laReportTargets import laReportTargets
 
-from la.lib.lautils import LaUtils, LaMessageBus 
+from la.lib.lautils import LaUtils 
 
 from la.lib.laanimal import LaAnimal
 from la.lib.laanimalparameter import LaAnimalParameter
 from la.lib.lacrop import LaCrop
 from la.lib.lacropparameter import LaCropParameter
-from la.lib.ladietlabels import LaDietLabels
-from la.lib.lafoodsource import LaFoodSource
-from la.lib.lagrass import LaGrass
-from la.lib.lagrassprocesslib import LaGrassProcessLib
-from la.lib.laguid import LaGuid
 from la.lib.lamodel import LaModel
-from la.lib.lamodel_interface import LaModelInterface
-from la.lib.laserialisable import LaSerialisable
-from la.lib.lautils import LaUtils, LaMessageBus
-from la.lib.version import VERSION
+from la.lib.lautils import LaUtils
 from la.lib.la import La
 
 class LaMainForm(QMainWindow):

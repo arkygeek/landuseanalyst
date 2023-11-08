@@ -771,9 +771,7 @@ p, li { white-space: pre-wrap; }
   <tabstop>pbnApply</tabstop>
   <tabstop>pbnClose</tabstop>
  </tabstops>
- <resources>
-  <include location="../resources.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>pbnClose</sender>

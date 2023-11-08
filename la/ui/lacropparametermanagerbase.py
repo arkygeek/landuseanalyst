@@ -17,16 +17,17 @@
 ***************************************************************"""
 
 import os
+from qgis.PyQt.QtWidgets import QDialog
 from qgis.PyQt.uic import loadUiType
 from qgis.PyQt.QtCore import (
         QSettings, QDir, QSettings, QPoint, QSize, Qt)
 from qgis.PyQt.QtWidgets import (
-        QDialog, QTableWidgetItem, QMessageBox, QHeaderView, QTableWidgetItem)
+        QTableWidgetItem, QMessageBox, QHeaderView, QTableWidgetItem)
 from qgis.PyQt.QtGui import QIcon
 
 # local imports
-from la.lib.lautils import LaUtils
 from la.gui.lacropparametermanager import LaCropParameterManager
+from la.lib.lautils import LaUtils
 from la.lib.lagrass import LaGrass
 from la.lib.lacropparameter import LaCropParameter
 from la.lib.la import AreaUnits
@@ -44,21 +45,22 @@ print(f"Ui_LaCropParameterManagerBase: {Ui_LaCropParameterManagerBase}")
 class LaCropParameterManagerBase(QDialog, Ui_LaCropParameterManagerBase):
 	
     def __init__(self, parent=None, flags=Qt.WindowFlags()):
-        super(LaCropParameterManager, self).__init__(parent, flags)
+        super(LaCropParameterManagerBase, self).__init__(parent, flags)
         self.setupUi(self)
         self.readSettings()
         self.tblCropParameterProfiles.cellClicked.connect(self.cellClicked)
         myList = []
         myGrass = LaGrass()
-        myMapsetList = myGrass.getMapsetList()
-        myIterator1 = iter(myMapsetList)
-        while myIterator1.hasNext():
-            myList += myGrass.getRasterList(myIterator1.next())
+        myMapsetList = "" #myGrass.getMapsetList() @TODO get Grass stuff working
+        # myIterator1 = iter(myMapsetList)
+        # while myIterator1.hasNext():
+        #     myList += myGrass.getRasterList(myIterator1.next())
         self.cboRaster.addItems(myList)
         self.pbnImport.setVisible(False)
         self.pbnExport.setVisible(False)
         self.lblCropPic.setScaledContents(True)
         
+        myCropsMap: dict = []
         myCropsMap = LaUtils.getAvailableCrops()
         
         # This creates an iterator for myCropsMap in Python, which you can then iterate over
@@ -66,16 +68,16 @@ class LaCropParameterManagerBase(QDialog, Ui_LaCropParameterManagerBase):
         # In Python, dictionaries (which are similar to QMap in Qt) are iterable, and you can
         # use the items() method to get an iterable that yields pairs of keys and values. 
         # The iter function then creates an iterator from this iterable.
-        myIterator = iter(myCropsMap.items)
+        # myIterator = iter(myCropsMap.items())
 
-        while myIterator.hasNext():
-            myIterator.next()
-            myCrop = myIterator.value()
-            myGuid = myCrop.guid()
-            myName = myCrop.name()
-            myIcon = QIcon()
-            myIcon.addFile(":/localdata.png")
-            self.cboCrop.addItem(myName, myGuid)
+        # while myIterator.hasNext():
+        #     myIterator.next()
+        #     myCrop = myIterator.value()
+        #     myGuid = myCrop.guid()
+        #     myName = myCrop.name()
+        #     myIcon = QIcon()
+        #     myIcon.addFile(":/localdata.png")
+        #     self.cboCrop.addItem(myName, myGuid)
         self.cboCrop.currentIndexChanged.connect(self.on_cboCrop_changed)
         self.cbAreaUnits.addItem("Dunum")
         self.cbAreaUnits.addItem("Hectare")
@@ -190,13 +192,14 @@ class LaCropParameterManagerBase(QDialog, Ui_LaCropParameterManagerBase):
         self.tblCropParameterProfiles.setColumnWidth(1, self.tblCropParameterProfiles.width())
         self.tblCropParameterProfiles.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
 
-    def refreshCropParameterTable(self, theGuid):
-        self.mCropParameterMap.clear()
+    def refreshCropParameterTable(self, theGuid=None):
+        pass
+        """# self.mCropParameterMap.clear()
         self.tblCropParameterProfiles.clear()
         self.tblCropParameterProfiles.setRowCount(0)
         self.tblCropParameterProfiles.setColumnCount(2)
 
-        self.mCropParameterMap = LaUtils.getAvailableCropParameters()
+        # self.mCropParameterMap = LaUtils.getAvailableCropParameters()
 
         mySelectedRow = 0
         myCurrentRow = 0
@@ -231,7 +234,7 @@ class LaCropParameterManagerBase(QDialog, Ui_LaCropParameterManagerBase):
         self.tblCropParameterProfiles.horizontalHeader().hide()
         self.tblCropParameterProfiles.verticalHeader().hide()
         self.tblCropParameterProfiles.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
-
+        """
     def selectCropParameter(self, theFileName):
         myCropParameterDir = LaUtils.userCropParameterProfilesDirPath()
         myCropParameter = LaCropParameter()

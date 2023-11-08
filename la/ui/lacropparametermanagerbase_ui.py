@@ -21,7 +21,6 @@ from PySide6.QtWidgets import (QAbstractItemView, QAbstractSpinBox, QApplication
     QLabel, QLineEdit, QPushButton, QSizePolicy,
     QSpacerItem, QSpinBox, QTableWidget, QTableWidgetItem,
     QToolButton, QWidget)
-import resources_rc
 
 class Ui_LaCropParameterManagerBase(object):
     def setupUi(self, LaCropParameterManagerBase):

@@ -33,6 +33,7 @@ Ui_LaCropManagerBase, _ = loadUiType(
 )
 print(f"Ui_LaCropManagerBase: {Ui_LaCropManagerBase}")
 # @TODO remove the above print statement after testing
+
 class LaCropManagerBase(QDialog, Ui_LaCropManagerBase):
     def __init__(self, parent=None, flags=Qt.WindowFlags()):
         super(LaCropManagerBase, self).__init__(parent, flags)

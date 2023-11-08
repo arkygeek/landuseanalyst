@@ -27,7 +27,7 @@ import os.path
 # local pkg imports
 
 # the following line for resources is required
-from la.resources import *  # Initialize Qt resources from file resources.py
+from la.resources_rc import *  # Initialize Qt resources from file resources.py
 from la.ui.lamainformbase import LaMainFormBase  # Import dialog code
 
 

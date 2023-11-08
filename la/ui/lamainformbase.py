@@ -31,15 +31,9 @@ from qgis.PyQt.QtCore import QTextStream
 
 import os
 
-from la.lib.lautils import (
-    LaMessageBus, LaUtils
-)
+from la.lib.lautils import LaMessageBus, LaUtils
 
-# myAreaUnits = LaUtils.AreaUnits()
-
-from la.lib.la import (
-    La, LaFoodSource, LandFound, LandBeingGrazed
-) # my own classes
+from la.lib.la import La, LaFoodSource, LandFound, LandBeingGrazed # my own classes
 from la.ui.laanimalmanagerbase import LaAnimalManagerBase
 from la.ui.laanimalparametermanagerbase import LaAnimalParameterManagerBase
 from la.ui.laanimalparameterbase import LaAnimalParameterBase
@@ -219,9 +213,9 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
                 os.path.dirname(__file__),
                 'lacropmanagerbase.ui'))
 
-        crop_manager = LaCropManagerBase()
-        crop_manager.show()
-        crop_manager.exec_()
+        myCropManager = LaCropManagerBase()
+        myCropManager.show()
+        myCropManager.exec_()
 
 
     def on_clicked_pbnNewCropParameter(self):
@@ -233,9 +227,9 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
                 os.path.dirname(__file__),
                 'lacropparametermanagerbase.ui'))
 
-        crop_parameter_manager = LaCropParameterManagerBase()
-        crop_parameter_manager.show()
-        crop_parameter_manager.exec_()
+        myCropParameterManager = LaCropParameterManagerBase()
+        myCropParameterManager.show()
+        myCropParameterManager.exec_()
 
 
     def on_clicked_pbnNewAnimal(self):
