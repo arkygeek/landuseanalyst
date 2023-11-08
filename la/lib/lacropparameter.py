@@ -1,10 +1,13 @@
 # lacropparameter.py
+from typing import Optional, Type
+
 from qgis.PyQt.QtCore import QObject, pyqtProperty, pyqtSignal, pyqtSlot, Qt
 from la.lib.laserialisable import LaSerialisable
 from la.lib.laguid import LaGuid
+from la.lib.la import AreaUnits as LaAreaUnits #, LaTripleMap, LaRasterInfo, LaFoodSourceMap, HerdSize, LaReportMap
 
 class LaCropParameter(LaSerialisable, LaGuid):
-    def __init__(self, theCropParameter=None):
+    def __init__(self, theCropParameter: Optional[Type['LaCropParameter']] = None):
         """
         Initializes a new instance of the LaCropParameter class.
         
@@ -72,22 +75,114 @@ class LaCropParameter(LaSerialisable, LaGuid):
     @description.setter
     def description(self, theDescription):
         self._description = theDescription  
+    
+    @property
+    def cropGuid(self) -> str:
+        return self._cropGuid
+    
+    @cropGuid.setter
+    def cropGuid(self, theCropGuid: str) -> None:
+        self._cropGuid = theCropGuid
 
-    def value(self):
-        return self._value
+    @property
+    def percentTameCrop(self) -> float:
+        return self._percentTameCrop
+    
+    @percentTameCrop.setter
+    def percentTameCrop(self, thePercentTameCrop: float) -> None:
+        self._percentTameCrop = thePercentTameCrop
 
-    def setName(self, name):
-        self._name = name
+    @property
+    def spoilage(self) -> float:
+        return self._spoilage
+    
+    @spoilage.setter
+    def spoilage(self, theSpoilage: float) -> None:
+        self._spoilage = theSpoilage
+    
+    @property
+    def reseed(self) -> float:
+        return self._reseed
+    
+    @reseed.setter
+    def reseed(self, theReseed: float) -> None:
+        self._reseed = theReseed
+    
+    @property
+    def cropRotation(self) -> float:
+        return self._cropRotation
+    
+    @cropRotation.setter
+    def cropRotation(self, theCropRotation: float) -> None:
+        self._cropRotation = theCropRotation
 
-    def setDescription(self, description):
-        self._description = description
+    @property
+    def fallowRatio(self) -> float:
+        return self._fallowRatio
+    
+    @fallowRatio.setter
+    def fallowRatio(self, theFallowRatio: float) -> None:
+        self._fallowRatio = theFallowRatio
+    
+    @property
+    def fallowValue(self) -> float:
+        return self._fallowValue
+    
+    @fallowValue.setter
+    def fallowValue(self, theFallowValue: float) -> None:
+        self._fallowValue = theFallowValue
 
-    def setValue(self, value):
-        self._value = value
+    @property
+    def areaUnits(self) -> LaAreaUnits:
+        return self._areaUnits
+    
+    @areaUnits.setter
+    def areaUnits(self, theAreaUnits: LaAreaUnits) -> None:
+        self._areaUnits = theAreaUnits
+
+    @property
+    def useCommonLand(self) -> bool:
+        return self._useCommonLand
+    
+    @useCommonLand.setter
+    def useCommonLand(self, theUseCommonLand: bool) -> None:
+        self._useCommonLand = theUseCommonLand
+
+    @property
+    def useSpecificLand(self) -> bool:
+        return self._useSpecificLand
+    
+    @useSpecificLand.setter
+    def useSpecificLand(self, theUseSpecificLand: bool) -> None:
+        self._useSpecificLand = theUseSpecificLand
+
+    @property
+    def rasterName(self) -> str:
+        return self._rasterName
+    
+    @rasterName.setter
+    def rasterName(self, theRasterName: str) -> None:
+        self._rasterName = theRasterName
+
+    
+    
 
     nameChanged = pyqtSignal(str)
     descriptionChanged = pyqtSignal(str)
-    valueChanged = pyqtSignal(str)
+    cropGuidChanged = pyqtSignal(str)
+    percentTameCropChanged = pyqtSignal(float)
+    spoilageChanged = pyqtSignal(float)
+    reseedChanged = pyqtSignal(float)
+    cropRotationChanged = pyqtSignal(float)
+    fallowRatioChanged = pyqtSignal(float)
+    fallowValueChanged = pyqtSignal(float)
+    areaUnitsChanged = pyqtSignal(LaAreaUnits)
+    useCommonLandChanged = pyqtSignal(bool)
+    useSpecificLandChanged = pyqtSignal(bool)
+    rasterNameChanged = pyqtSignal(str)
+
+
+
 
     @pyqtProperty(str, notify=nameChanged)
     def name(self):
@@ -109,15 +204,120 @@ class LaCropParameter(LaSerialisable, LaGuid):
             self._description = description
             self.descriptionChanged.emit(description)
 
-    @pyqtProperty(str, notify=valueChanged)
-    def value(self):
-        return self._value
+    @pyqtProperty(str, notify=cropGuidChanged)
+    def cropGuid(self):
+        return self._cropGuid
+    
+    @cropGuid.setter
+    def cropGuid(self, cropGuid):
+        if self._cropGuid != cropGuid:
+            self._cropGuid = cropGuid
+            self.cropGuidChanged.emit(cropGuid)
+    
+    @pyqtProperty(float, notify=percentTameCropChanged)
+    def percentTameCrop(self):
+        return self._percentTameCrop
+    
+    @percentTameCrop.setter
+    def percentTameCrop(self, percentTameCrop):
+        if self._percentTameCrop != percentTameCrop:
+            self._percentTameCrop = percentTameCrop
+            self.percentTameCropChanged.emit(percentTameCrop)
+    
+    @pyqtProperty(float, notify=spoilageChanged)
+    def spoilage(self):
+        return self._spoilage
+    
+    @spoilage.setter
+    def spoilage(self, spoilage):
+        if self._spoilage != spoilage:
+            self._spoilage = spoilage
+            self.spoilageChanged.emit(spoilage)
 
-    @value.setter
-    def value(self, value):
-        if self._value != value:
-            self._value = value
-            self.valueChanged.emit(value)
+    @pyqtProperty(float, notify=reseedChanged)
+    def reseed(self):
+        return self._reseed
+    
+    @reseed.setter
+    def reseed(self, reseed):
+        if self._reseed != reseed:
+            self._reseed = reseed
+            self.reseedChanged.emit(reseed)
+
+    @pyqtProperty(float, notify=cropRotationChanged)
+    def cropRotation(self):
+        return self._cropRotation
+    
+    @cropRotation.setter
+    def cropRotation(self, cropRotation):
+        if self._cropRotation != cropRotation:
+            self._cropRotation = cropRotation
+            self.cropRotationChanged.emit(cropRotation)
+
+    @pyqtProperty(float, notify=fallowRatioChanged)
+    def fallowRatio(self):
+        return self._fallowRatio
+    
+    @fallowRatio.setter
+    def fallowRatio(self, fallowRatio):
+        if self._fallowRatio != fallowRatio:
+            self._fallowRatio = fallowRatio
+            self.fallowRatioChanged.emit(fallowRatio)
+
+    @pyqtProperty(float, notify=fallowValueChanged)
+    def fallowValue(self):
+        return self._fallowValue
+    
+    @fallowValue.setter
+    def fallowValue(self, fallowValue):
+        if self._fallowValue != fallowValue:
+            self._fallowValue = fallowValue
+            self.fallowValueChanged.emit(fallowValue)
+
+    @pyqtProperty(LaAreaUnits, notify=areaUnitsChanged)
+    def areaUnits(self):
+        return self._areaUnits
+    
+    @areaUnits.setter
+    def areaUnits(self, areaUnits):
+        if self._areaUnits != areaUnits:
+            self._areaUnits = areaUnits
+            self.areaUnitsChanged.emit(areaUnits)
+
+    @pyqtProperty(bool, notify=useCommonLandChanged)
+    def useCommonLand(self):
+        return self._useCommonLand
+    
+    @useCommonLand.setter
+    def useCommonLand(self, useCommonLand):
+        if self._useCommonLand != useCommonLand:
+            self._useCommonLand = useCommonLand
+            self.useCommonLandChanged.emit(useCommonLand)
+    
+    @pyqtProperty(bool, notify=useSpecificLandChanged)
+    def useSpecificLand(self):
+        return self._useSpecificLand
+    
+    @useSpecificLand.setter
+    def useSpecificLand(self, useSpecificLand):
+        if self._useSpecificLand != useSpecificLand:
+            self._useSpecificLand = useSpecificLand
+            self.useSpecificLandChanged.emit(useSpecificLand)
+
+    @pyqtProperty(str, notify=rasterNameChanged)
+    def rasterName(self):
+        return self._rasterName
+    
+    @rasterName.setter
+    def rasterName(self, rasterName):
+        if self._rasterName != rasterName:
+            self._rasterName = rasterName
+            self.rasterNameChanged.emit(rasterName)
+
+
+
+
+
 
 """
 This code defines a LaCropParameter class in Python using PyQt5.

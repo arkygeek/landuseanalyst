@@ -6,53 +6,42 @@ from la.lib.laserialisable import LaSerialisable
 from la.lib.laguid import LaGuid
 
 class LaCrop(LaSerialisable, LaGuid):
-    """
-    A class representing a crop.
+    
+    def __init__(self, theCrop: Optional[Type['LaCrop']] = None):
+        """Initializes a new instance of the LaCrop class.
+        
+        The LaCrop class represents a crop that can be grown in a simulation. This class 
+        contains information about the crop's name, description, yield, and other properties.
+        Note that the class name is used as a string in the type hint for the `the_crop` 
+        parameter. This is necessary because the class definition hasn't been fully parsed 
+        yet when the type hint is evaluated. The `Type` type hint is used to refer to the 
+        class itself.
 
-    Attributes:
-        mName (str): The name of the crop.
-        mDescription (str): The description of the crop.
-        mCropYield (int): The yield of the crop.
-        mCropCalories (int): The calories of the crop.
-        mCropFodderProduction (int): The fodder production of the crop.
-        mCropFodderValue (int): The fodder value of the crop.
-        mCropFodderEnergyType (str): The energy type of the crop fodder.
-        mAreaUnits (str): The area units of the crop.
-        mImageFile (str): The image file of the crop.
-    """
-
-    class LaCrop:
-        def __init__(self, theCrop: Optional[Type['LaCrop']] = None):
-            """
-            Initializes a new instance of the LaCrop class.
-
-            The LaCrop class represents a crop that can be grown in a simulation. This class contains information about the crop's name, description, yield, and other properties.
-
-            Note that the class name is used as a string in the type hint for the `theCrop` parameter. This is necessary because the class definition hasn't been fully parsed yet when the type hint is evaluated. The `Type` type hint is used to refer to the class itself.
-
-            Args:
-                theCrop (Optional[Type['LaCrop']]): An existing LaCrop object to copy. If provided, the new instance will be a copy of the existing object. If not provided, the new instance will be initialized with default values.
-            """
-            super().__init__()
-            if theCrop is None: # If NO crop is provided, initialize with default values.
-                self.setGuid()
-                self.mName = "No Name Set"
-                self.mDescription = "Not Set"
-                self.mCropYield = 60
-                self.mCropCalories = 3000
-                self.mCropFodderProduction = 50
-                self.mCropFodderValue = 1000
-            else: # If a crop IS provided, copy the values from the existing crop.
-                self.mName = theCrop.name
-                self.mDescription = theCrop.description
-                self.setGuid(theCrop.guid)
-                self.mCropYield = theCrop.cropYield
-                self.mCropCalories = theCrop.cropCalories
-                self.mCropFodderProduction = theCrop.fodderProduction
-                self.mCropFodderValue = theCrop.fodderValue
-                self.mCropFodderEnergyType = theCrop.cropFodderEnergyType
-                self.mAreaUnits = theCrop.areaUnits
-                self.mImageFile = theCrop.imageFile
+        Args:
+            the_crop (Optional[Type['LaCrop']]): An existing LaCrop object to copy.
+                If provided, the new instance will be a copy of the existing object. 
+                If not provided, the new instance will be initialized with default values.
+        """
+        super().__init__()
+        if theCrop is None: # If NO crop is provided, initialize with default values.
+            self.setGuid()
+            self.mName = "No Name Set"
+            self.mDescription = "Not Set"
+            self.mCropYield = 60
+            self.mCropCalories = 3000
+            self.mCropFodderProduction = 50
+            self.mCropFodderValue = 1000
+        else: # If a crop IS provided, copy the values from the existing crop.
+            self.mName = theCrop.name
+            self.mDescription = theCrop.description
+            self.setGuid(theCrop.guid)
+            self.mCropYield = theCrop.cropYield
+            self.mCropCalories = theCrop.cropCalories
+            self.mCropFodderProduction = theCrop.fodderProduction
+            self.mCropFodderValue = theCrop.fodderValue
+            self.mCropFodderEnergyType = theCrop.cropFodderEnergyType
+            self.mAreaUnits = theCrop.areaUnits
+            self.mImageFile = theCrop.imageFile
 
     def __del__(self):
         pass
@@ -94,7 +83,16 @@ class LaCrop(LaSerialisable, LaGuid):
         return myNewCrop
 
     def __deepcopy__(self, memo):
-        return LaCrop(self)
+            """
+            Create a deep copy of the LaCrop object.
+
+            Args:
+                memo: A dictionary that is used to track already copied objects.
+
+            Returns:
+                A new instance of LaCrop with the same attribute values as the original.
+            """
+            return LaCrop(self)
 
     @property
     def name(self) -> str:

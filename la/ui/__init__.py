@@ -1,4 +1,4 @@
 """
 ui classes
 """
-# from la.resources_rc import *
+# from ..resources_rc import *

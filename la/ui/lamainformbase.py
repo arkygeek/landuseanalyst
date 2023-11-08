@@ -45,7 +45,7 @@ from la.ui.laanimalparametermanagerbase import LaAnimalParameterManagerBase
 from la.ui.laanimalparameterbase import LaAnimalParameterBase
 from la.ui.laassemblageconversionbase import laassemblageconversionbase
 from la.ui.lacropmanagerbase import LaCropManagerBase
-from la.ui.lacropparameterbase import LaCropParameterBase
+# from la.ui.lacropparameterbase import LaCropParameterBase
 from la.ui.lacropparametermanagerbase import LaCropParameterManagerBase
 from la.ui.laexperimentbase import laexperimentbase
 from la.ui.lagrassprocessbase import lagrassprocessbase
@@ -214,10 +214,10 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         print("open Manage Crops window printed")
         self.tbReport.append("Manage Crops button clicked")
 
-        Ui_LaCropProfileManagerBase, QDialog = uic.loadUiType(
+        Ui_LaCropManagerBase, QDialog = uic.loadUiType(
             os.path.join(
                 os.path.dirname(__file__),
-                'lacropprofilemanagerbase.ui'))
+                'lacropmanagerbase.ui'))
 
         crop_manager = LaCropManagerBase()
         crop_manager.show()
@@ -225,8 +225,17 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
 
 
     def on_clicked_pbnNewCropParameter(self):
-        print("open Crop Parameters window")
+        print("open Crop Parameters window printed")
         self.tbReport.append("Manage Crop Parameters button clicked")
+
+        Ui_LaCropParameterManagerBase, QDialog = uic.loadUiType(
+            os.path.join(
+                os.path.dirname(__file__),
+                'lacropparametermanagerbase.ui'))
+
+        crop_parameter_manager = LaCropParameterManagerBase()
+        crop_parameter_manager.show()
+        crop_parameter_manager.exec_()
 
 
     def on_clicked_pbnNewAnimal(self):

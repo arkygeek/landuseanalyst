@@ -14,7 +14,7 @@ from qgis.PyQt.QtWidgets import (QAction, QCheckBox, QComboBox, QDialog ,QHeader
 
 # Local application/library specific imports
 # from lib.la import La 
-from la.resources import *
+from la.resources_rc import *
 
 from la.gui.lamodelreport import LaModelReport
 from la.gui.lamodelreporttablemodel import LaModelReportTableModel
@@ -31,7 +31,7 @@ from la.ui.laanimalparametermanagerbase import LaAnimalParameterManagerBase
 from la.ui.laanimalparameterbase import LaAnimalParameterBase
 from la.ui.laassemblageconversionbase import laassemblageconversionbase
 from la.ui.lacropmanagerbase import LaCropManagerBase
-from la.ui.lacropparameterbase import LaCropParameterBase
+# from la.ui.lacropparameterbase import LaCropParameterManagerBase
 from la.ui.lacropparametermanagerbase import LaCropParameterManagerBase
 from la.ui.laexperimentbase import laexperimentbase
 from la.ui.lagrassprocessbase import lagrassprocessbase

@@ -25,8 +25,14 @@ from la.lib.lacrop import LaCrop
 from la.lib.lautils import LaUtils
 from la.gui.lacropmanager import LaCropManager
 
-Ui_LaCropManagerBase, _ = loadUiType(os.path.join(os.path.dirname(__file__),"lacropmanagerbase.ui"))
-
+Ui_LaCropManagerBase, _ = loadUiType(
+    os.path.join(
+        os.path.dirname(__file__),
+        "lacropmanagerbase.ui"
+    )
+)
+print(f"Ui_LaCropManagerBase: {Ui_LaCropManagerBase}")
+# @TODO remove the above print statement after testing
 class LaCropManagerBase(QDialog, Ui_LaCropManagerBase):
     def __init__(self, parent=None, flags=Qt.WindowFlags()):
         super(LaCropManagerBase, self).__init__(parent, flags)
