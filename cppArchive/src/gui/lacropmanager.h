@@ -35,7 +35,7 @@ class LaCropManager : public QDialog, private Ui::LaCropManagerBase
 {
   Q_OBJECT
   public:
-      LaCropManager(QWidget* parent = 0, Qt::WFlags fl = 0 );
+      LaCropManager(QWidget* parent = 0, Qt::WindowFlags fl = 0 );
       ~LaCropManager();
 
   public slots:

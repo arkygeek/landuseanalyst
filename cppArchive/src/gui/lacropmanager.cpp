@@ -37,7 +37,7 @@
 #include <QListWidgetItem>
 #include <QDebug>
 
-  LaCropManager::LaCropManager(QWidget* parent, Qt::WFlags fl)
+LaCropManager::LaCropManager(QWidget* parent, Qt::WindowFlags fl)
 : QDialog(parent,fl)
 {
     //required by Qt4 to initialise the ui
@@ -166,7 +166,8 @@ void LaCropManager::refreshCropTable(QString theGuid)
   tblCrops->setColumnWidth(1,tblCrops->width());
   tblCrops->horizontalHeader()->hide();
   tblCrops->verticalHeader()->hide();
-  tblCrops->horizontalHeader()->setResizeMode(1,QHeaderView::Stretch);
+  // tblCrops->horizontalHeader()->setResizeMode(1,QHeaderView::Stretch);
+  tblCrops->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
 }
 
 void LaCropManager::cellClicked(int theRow, int theColumn)
@@ -226,7 +227,7 @@ void LaCropManager::resizeEvent ( QResizeEvent * theEvent )
 {
   tblCrops->setColumnWidth(0,0);
   tblCrops->setColumnWidth(1,tblCrops->width());
-  tblCrops->horizontalHeader()->setResizeMode(1,QHeaderView::Stretch);
+  tblCrops->horizontalHeader()->setSectionResizeMode(1,QHeaderView::Stretch);
 }
 
 void LaCropManager::on_toolCopy_clicked()

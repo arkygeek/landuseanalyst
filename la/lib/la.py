@@ -48,10 +48,29 @@ class LandBeingGrazed:
     Unique = 1
 
 class AreaUnits:
-    Dunum = 0
-    Hectare = 1
+    """
+    This class is an enumeration of area units.
+
+    Attributes:
+        Dunum: Represents the Dunum unit of area.
+        Hectare: Represents the Hectare unit of area.
+    """
+    Dunum = 0  # Represents the Dunum unit of area.
+    Hectare = 1  # Represents the Hectare unit of area.
 
 class LandFound:
+    """
+    A class representing the possible outcomes of a land search operation.
+
+    Attributes:
+    -----------
+    NotEnough : int
+        Indicates that the search did not yield enough land.
+    TooMuch : int
+        Indicates that the search yielded too much land.
+    FoundTarget : int
+        Indicates that the search successfully found the target land.
+    """
     NotEnough = 0
     TooMuch = 1
     FoundTarget = 2

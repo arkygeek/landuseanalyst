@@ -19,28 +19,18 @@
 import os
 from qgis.PyQt.uic import loadUiType
 from qgis.PyQt.QtCore import (
-        QSettings, QDir, QFile, QTextStream, QProcess, QSettings, QPoint, QSize, Qt)
+        QSettings, QDir, QSettings, QPoint, QSize, Qt)
 from qgis.PyQt.QtWidgets import (
-        QDialog, QComboBox, QTreeWidget, QTreeWidgetItem, QTableWidgetItem, 
-        QMessageBox, QHeaderView, QTableWidget, QFileDialog, QListWidgetItem)
+        QDialog, QTableWidgetItem, QMessageBox, QHeaderView, QTableWidgetItem)
 from qgis.PyQt.QtGui import QIcon
 
 # local imports
-from la.lib.lacrop import LaCrop
 from la.lib.lautils import LaUtils
 from la.gui.lacropparametermanager import LaCropParameterManager
 from la.lib.lagrass import LaGrass
+from la.lib.lacropparameter import LaCropParameter
+from la.lib.la import AreaUnits
 
-# import os
-
-# from qgis.PyQt.uic import loadUiType
-
-# from qgis.PyQt.QtWidgets import QDialog, QWidget
-# from qgis.PyQt.QtCore import Qt
-# ## IMPORTS:
-# from la.gui.lacropparametermanager import LaCropParameterManager
-# from la.resources_rc import *
-# # from la.ui.lacropparametermanagerbase import lacropparametermanagerbase
 Ui_LaCropParameterManagerBase, _ = loadUiType(
 	os.path.join(
 		os.path.dirname(__file__),
@@ -93,55 +83,174 @@ class LaCropParameterManagerBase(QDialog, Ui_LaCropParameterManagerBase):
     
     def readSettings(self):
         """
-        Reads the settings from QSettings and sets the position and size of the window.
-        It then reads the window position and size from the application settings and applies them to the current window. 
-        The QSettings class is used to read and write application settings, and the QPoint and QSize classes are used to represent the position and size of the window.
-                """
+        Reads the settings of the main window's position and size from QSettings 
+        and sets the position and size of the current window accordingly.
+        """
         mySettings = QSettings()
         pos = mySettings.value("mainwindow/pos", QPoint(200, 200))
         size = mySettings.value("mainwindow/size", QSize(400, 400))
         self.resize(size)
         self.move(pos)
-
+    
+    def writeSettings(self):
+        mySettings = QSettings()
+        mySettings.setValue("mainwindow/pos", self.pos())
+        mySettings.setValue("mainwindow/size", self.size())
 
     def cellClicked(self, theRow, theColumn):
-        pass
+        myGuid = self.tblCropParameterProfiles.item(self.tblCropParameterProfiles.currentRow(), 0).text()
+        myFileName = myGuid + ".xml"
+        self.selectCropParameter(myFileName)
+        myCrop = LaUtils.getCrop(self.cboCrop.itemData(self.cboCrop.currentIndex(), Qt.UserRole))
+        myAnimalPic = myCrop.imageFile()
+        self.lblCropPic.setPixmap(myAnimalPic)
 
     def on_cboCrop_changed(self, theIndex):
-        pass
+        myCrop = LaUtils.getCrop(self.cboCrop.itemData(self.cboCrop.currentIndex(), Qt.UserRole))
+        myCropPic = myCrop.imageFile()
+        self.lblCropPic.setPixmap(myCropPic)
 
     def showCropParameter(self):
-        pass
+        self.leName.setText(self.mCropParameter.name())
+        self.leDescription.setText(self.mCropParameter.description())
+        self.setComboToDefault(self.cboCrop, self.mCropParameter.cropGuid())
+        self.sbPercentTameCrop.setValue(self.mCropParameter.percentTameCrop())
+        self.sbSpoilage.setValue(self.mCropParameter.spoilage())
+        self.sbReseed.setValue(self.mCropParameter.reseed())
+        self.grpCropRotation.setChecked(self.mCropParameter.cropRotation())
+        self.sbFallowRatio.setValue(self.mCropParameter.fallowRatio())
+        self.sbFallowValue.setValue(self.mCropParameter.fallowValue())
+        self.cbAreaUnits.setCurrentIndex(self.mCropParameter.areaUnits())
+        self.checkBoxUseCommonLand.setChecked(self.mCropParameter.useCommonLand())
+        self.checkBoxUseSpecificLand.setChecked(self.mCropParameter.useSpecificLand())
+        # self.cboRastere.setText(self.mCropParameter.rasterName())
 
     def on_toolCopy_clicked(self):
-        pass
+        if self.tblCropParameterProfiles.currentRow() < 0:
+            return
+
+        myGuid = self.tblCropParameterProfiles.item(self.tblCropParameterProfiles.currentRow(), 0).text()
+        if myGuid == "":
+            return
+
+        myOriginalFileName = LaUtils.userCropParameterProfilesDirPath() + QDir.separator() + myGuid + ".xml"
+        myCropParameter = LaCropParameter()
+        myCropParameter.fromXmlFile(myOriginalFileName)
+
+        myCropParameter.setGuid()
+        myNewFileName = LaUtils.userCropParameterProfilesDirPath() + QDir.separator() + myCropParameter.guid() + ".xml"
+        myCropParameter.setName("Copy of " + myCropParameter.name())
+        myCropParameter.toXmlFile(myNewFileName)
+        self.refreshCropParameterTable(myCropParameter.guid())
 
     def on_toolNew_clicked(self):
-        pass
+        myCropParameter = LaCropParameter()
+        myCropParameter.setGuid()
+        self.mCropParameter = myCropParameter
+        self.showCropParameter()
 
     def on_toolDelete_clicked(self):
-        pass
+        if self.tblCropParameterProfiles.currentRow() < 0:
+            return
+
+        myGuid = self.tblCropParameterProfiles.item(self.tblCropParameterProfiles.currentRow(), 0).text()
+        if myGuid != "":
+            myFile = LaUtils.userCropParameterProfilesDirPath() + QDir.separator() + myGuid + ".xml"
+            try:
+                os.remove(myFile)
+            except OSError:
+                QMessageBox.warning(self, "Landuse Analyst", "Unable to delete file \n" + myFile)
+            self.refreshCropParameterTable()
 
     def on_pbnApply_clicked(self):
-        pass
+        self.mCropParameter.setName(self.leName.text())
+        self.mCropParameter.setDescription(self.leDescription.text())
+        self.mCropParameter.setCropGuid(self.cboCrop.itemData(self.cboCrop.currentIndex(), Qt.UserRole))
+        self.mCropParameter.setPercentTameCrop(self.sbPercentTameCrop.value())
+        self.mCropParameter.setSpoilage(self.sbSpoilage.value())
+        self.mCropParameter.setReseed(self.sbReseed.value())
+        self.mCropParameter.setCropRotation(self.grpCropRotation.isChecked())
+        self.mCropParameter.setFallowRatio(self.sbFallowRatio.value())
+        self.mCropParameter.setFallowValue(self.sbFallowValue.value())
 
-    def resizeEvent(self, event):
-        pass
+        mySelectedAreaUnit = self.cbAreaUnits.currentText()
+        if mySelectedAreaUnit == "Dunum":
+            self.mCropParameter.setAreaUnits(AreaUnits.Dunum)
+        elif mySelectedAreaUnit == "Hectare":
+            self.mCropParameter.setAreaUnits(AreaUnits.Hectare)
 
-    def refreshCropParameterTable(self, theGuid=0):
-        pass
+        self.mCropParameter.setUseCommonLand(self.checkBoxUseCommonLand.isChecked())
+        self.mCropParameter.setUseSpecificLand(self.checkBoxUseSpecificLand.isChecked())
+        self.mCropParameter.setRasterName(self.cboRaster.currentText())
+        self.mCropParameter.toXmlFile(LaUtils.userCropParameterProfilesDirPath() + QDir.separator() + self.mCropParameter.guid() + ".xml")
+        self.refreshCropParameterTable(self.mCropParameter.guid())
+
+    def resizeEvent(self, theEvent):
+        self.tblCropParameterProfiles.setColumnWidth(0, 0)
+        self.tblCropParameterProfiles.setColumnWidth(1, self.tblCropParameterProfiles.width())
+        self.tblCropParameterProfiles.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
+
+    def refreshCropParameterTable(self, theGuid):
+        self.mCropParameterMap.clear()
+        self.tblCropParameterProfiles.clear()
+        self.tblCropParameterProfiles.setRowCount(0)
+        self.tblCropParameterProfiles.setColumnCount(2)
+
+        self.mCropParameterMap = LaUtils.getAvailableCropParameters()
+
+        mySelectedRow = 0
+        myCurrentRow = 0
+        for myGuid, myCropParameter in self.mCropParameterMap.items():
+            if theGuid == "":
+                theGuid = myCropParameter.guid()
+            if myCropParameter.guid() == theGuid:
+                mySelectedRow = myCurrentRow
+
+            self.tblCropParameterProfiles.insertRow(myCurrentRow)
+            mypFileNameItem = QTableWidgetItem(myGuid)
+            self.tblCropParameterProfiles.setItem(myCurrentRow, 0, mypFileNameItem)
+            mypNameItem = QTableWidgetItem(myCropParameter.name() + "  (" + myCropParameter.description() + ")")
+            self.tblCropParameterProfiles.setItem(myCurrentRow, 1, mypNameItem)
+
+            myIcon = QIcon()
+            myIcon.addFile(":/localdata.png")
+            mypNameItem.setIcon(myIcon)
+
+            myCurrentRow += 1
+
+        if myCurrentRow > 0:
+            self.tblCropParameterProfiles.setCurrentCell(mySelectedRow, 1)
+            self.cellClicked(mySelectedRow, 1)
+        else:
+            self.on_toolNew_clicked()
+
+        headerLabels = ["File Name", "Name"]
+        self.tblCropParameterProfiles.setHorizontalHeaderLabels(headerLabels)
+        self.tblCropParameterProfiles.setColumnWidth(0, 0)
+        self.tblCropParameterProfiles.setColumnWidth(1, self.tblCropParameterProfiles.width())
+        self.tblCropParameterProfiles.horizontalHeader().hide()
+        self.tblCropParameterProfiles.verticalHeader().hide()
+        self.tblCropParameterProfiles.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
 
     def selectCropParameter(self, theFileName):
-        pass
+        myCropParameterDir = LaUtils.userCropParameterProfilesDirPath()
+        myCropParameter = LaCropParameter()
+        myCropParameter.fromXmlFile(myCropParameterDir + QDir.separator() + theFileName)
+        self.leName.setText(myCropParameter.name())
+        self.mCropParameter = myCropParameter
+        self.showCropParameter()
 
-    def readSettings(self):
-        pass
+    
 
-    def writeSettings(self):
-        pass
-
-    def setComboToDefault(self, thepCombo: QComboBox, theDefault: str) -> bool:
-        pass
+    def setComboToDefault(self, thepCombo, theDefault):
+        if theDefault != "":
+            for myCounter in range(thepCombo.count()):
+                thepCombo.setCurrentIndex(myCounter)
+                if thepCombo.itemData(myCounter, Qt.UserRole) == theDefault:
+                    break
+        else:
+            return False
+        return True
 
 
 

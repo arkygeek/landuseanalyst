@@ -39,8 +39,8 @@
 #include <QListWidgetItem>
 #include <QComboBox>
 
-  LaCropParameterManager::LaCropParameterManager(QWidget* parent, Qt::WFlags fl)
-: QDialog(parent,fl)
+  LaCropParameterManager::LaCropParameterManager(QWidget* parent, Qt::WindowFlags fl)
+  : QDialog(parent,fl)
 {
     //required by Qt4 to initialise the ui
   setupUi(this);
@@ -188,7 +188,7 @@ void LaCropParameterManager::refreshCropParameterTable(QString theGuid)
   tblCropParameterProfiles->setColumnWidth(1,tblCropParameterProfiles->width());
   tblCropParameterProfiles->horizontalHeader()->hide();
   tblCropParameterProfiles->verticalHeader()->hide();
-  tblCropParameterProfiles->horizontalHeader()->setResizeMode(1,QHeaderView::Stretch);
+  tblCropParameterProfiles->horizontalHeader()->setSectionResizeMode(1,QHeaderView::Stretch);
 }
 
 void LaCropParameterManager::on_cboCrop_changed(int theIndex)
@@ -253,7 +253,7 @@ void LaCropParameterManager::resizeEvent ( QResizeEvent * theEvent )
 {
   tblCropParameterProfiles->setColumnWidth(0,0);
   tblCropParameterProfiles->setColumnWidth(1,tblCropParameterProfiles->width());
-  tblCropParameterProfiles->horizontalHeader()->setResizeMode(1,QHeaderView::Stretch);
+  tblCropParameterProfiles->horizontalHeader()->setSectionResizeMode(1,QHeaderView::Stretch);
 }
 
 void LaCropParameterManager::on_toolCopy_clicked()
