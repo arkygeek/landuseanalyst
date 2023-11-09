@@ -1,4 +1,16 @@
 # lamodel.py
+from qgis.PyQt.QtCore import (
+    QObject, pyqtSignal, pyqtSlot, Qt, QSettings, QProcess, QFile, QTextStream)
+from qgis.PyQt.QtWidgets import (
+    QDialog, QTreeWidget, QTreeWidgetItem, QTableWidgetItem, QListWidget, QComboBox, QHeaderView)
+from qgis.PyQt.QtGui import QIcon
+from qgis.PyQt.QtXml import QDomDocument, QDomElement
+from qgis.PyQt.QtCore import qDebug
+from qgis.core import QgsProperty
+from typing import Tuple
+from builtins import dict as Dict
+from builtins import list as List
+
 from qgis.PyQt.QtCore import QObject, pyqtProperty, pyqtSignal, pyqtSlot, Qt
 from qgis.PyQt.QtWidgets import QDialog
 from typing import Dict, List, Tuple
@@ -10,10 +22,15 @@ from lib.ladietlabels import LaDietLabels
 class LaModel(QDialog, LaSerialisable, LaGuid):
     def __init__(self, parent=None):
         QDialog.__init__(self, parent)
-        self._name = ""
-        self._description = ""
-        self._diets = {}
-        self._dietLabels = []
+        self._name: str = "No Name Set"
+        self._population: int = 1000
+        self._period: str = "No Period Set"
+        self._projection: int = 100
+        self._precision: int = 5
+        self._diet_percent: int = 25
+        self._percent_of_diet_that_is_from_crops: int = 10
+        self._meat_percent: int = 10
+        self._calories_per_person_daily: int = 2500
 
     def __del__(self):
         pass

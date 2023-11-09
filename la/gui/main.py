@@ -19,12 +19,7 @@ if __name__ == '__main__':
     if sys.platform == 'win32':
         app.setStyle('plastique')
 
-    # Install OpenDocuments AppleEvent handler after application object is initialized
-    # but before any other event handling (including dialogs or splash screens) occurs.
-    # If an OpenDocuments event has been created before the application was launched,
-    # it must be handled before some other event handler runs and dismisses it as unknown.
-    # If run at startup, the handler will set either or both of myProjectFileName and myFileList.
-    # AEInstallEventHandler(kCoreEventClass, kAEOpenDocuments, openDocumentsAEHandler, 0, false);
+
     if sys.platform == 'darwin':
         # If the QtCore framework is bundled with the application, clear the library search path
         # and look for Qt plugins only within the application bundle.
