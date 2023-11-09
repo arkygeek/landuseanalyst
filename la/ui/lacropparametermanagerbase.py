@@ -17,6 +17,8 @@
 ***************************************************************"""
 
 import os
+from typing import Dict
+
 from qgis.PyQt.QtWidgets import QDialog
 from qgis.PyQt.uic import loadUiType
 from qgis.PyQt.QtCore import (
@@ -27,6 +29,7 @@ from qgis.PyQt.QtGui import QIcon
 
 # local imports
 from la.gui.lacropparametermanager import LaCropParameterManager
+from la.lib.lacrop import LaCrop
 from la.lib.lautils import LaUtils
 from la.lib.lagrass import LaGrass
 from la.lib.lacropparameter import LaCropParameter
@@ -60,19 +63,9 @@ class LaCropParameterManagerBase(QDialog, Ui_LaCropParameterManagerBase):
         self.pbnExport.setVisible(False)
         self.lblCropPic.setScaledContents(True)
         
-        myCropsMap: dict = []
-        myCropsMap = LaUtils.getAvailableCrops()
+        # myCropsMap: Dict[str, LaCrop] = LaUtils.getAvailableCrops()
         
-        # This creates an iterator for myCropsMap in Python, which you can then iterate over
-        # using the next function, similar to how you would use QMapIterator in PyQt4. 
-        # In Python, dictionaries (which are similar to QMap in Qt) are iterable, and you can
-        # use the items() method to get an iterable that yields pairs of keys and values. 
-        # The iter function then creates an iterator from this iterable.
-        # myIterator = iter(myCropsMap.items())
-
-        # while myIterator.hasNext():
-        #     myIterator.next()
-        #     myCrop = myIterator.value()
+        # for _ , myCrop in myCropsMap.items(): # if at some point in the future I do need to use the keys, I can simply change the _ back to key and add code that uses the key variable.
         #     myGuid = myCrop.guid()
         #     myName = myCrop.name()
         #     myIcon = QIcon()
