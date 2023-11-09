@@ -15,7 +15,9 @@ import sys
 import shutil
 import random
 import string
-from typing import Dict, List, Tuple
+from builtins import dict as Dict
+from builtins import list as List
+from typing import Tuple
 
 # Third party imports
 from qgis.PyQt.QtWidgets import (
@@ -498,10 +500,10 @@ class LaUtils:
         :rtype: List[str]
         """
         # sort the taxon list alphabetically descending order
-        theList.sort()  # this sorts ascending!
+        mySortedList: List[str] = theList.sort(reverse=True)  # this sorts descending!
         # TODO use :reverse option of sort() method instead of reversing the list
         # flip the sort order
-        mySortedList: List[str] = theList[::-1]
+        # mySortedList: List[str] = theList[::-1]
         return mySortedList
 
     @staticmethod

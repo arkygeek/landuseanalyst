@@ -8,28 +8,35 @@ various enums and typedefs used throughout the simulation.
 Author: [Your Name]
 Date created: [Date]
 """
+from builtins import dict as Dict
+from typing import Tuple
 
 from la.lib.lafoodsource import LaFoodSource
 
-from typing import Tuple
-from typing import Dict
-# Python 3.9
-from typing import Dict, Tuple
 
 class La:
-    # Equivalent to QMap<QString,QPair<bool,QString>>
+    """
+    The La class defines several class-level attributes that are used throughout the code.
+    """
+    # LaTripleMap is a dictionary where each key is a string and each value is a tuple.
+    # The tuple contains a boolean and a string.
     LaTripleMap: Dict[str, Tuple[bool, str]] = {}
 
-    # Equivalent to QPair<QPair<QString,QString>, QPair<QString,QString>>
+    # LaRasterInfo is a tuple of two tuples, each containing two strings.
+    # This could represent information about a raster image, such as its dimensions and resolution.
     LaRasterInfo: Tuple[Tuple[str, str], Tuple[str, str]] = (("",""),("",""))
 
-    # Equivalent to QMap<QString, LaFoodSource>
+    # LaFoodSourceMap is a dictionary where each key is a string and each value is an instance of LaFoodSource.
+    # This could represent a mapping from food source names to food source objects.
     LaFoodSourceMap: Dict[str, LaFoodSource] = {}
 
-    # Equivalent to QPair<float,float>
+    # HerdSize is a tuple of two floats.
+    # This could represent the minimum and maximum size of a herd.
     HerdSize: Tuple[float, float] = (0.0, 0.0)
 
-    # Equivalent to QMap<QString,QPair<QString,float>>
+    # LaReportMap is a dictionary where each key is a string and each value is a tuple.
+    # The tuple contains a string and a float.
+    # This could represent a mapping from report names to report data.
     LaReportMap: Dict[str, Tuple[str, float]] = {}
 
 # Equivalent to enum types

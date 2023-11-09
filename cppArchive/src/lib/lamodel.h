@@ -550,6 +550,8 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
     /** holder */
     float mCommonCropLand;
     /** holder */
+
+    /** @brief Represents the size of a herd. */
     HerdSize mHerdSize;
     QMap <QString, QPair<QString,float> > mAnimalCalcReport;
 };
