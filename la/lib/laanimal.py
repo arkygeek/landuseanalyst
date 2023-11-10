@@ -39,6 +39,7 @@ The class has several methods, including
     __init__, __del__, __copy__, and __deepcopy__
 """
 from typing import Optional, Type
+import warnings
 # laanimal.py
 from PyQt5.QtCore import QObject, pyqtProperty, pyqtSignal, pyqtSlot, Qt, QMetaProperty
 from qgis.PyQt.QtXml import QDomDocument
@@ -175,6 +176,60 @@ class LaAnimal(LaSerialisable, LaGuid):
         :return: True if the two objects are equal, False otherwise
         :rtype: bool
         """
+        return self._name == theAnimal._name and \
+           self._description == theAnimal._description and \
+           self._guid == theAnimal._guid and \
+           self._meatFoodValue == theAnimal._meatFoodValue and \
+           self._usableMeat == theAnimal._usableMeat and \
+           self._killWeight == theAnimal._killWeight and \
+           self._growTime == theAnimal._growTime and \
+           self._deathRate == theAnimal._deathRate and \
+           self._feedEnergyType == theAnimal._feedEnergyType and \
+           self._gestating == theAnimal._gestating and \
+           self._lactating == theAnimal._lactating and \
+           self._maintenance == theAnimal._maintenance and \
+           self._juvenile == theAnimal._juvenile and \
+           self._sexualMaturity == theAnimal._sexualMaturity and \
+           self._breedingExpectancy == theAnimal._breedingExpectancy and \
+           self._youngPerBirth == theAnimal._youngPerBirth and \
+           self._weaningAge == theAnimal._weaningAge and \
+           self._weaningWeight == theAnimal._weaningWeight and \
+           self._conceptionEfficiency == theAnimal._conceptionEfficiency and \
+           self._femalesToMales == theAnimal._femalesToMales and \
+           self._adultWeight == theAnimal._adultWeight and \
+           self._gestationTime == theAnimal._gestationTime and \
+           self._estrousCycle == theAnimal._estrousCycle and \
+           self._lactationTime == theAnimal._lactationTime and \
+           self._milk == theAnimal._milk and \
+           self._milkGramsPerDay == theAnimal._milkGramsPerDay and \
+           self._milkFoodValue == theAnimal._milkFoodValue and \
+           self._fleece == theAnimal._fleece and \
+           self._fleeceWeightKg == theAnimal._fleeceWeightKg and \
+           self._imageFile == theAnimal._imageFile
+
+    def __eq__(self, theAnimal: 'LaAnimal') -> bool:
+        myAttributes = [    
+            '_name',                  '_description',     '_guid', 
+            '_meatFoodValue',         '_usableMeat',      '_killWeight', 
+            '_growTime',              '_deathRate',       '_feedEnergyType', 
+            '_gestating',             '_lactating',       '_maintenance',
+            '_juvenile',              '_sexualMaturity',  '_breedingExpectancy', 
+            '_youngPerBirth',         '_weaningAge',      '_weaningWeight', 
+            '_conceptionEfficiency',  '_femalesToMales',  '_adultWeight', 
+            '_gestationTime',         '_estrousCycle',    '_lactationTime',
+            '_milk',                  '_milkGramsPerDay', '_milkFoodValue', 
+            '_fleece',                '_fleeceWeightKg',  '_imageFile'
+        ]
+        # Initialize a list to store the comparison results
+        myComparisonResults = []
+        # return all(getattr(self, attr) == getattr(theAnimal, attr) for attr in attributes)
+        for attr in myAttributes:
+            # Compare the attribute for self and theAnimal
+            is_equal = getattr(self, attr) == getattr(theAnimal, attr)
+            # Append the result to the list
+            myComparisonResults.append(is_equal)
+        # Return True if all comparisons were True (i.e., all attributes are equal)
+        return all(myComparisonResults)
 
     def __del__(self):
         pass
@@ -508,14 +563,24 @@ class LaAnimal(LaSerialisable, LaGuid):
 
     
     def fromXml(self, theXml):
+        """
+        Parses an XML string and sets the properties of the animal object accordingly.
+
+        :param theXml: The XML string to parse.
+        :type theXml: str
+        :return: True if the parsing was successful, False otherwise.
+        :rtype: bool
+        """
         # the following import is here to avoid a circular import
         from la.lib.lautils import LaUtils #, xmlEncode, xmlDecode
         myDocument = QDomDocument("mydocument")
         myDocument.setContent(theXml)
         myTopElement = myDocument.firstChildElement("animal")
+
+        # gracefully handle the case where the top element is null
         if myTopElement.isNull():
-            # TODO - just make this a warning
-            pass
+            warnings.warn("Failed to parse XML: myTopElement is null. The XML element could not be found or parsed.")
+            return False
 
         self.setGuid(myTopElement.attribute("guid"))
         self.name = LaUtils.xmlDecode(myTopElement.firstChildElement("name").text())
@@ -557,9 +622,21 @@ class LaAnimal(LaSerialisable, LaGuid):
 
         return True
 
+
     def toXml(self) -> str:
-        from la.lib.lautils import LaUtils
+        from la.lib.lautils import LaUtils # we import this here to avoid a circular import
         myString = f'<animal guid="{self.guid()}">\n'
+        """ NOTE:
+            The LaUtils.xmlEncode function is likely used here to escape special characters that 
+            have specific meanings in XML. This is done to ensure that the _name value can be safely
+            included in an XML document without causing parsing errors.
+
+            For example, characters like <, >, and & are used in XML tags and entities.
+            If these characters appear in the _name value, they could cause the XML to be malformed.
+            
+            The xmlEncode function would replace these characters with their corresponding 
+            XML entities (&lt;, &gt;, and &amp; respectively). 
+        """
         myString += f'  <name>{LaUtils.xmlEncode(self._name)}</name>\n'
         myString += f'  <description>{LaUtils.xmlEncode(self._description)}</description>\n'
         myString += f'  <meatFoodValue>{self._meatFoodValue}</meatFoodValue>\n'
@@ -570,12 +647,10 @@ class LaAnimal(LaSerialisable, LaGuid):
         myString += f'  <femalesToMales>{self._femalesToMales}</femalesToMales>\n'
         myString += f'  <growTime>{self._growTime}</growTime>\n'
         myString += f'  <deathRate>{self._deathRate}</deathRate>\n'
-
         if self._feedEnergyType == EnergyType.KCalories:
             myString += '  <feedEnergyType>KCalories</feedEnergyType>\n'
         elif self._feedEnergyType == EnergyType.TDN:
             myString += '  <feedEnergyType>TDN</feedEnergyType>\n'
-
         myString += f'  <gestating>{self._gestating}</gestating>\n'
         myString += f'  <lactating>{self._lactating}</lactating>\n'
         myString += f'  <maintenance>{self._maintenance}</maintenance>\n'
@@ -597,10 +672,54 @@ class LaAnimal(LaSerialisable, LaGuid):
         myString += '</animal>\n'
         return myString
 
-    def toText(self) -> str:
-        from la.lib.lautils import LaUtils
 
-        myString = f'guid=>{self.guid()}\n'
+    def toText(self) -> str:
+        """
+        Returns a string representation of the animal object.
+        The string contains the following fields:
+        - guid
+        - name
+        - description
+        - meatFoodValue
+        - usableMeat
+        - killWeight
+        - adultWeight
+        - conceptionEfficiency
+        - femalesToMales
+        - growTime
+        - deathRate
+        - feedEnergyType
+        - gestating
+        - lactating
+        - maintenance
+        - juvenile
+        - sexualMaturity
+        - breedingExpectancy
+        - youngPerBirth
+        - weaningAge
+        - weaningWeight
+        - gestationTime
+        - estrousCycle
+        - lactationTime
+        - milk
+        - milkGramsPerDay
+        - milkFoodValue
+        - fleece
+        - fleeceWeightKg
+        """
+        from la.lib.lautils import LaUtils # we import this here to avoid a circular import
+        myString: str = f'guid=>{self.guid()}\n'
+        """ 
+        NOTE: The LaUtils.xmlEncode function is likely used here to escape special 
+             characters that have specific meanings in XML. This is done to ensure
+             that the _name value can be safely included in an XML document without
+             causing parsing errors.
+             For example, chars like <, >, and & are used in XML tags/entities
+             These characters in could cause the XML to be malformed.
+            
+             The xmlEncode function replaces these characters with their corresponding 
+            XML entities (&lt;, &gt;, and &amp; respectively). 
+        """
         myString += f'name=>{LaUtils.xmlEncode(self._name)}\n'
         myString += f'description=>{LaUtils.xmlEncode(self._description)}\n'
         myString += f'meatFoodValue=>{self._meatFoodValue}\n'
@@ -611,12 +730,10 @@ class LaAnimal(LaSerialisable, LaGuid):
         myString += f'femalesToMales=>{self._femalesToMales}\n'
         myString += f'growTime=>{self._growTime}\n'
         myString += f'deathRate=>{self._deathRate}\n'
-
         if self._feedEnergyType == EnergyType.KCalories:
             myString += 'feedEnergyType=>KCalories\n'
         elif self._feedEnergyType == EnergyType.TDN:
             myString += 'feedEnergyType=>TDN\n'
-
         myString += f'gestating=>{self._gestating}\n'
         myString += f'lactating=>{self._lactating}\n'
         myString += f'maintenance=>{self._maintenance}\n'
@@ -635,27 +752,32 @@ class LaAnimal(LaSerialisable, LaGuid):
         myString += f'fleece=>{self._fleece}\n'
         myString += f'fleeceWeightKg=>{self._fleeceWeightKg}\n'
         return myString
-    
+
+
     def toHtml(self) -> str:
-        myString = f'<h2>Details for {xmlEncode(self._name)}</h2>'
+        """
+        Returns an HTML string containing details of the animal object.
+
+        The string contains the following fields:
+        -
+        """
+        from la.lib.lautils import LaUtils # we import this here to avoid a circular import
+        myString = f'<h2>Details for {LaUtils.xmlEncode(self._name)}</h2>'
         myString += '<table>'
         myString += f'<tr><td><b>Description:</b></td><td>{self._description}</td></tr>'
         myString += f'<tr><td><b>Meat Food Value:</b></td><td>{self._meatFoodValue}</td></tr>'
         myString += f'<tr><td><b>Usable Meat (%):</b></td><td>{self._usableMeat}</td></tr>'
-
         myString += f'<tr><td><b>Sexual Maturity:</b></td><td>{self._sexualMaturity}</td></tr>'
         myString += f'<tr><td><b>Years Breedable:</b></td><td>{self._breedingExpectancy}</td></tr>'
         myString += f'<tr><td><b>Young Per Birth:</b></td><td>{self._youngPerBirth}</td></tr>'
         myString += f'<tr><td><b>Weaning Age:</b></td><td>{self._weaningAge}</td></tr>'
         myString += f'<tr><td><b>Weaning Weight:</b></td><td>{self._weaningWeight}</td></tr>'
         myString += f'<tr><td><b>Kill Weight (Kg):</b></td><td>{self._killWeight}</td></tr>'
-
         myString += f'<tr><td><b>Adult Weight (Kg):</b></td><td>{self._adultWeight}</td></tr>'
         myString += f'<tr><td><b>Conception Efficiency(Percent):</b></td><td>{self._conceptionEfficiency}</td></tr>'
         myString += f'<tr><td><b>Females to Males (Breeding):</b></td><td>{self._femalesToMales}</td></tr>'
         myString += f'<tr><td><b>Grow Time:</b></td><td>{self._growTime}</td></tr>'
         myString += f'<tr><td><b>Death Rate (%):</b></td><td>{self._deathRate}</td></tr>'
-
         myString += f'<tr><td><b>Gestation Time:</b></td><td>{self._gestationTime}</td></tr>'
         myString += f'<tr><td><b>Estrous Cycle:</b></td><td>{self._estrousCycle}</td></tr>'
         myString += f'<tr><td><b>lactationTime:</b></td><td>{self._lactationTime}</td></tr>'
@@ -666,12 +788,10 @@ class LaAnimal(LaSerialisable, LaGuid):
         myString += f'<tr><td><b>fleeceWeightKg:</b></td><td>{self._fleeceWeightKg}</td></tr>'
         myString += '<tr><td></td><td>'
         myString += '<tr><td><FONT COLOR="#0063F7">Feed Requirements (pa)</FONT></td><td>'
-
         if self._feedEnergyType == EnergyType.KCalories:
             myString += '<tr><td><b>EnergyType:</b></td><td>KCalories</td></tr>'
         elif self._feedEnergyType == EnergyType.TDN:
             myString += '<tr><td><b>EnergyType:</b></td><td>TDN</td></tr>'
-
         myString += f'<tr><td><b>Gestating Female:</b></td><td>{self._gestating}</td></tr>'
         myString += f'<tr><td><b>Lactating Female:</b></td><td>{self._lactating}</td></tr>'
         myString += f'<tr><td><b>Adult Maintenance:</b></td><td>{self._maintenance}</td></tr>'
