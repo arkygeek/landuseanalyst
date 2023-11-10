@@ -21,7 +21,9 @@ from lib.ladietlabels import LaDietLabels
 from lib.lautils import LaMessageBus
 from la.lib.la import AreaUnits, Status, Priority, LandBeingGrazed, LandFound
 
-""" The messaged signal in LaMessageBus is used for inter-object communication in the application.
+""" NOTES ON THE CODE - Python and PyQt
+
+    The messaged signal in LaMessageBus is used for inter-object communication in the application.
 
     In PyQt, signals and slots are used for communication between objects. A signal is emitted when
     a particular event occurs, and slots can be connected to a signal. When the signal is emitted, 
@@ -37,7 +39,8 @@ from la.lib.la import AreaUnits, Status, Priority, LandBeingGrazed, LandFound
     This allows for a decoupled architecture where the LaMessageBus doesn't need to know what 
     parts of the system are interested in messages, it just emits the messaged signal whenever it
     has a new message. Any part of the system interested in these messages can simply connect a slot
-    to the messaged signal to handle them. """
+    to the messaged signal to handle them. 
+"""
 message_bus: LaMessageBus = LaMessageBus()
 
 
@@ -440,6 +443,26 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         if self._guid != theGuid:
             self._guid = LaGuid.setGuid()
             self.guidChanged.emit()
+
+
+    """ The following defines a series of PyQt signals. 
+        
+        These signals are used in PyQt to facilitate communication between different parts of a Qt application.
+        Each of these signals is associated with a specific property of the LaModel class. 
+        
+        When the value of the property changes, the corresponding signal is emitted. 
+        
+        Other parts of the application can connect to these signals to be notified when the
+        properties change, allowing them to react accordingly.
+
+        For example, if a GUI element displays the name property of a LaModel instance, it could 
+        connect a slot to the nameChanged signal. Then, whenever the name property changes and the 
+        nameChanged signal is emitted, the GUI element automatically updates to display the new name. 
+        
+        This is a fundamental part of the signal-slot mechanism in Qt, which is used for 
+        event-driven programming.
+
+    """
 
     nameChanged = pyqtSignal()
     populationChanged = pyqtSignal()

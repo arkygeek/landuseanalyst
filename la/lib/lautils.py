@@ -49,53 +49,52 @@ message_bus: LaMessageBus = LaMessageBus()
 
 
 class LaUtils:
-    class LaUtils:
-        """
-        A utility class for Land Use Analyst.
+    """
+    A utility class for Land Use Analyst.
 
-        This class provides various static methods for getting and manipulating data directories, animal and crop profiles,
-        conversion tables, animal and crop parameter profiles, and images. It also provides methods for encoding and decoding
-        XML strings, sorting and removing duplicates from lists, and creating text files.
+    This class provides various static methods for getting and manipulating data directories, animal and crop profiles,
+    conversion tables, animal and crop parameter profiles, and images. It also provides methods for encoding and decoding
+    XML strings, sorting and removing duplicates from lists, and creating text files.
 
-        Static Methods:
-            userSettingsDirPath: Returns the path to the user settings directory.
-            getModelOutputDir: Returns the path to the model outputs directory.
-            userAnimalProfilesDirPath: Returns the path to the animal profiles directory.
-            userCropProfilesDirPath: Returns the path to the crop profiles directory.
-            getAvailableAnimals: Returns a dictionary of available animals.
-            getAnimal: Returns an animal object with the given GUID.
-            getAvailableCrops: Returns a dictionary of available crops.
-            getCrop: Returns a crop object with the given GUID.
-            userConversionTablesDirPath: Returns the path to the user's conversion tables directory.
-            userAnimalParameterProfilesDirPath: Returns the path to the user's animal parameter profiles directory.
-            userImagesDirPath: Returns the path to the user's images directory.
-            userCropParameterProfilesDirPath: Returns the path to the user's crop parameter profiles directory.
-            convertAreaToHectares: Converts an area in the specified area unit to hectares.
-            getAvailableAnimalParameters: Returns a dictionary of available animal parameters.
-            getAnimalParameter: Returns an animal parameter with the given GUID.
-            getAvailableCropParameters: Returns a dictionary of available crop parameters.
-            getCropParameter: Returns a crop parameter with the given GUID.
-            sortList: Sorts a list of strings in descending alphabetical order.
-            uniqueList: Returns a list with duplicates removed from the input list.
-            getExperimentsList: Returns a list of all experiment XML files in the model outputs directory.
-            createTextFile: Creates a text file with the given name and writes the given data to it.
-            xmlEncode: Encodes a string for use in XML.
-            xmlDecode: Decodes a string from XML encoding.
-            getStandardCss: Returns a string of standard CSS styles.
-            getAnimalParameters: Returns a list of animal parameters.
-            addAnimalParameter: Adds an animal parameter to the list of animal parameters.
-            removeAnimalParameter: Removes an animal parameter from the list of animal parameters.
-            editAnimalParameter: Edits an animal parameter in the list of animal parameters.
-            showInputDialog: Displays an input dialog.
-            showMessageBox: Displays a message box.
-            showColorDialog: Displays a color dialog.
-            generateGuid: Generates a GUID.
-            saveToFile: Saves the given data to the given file.
-            loadFromFile: Loads data from the given file.
-            getApplicationDirPath: Returns the path to the application directory.
-            openGraphicFile: Opens a graphic file.
-            saveFile: Saves a file.
-        """
+    Static Methods:
+        userSettingsDirPath: Returns the path to the user settings directory.
+        getModelOutputDir: Returns the path to the model outputs directory.
+        userAnimalProfilesDirPath: Returns the path to the animal profiles directory.
+        userCropProfilesDirPath: Returns the path to the crop profiles directory.
+        getAvailableAnimals: Returns a dictionary of available animals.
+        getAnimal: Returns an animal object with the given GUID.
+        getAvailableCrops: Returns a dictionary of available crops.
+        getCrop: Returns a crop object with the given GUID.
+        userConversionTablesDirPath: Returns the path to the user's conversion tables directory.
+        userAnimalParameterProfilesDirPath: Returns the path to the user's animal parameter profiles directory.
+        userImagesDirPath: Returns the path to the user's images directory.
+        userCropParameterProfilesDirPath: Returns the path to the user's crop parameter profiles directory.
+        convertAreaToHectares: Converts an area in the specified area unit to hectares.
+        getAvailableAnimalParameters: Returns a dictionary of available animal parameters.
+        getAnimalParameter: Returns an animal parameter with the given GUID.
+        getAvailableCropParameters: Returns a dictionary of available crop parameters.
+        getCropParameter: Returns a crop parameter with the given GUID.
+        sortList: Sorts a list of strings in descending alphabetical order.
+        uniqueList: Returns a list with duplicates removed from the input list.
+        getExperimentsList: Returns a list of all experiment XML files in the model outputs directory.
+        createTextFile: Creates a text file with the given name and writes the given data to it.
+        xmlEncode: Encodes a string for use in XML.
+        xmlDecode: Decodes a string from XML encoding.
+        getStandardCss: Returns a string of standard CSS styles.
+        getAnimalParameters: Returns a list of animal parameters.
+        addAnimalParameter: Adds an animal parameter to the list of animal parameters.
+        removeAnimalParameter: Removes an animal parameter from the list of animal parameters.
+        editAnimalParameter: Edits an animal parameter in the list of animal parameters.
+        showInputDialog: Displays an input dialog.
+        showMessageBox: Displays a message box.
+        showColorDialog: Displays a color dialog.
+        generateGuid: Generates a GUID.
+        saveToFile: Saves the given data to the given file.
+        loadFromFile: Loads data from the given file.
+        getApplicationDirPath: Returns the path to the application directory.
+        openGraphicFile: Opens a graphic file.
+        saveFile: Saves a file.
+    """
 
     @staticmethod
     def userSettingsDirPath() -> str:

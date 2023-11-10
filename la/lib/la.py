@@ -37,20 +37,48 @@ class La:
     # LaReportMap is a dictionary where each key is a string and each value is a tuple.
     # The tuple contains a string and a float.
     # This could represent a mapping from report names to report data.
-    LaReportMap: Dict[str, Tuple[str, float]] = {}
+    LaReportMap: Dict[str, Tuple[str, float]] = {} 
 
 # Equivalent to enum types
 class Priority:
+    """
+    A class representing the priority levels.
+
+    Attributes:
+    ----------
+    None_ : int
+        The priority level for no priority.
+    High : int
+        The priority level for high priority.
+    Medium : int
+        The priority level for medium priority.
+    Low : int
+        The priority level for low priority.
+    """
     None_ = 0
     High = 1
     Medium = 2
     Low = 3
 
 class Status:
+    """
+    A class representing the status of a certain operation.
+
+    Attributes:
+        MoreThanEnoughToCompletelySatisfy (int): The status code indicating that there is more than enough resources to completely satisfy the operation.
+        NotEnoughToCompletelySatisfy (int): The status code indicating that there is not enough resources to completely satisfy the operation.
+    """
     MoreThanEnoughToCompletelySatisfy = 0
     NotEnoughToCompletelySatisfy = 1
 
 class LandBeingGrazed:
+    """
+    A class representing the grazing status of a piece of land.
+
+    Attributes:
+    - Common: An integer representing common grazing land.
+    - Unique: An integer representing unique grazing land.
+    """
     Common = 0
     Unique = 1
 
@@ -83,5 +111,12 @@ class LandFound:
     FoundTarget = 2
 
 class EnergyType:
+    """
+    A class representing different types of energy.
+
+    Attributes:
+    - KCalories: An integer representing energy in kilocalories.
+    - TDN: An integer representing energy in total digestible nutrients.
+    """
     KCalories = 0
     TDN = 1
