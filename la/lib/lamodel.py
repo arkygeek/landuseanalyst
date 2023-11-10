@@ -18,6 +18,27 @@ from lib.la import La
 from lib.laserialisable import LaSerialisable
 from lib.laguid import LaGuid
 from lib.ladietlabels import LaDietLabels
+from lib.lautils import LaMessageBus
+
+""" The messaged signal in LaMessageBus is used for inter-object communication in the application.
+
+    In PyQt, signals and slots are used for communication between objects. A signal is emitted when
+    a particular event occurs, and slots can be connected to a signal. When the signal is emitted, 
+    the connected slots are automatically executed.
+
+    In the context of the LaMessageBus class, the messaged signal would be emitted when there's a
+    new message to be broadcasted across the system. 
+    
+    Other parts of the application can connect slots to this signal to react to new messages. 
+    For example, a logging system might connect a slot to the messaged signal to log all messages, 
+    or a GUI might connect a slot to update a message display whenever a new message is sent.
+
+    This allows for a decoupled architecture where the LaMessageBus doesn't need to know what 
+    parts of the system are interested in messages, it just emits the messaged signal whenever it
+    has a new message. Any part of the system interested in these messages can simply connect a slot
+    to the messaged signal to handle them. """
+message_bus: LaMessageBus = LaMessageBus()
+
 
 class LaModel(QDialog, LaSerialisable, LaGuid):
     def __init__(self, parent=None):

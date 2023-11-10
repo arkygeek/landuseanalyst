@@ -17,7 +17,7 @@
 ***************************************************************"""
 
 # third party imports
-from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication
+from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication, QLocale
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction
 
@@ -42,21 +42,55 @@ class LanduseAnalyst:
             application at run time.
         :type iface: QgsInterface
         """
+        # Save reference to the QGIS interface
+        self.iface = iface
 
-        self.iface = iface # Save reference to the QGIS interface
+        #initialize plugin directory
         self.plugin_dir = os.path.dirname(__file__)  # initialize plugin directory
 
         # initialize locale
-        locale = QSettings().value('locale/userLocale')[0:2]
+        locale = QSettings().value('locale/userLocale')[0:2] # slice for the first 2 chars with [0,2]
+        
+        # The expression QSettings().value('locale/userLocale')[0:2] is retrieving 
+        # a setting value from the application's settings, then slicing the result.
+
+        # QSettings().value('locale/userLocale') retrieves the value of the 
+        # 'locale/userLocale' setting. This is typically a string representing
+        # a user's locale in the form of language_COUNTRY.
+        # For example:
+        #   en_US is for English (United States)
+        #   fr_FR is for French (France)
+        #   en_CA is for English (Canada)
+        # This is to get just the language part of the locale, without the country. 
+        # For example, if the locale is 'en_US', the slice operation would give 'en'.
+        # 
+        # So, locale = QSettings().value('locale/userLocale')[0:2] gets the 2 letter language
+        # code from the user's locale setting. 
+        
         locale_path = os.path.join(
                         self.plugin_dir,
                         'i18n',
                         'LanduseAnalyst_{}.qm'.format(locale)
                         )
         print(locale_path)
+
+        # initialise the plugin directory
+        self.plugin_dir = os.path.dirname(__file__)
+        
+        # initialise the locale
+        locale_str = QSettings().value("locale/userLocale")
+        if isinstance(locale_str, str):
+            locale = QLocale(locale_str)
+        else:
+            locale = QLocale()
+
+        locale_path = os.path.join(self.plugin_dir, 'i18n')
         if os.path.exists(locale_path):
             self.translator = QTranslator()
-            self.translator.load(locale_path)
+            self.translator.load(
+                locale, "LanduseAnalyst", 
+                "_", locale_path
+            )
             QCoreApplication.installTranslator(self.translator)
 
         # Declare instance attributes
