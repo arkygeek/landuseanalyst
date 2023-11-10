@@ -1215,9 +1215,9 @@ LaDietLabels LaModel::doCalcsAnimalsFirstDairySeparate()  // working :-)
   float myDairyLimit = myLimitDairyBool ? myDairyLimitPercent : 1.; // B22
   float myDomesticMeatPercent = myTameMeatMCalorieCounter / myMCalsSettlementAnnual;  // B11
   float myWildMeatPercent = myWildMeatPortion * mDietPercent; // B13
-  bool myLimitSatisfies = ( myDomesticMeatPercent + myWildMeatPercent + myDairyLimit) > 1. ? TRUE:FALSE; // B21 -- BOOL --
+  bool myLimitSatisfies = ( myDomesticMeatPercent + myWildMeatPercent + myDairyLimit) > 1. ? true:false; // B21 -- BOOL --
   float myNewLimit = myLimitSatisfies ? (1. - myDomesticMeatPercent - myWildMeatPercent) : myDairyLimit; // B20
-  bool myPotentialDairyLessThanLimitBool = (myDairyMCalorieCounter / myMCalsSettlementAnnual) < myDairyLimit ? TRUE:FALSE; // B19 -- BOOL --
+  bool myPotentialDairyLessThanLimitBool = (myDairyMCalorieCounter / myMCalsSettlementAnnual) < myDairyLimit ? true:false; // B19 -- BOOL --
   float myNewDairy = myPotentialDairyLessThanLimitBool ? myDairyMCalorieCounter : myNewLimit * myMCalsSettlementAnnual; // B18
   float myOverallDairyPercent = myNewDairy / myMCalsSettlementAnnual; // B12 and B8
 

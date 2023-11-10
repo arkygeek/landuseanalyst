@@ -521,13 +521,13 @@ class LaModel : public QObject, public LaSerialisable, public LaGuid
     /** The percent of dairy utilisation by the settlement */
     float mDairyUtilisation;
 
-    /** The percent of dairy utilisation by the settlement */
+    /** Whether the base diet is plant-based */
     float mBaseOnPlants;
-    /** The percent of dairy utilisation by the settlement */
+    /** Whether dairy is included in the diet */
     bool mIncludeDairy;
-    /** The percent of dairy utilisation by the settlement */
+    /** Whether there's a limit on dairy consumption */
     bool mLimitDairy;
-    /** The percent of dairy utilisation by the settlement */
+    /** The percentage limit on dairy consumption */
     float mLimitDairyPercentage;
 
     /** A map to hold the associated animals and their parameters */
