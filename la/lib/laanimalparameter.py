@@ -18,116 +18,174 @@ class LaAnimalParameter(LaSerialisable, LaGuid):
         pass
 
     def __copy__(self):
-        return LaAnimalParameter(self)
+        new_obj = LaAnimalParameter()
+        new_obj._name = self.name()
+        new_obj._description = self.description()
+        new_obj._guid = self.guid()
+        new_obj._animalGuid = self.animalGuid()
+        new_obj._percentTameMeat = self.percentTameMeat()
+        new_obj._valueSpecificGrazingLand = self.valueSpecificGrazingLand()
+        new_obj._valueCommonGrazingLand = self.valueCommonGrazingLand()
+        new_obj._areaUnits = self.areaUnits()
+        new_obj._energyType = self.energyType()
+        new_obj._fodderUse = self.fodderUse()
+        new_obj._foodSourceMap = self.fodderSourceMap().copy()  # Assuming this is a dictionary
+
+        # Copy fodder stuff here
+
+        new_obj._useSpecificGrazingLand = self.useSpecificGrazingLand()
+        new_obj._useCommonGrazingLand = self.useCommonGrazingLand()
+        new_obj._fallowUsage = self.fallowUsage()
+        new_obj._rasterName = self.rasterName()
+        return new_obj
 
     def __deepcopy__(self, memo):
         return LaAnimalParameter(self)
 
+    @property
     def name(self):
         return self._name
-
-    def description(self):
-        return self._description
-
-    def meatFoodValue(self):
-        return self._meatFoodValue
-
-    def slaughterWeight(self):
-        return self._slaughterWeight
-
-    def foodSources(self):
-        return self._foodSources
-
-    def setName(self, name):
-        self._name = name
-
-    def setDescription(self, description):
-        self._description = description
-
-    def setMeatFoodValue(self, meatFoodValue):
-        self._meatFoodValue = meatFoodValue
-
-    def setSlaughterWeight(self, slaughterWeight):
-        self._slaughterWeight = slaughterWeight
-
-    def setFoodSources(self, foodSources):
-        self._foodSources = foodSources
-
-    nameChanged = pyqtSignal(str)
-    descriptionChanged = pyqtSignal(str)
-    meatFoodValueChanged = pyqtSignal(int)
-    slaughterWeightChanged = pyqtSignal(int)
-    foodSourcesChanged = pyqtSignal(list)
-
-    @pyqtProperty(str, notify=nameChanged)
-    def name(self):
-        return self._name
-
+    
     @name.setter
     def name(self, name):
         if self._name != name:
             self._name = name
             self.nameChanged.emit(name)
 
-    @pyqtProperty(str, notify=descriptionChanged)
+    @property
     def description(self):
         return self._description
-
+    
     @description.setter
     def description(self, description):
         if self._description != description:
             self._description = description
             self.descriptionChanged.emit(description)
 
-    @pyqtProperty(int, notify=meatFoodValueChanged)
-    def meatFoodValue(self):
+    @property
+    def guid(self) -> str:
+        return super().guid()
+    
+    @guid.setter
+    def guid(self, guid: str):
+        super().guid(guid)
+
+    @property
+    def animalGuid(self) -> str:
+        return super().guid()
+    
+    @animalGuid.setter
+    def animalGuid(self, guid: str):
+        super().guid(guid)
+
+    @property
+    def percentTameMeat(self) -> float:
         return self._meatFoodValue
+    
+    @percentTameMeat.setter
+    def percentTameMeat(self, value: float):
+        if self._meatFoodValue != value:
+            self._meatFoodValue = value
+            self.percentTameMeatChanged.emit(value)
 
-    @meatFoodValue.setter
-    def meatFoodValue(self, meatFoodValue):
-        if self._meatFoodValue != meatFoodValue:
-            self._meatFoodValue = meatFoodValue
-            self.meatFoodValueChanged.emit(meatFoodValue)
-
-    @pyqtProperty(int, notify=slaughterWeightChanged)
-    def slaughterWeight(self):
+    @property
+    def valueSpecificGrazingLand(self) -> float:
         return self._slaughterWeight
+    
+    @valueSpecificGrazingLand.setter
+    def valueSpecificGrazingLand(self, value: float):
+        if self._slaughterWeight != value:
+            self._slaughterWeight = value
+            self.valueSpecificGrazingLandChanged.emit(value)
 
-    @slaughterWeight.setter
-    def slaughterWeight(self, slaughterWeight):
-        if self._slaughterWeight != slaughterWeight:
-            self._slaughterWeight = slaughterWeight
-            self.slaughterWeightChanged.emit(slaughterWeight)
+    @property
+    def valueCommonGrazingLand(self) -> float:
+        return self._slaughterWeight
+    
+    @valueCommonGrazingLand.setter
+    def valueCommonGrazingLand(self, value: float):
+        if self._slaughterWeight != value:
+            self._slaughterWeight = value
+            self.valueCommonGrazingLandChanged.emit(value)
 
-    @pyqtProperty(list, notify=foodSourcesChanged)
-    def foodSources(self):
-        return self._foodSources
+    @property
+    def areaUnits(self) -> str:
+        return self._slaughterWeight
+    
+    @areaUnits.setter
+    def areaUnits(self, value: str):
+        if self._slaughterWeight != value:
+            self._slaughterWeight = value
+            self.areaUnitsChanged.emit(value)
 
-    @foodSources.setter
-    def foodSources(self, foodSources):
-        if self._foodSources != foodSources:
-            self._foodSources = foodSources
-            self.foodSourcesChanged.emit(foodSources)
+    @property
+    def energyType(self) -> str:
+        return self._slaughterWeight
+    
+    @energyType.setter
+    def energyType(self, value: str):
+        if self._slaughterWeight != value:
+            self._slaughterWeight = value
+            self.energyTypeChanged.emit(value)
 
-"""
+    @property
+    def fodderUse(self) -> str:
+        return self._slaughterWeight
+    
+    @fodderUse.setter
+    def fodderUse(self, value: str):
+        if self._slaughterWeight != value:
+            self._slaughterWeight = value
+            self.fodderUseChanged.emit(value)
 
-This code defines a LaAnimalParameter class in Python using PyQt5. The class
-    inherits from LaSerialisable and LaGuid, assumed to be defined elsewhere.
+    @property
+    def fodderSourceMap(self) -> dict:
+        return self._slaughterWeight
+    
+    @fodderSourceMap.setter
+    def fodderSourceMap(self, value: dict):
+        if self._slaughterWeight != value:
+            self._slaughterWeight = value
+            self.fodderSourceMapChanged.emit(value)
 
-The class has several properties, including name, description, meatFoodValue,
-    slaughterWeight, and foodSources, defined using the @pyqtProperty decorator.
+    @property
+    def useSpecificGrazingLand(self) -> bool:
+        return self._slaughterWeight
+    
+    @useSpecificGrazingLand.setter
+    def useSpecificGrazingLand(self, value: bool):
+        if self._slaughterWeight != value:
+            self._slaughterWeight = value
+            self.useSpecificGrazingLandChanged.emit(value)
 
-The class also has several slots: setName, setDescription, setMeatFoodValue,
-    setSlaughterWeight, and setFoodSources, which are used to set the values of
-    the properties.
+    @property
+    def useCommonGrazingLand(self) -> bool:
+        return self._slaughterWeight
+    
+    @useCommonGrazingLand.setter
+    def useCommonGrazingLand(self, value: bool):
+        if self._slaughterWeight != value:
+            self._slaughterWeight = value
+            self.useCommonGrazingLandChanged.emit(value)
 
-Finally the class has several signals including nameChanged, descriptionChanged,
-    meatFoodValueChanged, slaughterWeightChanged, and foodSourcesChanged, which
-    are emitted whenever the corresponding property is changed.
+    @property
+    def fallowUsage(self) -> float:
+        return self._slaughterWeight
+    
+    @fallowUsage.setter
+    def fallowUsage(self, value: float):
+        if self._slaughterWeight != value:
+            self._slaughterWeight = value
+            self.fallowUsageChanged.emit(value)
 
-laanimalparameter.cpp defines implementation of LaAnimalParameter class in C++.
+    @property
+    def rasterName(self) -> str:
+        return self._slaughterWeight
+    
+    @rasterName.setter
+    def rasterName(self, value: str):
+        if self._slaughterWeight != value:
+            self._slaughterWeight = value
+            self.rasterNameChanged.emit(value)
 
-The Python version of the class does not require an implementation file, as the
-    properties and slots are defined using decorators in the class definition.
-
-"""
+            
