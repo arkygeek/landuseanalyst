@@ -18,26 +18,26 @@ class LaAnimalParameter(LaSerialisable, LaGuid):
         pass
 
     def __copy__(self):
-        new_obj = LaAnimalParameter()
-        new_obj._name = self.name()
-        new_obj._description = self.description()
-        new_obj._guid = self.guid()
-        new_obj._animalGuid = self.animalGuid()
-        new_obj._percentTameMeat = self.percentTameMeat()
-        new_obj._valueSpecificGrazingLand = self.valueSpecificGrazingLand()
-        new_obj._valueCommonGrazingLand = self.valueCommonGrazingLand()
-        new_obj._areaUnits = self.areaUnits()
-        new_obj._energyType = self.energyType()
-        new_obj._fodderUse = self.fodderUse()
-        new_obj._foodSourceMap = self.fodderSourceMap().copy()  # Assuming this is a dictionary
+        myAnimalParameter = LaAnimalParameter()
+        myAnimalParameter._name = self.name()
+        myAnimalParameter._description = self.description()
+        myAnimalParameter._guid = self.guid()
+        myAnimalParameter._animalGuid = self.animalGuid()
+        myAnimalParameter._percentTameMeat = self.percentTameMeat()
+        myAnimalParameter._valueSpecificGrazingLand = self.valueSpecificGrazingLand()
+        myAnimalParameter._valueCommonGrazingLand = self.valueCommonGrazingLand()
+        myAnimalParameter._areaUnits = self.areaUnits()
+        myAnimalParameter._energyType = self.energyType()
+        myAnimalParameter._fodderUse = self.fodderUse()
+        myAnimalParameter._foodSourceMap = self.fodderSourceMap().copy()  # Assuming this is a dictionary
 
         # Copy fodder stuff here
 
-        new_obj._useSpecificGrazingLand = self.useSpecificGrazingLand()
-        new_obj._useCommonGrazingLand = self.useCommonGrazingLand()
-        new_obj._fallowUsage = self.fallowUsage()
-        new_obj._rasterName = self.rasterName()
-        return new_obj
+        myAnimalParameter._useSpecificGrazingLand = self.useSpecificGrazingLand()
+        myAnimalParameter._useCommonGrazingLand = self.useCommonGrazingLand()
+        myAnimalParameter._fallowUsage = self.fallowUsage()
+        myAnimalParameter._rasterName = self.rasterName()
+        return myAnimalParameter
 
     def __deepcopy__(self, memo):
         return LaAnimalParameter(self)
@@ -188,4 +188,4 @@ class LaAnimalParameter(LaSerialisable, LaGuid):
             self._slaughterWeight = value
             self.rasterNameChanged.emit(value)
 
-            
+    

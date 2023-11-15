@@ -17,6 +17,25 @@ from la.lib.lafoodsource import LaFoodSource
 class La:
     """
     The La class defines several class-level attributes that are used throughout the code.
+
+    Attributes:
+    ----------
+    LaTripleMap : Dict[str, Tuple[bool, str]]
+        A dictionary where each key is a string and each value is a tuple.
+        The tuple contains a boolean and a string.
+    LaRasterInfo : Tuple[Tuple[str, str], Tuple[str, str]]
+        A tuple of two tuples, each containing two strings.
+        This could represent information about a raster image, such as its dimensions and resolution.   
+    LaFoodSourceMap : Dict[str, LaFoodSource]
+        A dictionary where each key is a string and each value is an instance of LaFoodSource.
+        This could represent a mapping from food source names to food source objects.
+    HerdSize : Tuple[float, float]
+        A tuple of two floats.
+        This could represent the minimum and maximum size of a herd.
+    LaReportMap : Dict[str, Tuple[str, float]]
+        A dictionary where each key is a string and each value is a tuple.
+        The tuple contains a string and a float.
+        This could represent a mapping from report names to report data.
     """
     # LaTripleMap is a dictionary where each key is a string and each value is a tuple.
     # The tuple contains a boolean and a string.

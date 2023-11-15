@@ -1,7 +1,8 @@
 # lacropparameter.py
 from typing import Optional, Type
 
-from qgis.PyQt.QtCore import QObject, pyqtProperty, pyqtSignal, pyqtSlot, Qt
+from qgis.PyQt.QtCore import QObject, pyqtSignal, pyqtSlot, Qt
+from qgis.PyQt.QtCore import pyqtSlot, pyqtProperty, pyqtSignal, Qt
 from la.lib.laserialisable import LaSerialisable
 from la.lib.laguid import LaGuid
 from la.lib.la import AreaUnits as LaAreaUnits #, LaTripleMap, LaRasterInfo, LaFoodSourceMap, HerdSize, LaReportMap

@@ -22,11 +22,22 @@ class LaGuid:
     def __deepcopy__(self, memo):
         return LaGuid(self)
 
+    @property
     def guid(self) -> str:
         """
         Returns the GUID value.
         """
         return self._guid
+
+    @guid.setter
+    def guid(self, theGuid: Optional[str]) -> None:
+        """
+        Sets the GUID value.
+        """
+        if theGuid is None:
+            self._guid = QUuid.createUuid().toString(QUuid.StringFormat.WithoutBraces)
+        else:
+            self._guid = theGuid
 
     def setGuid(self, theGuid: Optional[str]) -> None:
         """

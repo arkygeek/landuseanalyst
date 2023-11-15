@@ -3,7 +3,9 @@
     "/Applications/QGIS.app/Contents/Resources/python",
     "./landuse_analyst/Support/QGIS/QGIS3/profiles/default/python/plugins/python/plugins/landuse_analyst"
   ],
+
   "python.formatting.provider": "black",
+
   "maptz.regionfolder": {
     "[python]": {        
         "defaultFoldStartRegex": "\\#[\\s]*#region\\(collapsed\\)[\\s]*(.*)",
@@ -13,10 +15,97 @@
         "foldStartRegex": "\\#[\\s]*#region[\\s]*(.*)"
     }
   },
+
+  "editor.tokenColorCustomizations": {    
+    "textMateRules": [
+      {
+        "scope": [
+          //following will be in italics (=Pacifico)
+          "comment",
+          "entity.name.type.class", //class names
+          "keyword", //import, export, return…
+          //"support.class.builtin.js", //String, Number, Boolean…, this, super
+          "storage.modifier", //static keyword
+          "storage.type.class.js", //class keyword
+          "storage.type.function.js", // function keyword
+          "storage.type.js", // Variable declarations
+          "keyword.control.import.js", // Imports
+          "keyword.control.from.js", // From-Keyword
+          //"entity.name.type.js", // new … Expression
+          "keyword.control.flow.js", // await
+          "keyword.control.conditional.js", // if
+          "keyword.control.loop.js", // for
+          "keyword.operator.new.js", // new
+          "variable.parameter.function-call.python", // parameters, added by Jason
+        ],
+        "settings": { "fontStyle": "italic" } 
+      },
+      {
+        "scope": [
+          //following will be excluded from italics (My theme (Monokai dark) has some defaults I don't want to be in italics)
+          "invalid",
+          "keyword.operator",
+          "constant.numeric.css",
+          "keyword.other.unit.px.css",
+          "constant.numeric.decimal.js",
+          "constant.numeric.json",
+          "entity.name.type.class.js"
+        ],
+        "settings": { "fontStyle": "" }
+      }, 
+      {
+        "scope": [
+          // following will make the parameters orange by Jason
+          "variable.parameter.function-call.python",
+          // "meta.function-call.arguments.python",
+          // "entity.name.function.decorator.python",
+          // "meta.function.decorator.python"
+        ],
+        "settings": {
+          "fontStyle": "bold",
+          "foreground": "#eea781"
+        }
+      },
+
+      {
+        "scope": [
+          // following will make the parameters orange by Jason
+          // "variable.parameter.function-call.python",
+          // "meta.function-call.arguments.python",
+          "entity.name.function.decorator.python",
+          "meta.function.decorator.python"
+        ],
+        "settings": {
+          "fontStyle": "italic",
+          "foreground": "#a88cd4"
+        }
+      },
+      {
+        "scope": [
+          //following will make the '=' white by Jason
+          "keyword.operator.assignment.python",
+        ],
+        "settings": {
+          "fontStyle": "",
+          "foreground": "#fafafa"
+        }
+      }
+    ]
+  },
   "editor.fontFamily": "Fira Code iScript",
   "C_Cpp.errorSquiggles": "enabled",
   "files.associations": {
     "qsplitter": "cpp",
     "qheaderview": "cpp"
   },
+  "editor.semanticTokenColorCustomizations": {
+    "rules": {
+      "parameter": {
+        "foreground": "#d3745d",
+        "fontFamily": "Fira Code iScript",
+        "fontStyle": "italic"
+      }
+    }
+  },
+  "python.analysis.typeCheckingMode": "basic",
 }

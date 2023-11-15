@@ -1,21 +1,46 @@
 # lacrop.py
 from typing import Optional, Type
 
-from qgis.PyQt.QtCore import QObject, pyqtProperty, pyqtSignal, pyqtSlot, Qt
+# pyqtProperty is a decorator that is used to define Qt properties in Python.   
+# It is defined in a stub file that provides type hints
+# for PyQt5 classes and methods. The actual implementation of the pyqtProperty
+# decorator is in the PyQt5.QtCore module. The pyqtProperty decorator is used   
+# to define the properties of the LaCrop class, including name, description,
+# cropType, plantingDate, harvestDate, and yieldValue.
+
+from qgis.PyQt.QtCore import (
+        QObject, 
+        pyqtSignal,
+        pyqtProperty, 
+        pyqtSlot, 
+        Qt
+    )
 from la.lib.laserialisable import LaSerialisable
 from la.lib.laguid import LaGuid
 
 class LaCrop(LaSerialisable, LaGuid):
+    """ The LaCrop class represents a crop that can be grown in a simulation. 
     
+    This class contains information about the crop's name, description, yield,
+    and other properties. Note that the class name is used as a string in the 
+    type hint for the `the_crop` parameter. This is necessary because the class 
+    definition hasn't been fully parsed yet when the type hint is evaluated. 
+    The `Type` type hint is used to refer to the class itself.
+
+    Attributes:
+        name (str): The name of the crop.
+        description (str): A description of the crop.
+        cropYield (int): The yield of the crop in kg/ha.
+        cropCalories (int): The number of calories produced by the crop.
+        fodderProduction (int): The amount of fodder produced by the crop.
+        fodderValue (int): The value of the fodder produced by the crop.
+        cropFodderEnergyType (str): The type of energy produced by the crop.
+        areaUnits (str): The units used to measure the area of the crop.
+        imageFile (str): The image file used to represent the crop.
+
+    """
     def __init__(self, theCrop: Optional[Type['LaCrop']] = None):
         """Initializes a new instance of the LaCrop class.
-        
-        The LaCrop class represents a crop that can be grown in a simulation. This class 
-        contains information about the crop's name, description, yield, and other properties.
-        Note that the class name is used as a string in the type hint for the `the_crop` 
-        parameter. This is necessary because the class definition hasn't been fully parsed 
-        yet when the type hint is evaluated. The `Type` type hint is used to refer to the 
-        class itself.
 
         Args:
             the_crop (Optional[Type['LaCrop']]): An existing LaCrop object to copy.
@@ -24,21 +49,21 @@ class LaCrop(LaSerialisable, LaGuid):
         """
         super().__init__()
         if theCrop is None: # If NO crop is provided, initialize with default values.
-            self.setGuid()
-            self.mName = "No Name Set"
-            self.mDescription = "Not Set"
-            self.mCropYield = 60
-            self.mCropCalories = 3000
-            self.mCropFodderProduction = 50
-            self.mCropFodderValue = 1000
+            self._guid = LaGuid() # @TODO: check that this works.
+            self._name = "No Name Set"
+            self._description = "Not Set"
+            self._cropYield = 60
+            self._cropCalories = 3000
+            self._cropFodderProduction = 50
+            self._cropFodderValue = 1000
         else: # If a crop IS provided, copy the values from the existing crop.
-            self.mName = theCrop.name
-            self.mDescription = theCrop.description
+            self._name = theCrop.name
+            self._description = theCrop.description
             self.setGuid(theCrop.guid)
-            self.mCropYield = theCrop.cropYield
-            self.mCropCalories = theCrop.cropCalories
-            self.mCropFodderProduction = theCrop.fodderProduction
-            self.mCropFodderValue = theCrop.fodderValue
+            self._cropYield = theCrop.cropYield
+            self._cropCalories = theCrop.cropCalories
+            self._cropFodderProduction = theCrop.fodderProduction
+            self._cropFodderValue = theCrop.fodderValue
             self.mCropFodderEnergyType = theCrop.cropFodderEnergyType
             self.mAreaUnits = theCrop.areaUnits
             self.mImageFile = theCrop.imageFile
@@ -57,26 +82,26 @@ class LaCrop(LaSerialisable, LaGuid):
         :return: True if the two objects are equal, False otherwise
         :rtype: bool
         """
-        return self.mName == theCrop.name and \
-                self.mDescription == theCrop.description and \
+        return self._name == theCrop.name and \
+                self._description == theCrop.description and \
                 self.guid == theCrop.guid and \
-                self.mCropYield == theCrop.cropYield and \
-                self.mCropCalories == theCrop.cropCalories and \
-                self.mCropFodderProduction == theCrop.fodderProduction and \
-                self.mCropFodderValue == theCrop.fodderValue and \
+                self._cropYield == theCrop.cropYield and \
+                self._cropCalories == theCrop.cropCalories and \
+                self._cropFodderProduction == theCrop.fodderProduction and \
+                self._cropFodderValue == theCrop.fodderValue and \
                 self.mCropFodderEnergyType == theCrop.cropFodderEnergyType and \
                 self.mAreaUnits == theCrop.areaUnits and \
                 self.mImageFile == theCrop.imageFile
         
     def __copy__(self) -> 'LaCrop':
         myNewCrop: LaCrop = LaCrop()
-        myNewCrop.mName = self.mName
-        myNewCrop.mDescription = self.mDescription
+        myNewCrop._name = self._name
+        myNewCrop._description = self._description
         myNewCrop.setGuid(self.guid)
-        myNewCrop.mCropYield = self.mCropYield
-        myNewCrop.mCropCalories = self.mCropCalories
-        myNewCrop.mCropFodderProduction = self.mCropFodderProduction
-        myNewCrop.mCropFodderValue = self.mCropFodderValue
+        myNewCrop._cropYield = self._cropYield
+        myNewCrop._cropCalories = self._cropCalories
+        myNewCrop._cropFodderProduction = self._cropFodderProduction
+        myNewCrop._cropFodderValue = self._cropFodderValue
         myNewCrop.mCropFodderEnergyType = self.mCropFodderEnergyType
         myNewCrop.mAreaUnits = self.mAreaUnits
         myNewCrop.mImageFile = self.mImageFile
@@ -94,88 +119,18 @@ class LaCrop(LaSerialisable, LaGuid):
             """
             return LaCrop(self)
 
-    @property
-    def name(self) -> str:
-        """
-        Returns the name of the crop.
-        """
-        return self.mName
-
-    @property
-    def description(self) -> str:
-        """
-        Returns the description of the crop.
-        """
-        return self.mDescription
-
-    @property
-    def cropYield(self) -> int:
-        """
-        Returns the crop yield of the current crop object.
-
-        :return: float
-        """
-        return self.mCropYield
-
-    @property
-    def cropCalories(self) -> int:
-        """
-        Returns the number of calories in 1 Kg of that part of the crop which is eaten (ie. the grain or fruit)
-        """
-        return self.mCropCalories
-
-    @property
-    def fodderProduction(self) -> int:
-        """
-        When harvesting crops, the chaff and straw (fodder) can be saved and
-        used as feed for animals. Landuse Analyst needs to know the food value
-        of this fodder. This is expressed as number of calories per Kg.
-        """
-        return self.mCropFodderProduction
-
-    @property
-    def fodderValue(self):
-        return self.mCropFodderValue
-
-    @property
-    def cropFodderEnergyType(self):
-        return self.mCropFodderEnergyType
-
-    @property
-    def areaUnits(self):
-        return self.mAreaUnits
-
-    @property
-    def imageFile(self):
-        return self.mImageFile
-
-    def setName(self, name):
-        self._name = name
-
-    def setDescription(self, description):
-        self._description = description
-
-    def setCropType(self, cropType):
-        self._cropType = cropType
-
-    def setPlantingDate(self, plantingDate):
-        self._plantingDate = plantingDate
-
-    def setHarvestDate(self, harvestDate):
-        self._harvestDate = harvestDate
-
-    def setYieldValue(self, yieldValue):
-        self._yieldValue = yieldValue
-
-    nameChanged = pyqtSignal(str)
-    descriptionChanged = pyqtSignal(str)
-    cropTypeChanged = pyqtSignal(str)
-    plantingDateChanged = pyqtSignal(str)
-    harvestDateChanged = pyqtSignal(str)
-    yieldValueChanged = pyqtSignal(int)
+    nameChanged: pyqtSignal = pyqtSignal(str)
+    descriptionChanged: pyqtSignal = pyqtSignal(str)
+    cropTypeChanged: pyqtSignal = pyqtSignal(str)
+    plantingDateChanged: pyqtSignal = pyqtSignal(str)
+    harvestDateChanged: pyqtSignal = pyqtSignal(str)
+    yieldValueChanged: pyqtSignal = pyqtSignal(int)
+    foddervalueChanged: pyqtSignal = pyqtSignal(int)
+    areaUnitsChanged: pyqtSignal = pyqtSignal(str)
+    imageFileChanged: pyqtSignal = pyqtSignal(str)
 
     @pyqtProperty(str, notify=nameChanged)
-    def name(self):
+    def name(self): # type: ignore
         return self._name
 
     @name.setter
@@ -185,7 +140,7 @@ class LaCrop(LaSerialisable, LaGuid):
             self.nameChanged.emit(name)
 
     @pyqtProperty(str, notify=descriptionChanged)
-    def description(self):
+    def description(self): # type: ignore
         return self._description
 
     @description.setter
@@ -195,7 +150,7 @@ class LaCrop(LaSerialisable, LaGuid):
             self.descriptionChanged.emit(description)
 
     @pyqtProperty(str, notify=cropTypeChanged)
-    def cropType(self):
+    def cropType(self): # type: ignore
         return self._cropType
 
     @cropType.setter
@@ -205,7 +160,7 @@ class LaCrop(LaSerialisable, LaGuid):
             self.cropTypeChanged.emit(cropType)
 
     @pyqtProperty(str, notify=plantingDateChanged)
-    def plantingDate(self):
+    def plantingDate(self): # type: ignore
         return self._plantingDate
 
     @plantingDate.setter
@@ -215,7 +170,7 @@ class LaCrop(LaSerialisable, LaGuid):
             self.plantingDateChanged.emit(plantingDate)
 
     @pyqtProperty(str, notify=harvestDateChanged)
-    def harvestDate(self):
+    def harvestDate(self): # type: ignore
         return self._harvestDate
 
     @harvestDate.setter
@@ -225,7 +180,7 @@ class LaCrop(LaSerialisable, LaGuid):
             self.harvestDateChanged.emit(harvestDate)
 
     @pyqtProperty(int, notify=yieldValueChanged)
-    def yieldValue(self):
+    def yieldValue(self): # type: ignore
         return self._yieldValue
 
     @yieldValue.setter
@@ -233,6 +188,17 @@ class LaCrop(LaSerialisable, LaGuid):
         if self._yieldValue != yieldValue:
             self._yieldValue = yieldValue
             self.yieldValueChanged.emit(yieldValue)
+
+    @pyqtProperty(str, notify=foddervalueChanged)
+    def fodderValue(self): # type: ignore
+        return self._fodderValue
+    
+    @fodderValue.setter
+    def fodderValue(self, fodderValue):
+        if self._fodderValue != fodderValue:
+            self._fodderValue = fodderValue
+            self.foddervalueChanged.emit(fodderValue)
+
 
 
 # This code defines a LaCrop class in Python using PyQt5.
