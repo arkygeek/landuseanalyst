@@ -14,11 +14,11 @@ from builtins import list as List
 from qgis.PyQt.QtCore import QObject, pyqtProperty, pyqtSignal, pyqtSlot, Qt
 from qgis.PyQt.QtWidgets import QDialog
 from typing import Dict, List, Tuple
-from lib.la import La
-from lib.laserialisable import LaSerialisable
-from lib.laguid import LaGuid
-from lib.ladietlabels import LaDietLabels
-from lib.lautils import LaMessageBus
+from la.lib.la import La
+from la.lib.laserialisable import LaSerialisable
+from la.lib.laguid import LaGuid
+from la.lib.ladietlabels import LaDietLabels
+from la.lib.lautils import LaUtils, LaMessageBus
 from la.lib.la import AreaUnits, Status, Priority, LandBeingGrazed, LandFound
 
 """ NOTES ON THE CODE - Python and PyQt
@@ -26,69 +26,95 @@ from la.lib.la import AreaUnits, Status, Priority, LandBeingGrazed, LandFound
     The messaged signal in LaMessageBus is used for inter-object communication in the application.
 
     In PyQt, signals and slots are used for communication between objects. A signal is emitted when
-    a particular event occurs, and slots can be connected to a signal. When the signal is emitted, 
+    a particular event occurs, and slots can be connected to a signal. When the signal is emitted,
     the connected slots are automatically executed.
 
     In the context of the LaMessageBus class, the messaged signal would be emitted when there's a
-    new message to be broadcasted across the system. 
-    
-    Other parts of the application can connect slots to this signal to react to new messages. 
-    For example, a logging system might connect a slot to the messaged signal to log all messages, 
+    new message to be broadcasted across the system.
+
+    Other parts of the application can connect slots to this signal to react to new messages.
+    For example, a logging system might connect a slot to the messaged signal to log all messages,
     or a GUI might connect a slot to update a message display whenever a new message is sent.
 
-    This allows for a decoupled architecture where the LaMessageBus doesn't need to know what 
+    This allows for a decoupled architecture where the LaMessageBus doesn't need to know what
     parts of the system are interested in messages, it just emits the messaged signal whenever it
     has a new message. Any part of the system interested in these messages can simply connect a slot
-    to the messaged signal to handle them. 
+    to the messaged signal to handle them.
 """
-message_bus: LaMessageBus = LaMessageBus()
+MESSAGE_BUS: LaMessageBus = LaMessageBus()
 
 
 class LaModel(QDialog, LaSerialisable, LaGuid):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, theModel=None):
         QDialog.__init__(self, parent)
-        self._name: str = "No Name Set"
-        self._population: int = 1000
-        self._period: str = "No Period Set"
-        self._projection: int = 100
-        self._precision: int = 5
-        self._dietPercent: int = 25
-        self._percentOfDietThatIsFromCrops: int = 10
-        self._meatPercent: int = 10
-        self._caloriesPerPersonDaily: int = 2500
-        self._dairyUtilisation: int = 100
-        self._baseOnPlants: bool = True
-        self._includeDairy: bool = True
-        self._limitDairy: bool = False
-        self._limitDairyPercent: int = 10
-        self._fallowStatus: Status = Status.FALLOW
-        self._fallowRatio: int = 10
-        self._easting: int = 0
-        self._northing: int = 0
-        self._euclideanDistance: bool = True
-        self._walkingTime: bool = False
-        self._pathDistance: bool = False
-        self._commonLandValue: float = 0.0
-        self._commonLandAreaUnits: AreaUnits = AreaUnits.HECTARES
-        self._herdSize: int = 0
-        self._animals: Dict[str, str] = {}
-        self._crops: Dict[str, str] = {}
-        self._diets: Dict[str, La] = {}
-        self._dietLabels: List[LaDietLabels] = []
-        self._landBeingGrazed: LandBeingGrazed = LandBeingGrazed.NO
-        self._landFound: LandFound = LandFound.NO
-        self._priority: Priority = Priority.NORMAL
-        self._description: str = "No Description Set"
-        self._areaUnits: AreaUnits = AreaUnits.HECTARES
-        self._status: Status = Status.FALLOW
-        self._guid: str = self.generateGuid()
-        self._icon: QIcon = QIcon()
-        
+        if theModel is not None:
+            self.mName = theModel.name
+            self.mPopulation = theModel.population
+            self.setGuid(theModel.guid)
+            self.mPeriod = theModel.period
+            self.mProjection = theModel.projection
+            self.mEasting = theModel.easting
+            self.mNorthing = theModel.northing
+            self.mEuclideanDistance = theModel.euclideanDistance
+            self.mWalkingTime = theModel.walkingTime
+            self.mPathDistance = theModel.pathDistance
+            self.mPrecision = theModel.precision
+            self.mDietPercent = theModel.dietPercent
+            self.mPercentOfDietThatIsFromCrops = theModel.plantPercent
+            self.mMeatPercent = theModel.meatPercent
+            self.mCaloriesPerPersonDaily = theModel.caloriesPerPersonDaily
+            self.mDairyUtilisation = theModel.dairyUtilisation
+            self.mBaseOnPlants = theModel.baseOnPlants
+            self.mIncludeDairy = theModel.includeDairy
+            self.mLimitDairy = theModel.limitDairy
+            self.mLimitDairyPercentage = theModel.limitDairyPercent
+            self.mFallowStatus = theModel.fallowStatus
+            self.mFallowRatio = theModel.fallowRatio
+        else:
+            self._name: str = "No Name Set"
+            self._population: int = 1000
+            self._period: str = "No Period Set"
+            self._projection: int = 100
+            self._precision: int = 5
+            self._dietPercent: int = 25
+            self._percentOfDietThatIsFromCrops: int = 10
+            self._meatPercent: int = 10
+            self._caloriesPerPersonDaily: int = 2500
+        # self._dairyUtilisation: int = 100
+        # self._baseOnPlants: bool = True
+        # self._includeDairy: bool = True
+        # self._limitDairy: bool = False
+        # self._limitDairyPercent: int = 10
+        # self._fallowStatus: Status = Status.FALLOW)
+        # self._easting: int = 0
+        # self._northing: int = 0
+        # self._euclideanDistance: bool = True
+        # self._walkingTime: bool = False
+        # self._pathDistance: bool = False
+        # self._commonLandValue: float = 0.0
+        # self._commonLandAreaUnits: AreaUnits = AreaUnits.HECTARES
+        # self._herdSize: int = 0
+        # self._animals: Dict[str, str] = {}
+        # self._crops: Dict[str, str] = {}
+        # self._diets: Dict[str, La] = {}
+        # self._dietLabels: List[LaDietLabels] = []
+        # self._landBeingGrazed: LandBeingGrazed = LandBeingGrazed.NO
+        # self._landFound: LandFound = LandFound.NO
+        # self._priority: Priority = Priority.NORMAL
+        # self._description: str = "No Description Set"
+        # self._areaUnits: AreaUnits = AreaUnits.HECTARES
+        # self._status: Status = Status.FALLOW
+        # self._guid: str = self.generateGuid()
+        # self._icon: QIcon = QIcon()
+
 
     def __del__(self):
         pass
 
     def __copy__(self):
+        myModel: LaModel = LaModel()
+        myModel.name = self._name
+    
         return LaModel(self)
 
     def __deepcopy__(self, memo):
@@ -223,7 +249,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         if self._limitDairy != theBool:
             self._limitDairy = theBool
             self.limitDairyChanged.emit()
-    
+
     @property
     def limitDairyPercent(self) -> int:
         return self._limitDairyPercent
@@ -357,7 +383,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
     @property
     def diets(self) -> Dict[str, La]:
         return self._diets
-    
+
     @diets.setter
     def diets(self, theDiets: Dict[str, La]):
         if self._diets != theDiets:
@@ -367,7 +393,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
     @property
     def dietLabels(self) -> List[LaDietLabels]:
         return self._dietLabels
-    
+
     @dietLabels.setter
     def dietLabels(self, theDietLabels: List[LaDietLabels]):
         if self._dietLabels != theDietLabels:
@@ -377,7 +403,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
     @property
     def landBeingGrazed(self) -> LandBeingGrazed:
         return self._landBeingGrazed
-    
+
     @LandBeingGrazed.setter
     def landBeingGrazed(self, theLandBeingGrazed: LandBeingGrazed):
         if self._landBeingGrazed != theLandBeingGrazed:
@@ -387,7 +413,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
     @property
     def landFound(self) -> LandFound:
         return self._landFound
-    
+
     @LandFound.setter
     def landFound(self, theLandFound: LandFound):
         if self._landFound != theLandFound:
@@ -397,7 +423,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
     @property
     def priority(self) -> Priority:
         return self._priority
-    
+
     @priority.setter
     def priority(self, thePriority: Priority):
         if self._priority != thePriority:
@@ -407,7 +433,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
     @property
     def description(self) -> str:
         return self._description
-    
+
     @description.setter
     def description(self, theDescription: str):
         if self._description != theDescription:
@@ -417,9 +443,9 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
     @property
     def areaUnits(self) -> AreaUnits:
         return self._areaUnits
-    
+
     @areaUnits.setter
-    def areaUnits(self, theAreaUnits: AreaUnits):  
+    def areaUnits(self, theAreaUnits: AreaUnits):
         if self._areaUnits != theAreaUnits:
             self._areaUnits = theAreaUnits
             self.areaUnitsChanged.emit()
@@ -427,7 +453,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
     @property
     def status(self) -> Status:
         return self._status
-    
+
     @status.setter
     def status(self, theStatus: Status):
         if self._status != theStatus:
@@ -437,29 +463,53 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
     @property
     def guid(self) -> str:
         return self._guid
-    
+
     @guid.setter
     def guid(self, theGuid: str):
         if self._guid != theGuid:
             self._guid = LaGuid.setGuid()
             self.guidChanged.emit()
 
+    def toXml(self) -> str:
+        myString = f'<model guid="{self.guid}">\n'
+        myString += f'  <name>{xmlEncode(self.mName)}</name>\n'
+        myString += f'  <population>{self.mPopulation}</population>\n'
+        myString += f'  <period>{LaUtils.xmlEncode(self.mPeriod)}</period>\n'
+        myString += f'  <projection>{self.mProjection}</projection>\n'
+        myString += f'  <easting>{self.mEasting}</easting>\n'
+        myString += f'  <northing>{self.mNorthing}</northing>\n'
+        myString += f'  <euclideanDistance>{self.mEuclideanDistance}</euclideanDistance>\n'
+        myString += f'  <walkingTime>{self.mWalkingTime}</walkingTime>\n'
+        myString += f'  <pathDistance>{self.mPathDistance}</pathDistance>\n'
+        myString += f'  <precision>{self.mPrecision}</precision>\n'
+        myString += f'  <dietPercent>{self.mDietPercent}</dietPercent>\n'
+        myString += f'  <plantPercent>{self.mPercentOfDietThatIsFromCrops}</plantPercent>\n'
+        myString += f'  <meatPercent>{self.mMeatPercent}</meatPercent>\n'
+        myString += f'  <caloriesPerPersonDaily>{self.mCaloriesPerPersonDaily}</caloriesPerPersonDaily>\n'
+        myString += f'  <baseOnPlants>{self.mBaseOnPlants}</baseOnPlants>\n'
+        myString += f'  <includeDairy>{self.mIncludeDairy}</includeDairy>\n'
+        myString += f'  <limitDairy>{self.mLimitDairy}</limitDairy>\n'
+        myString += f'  <limitDairyPercent>{self.mLimitDairyPercentage}</limitDairyPercent>\n'
+        myString += f'  <dairyUtilisation>{self.mDairyUtilisation}</dairyUtilisation>\n'
+        myString += '</model>\n'
+        return myString
+    
 
-    """ The following defines a series of PyQt signals. 
-        
+    """ The following defines a series of PyQt signals.
+
         These signals are used in PyQt to facilitate communication between different parts of a Qt application.
-        Each of these signals is associated with a specific property of the LaModel class. 
-        
-        When the value of the property changes, the corresponding signal is emitted. 
-        
+        Each of these signals is associated with a specific property of the LaModel class.
+
+        When the value of the property changes, the corresponding signal is emitted.
+
         Other parts of the application can connect to these signals to be notified when the
         properties change, allowing them to react accordingly.
 
-        For example, if a GUI element displays the name property of a LaModel instance, it could 
-        connect a slot to the nameChanged signal. Then, whenever the name property changes and the 
-        nameChanged signal is emitted, the GUI element automatically updates to display the new name. 
-        
-        This is a fundamental part of the signal-slot mechanism in Qt, which is used for 
+        For example, if a GUI element displays the name property of a LaModel instance, it could
+        connect a slot to the nameChanged signal. Then, whenever the name property changes and the
+        nameChanged signal is emitted, the GUI element automatically updates to display the new name.
+
+        This is a fundamental part of the signal-slot mechanism in Qt, which is used for
         event-driven programming.
 
     """
@@ -501,27 +551,3 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
     guidChanged = pyqtSignal()
     iconChanged = pyqtSignal()
 
-
-
-"""
-
-This code defines a LaModel class in Python using PyQt5.
-
-The class inherits from QDialog, LaSerialisable, and LaGuid.
-
-It has several properties, including name, description, diets, and dietLabels,
-    which are defined using the @pyqtProperty decorator.
-
-It defines slots, including setName, setDescription, setDiets, and setDietLabels
-    which are used to set the values of the properties.
-
-The class has several signals including nameChanged, descriptionChanged,
-    dietsChanged, and dietLabelsChanged, which are emitted whenever the
-    corresponding property is changed.
-
-The lamodel.cpp file defines the implementation of the LaModel class in C++.
-
-The Python version of the class does not require an implementation file, as the
-    properties and slots are defined using decorators in the class definition.
-
-"""

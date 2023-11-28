@@ -17,6 +17,7 @@ import random
 import string
 from builtins import dict as Dict
 from builtins import list as List
+from builtins import classmethod
 from typing import Tuple
 
 # Third party imports
@@ -45,7 +46,7 @@ class LaMessageBus(QObject):
     messaged: pyqtSignal = pyqtSignal(str)
 
 # Modules are evaluated only once, therefore it works as a poor man version of singleton.
-message_bus: LaMessageBus = LaMessageBus()
+MESSAGE_BUS: LaMessageBus = LaMessageBus()
 
 
 class LaUtils:
@@ -109,7 +110,7 @@ class LaUtils:
         # Get the user settings directory path from QSettings
         mySettings = QSettings()
         myPath = mySettings.value(
-            "dataDirs/dataDir", 
+            "dataDirs/dataDir",
             os.path.expanduser("~/.landuseAnalyst/"))
         # Create the directory if it does not exist
         os.makedirs(myPath, exist_ok=True)
@@ -169,9 +170,9 @@ class LaUtils:
                 continue
             # if the filename ends in .xml try to load it into our layerSets listing
             if myFileInfo.completeSuffix() == "xml":
-                myAnimal = LaAnimal()
+                myAnimal: LaAnimal = LaAnimal()
                 myAnimal.fromXmlFile(myFileInfo.absoluteFilePath())
-                if myAnimal.name() == "":
+                if myAnimal.name == "":
                     continue
                 myMap[myAnimal.guid()] = myAnimal
         return myMap
@@ -194,26 +195,63 @@ class LaUtils:
                 continue
             # if the filename ends in .xml try to load it into our layerSets listing
             if myFileInfo.completeSuffix() == "xml":
-                myAnimal = LaAnimal()
+                myAnimal: LaAnimal = LaAnimal()
                 myAnimal.fromXmlFile(myFileInfo.absoluteFilePath())
-                if myAnimal.name() == "":
+                if myAnimal.name == "":
                     continue
-                if myAnimal.guid() == theGuid:
+                if myAnimal.guid == theGuid:
                     return myAnimal
         return LaAnimal()  # Return a blank animal if no match is found
-            
-    
+
+
     @staticmethod
     def getAvailableCrops() -> Dict[str, LaCrop]:
-        """
-        Returns a dictionary of available crops, where the keys are the 
-        crop GUIDs and the values are LaCrop objects.
-        :return: A dictionary of available crops.
-        :rtype: Dict[str, LaCrop]
+        """Returns a dict of available crops; keys: crop GUIDs, values: LaCrop objects
+
+            :return: A dictionary of available crops.
+            :rtype: Dict[str, LaCrop]
+
+            This function, getAvailableCrops(), is part of the LaUtils class. It returns a
+            dictionary of available crops. The dictionary's keys are the GUIDs of the crops,
+            and the values are the LaCrop objects themselves.
+
+            Here's a step-by-step explanation of what the function does:
+
+            1. It creates an empty dictionary named myMap to store the available crops.
+            2. It creates a QDir object named myDirectory that represents the directory
+                where the user's crop profiles are stored.
+            3. It gets a list of QFileInfo objects representing the entries in myDirectory
+                and stores this list in myList.
+            4. It then loops over each entry in myList.
+            5. For each entry, it checks if the entry is a directory (by checking if the
+                filename is "." or ".."). If it is, it skips to the next iteration of the loop.
+            6. If the entry is not a directory, it checks if the entry is an XML file (by
+                checking if the file's suffix is "xml"). If it's not an XML file, it skips to
+                the next iteration of the loop.
+            7. If the entry is an XML file, it creates a new LaCrop object named myCrop and
+                attempts to load the crop data from the XML file.
+            8. If the crop's name is empty, it skips to the next iteration of the loop.
+            9. If the crop's name is not empty, it adds the crop to myMap, using the crop's
+                GUID as the key and the LaCrop object as the value.
+            10. After it has looped over all the entries in myList, it returns myMap.
+
+            This function is used to load all the available crops from the user's crop
+            profiles directory. Each crop is represented by an XML file in this directory.
+
+            NOTE please ensure the following:
+
+            - LaCrop class has a method fromXmlFile() that correctly parses an XML
+                file and populates the LaCrop object.
+            - LaCrop class has methods guid() and name() to get the GUID and name of the crop.
+            - LaUtils class has a method userCropProfilesDirPath() that returns the
+                correct directory path.
+            - QDir and QFileInfo classes are correctly imported from PyQt5.QtCore.
+            - The XML files in the directory are well-formed and contain all the
+                necessary information for creating LaCrop objects.
         """
         myMap = {}
         myDirectory = QDir(LaUtils.userCropProfilesDirPath())
-        myList = myDirectory.entryInfoList(QDir.Dirs | QDir.Files | QDir.NoSymLinks)
+        myList: List = myDirectory.entryInfoList(QDir.Dirs | QDir.Files | QDir.NoSymLinks)
         for myFileInfo in myList:
             # Ignore directories
             if myFileInfo.fileName() in [".", ".."]:
@@ -231,15 +269,15 @@ class LaUtils:
     def getCrop(
             theGuid: str
         ) -> LaCrop:
+        """ This method searches for a crop with the specified GUID in the user's crop profiles directory.
+            If a matching crop is found, it is returned as a LaCrop object. Otherwise, a blank LaCrop object is returned.
+            :param theGuid: The GUID of the crop to search for.
+            :type theGuid: str
+            :return: The LaCrop object with the specified GUID, or a blank LaCrop object if no match is found.
+            :rtype: LaCrop
         """
-        This method searches for a crop with the specified GUID in the user's crop profiles directory.
-        If a matching crop is found, it is returned as a LaCrop object. Otherwise, a blank LaCrop object is returned.
-        :param theGuid: The GUID of the crop to search for.
-        :type theGuid: str
-        :return: The LaCrop object with the specified GUID, or a blank LaCrop object if no match is found.
-        :rtype: LaCrop
-        """
-        myDirectory = QDir(LaUtils.userCropProfilesDirPath())
+        myUserCropProfilesDirPath = LaUtils.userCropProfilesDirPath()
+        myDirectory = QDir(myUserCropProfilesDirPath)
         myList = myDirectory.entryInfoList(QDir.Dirs | QDir.Files | QDir.NoSymLinks)
         for myFileInfo in myList:
             # Ignore directories
@@ -254,7 +292,7 @@ class LaUtils:
                 if myCrop.guid() == theGuid:
                     return myCrop
         return LaCrop()  # Return a blank crop if no match is found
-    
+
     @staticmethod
     def userConversionTablesDirPath(
         ) -> str:
@@ -271,7 +309,7 @@ class LaUtils:
     @staticmethod
     def userAnimalParameterProfilesDirPath(
         ) -> str:
-        """ 
+        """
         Returns the path to the user's animal parameter profiles directory.
         :return: The path to the user's animal parameter profiles directory.
         :rtype: str
@@ -282,8 +320,8 @@ class LaUtils:
 
     @staticmethod
     def userImagesDirPath() -> str:
-        """ 
-        Returns the path to the user's images directory. 
+        """
+        Returns the path to the user's images directory.
         :return: The path to the user's images directory.
         :rtype: str
         """
@@ -301,7 +339,7 @@ class LaUtils:
         myPath = os.path.expanduser("~/.landuseAnalyst/cropParameterProfiles")
         os.makedirs(myPath, exist_ok=True)
         return myPath
-    
+
     @staticmethod
     def convertAreaToHectares(
             theAreaUnit: str,
@@ -309,7 +347,7 @@ class LaUtils:
         ) -> int:
         """
         The method converts an area in the specified area unit to hectares.
-        :param theAreaUnit: The area unit name to use for conversion. 
+        :param theAreaUnit: The area unit name to use for conversion.
         :type theAreaUnit: str
         :return: The area in hectares.
         :rtype: int
@@ -331,7 +369,7 @@ class LaUtils:
         #     myHectares = theArea / 2.47105381
         # TODO check why this value is an int. I think it should be a float.
         return int(myHectares)
-    
+
     @staticmethod
     def getAvailableAnimalParameters(
         ) -> Dict[str, LaAnimalParameter]:
@@ -352,7 +390,7 @@ class LaUtils:
         myMap: Dict[str, LaAnimalParameter] = {}
         myDirectory: QDir = QDir(LaUtils.userCropProfilesDirPath())
         # In PyQt5, there is no specific QFileInfoList class. Given that the
-        # QDir.entryInfoList() method returns a Python list of QFileInfo objects, 
+        # QDir.entryInfoList() method returns a Python list of QFileInfo objects,
         # you only need to import QFileInfo from QtCore
         myList: List[QFileInfo] = myDirectory.entryInfoList(QDir.Dirs | QDir.Files | QDir.NoSymLinks)
 
@@ -368,7 +406,7 @@ class LaUtils:
                     continue
                 myMap[myAnimalParameter.guid()] = myAnimalParameter
         return myMap
-    
+
     @staticmethod
     def getAnimalParameter(theGuid: str) -> LaAnimalParameter:
         """Returns an animal parameter with the given GUID.
@@ -387,7 +425,7 @@ class LaUtils:
         Returns:
             LaAnimalParameter: The animal parameter with the given GUID, or a blank
             `LaAnimalParameter` object if no such animal parameter is found.
-        
+
         :param theGuid: The GUID of the animal parameter to retrieve.
         :type theGuid: str
 
@@ -407,14 +445,14 @@ class LaUtils:
                 if myAnimalParameter.guid() == theGuid:
                     return myAnimalParameter
         return LaAnimalParameter()  # Return a blank one since no match found
-    
+
     @staticmethod
     def getAvailableCropParameters() -> Dict[str, LaCropParameter]:
         """ Returns a dictionary of available crop parameters.
 
         This method scans the directory returned by `userCropParameterProfilesDirPath()`
         for XML files, each of which is expected to define a crop parameter.
-        Each file is parsed into an `LaCropParameter` object. 
+        Each file is parsed into an `LaCropParameter` object.
 
         Returns:
             A dictionary mapping the GUIDs of the crop parameters to the
@@ -426,7 +464,7 @@ class LaUtils:
         """
         myMap: Dict [str, LaCropParameter] = {}
         myDirectory: QDir = QDir(LaUtils.userCropParameterProfilesDirPath())
-        myList: List(QFileInfo) = myDirectory.entryInfoList(QDir.Dirs | QDir.Files | QDir.NoSymLinks)
+        myList: List[QFileInfo] = myDirectory.entryInfoList(QDir.Dirs | QDir.Files | QDir.NoSymLinks)
         for myFileInfo in myList:
             # Ignore directories
             if myFileInfo.fileName() in [".", ".."]:
@@ -439,7 +477,7 @@ class LaUtils:
                     continue
                 myMap[myCropParameter.guid()] = myCropParameter
         return myMap
-    
+
     @staticmethod
     def getCropParameter(theGuid: str) -> LaCropParameter:
         """Returns a crop parameter with the given GUID.
@@ -465,7 +503,7 @@ class LaUtils:
         :rtype: LaCropParameter
         """
         myDirectory: QDir = QDir(LaUtils.userCropParameterProfilesDirPath())
-        myList: List(QFileInfo) = myDirectory.entryInfoList(QDir.Dirs | QDir.Files | QDir.NoSymLinks)
+        myList: List[QFileInfo] = myDirectory.entryInfoList(QDir.Dirs | QDir.Files | QDir.NoSymLinks)
         for myFileInfo in myList:
             # Ignore directories
             if myFileInfo.fileName() in [".", ".."]:
@@ -479,7 +517,7 @@ class LaUtils:
                 if myCropParameter.guid() == theGuid:
                     return myCropParameter
         return LaCropParameter()  # Return a blank one since no match found
-    
+
     @staticmethod
     def sortList(theList: List[str]) -> List[str]:
         """Sorts a list of strings in descending alphabetical order.
@@ -499,7 +537,7 @@ class LaUtils:
         :rtype: List[str]
         """
         # sort the taxon list alphabetically descending order
-        mySortedList: List[str] = theList.sort(reverse=True)  # this sorts descending!
+        mySortedList: List[str] = sorted(theList, reverse=True)  # this sorts descending!
         # TODO use :reverse option of sort() method instead of reversing the list
         # flip the sort order
         # mySortedList: List[str] = theList[::-1]
@@ -532,7 +570,7 @@ class LaUtils:
                 myUniqueList.append(myCurrent)
             myLast = myCurrent
         return myUniqueList
-    
+
     @staticmethod
     def getExperimentsList() -> List[str]:
         """Returns a list of all experiment XML files in the model outputs directory.
@@ -555,7 +593,7 @@ class LaUtils:
                 if file.endswith(".xml"):
                     myExperimentList.append(os.path.join(root, file))
         return myExperimentList
-    
+
     @staticmethod
     def createTextFile(theFileName: str, theData: str) -> bool:
         """Creates a text file with the given name and writes the given data to it.
@@ -586,7 +624,7 @@ class LaUtils:
             return True
         except:
             return False
-        
+
     @staticmethod
     def xmlEncode(theString: str) -> str:
         """Encodes a string for use in XML.
@@ -616,7 +654,7 @@ class LaUtils:
         """Decodes a string from XML encoding.
 
         This method replaces certain XML entities in the input string with their
-        corresponding characters. Specifically, it replaces "&lt;" with "<", 
+        corresponding characters. Specifically, it replaces "&lt;" with "<",
         "&gt;" with ">", and "&amp;" with "&".
 
         Args:
@@ -707,8 +745,8 @@ class LaUtils:
     def removeAnimalParameter(theName: str) -> None:
         """Removes an animal parameter by name.
 
-        This method retrieves an instance of `LaAnimalParameter` by its name by calling the 
-        `getInstanceByName` method of the `LaAnimalParameter` class. If such an instance exists, 
+        This method retrieves an instance of `LaAnimalParameter` by its name by calling the
+        `getInstanceByName` method of the `LaAnimalParameter` class. If such an instance exists,
         it is removed by calling its `remove` method.
 
         Args:
@@ -725,7 +763,7 @@ class LaUtils:
     def editAnimalParameter(theAnimalParameter: LaAnimalParameter) -> None:
         """Edits an existing animal parameter by saving changes.
 
-        This method saves changes to an existing instance of `LaAnimalParameter` by calling the 
+        This method saves changes to an existing instance of `LaAnimalParameter` by calling the
         `save` method of the `LaAnimalParameter` instance.
 
         Args:
@@ -779,9 +817,9 @@ class LaUtils:
 
     @staticmethod
     def showMessageBox(
-            theParent: QWidget, 
-            theTitle: str, 
-            text: str, 
+            theParent: QWidget,
+            theTitle: str,
+            text: str,
             theIcon: QMessageBox.Icon = QMessageBox.Information
         ) -> None:
         """Shows a message box with the specified title, text, and icon.
@@ -813,8 +851,8 @@ class LaUtils:
 
     @staticmethod
     def showColorDialog(
-            theParent: QWidget, 
-            theTitle: str, 
+            theParent: QWidget,
+            theTitle: str,
             theColor: QColor = QColor()
         ) -> QColor:
         """Shows a color dialog and returns the selected color.
@@ -853,8 +891,8 @@ class LaUtils:
     def generateGuid() -> str:
         """Generates a new GUID.
 
-        This method generates a new globally unique identifier (GUID) string. 
-        The GUID is composed of 16 characters, each of which is a randomly 
+        This method generates a new globally unique identifier (GUID) string.
+        The GUID is composed of 16 characters, each of which is a randomly
         chosen uppercase letter or digit.
 
         Returns:
@@ -890,7 +928,7 @@ class LaUtils:
         myFile: QFile = QFile(theFilename)
         if myFile.open(QFile.WriteOnly | QFile.Text):
             myStream: QTextStream = QTextStream(myFile)
-            myStream << theData
+            myStream.write(theData)
             myFile.close()
 
     @staticmethod
@@ -955,7 +993,7 @@ class LaUtils:
         """
         myHomePath: str = os.path.expanduser("~")
         myFileName: str
-        # Since we're only interested in the file name and not the filter, 
+        # Since we're only interested in the file name and not the filter,
         # we can ignore the second element with _
         myFileName, _ = QFileDialog.getOpenFileName(
                             None,
@@ -965,7 +1003,7 @@ class LaUtils:
                         )
         myName: str = os.path.basename(myFileName)
         myDestinationFilePathName: str = os.path.join(
-                                            LaUtils.userImagesDirPath(), 
+                                            LaUtils.userImagesDirPath(),
                                             myName
                                         )
         shutil.copy(myFileName, myDestinationFilePathName)
@@ -975,8 +1013,8 @@ class LaUtils:
     def saveFile() -> str:
         """Opens a file dialog to choose a file name and returns the selected file path.
 
-        This method opens a file dialog that starts at the user's conversion tables directory 
-        and filters for CSV files. The user can choose a file name to save. The method then 
+        This method opens a file dialog that starts at the user's conversion tables directory
+        and filters for CSV files. The user can choose a file name to save. The method then
         returns the file path of the chosen file.
 
         Returns:
@@ -986,12 +1024,12 @@ class LaUtils:
         :rtype: str
         """
         myFileName: str
-        # Since we're only interested in the file name and not the filter, 
+        # Since we're only interested in the file name and not the filter,
         # we can ignore the second element with _
         myFileName, _ = QFileDialog.getSaveFileName(
-                            None, 
-                            "Choose a file name", 
-                            LaUtils.userConversionTablesDirPath(), 
+                            None,
+                            "Choose a file name",
+                            LaUtils.userConversionTablesDirPath(),
                             "*.csv"
                         )
         myName: str = os.path.basename(myFileName)

@@ -37,7 +37,7 @@ class LaDietLabels(LaSerialisable, LaGuid):
     @property
     def dairyMCalories(self):
         return self._dairyMCalories
-    
+
     @dairyMCalories.setter
     def dairyMCalories(self, theDairyMCalories):
         if self._dairyMCalories != theDairyMCalories:
@@ -47,17 +47,17 @@ class LaDietLabels(LaSerialisable, LaGuid):
     @property
     def cropMCalories(self):
         return self._cropMCalories
-    
+
     @cropMCalories.setter
     def cropMCalories(self, theCropMCalories):
         if self._cropMCalories != theCropMCalories:
             self._cropMCalories = theCropMCalories
             self.cropMCaloriesChanged.emit(theCropMCalories)
-    
+
     @property
     def animalMCalories(self):
         return self._animalMCalories
-    
+
     @animalMCalories.setter
     def animalMCalories(self, theAnimalMCalories):
         if self._animalMCalories != theAnimalMCalories:
@@ -67,7 +67,7 @@ class LaDietLabels(LaSerialisable, LaGuid):
     @property
     def wildAnimalMCalories(self):
         return self._wildAnimalMCalories
-    
+
     @wildAnimalMCalories.setter
     def wildAnimalMCalories(self, theWildAnimalMCalories):
         if self._wildAnimalMCalories != theWildAnimalMCalories:
@@ -77,7 +77,7 @@ class LaDietLabels(LaSerialisable, LaGuid):
     @property
     def wildPlantsMCalories(self):
         return self._wildPlantsMCalories
-    
+
     @wildPlantsMCalories.setter
     def wildPlantsMCalories(self, theWildPlantsMCalories):
         if self._wildPlantsMCalories != theWildPlantsMCalories:
@@ -87,7 +87,7 @@ class LaDietLabels(LaSerialisable, LaGuid):
     @property
     def dairyPortionPct(self):
         return self._dairyPortionPct
-    
+
     @dairyPortionPct.setter
     def dairyPortionPct(self, theDairyPortionPct):
         if self._dairyPortionPct != theDairyPortionPct:
@@ -97,7 +97,7 @@ class LaDietLabels(LaSerialisable, LaGuid):
     @property
     def tameMeatPortionPct(self):
         return self._tameMeatPortionPct
-    
+
     @tameMeatPortionPct.setter
     def tameMeatPortionPct(self, theTameMeatPortionPct):
         if self._tameMeatPortionPct != theTameMeatPortionPct:
@@ -107,7 +107,7 @@ class LaDietLabels(LaSerialisable, LaGuid):
     @property
     def cropsPortionPct(self):
         return self._cropsPortionPct
-    
+
     @cropsPortionPct.setter
     def cropsPortionPct(self, theCropsPortionPct):
         if self._cropsPortionPct != theCropsPortionPct:
@@ -117,7 +117,7 @@ class LaDietLabels(LaSerialisable, LaGuid):
     @property
     def wildAnimalPortionPct(self):
         return self._wildAnimalPortionPct
-    
+
     @wildAnimalPortionPct.setter
     def wildAnimalPortionPct(self, theWildAnimalPortionPct):
         if self._wildAnimalPortionPct != theWildAnimalPortionPct:
@@ -127,7 +127,7 @@ class LaDietLabels(LaSerialisable, LaGuid):
     @property
     def wildPlantsPortionPct(self):
         return self._wildPlantsPortionPct
-    
+
     @wildPlantsPortionPct.setter
     def wildPlantsPortionPct(self, theWildPlantsPortionPct):
         if self._wildPlantsPortionPct != theWildPlantsPortionPct:
@@ -137,7 +137,7 @@ class LaDietLabels(LaSerialisable, LaGuid):
     @property
     def plantsPortionPct(self):
         return self._plantsPortionPct
-    
+
     @plantsPortionPct.setter
     def plantsPortionPct(self, thePlantsPortionPct):
         if self._plantsPortionPct != thePlantsPortionPct:
@@ -147,7 +147,7 @@ class LaDietLabels(LaSerialisable, LaGuid):
     @property
     def animalPortionPct(self):
         return self._animalPortionPct
-    
+
     @animalPortionPct.setter
     def animalPortionPct(self, theAnimalPortionPct):
         if self._animalPortionPct != theAnimalPortionPct:
@@ -157,7 +157,7 @@ class LaDietLabels(LaSerialisable, LaGuid):
     @property
     def kiloCaloriesIndividualAnnual(self):
         return self._kiloCaloriesIndividualAnnual
-    
+
     @kiloCaloriesIndividualAnnual.setter
     def kiloCaloriesIndividualAnnual(self, theKiloCaloriesIndividualAnnual):
         if self._kiloCaloriesIndividualAnnual != theKiloCaloriesIndividualAnnual:
@@ -167,7 +167,7 @@ class LaDietLabels(LaSerialisable, LaGuid):
     @property
     def megaCaloriesSettlementAnnual(self):
         return self._megaCaloriesSettlementAnnual
-    
+
     @megaCaloriesSettlementAnnual.setter
     def megaCaloriesSettlementAnnual(self, theMegaCaloriesSettlementAnnual):
         if self._megaCaloriesSettlementAnnual != theMegaCaloriesSettlementAnnual:
@@ -177,7 +177,7 @@ class LaDietLabels(LaSerialisable, LaGuid):
     @property
     def dairySurplusMCalories(self):
         return self._dairySurplusMCalories
-    
+
     @dairySurplusMCalories.setter
     def dairySurplusMCalories(self, theDairySurplusMCalories):
         if self._dairySurplusMCalories != theDairySurplusMCalories:
@@ -187,7 +187,7 @@ class LaDietLabels(LaSerialisable, LaGuid):
     @property
     def cropCalcsReportMap(self):
         return self._cropCalcsReportMap
-    
+
     @cropCalcsReportMap.setter
     def cropCalcsReportMap(self, theCropCalcsReportMap):
         if self._cropCalcsReportMap != theCropCalcsReportMap:
@@ -197,7 +197,7 @@ class LaDietLabels(LaSerialisable, LaGuid):
     @property
     def animalCalcsReportMap(self):
         return self._animalCalcsReportMap
-    
+
     @animalCalcsReportMap.setter
     def animalCalcsReportMap(self, theAnimalCalcsReportMap):
         if self._animalCalcsReportMap != theAnimalCalcsReportMap:

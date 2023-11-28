@@ -1,60 +1,81 @@
 # laserialisable.py
-from qgis.PyQt.QtCore import QObject, pyqtProperty, pyqtSignal, pyqtSlot, Qt
-import pickle
+from qgis.PyQt.QtCore import QObject, QFile, QIODevice, QTextStream
 
-class LaSerialisable(QObject):
+from abc import ABC, abstractmethod
+# import pickle
+
+from abc import ABC, abstractmethod
+
+class LaSerialisable(ABC):
     """
-    This code defines a LaSerialisable class in Python using PyQt5.
+    LaSerialisable class is an abstract base class (ABC), and the toXml and
+    fromXml methods are abstract methods.
+    This means that any class that inherits from LaSerialisable must
+    implement these methods.
 
-    The class provides two methods, toByteArray and fromByteArray, which can be used
-    to serialize and deserialize objects of its derived classes.
-
-    toByteArray uses the pickle module to convert the object into a byte stream.
-
-    fromByteArray uses pickle to restore an object from a byte stream.
-
-    laserialisable.cpp defines the implementation of LaSerialisable class in C++.
-
-    The Python version of the class does not require an implementation file, as the
-    serialization and deserialization methods are defined in the class
-    definition using Python's built-in pickle module.
+    The toXmlFile and fromXmlFile methods provide default implementations
+    that call toXml and fromXml, respectively.
 
     Attributes:
-        None
+    -----------
+    None
 
     Methods:
-        toByteArray: Returns the byte representation of the object using pickle.
-        fromByteArray: Returns the object after deserializing the given byte data using pickle.
+    --------
+    toXml() -> str:
+        Write this object to xml and return result as string.
+        This method must be implemented by subclasses.
+
+    toXmlFile(theFileName: str) -> bool:
+        Write this object to xml and return result as string.
+        We provide a basic default implementation where given a file name,
+        we will write the serialised xml to that file.
+        Internally it uses toXml() method above so that must be properly implemented.
+
+    fromXml(theXml: str) -> bool:
+        Read this object from xml and return result as true for success, false for failure.
+        This method must be implemented by subclasses.
+
+    fromXmlFile(theFileName: str) -> bool:
+        Read this object from xml in a file and return result as true for success, false for failure.
+        Internally it uses fromXml(QString) method above so that must be properly implemented.
     """
     def __init__(self):
         super().__init__()
 
-    def __del__(self):
+    @abstractmethod
+    def toXml(self) -> str:
+        """
+        Write this object to xml and return result as string.
+        This method must be implemented by subclasses.
+        """
         pass
 
-    def __copy__(self):
-        return self.__class__(self)
+    def toXmlFile(self, theFileName: str) -> bool:
+        """
+        Write this object to xml and return result as string.
+        We provide a basic default implementation where given a file name,
+        we will write the serialised xml to that file.
+        Internally it uses toXml() method above so that must be properly implemented.
+        """
+        xml_str = self.toXml()
+        with open(theFileName, 'w') as f:
+            f.write(xml_str)
+        return True
 
-    def __deepcopy__(self, memo):
-        return self.__class__(self)
+    @abstractmethod
+    def fromXml(self, theXml: str) -> bool:
+        """
+        Read this object from xml and return result as true for success, false for failure.
+        This method must be implemented by subclasses.
+        """
+        pass
 
-    def toByteArray(self):
-            """
-            Serializes the object using pickle and returns the resulting byte array.
-
-            Returns:
-                bytes: The serialized object as a byte array.
-            """
-            return pickle.dumps(self)
-
-    def fromByteArray(self, data):
-            """
-            Deserialize an object from a byte array using pickle.
-
-            Args:
-                data (bytes): The byte array to deserialize.
-
-            Returns:
-                The deserialized object.
-            """
-            return pickle.loads(data)
+    def fromXmlFile(self, theFileName: str) -> bool:
+        """
+        Read this object from xml in a file and return result as true for success, false for failure.
+        Internally it uses fromXml(QString) method above so that must be properly implemented.
+        """
+        with open(theFileName, 'r') as f:
+            xml_str = f.read()
+        return self.fromXml(xml_str)

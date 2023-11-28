@@ -1,30 +1,33 @@
 # lacrop.py
 from typing import Optional, Type
 
-# pyqtProperty is a decorator that is used to define Qt properties in Python.   
+# pyqtProperty is a decorator that is used to define Qt properties in Python.
 # It is defined in a stub file that provides type hints
 # for PyQt5 classes and methods. The actual implementation of the pyqtProperty
-# decorator is in the PyQt5.QtCore module. The pyqtProperty decorator is used   
+# decorator is in the PyQt5.QtCore module. The pyqtProperty decorator is used
 # to define the properties of the LaCrop class, including name, description,
 # cropType, plantingDate, harvestDate, and yieldValue.
 
 from qgis.PyQt.QtCore import (
-        QObject, 
-        pyqtSignal,
-        pyqtProperty, 
-        pyqtSlot, 
-        Qt
-    )
+    QObject,
+    pyqtSignal,
+    pyqtProperty,
+    pyqtSlot,
+    Qt
+)
+from qgis.PyQt.QtXml import QDomDocument
 from la.lib.laserialisable import LaSerialisable
 from la.lib.laguid import LaGuid
-
+from la.lib.la import AreaUnits as LaAreaUnits
+# from la.lib.lautils import LaUtils
+from la.lib.la import EnergyType as LaEnergyType
 class LaCrop(LaSerialisable, LaGuid):
-    """ The LaCrop class represents a crop that can be grown in a simulation. 
-    
+    """ The LaCrop class represents a crop that can be grown in a simulation.
+
     This class contains information about the crop's name, description, yield,
-    and other properties. Note that the class name is used as a string in the 
-    type hint for the `the_crop` parameter. This is necessary because the class 
-    definition hasn't been fully parsed yet when the type hint is evaluated. 
+    and other properties. Note that the class name is used as a string in the
+    type hint for the `the_crop` parameter. This is necessary because the class
+    definition hasn't been fully parsed yet when the type hint is evaluated.
     The `Type` type hint is used to refer to the class itself.
 
     Attributes:
@@ -44,12 +47,12 @@ class LaCrop(LaSerialisable, LaGuid):
 
         Args:
             the_crop (Optional[Type['LaCrop']]): An existing LaCrop object to copy.
-                If provided, the new instance will be a copy of the existing object. 
+                If provided, the new instance will be a copy of the existing object.
                 If not provided, the new instance will be initialized with default values.
         """
         super().__init__()
         if theCrop is None: # If NO crop is provided, initialize with default values.
-            self._guid = LaGuid() # @TODO: check that this works.
+            self._guid = LaGuid() # @TODO: check that this works. It should generate a new GUID when called empty.like this.
             self._name = "No Name Set"
             self._description = "Not Set"
             self._cropYield = 60
@@ -59,14 +62,25 @@ class LaCrop(LaSerialisable, LaGuid):
         else: # If a crop IS provided, copy the values from the existing crop.
             self._name = theCrop.name
             self._description = theCrop.description
-            self.setGuid(theCrop.guid)
+            self._guid = theCrop.guid
             self._cropYield = theCrop.cropYield
             self._cropCalories = theCrop.cropCalories
-            self._cropFodderProduction = theCrop.fodderProduction
-            self._cropFodderValue = theCrop.fodderValue
-            self.mCropFodderEnergyType = theCrop.cropFodderEnergyType
-            self.mAreaUnits = theCrop.areaUnits
-            self.mImageFile = theCrop.imageFile
+            self._cropFodderProduction = theCrop.cropFodderProduction
+            self._cropFodderValue = theCrop.cropFodderValue
+            self._cropFodderEnergyType = theCrop.cropFodderEnergyType
+            self._areaUnits = theCrop.areaUnits
+            self._imageFile = theCrop.imageFile
+
+        # self._nameChanged = pyqtSignal(str)
+        # self._descriptionChanged = pyqtSignal(str)
+        # self._cropYieldChanged = pyqtSignal(int)
+        # self._cropCaloriesChanged = pyqtSignal(int)
+        # self._cropFodderProductionChanged = pyqtSignal(int)
+        # self._cropFodderValueChanged = pyqtSignal(int)
+        # self._cropFodderEnergyTypeChanged = pyqtSignal(str)
+        # self._areaUnitsChanged = pyqtSignal(str)
+        # self._imageFileChanged = pyqtSignal(str)
+
 
     def __del__(self):
         pass
@@ -84,50 +98,40 @@ class LaCrop(LaSerialisable, LaGuid):
         """
         return self._name == theCrop.name and \
                 self._description == theCrop.description and \
-                self.guid == theCrop.guid and \
+                self._guid == theCrop.guid and \
                 self._cropYield == theCrop.cropYield and \
                 self._cropCalories == theCrop.cropCalories and \
-                self._cropFodderProduction == theCrop.fodderProduction and \
-                self._cropFodderValue == theCrop.fodderValue and \
-                self.mCropFodderEnergyType == theCrop.cropFodderEnergyType and \
-                self.mAreaUnits == theCrop.areaUnits and \
-                self.mImageFile == theCrop.imageFile
-        
+                self._cropFodderProduction == theCrop.cropFodderProduction and \
+                self._cropFodderValue == theCrop.cropFodderValue and \
+                self._cropFodderEnergyType == theCrop.cropFodderEnergyType and \
+                self._areaUnits == theCrop.areaUnits and \
+                self._imageFile == theCrop.imageFile
+
     def __copy__(self) -> 'LaCrop':
         myNewCrop: LaCrop = LaCrop()
         myNewCrop._name = self._name
         myNewCrop._description = self._description
-        myNewCrop.setGuid(self.guid)
+        myNewCrop._guid = LaGuid() # I don't think we want to copy the GUID but rather get a new one.
         myNewCrop._cropYield = self._cropYield
         myNewCrop._cropCalories = self._cropCalories
         myNewCrop._cropFodderProduction = self._cropFodderProduction
         myNewCrop._cropFodderValue = self._cropFodderValue
-        myNewCrop.mCropFodderEnergyType = self.mCropFodderEnergyType
-        myNewCrop.mAreaUnits = self.mAreaUnits
-        myNewCrop.mImageFile = self.mImageFile
+        myNewCrop._cropFodderEnergyType = self._cropFodderEnergyType
+        myNewCrop._areaUnits = self._areaUnits
+        myNewCrop._imageFile = self._imageFile
         return myNewCrop
 
-    def __deepcopy__(self, memo):
-            """
-            Create a deep copy of the LaCrop object.
-
-            Args:
-                memo: A dictionary that is used to track already copied objects.
-
-            Returns:
-                A new instance of LaCrop with the same attribute values as the original.
-            """
-            return LaCrop(self)
-
+    # next we need to declare the variables for the signals
     nameChanged: pyqtSignal = pyqtSignal(str)
     descriptionChanged: pyqtSignal = pyqtSignal(str)
-    cropTypeChanged: pyqtSignal = pyqtSignal(str)
-    plantingDateChanged: pyqtSignal = pyqtSignal(str)
-    harvestDateChanged: pyqtSignal = pyqtSignal(str)
-    yieldValueChanged: pyqtSignal = pyqtSignal(int)
-    foddervalueChanged: pyqtSignal = pyqtSignal(int)
+    cropYieldChanged: pyqtSignal = pyqtSignal(int)
+    cropCaloriesChanged: pyqtSignal = pyqtSignal(int)
+    cropFodderProductionChanged: pyqtSignal = pyqtSignal(int)
+    cropFodderValueChanged: pyqtSignal = pyqtSignal(int)
+    cropFodderEnergyTypeChanged: pyqtSignal = pyqtSignal(str)
     areaUnitsChanged: pyqtSignal = pyqtSignal(str)
     imageFileChanged: pyqtSignal = pyqtSignal(str)
+
 
     @pyqtProperty(str, notify=nameChanged)
     def name(self): # type: ignore
@@ -149,57 +153,197 @@ class LaCrop(LaSerialisable, LaGuid):
             self._description = description
             self.descriptionChanged.emit(description)
 
-    @pyqtProperty(str, notify=cropTypeChanged)
-    def cropType(self): # type: ignore
-        return self._cropType
+    @pyqtProperty(int, notify=cropYieldChanged)
+    def cropYield(self): # type: ignore
+        return self._cropYield
 
-    @cropType.setter
-    def cropType(self, cropType):
-        if self._cropType != cropType:
-            self._cropType = cropType
-            self.cropTypeChanged.emit(cropType)
+    @cropYield.setter
+    def cropYield(self, cropYield):
+        if self._cropYield != cropYield:
+            self._cropYield = cropYield
+            self.cropYieldChanged.emit(cropYield)
 
-    @pyqtProperty(str, notify=plantingDateChanged)
-    def plantingDate(self): # type: ignore
-        return self._plantingDate
+    @pyqtProperty(int, notify=cropCaloriesChanged)
+    def cropCalories(self): # type: ignore
+        return self._cropCalories
 
-    @plantingDate.setter
-    def plantingDate(self, plantingDate):
-        if self._plantingDate != plantingDate:
-            self._plantingDate = plantingDate
-            self.plantingDateChanged.emit(plantingDate)
+    @cropCalories.setter
+    def cropCalories(self, cropCalories):
+        if self._cropCalories != cropCalories:
+            self._cropCalories = cropCalories
+            self.cropCaloriesChanged.emit(cropCalories)
 
-    @pyqtProperty(str, notify=harvestDateChanged)
-    def harvestDate(self): # type: ignore
-        return self._harvestDate
+    @pyqtProperty(int, notify=cropFodderProductionChanged)
+    def cropFodderProduction(self): # type: ignore
+        return self._cropFodderProduction
 
-    @harvestDate.setter
-    def harvestDate(self, harvestDate):
-        if self._harvestDate != harvestDate:
-            self._harvestDate = harvestDate
-            self.harvestDateChanged.emit(harvestDate)
+    @cropFodderProduction.setter
+    def cropFodderProduction(self, cropFodderProduction):
+        if self._cropFodderProduction != cropFodderProduction:
+            self._cropFodderProduction = cropFodderProduction
+            self.cropFodderProductionChanged.emit(cropFodderProduction)
 
-    @pyqtProperty(int, notify=yieldValueChanged)
-    def yieldValue(self): # type: ignore
-        return self._yieldValue
+    @pyqtProperty(int, notify=cropFodderValueChanged)
+    def cropFodderValue(self): # type: ignore
+        return self._cropFodderValue
 
-    @yieldValue.setter
-    def yieldValue(self, yieldValue):
-        if self._yieldValue != yieldValue:
-            self._yieldValue = yieldValue
-            self.yieldValueChanged.emit(yieldValue)
+    @cropFodderValue.setter
+    def cropFodderValue(self, cropFodderValue):
+        if self._cropFodderValue != cropFodderValue:
+            self._cropFodderValue = cropFodderValue
+            self.cropFodderValueChanged.emit(cropFodderValue)
 
-    @pyqtProperty(str, notify=foddervalueChanged)
-    def fodderValue(self): # type: ignore
-        return self._fodderValue
-    
-    @fodderValue.setter
-    def fodderValue(self, fodderValue):
-        if self._fodderValue != fodderValue:
-            self._fodderValue = fodderValue
-            self.foddervalueChanged.emit(fodderValue)
+    @pyqtProperty(str, notify=cropFodderEnergyTypeChanged)
+    def cropFodderEnergyType(self): # type: ignore
+        return self._cropFodderEnergyType
+
+    @cropFodderEnergyType.setter
+    def cropFodderEnergyType(self, cropFodderEnergyType):
+        if self._cropFodderEnergyType != cropFodderEnergyType:
+            self._cropFodderEnergyType = cropFodderEnergyType
+            self.cropFodderEnergyTypeChanged.emit(cropFodderEnergyType)
+
+    @pyqtProperty(str, notify=areaUnitsChanged)
+    def areaUnits(self): # type: ignore
+        return self._areaUnits
+
+    @areaUnits.setter
+    def areaUnits(self, areaUnits):
+        if self._areaUnits != areaUnits:
+            self._areaUnits = areaUnits
+            self.areaUnitsChanged.emit(areaUnits)
+
+    @pyqtProperty(str, notify=imageFileChanged)
+    def imageFile(self): # type: ignore
+        return self._imageFile
+
+    @imageFile.setter
+    def imageFile(self, imageFile):
+        if self._imageFile != imageFile:
+            self._imageFile = imageFile
+            self.imageFileChanged.emit(imageFile)
+
+    def fromXml(self, theXml: str) -> bool:
+            """
+            Parses an XML string and sets the properties of the crop object accordingly.
+
+            Args:
+            theXml (str): The XML string to parse.
+
+            Returns:
+            bool: True if the parsing was successful, False otherwise.
+            """
+            from la.lib.lautils import LaUtils
+            myDocument = QDomDocument("mydocument")
+            myDocument.setContent(theXml)
+            myTopElement = myDocument.firstChildElement("crop")
+            if myTopElement.isNull():
+                # TODO - just make this a warning
+                pass
+            self.setGuid(myTopElement.attribute("guid"))
+            self.name = LaUtils.xmlDecode(myTopElement.firstChildElement("name").text())
+            self.description = LaUtils.xmlDecode(myTopElement.firstChildElement("description").text())
+            self.cropYield = int(myTopElement.firstChildElement("cropYield").text())
+            self.cropCalories = int(myTopElement.firstChildElement("cropCalories").text())
+            self.cropFodderProduction = int(myTopElement.firstChildElement("fodderProduction").text())
+            self.cropFodderValue = int(myTopElement.firstChildElement("fodderCalories").text())
+            myCropFodderEnergyType: str = myTopElement.firstChildElement("cropFodderEnergyType").text()
+            if myCropFodderEnergyType == "KCalories":
+                self.cropFodderEnergyType = LaEnergyType.KCalories
+            elif myCropFodderEnergyType == "TDN":
+                self.cropFodderEnergyType = LaEnergyType.TDN
+            myAreaUnits = myTopElement.firstChildElement("areaUnits").text()
+            if myAreaUnits == "Dunum":
+                self.areaUnits = LaAreaUnits.Dunum
+            elif myAreaUnits == "Hectare":
+                self.areaUnits = LaAreaUnits.Hectare
+            self.imageFile = myTopElement.firstChildElement("imageFile").text()
+            return True
+
+    def toXml(self):
+        myName: str = self.name
+        myDescription: str = self.description
+        myCropYield: int = self.cropYield
+        myCropCalories: int = self.cropCalories
+        myCropFodderProduction: int = self.cropFodderProduction
+        myCropFodderValue: int = self.cropFodderValue
+
+        myCropFodderEnergyType: str = ""
+        if self.cropFodderEnergyType == LaEnergyType.KCalories:
+            myCropFodderEnergyType = "KCalories"
+        elif self.cropFodderEnergyType == LaEnergyType.TDN:
+            myCropFodderEnergyType = "TDN"
+
+        myAreaUnitsType: str = ""
+        if self.areaUnits == LaAreaUnits.Dunum:
+            myAreaUnitsType = "Dunum"
+        elif self.areaUnits == LaAreaUnits.Hectare:
+            myAreaUnitsType = "Hectare"
+        myImageFile: str = self.imageFile
 
 
+
+        myString = "<crop guid=\"" + self.guid() + "\">\n"
+        myString += "  <name>" + myName + "</name>\n"
+        myString += "  <description>" + myDescription + "</description>\n"
+        myString += "  <cropYield>" + str(myCropYield) + "</cropYield>\n"
+        myString += "  <cropCalories>" + str(myCropCalories) + "</cropCalories>\n"
+        myString += "  <fodderProduction>" + str(myCropFodderProduction) + "</fodderProduction>\n"
+        myString += "  <fodderCalories>" + str(myCropFodderValue) + "</fodderCalories>\n"
+        myString += "  <cropFodderEnergyType>" + myCropFodderEnergyType + "</cropFodderEnergyType>\n"
+        myString += "  <areaUnits>" + myAreaUnitsType + "</areaUnits>\n"
+        myString += "  <imageFile>" + myImageFile + "</imageFile>\n"
+        myString += "</crop>\n"
+        return myString
+
+    def toText(self):
+        myName: str = self.name
+        myDescription: str = self.description
+        myCropYield: str = str(self.cropYield)
+        myCropCalories: str = str(self.cropCalories)
+        myCropFodderProduction: str = str(self.cropFodderProduction)
+        myCropFodderValue: str = str(self.cropFodderValue)
+
+        myCropFodderEnergyType: str = ""
+        if self.cropFodderEnergyType == LaEnergyType.KCalories:
+            myCropFodderEnergyType = "KCalories"
+        elif self.cropFodderEnergyType == LaEnergyType.TDN:
+            myCropFodderEnergyType = "TDN"
+        # myCropFodderEnergyType = "KCalories" if self.cropFodderEnergyType == LaEnergyType.KCalories else "TDN"
+
+        myAreaUnitsType: str = ""
+        if self.areaUnits == LaAreaUnits.Dunum:
+            myAreaUnitsType = "Dunum"
+        elif self.areaUnits == LaAreaUnits.Hectare:
+            myAreaUnitsType = "Hectare"
+        myImageFile: str = self.imageFile
+
+        myString = "guid=>" + self.guid() + "\n"
+        myString += "name=>" + myName + "\n"
+        myString += "description=>" + myDescription + "\n"
+        myString += "cropYield=>" + myCropYield + "\n"
+        myString += "cropCalories=>" + myCropCalories + "\n"
+        myString += "fodderProduction=>" + myCropFodderProduction + "\n"
+        myString += "fodderCalories=>" + myCropFodderValue + "\n"
+        myString += "cropFodderEnergyType=>" + myCropFodderEnergyType + "\n"
+        myUnits = "Dunum" if self.areaUnits == LaAreaUnits.Dunum else "Hectare"
+        myString += "yieldUnits=>" + myUnits + "\n"
+        return myString
+
+    def toHtml(self):
+        myString = "<h3>Details for " + LaUtils.xmlEncode(self.name) + "</h3>"
+        myString += "<table>"
+        myString += "<tr><td><b>Description: </b></td><td>" + self.description + "</td></tr>"
+        myString += "<tr><td><b>Avg Yield: </b></td><td>" + str(self.cropYield) + "</td></tr>"
+        myString += "<tr><td><b>Cals/Kg: </b></td><td>" + str(self.cropCalories) + "</td></tr>"
+        myCropFodderEnergyType = "KCalories" if self.cropFodderEnergyType == LaEnergyType.KCalories else "TDN"
+        myUnits = "Dunum" if self.areaUnits == LaAreaUnits.Dunum else "Hectare"
+        myString += "<tr><td><b>Fodder (kg/" + myUnits + "): </b></td><td>" + str(self.cropFodderProduction) + "</td></tr>"
+        myString += "<tr><td><b>Fodder Value/Kg: </b></td><td>" + str(self.cropFodderValue) + "</td></tr>"
+        myString += "<tr><td><b>FodderEnergyType: </b></td><td>" + myCropFodderEnergyType + "</td></tr>"
+        myString += "<tr><td><b>AreaUnits: </b></td><td>" + myUnits + "</td></tr>"
+        myString += "</table>"
+        return myString
 
 # This code defines a LaCrop class in Python using PyQt5.
 #

@@ -26,14 +26,16 @@ from qgis.PyQt.QtCore import (
 from qgis.PyQt.QtWidgets import (
         QTableWidgetItem, QMessageBox, QHeaderView, QTableWidgetItem)
 from qgis.PyQt.QtGui import QIcon
-
+from qgis.PyQt.QtCore import Qt
 # local imports
-from la.gui.lacropparametermanager import LaCropParameterManager
 from la.lib.lacrop import LaCrop
+from la.gui.lacropparametermanager import LaCropParameterManager
 from la.lib.lautils import LaUtils
 from la.lib.lagrass import LaGrass
+from la.lib.laanimal import LaAnimal
 from la.lib.lacropparameter import LaCropParameter
 from la.lib.la import AreaUnits
+from la.lib.laguid import LaGuid
 
 Ui_LaCropParameterManagerBase, _ = loadUiType(
 	os.path.join(
@@ -96,11 +98,12 @@ class LaCropParameterManagerBase(QDialog, Ui_LaCropParameterManagerBase):
         myGuid = self.tblCropParameterProfiles.item(self.tblCropParameterProfiles.currentRow(), 0).text()
         myFileName = myGuid + ".xml"
         self.selectCropParameter(myFileName)
-        myCrop = LaUtils.getCrop(self.cboCrop.itemData(self.cboCrop.currentIndex(), Qt.UserRole))
+        myCrop = LaUtils.getCrop(self.cboCrop.itemData(self.cboCrop.currentIndex(), Qt))
         myAnimalPic = myCrop.imageFile()
         self.lblCropPic.setPixmap(myAnimalPic)
 
     def on_cboCrop_changed(self, theIndex):
+        from PyQt5.QtCore import Qt
         myCrop = LaUtils.getCrop(self.cboCrop.itemData(self.cboCrop.currentIndex(), Qt.UserRole))
         myCropPic = myCrop.imageFile()
         self.lblCropPic.setPixmap(myCropPic)
@@ -132,15 +135,15 @@ class LaCropParameterManagerBase(QDialog, Ui_LaCropParameterManagerBase):
         myCropParameter = LaCropParameter()
         myCropParameter.fromXmlFile(myOriginalFileName)
 
-        myCropParameter.setGuid()
+        myCropParameter.guid = LaGuid()
         myNewFileName = LaUtils.userCropParameterProfilesDirPath() + QDir.separator() + myCropParameter.guid() + ".xml"
-        myCropParameter.setName("Copy of " + myCropParameter.name())
+        myCropParameter.name = "Copy of " + myCropParameter.name()
         myCropParameter.toXmlFile(myNewFileName)
         self.refreshCropParameterTable(myCropParameter.guid())
 
     def on_toolNew_clicked(self):
         myCropParameter = LaCropParameter()
-        myCropParameter.setGuid()
+        myCropParameter.guid = LaGuid()
         self.mCropParameter = myCropParameter
         self.showCropParameter()
 
