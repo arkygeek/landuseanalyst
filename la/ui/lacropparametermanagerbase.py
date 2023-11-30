@@ -48,7 +48,7 @@ print(f"Ui_LaCropParameterManagerBase: {Ui_LaCropParameterManagerBase}")
 # @TODO remove the above print statement after testing
 
 class LaCropParameterManagerBase(QDialog, Ui_LaCropParameterManagerBase):
-	
+
     def __init__(self, parent=None, flags=Qt.WindowFlags()):
         super(LaCropParameterManagerBase, self).__init__(parent, flags)
         self.setupUi(self)
@@ -64,9 +64,9 @@ class LaCropParameterManagerBase(QDialog, Ui_LaCropParameterManagerBase):
         self.pbnImport.setVisible(False)
         self.pbnExport.setVisible(False)
         self.lblCropPic.setScaledContents(True)
-        
+
         # myCropsMap: Dict[str, LaCrop] = LaUtils.getAvailableCrops()
-        
+
         # for _ , myCrop in myCropsMap.items(): # if at some point in the future I do need to use the keys, I can simply change the _ back to key and add code that uses the key variable.
         #     myGuid = myCrop.guid()
         #     myName = myCrop.name()
@@ -76,11 +76,11 @@ class LaCropParameterManagerBase(QDialog, Ui_LaCropParameterManagerBase):
         self.cboCrop.currentIndexChanged.connect(self.on_cboCrop_changed)
         self.cbAreaUnits.addItem("Dunum")
         self.cbAreaUnits.addItem("Hectare")
-        self.refreshCropParameterTable()    
-    
+        self.refreshCropParameterTable()
+
     def readSettings(self):
         """
-        Reads the settings of the main window's position and size from QSettings 
+        Reads the settings of the main window's position and size from QSettings
         and sets the position and size of the current window accordingly.
         """
         mySettings = QSettings()
@@ -88,7 +88,7 @@ class LaCropParameterManagerBase(QDialog, Ui_LaCropParameterManagerBase):
         size = mySettings.value("mainwindow/size", QSize(400, 400))
         self.resize(size)
         self.move(pos)
-    
+
     def writeSettings(self):
         mySettings = QSettings()
         mySettings.setValue("mainwindow/pos", self.pos())
@@ -109,18 +109,18 @@ class LaCropParameterManagerBase(QDialog, Ui_LaCropParameterManagerBase):
         self.lblCropPic.setPixmap(myCropPic)
 
     def showCropParameter(self):
-        self.leName.setText(self.mCropParameter.name())
-        self.leDescription.setText(self.mCropParameter.description())
-        self.setComboToDefault(self.cboCrop, self.mCropParameter.cropGuid())
-        self.sbPercentTameCrop.setValue(self.mCropParameter.percentTameCrop())
-        self.sbSpoilage.setValue(self.mCropParameter.spoilage())
-        self.sbReseed.setValue(self.mCropParameter.reseed())
-        self.grpCropRotation.setChecked(self.mCropParameter.cropRotation())
-        self.sbFallowRatio.setValue(self.mCropParameter.fallowRatio())
-        self.sbFallowValue.setValue(self.mCropParameter.fallowValue())
-        self.cbAreaUnits.setCurrentIndex(self.mCropParameter.areaUnits())
-        self.checkBoxUseCommonLand.setChecked(self.mCropParameter.useCommonLand())
-        self.checkBoxUseSpecificLand.setChecked(self.mCropParameter.useSpecificLand())
+        self.leName.setText(self.mCropParameter.name)
+        self.leDescription.setText(self.mCropParameter.description)
+        self.setComboToDefault(self.cboCrop, self.mCropParameter.cropGuid)
+        self.sbPercentTameCrop.setValue(self.mCropParameter.percentTameCrop)
+        self.sbSpoilage.setValue(self.mCropParameter.spoilage)
+        self.sbReseed.setValue(self.mCropParameter.reseed)
+        self.grpCropRotation.setChecked(self.mCropParameter.cropRotation)
+        self.sbFallowRatio.setValue(self.mCropParameter.fallowRatio)
+        self.sbFallowValue.setValue(self.mCropParameter.fallowValue)
+        self.cbAreaUnits.setCurrentIndex(self.mCropParameter.areaUnits)
+        self.checkBoxUseCommonLand.setChecked(self.mCropParameter.useCommonLand)
+        self.checkBoxUseSpecificLand.setChecked(self.mCropParameter.useSpecificLand)
         # self.cboRastere.setText(self.mCropParameter.rasterName())
 
     def on_toolCopy_clicked(self):
@@ -145,7 +145,7 @@ class LaCropParameterManagerBase(QDialog, Ui_LaCropParameterManagerBase):
         myCropParameter = LaCropParameter()
         myCropParameter.guid = LaGuid()
         self.mCropParameter = myCropParameter
-        self.showCropParameter()
+        self.showCropParameter
 
     def on_toolDelete_clicked(self):
         if self.tblCropParameterProfiles.currentRow() < 0:
@@ -239,7 +239,7 @@ class LaCropParameterManagerBase(QDialog, Ui_LaCropParameterManagerBase):
         self.mCropParameter = myCropParameter
         self.showCropParameter()
 
-    
+
 
     def setComboToDefault(self, thepCombo, theDefault):
         if theDefault != "":
@@ -250,6 +250,3 @@ class LaCropParameterManagerBase(QDialog, Ui_LaCropParameterManagerBase):
         else:
             return False
         return True
-
-
-

@@ -9,14 +9,14 @@ from qgis.PyQt.QtWidgets import (QAction, QComboBox, QLabel, QLineEdit, QMainWin
                                  QTextEdit, QTreeWidget, QMessageBox)
 
 # Local application/library specific imports
-# from lib.la import La 
+# from lib.la import La
 from la.resources_rc import *
 
 
 from la.ui.lamainformbase import LaMainFormBase
 # from la.ui.lacropparameterbase import LaCropParameterManagerBase
 
-from la.lib.lautils import LaUtils 
+from la.lib.lautils import LaUtils
 
 from la.lib.laanimal import LaAnimal
 from la.lib.laanimalparameter import LaAnimalParameter
@@ -43,7 +43,7 @@ class LaMainForm(QMainWindow):
       self.actionSaveAs.triggered.connect(self.saveFileAs)
       self.actionPreferences.triggered.connect(self.showPreferences)
       self.actionAbout.triggered.connect(self.showAbout)
-      
+
       # Set up the toolbar actions
       self.actionNewToolbar.triggered.connect(self.newFile)
       self.actionOpenToolbar.triggered.connect(self.openFile)
@@ -117,6 +117,48 @@ class LaMainForm(QMainWindow):
     self.labelCropPercent = QLabel(self)
     self.labelCropPercent.setText(myMaxString)
     self.setDietLabels()
+
+  def on_sbDailyCalories_valueChanged(self, theValue):
+    self.setDietLabels()
+
+  def on_cboxIncludeDairy_clicked(self, theBool):
+    self.setDietLabels()
+
+  def on_sbLimitDairyPercent_valueChanged(self, theValue):
+    self.setDietLabels()
+
+  def on_cboxBaseOnPlants_clicked(self, theBool):
+    self.setDietLabels()
+
+  def on_cboxLimitDairy_clicked(self, theBool):
+    self.setDietLabels()
+
+  def on_sliderMeat_valueChanged(self, theValue):
+    myMinString = str(100 - theValue)
+    myMaxString = str(theValue)
+    self.labelMeatWildPercent.setText(myMinString)
+    self.labelMeatTamePercent.setText(myMaxString)
+    self.setDietLabels()
+
+  def on_sliderDiet_valueChanged(self, theValue):
+    myMinString = str(theValue)
+    myMaxString = str(100 - theValue)
+    self.labelMeatPercent.setText(myMinString)
+    self.labelCropPercent.setText(myMaxString)
+    self.setDietLabels()
+
+  def on_sbDairyUtilisation_valueChanged(self, theValue):
+    self.setDietLabels()
+
+  def on_sliderCrop_valueChanged(self, theValue):
+    myMinString = str(100 - theValue)
+    myMaxString = str(theValue)
+    self.labelCropWildPercent.setText(myMinString)
+    self.labelCropTamePercent.setText(myMaxString)
+    self.setDietLabels()
+
+
+
 
   def current_item_changed(self, current, previous):
     # TODO: Implement current_item_changed functionality
