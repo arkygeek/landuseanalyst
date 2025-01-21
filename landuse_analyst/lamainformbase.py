@@ -187,7 +187,7 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         myQFile.close()
 
 
-    def on_clicked_pbnNewCrop(self, parent=None):
+    def on_clicked_pbnNewCrop(self):
         print("open Manage Crops window printed")
         self.tbReport.append("Manage Crops button clicked")
 
@@ -196,10 +196,14 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
                 os.path.dirname(__file__),
                 'ui/lacropmanagerbase.ui'))
 
-        super(self, Ui_CropManagerBase).__init__(parent)
-        self.setupUi(Ui_CropManagerBase)
-        Ui_CropManagerBase.show()
-        Ui_CropManagerBase.exec()
+        class CropManagerDialog(QtWidgets.QDialog, Ui_CropManagerBase):
+            def __init__(self, parent=None):
+                super(CropManagerDialog, self).__init__(parent)
+                self.setupUi(self)
+
+        crop_manager = CropManagerDialog(self)
+        crop_manager.show()
+        crop_manager.exec()
 
 
     def on_clicked_pbnNewCropParameter(self):
