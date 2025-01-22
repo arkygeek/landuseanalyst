@@ -190,17 +190,14 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
     def on_clicked_pbnNewCrop(self):
         print("open Manage Crops window printed")
         self.tbReport.append("Manage Crops button clicked")
-
         Ui_CropManagerBase, _ = uic.loadUiType(
             os.path.join(
                 os.path.dirname(__file__),
                 'ui/lacropmanagerbase.ui'))
-
         class CropManagerDialog(QtWidgets.QDialog, Ui_CropManagerBase):
             def __init__(self, parent=None):
                 super(CropManagerDialog, self).__init__(parent)
                 self.setupUi(self)
-
         crop_manager = CropManagerDialog(self)
         crop_manager.show()
         crop_manager.exec()
@@ -210,15 +207,53 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         print("open Crop Parameters window")
         self.tbReport.append("Manage Crop Parameters button clicked")
 
+        Ui_CropParameterBase, _ = uic.loadUiType(
+            os.path.join(
+                os.path.dirname(__file__),
+                'ui/lacropparameterbase.ui'))
+
+        class CropParameterDialog(QtWidgets.QDialog, Ui_CropParameterBase):
+            def __init__(self, parent=None):
+                super(CropParameterDialog, self).__init__(parent)
+                self.setupUi(self)
+
+        crop_parameter_dialog = CropParameterDialog(self)
+        crop_parameter_dialog.show()
+        crop_parameter_dialog.exec()
+
 
     def on_clicked_pbnNewAnimal(self):
         print("open Manage Animals window printed")
         self.tbReport.append("Manage Animals button clicked")
-
+        Ui_AnimalManagerBase, _ = uic.loadUiType(
+            os.path.join(
+                os.path.dirname(__file__),
+                'ui/laanimalmanagerbase.ui'))
+        class AnimalManagerDialog(QtWidgets.QDialog, Ui_AnimalManagerBase):
+            def __init__(self, parent=None):
+                super(AnimalManagerDialog, self).__init__(parent)
+                self.setupUi(self)
+        animal_manager = AnimalManagerDialog(self)
+        animal_manager.show()
+        animal_manager.exec()
 
     def on_clicked_pbnNewAnimalParameter(self):
         print("open Animal Parameters window")
         self.tbReport.append("Manage Animal Parameters button clicked")
+
+        Ui_AnimalParameterBase, _ = uic.loadUiType(
+            os.path.join(
+                os.path.dirname(__file__),
+                'ui/laanimalparameterbase.ui'))
+
+        class AnimalParameterDialog(QtWidgets.QDialog, Ui_AnimalParameterBase):
+            def __init__(self, parent=None):
+                super(AnimalParameterDialog, self).__init__(parent)
+                self.setupUi(self)
+
+        animal_parameter_dialog = AnimalParameterDialog(self)
+        animal_parameter_dialog.show()
+        animal_parameter_dialog.exec()
 
 
     def on_sliderDiet_valueChanged(self,  theValue):

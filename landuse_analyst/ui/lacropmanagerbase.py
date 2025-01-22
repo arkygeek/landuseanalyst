@@ -38,14 +38,11 @@ class LaCropManagerBase(QWidget):
 		super().__init__(parent=parent) # Call the inherited classes __init__ method
 		self.ui = uic.loadUi("lacropmanagerbase.ui", self) # Load the .ui file
 
-
 		self.initUI()
 		self.show() # Show the GUI
 
-
 	def initUI(self):
 		pass
-
 
 	def __str__(self):
  		return

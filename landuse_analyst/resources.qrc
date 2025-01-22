@@ -117,5 +117,24 @@
     <file alias="status_error.png">resources/status_error.png</file>
     <file alias="status_ok.png">resources/status_ok.png</file>
     <file alias="tux-indiana.png">resources/tux-indiana.png</file>
+    <file alias="copy.png">resources/copy.png</file>
+    <file alias="barley.png">resources/barley.png</file>
+    <file alias="chicken.png">resources/chicken.png</file>
+    <file alias="commonTarget.png">resources/commonTarget.png</file>
+    <file alias="cow.png">resources/cow.png</file>
+    <file alias="delete.png">resources/delete.png</file>
+    <file alias="eggs.png">resources/eggs.png</file>
+    <file alias="emule_icon_emule.org_01.png">resources/emule_icon_emule.org_01.png</file>
+    <file alias="errordunums.png">resources/errordunums.png</file>
+    <file alias="errorpercent.png">resources/errorpercent.png</file>
+    <file alias="exceptions.png">resources/exceptions.png</file>
+    <file alias="goat_icon.png">resources/goat_icon.png</file>
+    <file alias="grape_icon.png">resources/grape_icon.png</file>
+    <file alias="grapes_leif_lodahl_02.png">resources/grapes_leif_lodahl_02.png</file>
+    <file alias="kidscorner_infopage_cowpigchick.jpg">resources/kidscorner_infopage_cowpigchick.jpg</file>
+    <file alias="lentil.png">resources/lentil.png</file>
+    <file alias="olive.png">resources/olive.png</file>
+    <file alias="sheep.png">resources/sheep.png</file>
+    <file alias="wheatclricon.png">resources/wheatclricon.png</file>
   </qresource>
 </RCC>
