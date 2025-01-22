@@ -74,8 +74,8 @@
 
 #     def message(self, theMessage: str): ...
 
-#     """ This is a rough translation and may need to be adjusted based on the
-#         actual implementation of the LaModel class and the other classes it
-#         interacts with. The ... in the method definitions is a placeholder
-#         and should be replaced with the actual implementation in laModel.py
-#     """
+    """ This is a rough translation and may need to be adjusted based on the
+        actual implementation of the LaModel class and the other classes it
+        interacts with. The ... in the method definitions is a placeholder
+        and should be replaced with the actual implementation in laModel.py
+    """

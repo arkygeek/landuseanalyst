@@ -180,6 +180,9 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         pass
 
     def __copy__(self):
+        myModel: LaModel = LaModel()
+        myModel.name = self._name
+
         return LaModel(self)
 
     def __deepcopy__(self, memo):
@@ -669,6 +672,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         myString += f'  <dairyUtilisation>{self._dairyUtilisation}</dairyUtilisation>\n'
         myString += '</model>\n'
         return myString
+
 
 
     """ The following defines a series of PyQt signals.
