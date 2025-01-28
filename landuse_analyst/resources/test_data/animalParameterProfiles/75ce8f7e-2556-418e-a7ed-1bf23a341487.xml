@@ -1,0 +1,26 @@
+<animalParameter guid="75ce8f7e-2556-418e-a7ed-1bf23a341487">
+  <name>sheep params</name>
+  <description>none</description>
+  <animal>261b36dc-a9b9-4995-9c9f-15e19949c10a</animal>
+  <percentTameMeat>34</percentTameMeat>
+  <useCommonGrazingLand>0</useCommonGrazingLand>
+  <useSpecificGrazingLand>1</useSpecificGrazingLand>
+  <foodValueOfCommonGrazingLand>0</foodValueOfCommonGrazingLand>
+  <foodValueOfSpecificGrazingLand>54</foodValueOfSpecificGrazingLand>
+  <areaUnits>0</areaUnits>
+  <fodderUse>1</fodderUse>
+   <fodderCrops>
+    <fodderCrop>
+      <fodderCropGuid>1b7d0917-78af-4a12-a5c6-222994f1866e</fodderCropGuid>
+      <fodderStrawChaff>2</fodderStrawChaff>
+      <fodderGrain>0</fodderGrain>
+    </fodderCrop>
+    <fodderCrop>
+      <fodderCropGuid>d413884f-45d8-457b-9c2f-e479f291bbeb</fodderCropGuid>
+      <fodderStrawChaff>1</fodderStrawChaff>
+      <fodderGrain>0</fodderGrain>
+    </fodderCrop>
+   </fodderCrops>
+  <fallowUsage>High</fallowUsage>
+  <rasterName>sampleRasterName</RasterName>
+</animalParameter>

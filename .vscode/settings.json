@@ -5,12 +5,13 @@
   ],
   "python.formatting.provider": "black",
   "maptz.regionfolder": {
-    "[python]": {        
+    "[python]": {
         "defaultFoldStartRegex": "\\#[\\s]*#region\\(collapsed\\)[\\s]*(.*)",
         "foldEnd": "# #endregion",
         "foldEndRegex": "\\#[\\s]*#endregion",
         "foldStart": "# #region [NAME]",
         "foldStartRegex": "\\#[\\s]*#region[\\s]*(.*)"
     }
-  }
+  },
+  "editor.fontFamily": "Fira Code iScript, fira-code-nerd, FiraCode Nerd Font, Consolas, 'Courier New', monospace"
 }

@@ -1,5 +1,5 @@
 # laguid.py
-from PyQt5.QtCore import QUuid
+from qgis.PyQt.QtCore import QUuid
 
 class LaGuid:
     def __init__(self):

@@ -1,11 +1,11 @@
 # lamodel.py
-from PyQt5.QtCore import QObject, pyqtProperty, pyqtSignal, pyqtSlot, Qt
-from PyQt5.QtWidgets import QDialog
+from qgis.PyQt.QtCore import QObject, pyqtProperty, pyqtSignal, pyqtSlot, Qt
+from qgis.PyQt.QtWidgets import QDialog
 from typing import Dict, List, Tuple
-from laserialisable import LaSerialisable
-from laguid import LaGuid
-from la import La
-from ladietlabels import LaDietLabels
+from .laserialisable import LaSerialisable
+from .laguid import LaGuid
+from .la import La
+from .ladietlabels import LaDietLabels
 
 class LaModel(QDialog, LaSerialisable, LaGuid):
     def __init__(self, parent=None):

@@ -1,9 +1,9 @@
 # laanimalparameter.py
-from PyQt5.QtCore import QObject, pyqtProperty, pyqtSignal, pyqtSlot, Qt
-from laserialisable import LaSerialisable
-from laguid import LaGuid
-from la import La
-from lafoodsource import LaFoodSource
+from qgis.PyQt.QtCore import QObject, pyqtProperty, pyqtSignal, pyqtSlot, Qt
+from .laserialisable import LaSerialisable
+from .laguid import LaGuid
+from .la import La
+from .lafoodsource import LaFoodSource
 
 class LaAnimalParameter(LaSerialisable, LaGuid):
     def __init__(self):

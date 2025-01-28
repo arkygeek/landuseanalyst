@@ -1,0 +1,13 @@
+<cropParameter guid="1b1155c2-e222-4b84-b0fb-f20f99d8f5f8">
+  <name>OliveParames</name>
+  <description></description>
+  <crop>978beb56-632c-4747-a80b-5efbc2cb57ba</crop>
+  <percentTameCrop>10</percentTameCrop>
+  <cropRotation>0</cropRotation>
+  <fallowRatio>1</fallowRatio>
+  <fallowTDN>500</fallowTDN>
+  <areaUnits>0</areaUnits>
+  <useCommonLand>0</useCommonLand>
+  <useSpecificLand>1</useSpecificLand>
+  <rasterName>OliveMask</rasterName>
+</cropParameter>
