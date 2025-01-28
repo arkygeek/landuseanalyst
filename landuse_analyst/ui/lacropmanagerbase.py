@@ -28,27 +28,6 @@ from qgis.PyQt.QtCore import QPoint, QSize, QPoint, QSize, QSettings
 
 ## IMPORTS:
 from landuse_analyst.ui import lacropmanagerbase
-
-
-# class LaCropManagerBase(QWidget):
-# 	def __init__(self, parent=None):
-# 		super().__init__(parent=parent) # Call the inherited classes __init__ method
-# 		self.ui = uic.loadUi("lacropmanagerbase.ui", self) # Load the .ui file
-
-# 		self.initUI()
-# 		self.show() # Show the GUI
-
-# 	def initUI(self):
-# 		pass
-
-# 	def __str__(self):
-#  		return
-
-# from qgis.PyQt.QtGui import QIcon
-# from qgis.PyQt.QtCore import Qt, QPoint, QSize, QSettings, QDir
-# from qgis.PyQt import uic
-# from qgis.PyQt.QtWidgets import QWidget, QDialog, QTableWidgetItem, QMessageBox
-# from landuse_analyst.ui import lacropmanagerbase
 from landuse_analyst.lib.lautils import LaUtils
 from landuse_analyst.lib.lacrop import LaCrop
 
