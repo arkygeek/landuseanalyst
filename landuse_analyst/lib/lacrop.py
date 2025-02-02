@@ -1,5 +1,5 @@
 # lacrop.py
-from qgis.PyQt.QtCore import QObject, pyqtProperty, pyqtSignal, pyqtSlot, Qt
+from qgis.PyQt.QtCore import pyqtProperty, pyqtSignal
 from .laserialisable import LaSerialisable
 from .laguid import LaGuid
 

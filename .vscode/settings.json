@@ -1,9 +1,16 @@
 {
   "python.analysis.extraPaths": [
-    "/Applications/QGIS.app/Contents/Resources/python",
-    "./landuse_analyst/Support/QGIS/QGIS3/profiles/default/python/plugins/python/plugins/landuse_analyst"
+      // "/Applications/QGIS.app/Contents/Resources/python",
+      "./landuse_analyst/Support/QGIS/QGIS3/profiles/default/python/plugins/python/plugins/landuse_analyst",
+      "/home/arkygeek/anaconda3/envs/conda-qgis/bin/python"
   ],
-  "python.formatting.provider": "black",
+  "python.formatting.provider": "ms-python.black-formatter",
+  "python.pythonPath": "/home/arkygeek/anaconda3/envs/conda-qgis/bin/python",
+  "python.envFile": "${workspaceFolder}/.env",
+  "python.autoComplete.extraPaths": [
+    "/home/arkygeek/anaconda3/envs/conda-qgis/bin/python"
+  ],
+
   "maptz.regionfolder": {
     "[python]": {
         "defaultFoldStartRegex": "\\#[\\s]*#region\\(collapsed\\)[\\s]*(.*)",

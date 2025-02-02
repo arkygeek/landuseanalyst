@@ -1,41 +1,40 @@
-# laserialisable.py
-from PyQt5.QtCore import QObject, pyqtProperty, pyqtSignal, pyqtSlot, Qt
-import pickle
+import xml.etree.ElementTree as ET
+from abc import ABCMeta, abstractmethod
+from qgis.PyQt import QtWidgets
 
-class LaSerialisable(QObject):
+class MetaSerialisable(ABCMeta, type(QtWidgets.QDialog)):
+    pass
+
+class LaSerialisable(metaclass=MetaSerialisable):
     def __init__(self):
         super().__init__()
 
-    def __del__(self):
+    @abstractmethod
+    def toXml(self):
+        """Convert the object to an XML string."""
         pass
 
-    def __copy__(self):
-        return self.__class__(self)
+    @abstractmethod
+    def fromXml(self, xml_string):
+        """Initialize the object from an XML string."""
+        pass
 
-    def __deepcopy__(self, memo):
-        return self.__class__(self)
+    def toXmlFile(self, file_name):
+        """Write the object to an XML file."""
+        try:
+            with open(file_name, 'w') as file:
+                file.write(self.toXml())
+            return True
+        except IOError as e:
+            print(f"Failed to write to file {file_name}: {e}")
+            return False
 
-    def toByteArray(self):
-        return pickle.dumps(self)
-
-    def fromByteArray(self, data):
-        return pickle.loads(data)
-
-"""
-
-This code defines a LaSerialisable class in Python using PyQt5.
-
-The class provides two methods, toByteArray and fromByteArray, which can be used
-    to serialize and deserialize objects of its derived classes.
-
-    toByteArray uses the pickle module to convert the object into a byte stream
-
-    fromByteArray uses pickle to restore an object from a byte stream
-
-laserialisable.cpp defines the implementation of LaSerialisable class in C++.
-
-The Python version of the class does not require an implementation file, as the
-    serialization and deserialization methods are defined in the class
-    definition using Python's built-in pickle module.
-
-"""
+    def fromXmlFile(self, file_name):
+        """Read the object from an XML file."""
+        try:
+            with open(file_name, 'r') as file:
+                xml_string = file.read()
+            return self.fromXml(xml_string)
+        except IOError as e:
+            print(f"Failed to read from file {file_name}: {e}")
+            return False

@@ -16,30 +16,29 @@
    (at your option) any later version.
 ***************************************************************"""
 
+
 # lacropmanagerbase.py from lacropmanagerbase.ui
-
-from datetime import datetime, timezone, timedelta
-from enum import Enum
-
+import os
 from qgis.PyQt import QtWidgets, uic
-from qgis.PyQt.QtWidgets import QMessageBox, QTableWidgetItem, QWidget
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtCore import QPoint, QSize, QPoint, QSize, QSettings
-
-## IMPORTS:
-from landuse_analyst.ui import lacropmanagerbase
+from qgis.PyQt.QtWidgets import QDialog, QTableWidgetItem, QMessageBox
+from landuse_analyst.lib.laserialisable import LaSerialisable
 from landuse_analyst.lib.lautils import LaUtils
 from landuse_analyst.lib.lacrop import LaCrop
 
-class LaCropManagerBase(QWidget):
+class LaCropManagerBase(QDialog, LaSerialisable):
     def __init__(self, parent=None):
         super().__init__(parent)
+        print("Initializing LaCropManagerBase")
         ui_path = os.path.join(os.path.dirname(__file__), 'lacropmanagerbase.ui')
+        print(f"Loading UI from: {ui_path}")
         uic.loadUi(ui_path, self)
         self.initUI()
         self.show()
 
+
     def initUI(self):
+        print("Initializing UI components")
         self.readSettings()
         self.lblCropPix.setScaledContents(True)
         self.tblCrops.cellClicked.connect(self.cellClicked)
@@ -50,31 +49,20 @@ class LaCropManagerBase(QWidget):
         self.refreshCropTable()
         self.mImageFile = ""
 
-    def readSettings(self):
-        mySettings = QSettings()
-        pos = mySettings.value("mainwindow/pos", QPoint(200, 200))
-        size = mySettings.value("mainwindow/size", QSize(400, 400))
-        self.resize(size)
-        self.move(pos)
-
-    def writeSettings(self):
-        mySettings = QSettings()
-        mySettings.setValue("mainwindow/pos", self.pos())
-        mySettings.setValue("mainwindow/size", self.size())
-
-    def on_pbnCropPic_clicked(self):
-        myUtils = LaUtils()
-        myFile = myUtils.openGraphicFile()
-        self.lblCropPix.setPixmap(myFile)
-        self.mImageFile = myFile
+        # Connect buttons to their respective methods
+        self.pbnCropPic.clicked.connect(self.on_pbnCropPic_clicked)
 
     def refreshCropTable(self, theGuid=""):
+        print("Refreshing crop table")
         self.mCropMap = {}
         self.tblCrops.clear()
         self.tblCrops.setRowCount(0)
         self.tblCrops.setColumnCount(2)
 
-        self.mCropMap = LaUtils.getAvailableCrops()
+        crop_profiles_dir = LaUtils.userCropProfilesDirPath()
+        print(f"Loading crop profiles from: {crop_profiles_dir}")
+
+        self.mCropMap = LaCropManagerBase.getAvailableCrops()
 
         mySelectedRow = 0
         myCurrentRow = 0
@@ -109,12 +97,44 @@ class LaCropManagerBase(QWidget):
         self.tblCrops.verticalHeader().hide()
         self.tblCrops.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
 
+    def on_pbnCropPic_clicked(self):
+        print("on_pbnCropPic_clicked called")
+        myFile = LaUtils.openGraphicFile(self)
+        if myFile:
+            self.lblCropPix.setPixmap(myFile)
+            self.mImageFile = myFile
+
+    @staticmethod
+    def getAvailableCrops():
+        """
+        Returns a dictionary of available crops.
+        """
+        crop_profiles_dir = LaUtils.userCropProfilesDirPath()
+        print(f"Looking for crop profiles in: {crop_profiles_dir}")
+        crops = {}
+        if not os.path.exists(crop_profiles_dir):
+            print(f"Directory does not exist: {crop_profiles_dir}")
+            return crops
+
+        for file_name in os.listdir(crop_profiles_dir):
+            if file_name.endswith(".xml"):
+                print(f"Found crop profile: {file_name}")
+                crop = LaCrop()
+                crop.fromXmlFile(os.path.join(crop_profiles_dir, file_name))
+                crops[crop.guid()] = crop
+            else:
+                print(f"Skipping non-XML file: {file_name}")
+        print(f"Total crops loaded: {len(crops)}")
+        return crops
+
     def cellClicked(self, theRow, theColumn):
+        print(f"Cell clicked at row {theRow}, column {theColumn}")
         myGuid = self.tblCrops.item(self.tblCrops.currentRow(), 0).text()
         myFileName = myGuid + ".xml"
         self.selectCrop(myFileName)
 
     def selectCrop(self, theFileName):
+        print(f"Selecting crop from file: {theFileName}")
         myCropDir = LaUtils.userCropProfilesDirPath()
         myCrop = LaCrop()
         myCrop.fromXmlFile(os.path.join(myCropDir, theFileName))
@@ -123,6 +143,7 @@ class LaCropManagerBase(QWidget):
         self.showCrop()
 
     def showCrop(self):
+        print("Showing crop details")
         self.leName.setText(self.mCrop.name())
         self.leDescription.setText(self.mCrop.description())
         self.sbCropYield.setValue(self.mCrop.cropYield())
@@ -134,13 +155,16 @@ class LaCropManagerBase(QWidget):
         self.lblCropPix.setPixmap(self.mCrop.imageFile())
 
     def on_pushButtonLoad_clicked(self):
+        print("on_pushButtonLoad_clicked called")
         self.mCrop.fromXmlFile("/tmp/crop.xml")
         self.showCrop()
 
     def on_pushButtonSave_clicked(self):
-        pass
+        print("on_pushButtonSave_clicked called")
+        # Implement save functionality here
 
     def on_toolNew_clicked(self):
+        print("on_toolNew_clicked called")
         myCrop = LaCrop()
         myCrop.setGuid()
         self.mCrop = myCrop
@@ -152,6 +176,7 @@ class LaCropManagerBase(QWidget):
         self.tblCrops.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
 
     def on_toolCopy_clicked(self):
+        print("on_toolCopy_clicked called")
         if self.tblCrops.currentRow() < 0:
             return
 
@@ -170,6 +195,7 @@ class LaCropManagerBase(QWidget):
         self.refreshCropTable(myCrop.guid())
 
     def on_toolDelete_clicked(self):
+        print("on_toolDelete_clicked called")
         if self.tblCrops.currentRow() < 0:
             return
 
@@ -181,6 +207,7 @@ class LaCropManagerBase(QWidget):
             self.refreshCropTable()
 
     def on_pbnApply_clicked(self):
+        print("on_pbnApply_clicked called")
         self.mCrop.setName(self.leName.text())
         self.mCrop.setDescription(self.leDescription.text())
         self.mCrop.setCropYield(self.sbCropYield.value())
@@ -197,6 +224,10 @@ class LaCropManagerBase(QWidget):
         self.mCrop.setImageFile(self.mImageFile)
         self.mCrop.toXmlFile(os.path.join(LaUtils.userCropProfilesDirPath(), self.mCrop.guid() + ".xml"))
         self.refreshCropTable(self.mCrop.guid())
+
+    def readSettings(self):
+        """Placeholder for restoring UI settings"""
+        print("readSettings() called, but not implemented yet.")
 
     def closeEvent(self, event):
         self.writeSettings()
