@@ -18,7 +18,11 @@
 
 
 # lacropmanagerbase.py from lacropmanagerbase.ui
+import sys
 import os
+# Update the sys.path to include the parent directory
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
+
 from qgis.PyQt import QtWidgets, uic
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QDialog, QTableWidgetItem, QMessageBox
@@ -34,8 +38,6 @@ class LaCropManagerBase(QDialog, LaSerialisable):
         print(f"Loading UI from: {ui_path}")
         uic.loadUi(ui_path, self)
         self.initUI()
-        self.show()
-
 
     def initUI(self):
         print("Initializing UI components")
@@ -51,6 +53,43 @@ class LaCropManagerBase(QDialog, LaSerialisable):
 
         # Connect buttons to their respective methods
         self.pbnCropPic.clicked.connect(self.on_pbnCropPic_clicked)
+        self.pbnApply.clicked.connect(self.on_pbnApply_clicked)
+        self.pbnLoad.clicked.connect(self.on_pushButtonLoad_clicked)
+        self.pbnSave.clicked.connect(self.on_pushButtonSave_clicked)
+        self.toolNew.clicked.connect(self.on_toolNew_clicked)
+        self.toolCopy.clicked.connect(self.on_toolCopy_clicked)
+        self.toolDelete.clicked.connect(self.on_toolDelete_clicked)
+
+    def run(self):
+        self.show()
+        result = self.exec_()
+        if result:
+            print("DEBUGGING: Handle this result if needed") # Handle the result if needed
+            pass
+
+    def toXml(self):
+        # Implement the toXml method
+        return "<LaCropManagerBase></LaCropManagerBase>"
+
+    def fromXml(self, xml_string):
+        # Implement the fromXml method
+        pass
+
+    def refreshCropTable(self, theGuid=""):
+        print("Refreshing crop table")
+        self.mCropMap = {}
+        self.tblCrops.clear()
+        self.tblCrops.setRowCount(0)
+        self.tblCrops.setColumnCount(2)
+
+# Example usage
+if __name__ == "__main__":
+    app = QtWidgets.QApplication(sys.argv)
+    dialog = LaCropManagerBase()
+    dialog.run()
+    sys.exit(app.exec_())
+
+
 
     def refreshCropTable(self, theGuid=""):
         print("Refreshing crop table")

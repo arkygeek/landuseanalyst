@@ -34,7 +34,8 @@ class LaSerialisable(metaclass=MetaSerialisable):
         try:
             with open(file_name, 'r') as file:
                 xml_string = file.read()
-            return self.fromXml(xml_string)
+            self.fromXml(xml_string)
+            return True
         except IOError as e:
             print(f"Failed to read from file {file_name}: {e}")
             return False

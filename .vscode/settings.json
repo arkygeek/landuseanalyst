@@ -1,24 +1,27 @@
 {
   "python.analysis.extraPaths": [
-      // "/Applications/QGIS.app/Contents/Resources/python",
-      "./landuse_analyst/Support/QGIS/QGIS3/profiles/default/python/plugins/python/plugins/landuse_analyst",
-      "/home/arkygeek/anaconda3/envs/conda-qgis/bin/python"
+    "./landuse_analyst/Support/QGIS/QGIS3/profiles/default/python/plugins/landuse_analyst",
+    "/home/arkygeek/anaconda3/envs/qgis_dev/lib/python3.12/site-packages"
   ],
-  "python.formatting.provider": "ms-python.black-formatter",
-  "python.pythonPath": "/home/arkygeek/anaconda3/envs/conda-qgis/bin/python",
-  "python.envFile": "${workspaceFolder}/.env",
+  "python.formatting.provider": "black",
+  "python.pythonPath": "/home/arkygeek/anaconda3/envs/qgis_dev/bin/python",
   "python.autoComplete.extraPaths": [
-    "/home/arkygeek/anaconda3/envs/conda-qgis/bin/python"
+    "/home/arkygeek/anaconda3/envs/qgis_dev/lib/python3.12/site-packages"
   ],
-
   "maptz.regionfolder": {
     "[python]": {
-        "defaultFoldStartRegex": "\\#[\\s]*#region\\(collapsed\\)[\\s]*(.*)",
-        "foldEnd": "# #endregion",
-        "foldEndRegex": "\\#[\\s]*#endregion",
-        "foldStart": "# #region [NAME]",
-        "foldStartRegex": "\\#[\\s]*#region[\\s]*(.*)"
+      "defaultFoldStartRegex": "\\#[\\s]*#region\\(collapsed\\)[\\s]*(.*)",
+      "foldEnd": "# #endregion",
+      "foldEndRegex": "\\#[\\s]*#endregion",
+      "foldStart": "# #region [NAME]",
+      "foldStartRegex": "\\#[\\s]*#region[\\s]*(.*)"
     }
   },
-  "editor.fontFamily": "Fira Code iScript, fira-code-nerd, FiraCode Nerd Font, Consolas, 'Courier New', monospace"
+  "editor.fontFamily": "Fira Code iScript, fira-code-nerd, FiraCode Nerd Font, Consolas, 'Courier New', monospace",
+  "python.defaultInterpreterPath": "/home/arkygeek/anaconda3/envs/qgis_dev/bin/python",
+  "terminal.integrated.smoothScrolling": true,
+  "python-envs.pythonProjects": [],
+  "cmake.ignoreCMakeListsMissing": true,
+  "python-envs.defaultEnvManager": "ms-python.python:conda",
+  "python-envs.defaultPackageManager": "ms-python.python:conda"
 }
