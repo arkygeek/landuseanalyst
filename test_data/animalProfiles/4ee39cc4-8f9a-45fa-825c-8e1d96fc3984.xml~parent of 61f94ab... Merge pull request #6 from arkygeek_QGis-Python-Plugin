@@ -1,0 +1,19 @@
+<animal guid="4ee39cc4-8f9a-45fa-825c-8e1d96fc3984">
+  <name>Pig</name>
+  <description>no pig notes</description>
+  <meatFoodValue>3000</meatFoodValue>
+  <usableMeat>50</usableMeat>
+  <killWeight>100</killWeight>
+  <growTime>10</growTime>
+  <deathRate>10</deathRate>
+  <gestating>300</gestating>
+  <lactating>300</lactating>
+  <juvenile>110</juvenile>
+  <sexualMaturity>11</sexualMaturity>
+  <breedingExpectancy>4</breedingExpectancy>
+  <youngPerBirth>6</youngPerBirth>
+  <weaningAge>6</weaningAge>
+  <gestationTime>115</gestationTime>
+  <estrousCycle>21</estrousCycle>
+  <imageFile>/home/arkygeek/.landuseAnalyst/images/pig.png</imageFile>
+</animal>
