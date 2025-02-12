@@ -1,0 +1,26 @@
+<animalParameter guid="81589aae-c461-4e51-8584-9a1a60af359e">
+  <name>cow params</name>
+  <description>No cow param notes</description>
+  <animal>7b71ee13-a992-4226-b5cf-5f69f071a265</animal>
+  <percentTameMeat>33</percentTameMeat>
+  <useCommonGrazingLand>0</useCommonGrazingLand>
+  <useSpecificGrazingLand>1</useSpecificGrazingLand>
+  <foodValueOfCommonGrazingLand>0</foodValueOfCommonGrazingLand>
+  <foodValueOfSpecificGrazingLand>16</foodValueOfSpecificGrazingLand>
+  <areaUnits>-1</areaUnits>
+  <fodderUse>1</fodderUse>
+   <fodderCrops>
+    <fodderCrop>
+      <fodderCropGuid>1b7d0917-78af-4a12-a5c6-222994f1866e</fodderCropGuid>
+      <fodderStrawChaff>1</fodderStrawChaff>
+      <fodderGrain>2</fodderGrain>
+    </fodderCrop>
+    <fodderCrop>
+      <fodderCropGuid>74e7a763-2961-495e-a6ee-5126cbb0cf5e</fodderCropGuid>
+      <fodderStrawChaff>3</fodderStrawChaff>
+      <fodderGrain>4</fodderGrain>
+    </fodderCrop>
+   </fodderCrops>
+  <fallowUsage>High</fallowUsage>
+  <rasterName>CowMask</RasterName>
+</animalParameter>
