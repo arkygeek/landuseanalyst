@@ -1,9 +1,0 @@
-<crop guid="080ce4ff-6135-4414-a6dd-fb66fab84f26">
-  <name>Wheat</name>
-  <description>Sample wheat crop</description>
-  <cropYield>60</cropYield>
-  <cropCalories>3000</cropCalories>
-  <fodderProduction>50</fodderProduction>
-  <fodderCalories>1000</fodderCalories>
-  <yieldUnits>0</yieldUnits>
-</crop>
