@@ -1,15 +1,17 @@
 """
-la.py - A PyQt5 implementation of the La class.
+la.py - A QGIS PyQt5 implementation of the La class.
 
 This file contains the La class, which is a PyQt5 implementation of thetoggle
 La class from the original C++ code. The class is responsible for defining
 various enums and typedefs used throughout the simulation.
 
-Author: [Your Name]
-Date created: [Date]
+Author: [Jason Jorgenson]
+Date created: [February 14, 2025]
 """
-from builtins import dict as Dict
-from typing import Tuple
+
+# from builtins import dict as Dict
+from enum import Enum
+from typing import Dict, Tuple
 
 from la.lib.lafoodsource import LaFoodSource
 
@@ -25,7 +27,7 @@ class La:
         The tuple contains a boolean and a string.
     LaRasterInfo : Tuple[Tuple[str, str], Tuple[str, str]]
         A tuple of two tuples, each containing two strings.
-        This could represent information about a raster image, such as its dimensions and resolution.   
+        This could represent information about a raster image, such as its dimensions and resolution.
     LaFoodSourceMap : Dict[str, LaFoodSource]
         A dictionary where each key is a string and each value is an instance of LaFoodSource.
         This could represent a mapping from food source names to food source objects.
@@ -56,10 +58,10 @@ class La:
     # LaReportMap is a dictionary where each key is a string and each value is a tuple.
     # The tuple contains a string and a float.
     # This could represent a mapping from report names to report data.
-    LaReportMap: Dict[str, Tuple[str, float]] = {} 
+    LaReportMap: Dict[str, Tuple[str, float]] = {}
 
 # Equivalent to enum types
-class Priority:
+class Priority(Enum):
     """
     A class representing the priority levels.
 
@@ -79,7 +81,7 @@ class Priority:
     Medium = 2
     Low = 3
 
-class Status:
+class Status(Enum):
     """
     A class representing the status of a certain operation.
 
@@ -90,7 +92,7 @@ class Status:
     MoreThanEnoughToCompletelySatisfy = 0
     NotEnoughToCompletelySatisfy = 1
 
-class LandBeingGrazed:
+class LandBeingGrazed(Enum):
     """
     A class representing the grazing status of a piece of land.
 
@@ -101,7 +103,7 @@ class LandBeingGrazed:
     Common = 0
     Unique = 1
 
-class AreaUnits:
+class AreaUnits(Enum):
     """
     This class is an enumeration of area units.
 
@@ -112,7 +114,7 @@ class AreaUnits:
     Dunum = 0  # Represents the Dunum unit of area.
     Hectare = 1  # Represents the Hectare unit of area.
 
-class LandFound:
+class LandFound(Enum):
     """
     A class representing the possible outcomes of a land search operation.
 
@@ -129,7 +131,7 @@ class LandFound:
     TooMuch = 1
     FoundTarget = 2
 
-class EnergyType:
+class EnergyType(Enum):
     """
     A class representing different types of energy.
 

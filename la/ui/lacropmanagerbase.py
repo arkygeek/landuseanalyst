@@ -57,19 +57,23 @@ class LaCropManagerBase(QDialog, Ui_LaCropManagerBase):
         size = mySettings.value("mainwindow/size", QSize(400, 400))
         self.resize(size)
         self.move(pos)
-		
+
 
     def writeSettings(self):
         # TODO: Implement this method
         pass
-    
+
     def on_pbnCropPic_clicked(self):
         # TODO: Implement this method
         pass
 
-    def refreshCropTable(self, theGuid=None):
-        # TODO: Implement this method
-        pass
+    # def refreshCropTable(self, theGuid=None):
+    def refreshCropTable(self, theGuid=""):
+        print("Refreshing crop table")
+        self.mCropMap = {}
+        self.tblCrops.clear()
+        self.tblCrops.setRowCount(0)
+        self.tblCrops.setColumnCount(2)
 
     def cellClicked(self, theRow, theColumn):
         # TODO: Implement this method
@@ -168,7 +172,7 @@ class LaCropManagerBase(QDialog):
 	def __str__(self):
  		return """
 
-""" 
+"""
 
 /***************************************************************************
  *   Copyright (C) 2007 by: Tim Sutton        tim@linfiniti.com            *

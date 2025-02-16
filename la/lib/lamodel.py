@@ -1,19 +1,8 @@
 # lamodel.py
-from qgis.PyQt.QtCore import (
-    QObject, pyqtSignal, pyqtSlot, Qt, QSettings, QProcess, QFile, QTextStream)
-from qgis.PyQt.QtWidgets import (
-    QDialog, QTreeWidget, QTreeWidgetItem, QTableWidgetItem, QListWidget, QComboBox, QHeaderView)
-from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtXml import QDomDocument, QDomElement
-from qgis.PyQt.QtCore import qDebug
-from qgis.core import QgsProperty
-from typing import Tuple
-from builtins import dict as Dict
-from builtins import list as List
-
-from qgis.PyQt.QtCore import QObject, pyqtProperty, pyqtSignal, pyqtSlot, Qt
+from qgis.PyQt.QtCore import pyqtSignal
 from qgis.PyQt.QtWidgets import QDialog
-from typing import Dict, List, Tuple
+
+from typing import Dict, List
 from la.lib.la import La
 from la.lib.laserialisable import LaSerialisable
 from la.lib.laguid import LaGuid
@@ -45,32 +34,72 @@ MESSAGE_BUS: LaMessageBus = LaMessageBus()
 
 
 class LaModel(QDialog, LaSerialisable, LaGuid):
+    nameChanged = pyqtSignal()
+    populationChanged = pyqtSignal()
+    periodChanged = pyqtSignal()
+    projectionChanged = pyqtSignal()
+    precisionChanged = pyqtSignal()
+    dietPercentChanged = pyqtSignal()
+    percentOfDietThatIsFromCropsChanged = pyqtSignal()
+    meatPercentChanged = pyqtSignal()
+    caloriesPerPersonDailyChanged = pyqtSignal()
+    dairyUtilisationChanged = pyqtSignal()
+    baseOnPlantsChanged = pyqtSignal()
+    includeDairyChanged = pyqtSignal()
+    limitDairyChanged = pyqtSignal()
+    limitDairyPercentChanged = pyqtSignal()
+    fallowStatusChanged = pyqtSignal()
+    fallowRatioChanged = pyqtSignal()
+    eastingChanged = pyqtSignal()
+    northingChanged = pyqtSignal()
+    euclideanDistanceChanged = pyqtSignal()
+    walkingTimeChanged = pyqtSignal()
+    pathDistanceChanged = pyqtSignal()
+    commonLandValueChanged = pyqtSignal()
+    commonLandAreaUnitsChanged = pyqtSignal()
+    herdSizeChanged = pyqtSignal()
+    animalsChanged = pyqtSignal()
+    cropsChanged = pyqtSignal()
+    dietsChanged = pyqtSignal()
+    dietLabelsChanged = pyqtSignal()
+    landBeingGrazedChanged = pyqtSignal()
+    landFoundChanged = pyqtSignal()
+    priorityChanged = pyqtSignal()
+    descriptionChanged = pyqtSignal()
+    areaUnitsChanged = pyqtSignal()
+    statusChanged = pyqtSignal()
+    guidChanged = pyqtSignal()
+    iconChanged = pyqtSignal()
+
     def __init__(self, parent=None, theModel=None):
         QDialog.__init__(self, parent)
         if theModel is not None:
-            self.mName = theModel.name
-            self.mPopulation = theModel.population
+            self._name = theModel.name
+            self._population = theModel.population
             self.setGuid(theModel.guid)
-            self.mPeriod = theModel.period
-            self.mProjection = theModel.projection
-            self.mEasting = theModel.easting
-            self.mNorthing = theModel.northing
-            self.mEuclideanDistance = theModel.euclideanDistance
-            self.mWalkingTime = theModel.walkingTime
-            self.mPathDistance = theModel.pathDistance
-            self.mPrecision = theModel.precision
-            self.mDietPercent = theModel.dietPercent
-            self.mPercentOfDietThatIsFromCrops = theModel.plantPercent
-            self.mMeatPercent = theModel.meatPercent
-            self.mCaloriesPerPersonDaily = theModel.caloriesPerPersonDaily
-            self.mDairyUtilisation = theModel.dairyUtilisation
-            self.mBaseOnPlants = theModel.baseOnPlants
-            self.mIncludeDairy = theModel.includeDairy
-            self.mLimitDairy = theModel.limitDairy
-            self.mLimitDairyPercentage = theModel.limitDairyPercent
-            self.mFallowStatus = theModel.fallowStatus
-            self.mFallowRatio = theModel.fallowRatio
+            self._period = theModel.period
+            self._projection = theModel.projection
+            self._easting = theModel.easting
+            self._northing = theModel.northing
+            self._euclideanDistance = theModel.euclideanDistance
+            self._walkingTime = theModel.walkingTime
+            self._pathDistance = theModel.pathDistance
+            self._precision = theModel.precision
+            self._dietPercent = theModel.dietPercent
+            self._percentOfDietThatIsFromCrops = theModel.plantPercent
+            self._meatPercent = theModel.meatPercent
+            self._caloriesPerPersonDaily = theModel.caloriesPerPersonDaily
+            self._dairyUtilisation = theModel.dairyUtilisation
+            self._baseOnPlants = theModel.baseOnPlants
+            self._includeDairy = theModel.includeDairy
+            self._limitDairy = theModel.limitDairy
+            self._limitDairyPercentage = theModel.limitDairyPercent
+            self._fallowStatus = theModel.fallowStatus
+            self._fallowRatio = theModel.fallowRatio
+            self._landBeingGrazed = theModel.landBeingGrazed
+            self._landFound = theModel.landFound
         else:
+            self.setGuid(None)
             self._name: str = "No Name Set"
             self._population: int = 1000
             self._period: str = "No Period Set"
@@ -80,32 +109,33 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             self._percentOfDietThatIsFromCrops: int = 10
             self._meatPercent: int = 10
             self._caloriesPerPersonDaily: int = 2500
-        # self._dairyUtilisation: int = 100
-        # self._baseOnPlants: bool = True
-        # self._includeDairy: bool = True
-        # self._limitDairy: bool = False
-        # self._limitDairyPercent: int = 10
-        # self._fallowStatus: Status = Status.FALLOW)
-        # self._easting: int = 0
-        # self._northing: int = 0
-        # self._euclideanDistance: bool = True
-        # self._walkingTime: bool = False
-        # self._pathDistance: bool = False
-        # self._commonLandValue: float = 0.0
-        # self._commonLandAreaUnits: AreaUnits = AreaUnits.HECTARES
-        # self._herdSize: int = 0
-        # self._animals: Dict[str, str] = {}
-        # self._crops: Dict[str, str] = {}
-        # self._diets: Dict[str, La] = {}
-        # self._dietLabels: List[LaDietLabels] = []
-        # self._landBeingGrazed: LandBeingGrazed = LandBeingGrazed.NO
-        # self._landFound: LandFound = LandFound.NO
-        # self._priority: Priority = Priority.NORMAL
-        # self._description: str = "No Description Set"
-        # self._areaUnits: AreaUnits = AreaUnits.HECTARES
-        # self._status: Status = Status.FALLOW
-        # self._guid: str = self.generateGuid()
-        # self._icon: QIcon = QIcon()
+            self._landBeingGrazed: LandBeingGrazed = LandBeingGrazed.Common
+            self._landFound: LandFound = LandFound.NO
+            # self._dairyUtilisation: int = 100
+            # self._baseOnPlants: bool = True
+            # self._includeDairy: bool = True
+            # self._limitDairy: bool = False
+            # self._limitDairyPercent: int = 10
+            # self._fallowStatus: Status = Status.FALLOW)
+            # self._easting: int = 0
+            # self._northing: int = 0
+            # self._euclideanDistance: bool = True
+            # self._walkingTime: bool = False
+            # self._pathDistance: bool = False
+            # self._commonLandValue: float = 0.0
+            # self._commonLandAreaUnits: AreaUnits = AreaUnits.HECTARES
+            # self._herdSize: int = 0
+            # self._animals: Dict[str, str] = {}
+            # self._crops: Dict[str, str] = {}
+            # self._diets: Dict[str, La] = {}
+            # self._dietLabels: List[LaDietLabels] = []
+            # self._landBeingGrazed: LandBeingGrazed = LandBeingGrazed.NO
+            # self._landFound: LandFound = LandFound.NO
+            # self._priority: Priority = Priority.NORMAL
+            # self._description: str = "No Description Set"
+            # self._areaUnits: AreaUnits = AreaUnits.HECTARES
+            # self._status: Status = Status.FALLOW
+            # self._icon: QIcon = QIcon()
 
 
     def __del__(self):
@@ -114,7 +144,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
     def __copy__(self):
         myModel: LaModel = LaModel()
         myModel.name = self._name
-    
+
         return LaModel(self)
 
     def __deepcopy__(self, memo):
@@ -404,7 +434,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
     def landBeingGrazed(self) -> LandBeingGrazed:
         return self._landBeingGrazed
 
-    @LandBeingGrazed.setter
+    @landBeingGrazed.setter
     def landBeingGrazed(self, theLandBeingGrazed: LandBeingGrazed):
         if self._landBeingGrazed != theLandBeingGrazed:
             self._landBeingGrazed = theLandBeingGrazed
@@ -414,7 +444,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
     def landFound(self) -> LandFound:
         return self._landFound
 
-    @LandFound.setter
+    @landFound.setter
     def landFound(self, theLandFound: LandFound):
         if self._landFound != theLandFound:
             self._landFound = theLandFound
@@ -472,28 +502,28 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
     def toXml(self) -> str:
         myString = f'<model guid="{self.guid}">\n'
-        myString += f'  <name>{xmlEncode(self.mName)}</name>\n'
-        myString += f'  <population>{self.mPopulation}</population>\n'
-        myString += f'  <period>{LaUtils.xmlEncode(self.mPeriod)}</period>\n'
-        myString += f'  <projection>{self.mProjection}</projection>\n'
-        myString += f'  <easting>{self.mEasting}</easting>\n'
-        myString += f'  <northing>{self.mNorthing}</northing>\n'
-        myString += f'  <euclideanDistance>{self.mEuclideanDistance}</euclideanDistance>\n'
-        myString += f'  <walkingTime>{self.mWalkingTime}</walkingTime>\n'
-        myString += f'  <pathDistance>{self.mPathDistance}</pathDistance>\n'
-        myString += f'  <precision>{self.mPrecision}</precision>\n'
-        myString += f'  <dietPercent>{self.mDietPercent}</dietPercent>\n'
-        myString += f'  <plantPercent>{self.mPercentOfDietThatIsFromCrops}</plantPercent>\n'
-        myString += f'  <meatPercent>{self.mMeatPercent}</meatPercent>\n'
-        myString += f'  <caloriesPerPersonDaily>{self.mCaloriesPerPersonDaily}</caloriesPerPersonDaily>\n'
-        myString += f'  <baseOnPlants>{self.mBaseOnPlants}</baseOnPlants>\n'
-        myString += f'  <includeDairy>{self.mIncludeDairy}</includeDairy>\n'
-        myString += f'  <limitDairy>{self.mLimitDairy}</limitDairy>\n'
-        myString += f'  <limitDairyPercent>{self.mLimitDairyPercentage}</limitDairyPercent>\n'
-        myString += f'  <dairyUtilisation>{self.mDairyUtilisation}</dairyUtilisation>\n'
+        myString += f'  <name>{xmlEncode(self._name)}</name>\n'
+        myString += f'  <population>{self._population}</population>\n'
+        myString += f'  <period>{LaUtils.xmlEncode(self._period)}</period>\n'
+        myString += f'  <projection>{self._projection}</projection>\n'
+        myString += f'  <easting>{self._easting}</easting>\n'
+        myString += f'  <northing>{self._northing}</northing>\n'
+        myString += f'  <euclideanDistance>{self._euclideanDistance}</euclideanDistance>\n'
+        myString += f'  <walkingTime>{self._walkingTime}</walkingTime>\n'
+        myString += f'  <pathDistance>{self._pathDistance}</pathDistance>\n'
+        myString += f'  <precision>{self._precision}</precision>\n'
+        myString += f'  <dietPercent>{self._dietPercent}</dietPercent>\n'
+        myString += f'  <plantPercent>{self._percentOfDietThatIsFromCrops}</plantPercent>\n'
+        myString += f'  <meatPercent>{self._meatPercent}</meatPercent>\n'
+        myString += f'  <caloriesPerPersonDaily>{self._caloriesPerPersonDaily}</caloriesPerPersonDaily>\n'
+        myString += f'  <baseOnPlants>{self._baseOnPlants}</baseOnPlants>\n'
+        myString += f'  <includeDairy>{self._includeDairy}</includeDairy>\n'
+        myString += f'  <limitDairy>{self._limitDairy}</limitDairy>\n'
+        myString += f'  <limitDairyPercent>{self._limitDairyPercentage}</limitDairyPercent>\n'
+        myString += f'  <dairyUtilisation>{self._dairyUtilisation}</dairyUtilisation>\n'
         myString += '</model>\n'
         return myString
-    
+
 
     """ The following defines a series of PyQt signals.
 
@@ -513,41 +543,3 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         event-driven programming.
 
     """
-
-    nameChanged = pyqtSignal()
-    populationChanged = pyqtSignal()
-    periodChanged = pyqtSignal()
-    projectionChanged = pyqtSignal()
-    precisionChanged = pyqtSignal()
-    dietPercentChanged = pyqtSignal()
-    percentOfDietThatIsFromCropsChanged = pyqtSignal()
-    meatPercentChanged = pyqtSignal()
-    caloriesPerPersonDailyChanged = pyqtSignal()
-    dairyUtilisationChanged = pyqtSignal()
-    baseOnPlantsChanged = pyqtSignal()
-    includeDairyChanged = pyqtSignal()
-    limitDairyChanged = pyqtSignal()
-    limitDairyPercentChanged = pyqtSignal()
-    fallowStatusChanged = pyqtSignal()
-    fallowRatioChanged = pyqtSignal()
-    eastingChanged = pyqtSignal()
-    northingChanged = pyqtSignal()
-    euclideanDistanceChanged = pyqtSignal()
-    walkingTimeChanged = pyqtSignal()
-    pathDistanceChanged = pyqtSignal()
-    commonLandValueChanged = pyqtSignal()
-    commonLandAreaUnitsChanged = pyqtSignal()
-    herdSizeChanged = pyqtSignal()
-    animalsChanged = pyqtSignal()
-    cropsChanged = pyqtSignal()
-    dietsChanged = pyqtSignal()
-    dietLabelsChanged = pyqtSignal()
-    landBeingGrazedChanged = pyqtSignal()
-    landFoundChanged = pyqtSignal()
-    priorityChanged = pyqtSignal()
-    descriptionChanged = pyqtSignal()
-    areaUnitsChanged = pyqtSignal()
-    statusChanged = pyqtSignal()
-    guidChanged = pyqtSignal()
-    iconChanged = pyqtSignal()
-

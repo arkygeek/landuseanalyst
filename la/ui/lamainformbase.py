@@ -31,21 +31,21 @@ from qgis.PyQt.QtCore import QTextStream
 
 import os
 
-from la.lib.lautils import LaMessageBus, LaUtils
+# from la.lib.lautils import LaMessageBus, LaUtils
 
-from la.lib.la import La, LaFoodSource, LandFound, LandBeingGrazed # my own classes
-from la.ui.laanimalmanagerbase import LaAnimalManagerBase
-from la.ui.laanimalparametermanagerbase import LaAnimalParameterManagerBase
-from la.ui.laanimalparameterbase import LaAnimalParameterBase
-from la.ui.laassemblageconversionbase import laassemblageconversionbase
-from la.ui.lacropmanagerbase import LaCropManagerBase
-# from la.ui.lacropparameterbase import LaCropParameterBase
-from la.ui.lacropparametermanagerbase import LaCropParameterManagerBase
-from la.ui.laexperimentbase import laexperimentbase
-from la.ui.lagrassprocessbase import lagrassprocessbase
-from la.ui.laReportFallow import laReportFallow
-from la.ui.laReportHerds import laReportHerds
-from la.ui.laReportTargets import laReportTargets
+# from la.lib.la import La, LaFoodSource, LandFound, LandBeingGrazed # my own classes
+# from la.ui.laanimalmanagerbase import LaAnimalManagerBase
+# from la.ui.laanimalparametermanagerbase import LaAnimalParameterManagerBase
+# from la.ui.laanimalparameterbase import LaAnimalParameterBase
+# from la.ui.laassemblageconversionbase import laassemblageconversionbase
+# from la.ui.lacropmanagerbase import LaCropManagerBase
+# # from la.ui.lacropparameterbase import LaCropParameterBase
+# from la.ui.lacropparametermanagerbase import LaCropParameterManagerBase
+# from la.ui.laexperimentbase import laexperimentbase
+# from la.ui.lagrassprocessbase import lagrassprocessbase
+# from la.ui.laReportFallow import laReportFallow
+# from la.ui.laReportHerds import laReportHerds
+# from la.ui.laReportTargets import laReportTargets
 
 # endregion
 
@@ -65,10 +65,10 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         super(LaMainFormBase, self).__init__(parent)
 
         """ Set up the user interface from Designer through FORM_CLASS.
-        After self.setupUi() you can access any designer object by doing
-        self.<objectname>, and you can use autoconnect slots - see
-        http://qt-project.org/doc/qt-4.8/designer-using-a-ui-file.html
-        #widgets-and-dialogs-with-auto-connect
+            After self.setupUi() you can access any designer object by doing
+            self.<objectname>, and you can use autoconnect slots - see
+            http://qt-project.org/doc/qt-4.8/designer-using-a-ui-file.html
+            #widgets-and-dialogs-with-auto-connect
         """
         self.setupUi(self)
 
@@ -269,9 +269,10 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
     # Set's the model.  All data comes from laMainForm EXCEPT for
     # the map of crops and animals, which are being generated here.
     def setModel(self, *args):
+        from la.lib.la import La
         self.mSelectedCropsMap.clear()
         self.mSelectedAnimalsMap.clear()
-        mySelectedAreaUnit = LaUtils.AreaUnits(self.cbAreaUnits.currentText())
+        mySelectedAreaUnit = La.AreaUnits(self.cbAreaUnits.currentText())
         myCommonRasterValue = int(self.sbCommonRasterValue.value())
 
         # TODO this is quick and dirty

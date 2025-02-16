@@ -1,0 +1,13 @@
+<cropParameter guid="8c97586f-dc24-42fe-9989-2b81b3b4777d">
+  <name>Lentils Params</name>
+  <description>No lentil Params</description>
+  <crop>74e7a763-2961-495e-a6ee-5126cbb0cf5e</crop>
+  <percentTameCrop>33</percentTameCrop>
+  <cropRotation>1</cropRotation>
+  <fallowRatio>1</fallowRatio>
+  <fallowTDN>11</fallowTDN>
+  <areaUnits>0</areaUnits>
+  <useCommonLand>1</useCommonLand>
+  <useSpecificLand>0</useSpecificLand>
+  <rasterName>LentilMask</rasterName>
+</cropParameter>

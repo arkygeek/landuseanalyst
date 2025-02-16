@@ -21,7 +21,7 @@ from builtins import classmethod
 from typing import Tuple
 
 # Third party imports
-from qgis.PyQt.QtWidgets import (
+from qgis.PyQt .QtWidgets import (
     QMessageBox, QColorDialog, QInputDialog, QFileDialog, QWidget)
 from qgis.PyQt.QtCore import (
     QFile, QTextStream, QObject, QDir, QSettings, QFileInfo, QObject, pyqtSignal)
@@ -102,18 +102,20 @@ class LaUtils:
         """
         Returns the path to the user settings directory.
         If the directory does not exist, it is created.
-        :param thePath: A string representing the path to the user settings directory.
-        :type thePath: str
         :return: A string representing the path to the user settings directory.
         :rtype: str
         """
         # Get the user settings directory path from QSettings
         mySettings = QSettings()
-        myPath = mySettings.value(
-            "dataDirs/dataDir",
-            os.path.expanduser("~/.landuseAnalyst/"))
+        myPath = mySettings.value("dataDirs/dataDir", os.path.expanduser("~/.landuseAnalyst/"))
+
+        # Ensure myPath is a string
+        if not isinstance(myPath, str):
+            myPath = os.path.expanduser("~/.landuseAnalyst/")
+
         # Create the directory if it does not exist
         os.makedirs(myPath, exist_ok=True)
+
         # Return the path to the user settings directory
         return myPath
 
@@ -153,6 +155,8 @@ class LaUtils:
         os.makedirs(myPath, exist_ok=True)
         return myPath
 
+        from PyQt5.QtCore import QDir
+
     @staticmethod
     def getAvailableAnimals() -> Dict[str, LaAnimal]:
         """
@@ -163,18 +167,18 @@ class LaUtils:
         """
         myMap = {}
         myDirectory = QDir(LaUtils.userAnimalProfilesDirPath())
-        myList = myDirectory.entryInfoList(QDir.Dirs | QDir.Files | QDir.NoSymLinks)
+        myList = myDirectory.entryInfoList(QDir.Files | QDir.NoSymLinks, QDir.Name)
         for myFileInfo in myList:
             # Ignore directories
             if myFileInfo.fileName() in [".", ".."]:
                 continue
             # if the filename ends in .xml try to load it into our layerSets listing
             if myFileInfo.completeSuffix() == "xml":
-                myAnimal: LaAnimal = LaAnimal()
+                myAnimal = LaAnimal()
                 myAnimal.fromXmlFile(myFileInfo.absoluteFilePath())
                 if myAnimal.name == "":
                     continue
-                myMap[myAnimal.guid()] = myAnimal
+                myMap[myAnimal.guid] = myAnimal
         return myMap
 
     @staticmethod
@@ -188,20 +192,20 @@ class LaUtils:
         :rtype: LaAnimal
         """
         myDirectory = QDir(LaUtils.userAnimalProfilesDirPath())
-        myList = myDirectory.entryInfoList(QDir.Dirs | QDir.Files | QDir.NoSymLinks)
+        myList = myDirectory.entryInfoList(QDir.Files | QDir.NoSymLinks)
         for myFileInfo in myList:
             # Ignore directories
             if myFileInfo.fileName() in [".", ".."]:
                 continue
             # if the filename ends in .xml try to load it into our layerSets listing
             if myFileInfo.completeSuffix() == "xml":
-                myAnimal: LaAnimal = LaAnimal()
+                myAnimal = LaAnimal()
                 myAnimal.fromXmlFile(myFileInfo.absoluteFilePath())
                 if myAnimal.name == "":
                     continue
                 if myAnimal.guid == theGuid:
                     return myAnimal
-        return LaAnimal()  # Return a blank animal if no match is found
+        return LaAnimal()
 
 
     @staticmethod

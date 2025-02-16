@@ -38,10 +38,11 @@ The class defines several PyQt signals, including:
 The class has several methods, including
     __init__, __del__, __copy__, and __deepcopy__
 """
+
 from typing import Optional, Type
 import warnings
 # laanimal.py
-from PyQt5.QtCore import QObject, pyqtProperty, pyqtSignal, pyqtSlot, Qt, QMetaProperty
+from qgis.PyQt.QtCore import QObject, pyqtProperty, pyqtSignal, pyqtSlot, Qt, QMetaProperty
 from qgis.PyQt.QtXml import QDomDocument
 from la.lib.laserialisable import LaSerialisable
 from la.lib.laguid import LaGuid
@@ -49,7 +50,7 @@ from la.lib.laguid import LaGuid
 from la.lib.la import EnergyType
 # from qgis.PyQt.QtCore import pyqtProperty
 
-class LaAnimal(LaSerialisable, LaGuid):
+class LaAnimal(QObject, LaSerialisable, LaGuid):
     """ This class defines an LaAnimal object (an animal)
 
     Properties:
@@ -79,66 +80,77 @@ class LaAnimal(LaSerialisable, LaGuid):
         @pyqtProperty: defines a property
         @pyqtSignal: defines a signal
         @pyqtSlot: defines a slot
-
     """
-    
 
+     # Correct signal definitions
+    nameChanged = pyqtSignal(str)
+    descriptionChanged = pyqtSignal(str)
+    meatFoodValueChanged = pyqtSignal(int)
+    usableMeatChanged = pyqtSignal(int)
+    killWeightChanged = pyqtSignal(int)
+    growTimeChanged = pyqtSignal(int)
+    deathRateChanged = pyqtSignal(int)
+    feedEnergyTypeChanged = pyqtSignal(str)
+    gestatingChanged = pyqtSignal(int)
+    lactatingChanged = pyqtSignal(int)
+    maintenanceChanged = pyqtSignal(int)
+    juvenileChanged = pyqtSignal(int)
+    sexualMaturityChanged = pyqtSignal(int)
+    breedingExpectancyChanged = pyqtSignal(int)
+    conceptionEfficiencyChanged = pyqtSignal(int)
+    femalesToMalesChanged = pyqtSignal(int)
+    adultWeightChanged = pyqtSignal(int)
+    youngPerBirthChanged = pyqtSignal(int)
+    weaningAgeChanged = pyqtSignal(int)
+    weaningWeightChanged = pyqtSignal(int)
+    gestationTimeChanged = pyqtSignal(int)
+    estrousCycleChanged = pyqtSignal(int)
+    lactationTimeChanged = pyqtSignal(int)
+    milkChanged = pyqtSignal(int)
+    milkGramsPerDayChanged = pyqtSignal(int)
+    milkFoodValueChanged = pyqtSignal(int)
+    fleeceChanged = pyqtSignal(int)
+    fleeceWeightKgChanged = pyqtSignal(int)
+    imageFileChanged = pyqtSignal(str)
 
-    def __init__(self, theAnimal: Optional[Type['LaAnimal']] = None):
-        self._nameChanged = pyqtSignal()
-        self._descriptionChanged = pyqtSignal()
-        self._meatFoodValueChanged = pyqtSignal()
-        self._usableMeatChanged = pyqtSignal()
-        self._killWeightChanged = pyqtSignal()
-        self._growTimeChanged = pyqtSignal()
-        self._deathRateChanged = pyqtSignal()
-        self._feedEnergyTypeChanged = pyqtSignal()
-        self._gestatingChanged = pyqtSignal()
-        self._lactatingChanged = pyqtSignal()
-        self._maintenanceChanged = pyqtSignal()
-        self._juvenileChanged = pyqtSignal()
-        self._sexualMaturityChanged = pyqtSignal()
-        self._breedingExpectancyChanged = pyqtSignal()
-        self._conceptionEfficiencyChanged = pyqtSignal()
-        self._femalesToMalesChanged = pyqtSignal()
-        self._adultWeightChanged = pyqtSignal()
-        self._youngPerBirthChanged = pyqtSignal()
-        self._weaningAgeChanged = pyqtSignal()
-        self._weaningWeightChanged = pyqtSignal()
-        self._gestationTimeChanged = pyqtSignal()
-        self._estrousCycleChanged = pyqtSignal()
-        self._lactationTimeChanged = pyqtSignal()
-        self._milkChanged = pyqtSignal()
-        self._milkGramsPerDayChanged = pyqtSignal()
-        self._milkFoodValueChanged = pyqtSignal()
-        self._fleeceChanged = pyqtSignal()
-        self._fleeceWeightKgChanged = pyqtSignal()
-        self._imageFileChanged = pyqtSignal()
-
+    def __init__(self, theAnimal: Optional[Type['LaAnimal']] = None, parent=None):
+        super().__init__(parent)
         if theAnimal is None:
-            self._guid = LaGuid.setGuid
-            self._name = "No Name Set"
+            self._guid = LaGuid.setGuid(self, None)
+            self._animalName = "No Name Set"
             self._description = "Not Set"
             self._meatFoodValue = 3000
             self._usableMeat = 50
             self._killWeight = 100
             self._growTime = 10
             self._deathRate = 10
-            # self._gestating = 5000
-            # self._lactating = 5000
-            # self._juvenile = 3500
             self._sexualMaturity = 18
             self._breedingExpectancy = 5
+            self._adultWeight = ""
             self._youngPerBirth = 1
             self._weaningAge = 12
             self._weaningWeight = 30
             self._gestationTime = 120
             self._estrousCycle = 21
+            self._feedEnergyType = ""
+            self._gestating = ""
+            self._lactating = ""
+            self._maintenance = ""
+            self._juvenile = ""
+            self._conceptionEfficiency = ""
+            self._femalesToMales = ""
+            self._lactationTime = ""
+            self._milk = ""
+            self._milkGramsPerDay = ""
+            self._milkFoodValue = ""
+            self._fleece = ""
+            self._fleeceWeightKg = ""
+            self._imageFile = ""
         else:
-            self._name = theAnimal.name
+            self._guid = theAnimal.guid
+            self._animalName = theAnimal.animalName
             self._description = theAnimal.description
             self._meatFoodValue = theAnimal.meatFoodValue
-            self._guid = theAnimal.guid
             self._usableMeat = theAnimal.usableMeat
             self._killWeight = theAnimal.killWeight
             self._growTime = theAnimal.growTime
@@ -150,12 +162,12 @@ class LaAnimal(LaSerialisable, LaGuid):
             self._juvenile = theAnimal.juvenile
             self._sexualMaturity = theAnimal.sexualMaturity
             self._breedingExpectancy = theAnimal.breedingExpectancy
-            self._conceptionEfficiency = theAnimal.conceptionEfficiency
-            self._femalesToMales = theAnimal.femalesPerMale
-            self._adultWeight = theAnimal.adultWeight
             self._youngPerBirth = theAnimal.youngPerBirth
             self._weaningAge = theAnimal.weaningAge
             self._weaningWeight = theAnimal.weaningWeight
+            self._conceptionEfficiency = theAnimal.conceptionEfficiency
+            self._femalesToMales = theAnimal.femalesToMales
+            self._adultWeight = theAnimal.adultWeight
             self._gestationTime = theAnimal.gestationTime
             self._estrousCycle = theAnimal.estrousCycle
             self._lactationTime = theAnimal.lactationTime
@@ -166,52 +178,19 @@ class LaAnimal(LaSerialisable, LaGuid):
             self._fleeceWeightKg = theAnimal.fleeceWeightKg
             self._imageFile = theAnimal.imageFile
 
+    @property
+    def guid(self):
+        return self._guid
 
-    # def __eq__(self, theAnimal: 'LaAnimal') -> bool:
-    #     """Compare two LaCrop objects for equality.
-    #     Args:
-    #         theCrop (LaCrop): The LaCrop object to compare against.
-    #     Returns:
-    #         bool: True if the two objects are equal, False otherwise.
-    #     :param theCrop: the crop to compare against
-    #     :paramtype theCrop: LaCrop
-    #     :return: True if the two objects are equal, False otherwise
-    #     :rtype: bool
-    #     """
-    #     return self._name == theAnimal._name and \
-    #        self._description == theAnimal._description and \
-    #        self._guid == theAnimal._guid and \
-    #        self._meatFoodValue == theAnimal._meatFoodValue and \
-    #        self._usableMeat == theAnimal._usableMeat and \
-    #        self._killWeight == theAnimal._killWeight and \
-    #        self._growTime == theAnimal._growTime and \
-    #        self._deathRate == theAnimal._deathRate and \
-    #        self._feedEnergyType == theAnimal._feedEnergyType and \
-    #        self._gestating == theAnimal._gestating and \
-    #        self._lactating == theAnimal._lactating and \
-    #        self._maintenance == theAnimal._maintenance and \
-    #        self._juvenile == theAnimal._juvenile and \
-    #        self._sexualMaturity == theAnimal._sexualMaturity and \
-    #        self._breedingExpectancy == theAnimal._breedingExpectancy and \
-    #        self._youngPerBirth == theAnimal._youngPerBirth and \
-    #        self._weaningAge == theAnimal._weaningAge and \
-    #        self._weaningWeight == theAnimal._weaningWeight and \
-    #        self._conceptionEfficiency == theAnimal._conceptionEfficiency and \
-    #        self._femalesToMales == theAnimal._femalesToMales and \
-    #        self._adultWeight == theAnimal._adultWeight and \
-    #        self._gestationTime == theAnimal._gestationTime and \
-    #        self._estrousCycle == theAnimal._estrousCycle and \
-    #        self._lactationTime == theAnimal._lactationTime and \
-    #        self._milk == theAnimal._milk and \
-    #        self._milkGramsPerDay == theAnimal._milkGramsPerDay and \
-    #        self._milkFoodValue == theAnimal._milkFoodValue and \
-    #        self._fleece == theAnimal._fleece and \
-    #        self._fleeceWeightKg == theAnimal._fleeceWeightKg and \
-    #        self._imageFile == theAnimal._imageFile
+    @guid.setter
+    def guid(self, value):
+        self._guid = value
 
-    def __eq__(self, theAnimal: 'LaAnimal') -> bool:
+    def __eq__(self, other):
+        if not isinstance(other, LaAnimal):
+            return False
         myAttributes = [
-            '_name',                  '_description',     '_guid',
+            '_animalName',            '_description',     '_guid',
             '_meatFoodValue',         '_usableMeat',      '_killWeight',
             '_growTime',              '_deathRate',       '_feedEnergyType',
             '_gestating',             '_lactating',       '_maintenance',
@@ -222,25 +201,16 @@ class LaAnimal(LaSerialisable, LaGuid):
             '_milk',                  '_milkGramsPerDay', '_milkFoodValue',
             '_fleece',                '_fleeceWeightKg',  '_imageFile'
         ]
-        # Initialize a list to store the comparison results
-        myComparisonResults = []
-        # return all(getattr(self, attr) == getattr(theAnimal, attr) for attr in attributes)
-        for attr in myAttributes:
-            # Compare the attribute for self and theAnimal
-            is_equal = getattr(self, attr) == getattr(theAnimal, attr)
-            # Append the result to the list
-            myComparisonResults.append(is_equal)
-        # Return True if all comparisons were True (i.e., all attributes are equal)
-        return all(myComparisonResults)
+        return all(getattr(self, attr) == getattr(other, attr) for attr in myAttributes)
 
     def __del__(self):
         pass
 
     def __copy__(self):
         myNewAnimal: LaAnimal = LaAnimal()
-        myNewAnimal._name = self._name
+        myNewAnimal._animalName = self._animalName
         myNewAnimal._description = self._description
-        myNewAnimal._guid = LaGuid.setGuid # this gets a new guid
+        myNewAnimal._guid = LaGuid.setGuid() # this gets a new guid
         myNewAnimal._meatFoodValue = self._meatFoodValue
         myNewAnimal._usableMeat = self._usableMeat
         myNewAnimal._killWeight = self._killWeight
@@ -270,47 +240,17 @@ class LaAnimal(LaSerialisable, LaGuid):
         myNewAnimal._imageFile = self._imageFile
         return myNewAnimal
 
-    # assign the signals
-    nameChanged = pyqtSignal(str)
-    descriptionChanged = pyqtSignal(str)
-    meatFoodValueChanged = pyqtSignal(int)
-    usableMeatChanged = pyqtSignal(int)
-    killWeightChanged = pyqtSignal(int)
-    growTimeChanged = pyqtSignal(int)
-    deathRateChanged = pyqtSignal(int)
-    feedEnergyTypeChanged = pyqtSignal(EnergyType)
-    gestatingChanged = pyqtSignal(int)
-    lactatingChanged = pyqtSignal(int)
-    maintenanceChanged = pyqtSignal(int)
-    juvenileChanged = pyqtSignal(int)
-    sexualMaturityChanged = pyqtSignal(int)
-    breedingExpectancyChanged = pyqtSignal(int)
-    conceptionEfficiencyChanged = pyqtSignal(int)
-    femalesToMalesChanged = pyqtSignal(int)
-    adultWeightChanged = pyqtSignal(int)
-    youngPerBirthChanged = pyqtSignal(int)
-    weaningAgeChanged = pyqtSignal(int)
-    weaningWeightChanged = pyqtSignal(int)
-    gestationTimeChanged = pyqtSignal(int)
-    estrousCycleChanged = pyqtSignal(int)
-    lactationTimeChanged = pyqtSignal(int)
-    milkChanged = pyqtSignal(int)
-    milkGramsPerDayChanged = pyqtSignal(int)
-    milkFoodValueChanged = pyqtSignal(int)
-    fleeceChanged = pyqtSignal(int)
-    fleeceWeightKgChanged = pyqtSignal(int)
-    imageFileChanged = pyqtSignal(str)
-
-
     @pyqtProperty(str, notify=nameChanged)
-    def name(self): # type: ignore
-        return self._name
+    def animalName(self):
+        return self._animalName
 
-    @name.setter
-    def name(self, name):
-        if self._name != name:
-            self._name = name
-            self._nameChanged.emit(name)
+    @animalName.setter
+    def animalName(self, theAnimalName):
+        if self._animalName != theAnimalName:
+            self._animalName = theAnimalName
+            self.nameChanged.emit(theAnimalName)
+
+
 
     @property
     def description(self):
@@ -320,7 +260,7 @@ class LaAnimal(LaSerialisable, LaGuid):
     def description(self, description):
         if self._description != description:
             self._description = description
-            self._descriptionChanged.emit(description)
+            self.descriptionChanged.emit(description)
 
     @property
     def meatFoodValue(self):
@@ -592,6 +532,16 @@ class LaAnimal(LaSerialisable, LaGuid):
             self._imageFile = imageFile
             self.imageFileChanged.emit(imageFile)
 
+    @pyqtProperty(str, notify=nameChanged)
+    def animalName(self):
+        return self._animalName
+
+    @animalName.setter
+    def animalName(self, theAnimalName):
+        if self._animalName != theAnimalName:
+            self._animalName = theAnimalName
+            self.nameChanged.emit(theAnimalName)
+
 
     def fromXml(self, theXml):
         """
@@ -616,32 +566,38 @@ class LaAnimal(LaSerialisable, LaGuid):
         self.setGuid(myTopElement.attribute("guid"))
         self.name = LaUtils.xmlDecode(myTopElement.firstChildElement("name").text())
         self.description = LaUtils.xmlDecode(myTopElement.firstChildElement("description").text())
-        self.meatFoodValue = int(myTopElement.firstChildElement("meatFoodValue").text())
-        self.usableMeat = int(myTopElement.firstChildElement("usableMeat").text())
-        self.killWeight = int(myTopElement.firstChildElement("killWeight").text())
-        self.adultWeight = int(myTopElement.firstChildElement("adultWeight").text())
-        self.conceptionEfficiency = int(myTopElement.firstChildElement("conceptionEfficiency").text())
-        self.femalesToMales = int(myTopElement.firstChildElement("femalesToMales").text())
-        self.growTime = int(myTopElement.firstChildElement("growTime").text())
-        self.deathRate = int(myTopElement.firstChildElement("deathRate").text())
-        self.gestating = int(myTopElement.firstChildElement("gestating").text())
-        self.lactating = int(myTopElement.firstChildElement("lactating").text())
-        self.maintenance = int(myTopElement.firstChildElement("maintenance").text())
-        self.juvenile = int(myTopElement.firstChildElement("juvenile").text())
-        self.sexualMaturity = int(myTopElement.firstChildElement("sexualMaturity").text())
-        self.breedingExpectancy = int(myTopElement.firstChildElement("breedingExpectancy").text())
-        self.youngPerBirth = int(myTopElement.firstChildElement("youngPerBirth").text())
-        self.weaningAge = int(myTopElement.firstChildElement("weaningAge").text())
-        self.weaningWeight = int(myTopElement.firstChildElement("weaningWeight").text())
-        self.gestationTime = int(myTopElement.firstChildElement("gestationTime").text())
-        self.estrousCycle = int(myTopElement.firstChildElement("estrousCycle").text())
-        self.lactationTime = int(myTopElement.firstChildElement("lactationTime").text())
-        self.milk = int(myTopElement.firstChildElement("milk").text())
-        self.milkGramsPerDay = int(myTopElement.firstChildElement("milkGramsPerDay").text())
-        self.milkFoodValue = int(myTopElement.firstChildElement("milkFoodValue").text())
-        self.fleece = int(myTopElement.firstChildElement("fleece").text())
-        self.fleeceWeightKg = int(myTopElement.firstChildElement("fleeceWeightKg").text())
+
+        def get_int_value(element_name):
+            element_text = myTopElement.firstChildElement(element_name).text()
+            return int(element_text) if element_text else 0
+
+        self.meatFoodValue = get_int_value("meatFoodValue")
+        self.usableMeat = get_int_value("usableMeat")
+        self.killWeight = get_int_value("killWeight")
+        self.adultWeight = get_int_value("adultWeight")
+        self.conceptionEfficiency = get_int_value("conceptionEfficiency")
+        self.femalesToMales = get_int_value("femalesToMales")
+        self.growTime = get_int_value("growTime")
+        self.deathRate = get_int_value("deathRate")
+        self.gestating = get_int_value("gestating")
+        self.lactating = get_int_value("lactating")
+        self.maintenance = get_int_value("maintenance")
+        self.juvenile = get_int_value("juvenile")
+        self.sexualMaturity = get_int_value("sexualMaturity")
+        self.breedingExpectancy = get_int_value("breedingExpectancy")
+        self.youngPerBirth = get_int_value("youngPerBirth")
+        self.weaningAge = get_int_value("weaningAge")
+        self.weaningWeight = get_int_value("weaningWeight")
+        self.gestationTime = get_int_value("gestationTime")
+        self.estrousCycle = get_int_value("estrousCycle")
+        self.lactationTime = get_int_value("lactationTime")
+        self.milk = get_int_value("milk")
+        self.milkGramsPerDay = get_int_value("milkGramsPerDay")
+        self.milkFoodValue = get_int_value("milkFoodValue")
+        self.fleece = get_int_value("fleece")
+        self.fleeceWeightKg = get_int_value("fleeceWeightKg")
         self.imageFile = LaUtils.xmlDecode(myTopElement.firstChildElement("imageFile").text())
+
         # the following is a hack to get around the fact that the feedEnergyType
         # property is an enum, and the enum values are not being saved to the
         # XML file
@@ -668,7 +624,7 @@ class LaAnimal(LaSerialisable, LaGuid):
             The xmlEncode function would replace these characters with their corresponding
             XML entities (&lt;, &gt;, and &amp; respectively).
         """
-        myString += f'  <name>{LaUtils.xmlEncode(self._name)}</name>\n'
+        myString += f'  <name>{LaUtils.xmlEncode(self._animalName)}</name>\n'
         myString += f'  <description>{LaUtils.xmlEncode(self._description)}</description>\n'
         myString += f'  <meatFoodValue>{self._meatFoodValue}</meatFoodValue>\n'
         myString += f'  <usableMeat>{self._usableMeat}</usableMeat>\n'
@@ -751,7 +707,7 @@ class LaAnimal(LaSerialisable, LaGuid):
              The xmlEncode function replaces these characters with their corresponding
             XML entities (&lt;, &gt;, and &amp; respectively).
         """
-        myString += f'name=>{LaUtils.xmlEncode(self._name)}\n'
+        myString += f'name=>{LaUtils.xmlEncode(self._animalName)}\n'
         myString += f'description=>{LaUtils.xmlEncode(self._description)}\n'
         myString += f'meatFoodValue=>{self._meatFoodValue}\n'
         myString += f'usableMeat=>{self._usableMeat}\n'
@@ -793,7 +749,7 @@ class LaAnimal(LaSerialisable, LaGuid):
         -
         """
         from la.lib.lautils import LaUtils # we import this here to avoid a circular import
-        myString = f'<h2>Details for {LaUtils.xmlEncode(self._name)}</h2>'
+        myString = f'<h2>Details for {LaUtils.xmlEncode(self._animalName)}</h2>'
         myString += '<table>'
         myString += f'<tr><td><b>Description:</b></td><td>{self._description}</td></tr>'
         myString += f'<tr><td><b>Meat Food Value:</b></td><td>{self._meatFoodValue}</td></tr>'

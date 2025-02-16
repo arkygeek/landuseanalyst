@@ -1,7 +1,9 @@
+import json
+from typing import Dict, Tuple
 # ladietlabels.py
 from qgis.PyQt.QtCore import QObject, pyqtProperty, pyqtSignal, pyqtSlot, Qt
-from lib.laserialisable import LaSerialisable
-from lib.laguid import LaGuid
+from la.lib.laserialisable import LaSerialisable
+from la.lib.laguid import LaGuid
 from la.lib.la import La
 class LaDietLabels(LaSerialisable, LaGuid):
     def __init__(self):
@@ -21,8 +23,8 @@ class LaDietLabels(LaSerialisable, LaGuid):
         self._kiloCaloriesIndividualAnnual: float = 0.0
         self._megaCaloriesSettlementAnnual: float = 0.0
         self._dairySurplusMCalories: float = 0.0
-        self._cropCalcsReportMap: La.LaReportMap = La.LaReportMap()
-        self._animalCalcsReportMap: La.LaReportMap = La.LaReportMap()
+        self._cropCalcsReportMap: Dict[str, Tuple[str, float]] = {}
+        self._animalCalcsReportMap: Dict[str, Tuple[str, float]] = {}
 
 
     def __del__(self):
@@ -33,6 +35,9 @@ class LaDietLabels(LaSerialisable, LaGuid):
 
     def __deepcopy__(self, memo):
         return LaDietLabels(self)
+
+    cropCalcsReportMapChanged = pyqtSignal(dict)
+    animalCalcsReportMapChanged = pyqtSignal(dict)
 
     @property
     def dairyMCalories(self):
@@ -219,8 +224,7 @@ class LaDietLabels(LaSerialisable, LaGuid):
     kiloCaloriesIndividualAnnualChanged = pyqtSignal(float)
     megaCaloriesSettlementAnnualChanged = pyqtSignal(float)
     dairySurplusMCaloriesChanged = pyqtSignal(float)
-    cropCalcsReportMapChanged = pyqtSignal(La.LaReportMap)
-    animalCalcsReportMapChanged = pyqtSignal(La.LaReportMap)
+
 
 
 """
