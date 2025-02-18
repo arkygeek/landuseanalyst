@@ -19,23 +19,7 @@ class LaFoodSource(LaSerialisable, LaGuid):
     def __deepcopy__(self, memo):
         return LaFoodSource(self)
 
-    def name(self):
-        return self._name
 
-    def description(self):
-        return self._description
-
-    def foodValue(self):
-        return self._foodValue
-
-    def setName(self, name):
-        self._name = name
-
-    def setDescription(self, description):
-        self._description = description
-
-    def setFoodValue(self, foodValue):
-        self._foodValue = foodValue
 
     nameChanged = pyqtSignal(str)
     descriptionChanged = pyqtSignal(str)

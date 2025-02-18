@@ -17,7 +17,7 @@ import random
 import string
 from builtins import dict as Dict
 from builtins import list as List
-from builtins import classmethod
+# from builtins import classmethod
 from typing import Tuple
 
 # Third party imports
@@ -30,8 +30,8 @@ from qgis.PyQt.QtGui import QColor
 # Local application imports
 from la.lib.laanimalparameter import LaAnimalParameter
 from la.lib.laanimal import LaAnimal
-from la.lib.lacrop import LaCrop
 from la.lib.lacropparameter import LaCropParameter
+from la.lib.lacrop import LaCrop
 
 class LaMessageBus(QObject):
     """Super minimal implementation of a message bus.
@@ -165,7 +165,7 @@ class LaUtils:
         :return: A dictionary of available animals.
         :rtype: Dict[str, LaAnimal]
         """
-        myMap = {}
+        myAnimalsMap = {}
         myDirectory = QDir(LaUtils.userAnimalProfilesDirPath())
         myList = myDirectory.entryInfoList(QDir.Files | QDir.NoSymLinks, QDir.Name)
         for myFileInfo in myList:
@@ -178,8 +178,8 @@ class LaUtils:
                 myAnimal.fromXmlFile(myFileInfo.absoluteFilePath())
                 if myAnimal.name == "":
                     continue
-                myMap[myAnimal.guid] = myAnimal
-        return myMap
+                myAnimalsMap[myAnimal.guid] = myAnimal
+        return myAnimalsMap
 
     @staticmethod
     def getAnimal(theGuid: str) -> LaAnimal:
@@ -210,52 +210,15 @@ class LaUtils:
 
     @staticmethod
     def getAvailableCrops() -> Dict[str, LaCrop]:
-        """Returns a dict of available crops; keys: crop GUIDs, values: LaCrop objects
-
-            :return: A dictionary of available crops.
-            :rtype: Dict[str, LaCrop]
-
-            This function, getAvailableCrops(), is part of the LaUtils class. It returns a
-            dictionary of available crops. The dictionary's keys are the GUIDs of the crops,
-            and the values are the LaCrop objects themselves.
-
-            Here's a step-by-step explanation of what the function does:
-
-            1. It creates an empty dictionary named myMap to store the available crops.
-            2. It creates a QDir object named myDirectory that represents the directory
-                where the user's crop profiles are stored.
-            3. It gets a list of QFileInfo objects representing the entries in myDirectory
-                and stores this list in myList.
-            4. It then loops over each entry in myList.
-            5. For each entry, it checks if the entry is a directory (by checking if the
-                filename is "." or ".."). If it is, it skips to the next iteration of the loop.
-            6. If the entry is not a directory, it checks if the entry is an XML file (by
-                checking if the file's suffix is "xml"). If it's not an XML file, it skips to
-                the next iteration of the loop.
-            7. If the entry is an XML file, it creates a new LaCrop object named myCrop and
-                attempts to load the crop data from the XML file.
-            8. If the crop's name is empty, it skips to the next iteration of the loop.
-            9. If the crop's name is not empty, it adds the crop to myMap, using the crop's
-                GUID as the key and the LaCrop object as the value.
-            10. After it has looped over all the entries in myList, it returns myMap.
-
-            This function is used to load all the available crops from the user's crop
-            profiles directory. Each crop is represented by an XML file in this directory.
-
-            NOTE please ensure the following:
-
-            - LaCrop class has a method fromXmlFile() that correctly parses an XML
-                file and populates the LaCrop object.
-            - LaCrop class has methods guid() and name() to get the GUID and name of the crop.
-            - LaUtils class has a method userCropProfilesDirPath() that returns the
-                correct directory path.
-            - QDir and QFileInfo classes are correctly imported from PyQt5.QtCore.
-            - The XML files in the directory are well-formed and contain all the
-                necessary information for creating LaCrop objects.
         """
-        myMap = {}
+        Returns a dictionary of available crops.
+        The keys are the GUIDs of the crops, and the values are the crop objects.
+        :return: A dictionary of available crops.
+        :rtype: Dict[str, LaCrop]
+        """
+        myCropsMap = {}
         myDirectory = QDir(LaUtils.userCropProfilesDirPath())
-        myList: List = myDirectory.entryInfoList(QDir.Dirs | QDir.Files | QDir.NoSymLinks)
+        myList = myDirectory.entryInfoList(QDir.Files | QDir.NoSymLinks, QDir.Name)
         for myFileInfo in myList:
             # Ignore directories
             if myFileInfo.fileName() in [".", ".."]:
@@ -264,25 +227,23 @@ class LaUtils:
             if myFileInfo.completeSuffix() == "xml":
                 myCrop = LaCrop()
                 myCrop.fromXmlFile(myFileInfo.absoluteFilePath())
-                if myCrop.name() == "":
+                if myCrop.name == "":
                     continue
-                myMap[myCrop.guid()] = myCrop
-        return myMap
+                myCropsMap[myCrop.guid] = myCrop
+        return myCropsMap
 
     @staticmethod
-    def getCrop(
-            theGuid: str
-        ) -> LaCrop:
-        """ This method searches for a crop with the specified GUID in the user's crop profiles directory.
-            If a matching crop is found, it is returned as a LaCrop object. Otherwise, a blank LaCrop object is returned.
-            :param theGuid: The GUID of the crop to search for.
-            :type theGuid: str
-            :return: The LaCrop object with the specified GUID, or a blank LaCrop object if no match is found.
-            :rtype: LaCrop
+    def getCrop(theGuid: str) -> LaCrop:
         """
-        myUserCropProfilesDirPath = LaUtils.userCropProfilesDirPath()
-        myDirectory = QDir(myUserCropProfilesDirPath)
-        myList = myDirectory.entryInfoList(QDir.Dirs | QDir.Files | QDir.NoSymLinks)
+        Returns a crop object with the given GUID.
+        If no such crop exists, returns a blank crop.
+        :param theGuid: The GUID of the crop to return.
+        :type theGuid: str
+        :return: A crop object.
+        :rtype: LaCrop
+        """
+        myDirectory = QDir(LaUtils.userCropProfilesDirPath())
+        myList = myDirectory.entryInfoList(QDir.Files | QDir.NoSymLinks)
         for myFileInfo in myList:
             # Ignore directories
             if myFileInfo.fileName() in [".", ".."]:
@@ -291,11 +252,11 @@ class LaUtils:
             if myFileInfo.completeSuffix() == "xml":
                 myCrop = LaCrop()
                 myCrop.fromXmlFile(myFileInfo.absoluteFilePath())
-                if myCrop.name() == "":
+                if myCrop.name == "":
                     continue
-                if myCrop.guid() == theGuid:
+                if myCrop.guid == theGuid:
                     return myCrop
-        return LaCrop()  # Return a blank crop if no match is found
+        return LaCrop()
 
     @staticmethod
     def userConversionTablesDirPath(

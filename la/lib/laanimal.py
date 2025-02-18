@@ -42,7 +42,7 @@ The class has several methods, including
 from typing import Optional, Type
 import warnings
 # laanimal.py
-from qgis.PyQt.QtCore import QObject, pyqtProperty, pyqtSignal, pyqtSlot, Qt, QMetaProperty
+from qgis.PyQt.QtCore import QObject, pyqtProperty, pyqtSignal, pyqtSlot
 from qgis.PyQt.QtXml import QDomDocument
 from la.lib.laserialisable import LaSerialisable
 from la.lib.laguid import LaGuid
@@ -148,7 +148,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
             self._imageFile = ""
         else:
             self._guid = theAnimal.guid
-            self._animalName = theAnimal.animalName
+            self._animalName = theAnimal.name
             self._description = theAnimal.description
             self._meatFoodValue = theAnimal.meatFoodValue
             self._usableMeat = theAnimal.usableMeat
@@ -533,17 +533,17 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
             self.imageFileChanged.emit(imageFile)
 
     @pyqtProperty(str, notify=nameChanged)
-    def animalName(self):
+    def name(self):
         return self._animalName
 
-    @animalName.setter
-    def animalName(self, theAnimalName):
+    @name.setter
+    def name(self, theAnimalName):
         if self._animalName != theAnimalName:
             self._animalName = theAnimalName
             self.nameChanged.emit(theAnimalName)
 
 
-    def fromXml(self, theXml):
+    def fromXml(self, theXml: str) -> bool:
         """
         Parses an XML string and sets the properties of the animal object accordingly.
 
@@ -560,42 +560,43 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
 
         # gracefully handle the case where the top element is null
         if myTopElement.isNull():
-            warnings.warn("Failed to parse XML: myTopElement is null. The XML element could not be found or parsed.")
+            warnings.warn("Failed to parse XML: myTopElement is null. The XML \
+                element could not be found or parsed.")
             return False
 
         self.setGuid(myTopElement.attribute("guid"))
         self.name = LaUtils.xmlDecode(myTopElement.firstChildElement("name").text())
         self.description = LaUtils.xmlDecode(myTopElement.firstChildElement("description").text())
 
-        def get_int_value(element_name):
-            element_text = myTopElement.firstChildElement(element_name).text()
-            return int(element_text) if element_text else 0
+        def getIntValue(theElementName: str) -> int:
+            myElementText: int = myTopElement.firstChildElement(theElementName).text()
+            return int(myElementText) if myElementText else 0
 
-        self.meatFoodValue = get_int_value("meatFoodValue")
-        self.usableMeat = get_int_value("usableMeat")
-        self.killWeight = get_int_value("killWeight")
-        self.adultWeight = get_int_value("adultWeight")
-        self.conceptionEfficiency = get_int_value("conceptionEfficiency")
-        self.femalesToMales = get_int_value("femalesToMales")
-        self.growTime = get_int_value("growTime")
-        self.deathRate = get_int_value("deathRate")
-        self.gestating = get_int_value("gestating")
-        self.lactating = get_int_value("lactating")
-        self.maintenance = get_int_value("maintenance")
-        self.juvenile = get_int_value("juvenile")
-        self.sexualMaturity = get_int_value("sexualMaturity")
-        self.breedingExpectancy = get_int_value("breedingExpectancy")
-        self.youngPerBirth = get_int_value("youngPerBirth")
-        self.weaningAge = get_int_value("weaningAge")
-        self.weaningWeight = get_int_value("weaningWeight")
-        self.gestationTime = get_int_value("gestationTime")
-        self.estrousCycle = get_int_value("estrousCycle")
-        self.lactationTime = get_int_value("lactationTime")
-        self.milk = get_int_value("milk")
-        self.milkGramsPerDay = get_int_value("milkGramsPerDay")
-        self.milkFoodValue = get_int_value("milkFoodValue")
-        self.fleece = get_int_value("fleece")
-        self.fleeceWeightKg = get_int_value("fleeceWeightKg")
+        self.meatFoodValue = getIntValue("meatFoodValue")
+        self.usableMeat = getIntValue("usableMeat")
+        self.killWeight = getIntValue("killWeight")
+        self.adultWeight = getIntValue("adultWeight")
+        self.conceptionEfficiency = getIntValue("conceptionEfficiency")
+        self.femalesToMales = getIntValue("femalesToMales")
+        self.growTime = getIntValue("growTime")
+        self.deathRate = getIntValue("deathRate")
+        self.gestating = getIntValue("gestating")
+        self.lactating = getIntValue("lactating")
+        self.maintenance = getIntValue("maintenance")
+        self.juvenile = getIntValue("juvenile")
+        self.sexualMaturity = getIntValue("sexualMaturity")
+        self.breedingExpectancy = getIntValue("breedingExpectancy")
+        self.youngPerBirth = getIntValue("youngPerBirth")
+        self.weaningAge = getIntValue("weaningAge")
+        self.weaningWeight = getIntValue("weaningWeight")
+        self.gestationTime = getIntValue("gestationTime")
+        self.estrousCycle = getIntValue("estrousCycle")
+        self.lactationTime = getIntValue("lactationTime")
+        self.milk = getIntValue("milk")
+        self.milkGramsPerDay = getIntValue("milkGramsPerDay")
+        self.milkFoodValue = getIntValue("milkFoodValue")
+        self.fleece = getIntValue("fleece")
+        self.fleeceWeightKg = getIntValue("fleeceWeightKg")
         self.imageFile = LaUtils.xmlDecode(myTopElement.firstChildElement("imageFile").text())
 
         # the following is a hack to get around the fact that the feedEnergyType
@@ -612,7 +613,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
 
     def toXml(self) -> str:
         from la.lib.lautils import LaUtils # we import this here to avoid a circular import
-        myString = f'<animal guid="{self.guid()}">\n'
+        myString = f'<animal guid="{self.guid}">\n'
         """ NOTE:
             The LaUtils.xmlEncode function is likely used here to escape special characters that
             have specific meanings in XML. This is done to ensure that the _name value can be safely

@@ -10,7 +10,7 @@ class LaGuid:
     - setGuid: Sets the GUID value.
     """
     def __init__(self):
-        self._guid = QUuid.createUuid().toString(QUuid.StringFormat.WithoutBraces)
+        self._guid = QUuid.createUuid().toString(QUuid.Id128)
 
     def guid(self) -> str:
         """
@@ -23,6 +23,6 @@ class LaGuid:
         Sets the GUID value.
         """
         if theGuid is None:
-            self._guid = QUuid.createUuid().toString(QUuid.StringFormat.WithoutBraces)
+            self._guid = QUuid.createUuid().toString(QUuid.Id128)
         else:
             self._guid = theGuid
