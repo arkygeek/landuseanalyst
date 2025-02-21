@@ -13,6 +13,7 @@ Date created: [Date]
 import os
 import sys
 import shutil
+import uuid
 import random
 import string
 from builtins import dict as Dict
@@ -21,7 +22,7 @@ from builtins import list as List
 from typing import Tuple
 
 # Third party imports
-from qgis.PyQt .QtWidgets import (
+from qgis.PyQt.QtWidgets import (
     QMessageBox, QColorDialog, QInputDialog, QFileDialog, QWidget)
 from qgis.PyQt.QtCore import (
     QFile, QTextStream, QObject, QDir, QSettings, QFileInfo, QObject, pyqtSignal)
@@ -96,6 +97,7 @@ class LaUtils:
         openGraphicFile: Opens a graphic file.
         saveFile: Saves a file.
     """
+    # from la.lib.laanimalparameter import LaAnimalParameter
 
     @staticmethod
     def userSettingsDirPath() -> str:
@@ -107,14 +109,14 @@ class LaUtils:
         """
         # Get the user settings directory path from QSettings
         mySettings = QSettings()
-        myPath = mySettings.value("dataDirs/dataDir", os.path.expanduser("~/.landuseAnalyst/"))
+        myPath = mySettings.value("dataDirs/dataDir", QDir.homePath() + "/.landuseAnalyst/")
 
         # Ensure myPath is a string
         if not isinstance(myPath, str):
-            myPath = os.path.expanduser("~/.landuseAnalyst/")
+            myPath = QDir.homePath() + "/.landuseAnalyst/"
 
         # Create the directory if it does not exist
-        os.makedirs(myPath, exist_ok=True)
+        QDir().mkpath(myPath)
 
         # Return the path to the user settings directory
         return myPath
@@ -139,8 +141,8 @@ class LaUtils:
         :return: A string representing the path to the animal profiles directory.
         :rtype: str
         """
-        myPath = os.path.expanduser("~/.landuseAnalyst/animalProfiles")
-        os.makedirs(myPath, exist_ok=True)
+        myPath = QDir.homePath() + "/.landuseAnalyst/animalProfiles/"
+        QDir().mkpath(myPath)
         return myPath
 
     @staticmethod
@@ -151,11 +153,9 @@ class LaUtils:
         :return: A string representing the path to the crop profiles directory.
         :rtype: str
         """
-        myPath = os.path.expanduser("~/.landuseAnalyst/cropProfiles")
-        os.makedirs(myPath, exist_ok=True)
+        myPath = QDir.homePath() + "/.landuseAnalyst/cropProfiles/"
+        QDir().mkpath(myPath)
         return myPath
-
-        from PyQt5.QtCore import QDir
 
     @staticmethod
     def getAvailableAnimals() -> Dict[str, LaAnimal]:
@@ -206,7 +206,6 @@ class LaUtils:
                 if myAnimal.guid == theGuid:
                     return myAnimal
         return LaAnimal()
-
 
     @staticmethod
     def getAvailableCrops() -> Dict[str, LaCrop]:
@@ -267,21 +266,18 @@ class LaUtils:
         :return: The path to the user's conversion tables directory.
         :rtype: str
         """
-        myPath = os.path.expanduser("~/.landuseAnalyst/conversionTables")
-        os.makedirs(myPath, exist_ok=True) # create directory if it doesn't exist
+        myPath = QDir.homePath() + "/.landuseAnalyst/conversionTables/"
+        QDir().mkpath(myPath)
         return myPath
 
+
+
     @staticmethod
-    def userAnimalParameterProfilesDirPath(
-        ) -> str:
-        """
-        Returns the path to the user's animal parameter profiles directory.
-        :return: The path to the user's animal parameter profiles directory.
-        :rtype: str
-        """
-        myPath = os.path.expanduser("~/.landuseAnalyst/animalParameterProfiles")
-        os.makedirs(myPath, exist_ok=True)
-        return myPath
+    def userAnimalParameterProfilesDirPath() -> str:
+        """Returns the path to the user's animal parameter profiles directory, creating it if necessary."""
+        path = QDir.homePath() + "/.landuseAnalyst/animalParameterProfiles/"
+        QDir().mkpath(path)
+        return path
 
     @staticmethod
     def userImagesDirPath() -> str:
@@ -290,8 +286,8 @@ class LaUtils:
         :return: The path to the user's images directory.
         :rtype: str
         """
-        myPath = os.path.expanduser("~/.landuseAnalyst/images")
-        os.makedirs(myPath, exist_ok=True)
+        myPath = QDir.homePath() + "/.landuseAnalyst/images/"
+        QDir().mkpath(myPath)
         return myPath
 
     @staticmethod
@@ -301,8 +297,8 @@ class LaUtils:
         :return: The path to the user's crop parameter profiles directory.
         :rtype: str
         """
-        myPath = os.path.expanduser("~/.landuseAnalyst/cropParameterProfiles")
-        os.makedirs(myPath, exist_ok=True)
+        myPath = QDir.homePath() + "/.landuseAnalyst/cropParameterProfiles/"
+        QDir().mkpath(myPath)
         return myPath
 
     @staticmethod
@@ -336,8 +332,7 @@ class LaUtils:
         return int(myHectares)
 
     @staticmethod
-    def getAvailableAnimalParameters(
-        ) -> Dict[str, LaAnimalParameter]:
+    def getAvailableAnimalParameters(): # -> Dict[str, LaAnimalParameter]:
         """Returns a dictionary of available animal parameters.
 
         This method scans the directory returned by `userCropProfilesDirPath()`
@@ -352,12 +347,13 @@ class LaUtils:
         :return: A dictionary of available animal parameters.
         :rtype: Dict[str, LaAnimalParameter]
         """
-        myMap: Dict[str, LaAnimalParameter] = {}
-        myDirectory: QDir = QDir(LaUtils.userCropProfilesDirPath())
+        # from la.lib.laanimalparameter import LaAnimalParameter
+        myMap = {}
+        myDirectory = QDir(LaUtils.userAnimalParameterProfilesDirPath())
         # In PyQt5, there is no specific QFileInfoList class. Given that the
         # QDir.entryInfoList() method returns a Python list of QFileInfo objects,
         # you only need to import QFileInfo from QtCore
-        myList: List[QFileInfo] = myDirectory.entryInfoList(QDir.Dirs | QDir.Files | QDir.NoSymLinks)
+        myList = myDirectory.entryInfoList(QDir.Dirs | QDir.Files | QDir.NoSymLinks)
 
         for myFileInfo in myList:
             # Ignore directories
@@ -367,49 +363,38 @@ class LaUtils:
             if myFileInfo.completeSuffix() == "xml":
                 myAnimalParameter = LaAnimalParameter()
                 myAnimalParameter.fromXmlFile(myFileInfo.absoluteFilePath())
-                if myAnimalParameter.name() == "":
+                if myAnimalParameter.name == "":
                     continue
-                myMap[myAnimalParameter.guid()] = myAnimalParameter
+                myMap[myAnimalParameter.guid] = myAnimalParameter
         return myMap
 
     @staticmethod
     def getAnimalParameter(theGuid: str) -> LaAnimalParameter:
-        """Returns an animal parameter with the given GUID.
-
-        This method scans the directory returned by `userAnimalParameterProfilesDirPath()`
-        for XML files, each of which is expected to define an animal parameter.
-        Each file is parsed into an `LaAnimalParameter` object. If an animal parameter
-        with a matching GUID is found, it is returned.
-
-        If no animal parameter with the given GUID is found, this method returns a blank
-        `LaAnimalParameter` object.
-
-        Args:
-            theGuid (str): The GUID of the animal parameter to retrieve.
-
-        Returns:
-            LaAnimalParameter: The animal parameter with the given GUID, or a blank
-            `LaAnimalParameter` object if no such animal parameter is found.
-
-        :param theGuid: The GUID of the animal parameter to retrieve.
+        """
+        Returns an animal parameter object with the given GUID.
+        If no such animal parameter exists, returns a blank animal parameter.
+        :param theGuid: The GUID of the animal parameter to return.
         :type theGuid: str
-
-        :return: The animal parameter with the given GUID, or a blank `LaAnimalParameter` object.
+        :return: An animal parameter object.
         :rtype: LaAnimalParameter
         """
-        myDirectory: QDir = QDir(LaUtils.userAnimalParameterProfilesDirPath())
-        myList: List[QFileInfo] = myDirectory.entryInfoList(QDir.Dirs | QDir.Files | QDir.NoSymLinks)
+        # from la.lib.laanimalparameter import LaAnimalParameter  # Move the import here to avoid circular import
+        # myAnimalParameter = LaAnimalParameter()
+        myDirectory = QDir(LaUtils.userAnimalParameterProfilesDirPath())
+        myList = myDirectory.entryInfoList(QDir.Files | QDir.NoSymLinks)
         for myFileInfo in myList:
+            # Ignore directories
             if myFileInfo.fileName() in [".", ".."]:
                 continue
+            # if the filename ends in .xml try to load it into our layerSets listing
             if myFileInfo.completeSuffix() == "xml":
                 myAnimalParameter = LaAnimalParameter()
                 myAnimalParameter.fromXmlFile(myFileInfo.absoluteFilePath())
-                if myAnimalParameter.name() == "":
+                if myAnimalParameter.name == "":
                     continue
-                if myAnimalParameter.guid() == theGuid:
+                if myAnimalParameter.guid == theGuid:
                     return myAnimalParameter
-        return LaAnimalParameter()  # Return a blank one since no match found
+        return LaAnimalParameter()
 
     @staticmethod
     def getAvailableCropParameters() -> Dict[str, LaCropParameter]:
@@ -438,50 +423,31 @@ class LaUtils:
             if myFileInfo.completeSuffix() == "xml":
                 myCropParameter = LaCropParameter()
                 myCropParameter.fromXmlFile(myFileInfo.absoluteFilePath())
-                if myCropParameter.name() == "":
+                if myCropParameter.name == "":
                     continue
-                myMap[myCropParameter.guid()] = myCropParameter
+                myMap[myCropParameter.guid] = myCropParameter
         return myMap
 
     @staticmethod
     def getCropParameter(theGuid: str) -> LaCropParameter:
-        """Returns a crop parameter with the given GUID.
-
-        This method scans the directory returned by `userCropParameterProfilesDirPath()`
-        for XML files, each of which is expected to define a crop parameter.
-        Each file is parsed into an `LaCropParameter` object. If a crop parameter
-        with a matching GUID is found, it is returned.
-
-        If no crop parameter with the given GUID is found, this method returns a blank
-        `LaCropParameter` object.
-
-        Args:
-            theGuid (str): The GUID of the crop parameter to retrieve.
-
-        Returns:
-            LaCropParameter: The crop parameter with the given GUID, or a blank
-            `LaCropParameter` object if no such crop parameter is found.
-
-        :param theGuid: The GUID of the crop parameter to retrieve.
+        """
+        Returns a crop parameter object with the given GUID.
+        If no such crop parameter exists, returns a blank crop parameter.
+        :param theGuid: The GUID of the crop parameter to return.
         :type theGuid: str
-        :return: The crop parameter with the given GUID, or a blank `LaCropParameter` object.
+        :return: A crop parameter object.
         :rtype: LaCropParameter
         """
-        myDirectory: QDir = QDir(LaUtils.userCropParameterProfilesDirPath())
-        myList: List[QFileInfo] = myDirectory.entryInfoList(QDir.Dirs | QDir.Files | QDir.NoSymLinks)
-        for myFileInfo in myList:
-            # Ignore directories
-            if myFileInfo.fileName() in [".", ".."]:
-                continue
-            # if the filename ends in .xml try to load it into our layerSets listing
-            if myFileInfo.completeSuffix() == "xml":
-                myCropParameter = LaCropParameter()
-                myCropParameter.fromXmlFile(myFileInfo.absoluteFilePath())
-                if myCropParameter.name() == "":
-                    continue
-                if myCropParameter.guid() == theGuid:
-                    return myCropParameter
-        return LaCropParameter()  # Return a blank one since no match found
+        from la.lib.lacropparameter import LaCropParameter  # Move the import here to avoid circular import
+        myCropParameter = LaCropParameter()
+        myFilePath = os.path.join(LaUtils.userCropParameterProfilesDirPath(), f"{theGuid}.xml")
+        if os.path.exists(myFilePath):
+            with open(myFilePath, 'r') as myFile:
+                myXmlContent = myFile.read()
+                myCropParameter.fromXml(myXmlContent)
+        if myCropParameter.name == "":
+            return LaCropParameter()
+        return myCropParameter
 
     @staticmethod
     def sortList(theList: List[str]) -> List[str]:
@@ -609,9 +575,9 @@ class LaUtils:
         :return: The encoded string.
         :rtype: str
         """
-        myEncodedString = theString.replace("<", "&lt;")
+        myEncodedString = theString.replace("&", "&amp;")
+        myEncodedString = myEncodedString.replace("<", "&lt;")
         myEncodedString = myEncodedString.replace(">", "&gt;")
-        myEncodedString = myEncodedString.replace("&", "&amp;")
         return myEncodedString
 
     @staticmethod
@@ -739,118 +705,118 @@ class LaUtils:
         """
         theAnimalParameter.save()
 
-    @staticmethod
-    def showInputDialog(theParent: QWidget, theTitle: str, theText: str = "") -> Tuple[str, bool]:
-        """Shows an input dialog and returns the entered text and a boolean indicating whether
-        the OK button was pressed.
+    # @staticmethod
+    # def showInputDialog(theParent: QWidget, theTitle: str, theText: str = "") -> Tuple[str, bool]:
+    #     """Shows an input dialog and returns the entered text and a boolean indicating whether
+    #     the OK button was pressed.
 
-        This method creates a `QInputDialog` with the given parent and title, and an optional
-        initial text value. It sets the input mode to text input, and the OK and Cancel button
-        texts to "OK" and "Cancel", respectively. It then executes the dialog and returns the
-        entered text and a boolean indicating whether the OK button was pressed.
+    #     This method creates a `QInputDialog` with the given parent and title, and an optional
+    #     initial text value. It sets the input mode to text input, and the OK and Cancel button
+    #     texts to "OK" and "Cancel", respectively. It then executes the dialog and returns the
+    #     entered text and a boolean indicating whether the OK button was pressed.
 
-        Args:
-            parent (QWidget): The parent widget of the dialog.
-            title (str): The title of the dialog.
-            text (str, optional): The initial text value of the dialog. Defaults to "".
+    #     Args:
+    #         parent (QWidget): The parent widget of the dialog.
+    #         title (str): The title of the dialog.
+    #         text (str, optional): The initial text value of the dialog. Defaults to "".
 
-        Returns:
-            Tuple[str, bool]: A tuple where the first element is the entered text and the second
-            element is a boolean indicating whether the OK button was pressed.
+    #     Returns:
+    #         Tuple[str, bool]: A tuple where the first element is the entered text and the second
+    #         element is a boolean indicating whether the OK button was pressed.
 
-        :param parent: The parent widget of the dialog.
-        :type parent: QWidget
-        :param title: The title of the dialog.
-        :type title: str
-        :param text: The initial text value of the dialog. Defaults to "".
-        :type text: str
-        :return: A tuple where the first element is the entered text and the second element is a boolean indicating whether the OK button was pressed.
-        :rtype: Tuple[str, bool]
-        """
-        print("showInputDialog")
-        myInputDialog: QInputDialog = QInputDialog(theParent)
-        myInputDialog.setWindowTitle(theTitle)
-        myInputDialog.setTextValue(theText)
-        myInputDialog.setLabelText(theTitle)
-        myInputDialog.setInputMode(QInputDialog.TextInput)
-        myInputDialog.setOkButtonText("OK")
-        myInputDialog.setCancelButtonText("Cancel")
-        if myInputDialog.exec_() == QInputDialog.Accepted:
-            return myInputDialog.textValue(), True
-        else:
-            return "", False
+    #     :param parent: The parent widget of the dialog.
+    #     :type parent: QWidget
+    #     :param title: The title of the dialog.
+    #     :type title: str
+    #     :param text: The initial text value of the dialog. Defaults to "".
+    #     :type text: str
+    #     :return: A tuple where the first element is the entered text and the second element is a boolean indicating whether the OK button was pressed.
+    #     :rtype: Tuple[str, bool]
+    #     """
+    #     print("showInputDialog")
+    #     myInputDialog: QInputDialog = QInputDialog(theParent)
+    #     myInputDialog.setWindowTitle(theTitle)
+    #     myInputDialog.setTextValue(theText)
+    #     myInputDialog.setLabelText(theTitle)
+    #     myInputDialog.setInputMode(QInputDialog.TextInput)
+    #     myInputDialog.setOkButtonText("OK")
+    #     myInputDialog.setCancelButtonText("Cancel")
+    #     if myInputDialog.exec_() == QInputDialog.Accepted:
+    #         return myInputDialog.textValue(), True
+    #     else:
+    #         return "", False
 
-    @staticmethod
-    def showMessageBox(
-            theParent: QWidget,
-            theTitle: str,
-            text: str,
-            theIcon: QMessageBox.Icon = QMessageBox.Information
-        ) -> None:
-        """Shows a message box with the specified title, text, and icon.
+    # @staticmethod
+    # def showMessageBox(
+    #         theParent: QWidget,
+    #         theTitle: str,
+    #         text: str,
+    #         theIcon: QMessageBox.Icon = QMessageBox.Information
+    #     ) -> None:
+    #     """Shows a message box with the specified title, text, and icon.
 
-        This method creates a `QMessageBox` with the given parent, title, text, and icon.
-        It sets the standard buttons to OK and then executes the message box.
+    #     This method creates a `QMessageBox` with the given parent, title, text, and icon.
+    #     It sets the standard buttons to OK and then executes the message box.
 
-        Args:
-            theParent (QWidget): The parent widget of the message box.
-            ttheTitle (str): The title of the message box.
-            theText (str): The text of the message box.
-            theIcon (QMessageBox.Icon, optional): The icon of the message box. Defaults to QMessageBox.Information.
+    #     Args:
+    #         theParent (QWidget): The parent widget of the message box.
+    #         ttheTitle (str): The title of the message box.
+    #         theText (str): The text of the message box.
+    #         theIcon (QMessageBox.Icon, optional): The icon of the message box. Defaults to QMessageBox.Information.
 
-        :param parent: The parent widget of the message box.
-        :type parent: QWidget
-        :param title: The title of the message box.
-        :type title: str
-        :param text: The text of the message box.
-        :type text: str
-        :param icon: The icon of the message box. Defaults to QMessageBox.Information.
-        :type icon: QMessageBox.Icon
-        """
-        myMessageBox: QMessageBox = QMessageBox(theParent)
-        myMessageBox.setWindowTitle(theTitle)
-        myMessageBox.setText(text)
-        myMessageBox.setIcon(theIcon)
-        myMessageBox.setStandardButtons(QMessageBox.Ok)
-        myMessageBox.exec_()
+    #     :param parent: The parent widget of the message box.
+    #     :type parent: QWidget
+    #     :param title: The title of the message box.
+    #     :type title: str
+    #     :param text: The text of the message box.
+    #     :type text: str
+    #     :param icon: The icon of the message box. Defaults to QMessageBox.Information.
+    #     :type icon: QMessageBox.Icon
+    #     """
+    #     myMessageBox: QMessageBox = QMessageBox(theParent)
+    #     myMessageBox.setWindowTitle(theTitle)
+    #     myMessageBox.setText(text)
+    #     myMessageBox.setIcon(theIcon)
+    #     myMessageBox.setStandardButtons(QMessageBox.Ok)
+    #     myMessageBox.exec_()
 
-    @staticmethod
-    def showColorDialog(
-            theParent: QWidget,
-            theTitle: str,
-            theColor: QColor = QColor()
-        ) -> QColor:
-        """Shows a color dialog and returns the selected color.
+    # @staticmethod
+    # def showColorDialog(
+    #         theParent: QWidget,
+    #         theTitle: str,
+    #         theColor: QColor = QColor()
+    #     ) -> QColor:
+    #     """Shows a color dialog and returns the selected color.
 
-        This method creates a `QColorDialog` with the given parent and title, and an optional
-        initial color. It sets the current color to the given color and then executes the dialog.
-        If the user presses the OK button, it returns the selected color. If the user presses
-        the Cancel button or closes the dialog, it returns the initial color.
+    #     This method creates a `QColorDialog` with the given parent and title, and an optional
+    #     initial color. It sets the current color to the given color and then executes the dialog.
+    #     If the user presses the OK button, it returns the selected color. If the user presses
+    #     the Cancel button or closes the dialog, it returns the initial color.
 
-        Args:
-            theParent (QWidget): The parent widget of the dialog.
-            theTitle (str): The title of the dialog.
-            theColor (QColor, optional): The initial color of the dialog. Defaults to QColor().
+    #     Args:
+    #         theParent (QWidget): The parent widget of the dialog.
+    #         theTitle (str): The title of the dialog.
+    #         theColor (QColor, optional): The initial color of the dialog. Defaults to QColor().
 
-        Returns:
-            QColor: The selected color if the OK button was pressed, otherwise the initial color.
+    #     Returns:
+    #         QColor: The selected color if the OK button was pressed, otherwise the initial color.
 
-        :param theParent: The parent widget of the dialog.
-        :type theParent: QWidget
-        :param theTitle: The title of the dialog.
-        :type theTitle: str
-        :param theColor: The initial color of the dialog. Defaults to QColor().
-        :type theColor: QColor
-        :return: The selected color if the OK button was pressed, otherwise the initial color.
-        :rtype: QColor
-        """
-        myColorDialog: QColorDialog = QColorDialog(theParent)
-        myColorDialog.setWindowTitle(theTitle)
-        myColorDialog.setCurrentColor(theColor)
-        if myColorDialog.exec_() == QColorDialog.Accepted:
-            return myColorDialog.selectedColor()
-        else:
-            return theColor
+    #     :param theParent: The parent widget of the dialog.
+    #     :type theParent: QWidget
+    #     :param theTitle: The title of the dialog.
+    #     :type theTitle: str
+    #     :param theColor: The initial color of the dialog. Defaults to QColor().
+    #     :type theColor: QColor
+    #     :return: The selected color if the OK button was pressed, otherwise the initial color.
+    #     :rtype: QColor
+    #     """
+    #     myColorDialog: QColorDialog = QColorDialog(theParent)
+    #     myColorDialog.setWindowTitle(theTitle)
+    #     myColorDialog.setCurrentColor(theColor)
+    #     if myColorDialog.exec_() == QColorDialog.Accepted:
+    #         return myColorDialog.selectedColor()
+    #     else:
+    #         return theColor
 
     @staticmethod
     def generateGuid() -> str:
@@ -866,12 +832,14 @@ class LaUtils:
         :return: The generated GUID.
         :rtype: str
         """
-        myNewGuid: str = ''.join(
-            random.choice(
-                string.ascii_uppercase + string.digits
-            ) for _ in range(16)
-        )
-        return  myNewGuid
+        """Generates a new GUID."""
+        return str(uuid.uuid4())
+        # myNewGuid: str = ''.join(
+        #     random.choice(
+        #         string.ascii_uppercase + string.digits
+        #     ) for _ in range(16)
+        # )
+        # return  myNewGuid
 
     @staticmethod
     def saveToFile(theFilename: str, theData: str) -> None:
@@ -956,22 +924,15 @@ class LaUtils:
         :return: The file path of the copied image file.
         :rtype: str
         """
-        myHomePath: str = os.path.expanduser("~")
-        myFileName: str
-        # Since we're only interested in the file name and not the filter,
-        # we can ignore the second element with _
-        myFileName, _ = QFileDialog.getOpenFileName(
-                            None,
-                            "Choose an image",
-                            myHomePath,
-                            "Images (*.png *.xpm *.jpg)"
-                        )
-        myName: str = os.path.basename(myFileName)
-        myDestinationFilePathName: str = os.path.join(
-                                            LaUtils.userImagesDirPath(),
-                                            myName
-                                        )
-        shutil.copy(myFileName, myDestinationFilePathName)
+        """Prompts the user to choose an image file and copies it to the user's images directory."""
+        myHomePath = QDir.homePath()
+        myFileName, _ = QFileDialog.getOpenFileName(None, "Choose an image", myHomePath, "Images (*.png *.xpm *.jpg)")
+        if not myFileName:
+            return ""
+        fi = QFileInfo(myFileName)
+        myName = fi.fileName()
+        myDestinationFilePathName = LaUtils.userImagesDirPath() + "/" + myName
+        QFile.copy(myFileName, myDestinationFilePathName)
         return myDestinationFilePathName
 
     @staticmethod
@@ -988,15 +949,12 @@ class LaUtils:
         :return: The file path of the chosen file.
         :rtype: str
         """
-        myFileName: str
-        # Since we're only interested in the file name and not the filter,
-        # we can ignore the second element with _
-        myFileName, _ = QFileDialog.getSaveFileName(
-                            None,
-                            "Choose a file name",
-                            LaUtils.userConversionTablesDirPath(),
-                            "*.csv"
-                        )
-        myName: str = os.path.basename(myFileName)
-        myDestinationFilePathName: str = os.path.join(LaUtils.userConversionTablesDirPath(), myName)
+        """Prompts the user to choose a file name and returns the full path to the selected file."""
+        myHomePath = QDir.homePath()
+        myFileName, _ = QFileDialog.getSaveFileName(None, "Choose a file name", LaUtils.userConversionTablesDirPath(), "*.csv")
+        if not myFileName:
+            return ""
+        fi = QFileInfo(myFileName)
+        myName = fi.fileName()
+        myDestinationFilePathName = LaUtils.userConversionTablesDirPath() + "/" + myName
         return myDestinationFilePathName

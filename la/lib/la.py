@@ -1,7 +1,7 @@
 """
 la.py - A QGIS PyQt5 implementation of the La class.
 
-This file contains the La class, which is a PyQt5 implementation of thetoggle
+This file contains the La class, which is a PyQt5 implementation of the
 La class from the original C++ code. The class is responsible for defining
 various enums and typedefs used throughout the simulation.
 
@@ -9,56 +9,29 @@ Author: [Jason Jorgenson]
 Date created: [February 14, 2025]
 """
 
-# from builtins import dict as Dict
 from enum import Enum
 from typing import Dict, Tuple
-
 from la.lib.lafoodsource import LaFoodSource
 
+# Module-level variables
+LaTripleMap: Dict[str, Tuple[bool, str]] = {}
 
-class La:
-    """
-    The La class defines several class-level attributes that are used throughout the code.
+# LaRasterInfo is a tuple of two tuples, each containing two strings.
+# This could represent information about a raster image, such as its dimensions and resolution.
+LaRasterInfo: Tuple[Tuple[str, str], Tuple[str, str]] = (("",""),("",""))
 
-    Attributes:
-    ----------
-    LaTripleMap : Dict[str, Tuple[bool, str]]
-        A dictionary where each key is a string and each value is a tuple.
-        The tuple contains a boolean and a string.
-    LaRasterInfo : Tuple[Tuple[str, str], Tuple[str, str]]
-        A tuple of two tuples, each containing two strings.
-        This could represent information about a raster image, such as its dimensions and resolution.
-    LaFoodSourceMap : Dict[str, LaFoodSource]
-        A dictionary where each key is a string and each value is an instance of LaFoodSource.
-        This could represent a mapping from food source names to food source objects.
-    HerdSize : Tuple[float, float]
-        A tuple of two floats.
-        This could represent the minimum and maximum size of a herd.
-    LaReportMap : Dict[str, Tuple[str, float]]
-        A dictionary where each key is a string and each value is a tuple.
-        The tuple contains a string and a float.
-        This could represent a mapping from report names to report data.
-    """
-    # LaTripleMap is a dictionary where each key is a string and each value is a tuple.
-    # The tuple contains a boolean and a string.
-    LaTripleMap: Dict[str, Tuple[bool, str]] = {}
+# LaFoodSourceMap is a dictionary where each key is a string and each value is an instance of LaFoodSource.
+# This could represent a mapping from food source names to food source objects.
+LaFoodSourceMap: Dict[str, LaFoodSource] = {}
 
-    # LaRasterInfo is a tuple of two tuples, each containing two strings.
-    # This could represent information about a raster image, such as its dimensions and resolution.
-    LaRasterInfo: Tuple[Tuple[str, str], Tuple[str, str]] = (("",""),("",""))
+# HerdSize is a tuple of two floats.
+# This could represent the minimum and maximum size of a herd.
+HerdSize: Tuple[float, float] = (0.0, 0.0)
 
-    # LaFoodSourceMap is a dictionary where each key is a string and each value is an instance of LaFoodSource.
-    # This could represent a mapping from food source names to food source objects.
-    LaFoodSourceMap: Dict[str, LaFoodSource] = {}
-
-    # HerdSize is a tuple of two floats.
-    # This could represent the minimum and maximum size of a herd.
-    HerdSize: Tuple[float, float] = (0.0, 0.0)
-
-    # LaReportMap is a dictionary where each key is a string and each value is a tuple.
-    # The tuple contains a string and a float.
-    # This could represent a mapping from report names to report data.
-    LaReportMap: Dict[str, Tuple[str, float]] = {}
+# LaReportMap is a dictionary where each key is a string and each value is a tuple.
+# The tuple contains a string and a float.
+# This could represent a mapping from report names to report data.
+LaReportMap: Dict[str, Tuple[str, float]] = {}
 
 # Equivalent to enum types
 class Priority(Enum):

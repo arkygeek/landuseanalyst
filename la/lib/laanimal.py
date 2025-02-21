@@ -48,7 +48,6 @@ from la.lib.laserialisable import LaSerialisable
 from la.lib.laguid import LaGuid
 # from la.lib.lautils import  LaUtils, xmlEncode, xmlDecode # moved to method to avoid circular import
 from la.lib.la import EnergyType
-# from qgis.PyQt.QtCore import pyqtProperty
 
 class LaAnimal(QObject, LaSerialisable, LaGuid):
     """ This class defines an LaAnimal object (an animal)
@@ -83,41 +82,41 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
     """
 
      # Correct signal definitions
-    nameChanged = pyqtSignal(str)
-    descriptionChanged = pyqtSignal(str)
-    meatFoodValueChanged = pyqtSignal(int)
-    usableMeatChanged = pyqtSignal(int)
-    killWeightChanged = pyqtSignal(int)
-    growTimeChanged = pyqtSignal(int)
-    deathRateChanged = pyqtSignal(int)
-    feedEnergyTypeChanged = pyqtSignal(str)
-    gestatingChanged = pyqtSignal(int)
-    lactatingChanged = pyqtSignal(int)
-    maintenanceChanged = pyqtSignal(int)
-    juvenileChanged = pyqtSignal(int)
-    sexualMaturityChanged = pyqtSignal(int)
-    breedingExpectancyChanged = pyqtSignal(int)
-    conceptionEfficiencyChanged = pyqtSignal(int)
-    femalesToMalesChanged = pyqtSignal(int)
-    adultWeightChanged = pyqtSignal(int)
-    youngPerBirthChanged = pyqtSignal(int)
-    weaningAgeChanged = pyqtSignal(int)
-    weaningWeightChanged = pyqtSignal(int)
-    gestationTimeChanged = pyqtSignal(int)
-    estrousCycleChanged = pyqtSignal(int)
-    lactationTimeChanged = pyqtSignal(int)
-    milkChanged = pyqtSignal(int)
-    milkGramsPerDayChanged = pyqtSignal(int)
-    milkFoodValueChanged = pyqtSignal(int)
-    fleeceChanged = pyqtSignal(int)
-    fleeceWeightKgChanged = pyqtSignal(int)
-    imageFileChanged = pyqtSignal(str)
+    nameChanged: pyqtSignal = pyqtSignal(str)
+    descriptionChanged: pyqtSignal = pyqtSignal(str)
+    meatFoodValueChanged: pyqtSignal = pyqtSignal(int)
+    usableMeatChanged: pyqtSignal = pyqtSignal(int)
+    killWeightChanged: pyqtSignal = pyqtSignal(int)
+    growTimeChanged: pyqtSignal = pyqtSignal(int)
+    deathRateChanged: pyqtSignal = pyqtSignal(int)
+    feedEnergyTypeChanged: pyqtSignal = pyqtSignal(str)
+    gestatingChanged: pyqtSignal = pyqtSignal(int)
+    lactatingChanged: pyqtSignal = pyqtSignal(int)
+    maintenanceChanged: pyqtSignal = pyqtSignal(int)
+    juvenileChanged: pyqtSignal = pyqtSignal(int)
+    sexualMaturityChanged: pyqtSignal = pyqtSignal(int)
+    breedingExpectancyChanged: pyqtSignal = pyqtSignal(int)
+    conceptionEfficiencyChanged: pyqtSignal = pyqtSignal(int)
+    femalesToMalesChanged: pyqtSignal = pyqtSignal(int)
+    adultWeightChanged: pyqtSignal = pyqtSignal(int)
+    youngPerBirthChanged: pyqtSignal = pyqtSignal(int)
+    weaningAgeChanged: pyqtSignal = pyqtSignal(int)
+    weaningWeightChanged: pyqtSignal = pyqtSignal(int)
+    gestationTimeChanged: pyqtSignal = pyqtSignal(int)
+    estrousCycleChanged: pyqtSignal = pyqtSignal(int)
+    lactationTimeChanged: pyqtSignal = pyqtSignal(int)
+    milkChanged: pyqtSignal = pyqtSignal(int)
+    milkGramsPerDayChanged: pyqtSignal = pyqtSignal(int)
+    milkFoodValueChanged: pyqtSignal = pyqtSignal(int)
+    fleeceChanged: pyqtSignal = pyqtSignal(int)
+    fleeceWeightKgChanged: pyqtSignal = pyqtSignal(int)
+    imageFileChanged: pyqtSignal = pyqtSignal(str)
 
     def __init__(self, theAnimal: Optional[Type['LaAnimal']] = None, parent=None):
         super().__init__(parent)
         if theAnimal is None:
             self._guid = LaGuid.setGuid(self, None)
-            self._animalName = "No Name Set"
+            self._name = "No Name Set"
             self._description = "Not Set"
             self._meatFoodValue = 3000
             self._usableMeat = 50
@@ -148,7 +147,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
             self._imageFile = ""
         else:
             self._guid = theAnimal.guid
-            self._animalName = theAnimal.name
+            self._name = theAnimal.name
             self._description = theAnimal.description
             self._meatFoodValue = theAnimal.meatFoodValue
             self._usableMeat = theAnimal.usableMeat
@@ -178,6 +177,16 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
             self._fleeceWeightKg = theAnimal.fleeceWeightKg
             self._imageFile = theAnimal.imageFile
 
+    @pyqtProperty(str, notify=nameChanged)
+    def name(self):
+        return self._name
+
+    @name.setter
+    def name(self, theAnimalName):
+        if self._name != theAnimalName:
+            self._name = theAnimalName
+            self.nameChanged.emit(theAnimalName)
+
     @property
     def guid(self):
         return self._guid
@@ -190,7 +199,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
         if not isinstance(other, LaAnimal):
             return False
         myAttributes = [
-            '_animalName',            '_description',     '_guid',
+            '_name',                  '_description',     '_guid',
             '_meatFoodValue',         '_usableMeat',      '_killWeight',
             '_growTime',              '_deathRate',       '_feedEnergyType',
             '_gestating',             '_lactating',       '_maintenance',
@@ -208,7 +217,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
 
     def __copy__(self):
         myNewAnimal: LaAnimal = LaAnimal()
-        myNewAnimal._animalName = self._animalName
+        myNewAnimal._name = self._name
         myNewAnimal._description = self._description
         myNewAnimal._guid = LaGuid.setGuid() # this gets a new guid
         myNewAnimal._meatFoodValue = self._meatFoodValue
@@ -239,16 +248,6 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
         myNewAnimal._fleeceWeightKg = self._fleeceWeightKg
         myNewAnimal._imageFile = self._imageFile
         return myNewAnimal
-
-    @pyqtProperty(str, notify=nameChanged)
-    def animalName(self):
-        return self._animalName
-
-    @animalName.setter
-    def animalName(self, theAnimalName):
-        if self._animalName != theAnimalName:
-            self._animalName = theAnimalName
-            self.nameChanged.emit(theAnimalName)
 
 
 
@@ -534,12 +533,12 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
 
     @pyqtProperty(str, notify=nameChanged)
     def name(self):
-        return self._animalName
+        return self._name
 
     @name.setter
     def name(self, theAnimalName):
-        if self._animalName != theAnimalName:
-            self._animalName = theAnimalName
+        if self._name != theAnimalName:
+            self._name = theAnimalName
             self.nameChanged.emit(theAnimalName)
 
 
@@ -625,7 +624,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
             The xmlEncode function would replace these characters with their corresponding
             XML entities (&lt;, &gt;, and &amp; respectively).
         """
-        myString += f'  <name>{LaUtils.xmlEncode(self._animalName)}</name>\n'
+        myString += f'  <name>{LaUtils.xmlEncode(self._name)}</name>\n'
         myString += f'  <description>{LaUtils.xmlEncode(self._description)}</description>\n'
         myString += f'  <meatFoodValue>{self._meatFoodValue}</meatFoodValue>\n'
         myString += f'  <usableMeat>{self._usableMeat}</usableMeat>\n'
@@ -708,7 +707,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
              The xmlEncode function replaces these characters with their corresponding
             XML entities (&lt;, &gt;, and &amp; respectively).
         """
-        myString += f'name=>{LaUtils.xmlEncode(self._animalName)}\n'
+        myString += f'name=>{LaUtils.xmlEncode(self._name)}\n'
         myString += f'description=>{LaUtils.xmlEncode(self._description)}\n'
         myString += f'meatFoodValue=>{self._meatFoodValue}\n'
         myString += f'usableMeat=>{self._usableMeat}\n'
@@ -750,7 +749,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
         -
         """
         from la.lib.lautils import LaUtils # we import this here to avoid a circular import
-        myString = f'<h2>Details for {LaUtils.xmlEncode(self._animalName)}</h2>'
+        myString = f'<h2>Details for {LaUtils.xmlEncode(self._name)}</h2>'
         myString += '<table>'
         myString += f'<tr><td><b>Description:</b></td><td>{self._description}</td></tr>'
         myString += f'<tr><td><b>Meat Food Value:</b></td><td>{self._meatFoodValue}</td></tr>'

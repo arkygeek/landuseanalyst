@@ -1,240 +1,282 @@
-# laanimalparameter.py
-from typing import Optional, Dict, List, Any
-from qgis.PyQt.QtCore import QObject, pyqtProperty, pyqtSignal, pyqtSlot, Qt
+import os
+from typing import Optional, Type
+import warnings
+from qgis.PyQt.QtCore import QObject, pyqtSignal, pyqtProperty
 from qgis.PyQt.QtXml import QDomDocument
 from la.lib.laserialisable import LaSerialisable
 from la.lib.laguid import LaGuid
+# from la.lib.la import AreaUnits
 # from la.lib.lautils import LaUtils
-from la.lib.lafoodsource import LaFoodSource
-from la.lib.la import AreaUnits as LaAreaUnits
-from la.lib.la import EnergyType as LaEnergyType
-from la.lib.la import Priority
 
-class Base(QObject):
-    pass
-class LaAnimalParameter(LaSerialisable, LaGuid):
-    nameChanged: pyqtSignal = pyqtSignal(str)
-    descriptionChanged: pyqtSignal = pyqtSignal()
-    guidChanged: pyqtSignal = pyqtSignal()
-    animalParameterGuidChanged: pyqtSignal = pyqtSignal()
-    percentTameMeatChanged: pyqtSignal = pyqtSignal()
-    valueSpecificGrazingLandChanged: pyqtSignal = pyqtSignal()
-    valueCommonGrazingLandChanged: pyqtSignal = pyqtSignal()
-    areaUnitsChanged: pyqtSignal = pyqtSignal()
-    energyTypeChanged: pyqtSignal = pyqtSignal()
-    fodderUseChanged: pyqtSignal = pyqtSignal()
-    fodderSourceMapChanged: pyqtSignal = pyqtSignal()
-    useSpecificGrazingLandChanged: pyqtSignal = pyqtSignal()
-    useCommonGrazingLandChanged: pyqtSignal = pyqtSignal()
-    fallowUsageChanged: pyqtSignal = pyqtSignal()
-    rasterNameChanged: pyqtSignal = pyqtSignal()
 
-    def __init__(self, theAnimalParameter: Optional[type['LaAnimalParameter']] = None):
+class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
+    # from la.lib.lautils import LaUtils
+    from la.lib.la import AreaUnits
+
+    _instances = []
+
+
+
+    def __init__(self, theAnimalParameter: Optional[Type['LaAnimalParameter']] = None):
         super().__init__()
+        from la.lib.la import AreaUnits
+
+
         if theAnimalParameter is None:
-            self._guid = LaGuid.setGuid
-            self._name = ""
-            self._description = ""
+            self._guid = LaGuid()
+            self._name = "No Name Set"
+            self._description = "Not Set"
+            self._animalGuid = ""
+            self._percentTameMeat = 0.0
+            self._useCommonGrazingLand = False
+            self._useSpecificGrazingLand = False
+            self._valueCommonGrazingLand = 0.0
+            self._valueSpecificGrazingLand = 0.0
+            self._areaUnits = AreaUnits.Dunum
+            self._energyType = ""
+            self._fodderUse = 0.0
+            self._foodSourceMap = ""
+            self._fallowUsage = 0.0
+            self._rasterName = ""
         else:
+            self._guid = theAnimalParameter.guid
             self._name = theAnimalParameter.name
             self._description = theAnimalParameter.description
-            self._guid = theAnimalParameter.guid
             self._animalGuid = theAnimalParameter.animalGuid
             self._percentTameMeat = theAnimalParameter.percentTameMeat
-            self._valueSpecificGrazingLand = theAnimalParameter.valueSpecificGrazingLand
+            self._useCommonGrazingLand = theAnimalParameter.useCommonGrazingLand
+            self._useSpecificGrazingLand = theAnimalParameter.useSpecificGrazingLand
             self._valueCommonGrazingLand = theAnimalParameter.valueCommonGrazingLand
+            self._valueSpecificGrazingLand = theAnimalParameter.valueSpecificGrazingLand
             self._areaUnits = theAnimalParameter.areaUnits
             self._energyType = theAnimalParameter.energyType
             self._fodderUse = theAnimalParameter.fodderUse
             self._foodSourceMap = theAnimalParameter.foodSourceMap
-            self._useSpecificGrazingLand = theAnimalParameter.useSpecificGrazingLand
-            self._useCommonGrazingLand = theAnimalParameter.useCommonGrazingLand
             self._fallowUsage = theAnimalParameter.fallowUsage
             self._rasterName = theAnimalParameter.rasterName
 
+        self.__class__._instances.append(self)
 
-    def __del__(self):
-        pass
 
-    def __copy__(self):
-        myAnimalParameter: LaAnimalParameter = LaAnimalParameter()
-        myAnimalParameter.name = self.name()
-        myAnimalParameter.description = self.description()
-        myAnimalParameter.guid = self.guid()
-        myAnimalParameter.animalGuid = self.animalGuid()
-        myAnimalParameter.percentTameMeat = self.percentTameMeat()
-        myAnimalParameter.valueSpecificGrazingLand = self.valueSpecificGrazingLand()
-        myAnimalParameter.valueCommonGrazingLand = self.valueCommonGrazingLand()
-        myAnimalParameter.areaUnits = self.areaUnits()
-        myAnimalParameter.energyType = self.energyType()
-        myAnimalParameter.fodderUse = self.fodderUse()
-        myAnimalParameter.foodSourceMap = self.foodSourceMap().copy()  # Assuming this is a dictionary
-        # Copy fodder stuff here
-        myAnimalParameter.useSpecificGrazingLand = self.useSpecificGrazingLand()
-        myAnimalParameter.useCommonGrazingLand = self.useCommonGrazingLand()
-        myAnimalParameter.fallowUsage = self.fallowUsage()
-        myAnimalParameter.rasterName = self.rasterName()
-        return myAnimalParameter
 
+    def __eq__(self, other):
+        if not isinstance(other, LaAnimalParameter):
+            return False
+        myAttributes = [
+            '_guid',               '_name',              '_description',
+            '_animalGuid',         '_percentTameMeat',   '_useCommonGrazingLand',
+            '_useSpecificGrazingLand', '_valueCommonGrazingLand', '_valueSpecificGrazingLand',
+            '_areaUnits',          '_energyType',        '_fodderUse',
+            '_foodSourceMap',      '_fallowUsage',       '_rasterName'
+        ]
+        return all(getattr(self, attr) == getattr(other, attr) for attr in myAttributes)
+
+    nameChanged: pyqtSignal = pyqtSignal(str)
+    descriptionChanged: pyqtSignal = pyqtSignal(str)
+    guidChanged: pyqtSignal = pyqtSignal(str)
+    animalGuidChanged: pyqtSignal = pyqtSignal(str)
+    percentTameMeatChanged: pyqtSignal = pyqtSignal(float)
+    useCommonGrazingLandChanged: pyqtSignal = pyqtSignal(bool)
+    useSpecificGrazingLandChanged: pyqtSignal = pyqtSignal(bool)
+    valueCommonGrazingLandChanged: pyqtSignal = pyqtSignal(float)
+    valueSpecificGrazingLandChanged: pyqtSignal = pyqtSignal(float)
+    areaUnitsChanged: pyqtSignal = pyqtSignal(AreaUnits)
+    energyTypeChanged: pyqtSignal = pyqtSignal(str)
+    fodderUseChanged: pyqtSignal = pyqtSignal(float)
+    foodSourceMapChanged: pyqtSignal = pyqtSignal(str)
+    fallowUsageChanged: pyqtSignal = pyqtSignal(float)
+    rasterNameChanged: pyqtSignal = pyqtSignal(str)
+
+
+
+    @classmethod
+    def getInstances(cls):
+        """Returns a list of all instances of LaAnimalParameter."""
+        return cls._instances
+
+    @classmethod
+    def getInstanceByName(cls, name):
+        for instance in cls._instances:
+            if instance._name == name:
+                return instance
+        return None
+
+    def remove(self):
+        """Removes the animal parameter instance."""
+        self.__class__._instances.remove(self)
+
+    def save(self) -> None:
+        """Saves the animal parameter to an XML file.
+
+        This method converts the animal parameter object to an XML string and writes it to a file
+        in the user's animal parameter profiles directory. The file name is based on the GUID of the animal parameter.
+        """
+        from la.lib.lautils import LaUtils
+        myXmlContent = self.toXml()
+        myFilePath = os.path.join(LaUtils.userAnimalParameterProfilesDirPath(), f"{self.guid}.xml")
+        with open(myFilePath, 'w') as myFile:
+            myFile.write(myXmlContent)
 
     @pyqtProperty(str, notify=nameChanged)
     def name(self):
         return self._name
 
     @name.setter
-    def name(self, name):
-        if self._name != name:
-            self._name = name
-            self.nameChanged.emit(name)
-
+    def name(self, theName):
+        if self._name != theName:
+            self._name = theName
+            self.nameChanged.emit(theName)
 
     @pyqtProperty(str, notify=descriptionChanged)
-    def description(self):  # type: ignore
+    def description(self):
         return self._description
 
     @description.setter
-    def description(self, description): # type: ignore
+    def description(self, description):
         if self._description != description:
             self._description = description
             self.descriptionChanged.emit(description)
 
     @pyqtProperty(str, notify=guidChanged)
-    def guid(self):  # type: ignore
+    def guid(self):
         return self._guid
 
     @guid.setter
-    def guid(self, guid): # type: ignore
+    def guid(self, guid):
         if self._guid != guid:
             self._guid = guid
             self.guidChanged.emit(guid)
 
-    @pyqtProperty(str, notify=animalParameterGuidChanged)
-    def animalGuid(self):  # type: ignore
-        return self._animalParameterGuid
+    @pyqtProperty(str, notify=animalGuidChanged)
+    def animalGuid(self):
+        return self._animalGuid
 
     @animalGuid.setter
-    def animalGuid(self, animalGuid): # type: ignore
-        if self._animalParameterGuid != animalGuid:
-            self._animalParameterGuid = animalGuid
-            self.animalParameterGuidChanged.emit(animalGuid)
+    def animalGuid(self, animalGuid):
+        if self._animalGuid != animalGuid:
+            self._animalGuid = animalGuid
+            self.animalGuidChanged.emit(animalGuid)
 
     @pyqtProperty(float, notify=percentTameMeatChanged)
-    def percentTameMeat(self):  # type: ignore
+    def percentTameMeat(self):
         return self._percentTameMeat
 
     @percentTameMeat.setter
-    def percentTameMeat(self, percentTameMeat): # type: ignore
+    def percentTameMeat(self, percentTameMeat):
         if self._percentTameMeat != percentTameMeat:
             self._percentTameMeat = percentTameMeat
             self.percentTameMeatChanged.emit(percentTameMeat)
 
-    @pyqtProperty(int, notify=valueSpecificGrazingLandChanged)
-    def valueSpecificGrazingLand(self):  # type: ignore
-        return self._valueSpecificGrazingLand
-
-    @valueSpecificGrazingLand.setter
-    def valueSpecificGrazingLand(self, valueSpecificGrazingLand): # type: ignore
-        if self._valueSpecificGrazingLand != valueSpecificGrazingLand:
-            self._valueSpecificGrazingLand = valueSpecificGrazingLand
-            self.valueSpecificGrazingLandChanged.emit(valueSpecificGrazingLand)
-
-    @pyqtProperty(int, notify=valueCommonGrazingLandChanged)
-    def valueCommonGrazingLand(self):  # type: ignore
-        return self._valueCommonGrazingLand
-
-    @valueCommonGrazingLand.setter
-    def valueCommonGrazingLand(self, valueCommonGrazingLand): # type: ignore
-        if self._valueCommonGrazingLand != valueCommonGrazingLand:
-            self._valueCommonGrazingLand = valueCommonGrazingLand
-            self.valueCommonGrazingLandChanged.emit(valueCommonGrazingLand)
-
-    @pyqtProperty(int, notify=areaUnitsChanged)
-    def areaUnits(self):  # type: ignore
-        return self._areaUnits
-
-    @areaUnits.setter
-    def areaUnits(self, areaUnits): # type: ignore
-        if self._areaUnits != areaUnits:
-            self._areaUnits = areaUnits
-            self.areaUnitsChanged.emit(areaUnits)
-
-    @pyqtProperty(int, notify=energyTypeChanged)
-    def energyType(self):  # type: ignore
-        return self._energyType
-
-    @energyType.setter
-    def energyType(self, energyType): # type: ignore
-        if self._energyType != energyType:
-            self._energyType = energyType
-            self.energyTypeChanged.emit(energyType)
-
-    @pyqtProperty(int, notify=fodderUseChanged)
-    def fodderUse(self):  # type: ignore
-        return self._fodderUse
-
-    @fodderUse.setter
-    def fodderUse(self, fodderUse): # type: ignore
-        if self._fodderUse != fodderUse:
-            self._fodderUse = fodderUse
-            self.fodderUseChanged.emit(fodderUse)
-
-    @pyqtProperty(dict, notify=fodderSourceMapChanged)
-    def foodSourceMap(self):  # type: ignore
-        return self._foodSourceMap
-
-    @foodSourceMap.setter
-    def foodSourceMap(self, foodSourceMap): # type: ignore
-        if self._foodSourceMap != foodSourceMap:
-            self._foodSourceMap = foodSourceMap
-            self.fodderSourceMapChanged.emit(foodSourceMap)
-
-    @pyqtProperty(int, notify=useSpecificGrazingLandChanged)
-    def useSpecificGrazingLand(self):  # type: ignore
-        return self._useSpecificGrazingLand
-
-    @useSpecificGrazingLand.setter
-    def useSpecificGrazingLand(self, useSpecificGrazingLand): # type: ignore
-        if self._useSpecificGrazingLand != useSpecificGrazingLand:
-            self._useSpecificGrazingLand = useSpecificGrazingLand
-            self.useSpecificGrazingLandChanged.emit(useSpecificGrazingLand)
-
-    @pyqtProperty(int, notify=useCommonGrazingLandChanged)
-    def useCommonGrazingLand(self):  # type: ignore
+    @pyqtProperty(bool, notify=useCommonGrazingLandChanged)
+    def useCommonGrazingLand(self):
         return self._useCommonGrazingLand
 
     @useCommonGrazingLand.setter
-    def useCommonGrazingLand(self, useCommonGrazingLand): # type: ignore
+    def useCommonGrazingLand(self, useCommonGrazingLand):
         if self._useCommonGrazingLand != useCommonGrazingLand:
             self._useCommonGrazingLand = useCommonGrazingLand
             self.useCommonGrazingLandChanged.emit(useCommonGrazingLand)
 
-    @pyqtProperty(int, notify=fallowUsageChanged)
-    def fallowUsage(self):  # type: ignore
+    @pyqtProperty(bool, notify=useSpecificGrazingLandChanged)
+    def useSpecificGrazingLand(self):
+        return self._useSpecificGrazingLand
+
+    @useSpecificGrazingLand.setter
+    def useSpecificGrazingLand(self, useSpecificGrazingLand):
+        if self._useSpecificGrazingLand != useSpecificGrazingLand:
+            self._useSpecificGrazingLand = useSpecificGrazingLand
+            self.useSpecificGrazingLandChanged.emit(useSpecificGrazingLand)
+
+    @pyqtProperty(float, notify=valueCommonGrazingLandChanged)
+    def valueCommonGrazingLand(self):
+        return self._valueCommonGrazingLand
+
+    @valueCommonGrazingLand.setter
+    def valueCommonGrazingLand(self, valueCommonGrazingLand):
+        if self._valueCommonGrazingLand != valueCommonGrazingLand:
+            self._valueCommonGrazingLand = valueCommonGrazingLand
+            self.valueCommonGrazingLandChanged.emit(valueCommonGrazingLand)
+
+    @pyqtProperty(float, notify=valueSpecificGrazingLandChanged)
+    def valueSpecificGrazingLand(self):
+        return self._valueSpecificGrazingLand
+
+    @valueSpecificGrazingLand.setter
+    def valueSpecificGrazingLand(self, valueSpecificGrazingLand):
+        if self._valueSpecificGrazingLand != valueSpecificGrazingLand:
+            self._valueSpecificGrazingLand = valueSpecificGrazingLand
+            self.valueSpecificGrazingLandChanged.emit(valueSpecificGrazingLand)
+
+    @pyqtProperty(AreaUnits, notify=areaUnitsChanged)
+    def areaUnits(self):
+        return self._areaUnits
+
+    @areaUnits.setter
+    def areaUnits(self, areaUnits):
+        if self._areaUnits != areaUnits:
+            self._areaUnits = areaUnits
+            self.areaUnitsChanged.emit(areaUnits)
+
+    @pyqtProperty(str, notify=energyTypeChanged)
+    def energyType(self):
+        return self._energyType
+
+    @energyType.setter
+    def energyType(self, energyType):
+        if self._energyType != energyType:
+            self._energyType = energyType
+            self.energyTypeChanged.emit(energyType)
+
+    @pyqtProperty(float, notify=fodderUseChanged)
+    def fodderUse(self):
+        return self._fodderUse
+
+    @fodderUse.setter
+    def fodderUse(self, fodderUse):
+        if self._fodderUse != fodderUse:
+            self._fodderUse = fodderUse
+            self.fodderUseChanged.emit(fodderUse)
+
+    @pyqtProperty(str, notify=foodSourceMapChanged)
+    def foodSourceMap(self):
+        return self._foodSourceMap
+
+    @foodSourceMap.setter
+    def foodSourceMap(self, foodSourceMap):
+        if self._foodSourceMap != foodSourceMap:
+            self._foodSourceMap = foodSourceMap
+            self.foodSourceMapChanged.emit(foodSourceMap)
+
+    @pyqtProperty(float, notify=fallowUsageChanged)
+    def fallowUsage(self):
         return self._fallowUsage
 
     @fallowUsage.setter
-    def fallowUsage(self, fallowUsage): # type: ignore
+    def fallowUsage(self, fallowUsage):
         if self._fallowUsage != fallowUsage:
             self._fallowUsage = fallowUsage
             self.fallowUsageChanged.emit(fallowUsage)
 
     @pyqtProperty(str, notify=rasterNameChanged)
-    def rasterName(self):  # type: ignore
+    def rasterName(self):
         return self._rasterName
 
     @rasterName.setter
-    def rasterName(self, rasterName): # type: ignore
+    def rasterName(self, rasterName):
         if self._rasterName != rasterName:
             self._rasterName = rasterName
             self.rasterNameChanged.emit(rasterName)
 
-    def fromXml(self, theXml):
-        from la.lib.lautils import LaUtils #, xmlEncode, xmlDecode
+    def fromXml(self, theXml: str) -> bool:
+        from la.lib.lautils import LaUtils
         myDocument = QDomDocument("mydocument")
         myDocument.setContent(theXml)
         myTopElement = myDocument.firstChildElement("animalParameter")
+        # gracefully handle the case where the top element is null
         if myTopElement.isNull():
-            pass  # TODO - just make this a warning
+            warnings.warn("Failed to parse XML: myTopElement is null. The XML \
+                element could not be found or parsed.")
+            return False
         self.setGuid(myTopElement.attribute("guid"))
         self.name = LaUtils.xmlDecode(myTopElement.firstChildElement("name").text())
         self.description = LaUtils.xmlDecode(myTopElement.firstChildElement("description").text())
@@ -242,152 +284,51 @@ class LaAnimalParameter(LaSerialisable, LaGuid):
         self.percentTameMeat = float(myTopElement.firstChildElement("percentTameMeat").text())
         self.useCommonGrazingLand = int(myTopElement.firstChildElement("useCommonGrazingLand").text())
         self.useSpecificGrazingLand = int(myTopElement.firstChildElement("useSpecificGrazingLand").text())
-        self.valueCommonGrazingLand = int(myTopElement.firstChildElement("foodValueOfCommonGrazingLand").text())
-        self.valueSpecificGrazingLand = int(myTopElement.firstChildElement("foodValueOfSpecificGrazingLand").text())
 
-        myAreaUnits = myTopElement.firstChildElement("areaUnits").text()
-        if myAreaUnits == "Dunum":
-            self.areaUnits = LaAreaUnits.Dunum
-        elif myAreaUnits == "Hectare":
-            self.areaUnits = LaAreaUnits.Hectare
+        valueCommonGrazingLand_text = myTopElement.firstChildElement("valueCommonGrazingLand").text()
+        self.valueCommonGrazingLand = float(valueCommonGrazingLand_text) if valueCommonGrazingLand_text else 0.0
 
-        myEnergyType = myTopElement.firstChildElement("energyType").text()
-        if myEnergyType == "KCalories":
-            self.energyType = LaEnergyType.KCalories
-        elif myEnergyType == "TDN":
-            self.energyType = LaEnergyType.TDN
+        valueSpecificGrazingLand_text = myTopElement.firstChildElement("valueSpecificGrazingLand").text()
+        self.valueSpecificGrazingLand = float(valueSpecificGrazingLand_text) if valueSpecificGrazingLand_text else 0.0
 
-        self.fodderUse = int(myTopElement.firstChildElement("fodderUse").text())
+        my_area_units = myTopElement.firstChildElement("areaUnits").text()
+        # doing area units this way makes the xml files PROFOUNDLY easier to read
+        if my_area_units == "Dunum":
+            self.areaUnits = AreaUnits.Dunum
+        elif my_area_units == "Hectare":
+            self.areaUnits = AreaUnits.Hectare
+        self.energyType = LaUtils.xmlDecode(myTopElement.firstChildElement("energyType").text())
+        self.fodderUse = float(myTopElement.firstChildElement("fodderUse").text())
+        self.foodSourceMap = LaUtils.xmlDecode(myTopElement.firstChildElement("foodSourceMap").text())
 
-        self.foodSourceMap.clear()
-        myFodderCropsList = myDocument.elementsByTagName("fodderCrop")
-        for myCounter in range(myFodderCropsList.size()):
-            myFoodSourceNode = myFodderCropsList.item(myCounter)
-            myFoodSourceElement = myFoodSourceNode.toElement()
-
-            myCropGuid = myFoodSourceElement.firstChildElement("fodderCropGuid").text()
-            myFodderStrawChaff = int(myFoodSourceElement.firstChildElement("fodderStrawChaff").text())
-            myGrain = int(myFoodSourceElement.firstChildElement("fodderGrain").text())
-            myUsed = int(myFoodSourceElement.firstChildElement("fodderUse").text())
-            myDays = int(myFoodSourceElement.firstChildElement("fodderDays").text())
-            myFoodSource = LaFoodSource()
-
-            myFoodSource.setFodder(myFodderStrawChaff)
-            myFoodSource.setGrain(myGrain)
-            myFoodSource.setDays(myDays)
-            myFoodSource.setUsed(myUsed)
-            myFoodSource.setCropGuid(myCropGuid)
-
-            self.foodSourceMap[myCropGuid] = myFoodSource
-
-        myFallowUsage = myTopElement.firstChildElement("fallowUsage").text()
-        if myFallowUsage == "High":
-            self.fallowUsage = Priority.High
-        elif myFallowUsage == "Medium":
-            self.fallowUsage = Priority.Medium
-        elif myFallowUsage == "Low":
-            self.fallowUsage = Priority.Low
-        else:
-            self.fallowUsage = Priority.None_
+        fallowUsage_text = myTopElement.firstChildElement("fallowUsage").text()
+        try:
+            self.fallowUsage = float(fallowUsage_text)
+        except ValueError:
+            self.fallowUsage = 0.0  # or handle it appropriately
 
         self.rasterName = LaUtils.xmlDecode(myTopElement.firstChildElement("rasterName").text())
         return True
 
+
+
     def toXml(self):
         """Converts the LaAnimalParameter object to an XML string."""
-        from la.lib.lautils import LaUtils
-        myName:str = LaUtils.xmlEncode(self.name)
-        myDescription: str = LaUtils.xmlEncode(self.description)
-        myGuid: str = LaUtils.xmlEncode(self.guid())
-        myAnimalGuid: str = LaUtils.xmlEncode(self.animalGuid)
-        myPercentTameMeat: float = self.percentTameMeat
-        myUseCommonGrazingLand: int = self.useCommonGrazingLand
-        myUseSpecificGrazingLand: int = self.useSpecificGrazingLand
-        myValueCommonGrazingLand: int = self.valueCommonGrazingLand
-        myValueSpecificGrazingLand: int = self.valueSpecificGrazingLand
 
-        if self.areaUnits == LaAreaUnits.Dunum:
-            myAreaUnits: str = "Dunum"
-        else:
-            myAreaUnits: str = "Hectare"
-
-        myFodderUse: int = self.fodderUse
-        myFoodSourceMap: Dict[str, LaFoodSource] = self.foodSourceMap
-
-        if self.fallowUsage == Priority.High:
-            myFallowUsage: str = "High"
-        elif self.fallowUsage == Priority.Medium:
-            myFallowUsage: str = "Medium"
-        elif self.fallowUsage == Priority.Low:
-            myFallowUsage: str = "Low"
-        else:
-            myFallowUsage: str = ""
-
-        myRasterName: str = self.rasterName
-
-
-
-        myString = f'<animalParameter guid="{myGuid}">\n'
-        myString += f'  <name>{myName}</name>\n'
-        myString += f'  <description>{myDescription}</description>\n'
-        myString += f'  <animal>{myAnimalGuid}</animal>\n'
-        myString += f'  <percentTameMeat>{myPercentTameMeat}</percentTameMeat>\n'
-        myString += f'  <useCommonGrazingLand>{myUseCommonGrazingLand}</useCommonGrazingLand>\n'
-        myString += f'  <useSpecificGrazingLand>{myUseSpecificGrazingLand}</useSpecificGrazingLand>\n'
-        myString += f'  <foodValueOfCommonGrazingLand>{myValueCommonGrazingLand}</foodValueOfCommonGrazingLand>\n'
-        myString += f'  <foodValueOfSpecificGrazingLand>{myValueSpecificGrazingLand}</foodValueOfSpecificGrazingLand>\n'
-        myString += f'  <areaUnits>{myAreaUnits}</areaUnits>\n'
-        myString += f'  <energyType>{self.energyType}</energyType>\n'
-
-
-        if self.energyType == 'KCalories':
-            myString += '  <energyType>KCalories</energyType>\n'
-        elif self.energyType == 'TDN':
-            myString += '  <energyType>TDN</energyType>\n'
-
+        myString = f'<animalParameter guid="{self.guid}">\n'
+        myString += f'  <name>{LaUtils.xmlEncode(self.name)}</name>\n'
+        myString += f'  <description>{LaUtils.xmlEncode(self.description)}</description>\n'
+        myString += f'  <animal>{LaUtils.xmlEncode(self.animalGuid)}</animal>\n'
+        myString += f'  <percentTameMeat>{self.percentTameMeat}</percentTameMeat>\n'
+        myString += f'  <useCommonGrazingLand>{self.useCommonGrazingLand}</useCommonGrazingLand>\n'
+        myString += f'  <useSpecificGrazingLand>{self.useSpecificGrazingLand}</useSpecificGrazingLand>\n'
+        myString += f'  <valueCommonGrazingLand>{self.valueCommonGrazingLand}</valueCommonGrazingLand>\n'
+        myString += f'  <valueSpecificGrazingLand>{self.valueSpecificGrazingLand}</valueSpecificGrazingLand>\n'
+        myString += f'  <areaUnits>{self.areaUnits}</areaUnits>\n'
+        myString += f'  <energyType>{LaUtils.xmlEncode(self.energyType)}</energyType>\n'
         myString += f'  <fodderUse>{self.fodderUse}</fodderUse>\n'
-
-        if self.fodderUse:
-            myString += '   <fodderCrops>\n'
-            for myGuid, myFoodSource in self.foodSourceMap.items():
-                myFodderStrawChaff = myFoodSource.fodder()
-                myFodderGrain = myFoodSource.grain()
-                myFodderDays = myFoodSource.days()
-                myString += f'    <fodderCrop>\n'
-                myString += f'      <fodderCropGuid>{myGuid}</fodderCropGuid>\n'
-                myString += f'      <fodderStrawChaff>{myFodderStrawChaff}</fodderStrawChaff>\n'
-                myString += f'      <fodderGrain>{myFodderGrain}</fodderGrain>\n'
-                myString += f'      <fodderDays>{myFodderDays}</fodderDays>\n'
-                myString += '    </fodderCrop>\n'
-            myString += '   </fodderCrops>\n'
-        myString += f'  <fallowUsage>{myFallowUsage}</fallowUsage>\n'
-        myString += f'  <rasterName>{myRasterName}</RasterName>\n'
+        myString += f'  <foodSourceMap>{LaUtils.xmlEncode(self.foodSourceMap)}</foodSourceMap>\n'
+        myString += f'  <fallowUsage>{self.fallowUsage}</fallowUsage>\n'
+        myString += f'  <rasterName>{LaUtils.xmlEncode(self.rasterName)}</rasterName>\n'
         myString += '</animalParameter>\n'
         return myString
-
-    # def toXml(self) -> str:
-    #     from la.lib.lautils import LaUtils
-    #     """Converts the LaCropParameter object to an XML string."""
-    #     myUnits = "Dunum" if self._areaUnits == 0 else "Hectare"
-    #     myName: str = self._name
-    #     myDescription: str = self._description
-    #     myGuid: str = self._guid
-    #     myCropGuid: str = self._cropGuid
-    #     myPercentTameMeat: float = self._percentTameMeat
-    #     mySpoilage: int = self._
-    #     myString = f'<cropParameter guid="{self._guid()}">\n'
-    #     myString += f'  <name>{LaUtils.xmlEncode(self._name)}</name>\n'
-    #     myString += f'  <description>{LaUtils.xmlEncode(self._description)}</description>\n'
-    #     myString += f'  <crop>{LaUtils.xmlEncode(self._cropGuid)}</crop>\n'
-    #     myString += f'  <percentTameCrop>{self._percentTameMeat}</percentTameCrop>\n'
-    #     myString += f'  <spoilage>{self.mSpoilage}</spoilage>\n'
-    #     myString += f'  <reseed>{self.mReseed}</reseed>\n'
-    #     myString += f'  <cropRotation>{self.mCropRotation}</cropRotation>\n'
-    #     myString += f'  <fallowRatio>{self.mFallowRatio}</fallowRatio>\n'
-    #     myString += f'  <fallowValue>{self.mFallowValue}</fallowValue>\n'
-    #     myString += f'  <areaUnits>{myUnits}</areaUnits>\n'
-    #     myString += f'  <useCommonLand>{self.mUseCommonLand}</useCommonLand>\n'
-    #     myString += f'  <useSpecificLand>{self.mUseSpecificLand}</useSpecificLand>\n'
-    #     myString += f'  <rasterName>{LaUtils.xmlEncode(self.mRasterName)}</rasterName>\n'
-    #     myString += '</cropParameter>\n'
-    #     return myString

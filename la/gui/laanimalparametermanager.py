@@ -12,9 +12,9 @@ Date created: [12-OCT-2023]
 from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtWidgets import QDialog, QTreeWidgetItem, QSpinBox
 from qgis.PyQt.uic import loadUi
-from lib.laanimalparameter import LaAnimalParameter
-from lib.lautils import LaUtils
-from ui.laanimalparametermanagerbase import LaAnimalParameterManagerBase
+# from la.lib.laanimalparameter import LaAnimalParameter
+from la.lib.lautils import LaUtils
+from la.ui.laanimalparametermanagerbase import LaAnimalParameterManagerBase
 
 
 class LaAnimalParameterManager(QDialog, LaAnimalParameterManagerBase):
@@ -36,15 +36,17 @@ class LaAnimalParameterManager(QDialog, LaAnimalParameterManagerBase):
         Populates the tree widget with animal parameters.
         """
         self.treeWidget.clear()
-        for animalParameter in LaUtils.getAnimalParameters():
+        animalParameters = LaUtils.getAvailableAnimalParameters()
+        for guid, animalParameter in animalParameters.items():
             item = QTreeWidgetItem(self.treeWidget)
-            item.setText(0, animalParameter.getName())
-            item.setText(1, str(animalParameter.getValue()))
+            item.setText(0, animalParameter.name)
+            item.setText(1, str(animalParameter.value))
 
     def addAnimalParameter(self):
         """
         Adds a new animal parameter to the tree widget.
         """
+        from la.lib.laanimalparameter import LaAnimalParameter # import here to avoid circular imports
         name, ok = LaUtils.showInputDialog(self, "Enter the name of the new animal parameter:")
         if ok:
             value, ok = LaUtils.showInputDialog(self, "Enter the value of the new animal parameter:")

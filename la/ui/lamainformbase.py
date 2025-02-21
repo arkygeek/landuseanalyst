@@ -28,24 +28,14 @@ from qgis.PyQt import QtCore
 from qgis.PyQt.QtWidgets import QDialog
 from qgis.PyQt.QtCore import QFile
 from qgis.PyQt.QtCore import QTextStream
+from qgis.PyQt.QtGui import QIcon
 
 import os
 
-# from la.lib.lautils import LaMessageBus, LaUtils
-
-# from la.lib.la import La, LaFoodSource, LandFound, LandBeingGrazed # my own classes
-# from la.ui.laanimalmanagerbase import LaAnimalManagerBase
-# from la.ui.laanimalparametermanagerbase import LaAnimalParameterManagerBase
-# from la.ui.laanimalparameterbase import LaAnimalParameterBase
-# from la.ui.laassemblageconversionbase import laassemblageconversionbase
-# from la.ui.lacropmanagerbase import LaCropManagerBase
-# # from la.ui.lacropparameterbase import LaCropParameterBase
-# from la.ui.lacropparametermanagerbase import LaCropParameterManagerBase
-# from la.ui.laexperimentbase import laexperimentbase
-# from la.ui.lagrassprocessbase import lagrassprocessbase
-# from la.ui.laReportFallow import laReportFallow
-# from la.ui.laReportHerds import laReportHerds
-# from la.ui.laReportTargets import laReportTargets
+from la.lib.lautils import LaUtils
+from la.ui.laanimalparametermanagerbase import LaAnimalParameterManagerBase
+from la.ui.lacropmanagerbase import LaCropManagerBase
+from la.ui.lacropparametermanagerbase import LaCropParameterManagerBase
 
 # endregion
 
@@ -58,8 +48,6 @@ FORM_CLASS, _ = uic.loadUiType(
 
 
 class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
-    # pass
-
     def __init__(self, parent=None):
         """Constructor for LaMainFormBase (.ui file)"""
         super(LaMainFormBase, self).__init__(parent)
@@ -123,8 +111,8 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         # but probably will use either JSON, or store it in a database
         # The following could possibly come from utils? - JJ
 
-        # loadAnimals()
-        # loadCrops()
+        self.loadAnimals()
+        self.loadCrops()
         # endregion
 
         # region COMBO BOX ITEMS LOADED
@@ -269,12 +257,21 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
     # Set's the model.  All data comes from laMainForm EXCEPT for
     # the map of crops and animals, which are being generated here.
     def setModel(self, *args):
-        from la.lib.la import La
+        from la.lib.la import  AreaUnits
         self.mSelectedCropsMap.clear()
         self.mSelectedAnimalsMap.clear()
-        mySelectedAreaUnit = La.AreaUnits(self.cbAreaUnits.currentText())
+        mySelectedAreaUnit = AreaUnits(self.cbAreaUnits.currentText())
         myCommonRasterValue = int(self.sbCommonRasterValue.value())
 
         # TODO this is quick and dirty
         myAreaUnits = 'Dunum' if mySelectedAreaUnit else 'Hectare'
         print(mySelectedAreaUnit, myAreaUnits, myCommonRasterValue)
+
+
+    def loadAnimals(self):
+        # Implement the logic to load animals
+        pass
+
+    def loadCrops(self):
+        # Implement the logic to load crops
+        pass

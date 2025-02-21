@@ -1,28 +1,27 @@
 # lacropparameter.py
-from typing import Optional, Type
-
-from qgis.PyQt.QtCore import QObject, pyqtSignal, pyqtSlot, Qt
-from qgis.PyQt.QtCore import pyqtSlot, pyqtProperty, pyqtSignal, Qt
+from typing import Optional, Type, Dict
+import warnings
+from qgis.PyQt.QtCore import QObject, pyqtSignal, pyqtSlot, pyqtProperty
 from qgis.PyQt.QtXml import QDomDocument
 from la.lib.laserialisable import LaSerialisable
 from la.lib.laguid import LaGuid
-from la.lib.la import AreaUnits as LaAreaUnits
-#, LaTripleMap, LaRasterInfo, LaFoodSourceMap, HerdSize, LaReportMap
+from la.lib.la import (AreaUnits, LaTripleMap, LaRasterInfo,
+                       LaFoodSourceMap, HerdSize, LaReportMap)
 
 # from la.lib.lautils import LaUtils
 
-class LaCropParameter(LaSerialisable, LaGuid):
-
-    nameChanged: pyqtSignal = pyqtSignal()
-    descriptionChanged: pyqtSignal = pyqtSignal()
-    cropGuidChanged: pyqtSignal = pyqtSignal()
+class LaCropParameter(QObject, LaSerialisable, LaGuid):
+    nameChanged: pyqtSignal = pyqtSignal(str)
+    descriptionChanged: pyqtSignal = pyqtSignal(str)
+    guidChanged: pyqtSignal = pyqtSignal(str)
+    cropGuidChanged: pyqtSignal = pyqtSignal(str)
     percentTameCropChanged: pyqtSignal = pyqtSignal(float)
     spoilageChanged: pyqtSignal = pyqtSignal(float)
     reseedChanged: pyqtSignal = pyqtSignal(float)
     cropRotationChanged: pyqtSignal = pyqtSignal(float)
     fallowRatioChanged: pyqtSignal = pyqtSignal(float)
     fallowValueChanged: pyqtSignal = pyqtSignal(float)
-    areaUnitsChanged: pyqtSignal = pyqtSignal(LaAreaUnits)
+    areaUnitsChanged: pyqtSignal = pyqtSignal(AreaUnits)
     useCommonLandChanged: pyqtSignal = pyqtSignal(bool)
     useSpecificLandChanged: pyqtSignal = pyqtSignal(bool)
     rasterNameChanged: pyqtSignal = pyqtSignal(str)
@@ -39,6 +38,17 @@ class LaCropParameter(LaSerialisable, LaGuid):
             self._guid = LaGuid()
             self._name = "No Name Set"
             self._description = "Not Set"
+            self._cropGuid = ""
+            self._percentTameCrop = 0.0
+            self._spoilage = 0.0
+            self._reseed = 0.0
+            self._cropRotation = 0
+            self._fallowRatio = 0.0
+            self._fallowValue = 0
+            self._areaUnits = AreaUnits.Dunum
+            self._useCommonLand = False
+            self._useSpecificLand = False
+            self._rasterName = ""
         else:
             self._name = theCropParameter.name
             self._description = theCropParameter.description
@@ -55,14 +65,26 @@ class LaCropParameter(LaSerialisable, LaGuid):
             self._useSpecificLand = theCropParameter.useSpecificLand
             self._rasterName = theCropParameter.rasterName
 
-
     def __del__(self):
         pass
+
+    def __eq__(self, other):
+        if not isinstance(other, LaCropParameter):
+            return False
+        myAttributes = [
+            '_guid',               '_name',              '_description',
+            '_cropGuid',           '_percentTameCrop',   '_spoilage',
+            '_reseed',             '_cropRotation',      '_fallowRatio',
+            '_fallowValue',        '_areaUnits',         '_useCommonLand',
+            '_useSpecificLand',    '_rasterName'
+        ]
+        return all(getattr(self, attr) == getattr(other, attr) for attr in myAttributes)
 
     def __copy__(self) -> 'LaCropParameter':
         myNewCropParameter: LaCropParameter = LaCropParameter()
         myNewCropParameter._name = self._name
         myNewCropParameter._description = self._description
+        myNewCropParameter._guid = self._guid
         myNewCropParameter._cropGuid = self._cropGuid
         myNewCropParameter._percentTameCrop = self._percentTameCrop
         myNewCropParameter._spoilage = self._spoilage
@@ -75,7 +97,6 @@ class LaCropParameter(LaSerialisable, LaGuid):
         myNewCropParameter._useSpecificLand = self._useSpecificLand
         myNewCropParameter._rasterName = self._rasterName
         return myNewCropParameter
-
 
     @pyqtProperty(str, notify=nameChanged)
     def name(self): # type: ignore
@@ -96,6 +117,16 @@ class LaCropParameter(LaSerialisable, LaGuid):
         if self._description != description:
             self._description = description
             self.descriptionChanged.emit(description) # type: ignore
+
+    @pyqtProperty(str, notify=guidChanged)
+    def guid(self): # type: ignore
+        return self._guid
+
+    @guid.setter
+    def guid(self, guid):
+        if self._guid != guid:
+            self._guid = guid
+            self.guidChanged.emit(guid) # type: ignore
 
     @pyqtProperty(str, notify=cropGuidChanged)
     def cropGuid(self): # type: ignore
@@ -167,7 +198,7 @@ class LaCropParameter(LaSerialisable, LaGuid):
             self._fallowValue = fallowValue
             self.fallowValueChanged.emit(fallowValue) # type: ignore
 
-    @pyqtProperty(LaAreaUnits, notify=areaUnitsChanged)
+    @pyqtProperty(AreaUnits, notify=areaUnitsChanged)
     def areaUnits(self): # type: ignore
         return self._areaUnits
 
@@ -212,29 +243,33 @@ class LaCropParameter(LaSerialisable, LaGuid):
         myDocument = QDomDocument("mydocument")
         myDocument.setContent(theXml)
         myTopElement = myDocument.firstChildElement("cropParameter")
+        # gracefully handle the case where the top element is null
         if myTopElement.isNull():
-            # TODO - just make this a warning
-            pass
-        self.guid = LaGuid.setGuid.myTopElement.attribute("guid")
+            warnings.warn("Failed to parse XML: myTopElement is null. The XML \
+                element could not be found or parsed.")
+            return False
+        self.setGuid(myTopElement.attribute("guid"))
         self.name = LaUtils.xmlDecode(myTopElement.firstChildElement("name").text())
         self.description = LaUtils.xmlDecode(myTopElement.firstChildElement("description").text())
         self.cropGuid = LaUtils.xmlDecode(myTopElement.firstChildElement("crop").text())
         self.percentTameCrop = float(myTopElement.firstChildElement("percentTameCrop").text())
-        self.spoilage = float(myTopElement.firstChildElement("spoilage").text())
-        self.reseed = float(myTopElement.firstChildElement("reseed").text())
+        spoilage_text = myTopElement.firstChildElement("spoilage").text()
+        self.spoilage = float(spoilage_text) if spoilage_text else 0.0
+        reseed_text = myTopElement.firstChildElement("reseed").text()
+        self.reseed = float(reseed_text) if reseed_text else 0.0
         self.cropRotation = int(myTopElement.firstChildElement("cropRotation").text())
         self.fallowRatio = float(myTopElement.firstChildElement("fallowRatio").text())
-        self.fallowValue = int(myTopElement.firstChildElement("fallowValue").text())
+        fallowValue_text = myTopElement.firstChildElement("fallowValue").text()
+        self.fallowValue = int(fallowValue_text) if fallowValue_text else 0
         my_area_units = myTopElement.firstChildElement("areaUnits").text()
         # doing area units this way makes the xml files PROFOUNDLY easier to read
         if my_area_units == "Dunum":
-            self.areaUnits = LaAreaUnits.Dunum
+            self.areaUnits = AreaUnits.Dunum
         elif my_area_units == "Hectare":
-            self.areaUnits = LaAreaUnits.Hectare
+            self.areaUnits = AreaUnits.Hectare
         self.useCommonLand = int(myTopElement.firstChildElement("useCommonLand").text())
         self.useSpecificLand = int(myTopElement.firstChildElement("useSpecificLand").text())
         self.rasterName = LaUtils.xmlDecode(myTopElement.firstChildElement("rasterName").text())
-        #
         return True
 
     def toXml(self):
@@ -272,4 +307,3 @@ class LaCropParameter(LaSerialisable, LaGuid):
         myString += '</cropParameter>\n'
 
         return myString
-    
