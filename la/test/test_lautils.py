@@ -19,8 +19,28 @@ from la.lib.la import LaTripleMap
 
 
 class TestLaUtils(unittest.TestCase):
-    myTestNumber = 1
+    """ Test suite for the LaUtils class.
+    This test suite contains unit tests for various static methods in the LaUtils class.
+    The tests cover the following functionalities:
+    - Retrieving user settings directory paths and ensuring directory creation.
+    - Retrieving model output directory and ensuring directory creation.
+    - Retrieving various user profile directory paths and ensuring directory creation.
+    - Converting area units to hectares.
+    - Retrieving available animals and specific animal profiles.
+    - Retrieving available animal parameters and specific animal parameter profiles.
+    - Retrieving available crops and specific crop profiles.
+    - Retrieving available crop parameters and specific crop parameter profiles.
+    - Sorting and removing duplicates from lists.
+    - Retrieving a list of experiment files.
+    - Creating text files.
+    - Encoding and decoding XML strings.
+    - Retrieving standard CSS.
+    - Managing animal parameters (add, edit, remove).
+    - Generating GUIDs.
+    - Opening and saving graphic files.
 
+    Each test method is decorated with appropriate patches to mock dependencies and isolate the functionality being tested.
+    """
     @classmethod
     def setUpClass(cls):
         # Create a QApplication instance
@@ -28,30 +48,31 @@ class TestLaUtils(unittest.TestCase):
 
     @patch('la.lib.lautils.QDir.mkpath')
     @patch('la.lib.lautils.QSettings')
-    def test_userSettingsDirPath(self, mock_qsettings, mock_mkpath):
-        print(f"Test number {self.myTestNumber}: userSettingsDirPath")
+    def test_userSettingsDirPath(self, theMockQSettings, theMockMakePath):
         # Mock the QSettings value method
-        mock_settings_instance = MagicMock()
-        mock_settings_instance.value.return_value = QDir.homePath() + "/.landuseAnalyst/"
-        mock_qsettings.return_value = mock_settings_instance
+        print(f"Test number 1: userSettingsDirPath")
+        myMockSettingsInstance = MagicMock()
+        myMockSettingsInstance.value.return_value = QDir.homePath() + "/.landuseAnalyst/"
+        theMockQSettings.return_value = myMockSettingsInstance
 
         # Call the static method
-        result = LaUtils.userSettingsDirPath()
+        myResult = LaUtils.userSettingsDirPath()
 
         # Assert the expected path is returned
-        expected_path = QDir.homePath() + "/.landuseAnalyst/"
-        self.assertEqual(result, expected_path)
+        myExpectedPath = QDir.homePath() + "/.landuseAnalyst/"
+        self.assertEqual(myResult, myExpectedPath)
 
         # Assert the directory creation was called
-        mock_mkpath.assert_called_once_with(expected_path)
+        theMockMakePath.assert_called_once_with(myExpectedPath)
 
     @patch('la.lib.lautils.QDir.mkpath')
     @patch('la.lib.lautils.QSettings')
-    def test_userSettingsDirPath_default(self, mock_qsettings, mock_mkpath):
+    def test_userSettingsDirPath_default(self, theMockQSettings, theMockMakePath):
         # Mock the QSettings value method to return None
-        mock_settings_instance = MagicMock()
-        mock_settings_instance.value.return_value = None
-        mock_qsettings.return_value = mock_settings_instance
+        print(f"Test number 2: userSettingsDirPath_default")
+        myMockSettingsInstance = MagicMock()
+        myMockSettingsInstance.value.return_value = None
+        theMockQSettings.return_value = myMockSettingsInstance
 
         # Call the static method
         result = LaUtils.userSettingsDirPath()
@@ -61,11 +82,12 @@ class TestLaUtils(unittest.TestCase):
         self.assertEqual(result, expected_path)
 
         # Assert the directory creation was called
-        mock_mkpath.assert_called_once_with(expected_path)
+        theMockMakePath.assert_called_once_with(expected_path)
 
     @patch('la.lib.lautils.os.makedirs')
     @patch('la.lib.lautils.LaUtils.userSettingsDirPath', return_value='/mock/path/to/settings')
     def test_getModelOutputDir(self, mock_userSettingsDirPath, mock_makedirs):
+        print(f"Test number 3: getModelOutputDir")
         # Call the static method
         result = LaUtils.getModelOutputDir()
         # Assert the expected path is returned
@@ -75,6 +97,7 @@ class TestLaUtils(unittest.TestCase):
 
     @patch('la.lib.lautils.QDir.mkpath')
     def test_userAnimalProfilesDirPath(self, mock_mkpath):
+        print(f"Test number 4: userAnimalProfilesDirPath")
         # Call the static method
         result = LaUtils.userAnimalProfilesDirPath()
 
@@ -87,6 +110,7 @@ class TestLaUtils(unittest.TestCase):
 
     @patch('la.lib.lautils.QDir.mkpath')
     def test_userCropProfilesDirPath(self, mock_mkpath):
+        print(f"Test number 5: userCropProfilesDirPath")
         # Call the static method
         result = LaUtils.userCropProfilesDirPath()
 
@@ -100,6 +124,7 @@ class TestLaUtils(unittest.TestCase):
 
     @patch('la.lib.lautils.QDir.mkpath')
     def test_userConversionTablesDirPath(self, mock_mkpath):
+        print(f"Test number 6: userConversionTablesDirPath")
         # Call the static method
         result = LaUtils.userConversionTablesDirPath()
 
@@ -112,6 +137,7 @@ class TestLaUtils(unittest.TestCase):
 
     @patch('la.lib.lautils.QDir.mkpath')
     def test_userAnimalParameterProfilesDirPath(self, mock_mkpath):
+        print(f"Test number 7: userAnimalParameterProfilesDirPath")
         # Call the static method
         result = LaUtils.userAnimalParameterProfilesDirPath()
 
@@ -124,6 +150,7 @@ class TestLaUtils(unittest.TestCase):
 
     @patch('la.lib.lautils.QDir.mkpath')
     def test_userImagesDirPath(self, mock_mkpath):
+        print(f"Test number 8: userImagesDirPath")
         # Call the static method
         result = LaUtils.userImagesDirPath()
 
@@ -136,6 +163,7 @@ class TestLaUtils(unittest.TestCase):
 
     @patch('la.lib.lautils.QDir.mkpath')
     def test_userCropParameterProfilesDirPath(self, mock_mkpath):
+        print(f"Test number 9: userCropParameterProfilesDirPath")
         # Call the static method
         result = LaUtils.userCropParameterProfilesDirPath()
 
@@ -147,6 +175,7 @@ class TestLaUtils(unittest.TestCase):
         mock_mkpath.assert_called_once_with(expected_path)
 
     def test_convertAreaToHectares(self):
+        print(f"Test number 10: convertAreaToHectares")
         # Test conversion from Dunum to Hectares
         result = LaUtils.convertAreaToHectares("Dunum", 5)
         self.assertEqual(result, 50)
@@ -162,6 +191,7 @@ class TestLaUtils(unittest.TestCase):
     @patch('la.lib.lautils.QDir')
     @patch('la.lib.lautils.LaUtils.userAnimalProfilesDirPath')
     def test_getAvailableAnimals(self, theMockDirPath, theMockQDir):
+        print(f"Test number 11: getAvailableAnimals")
         # Set up the directory containing the XML files
         myTestDir = os.path.join(os.path.dirname(__file__), 'xmlData', 'animalProfiles')
         theMockDirPath.return_value = myTestDir
