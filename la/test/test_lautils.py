@@ -75,118 +75,118 @@ class TestLaUtils(unittest.TestCase):
         theMockQSettings.return_value = myMockSettingsInstance
 
         # Call the static method
-        result = LaUtils.userSettingsDirPath()
+        myResult = LaUtils.userSettingsDirPath()
 
         # Assert the default path is returned
-        expected_path = QDir.homePath() + "/.landuseAnalyst/"
-        self.assertEqual(result, expected_path)
+        myExpectedPath = QDir.homePath() + "/.landuseAnalyst/"
+        self.assertEqual(myResult, myExpectedPath)
 
         # Assert the directory creation was called
-        theMockMakePath.assert_called_once_with(expected_path)
+        theMockMakePath.assert_called_once_with(myExpectedPath)
 
     @patch('la.lib.lautils.os.makedirs')
     @patch('la.lib.lautils.LaUtils.userSettingsDirPath', return_value='/mock/path/to/settings')
-    def test_getModelOutputDir(self, mock_userSettingsDirPath, mock_makedirs):
+    def test_getModelOutputDir(self, mock_userSettingsDirPath, theMockMakeDirs):
         print(f"Test number 3: getModelOutputDir")
         # Call the static method
-        result = LaUtils.getModelOutputDir()
+        myResult = LaUtils.getModelOutputDir()
         # Assert the expected path is returned
-        self.assertEqual(result, '/mock/path/to/settings/modelOutputs')
+        self.assertEqual(myResult, '/mock/path/to/settings/modelOutputs')
         # Assert the directory creation was called
-        mock_makedirs.assert_called_once_with('/mock/path/to/settings/modelOutputs', exist_ok=True)
+        theMockMakeDirs.assert_called_once_with('/mock/path/to/settings/modelOutputs', exist_ok=True)
 
     @patch('la.lib.lautils.QDir.mkpath')
-    def test_userAnimalProfilesDirPath(self, mock_mkpath):
+    def test_userAnimalProfilesDirPath(self, theMockMakePath):
         print(f"Test number 4: userAnimalProfilesDirPath")
         # Call the static method
-        result = LaUtils.userAnimalProfilesDirPath()
+        myResult = LaUtils.userAnimalProfilesDirPath()
 
         # Assert the expected path is returned
-        expected_path = QDir.homePath() + "/.landuseAnalyst/animalProfiles/"
-        self.assertEqual(result, expected_path)
+        myExpectedPath = QDir.homePath() + "/.landuseAnalyst/animalProfiles/"
+        self.assertEqual(myResult, myExpectedPath)
 
         # Assert the directory creation was called
-        mock_mkpath.assert_called_once_with(expected_path)
+        theMockMakePath.assert_called_once_with(myExpectedPath)
 
     @patch('la.lib.lautils.QDir.mkpath')
-    def test_userCropProfilesDirPath(self, mock_mkpath):
+    def test_userCropProfilesDirPath(self, theMockMakePath):
         print(f"Test number 5: userCropProfilesDirPath")
         # Call the static method
-        result = LaUtils.userCropProfilesDirPath()
+        myResult = LaUtils.userCropProfilesDirPath()
 
         # Assert the expected path is returned
-        expected_path = QDir.homePath() + "/.landuseAnalyst/cropProfiles/"
-        self.assertEqual(result, expected_path)
+        myExpectedPath = QDir.homePath() + "/.landuseAnalyst/cropProfiles/"
+        self.assertEqual(myResult, myExpectedPath)
 
         # Assert the directory creation was called
-        mock_mkpath.assert_called_once_with(expected_path)
+        theMockMakePath.assert_called_once_with(myExpectedPath)
 
 
     @patch('la.lib.lautils.QDir.mkpath')
-    def test_userConversionTablesDirPath(self, mock_mkpath):
+    def test_userConversionTablesDirPath(self, theMockMakePath):
         print(f"Test number 6: userConversionTablesDirPath")
         # Call the static method
-        result = LaUtils.userConversionTablesDirPath()
+        myResult = LaUtils.userConversionTablesDirPath()
 
         # Assert the expected path is returned
-        expected_path = QDir.homePath() + "/.landuseAnalyst/conversionTables/"
-        self.assertEqual(result, expected_path)
+        myExpectedPath = QDir.homePath() + "/.landuseAnalyst/conversionTables/"
+        self.assertEqual(myResult, myExpectedPath)
 
         # Assert the directory creation was called
-        mock_mkpath.assert_called_once_with(expected_path)
+        theMockMakePath.assert_called_once_with(myExpectedPath)
 
     @patch('la.lib.lautils.QDir.mkpath')
-    def test_userAnimalParameterProfilesDirPath(self, mock_mkpath):
+    def test_userAnimalParameterProfilesDirPath(self, theMockMakePath):
         print(f"Test number 7: userAnimalParameterProfilesDirPath")
         # Call the static method
-        result = LaUtils.userAnimalParameterProfilesDirPath()
+        myResult = LaUtils.userAnimalParameterProfilesDirPath()
 
         # Assert the expected path is returned
-        expected_path = QDir.homePath() + "/.landuseAnalyst/animalParameterProfiles/"
-        self.assertEqual(result, expected_path)
+        myExpectedPath = QDir.homePath() + "/.landuseAnalyst/animalParameterProfiles/"
+        self.assertEqual(myResult, myExpectedPath)
 
         # Assert the directory creation was called
-        mock_mkpath.assert_called_once_with(expected_path)
+        theMockMakePath.assert_called_once_with(myExpectedPath)
 
     @patch('la.lib.lautils.QDir.mkpath')
-    def test_userImagesDirPath(self, mock_mkpath):
+    def test_userImagesDirPath(self, theMockMakePath):
         print(f"Test number 8: userImagesDirPath")
         # Call the static method
-        result = LaUtils.userImagesDirPath()
+        myResult = LaUtils.userImagesDirPath()
 
         # Assert the expected path is returned
-        expected_path = QDir.homePath() + "/.landuseAnalyst/images/"
-        self.assertEqual(result, expected_path)
+        myExpectedPath = QDir.homePath() + "/.landuseAnalyst/images/"
+        self.assertEqual(myResult, myExpectedPath)
 
         # Assert the directory creation was called
-        mock_mkpath.assert_called_once_with(expected_path)
+        theMockMakePath.assert_called_once_with(myExpectedPath)
 
     @patch('la.lib.lautils.QDir.mkpath')
-    def test_userCropParameterProfilesDirPath(self, mock_mkpath):
+    def test_userCropParameterProfilesDirPath(self, theMockMakePath):
         print(f"Test number 9: userCropParameterProfilesDirPath")
         # Call the static method
-        result = LaUtils.userCropParameterProfilesDirPath()
+        myResult = LaUtils.userCropParameterProfilesDirPath()
 
         # Assert the expected path is returned
-        expected_path = QDir.homePath() + "/.landuseAnalyst/cropParameterProfiles/"
-        self.assertEqual(result, expected_path)
+        myExpectedPath = QDir.homePath() + "/.landuseAnalyst/cropParameterProfiles/"
+        self.assertEqual(myResult, myExpectedPath)
 
         # Assert the directory creation was called
-        mock_mkpath.assert_called_once_with(expected_path)
+        theMockMakePath.assert_called_once_with(myExpectedPath)
 
     def test_convertAreaToHectares(self):
         print(f"Test number 10: convertAreaToHectares")
         # Test conversion from Dunum to Hectares
-        result = LaUtils.convertAreaToHectares("Dunum", 5)
-        self.assertEqual(result, 50)
+        myResult = LaUtils.convertAreaToHectares("Dunum", 5)
+        self.assertEqual(myResult, 50)
 
         # Test conversion from Hectares to Hectares
-        result = LaUtils.convertAreaToHectares("Hectare", 5)
-        self.assertEqual(result, 5)
+        myResult = LaUtils.convertAreaToHectares("Hectare", 5)
+        self.assertEqual(myResult, 5)
 
         # Test conversion with an unknown area unit (should return 0)
-        result = LaUtils.convertAreaToHectares("Unknown", 5)
-        self.assertEqual(result, 0)
+        myResult = LaUtils.convertAreaToHectares("Unknown", 5)
+        self.assertEqual(myResult, 0)
 
     @patch('la.lib.lautils.QDir')
     @patch('la.lib.lautils.LaUtils.userAnimalProfilesDirPath')
@@ -226,17 +226,18 @@ class TestLaUtils(unittest.TestCase):
 
         # Call the static method
         myResult = LaUtils.getAvailableAnimals()
-        print(f"animal result = {myResult}")
+        # print(f"animal result = {myResult}")
 
         # Adjust the expected result to match the actual result
         myExpectedResult = myAnimalsDict
-        print(f"expected animals = {myExpectedResult}")
+        # print(f"expected animals = {myExpectedResult}")
         # Assert the expected dictionary is returned
         self.assertEqual(myResult, myExpectedResult)
 
     @patch('la.lib.lautils.QDir')
     @patch('la.lib.lautils.LaUtils.userAnimalProfilesDirPath')
     def test_getAnimal(self, theMockDirPath, theMockQDir):
+        print(f"Test number 12: getAnimal")
         # Set up the directory containing the XML files
         myTestDir = os.path.join(os.path.dirname(__file__), 'xmlData', 'animalProfiles')
         theMockDirPath.return_value = myTestDir
@@ -267,21 +268,22 @@ class TestLaUtils(unittest.TestCase):
                     myAnimalsDict[myGuid] = myAnimal
 
                     # Print the XML file contents
-                    print(f"Contents of {myFilename}:\n{myXmlContent}\n")
+                    # print(f"Contents of {myFilename}:\n{myXmlContent}\n")
 
         # Test getting each animal by GUID
         for myGuid, myExpectedAnimal in myAnimalsDict.items():
-            result = LaUtils.getAnimal(myGuid)
-            self.assertEqual(result, myExpectedAnimal)
+            myResult = LaUtils.getAnimal(myGuid)
+            self.assertEqual(myResult, myExpectedAnimal)
 
         # Test getting an animal with a non-existent GUID
         non_existent_guid = "non-existent-guid"
-        result = LaUtils.getAnimal(non_existent_guid)
-        self.assertEqual(result.name, "No Name Set")
+        myResult = LaUtils.getAnimal(non_existent_guid)
+        self.assertEqual(myResult.name, "No Name Set")
 
     @patch('la.lib.lautils.QDir')
     @patch('la.lib.lautils.LaUtils.userAnimalParameterProfilesDirPath')
     def test_getAvailableAnimalParameters(self, theMockDirPath, theMockQDir):
+        print(f"Test number 13: getAvailableAnimalParameters")
         self.maxDiff = None  # Allow full diff to be displayed
         # Set up the directory containing the XML files
         myTestDir = os.path.join(os.path.dirname(__file__), 'xmlData', 'animalParameterProfiles')
@@ -313,15 +315,15 @@ class TestLaUtils(unittest.TestCase):
                     myAnimalParametersDict[myGuid] = myAnimalParameter
 
                     # Print the XML file contents
-                    print(f"Contents of {myFilename}:\n{myXmlContent}\n")
+                    # print(f"Contents of {myFilename}:\n{myXmlContent}\n")
 
         # Call the static method
         myResult = LaUtils.getAvailableAnimalParameters()
-        print(f"animal parameter result = {myResult}")
+        # print(f"animal parameter result = {myResult}")
 
         # Adjust the expected result to match the actual result
         myExpectedResult = myAnimalParametersDict
-        print(f"expected animal parameters = {myExpectedResult}")
+        # print(f"expected animal parameters = {myExpectedResult}")
         # Assert the expected dictionary is returned
         self.assertEqual(myResult, myExpectedResult)
 
@@ -329,6 +331,7 @@ class TestLaUtils(unittest.TestCase):
     @patch('la.lib.lautils.QDir')
     @patch('la.lib.lautils.LaUtils.userCropProfilesDirPath')
     def test_getAvailableCrops(self, theMockDirPath, theMockQDir):
+        print(f"Test number 14: getAvailableCrops")
         self.maxDiff = None  # Allow full diff to be displayed
         # Set up the directory containing the XML files
         myTestDir = os.path.join(os.path.dirname(__file__), 'xmlData', 'cropProfiles')
@@ -361,22 +364,23 @@ class TestLaUtils(unittest.TestCase):
                     myCropsDict[myGuid] = myLaCrop
 
                     # Print the XML file contents
-                    print(f"Contents of {myFilename}:\n{myXmlContent}\n")
-                    print(f"\n\n\n myGuid = {myGuid}")
-                    print(f"\n myCropsDict = {myCropsDict}")
+                    # print(f"Contents of {myFilename}:\n{myXmlContent}\n")
+                    # print(f"\n\n\n myGuid = {myGuid}")
+                    # print(f"\n myCropsDict = {myCropsDict}")
         # Call the static method
         myResult = LaUtils.getAvailableCrops()
-        print(f"crop result = {myResult}")
+        # print(f"crop result = {myResult}")
 
         # Adjust the expected result to match the actual result
         myExpectedResult = myCropsDict
-        print(f"expected crops = {myExpectedResult}")
+        # print(f"expected crops = {myExpectedResult}")
         # Assert the expected dictionary is returned
         self.assertEqual(myResult, myExpectedResult)
 
     @patch('la.lib.lautils.QDir')
     @patch('la.lib.lautils.LaUtils.userCropProfilesDirPath')
     def test_getCrop(self, theMockDirPath, theMockQDir):
+        print(f"Test number 15: getCrop")
         self.maxDiff = None  # Allow full diff to be displayed
         # Set up the directory containing the XML files
         myTestDir = os.path.join(os.path.dirname(__file__), 'xmlData', 'cropProfiles')
@@ -409,10 +413,10 @@ class TestLaUtils(unittest.TestCase):
                     myCropsDict[myGuid] = myCrop
 
                     # Print the XML file contents
-                    print(f"Contents of {myFilename}:\n{myXmlContent}\n")
+                    # print(f"Contents of {myFilename}:\n{myXmlContent}\n")
 
         # Test getting each crop by GUID
-        print("Test getting each crop by GUID \n")
+        # print("Test getting each crop by GUID \n")
         for myGuid, myExpectedCrop in myCropsDict.items():
             myResult = LaUtils.getCrop(myGuid)
             self.assertEqual(myResult, myExpectedCrop)
@@ -425,6 +429,7 @@ class TestLaUtils(unittest.TestCase):
     @patch('la.lib.lautils.QDir')
     @patch('la.lib.lautils.LaUtils.userAnimalParameterProfilesDirPath')
     def test_getAnimalParameter(self, theMockDirPath, theMockQDir):
+        print(f"Test number 16: getAnimalParameter")
         # Set up the directory containing the XML files
         myTestDir = os.path.join(os.path.dirname(__file__), 'xmlData', 'animalParameterProfiles')
         theMockDirPath.return_value = myTestDir
@@ -455,28 +460,29 @@ class TestLaUtils(unittest.TestCase):
                     myAnimalParametersDict[myGuid] = myAnimalParameter
 
                     # Print the XML file contents
-                    print(f"Contents of {myFilename}:\n{myXmlContent}\n")
+                    # print(f"Contents of {myFilename}:\n{myXmlContent}\n")
 
         # Test getting each animal parameter by GUID
         for myGuid, myExpectedAnimalParameter in myAnimalParametersDict.items():
-            result = LaUtils.getAnimalParameter(myGuid)
-            self.assertEqual(result, myExpectedAnimalParameter)
+            myResult = LaUtils.getAnimalParameter(myGuid)
+            self.assertEqual(myResult, myExpectedAnimalParameter)
 
         # Test getting an animal parameter with a non-existent GUID
         non_existent_guid = "non-existent-guid"
-        result = LaUtils.getAnimalParameter(non_existent_guid)
-        self.assertEqual(result.name, "No Name Set")
+        myResult = LaUtils.getAnimalParameter(non_existent_guid)
+        self.assertEqual(myResult.name, "No Name Set")
 
     @patch('la.lib.lautils.QDir')
     @patch('la.lib.lautils.LaUtils.userCropParameterProfilesDirPath')
-    def test_getAvailableCropParameters(self, mock_userCropParameterProfilesDirPath, mock_QDir):
+    def test_getAvailableCropParameters(self, theMockDirPath, theMockQDir):
+        print(f"Test number 17: getAvailableCropParameters")
         # Set up the directory containing the XML files
         myTestDir = os.path.join(os.path.dirname(__file__), 'xmlData', 'cropParameterProfiles')
-        mock_userCropParameterProfilesDirPath.return_value = myTestDir
+        theMockDirPath.return_value = myTestDir
 
         # Mock the QDir and QFileInfo
         myMockDir = MagicMock()
-        mock_QDir.return_value = myMockDir
+        theMockQDir.return_value = myMockDir
         myMockFileInfoList = []
         for myFilename in os.listdir(myTestDir):
             if myFilename.endswith(".xml"):
@@ -500,28 +506,29 @@ class TestLaUtils(unittest.TestCase):
                     myCropParametersDict[myGuid] = myCropParameter
 
                     # Print the XML file contents
-                    print(f"Contents of {myFilename}:\n{myXmlContent}\n")
+                    # print(f"Contents of {myFilename}:\n{myXmlContent}\n")
 
         # Call the static method
         myResult = LaUtils.getAvailableCropParameters()
-        print(f"crop parameter result = {myResult}")
+        # print(f"crop parameter result = {myResult}")
 
         # Adjust the expected result to match the actual result
         myExpectedResult = myCropParametersDict
-        print(f"expected crop parameters = {myExpectedResult}")
+        # print(f"expected crop parameters = {myExpectedResult}")
         # Assert the expected dictionary is returned
         self.assertEqual(myResult, myExpectedResult)
 
     @patch('la.lib.lautils.QDir')
     @patch('la.lib.lautils.LaUtils.userCropParameterProfilesDirPath')
-    def test_getCropParameter(self, mock_userCropParameterProfilesDirPath, mock_QDir):
+    def test_getCropParameter(self, theMockDirPath, theMockQDir):
+        print(f"Test number 18: getCropParameter")
         # Set up the directory containing the XML files
         myTestDir = os.path.join(os.path.dirname(__file__), 'xmlData', 'cropParameterProfiles')
-        mock_userCropParameterProfilesDirPath.return_value = myTestDir
+        theMockDirPath.return_value = myTestDir
 
         # Mock the QDir and QFileInfo
         myMockDir = MagicMock()
-        mock_QDir.return_value = myMockDir
+        theMockQDir.return_value = myMockDir
         myMockFileInfoList = []
         for myFilename in os.listdir(myTestDir):
             if myFilename.endswith(".xml"):
@@ -545,139 +552,153 @@ class TestLaUtils(unittest.TestCase):
                     myCropParametersDict[myGuid] = myCropParameter
 
                     # Print the XML file contents
-                    print(f"Contents of {myFilename}:\n{myXmlContent}\n")
+                    # print(f"Contents of {myFilename}:\n{myXmlContent}\n")
 
         # Test getting each crop parameter by GUID
         for myGuid, myExpectedCropParameter in myCropParametersDict.items():
-            result = LaUtils.getCropParameter(myGuid)
-            self.assertEqual(result, myExpectedCropParameter)
+            myResult = LaUtils.getCropParameter(myGuid)
+            self.assertEqual(myResult, myExpectedCropParameter)
 
         # Test getting a crop parameter with a non-existent GUID
-        non_existent_guid = "non-existent-guid"
-        result = LaUtils.getCropParameter(non_existent_guid)
-        self.assertEqual(result.name, "No Name Set")
+        myNonExistantGuid = "non-existent-guid"
+        myResult = LaUtils.getCropParameter(myNonExistantGuid)
+        self.assertEqual(myResult.name, "No Name Set")
 
     def test_sortList(self):
         # Test sorting a list of strings in descending alphabetical order
-        input_list = ["banana", "apple", "cherry", "date"]
-        expected_output = ["date", "cherry", "banana", "apple"]
-        result = LaUtils.sortList(input_list)
-        self.assertEqual(result, expected_output)
+        print(f"Test number 19: sortList")
+
+        myInputList = ["banana", "apple", "cherry", "date"]
+        myExpectedOutput = ["date", "cherry", "banana", "apple"]
+        myResult = LaUtils.sortList(myInputList)
+        self.assertEqual(myResult, myExpectedOutput)
 
         # Test sorting an already sorted list
-        input_list = ["date", "cherry", "banana", "apple"]
-        expected_output = ["date", "cherry", "banana", "apple"]
-        result = LaUtils.sortList(input_list)
-        self.assertEqual(result, expected_output)
+        myInputList = ["date", "cherry", "banana", "apple"]
+        myExpectedOutput = ["date", "cherry", "banana", "apple"]
+        myResult = LaUtils.sortList(myInputList)
+        self.assertEqual(myResult, myExpectedOutput)
 
         # Test sorting a list with duplicate elements
-        input_list = ["banana", "apple", "cherry", "banana", "date"]
-        expected_output = ["date", "cherry", "banana", "banana", "apple"]
-        result = LaUtils.sortList(input_list)
-        self.assertEqual(result, expected_output)
+        myInputList = ["banana", "apple", "cherry", "banana", "date"]
+        myExpectedOutput = ["date", "cherry", "banana", "banana", "apple"]
+        myResult = LaUtils.sortList(myInputList)
+        self.assertEqual(myResult, myExpectedOutput)
 
     def test_uniqueList(self):
         # Test removing duplicates from a sorted list
-        input_list = ["apple", "banana", "banana", "cherry", "date", "date"]
-        expected_output = ["apple", "banana", "cherry", "date"]
-        result = LaUtils.uniqueList(input_list)
-        self.assertEqual(result, expected_output)
+        print(f"Test number 20: uniqueList")
+
+        myInputList = ["apple", "banana", "banana", "cherry", "date", "date"]
+        myExpectedOutput = ["apple", "banana", "cherry", "date"]
+        myResult = LaUtils.uniqueList(myInputList)
+        self.assertEqual(myResult, myExpectedOutput)
 
         # Test removing duplicates from an already unique list
-        input_list = ["apple", "banana", "cherry", "date"]
-        expected_output = ["apple", "banana", "cherry", "date"]
-        result = LaUtils.uniqueList(input_list)
-        self.assertEqual(result, expected_output)
+        myInputList = ["apple", "banana", "cherry", "date"]
+        myExpectedOutput = ["apple", "banana", "cherry", "date"]
+        myResult = LaUtils.uniqueList(myInputList)
+        self.assertEqual(myResult, myExpectedOutput)
 
         # Test removing duplicates from an empty list
-        input_list = []
-        expected_output = []
-        result = LaUtils.uniqueList(input_list)
-        self.assertEqual(result, expected_output)
+        myInputList = []
+        myExpectedOutput = []
+        myResult = LaUtils.uniqueList(myInputList)
+        self.assertEqual(myResult, myExpectedOutput)
 
         # Test removing duplicates from a list with one element
-        input_list = ["apple"]
-        expected_output = ["apple"]
-        result = LaUtils.uniqueList(input_list)
-        self.assertEqual(result, expected_output)
+        myInputList = ["apple"]
+        myExpectedOutput = ["apple"]
+        myResult = LaUtils.uniqueList(myInputList)
+        self.assertEqual(myResult, myExpectedOutput)
 
     @patch('os.path.expanduser')
     @patch('os.walk')
-    def test_getExperimentsList(self, mock_os_walk, mock_expanduser):
+    def test_getExperimentsList(self, theMockOsWalk, theMockExpandUser):
         # Mock the expanduser method to return a specific directory
-        mock_expanduser.return_value = '/mocked/home/.landuseAnalyst/modelOutputs/'
+        print(f"Test number 21: getExperimentsList")
+
+        theMockExpandUser.return_value = '/mocked/home/.landuseAnalyst/modelOutputs/'
 
         # Mock the os.walk method to return a specific directory structure
-        mock_os_walk.return_value = [
+        theMockOsWalk.return_value = [
             ('/mocked/home/.landuseAnalyst/modelOutputs/', ('subdir',), ('experiment1.xml', 'experiment2.xml')),
             ('/mocked/home/.landuseAnalyst/modelOutputs/subdir', (), ('experiment3.xml',))
         ]
 
-        expected_output = [
+        myExpectedOutput = [
             '/mocked/home/.landuseAnalyst/modelOutputs/experiment1.xml',
             '/mocked/home/.landuseAnalyst/modelOutputs/experiment2.xml',
             '/mocked/home/.landuseAnalyst/modelOutputs/subdir/experiment3.xml'
         ]
-        result = LaUtils.getExperimentsList()
-        self.assertEqual(result, expected_output)
+        myResult = LaUtils.getExperimentsList()
+        self.assertEqual(myResult, myExpectedOutput)
 
     @patch('builtins.open', new_callable=mock_open)
-    def test_createTextFile(self, mock_open):
+    def test_createTextFile(self, theMockOpen):
         # Test creating a text file and writing data to it
-        file_name = 'test_file.txt'
-        data = 'This is a test.'
+        print(f"Test number 22: createTextFile")
 
-        result = LaUtils.createTextFile(file_name, data)
-        self.assertTrue(result)
-        mock_open.assert_called_once_with(file_name, 'w')
-        mock_open().write.assert_called_once_with(data)
+        myFilename = 'test_file.txt'
+        myData = 'This is a test.'
+
+        myResult = LaUtils.createTextFile(myFilename, myData)
+        self.assertTrue(myResult)
+        theMockOpen.assert_called_once_with(myFilename, 'w')
+        theMockOpen().write.assert_called_once_with(myData)
 
         # Test handling an exception when creating a text file
-        mock_open.side_effect = IOError
-        result = LaUtils.createTextFile(file_name, data)
-        self.assertFalse(result)
+        theMockOpen.side_effect = IOError
+        myResult = LaUtils.createTextFile(myFilename, myData)
+        self.assertFalse(myResult)
 
     def test_xmlEncode(self):
         # Test encoding a string with special characters
-        input_string = "<test>&string"
-        expected_output = "&lt;test&gt;&amp;string"
-        result = LaUtils.xmlEncode(input_string)
-        self.assertEqual(result, expected_output)
+        print(f"Test number 23: xmlEncode")
+
+        myInputString = "<test>&string"
+        myExpectedOutput = "&lt;test&gt;&amp;string"
+        myResult = LaUtils.xmlEncode(myInputString)
+        self.assertEqual(myResult, myExpectedOutput)
 
         # Test encoding a string without special characters
-        input_string = "normalstring"
-        expected_output = "normalstring"
-        result = LaUtils.xmlEncode(input_string)
-        self.assertEqual(result, expected_output)
+        myInputString = "normalstring"
+        myExpectedOutput = "normalstring"
+        myResult = LaUtils.xmlEncode(myInputString)
+        self.assertEqual(myResult, myExpectedOutput)
 
         # Test encoding an empty string
-        input_string = ""
-        expected_output = ""
-        result = LaUtils.xmlEncode(input_string)
-        self.assertEqual(result, expected_output)
+        myInputString = ""
+        myExpectedOutput = ""
+        myResult = LaUtils.xmlEncode(myInputString)
+        self.assertEqual(myResult, myExpectedOutput)
 
     def test_xmlDecode(self):
         # Test decoding a string with XML entities
-        input_string = "&lt;test&gt;&amp;string"
-        expected_output = "<test>&string"
-        result = LaUtils.xmlDecode(input_string)
-        self.assertEqual(result, expected_output)
+        print(f"Test number 24: xmlDecode")
+
+        myInputString = "&lt;test&gt;&amp;string"
+        myExpectedOutput = "<test>&string"
+        myResult = LaUtils.xmlDecode(myInputString)
+        self.assertEqual(myResult, myExpectedOutput)
 
         # Test decoding a string without XML entities
-        input_string = "normalstring"
-        expected_output = "normalstring"
-        result = LaUtils.xmlDecode(input_string)
-        self.assertEqual(result, expected_output)
+        myInputString = "normalstring"
+        myExpectedOutput = "normalstring"
+        myResult = LaUtils.xmlDecode(myInputString)
+        self.assertEqual(myResult, myExpectedOutput)
 
         # Test decoding an empty string
-        input_string = ""
-        expected_output = ""
-        result = LaUtils.xmlDecode(input_string)
-        self.assertEqual(result, expected_output)
+        myInputString = ""
+        myExpectedOutput = ""
+        myResult = LaUtils.xmlDecode(myInputString)
+        self.assertEqual(myResult, myExpectedOutput)
 
     def test_getStandardCss(self):
         # Test that the getStandardCss method returns the expected CSS string
-        expected_output = (
+        print(f"Test number 25: getStandardCss")
+
+        myExpectedOutput = (
             ".glossy{"
             "  background-color: qlineargradient("
             "    x1:0, y1:0, x2:0, y2:1, stop:0 #616161,"
@@ -700,122 +721,135 @@ class TestLaUtils(unittest.TestCase):
             "  background-color: white;"
             "}"
         )
-        result = LaUtils.getStandardCss()
-        self.assertEqual(result, expected_output)
+        myResult = LaUtils.getStandardCss()
+        self.assertEqual(myResult, myExpectedOutput)
 
 
 
     @patch('la.lib.laanimalparameter.LaAnimalParameter.getInstances')
-    def test_getAnimalParameters(self, mock_getInstances):
+    def test_getAnimalParameters(self, theMockGetInstances):
         # Mock the getInstances method to return a list of LaAnimalParameter instances
-        mock_animal_parameter_1 = MagicMock(spec=LaAnimalParameter)
-        mock_animal_parameter_2 = MagicMock(spec=LaAnimalParameter)
-        mock_getInstances.return_value = [mock_animal_parameter_1, mock_animal_parameter_2]
-        result = LaUtils.getAnimalParameters()
-        self.assertEqual(result, [mock_animal_parameter_1, mock_animal_parameter_2])
-        mock_getInstances.assert_called_once()
+        print(f"Test number 26: getAnimalParameters")
+
+        myMockAnimalParam1 = MagicMock(spec=LaAnimalParameter)
+        myMockAnimalParam2 = MagicMock(spec=LaAnimalParameter)
+        theMockGetInstances.return_value = [myMockAnimalParam1, myMockAnimalParam2]
+        myResult = LaUtils.getAnimalParameters()
+        self.assertEqual(myResult, [myMockAnimalParam1, myMockAnimalParam2])
+        theMockGetInstances.assert_called_once()
 
     @patch.object(LaAnimalParameter, 'save')
     def test_addAnimalParameter(self, mock_save):
+        print(f"Test number 27: addAnimalParameter")
         # Create a mock LaAnimalParameter instance
-        mock_animal_parameter = MagicMock(spec=LaAnimalParameter)
+        myMockAnimalParam = MagicMock(spec=LaAnimalParameter)
         # Call the addAnimalParameter method
-        LaUtils.addAnimalParameter(mock_animal_parameter)
+        LaUtils.addAnimalParameter(myMockAnimalParam)
         # Verify that the save method was called on the mock instance
-        mock_animal_parameter.save.assert_called_once_with()
+        myMockAnimalParam.save.assert_called_once_with()
 
     @patch.object(LaAnimalParameter, 'save')
     def test_editAnimalParameter(self, mock_save):
+        print(f"Test number 28: editAnimalParameter")
         # Create a mock LaAnimalParameter instance
-        mock_animal_parameter = MagicMock(spec=LaAnimalParameter)
+        myMockAnimalParam = MagicMock(spec=LaAnimalParameter)
         # Call the editAnimalParameter method
-        LaUtils.editAnimalParameter(mock_animal_parameter)
+        LaUtils.editAnimalParameter(myMockAnimalParam)
         # Verify that the save method was called on the mock instance
-        mock_animal_parameter.save.assert_called_once_with()
+        myMockAnimalParam.save.assert_called_once_with()
 
     @patch.object(LaAnimalParameter, 'remove')
     @patch('la.lib.laanimalparameter.LaAnimalParameter.getInstanceByName')
-    def test_removeAnimalParameter(self, mock_getInstanceByName, mock_remove):
+    def test_removeAnimalParameter(self, theMockGetInstanceByName, mock_remove):
+        print(f"Test number 29: removeAnimalParameter")
+
         # Create a mock LaAnimalParameter instance
         mock_animal_parameter = MagicMock(spec=LaAnimalParameter)
-        mock_getInstanceByName.return_value = mock_animal_parameter
+        theMockGetInstanceByName.return_value = mock_animal_parameter
         # Call the removeAnimalParameter method
         LaUtils.removeAnimalParameter("TestName")
         # Verify that the getInstanceByName method was called with the correct argument
-        mock_getInstanceByName.assert_called_once_with("TestName")
+        theMockGetInstanceByName.assert_called_once_with("TestName")
         # Verify that the remove method was called on the mock instance
         mock_animal_parameter.remove.assert_called_once_with()
 
 
     def test_LaTripleMap(self):
+        print(f"Test number 30: LaTripleMap")
         # Create a LaTripleMap instance
-        la_triple_map: LaTripleMap = {
+        myTripleMap = {
             "animal1": (True, "param1"),
             "animal2": (False, "param2")
         }
 
         # Verify the contents of the LaTripleMap
-        self.assertEqual(la_triple_map["animal1"], (True, "param1"))
-        self.assertEqual(la_triple_map["animal2"], (False, "param2"))
+        self.assertEqual(myTripleMap["animal1"], (True, "param1"))
+        self.assertEqual(myTripleMap["animal2"], (False, "param2"))
 
 
     def test_generateGuid(self):
+        print(f"Test number 31: generateGuid")
+
         # Call the generateGuid method
-        result = LaUtils.generateGuid()
+        myResult = LaUtils.generateGuid()
 
         # Verify that the result is a valid UUID
         try:
-            uuid_obj = uuid.UUID(result, version=4)
+            uuid_obj = uuid.UUID(myResult, version=4)
         except ValueError:
             self.fail("generateGuid did not return a valid UUID")
 
         # Verify that the result is a string
-        self.assertIsInstance(result, str)
+        self.assertIsInstance(myResult, str)
 
     @patch('la.lib.lautils.QFileDialog.getOpenFileName')
     @patch('la.lib.lautils.QFile.copy')
     @patch('la.lib.lautils.LaUtils.userImagesDirPath', return_value=QDir.homePath() + "/.landuseAnalyst/images")
     def test_openGraphicFile(self, mock_userImagesDirPath, mock_copy, mock_getOpenFileName):
+        print(f"Test number 32: openGraphicFile")
+
         # Mock the QFileDialog.getOpenFileName method
         mock_getOpenFileName.return_value = ("/mock/path/to/image.png", "")
 
         # Call the openGraphicFile method
-        result = LaUtils.openGraphicFile()
+        myResult = LaUtils.openGraphicFile()
 
         # Verify the result
-        expected_path = QDir.homePath() + "/.landuseAnalyst/images/image.png"
-        self.assertEqual(result, expected_path)
+        myExpectedPath = QDir.homePath() + "/.landuseAnalyst/images/image.png"
+        self.assertEqual(myResult, myExpectedPath)
 
         # Verify that the QFileDialog.getOpenFileName method was called with the correct arguments
         mock_getOpenFileName.assert_called_once_with(None, "Choose an image", QDir.homePath(), "Images (*.png *.xpm *.jpg)")
 
         # Verify that the QFile.copy method was called with the correct arguments
-        mock_copy.assert_called_once_with("/mock/path/to/image.png", expected_path)
+        mock_copy.assert_called_once_with("/mock/path/to/image.png", myExpectedPath)
 
     @patch('la.lib.lautils.QFileDialog.getSaveFileName')
     @patch('la.lib.lautils.LaUtils.userConversionTablesDirPath', return_value=QDir.homePath() + "/.landuseAnalyst/conversionTables")
-    def test_saveFile(self, mock_userConversionTablesDirPath, mock_getSaveFileName):
+    def test_saveFile(self, theMockDirPath, theMockFilename):
+        print(f"Test number 33: saveFile")
+
         # Mock the QFileDialog.getSaveFileName method
-        mock_getSaveFileName.return_value = ("/Users/arkygeek/.landuseAnalyst/conversionTables/file.csv", "")
+        theMockFilename.return_value = ("/Users/arkygeek/.landuseAnalyst/conversionTables/file.csv", "")
 
         # Call the saveFile method
-        result = LaUtils.saveFile()
+        myResult = LaUtils.saveFile()
 
         # Verify the result
-        expected_path = QDir.homePath() + "/.landuseAnalyst/conversionTables/file.csv"
-        self.assertEqual(result, expected_path)
+        myExpectedPath = QDir.homePath() + "/.landuseAnalyst/conversionTables/file.csv"
+        self.assertEqual(myResult, myExpectedPath)
 
         # Verify that the QFileDialog.getSaveFileName method was called with the correct arguments
-        mock_getSaveFileName.assert_called_once_with(None, "Choose a file name", QDir.homePath() + "/.landuseAnalyst/conversionTables", "*.csv")
+        theMockFilename.assert_called_once_with(None, "Choose a file name", QDir.homePath() + "/.landuseAnalyst/conversionTables", "*.csv")
 
 
 
 if __name__ == '__main__':
     class CustomTestRunner(unittest.TextTestRunner):
         def run(self, test):
-            result = super().run(test)
-            if result.wasSuccessful():
+            myResult = super().run(test)
+            if myResult.wasSuccessful():
                 print("All tests passed successfully!")
-            return result
+            return myResult
 
     unittest.main(testRunner=CustomTestRunner())
