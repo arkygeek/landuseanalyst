@@ -695,118 +695,6 @@ class LaUtils:
         theAnimalParameter.save()
 
     @staticmethod
-    def showInputDialog(theParent: QWidget, theTitle: str, theText: str = "") -> Tuple[str, bool]:
-        """Shows an input dialog and returns the entered text and a boolean indicating whether
-        the OK button was pressed.
-
-        This method creates a `QInputDialog` with the given parent and title, and an optional
-        initial text value. It sets the input mode to text input, and the OK and Cancel button
-        texts to "OK" and "Cancel", respectively. It then executes the dialog and returns the
-        entered text and a boolean indicating whether the OK button was pressed.
-
-        Args:
-            parent (QWidget): The parent widget of the dialog.
-            title (str): The title of the dialog.
-            text (str, optional): The initial text value of the dialog. Defaults to "".
-
-        Returns:
-            Tuple[str, bool]: A tuple where the first element is the entered text and the second
-            element is a boolean indicating whether the OK button was pressed.
-
-        :param parent: The parent widget of the dialog.
-        :type parent: QWidget
-        :param title: The title of the dialog.
-        :type title: str
-        :param text: The initial text value of the dialog. Defaults to "".
-        :type text: str
-        :return: A tuple where the first element is the entered text and the second element is a boolean indicating whether the OK button was pressed.
-        :rtype: Tuple[str, bool]
-        """
-        myInputDialog: QInputDialog = QInputDialog(theParent)
-        myInputDialog.setWindowTitle(theTitle)
-        myInputDialog.setTextValue(theText)
-        myInputDialog.setLabelText("A test label")
-        myInputDialog.setInputMode(QInputDialog.TextInput)
-        myInputDialog.setOkButtonText("OK")
-        myInputDialog.setCancelButtonText("Cancel")
-        if myInputDialog.exec_() == QInputDialog.Accepted:
-            return myInputDialog.textValue(), True
-        else:
-            return "", False
-
-    # @staticmethod
-    # def showMessageBox(
-    #         theParent: QWidget,
-    #         theTitle: str,
-    #         text: str,
-    #         theIcon: QMessageBox.Icon = QMessageBox.Information
-    #     ) -> None:
-    #     """Shows a message box with the specified title, text, and icon.
-
-    #     This method creates a `QMessageBox` with the given parent, title, text, and icon.
-    #     It sets the standard buttons to OK and then executes the message box.
-
-    #     Args:
-    #         theParent (QWidget): The parent widget of the message box.
-    #         ttheTitle (str): The title of the message box.
-    #         theText (str): The text of the message box.
-    #         theIcon (QMessageBox.Icon, optional): The icon of the message box. Defaults to QMessageBox.Information.
-
-    #     :param parent: The parent widget of the message box.
-    #     :type parent: QWidget
-    #     :param title: The title of the message box.
-    #     :type title: str
-    #     :param text: The text of the message box.
-    #     :type text: str
-    #     :param icon: The icon of the message box. Defaults to QMessageBox.Information.
-    #     :type icon: QMessageBox.Icon
-    #     """
-    #     myMessageBox: QMessageBox = QMessageBox(theParent)
-    #     myMessageBox.setWindowTitle(theTitle)
-    #     myMessageBox.setText(text)
-    #     myMessageBox.setIcon(theIcon)
-    #     myMessageBox.setStandardButtons(QMessageBox.Ok)
-    #     myMessageBox.exec_()
-
-    # @staticmethod
-    # def showColorDialog(
-    #         theParent: QWidget,
-    #         theTitle: str,
-    #         theColor: QColor = QColor()
-    #     ) -> QColor:
-    #     """Shows a color dialog and returns the selected color.
-
-    #     This method creates a `QColorDialog` with the given parent and title, and an optional
-    #     initial color. It sets the current color to the given color and then executes the dialog.
-    #     If the user presses the OK button, it returns the selected color. If the user presses
-    #     the Cancel button or closes the dialog, it returns the initial color.
-
-    #     Args:
-    #         theParent (QWidget): The parent widget of the dialog.
-    #         theTitle (str): The title of the dialog.
-    #         theColor (QColor, optional): The initial color of the dialog. Defaults to QColor().
-
-    #     Returns:
-    #         QColor: The selected color if the OK button was pressed, otherwise the initial color.
-
-    #     :param theParent: The parent widget of the dialog.
-    #     :type theParent: QWidget
-    #     :param theTitle: The title of the dialog.
-    #     :type theTitle: str
-    #     :param theColor: The initial color of the dialog. Defaults to QColor().
-    #     :type theColor: QColor
-    #     :return: The selected color if the OK button was pressed, otherwise the initial color.
-    #     :rtype: QColor
-    #     """
-    #     myColorDialog: QColorDialog = QColorDialog(theParent)
-    #     myColorDialog.setWindowTitle(theTitle)
-    #     myColorDialog.setCurrentColor(theColor)
-    #     if myColorDialog.exec_() == QColorDialog.Accepted:
-    #         return myColorDialog.selectedColor()
-    #     else:
-    #         return theColor
-
-    @staticmethod
     def generateGuid() -> str:
         """Generates a new GUID.
 
@@ -822,12 +710,7 @@ class LaUtils:
         """
         """Generates a new GUID."""
         return str(uuid.uuid4())
-        # myNewGuid: str = ''.join(
-        #     random.choice(
-        #         string.ascii_uppercase + string.digits
-        #     ) for _ in range(16)
-        # )
-        # return  myNewGuid
+
 
     @staticmethod
     def saveToFile(theFilename: str, theData: str) -> None:
