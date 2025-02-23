@@ -3,8 +3,8 @@ import os
 import unittest
 import uuid
 from unittest.mock import patch, MagicMock, mock_open
-from qgis.PyQt.QtWidgets import QWidget, QInputDialog, QApplication  # Add this import
-from qgis.PyQt.QtCore import QDir
+from qgis.PyQt.QtWidgets import QWidget, QInputDialog, QApplication
+from qgis.PyQt.QtCore import QDir, QSettings
 
 # Update sys.path to include the parent directory
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
@@ -842,6 +842,34 @@ class TestLaUtils(unittest.TestCase):
         # Verify that the QFileDialog.getSaveFileName method was called with the correct arguments
         theMockFilename.assert_called_once_with(None, "Choose a file name", QDir.homePath() + "/.landuseAnalyst/conversionTables", "*.csv")
 
+    @patch("qgis.PyQt.QtWidgets.QInputDialog")
+    def test_showInputDialog(self, theMockQInputDialog):
+        print(f"Test number 32: showInputDialog")
+
+        # Create a mock QInputDialog instance
+        myMockInputDialog = MagicMock(spec=QInputDialog)
+        theMockQInputDialog.return_value = myMockInputDialog
+
+        # Set up the return values for the mock input dialog
+        myMockInputDialog.exec_.return_value = QInputDialog.Accepted
+        myMockInputDialog.textValue.return_value = "Test Input"
+
+        # Call the showInputDialog method
+        result_text, result_ok = LaUtils.showInputDialog(QWidget(), "Test Title", "Initial Text")
+
+        # Verify the result
+        self.assertEqual(result_text, "Test Input")
+        self.assertTrue(result_ok)
+
+        # Verify that the QInputDialog was created with the correct parameters
+        theMockQInputDialog.assert_called_once_with(QWidget())
+        myMockInputDialog.setWindowTitle.assert_called_once_with("Test Title")
+        myMockInputDialog.setTextValue.assert_called_once_with("Initial Text")
+        myMockInputDialog.setLabelText.assert_called_once_with("Test Title")
+        myMockInputDialog.setInputMode.assert_called_once_with(QInputDialog.TextInput)
+        myMockInputDialog.setOkButtonText.assert_called_once_with("OK")
+        myMockInputDialog.setCancelButtonText.assert_called_once_with("Cancel")
+        myMockInputDialog.exec_.assert_called_once()
 
 
 if __name__ == '__main__':

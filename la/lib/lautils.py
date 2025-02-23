@@ -12,21 +12,15 @@ Date created: [Date]
 # Standard library imports
 import os
 import sys
-import shutil
 import uuid
-import random
-import string
+
 from builtins import dict as Dict
 from builtins import list as List
-# from builtins import classmethod
 from typing import Tuple
 
 # Third party imports
-from qgis.PyQt.QtWidgets import (
-    QMessageBox, QColorDialog, QInputDialog, QFileDialog, QWidget)
-from qgis.PyQt.QtCore import (
-    QFile, QTextStream, QObject, QDir, QSettings, QFileInfo, QObject, pyqtSignal)
-from qgis.PyQt.QtGui import QColor
+from qgis.PyQt.QtWidgets import QFileDialog, QWidget, QInputDialog
+from qgis.PyQt.QtCore import QFile, QTextStream, QObject, QDir, QSettings, QFileInfo, pyqtSignal
 
 # Local application imports
 from la.lib.laanimalparameter import LaAnimalParameter
@@ -110,14 +104,11 @@ class LaUtils:
         # Get the user settings directory path from QSettings
         mySettings = QSettings()
         myPath = mySettings.value("dataDirs/dataDir", QDir.homePath() + "/.landuseAnalyst/")
-
         # Ensure myPath is a string
         if not isinstance(myPath, str):
             myPath = QDir.homePath() + "/.landuseAnalyst/"
-
         # Create the directory if it does not exist
         QDir().mkpath(myPath)
-
         # Return the path to the user settings directory
         return myPath
 
@@ -258,8 +249,7 @@ class LaUtils:
         return LaCrop()
 
     @staticmethod
-    def userConversionTablesDirPath(
-        ) -> str:
+    def userConversionTablesDirPath() -> str:
         """
         Returns the path to the user's conversion tables directory.
         If the directory does not exist, it will be created.
@@ -275,9 +265,9 @@ class LaUtils:
     @staticmethod
     def userAnimalParameterProfilesDirPath() -> str:
         """Returns the path to the user's animal parameter profiles directory, creating it if necessary."""
-        path = QDir.homePath() + "/.landuseAnalyst/animalParameterProfiles/"
-        QDir().mkpath(path)
-        return path
+        myPath = QDir.homePath() + "/.landuseAnalyst/animalParameterProfiles/"
+        QDir().mkpath(myPath)
+        return myPath
 
     @staticmethod
     def userImagesDirPath() -> str:
@@ -378,8 +368,7 @@ class LaUtils:
         :return: An animal parameter object.
         :rtype: LaAnimalParameter
         """
-        # from la.lib.laanimalparameter import LaAnimalParameter  # Move the import here to avoid circular import
-        # myAnimalParameter = LaAnimalParameter()
+
         myDirectory = QDir(LaUtils.userAnimalParameterProfilesDirPath())
         myList = myDirectory.entryInfoList(QDir.Files | QDir.NoSymLinks)
         for myFileInfo in myList:
@@ -705,46 +694,45 @@ class LaUtils:
         """
         theAnimalParameter.save()
 
-    # @staticmethod
-    # def showInputDialog(theParent: QWidget, theTitle: str, theText: str = "") -> Tuple[str, bool]:
-    #     """Shows an input dialog and returns the entered text and a boolean indicating whether
-    #     the OK button was pressed.
+    @staticmethod
+    def showInputDialog(theParent: QWidget, theTitle: str, theText: str = "") -> Tuple[str, bool]:
+        """Shows an input dialog and returns the entered text and a boolean indicating whether
+        the OK button was pressed.
 
-    #     This method creates a `QInputDialog` with the given parent and title, and an optional
-    #     initial text value. It sets the input mode to text input, and the OK and Cancel button
-    #     texts to "OK" and "Cancel", respectively. It then executes the dialog and returns the
-    #     entered text and a boolean indicating whether the OK button was pressed.
+        This method creates a `QInputDialog` with the given parent and title, and an optional
+        initial text value. It sets the input mode to text input, and the OK and Cancel button
+        texts to "OK" and "Cancel", respectively. It then executes the dialog and returns the
+        entered text and a boolean indicating whether the OK button was pressed.
 
-    #     Args:
-    #         parent (QWidget): The parent widget of the dialog.
-    #         title (str): The title of the dialog.
-    #         text (str, optional): The initial text value of the dialog. Defaults to "".
+        Args:
+            parent (QWidget): The parent widget of the dialog.
+            title (str): The title of the dialog.
+            text (str, optional): The initial text value of the dialog. Defaults to "".
 
-    #     Returns:
-    #         Tuple[str, bool]: A tuple where the first element is the entered text and the second
-    #         element is a boolean indicating whether the OK button was pressed.
+        Returns:
+            Tuple[str, bool]: A tuple where the first element is the entered text and the second
+            element is a boolean indicating whether the OK button was pressed.
 
-    #     :param parent: The parent widget of the dialog.
-    #     :type parent: QWidget
-    #     :param title: The title of the dialog.
-    #     :type title: str
-    #     :param text: The initial text value of the dialog. Defaults to "".
-    #     :type text: str
-    #     :return: A tuple where the first element is the entered text and the second element is a boolean indicating whether the OK button was pressed.
-    #     :rtype: Tuple[str, bool]
-    #     """
-    #     print("showInputDialog")
-    #     myInputDialog: QInputDialog = QInputDialog(theParent)
-    #     myInputDialog.setWindowTitle(theTitle)
-    #     myInputDialog.setTextValue(theText)
-    #     myInputDialog.setLabelText(theTitle)
-    #     myInputDialog.setInputMode(QInputDialog.TextInput)
-    #     myInputDialog.setOkButtonText("OK")
-    #     myInputDialog.setCancelButtonText("Cancel")
-    #     if myInputDialog.exec_() == QInputDialog.Accepted:
-    #         return myInputDialog.textValue(), True
-    #     else:
-    #         return "", False
+        :param parent: The parent widget of the dialog.
+        :type parent: QWidget
+        :param title: The title of the dialog.
+        :type title: str
+        :param text: The initial text value of the dialog. Defaults to "".
+        :type text: str
+        :return: A tuple where the first element is the entered text and the second element is a boolean indicating whether the OK button was pressed.
+        :rtype: Tuple[str, bool]
+        """
+        myInputDialog: QInputDialog = QInputDialog(theParent)
+        myInputDialog.setWindowTitle(theTitle)
+        myInputDialog.setTextValue(theText)
+        myInputDialog.setLabelText("A test label")
+        myInputDialog.setInputMode(QInputDialog.TextInput)
+        myInputDialog.setOkButtonText("OK")
+        myInputDialog.setCancelButtonText("Cancel")
+        if myInputDialog.exec_() == QInputDialog.Accepted:
+            return myInputDialog.textValue(), True
+        else:
+            return "", False
 
     # @staticmethod
     # def showMessageBox(
