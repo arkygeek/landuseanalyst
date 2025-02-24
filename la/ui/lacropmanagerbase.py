@@ -67,7 +67,6 @@ class LaCropManagerBase(QDialog, Ui_LaCropManagerBase):
         # TODO: Implement this method
         pass
 
-    # def refreshCropTable(self, theGuid=None):
     def refreshCropTable(self, theGuid=""):
         print("Refreshing crop table")
         self.mCropMap = {}
@@ -75,45 +74,164 @@ class LaCropManagerBase(QDialog, Ui_LaCropManagerBase):
         self.tblCrops.setRowCount(0)
         self.tblCrops.setColumnCount(2)
 
+        # Populate a QMap with all the layersets
+        self.mCropMap = LaUtils.getAvailableCrops()
+
+        # Populate the table from the map, ensuring rows are sorted by layerset name
+        mySelectedRow = 0
+        myCurrentRow = 0
+
+        for myGuid, myCrop in self.mCropMap.items():
+            if not theGuid:
+                theGuid = myCrop.guid
+
+            if myCrop.guid == theGuid:
+                mySelectedRow = myCurrentRow
+
+            # Insert new row ready to fill with details
+            self.tblCrops.insertRow(myCurrentRow)
+
+            # Add details to the new row
+            mypFileNameItem = QtWidgets.QTableWidgetItem(myGuid)
+            self.tblCrops.setItem(myCurrentRow, 0, mypFileNameItem)
+
+            mypNameItem = QtWidgets.QTableWidgetItem(myCrop.name)
+            self.tblCrops.setItem(myCurrentRow, 1, mypNameItem)
+
+            # Display an icon indicating if the layerset is local or remote
+            myIcon = QIcon(":/localdata.png")
+            mypNameItem.setIcon(myIcon)
+
+            myCurrentRow += 1
+
+        if myCurrentRow > 0:
+            self.tblCrops.setCurrentCell(mySelectedRow, 1)
+            self.cellClicked(mySelectedRow, 1)
+        else:
+            self.on_toolNew_clicked()
+
+        headerLabels = ["File Name", "Name"]
+        self.tblCrops.setHorizontalHeaderLabels(headerLabels)
+        self.tblCrops.setColumnWidth(0, 0)
+        self.tblCrops.setColumnWidth(1, self.tblCrops.width())
+        self.tblCrops.horizontalHeader().hide()
+        self.tblCrops.verticalHeader().hide()
+        self.tblCrops.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
+
+
+    '''
+      cellClicked: This method retrieves the GUID of the selected crop and calls selectCrop with the corresponding file name.
+      selectCrop: This method loads the crop data from the XML file and updates the UI with the crop details.
+      showCrop: This method updates the UI with the details of the current crop.
+      on_pushButtonLoad_clicked: This method loads crop data from a temporary XML file and updates the UI.
+      on_pushButtonSave_clicked: This method saves the current crop data to an XML file and refreshes the crop table.
+      on_toolNew_clicked: This method creates a new crop, assigns it a GUID, and updates the UI.
+      resizeEvent: This method adjusts the column widths of the crop table when the window is resized.
+      on_toolCopy_clicked: This method creates a copy of the selected crop, assigns it a new GUID, and refreshes the crop table.
+      on_toolDelete_clicked: This method deletes the selected crop's XML file and refreshes the crop table.
+      on_pbnApply_clicked: This method updates the current crop data with the values from the UI and saves it to an XML file.
+    '''
+
+
     def cellClicked(self, theRow, theColumn):
-        # TODO: Implement this method
-        pass
+        # Note we use the alg name not the id because user may have customized params
+        print("LaCropManager::cellClicked")
+        myGuid = self.tblCrops.item(self.tblCrops.currentRow(), 0).text()
+        print(f"Guid is: {myGuid}")
+        myFileName = f"{myGuid}.xml"
+        self.selectCrop(myFileName)
 
     def selectCrop(self, theFileName):
-        # TODO: Implement this method
-        pass
+        print(f"selectCrop Called: {theFileName}")
+        myCropDir = LaUtils.userCropProfilesDirPath()
+        myCrop = LaCrop()
+        myCrop.fromXmlFile(os.path.join(myCropDir, theFileName))
+        self.leName.setText(myCrop.name)
+        self.mCrop = myCrop
+        self.showCrop()
 
     def showCrop(self):
-        # TODO: Implement this method
-        pass
+        self.leName.setText(self.mCrop.name)
+        self.leDescription.setText(self.mCrop.description)
+        self.sbCropYield.setValue(self.mCrop.cropYield)
+        self.sbCropCalories.setValue(self.mCrop.cropCalories)
+        self.sbCropFodderProduction.setValue(self.mCrop.fodderProduction)
+        self.sbCropFodderValue.setValue(self.mCrop.fodderValue)
+        self.cbAreaUnits.setCurrentIndex(self.mCrop.areaUnits)
+        self.cbFodderEnergyType.setCurrentIndex(self.mCrop.cropFodderEnergyType)
+        self.lblCropPix.setPixmap(self.mCrop.imageFile)
 
     def on_pushButtonLoad_clicked(self):
-        # TODO: Implement this method
-        pass
+        self.mCrop.fromXmlFile("/tmp/crop.xml")
+        self.showCrop()
 
     def on_pushButtonSave_clicked(self):
-        # TODO: Implement this method
-        pass
+        self.mCrop.setName(self.leName.text())
+        self.mCrop.setDescription(self.leDescription.text())
+        self.mCrop.setCropYield(self.sbCropYield.value())
+        self.mCrop.setCropCalories(self.sbCropCalories.value())
+        self.mCrop.setFodderProduction(self.sbCropFodderProduction.value())
+        self.mCrop.setCropFodderValue(self.sbCropFodderValue.value())
+        self.mCrop.setAreaUnits(self.cbAreaUnits.currentIndex())
+        self.mCrop.setCropFodderEnergyType(self.cbFodderEnergyType.currentIndex())
+        self.mCrop.setImageFile(self.mImageFile)
+        self.mCrop.toXmlFile(os.path.join(LaUtils.userCropProfilesDirPath(), f"{self.mCrop.guid}.xml"))
+        self.refreshCropTable(self.mCrop.guid)
 
     def on_toolNew_clicked(self):
-        # TODO: Implement this method
-        pass
+        print("New toolbutton clicked")
+        myCrop = LaCrop()
+        myCrop.setGuid()
+        self.mCrop = myCrop
+        self.showCrop()
 
     def resizeEvent(self, theEvent):
-        # TODO: Implement this method
-        pass
+        self.tblCrops.setColumnWidth(0, 0)
+        self.tblCrops.setColumnWidth(1, self.tblCrops.width())
+        self.tblCrops.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
 
     def on_toolCopy_clicked(self):
-        # TODO: Implement this method
-        pass
+        print("Copy toolbutton clicked")
+        if self.tblCrops.currentRow() < 0:
+            return
+        myGuid = self.tblCrops.item(self.tblCrops.currentRow(), 0).text()
+        if not myGuid:
+            return
+        myOriginalFileName = os.path.join(LaUtils.userCropProfilesDirPath(), f"{myGuid}.xml")
+        myCrop = LaCrop()
+        myCrop.fromXmlFile(myOriginalFileName)
+        myCrop.setGuid()
+        myNewFileName = os.path.join(LaUtils.userCropProfilesDirPath(), f"{myCrop.guid}.xml")
+        myCrop.setName(f"Copy of {myCrop.name}")
+        myCrop.toXmlFile(myNewFileName)
+        self.refreshCropTable(myCrop.guid)
 
     def on_toolDelete_clicked(self):
-        # TODO: Implement this method
-        pass
+        print("Delete toolbutton clicked")
+        if self.tblCrops.currentRow() < 0:
+            return
+        myGuid = self.tblCrops.item(self.tblCrops.currentRow(), 0).text()
+        if myGuid:
+            myFile = os.path.join(LaUtils.userCropProfilesDirPath(), f"{myGuid}.xml")
+            if not os.remove(myFile):
+                QtWidgets.QMessageBox.warning(self, "Landuse Analyst", f"Unable to delete file \n{myFile}")
+            self.refreshCropTable()
 
     def on_pbnApply_clicked(self):
-        # TODO: Implement this method
-        pass
+        self.mCrop.setName(self.leName.text())
+        self.mCrop.setDescription(self.leDescription.text())
+        self.mCrop.setCropYield(self.sbCropYield.value())
+        self.mCrop.setCropCalories(self.sbCropCalories.value())
+        self.mCrop.setFodderProduction(self.sbCropFodderProduction.value())
+        self.mCrop.setCropFodderValue(self.sbCropFodderValue.value())
+        mySelectedAreaUnit = self.cbAreaUnits.currentText()
+        if mySelectedAreaUnit == "Dunum":
+            self.mCrop.setAreaUnits(Dunum)
+        elif mySelectedAreaUnit == "Hectare":
+            self.mCrop.setAreaUnits(Hectare)
+        self.mCrop.setImageFile(self.mImageFile)
+        self.mCrop.toXmlFile(os.path.join(LaUtils.userCropProfilesDirPath(), f"{self.mCrop.guid}.xml"))
+        self.refreshCropTable(self.mCrop.guid)
 
 
 

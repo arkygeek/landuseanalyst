@@ -3,9 +3,9 @@ import os
 import unittest
 import uuid
 from unittest.mock import patch, MagicMock, mock_open
-from qgis.PyQt.QtWidgets import QWidget, QInputDialog, QApplication
-from qgis.PyQt.QtCore import QDir, QSettings
-from qgis.PyQt.QtCore import QTimer
+from qgis.PyQt.QtWidgets import QApplication
+from qgis.PyQt.QtCore import QDir
+
 # Update sys.path to include the parent directory
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 

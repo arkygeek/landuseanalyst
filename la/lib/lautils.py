@@ -19,7 +19,7 @@ from builtins import list as List
 from typing import Tuple
 
 # Third party imports
-from qgis.PyQt.QtWidgets import QFileDialog, QWidget, QInputDialog
+from qgis.PyQt.QtWidgets import QFileDialog
 from qgis.PyQt.QtCore import QFile, QTextStream, QObject, QDir, QSettings, QFileInfo, pyqtSignal
 
 # Local application imports
@@ -183,7 +183,7 @@ class LaUtils:
         :rtype: LaAnimal
         """
         myDirectory = QDir(LaUtils.userAnimalProfilesDirPath())
-        myList = myDirectory.entryInfoList(QDir.Files | QDir.NoSymLinks)
+        myList = myDirectory.entryInfoList(QDir.Files | QDir.NoSymLinks, QDir.Name)
         for myFileInfo in myList:
             # Ignore directories
             if myFileInfo.fileName() in [".", ".."]:
@@ -197,6 +197,7 @@ class LaUtils:
                 if myAnimal.guid == theGuid:
                     return myAnimal
         return LaAnimal()
+
 
     @staticmethod
     def getAvailableCrops() -> Dict[str, LaCrop]:
@@ -306,8 +307,8 @@ class LaUtils:
         # this may seem ridiculous to do it this way, but
         # i plan to include other area units and this way
         # it will make it very easy to work with in the future
-        # all need be done is add new units to la.h enum and enter
-        # into the following switch...
+        # all need be done is add new units to la.h enum and add
+        # into the following code...
 
         myHectares = 0.
 

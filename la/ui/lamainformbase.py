@@ -31,11 +31,12 @@ from qgis.PyQt.QtCore import QTextStream
 from qgis.PyQt.QtGui import QIcon
 
 import os
-
+from la.gui.lamainform import LaMainForm
 from la.lib.lautils import LaUtils
-from la.ui.laanimalparametermanagerbase import LaAnimalParameterManagerBase
 from la.ui.lacropmanagerbase import LaCropManagerBase
 from la.ui.lacropparametermanagerbase import LaCropParameterManagerBase
+from la.ui.laanimalmanagerbase import LaAnimalManagerBase
+from la.ui.laanimalparametermanagerbase import LaAnimalParameterManagerBase
 
 # endregion
 
@@ -47,20 +48,15 @@ FORM_CLASS, _ = uic.loadUiType(
                         'lamainformbase.ui'))
 
 
-class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
+class LaMainFormBase(LaMainForm, QtWidgets.QDialog, FORM_CLASS):
     def __init__(self, parent=None):
         """Constructor for LaMainFormBase (.ui file)"""
         super(LaMainFormBase, self).__init__(parent)
-
-        """ Set up the user interface from Designer through FORM_CLASS.
-            After self.setupUi() you can access any designer object by doing
-            self.<objectname>, and you can use autoconnect slots - see
-            http://qt-project.org/doc/qt-4.8/designer-using-a-ui-file.html
-            #widgets-and-dialogs-with-auto-connect
-        """
         self.setupUi(self)
 
-        # NOTE everything below this Jason did
+        # Initialize maps
+        self.mAnimalsMap = {}
+        self.mCropsMap = {}
 
         # make the form's buttons work
         # region PUSH BUTTONS
@@ -79,23 +75,6 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         self.lblAnimalPicCalcs.setScaledContents(True)
         #endregion
 
-        """ NOTES for setting the resize-mode for each column:
-            The first section must stretch to take up the available space,
-            whilst the last two sections just resize to their contents:
-
-            PyQt4:
-            header = self.table.horizontalHeader()
-            header.setResizeMode(0, QtGui.QHeaderView.Stretch)
-            header.setResizeMode(1, QtGui.QHeaderView.ResizeToContents)
-            header.setResizeMode(2, QtGui.QHeaderView.ResizeToContents)
-
-            PyQt5:
-            header = self.table.horizontalHeader()
-            header.setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
-            header.setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeToContents)
-            header.setSectionResizeMode(2, QtWidgets.QHeaderView.ResizeToContents)
-        """
-
         # region PREPARE FORM DISPLAY PANELS
         self.tblAnimals.horizontalHeader().hide()
         self.tblAnimals.verticalHeader().hide()
@@ -107,16 +86,11 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         # endregion
 
         # region LOAD CROPS AND ANIMALS
-        # the following SHOULD load from XML files that define animals and crops
-        # but probably will use either JSON, or store it in a database
-        # The following could possibly come from utils? - JJ
-
         self.loadAnimals()
         self.loadCrops()
         # endregion
 
         # region COMBO BOX ITEMS LOADED
-        # cbAreaUnits needs populating with values; Dunums & Hectares for now...
         self.cbAreaUnits.addItem("Dunum")
         self.cbAreaUnits.addItem("Hectare")
         self.cbCommonLandEnergyType.addItem("KCalories")
@@ -124,7 +98,6 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         # endregion
 
         # region DIET SLIDERS CONNECTED
-        # the diet sliders get connected here
         self.sliderDiet.valueChanged.connect(self.on_sliderDiet_valueChanged)
         self.sliderMeat.valueChanged.connect(self.on_sliderMeat_valueChanged)
         self.sliderCrop.valueChanged.connect(self.on_sliderCrop_valueChanged)
@@ -133,52 +106,16 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         # connect the change in tree to it's def
         self.treeHelp.currentItemChanged.connect(self.current_item_changed)
 
-        """ this is c++ code that needs translation
-        QStringList myWholeList
-
-        setDietLabels()  # <-- This is actually the modelling here!
-
-        # See the qtdocs on signals and slots to understand below.
-        # we connect the currentItemChanged signal that a tree view emits when you
-        # click on an item to a little method that sets the help viewer contents
-        # appropriately. TS
-        # Make sure this is the last stuff we do in the ctor! TS
-
-        connect(treeHelp, SIGNAL(currentItemChanged(QTreeWidgetItem * ,QTreeWidgetItem *)),
-            this, SLOT(helpItemClicked(QTreeWidgetItem * ,QTreeWidgetItem *)))
-        connect(listWidgetCalculationsCrop, SIGNAL(currentItemChanged(QListWidgetItem * ,QListWidgetItem *)),
-            this, SLOT(cropCalcClicked(QListWidgetItem * ,QListWidgetItem *)))
-        connect(listWidgetCalculationsAnimal, SIGNAL(currentItemChanged(QListWidgetItem * ,QListWidgetItem *)),
-            this, SLOT(animalCalcClicked(QListWidgetItem * ,QListWidgetItem *)))
-        connect(pushButtonExit, SIGNAL(clicked()), qApp, SLOT(quit()))
-        connect(tblAnimals, SIGNAL(cellClicked( int,int)),
-            this, SLOT(animalCellClicked( int,int)))
-        connect(tblAnimals, SIGNAL(cellChanged( int,int)),
-            this, SLOT(animalCalcSelectionChanged( int,int)))
-        connect(tblCrops, SIGNAL(cellClicked( int,int)),
-            this, SLOT(cropCellClicked( int,int)))
-        connect(tblCrops, SIGNAL(cellChanged( int,int)),
-            this, SLOT(cropCalcSelectionChanged( int,int)))
-        connect(cbDebug, SIGNAL(clicked()),
-            this, SLOT(on_cbDebug_clicked()))
-
-        # the above code (roughly) ported to python is shown below - Jason
-
         # Connect signals to slots
         self.treeHelp.currentItemChanged.connect(self.helpItemClicked)
         self.listWidgetCalculationsCrop.currentItemChanged.connect(self.cropCalcClicked)
         self.listWidgetCalculationsAnimal.currentItemChanged.connect(self.animalCalcClicked)
-        self.pushButtonExit.clicked.connect(qApp.quit)  #not right
+        self.pushButtonExit.clicked.connect(QtWidgets.qApp.quit)
         self.tblAnimals.cellClicked.connect(self.animalCellClicked)
         self.tblAnimals.cellChanged.connect(self.animalCalcSelectionChanged)
         self.tblCrops.cellClicked.connect(self.cropCellClicked)
         self.tblCrops.cellChanged.connect(self.cropCalcSelectionChanged)
         self.cbDebug.clicked.connect(self.on_cbDebug_clicked)
-
-        """
-
-        # This is the end of the constructor
-
 
     # read/load/display help file corresponding to selected item in helpTree
     @QtCore.pyqtSlot(QtWidgets.QTreeWidgetItem, QtWidgets.QTreeWidgetItem)
@@ -187,91 +124,211 @@ class LaMainFormBase(QtWidgets.QDialog, FORM_CLASS):
         myQFile = QFile(":/" + theCurrentItem.text(0) + ".html")
         myQFile.open(QFile.ReadOnly | QFile.Text)
         istream = QTextStream(myQFile)
-
         self.textHelp.setHtml(istream.readAll())
         myQFile.close()
-
 
     def on_clicked_pbnNewCrop(self):
         print("open Manage Crops window printed")
         self.tbReport.append("Manage Crops button clicked")
-
-        Ui_LaCropManagerBase, QDialog = uic.loadUiType(
-            os.path.join(
-                os.path.dirname(__file__),
-                'lacropmanagerbase.ui'))
-
         myCropManager = LaCropManagerBase()
         myCropManager.show()
         myCropManager.exec_()
 
-
     def on_clicked_pbnNewCropParameter(self):
         print("open Crop Parameters window printed")
         self.tbReport.append("Manage Crop Parameters button clicked")
-
-        Ui_LaCropParameterManagerBase, QDialog = uic.loadUiType(
-            os.path.join(
-                os.path.dirname(__file__),
-                'lacropparametermanagerbase.ui'))
-
         myCropParameterManager = LaCropParameterManagerBase()
         myCropParameterManager.show()
         myCropParameterManager.exec_()
 
-
     def on_clicked_pbnNewAnimal(self):
         print("open Manage Animals window printed")
         self.tbReport.append("Manage Animals button clicked")
-
+        myAnimalManager = LaAnimalManagerBase()
+        myAnimalManager.show()
+        myAnimalManager.exec_()
 
     def on_clicked_pbnNewAnimalParameter(self):
         print("open Animal Parameters window")
         self.tbReport.append("Manage Animal Parameters button clicked")
+        myAnimalParameterManager = LaAnimalParameterManagerBase()
+        myAnimalParameterManager.show()
+        myAnimalParameterManager.exec_()
 
-
-    def on_sliderDiet_valueChanged(self,  theValue):
+    def on_sliderDiet_valueChanged(self, theValue):
         myMinString = str(theValue)
-        myMaxString = str(100-theValue)
+        myMaxString = str(100 - theValue)
         self.labelMeatPercent.setText(myMinString)
         self.labelCropPercent.setText(myMaxString)
-        # setDietLabels()  # recalculates model (to update the diet labels!)s
+        self.setDietLabels()  # recalculates model (to update the diet labels!)
 
-
-    def on_sliderMeat_valueChanged(self,  theValue):
+    def on_sliderMeat_valueChanged(self, theValue):
         myMinString = str(theValue)
-        myMaxString = str(100-theValue)
+        myMaxString = str(100 - theValue)
         self.labelMeatWildPercent.setText(myMinString)
         self.labelMeatTamePercent.setText(myMaxString)
-        # setDietLabels()  # recalculates model (to update the diet labels!)
+        self.setDietLabels()  # recalculates model (to update the diet labels!)
 
-
-    def on_sliderCrop_valueChanged(self,  theValue):
+    def on_sliderCrop_valueChanged(self, theValue):
         myMinString = str(theValue)
-        myMaxString = str(100-theValue)
+        myMaxString = str(100 - theValue)
         self.labelCropWildPercent.setText(myMinString)
         self.labelCropTamePercent.setText(myMaxString)
-        # setDietLabels()  # recalculates model (to update the diet labels!)
+        self.setDietLabels()  # recalculates model (to update the diet labels!)
 
-
-    # Set's the model.  All data comes from laMainForm EXCEPT for
-    # the map of crops and animals, which are being generated here.
     def setModel(self, *args):
-        from la.lib.la import  AreaUnits
+        from la.lib.la import AreaUnits
         self.mSelectedCropsMap.clear()
         self.mSelectedAnimalsMap.clear()
         mySelectedAreaUnit = AreaUnits(self.cbAreaUnits.currentText())
         myCommonRasterValue = int(self.sbCommonRasterValue.value())
-
-        # TODO this is quick and dirty
         myAreaUnits = 'Dunum' if mySelectedAreaUnit else 'Hectare'
         print(mySelectedAreaUnit, myAreaUnits, myCommonRasterValue)
 
-
     def loadAnimals(self):
-        # Implement the logic to load animals
-        pass
+        self.listWidgetCalculationsAnimal.clear()
+        myModel = LaModel()
+        self.tblAnimals.clear()
+        self.tblAnimals.setRowCount(0)
+        self.tblAnimals.setColumnCount(4)
+        myCurrentRow = 0
+        myRunningPercentage = 0.0
+        myAnimalsMap = LaUtils.getAvailableAnimals()
+        myAnimalParametersMap = LaUtils.getAvailableAnimalParameters()
+        for myGuid, myAnimal in myAnimalsMap.items():
+            myName = myAnimal.name
+            myValue = self.mAnimalsMap.get(myGuid, (False, ""))
+            if myGuid not in self.mAnimalsMap:
+                self.mAnimalsMap[myGuid] = myValue
+            myIcon = QIcon(":/localdata.png")
+            self.tblAnimals.insertRow(myCurrentRow)
+            mypUsedItem = QtWidgets.QTableWidgetItem("Used?")
+            if myValue[0]:
+                mypUsedItem.setCheckState(QtCore.Qt.Checked)
+                myItem = QtWidgets.QListWidgetItem(myAnimal.name)
+                myItem.setData(QtCore.Qt.UserRole, myAnimal.guid)
+                self.listWidgetCalculationsAnimal.addItem(myItem)
+            else:
+                mypUsedItem.setCheckState(QtCore.Qt.Unchecked)
+                myItem = QtWidgets.QListWidgetItem(myAnimal.name)
+                myItem.setData(QtCore.Qt.UserRole, myAnimal.guid)
+                self.listWidgetCalculationsAnimal.takeItem(self.listWidgetCalculationsAnimal.row(myItem))
+            self.tblAnimals.setItem(myCurrentRow, 0, mypUsedItem)
+            mypNameItem = QtWidgets.QTableWidgetItem(myAnimal.name)
+            mypNameItem.setData(QtCore.Qt.UserRole, myGuid)
+            self.tblAnimals.setItem(myCurrentRow, 1, mypNameItem)
+            mypNameItem.setIcon(myIcon)
+            mypCombo = QtWidgets.QComboBox(self)
+            for myParameterGuid, myAnimalParameter in myAnimalParametersMap.items():
+                myParameterName = f"{myAnimalParameter.name}  ({myAnimalParameter.description})"
+                if myGuid != myAnimalParameter.animalGuid:
+                    continue
+                if not myValue[1]:
+                    myValue = (myValue[0], myParameterGuid)
+                if myValue[1] == myAnimalParameter.guid:
+                    if myValue[0]:
+                        myRunningPercentage += myAnimalParameter.percentTameMeat
+                    mypPercentItem = QtWidgets.QTableWidgetItem(str(myAnimalParameter.percentTameMeat))
+                    self.tblAnimals.setItem(myCurrentRow, 3, mypPercentItem)
+                mypCombo.addItem(myIcon, myParameterName, myParameterGuid)
+            self.setComboToDefault(mypCombo, myValue[1])
+            self.mAnimalsMap[myGuid] = myValue
+            self.tblAnimals.setCellWidget(myCurrentRow, 2, mypCombo)
+            myCurrentRow += 1
+        myIcon = QIcon(":/status_ok.png") if myRunningPercentage == 100 else QIcon(":/status_error.png")
+        myPercentItem = str(myRunningPercentage)
+        self.labelAnimalCheck.setText(f"{myPercentItem}%")
 
     def loadCrops(self):
-        # Implement the logic to load crops
+        self.listWidgetCalculationsCrop.clear()
+        self.tblCrops.clear()
+        self.tblCrops.setRowCount(0)
+        self.tblCrops.setColumnCount(4)
+        myCurrentRow = 0
+        myRunningPercentage = 0.0
+        myCropsMap = LaUtils.getAvailableCrops()
+        myCropParametersMap = LaUtils.getAvailableCropParameters()
+        for myGuid, myCrop in myCropsMap.items():
+            myName = myCrop.name
+            myValue = self.mCropsMap.get(myGuid, (False, ""))
+            if myGuid not in self.mCropsMap:
+                self.mCropsMap[myGuid] = myValue
+            myIcon = QIcon(":/localdata.png")
+            self.tblCrops.insertRow(myCurrentRow)
+            mypUsedItem = QtWidgets.QTableWidgetItem("Used?")
+            if myValue[0]:
+                mypUsedItem.setCheckState(QtCore.Qt.Checked)
+                myItem = QtWidgets.QListWidgetItem(myCrop.name)
+                myItem.setData(QtCore.Qt.UserRole, myCrop.guid)
+                self.listWidgetCalculationsCrop.addItem(myItem)
+            else:
+                mypUsedItem.setCheckState(QtCore.Qt.Unchecked)
+            self.tblCrops.setItem(myCurrentRow, 0, mypUsedItem)
+            mypNameItem = QtWidgets.QTableWidgetItem(myCrop.name)
+            mypNameItem.setData(QtCore.Qt.UserRole, myGuid)
+            self.tblCrops.setItem(myCurrentRow, 1, mypNameItem)
+            mypNameItem.setIcon(myIcon)
+            mypCombo = QtWidgets.QComboBox(self)
+            for myParameterGuid, myCropParameter in myCropParametersMap.items():
+                myParameterName = f"{myCropParameter.name}  ({myCropParameter.description})"
+                if myGuid != myCropParameter.cropGuid:
+                    continue
+                if not myValue[1]:
+                    myValue = (myValue[0], myParameterGuid)
+                if myValue[1] == myCropParameter.guid:
+                    if myValue[0]:
+                        myRunningPercentage += myCropParameter.percentTameCrop
+                        myItem = QtWidgets.QListWidgetItem(myCrop.name)
+                        myItem.setData(QtCore.Qt.UserRole, myCrop.guid)
+                        self.listWidgetCalculationsCrop.addItem(myItem)
+                    mypPercentItem = QtWidgets.QTableWidgetItem(str(myCropParameter.percentTameCrop))
+                    self.tblCrops.setItem(myCurrentRow, 3, mypPercentItem)
+                mypCombo.addItem(myIcon, myParameterName, myParameterGuid)
+            self.setComboToDefault(mypCombo, myValue[1])
+            self.mCropsMap[myGuid] = myValue
+            self.tblCrops.setCellWidget(myCurrentRow, 2, mypCombo)
+            myCurrentRow += 1
+        myIcon = QIcon(":/status_ok.png") if myRunningPercentage == 100 else QIcon(":/status_error.png")
+        myPercentItem = str(myRunningPercentage)
+        self.labelCropCheck.setText(f"{myPercentItem}%")
+
+    def setComboToDefault(self, combo, default):
+        index = combo.findData(default)
+        if index >= 0:
+            combo.setCurrentIndex(index)
+
+    def setDietLabels(self):
+        # Implement the logic to set diet labels based on the current model
+        pass
+
+    def helpItemClicked(self, current, previous):
+        # Implement the logic to handle help item clicked
+        pass
+
+    def cropCalcClicked(self, current, previous):
+        # Implement the logic to handle crop calculation item clicked
+        pass
+
+    def animalCalcClicked(self, current, previous):
+        # Implement the logic to handle animal calculation item clicked
+        pass
+
+    def animalCellClicked(self, row, column):
+        # Implement the logic to handle animal cell clicked
+        pass
+
+    def animalCalcSelectionChanged(self, row, column):
+        # Implement the logic to handle animal calculation selection changed
+        pass
+
+    def cropCellClicked(self, row, column):
+        # Implement the logic to handle crop cell clicked
+        pass
+
+    def cropCalcSelectionChanged(self, row, column):
+        # Implement the logic to handle crop calculation selection changed
+        pass
+
+    def on_cbDebug_clicked(self):
+        # Implement the logic to handle debug checkbox clicked
         pass
