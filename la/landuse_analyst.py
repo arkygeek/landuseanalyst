@@ -28,7 +28,7 @@ import os.path
 
 # the following line for resources is required
 from la.resources_rc import *  # Initialize Qt resources from file resources.py
-from la.ui.lamainformbase import LaMainFormBase  # Import dialog code
+from la.gui.lamainform import LaMainForm  # Import dialog code
 
 
 class LanduseAnalyst:
@@ -50,23 +50,23 @@ class LanduseAnalyst:
 
         # initialize locale
         locale = QSettings().value('locale/userLocale')[0:2] # slice for the first 2 chars with [0,2]
-        
-        # The expression QSettings().value('locale/userLocale')[0:2] is retrieving 
+
+        # The expression QSettings().value('locale/userLocale')[0:2] is retrieving
         # a setting value from the application's settings, then slicing the result.
 
-        # QSettings().value('locale/userLocale') retrieves the value of the 
+        # QSettings().value('locale/userLocale') retrieves the value of the
         # 'locale/userLocale' setting. This is typically a string representing
         # a user's locale in the form of language_COUNTRY.
         # For example:
         #   en_US is for English (United States)
         #   fr_FR is for French (France)
         #   en_CA is for English (Canada)
-        # This is to get just the language part of the locale, without the country. 
+        # This is to get just the language part of the locale, without the country.
         # For example, if the locale is 'en_US', the slice operation would give 'en'.
-        # 
+        #
         # So, locale = QSettings().value('locale/userLocale')[0:2] gets the 2 letter language
-        # code from the user's locale setting. 
-        
+        # code from the user's locale setting.
+
         locale_path = os.path.join(
                         self.plugin_dir,
                         'i18n',
@@ -76,7 +76,7 @@ class LanduseAnalyst:
 
         # initialise the plugin directory
         self.plugin_dir = os.path.dirname(__file__)
-        
+
         # initialise the locale
         locale_str = QSettings().value("locale/userLocale")
         if isinstance(locale_str, str):
@@ -88,7 +88,7 @@ class LanduseAnalyst:
         if os.path.exists(locale_path):
             self.translator = QTranslator()
             self.translator.load(
-                locale, "LanduseAnalyst", 
+                locale, "LanduseAnalyst",
                 "_", locale_path
             )
             QCoreApplication.installTranslator(self.translator)
@@ -221,7 +221,7 @@ class LanduseAnalyst:
         # Only create GUI ONCE in callback, so that it will only load when the plugin is started
         if self.first_start == True:
             self.first_start = False
-            self.dlg = LaMainFormBase()
+            self.dlg = LaMainForm()
 
         # show the dialog
         self.dlg.show()

@@ -17,28 +17,22 @@
 ***************************************************************"""
 
 import os
-from qgis.PyQt.QtWidgets import QDialog
-from qgis.PyQt.uic import loadUiType
-
-from qgis.PyQt.QtCore import QSettings, QPoint, QSize, Qt
-from la.lib.lacrop import LaCrop
+from qgis.PyQt import QtWidgets, uic
+from qgis.PyQt.QtCore import QSettings, QPoint, QSize
+from qgis.PyQt.QtWidgets import QDialog, QTableWidgetItem, QHeaderView
+from qgis.PyQt.QtGui import QIcon
 from la.lib.lautils import LaUtils
-from la.gui.lacropmanager import LaCropManager
 
-Ui_LaCropManagerBase, _ = loadUiType(
-    os.path.join(
-        os.path.dirname(__file__),
-        "lacropmanagerbase.ui"
-    )
-)
-print(f"Ui_LaCropManagerBase: {Ui_LaCropManagerBase}")
+FORM_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'lacropmanagerbase.ui'))
+
+# print(f"Ui_LaCropManagerBase: {Ui_LaCropManagerBase}")
 # @TODO remove the above print statement after testing
 
-class LaCropManagerBase(QDialog, Ui_LaCropManagerBase):
-    def __init__(self, parent=None, flags=Qt.WindowFlags()):
-        super(LaCropManagerBase, self).__init__(parent, flags)
+class LaCropManagerBase(QDialog, FORM_CLASS):
+    def __init__(self, parent=None):
+        super(LaCropManagerBase, self).__init__(parent)
         self.setupUi(self)
-        self.readSettings()
+        self.mCropMap = {}
         self.lblCropPix.setScaledContents(True)
         self.tblCrops.cellClicked.connect(self.cellClicked)
         self.cbAreaUnits.addItem("Dunum")
@@ -46,10 +40,8 @@ class LaCropManagerBase(QDialog, Ui_LaCropManagerBase):
         self.cbFodderEnergyType.addItem("KCalories")
         self.cbFodderEnergyType.addItem("TDN")
         self.refreshCropTable()
-
-        # disable these buttons unless experimental is allowed
-        self.pbnImport.setVisible(False)
-        self.pbnExport.setVisible(False)
+        self.pbnImport.setVisible(True)
+        self.pbnExport.setVisible(True)
 
     def readSettings(self):
         mySettings = QSettings()
@@ -76,12 +68,14 @@ class LaCropManagerBase(QDialog, Ui_LaCropManagerBase):
 
         # Populate a QMap with all the layersets
         self.mCropMap = LaUtils.getAvailableCrops()
+        print(f"Available crops: {self.mCropMap}")
 
         # Populate the table from the map, ensuring rows are sorted by layerset name
         mySelectedRow = 0
         myCurrentRow = 0
 
         for myGuid, myCrop in self.mCropMap.items():
+            print(f"Processing crop: {myCrop.name} with GUID: {myGuid}")
             if not theGuid:
                 theGuid = myCrop.guid
 
@@ -92,10 +86,10 @@ class LaCropManagerBase(QDialog, Ui_LaCropManagerBase):
             self.tblCrops.insertRow(myCurrentRow)
 
             # Add details to the new row
-            mypFileNameItem = QtWidgets.QTableWidgetItem(myGuid)
+            mypFileNameItem = QTableWidgetItem(myGuid)
             self.tblCrops.setItem(myCurrentRow, 0, mypFileNameItem)
 
-            mypNameItem = QtWidgets.QTableWidgetItem(myCrop.name)
+            mypNameItem = QTableWidgetItem(myCrop.name)
             self.tblCrops.setItem(myCurrentRow, 1, mypNameItem)
 
             # Display an icon indicating if the layerset is local or remote
@@ -116,21 +110,8 @@ class LaCropManagerBase(QDialog, Ui_LaCropManagerBase):
         self.tblCrops.setColumnWidth(1, self.tblCrops.width())
         self.tblCrops.horizontalHeader().hide()
         self.tblCrops.verticalHeader().hide()
-        self.tblCrops.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
-
-
-    '''
-      cellClicked: This method retrieves the GUID of the selected crop and calls selectCrop with the corresponding file name.
-      selectCrop: This method loads the crop data from the XML file and updates the UI with the crop details.
-      showCrop: This method updates the UI with the details of the current crop.
-      on_pushButtonLoad_clicked: This method loads crop data from a temporary XML file and updates the UI.
-      on_pushButtonSave_clicked: This method saves the current crop data to an XML file and refreshes the crop table.
-      on_toolNew_clicked: This method creates a new crop, assigns it a GUID, and updates the UI.
-      resizeEvent: This method adjusts the column widths of the crop table when the window is resized.
-      on_toolCopy_clicked: This method creates a copy of the selected crop, assigns it a new GUID, and refreshes the crop table.
-      on_toolDelete_clicked: This method deletes the selected crop's XML file and refreshes the crop table.
-      on_pbnApply_clicked: This method updates the current crop data with the values from the UI and saves it to an XML file.
-    '''
+        self.tblCrops.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
+        print("Crop table refreshed")
 
 
     def cellClicked(self, theRow, theColumn):

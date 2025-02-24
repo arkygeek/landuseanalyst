@@ -2,7 +2,7 @@ from typing import Dict, Tuple
 from PyQt5.QtCore import QObject
 from .laserialisable import LaSerialisable
 from .laguid import LaGuid
-from la.lib.la import La, AreaUnits, Status, Priority, LandBeingGrazed, LandFound
+from la.lib.la import AreaUnits, Status, Priority, LandBeingGrazed, LandFound
 from .ladietlabels import LaDietLabels
 
 class LaModel():
@@ -74,8 +74,8 @@ class LaModel():
 
     def message(self, theMessage: str): ...
 
-    """ This is a rough translation and may need to be adjusted based on the 
-        actual implementation of the LaModel class and the other classes it 
-        interacts with. The ... in the method definitions is a placeholder 
+    """ This is a rough translation and may need to be adjusted based on the
+        actual implementation of the LaModel class and the other classes it
+        interacts with. The ... in the method definitions is a placeholder
         and should be replaced with the actual implementation in laModel.py
     """

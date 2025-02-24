@@ -31,12 +31,6 @@ from qgis.PyQt.QtCore import QTextStream
 from qgis.PyQt.QtGui import QIcon
 
 import os
-from la.gui.lamainform import LaMainForm
-from la.lib.lautils import LaUtils
-from la.ui.lacropmanagerbase import LaCropManagerBase
-from la.ui.lacropparametermanagerbase import LaCropParameterManagerBase
-from la.ui.laanimalmanagerbase import LaAnimalManagerBase
-from la.ui.laanimalparametermanagerbase import LaAnimalParameterManagerBase
 
 # endregion
 
@@ -48,7 +42,7 @@ FORM_CLASS, _ = uic.loadUiType(
                         'lamainformbase.ui'))
 
 
-class LaMainFormBase(LaMainForm, QtWidgets.QDialog, FORM_CLASS):
+class LaMainFormBase(QDialog, FORM_CLASS):
     def __init__(self, parent=None):
         """Constructor for LaMainFormBase (.ui file)"""
         super(LaMainFormBase, self).__init__(parent)

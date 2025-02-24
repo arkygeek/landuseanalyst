@@ -3,7 +3,7 @@ from qgis.PyQt.QtCore import pyqtSignal
 from qgis.PyQt.QtWidgets import QDialog
 
 from typing import Dict, List
-from la.lib.la import La
+# from la.lib.la import La
 from la.lib.laserialisable import LaSerialisable
 from la.lib.laguid import LaGuid
 from la.lib.ladietlabels import LaDietLabels

@@ -13,7 +13,7 @@ print("Updated sys.path:", sys.path)
 import unittest
 
 # Use relative imports to import modules from la/lib
-from la.lib.la import La
+# from la.lib.la import La
 from la.lib.lafoodsource import LaFoodSource
 
 class TestLa(unittest.TestCase):

@@ -4,7 +4,7 @@ from typing import Dict, Tuple
 from qgis.PyQt.QtCore import QObject, pyqtProperty, pyqtSignal, pyqtSlot, Qt
 from la.lib.laserialisable import LaSerialisable
 from la.lib.laguid import LaGuid
-from la.lib.la import La
+# from la.lib.la import La
 class LaDietLabels(LaSerialisable, LaGuid):
     def __init__(self):
         super().__init__()
