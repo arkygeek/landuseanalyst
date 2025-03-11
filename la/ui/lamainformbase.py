@@ -32,6 +32,15 @@ from qgis.PyQt.QtGui import QIcon
 
 import os
 
+from la.lib.lamodel import LaModel
+from la.lib.lautils import LaUtils
+
+from la.ui.lacropmanagerbase import LaCropManagerBase
+from la.ui.lacropparameterbase import LaCropParameterManagerBase
+from la.ui.laanimalmanagerbase import LaAnimalManagerBase
+from la.ui.laanimalparameterbase import LaAnimalParameterBase
+
+
 # endregion
 
 # This loads your .ui file so that PyQt can

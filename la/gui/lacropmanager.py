@@ -1,3 +1,5 @@
+import os
+\
 from qgis.PyQt.QtCore import Qt, QModelIndex, QAbstractTableModel
 from qgis.PyQt.QtGui import QBrush, QColor, QPixmap, QIcon
 from qgis.PyQt.QtWidgets import QLabel, QTableWidgetItem, QDialog, QHeaderView, QMessageBox

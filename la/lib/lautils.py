@@ -91,15 +91,17 @@ class LaUtils:
         openGraphicFile: Opens a graphic file.
         saveFile: Saves a file.
     """
-    # from la.lib.laanimalparameter import LaAnimalParameter
 
     @staticmethod
     def userSettingsDirPath() -> str:
         """
         Returns the path to the user settings directory.
         If the directory does not exist, it is created.
-        :return: A string representing the path to the user settings directory.
-        :rtype: str
+
+        This is a static method.
+
+        Returns:
+            str: A string representing the path to the user settings directory.
         """
         # Get the user settings directory path from QSettings
         mySettings = QSettings()

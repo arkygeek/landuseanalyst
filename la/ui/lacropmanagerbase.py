@@ -21,7 +21,9 @@ from qgis.PyQt import QtWidgets, uic
 from qgis.PyQt.QtCore import QSettings, QPoint, QSize
 from qgis.PyQt.QtWidgets import QDialog, QTableWidgetItem, QHeaderView
 from qgis.PyQt.QtGui import QIcon
+
 from la.lib.lautils import LaUtils
+from la.lib.lacrop import LaCrop
 
 FORM_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'lacropmanagerbase.ui'))
 
@@ -136,8 +138,8 @@ class LaCropManagerBase(QDialog, FORM_CLASS):
         self.leDescription.setText(self.mCrop.description)
         self.sbCropYield.setValue(self.mCrop.cropYield)
         self.sbCropCalories.setValue(self.mCrop.cropCalories)
-        self.sbCropFodderProduction.setValue(self.mCrop.fodderProduction)
-        self.sbCropFodderValue.setValue(self.mCrop.fodderValue)
+        self.sbCropFodderProduction.setValue(self.mCrop.cropFodderProduction)
+        self.sbCropFodderValue.setValue(self.mCrop.cropFodderValue)
         self.cbAreaUnits.setCurrentIndex(self.mCrop.areaUnits)
         self.cbFodderEnergyType.setCurrentIndex(self.mCrop.cropFodderEnergyType)
         self.lblCropPix.setPixmap(self.mCrop.imageFile)
@@ -147,15 +149,15 @@ class LaCropManagerBase(QDialog, FORM_CLASS):
         self.showCrop()
 
     def on_pushButtonSave_clicked(self):
-        self.mCrop.setName(self.leName.text())
-        self.mCrop.setDescription(self.leDescription.text())
-        self.mCrop.setCropYield(self.sbCropYield.value())
-        self.mCrop.setCropCalories(self.sbCropCalories.value())
-        self.mCrop.setFodderProduction(self.sbCropFodderProduction.value())
-        self.mCrop.setCropFodderValue(self.sbCropFodderValue.value())
-        self.mCrop.setAreaUnits(self.cbAreaUnits.currentIndex())
-        self.mCrop.setCropFodderEnergyType(self.cbFodderEnergyType.currentIndex())
-        self.mCrop.setImageFile(self.mImageFile)
+        self.mCrop.name(self.leName.text())
+        self.mCrop.description(self.leDescription.text())
+        self.mCrop.cropYield(self.sbCropYield.value())
+        self.mCrop.cropCalories(self.sbCropCalories.value())
+        self.mCrop.cropFodderProduction(self.sbCropFodderProduction.value())
+        self.mCrop.cropFodderValue(self.sbCropFodderValue.value())
+        self.mCrop.areaUnits(self.cbAreaUnits.currentIndex())
+        self.mCrop.cropFodderEnergyType(self.cbFodderEnergyType.currentIndex())
+        self.mCrop.imageFile(self.mImageFile)
         self.mCrop.toXmlFile(os.path.join(LaUtils.userCropProfilesDirPath(), f"{self.mCrop.guid}.xml"))
         self.refreshCropTable(self.mCrop.guid)
 
