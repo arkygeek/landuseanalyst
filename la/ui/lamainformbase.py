@@ -36,10 +36,15 @@ from la.lib.lamodel import LaModel
 from la.lib.lautils import LaUtils
 
 from la.ui.lacropmanagerbase import LaCropManagerBase
-from la.ui.lacropparameterbase import LaCropParameterManagerBase
+from la.ui.lacropparametermanagerbase import LaCropParameterManagerBase
 from la.ui.laanimalmanagerbase import LaAnimalManagerBase
 from la.ui.laanimalparameterbase import LaAnimalParameterBase
 
+# Add imports for implementation classes
+from la.gui.lacropmanager import LaCropManager
+from la.gui.lacropparametermanager import LaCropParameterManager
+from la.gui.laanimalmanager import LaAnimalManager
+from la.gui.laanimalparametermanager import LaAnimalParameterManager
 
 # endregion
 
@@ -133,28 +138,28 @@ class LaMainFormBase(QDialog, FORM_CLASS):
     def on_clicked_pbnNewCrop(self):
         print("open Manage Crops window printed")
         self.tbReport.append("Manage Crops button clicked")
-        myCropManager = LaCropManagerBase()
+        myCropManager = LaCropManager()  # Use implementation class
         myCropManager.show()
         myCropManager.exec_()
 
     def on_clicked_pbnNewCropParameter(self):
         print("open Crop Parameters window printed")
         self.tbReport.append("Manage Crop Parameters button clicked")
-        myCropParameterManager = LaCropParameterManagerBase()
+        myCropParameterManager = LaCropParameterManager()  # Use implementation class
         myCropParameterManager.show()
         myCropParameterManager.exec_()
 
     def on_clicked_pbnNewAnimal(self):
         print("open Manage Animals window printed")
         self.tbReport.append("Manage Animals button clicked")
-        myAnimalManager = LaAnimalManagerBase()
+        myAnimalManager = LaAnimalManager()  # Use implementation class
         myAnimalManager.show()
         myAnimalManager.exec_()
 
     def on_clicked_pbnNewAnimalParameter(self):
         print("open Animal Parameters window")
         self.tbReport.append("Manage Animal Parameters button clicked")
-        myAnimalParameterManager = LaAnimalParameterManagerBase()
+        myAnimalParameterManager = LaAnimalParameterManager()  # Use implementation class
         myAnimalParameterManager.show()
         myAnimalParameterManager.exec_()
 

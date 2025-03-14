@@ -128,27 +128,15 @@ class LaUtils:
 
     @staticmethod
     def userAnimalProfilesDirPath() -> str:
-        """
-        Returns the path to the animal profiles directory.
-        If the directory does not exist, it is created.
-        :return: A string representing the path to the animal profiles directory.
-        :rtype: str
-        """
-        myPath = QDir.homePath() + "/.landuseAnalyst/animalProfiles/"
-        QDir().mkpath(myPath)
-        return myPath
+        path = os.path.join(LaUtils.userDataPath(), 'animalProfiles')
+        LaUtils.ensureDirectoryExists(path)
+        return path
 
     @staticmethod
     def userCropProfilesDirPath() -> str:
-        """
-        Returns the path to the crop profiles directory.
-        If the directory does not exist, it is created.
-        :return: A string representing the path to the crop profiles directory.
-        :rtype: str
-        """
-        myPath = QDir.homePath() + "/.landuseAnalyst/cropProfiles/"
-        QDir().mkpath(myPath)
-        return myPath
+        path = os.path.join(LaUtils.userDataPath(), 'cropProfiles')
+        LaUtils.ensureDirectoryExists(path)
+        return path
 
     @staticmethod
     def getAvailableAnimals() -> Dict[str, LaAnimal]:
@@ -263,14 +251,11 @@ class LaUtils:
         QDir().mkpath(myPath)
         return myPath
 
-
-
     @staticmethod
     def userAnimalParameterProfilesDirPath() -> str:
-        """Returns the path to the user's animal parameter profiles directory, creating it if necessary."""
-        myPath = QDir.homePath() + "/.landuseAnalyst/animalParameterProfiles/"
-        QDir().mkpath(myPath)
-        return myPath
+        path = os.path.join(LaUtils.userDataPath(), 'animalParameterProfiles')
+        LaUtils.ensureDirectoryExists(path)
+        return path
 
     @staticmethod
     def userImagesDirPath() -> str:
@@ -285,14 +270,9 @@ class LaUtils:
 
     @staticmethod
     def userCropParameterProfilesDirPath() -> str:
-        """
-        Returns the path to the user's crop parameter profiles directory.
-        :return: The path to the user's crop parameter profiles directory.
-        :rtype: str
-        """
-        myPath = QDir.homePath() + "/.landuseAnalyst/cropParameterProfiles/"
-        QDir().mkpath(myPath)
-        return myPath
+        path = os.path.join(LaUtils.userDataPath(), 'cropParameterProfiles')
+        LaUtils.ensureDirectoryExists(path)
+        return path
 
     @staticmethod
     def convertAreaToHectares(
@@ -467,7 +447,7 @@ class LaUtils:
         return mySortedList
 
     @staticmethod
-    def uniqueList(theList: List[str]) -> List[str]:
+    def uniqueList(theList):
         """Returns a list with duplicates removed from the input list.
 
         This method iterates over the input list and adds each item to a new list
@@ -487,7 +467,7 @@ class LaUtils:
         """
         # remove any duplicates from a sorted list
         myUniqueList: List[str] = []
-        myLast: str = ""
+        myLast = ""
         for myCurrent in theList:
             if myCurrent != myLast:
                 myUniqueList.append(myCurrent)
@@ -518,7 +498,7 @@ class LaUtils:
         return myExperimentList
 
     @staticmethod
-    def createTextFile(theFileName: str, theData: str) -> bool:
+    def createTextFile(theFileName, theData) -> bool:
         """Creates a text file with the given name and writes the given data to it.
 
         This method attempts to open a file with the given name in write mode.
@@ -549,7 +529,7 @@ class LaUtils:
             return False
 
     @staticmethod
-    def xmlEncode(theString: str) -> str:
+    def xmlEncode(theString):
         """Encodes a string for use in XML.
 
         This method replaces certain characters in the input string with their
@@ -573,7 +553,7 @@ class LaUtils:
         return myEncodedString
 
     @staticmethod
-    def xmlDecode(theString: str) -> str:
+    def xmlDecode(theString):
         """Decodes a string from XML encoding.
 
         This method replaces certain XML entities in the input string with their
@@ -591,7 +571,7 @@ class LaUtils:
         :return: The decoded string.
         :rtype: str
         """
-        myDecodedString: str = theString.replace("&lt;", "<")
+        myDecodedString = theString.replace("&lt;", "<")
         myDecodedString = myDecodedString.replace("&gt;", ">")
         myDecodedString = myDecodedString.replace("&amp;", "&")
         return myDecodedString
@@ -832,3 +812,57 @@ class LaUtils:
         myName = fi.fileName()
         myDestinationFilePathName = LaUtils.userConversionTablesDirPath() + "/" + myName
         return myDestinationFilePathName
+
+    @staticmethod
+    def resolvePath(path, fileType=None):
+        """Resolve path across platforms maintaining consistency with C++ version."""
+        # If path exists as-is, use it (matches original C++ behavior)
+        if path and os.path.exists(path):
+            return path
+
+        # If not found as absolute path, try user data directory
+        basename = os.path.basename(path) if path else ''
+        if not basename:
+            return ""
+
+        # Define standard locations based on original C++ structure
+        userDataPath = os.path.join(os.path.expanduser('~'), '.landuseAnalyst')
+
+        # Try standard locations
+        if fileType == 'image':
+            userPath = os.path.join(userDataPath, 'images', basename)
+            if os.path.exists(userPath):
+                return userPath
+
+        # Try resource path as fallback (matching Qt resource system)
+        resourcePath = f":/images/{basename}"
+        return resourcePath
+
+    @staticmethod
+    def userDataPath():
+        """Returns the path to the user's data directory."""
+        home = os.path.expanduser('~')
+        base_dir = '.landuseAnalyst'
+        return os.path.join(home, base_dir)
+
+    @staticmethod
+    def ensureDirectoryExists(path):
+        """Ensures that the directory exists, creating it if necessary."""
+        if not os.path.exists(path):
+            os.makedirs(path, exist_ok=True)
+        return path
+
+    @staticmethod
+    def saveFilePath(sourceFile, fileType):
+        """Returns a path where a file should be saved based on its type."""
+        subdir = {
+            'image': 'images',
+            'crop': 'cropProfiles',
+            'cropParameter': 'cropParameterProfiles',
+            'animal': 'animalProfiles',
+            'animalParameter': 'animalParameterProfiles'
+        }.get(fileType, '')
+
+        target_dir = os.path.join(LaUtils.userDataPath(), subdir)
+        LaUtils.ensureDirectoryExists(target_dir)
+        return os.path.join(target_dir, os.path.basename(sourceFile))

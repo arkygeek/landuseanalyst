@@ -99,7 +99,7 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
         return myNewCropParameter
 
     @pyqtProperty(str, notify=nameChanged)
-    def name(self): # type: ignore
+    def name(self):
         return self._name
 
     @name.setter
@@ -109,134 +109,134 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
             self.nameChanged.emit(theName)
 
     @pyqtProperty(str, notify=descriptionChanged)
-    def description(self): # type: ignore
+    def description(self):
         return self._description
 
     @description.setter
     def description(self, description):
         if self._description != description:
             self._description = description
-            self.descriptionChanged.emit(description) # type: ignore
+            self.descriptionChanged.emit(description)
 
     @pyqtProperty(str, notify=guidChanged)
-    def guid(self): # type: ignore
+    def guid(self):
         return self._guid
 
     @guid.setter
     def guid(self, guid):
         if self._guid != guid:
             self._guid = guid
-            self.guidChanged.emit(guid) # type: ignore
+            self.guidChanged.emit(guid)
 
     @pyqtProperty(str, notify=cropGuidChanged)
-    def cropGuid(self): # type: ignore
+    def cropGuid(self):
         return self._cropGuid
 
     @cropGuid.setter
     def cropGuid(self, cropGuid):
         if self._cropGuid != cropGuid:
             self._cropGuid = cropGuid
-            self.cropGuidChanged.emit(cropGuid) # type: ignore
+            self.cropGuidChanged.emit(cropGuid)
 
     @pyqtProperty(float, notify=percentTameCropChanged)
-    def percentTameCrop(self): # type: ignore
+    def percentTameCrop(self):
         return self._percentTameCrop
 
     @percentTameCrop.setter
     def percentTameCrop(self, percentTameCrop):
         if self._percentTameCrop != percentTameCrop:
             self._percentTameCrop = percentTameCrop
-            self.percentTameCropChanged.emit(percentTameCrop) # type: ignore
+            self.percentTameCropChanged.emit(percentTameCrop)
 
     @pyqtProperty(float, notify=spoilageChanged)
-    def spoilage(self): # type: ignore
+    def spoilage(self):
         return self._spoilage
 
     @spoilage.setter
     def spoilage(self, spoilage):
         if self._spoilage != spoilage:
             self._spoilage = spoilage
-            self.spoilageChanged.emit(spoilage) # type: ignore
+            self.spoilageChanged.emit(spoilage)
 
     @pyqtProperty(float, notify=reseedChanged)
-    def reseed(self): # type: ignore
+    def reseed(self):
         return self._reseed
 
     @reseed.setter
     def reseed(self, reseed):
         if self._reseed != reseed:
             self._reseed = reseed
-            self.reseedChanged.emit(reseed) # type: ignore
+            self.reseedChanged.emit(reseed)
 
     @pyqtProperty(float, notify=cropRotationChanged)
-    def cropRotation(self): # type: ignore
+    def cropRotation(self):
         return self._cropRotation
 
     @cropRotation.setter
     def cropRotation(self, cropRotation):
         if self._cropRotation != cropRotation:
             self._cropRotation = cropRotation
-            self.cropRotationChanged.emit(cropRotation) # type: ignore
+            self.cropRotationChanged.emit(cropRotation)
 
     @pyqtProperty(float, notify=fallowRatioChanged)
-    def fallowRatio(self): # type: ignore
+    def fallowRatio(self):
         return self._fallowRatio
 
     @fallowRatio.setter
     def fallowRatio(self, fallowRatio):
         if self._fallowRatio != fallowRatio:
             self._fallowRatio = fallowRatio
-            self.fallowRatioChanged.emit(fallowRatio) # type: ignore
+            self.fallowRatioChanged.emit(fallowRatio)
 
     @pyqtProperty(float, notify=fallowValueChanged)
-    def fallowValue(self): # type: ignore
+    def fallowValue(self):
         return self._fallowValue
 
     @fallowValue.setter
     def fallowValue(self, fallowValue):
         if self._fallowValue != fallowValue:
             self._fallowValue = fallowValue
-            self.fallowValueChanged.emit(fallowValue) # type: ignore
+            self.fallowValueChanged.emit(fallowValue)
 
     @pyqtProperty(AreaUnits, notify=areaUnitsChanged)
-    def areaUnits(self): # type: ignore
+    def areaUnits(self):
         return self._areaUnits
 
     @areaUnits.setter
     def areaUnits(self, areaUnits):
         if self._areaUnits != areaUnits:
             self._areaUnits = areaUnits
-            self.areaUnitsChanged.emit(areaUnits) # type: ignore
+            self.areaUnitsChanged.emit(areaUnits)
 
     @pyqtProperty(bool, notify=useCommonLandChanged)
-    def useCommonLand(self): # type: ignore
+    def useCommonLand(self):
         return self._useCommonLand
 
     @useCommonLand.setter
     def useCommonLand(self, useCommonLand):
         if self._useCommonLand != useCommonLand:
             self._useCommonLand = useCommonLand
-            self.useCommonLandChanged.emit(useCommonLand) # type: ignore
+            self.useCommonLandChanged.emit(useCommonLand)
 
     @pyqtProperty(bool, notify=useSpecificLandChanged)
-    def useSpecificLand(self): # type: ignore
+    def useSpecificLand(self):
         return self._useSpecificLand
 
     @useSpecificLand.setter
     def useSpecificLand(self, useSpecificLand):
         if self._useSpecificLand != useSpecificLand:
             self._useSpecificLand = useSpecificLand
-            self.useSpecificLandChanged.emit(useSpecificLand) # type: ignore
+            self.useSpecificLandChanged.emit(useSpecificLand)
 
     @pyqtProperty(str, notify=rasterNameChanged)
-    def rasterName(self): # type: ignore
+    def rasterName(self):
         return self._rasterName
 
     @rasterName.setter
     def rasterName(self, rasterName):
         if self._rasterName != rasterName:
             self._rasterName = rasterName
-            self.rasterNameChanged.emit(rasterName) # type: ignore
+            self.rasterNameChanged.emit(rasterName)
 
     def fromXml(self, theXml: str) -> bool:
         from la.lib.lautils import LaUtils

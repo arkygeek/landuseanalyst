@@ -197,18 +197,10 @@ class LanduseAnalyst:
 
         icon_path = ':/la_icon_small.png'
 
-        self.action = QAction(QIcon(":/plugins/la/la_icon_small.png"), "Landuse Analyst", self.iface.mainWindow())
+        self.action = QAction(QIcon(icon_path), "Landuse Analyst", self.iface.mainWindow())
         self.action.triggered.connect(self.run)
         self.iface.addToolBarIcon(self.action)
         self.iface.addPluginToMenu("&Landuse Analyst", self.action)
-        # self.add_action(
-        #     icon_path,
-        #     text=self.tr(u'Model archaeological site catchement areas'),
-        #     callback=self.run,
-        #     parent=self.iface.mainWindow())
-
-        # will be set False in run()
-        # self.first_start = True
 
 
     def unload(self):
