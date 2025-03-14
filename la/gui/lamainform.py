@@ -1,419 +1,360 @@
-# Standard library imports
-from typing import Tuple
+# -*- coding: utf-8 -*-
+"""
+LanduseAnalyst - A QGIS plugin for determining the extent of the catchment area
+of a settlement (with respect to required land needed for food production).
+Land area targets for each food source supplied to the model are calculated based
+on a multitude of demographic and dietary inputs.
 
-# Third-party imports
-from qgis.PyQt.QtCore import Qt, QTranslator, QCoreApplication
-from qgis.PyQt.QtGui import QIcon, QPixmap
-from qgis.PyQt.QtWidgets import (QAction, QComboBox, QLabel, QLineEdit, QMainWindow, QSlider, QSpinBox,
-                                 QTextBrowser, QTextEdit, QTreeWidget, QMessageBox)
+@author:
+    Dr. Jason S. Jorgenson <jjorgenson@gmail.com>
 
-# Local application/library specific imports
-from la.resources_rc import *
-from la.ui.lamainformbase import LaMainFormBase
-from la.lib.lautils import LaUtils
+@date:
+    2022-03-22
+
+@version:
+    git sha: $Format:%H$
+
+@license:
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 3 of the License, or
+    (at your option) any later version.
+"""
+
 from la.lib.laanimal import LaAnimal
-from la.lib.laanimalparameter import LaAnimalParameter
-from la.lib.lacrop import LaCrop
-from la.lib.lacropparameter import LaCropParameter
+from qgis.PyQt import QtWidgets
+from qgis.PyQt import QtCore
+from qgis.PyQt.QtCore import QFile, QTextStream
+from qgis.PyQt.QtGui import QIcon
+
+# Import the base UI class
+from la.ui.lamainformbase import LaMainFormBase
+
+# Import dialog forms (implementation classes, not base classes)
+from la.gui.lacropmanager import LaCropManager
+from la.gui.lacropparametermanager import LaCropParameterManager
+from la.gui.laanimalmanager import LaAnimalManager
+from la.gui.laanimalparametermanager import LaAnimalParameterManager
+
+# Import library classes
 from la.lib.lamodel import LaModel
+from la.lib.lautils import LaUtils
+
 
 class LaMainForm(LaMainFormBase):
+    """Main form for the LanduseAnalyst plugin."""
+
     def __init__(self, parent=None):
+        """Constructor for LaMainForm."""
         super(LaMainForm, self).__init__(parent)
-        self.myModel = LaModel()
+
+        # Initialize maps
         self.mAnimalsMap = {}
         self.mCropsMap = {}
-        self.menu = None  # Define the menu attribute
-        self.initGUI()
-        self.loadSettings()
+        self.mSelectedAnimalsMap = {}
+        self.mSelectedCropsMap = {}
+        self.mWeightCounter = 0
 
-        # Additional initialization and logic for LaMainForm
-        # You can override methods from LaMainFormBase if needed
+        # Connect all signals and slots
+        self.connectSignalsSlots()
 
-        # Set up the menu actions
-        self.actionNew.triggered.connect(self.newFile)
-        self.actionOpen.triggered.connect(self.openFile)
-        self.actionSave.triggered.connect(self.saveFile)
-        self.actionSaveAs.triggered.connect(self.saveFileAs)
-        self.actionPreferences.triggered.connect(self.showPreferences)
-        self.actionAbout.triggered.connect(self.showAbout)
+        # Initialize combo boxes
+        self.initializeComboBoxes()
 
-        # Set up the toolbar actions
-        self.actionNewToolbar.triggered.connect(self.newFile)
-        self.actionOpenToolbar.triggered.connect(self.openFile)
-        self.actionSaveToolbar.triggered.connect(self.saveFile)
+        # Load data
+        self.loadAnimals()
+        self.loadCrops()
 
-        # Set up the status bar
-        self.statusBar().showMessage("Ready")
+    def connectSignalsSlots(self):
+        """Connect all signals to their corresponding slots."""
+        # Button connections
+        self.pushButtonExit.clicked.connect(self.close)
+        self.pbnNewCrop.clicked.connect(self.on_clicked_pbnNewCrop)
+        self.pbnNewCropParameter.clicked.connect(self.on_clicked_pbnNewCropParameter)
+        self.pbnNewAnimal.clicked.connect(self.on_clicked_pbnNewAnimal)
+        self.pbnNewAnimalParameter.clicked.connect(self.on_clicked_pbnNewAnimalParameter)
 
-        # Set up the window icon
-        self.setWindowIcon(QIcon(":/icons/landuseanalyst.png"))
-
-    def initGUI(self):
-        # create widgets
-        self.cbAreaUnits = QComboBox(self)
-        self.treeWidget = QTreeWidget(self)
-        self.treeWidget.setHeaderLabels(["Parameter", "Value"])
-        self.treeWidget.setColumnWidth(0, 200)
-        self.treeWidget.setColumnWidth(1, 100)
-        self.cbAreaUnits.addItem("Dunum")
-        self.cbAreaUnits.addItem("Hectare")
-        self.cbCommonLandEnergyType = QComboBox(self)
-        self.cbCommonLandEnergyType.addItem("KCalories")
-        self.cbCommonLandEnergyType.addItem("TDN")
-        self.sliderDiet = QSlider(Qt.Horizontal, self)
-        self.sliderDiet.setRange(0, 100)
-        self.sliderDiet.setValue(50)
-        self.sliderMeat = QSlider(Qt.Horizontal, self)
-        self.sliderMeat.setRange(0, 100)
-        self.sliderMeat.setValue(50)
-        self.sliderCrop = QSlider(Qt.Horizontal, self)
-        self.sliderCrop.setRange(0, 100)
-        self.sliderCrop.setValue(50)
+        # Slider connections
         self.sliderDiet.valueChanged.connect(self.on_sliderDiet_valueChanged)
         self.sliderMeat.valueChanged.connect(self.on_sliderMeat_valueChanged)
         self.sliderCrop.valueChanged.connect(self.on_sliderCrop_valueChanged)
-        self.treeWidget.currentItemChanged.connect(self.current_item_changed)
 
-        self.sbPopulation = QSpinBox(self)
-        self.sbPopulation.setRange(1, 1000000)
-        self.sbPopulation.setValue(1000)
-        self.lineEditPeriod = QLineEdit(self)
+        # Tree and list widget connections
+        self.treeHelp.currentItemChanged.connect(self.current_item_changed)
+        self.treeHelp.currentItemChanged.connect(self.helpItemClicked)
+        self.listWidgetCalculationsCrop.currentItemChanged.connect(self.cropCalcClicked)
+        self.listWidgetCalculationsAnimal.currentItemChanged.connect(self.animalCalcClicked)
 
-        # create actions
-        self.actionNew = QAction("New", self)
-        self.actionNew.setShortcut("Ctrl+N")
-        self.actionNew.triggered.connect(self.newFile)
+        # Table connections
+        self.tblAnimals.cellClicked.connect(self.animalCellClicked)
+        self.tblAnimals.cellChanged.connect(self.animalCalcSelectionChanged)
+        self.tblCrops.cellClicked.connect(self.cropCellClicked)
+        self.tblCrops.cellChanged.connect(self.cropCalcSelectionChanged)
 
-        # set widget properties
-        self.tbReport = QTextEdit(self)
-        self.tbReport.setReadOnly(True)
-        self.tbLogs = QTextEdit(self)
-        self.tbLogs.setReadOnly(True)
-        self.textBrowserAnimalDefinition = QTextBrowser(self)
-        self.textBrowserAnimalDefinition.setHtml("")
-        self.textBrowserCropDefinition = QTextBrowser(self)
-        self.textBrowserCropDefinition.setHtml("")
+        # Miscellaneous connections
+        self.cbDebug.clicked.connect(self.on_cbDebug_clicked)
+        self.pushButtonExit.clicked.connect(QtWidgets.qApp.quit)
 
-        # set layout
-        self.tbReport.moveCursor(self.tbReport.textCursor().End)
-        self.tbLogs.moveCursor(self.tbLogs.textCursor().End)
+    def initializeComboBoxes(self):
+        """Initialize combo box items."""
+        self.cbAreaUnits.addItem("Dunum")
+        self.cbAreaUnits.addItem("Hectare")
+        self.cbCommonLandEnergyType.addItem("KCalories")
+        self.cbCommonLandEnergyType.addItem("TDN")
 
-    def on_sliderDiet_valueChanged(self, value):
-        myMinString = str(value)
-        myMaxString = str(100 - value)
-        self.labelMeatPercent = QLabel(self)
-        self.labelMeatPercent.setText(myMinString)
-        self.labelCropPercent = QLabel(self)
-        self.labelCropPercent.setText(myMaxString)
-        self.setDietLabels()
+    def on_clicked_pbnNewCrop(self):
+        """Open the Crop Manager dialog."""
+        print("open Manage Crops window printed")
+        self.tbReport.append("Manage Crops button clicked")
 
-    def on_sbDailyCalories_valueChanged(self, theValue):
-        self.setDietLabels()
+        # Create and show the crop manager form
+        myCropManager = LaCropManager(self.mCropsMap, self)
+        result = myCropManager.exec_()
 
-    def on_cboxIncludeDairy_clicked(self, theBool):
-        self.setDietLabels()
+        # Handle the result
+        if result == QtWidgets.QDialog.Accepted:
+            self.mCropsMap = myCropManager.getCrops()
+            self.loadCrops()  # Refresh crops list
 
-    def on_sbLimitDairyPercent_valueChanged(self, theValue):
-        self.setDietLabels()
+    def on_clicked_pbnNewCropParameter(self):
+        """Open the Crop Parameter Manager dialog."""
+        print("open Crop Parameters window printed")
+        self.tbReport.append("Manage Crop Parameters button clicked")
 
-    def on_cboxBaseOnPlants_clicked(self, theBool):
-        self.setDietLabels()
+        # Create and show the crop parameter form
+        myCropParameterManager = LaCropParameterManager(self)
+        result = myCropParameterManager.exec_()
 
-    def on_cboxLimitDairy_clicked(self, theBool):
-        self.setDietLabels()
+        # Handle the result
+        if result == QtWidgets.QDialog.Accepted:
+            self.loadCrops()  # Refresh crops list
 
-    def on_sliderMeat_valueChanged(self, theValue):
-        myMinString = str(100 - theValue)
-        myMaxString = str(theValue)
-        self.labelMeatWildPercent.setText(myMinString)
-        self.labelMeatTamePercent.setText(myMaxString)
-        self.setDietLabels()
+    def on_clicked_pbnNewAnimal(self):
+        """Open the Animal Manager dialog."""
+        print("open Manage Animals window printed")
+        self.tbReport.append("Manage Animals button clicked")
+
+        # Create and show the animal manager form
+        myAnimalManager = LaAnimalManager(self.mAnimalsMap, self)
+        result = myAnimalManager.exec_()
+
+        # Handle the result
+        if result == QtWidgets.QDialog.Accepted:
+            self.mAnimalsMap = myAnimalManager.getAnimals()
+            self.loadAnimals()  # Refresh animals list
+
+    def on_clicked_pbnNewAnimalParameter(self):
+        """Open the Animal Parameter Manager dialog."""
+        print("open Animal Parameters window")
+        self.tbReport.append("Manage Animal Parameters button clicked")
+
+        # Create and show the animal parameter form
+        myAnimalParameterManager = LaAnimalParameterManager(self)
+        result = myAnimalParameterManager.exec_()
+
+        # Handle the result
+        if result == QtWidgets.QDialog.Accepted:
+            self.loadAnimals()  # Refresh animals list
 
     def on_sliderDiet_valueChanged(self, theValue):
+        """Handle diet slider value change."""
         myMinString = str(theValue)
         myMaxString = str(100 - theValue)
         self.labelMeatPercent.setText(myMinString)
         self.labelCropPercent.setText(myMaxString)
-        self.setDietLabels()
+        self.setDietLabels()  # recalculates model (to update the diet labels!)
 
-    def on_sbDairyUtilisation_valueChanged(self, theValue):
-        self.setDietLabels()
+    def on_sliderMeat_valueChanged(self, theValue):
+        """Handle meat slider value change."""
+        myMinString = str(theValue)
+        myMaxString = str(100 - theValue)
+        self.labelMeatWildPercent.setText(myMinString)
+        self.labelMeatTamePercent.setText(myMaxString)
+        self.setDietLabels()  # recalculates model (to update the diet labels!)
 
     def on_sliderCrop_valueChanged(self, theValue):
-        myMinString = str(100 - theValue)
-        myMaxString = str(theValue)
+        """Handle crop slider value change."""
+        myMinString = str(theValue)
+        myMaxString = str(100 - theValue)
         self.labelCropWildPercent.setText(myMinString)
         self.labelCropTamePercent.setText(myMaxString)
-        self.setDietLabels()
+        self.setDietLabels()  # recalculates model (to update the diet labels!)
 
-    def current_item_changed(self, current, previous):
-        # TODO: Implement current_item_changed functionality
-        pass
+    def setModel(self, *args):
+        """Set up the model based on current form values."""
+        from la.lib.la import AreaUnits
+        self.mSelectedCropsMap.clear()
+        self.mSelectedAnimalsMap.clear()
+        mySelectedAreaUnit = AreaUnits(self.cbAreaUnits.currentText())
+        myCommonRasterValue = int(self.sbCommonRasterValue.value())
+        myAreaUnits = 'Dunum' if mySelectedAreaUnit else 'Hectare'
+        print(mySelectedAreaUnit, myAreaUnits, myCommonRasterValue)
 
-    def newFile(self):
-        # TODO: Implement new file functionality
-        pass
-
-    def calculate(self):
-        self.myModel.setPopulation(self.sbPopulation.value())
-        self.myModel.setPeriod(self.lineEditPeriod.text())
-        self.myModel.setEasting(int(self.lineEditEasting.text()))
-        self.myModel.setNorthing(int(self.lineEditNorthing.text()))
-        self.myModel.setEuclideanDistance(self.radioButtonEuclidean.isChecked())
-        self.myModel.setWalkingTime(self.radioButtonWalkingTime.isChecked())
-        self.myModel.setPathDistance(self.radioButtonPathDistance.isChecked())
-        self.myModel.setPrecision(self.sbModelPrecision.value())
-
-        if self.labelCropCheck.text() != "100%" or self.labelAnimalCheck.text() != "100%":
-            return
-        else:
-            if self.cboxBaseOnPlants.isChecked():
-                if self.cboxIncludeDairy.isChecked():
-                    self.myDietLabels = self.myModel.doCalcsPlantsFirstIncludeDairy()
-                else:
-                    self.myDietLabels = self.myModel.doCalcsPlantsFirstDairySeperate()
+    def loadAnimals(self):
+        """Load animals from disk and populate the UI."""
+        self.listWidgetCalculationsAnimal.clear()
+        myModel = LaModel()
+        self.tblAnimals.clear()
+        self.tblAnimals.setRowCount(0)
+        self.tblAnimals.setColumnCount(4)
+        myCurrentRow = 0
+        myRunningPercentage = 0.0
+        myAnimalsMap: dict[str, LaAnimal] = LaUtils.getAvailableAnimals()
+        myAnimalParametersMap    = LaUtils.getAvailableAnimalParameters()
+        for myGuid, myAnimal in myAnimalsMap.items():
+            myName: QtCore.pyqtProperty = myAnimal.name
+            myValue = self.mAnimalsMap.get(myGuid, (False, ""))
+            if myGuid not in self.mAnimalsMap:
+                self.mAnimalsMap[myGuid] = myValue
+            myIcon = QIcon(":/localdata.png")
+            self.tblAnimals.insertRow(myCurrentRow)
+            mypUsedItem = QtWidgets.QTableWidgetItem("Used?")
+            if myValue[0]:
+                mypUsedItem.setCheckState(QtCore.Qt.Checked)
+                myItem = QtWidgets.QListWidgetItem(str(myAnimal.name))
+                myItem.setData(QtCore.Qt.UserRole, myAnimal.guid)
+                self.listWidgetCalculationsAnimal.addItem(myItem)
             else:
-                if self.cboxIncludeDairy.isChecked():
-                    self.myDietLabels = self.myModel.doCalcsAnimalsFirstIncludeDiary()
-                else:
-                    self.myDietLabels = self.myModel.doCalcsAnimalsFirstDairySeparate()
+                mypUsedItem.setCheckState(QtCore.Qt.Unchecked)
+                myItem = QtWidgets.QListWidgetItem(str(myAnimal.name))
+                myItem.setData(QtCore.Qt.UserRole, myAnimal.guid)
+                self.listWidgetCalculationsAnimal.takeItem(self.listWidgetCalculationsAnimal.row(myItem))
+            self.tblAnimals.setItem(myCurrentRow, 0, mypUsedItem)
+            mypNameItem = QtWidgets.QTableWidgetItem(str(myAnimal.name))
+            mypNameItem.setData(QtCore.Qt.UserRole, myGuid)
+            self.tblAnimals.setItem(myCurrentRow, 1, mypNameItem)
+            mypNameItem.setIcon(myIcon)
+            mypCombo = QtWidgets.QComboBox(self)
+            for myParameterGuid, myAnimalParameter in myAnimalParametersMap.items():
+                myParameterName = f"{myAnimalParameter.name}  ({myAnimalParameter.description})"
+                if myGuid != myAnimalParameter.animalGuid:
+                    continue
+                if not myValue[1]:
+                    myValue = (myValue[0], myParameterGuid)
+                if myValue[1] == myAnimalParameter.guid:
+                    if myValue[0]:
+                        myRunningPercentage += myAnimalParameter.percentTameMeat
+                    mypPercentItem = QtWidgets.QTableWidgetItem(str(myAnimalParameter.percentTameMeat))
+                    self.tblAnimals.setItem(myCurrentRow, 3, mypPercentItem)
+                mypCombo.addItem(myIcon, myParameterName, myParameterGuid)
+            self.setComboToDefault(mypCombo, myValue[1])
+            self.mAnimalsMap[myGuid] = myValue
+            self.tblAnimals.setCellWidget(myCurrentRow, 2, mypCombo)
+            myCurrentRow += 1
+        myIcon = QIcon(":/status_ok.png") if myRunningPercentage == 100 else QIcon(":/status_error.png")
+        myPercentItem = str(myRunningPercentage)
+        self.labelAnimalCheck.setText(f"{myPercentItem}%")
 
-        self.tbReport.setHtml(self.myModel.toHtml())
+    def loadCrops(self):
+        """Load crops from disk and populate the UI."""
+        self.listWidgetCalculationsCrop.clear()
+        self.tblCrops.clear()
+        self.tblCrops.setRowCount(0)
+        self.tblCrops.setColumnCount(4)
+        myCurrentRow = 0
+        myRunningPercentage = 0.0
+        myCropsMap = LaUtils.getAvailableCrops()
+        myCropParametersMap = LaUtils.getAvailableCropParameters()
+        for myGuid, myCrop in myCropsMap.items():
+            myName = myCrop.name
+            myValue = self.mCropsMap.get(myGuid, (False, ""))
+            if myGuid not in self.mCropsMap:
+                self.mCropsMap[myGuid] = myValue
+            myIcon = QIcon(":/localdata.png")
+            self.tblCrops.insertRow(myCurrentRow)
+            mypUsedItem = QtWidgets.QTableWidgetItem("Used?")
+            if myValue[0]:
+                mypUsedItem.setCheckState(QtCore.Qt.Checked)
+                myItem = QtWidgets.QListWidgetItem(str(myCrop.name))
+                myItem.setData(QtCore.Qt.UserRole, myCrop.guid)
+                self.listWidgetCalculationsCrop.addItem(myItem)
+            else:
+                mypUsedItem.setCheckState(QtCore.Qt.Unchecked)
+            self.tblCrops.setItem(myCurrentRow, 0, mypUsedItem)
+            mypNameItem = QtWidgets.QTableWidgetItem(str(myCrop.name))
+            mypNameItem.setData(QtCore.Qt.UserRole, myGuid)
+            self.tblCrops.setItem(myCurrentRow, 1, mypNameItem)
+            mypNameItem.setIcon(myIcon)
+            mypCombo = QtWidgets.QComboBox(self)
+            for myParameterGuid, myCropParameter in myCropParametersMap.items():
+                myParameterName = f"{myCropParameter.name}  ({myCropParameter.description})"
+                if myGuid != myCropParameter.cropGuid:
+                    continue
+                if not myValue[1]:
+                    myValue = (myValue[0], myParameterGuid)
+                if myValue[1] == myCropParameter.guid:
+                    if myValue[0]:
+                        myRunningPercentage += float(str(myCropParameter.percentTameCrop))
+                        myItem = QtWidgets.QListWidgetItem(str(myCrop.name))
+                        myItem.setData(QtCore.Qt.UserRole, myCrop.guid)
+                        self.listWidgetCalculationsCrop.addItem(myItem)
+                    mypPercentItem = QtWidgets.QTableWidgetItem(str(myCropParameter.percentTameCrop))
+                    self.tblCrops.setItem(myCurrentRow, 3, mypPercentItem)
+                mypCombo.addItem(myIcon, myParameterName, myParameterGuid)
+            self.setComboToDefault(mypCombo, myValue[1])
+            self.mCropsMap[myGuid] = myValue
+            self.tblCrops.setCellWidget(myCurrentRow, 2, mypCombo)
+            myCurrentRow += 1
+        myIcon = QIcon(":/status_ok.png") if myRunningPercentage == 100 else QIcon(":/status_error.png")
+        myPercentItem = str(myRunningPercentage)
+        self.labelCropCheck.setText(f"{myPercentItem}%")
 
-        myGuid = self.thepCurrentItem.data(Qt.UserRole)
-        myAnimal = LaUtils.getAnimal(myGuid)
-        self.lblAnimalPicCalcs.setPixmap(QPixmap(myAnimal.imageFile()))
-        myCalcsMap = self.myModel.calcsAnimalsMap()
-        myReportPair: Tuple[str, float]
-        myReportMap: La.LaReportMap = self.myDietLabels.animalCalcsReportMap()
-        myReportPair = myReportMap.value(myGuid)
-        myReportString = myReportPair.first
-        self.textBrowserResultsAnimals.setText(myReportString)
-        self.progressBarCalcs.setMaximum(100)
+    def setComboToDefault(self, combo, default):
+        """Set a combo box to a specified default value."""
+        index = combo.findData(default)
+        if index >= 0:
+            combo.setCurrentIndex(index)
 
-    def printCropsAndAnimals(self):
-        self.tbReport.clear()
-        myAnimalIterator = iter(self.mAnimalsMap)
-        while True:
-            try:
-                myAnimalGuid = next(myAnimalIterator)
-                myPair = self.mAnimalsMap[myAnimalGuid]
-                mySelectedFlag = myPair[0]
-                myAnimalParameterGuid = myPair[1]
-                myText = "Animal <" + myAnimalGuid.toLocal8Bit() + " , <"
-                if mySelectedFlag:
-                    myText += "true,"
-                else:
-                    myText += "false,"
-                myText += myAnimalParameterGuid.toLocal8Bit()
-                myText += "> >"
-                self.tbLogs.append(myText)
-            except StopIteration:
-                break
+    def current_item_changed(self, theCurrentItem, thePreviousItem):
+        """Handle the change of current item in help tree."""
+        self.tbReport.append("Item clicked in help browser: " + theCurrentItem.text(0))
+        myQFile = QFile(":/" + theCurrentItem.text(0) + ".html")
+        myQFile.open(QFile.ReadOnly | QFile.Text)
+        istream = QTextStream(myQFile)
+        self.textHelp.setHtml(istream.readAll())
+        myQFile.close()
 
-        myCropIterator = iter(self.mCropsMap)
-        while True:
-            try:
-                myCropGuid = next(myCropIterator)
-                myPair = self.mCropsMap[myCropGuid]
-                mySelectedFlag = myPair[0]
-                myCropParameterGuid = myPair[1]
-                myText = "Crop <" + myCropGuid.toLocal8Bit() + " , <"
-                if mySelectedFlag:
-                    myText += "true,"
-                else:
-                    myText += "false,"
-                myText += myCropParameterGuid.toLocal8Bit()
-                myText += "> >"
-                self.tbLogs.append(myText)
-            except StopIteration:
-                break
-
-    def logMessage(self, theMessage: str):
-        self.tbLogs.append(theMessage)
-        self.tbLogs.ensureCursorVisible()
-
-    def showAnimalDefinitionReport(self, theAnimal: LaAnimal, theAnimalParameter: LaAnimalParameter):
-        myHtml = "<body>"
-        myHtml += "<table width=\"100%\">"
-        myHtml += "<tr>"
-        myHtml += "<td>"
-        myHtml += theAnimal.toHtml()
-        myHtml += "</td>"
-        myHtml += "<td>"
-        myHtml += theAnimalParameter.toHtml()
-        myHtml += "</td>"
-        myHtml += "</tr>"
-        myHtml += "</table>"
-        myHtml += "</body>"
-        self.textBrowserAnimalDefinition.setHtml(myHtml)
-
-    def showCropDefinitionReport(self, theCrop: LaCrop, theCropParameter: LaCropParameter):
-        myHtml = "<body>"
-        myHtml += "<table width=\"100%\">"
-        myHtml += "<tr>"
-        myHtml += "<td>"
-        myHtml += theCrop.toHtml()
-        myHtml += "</td>"
-        myHtml += "<td>"
-        myHtml += theCropParameter.toHtml()
-        myHtml += "</td>"
-        myHtml += "</tr>"
-        myHtml += "</table>"
-        myHtml += "</body>"
-        self.textBrowserCropDefinition.setHtml(myHtml)
-
-    def openFile(self):
-        # TODO: Implement open file functionality
+    def setDietLabels(self):
+        """Set diet labels based on the current model state."""
+        # Implement setting diet labels logic here
         pass
 
-    def saveFile(self):
-        # TODO: Implement save file functionality
+    def helpItemClicked(self, current, previous):
+        """Handle help item selection."""
+        # Additional help item processing logic here
         pass
 
-    def saveFileAs(self):
-        # TODO: Implement save file as functionality
+    def cropCalcClicked(self, current, previous):
+        """Handle click on crop calculation item."""
+        # Implement crop calculation click handling here
         pass
 
-    def showPreferences(self):
-        # TODO: Implement show preferences functionality
+    def animalCalcClicked(self, current, previous):
+        """Handle click on animal calculation item."""
+        # Implement animal calculation click handling here
         pass
 
-    def showAbout(self):
-        # TODO: Implement show about functionality
+    def animalCellClicked(self, row, column):
+        """Handle click on animal table cell."""
+        # Implement animal cell click handling here
         pass
 
-    def closeEvent(self, event):
-        # Save the settings
-        self.saveSettings()
+    def cropCellClicked(self, row, column):
+        """Handle click on crop table cell."""
+        # Implement crop cell click handling here
+        pass
 
-        # Confirm exit
-        reply = QMessageBox.question(self, "Exit", "Are you sure you want to exit?",
-                                     QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
-        if reply == QMessageBox.Yes:
-            event.accept()
-        else:
-            event.ignore()
+    def animalCalcSelectionChanged(self, row, column):
+        """Handle change in animal calculation selection."""
+        # Implement animal calculation selection change handling here
+        pass
 
-    def loadSettings(self):
-        # Load the language settings
-        language = self.settings.value("language", "en")
-        translator = QTranslator()
-        translator.load(f":/translations/landuseanalyst_{language}.qm")
-        QCoreApplication.installTranslator(translator)
+    def cropCalcSelectionChanged(self, row, column):
+        """Handle change in crop calculation selection."""
+        # Implement crop calculation selection change handling here
+        pass
 
-    def saveSettings(self):
-        # Save the language settings
-        language = QCoreApplication.translate("LaMainForm", "English")
-        if QCoreApplication.translate("LaMainForm", "French") in self.languageComboBox.currentText():
-            language = "fr"
-        self.settings.setValue("language", language)
-
-    def tr(self, message):
-        """Get the translation for a string using Qt translation API.
-
-        We implement this ourselves since we do not inherit QObject.
-
-        :param message: String for translation.
-        :type message: str, QString
-
-        :returns: Translated version of message.
-        :rtype: QString
-        """
-        return QCoreApplication.translate('LanduseAnalyst', message)
-
-    def add_action(self, icon_path, text, callback, enabled_flag=True, add_to_menu=True, add_to_toolbar=True,
-                   status_tip=None, whats_this=None, parent=None):
-        """Add a toolbar icon to the toolbar.
-
-        :param icon_path: Path to the icon for this action. Can be a resource
-            path (e.g. ':/plugins/foo/bar.png') or a normal file system path.
-        :type icon_path: str
-
-        :param text: Text that should be shown in menu items for this action.
-        :type text: str
-
-        :param callback: Function to be called when the action is triggered.
-        :type callback: function
-
-        :param enabled_flag: A flag indicating if the action should be enabled
-            by default. Defaults to True.
-        :type enabled_flag: bool
-
-        :param add_to_menu: Flag indicating whether the action should also
-            be added to the menu. Defaults to True.
-        :type add_to_menu: bool
-
-        :param add_to_toolbar: Flag indicating whether the action should also
-            be added to the toolbar. Defaults to True.
-        :type add_to_toolbar: bool
-
-        :param status_tip: Optional text to show in a popup when mouse pointer
-            hovers over the action.
-        :type status_tip: str
-
-        :param parent: Parent widget for the new action. Defaults None.
-        :type parent: QWidget
-
-        :param whats_this: Optional text to show in the status bar when the
-            mouse pointer hovers over the action.
-
-        :returns: The action that was created. Note that the action is also
-            added to self.actions list.
-        :rtype: QAction
-        """
-        icon = QIcon(icon_path)
-        action = QAction(icon, text, parent)
-        action.triggered.connect(callback)
-        action.setEnabled(enabled_flag)
-
-        if status_tip is not None:
-            action.setStatusTip(status_tip)
-
-        if whats_this is not None:
-            action.setWhatsThis(whats_this)
-
-        if add_to_toolbar:
-            # Adds plugin icon to Plugins toolbar
-            self.iface.addToolBarIcon(action)
-
-        if add_to_menu:
-            self.iface.addPluginToMenu(self.menu, action)
-
-        self.actions.append(action)
-        return action
-
-    def initGui(self):
-        """Create the menu entries and toolbar icons inside the QGIS GUI."""
-        icon_path = ':/la_icon_small.png'
-        self.add_action(icon_path, text=self.tr(u'Model archaeological site'), callback=self.run,
-                        parent=self.iface.mainWindow())
-
-        # will be set False in run()
-        self.first_start = True
-
-    def unload(self):
-        """Removes the plugin menu item and icon from QGIS GUI."""
-        for action in self.actions:
-            self.iface.removePluginMenu(self.tr(u'&Landuse Analyst'), action)
-            self.iface.removeToolBarIcon(action)
-
-    def run(self):
-        """Run method that performs all the real work"""
-        # Create the dialog with elements (after translation) and keep reference
-        # Only create GUI ONCE in callback, so that it will only load when the plugin is started
-        if self.first_start:
-            self.first_start = False
-            self.dlg = LaMainFormBase()
-
-        # show the dialog
-        self.dlg.show()
-        # Run the dialog event loop
-        result = self.dlg.exec_()
-        # See if OK was pressed
-        if result:
-            # Do something useful here - delete the line containing pass and
-            # substitute with your code.
-            print("thisIsOutput")
-            pass
+    def on_cbDebug_clicked(self):
+        """Handle debug checkbox click."""
+        # Implement debug checkbox handling here
+        pass

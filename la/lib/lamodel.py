@@ -167,14 +167,14 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             self._icon = None
         self.logger = logging.getLogger(__name__)
 
-    def logMessage(self, message: str):
+    def logMessage(self, theMessage: str):
         """
         Logs a message using the logger.
 
         Args:
             message (str): The message to log.
         """
-        self.logger.info(message)
+        self.logger.info(theMessage)
 
     def __del__(self):
         pass
