@@ -36,7 +36,7 @@ from la.lib.lacrop import LaCrop
 
 
 class LaCropManager(LaCropManagerBase):
-    def __init__(self, theCropsMap=None, parent=None):
+    def __init__(self, theCropsMap, parent=None):
         """Constructor for the Crop Manager dialog.
 
         :param theCropsMap: Dictionary of crops with guid as key
@@ -45,12 +45,12 @@ class LaCropManager(LaCropManagerBase):
         :type parent: QWidget
         """
         super(LaCropManager, self).__init__(parent)
-
+        # Store a working copy of the crops map
+        self.mCropsMap = theCropsMap.copy() if theCropsMap else {}
         # Initialize crops map (make a copy to avoid modifying the original)
-        self.mCropMap = {}
         if theCropsMap:
             for guid, value in theCropsMap.items():
-                self.mCropMap[guid] = value
+                self.mCropsMap[guid] = value
 
         # Initialize other variables
         self.imageFile = ""
@@ -220,14 +220,14 @@ class LaCropManager(LaCropManagerBase):
         self.crop.fromXmlFile(myOriginalFileName)
 
         # Change name to indicate it's a copy
-        myNewName = str(self.crop.name)
-        self.crop._name = f"{myNewName} (copy)"
+        myNewName = self.crop.name
+        self.crop.name = f"{myNewName} (copy)"
 
         # Generate a new GUID
         self.crop.setGuid(None)
 
         # Keep the same image
-        self.crop._imageFile = self.crop.imageFile
+        self.crop.imageFile = self.crop.imageFile
 
         self.showCrop()
 
@@ -323,7 +323,7 @@ class LaCropManager(LaCropManagerBase):
             self.crop.cropFodderValue = self.sbCropFodderValue.value()
             self.crop.areaUnits = self.cbAreaUnits.currentIndex()
             self.crop.cropFodderEnergyType = self.cbFodderEnergyType.currentIndex()
-            self.crop.imageFile = self.imageFile
+            self.crop.imageFile = self.imageFile  # Use the property
 
             # Make sure we have a valid GUID
             if not self.crop.guid:
