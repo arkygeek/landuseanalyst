@@ -26,6 +26,7 @@ This file implements the Crop Manager functionality.
 import os
 import shutil
 from qgis.PyQt import QtCore, QtWidgets
+from qgis.PyQt.QtCore import QSettings
 from qgis.PyQt.QtGui import QIcon, QPixmap
 from qgis.PyQt.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QFileDialog
 
@@ -38,28 +39,32 @@ class LaCropManager(LaCropManagerBase):
     def __init__(self, theCropsMap=None, parent=None):
         """Constructor for the Crop Manager dialog.
 
-        :param crops_map: Dictionary of crops with guid as key
-        :type crops_map: dict
+        :param theCropsMap: Dictionary of crops with guid as key
+        :type theCropsMap: dict
         :param parent: Parent widget
         :type parent: QWidget
         """
         super(LaCropManager, self).__init__(parent)
 
         # Initialize crops map (make a copy to avoid modifying the original)
-        self._cropMap = {}
+        self.mCropMap = {}
         if theCropsMap:
             for guid, value in theCropsMap.items():
-                self._cropMap[guid] = value
+                self.mCropMap[guid] = value
 
         # Initialize other variables
-        self._imageFile = ""
-        self._crop = LaCrop()
+        self.imageFile = ""
+        self.crop = LaCrop()
 
         # Connect signals/slots
         self.connectSignalsSlots()
 
         # Populate the table with crops
         self.refreshCropTable()
+
+        # Read window settings
+        self.readSettings()
+
 
     def connectSignalsSlots(self):
         """Connect signals to slots for UI interaction."""
@@ -88,13 +93,13 @@ class LaCropManager(LaCropManagerBase):
         self.tblCrops.setColumnCount(2)
 
         # Get available crops
-        self._cropMap = LaUtils.getAvailableCrops()
+        self.mCropMap = LaUtils.getAvailableCrops()
 
         # Populate table
         myCurrentRow = 0
         mySelectedRow = 0
 
-        for guid, crop in self._cropMap.items():
+        for guid, crop in self.mCropMap.items():
             self.tblCrops.insertRow(myCurrentRow)
 
             # GUID column (hidden)
@@ -126,8 +131,8 @@ class LaCropManager(LaCropManagerBase):
         """Create a new crop."""
         myCrop = LaCrop()
         myCrop.setGuid(None)  # Generate a new GUID
-        self._crop = myCrop
-        self._imageFile = ""
+        self.crop = myCrop
+        self.imageFile = ""
         self.showCrop()
 
         # Clear form fields for new crop
@@ -156,13 +161,13 @@ class LaCropManager(LaCropManagerBase):
             return
 
         myOriginalFileName = LaUtils.userCropProfilesDirPath() + "/" + myGuid + ".xml"
-        self._crop = LaCrop()
+        self.crop = LaCrop()
         if not os.path.exists(myOriginalFileName):
             QMessageBox.warning(self, "Edit Crop", f"Could not find crop file: {myOriginalFileName}")
             return
 
-        self._crop.fromXmlFile(myOriginalFileName)
-        self._imageFile = self._crop.imageFile
+        self.crop.fromXmlFile(myOriginalFileName)
+        self.imageFile = self.crop.imageFile
         self.showCrop()
 
     def on_toolDelete_clicked(self):
@@ -211,18 +216,18 @@ class LaCropManager(LaCropManagerBase):
             QMessageBox.warning(self, "Copy Crop", f"Could not find crop file: {myOriginalFileName}")
             return
 
-        self._crop = LaCrop()
-        self._crop.fromXmlFile(myOriginalFileName)
+        self.crop = LaCrop()
+        self.crop.fromXmlFile(myOriginalFileName)
 
         # Change name to indicate it's a copy
-        myNewName = str(self._crop.name)
-        self._crop.name = f"{myNewName} (copy)"
+        myNewName = str(self.crop.name)
+        self.crop._name = f"{myNewName} (copy)"
 
         # Generate a new GUID
-        self._crop.setGuid(None)
+        self.crop.setGuid(None)
 
         # Keep the same image
-        self._crop._imageFile = self._crop.imageFile
+        self.crop._imageFile = self.crop.imageFile
 
         self.showCrop()
 
@@ -249,7 +254,7 @@ class LaCropManager(LaCropManagerBase):
             pixmap = QPixmap(savedPath)
             if not pixmap.isNull():
                 self.lblCropPix.setPixmap(pixmap)
-                self._imageFile = savedPath
+                self.imageFile = savedPath
             else:
                 QMessageBox.warning(self, "Image Error", "Could not load the selected image.")
 
@@ -267,9 +272,9 @@ class LaCropManager(LaCropManagerBase):
             if not os.path.exists(myOriginalFileName):
                 return
 
-            self._crop = LaCrop()
-            self._crop.fromXmlFile(myOriginalFileName)
-            self._imageFile = self._crop.imageFile
+            self.crop = LaCrop()
+            self.crop.fromXmlFile(myOriginalFileName)
+            self.imageFile = self.crop.imageFile
             self.showCrop()
         except Exception as e:
             QMessageBox.warning(self, "Selection Change Error", f"Error loading crop: {str(e)}")
@@ -277,23 +282,23 @@ class LaCropManager(LaCropManagerBase):
     def showCrop(self):
         """Show the current crop in the form."""
         try:
-            self.leName.setText(str(self._crop.name))
-            self.leDescription.setText(str(self._crop.description))
-            self.sbCropYield.setValue(self._crop.cropYield)
-            self.sbCropCalories.setValue(self._crop.cropCalories)
-            self.sbCropFodderProduction.setValue(str(self._crop.cropFodderProduction))
-            self.sbCropFodderValue.setValue(str(self._crop.cropFodderValue))
+            self.leName.setText(str(self.crop.name))
+            self.leDescription.setText(str(self.crop.description))
+            self.sbCropYield.setValue(self.crop.cropYield)
+            self.sbCropCalories.setValue(self.crop.cropCalories)
+            self.sbCropFodderProduction.setValue(str(self.crop.cropFodderProduction))
+            self.sbCropFodderValue.setValue(str(self.crop.cropFodderValue))
 
             # Handle comboboxes with bounds checking
-            areaUnitsIndex = max(0, min(self.cbAreaUnits.count() - 1, str(self._crop.areaUnits)))
+            areaUnitsIndex = max(0, min(self.cbAreaUnits.count() - 1, str(self.crop.areaUnits)))
             self.cbAreaUnits.setCurrentIndex(areaUnitsIndex)
 
-            energyTypeIndex = max(0, min(self.cbFodderEnergyType.count() - 1, str(self._crop.cropFodderEnergyType)))
+            energyTypeIndex = max(0, min(self.cbFodderEnergyType.count() - 1, str(self.crop.cropFodderEnergyType)))
             self.cbFodderEnergyType.setCurrentIndex(energyTypeIndex)
 
             # Show image if available
-            if self._crop.imageFile and os.path.exists(str(self._crop.imageFile)):
-                pixmap = QPixmap(self._crop.imageFile)
+            if self.crop.imageFile and os.path.exists(str(self.crop.imageFile)):
+                pixmap = QPixmap(self.crop.imageFile)
                 self.lblCropPix.setPixmap(pixmap)
             else:
                 self.lblCropPix.clear()
@@ -310,19 +315,19 @@ class LaCropManager(LaCropManagerBase):
                 return
 
             # Save crop data from form
-            self._crop.name = self.leName.text()
-            self._crop.description = self.leDescription.text()
-            self._crop.cropYield = self.sbCropYield.value()
-            self._crop.cropCalories = self.sbCropCalories.value()
-            self._crop.cropFodderProduction = self.sbCropFodderProduction.value()
-            self._crop.cropFodderValue = self.sbCropFodderValue.value()
-            self._crop.areaUnits = self.cbAreaUnits.currentIndex()
-            self._crop.cropFodderEnergyType = self.cbFodderEnergyType.currentIndex()
-            self._crop.imageFile = self.imageFile()
+            self.crop.name = self.leName.text()
+            self.crop.description = self.leDescription.text()
+            self.crop.cropYield = self.sbCropYield.value()
+            self.crop.cropCalories = self.sbCropCalories.value()
+            self.crop.cropFodderProduction = self.sbCropFodderProduction.value()
+            self.crop.cropFodderValue = self.sbCropFodderValue.value()
+            self.crop.areaUnits = self.cbAreaUnits.currentIndex()
+            self.crop.cropFodderEnergyType = self.cbFodderEnergyType.currentIndex()
+            self.crop.imageFile = self.imageFile
 
             # Make sure we have a valid GUID
-            if not self._crop.guid:
-                self._crop.setGuid(None)
+            if not self.crop.guid:
+                self.crop.setGuid(None)
 
             # Ensure crops directory exists
             cropDirPath = LaUtils.userCropProfilesDirPath()
@@ -330,12 +335,12 @@ class LaCropManager(LaCropManagerBase):
                 os.makedirs(cropDirPath)
 
             # Save to file
-            myFileName = cropDirPath + "/" + str(self._crop.guid) + ".xml"
-            success = self._crop.toXmlFile(myFileName)
+            myFileName = cropDirPath + "/" + str(self.crop.guid) + ".xml"
+            success = self.crop.toXmlFile(myFileName)
 
             if success:
                 # Refresh the table, selecting the saved crop
-                self.refreshCropTable(self._crop.guid)
+                self.refreshCropTable(self.crop.guid)
 
                 # Accept and close the dialog
                 super(LaCropManager, self).accept()
@@ -356,4 +361,18 @@ class LaCropManager(LaCropManagerBase):
         :returns: Dictionary of crops
         :rtype: dict
         """
-        return self._cropMap
+        return self.mCropMap
+
+    def readSettings(self):
+        """Reads the settings of the window's position and size from QSettings."""
+        settings = QSettings()
+        pos = settings.value("mainwindow/pos", QtCore.QPoint(200, 200))
+        size = settings.value("mainwindow/size", QtCore.QSize(400, 400))
+        self.resize(size)
+        self.move(pos)
+
+    def writeSettings(self):
+        """Saves the window's position and size to QSettings."""
+        settings = QSettings()
+        settings.setValue("mainwindow/pos", self.pos())
+        settings.setValue("mainwindow/size", self.size())

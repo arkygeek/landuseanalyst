@@ -38,8 +38,10 @@ from la.gui.laanimalparametermanager import LaAnimalParameterManager
 
 # Import library classes
 from la.lib.lamodel import LaModel
+# from la.lib.lagrass import LaGrass
+# from la.lib.lagrassprocesslib import LaGrassProcessLib
 from la.lib.lautils import LaUtils
-
+from la.lib.ladietlabels import LaDietLabels
 
 class LaMainForm(LaMainFormBase):
     """Main form for the LanduseAnalyst plugin."""

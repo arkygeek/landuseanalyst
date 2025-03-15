@@ -138,30 +138,27 @@ class LaMainFormBase(QDialog, FORM_CLASS):
     def on_clicked_pbnNewCrop(self):
         print("open Manage Crops window printed")
         self.tbReport.append("Manage Crops button clicked")
-        myCropManager = LaCropManager()  # Use implementation class
-        myCropManager.show()
-        myCropManager.exec_()
+        theCropsMap = self.mCropsMap  # Pass the crops map
+        myCropManager = LaCropManager(theCropsMap, self)  # Pass parent if needed
+        myCropManager.exec_()  # Use exec_ to show the dialog modally
 
     def on_clicked_pbnNewCropParameter(self):
         print("open Crop Parameters window printed")
         self.tbReport.append("Manage Crop Parameters button clicked")
-        myCropParameterManager = LaCropParameterManager()  # Use implementation class
-        myCropParameterManager.show()
-        myCropParameterManager.exec_()
+        myCropParameterManager = LaCropParameterManager(self)  # Pass parent if needed
+        myCropParameterManager.exec_()  # Use exec_ to show the dialog modally
 
     def on_clicked_pbnNewAnimal(self):
         print("open Manage Animals window printed")
         self.tbReport.append("Manage Animals button clicked")
-        myAnimalManager = LaAnimalManager()  # Use implementation class
-        myAnimalManager.show()
-        myAnimalManager.exec_()
+        myAnimalManager = LaAnimalManager(self)  # Pass parent if needed
+        myAnimalManager.exec_()  # Use exec_ to show the dialog modally
 
     def on_clicked_pbnNewAnimalParameter(self):
         print("open Animal Parameters window")
         self.tbReport.append("Manage Animal Parameters button clicked")
-        myAnimalParameterManager = LaAnimalParameterManager()  # Use implementation class
-        myAnimalParameterManager.show()
-        myAnimalParameterManager.exec_()
+        myAnimalParameterManager = LaAnimalParameterManager(self)  # Pass parent if needed
+        myAnimalParameterManager.exec_()  # Use exec_ to show the dialog modally
 
     def on_sliderDiet_valueChanged(self, theValue):
         myMinString = str(theValue)

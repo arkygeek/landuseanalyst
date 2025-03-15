@@ -240,7 +240,7 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         self._fodderProduction = GetIntValue("fodderProduction")
         self._fodderValue = GetIntValue("fodderCalories")
 
-        myCropFodderEnergyType: str = myTopElement.firstChildElement("cropFodderEnergyType").text()
+        myCropFodderEnergyType = myTopElement.firstChildElement("cropFodderEnergyType").text()
         if myCropFodderEnergyType == "KCalories":
             self._fodderEnergyType = LaEnergyType.KCalories
         elif myCropFodderEnergyType == "TDN":
@@ -251,7 +251,7 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
             self._areaUnits = LaAreaUnits.Dunum
         elif myAreaUnits == "Hectare":
             self._areaUnits = LaAreaUnits.Hectare
-        # self.imageFile: str = myTopElement.firstChildElement("imageFile").text()
+        # self.imageFile = myTopElement.firstChildElement("imageFile").text()
         # Handle image path with cross-platform resolution
         imagePath = myTopElement.firstChildElement("imageFile").text()
         from la.lib.lautils import LaUtils
