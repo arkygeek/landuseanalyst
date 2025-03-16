@@ -33,6 +33,7 @@ from qgis.PyQt.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QFileDia
 from la.ui.lacropmanagerbase import LaCropManagerBase
 from la.lib.lautils import LaUtils
 from la.lib.lacrop import LaCrop
+from la.lib.la import AreaUnits, EnergyType
 
 
 class LaCropManager(LaCropManagerBase):
@@ -58,6 +59,7 @@ class LaCropManager(LaCropManagerBase):
 
         # Connect signals/slots
         self.connectSignalsSlots()
+        self.setupComboBoxes()  # Add this line to initialize combo boxes
 
         # Populate the table with crops
         self.refreshCropTable()
@@ -270,61 +272,97 @@ class LaCropManager(LaCropManagerBase):
 
             myOriginalFileName = LaUtils.userCropProfilesDirPath() + "/" + myGuid + ".xml"
             if not os.path.exists(myOriginalFileName):
+                print(f"DEBUG: XML file doesn't exist: {myOriginalFileName}")
                 return
 
             self.crop = LaCrop()
-            self.crop.fromXmlFile(myOriginalFileName)
+            print(f"DEBUG: Loading crop from XML file: {myOriginalFileName}")
+            success = self.crop.fromXmlFile(myOriginalFileName)
+            print(f"DEBUG: fromXmlFile result: {success}")
+            print(f"DEBUG: After loading - cropYield: {self.crop.cropYield}, type: {type(self.crop.cropYield)}")
+            print(f"DEBUG: After loading - cropFodderProduction: {self.crop.cropFodderProduction}, type: {type(self.crop.cropFodderProduction)}")
+
             self.imageFile = str(LaUtils.userImagesDirPath) + "/" + self.crop.imageFile
             self.showCrop()
         except Exception as e:
             QMessageBox.warning(self, "Selection Change Error", f"Error loading crop: {str(e)}")
+            import traceback
+            print(f"DEBUG: Exception in itemSelectionChanged: {traceback.format_exc()}")
 
     def showCrop(self):
         """Show the current crop in the form."""
         try:
+            print(f"DEBUG: Showing crop: {self.crop.name}")
+            print(f"DEBUG: cropYield value: {self.crop.cropYield}, type: {type(self.crop.cropYield)}")
+            print(f"DEBUG: cropFodderProduction value: {self.crop.cropFodderProduction}, type: {type(self.crop.cropFodderProduction)}")
+
             self.leName.setText(str(self.crop.name))
             self.leDescription.setText(str(self.crop.description))
-            self.sbCropYield.setValue(int(self.crop.cropYield))
-            self.sbCropCalories.setValue(int(self.crop.cropCalories))
-            self.sbCropFodderProduction.setValue(int(self.crop.cropFodderProduction))
-            self.sbCropFodderValue.setValue(int(self.crop.cropFodderValue))
 
-            # Handle area units combobox - use the enum value's index or name
-            if hasattr(self.crop.areaUnits, 'value'):
-                # If it's an IntEnum with a value attribute
+            # Handle cropYield - ensure it's an integer
+            try:
+                self.sbCropYield.setValue(int(self.crop.cropYield))
+            except (ValueError, TypeError) as e:
+                print(f"DEBUG: Error converting cropYield: {e}")
+                self.sbCropYield.setValue(0)
+
+            # Handle cropCalories
+            try:
+                self.sbCropCalories.setValue(int(self.crop.cropCalories))
+            except (ValueError, TypeError) as e:
+                print(f"DEBUG: Error converting cropCalories: {e}")
+                self.sbCropCalories.setValue(0)
+
+            # Handle cropFodderProduction
+            try:
+                self.sbCropFodderProduction.setValue(int(self.crop.cropFodderProduction))
+            except (ValueError, TypeError) as e:
+                print(f"DEBUG: Error converting cropFodderProduction: {e}")
+                self.sbCropFodderProduction.setValue(0)
+
+            # Handle cropFodderValue
+            try:
+                self.sbCropFodderValue.setValue(int(self.crop.cropFodderValue))
+            except (ValueError, TypeError) as e:
+                print(f"DEBUG: Error converting cropFodderValue: {e}")
+                self.sbCropFodderValue.setValue(0)
+
+            # For area units, find the enum value index directly
+            if isinstance(self.crop.areaUnits, AreaUnits):
+                # If it's already an enum, use its value directly
                 areaUnitsValue = self.crop.areaUnits.value
-            elif hasattr(self.crop.areaUnits, 'name'):
-                # If it has a name attribute, look up by name
-                areaUnitsValue = {'Dunum': 0, 'Hectare': 1}.get(self.crop.areaUnits.name, 0)
             else:
-                # Fallback - convert to string and check specific values
-                areaUnitsStr = str(self.crop.areaUnits)
-                if 'Dunum' in areaUnitsStr:
-                    areaUnitsValue = 0
-                elif 'Hectare' in areaUnitsStr:
-                    areaUnitsValue = 1
-                else:
-                    areaUnitsValue = 0  # Default
+                # Try to convert to int or look up in the enum
+                try:
+                    areaUnitsValue = int(self.crop.areaUnits)
+                except (ValueError, TypeError):
+                    # Convert string representation to enum value if possible
+                    areaUnitsStr = str(self.crop.areaUnits)
+                    for unit in AreaUnits:
+                        if unit.name in areaUnitsStr:
+                            areaUnitsValue = unit.value
+                            break
+                    else:
+                        areaUnitsValue = 0  # Default to first item
 
+            # Use min/max to ensure the index is within valid range
             areaUnitsIndex = max(0, min(self.cbAreaUnits.count() - 1, areaUnitsValue))
             self.cbAreaUnits.setCurrentIndex(areaUnitsIndex)
 
-            # Handle energy type combobox similarly
-            if hasattr(self.crop.cropFodderEnergyType, 'value'):
-                # If it's an IntEnum with a value attribute
+            # Similarly for energy type
+            if isinstance(self.crop.cropFodderEnergyType, EnergyType):
                 energyTypeValue = self.crop.cropFodderEnergyType.value
-            elif hasattr(self.crop.cropFodderEnergyType, 'name'):
-                # If it has a name attribute, look up by name
-                energyTypeValue = {'KCalories': 0, 'TDN': 1}.get(self.crop.cropFodderEnergyType.name, 0)
             else:
-                # Fallback - convert to string and check
-                energyTypeStr = str(self.crop.cropFodderEnergyType)
-                if 'KCalories' in energyTypeStr:
-                    energyTypeValue = 0
-                elif 'TDN' in energyTypeStr:
-                    energyTypeValue = 1
-                else:
-                    energyTypeValue = 0  # Default
+                try:
+                    energyTypeValue = int(self.crop.cropFodderEnergyType)
+                except (ValueError, TypeError):
+                    energyTypeStr = str(self.crop.cropFodderEnergyType)
+                    for etype in EnergyType:
+                        if etype.name in energyTypeStr:
+                            energyTypeValue = etype.value
+                            break
+                    else:
+                        energyTypeValue = 0  # Default to first item
 
             energyTypeIndex = max(0, min(self.cbFodderEnergyType.count() - 1, energyTypeValue))
             self.cbFodderEnergyType.setCurrentIndex(energyTypeIndex)
@@ -335,8 +373,11 @@ class LaCropManager(LaCropManagerBase):
                 self.lblCropPix.setPixmap(pixmap)
             else:
                 self.lblCropPix.clear()
+
         except Exception as e:
             QMessageBox.warning(self, "Show Crop Error", f"Error displaying crop data: {str(e)}")
+            import traceback
+            print(f"DEBUG: Exception in showCrop: {traceback.format_exc()}")
 
     def accept(self):
         """Handle OK button click to save changes."""
@@ -350,12 +391,12 @@ class LaCropManager(LaCropManagerBase):
             # Save crop data from form
             self.crop.name = self.leName.text()
             self.crop.description = self.leDescription.text()
-            self.crop.cropYield = self.sbCropYield.value()
+            self.crop.cropYield = int(self.sbCropYield.value())  # Ensure cropYield is saved as an integer
             self.crop.cropCalories = self.sbCropCalories.value()
             self.crop.cropFodderProduction = self.sbCropFodderProduction.value()
             self.crop.cropFodderValue = self.sbCropFodderValue.value()
-            self.crop.areaUnits = self.cbAreaUnits.currentIndex()
-            self.crop.cropFodderEnergyType = self.cbFodderEnergyType.currentIndex()
+            self.crop.areaUnits = AreaUnits(self.cbAreaUnits.currentIndex())
+            self.crop.cropFodderEnergyType = EnergyType(self.cbFodderEnergyType.currentIndex())
             self.crop.imageFile = self.imageFile  # Use the property
 
             # Make sure we have a valid GUID
@@ -379,7 +420,6 @@ class LaCropManager(LaCropManagerBase):
                 super(LaCropManager, self).accept()
             else:
                 QMessageBox.critical(self, "Save Error", f"Failed to save crop to {myFileName}")
-
         except Exception as e:
             QMessageBox.critical(self, "Save Error", f"Error saving crop data: {str(e)}")
 
@@ -409,3 +449,26 @@ class LaCropManager(LaCropManagerBase):
         settings = QSettings()
         settings.setValue("mainwindow/pos", self.pos())
         settings.setValue("mainwindow/size", self.size())
+
+    def populateEnumComboBox(self, comboBox, enumClass):
+        """
+        Populate a combo box with items from an enum class.
+
+        :param comboBox: The combo box to populate
+        :type comboBox: QComboBox
+        :param enumClass: The enum class to use
+        :type enumClass: Enum class
+        """
+        comboBox.clear()
+        for member in enumClass:
+            # Extract the name, replacing underscores with spaces if needed
+            display_name = member.name.replace('_', ' ')
+            # Use the enum value as the data item
+            comboBox.addItem(display_name, member.value)
+
+    def setupComboBoxes(self):
+        """Initialize combo boxes with values from enums."""
+        # Populate area units combo box
+        self.populateEnumComboBox(self.cbAreaUnits, AreaUnits)
+        # Populate energy type combo box
+        self.populateEnumComboBox(self.cbFodderEnergyType, EnergyType)
