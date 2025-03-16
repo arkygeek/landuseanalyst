@@ -245,20 +245,34 @@ class LaCropManager(LaCropManagerBase):
         )
 
         if fileName:
-            # Save the image to the user data directory
-            from la.lib.lautils import LaUtils
-            savedPath = LaUtils.saveFilePath(fileName, 'image')
+            try:
+                # Get just the filename without path
+                baseFileName = os.path.basename(fileName)
 
-            # Copy the file if it's not already there
-            if fileName != savedPath:
-                shutil.copy(fileName, savedPath)
+                # Save the image to the user data directory
+                imagesDir = LaUtils.userImagesDirPath()
+                savedPath = os.path.join(imagesDir, baseFileName)
 
-            pixmap = QPixmap(savedPath)
-            if not pixmap.isNull():
-                self.lblCropPix.setPixmap(pixmap)
-                self.imageFile = savedPath
-            else:
-                QMessageBox.warning(self, "Image Error", "Could not load the selected image.")
+                print(f"DEBUG: Saving image from {fileName} to {savedPath}")
+
+                # Copy the file if it's not already there
+                if fileName != savedPath and not os.path.exists(savedPath):
+                    shutil.copy(fileName, savedPath)
+
+                # Update the image display
+                pixmap = QPixmap(savedPath)
+                if not pixmap.isNull():
+                    self.lblCropPix.setPixmap(pixmap)
+                    # Store just the filename, not the full path
+                    self.imageFile = baseFileName
+                    print(f"DEBUG: Image set to: {self.imageFile}")
+                else:
+                    QMessageBox.warning(self, "Image Error", "Could not load the selected image.")
+                    print(f"DEBUG: Failed to load image from {savedPath}")
+            except Exception as e:
+                QMessageBox.warning(self, "Image Error", f"Error processing image: {str(e)}")
+                import traceback
+                print(f"DEBUG: Exception in on_pbnCropPic_clicked: {traceback.format_exc()}")
 
     def on_tblCrops_itemSelectionChanged(self):
         """Handle selection change in the crops table."""
@@ -271,6 +285,8 @@ class LaCropManager(LaCropManagerBase):
                 return
 
             myOriginalFileName = LaUtils.userCropProfilesDirPath() + "/" + myGuid + ".xml"
+            print(f"DEBUG: Looking for crop XML file: {myOriginalFileName}")
+
             if not os.path.exists(myOriginalFileName):
                 print(f"DEBUG: XML file doesn't exist: {myOriginalFileName}")
                 return
@@ -279,11 +295,15 @@ class LaCropManager(LaCropManagerBase):
             print(f"DEBUG: Loading crop from XML file: {myOriginalFileName}")
             success = self.crop.fromXmlFile(myOriginalFileName)
             print(f"DEBUG: fromXmlFile result: {success}")
-            print(f"DEBUG: After loading - cropYield: {self.crop.cropYield}, type: {type(self.crop.cropYield)}")
-            print(f"DEBUG: After loading - cropFodderProduction: {self.crop.cropFodderProduction}, type: {type(self.crop.cropFodderProduction)}")
 
-            self.imageFile = str(LaUtils.userImagesDirPath) + "/" + self.crop.imageFile
-            self.showCrop()
+            if success:
+                print(f"DEBUG: After loading - cropYield: {self.crop.cropYield}, type: {type(self.crop.cropYield)}")
+                print(f"DEBUG: After loading - cropFodderProduction: {self.crop.cropFodderProduction}, type: {type(self.crop.cropFodderProduction)}")
+                print(f"DEBUG: Image path from crop: {self.crop.imageFile}")
+
+                self.showCrop()
+            else:
+                QMessageBox.warning(self, "Load Error", f"Failed to load crop from {myOriginalFileName}")
         except Exception as e:
             QMessageBox.warning(self, "Selection Change Error", f"Error loading crop: {str(e)}")
             import traceback
@@ -368,10 +388,44 @@ class LaCropManager(LaCropManagerBase):
             self.cbFodderEnergyType.setCurrentIndex(energyTypeIndex)
 
             # Show image if available
-            if self.crop.imageFile and os.path.exists(str(self.crop.imageFile)):
-                pixmap = QPixmap(self.crop.imageFile)
-                self.lblCropPix.setPixmap(pixmap)
+            if self.crop.imageFile:
+                # Resolve image path using LaUtils
+                imagePath = LaUtils.resolvePath(self.crop.imageFile, 'image')
+                print(f"DEBUG: Resolved image path: {imagePath}")
+
+                # Update self.imageFile so it gets saved correctly
+                self.imageFile = self.crop.imageFile
+
+                # Try to load the image
+                if os.path.exists(imagePath):
+                    pixmap = QPixmap(imagePath)
+                    if not pixmap.isNull():
+                        self.lblCropPix.setPixmap(pixmap)
+                        print(f"DEBUG: Successfully loaded image from: {imagePath}")
+                    else:
+                        print(f"DEBUG: Failed to load image - pixmap is null: {imagePath}")
+                        self.lblCropPix.clear()
+                else:
+                    print(f"DEBUG: Image file doesn't exist: {imagePath}")
+
+                    # Try from images directory
+                    imagesDir = LaUtils.userImagesDirPath()
+                    imageFileName = os.path.basename(self.crop.imageFile)
+                    alternativePath = os.path.join(imagesDir, imageFileName)
+
+                    if os.path.exists(alternativePath):
+                        pixmap = QPixmap(alternativePath)
+                        if not pixmap.isNull():
+                            self.lblCropPix.setPixmap(pixmap)
+                            print(f"DEBUG: Successfully loaded image from alternative path: {alternativePath}")
+                        else:
+                            print(f"DEBUG: Failed to load image from alternative path: {alternativePath}")
+                            self.lblCropPix.clear()
+                    else:
+                        print(f"DEBUG: Alternative image path doesn't exist: {alternativePath}")
+                        self.lblCropPix.clear()
             else:
+                print("DEBUG: No image file specified")
                 self.lblCropPix.clear()
 
         except Exception as e:
@@ -397,7 +451,12 @@ class LaCropManager(LaCropManagerBase):
             self.crop.cropFodderValue = self.sbCropFodderValue.value()
             self.crop.areaUnits = AreaUnits(self.cbAreaUnits.currentIndex())
             self.crop.cropFodderEnergyType = EnergyType(self.cbFodderEnergyType.currentIndex())
-            self.crop.imageFile = self.imageFile  # Use the property
+
+            # Store just the filename, not the full path for the image
+            if self.imageFile:
+                self.crop.imageFile = os.path.basename(self.imageFile)
+
+            print(f"DEBUG: Saving crop with image: {self.crop.imageFile}")
 
             # Make sure we have a valid GUID
             if not self.crop.guid:
@@ -413,6 +472,7 @@ class LaCropManager(LaCropManagerBase):
             success = self.crop.toXmlFile(myFileName)
 
             if success:
+                print(f"DEBUG: Successfully saved crop to {myFileName}")
                 # Refresh the table, selecting the saved crop
                 self.refreshCropTable(self.crop.guid)
 
@@ -422,6 +482,8 @@ class LaCropManager(LaCropManagerBase):
                 QMessageBox.critical(self, "Save Error", f"Failed to save crop to {myFileName}")
         except Exception as e:
             QMessageBox.critical(self, "Save Error", f"Error saving crop data: {str(e)}")
+            import traceback
+            print(f"DEBUG: Exception in accept: {traceback.format_exc()}")
 
     def reject(self):
         """Handle Cancel button click."""

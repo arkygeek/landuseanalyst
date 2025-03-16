@@ -200,17 +200,33 @@ class LaUtils:
         myCropsMap = {}
         myDirectory = QDir(LaUtils.userCropProfilesDirPath())
         myList = myDirectory.entryInfoList(QDir.Files | QDir.NoSymLinks, QDir.Name)
+        print(f"DEBUG: Looking for crops in directory: {LaUtils.userCropProfilesDirPath()}")
+        print(f"DEBUG: Found {len(myList)} files")
+
         for myFileInfo in myList:
             # Ignore directories
             if myFileInfo.fileName() in [".", ".."]:
                 continue
-            # if the filename ends in .xml try to load it into our layerSets listing
+
+            # if the filename ends in .xml try to load it into our crops listing
             if myFileInfo.completeSuffix() == "xml":
+                filePath = myFileInfo.absoluteFilePath()
+                print(f"DEBUG: Loading crop from file: {filePath}")
+
                 myCrop = LaCrop()
-                myCrop.fromXmlFile(myFileInfo.absoluteFilePath())
-                if myCrop.name == "":
+                loadSuccess = myCrop.fromXmlFile(filePath)
+                if not loadSuccess:
+                    print(f"DEBUG: Failed to load crop from {filePath}")
                     continue
+
+                if myCrop.name == "":
+                    print(f"DEBUG: Crop from {filePath} has no name, skipping")
+                    continue
+
                 myCropsMap[myCrop.guid] = myCrop
+                print(f"DEBUG: Successfully loaded crop: {myCrop.name}, cropYield: {myCrop.cropYield}")
+
+        print(f"DEBUG: Returning {len(myCropsMap)} crops")
         return myCropsMap
 
     @staticmethod
