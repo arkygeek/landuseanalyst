@@ -43,8 +43,8 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
     cropCaloriesChanged = pyqtSignal(int)
     cropFodderProductionChanged = pyqtSignal(int)
     cropFodderValueChanged = pyqtSignal(int)
-    cropFodderEnergyTypeChanged = pyqtSignal(str)
-    areaUnitsChanged = pyqtSignal(str)
+    cropFodderEnergyTypeChanged = pyqtSignal(LaEnergyType)
+    areaUnitsChanged = pyqtSignal(LaAreaUnits)
     imageFileChanged = pyqtSignal(str)
 
     def __init__(self, theCrop: Optional[Type['LaCrop']] = None, parent=None):
@@ -198,19 +198,20 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         :returns: The crop's yield value
         :rtype: int
         """
+        myCropYield = self._cropYield
         return self._cropYield
 
     @cropYield.setter
-    def cropYield(self, value):
+    def cropYield(self, theYield):
         """
         Set the yield value for this crop.
 
-        :param value: The new yield value
-        :type value: int
+        :param theYield: The new yield value
+        :type theYield: int
         """
-        if self._cropYield != value:
-            self._cropYield = value
-            self.yieldChanged.emit(value)
+        if self._cropYield != theYield:
+            self._cropYield = theYield
+            self.yieldChanged.emit(int(theYield))
 
     @pyqtProperty(int, notify=cropCaloriesChanged)
     def cropCalories(self):

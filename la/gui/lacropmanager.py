@@ -274,7 +274,7 @@ class LaCropManager(LaCropManagerBase):
 
             self.crop = LaCrop()
             self.crop.fromXmlFile(myOriginalFileName)
-            self.imageFile = self.crop.imageFile
+            self.imageFile = str(LaUtils.userImagesDirPath) + "/" + self.crop.imageFile
             self.showCrop()
         except Exception as e:
             QMessageBox.warning(self, "Selection Change Error", f"Error loading crop: {str(e)}")
@@ -284,16 +284,49 @@ class LaCropManager(LaCropManagerBase):
         try:
             self.leName.setText(str(self.crop.name))
             self.leDescription.setText(str(self.crop.description))
-            self.sbCropYield.setValue(self.crop.cropYield)
-            self.sbCropCalories.setValue(self.crop.cropCalories)
-            self.sbCropFodderProduction.setValue(str(self.crop.cropFodderProduction))
-            self.sbCropFodderValue.setValue(str(self.crop.cropFodderValue))
+            self.sbCropYield.setValue(int(self.crop.cropYield))
+            self.sbCropCalories.setValue(int(self.crop.cropCalories))
+            self.sbCropFodderProduction.setValue(int(self.crop.cropFodderProduction))
+            self.sbCropFodderValue.setValue(int(self.crop.cropFodderValue))
 
-            # Handle comboboxes with bounds checking
-            areaUnitsIndex = max(0, min(self.cbAreaUnits.count() - 1, str(self.crop.areaUnits)))
+            # Handle area units combobox - use the enum value's index or name
+            if hasattr(self.crop.areaUnits, 'value'):
+                # If it's an IntEnum with a value attribute
+                areaUnitsValue = self.crop.areaUnits.value
+            elif hasattr(self.crop.areaUnits, 'name'):
+                # If it has a name attribute, look up by name
+                areaUnitsValue = {'Dunum': 0, 'Hectare': 1}.get(self.crop.areaUnits.name, 0)
+            else:
+                # Fallback - convert to string and check specific values
+                areaUnitsStr = str(self.crop.areaUnits)
+                if 'Dunum' in areaUnitsStr:
+                    areaUnitsValue = 0
+                elif 'Hectare' in areaUnitsStr:
+                    areaUnitsValue = 1
+                else:
+                    areaUnitsValue = 0  # Default
+
+            areaUnitsIndex = max(0, min(self.cbAreaUnits.count() - 1, areaUnitsValue))
             self.cbAreaUnits.setCurrentIndex(areaUnitsIndex)
 
-            energyTypeIndex = max(0, min(self.cbFodderEnergyType.count() - 1, str(self.crop.cropFodderEnergyType)))
+            # Handle energy type combobox similarly
+            if hasattr(self.crop.cropFodderEnergyType, 'value'):
+                # If it's an IntEnum with a value attribute
+                energyTypeValue = self.crop.cropFodderEnergyType.value
+            elif hasattr(self.crop.cropFodderEnergyType, 'name'):
+                # If it has a name attribute, look up by name
+                energyTypeValue = {'KCalories': 0, 'TDN': 1}.get(self.crop.cropFodderEnergyType.name, 0)
+            else:
+                # Fallback - convert to string and check
+                energyTypeStr = str(self.crop.cropFodderEnergyType)
+                if 'KCalories' in energyTypeStr:
+                    energyTypeValue = 0
+                elif 'TDN' in energyTypeStr:
+                    energyTypeValue = 1
+                else:
+                    energyTypeValue = 0  # Default
+
+            energyTypeIndex = max(0, min(self.cbFodderEnergyType.count() - 1, energyTypeValue))
             self.cbFodderEnergyType.setCurrentIndex(energyTypeIndex)
 
             # Show image if available
