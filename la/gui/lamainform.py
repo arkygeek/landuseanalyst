@@ -20,6 +20,10 @@ from la.lib.lautils import LaUtils
 
 from la.lib.laanimal import LaAnimal
 from la.lib.lamodel import LaModel
+from la.lib.lacrop import LaCrop
+from la.lib.laanimalparameter import LaAnimalParameter
+from la.lib.lacropparameter import LaCropParameter
+
 # from la.lib.lagrass import LaGrass
 # from la.lib.lagrassprocesslib import LaGrassProcessLib
 from la.lib.lautils import LaUtils

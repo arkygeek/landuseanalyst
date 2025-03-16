@@ -469,7 +469,7 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         myAreaUnitsType= ""
         if self.areaUnits == LaAreaUnits.Dunum:
             myAreaUnitsType = "Dunum"
-        elif myAreaUnits == LaAreaUnits.Hectare:
+        elif self.areaUnits == LaAreaUnits.Hectare:
             myAreaUnitsType = "Hectare"
         myImageFile = self.imageFile
 
@@ -496,11 +496,11 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         myCropFodderEnergyType = "KCalories" if self.cropFodderEnergyType == LaEnergyType.KCalories else "TDN"
         myUnits = "Dunum" if self.areaUnits == LaAreaUnits.Dunum else "Hectare"
 
-        myString = "<h3>Details for " + str(LaUtils.xmlEncode(self.name)) + "</h3>"
+        myString = "<h3>Details for " + LaUtils.xmlEncode(self.name) + "</h3>"
         myString += "<table>"
-        myString += "<tr><td><b>Description: </b></td><td>" + str(self.description) + "</td></tr>"
-        myString += "<tr><td><b>Avg Yield: </b></td><td>" + str(self.cropYield) + "</td></tr>"
-        myString += "<tr><td><b>Cals/Kg: </b></td><td>" + str(self.cropCalories) + "</td></tr>"
+        myString += "<tr><td><b>Description: </b></td><td>" + self.description + "</td></tr>"
+        myString += "<tr><td><b>Avg Yield: </b></td><td>" + self.cropYield + "</td></tr>"
+        myString += "<tr><td><b>Cals/Kg: </b></td><td>" + self.cropCalories + "</td></tr>"
         myString += "<tr><td><b>Fodder (kg/" + myUnits + "): </b></td><td>" + str(self.cropFodderProduction) + "</td></tr>"
         myString += "<tr><td><b>Fodder Value/Kg: </b></td><td>" + str(self.cropFodderValue) + "</td></tr>"
         myString += "<tr><td><b>FodderEnergyType: </b></td><td>" + myCropFodderEnergyType + "</td></tr>"
