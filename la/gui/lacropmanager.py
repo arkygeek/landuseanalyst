@@ -26,7 +26,7 @@ This file implements the Crop Manager functionality.
 import os
 import shutil
 from qgis.PyQt import QtCore, QtWidgets
-from qgis.PyQt.QtCore import QSettings
+from qgis.PyQt.QtCore import QSettings, Qt
 from qgis.PyQt.QtGui import QIcon, QPixmap
 from qgis.PyQt.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QFileDialog
 
@@ -48,6 +48,7 @@ class LaCropManager(LaCropManagerBase):
         super(LaCropManager, self).__init__(parent)
         # Store a working copy of the crops map
         self.mCropsMap = theCropsMap.copy() if theCropsMap else {}
+
         # Initialize crops map (make a copy to avoid modifying the original)
         if theCropsMap:
             for guid, value in theCropsMap.items():
@@ -57,9 +58,11 @@ class LaCropManager(LaCropManagerBase):
         self.imageFile = ""
         self.crop = LaCrop()
 
+        # Initialize combo boxes
+        self.setupComboBoxes()
+
         # Connect signals/slots
         self.connectSignalsSlots()
-        self.setupComboBoxes()  # Add this line to initialize combo boxes
 
         # Populate the table with crops
         self.refreshCropTable()
@@ -67,22 +70,24 @@ class LaCropManager(LaCropManagerBase):
         # Read window settings
         self.readSettings()
 
-
     def connectSignalsSlots(self):
         """Connect signals to slots for UI interaction."""
         # Connect buttons
         self.toolNew.clicked.connect(self.on_toolNew_clicked)
-        # self.toolEdit.clicked.connect(self.on_toolEdit_clicked)  # Commented out
         self.toolDelete.clicked.connect(self.on_toolDelete_clicked)
         self.toolCopy.clicked.connect(self.on_toolCopy_clicked)
         self.pbnCropPic.clicked.connect(self.on_pbnCropPic_clicked)
 
+        # Connect import/export buttons
+        self.pbnImport.clicked.connect(self.on_pbnImport_clicked)
+        self.pbnExport.clicked.connect(self.on_pbnExport_clicked)
+
+        # Connect Apply and Close buttons
+        self.pbnApply.clicked.connect(self.accept)
+        self.pbnClose.clicked.connect(self.reject)
+
         # Connect the table selection change
         self.tblCrops.itemSelectionChanged.connect(self.on_tblCrops_itemSelectionChanged)
-
-        # Connect the dialog buttons
-        # self.buttonBox.accepted.connect(self.accept)
-        # self.buttonBox.rejected.connect(self.reject)
 
     def refreshCropTable(self, theGuid=None):
         """Refresh the crops table with current data.
@@ -151,27 +156,6 @@ class LaCropManager(LaCropManagerBase):
         # Set focus to name field
         self.leName.setFocus()
 
-    def on_toolEdit_clicked(self):
-        """Edit the selected crop."""
-        if self.tblCrops.currentRow() < 0:
-            QMessageBox.information(self, "Edit Crop", "Please select a crop to edit.")
-            return
-
-        myGuid = self.tblCrops.item(self.tblCrops.currentRow(), 0).text()
-        if not myGuid:
-            QMessageBox.warning(self, "Edit Crop", "Could not determine crop GUID.")
-            return
-
-        myOriginalFileName = LaUtils.userCropProfilesDirPath() + "/" + myGuid + ".xml"
-        self.crop = LaCrop()
-        if not os.path.exists(myOriginalFileName):
-            QMessageBox.warning(self, "Edit Crop", f"Could not find crop file: {myOriginalFileName}")
-            return
-
-        self.crop.fromXmlFile(myOriginalFileName)
-        self.imageFile = self.crop.imageFile
-        self.showCrop()
-
     def on_toolDelete_clicked(self):
         """Delete the selected crop."""
         if self.tblCrops.currentRow() < 0:
@@ -229,7 +213,7 @@ class LaCropManager(LaCropManagerBase):
         self.crop.setGuid(None)
 
         # Keep the same image
-        self.crop.imageFile = self.crop.imageFile
+        self.imageFile = self.crop.imageFile
 
         self.showCrop()
 
@@ -251,18 +235,29 @@ class LaCropManager(LaCropManagerBase):
 
                 # Save the image to the user data directory
                 imagesDir = LaUtils.userImagesDirPath()
+                if not os.path.exists(imagesDir):
+                    os.makedirs(imagesDir)
+
                 savedPath = os.path.join(imagesDir, baseFileName)
 
                 print(f"DEBUG: Saving image from {fileName} to {savedPath}")
 
                 # Copy the file if it's not already there
                 if fileName != savedPath and not os.path.exists(savedPath):
-                    shutil.copy(fileName, savedPath)
+                    shutil.copy2(fileName, savedPath)  # shutil.copy2 preserves metadata
 
                 # Update the image display
                 pixmap = QPixmap(savedPath)
                 if not pixmap.isNull():
-                    self.lblCropPix.setPixmap(pixmap)
+                    # Scale pixmap to fit label while preserving aspect ratio
+                    scaledPixmap = pixmap.scaled(
+                        self.lblCropPix.width(),
+                        self.lblCropPix.height(),
+                        Qt.KeepAspectRatio,
+                        Qt.SmoothTransformation
+                    )
+                    self.lblCropPix.setPixmap(scaledPixmap)
+
                     # Store just the filename, not the full path
                     self.imageFile = baseFileName
                     print(f"DEBUG: Image set to: {self.imageFile}")
@@ -388,7 +383,7 @@ class LaCropManager(LaCropManagerBase):
             self.cbFodderEnergyType.setCurrentIndex(energyTypeIndex)
 
             # Show image if available
-            if self.crop.imageFile:
+            if hasattr(self.crop, 'imageFile') and self.crop.imageFile:
                 # Resolve image path using LaUtils
                 imagePath = LaUtils.resolvePath(self.crop.imageFile, 'image')
                 print(f"DEBUG: Resolved image path: {imagePath}")
@@ -437,14 +432,28 @@ class LaCropManager(LaCropManagerBase):
         """Handle OK button click to save changes."""
         try:
             # Validate form
-            if not self.leName.text():
+            if not self.leName.text().strip():
                 QMessageBox.warning(self, "Validation Error", "Crop name cannot be empty.")
                 self.leName.setFocus()
                 return
 
+            # Ensure crop yield is valid
+            if self.sbCropYield.value() <= 0:
+                QMessageBox.warning(self, "Validation Error",
+                                 "Crop yield must be greater than zero.")
+                self.sbCropYield.setFocus()
+                return
+
+            # Ensure crop calorie value is valid
+            if self.sbCropCalories.value() <= 0:
+                QMessageBox.warning(self, "Validation Error",
+                                 "Crop calorie value must be greater than zero.")
+                self.sbCropCalories.setFocus()
+                return
+
             # Save crop data from form
-            self.crop.name = self.leName.text()
-            self.crop.description = self.leDescription.text()
+            self.crop.name = self.leName.text().strip()
+            self.crop.description = self.leDescription.text().strip()
             self.crop.cropYield = int(self.sbCropYield.value())  # Ensure cropYield is saved as an integer
             self.crop.cropCalories = self.sbCropCalories.value()
             self.crop.cropFodderProduction = self.sbCropFodderProduction.value()
@@ -496,7 +505,7 @@ class LaCropManager(LaCropManagerBase):
         :returns: Dictionary of crops
         :rtype: dict
         """
-        return self.mCropMap
+        return self.mCropsMap
 
     def readSettings(self):
         """Reads the settings of the window's position and size from QSettings."""
@@ -512,25 +521,97 @@ class LaCropManager(LaCropManagerBase):
         settings.setValue("mainwindow/pos", self.pos())
         settings.setValue("mainwindow/size", self.size())
 
-    def populateEnumComboBox(self, comboBox, enumClass):
-        """
-        Populate a combo box with items from an enum class.
-
-        :param comboBox: The combo box to populate
-        :type comboBox: QComboBox
-        :param enumClass: The enum class to use
-        :type enumClass: Enum class
-        """
-        comboBox.clear()
-        for member in enumClass:
-            # Extract the name, replacing underscores with spaces if needed
-            display_name = member.name.replace('_', ' ')
-            # Use the enum value as the data item
-            comboBox.addItem(display_name, member.value)
-
     def setupComboBoxes(self):
         """Initialize combo boxes with values from enums."""
-        # Populate area units combo box
-        self.populateEnumComboBox(self.cbAreaUnits, AreaUnits)
-        # Populate energy type combo box
-        self.populateEnumComboBox(self.cbFodderEnergyType, EnergyType)
+        # Area Units combo box
+        self.cbAreaUnits.clear()
+        for unit in AreaUnits:
+            self.cbAreaUnits.addItem(unit.name.replace("_", " ").title(), unit.value)
+
+        # Energy Type combo box
+        self.cbFodderEnergyType.clear()
+        for energy in EnergyType:
+            self.cbFodderEnergyType.addItem(energy.name.replace("_", " ").title(), energy.value)
+
+    def on_pbnImport_clicked(self):
+        """Import crop profiles from XML file."""
+        options = QFileDialog.Options()
+        fileName, _ = QFileDialog.getOpenFileName(
+            self,
+            "Import Crop Profile",
+            "",
+            "XML Files (*.xml);;All Files (*)",
+            options=options
+        )
+
+        if fileName:
+            try:
+                # Create a new crop object
+                importedCrop = LaCrop()
+
+                # Load from XML file
+                if importedCrop.fromXmlFile(fileName):
+                    # Generate a new GUID for the imported crop
+                    importedCrop.setGuid(None)
+
+                    # Save to the user crops directory
+                    destPath = os.path.join(LaUtils.userCropProfilesDirPath(),
+                                           f"{importedCrop.guid}.xml")
+                    importedCrop.toXmlFile(destPath)
+
+                    # Refresh the crops table
+                    self.refreshCropTable(importedCrop.guid)
+                    QMessageBox.information(self, "Import Successful",
+                                          f"Successfully imported crop: {importedCrop.name}")
+                else:
+                    QMessageBox.warning(self, "Import Failed",
+                                       "Failed to import crop from file.")
+            except Exception as e:
+                QMessageBox.critical(self, "Import Error", f"Error importing crop: {str(e)}")
+                import traceback
+                print(f"DEBUG: Exception in on_pbnImport_clicked: {traceback.format_exc()}")
+
+    def on_pbnExport_clicked(self):
+        """Export selected crop profile to XML file."""
+        if self.tblCrops.currentRow() < 0:
+            QMessageBox.information(self, "Export Crop",
+                                 "Please select a crop to export.")
+            return
+
+        guid = self.tblCrops.item(self.tblCrops.currentRow(), 0).text()
+        if not guid:
+            QMessageBox.warning(self, "Export Crop",
+                             "Could not determine crop GUID.")
+            return
+
+        # Get the crop from the file
+        sourcePath = os.path.join(LaUtils.userCropProfilesDirPath(), f"{guid}.xml")
+        if not os.path.exists(sourcePath):
+            QMessageBox.warning(self, "Export Crop",
+                             f"Could not find crop file: {sourcePath}")
+            return
+
+        # Get the crop name for the default filename
+        crop = LaCrop()
+        crop.fromXmlFile(sourcePath)
+        defaultName = crop.name.replace(" ", "_")
+
+        # Show save dialog
+        options = QFileDialog.Options()
+        fileName, _ = QFileDialog.getSaveFileName(
+            self,
+            "Export Crop Profile",
+            f"{defaultName}.xml",
+            "XML Files (*.xml);;All Files (*)",
+            options=options
+        )
+
+        if fileName:
+            try:
+                # Copy the file to the selected location
+                shutil.copy(sourcePath, fileName)
+                QMessageBox.information(self, "Export Successful",
+                                      f"Successfully exported crop to: {fileName}")
+            except Exception as e:
+                QMessageBox.critical(self, "Export Error",
+                                   f"Error exporting crop: {str(e)}")

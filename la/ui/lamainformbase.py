@@ -46,6 +46,12 @@ from la.gui.lacropparametermanager import LaCropParameterManager
 from la.gui.laanimalmanager import LaAnimalManager
 from la.gui.laanimalparametermanager import LaAnimalParameterManager
 
+# Make sure we have the proper imports at the top
+from qgis.PyQt import QtWidgets, QtCore, QtGui
+from qgis.PyQt.QtWidgets import QDialog
+from qgis.PyQt.QtCore import QFile, QTextStream
+from qgis.PyQt.QtGui import QIcon, QPixmap
+
 # endregion
 
 # This loads your .ui file so that PyQt can
@@ -203,7 +209,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             absoluteWildPlantPercent = (plantPercent * wildPlantPercent) / 100
             absoluteTamePlantPercent = (plantPercent * tamePlantPercent) / 100
 
-            # Update labels
+            # Update the main percentage labels which we know exist
             self.labelMeatPercent.setText(str(animalPercent))
             self.labelCropPercent.setText(str(plantPercent))
             self.labelMeatWildPercent.setText(str(wildAnimalPercent))
@@ -211,11 +217,21 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             self.labelCropWildPercent.setText(str(wildPlantPercent))
             self.labelCropTamePercent.setText(str(tamePlantPercent))
 
-            # Update percentage breakdown labels
-            self.labelWildMeatPercentage.setText(f"{absoluteWildAnimalPercent:.1f}%")
-            self.labelTameMeatPercentage.setText(f"{absoluteTameAnimalPercent:.1f}%")
-            self.labelWildCropsPercentage.setText(f"{absoluteWildPlantPercent:.1f}%")
-            self.labelTameCropsPercentage.setText(f"{absoluteTamePlantPercent:.1f}%")
+            # Try to update additional percentage breakdown labels if they exist
+            # Use hasattr to safely check if the attribute exists before trying to access it
+            label_map = {
+                'labelWildMeatPercentage': f"{absoluteWildAnimalPercent:.1f}%",
+                'labelTameMeatPercentage': f"{absoluteTameAnimalPercent:.1f}%",
+                'labelWildCropsPercentage': f"{absoluteWildPlantPercent:.1f}%",
+                'labelTameCropsPercentage': f"{absoluteTamePlantPercent:.1f}%"
+            }
+
+            for label_name, value in label_map.items():
+                if hasattr(self, label_name):
+                    getattr(self, label_name).setText(value)
+                else:
+                    # Optional: Create a debug message
+                    self.tbReport.append(f"Note: Label '{label_name}' not found in the UI")
 
             # Update the model if needed
             if hasattr(self, 'model'):
@@ -228,10 +244,17 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                 self.updateDietPieChart()
 
             self.tbReport.append("Diet labels updated")
+
+            # Show the calculated percentages in the report for debugging
+            self.tbReport.append(f"Animal: {animalPercent}%, Plant: {plantPercent}%")
+            self.tbReport.append(f"Wild Animal: {absoluteWildAnimalPercent:.1f}%, Tame Animal: {absoluteTameAnimalPercent:.1f}%")
+            self.tbReport.append(f"Wild Plant: {absoluteWildPlantPercent:.1f}%, Tame Plant: {absoluteTamePlantPercent:.1f}%")
+
         except Exception as e:
             self.tbReport.append(f"Error updating diet labels: {str(e)}")
             import traceback
             print(f"Error in setDietLabels: {traceback.format_exc()}")
+            self.tbReport.append(traceback.format_exc())
 
     def setModel(self, *args):
         from la.lib.la import AreaUnits
@@ -410,25 +433,32 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             self.tbReport.append("Could not find crop")
             return
 
-        # Display crop details - check widget names based on the UI form design
-        if hasattr(self, 'leCropName'):
-            self.leCropName.setText(crop.name)
-        if hasattr(self, 'leCropDescription'):
-            self.leCropDescription.setText(crop.description)
+        # Display crop details in the text browser
+        html_content = "<h2>" + crop.name + "</h2>"
+        html_content += "<p><strong>Description:</strong> " + crop.description + "</p>"
+        html_content += "<p><strong>Calories:</strong> " + str(crop.cropCalories) + "</p>"
+        # Add any other crop properties you want to display
+        self.textBrowserCropDefinition.setHtml(html_content)
+
         if hasattr(self, 'lblCropValueCalcs'):
             self.lblCropValueCalcs.setText(f"{crop.cropCalories}")
 
         # Display crop image if available
         if hasattr(crop, 'imageFile') and crop.imageFile:
             imagePath = LaUtils.resolvePath(crop.imageFile, 'image')
-            if os.path.exists(imagePath):
-                pixmap = QtGui.QPixmap(imagePath)
+            self.tbReport.append(f"Attempting to load crop image for calculation: {imagePath}")
+
+            if imagePath and os.path.exists(imagePath):
+                pixmap = QPixmap(imagePath)
                 if not pixmap.isNull():
                     self.lblCropPicCalcs.setPixmap(pixmap)
+                    self.tbReport.append("Crop calculation image loaded successfully")
                 else:
                     self.lblCropPicCalcs.clear()
+                    self.tbReport.append(f"Failed to create pixmap for calculation from {imagePath}")
             else:
                 self.lblCropPicCalcs.clear()
+                self.tbReport.append(f"Calculation image path doesn't exist: {imagePath}")
         else:
             self.lblCropPicCalcs.clear()
 
@@ -549,7 +579,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                     self.removeCropFromCalculationsList(guid)
                 self.updateTotalPercentages()
 
-        # Handle row selection for viewing details
+        # Handle row selection for viewing details - this shows the crop details
         self.showSelectedCropDetails(row)
 
     def animalCalcSelectionChanged(self, row, column):
@@ -794,17 +824,34 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             guid = self.tblCrops.item(row, 1).data(QtCore.Qt.UserRole)
             crop = LaUtils.getCrop(guid)
             if crop and crop.name:
-                # Display basic crop details
+                # Display basic crop details in the text browser
+                html_content = "<h2>" + crop.name + "</h2>"
+                html_content += "<p><strong>Description:</strong> " + crop.description + "</p>"
+                html_content += "<p><strong>Calories:</strong> " + str(crop.cropCalories) + "</p>"
+                # Add any other crop properties you want to display
+                self.textBrowserCropDefinition.setHtml(html_content)
+
+                # Clear existing image
                 self.lblCropPix.clear()
+
                 # Display image if available
-                if crop.imageFile:
+                if hasattr(crop, 'imageFile') and crop.imageFile:
                     imagePath = LaUtils.resolvePath(crop.imageFile, 'image')
-                    if os.path.exists(imagePath):
-                        pixmap = QtGui.QPixmap(imagePath)
+                    self.tbReport.append(f"Attempting to load crop image: {imagePath}")
+
+                    if imagePath and os.path.exists(imagePath):
+                        pixmap = QPixmap(imagePath)
                         if not pixmap.isNull():
                             self.lblCropPix.setPixmap(pixmap)
+                            self.tbReport.append("Crop image loaded successfully")
+                        else:
+                            self.tbReport.append(f"Failed to create pixmap from {imagePath}")
+                    else:
+                        self.tbReport.append(f"Image path doesn't exist: {imagePath}")
         except Exception as e:
             self.tbReport.append(f"Error showing crop details: {str(e)}")
+            import traceback
+            self.tbReport.append(traceback.format_exc())
 
     def updateCropCalculations(self, crop):
         """Update calculations for a crop.
