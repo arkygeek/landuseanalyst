@@ -67,13 +67,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         self.mCropsMap = {}
 
         # make the form's buttons work
-        # region PUSH BUTTONS
-        self.pushButtonExit.clicked.connect(self.close)
-        self.pbnNewCrop.clicked.connect(self.on_clicked_pbnNewCrop)
-        self.pbnNewCropParameter.clicked.connect(self.on_clicked_pbnNewCropParameter)
-        self.pbnNewAnimal.clicked.connect(self.on_clicked_pbnNewAnimal)
-        self.pbnNewAnimalParameter.clicked.connect(self.on_clicked_pbnNewAnimalParameter)
-        #endregion
+        self.connectSignalsSlots()
 
         # set labels that for pix to scaled so images display properly
         # region INIT_PIXMAP_SCALING
@@ -844,3 +838,37 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         self.loadCrops()
         self.setDietLabels()  # Update diet labels
         # Update any other UI elements or calculations as needed
+
+    def connectSignalsSlots(self):
+        """Connect signals to slots for UI interaction."""
+
+        # TODO: Menu and toolbar actions will be implemented later
+        # These will include:
+        # - File menu: New, Open, Save, Save As, Preferences
+        # - Help menu: About
+        # - Toolbar: New, Open, Save
+
+        # Connect the existing buttons
+        self.pushButtonExit.clicked.connect(self.close)
+        self.pbnNewCrop.clicked.connect(self.on_clicked_pbnNewCrop)
+        self.pbnNewCropParameter.clicked.connect(self.on_clicked_pbnNewCropParameter)
+        self.pbnNewAnimal.clicked.connect(self.on_clicked_pbnNewAnimal)
+        self.pbnNewAnimalParameter.clicked.connect(self.on_clicked_pbnNewAnimalParameter)
+
+        # Connect tree widget
+        self.treeHelp.currentItemChanged.connect(self.current_item_changed)
+
+        # Connect sliders
+        self.sliderDiet.valueChanged.connect(self.on_sliderDiet_valueChanged)
+        self.sliderMeat.valueChanged.connect(self.on_sliderMeat_valueChanged)
+        self.sliderCrop.valueChanged.connect(self.on_sliderCrop_valueChanged)
+
+        # Connect list widgets and tables
+        self.treeHelp.currentItemChanged.connect(self.helpItemClicked)
+        self.listWidgetCalculationsCrop.currentItemChanged.connect(self.cropCalcClicked)
+        self.listWidgetCalculationsAnimal.currentItemChanged.connect(self.animalCalcClicked)
+        self.tblAnimals.cellClicked.connect(self.animalCellClicked)
+        self.tblAnimals.cellChanged.connect(self.animalCalcSelectionChanged)
+        self.tblCrops.cellClicked.connect(self.cropCellClicked)
+        self.tblCrops.cellChanged.connect(self.cropCalcSelectionChanged)
+        self.cbDebug.clicked.connect(self.on_cbDebug_clicked)
