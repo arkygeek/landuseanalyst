@@ -181,6 +181,64 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         self.labelCropTamePercent.setText(myMaxString)
         self.setDietLabels()  # recalculates model (to update the diet labels!)
 
+    def setDietLabels(self):
+        """Update the diet labels based on slider values.
+        This recalculates percentages for the diet breakdown display.
+        """
+        try:
+            # Get current slider values
+            plantAnimalRatio = self.sliderDiet.value()  # Plant % vs Animal %
+            wildTameAnimalRatio = self.sliderMeat.value()  # Wild % vs Tame % for animal portion
+            wildTamePlantRatio = self.sliderCrop.value()  # Wild % vs Tame % for plant portion
+
+            # Calculate percentages
+            animalPercent = plantAnimalRatio
+            plantPercent = 100 - plantAnimalRatio
+
+            # Animal breakdown
+            wildAnimalPercent = wildTameAnimalRatio
+            tameAnimalPercent = 100 - wildTameAnimalRatio
+
+            # Plant breakdown
+            wildPlantPercent = wildTamePlantRatio
+            tamePlantPercent = 100 - wildTamePlantRatio
+
+            # Calculate absolute percentages (of total diet)
+            absoluteWildAnimalPercent = (animalPercent * wildAnimalPercent) / 100
+            absoluteTameAnimalPercent = (animalPercent * tameAnimalPercent) / 100
+            absoluteWildPlantPercent = (plantPercent * wildPlantPercent) / 100
+            absoluteTamePlantPercent = (plantPercent * tamePlantPercent) / 100
+
+            # Update labels
+            self.labelMeatPercent.setText(str(animalPercent))
+            self.labelCropPercent.setText(str(plantPercent))
+            self.labelMeatWildPercent.setText(str(wildAnimalPercent))
+            self.labelMeatTamePercent.setText(str(tameAnimalPercent))
+            self.labelCropWildPercent.setText(str(wildPlantPercent))
+            self.labelCropTamePercent.setText(str(tamePlantPercent))
+
+            # Update percentage breakdown labels
+            self.labelWildMeatPercentage.setText(f"{absoluteWildAnimalPercent:.1f}%")
+            self.labelTameMeatPercentage.setText(f"{absoluteTameAnimalPercent:.1f}%")
+            self.labelWildCropsPercentage.setText(f"{absoluteWildPlantPercent:.1f}%")
+            self.labelTameCropsPercentage.setText(f"{absoluteTamePlantPercent:.1f}%")
+
+            # Update the model if needed
+            if hasattr(self, 'model'):
+                self.model.setPlantAnimalRatio(plantAnimalRatio)
+                self.model.setWildTameAnimalRatio(wildTameAnimalRatio)
+                self.model.setWildTamePlantRatio(wildTamePlantRatio)
+
+            # Also update any visualization or graph that depends on these values
+            if hasattr(self, 'updateDietPieChart'):
+                self.updateDietPieChart()
+
+            self.tbReport.append("Diet labels updated")
+        except Exception as e:
+            self.tbReport.append(f"Error updating diet labels: {str(e)}")
+            import traceback
+            print(f"Error in setDietLabels: {traceback.format_exc()}")
+
     def setModel(self, *args):
         from la.lib.la import AreaUnits
         self.mSelectedCropsMap.clear()
@@ -302,38 +360,487 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         if index >= 0:
             combo.setCurrentIndex(index)
 
-    def setDietLabels(self):
-        # Implement the logic to set diet labels based on the current model
-        pass
-
     def helpItemClicked(self, current, previous):
-        # Implement the logic to handle help item clicked
-        pass
+        """Handle help item click event.
+
+        This method is called when a user clicks on an item in the help tree.
+        It displays the corresponding help content in the help text browser.
+
+        Args:
+            current: The currently selected QTreeWidgetItem
+            previous: The previously selected QTreeWidgetItem
+        """
+        if current is None:
+            return
+
+        # The item text is the name of the help file
+        helpFileName = current.text(0)
+        self.tbReport.append(f"Help item clicked: {helpFileName}")
+
+        # Load the help file content
+        try:
+            helpFilePath = f":/{helpFileName}.html"
+            myQFile = QFile(helpFilePath)
+            if myQFile.open(QFile.ReadOnly | QFile.Text):
+                istream = QTextStream(myQFile)
+                self.textHelp.setHtml(istream.readAll())
+                myQFile.close()
+            else:
+                self.textHelp.setHtml(f"<p>Could not open help file: {helpFilePath}</p>")
+        except Exception as e:
+            self.textHelp.setHtml(f"<p>Error loading help: {str(e)}</p>")
 
     def cropCalcClicked(self, current, previous):
-        # Implement the logic to handle crop calculation item clicked
-        pass
+        """Handle crop calculation item click event.
+
+        This method is called when a user clicks on a crop in the calculations list.
+        It displays the crop details in the crop details panel.
+
+        Args:
+            current: The currently selected QListWidgetItem
+            previous: The previously selected QListWidgetItem
+        """
+        if current is None:
+            return
+
+        # Get the crop GUID from the item's user role data
+        cropGuid = current.data(QtCore.Qt.UserRole)
+        if not cropGuid:
+            return
+
+        self.tbReport.append(f"Crop calculation clicked: {current.text()} (GUID: {cropGuid})")
+
+        # Get the crop object
+        crop = LaUtils.getCrop(cropGuid)
+        if crop is None or crop.name == "":
+            self.tbReport.append("Could not find crop")
+            return
+
+        # Display crop details
+        self.leCropName.setText(crop.name)
+        self.leCropDescription.setText(crop.description)
+        self.lblCropValueCalcs.setText(f"{crop.cropCalories}")
+
+        # Display crop image if available
+        if crop.imageFile:
+            imagePath = LaUtils.resolvePath(crop.imageFile, 'image')
+            if os.path.exists(imagePath):
+                pixmap = QtGui.QPixmap(imagePath)
+                if not pixmap.isNull():
+                    self.lblCropPicCalcs.setPixmap(pixmap)
+                else:
+                    self.lblCropPicCalcs.clear()
+            else:
+                self.lblCropPicCalcs.clear()
+        else:
+            self.lblCropPicCalcs.clear()
+
+        # Update any calculations
+        self.updateCropCalculations(crop)
 
     def animalCalcClicked(self, current, previous):
-        # Implement the logic to handle animal calculation item clicked
-        pass
+        """Handle animal calculation item click event.
+
+        This method is called when a user clicks on an animal in the calculations list.
+        It displays the animal details in the animal details panel.
+
+        Args:
+            current: The currently selected QListWidgetItem
+            previous: The previously selected QListWidgetItem
+        """
+        if current is None:
+            return
+
+        # Get the animal GUID from the item's user role data
+        animalGuid = current.data(QtCore.Qt.UserRole)
+        if not animalGuid:
+            return
+
+        self.tbReport.append(f"Animal calculation clicked: {current.text()} (GUID: {animalGuid})")
+
+        # Get the animal object
+        animal = LaUtils.getAnimal(animalGuid)
+        if animal is None or animal.name == "":
+            self.tbReport.append("Could not find animal")
+            return
+
+        # Display animal details
+        self.leAnimalName.setText(animal.name)
+        self.leAnimalDescription.setText(animal.description)
+
+        # Display animal image if available
+        if animal.imageFile:
+            imagePath = LaUtils.resolvePath(animal.imageFile, 'image')
+            if os.path.exists(imagePath):
+                pixmap = QtGui.QPixmap(imagePath)
+                if not pixmap.isNull():
+                    self.lblAnimalPicCalcs.setPixmap(pixmap)
+                else:
+                    self.lblAnimalPicCalcs.clear()
+            else:
+                self.lblAnimalPicCalcs.clear()
+        else:
+            self.lblAnimalPicCalcs.clear()
+
+        # Update any calculations
+        self.updateAnimalCalculations(animal)
 
     def animalCellClicked(self, row, column):
-        # Implement the logic to handle animal cell clicked
-        pass
+        """Handle animal table cell click event.
 
-    def animalCalcSelectionChanged(self, row, column):
-        # Implement the logic to handle animal calculation selection changed
-        pass
+        This method is called when a user clicks on a cell in the animals table.
+        It handles the selection and display of animal details.
+
+        Args:
+            row: The row index of the clicked cell
+            column: The column index of the clicked cell
+        """
+        if column == 0:  # Checkbox column
+            item = self.tblAnimals.item(row, column)
+            guid = self.tblAnimals.item(row, 1).data(QtCore.Qt.UserRole)
+
+            # Get the current check state
+            isChecked = item.checkState() == QtCore.Qt.Checked
+
+            # Update the animals map
+            if guid in self.mAnimalsMap:
+                currentValue = self.mAnimalsMap[guid]
+                self.mAnimalsMap[guid] = (isChecked, currentValue[1])
+
+                # Update the animal calculations list
+                if isChecked:
+                    # Add to calculations list if not already there
+                    self.addAnimalToCalculationsList(guid)
+                else:
+                    # Remove from calculations list
+                    self.removeAnimalFromCalculationsList(guid)
+
+                self.updateTotalPercentages()
+
+        # Handle row selection for viewing details
+        self.showSelectedAnimalDetails(row)
 
     def cropCellClicked(self, row, column):
-        # Implement the logic to handle crop cell clicked
-        pass
+        """Handle crop table cell click event.
+
+        This method is called when a user clicks on a cell in the crops table.
+        It handles the selection and display of crop details.
+
+        Args:
+            row: The row index of the clicked cell
+            column: The column index of the clicked cell
+        """
+        if column == 0:  # Checkbox column
+            item = self.tblCrops.item(row, column)
+            guid = self.tblCrops.item(row, 1).data(QtCore.Qt.UserRole)
+
+            # Get the current check state
+            isChecked = item.checkState() == QtCore.Qt.Checked
+
+            # Update the crops map
+            if guid in self.mCropsMap:
+                currentValue = self.mCropsMap[guid]
+                self.mCropsMap[guid] = (isChecked, currentValue[1])
+
+                # Update the crop calculations list
+                if isChecked:
+                    # Add to calculations list if not already there
+                    self.addCropToCalculationsList(guid)
+                else:
+                    # Remove from calculations list
+                    self.removeCropFromCalculationsList(guid)
+
+                self.updateTotalPercentages()
+
+        # Handle row selection for viewing details
+        self.showSelectedCropDetails(row)
+
+    def animalCalcSelectionChanged(self, row, column):
+        """Handle changes in animal calculations table.
+
+        This method is called when a selection in the animal calculations table changes.
+        It updates the relevant data and UI elements accordingly.
+
+        Args:
+            row: The row index of the changed cell
+            column: The column index of the changed cell
+        """
+        # Only process changes in the parameter selection column
+        if column != 2:
+            return
+
+        try:
+            # Get the animal GUID
+            animalGuid = self.tblAnimals.item(row, 1).data(QtCore.Qt.UserRole)
+            if not animalGuid:
+                return
+
+            # Get the selected parameter GUID
+            comboBox = self.tblAnimals.cellWidget(row, column)
+            if not comboBox:
+                return
+
+            parameterGuid = comboBox.currentData()
+
+            # Get the current checked state
+            isChecked = self.tblAnimals.item(row, 0).checkState() == QtCore.Qt.Checked
+
+            # Update the animals map
+            self.mAnimalsMap[animalGuid] = (isChecked, parameterGuid)
+
+            # Update the percentage display
+            myAnimalParametersMap = LaUtils.getAvailableAnimalParameters()
+            if parameterGuid in myAnimalParametersMap:
+                parameter = myAnimalParametersMap[parameterGuid]
+                percentItem = QtWidgets.QTableWidgetItem(str(parameter.percentTameMeat))
+                self.tblAnimals.setItem(row, 3, percentItem)
+
+                # Update the total percentages if this animal is checked
+                self.updateTotalPercentages()
+        except Exception as e:
+            self.tbReport.append(f"Error in animalCalcSelectionChanged: {str(e)}")
 
     def cropCalcSelectionChanged(self, row, column):
-        # Implement the logic to handle crop calculation selection changed
-        pass
+        """Handle changes in crop calculations table.
+
+        This method is called when a selection in the crop calculations table changes.
+        It updates the relevant data and UI elements accordingly.
+
+        Args:
+            row: The row index of the changed cell
+            column: The column index of the changed cell
+        """
+        # Only process changes in the parameter selection column
+        if column != 2:
+            return
+
+        try:
+            # Get the crop GUID
+            cropGuid = self.tblCrops.item(row, 1).data(QtCore.Qt.UserRole)
+            if not cropGuid:
+                return
+
+            # Get the selected parameter GUID
+            comboBox = self.tblCrops.cellWidget(row, column)
+            if not comboBox:
+                return
+
+            parameterGuid = comboBox.currentData()
+
+            # Get the current checked state
+            isChecked = self.tblCrops.item(row, 0).checkState() == QtCore.Qt.Checked
+
+            # Update the crops map
+            self.mCropsMap[cropGuid] = (isChecked, parameterGuid)
+
+            # Update the percentage display
+            myCropParametersMap = LaUtils.getAvailableCropParameters()
+            if parameterGuid in myCropParametersMap:
+                parameter = myCropParametersMap[parameterGuid]
+                percentItem = QtWidgets.QTableWidgetItem(str(parameter.percentTameCrop))
+                self.tblCrops.setItem(row, 3, percentItem)
+
+                # Update the total percentages if this crop is checked
+                self.updateTotalPercentages()
+        except Exception as e:
+            self.tbReport.append(f"Error in cropCalcSelectionChanged: {str(e)}")
 
     def on_cbDebug_clicked(self):
-        # Implement the logic to handle debug checkbox clicked
+        """Handle debug checkbox click.
+
+        This method toggles the visibility of debug information in the application.
+        """
+        isChecked = self.cbDebug.isChecked()
+        self.tbReport.setVisible(isChecked)
+        self.tbReport.append(f"Debug mode {'enabled' if isChecked else 'disabled'}")
+
+    def addAnimalToCalculationsList(self, animalGuid):
+        """Add an animal to the calculations list.
+
+        Args:
+            animalGuid: The GUID of the animal to add
+        """
+        # Check if the animal is already in the list
+        for i in range(self.listWidgetCalculationsAnimal.count()):
+            item = self.listWidgetCalculationsAnimal.item(i)
+            if item.data(QtCore.Qt.UserRole) == animalGuid:
+                return
+
+        # Add the animal to the list
+        animal = LaUtils.getAnimal(animalGuid)
+        if animal and animal.name:
+            item = QtWidgets.QListWidgetItem(animal.name)
+            item.setData(QtCore.Qt.UserRole, animalGuid)
+            self.listWidgetCalculationsAnimal.addItem(item)
+
+    def removeAnimalFromCalculationsList(self, animalGuid):
+        """Remove an animal from the calculations list.
+
+        Args:
+            animalGuid: The GUID of the animal to remove
+        """
+        for i in range(self.listWidgetCalculationsAnimal.count()):
+            item = self.listWidgetCalculationsAnimal.item(i)
+            if item.data(QtCore.Qt.UserRole) == animalGuid:
+                self.listWidgetCalculationsAnimal.takeItem(i)
+                break
+
+    def addCropToCalculationsList(self, cropGuid):
+        """Add a crop to the calculations list.
+
+        Args:
+            cropGuid: The GUID of the crop to add
+        """
+        # Check if the crop is already in the list
+        for i in range(self.listWidgetCalculationsCrop.count()):
+            item = self.listWidgetCalculationsCrop.item(i)
+            if item.data(QtCore.Qt.UserRole) == cropGuid:
+                return
+
+        # Add the crop to the list
+        crop = LaUtils.getCrop(cropGuid)
+        if crop and crop.name:
+            item = QtWidgets.QListWidgetItem(crop.name)
+            item.setData(QtCore.Qt.UserRole, cropGuid)
+            self.listWidgetCalculationsCrop.addItem(item)
+
+    def removeCropFromCalculationsList(self, cropGuid):
+        """Remove a crop from the calculations list.
+
+        Args:
+            cropGuid: The GUID of the crop to remove
+        """
+        for i in range(self.listWidgetCalculationsCrop.count()):
+            item = self.listWidgetCalculationsCrop.item(i)
+            if item.data(QtCore.Qt.UserRole) == cropGuid:
+                self.listWidgetCalculationsCrop.takeItem(i)
+                break
+
+    def updateTotalPercentages(self):
+        """Update the total percentages for crops and animals.
+
+        This method calculates and updates the total percentages for tame crops
+        and animals based on the selected parameters.
+        """
+        # Calculate animal percentages
+        animalTotal = 0.0
+        myAnimalParametersMap = LaUtils.getAvailableAnimalParameters()
+        for guid, value in self.mAnimalsMap.items():
+            isChecked, parameterGuid = value
+            if isChecked and parameterGuid in myAnimalParametersMap:
+                animalTotal += myAnimalParametersMap[parameterGuid].percentTameMeat
+
+        # Calculate crop percentages
+        cropTotal = 0.0
+        myCropParametersMap = LaUtils.getAvailableCropParameters()
+        for guid, value in self.mCropsMap.items():
+            isChecked, parameterGuid = value
+            if isChecked and parameterGuid in myCropParametersMap:
+                cropTotal += myCropParametersMap[parameterGuid].percentTameCrop
+
+        # Update the totals display
+        self.labelAnimalCheck.setText(f"{animalTotal:.1f}%")
+        self.labelCropCheck.setText(f"{cropTotal:.1f}%")
+
+        # Update status icons - using appropriate icon based on percentage
+        animalIconPath = ":/status_ok.png" if abs(animalTotal - 100.0) < 0.1 else ":/status_error.png"
+        cropIconPath = ":/status_ok.png" if abs(cropTotal - 100.0) < 0.1 else ":/status_error.png"
+
+        # Check if the icon label widgets actually exist before setting pixmap
+        # The variable names might be different from what we assumed
+        try:
+            # Try to find appropriate labels by name - adapt these to match what's in your UI
+            if hasattr(self, 'labelAnimalIcon'):
+                self.labelAnimalIcon.setPixmap(QIcon(animalIconPath).pixmap(16, 16))
+
+            if hasattr(self, 'labelCropIcon'):
+                self.labelCropIcon.setPixmap(QIcon(cropIconPath).pixmap(16, 16))
+
+            # If the above doesn't work, we'll just skip setting the icons
+            # but still log the percentages
+        except Exception as e:
+            self.tbReport.append(f"Warning: Could not update status icons: {str(e)}")
+
+        # Log the updated percentages regardless of icon status
+        self.tbReport.append(f"Total percentages updated: Animals {animalTotal:.1f}%, Crops {cropTotal:.1f}%")
+
+    def showSelectedAnimalDetails(self, row):
+        """Show details for the selected animal.
+
+        Args:
+            row: The row index of the selected animal
+        """
+        if row < 0 or row >= self.tblAnimals.rowCount():
+            return
+
+        try:
+            guid = self.tblAnimals.item(row, 1).data(QtCore.Qt.UserRole)
+            animal = LaUtils.getAnimal(guid)
+
+            if animal and animal.name:
+                # Display basic animal details
+                self.lblAnimalPix.clear()
+
+                # Display image if available
+                if animal.imageFile:
+                    imagePath = LaUtils.resolvePath(animal.imageFile, 'image')
+                    if os.path.exists(imagePath):
+                        pixmap = QtGui.QPixmap(imagePath)
+                        if not pixmap.isNull():
+                            self.lblAnimalPix.setPixmap(pixmap)
+        except Exception as e:
+            self.tbReport.append(f"Error showing animal details: {str(e)}")
+
+    def showSelectedCropDetails(self, row):
+        """Show details for the selected crop.
+
+        Args:
+            row: The row index of the selected crop
+        """
+        if row < 0 or row >= self.tblCrops.rowCount():
+            return
+
+        try:
+            guid = self.tblCrops.item(row, 1).data(QtCore.Qt.UserRole)
+            crop = LaUtils.getCrop(guid)
+
+            if crop and crop.name:
+                # Display basic crop details
+                self.lblCropPix.clear()
+
+                # Display image if available
+                if crop.imageFile:
+                    imagePath = LaUtils.resolvePath(crop.imageFile, 'image')
+                    if os.path.exists(imagePath):
+                        pixmap = QtGui.QPixmap(imagePath)
+                        if not pixmap.isNull():
+                            self.lblCropPix.setPixmap(pixmap)
+        except Exception as e:
+            self.tbReport.append(f"Error showing crop details: {str(e)}")
+
+    def updateCropCalculations(self, crop):
+        """Update calculations for a crop.
+
+        Args:
+            crop: The crop object to calculate values for
+        """
+        # Implement any specific calculation logic for crops here
+        # This method would typically update display values based on the crop's properties
         pass
+
+    def updateAnimalCalculations(self, animal):
+        """Update calculations for an animal.
+
+        Args:
+            animal: The animal object to calculate values for
+        """
+        # Implement any specific calculation logic for animals here
+        # This method would typically update display values based on the animal's properties
+        pass
+
+    def refresh(self):
+        """Refresh all components of the form."""
+        self.loadAnimals()
+        self.loadCrops()
+        self.setDietLabels()  # Update diet labels
+        # Update any other UI elements or calculations as needed

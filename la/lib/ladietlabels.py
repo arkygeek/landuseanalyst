@@ -7,6 +7,22 @@ from la.lib.laserialisable import LaSerialisable
 from la.lib.laguid import LaGuid
 # from la.lib.la import La
 class LaDietLabels(LaSerialisable, LaGuid):
+    dairyMCaloriesChanged = pyqtSignal(float)
+    cropMCaloriesChanged = pyqtSignal(float)
+    animalMCaloriesChanged = pyqtSignal(float)
+    wildAnimalMCaloriesChanged = pyqtSignal(float)
+    wildPlantsMCaloriesChanged = pyqtSignal(float)
+    dairyPortionPctChanged = pyqtSignal(float)
+    tameMeatPortionPctChanged = pyqtSignal(float)
+    cropsPortionPctChanged = pyqtSignal(float)
+    wildAnimalPortionPctChanged = pyqtSignal(float)
+    wildPlantsPortionPctChanged = pyqtSignal(float)
+    plantsPortionPctChanged = pyqtSignal(float)
+    animalPortionPctChanged = pyqtSignal(float)
+    kiloCaloriesIndividualAnnualChanged = pyqtSignal(float)
+    megaCaloriesSettlementAnnualChanged = pyqtSignal(float)
+    dairySurplusMCaloriesChanged = pyqtSignal(float)
+
     def __init__(self):
         super().__init__()
         self._dairyMCalories: float = 0.0
@@ -210,21 +226,6 @@ class LaDietLabels(LaSerialisable, LaGuid):
             self._animalCalcsReportMap = theAnimalCalcsReportMap
             self.animalCalcsReportMapChanged.emit(theAnimalCalcsReportMap)
 
-    dairyMCaloriesChanged = pyqtSignal(float)
-    cropMCaloriesChanged = pyqtSignal(float)
-    animalMCaloriesChanged = pyqtSignal(float)
-    wildAnimalMCaloriesChanged = pyqtSignal(float)
-    wildPlantsMCaloriesChanged = pyqtSignal(float)
-    dairyPortionPctChanged = pyqtSignal(float)
-    tameMeatPortionPctChanged = pyqtSignal(float)
-    cropsPortionPctChanged = pyqtSignal(float)
-    wildAnimalPortionPctChanged = pyqtSignal(float)
-    wildPlantsPortionPctChanged = pyqtSignal(float)
-    plantsPortionPctChanged = pyqtSignal(float)
-    animalPortionPctChanged = pyqtSignal(float)
-    kiloCaloriesIndividualAnnualChanged = pyqtSignal(float)
-    megaCaloriesSettlementAnnualChanged = pyqtSignal(float)
-    dairySurplusMCaloriesChanged = pyqtSignal(float)
 
 
 

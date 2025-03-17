@@ -9,25 +9,17 @@ from qgis.PyQt.QtWidgets import (QAction, QComboBox, QLabel, QLineEdit, QMainWin
                                  QTextEdit, QTreeWidget, QMessageBox)
 
 # Local application/library specific imports
-# from lib.la import La
 from la.resources_rc import *
 
-
-from la.ui.lamainformbase import LaMainFormBase
-# from la.ui.lacropparameterbase import LaCropParameterManagerBase
-
 from la.lib.lautils import LaUtils
-
 from la.lib.laanimal import LaAnimal
 from la.lib.lamodel import LaModel
 from la.lib.lacrop import LaCrop
 from la.lib.laanimalparameter import LaAnimalParameter
 from la.lib.lacropparameter import LaCropParameter
-
-# from la.lib.lagrass import LaGrass
-# from la.lib.lagrassprocesslib import LaGrassProcessLib
-from la.lib.lautils import LaUtils
 from la.lib.ladietlabels import LaDietLabels
+
+from la.ui.lamainformbase import LaMainFormBase
 
 class LaMainForm(QMainWindow):
   def __init__(self, iface):
