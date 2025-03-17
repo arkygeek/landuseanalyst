@@ -410,13 +410,16 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             self.tbReport.append("Could not find crop")
             return
 
-        # Display crop details
-        self.leCropName.setText(crop.name)
-        self.leCropDescription.setText(crop.description)
-        self.lblCropValueCalcs.setText(f"{crop.cropCalories}")
+        # Display crop details - check widget names based on the UI form design
+        if hasattr(self, 'leCropName'):
+            self.leCropName.setText(crop.name)
+        if hasattr(self, 'leCropDescription'):
+            self.leCropDescription.setText(crop.description)
+        if hasattr(self, 'lblCropValueCalcs'):
+            self.lblCropValueCalcs.setText(f"{crop.cropCalories}")
 
         # Display crop image if available
-        if crop.imageFile:
+        if hasattr(crop, 'imageFile') and crop.imageFile:
             imagePath = LaUtils.resolvePath(crop.imageFile, 'image')
             if os.path.exists(imagePath):
                 pixmap = QtGui.QPixmap(imagePath)
@@ -458,12 +461,14 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             self.tbReport.append("Could not find animal")
             return
 
-        # Display animal details
-        self.leAnimalName.setText(animal.name)
-        self.leAnimalDescription.setText(animal.description)
+        # Display animal details - check widget names based on the UI form design
+        if hasattr(self, 'leAnimalName'):
+            self.leAnimalName.setText(animal.name)
+        if hasattr(self, 'leAnimalDescription'):
+            self.leAnimalDescription.setText(animal.description)
 
         # Display animal image if available
-        if animal.imageFile:
+        if hasattr(animal, 'imageFile') and animal.imageFile:
             imagePath = LaUtils.resolvePath(animal.imageFile, 'image')
             if os.path.exists(imagePath):
                 pixmap = QtGui.QPixmap(imagePath)
@@ -508,7 +513,6 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                 else:
                     # Remove from calculations list
                     self.removeAnimalFromCalculationsList(guid)
-
                 self.updateTotalPercentages()
 
         # Handle row selection for viewing details
@@ -543,7 +547,6 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                 else:
                     # Remove from calculations list
                     self.removeCropFromCalculationsList(guid)
-
                 self.updateTotalPercentages()
 
         # Handle row selection for viewing details
@@ -573,7 +576,6 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             comboBox = self.tblAnimals.cellWidget(row, column)
             if not comboBox:
                 return
-
             parameterGuid = comboBox.currentData()
 
             # Get the current checked state
@@ -588,7 +590,6 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                 parameter = myAnimalParametersMap[parameterGuid]
                 percentItem = QtWidgets.QTableWidgetItem(str(parameter.percentTameMeat))
                 self.tblAnimals.setItem(row, 3, percentItem)
-
                 # Update the total percentages if this animal is checked
                 self.updateTotalPercentages()
         except Exception as e:
@@ -618,7 +619,6 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             comboBox = self.tblCrops.cellWidget(row, column)
             if not comboBox:
                 return
-
             parameterGuid = comboBox.currentData()
 
             # Get the current checked state
@@ -633,7 +633,6 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                 parameter = myCropParametersMap[parameterGuid]
                 percentItem = QtWidgets.QTableWidgetItem(str(parameter.percentTameCrop))
                 self.tblCrops.setItem(row, 3, percentItem)
-
                 # Update the total percentages if this crop is checked
                 self.updateTotalPercentages()
         except Exception as e:
@@ -749,7 +748,6 @@ class LaMainFormBase(QDialog, FORM_CLASS):
 
             if hasattr(self, 'labelCropIcon'):
                 self.labelCropIcon.setPixmap(QIcon(cropIconPath).pixmap(16, 16))
-
             # If the above doesn't work, we'll just skip setting the icons
             # but still log the percentages
         except Exception as e:
@@ -770,11 +768,9 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         try:
             guid = self.tblAnimals.item(row, 1).data(QtCore.Qt.UserRole)
             animal = LaUtils.getAnimal(guid)
-
             if animal and animal.name:
                 # Display basic animal details
                 self.lblAnimalPix.clear()
-
                 # Display image if available
                 if animal.imageFile:
                     imagePath = LaUtils.resolvePath(animal.imageFile, 'image')
@@ -797,11 +793,9 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         try:
             guid = self.tblCrops.item(row, 1).data(QtCore.Qt.UserRole)
             crop = LaUtils.getCrop(guid)
-
             if crop and crop.name:
                 # Display basic crop details
                 self.lblCropPix.clear()
-
                 # Display image if available
                 if crop.imageFile:
                     imagePath = LaUtils.resolvePath(crop.imageFile, 'image')
@@ -826,7 +820,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         """Update calculations for an animal.
 
         Args:
-            animal: The animal object to calculate values for
+            animal: The animal object to calculate values for.
         """
         # Implement any specific calculation logic for animals here
         # This method would typically update display values based on the animal's properties
@@ -841,12 +835,11 @@ class LaMainFormBase(QDialog, FORM_CLASS):
 
     def connectSignalsSlots(self):
         """Connect signals to slots for UI interaction."""
-
         # TODO: Menu and toolbar actions will be implemented later
         # These will include:
         # - File menu: New, Open, Save, Save As, Preferences
         # - Help menu: About
-        # - Toolbar: New, Open, Save
+        # - Toolbar: New, Open, Save, Save As, Preferences
 
         # Connect the existing buttons
         self.pushButtonExit.clicked.connect(self.close)

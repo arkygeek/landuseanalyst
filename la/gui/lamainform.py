@@ -286,10 +286,6 @@ class LaMainForm(QMainWindow):
         language = "fr"
     self.settings.setValue("language", language)
 
-
-
-
-
   # noinspection PyMethodMayBeStatic
   def tr(self, message):
       """Get the translation for a string using Qt translation API.
@@ -423,122 +419,219 @@ class LaMainForm(QMainWindow):
           print("thisIsOutput")
           pass
 
+# -*- coding: utf-8 -*-
+"""
+LanduseAnalyst - A QGIS plugin for determining the extent of the catchment area
+of a settlement (with respect to required land needed for food production).
+Land area targets for each food source supplied to the model are calculated based
+on a multitude of demographic and dietary inputs.
 
+This file implements the main form functionality.
 
+@author:
+    Dr. Jason S. Jorgenson <jjorgenson@gmail.com>
 
+@date:
+    2022-03-22
 
+@version:
+    git sha: $Format:%H$
 
+@license:
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 3 of the License, or
+    (at your option) any later version.
+"""
 
+from qgis.PyQt import QtGui, QtCore
+from qgis.PyQt.QtGui import QPixmap
+from qgis.PyQt.QtCore import QSettings
+import os
 
+from la.ui.lamainformbase import LaMainFormBase
+from la.lib.lamodel import LaModel
+from la.lib.lautils import LaUtils
 
+class LaMainForm(LaMainFormBase):
+    """
+    Main form for LanduseAnalyst.
+    This class extends LaMainFormBase with additional functionality.
+    """
 
+    def __init__(self, parent=None):
+        """Constructor for LaMainForm"""
+        super(LaMainForm, self).__init__(parent)
 
+        # Initialize the model
+        self.model = LaModel()
 
+        # Additional initialization specific to the main form
+        self.setup()
 
+        # Initialize settings
+        self.readSettings()
 
+        # Show debug panel if debug mode is enabled
+        debugMode = QSettings().value("landuse_analyst/debug", False, type=bool)
+        self.cbDebug.setChecked(debugMode)
+        self.tbReport.setVisible(debugMode)
 
-# from qgis.PyQt.QtCore import Qt, QSettings, QTranslator, QCoreApplication
-# from qgis.PyQt.QtGui import QIcon
-# from qgis.PyQt.QtWidgets import QAction, QMainWindow, QFileDialog, QMessageBox
+    def setup(self):
+        """Perform additional setup beyond what's in the base class."""
+        # Update the application title
+        self.setWindowTitle("Land Use Analyst")
 
-# from ui.lamainformbase import LaMainFormBase
-# from gui.lacropmanager import LaCropManager
+        # Load images or set additional properties not handled in the base class
+        self.loadImages()
 
+        # Set up any additional connections not in the base class
+        self.connect_additional_signals()
 
-# class LaMainForm(QMainWindow, LaMainFormBase):
-#     def __init__(self, parent=None):
-#         super().__init__(parent)
-#         self.setupUi(self)
+        # Initialize the diet pie chart if it exists
+        if hasattr(self, 'updateDietPieChart'):
+            self.updateDietPieChart()
 
-#         # Initialize the crop manager
-#         self.cropManager = LaCropManager(self)
+        # Set default values for the population fields
+        self.sbPopulation.setValue(100)
 
-#         # Set up the menu actions
-#         self.actionNew.triggered.connect(self.newFile)
-#         self.actionOpen.triggered.connect(self.openFile)
-#         self.actionSave.triggered.connect(self.saveFile)
-#         self.actionSaveAs.triggered.connect(self.saveFileAs)
-#         self.actionPreferences.triggered.connect(self.showPreferences)
-#         self.actionAbout.triggered.connect(self.showAbout)
+        # Refresh all displays
+        self.refresh()
 
-#         # Set up the toolbar actions
-#         self.actionNewToolbar.triggered.connect(self.newFile)
-#         self.actionOpenToolbar.triggered.connect(self.openFile)
-#         self.actionSaveToolbar.triggered.connect(self.saveFile)
+    def loadImages(self):
+        """Load images for the application."""
+        try:
+            # Load application logo or other static images
+            logoPath = ":/la_icon.png"
+            if os.path.exists(logoPath):
+                self.lblLogo.setPixmap(QPixmap(logoPath))
+                self.lblLogo.setScaledContents(True)
+        except Exception as e:
+            self.tbReport.append(f"Error loading images: {str(e)}")
 
-#         # Set up the status bar
-#         self.statusBar().showMessage("Ready")
+    def connect_additional_signals(self):
+        """Connect additional signals not handled in the base class."""
+        # Connect the population spin box to update calculations
+        if hasattr(self, 'sbPopulation'):
+            self.sbPopulation.valueChanged.connect(self.updateCalculations)
 
-#         # Set up the window icon
-#         self.setWindowIcon(QIcon(":/icons/landuseanalyst.png"))
+        # Connect the area units combo box to update calculations
+        if hasattr(self, 'cbAreaUnits'):
+            self.cbAreaUnits.currentIndexChanged.connect(self.updateCalculations)
 
-#         # Set up the settings
-#         self.settings = QSettings("Linfiniti", "LandUseAnalyst")
-#         self.loadSettings()
+    def updateDietPieChart(self):
+        """Update the diet information display.
 
-#     def newFile(self):
-#         # TODO: Implement new file functionality
-#         pass
+        This method calculates the diet percentages based on slider values
+        and updates relevant labels in the UI.
+        """
+        try:
+            # Get current slider values
+            plantAnimalRatio = self.sliderDiet.value()  # Plant % vs Animal %
+            wildTameAnimalRatio = self.sliderMeat.value()  # Wild % vs Tame % for animal portion
+            wildTamePlantRatio = self.sliderCrop.value()  # Wild % vs Tame % for plant portion
 
-#     def openFile(self):
-#         # TODO: Implement open file functionality
-#         pass
+            # Calculate percentages
+            animalPercent = plantAnimalRatio
+            plantPercent = 100 - plantAnimalRatio
 
-#     def saveFile(self):
-#         # TODO: Implement save file functionality
-#         pass
+            wildAnimalPercent = (animalPercent * wildTameAnimalRatio) / 100
+            tameAnimalPercent = (animalPercent * (100 - wildTameAnimalRatio)) / 100
+            wildPlantPercent = (plantPercent * wildTamePlantRatio) / 100
+            tamePlantPercent = (plantPercent * (100 - wildTamePlantRatio)) / 100
 
-#     def saveFileAs(self):
-#         # TODO: Implement save file as functionality
-#         pass
+            # Update the labels with calculated values
+            # This matches the C++ version behavior without adding a pie chart
+            if hasattr(self, 'labelWildMeatPercentage'):
+                self.labelWildMeatPercentage.setText(f"{wildAnimalPercent:.1f}%")
+            if hasattr(self, 'labelTameMeatPercentage'):
+                self.labelTameMeatPercentage.setText(f"{tameAnimalPercent:.1f}%")
+            if hasattr(self, 'labelWildCropsPercentage'):
+                self.labelWildCropsPercentage.setText(f"{wildPlantPercent:.1f}%")
+            if hasattr(self, 'labelTameCropsPercentage'):
+                self.labelTameCropsPercentage.setText(f"{tamePlantPercent:.1f}%")
 
-#     def showPreferences(self):
-#         preferences = LaPreferences(self)
-#         preferences.exec_()
-#         self.loadSettings()
+            self.tbReport.append("Diet percentages updated")
 
-#     def showAbout(self):
-#         about = LaAbout(self)
-#         about.exec_()
+        except Exception as e:
+            self.tbReport.append(f"Error updating diet percentages: {str(e)}")
+            import traceback
+            print(f"Error in updateDietPieChart: {traceback.format_exc()}")
 
-#     def closeEvent(self, event):
-#         # Save the settings
-#         self.saveSettings()
+    def updateCalculations(self):
+        """Update all calculations based on current settings and selections."""
+        try:
+            # Get the current population
+            population = self.sbPopulation.value() if hasattr(self, 'sbPopulation') else 100
 
-#         # Confirm exit
-#         reply = QMessageBox.question(self, "Exit", "Are you sure you want to exit?",
-#                                       QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
-#         if reply == QMessageBox.Yes:
-#             event.accept()
-#         else:
-#             event.ignore()
+            # Update text fields with calculated values
+            self.tbReport.append(f"Updating calculations for population: {population}")
 
-#     def loadSettings(self):
-#         # Load the language settings
-#         language = self.settings.value("language", "en")
-#         translator = QTranslator()
-#         translator.load(f":/translations/landuseanalyst_{language}.qm")
-#         QCoreApplication.installTranslator(translator)
+            # Call setDietLabels to update percentages
+            self.setDietLabels()
 
-#     def saveSettings(self):
-#         # Save the language settings
-#         language = QCoreApplication.translate("LaMainForm", "English")
-#         if QCoreApplication.translate("LaMainForm", "French") in self.languageComboBox.currentText():
-#             language = "fr"
-#         self.settings.setValue("language", language)
+            # Calculate and display total land needed
+            self.calculateTotalLandNeeded()
 
-# """
+        except Exception as e:
+            self.tbReport.append(f"Error updating calculations: {str(e)}")
+            import traceback
+            print(f"Error in updateCalculations: {traceback.format_exc()}")
 
-# LaMainForm class is rewritten in Python using PyQt5.
+    def calculateTotalLandNeeded(self):
+        """Calculate and display the total land needed."""
+        try:
+            # This would calculate the total land needed based on:
+            # - Population
+            # - Selected crops and animals
+            # - Diet ratios
+            # - Crop yields and animal parameters
 
-# The necessary imports are included, including QAction, QFileDialog, QMessageBox,
-#     QMainWindow, QSettings, QTranslator, QCoreApplication, QIcon, and the
-#     Ui_LaMainFormBase class generated by Qt Designer.
+            # Dummy calculation for demonstration
+            population = self.sbPopulation.value() if hasattr(self, 'sbPopulation') else 100
+            landNeeded = population * 0.5  # Simple example - would be much more complex in reality
 
-# The LaMainForm class defines the necessary methods for managing the main form,
-#     including __init__, newFile, openFile, saveFile, saveFileAs, showPreferences,
-#     showAbout, closeEvent, loadSettings, and saveSettings.  These methods are
-#     used to manage the main form, including the menu actions, toolbar actions,
-#     status bar, window icon, settings, and language translations.
+            # Display the result
+            if hasattr(self, 'lblTotalLandNeeded'):
+                self.lblTotalLandNeeded.setText(f"{landNeeded:.2f}")
 
-# """
+            self.tbReport.append(f"Total land needed calculated: {landNeeded:.2f} units")
+
+        except Exception as e:
+            self.tbReport.append(f"Error calculating land needed: {str(e)}")
+
+    def readSettings(self):
+        """Read application settings."""
+        settings = QSettings()
+
+        # Window geometry
+        if settings.contains("landuse_analyst/geometry"):
+            self.restoreGeometry(settings.value("landuse_analyst/geometry"))
+
+        # Debug mode
+        debugMode = settings.value("landuse_analyst/debug", False, type=bool)
+        self.cbDebug.setChecked(debugMode)
+        self.tbReport.setVisible(debugMode)
+
+        # Load most recently used values
+        if hasattr(self, 'sbPopulation'):
+            self.sbPopulation.setValue(settings.value("landuse_analyst/population", 100, type=int))
+
+    def writeSettings(self):
+        """Save application settings."""
+        settings = QSettings()
+
+        # Window geometry
+        settings.setValue("landuse_analyst/geometry", self.saveGeometry())
+
+        # Debug mode
+        settings.setValue("landuse_analyst/debug", self.cbDebug.isChecked())
+
+        # Save most recently used values
+        if hasattr(self, 'sbPopulation'):
+            settings.setValue("landuse_analyst/population", self.sbPopulation.value())
+
+    def closeEvent(self, event):
+        """Handle window close event - save settings before closing."""
+        self.writeSettings()
+        super(LaMainForm, self).closeEvent(event)
