@@ -106,11 +106,11 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
             self.rasterName = theCropParameter.rasterName
 
     @pyqtProperty(str, notify=nameChanged)
-    def name(self) -> str:
+    def name(self) -> str: #type: ignore
         """Get the name of the crop parameter."""
         return str(self.mName)
 
-    @name.setter  
+    @name.setter
     def name(self, theName: str) -> None:
         """Set the name of the crop parameter."""
         if self.mName != theName:
@@ -118,7 +118,7 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
             self.nameChanged.emit(theName)
 
     @pyqtProperty(str, notify=descriptionChanged)
-    def description(self) -> str:
+    def description(self) -> str: #type: ignore
         """Get the description of the crop parameter."""
         return str(self.mDescription)
 
@@ -130,7 +130,7 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
             self.descriptionChanged.emit(theDescription)
 
     @pyqtProperty(str, notify=guidChanged)
-    def guid(self) -> str:
+    def guid(self) -> str: #type: ignore
         """Get the GUID of the crop parameter."""
         return str(self.mGuid)
 
@@ -142,7 +142,7 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
             self.guidChanged.emit(theGuid)
 
     @pyqtProperty(str, notify=cropGuidChanged)
-    def cropGuid(self) -> str:
+    def cropGuid(self) -> str: #type: ignore
         """Get the crop GUID."""
         return str(self.mCropGuid)
 
@@ -154,7 +154,7 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
             self.cropGuidChanged.emit(theCropGuid)
 
     @pyqtProperty(float, notify=percentTameCropChanged)
-    def percentTameCrop(self) -> float:
+    def percentTameCrop(self) -> float: #type: ignore
         """Get the percentage of tame crop."""
         return float(self.mPercentTameCrop)
 
@@ -172,7 +172,7 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
             self.percentTameCropChanged.emit(0.0)
 
     @pyqtProperty(int, notify=spoilageChanged)
-    def spoilage(self) -> int:
+    def spoilage(self) -> int: #type: ignore
         """Get the spoilage percentage."""
         return int(self.mSpoilage)
 
@@ -190,7 +190,7 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
             self.spoilageChanged.emit(0)
 
     @pyqtProperty(int, notify=reseedChanged)
-    def reseed(self) -> int:
+    def reseed(self) -> int: #type: ignore
         """Get the reseed percentage."""
         return int(self.mReseed)
 
@@ -208,7 +208,7 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
             self.reseedChanged.emit(0)
 
     @pyqtProperty(bool, notify=cropRotationChanged)
-    def cropRotation(self) -> bool:
+    def cropRotation(self) -> bool: #type: ignore
         """Get whether crop rotation is used."""
         return bool(self.mCropRotation)
 
@@ -221,7 +221,7 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
             self.cropRotationChanged.emit(bool_value)
 
     @pyqtProperty(float, notify=fallowRatioChanged)
-    def fallowRatio(self) -> float:
+    def fallowRatio(self) -> float: #type: ignore
         """Get the fallow ratio."""
         return float(self.mFallowRatio)
 
@@ -239,7 +239,7 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
             self.fallowRatioChanged.emit(0.0)
 
     @pyqtProperty(int, notify=fallowValueChanged)
-    def fallowValue(self) -> int:
+    def fallowValue(self) -> int: #type: ignore
         """Get the fallow value."""
         return int(self.mFallowValue)
 
@@ -257,7 +257,7 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
             self.fallowValueChanged.emit(0)
 
     @pyqtProperty(LaAreaUnits, notify=areaUnitsChanged)
-    def areaUnits(self) -> LaAreaUnits:
+    def areaUnits(self) -> LaAreaUnits: #type: ignore
         """Get the area units used."""
         return self.mAreaUnits
 
@@ -269,7 +269,7 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
             self.areaUnitsChanged.emit(theValue)
 
     @pyqtProperty(bool, notify=useCommonLandChanged)
-    def useCommonLand(self) -> bool:
+    def useCommonLand(self) -> bool: #type: ignore
         """Get whether common land is used."""
         return bool(self.mUseCommonLand)
 
@@ -282,7 +282,7 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
             self.useCommonLandChanged.emit(bool_value)
 
     @pyqtProperty(bool, notify=useSpecificLandChanged)
-    def useSpecificLand(self) -> bool:
+    def useSpecificLand(self) -> bool: #type: ignore
         """Get whether specific land is used."""
         return bool(self.mUseSpecificLand)
 
@@ -295,7 +295,7 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
             self.useSpecificLandChanged.emit(bool_value)
 
     @pyqtProperty(str, notify=rasterNameChanged)
-    def rasterName(self) -> str:
+    def rasterName(self) -> str: #type: ignore
         """Get the name of the raster."""
         return str(self.mRasterName)
 
@@ -311,7 +311,7 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
     def fromXmlFile(self, theFilePath: str) -> bool:
         """
         Load this crop parameter from an XML file.
-        
+
         :param theFilePath: The path to the XML file
         :type theFilePath: str
         :return: True if loading was successful, False otherwise
@@ -332,7 +332,7 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
     def toXmlFile(self, theFilePath: str) -> bool:
         """
         Save this crop parameter to an XML file.
-        
+
         :param theFilePath: The path to the XML file
         :type theFilePath: str
         :return: True if saving was successful, False otherwise
@@ -354,7 +354,7 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
     def toXml(self) -> str:
         """
         Convert this crop parameter to XML.
-        
+
         :return: The XML representation of this crop parameter
         :rtype: str
         """
@@ -381,7 +381,7 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
     def fromXml(self, theXml):
         """
         Parse XML and set this crop parameter's properties.
-        
+
         :param theXml: The XML to parse
         :type theXml: str
         :return: True if parsing was successful, False otherwise
@@ -431,7 +431,7 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
     def debug_info(self) -> str:
         """
         Get debug information about this crop parameter.
-        
+
         :return: Debug information about this crop parameter
         :rtype: str
         """

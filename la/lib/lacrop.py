@@ -148,7 +148,7 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         self._guid = value
 
     @pyqtProperty(str, notify=nameChanged)
-    def name(self):
+    def name(self): #type: ignore
         """
         Get the name of this crop.
 
@@ -170,7 +170,7 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
             self.nameChanged.emit(name)
 
     @pyqtProperty(str, notify=descriptionChanged)
-    def description(self):
+    def description(self): #type: ignore
         """
         Get the description of this crop.
 
@@ -192,7 +192,7 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
             self.descriptionChanged.emit(description)
 
     @pyqtProperty(int, notify=yieldChanged)
-    def cropYield(self):
+    def cropYield(self): #type: ignore
         """
         Get the yield value for this crop (kg/ha or kg/dunum).
 
@@ -215,7 +215,7 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
             self.yieldChanged.emit(theYield)
 
     @pyqtProperty(int, notify=cropCaloriesChanged)
-    def cropCalories(self):
+    def cropCalories(self): #type: ignore
         """
         Get the caloric value per kg of this crop.
 
@@ -237,7 +237,7 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
             self.cropCaloriesChanged.emit(cropCalories)
 
     @pyqtProperty(int, notify=cropFodderProductionChanged)
-    def cropFodderProduction(self):
+    def cropFodderProduction(self): #type: ignore
         """
         Get the fodder production amount for this crop.
 
@@ -259,7 +259,7 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
             self.cropFodderProductionChanged.emit(theCropFodderProduction)
 
     @pyqtProperty(int, notify=cropFodderValueChanged)
-    def cropFodderValue(self):
+    def cropFodderValue(self): #type: ignore
         """
         Get the nutritional value of fodder produced by this crop.
 
@@ -281,7 +281,7 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
             self.cropFodderValueChanged.emit(cropFodderValue)
 
     @pyqtProperty(LaEnergyType, notify=cropFodderEnergyTypeChanged)
-    def cropFodderEnergyType(self):
+    def cropFodderEnergyType(self): #type: ignore
         """
         Get the energy type for measuring fodder value (KCalories or TDN).
 
@@ -303,7 +303,7 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
             self.cropFodderEnergyTypeChanged.emit(cropFodderEnergyType)
 
     @pyqtProperty(LaAreaUnits, notify=areaUnitsChanged)
-    def areaUnits(self):
+    def areaUnits(self): #type: ignore
         """
         Get the area units used for this crop (Hectare or Dunum).
 
@@ -325,7 +325,7 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
             self.areaUnitsChanged.emit(theAreaUnits)
 
     @pyqtProperty(str, notify=imageFileChanged)
-    def imageFile(self):
+    def imageFile(self): #type: ignore
         """
         Get the path to the image file representing this crop.
 
@@ -366,9 +366,9 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
                 warnings.warn("Failed to parse XML: myTopElement is null. The XML element could not be found or parsed.")
                 return False
 
-            self.setGuid(myTopElement.attribute("guid"))
-            self.name = LaUtils.xmlDecode(myTopElement.firstChildElement("name").text())
-            self.description = LaUtils.xmlDecode(myTopElement.firstChildElement("description").text())
+            self.guid = (myTopElement.attribute("guid"))
+            self._name = LaUtils.xmlDecode(myTopElement.firstChildElement("name").text())
+            self._description = LaUtils.xmlDecode(myTopElement.firstChildElement("description").text())
 
             # Look for cropYield element - this is the main issue
             cropYieldElement = myTopElement.firstChildElement("cropYield")
@@ -536,7 +536,7 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         myCropFodderEnergyType = "KCalories" if self.cropFodderEnergyType == LaEnergyType.KCalories else "TDN"
         myUnits = "Dunum" if self.areaUnits == LaAreaUnits.Dunum else "Hectare"
 
-        myString = "<h3>Details for " + LaUtils.xmlEncode(self.name) + "</h3>"
+        myString = "<h3>Details for " + LaUtils.xmlEncode(str(self.name)) + "</h3>"
         myString += "<table>"
         myString += "<tr><td><b>Description: </b></td><td>" + str(self.description) + "</td></tr>"
         myString += "<tr><td><b>Avg Yield: </b></td><td>" + str(self.cropYield) + "</td></tr>"
