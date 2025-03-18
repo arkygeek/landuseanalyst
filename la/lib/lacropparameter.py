@@ -17,10 +17,10 @@ from la.lib.la import EnergyType as LaEnergyType
 class LaCropParameter(QObject, LaSerialisable, LaGuid):
     """
     A class representing the parameters for a crop.
-    
+
     This class stores parameters related to a crop, such as its name, description,
     yield, calories, etc. It also provides methods to convert to and from XML.
-    
+
     :ivar mName: The name of the crop parameter
     :type mName: str
     :ivar mDescription: The description of the crop parameter
@@ -403,12 +403,12 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
             self.mName = LaUtils.xmlDecode(myTopElement.firstChildElement("name").text())
             self.mDescription = LaUtils.xmlDecode(myTopElement.firstChildElement("description").text())
             self.mCropGuid = LaUtils.xmlDecode(myTopElement.firstChildElement("crop").text())
-            self.mPercentTameCrop = float(myTopElement.firstChildElement("percentTameCrop").text() or 0.0)
-            self.mSpoilage = float(myTopElement.firstChildElement("spoilage").text() or 0.0)
-            self.mReseed = float(myTopElement.firstChildElement("reseed").text() or 0.0)
-            self.mCropRotation = bool(int(myTopElement.firstChildElement("cropRotation").text() or 0))
-            self.mFallowRatio = float(myTopElement.firstChildElement("fallowRatio").text() or 0.0)
-            self.mFallowValue = int(myTopElement.firstChildElement("fallowValue").text() or 0)
+            self.mPercentTameCrop = myTopElement.firstChildElement("percentTameCrop").text()
+            self.mSpoilage = myTopElement.firstChildElement("spoilage").text()
+            self.mReseed = myTopElement.firstChildElement("reseed").text()
+            self.mCropRotation = myTopElement.firstChildElement("cropRotation").text()
+            self.mFallowRatio = myTopElement.firstChildElement("fallowRatio").text()
+            self.mFallowValue = myTopElement.firstChildElement("fallowValue").text()
 
             # Handle area units
             myAreaUnits = myTopElement.firstChildElement("areaUnits").text()
