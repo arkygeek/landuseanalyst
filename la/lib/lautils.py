@@ -48,9 +48,9 @@ class LaUtils:
     def userSettingsDirPath() -> str:
         """
         Returns the path to the user settings directory.
-        
+
         If the directory does not exist, it is created.
-        
+
         :return: A string representing the path to the user settings directory
         :rtype: str
         """
@@ -69,9 +69,9 @@ class LaUtils:
     def getModelOutputDir() -> str:
         """
         Returns the path to the model outputs directory.
-        
+
         If the directory does not exist, it is created.
-        
+
         :return: A string representing the path to the model outputs directory
         :rtype: str
         """
@@ -83,9 +83,9 @@ class LaUtils:
     def userAnimalProfilesDirPath() -> str:
         """
         Returns the path to the animal profiles directory.
-        
+
         If the directory does not exist, it is created.
-        
+
         :return: A string representing the path to the animal profiles directory
         :rtype: str
         """
@@ -97,9 +97,9 @@ class LaUtils:
     def userCropProfilesDirPath() -> str:
         """
         Returns the path to the crop profiles directory.
-        
+
         If the directory does not exist, it is created.
-        
+
         :return: A string representing the path to the crop profiles directory
         :rtype: str
         """
@@ -111,9 +111,9 @@ class LaUtils:
     def getAvailableAnimals() -> Dict[str, LaAnimal]:
         """
         Returns a dictionary of available animals.
-        
+
         The keys are the GUIDs of the animals, and the values are the animal objects.
-        
+
         :return: A dictionary of available animals
         :rtype: Dict[str, LaAnimal]
         """
@@ -137,9 +137,9 @@ class LaUtils:
     def getAnimal(theGuid: str) -> LaAnimal:
         """
         Returns an animal object with the given GUID.
-        
+
         If no such animal exists, returns a blank animal.
-        
+
         :param theGuid: The GUID of the animal to return
         :type theGuid: str
         :return: An animal object
@@ -165,9 +165,9 @@ class LaUtils:
     def getAvailableCrops() -> Dict[str, LaCrop]:
         """
         Returns a dictionary of available crops.
-        
+
         The keys are the GUIDs of the crops, and the values are the crop objects.
-        
+
         :return: A dictionary of available crops
         :rtype: Dict[str, LaCrop]
         """
@@ -201,9 +201,9 @@ class LaUtils:
     def getCrop(theGuid: str) -> LaCrop:
         """
         Returns a crop object with the given GUID.
-        
+
         If no such crop exists, returns a blank crop.
-        
+
         :param theGuid: The GUID of the crop to return
         :type theGuid: str
         :return: A crop object
@@ -229,9 +229,9 @@ class LaUtils:
     def userConversionTablesDirPath() -> str:
         """
         Returns the path to the user's conversion tables directory.
-        
+
         If the directory does not exist, it will be created.
-        
+
         :return: The path to the user's conversion tables directory
         :rtype: str
         """
@@ -249,7 +249,7 @@ class LaUtils:
     def userImagesDirPath() -> str:
         """
         Returns the path to the user's images directory.
-        
+
         :return: The path to the user's images directory
         :rtype: str
         """
@@ -261,9 +261,9 @@ class LaUtils:
     def userCropParameterProfilesDirPath() -> str:
         """
         Returns the path to the directory where crop parameter profiles are stored.
-        
+
         Creates the directory if it doesn't exist.
-        
+
         :return: The path to the directory where crop parameter profiles are stored
         :rtype: str
         """
@@ -276,7 +276,7 @@ class LaUtils:
     def convertAreaToHectares(theAreaUnit: str, theArea: float) -> int:
         """
         Converts an area in the specified area unit to hectares.
-        
+
         :param theAreaUnit: The area unit name to use for conversion
         :type theAreaUnit: str
         :param theArea: The area to convert
@@ -304,11 +304,11 @@ class LaUtils:
     def getAvailableAnimalParameters() -> Dict[str, LaAnimalParameter]:
         """
         Returns a dictionary of available animal parameters.
-        
+
         This method scans the directory returned by `userCropProfilesDirPath()`
         for XML files, each of which is expected to define an animal parameter.
         Each file is parsed into an `LaAnimalParameter` object.
-        
+
         :return: A dictionary of available animal parameters
         :rtype: Dict[str, LaAnimalParameter]
         """
@@ -332,9 +332,9 @@ class LaUtils:
     def getAnimalParameter(theGuid: str) -> LaAnimalParameter:
         """
         Returns an animal parameter object with the given GUID.
-        
+
         If no such animal parameter exists, returns a blank animal parameter.
-        
+
         :param theGuid: The GUID of the animal parameter to return
         :type theGuid: str
         :return: An animal parameter object
@@ -360,11 +360,11 @@ class LaUtils:
     def getAvailableCropParameters() -> Dict[str, LaCropParameter]:
         """
         Returns a dictionary of available crop parameters.
-        
+
         This method scans the directory returned by `userCropParameterProfilesDirPath()`
         for XML files, each of which is expected to define a crop parameter.
         Each file is parsed into an `LaCropParameter` object.
-        
+
         :return: A dictionary of available crop parameters
         :rtype: Dict[str, LaCropParameter]
         """
@@ -402,9 +402,9 @@ class LaUtils:
     def getCropParameter(theGuid: str) -> LaCropParameter:
         """
         Returns a crop parameter object with the given GUID.
-        
+
         If no such crop parameter exists, returns a blank crop parameter.
-        
+
         :param theGuid: The GUID of the crop parameter to return
         :type theGuid: str
         :return: A crop parameter object
@@ -425,7 +425,7 @@ class LaUtils:
     def sortList(theList: List[str]) -> List[str]:
         """
         Sorts a list of strings in descending alphabetical order.
-        
+
         :param theList: The list of strings to sort
         :type theList: List[str]
         :return: The input list sorted in descending alphabetical order
@@ -442,7 +442,7 @@ class LaUtils:
     def uniqueList(theList: List[str]) -> List[str]:
         """
         Returns a list with duplicates removed from the input list.
-        
+
         :param theList: The list from which to remove duplicates
         :type theList: List[str]
         :return: A new list with duplicates removed
@@ -461,7 +461,7 @@ class LaUtils:
     def getExperimentsList() -> List[str]:
         """
         Returns a list of all experiment XML files in the model outputs directory.
-        
+
         :return: A list of the paths of all experiment XML files
         :rtype: List[str]
         """
@@ -477,7 +477,7 @@ class LaUtils:
     def createTextFile(theFileName: str, theData: str) -> bool:
         """
         Creates a text file with the given name and writes the given data to it.
-        
+
         :param theFileName: The name of the file to create
         :type theFileName: str
         :param theData: The data to write to the file
@@ -497,7 +497,7 @@ class LaUtils:
     def xmlEncode(theString: str) -> str:
         """
         Encodes a string for use in XML.
-        
+
         :param theString: The string to encode
         :type theString: str
         :return: The encoded string
@@ -512,7 +512,7 @@ class LaUtils:
     def xmlDecode(theString: str) -> str:
         """
         Decodes a string from XML encoding.
-        
+
         :param theString: The string to decode
         :type theString: str
         :return: The decoded string
@@ -527,7 +527,7 @@ class LaUtils:
     def getStandardCss() -> str:
         """
         Returns a string of standard CSS styles.
-        
+
         :return: A string of CSS styles
         :rtype: str
         """
@@ -558,7 +558,7 @@ class LaUtils:
     def getAnimalParameters() -> List[LaAnimalParameter]:
         """
         Returns a list of all animal parameters.
-        
+
         :return: A list of all `LaAnimalParameter` instances
         :rtype: List[LaAnimalParameter]
         """
@@ -569,7 +569,7 @@ class LaUtils:
     def addAnimalParameter(theAnimalParameter: LaAnimalParameter) -> None:
         """
         Adds a new animal parameter.
-        
+
         :param theAnimalParameter: The `LaAnimalParameter` instance to save
         :type theAnimalParameter: LaAnimalParameter
         """
@@ -579,7 +579,7 @@ class LaUtils:
     def removeAnimalParameter(theName: str) -> None:
         """
         Removes an animal parameter by name.
-        
+
         :param theName: The name of the `LaAnimalParameter` instance to remove
         :type theName: str
         """
@@ -591,7 +591,7 @@ class LaUtils:
     def editAnimalParameter(theAnimalParameter: LaAnimalParameter) -> None:
         """
         Edits an existing animal parameter by saving changes.
-        
+
         :param theAnimalParameter: The `LaAnimalParameter` instance to edit and save
         :type theAnimalParameter: LaAnimalParameter
         """
@@ -601,7 +601,7 @@ class LaUtils:
     def generateGuid() -> str:
         """
         Generates a new GUID.
-        
+
         :return: The generated GUID
         :rtype: str
         """
@@ -611,7 +611,7 @@ class LaUtils:
     def saveToFile(theFilename: str, theData: str) -> None:
         """
         Saves data to a file with the specified filename.
-        
+
         :param theFilename: The name of the file to write to
         :type theFilename: str
         :param theData: The data to write to the file
@@ -619,15 +619,15 @@ class LaUtils:
         """
         myFile = QFile(theFilename)
         if myFile.open(QFile.WriteOnly | QFile.Text):
-            myStream = QTextStream(myFile)
-            myStream.write(theData)
+            # Encode the string data to bytes and write directly to the file
+            myFile.write(theData.encode("utf-8"))
             myFile.close()
 
     @staticmethod
     def loadFromFile(theFilename: str) -> str:
         """
         Loads data from a file with the specified filename.
-        
+
         :param theFilename: The name of the file to read from
         :type theFilename: str
         :return: The data read from the file, or an empty string if the file could not be opened
@@ -646,7 +646,7 @@ class LaUtils:
     def getApplicationDirPath() -> str:
         """
         Returns the path to the directory containing the application executable.
-        
+
         :return: The path to the directory containing the application executable
         :rtype: str
         """
@@ -657,7 +657,7 @@ class LaUtils:
     def openGraphicFile() -> str:
         """
         Opens a file dialog to choose an image file and copies it to the user's images directory.
-        
+
         :return: The file path of the copied image file
         :rtype: str
         """
@@ -675,7 +675,7 @@ class LaUtils:
     def saveFile() -> str:
         """
         Opens a file dialog to choose a file name and returns the selected file path.
-        
+
         :return: The file path of the chosen file
         :rtype: str
         """
@@ -692,7 +692,7 @@ class LaUtils:
     def resolvePath(path: str, fileType: str = None) -> str:
         """
         Resolve path across platforms maintaining consistency with C++ version.
-        
+
         :param path: The path to resolve
         :type path: str
         :param fileType: The type of file (optional)
@@ -722,7 +722,7 @@ class LaUtils:
     def userDataPath() -> str:
         """
         Returns the path to the user's data directory.
-        
+
         :return: The path to the user's data directory
         :rtype: str
         """
@@ -734,7 +734,7 @@ class LaUtils:
     def ensureDirectoryExists(path: str) -> str:
         """
         Ensures that the directory exists, creating it if necessary.
-        
+
         :param path: The path to the directory
         :type path: str
         :return: The path to the directory
@@ -748,7 +748,7 @@ class LaUtils:
     def saveFilePath(sourceFile: str, fileType: str) -> str:
         """
         Returns a path where a file should be saved based on its type.
-        
+
         :param sourceFile: The source file
         :type sourceFile: str
         :param fileType: The type of file
