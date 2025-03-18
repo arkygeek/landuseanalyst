@@ -1,5 +1,5 @@
 from qgis.PyQt.QtCore import Qt, QModelIndex, QAbstractTableModel, QDir, QPoint, QSize, QSettings
-from qgis.PyQt.QtGui import QBrush, QColor, QIcon
+from qgis.PyQt.QtGui import QBrush, QColor, QIcon, QPixmap
 from qgis.PyQt.QtWidgets import QDialog, QMessageBox, QHeaderView, QFileDialog, QTableWidgetItem, QApplication
 
 # Import only the base class from UI
@@ -148,13 +148,13 @@ class LaCropParameterManager(LaCropParameterManagerBase):
         myFileName = myGuid + ".xml"
         self.selectCropParameter(myFileName)
         myCrop = LaUtils.getCrop(self.cboCrop.itemData(self.cboCrop.currentIndex(), Qt.UserRole))
-        myAnimalPic = myCrop.imageFile()
+        myAnimalPic = QPixmap(myCrop.imageFile)
         self.lblCropPic.setPixmap(myAnimalPic)
 
     def on_cboCrop_changed(self, theIndex):
         """Handle change in crop selection"""
         myCrop = LaUtils.getCrop(self.cboCrop.itemData(self.cboCrop.currentIndex(), Qt.UserRole))
-        myCropPic = myCrop.imageFile
+        myCropPic = QPixmap(myCrop.imageFile)
         self.lblCropPic.setPixmap(myCropPic)
 
     def showCropParameter(self):
@@ -232,7 +232,7 @@ class LaCropParameterManager(LaCropParameterManagerBase):
             self.tblCropParameterProfiles.insertRow(myCurrentRow)
             mypFileNameItem = QTableWidgetItem(myGuid)
             self.tblCropParameterProfiles.setItem(myCurrentRow, 0, mypFileNameItem)
-            mypNameItem = QTableWidgetItem(myCropParameter.name + "  (" + myCropParameter.description + ")")
+            mypNameItem = QTableWidgetItem(str(myCropParameter.name) + "  (" + str(myCropParameter.description) + ")")
             self.tblCropParameterProfiles.setItem(myCurrentRow, 1, mypNameItem)
 
             myIcon = QIcon()
@@ -267,7 +267,7 @@ class LaCropParameterManager(LaCropParameterManagerBase):
     def on_toolNew_clicked(self):
         """Create a new crop parameter"""
         myCropParameter = LaCropParameter()
-        myCropParameter.setGuid()
+        myCropParameter.setGuid(None)
         self.mCropParameter = myCropParameter
         self.showCropParameter()
 
@@ -283,8 +283,8 @@ class LaCropParameterManager(LaCropParameterManagerBase):
         myOriginalFileName = LaUtils.userCropParameterProfilesDirPath() + QDir.separator() + myGuid + ".xml"
         myCropParameter = LaCropParameter()
         myCropParameter.fromXmlFile(myOriginalFileName)
-        myCropParameter.setGuid()
-        myNewFileName = LaUtils.userCropParameterProfilesDirPath() + QDir.separator() + myCropParameter.guid + ".xml"
+        myCropParameter.setGuid(LaGuid().guid())
+        myNewFileName = LaUtils.userCropParameterProfilesDirPath() + QDir.separator() + str(myCropParameter.guid) + ".xml"
         myCropParameter.name = "Copy of " + myCropParameter.name
         myCropParameter.toXmlFile(myNewFileName)
         self.refreshCropParameterTable(myCropParameter.guid)
@@ -313,8 +313,8 @@ class LaCropParameterManager(LaCropParameterManagerBase):
 
         # Handle numeric values with proper type conversion
         try:
-            # Always store as float in the model, regardless of widget type
-            self.mCropParameter.percentTameCrop = float(self.sbPercentTameCrop.value())
+            # Always store as float or int in the model, regardless of widget type
+            self.mCropParameter.percentTameCrop = int(self.sbPercentTameCrop.value())
             self.mCropParameter.spoilage = float(self.sbSpoilage.value())
             self.mCropParameter.reseed = float(self.sbReseed.value())
             self.mCropParameter.fallowRatio = float(self.sbFallowRatio.value())
@@ -336,8 +336,8 @@ class LaCropParameterManager(LaCropParameterManagerBase):
             self.mCropParameter.areaUnits = AreaUnits.Hectare
 
         self.mCropParameter.rasterName = self.cboRaster.currentText()
-        self.mCropParameter.toXmlFile(LaUtils.userCropParameterProfilesDirPath() + QDir.separator() +
-                                     self.mCropParameter.guid + ".xml")
+        self.mCropParameter.toXmlFile(str(LaUtils.userCropParameterProfilesDirPath) + QDir.separator() +
+                                     str(self.mCropParameter.guid) + ".xml")
         self.refreshCropParameterTable(self.mCropParameter.guid)
 
     def setComboToDefault(self, thepCombo, theDefault):

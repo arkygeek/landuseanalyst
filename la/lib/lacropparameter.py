@@ -443,9 +443,9 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
 
         # Using the exact same format as the C++ version
         myString = f"<cropParameter guid=\"{self.guid}\">\n"
-        myString += f"  <name>{LaUtils.xmlEncode(self.name)}</name>\n"
-        myString += f"  <description>{LaUtils.xmlEncode(self.description)}</description>\n"
-        myString += f"  <crop>{LaUtils.xmlEncode(self.cropGuid)}</crop>\n"
+        myString += f"  <name>{self.name}</name>\n"
+        myString += f"  <description>{self.description}</description>\n"
+        myString += f"  <crop>{self.cropGuid}</crop>\n"
 
         # Format numeric values carefully
         myString += f"  <percentTameCrop>{self.percentTameCrop}</percentTameCrop>\n"
@@ -462,10 +462,10 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
         myString += f"  <areaUnits>{myUnits}</areaUnits>\n"
 
         # Store booleans as 1/0
-        myString += f"  <useCommonLand>{1 if self._useCommonLand else 0}</useCommonLand>\n"
-        myString += f"  <useSpecificLand>{1 if self._useSpecificLand else 0}</useSpecificLand>\n"
+        myString += f"  <useCommonLand>{1 if self.useCommonLand else 0}</useCommonLand>\n"
+        myString += f"  <useSpecificLand>{1 if self.useSpecificLand else 0}</useSpecificLand>\n"
 
-        myString += f"  <rasterName>{LaUtils.xmlEncode(self._rasterName)}</rasterName>\n"
+        myString += f"  <rasterName>{self.rasterName}</rasterName>\n"
         myString += "</cropParameter>\n"
         return myString
 
@@ -478,110 +478,111 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
         Returns:
             bool: True if parsing was successful, False otherwise.
         """
-        from la.lib.lautils import LaUtils
+        from la.lib.lautils import LaUtils  # we import this here to avoid a circular import
 
-        # Log entry point for debugging
-        print(f"Parsing XML into crop parameter: length={len(theXml)}")
+        try:
+            myDocument = QDomDocument("mydocument")
+            myDocument.setContent(theXml)
+            myTopElement = myDocument.firstChildElement("cropParameter")
 
-        # Set up XML document
-        myDocument = QDomDocument("mydocument")
-        if not myDocument.setContent(theXml):
-            warnings.warn(f"Failed to parse XML content")
+            # gracefully handle the case where the top element is null
+            if myTopElement.isNull():
+                warnings.warn("Failed to parse XML: myTopElement is null. The XML element could not be found or parsed.")
+                return False
+
+            # Set guid attribute
+            self.setGuid(myTopElement.attribute("guid"))
+
+            # Parse all the child elements
+            self.name = LaUtils.xmlDecode(myTopElement.firstChildElement("name").text())
+            self.description = LaUtils.xmlDecode(myTopElement.firstChildElement("description").text())
+            self.cropGuid = LaUtils.xmlDecode(myTopElement.firstChildElement("crop").text())
+
+            # Parse percentTameCrop with proper error handling
+            percentTameCropText = myTopElement.firstChildElement("percentTameCrop").text()
+            try:
+                self.percentTameCrop = float(percentTameCropText) if percentTameCropText else 0.0
+            except ValueError:
+                print(f"Warning: Could not convert percentTameCrop value '{percentTameCropText}' to float, using 0.0")
+                self.percentTameCrop = 0.0
+
+            # Parse spoilage with proper error handling
+            spoilageText = myTopElement.firstChildElement("spoilage").text()
+            try:
+                self.spoilage = float(spoilageText) if spoilageText else 0.0
+            except ValueError:
+                print(f"Warning: Could not convert spoilage value '{spoilageText}' to float, using 0.0")
+                self.spoilage = 0.0
+
+            # Parse reseed with proper error handling
+            reseedText = myTopElement.firstChildElement("reseed").text()
+            try:
+                self.reseed = float(reseedText) if reseedText else 0.0
+            except ValueError:
+                print(f"Warning: Could not convert reseed value '{reseedText}' to float, using 0.0")
+                self.reseed = 0.0
+
+            # Parse cropRotation as a boolean (stored as 0/1 in XML)
+            cropRotationText = myTopElement.firstChildElement("cropRotation").text()
+            try:
+                self.cropRotation = bool(int(cropRotationText)) if cropRotationText else False
+            except ValueError:
+                print(f"Warning: Could not convert cropRotation value '{cropRotationText}' to bool, using False")
+                self.cropRotation = False
+
+            # Parse fallowRatio with proper error handling
+            fallowRatioText = myTopElement.firstChildElement("fallowRatio").text()
+            try:
+                self.fallowRatio = float(fallowRatioText) if fallowRatioText else 0.0
+            except ValueError:
+                print(f"Warning: Could not convert fallowRatio value '{fallowRatioText}' to float, using 0.0")
+                self.fallowRatio = 0.0
+
+            # Parse fallowValue as integer
+            fallowValueText = myTopElement.firstChildElement("fallowValue").text()
+            try:
+                self.fallowValue = int(fallowValueText) if fallowValueText else 0
+            except ValueError:
+                print(f"Warning: Could not convert fallowValue value '{fallowValueText}' to int, using 0")
+                self.fallowValue = 0
+
+            # Parse areaUnits as enum
+            areaUnitsText = myTopElement.firstChildElement("areaUnits").text()
+            if areaUnitsText == "Dunum":
+                self.areaUnits = LaAreaUnits.Dunum
+            elif areaUnitsText == "Hectare":
+                self.areaUnits = LaAreaUnits.Hectare
+            else:
+                # Default to Dunum if unrecognized
+                print(f"Warning: Unrecognized areaUnits value '{areaUnitsText}', using Dunum")
+                self.areaUnits = LaAreaUnits.Dunum
+
+            # Parse useCommonLand as boolean (stored as 0/1 in XML)
+            useCommonLandText = myTopElement.firstChildElement("useCommonLand").text()
+            try:
+                self.useCommonLand = bool(int(useCommonLandText)) if useCommonLandText else False
+            except ValueError:
+                print(f"Warning: Could not convert useCommonLand value '{useCommonLandText}' to bool, using False")
+                self.useCommonLand = False
+
+            # Parse useSpecificLand as boolean (stored as 0/1 in XML)
+            useSpecificLandText = myTopElement.firstChildElement("useSpecificLand").text()
+            try:
+                self.useSpecificLand = bool(int(useSpecificLandText)) if useSpecificLandText else False
+            except ValueError:
+                print(f"Warning: Could not convert useSpecificLand value '{useSpecificLandText}' to bool, using False")
+                self.useSpecificLand = False
+
+            # Parse rasterName
+            self.rasterName = LaUtils.xmlDecode(myTopElement.firstChildElement("rasterName").text())
+
+            print(f"Successfully parsed crop parameter: {self.name}")
+            return True
+        except Exception as e:
+            import traceback
+            print(f"DEBUG: Error in fromXml: {str(e)}")
+            print(traceback.format_exc())
             return False
-
-        myTopElement = myDocument.firstChildElement("cropParameter")
-        if myTopElement.isNull():
-            warnings.warn("Failed to parse XML: myTopElement is null")
-            return False
-
-        # Set guid attribute
-        self.setGuid(myTopElement.attribute("guid"))
-
-        # Parse all the child elements
-        self.name = LaUtils.xmlDecode(myTopElement.firstChildElement("name").text())
-        self.description = LaUtils.xmlDecode(myTopElement.firstChildElement("description").text())
-        self.cropGuid = LaUtils.xmlDecode(myTopElement.firstChildElement("crop").text())
-
-        # Parse percentTameCrop with proper error handling
-        percentTameCropText = myTopElement.firstChildElement("percentTameCrop").text()
-        try:
-            self.percentTameCrop = float(percentTameCropText) if percentTameCropText else 0.0
-        except ValueError:
-            print(f"Warning: Could not convert percentTameCrop value '{percentTameCropText}' to float, using 0.0")
-            self.percentTameCrop = 0.0
-
-        # Parse spoilage with proper error handling
-        spoilageText = myTopElement.firstChildElement("spoilage").text()
-        try:
-            self.spoilage = float(spoilageText) if spoilageText else 0.0
-        except ValueError:
-            print(f"Warning: Could not convert spoilage value '{spoilageText}' to float, using 0.0")
-            self.spoilage = 0.0
-
-        # Parse reseed with proper error handling
-        reseedText = myTopElement.firstChildElement("reseed").text()
-        try:
-            self.reseed = float(reseedText) if reseedText else 0.0
-        except ValueError:
-            print(f"Warning: Could not convert reseed value '{reseedText}' to float, using 0.0")
-            self.reseed = 0.0
-
-        # Parse cropRotation as a boolean (stored as 0/1 in XML)
-        cropRotationText = myTopElement.firstChildElement("cropRotation").text()
-        try:
-            self.cropRotation = bool(int(cropRotationText)) if cropRotationText else False
-        except ValueError:
-            print(f"Warning: Could not convert cropRotation value '{cropRotationText}' to bool, using False")
-            self.cropRotation = False
-
-        # Parse fallowRatio with proper error handling
-        fallowRatioText = myTopElement.firstChildElement("fallowRatio").text()
-        try:
-            self.fallowRatio = float(fallowRatioText) if fallowRatioText else 0.0
-        except ValueError:
-            print(f"Warning: Could not convert fallowRatio value '{fallowRatioText}' to float, using 0.0")
-            self.fallowRatio = 0.0
-
-        # Parse fallowValue as integer
-        fallowValueText = myTopElement.firstChildElement("fallowValue").text()
-        try:
-            self.fallowValue = int(fallowValueText) if fallowValueText else 0
-        except ValueError:
-            print(f"Warning: Could not convert fallowValue value '{fallowValueText}' to int, using 0")
-            self.fallowValue = 0
-
-        # Parse areaUnits as enum
-        areaUnitsText = myTopElement.firstChildElement("areaUnits").text()
-        if areaUnitsText == "Dunum":
-            self.areaUnits = LaAreaUnits.Dunum
-        elif areaUnitsText == "Hectare":
-            self.areaUnits = LaAreaUnits.Hectare
-        else:
-            # Default to Dunum if unrecognized
-            print(f"Warning: Unrecognized areaUnits value '{areaUnitsText}', using Dunum")
-            self.areaUnits = LaAreaUnits.Dunum
-
-        # Parse useCommonLand as boolean (stored as 0/1 in XML)
-        useCommonLandText = myTopElement.firstChildElement("useCommonLand").text()
-        try:
-            self.useCommonLand = bool(int(useCommonLandText)) if useCommonLandText else False
-        except ValueError:
-            print(f"Warning: Could not convert useCommonLand value '{useCommonLandText}' to bool, using False")
-            self.useCommonLand = False
-
-        # Parse useSpecificLand as boolean (stored as 0/1 in XML)
-        useSpecificLandText = myTopElement.firstChildElement("useSpecificLand").text()
-        try:
-            self.useSpecificLand = bool(int(useSpecificLandText)) if useSpecificLandText else False
-        except ValueError:
-            print(f"Warning: Could not convert useSpecificLand value '{useSpecificLandText}' to bool, using False")
-            self.useSpecificLand = False
-
-        # Parse rasterName
-        self.rasterName = LaUtils.xmlDecode(myTopElement.firstChildElement("rasterName").text())
-
-        print(f"Successfully parsed crop parameter: {self.name}")
-        return True
 
     def debug_info(self) -> str:
         """Get debug information about this crop parameter.
