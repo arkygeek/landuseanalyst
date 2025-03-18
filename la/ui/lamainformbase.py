@@ -22,7 +22,7 @@ on a multitude of demographic and dietary inputs.
 """
 
 # region imports
-from qgis.PyQt import QtWidgets
+from qgis.PyQt.QtWidgets import QListWidgetItem, QTableWidgetItem, QComboBox
 from qgis.PyQt import uic
 from qgis.PyQt import QtCore
 from qgis.PyQt.QtWidgets import QDialog
@@ -71,6 +71,8 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         # Initialize maps
         self.mAnimalsMap = {}
         self.mCropsMap = {}
+        self.mCropParametersMap = {}
+        self.mAnimalParametersMap = {}
 
         # make the form's buttons work
         self.connectSignalsSlots()
@@ -138,13 +140,14 @@ class LaMainFormBase(QDialog, FORM_CLASS):
     def on_clicked_pbnNewCrop(self):
         print("open Manage Crops window printed")
         self.tbReport.append("Manage Crops button clicked")
-        theCropsMap = self.mCropsMap  # Pass the crops map
-        myCropManager = LaCropManager(theCropsMap, self)  # Pass parent if needed
+        myCropsMap = self.mCropsMap  # Pass the crops map
+        myCropManager = LaCropManager(myCropsMap, self)  # Pass parent if needed
         myCropManager.exec_()  # Use exec_ to show the dialog modally
 
     def on_clicked_pbnNewCropParameter(self):
         print("open Crop Parameters window printed")
         self.tbReport.append("Manage Crop Parameters button clicked")
+        myCropParametersMap = self.mCropParametersMap  # Pass the crops map
         myCropParameterManager = LaCropParameterManager(self)  # Pass parent if needed
         myCropParameterManager.exec_()  # Use exec_ to show the dialog modally
 
@@ -285,20 +288,20 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             mypUsedItem = QtWidgets.QTableWidgetItem("Used?")
             if myValue[0]:
                 mypUsedItem.setCheckState(QtCore.Qt.Checked)
-                myItem = QtWidgets.QListWidgetItem(myAnimal.name)
+                myItem = QListWidgetItem(str(myAnimal.name))
                 myItem.setData(QtCore.Qt.UserRole, myAnimal.guid)
                 self.listWidgetCalculationsAnimal.addItem(myItem)
             else:
                 mypUsedItem.setCheckState(QtCore.Qt.Unchecked)
-                myItem = QtWidgets.QListWidgetItem(myAnimal.name)
+                myItem = QListWidgetItem(str(myAnimal.name))
                 myItem.setData(QtCore.Qt.UserRole, myAnimal.guid)
                 self.listWidgetCalculationsAnimal.takeItem(self.listWidgetCalculationsAnimal.row(myItem))
             self.tblAnimals.setItem(myCurrentRow, 0, mypUsedItem)
-            mypNameItem = QtWidgets.QTableWidgetItem(myAnimal.name)
+            mypNameItem = QTableWidgetItem(str(myAnimal.name))
             mypNameItem.setData(QtCore.Qt.UserRole, myGuid)
             self.tblAnimals.setItem(myCurrentRow, 1, mypNameItem)
             mypNameItem.setIcon(myIcon)
-            mypCombo = QtWidgets.QComboBox(self)
+            mypCombo = QComboBox(self)
             for myParameterGuid, myAnimalParameter in myAnimalParametersMap.items():
                 myParameterName = f"{myAnimalParameter.name}  ({myAnimalParameter.description})"
                 if myGuid != myAnimalParameter.animalGuid:
@@ -357,7 +360,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                     myValue = (myValue[0], myParameterGuid)
                 if myValue[1] == myCropParameter.guid:
                     if myValue[0]:
-                        myRunningPercentage += myCropParameter.percentTameCrop
+                        myRunningPercentage += float(myCropParameter.percentTameCrop)
                         myItem = QtWidgets.QListWidgetItem(myCrop.name)
                         myItem.setData(QtCore.Qt.UserRole, myCrop.guid)
                         self.listWidgetCalculationsCrop.addItem(myItem)
@@ -692,7 +695,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         # Add the animal to the list
         animal = LaUtils.getAnimal(animalGuid)
         if animal and animal.name:
-            item = QtWidgets.QListWidgetItem(animal.name)
+            item = QListWidgetItem(animal.name)
             item.setData(QtCore.Qt.UserRole, animalGuid)
             self.listWidgetCalculationsAnimal.addItem(item)
 
@@ -759,7 +762,13 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         for guid, value in self.mCropsMap.items():
             isChecked, parameterGuid = value
             if isChecked and parameterGuid in myCropParametersMap:
-                cropTotal += myCropParametersMap[parameterGuid].percentTameCrop
+                # Use the instance property, not the class property
+                parameter = myCropParametersMap[parameterGuid]
+                if hasattr(parameter, 'percentTameCrop'):
+                    try:
+                        cropTotal += float(parameter.percentTameCrop)
+                    except (ValueError, TypeError):
+                        print(f"Warning: Invalid percentTameCrop for {parameterGuid}")
 
         # Update the totals display
         self.labelAnimalCheck.setText(f"{animalTotal:.1f}%")

@@ -6,8 +6,9 @@
 # to define the properties of the LaCrop class, including name, description,
 # cropType, plantingDate, harvestDate, and yieldValue.
 import warnings
-from typing import Literal, Optional, Type
-from qgis.PyQt.QtCore import QObject, pyqtSignal, pyqtProperty, pyqtSlot, Qt
+from typing import Optional, Type
+
+from qgis.PyQt.QtCore import QObject, pyqtSignal, pyqtProperty
 from qgis.PyQt.QtXml import QDomDocument
 
 from la.resources_rc import *
@@ -520,7 +521,7 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         myString += "fodderCalories=>" + myCropFodderValue + "\n"
         myString += "cropFodderEnergyType=>" + myCropFodderEnergyType + "\n"
         myString += "yieldUnits=>" + myAreaUnitsType + "\n"
-        myString += "imageFile=>" + myImageFile + "\n"
+        myString += "imageFile=>" + str(myImageFile) + "\n"
         return myString
 
     def toHtml(self):

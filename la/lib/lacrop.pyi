@@ -27,7 +27,18 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
     @guid.setter
     def guid(self, value: str) -> None: ...
 
-    # PyQt properties as regular properties in stub file
+    # The following are actually PyQt properties but are defined as regular properties in the
+    # stub file so that type-hinting works correctly in the IDE:
+    # - name
+    # - description
+    # - cropYield
+    # - cropCalories
+    # - cropFodderProduction
+    # - cropFodderValue
+    # - cropFodderEnergyType
+    # - areaUnits
+    # - imageFile
+
     @property
     def name(self) -> str: ...
     @name.setter

@@ -286,9 +286,20 @@ class LaUtils:
 
     @staticmethod
     def userCropParameterProfilesDirPath() -> str:
-        path = os.path.join(LaUtils.userDataPath(), 'cropParameterProfiles')
-        LaUtils.ensureDirectoryExists(path)
-        return path
+        """Returns the path to the directory where crop parameter profiles are stored.
+
+        Creates the directory if it doesn't exist.
+
+        Returns:
+            str: The path to the directory where crop parameter profiles are stored.
+
+        :return: The path to the directory where crop parameter profiles are stored.
+        :rtype: str
+        """
+        import os
+        myPath = os.path.join(os.path.expanduser("~"), ".landuseAnalyst", "cropParameterProfiles")
+        os.makedirs(myPath, exist_ok=True)
+        return myPath
 
     @staticmethod
     def convertAreaToHectares(
@@ -396,24 +407,43 @@ class LaUtils:
             A dictionary mapping the GUIDs of the crop parameters to the
             corresponding `LaCropParameter` objects. If no crop parameters
             are found, returns an empty dictionary.
-
-        :return: A dictionary of available crop parameters.
-        :rtype: Dict[str, LaCropParameter]
         """
-        myMap: Dict [str, LaCropParameter] = {}
+        myMap: Dict[str, LaCropParameter] = {}
         myDirectory: QDir = QDir(LaUtils.userCropParameterProfilesDirPath())
         myList: List[QFileInfo] = myDirectory.entryInfoList(QDir.Dirs | QDir.Files | QDir.NoSymLinks)
+
+        print(f"Scanning for crop parameters in: {LaUtils.userCropParameterProfilesDirPath()}")
+        print(f"Found {len(myList)} entries")
+
         for myFileInfo in myList:
             # Ignore directories
             if myFileInfo.fileName() in [".", ".."]:
                 continue
-            # if the filename ends in .xml try to load it into our layerSets listing
+            # if the filename ends in .xml try to load it
             if myFileInfo.completeSuffix() == "xml":
-                myCropParameter = LaCropParameter()
-                myCropParameter.fromXmlFile(myFileInfo.absoluteFilePath())
-                if myCropParameter.name == "":
-                    continue
-                myMap[myCropParameter.guid] = myCropParameter
+                try:
+                    filePath = myFileInfo.absoluteFilePath()
+                    print(f"Loading crop parameter from: {filePath}")
+
+                    myCropParameter = LaCropParameter()
+                    success = myCropParameter.fromXmlFile(filePath)
+
+                    if not success:
+                        print(f"Failed to load crop parameter from file: {filePath}")
+                        continue
+
+                    if not myCropParameter.name:
+                        print(f"Crop parameter from {filePath} has no name, skipping")
+                        continue
+
+                    # Debug the parameter values
+                    print(f"Loaded crop parameter: '{myCropParameter.name}', percentTameCrop={myCropParameter.percentTameCrop}")
+
+                    myMap[myCropParameter.guid] = myCropParameter
+                except Exception as e:
+                    print(f"Error loading crop parameter: {str(e)}")
+
+        print(f"Returning {len(myMap)} crop parameters")
         return myMap
 
     @staticmethod
