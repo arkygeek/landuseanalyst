@@ -14,7 +14,7 @@ This document outlines the coding standards and naming conventions used in the P
 
 1. **Member Variables**: Use snake_case with a single underscore prefix for private member variables.
    - Examples: `_name`, `_description`, `_crop_yield`
-   
+
 2. **Properties**: Member variables should be exposed through Python properties (getters/setters). Properties should use camelCase without prefixes.
    - Examples: `name`, `description`, `cropYield`
 
@@ -69,11 +69,11 @@ Maintain the naming conventions from the original C++ codebase for UI element va
    - `la/`: Root package
    - `la/lib/`: Core business logic classes
    - `la/gui/`: UI-related code
-   - `la/ui/`: Generated UI files 
+   - `la/ui/`: Generated UI files
    - `la/resources/`: Resources like images, icons, etc.
 
-2. **File Naming**: Use lowercase with underscores for Python module files.
-   - Examples: `lacrop.py`, `lacrop_manager.py`
+2. **File Naming**: Use lowercase with no underscores for Python module files.
+   - Examples: `lacrop.py`, `lacropmanager.py`
 
 ## Code Style
 
