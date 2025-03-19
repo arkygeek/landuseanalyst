@@ -158,7 +158,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self.animalGuidChanged.emit(animalGuid)
 
     @pyqtProperty(float, notify=percentTameMeatChanged)
-    def percentTameMeat(self):
+    def percentTameMeat(self) -> float:
         return self._percentTameMeat
 
     @percentTameMeat.setter

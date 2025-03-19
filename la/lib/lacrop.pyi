@@ -1,0 +1,90 @@
+# lacrop.pyi
+from typing import Optional, Type, overload
+from qgis.PyQt.QtCore import QObject, pyqtSignal
+from la.lib.laguid import LaGuid
+from la.lib.laserialisable import LaSerialisable
+from la.lib.la import AreaUnits as LaAreaUnits
+from la.lib.la import EnergyType as LaEnergyType
+
+class LaCrop(QObject, LaSerialisable, LaGuid):
+    nameChanged: pyqtSignal
+    descriptionChanged: pyqtSignal
+    yieldChanged: pyqtSignal
+    cropCaloriesChanged: pyqtSignal
+    cropFodderProductionChanged: pyqtSignal
+    cropFodderValueChanged: pyqtSignal
+    cropFodderEnergyTypeChanged: pyqtSignal
+    areaUnitsChanged: pyqtSignal
+    imageFileChanged: pyqtSignal
+
+    def __init__(self, theCrop: Optional[Type['LaCrop']] = None, parent: Optional[QObject] = None) -> None: ...
+    def __eq__(self, other: object) -> bool: ...
+    def __copy__(self) -> 'LaCrop': ...
+
+    # Regular property (not a PyQt property)
+    @property
+    def guid(self) -> str: ...
+    @guid.setter
+    def guid(self, value: str) -> None: ...
+
+    # The following are actually PyQt properties but are defined as regular properties in the
+    # stub file so that type-hinting works correctly in the IDE:
+    # - name
+    # - description
+    # - cropYield
+    # - cropCalories
+    # - cropFodderProduction
+    # - cropFodderValue
+    # - cropFodderEnergyType
+    # - areaUnits
+    # - imageFile
+
+    @property
+    def name(self) -> str: ...
+    @name.setter
+    def name(self, value: str) -> None: ...
+
+    @property
+    def description(self) -> str: ...
+    @description.setter
+    def description(self, value: str) -> None: ...
+
+    @property
+    def cropYield(self) -> int: ...
+    @cropYield.setter
+    def cropYield(self, value: int) -> None: ...
+
+    @property
+    def cropCalories(self) -> int: ...
+    @cropCalories.setter
+    def cropCalories(self, value: int) -> None: ...
+
+    @property
+    def cropFodderProduction(self) -> int: ...
+    @cropFodderProduction.setter
+    def cropFodderProduction(self, value: int) -> None: ...
+
+    @property
+    def cropFodderValue(self) -> int: ...
+    @cropFodderValue.setter
+    def cropFodderValue(self, value: int) -> None: ...
+
+    @property
+    def cropFodderEnergyType(self) -> LaEnergyType: ...
+    @cropFodderEnergyType.setter
+    def cropFodderEnergyType(self, value: LaEnergyType) -> None: ...
+
+    @property
+    def areaUnits(self) -> LaAreaUnits: ...
+    @areaUnits.setter
+    def areaUnits(self, value: LaAreaUnits) -> None: ...
+
+    @property
+    def imageFile(self) -> str: ...
+    @imageFile.setter
+    def imageFile(self, value: str) -> None: ...
+
+    def fromXml(self, theXml: str) -> bool: ...
+    def toXml(self) -> str: ...
+    def toText(self) -> str: ...
+    def toHtml(self) -> str: ...

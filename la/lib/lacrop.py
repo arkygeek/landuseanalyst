@@ -7,12 +7,16 @@
 # cropType, plantingDate, harvestDate, and yieldValue.
 import warnings
 from typing import Optional, Type
-from qgis.PyQt.QtCore import QObject, pyqtSignal, pyqtProperty, pyqtSlot, Qt
+
+from qgis.PyQt.QtCore import QObject, pyqtSignal, pyqtProperty
 from qgis.PyQt.QtXml import QDomDocument
+
+from la.resources_rc import *
+
 from la.lib.laserialisable import LaSerialisable
 from la.lib.laguid import LaGuid
-from la.lib.la import AreaUnits
-from la.lib.la import EnergyType
+from la.lib.la import AreaUnits as LaAreaUnits
+from la.lib.la import EnergyType as LaEnergyType
 
 class LaCrop(QObject, LaSerialisable, LaGuid):
     """ The LaCrop class represents a crop that can be grown in a simulation.
@@ -26,7 +30,7 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
     Attributes:
         name (str): The name of the crop.
         description (str): A description of the crop.
-        cropYield (int): The yield of the crop in kg/ha.
+        yield (int): The yield of the crop in kg/ha.
         cropCalories (int): The number of calories produced by the crop.
         fodderProduction (int): The amount of fodder produced by the crop.
         fodderValue (int): The value of the fodder produced by the crop.
@@ -36,12 +40,12 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
     """
     nameChanged = pyqtSignal(str)
     descriptionChanged = pyqtSignal(str)
-    cropYieldChanged = pyqtSignal(int)
+    yieldChanged = pyqtSignal(int)
     cropCaloriesChanged = pyqtSignal(int)
     cropFodderProductionChanged = pyqtSignal(int)
     cropFodderValueChanged = pyqtSignal(int)
-    cropFodderEnergyTypeChanged = pyqtSignal(str)
-    areaUnitsChanged = pyqtSignal(str)
+    cropFodderEnergyTypeChanged = pyqtSignal(LaEnergyType)
+    areaUnitsChanged = pyqtSignal(LaAreaUnits)
     imageFileChanged = pyqtSignal(str)
 
     def __init__(self, theCrop: Optional[Type['LaCrop']] = None, parent=None):
@@ -55,278 +59,488 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         super().__init__(parent)
         if theCrop is None: # If NO crop is provided, initialize with default values.
             self._guid = LaGuid.setGuid(self, None)
-            self._cropName = "No Name Set"
+            self._name = "No Name Set"
             self._description = "Not Set"
             self._cropYield = 60
-            self._cropCalories = 3000
-            self._cropFodderProduction = 50
-            self._cropFodderValue = 1000
+            self._calories = 3000
+            self._fodderProduction = 50
+            self._fodderValue = 1000
             self._imageFile = ""
-            self._cropFodderEnergyType = ""
+            self._fodderEnergyType = ""
             self._areaUnits = ""
         else: # If a crop IS provided, copy the values from the existing crop.
-            self._cropName = theCrop.name
-            self._description = theCrop.description
             self._guid = theCrop.guid
+            self._name = theCrop.name
+            self._description = theCrop.description
             self._cropYield = theCrop.cropYield
-            self._cropCalories = theCrop.cropCalories
-            self._cropFodderProduction = theCrop.cropFodderProduction
-            self._cropFodderValue = theCrop.cropFodderValue
-            self._cropFodderEnergyType = theCrop.cropFodderEnergyType
+            self._calories = theCrop.cropCalories
+            self._fodderProduction = theCrop.cropFodderProduction
+            self._fodderValue = theCrop.cropFodderValue
+            self._fodderEnergyType = theCrop.cropFodderEnergyType
             self._areaUnits = theCrop.areaUnits
             self._imageFile = theCrop.imageFile
 
     def __eq__(self, other):
+        """
+        Compare this crop with another for equality.
+
+        :param other: Another object to compare with
+        :type other: object
+        :returns: True if both crops have identical properties, False otherwise
+        :rtype: bool
+        """
         if not isinstance(other, LaCrop):
             return False
         myAttributes = [
-            '_cropName',              '_description',     '_guid',
-            '_cropYield',             '_cropCalories',    '_cropFodderProduction',
-            '_cropFodderValue',       '_cropFodderEnergyType', '_areaUnits',
+            '_name',              '_description',     '_guid',
+            '_cropYield',         '_calories',        '_fodderProduction',
+            '_fodderValue',       '_fodderEnergyType', '_areaUnits',
             '_imageFile'
         ]
         return all(getattr(self, attr) == getattr(other, attr) for attr in myAttributes)
 
     def __del__(self):
+        """
+        Destructor method called when the object is about to be destroyed.
+        Performs necessary cleanup operations.
+        """
         # Perform any necessary cleanup here
         pass
 
-    def __copy__(self):
-        new_crop = LaCrop()
-        new_crop._guid = self._guid
-        new_crop._cropName = self._cropName
-        new_crop._description = self._description
-        new_crop._cropYield = self._cropYield
-        new_crop._cropCalories = self._cropCalories
-        new_crop._cropFodderProduction = self._cropFodderProduction
-        new_crop._cropFodderValue = self._cropFodderValue
-        new_crop._cropFodderEnergyType = self._cropFodderEnergyType
-        new_crop._areaUnits = self._areaUnits
-        new_crop._imageFile = self._imageFile
-        return new_crop
+    def __copy__(self) -> "LaCrop":
+        """
+        Create a deep copy of this crop.
+
+        :returns: A new LaCrop instance with the same properties as this one
+        :rtype: LaCrop
+        """
+        myNewCrop = LaCrop()
+        myNewCrop.guid = self.guid
+        myNewCrop.name = self.name
+        myNewCrop.description = self.description
+        myNewCrop.cropYield = self.cropYield
+        myNewCrop.cropCalories = self.cropCalories
+        myNewCrop.cropFodderProduction = self.cropFodderProduction
+        myNewCrop.cropFodderValue = self.cropFodderValue
+        myNewCrop.cropFodderEnergyType = self.cropFodderEnergyType
+        myNewCrop.areaUnits = self.areaUnits
+        myNewCrop.imageFile = self.imageFile
+        return myNewCrop
 
     @property
     def guid(self):
+        """
+        Get the GUID (Globally Unique Identifier) of this crop.
+
+        :returns: The crop's GUID
+        :rtype: str
+        """
         return self._guid
 
     @guid.setter
-    def guid(self, value):
-        self._guid = value
+    def guid(self, theGuid):
+        """
+        Set the GUID (Globally Unique Identifier) for this crop.
+
+        :param value: The new GUID value
+        :type value: str
+        """
+        self._guid = theGuid
 
     @pyqtProperty(str, notify=nameChanged)
-    def name(self): # type: ignore
-        return self._cropName
+    def name(self): #type: ignore
+        """
+        Get the name of this crop.
+
+        :returns: The crop's name
+        :rtype: str
+        """
+        return self._name
 
     @name.setter
     def name(self, name):
-        if self._cropName != name:
-            self._cropName = name
+        """
+        Set the name of this crop.
+
+        :param name: The new crop name
+        :type name: str
+        """
+        if self._name != name:
+            self._name = name
             self.nameChanged.emit(name)
 
     @pyqtProperty(str, notify=descriptionChanged)
-    def description(self): # type: ignore
+    def description(self): #type: ignore
+        """
+        Get the description of this crop.
+
+        :returns: The crop's description
+        :rtype: str
+        """
         return self._description
 
     @description.setter
     def description(self, description):
+        """
+        Set the description of this crop.
+
+        :param description: The new crop description
+        :type description: str
+        """
         if self._description != description:
             self._description = description
             self.descriptionChanged.emit(description)
 
-    @pyqtProperty(int, notify=cropYieldChanged)
-    def cropYield(self): # type: ignore
+    @pyqtProperty(int, notify=yieldChanged)
+    def cropYield(self): #type: ignore
+        """
+        Get the yield value for this crop (kg/ha or kg/dunum).
+
+        :returns: The crop's yield value
+        :rtype: int
+        """
+        myCropYield = self._cropYield
         return self._cropYield
 
     @cropYield.setter
-    def cropYield(self, cropYield):
-        if self._cropYield != cropYield:
-            self._cropYield = cropYield
-            self.cropYieldChanged.emit(cropYield)
+    def cropYield(self, theYield):
+        """
+        Set the yield value for this crop.
+
+        :param theYield: The new yield value
+        :type theYield: int
+        """
+        if self._cropYield != theYield:
+            self._cropYield = theYield
+            self.yieldChanged.emit(theYield)
 
     @pyqtProperty(int, notify=cropCaloriesChanged)
-    def cropCalories(self): # type: ignore
-        return self._cropCalories
+    def cropCalories(self): #type: ignore
+        """
+        Get the caloric value per kg of this crop.
+
+        :returns: The calories per kilogram
+        :rtype: int
+        """
+        return self._calories
 
     @cropCalories.setter
     def cropCalories(self, cropCalories):
-        if self._cropCalories != cropCalories:
-            self._cropCalories = cropCalories
+        """
+        Set the caloric value per kg of this crop.
+
+        :param cropCalories: The new caloric value
+        :type cropCalories: int
+        """
+        if self._calories != cropCalories:
+            self._calories = cropCalories
             self.cropCaloriesChanged.emit(cropCalories)
 
     @pyqtProperty(int, notify=cropFodderProductionChanged)
-    def cropFodderProduction(self): # type: ignore
-        return self._cropFodderProduction
+    def cropFodderProduction(self): #type: ignore
+        """
+        Get the fodder production amount for this crop.
+
+        :returns: The amount of fodder produced per area unit
+        :rtype: int
+        """
+        return self._fodderProduction
 
     @cropFodderProduction.setter
-    def cropFodderProduction(self, cropFodderProduction):
-        if self._cropFodderProduction != cropFodderProduction:
-            self._cropFodderProduction = cropFodderProduction
-            self.cropFodderProductionChanged.emit(cropFodderProduction)
+    def cropFodderProduction(self, theCropFodderProduction):
+        """
+        Set the fodder production amount for this crop.
+
+        :param theCropFodderProduction: The new fodder production value
+        :type theCropFodderProduction: int
+        """
+        if self._fodderProduction != theCropFodderProduction:
+            self._fodderProduction = theCropFodderProduction
+            self.cropFodderProductionChanged.emit(theCropFodderProduction)
 
     @pyqtProperty(int, notify=cropFodderValueChanged)
-    def cropFodderValue(self): # type: ignore
-        return self._cropFodderValue
+    def cropFodderValue(self): #type: ignore
+        """
+        Get the nutritional value of fodder produced by this crop.
+
+        :returns: The fodder's nutritional value
+        :rtype: int
+        """
+        return self._fodderValue
 
     @cropFodderValue.setter
     def cropFodderValue(self, cropFodderValue):
-        if self._cropFodderValue != cropFodderValue:
-            self._cropFodderValue = cropFodderValue
+        """
+        Set the nutritional value of fodder produced by this crop.
+
+        :param cropFodderValue: The new fodder nutritional value
+        :type cropFodderValue: int
+        """
+        if self._fodderValue != cropFodderValue:
+            self._fodderValue = cropFodderValue
             self.cropFodderValueChanged.emit(cropFodderValue)
 
-    @pyqtProperty(str, notify=cropFodderEnergyTypeChanged)
-    def cropFodderEnergyType(self): # type: ignore
-        return self._cropFodderEnergyType
+    @pyqtProperty(LaEnergyType, notify=cropFodderEnergyTypeChanged)
+    def cropFodderEnergyType(self): #type: ignore
+        """
+        Get the energy type for measuring fodder value (KCalories or TDN).
+
+        :returns: The fodder energy measurement type
+        :rtype: LaEnergyType
+        """
+        return self._fodderEnergyType
 
     @cropFodderEnergyType.setter
-    def cropFodderEnergyType(self, cropFodderEnergyType):
-        if self._cropFodderEnergyType != cropFodderEnergyType:
-            self._cropFodderEnergyType = cropFodderEnergyType
-            self.cropFodderEnergyTypeChanged.emit(cropFodderEnergyType)
+    def cropFodderEnergyType(self, theCropFodderEnergyType):
+        """
+        Set the energy type for measuring fodder value.
 
-    @pyqtProperty(str, notify=areaUnitsChanged)
-    def areaUnits(self): # type: ignore
+        :param cropFodderEnergyType: The new fodder energy measurement type
+        :type cropFodderEnergyType: LaEnergyType
+        """
+        if self._fodderEnergyType != theCropFodderEnergyType:
+            self._fodderEnergyType = theCropFodderEnergyType
+            self.cropFodderEnergyTypeChanged.emit(theCropFodderEnergyType)
+
+    @pyqtProperty(LaAreaUnits, notify=areaUnitsChanged)
+    def areaUnits(self): #type: ignore
+        """
+        Get the area units used for this crop (Hectare or Dunum).
+
+        :returns: The area units used for yield calculations
+        :rtype: LaAreaUnits
+        """
         return self._areaUnits
 
     @areaUnits.setter
-    def areaUnits(self, areaUnits):
-        if self._areaUnits != areaUnits:
-            self._areaUnits = areaUnits
-            self.areaUnitsChanged.emit(areaUnits)
+    def areaUnits(self, theAreaUnits):
+        """
+        Set the area units used for this crop.
+
+        :param theAreaUnits: The new area units
+        :type theAreaUnits: LaAreaUnits
+        """
+        if self._areaUnits != theAreaUnits:
+            self._areaUnits = theAreaUnits
+            self.areaUnitsChanged.emit(theAreaUnits)
 
     @pyqtProperty(str, notify=imageFileChanged)
-    def imageFile(self): # type: ignore
+    def imageFile(self): #type: ignore
+        """
+        Get the path to the image file representing this crop.
+
+        :returns: The image file path
+        :rtype: str
+        """
         return self._imageFile
 
     @imageFile.setter
-    def imageFile(self, imageFile):
+    def imageFile(self, imageFile) -> None:
+        """
+        Set the path to the image file representing this crop.
+
+        :param imageFile: The new image file path
+        :type imageFile: str
+        """
         if self._imageFile != imageFile:
             self._imageFile = imageFile
             self.imageFileChanged.emit(imageFile)
 
-    def fromXml(self, theXml: str) -> bool:
+    def fromXml(self, theXml):
         """
         Parses an XML string and sets the properties of the crop object accordingly.
-
         Args:
         theXml (str): The XML string to parse.
-
         Returns:
         bool: True if the parsing was successful, False otherwise.
         """
-        from la.lib.lautils import LaUtils
-        myDocument = QDomDocument("mydocument")
-        myDocument.setContent(theXml)
-        myTopElement = myDocument.firstChildElement("crop")
+        from la.lib.lautils import LaUtils  # we import this here to avoid a circular import
 
-        # gracefully handle the case where the top element is null
-        if myTopElement.isNull():
-            warnings.warn("Failed to parse XML: myTopElement is null. The XML \
-                element could not be found or parsed.")
+        try:
+            myDocument = QDomDocument("mydocument")
+            myDocument.setContent(theXml)
+            myTopElement = myDocument.firstChildElement("crop")
+
+            # gracefully handle the case where the top element is null
+            if myTopElement.isNull():
+                warnings.warn("Failed to parse XML: myTopElement is null. The XML element could not be found or parsed.")
+                return False
+
+            self.guid = myTopElement.attribute("guid")
+            self._name = LaUtils.xmlDecode(myTopElement.firstChildElement("name").text())
+            self._description = LaUtils.xmlDecode(myTopElement.firstChildElement("description").text())
+
+            # Look for cropYield element - this is the main issue
+            cropYieldElement = myTopElement.firstChildElement("cropYield")
+            if not cropYieldElement.isNull():
+                try:
+                    self._cropYield = int(cropYieldElement.text())
+                    print(f"DEBUG: Found cropYield in XML: {self._cropYield}")
+                except (ValueError, TypeError) as e:
+                    print(f"DEBUG: Error parsing cropYield from XML: {e}")
+                    self._cropYield = 60  # Default value
+            else:
+                print("DEBUG: cropYield element not found in XML")
+                self._cropYield = 60  # Default value
+
+            # Parse other elements similarly
+            try:
+                self._calories = int(myTopElement.firstChildElement("cropCalories").text())
+            except (ValueError, TypeError):
+                self._calories = 3000  # Default value
+
+            try:
+                self._fodderProduction = int(myTopElement.firstChildElement("fodderProduction").text())
+            except (ValueError, TypeError):
+                self._fodderProduction = 50  # Default value
+
+            try:
+                self._fodderValue = int(myTopElement.firstChildElement("fodderCalories").text())
+            except (ValueError, TypeError):
+                self._fodderValue = 1000  # Default value
+
+            # Area units (stored as "yieldUnits" in XML with numeric value)
+            yieldUnitsElement = myTopElement.firstChildElement("yieldUnits")
+            if not yieldUnitsElement.isNull():
+                try:
+                    yieldUnitsValue = int(yieldUnitsElement.text())
+                    if yieldUnitsValue == 0:
+                        self._areaUnits = LaAreaUnits.Dunum
+                    elif yieldUnitsValue == 1:
+                        self._areaUnits = LaAreaUnits.Hectare
+                except (ValueError, TypeError):
+                    self._areaUnits = LaAreaUnits.Dunum  # Default
+
+            # Image path
+            imageFileElement = myTopElement.firstChildElement("imageFile")
+            if not imageFileElement.isNull():
+                self._imageFile = imageFileElement.text()
+
+            return True
+        except Exception as e:
+            import traceback
+            print(f"DEBUG: Error in fromXml: {str(e)}")
+            print(traceback.format_exc())
             return False
 
-        self.setGuid(myTopElement.attribute("guid"))
-        self.name = LaUtils.xmlDecode(myTopElement.firstChildElement("name").text())
-        self.description = LaUtils.xmlDecode(myTopElement.firstChildElement("description").text())
+    def fromXmlFile(self, filePath):
+        """
+        Load crop data from an XML file.
 
-        def GetIntValue(theElementName):
-            myElementText = myTopElement.firstChildElement(theElementName).text()
-            return int(myElementText) if myElementText else 0
+        :param filePath: Path to the XML file
+        :type filePath: str
+        :returns: True if successful, False otherwise
+        :rtype: bool
+        """
+        try:
+            # Open the file
+            with open(filePath, 'r') as f:
+                xmlContent = f.read()
 
-        self.cropYield = GetIntValue("cropYield")
-        self.cropCalories = GetIntValue("cropCalories")
-        self.cropFodderProduction = GetIntValue("fodderProduction")
-        self.cropFodderValue = GetIntValue("fodderCalories")
+            # Print the XML content for debugging
+            print(f"DEBUG: Loading crop from file: {filePath}")
+            print(f"DEBUG: XML content (first 200 chars): {xmlContent[:200]}...")
 
-        myCropFodderEnergyType = myTopElement.firstChildElement("cropFodderEnergyType").text()
-        if myCropFodderEnergyType == "KCalories":
-            self.cropFodderEnergyType = EnergyType.KCalories
-        elif myCropFodderEnergyType == "TDN":
-            self.cropFodderEnergyType = EnergyType.TDN
+            # Parse the XML
+            result = self.fromXml(xmlContent)
 
-        myAreaUnits = myTopElement.firstChildElement("areaUnits").text()
-        if myAreaUnits == "Dunum":
-            self.areaUnits = AreaUnits.Dunum
-        elif myAreaUnits == "Hectare":
-            self.areaUnits = AreaUnits.Hectare
-        self.imageFile = myTopElement.firstChildElement("imageFile").text()
+            # Debug output after parsing
+            print(f"DEBUG: After fromXml - cropYield: {self.cropYield}, cropFodderProduction: {self.cropFodderProduction}")
 
-        return True
+            return result
+        except Exception as e:
+            print(f"DEBUG: Error in fromXmlFile for {filePath}: {str(e)}")
+            import traceback
+            print(traceback.format_exc())
+            return False
 
     def toXml(self):
-        myName: str = self.name
-        myDescription: str = self.description
-        myCropYield: int = self.cropYield
-        myCropCalories: int = self.cropCalories
-        myCropFodderProduction: int = self.cropFodderProduction
-        myCropFodderValue: int = self.cropFodderValue
+        """
+        Convert this crop to an XML representation.
 
-        myCropFodderEnergyType: str = ""
-        if self.cropFodderEnergyType == EnergyType.KCalories:
-            myCropFodderEnergyType = "KCalories"
-        elif self.cropFodderEnergyType == EnergyType.TDN:
-            myCropFodderEnergyType = "TDN"
+        :returns: XML string representing the crop's data
+        :rtype: str
+        """
+        from la.lib.lautils import LaUtils  # we import this here to avoid a circular import
 
-        myAreaUnitsType: str = ""
-        if self.areaUnits == AreaUnits.Dunum:
-            myAreaUnitsType = "Dunum"
-        elif self.areaUnits == AreaUnits.Hectare:
-            myAreaUnitsType = "Hectare"
-        myImageFile: str = self.imageFile
+        # Build XML directly matching the existing structure
+        xml = f'<crop guid="{self.guid}">\n'
+        xml += f'  <name>{self.name}</name>\n'
+        xml += f'  <description>{self.description}</description>\n'
+        xml += f'  <cropYield>{self.cropYield}</cropYield>\n'
+        xml += f'  <cropCalories>{self.cropCalories}</cropCalories>\n'
+        xml += f'  <fodderProduction>{self.cropFodderProduction}</fodderProduction>\n'
+        xml += f'  <fodderCalories>{self.cropFodderValue}</fodderCalories>\n'
 
-        myString = "<crop guid=\"" + self.guid() + "\">\n"
-        myString += "  <name>" + myName + "</name>\n"
-        myString += "  <description>" + myDescription + "</description>\n"
-        myString += "  <cropYield>" + str(myCropYield) + "</cropYield>\n"
-        myString += "  <cropCalories>" + str(myCropCalories) + "</cropCalories>\n"
-        myString += "  <fodderProduction>" + str(myCropFodderProduction) + "</fodderProduction>\n"
-        myString += "  <fodderCalories>" + str(myCropFodderValue) + "</fodderCalories>\n"
-        myString += "  <cropFodderEnergyType>" + myCropFodderEnergyType + "</cropFodderEnergyType>\n"
-        myString += "  <areaUnits>" + myAreaUnitsType + "</areaUnits>\n"
-        myString += "  <imageFile>" + myImageFile + "</imageFile>\n"
-        myString += "</crop>\n"
-        return myString
+        # Convert enum to number for yieldUnits
+        yieldUnitsValue = "0"  # Default to Dunum
+        if self.areaUnits == LaAreaUnits.Hectare:
+            yieldUnitsValue = "1"
+
+        xml += f'  <yieldUnits>{yieldUnitsValue}</yieldUnits>\n'
+        xml += f'  <imageFile>{self.imageFile}</imageFile>\n'
+        xml += f'</crop>\n'
+
+        return xml
 
     def toText(self):
-        myName: str = self.name
-        myDescription: str = self.description
-        myCropYield: str = str(self.cropYield)
-        myCropCalories: str = str(self.cropCalories)
-        myCropFodderProduction: str = str(self.cropFodderProduction)
-        myCropFodderValue: str = str(self.cropFodderValue)
+        """
+        Convert this crop to a plain text representation.
 
-        myCropFodderEnergyType: str = ""
-        if self.cropFodderEnergyType == EnergyType.KCalories:
+        :returns: Text string representing the crop's data in key-value format
+        :rtype: str
+        """
+        from la.lib.lautils import LaUtils  # we import this here to avoid a circular import
+
+        myName = str(self.name)
+        myGuid = str(self.guid)
+        myDescription = str(self.description)
+        myCropYield = str(self.cropYield)
+        myCropCalories = str(self.cropCalories)
+        myCropFodderProduction = str(self.cropFodderProduction)
+        myCropFodderValue = str(self.cropFodderValue)
+
+        if self.cropFodderEnergyType == LaEnergyType.KCalories:
             myCropFodderEnergyType = "KCalories"
-        elif self.cropFodderEnergyType == EnergyType.TDN:
+        elif self.cropFodderEnergyType == LaEnergyType.TDN:
             myCropFodderEnergyType = "TDN"
 
-        myAreaUnitsType: str = ""
-        if self.areaUnits == AreaUnits.Dunum:
+        myAreaUnitsType= ""
+        if self.areaUnits == LaAreaUnits.Dunum:
             myAreaUnitsType = "Dunum"
-        elif self.areaUnits == AreaUnits.Hectare:
+        elif self.areaUnits == LaAreaUnits.Hectare:
             myAreaUnitsType = "Hectare"
-        myImageFile: str = self.imageFile
+        myImageFile = self.imageFile
 
-        myString = "guid=>" + self.guid() + "\n"
+        myString = "guid=>" + str(self.guid) + "\n"
         myString += "name=>" + myName + "\n"
         myString += "description=>" + myDescription + "\n"
-        myString += "cropYield=>" + myCropYield + "\n"
+        myString += "yield=>" + myCropYield + "\n"
         myString += "cropCalories=>" + myCropCalories + "\n"
         myString += "fodderProduction=>" + myCropFodderProduction + "\n"
         myString += "fodderCalories=>" + myCropFodderValue + "\n"
         myString += "cropFodderEnergyType=>" + myCropFodderEnergyType + "\n"
-        myUnits = "Dunum" if self.areaUnits == AreaUnits.Dunum else "Hectare"
-        myString += "yieldUnits=>" + myUnits + "\n"
+        myString += "yieldUnits=>" + myAreaUnitsType + "\n"
+        myString += "imageFile=>" + str(myImageFile) + "\n"
         return myString
 
     def toHtml(self):
-        myString = "<h3>Details for " + LaUtils.xmlEncode(self.name) + "</h3>"
+        """
+        Convert this crop to an HTML representation for display.
+
+        :returns: HTML string representing the crop's data in a formatted table
+        :rtype: str
+        """
+        from la.lib.lautils import LaUtils  # we import this here to avoid a circular import
+
+        myCropFodderEnergyType = "KCalories" if self.cropFodderEnergyType == LaEnergyType.KCalories else "TDN"
+        myUnits = "Dunum" if self.areaUnits == LaAreaUnits.Dunum else "Hectare"
+
+        myString = "<h3>Details for " + LaUtils.xmlEncode(str(self.name)) + "</h3>"
         myString += "<table>"
-        myString += "<tr><td><b>Description: </b></td><td>" + self.description + "</td></tr>"
+        myString += "<tr><td><b>Description: </b></td><td>" + str(self.description) + "</td></tr>"
         myString += "<tr><td><b>Avg Yield: </b></td><td>" + str(self.cropYield) + "</td></tr>"
         myString += "<tr><td><b>Cals/Kg: </b></td><td>" + str(self.cropCalories) + "</td></tr>"
-        myCropFodderEnergyType = "KCalories" if self.cropFodderEnergyType == EnergyType.KCalories else "TDN"
-        myUnits = "Dunum" if self.areaUnits == AreaUnits.Dunum else "Hectare"
         myString += "<tr><td><b>Fodder (kg/" + myUnits + "): </b></td><td>" + str(self.cropFodderProduction) + "</td></tr>"
         myString += "<tr><td><b>Fodder Value/Kg: </b></td><td>" + str(self.cropFodderValue) + "</td></tr>"
         myString += "<tr><td><b>FodderEnergyType: </b></td><td>" + myCropFodderEnergyType + "</td></tr>"

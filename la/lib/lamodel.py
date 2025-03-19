@@ -1,39 +1,62 @@
-# lamodel.py
-from qgis.PyQt.QtCore import pyqtSignal
+from qgis.PyQt.QtCore import pyqtSignal, QUuid
 from qgis.PyQt.QtWidgets import QDialog
 
+import xml.etree.ElementTree as ET
+import logging
 from typing import Dict, List
-# from la.lib.la import La
+
 from la.lib.laserialisable import LaSerialisable
 from la.lib.laguid import LaGuid
 from la.lib.ladietlabels import LaDietLabels
 from la.lib.lautils import LaUtils, LaMessageBus
 from la.lib.la import AreaUnits, Status, Priority, LandBeingGrazed, LandFound
+from la.lib.laanimal import LaAnimal
 
-""" NOTES ON THE CODE - Python and PyQt
-
-    The messaged signal in LaMessageBus is used for inter-object communication in the application.
-
-    In PyQt, signals and slots are used for communication between objects. A signal is emitted when
-    a particular event occurs, and slots can be connected to a signal. When the signal is emitted,
-    the connected slots are automatically executed.
-
-    In the context of the LaMessageBus class, the messaged signal would be emitted when there's a
-    new message to be broadcasted across the system.
-
-    Other parts of the application can connect slots to this signal to react to new messages.
-    For example, a logging system might connect a slot to the messaged signal to log all messages,
-    or a GUI might connect a slot to update a message display whenever a new message is sent.
-
-    This allows for a decoupled architecture where the LaMessageBus doesn't need to know what
-    parts of the system are interested in messages, it just emits the messaged signal whenever it
-    has a new message. Any part of the system interested in these messages can simply connect a slot
-    to the messaged signal to handle them.
-"""
 MESSAGE_BUS: LaMessageBus = LaMessageBus()
 
-
 class LaModel(QDialog, LaSerialisable, LaGuid):
+    """
+    LaModel class represents the main model for the Landuse Analyst plugin.
+
+    Attributes:
+        nameChanged (pyqtSignal): Signal emitted when the name changes.
+        populationChanged (pyqtSignal): Signal emitted when the population changes.
+        periodChanged (pyqtSignal): Signal emitted when the period changes.
+        projectionChanged (pyqtSignal): Signal emitted when the projection changes.
+        precisionChanged (pyqtSignal): Signal emitted when the precision changes.
+        dietPercentChanged (pyqtSignal): Signal emitted when the diet percent changes.
+        percentOfDietThatIsFromCropsChanged (pyqtSignal): Signal emitted when the percent of diet from crops changes.
+        meatPercentChanged (pyqtSignal): Signal emitted when the meat percent changes.
+        caloriesPerPersonDailyChanged (pyqtSignal): Signal emitted when the calories per person daily changes.
+        dairyUtilisationChanged (pyqtSignal): Signal emitted when the dairy utilisation changes.
+        baseOnPlantsChanged (pyqtSignal): Signal emitted when the base on plants changes.
+        includeDairyChanged (pyqtSignal): Signal emitted when the include dairy changes.
+        limitDairyChanged (pyqtSignal): Signal emitted when the limit dairy changes.
+        limitDairyPercentChanged (pyqtSignal): Signal emitted when the limit dairy percent changes.
+        fallowStatusChanged (pyqtSignal): Signal emitted when the fallow status changes.
+        fallowRatioChanged (pyqtSignal): Signal emitted when the fallow ratio changes.
+        eastingChanged (pyqtSignal): Signal emitted when the easting changes.
+        northingChanged (pyqtSignal): Signal emitted when the northing changes.
+        euclideanDistanceChanged (pyqtSignal): Signal emitted when the euclidean distance changes.
+        walkingTimeChanged (pyqtSignal): Signal emitted when the walking time changes.
+        pathDistanceChanged (pyqtSignal): Signal emitted when the path distance changes.
+        commonLandValueChanged (pyqtSignal): Signal emitted when the common land value changes.
+        commonLandAreaUnitsChanged (pyqtSignal): Signal emitted when the common land area units changes.
+        herdSizeChanged (pyqtSignal): Signal emitted when the herd size changes.
+        animalsChanged (pyqtSignal): Signal emitted when the animals change.
+        cropsChanged (pyqtSignal): Signal emitted when the crops change.
+        dietsChanged (pyqtSignal): Signal emitted when the diets change.
+        dietLabelsChanged (pyqtSignal): Signal emitted when the diet labels change.
+        landBeingGrazedChanged (pyqtSignal): Signal emitted when the land being grazed changes.
+        landFoundChanged (pyqtSignal): Signal emitted when the land found changes.
+        priorityChanged (pyqtSignal): Signal emitted when the priority changes.
+        descriptionChanged (pyqtSignal): Signal emitted when the description changes.
+        areaUnitsChanged (pyqtSignal): Signal emitted when the area units change.
+        statusChanged (pyqtSignal): Signal emitted when the status changes.
+        guidChanged (pyqtSignal): Signal emitted when the GUID changes.
+        iconChanged (pyqtSignal): Signal emitted when the icon changes.
+    """
+
     nameChanged = pyqtSignal()
     populationChanged = pyqtSignal()
     periodChanged = pyqtSignal()
@@ -72,11 +95,18 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
     iconChanged = pyqtSignal()
 
     def __init__(self, parent=None, theModel=None):
-        QDialog.__init__(self, parent)
+        """
+        Initialize the LaModel instance.
+
+        Args:
+            parent (QWidget, optional): The parent widget. Defaults to None.
+            theModel (LaModel, optional): An existing LaModel instance to copy attributes from. Defaults to None.
+        """
+        super().__init__(parent)
         if theModel is not None:
             self._name = theModel.name
             self._population = theModel.population
-            self.setGuid(theModel.guid)
+            self.setGuid(str(theModel.guid))
             self._period = theModel.period
             self._projection = theModel.projection
             self._easting = theModel.easting
@@ -86,57 +116,65 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             self._pathDistance = theModel.pathDistance
             self._precision = theModel.precision
             self._dietPercent = theModel.dietPercent
-            self._percentOfDietThatIsFromCrops = theModel.plantPercent
+            self._percentOfDietThatIsFromCrops = theModel.percentOfDietThatIsFromCrops
             self._meatPercent = theModel.meatPercent
             self._caloriesPerPersonDaily = theModel.caloriesPerPersonDaily
             self._dairyUtilisation = theModel.dairyUtilisation
             self._baseOnPlants = theModel.baseOnPlants
             self._includeDairy = theModel.includeDairy
             self._limitDairy = theModel.limitDairy
-            self._limitDairyPercentage = theModel.limitDairyPercent
+            self._limitDairyPercent = theModel.limitDairyPercent
             self._fallowStatus = theModel.fallowStatus
             self._fallowRatio = theModel.fallowRatio
             self._landBeingGrazed = theModel.landBeingGrazed
             self._landFound = theModel.landFound
         else:
             self.setGuid(None)
-            self._name: str = "No Name Set"
-            self._population: int = 1000
-            self._period: str = "No Period Set"
-            self._projection: int = 100
-            self._precision: int = 5
-            self._dietPercent: int = 25
-            self._percentOfDietThatIsFromCrops: int = 10
-            self._meatPercent: int = 10
-            self._caloriesPerPersonDaily: int = 2500
-            self._landBeingGrazed: LandBeingGrazed = LandBeingGrazed.Common
-            self._landFound: LandFound = LandFound.NO
-            # self._dairyUtilisation: int = 100
-            # self._baseOnPlants: bool = True
-            # self._includeDairy: bool = True
-            # self._limitDairy: bool = False
-            # self._limitDairyPercent: int = 10
-            # self._fallowStatus: Status = Status.FALLOW)
-            # self._easting: int = 0
-            # self._northing: int = 0
-            # self._euclideanDistance: bool = True
-            # self._walkingTime: bool = False
-            # self._pathDistance: bool = False
-            # self._commonLandValue: float = 0.0
-            # self._commonLandAreaUnits: AreaUnits = AreaUnits.HECTARES
-            # self._herdSize: int = 0
-            # self._animals: Dict[str, str] = {}
-            # self._crops: Dict[str, str] = {}
-            # self._diets: Dict[str, La] = {}
-            # self._dietLabels: List[LaDietLabels] = []
-            # self._landBeingGrazed: LandBeingGrazed = LandBeingGrazed.NO
-            # self._landFound: LandFound = LandFound.NO
-            # self._priority: Priority = Priority.NORMAL
-            # self._description: str = "No Description Set"
-            # self._areaUnits: AreaUnits = AreaUnits.HECTARES
-            # self._status: Status = Status.FALLOW
-            # self._icon: QIcon = QIcon()
+            self._name = "No Name Set"
+            self._population = 1000
+            self._period = "No Period Set"
+            self._projection = 100
+            self._precision = 5
+            self._dietPercent = 25
+            self._percentOfDietThatIsFromCrops = 10
+            self._meatPercent = 10
+            self._caloriesPerPersonDaily = 2500
+            self._dairyUtilisation = 100
+            self._baseOnPlants = True
+            self._includeDairy = True
+            self._limitDairy = False
+            self._limitDairyPercent = 10
+            self._fallowStatus = Status.MoreThanEnoughToCompletelySatisfy
+            self._fallowRatio = 1
+            self._easting = 0
+            self._northing = 0
+            self._euclideanDistance = True
+            self._walkingTime = False
+            self._pathDistance = False
+            self._commonLandValue = 0.0
+            self._commonLandAreaUnits = AreaUnits.Hectare
+            self._herdSize = 0
+            self._animals = {}
+            self._crops = {}
+            self._diets = {}
+            self._dietLabels = []
+            self._landBeingGrazed = LandBeingGrazed.Common
+            self._landFound = LandFound.NotEnough
+            self._priority = Priority.None_
+            self._description = "No Description Set"
+            self._areaUnits = AreaUnits.Hectare
+            self._status = Status.MoreThanEnoughToCompletelySatisfy
+            self._icon = None
+        self.logger = logging.getLogger(__name__)
 
+    def logMessage(self, theMessage: str):
+        """
+        Logs a message using the logger.
+
+        Args:
+            message (str): The message to log.
+        """
+        self.logger.info(theMessage)
 
     def __del__(self):
         pass
@@ -179,6 +217,8 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         if self._period != thePeriod:
             self._period = thePeriod
             self.periodChanged.emit()
+
+
 
     @property
     def projection(self) -> int:
@@ -382,7 +422,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
     @property
     def herdSize(self) -> int:
-        return self._herdSize
+        return int(self._herdSize)
 
     @herdSize.setter
     def herdSize(self, theAnimalGuid: str):
@@ -411,11 +451,11 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             self.cropsChanged.emit()
 
     @property
-    def diets(self) -> Dict[str, La]:
+    def diets(self) -> Dict[str, LaDietLabels]:
         return self._diets
 
     @diets.setter
-    def diets(self, theDiets: Dict[str, La]):
+    def diets(self, theDiets: Dict[str, LaDietLabels]):
         if self._diets != theDiets:
             self._diets = theDiets
             self.dietsChanged.emit()
@@ -497,12 +537,121 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
     @guid.setter
     def guid(self, theGuid: str):
         if self._guid != theGuid:
-            self._guid = LaGuid.setGuid()
+            self.setGuid(theGuid)
             self.guidChanged.emit()
+
+    def requiredValue(self, theAnimalGuid):
+        """
+        Calculates the required value for the given animal GUID.
+
+        Args:
+            theAnimalGuid (str): The GUID of the animal.
+
+        Returns:
+            float: The required value.
+        """
+        myAnimal = LaUtils.getAnimal(theAnimalGuid)
+        myAnimalProductionTarget = 1
+        myAnimalsRequired = (myAnimalProductionTarget / myAnimal.killWeight()) / (myAnimal.usableMeat() * 0.01)
+        myBirthsPerYear = 365.0 / (myAnimal.gestationTime() + myAnimal.estrousCycle() + myAnimal.weaningAge())
+        myOffspringPerMotherYearly = myBirthsPerYear * myAnimal.youngPerBirth() * (1.0 - (0.01 * myAnimal.deathRate()))
+        myMothersNeededStepOne = myAnimalsRequired / myOffspringPerMotherYearly
+        myMalesStepOne = (myMothersNeededStepOne * myOffspringPerMotherYearly) / 2.0
+        myFemalesStepOne = myMalesStepOne
+        myMotherReplacementsPerYear = myMothersNeededStepOne / myAnimal.breedingExpectancy()
+        myAdditionalMothers = (myMotherReplacementsPerYear / myOffspringPerMotherYearly) * 2.0
+        myMalesStepTwo = (myAdditionalMothers * myOffspringPerMotherYearly) / 2.0
+        myFemalesStepTwo = (myAdditionalMothers * myOffspringPerMotherYearly) / 2.0
+        myTotalMothers = myMothersNeededStepOne + myAdditionalMothers
+        myTotalMales = myMalesStepOne + myMalesStepTwo
+        myTotalFemales = myFemalesStepOne - myFemalesStepTwo
+        myTotalJuveniles = myTotalMales + myTotalFemales
+        myTotalMothersValueRequired = myTotalMothers * myAnimal.gestating()
+        myTotalJuvenilesValueRequired = myTotalJuveniles * myAnimal.juvenile()
+        myValueNeededToFeedAnimals = myTotalMothersValueRequired + myTotalJuvenilesValueRequired
+        myReturnValue = float(myValueNeededToFeedAnimals)
+
+        # Log report
+        self.logMessage("method ==> float LaModel::requiredValue(QString theAnimalGuid)")
+        self.logMessage("animal prodn target = calorie target of animal / food value")
+        self.logMessage(f"mCaloriesProvidedByMeatMap.value(theAnimalGuid): {self.mCaloriesProvidedByMeatMap.get(theAnimalGuid, 0)}")
+        self.logMessage(f"myAnimal.meatFoodValue(): {myAnimal.meatFoodValue() / 1000.0}")
+        self.logMessage(f"myAnimalProductionTarget = {myAnimalProductionTarget}")
+        self.logMessage(f"slaughter animals reqd: {myAnimalsRequired}")
+        self.logMessage(f"BirthEventsPerYear: {myBirthsPerYear}")
+        self.logMessage(f"OffspringPerMotherYearly = {myOffspringPerMotherYearly}")
+        self.logMessage(f"MothersNeededStepOne = {myMothersNeededStepOne}")
+        self.logMessage(f"MalesStepOne = {myMalesStepOne}")
+        self.logMessage(f"FemalesStepOne = {myFemalesStepOne}")
+        self.logMessage(f"MotherReplacementsPerYear = {myMotherReplacementsPerYear}")
+        self.logMessage(f"AdditionalMothers = {myAdditionalMothers}")
+        self.logMessage(f"MalesStepTwo = {myMalesStepTwo}")
+        self.logMessage(f"FemalesStepTwo = {myFemalesStepTwo}")
+        self.logMessage(f"TotalMothers = {myTotalMothers}")
+        self.logMessage(f"TotalMales = {myTotalMales}")
+        self.logMessage(f"TotalFemales = {myTotalFemales}")
+        self.logMessage(f"TotalJuveniles = {myTotalJuveniles}")
+        self.logMessage(f"Total Adult Females Value(Kg) = {myTotalMothersValueRequired}")
+        self.logMessage(f"Total Juveniles Value(Kg) = {myTotalJuvenilesValueRequired}")
+        self.logMessage(f"Total Value (Kg) Needed To Feed Animals = {myValueNeededToFeedAnimals}")
+        self.logMessage("method ==> float LaModel::requiredValue(QString theAnimalGuid)")
+        self.logMessage(f"Animal: {myAnimal.name()}")
+        self.logMessage(f"Breeding Stock: {myTotalMothers}")
+        self.logMessage(f"Juveniles: {myTotalJuveniles}")
+        self.logMessage(f"Kg Value needed annually to feed the entire herd: {myReturnValue}")
+        self.logMessage("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+
+        return myReturnValue
+
+    def fromXml(self, theXmlData):
+        """
+        Initialize the LaModel instance from an XML string.
+
+        Args:
+            theXmlData (str): The XML string containing the model data.
+        """
+        root = ET.fromstring(theXmlData)
+
+        self._guid = root.attrib.get('guid', QUuid.createUuid().toString(QUuid.StringFormat.Id128))
+        self._name = root.findtext('name', default="No Name Set")
+        self._population = int(root.findtext('population', default="1000"))
+        self._period = root.findtext('period', default="No Period Set")
+        self._projection = int(root.findtext('projection', default="100"))
+        self._easting = int(root.findtext('easting', default="0"))
+        self._northing = int(root.findtext('northing', default="0"))
+        self._euclideanDistance = root.findtext('euclideanDistance', default="True") == "True"
+        self._walkingTime = root.findtext('walkingTime', default="False") == "False"
+        self._pathDistance = root.findtext('pathDistance', default="False") == "False"
+        self._precision = int(root.findtext('precision', default="5"))
+        self._dietPercent = int(root.findtext('dietPercent', default="25"))
+        self._percentOfDietThatIsFromCrops = int(root.findtext('plantPercent', default="10"))
+        self._meatPercent = int(root.findtext('meatPercent', default="10"))
+        self._caloriesPerPersonDaily = int(root.findtext('caloriesPerPersonDaily', default="2500"))
+        self._baseOnPlants = root.findtext('baseOnPlants', default="True") == "True"
+        self._includeDairy = root.findtext('includeDairy', default="True") == "True"
+        self._limitDairy = root.findtext('limitDairy', default="False") == "False"
+        self._limitDairyPercent = int(root.findtext('limitDairyPercent', default="10"))
+        self._dairyUtilisation = int(root.findtext('dairyUtilisation', default="100"))
+        self._fallowStatus = Status[root.findtext('fallowStatus', default="FALLOW")]
+        self._fallowRatio = int(root.findtext('fallowRatio', default="1"))
+        self._commonLandValue = float(root.findtext('commonLandValue', default="0.0"))
+        self._commonLandAreaUnits = AreaUnits[root.findtext('commonLandAreaUnits', default="HECTARES")]
+        self._herdSize = int(root.findtext('herdSize', default="0"))
+        self._animals = {}  # Assuming animals are stored in a more complex structure
+        self._crops = {}  # Assuming crops are stored in a more complex structure
+        self._diets = {}  # Assuming diets are stored in a more complex structure
+        self._dietLabels = []  # Assuming diet labels are stored in a more complex structure
+        self._landBeingGrazed = LandBeingGrazed[root.findtext('landBeingGrazed', default="NO")]
+        self._landFound = LandFound[root.findtext('landFound', default="NO")]
+        self._priority = Priority[root.findtext('priority', default="NORMAL")]
+        self._description = root.findtext('description', default="No Description Set")
+        self._areaUnits = AreaUnits[root.findtext('areaUnits', default="HECTARES")]
+        self._status = Status[root.findtext('status', default="FALLOW")]
+        self._icon = None  # Assuming icon is handled separately
 
     def toXml(self) -> str:
         myString = f'<model guid="{self.guid}">\n'
-        myString += f'  <name>{xmlEncode(self._name)}</name>\n'
+        myString += f'  <name>{LaUtils.xmlEncode(self._name)}</name>\n'
         myString += f'  <population>{self._population}</population>\n'
         myString += f'  <period>{LaUtils.xmlEncode(self._period)}</period>\n'
         myString += f'  <projection>{self._projection}</projection>\n'
@@ -519,10 +668,11 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         myString += f'  <baseOnPlants>{self._baseOnPlants}</baseOnPlants>\n'
         myString += f'  <includeDairy>{self._includeDairy}</includeDairy>\n'
         myString += f'  <limitDairy>{self._limitDairy}</limitDairy>\n'
-        myString += f'  <limitDairyPercent>{self._limitDairyPercentage}</limitDairyPercent>\n'
+        myString += f'  <limitDairyPercent>{self._limitDairyPercent}</limitDairyPercent>\n'
         myString += f'  <dairyUtilisation>{self._dairyUtilisation}</dairyUtilisation>\n'
         myString += '</model>\n'
         return myString
+
 
 
     """ The following defines a series of PyQt signals.

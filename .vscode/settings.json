@@ -1,57 +1,75 @@
 {
-  "python.defaultInterpreterPath": "/home/arkygeek/anaconda3/envs/qgis_dev/bin/python",
+  // Python Settings
   "python.analysis.extraPaths": [
     "/home/arkygeek/anaconda3/envs/qgis_dev/share/qgis/python",
-    "/home/arkygeek/anaconda3/envs/qgis_dev/share/qgis/python/plugins",
-    "/home/arkygeek/anaconda3/envs/qgis_dev/lib/python3.12/site-packages",
-    "/home/arkygeek/anaconda3/envs/qgis_dev/share/qgis/python/core",
-    "/Applications/QGIS.app/Contents/Resources/python",
-    "/Users/arkygeek/landuse_analyst/Support/QGIS/QGIS3/profiles/default/python/plugins/landuse_analyst",
-    "/Applications/QGIS.app/Contents/MacOS/lib/python3.9/site-packages",
-    "/Applications/QGIS.app/Contents/MacOS/lib/python3.9/site-packages/PyQt5/"
-
-
+    "/home/arkygeek/anaconda3/envs/qgis_dev/share/qgis/python/plugins"
   ],
-  "python.analysis.typeCheckingMode": "basic",
-  "python.formatting.provider": "black",
+  "python.autoComplete.extraPaths": [
+    "/home/arkygeek/anaconda3/envs/qgis_dev/share/qgis/python",
+    "/home/arkygeek/anaconda3/envs/qgis_dev/share/qgis/python/plugins"
+  ],
+  "python.defaultInterpreterPath": "/home/arkygeek/anaconda3/envs/qgis_dev/bin/python",
+  // "python.condaPath": "/home/arkygeek/anaconda3/bin/conda",
+  "python.terminal.activateEnvInCurrentTerminal": true,
+  "python.terminal.shellIntegration.enabled": true,
+  "python.analysis.indexing": true,
+  "python.analysis.inlayHints.variableTypes": true,
+  "python.analysis.regenerateStdLibIndices": true,
+  "python.languageServer": "Default",
+  // "python.jediEnabled": false,
+  "python.terminal.executeInFileDir": true,
+  // "python-envs.terminal.showActivateButton": true,
+  "python-envs.defaultEnvManager": "ms-python.python:conda",
+  "python-envs.defaultPackageManager": "ms-python.python:conda",
 
-  "maptz.regionfolder": {
-    "[python]": {
-        "defaultFoldStartRegex": "\\#[\\s]*#region\\(collapsed\\)[\\s]*(.*)",
-        "foldEnd": "# #endregion",
-        "foldEndRegex": "\\#[\\s]*#endregion",
-        "foldStart": "# #region [NAME]",
-        "foldStartRegex": "\\#[\\s]*#region[\\s]*(.*)"
+  // Terminal Profile
+  "terminal.integrated.profiles.linux": {
+    "conda-zsh": {
+      "path": "zsh",
+      "args": ["-l"],
+      "env": {
+        "CONDA_DEFAULT_ENV": "qgis_dev"
+      }
     }
   },
+  "terminal.integrated.defaultProfile.linux": "conda-zsh",
 
+  // Other settings
+  "python.analysis.typeCheckingMode": "basic",
+  "python-envs.pythonProjects": [],
+  "python.formatting.provider": "black",
+  "maptz.regionfolder": {
+    "[python]": {
+      "defaultFoldStartRegex": "\\#[\\s]*#region\\(collapsed\\)[\\s]*(.*)",
+      "foldEnd": "# #endregion",
+      "foldEndRegex": "\\#[\\s]*#endregion",
+      "foldStart": "# #region [NAME]",
+      "foldStartRegex": "\\#[\\s]*#region[\\s]*(.*)"
+    }
+  },
   "editor.tokenColorCustomizations": {
     "textMateRules": [
       {
         "scope": [
-          //following will be in italics (=Pacifico)
           "comment",
-          "entity.name.type.class", //class names
-          "keyword", //import, export, return…
-          //"support.class.builtin.js", //String, Number, Boolean…, this, super
-          "storage.modifier", //static keyword
-          "storage.type.class.js", //class keyword
-          "storage.type.function.js", // function keyword
-          "storage.type.js", // Variable declarations
-          "keyword.control.import.js", // Imports
-          "keyword.control.from.js", // From-Keyword
-          //"entity.name.type.js", // new … Expression
-          "keyword.control.flow.js", // await
-          "keyword.control.conditional.js", // if
-          "keyword.control.loop.js", // for
-          "keyword.operator.new.js", // new
-          "variable.parameter.function-call.python", // parameters, added by Jason
+          "entity.name.type.class",
+          "keyword",
+          "storage.modifier",
+          "storage.type.class.js",
+          "storage.type.function.js",
+          "storage.type.js",
+          "keyword.control.import.js",
+          "keyword.control.from.js",
+          "keyword.control.flow.js",
+          "keyword.control.conditional.js",
+          "keyword.control.loop.js",
+          "keyword.operator.new.js",
+          "variable.parameter.function-call.python"
         ],
         "settings": { "fontStyle": "italic" }
       },
       {
         "scope": [
-          //following will be excluded from italics (My theme (Monokai dark) has some defaults I don't want to be in italics)
           "invalid",
           "keyword.operator",
           "constant.numeric.css",
@@ -64,23 +82,15 @@
       },
       {
         "scope": [
-          // following will make the parameters orange by Jason
-          "variable.parameter.function-call.python",
-          // "meta.function-call.arguments.python",
-          // "entity.name.function.decorator.python",
-          // "meta.function.decorator.python"
+          "variable.parameter.function-call.python"
         ],
         "settings": {
           "fontStyle": "bold",
           "foreground": "#eea781"
         }
       },
-
       {
         "scope": [
-          // following will make the parameters orange by Jason
-          // "variable.parameter.function-call.python",
-          // "meta.function-call.arguments.python",
           "entity.name.function.decorator.python",
           "meta.function.decorator.python"
         ],
@@ -91,8 +101,7 @@
       },
       {
         "scope": [
-          //following will make the '=' white by Jason
-          "keyword.operator.assignment.python",
+          "keyword.operator.assignment.python"
         ],
         "settings": {
           "fontStyle": "",
@@ -115,5 +124,6 @@
         "fontStyle": "italic"
       }
     }
-  }
+  },
+  "cmake.ignoreCMakeListsMissing": true
 }

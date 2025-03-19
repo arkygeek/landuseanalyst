@@ -1,11 +1,25 @@
 import xml.etree.ElementTree as ET
 from abc import ABCMeta, abstractmethod
 from qgis.PyQt import QtWidgets
+import logging
+
+logging.basicConfig(level=logging.ERROR)
 
 class MetaSerialisable(ABCMeta, type(QtWidgets.QDialog)):
     pass
 
 class LaSerialisable(metaclass=MetaSerialisable):
+    """
+        Abstract base class for objects that can be serialized to and from XML.
+
+        This class provides a common interface for objects that need to be
+        persisted to XML format. It defines abstract methods for converting
+        the object to and from XML strings, as well as methods for writing
+        the XML representation to a file and reading it back from a file.
+
+        Classes that inherit from LaSerialisable must implement the toXml()
+        and fromXml() methods.
+        """
     def __init__(self):
         super().__init__()
 
@@ -23,10 +37,11 @@ class LaSerialisable(metaclass=MetaSerialisable):
         """Write the object to an XML file."""
         try:
             with open(file_name, 'w') as file:
-                file.write(self.toXml())
+                xml_string = self.toXml() or ""
+                file.write(xml_string)
             return True
         except IOError as e:
-            print(f"Failed to write to file {file_name}: {e}")
+            logging.error(f"Failed to write to file {file_name}: {e}")
             return False
 
     def fromXmlFile(self, file_name):
@@ -37,8 +52,10 @@ class LaSerialisable(metaclass=MetaSerialisable):
             self.fromXml(xml_string)
             return True
         except IOError as e:
-            print(f"Failed to read from file {file_name}: {e}")
+            logging.error(f"Failed to read from file {file_name}: {e}")
             return False
+
+
 
 
 # # laserialisable.py

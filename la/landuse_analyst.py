@@ -19,7 +19,7 @@
 # third party imports
 from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication, QLocale
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtWidgets import QAction
+from qgis.PyQt.QtWidgets import QAction, QDialog
 
 # import of 'built-ins'
 import os.path
@@ -28,8 +28,8 @@ import os.path
 
 # the following line for resources is required
 from la.resources_rc import *  # Initialize Qt resources from file resources.py
-from la.gui.lamainform import LaMainForm  # Import dialog code
-
+from la.ui.lamainformbase import LaMainFormBase  # Import dialog code
+from la.gui.lamainform import LaMainForm
 
 class LanduseAnalyst:
     """QGIS Plugin Implementation."""
@@ -44,6 +44,7 @@ class LanduseAnalyst:
         """
         # Save reference to the QGIS interface
         self.iface = iface
+        self.dlg = LaMainFormBase()  # Initialize the dialog
 
         #initialize plugin directory
         self.plugin_dir = os.path.dirname(__file__)  # initialize plugin directory
@@ -195,23 +196,17 @@ class LanduseAnalyst:
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
 
         icon_path = ':/la_icon_small.png'
-        self.add_action(
-            icon_path,
-            text=self.tr(u'Model archaeological site catchement areas'),
-            callback=self.run,
-            parent=self.iface.mainWindow())
 
-        # will be set False in run()
-        self.first_start = True
+        self.action = QAction(QIcon(icon_path), "Landuse Analyst", self.iface.mainWindow())
+        self.action.triggered.connect(self.run)
+        self.iface.addToolBarIcon(self.action)
+        self.iface.addPluginToMenu("&Landuse Analyst", self.action)
 
 
     def unload(self):
         """Removes the plugin menu item and icon from QGIS GUI."""
-        for action in self.actions:
-            self.iface.removePluginMenu(
-                self.tr(u'&Landuse Analyst'),
-                action)
-            self.iface.removeToolBarIcon(action)
+        self.iface.removeToolBarIcon(self.action)
+        self.iface.removePluginMenu("&Landuse Analyst", self.action)
 
 
     def run(self):
