@@ -10,7 +10,6 @@ from la.resources_rc import *
 
 from la.lib.laserialisable import LaSerialisable
 from la.lib.laguid import LaGuid
-from la.lib.la import LaTripleMap, LaRasterInfo, LaFoodSourceMap, HerdSize, LaReportMap
 from la.lib.la import AreaUnits as LaAreaUnits
 from la.lib.la import EnergyType as LaEnergyType
 
@@ -58,29 +57,32 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
     reseedChanged = pyqtSignal(float)
     cropRotationChanged = pyqtSignal(bool)  # Changed to bool to match C++
     fallowRatioChanged = pyqtSignal(float)
-    fallowValueChanged = pyqtSignal(int)    # Changed to int to match C++
+    fallowEnergyTypeChanged = pyqtSignal(LaEnergyType)  # Changed to LaEnergyType to match C++
+    fallowValueChanged = pyqtSignal(int)    # Added missing signal declaration
     areaUnitsChanged = pyqtSignal(object)   # Using object because LaAreaUnits is an enum
     useCommonLandChanged = pyqtSignal(bool)
     useSpecificLandChanged = pyqtSignal(bool)
     rasterNameChanged = pyqtSignal(str)
 
-    def __init__(self, theCropParameter: Optional['LaCropParameter'] = None):
+    def __init__(self, theCropParameter: Optional['LaCropParameter'] = None, parent=None):
         """
         Initialize a new crop parameter object.
 
         :param theCropParameter: Optional crop parameter to copy from
         :type theCropParameter: Optional[LaCropParameter]
         """
-        super().__init__()
-        self.mGuid = LaGuid()
+        super().__init__(parent)
+        # Initialize with empty GUID - LaGuid's __init__ will set proper GUID
+        self.setGuid(None)  # Call the method from LaGuid instead of setting property directly
         self.mName = "No Name Set"
         self.mDescription = "Not Set"
         self.mCropGuid = ""
         self.mPercentTameCrop = 0.0
-        self.mSpoilage = 0.0
-        self.mReseed = 0.0
+        self.mSpoilage = 0
+        self.mReseed = 0
         self.mCropRotation = False
         self.mFallowRatio = 0.0
+        self.mFallowEnergyType = LaEnergyType.KCalories
         self.mFallowValue = 0
         self.mAreaUnits = LaAreaUnits.Dunum
         self.mUseCommonLand = False
@@ -89,21 +91,38 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
 
         if theCropParameter is not None:
             # Copy from existing parameter
-            self.name(theCropParameter.name)
-            self.name = theCropParameter.name
-            self.description = theCropParameter.description
-            self.guid = theCropParameter.guid
-            self.cropGuid = theCropParameter.cropGuid
-            self.percentTameCrop = theCropParameter.percentTameCrop
-            self.spoilage = theCropParameter.spoilage
-            self.reseed = theCropParameter.reseed
-            self.cropRotation = theCropParameter.cropRotation
-            self.fallowRatio = theCropParameter.fallowRatio
-            self.fallowValue = theCropParameter.fallowValue
-            self.areaUnits = theCropParameter.areaUnits
-            self.useCommonLand = theCropParameter.useCommonLand
-            self.useSpecificLand = theCropParameter.useSpecificLand
-            self.rasterName = theCropParameter.rasterName
+            self.setGuid(theCropParameter.guid())  # Use the method from LaGuid
+            self.mName = theCropParameter.name
+            self.mDescription = theCropParameter.description
+            self.mCropGuid = theCropParameter.cropGuid
+            self.mPercentTameCrop = theCropParameter.percentTameCrop
+            self.mSpoilage = theCropParameter.spoilage
+            self.mReseed = theCropParameter.reseed
+            self.mCropRotation = theCropParameter.cropRotation
+            self.mFallowRatio = theCropParameter.fallowRatio
+            self.mFallowValue = theCropParameter.fallowValue
+            self.mAreaUnits = theCropParameter.areaUnits
+            self.mUseCommonLand = theCropParameter.useCommonLand
+            self.mUseSpecificLand = theCropParameter.useSpecificLand
+            self.mRasterName = theCropParameter.rasterName
+
+    # Remove the conflicting property accessor methods
+    # @property
+    # def guid(self):
+    #    """Get the GUID (Globally Unique Identifier) of this crop."""
+    #    return self._guid
+    #
+    # @guid.setter
+    # def guid(self, theGuid):
+    #    """Set the GUID (Globally Unique Identifier) for this crop parameter."""
+    #    self.mGuid = theGuid
+
+    # Use only the PyQt property that calls the LaGuid parent class method
+    @pyqtProperty(str, notify=guidChanged)
+    def guid(self) -> str:
+        """Get the GUID of the crop parameter."""
+        # Call the inherited method from LaGuid
+        return super().guid()
 
     @pyqtProperty(str, notify=nameChanged)
     def name(self) -> str: #type: ignore
@@ -128,18 +147,6 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
         if self.mDescription != theDescription:
             self.mDescription = theDescription
             self.descriptionChanged.emit(theDescription)
-
-    @pyqtProperty(str, notify=guidChanged)
-    def guid(self) -> str: #type: ignore
-        """Get the GUID of the crop parameter."""
-        return str(self.mGuid)
-
-    @guid.setter
-    def guid(self, theGuid: str) -> None:
-        """Set the GUID of the crop parameter."""
-        if self.mGuid != theGuid:
-            self.mGuid = theGuid
-            self.guidChanged.emit(theGuid)
 
     @pyqtProperty(str, notify=cropGuidChanged)
     def cropGuid(self) -> str: #type: ignore
@@ -237,6 +244,18 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
             print(f"Warning: Failed to convert fallowRatio value to float: {theValue}")
             self.mFallowRatio = 0.0
             self.fallowRatioChanged.emit(0.0)
+
+    @pyqtProperty(LaEnergyType, notify=fallowEnergyTypeChanged)
+    def fallowEnergyType(self) -> LaEnergyType:
+        """Get the energy type for fallow."""
+        return LaEnergyType.mFallowEnergyType
+
+    @fallowEnergyType.setter
+    def fallowEnergyType(self, theEnergyType: LaEnergyType) -> None:
+        """Signal emitted when the fallow energy type changes."""
+        if self.mFallowEnergyType != theEnergyType:
+            self.mFallowEnergyType = theEnergyType
+            self.fallowEnergyTypeChanged.emit(theEnergyType)
 
     @pyqtProperty(int, notify=fallowValueChanged)
     def fallowValue(self) -> int: #type: ignore
@@ -359,7 +378,6 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
         :rtype: str
         """
         from la.lib.lautils import LaUtils
-
         myString = f"<cropParameter guid=\"{self.guid}\">\n"
         myString += f"  <name>{self.name}</name>\n"
         myString += f"  <description>{self.description}</description>\n"
@@ -398,9 +416,10 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
                 warnings.warn("Failed to parse XML: myTopElement is null. The XML element could not be found or parsed.")
                 return False
 
-            # Use property assignment instead of calling them as functions
-            self.guid = myTopElement.attribute("guid")
-            # Change from function calls to assignments
+            # Use setGuid method from LaGuid instead of trying to assign to the property directly
+            self.setGuid(myTopElement.attribute("guid"))
+            
+            # Continue loading other parameters
             self.mName = LaUtils.xmlDecode(myTopElement.firstChildElement("name").text())
             self.mDescription = LaUtils.xmlDecode(myTopElement.firstChildElement("description").text())
             self.mCropGuid = LaUtils.xmlDecode(myTopElement.firstChildElement("crop").text())
@@ -470,3 +489,11 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
         info += f"  useSpecificLand: {self.useSpecificLand} (type: {type(self.useSpecificLand)})\n"
         info += f"  rasterName: {self.rasterName} (type: {type(self.rasterName)})\n"
         return info
+
+def on_toolNew_clicked(self):
+    """Create a new crop parameter"""
+    myCropParameter = LaCropParameter()
+    myCropParameter.setGuid(None)  # Use setGuid instead of guid property setter.
+    self.mCropParameter = myCropParameter
+    self.showCropParameter()
+

@@ -69,9 +69,9 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
             self._fodderEnergyType = ""
             self._areaUnits = ""
         else: # If a crop IS provided, copy the values from the existing crop.
+            self._guid = theCrop.guid
             self._name = theCrop.name
             self._description = theCrop.description
-            self._guid = theCrop.guid
             self._cropYield = theCrop.cropYield
             self._calories = theCrop.cropCalories
             self._fodderProduction = theCrop.cropFodderProduction
@@ -138,14 +138,14 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         return self._guid
 
     @guid.setter
-    def guid(self, value):
+    def guid(self, theGuid):
         """
         Set the GUID (Globally Unique Identifier) for this crop.
 
         :param value: The new GUID value
         :type value: str
         """
-        self._guid = value
+        self._guid = theGuid
 
     @pyqtProperty(str, notify=nameChanged)
     def name(self): #type: ignore
@@ -291,16 +291,16 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         return self._fodderEnergyType
 
     @cropFodderEnergyType.setter
-    def cropFodderEnergyType(self, cropFodderEnergyType):
+    def cropFodderEnergyType(self, theCropFodderEnergyType):
         """
         Set the energy type for measuring fodder value.
 
         :param cropFodderEnergyType: The new fodder energy measurement type
         :type cropFodderEnergyType: LaEnergyType
         """
-        if self._fodderEnergyType != cropFodderEnergyType:
-            self._fodderEnergyType = cropFodderEnergyType
-            self.cropFodderEnergyTypeChanged.emit(cropFodderEnergyType)
+        if self._fodderEnergyType != theCropFodderEnergyType:
+            self._fodderEnergyType = theCropFodderEnergyType
+            self.cropFodderEnergyTypeChanged.emit(theCropFodderEnergyType)
 
     @pyqtProperty(LaAreaUnits, notify=areaUnitsChanged)
     def areaUnits(self): #type: ignore

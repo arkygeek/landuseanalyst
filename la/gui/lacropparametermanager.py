@@ -225,16 +225,15 @@ class LaCropParameterManager(LaCropParameterManagerBase):
         myCurrentRow = 0
         for myGuid, myCropParameter in self.mCropParameterMap.items():
             if theGuid is None and myCurrentRow == 0:  # Default to first item if no GUID specified
-                theGuid = self.safe_guid(myCropParameter.guid)
+                theGuid = myCropParameter.guid
 
             # Convert both GUIDs to safe strings for comparison
-            if self.safe_guid(myCropParameter.guid) == self.safe_guid(theGuid):
+            if myCropParameter.guid == theGuid:
                 mySelectedRow = myCurrentRow
 
             self.tblCropParameterProfiles.insertRow(myCurrentRow)
             # Use the safe GUID string for display and storage
-            safe_guid_str = self.safe_guid(myCropParameter.guid)
-            mypFileNameItem = QTableWidgetItem(safe_guid_str)
+            mypFileNameItem = QTableWidgetItem(myCropParameter.guid)
             self.tblCropParameterProfiles.setItem(myCurrentRow, 0, mypFileNameItem)
             mypNameItem = QTableWidgetItem(str(myCropParameter.name) + "  (" + str(myCropParameter.description) + ")")
             self.tblCropParameterProfiles.setItem(myCurrentRow, 1, mypNameItem)
@@ -280,26 +279,33 @@ class LaCropParameterManager(LaCropParameterManagerBase):
 
     def on_toolCopy_clicked(self):
         """Copy the selected crop parameter"""
+        # Don't attempt to copy if no row is selected
         if self.tblCropParameterProfiles.currentRow() < 0:
             return
 
+        # Get the GUID of the selected crop parameter
         myGuid = self.tblCropParameterProfiles.item(self.tblCropParameterProfiles.currentRow(), 0).text()
         if not myGuid:
             return
 
-        # Use proper path joining
+        # Load the original crop parameter
         myOriginalFileName = os.path.join(LaUtils.userCropParameterProfilesDirPath(), f"{myGuid}.xml")
         myCropParameter = LaCropParameter()
         myCropParameter.fromXmlFile(myOriginalFileName)
-        myCropParameter.setGuid(None)  # Will generate a new GUID
-        
-        # Get string guid using our helper
-        safe_guid_str = self.safe_guid(myCropParameter.guid)
-        myNewFileName = os.path.join(LaUtils.userCropParameterProfilesDirPath(), f"{safe_guid_str}.xml")
-        
+
+        # Generate a new GUID for the copy
+        myCropParameter.setGuid()  # This will automatically generate a new GUID
+
+        # Set the name to indicate it's a copy
         myCropParameter.name = "Copy of " + myCropParameter.name
+
+        # Save the copy to a new file named with its GUID
+        myNewFileName = os.path.join(LaUtils.userCropParameterProfilesDirPath(), 
+                                   f"{myCropParameter.guid}.xml")
         myCropParameter.toXmlFile(myNewFileName)
-        self.refreshCropParameterTable(safe_guid_str)
+
+        # Refresh the table and select the new item
+        self.refreshCropParameterTable(myCropParameter.guid)
 
     def on_toolDelete_clicked(self):
         """Delete the selected crop parameter"""
@@ -328,8 +334,8 @@ class LaCropParameterManager(LaCropParameterManagerBase):
         try:
             # Convert numeric values properly
             self.mCropParameter.percentTameCrop = float(self.sbPercentTameCrop.value())
-            self.mCropParameter.spoilage = float(self.sbSpoilage.value())
-            self.mCropParameter.reseed = float(self.sbReseed.value())
+            self.mCropParameter.spoilage = int(self.sbSpoilage.value())
+            self.mCropParameter.reseed = int(self.sbReseed.value())
             self.mCropParameter.fallowRatio = float(self.sbFallowRatio.value())
             self.mCropParameter.fallowValue = int(self.sbFallowValue.value())
         except (ValueError, TypeError) as e:
@@ -339,7 +345,7 @@ class LaCropParameterManager(LaCropParameterManagerBase):
         self.mCropParameter.cropRotation = self.grpCropRotation.isChecked()
         self.mCropParameter.useCommonLand = self.checkBoxUseCommonLand.isChecked()
         self.mCropParameter.useSpecificLand = self.checkBoxUseSpecificLand.isChecked()
-        
+
         # Handle area units
         from la.lib.la import AreaUnits
         unit_text = self.cbAreaUnits.currentText()
@@ -353,13 +359,12 @@ class LaCropParameterManager(LaCropParameterManagerBase):
             self.mCropParameter.rasterName = self.cboRaster.currentText()
 
         # Use safe_guid for consistent string representation
-        safe_guid_str = self.safe_guid(self.mCropParameter.guid)
-        target_file = os.path.join(LaUtils.userCropParameterProfilesDirPath(), f"{safe_guid_str}.xml")
-        
+        target_file = os.path.join(LaUtils.userCropParameterProfilesDirPath(), f"{self.mCropParameter.guid}.xml")
+
         # Save to file
         success = self.mCropParameter.toXmlFile(target_file)
         if success:
-            self.refreshCropParameterTable(safe_guid_str)
+            self.refreshCropParameterTable(self.mCropParameter.guid)
         else:
             QMessageBox.warning(self, "Landuse Analyst", f"Failed to save crop parameter to {target_file}")
 
