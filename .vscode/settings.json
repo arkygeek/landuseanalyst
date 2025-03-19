@@ -1,13 +1,22 @@
 {
+  "python.defaultInterpreterPath": "/home/arkygeek/anaconda3/envs/qgis_dev/bin/python",
   "python.analysis.extraPaths": [
+    "/home/arkygeek/anaconda3/envs/qgis_dev/share/qgis/python",
+    "/home/arkygeek/anaconda3/envs/qgis_dev/share/qgis/python/plugins",
+    "/home/arkygeek/anaconda3/envs/qgis_dev/lib/python3.12/site-packages",
+    "/home/arkygeek/anaconda3/envs/qgis_dev/share/qgis/python/core",
     "/Applications/QGIS.app/Contents/Resources/python",
-    "./landuse_analyst/Support/QGIS/QGIS3/profiles/default/python/plugins/python/plugins/landuse_analyst"
-  ],
+    "/Users/arkygeek/landuse_analyst/Support/QGIS/QGIS3/profiles/default/python/plugins/landuse_analyst",
+    "/Applications/QGIS.app/Contents/MacOS/lib/python3.9/site-packages",
+    "/Applications/QGIS.app/Contents/MacOS/lib/python3.9/site-packages/PyQt5/"
 
+
+  ],
+  "python.analysis.typeCheckingMode": "basic",
   "python.formatting.provider": "black",
 
   "maptz.regionfolder": {
-    "[python]": {        
+    "[python]": {
         "defaultFoldStartRegex": "\\#[\\s]*#region\\(collapsed\\)[\\s]*(.*)",
         "foldEnd": "# #endregion",
         "foldEndRegex": "\\#[\\s]*#endregion",
@@ -16,7 +25,7 @@
     }
   },
 
-  "editor.tokenColorCustomizations": {    
+  "editor.tokenColorCustomizations": {
     "textMateRules": [
       {
         "scope": [
@@ -38,7 +47,7 @@
           "keyword.operator.new.js", // new
           "variable.parameter.function-call.python", // parameters, added by Jason
         ],
-        "settings": { "fontStyle": "italic" } 
+        "settings": { "fontStyle": "italic" }
       },
       {
         "scope": [
@@ -52,7 +61,7 @@
           "entity.name.type.class.js"
         ],
         "settings": { "fontStyle": "" }
-      }, 
+      },
       {
         "scope": [
           // following will make the parameters orange by Jason
@@ -106,6 +115,5 @@
         "fontStyle": "italic"
       }
     }
-  },
-  "python.analysis.typeCheckingMode": "basic",
+  }
 }
