@@ -366,7 +366,7 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
                 warnings.warn("Failed to parse XML: myTopElement is null. The XML element could not be found or parsed.")
                 return False
 
-            self.guid = (myTopElement.attribute("guid"))
+            self.guid = myTopElement.attribute("guid")
             self._name = LaUtils.xmlDecode(myTopElement.firstChildElement("name").text())
             self._description = LaUtils.xmlDecode(myTopElement.firstChildElement("description").text())
 

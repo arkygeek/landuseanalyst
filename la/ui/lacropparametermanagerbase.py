@@ -18,7 +18,7 @@
 
 import os
 from qgis.PyQt.QtCore import Qt
-from qgis.PyQt.QtWidgets import QDialog
+from qgis.PyQt.QtWidgets import QDialog, QComboBox
 from qgis.PyQt.uic import loadUiType
 
 # Load the UI form for the crop parameter manager
@@ -44,3 +44,80 @@ class LaCropParameterManagerBase(QDialog, Ui_LaCropParameterManagerBase):
 
         # Basic initialization of UI elements
         self.mCropParameter = None
+
+    def safe_guid(self, guid_obj):
+        """Convert a GUID object or string to a string representation.
+        
+        Args:
+            guid_obj: A GUID object or string
+            
+        Returns:
+            str: The string representation of the GUID
+        """
+        if guid_obj is None:
+            return ""
+        
+        # If it's already a string, return it
+        if isinstance(guid_obj, str):
+            return guid_obj
+            
+        # Try to get the guid attribute (LaGuid objects have this)
+        if hasattr(guid_obj, 'guid'):
+            return str(guid_obj.guid)
+            
+        # Last resort, convert to string
+        return str(guid_obj)
+        
+    def set_area_units_index(self, area_units):
+        """Set the area units combo box to the appropriate index for the given enum value.
+        
+        Args:
+            area_units: An AreaUnits enum value or integer
+            
+        Returns:
+            bool: True if successful, False otherwise
+        """
+        try:
+            # If it's already an integer, use it directly
+            if isinstance(area_units, int):
+                self.cbAreaUnits.setCurrentIndex(area_units)
+                return True
+                
+            # If it's an enum, get its integer value
+            if hasattr(area_units, 'value'):
+                self.cbAreaUnits.setCurrentIndex(area_units.value)
+                return True
+                
+            # Otherwise try direct conversion
+            self.cbAreaUnits.setCurrentIndex(int(area_units))
+            return True
+        except (ValueError, TypeError, AttributeError) as e:
+            print(f"Error setting area units: {e}")
+            # Default to first item
+            self.cbAreaUnits.setCurrentIndex(0)
+            return False
+            
+    def setComboToDefault(self, combo_box, default_value):
+        """Set a combo box to the item matching the given value.
+        
+        Args:
+            combo_box: QComboBox to modify
+            default_value: Value to match in the user role data
+            
+        Returns:
+            bool: True if found and set, False otherwise
+        """
+        if not default_value:
+            return False
+            
+        # Convert GUID objects to strings if needed
+        if not isinstance(default_value, str):
+            default_value = self.safe_guid(default_value)
+            
+        # Search for matching item
+        for i in range(combo_box.count()):
+            combo_box.setCurrentIndex(i)
+            if combo_box.itemData(i, Qt.UserRole) == default_value:
+                return True
+                
+        return False

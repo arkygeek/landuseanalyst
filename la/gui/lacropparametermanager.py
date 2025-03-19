@@ -147,9 +147,13 @@ class LaCropParameterManager(LaCropParameterManagerBase):
         myGuid = self.tblCropParameterProfiles.item(self.tblCropParameterProfiles.currentRow(), 0).text()
         myFileName = myGuid + ".xml"
         self.selectCropParameter(myFileName)
-        myCrop = LaUtils.getCrop(self.cboCrop.itemData(self.cboCrop.currentIndex(), Qt.UserRole))
-        myAnimalPic = QPixmap(myCrop.imageFile)
-        self.lblCropPic.setPixmap(myAnimalPic)
+        self.updateCropPicture()
+    
+    def updateCropPicture(self):
+        """Update the crop picture based on the selected crop"""
+        if self.cboCrop.currentIndex() >= 0:
+            myCrop = LaUtils.getCrop(self.cboCrop.itemData(self.cboCrop.currentIndex(), Qt.UserRole))
+            self.lblCropPic.setPixmap(QPixmap(myCrop.imageFile))
 
     def on_cboCrop_changed(self, theIndex):
         """Handle change in crop selection"""
@@ -170,18 +174,18 @@ class LaCropParameterManager(LaCropParameterManagerBase):
         try:
             # Check if these are QDoubleSpinBox or QSpinBox widgets
             if hasattr(self.sbPercentTameCrop, 'decimals'):  # It's a QDoubleSpinBox
-                self.sbPercentTameCrop.setValue(self.mCropParameter.percentTameCrop)
-                self.sbSpoilage.setValue(self.mCropParameter.spoilage)
-                self.sbReseed.setValue(self.mCropParameter.reseed)
-                self.sbFallowRatio.setValue(self.mCropParameter.fallowRatio)
+                self.sbPercentTameCrop.setValue(float(self.mCropParameter.percentTameCrop))
+                self.sbSpoilage.setValue(float(self.mCropParameter.spoilage))
+                self.sbReseed.setValue(float(self.mCropParameter.reseed))
+                self.sbFallowRatio.setValue(float(self.mCropParameter.fallowRatio))
             else:  # It's a QSpinBox
-                self.sbPercentTameCrop.setValue(self.mCropParameter.percentTameCrop)
-                self.sbSpoilage.setValue(self.mCropParameter.spoilage)
-                self.sbReseed.setValue(self.mCropParameter.reseed)
-                self.sbFallowRatio.setValue(self.mCropParameter.fallowRatio)
+                self.sbPercentTameCrop.setValue(int(self.mCropParameter.percentTameCrop))
+                self.sbSpoilage.setValue(int(self.mCropParameter.spoilage))
+                self.sbReseed.setValue(int(self.mCropParameter.reseed))
+                self.sbFallowRatio.setValue(int(self.mCropParameter.fallowRatio))
 
             # FallowValue should be an integer
-            self.sbFallowValue.setValue(self.mCropParameter.fallowValue)
+            self.sbFallowValue.setValue(int(self.mCropParameter.fallowValue))
         except (ValueError, TypeError) as e:
             print(f"Error converting values in showCropParameter: {e}")
 
@@ -190,11 +194,8 @@ class LaCropParameterManager(LaCropParameterManagerBase):
         self.checkBoxUseCommonLand.setChecked(bool(self.mCropParameter.useCommonLand))
         self.checkBoxUseSpecificLand.setChecked(bool(self.mCropParameter.useSpecificLand))
 
-        # Area units
-        try:
-            self.cbAreaUnits.setCurrentIndex(self.mCropParameter.areaUnits)
-        except (ValueError, TypeError) as e:
-            print(f"Error setting area units: {e}")
+        # Use the helper method for area units
+        self.set_area_units_index(self.mCropParameter.areaUnits)
 
     def resizeEvent(self, theEvent):
         """Handle resize event to adjust table columns"""
@@ -224,13 +225,16 @@ class LaCropParameterManager(LaCropParameterManagerBase):
         myCurrentRow = 0
         for myGuid, myCropParameter in self.mCropParameterMap.items():
             if theGuid is None and myCurrentRow == 0:  # Default to first item if no GUID specified
-                theGuid = myCropParameter.guid
+                theGuid = self.safe_guid(myCropParameter.guid)
 
-            if myCropParameter.guid == theGuid:
+            # Convert both GUIDs to safe strings for comparison
+            if self.safe_guid(myCropParameter.guid) == self.safe_guid(theGuid):
                 mySelectedRow = myCurrentRow
 
             self.tblCropParameterProfiles.insertRow(myCurrentRow)
-            mypFileNameItem = QTableWidgetItem(myGuid)
+            # Use the safe GUID string for display and storage
+            safe_guid_str = self.safe_guid(myCropParameter.guid)
+            mypFileNameItem = QTableWidgetItem(safe_guid_str)
             self.tblCropParameterProfiles.setItem(myCurrentRow, 0, mypFileNameItem)
             mypNameItem = QTableWidgetItem(str(myCropParameter.name) + "  (" + str(myCropParameter.description) + ")")
             self.tblCropParameterProfiles.setItem(myCurrentRow, 1, mypNameItem)
@@ -258,16 +262,19 @@ class LaCropParameterManager(LaCropParameterManagerBase):
     def selectCropParameter(self, theFileName):
         """Load a crop parameter from a file"""
         myCropParameterDir = LaUtils.userCropParameterProfilesDirPath()
+        filePath = os.path.join(myCropParameterDir, theFileName)
         myCropParameter = LaCropParameter()
-        myCropParameter.fromXmlFile(myCropParameterDir + QDir.separator() + theFileName)
-        self.leName.setText(myCropParameter.name)
-        self.mCropParameter = myCropParameter
-        self.showCropParameter()
+        if os.path.exists(filePath):
+            myCropParameter.fromXmlFile(filePath)
+            self.mCropParameter = myCropParameter
+            self.showCropParameter()
+        else:
+            print(f"Error: File does not exist: {filePath}")
 
     def on_toolNew_clicked(self):
         """Create a new crop parameter"""
         myCropParameter = LaCropParameter()
-        myCropParameter.setGuid(None)
+        myCropParameter.setGuid(None)  # Generate new GUID
         self.mCropParameter = myCropParameter
         self.showCropParameter()
 
@@ -280,14 +287,19 @@ class LaCropParameterManager(LaCropParameterManagerBase):
         if not myGuid:
             return
 
-        myOriginalFileName = LaUtils.userCropParameterProfilesDirPath() + QDir.separator() + myGuid + ".xml"
+        # Use proper path joining
+        myOriginalFileName = os.path.join(LaUtils.userCropParameterProfilesDirPath(), f"{myGuid}.xml")
         myCropParameter = LaCropParameter()
         myCropParameter.fromXmlFile(myOriginalFileName)
-        myCropParameter.setGuid(LaGuid().guid())
-        myNewFileName = LaUtils.userCropParameterProfilesDirPath() + QDir.separator() + str(myCropParameter.guid) + ".xml"
+        myCropParameter.setGuid(None)  # Will generate a new GUID
+        
+        # Get string guid using our helper
+        safe_guid_str = self.safe_guid(myCropParameter.guid)
+        myNewFileName = os.path.join(LaUtils.userCropParameterProfilesDirPath(), f"{safe_guid_str}.xml")
+        
         myCropParameter.name = "Copy of " + myCropParameter.name
         myCropParameter.toXmlFile(myNewFileName)
-        self.refreshCropParameterTable(myCropParameter.guid)
+        self.refreshCropParameterTable(safe_guid_str)
 
     def on_toolDelete_clicked(self):
         """Delete the selected crop parameter"""
@@ -297,9 +309,10 @@ class LaCropParameterManager(LaCropParameterManagerBase):
         myGuid = self.tblCropParameterProfiles.item(self.tblCropParameterProfiles.currentRow(), 0).text()
         if myGuid:
             from qgis.PyQt.QtCore import QFile
-            myFile = QFile(LaUtils.userCropParameterProfilesDirPath() + QDir.separator() + myGuid + ".xml")
+            filePath = os.path.join(LaUtils.userCropParameterProfilesDirPath(), f"{myGuid}.xml")
+            myFile = QFile(filePath)
             if not myFile.remove():
-                QMessageBox.warning(self, "Landuse Analyst", "Unable to delete file: " + myFile.fileName())
+                QMessageBox.warning(self, "Landuse Analyst", f"Unable to delete file: {myFile.fileName()}")
             self.refreshCropParameterTable()
 
     def on_pbnApply_clicked(self):
@@ -307,14 +320,14 @@ class LaCropParameterManager(LaCropParameterManagerBase):
         if not self.mCropParameter:
             return
 
+        # Save current values to the crop parameter
         self.mCropParameter.name = self.leName.text()
         self.mCropParameter.description = self.leDescription.text()
         self.mCropParameter.cropGuid = self.cboCrop.itemData(self.cboCrop.currentIndex(), Qt.UserRole)
 
-        # Handle numeric values with proper type conversion
         try:
-            # Always store as float or int in the model, regardless of widget type
-            self.mCropParameter.percentTameCrop = int(self.sbPercentTameCrop.value())
+            # Convert numeric values properly
+            self.mCropParameter.percentTameCrop = float(self.sbPercentTameCrop.value())
             self.mCropParameter.spoilage = float(self.sbSpoilage.value())
             self.mCropParameter.reseed = float(self.sbReseed.value())
             self.mCropParameter.fallowRatio = float(self.sbFallowRatio.value())
@@ -326,19 +339,29 @@ class LaCropParameterManager(LaCropParameterManagerBase):
         self.mCropParameter.cropRotation = self.grpCropRotation.isChecked()
         self.mCropParameter.useCommonLand = self.checkBoxUseCommonLand.isChecked()
         self.mCropParameter.useSpecificLand = self.checkBoxUseSpecificLand.isChecked()
-
+        
         # Handle area units
-        mySelectedAreaUnit = self.cbAreaUnits.currentText()
         from la.lib.la import AreaUnits
-        if mySelectedAreaUnit == "Dunum":
+        unit_text = self.cbAreaUnits.currentText()
+        if unit_text == "Dunum":
             self.mCropParameter.areaUnits = AreaUnits.Dunum
-        elif mySelectedAreaUnit == "Hectare":
+        elif unit_text == "Hectare":
             self.mCropParameter.areaUnits = AreaUnits.Hectare
 
-        self.mCropParameter.rasterName = self.cboRaster.currentText()
-        self.mCropParameter.toXmlFile(str(LaUtils.userCropParameterProfilesDirPath) + QDir.separator() +
-                                     str(self.mCropParameter.guid) + ".xml")
-        self.refreshCropParameterTable(self.mCropParameter.guid)
+        # Get the raster name if available
+        if hasattr(self, 'cboRaster'):
+            self.mCropParameter.rasterName = self.cboRaster.currentText()
+
+        # Use safe_guid for consistent string representation
+        safe_guid_str = self.safe_guid(self.mCropParameter.guid)
+        target_file = os.path.join(LaUtils.userCropParameterProfilesDirPath(), f"{safe_guid_str}.xml")
+        
+        # Save to file
+        success = self.mCropParameter.toXmlFile(target_file)
+        if success:
+            self.refreshCropParameterTable(safe_guid_str)
+        else:
+            QMessageBox.warning(self, "Landuse Analyst", f"Failed to save crop parameter to {target_file}")
 
     def setComboToDefault(self, thepCombo, theDefault):
         """

@@ -399,29 +399,50 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
                 return False
 
             # Use property assignment instead of calling them as functions
-            self.setGuid(myTopElement.attribute("guid"))
+            self.guid = myTopElement.attribute("guid")
+            # Change from function calls to assignments
             self.mName = LaUtils.xmlDecode(myTopElement.firstChildElement("name").text())
             self.mDescription = LaUtils.xmlDecode(myTopElement.firstChildElement("description").text())
             self.mCropGuid = LaUtils.xmlDecode(myTopElement.firstChildElement("crop").text())
-            self.mPercentTameCrop = myTopElement.firstChildElement("percentTameCrop").text()
-            self.mSpoilage = myTopElement.firstChildElement("spoilage").text()
-            self.mReseed = myTopElement.firstChildElement("reseed").text()
+
+            # Parse numeric values with proper conversion
+            try:
+                self.mPercentTameCrop = float(myTopElement.firstChildElement("percentTameCrop").text())
+            except (ValueError, TypeError):
+                self.mPercentTameCrop = 0.0
+
+            try:
+                self.mSpoilage = myTopElement.firstChildElement("spoilage").text()
+            except (ValueError, TypeError):
+                self.mSpoilage = 0
+
+            try:
+                self.mReseed = myTopElement.firstChildElement("reseed").text()
+            except (ValueError, TypeError):
+                self.mReseed = 0
+
+            # Parse boolean and other values similarly
             self.mCropRotation = myTopElement.firstChildElement("cropRotation").text()
-            self.mFallowRatio = myTopElement.firstChildElement("fallowRatio").text()
-            self.mFallowValue = myTopElement.firstChildElement("fallowValue").text()
+
+            try:
+                self.mFallowRatio = float(myTopElement.firstChildElement("fallowRatio").text())
+            except (ValueError, TypeError):
+                self.mFallowRatio = 0.0
+
+            try:
+                self.mFallowValue = int(myTopElement.firstChildElement("fallowValue").text())
+            except (ValueError, TypeError):
+                self.mFallowValue = 0
 
             # Handle area units
             myAreaUnits = myTopElement.firstChildElement("areaUnits").text()
             self.mAreaUnits = LaAreaUnits.Dunum if myAreaUnits == "Dunum" else LaAreaUnits.Hectare
-            # Convert AreaUnits enum to integer index
-            # self.cbAreaUnits.setCurrentIndex(self.mAreaUnits.value)
 
-            self.mUseCommonLand = bool(int(myTopElement.firstChildElement("useCommonLand").text()))
-            self.mUseSpecificLand = bool(int(myTopElement.firstChildElement("useSpecificLand").text()))
+            self.mUseCommonLand = myTopElement.firstChildElement("useCommonLand").text()
+            self.mUseSpecificLand = myTopElement.firstChildElement("useSpecificLand").text()
             self.mRasterName = LaUtils.xmlDecode(myTopElement.firstChildElement("rasterName").text())
 
             return True
-
         except Exception as e:
             print(f"DEBUG: Error in fromXml: {str(e)}")
             import traceback
