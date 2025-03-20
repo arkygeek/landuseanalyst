@@ -91,7 +91,7 @@ This plugin is designed to work across multiple platforms, including Linux, Wind
 
 For more detailed information on the project, including design decisions and implementation details, refer to the following documents:
 - [Thesis available here](https://www.researchgate.net/publication/311589270_The_Impact_of_South_Levantine_Early_Bronze_Age_Communities_On_Their_Landscapes)
-- [Project Documentation](./docs/index.html)
+- [Class Documentation](https://arkygeek.github.io/landuseanalyst)
 
 ## Contact
 
