@@ -31,7 +31,7 @@ class LaMessageBus(QObject):
     """
     # The signal that passes the message.
     messaged: pyqtSignal = pyqtSignal(str)
-    
+
     # Add a debug signal for debugging messages
     debugMessaged: pyqtSignal = pyqtSignal(str)
 
@@ -41,24 +41,24 @@ MESSAGE_BUS: LaMessageBus = LaMessageBus()
 class LaDebugLogger:
     """
     A singleton logger class that handles debug messages for Land Use Analyst.
-    
+
     This class provides methods for logging debug messages to different outputs
     based on the current debug settings.
     """
     _mInstance = None
     _mDebug_enabled = False
     _mLog_callback = None
-    
-    def __new__(cls):
+
+    def __new__(cls): # cls is not following naming conventions (ex. theCls would normally be used here) but we have to 
         if cls._mInstance is None:
             cls._mInstance = super(LaDebugLogger, cls).__new__(cls)
         return cls._mInstance
-    
+
     @classmethod
     def initialize(cls, enabled: bool = False, callback: Optional[Callable[[str], None]] = None):
         """
         Initialize the debug logger.
-        
+
         Args:
             enabled: Whether debug logging is enabled
             callback: Optional callback function that will receive debug messages
@@ -66,44 +66,44 @@ class LaDebugLogger:
         cls._mDebug_enabled = enabled
         cls._mLog_callback = callback
         print(f"Debug logger initialized with enabled={enabled}, callback={callback}")  # Diagnostic
-    
+
     @classmethod
     def set_enabled(cls, enabled: bool):
         """
         Enable or disable debug logging.
-        
+
         Args:
             enabled: Whether debug logging should be enabled
         """
         cls._mDebug_enabled = enabled
         print(f"Debug logging set to: {enabled}")
-    
+
     @classmethod
     def log(cls, message: str, component: str = "General"):
         """
         Log a debug message if debug logging is enabled.
-        
+
         Args:
             message: The debug message to log
             component: The component generating the message
         """
         if cls._mDebug_enabled:
             myFormattedDebugMessage = f"[DEBUG] [{component}] {message}"
-            
+
             # Print to console for development
             print(myFormattedDebugMessage)
-            
+
             # Send to callback if available (e.g., UI logger)
             if cls._mLog_callback:
                 cls._mLog_callback(myFormattedDebugMessage)
-            
+
             # Emit on message bus
             MESSAGE_BUS.debugMessaged.emit(myFormattedDebugMessage)
 
 class LaUtils:
     """
     A utility class for Land Use Analyst.
-    
+
     This class provides various static methods for getting and manipulating data 
     directories, animal and crop profiles, conversion tables, animal and crop 
     parameter profiles, and images. It also provides methods for encoding and decoding
@@ -111,7 +111,7 @@ class LaUtils:
     """
     # Initialize the debug logger
     debug = LaDebugLogger()
-    
+
     @staticmethod
     def userSettingsDirPath() -> str:
         """
@@ -444,10 +444,10 @@ class LaUtils:
         myMap = {}
         myDirectory = QDir(LaUtils.userCropParameterProfilesDirPath())
         myList = myDirectory.entryInfoList(QDir.Dirs | QDir.Files | QDir.NoSymLinks)
-        
+
         LaUtils.debug.log(f"Scanning for crop parameters in: {LaUtils.userCropParameterProfilesDirPath()}", "CropParams")
         LaUtils.debug.log(f"Found {len(myList)} entries", "CropParams")
-        
+
         for myFileInfo in myList:
             # Ignore directories
             if myFileInfo.fileName() in [".", ".."]:
@@ -470,7 +470,7 @@ class LaUtils:
                     myMap[myCropParameter.guid] = myCropParameter
                 except Exception as e:
                     LaUtils.debug.log(f"Error loading crop parameter: {str(e)}", "CropParams")
-        
+
         LaUtils.debug.log(f"Returning {len(myMap)} crop parameters", "CropParams")
         return myMap
 

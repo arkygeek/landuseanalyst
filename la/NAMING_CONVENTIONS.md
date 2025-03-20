@@ -22,6 +22,21 @@ best practices where appropriate.
 - Event handlers and slots follow Qt naming convention with `on_` prefix
   - Example: `on_pbnApply_clicked()`, `on_toolNew_clicked()`
 
+### Special Case: Class Methods
+
+- Class methods decorated with `@classmethod` use `cls` as the first parameter name, not `theCls`
+  - This is a deliberate exception to our naming convention to maintain compatibility with standard Python practices
+  - The `cls` parameter name is so universally recognized in Python that deviating would reduce code readability
+  - Example:
+    ```python
+    @classmethod
+    def initialize(cls, theEnabled: bool = False):
+        # Use cls here, not theCls
+        cls._mDebug_enabled = theEnabled
+    ```
+- Other parameters in class methods still follow the `the` prefix convention
+  - Example: `@classmethod def fromXml(cls, theXmlString)`
+
 ## Variables
 
 ### Parameter Naming (Very Important)

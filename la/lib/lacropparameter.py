@@ -184,7 +184,7 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
         try:
             if not self._mSpoilage and self._mSpoilage != 0:  # Check if empty or None
                 return 0
-            return int(self._mSpoilage)
+            return int(str(self._mSpoilage))
         except (ValueError, TypeError):
             # Default to 0 if conversion fails
             return 0
@@ -208,7 +208,7 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
         try:
             if not self._mReseed and self._mReseed != 0:  # Check if empty or None
                 return 0
-            return int(self._mReseed)
+            return int(str(self._mReseed))
         except (ValueError, TypeError):
             # Default to 0 if conversion fails
             return 0
