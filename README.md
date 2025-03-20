@@ -95,7 +95,7 @@ For more detailed information on the project, including design decisions and imp
 
 ## Contact
 
-For any questions or contributions, please contact Jason Jorgenson at [your.email@example.com].
+For any questions or contributions, please contact Jason Jorgenson at [jjorgenson a@t gmail.com].
 
 ---
 
