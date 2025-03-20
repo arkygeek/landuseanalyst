@@ -1,14 +1,16 @@
 import sys
 import os
+from la.lib.lautils import LaMessageBus
 
-# Print the initial sys.path
-print("Initial sys.path:", sys.path)
+MESSAGE_BUS = LaMessageBus()
 
 # Update the sys.path to include the parent directory
+MESSAGE_BUS.debug("Initial sys.path: " + str(sys.path))
+
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 
 # Print the updated sys.path
-print("Updated sys.path:", sys.path)
+MESSAGE_BUS.debug("Updated sys.path: " + str(sys.path))
 
 import unittest
 from la.lib.laserialisable import LaSerialisable

@@ -1,14 +1,17 @@
 import sys
 import os
+from la.lib.lautils import LaMessageBus
+
+MESSAGE_BUS = LaMessageBus()
 
 # Print the initial sys.path
-print("Initial sys.path:", sys.path)
+MESSAGE_BUS.debug("Initial sys.path: " + str(sys.path))
 
 # Update the sys.path to include the parent directory
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 
 # Print the updated sys.path
-print("Updated sys.path:", sys.path)
+MESSAGE_BUS.debug("Updated sys.path: " + str(sys.path))
 
 import unittest
 

@@ -10,7 +10,7 @@ from qgis.PyQt.QtCore import QDir
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 
 # Import the LaUtils class
-from la.lib.lautils import LaUtils
+from la.lib.lautils import LaUtils, LaMessageBus
 from la.lib.laanimal import LaAnimal
 from la.lib.laanimalparameter import LaAnimalParameter
 from la.lib.lacrop import LaCrop
@@ -19,6 +19,8 @@ from la.lib.la import LaTripleMap
 
 import threading
 import time
+
+MESSAGE_BUS = LaMessageBus()
 
 def close_dialog(dialog):
     """Close the dialog."""
@@ -56,7 +58,7 @@ class TestLaUtils(unittest.TestCase):
     @patch('la.lib.lautils.QSettings')
     def test_userSettingsDirPath(self, theMockQSettings, theMockMakePath):
         # Mock the QSettings value method
-        print(f"Test number 1: userSettingsDirPath")
+        MESSAGE_BUS.debug("Test number 1: userSettingsDirPath")
         myMockSettingsInstance = MagicMock()
         myMockSettingsInstance.value.return_value = QDir.homePath() + "/.landuseAnalyst/"
         theMockQSettings.return_value = myMockSettingsInstance
@@ -75,7 +77,7 @@ class TestLaUtils(unittest.TestCase):
     @patch('la.lib.lautils.QSettings')
     def test_userSettingsDirPath_default(self, theMockQSettings, theMockMakePath):
         # Mock the QSettings value method to return None
-        print(f"Test number 2: userSettingsDirPath_default")
+        MESSAGE_BUS.debug("Test number 2: userSettingsDirPath_default")
         myMockSettingsInstance = MagicMock()
         myMockSettingsInstance.value.return_value = None
         theMockQSettings.return_value = myMockSettingsInstance
@@ -93,7 +95,7 @@ class TestLaUtils(unittest.TestCase):
     @patch('la.lib.lautils.os.makedirs')
     @patch('la.lib.lautils.LaUtils.userSettingsDirPath', return_value='/mock/path/to/settings')
     def test_getModelOutputDir(self, mock_userSettingsDirPath, theMockMakeDirs):
-        print(f"Test number 3: getModelOutputDir")
+        MESSAGE_BUS.debug("Test number 3: getModelOutputDir")
         # Call the static method
         myResult = LaUtils.getModelOutputDir()
         # Assert the expected path is returned
@@ -103,7 +105,7 @@ class TestLaUtils(unittest.TestCase):
 
     @patch('la.lib.lautils.QDir.mkpath')
     def test_userAnimalProfilesDirPath(self, theMockMakePath):
-        print(f"Test number 4: userAnimalProfilesDirPath")
+        MESSAGE_BUS.debug("Test number 4: userAnimalProfilesDirPath")
         # Call the static method
         myResult = LaUtils.userAnimalProfilesDirPath()
 
@@ -116,7 +118,7 @@ class TestLaUtils(unittest.TestCase):
 
     @patch('la.lib.lautils.QDir.mkpath')
     def test_userCropProfilesDirPath(self, theMockMakePath):
-        print(f"Test number 5: userCropProfilesDirPath")
+        MESSAGE_BUS.debug("Test number 5: userCropProfilesDirPath")
         # Call the static method
         myResult = LaUtils.userCropProfilesDirPath()
 
@@ -130,7 +132,7 @@ class TestLaUtils(unittest.TestCase):
 
     @patch('la.lib.lautils.QDir.mkpath')
     def test_userConversionTablesDirPath(self, theMockMakePath):
-        print(f"Test number 6: userConversionTablesDirPath")
+        MESSAGE_BUS.debug("Test number 6: userConversionTablesDirPath")
         # Call the static method
         myResult = LaUtils.userConversionTablesDirPath()
 
@@ -143,7 +145,7 @@ class TestLaUtils(unittest.TestCase):
 
     @patch('la.lib.lautils.QDir.mkpath')
     def test_userAnimalParameterProfilesDirPath(self, theMockMakePath):
-        print(f"Test number 7: userAnimalParameterProfilesDirPath")
+        MESSAGE_BUS.debug("Test number 7: userAnimalParameterProfilesDirPath")
         # Call the static method
         myResult = LaUtils.userAnimalParameterProfilesDirPath()
 
@@ -156,7 +158,7 @@ class TestLaUtils(unittest.TestCase):
 
     @patch('la.lib.lautils.QDir.mkpath')
     def test_userImagesDirPath(self, theMockMakePath):
-        print(f"Test number 8: userImagesDirPath")
+        MESSAGE_BUS.debug("Test number 8: userImagesDirPath")
         # Call the static method
         myResult = LaUtils.userImagesDirPath()
 
@@ -169,7 +171,7 @@ class TestLaUtils(unittest.TestCase):
 
     @patch('la.lib.lautils.QDir.mkpath')
     def test_userCropParameterProfilesDirPath(self, theMockMakePath):
-        print(f"Test number 9: userCropParameterProfilesDirPath")
+        MESSAGE_BUS.debug("Test number 9: userCropParameterProfilesDirPath")
         # Call the static method
         myResult = LaUtils.userCropParameterProfilesDirPath()
 
@@ -181,7 +183,7 @@ class TestLaUtils(unittest.TestCase):
         theMockMakePath.assert_called_once_with(myExpectedPath)
 
     def test_convertAreaToHectares(self):
-        print(f"Test number 10: convertAreaToHectares")
+        MESSAGE_BUS.debug("Test number 10: convertAreaToHectares")
         # Test conversion from Dunum to Hectares
         myResult = LaUtils.convertAreaToHectares("Dunum", 5)
         self.assertEqual(myResult, 50)
@@ -197,7 +199,7 @@ class TestLaUtils(unittest.TestCase):
     @patch('la.lib.lautils.QDir')
     @patch('la.lib.lautils.LaUtils.userAnimalProfilesDirPath')
     def test_getAvailableAnimals(self, theMockDirPath, theMockQDir):
-        print(f"Test number 11: getAvailableAnimals")
+        MESSAGE_BUS.debug("Test number 11: getAvailableAnimals")
         # Set up the directory containing the XML files
         myTestDir = os.path.join(os.path.dirname(__file__), 'xmlData', 'animalProfiles')
         theMockDirPath.return_value = myTestDir
@@ -243,7 +245,7 @@ class TestLaUtils(unittest.TestCase):
     @patch('la.lib.lautils.QDir')
     @patch('la.lib.lautils.LaUtils.userAnimalProfilesDirPath')
     def test_getAnimal(self, theMockDirPath, theMockQDir):
-        print(f"Test number 12: getAnimal")
+        MESSAGE_BUS.debug("Test number 12: getAnimal")
         # Set up the directory containing the XML files
         myTestDir = os.path.join(os.path.dirname(__file__), 'xmlData', 'animalProfiles')
         theMockDirPath.return_value = myTestDir
@@ -289,7 +291,7 @@ class TestLaUtils(unittest.TestCase):
     @patch('la.lib.lautils.QDir')
     @patch('la.lib.lautils.LaUtils.userAnimalParameterProfilesDirPath')
     def test_getAvailableAnimalParameters(self, theMockDirPath, theMockQDir):
-        print(f"Test number 13: getAvailableAnimalParameters")
+        MESSAGE_BUS.debug("Test number 13: getAvailableAnimalParameters")
         self.maxDiff = None  # Allow full diff to be displayed
         # Set up the directory containing the XML files
         myTestDir = os.path.join(os.path.dirname(__file__), 'xmlData', 'animalParameterProfiles')
@@ -337,7 +339,7 @@ class TestLaUtils(unittest.TestCase):
     @patch('la.lib.lautils.QDir')
     @patch('la.lib.lautils.LaUtils.userCropProfilesDirPath')
     def test_getAvailableCrops(self, theMockDirPath, theMockQDir):
-        print(f"Test number 14: getAvailableCrops")
+        MESSAGE_BUS.debug("Test number 14: getAvailableCrops")
         self.maxDiff = None  # Allow full diff to be displayed
         # Set up the directory containing the XML files
         myTestDir = os.path.join(os.path.dirname(__file__), 'xmlData', 'cropProfiles')
@@ -386,7 +388,7 @@ class TestLaUtils(unittest.TestCase):
     @patch('la.lib.lautils.QDir')
     @patch('la.lib.lautils.LaUtils.userCropProfilesDirPath')
     def test_getCrop(self, theMockDirPath, theMockQDir):
-        print(f"Test number 15: getCrop")
+        MESSAGE_BUS.debug("Test number 15: getCrop")
         self.maxDiff = None  # Allow full diff to be displayed
         # Set up the directory containing the XML files
         myTestDir = os.path.join(os.path.dirname(__file__), 'xmlData', 'cropProfiles')
@@ -435,7 +437,7 @@ class TestLaUtils(unittest.TestCase):
     @patch('la.lib.lautils.QDir')
     @patch('la.lib.lautils.LaUtils.userAnimalParameterProfilesDirPath')
     def test_getAnimalParameter(self, theMockDirPath, theMockQDir):
-        print(f"Test number 16: getAnimalParameter")
+        MESSAGE_BUS.debug("Test number 16: getAnimalParameter")
         # Set up the directory containing the XML files
         myTestDir = os.path.join(os.path.dirname(__file__), 'xmlData', 'animalParameterProfiles')
         theMockDirPath.return_value = myTestDir
@@ -481,7 +483,7 @@ class TestLaUtils(unittest.TestCase):
     @patch('la.lib.lautils.QDir')
     @patch('la.lib.lautils.LaUtils.userCropParameterProfilesDirPath')
     def test_getAvailableCropParameters(self, theMockDirPath, theMockQDir):
-        print(f"Test number 17: getAvailableCropParameters")
+        MESSAGE_BUS.debug("Test number 17: getAvailableCropParameters")
         # Set up the directory containing the XML files
         myTestDir = os.path.join(os.path.dirname(__file__), 'xmlData', 'cropParameterProfiles')
         theMockDirPath.return_value = myTestDir
@@ -527,7 +529,7 @@ class TestLaUtils(unittest.TestCase):
     @patch('la.lib.lautils.QDir')
     @patch('la.lib.lautils.LaUtils.userCropParameterProfilesDirPath')
     def test_getCropParameter(self, theMockDirPath, theMockQDir):
-        print(f"Test number 18: getCropParameter")
+        MESSAGE_BUS.debug("Test number 18: getCropParameter")
         # Set up the directory containing the XML files
         myTestDir = os.path.join(os.path.dirname(__file__), 'xmlData', 'cropParameterProfiles')
         theMockDirPath.return_value = myTestDir
@@ -572,7 +574,7 @@ class TestLaUtils(unittest.TestCase):
 
     def test_sortList(self):
         # Test sorting a list of strings in descending alphabetical order
-        print(f"Test number 19: sortList")
+        MESSAGE_BUS.debug("Test number 19: sortList")
 
         myInputList = ["banana", "apple", "cherry", "date"]
         myExpectedOutput = ["date", "cherry", "banana", "apple"]
@@ -593,7 +595,7 @@ class TestLaUtils(unittest.TestCase):
 
     def test_uniqueList(self):
         # Test removing duplicates from a sorted list
-        print(f"Test number 20: uniqueList")
+        MESSAGE_BUS.debug("Test number 20: uniqueList")
 
         myInputList = ["apple", "banana", "banana", "cherry", "date", "date"]
         myExpectedOutput = ["apple", "banana", "cherry", "date"]
@@ -622,7 +624,7 @@ class TestLaUtils(unittest.TestCase):
     @patch('os.walk')
     def test_getExperimentsList(self, theMockOsWalk, theMockExpandUser):
         # Mock the expanduser method to return a specific directory
-        print(f"Test number 21: getExperimentsList")
+        MESSAGE_BUS.debug("Test number 21: getExperimentsList")
 
         theMockExpandUser.return_value = '/mocked/home/.landuseAnalyst/modelOutputs/'
 
@@ -643,7 +645,7 @@ class TestLaUtils(unittest.TestCase):
     @patch('builtins.open', new_callable=mock_open)
     def test_createTextFile(self, theMockOpen):
         # Test creating a text file and writing data to it
-        print(f"Test number 22: createTextFile")
+        MESSAGE_BUS.debug("Test number 22: createTextFile")
 
         myFilename = 'test_file.txt'
         myData = 'This is a test.'
@@ -660,7 +662,7 @@ class TestLaUtils(unittest.TestCase):
 
     def test_xmlEncode(self):
         # Test encoding a string with special characters
-        print(f"Test number 23: xmlEncode")
+        MESSAGE_BUS.debug("Test number 23: xmlEncode")
 
         myInputString = "<test>&string"
         myExpectedOutput = "&lt;test&gt;&amp;string"
@@ -681,7 +683,7 @@ class TestLaUtils(unittest.TestCase):
 
     def test_xmlDecode(self):
         # Test decoding a string with XML entities
-        print(f"Test number 24: xmlDecode")
+        MESSAGE_BUS.debug("Test number 24: xmlDecode")
 
         myInputString = "&lt;test&gt;&amp;string"
         myExpectedOutput = "<test>&string"
@@ -702,7 +704,7 @@ class TestLaUtils(unittest.TestCase):
 
     def test_getStandardCss(self):
         # Test that the getStandardCss method returns the expected CSS string
-        print(f"Test number 25: getStandardCss")
+        MESSAGE_BUS.debug("Test number 25: getStandardCss")
 
         myExpectedOutput = (
             ".glossy{"
@@ -735,7 +737,7 @@ class TestLaUtils(unittest.TestCase):
     @patch('la.lib.laanimalparameter.LaAnimalParameter.getInstances')
     def test_getAnimalParameters(self, theMockGetInstances):
         # Mock the getInstances method to return a list of LaAnimalParameter instances
-        print(f"Test number 26: getAnimalParameters")
+        MESSAGE_BUS.debug("Test number 26: getAnimalParameters")
 
         myMockAnimalParam1 = MagicMock(spec=LaAnimalParameter)
         myMockAnimalParam2 = MagicMock(spec=LaAnimalParameter)
@@ -746,7 +748,7 @@ class TestLaUtils(unittest.TestCase):
 
     @patch.object(LaAnimalParameter, 'save')
     def test_addAnimalParameter(self, mock_save):
-        print(f"Test number 27: addAnimalParameter")
+        MESSAGE_BUS.debug("Test number 27: addAnimalParameter")
         # Create a mock LaAnimalParameter instance
         myMockAnimalParam = MagicMock(spec=LaAnimalParameter)
         # Call the addAnimalParameter method
@@ -756,7 +758,7 @@ class TestLaUtils(unittest.TestCase):
 
     @patch.object(LaAnimalParameter, 'save')
     def test_editAnimalParameter(self, mock_save):
-        print(f"Test number 28: editAnimalParameter")
+        MESSAGE_BUS.debug("Test number 28: editAnimalParameter")
         # Create a mock LaAnimalParameter instance
         myMockAnimalParam = MagicMock(spec=LaAnimalParameter)
         # Call the editAnimalParameter method
@@ -767,7 +769,7 @@ class TestLaUtils(unittest.TestCase):
     @patch.object(LaAnimalParameter, 'remove')
     @patch('la.lib.laanimalparameter.LaAnimalParameter.getInstanceByName')
     def test_removeAnimalParameter(self, theMockGetInstanceByName, mock_remove):
-        print(f"Test number 29: removeAnimalParameter")
+        MESSAGE_BUS.debug("Test number 29: removeAnimalParameter")
 
         # Create a mock LaAnimalParameter instance
         mock_animal_parameter = MagicMock(spec=LaAnimalParameter)
@@ -781,7 +783,7 @@ class TestLaUtils(unittest.TestCase):
 
 
     def test_LaTripleMap(self):
-        print(f"Test number 30: LaTripleMap")
+        MESSAGE_BUS.debug("Test number 30: LaTripleMap")
         # Create a LaTripleMap instance
         myTripleMap = {
             "animal1": (True, "param1"),
@@ -794,7 +796,7 @@ class TestLaUtils(unittest.TestCase):
 
 
     def test_generateGuid(self):
-        print(f"Test number 31: generateGuid")
+        MESSAGE_BUS.debug("Test number 31: generateGuid")
 
         # Call the generateGuid method
         myResult = LaUtils.generateGuid()
@@ -812,7 +814,7 @@ class TestLaUtils(unittest.TestCase):
     @patch('la.lib.lautils.QFile.copy')
     @patch('la.lib.lautils.LaUtils.userImagesDirPath', return_value=QDir.homePath() + "/.landuseAnalyst/images")
     def test_openGraphicFile(self, mock_userImagesDirPath, mock_copy, mock_getOpenFileName):
-        print(f"Test number 32: openGraphicFile")
+        MESSAGE_BUS.debug("Test number 32: openGraphicFile")
         # Mock the QFileDialog.getOpenFileName method
         mock_getOpenFileName.return_value = ("/mock/path/to/image.png", "")
         # Call the openGraphicFile method
@@ -828,7 +830,7 @@ class TestLaUtils(unittest.TestCase):
     @patch('la.lib.lautils.QFileDialog.getSaveFileName')
     @patch('la.lib.lautils.LaUtils.userConversionTablesDirPath', return_value=QDir.homePath() + "/.landuseAnalyst/conversionTables")
     def test_saveFile(self, theMockDirPath, theMockFilename):
-        print(f"Test number 33: saveFile")
+        MESSAGE_BUS.debug("Test number 33: saveFile")
         # Mock the QFileDialog.getSaveFileName method
         theMockFilename.return_value = ("/Users/arkygeek/.landuseAnalyst/conversionTables/file.csv", "")
         # Call the saveFile method
@@ -845,7 +847,7 @@ if __name__ == '__main__':
         def run(self, test):
             myResult = super().run(test)
             if myResult.wasSuccessful():
-                print("All tests passed successfully!")
+                MESSAGE_BUS.debug("All tests passed successfully!")
             return myResult
 
     unittest.main(testRunner=CustomTestRunner())

@@ -10,13 +10,15 @@ from typing import Optional, Type
 
 from qgis.PyQt.QtCore import QObject, pyqtSignal, pyqtProperty
 from qgis.PyQt.QtXml import QDomDocument
-
+from la.lib.lautils import LaMessageBus, LaUtils
 from la.resources_rc import *
 
 from la.lib.laserialisable import LaSerialisable
 from la.lib.laguid import LaGuid
 from la.lib.la import AreaUnits as LaAreaUnits
 from la.lib.la import EnergyType as LaEnergyType
+
+MESSAGE_BUS: LaMessageBus = LaMessageBus()
 
 class LaCrop(QObject, LaSerialisable, LaGuid):
     """ The LaCrop class represents a crop that can be grown in a simulation.
@@ -58,27 +60,27 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         """
         super().__init__(parent)
         if theCrop is None: # If NO crop is provided, initialize with default values.
-            self._guid = LaGuid.setGuid(self, None)
-            self._name = "No Name Set"
-            self._description = "Not Set"
-            self._cropYield = 60
-            self._calories = 3000
-            self._fodderProduction = 50
-            self._fodderValue = 1000
-            self._imageFile = ""
-            self._fodderEnergyType = ""
-            self._areaUnits = ""
+            self._mGuid = LaGuid.setGuid(self, None)
+            self._mName = "No Name Set"
+            self._mDescription = "Not Set"
+            self._mCropYield = 60
+            self._mCalories = 3000
+            self._mFodderProduction = 50
+            self._mFodderValue = 1000
+            self._mImageFile = ""
+            self._mFodderEnergyType = ""
+            self._mAreaUnits = ""
         else: # If a crop IS provided, copy the values from the existing crop.
-            self._guid = theCrop.guid
-            self._name = theCrop.name
-            self._description = theCrop.description
-            self._cropYield = theCrop.cropYield
-            self._calories = theCrop.cropCalories
-            self._fodderProduction = theCrop.cropFodderProduction
-            self._fodderValue = theCrop.cropFodderValue
-            self._fodderEnergyType = theCrop.cropFodderEnergyType
-            self._areaUnits = theCrop.areaUnits
-            self._imageFile = theCrop.imageFile
+            self._mGuid = theCrop.guid
+            self._mName = theCrop.name
+            self._mDescription = theCrop.description
+            self._mCropYield = theCrop.cropYield
+            self._mCalories = theCrop.cropCalories
+            self._mFodderProduction = theCrop.cropFodderProduction
+            self._mFodderValue = theCrop.cropFodderValue
+            self._mFodderEnergyType = theCrop.cropFodderEnergyType
+            self._mAreaUnits = theCrop.areaUnits
+            self._mImageFile = theCrop.imageFile
 
     def __eq__(self, other):
         """
@@ -92,10 +94,10 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         if not isinstance(other, LaCrop):
             return False
         myAttributes = [
-            '_name',              '_description',     '_guid',
-            '_cropYield',         '_calories',        '_fodderProduction',
-            '_fodderValue',       '_fodderEnergyType', '_areaUnits',
-            '_imageFile'
+            '_mName',              '_mDescription',     '_mGuid',
+            '_mCropYield',         '_mCalories',        '_mFodderProduction',
+            '_mFodderValue',       '_mFodderEnergyType', '_mAreaUnits',
+            '_mImageFile'
         ]
         return all(getattr(self, attr) == getattr(other, attr) for attr in myAttributes)
 
@@ -135,7 +137,7 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         :returns: The crop's GUID
         :rtype: str
         """
-        return self._guid
+        return self._mGuid
 
     @guid.setter
     def guid(self, theGuid):
@@ -145,7 +147,7 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         :param value: The new GUID value
         :type value: str
         """
-        self._guid = theGuid
+        self._mGuid = theGuid
 
     @pyqtProperty(str, notify=nameChanged)
     def name(self): #type: ignore
@@ -155,7 +157,7 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         :returns: The crop's name
         :rtype: str
         """
-        return self._name
+        return self._mName
 
     @name.setter
     def name(self, name):
@@ -165,8 +167,8 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         :param name: The new crop name
         :type name: str
         """
-        if self._name != name:
-            self._name = name
+        if self._mName != name:
+            self._mName = name
             self.nameChanged.emit(name)
 
     @pyqtProperty(str, notify=descriptionChanged)
@@ -177,7 +179,7 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         :returns: The crop's description
         :rtype: str
         """
-        return self._description
+        return self._mDescription
 
     @description.setter
     def description(self, description):
@@ -187,8 +189,8 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         :param description: The new crop description
         :type description: str
         """
-        if self._description != description:
-            self._description = description
+        if self._mDescription != description:
+            self._mDescription = description
             self.descriptionChanged.emit(description)
 
     @pyqtProperty(int, notify=yieldChanged)
@@ -199,8 +201,8 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         :returns: The crop's yield value
         :rtype: int
         """
-        myCropYield = self._cropYield
-        return self._cropYield
+        myCropYield = self._mCropYield
+        return self._mCropYield
 
     @cropYield.setter
     def cropYield(self, theYield):
@@ -210,8 +212,8 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         :param theYield: The new yield value
         :type theYield: int
         """
-        if self._cropYield != theYield:
-            self._cropYield = theYield
+        if self._mCropYield != theYield:
+            self._mCropYield = theYield
             self.yieldChanged.emit(theYield)
 
     @pyqtProperty(int, notify=cropCaloriesChanged)
@@ -222,7 +224,7 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         :returns: The calories per kilogram
         :rtype: int
         """
-        return self._calories
+        return self._mCalories
 
     @cropCalories.setter
     def cropCalories(self, cropCalories):
@@ -232,8 +234,8 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         :param cropCalories: The new caloric value
         :type cropCalories: int
         """
-        if self._calories != cropCalories:
-            self._calories = cropCalories
+        if self._mCalories != cropCalories:
+            self._mCalories = cropCalories
             self.cropCaloriesChanged.emit(cropCalories)
 
     @pyqtProperty(int, notify=cropFodderProductionChanged)
@@ -244,7 +246,7 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         :returns: The amount of fodder produced per area unit
         :rtype: int
         """
-        return self._fodderProduction
+        return self._mFodderProduction
 
     @cropFodderProduction.setter
     def cropFodderProduction(self, theCropFodderProduction):
@@ -254,8 +256,8 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         :param theCropFodderProduction: The new fodder production value
         :type theCropFodderProduction: int
         """
-        if self._fodderProduction != theCropFodderProduction:
-            self._fodderProduction = theCropFodderProduction
+        if self._mFodderProduction != theCropFodderProduction:
+            self._mFodderProduction = theCropFodderProduction
             self.cropFodderProductionChanged.emit(theCropFodderProduction)
 
     @pyqtProperty(int, notify=cropFodderValueChanged)
@@ -266,7 +268,7 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         :returns: The fodder's nutritional value
         :rtype: int
         """
-        return self._fodderValue
+        return self._mFodderValue
 
     @cropFodderValue.setter
     def cropFodderValue(self, cropFodderValue):
@@ -276,8 +278,8 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         :param cropFodderValue: The new fodder nutritional value
         :type cropFodderValue: int
         """
-        if self._fodderValue != cropFodderValue:
-            self._fodderValue = cropFodderValue
+        if self._mFodderValue != cropFodderValue:
+            self._mFodderValue = cropFodderValue
             self.cropFodderValueChanged.emit(cropFodderValue)
 
     @pyqtProperty(LaEnergyType, notify=cropFodderEnergyTypeChanged)
@@ -288,7 +290,7 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         :returns: The fodder energy measurement type
         :rtype: LaEnergyType
         """
-        return self._fodderEnergyType
+        return self._mFodderEnergyType
 
     @cropFodderEnergyType.setter
     def cropFodderEnergyType(self, theCropFodderEnergyType):
@@ -298,8 +300,8 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         :param cropFodderEnergyType: The new fodder energy measurement type
         :type cropFodderEnergyType: LaEnergyType
         """
-        if self._fodderEnergyType != theCropFodderEnergyType:
-            self._fodderEnergyType = theCropFodderEnergyType
+        if self._mFodderEnergyType != theCropFodderEnergyType:
+            self._mFodderEnergyType = theCropFodderEnergyType
             self.cropFodderEnergyTypeChanged.emit(theCropFodderEnergyType)
 
     @pyqtProperty(LaAreaUnits, notify=areaUnitsChanged)
@@ -310,7 +312,7 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         :returns: The area units used for yield calculations
         :rtype: LaAreaUnits
         """
-        return self._areaUnits
+        return self._mAreaUnits
 
     @areaUnits.setter
     def areaUnits(self, theAreaUnits):
@@ -320,8 +322,8 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         :param theAreaUnits: The new area units
         :type theAreaUnits: LaAreaUnits
         """
-        if self._areaUnits != theAreaUnits:
-            self._areaUnits = theAreaUnits
+        if self._mAreaUnits != theAreaUnits:
+            self._mAreaUnits = theAreaUnits
             self.areaUnitsChanged.emit(theAreaUnits)
 
     @pyqtProperty(str, notify=imageFileChanged)
@@ -332,7 +334,7 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         :returns: The image file path
         :rtype: str
         """
-        return self._imageFile
+        return self._mImageFile
 
     @imageFile.setter
     def imageFile(self, imageFile) -> None:
@@ -342,8 +344,8 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         :param imageFile: The new image file path
         :type imageFile: str
         """
-        if self._imageFile != imageFile:
-            self._imageFile = imageFile
+        if self._mImageFile != imageFile:
+            self._mImageFile = imageFile
             self.imageFileChanged.emit(imageFile)
 
     def fromXml(self, theXml):
@@ -367,37 +369,37 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
                 return False
 
             self.guid = myTopElement.attribute("guid")
-            self._name = LaUtils.xmlDecode(myTopElement.firstChildElement("name").text())
-            self._description = LaUtils.xmlDecode(myTopElement.firstChildElement("description").text())
+            self._mName = LaUtils.xmlDecode(myTopElement.firstChildElement("name").text())
+            self._mDescription = LaUtils.xmlDecode(myTopElement.firstChildElement("description").text())
 
             # Look for cropYield element - this is the main issue
             cropYieldElement = myTopElement.firstChildElement("cropYield")
             if not cropYieldElement.isNull():
                 try:
-                    self._cropYield = int(cropYieldElement.text())
-                    print(f"DEBUG: Found cropYield in XML: {self._cropYield}")
+                    self._mCropYield = int(cropYieldElement.text())
+                    LaUtils.debug.log(f"Found cropYield in XML: {self._mCropYield}")
                 except (ValueError, TypeError) as e:
-                    print(f"DEBUG: Error parsing cropYield from XML: {e}")
-                    self._cropYield = 60  # Default value
+                    LaUtils.debug.log(f"Error parsing cropYield from XML: {e}")
+                    self._mCropYield = 60  # Default value
             else:
-                print("DEBUG: cropYield element not found in XML")
-                self._cropYield = 60  # Default value
+                LaUtils.debug.log("cropYield element not found in XML")
+                self._mCropYield = 60  # Default value
 
             # Parse other elements similarly
             try:
-                self._calories = int(myTopElement.firstChildElement("cropCalories").text())
+                self._mCalories = int(myTopElement.firstChildElement("cropCalories").text())
             except (ValueError, TypeError):
-                self._calories = 3000  # Default value
+                self._mCalories = 3000  # Default value
 
             try:
-                self._fodderProduction = int(myTopElement.firstChildElement("fodderProduction").text())
+                self._mFodderProduction = int(myTopElement.firstChildElement("fodderProduction").text())
             except (ValueError, TypeError):
-                self._fodderProduction = 50  # Default value
+                self._mFodderProduction = 50  # Default value
 
             try:
-                self._fodderValue = int(myTopElement.firstChildElement("fodderCalories").text())
+                self._mFodderValue = int(myTopElement.firstChildElement("fodderCalories").text())
             except (ValueError, TypeError):
-                self._fodderValue = 1000  # Default value
+                self._mFodderValue = 1000  # Default value
 
             # Area units (stored as "yieldUnits" in XML with numeric value)
             yieldUnitsElement = myTopElement.firstChildElement("yieldUnits")
@@ -405,22 +407,22 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
                 try:
                     yieldUnitsValue = int(yieldUnitsElement.text())
                     if yieldUnitsValue == 0:
-                        self._areaUnits = LaAreaUnits.Dunum
+                        self._mAreaUnits = LaAreaUnits.Dunum
                     elif yieldUnitsValue == 1:
-                        self._areaUnits = LaAreaUnits.Hectare
+                        self._mAreaUnits = LaAreaUnits.Hectare
                 except (ValueError, TypeError):
-                    self._areaUnits = LaAreaUnits.Dunum  # Default
+                    self._mAreaUnits = LaAreaUnits.Dunum  # Default
 
             # Image path
             imageFileElement = myTopElement.firstChildElement("imageFile")
             if not imageFileElement.isNull():
-                self._imageFile = imageFileElement.text()
+                self._mImageFile = imageFileElement.text()
 
             return True
         except Exception as e:
             import traceback
-            print(f"DEBUG: Error in fromXml: {str(e)}")
-            print(traceback.format_exc())
+            LaUtils.debug.log(f"Error in fromXml: {str(e)}")
+            LaUtils.debug.log(traceback.format_exc())
             return False
 
     def fromXmlFile(self, filePath):
@@ -437,21 +439,21 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
             with open(filePath, 'r') as f:
                 xmlContent = f.read()
 
-            # Print the XML content for debugging
-            print(f"DEBUG: Loading crop from file: {filePath}")
-            print(f"DEBUG: XML content (first 200 chars): {xmlContent[:200]}...")
+            # Debug output for XML content
+            LaUtils.debug.log(f"Loading crop from file: {filePath}")
+            LaUtils.debug.log(f"XML content (first 200 chars): {xmlContent[:200]}...")
 
             # Parse the XML
             result = self.fromXml(xmlContent)
 
             # Debug output after parsing
-            print(f"DEBUG: After fromXml - cropYield: {self.cropYield}, cropFodderProduction: {self.cropFodderProduction}")
+            LaUtils.debug.log(f"After fromXml - cropYield: {self.cropYield}, cropFodderProduction: {self.cropFodderProduction}")
 
             return result
         except Exception as e:
-            print(f"DEBUG: Error in fromXmlFile for {filePath}: {str(e)}")
+            LaUtils.debug.log(f"Error in fromXmlFile for {filePath}: {str(e)}")
             import traceback
-            print(traceback.format_exc())
+            LaUtils.debug.log(traceback.format_exc())
             return False
 
     def toXml(self):

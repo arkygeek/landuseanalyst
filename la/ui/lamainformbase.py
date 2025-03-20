@@ -130,7 +130,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
     # read/load/display help file corresponding to selected item in helpTree
     @QtCore.pyqtSlot(QtWidgets.QTreeWidgetItem, QtWidgets.QTreeWidgetItem)
     def current_item_changed(self, theCurrentItem, thePreviousItem):
-        self.tbReport.append("Item clicked in help browser: " + theCurrentItem.text(0))
+        LaUtils.debug.log(f"Item clicked in help browser: {theCurrentItem.text(0)}", "Help")
         myQFile = QFile(":/" + theCurrentItem.text(0) + ".html")
         myQFile.open(QFile.ReadOnly | QFile.Text)
         istream = QTextStream(myQFile)
@@ -138,28 +138,24 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         myQFile.close()
 
     def on_clicked_pbnNewCrop(self):
-        print("open Manage Crops window printed")
-        self.tbReport.append("Manage Crops button clicked")
+        LaUtils.debug.log("Manage Crops button clicked", "UI")
         myCropsMap = self.mCropsMap  # Pass the crops map
         myCropManager = LaCropManager(myCropsMap, self)  # Pass parent if needed
         myCropManager.exec_()  # Use exec_ to show the dialog modally
 
     def on_clicked_pbnNewCropParameter(self):
-        print("open Crop Parameters window printed")
-        self.tbReport.append("Manage Crop Parameters button clicked")
+        LaUtils.debug.log("Manage Crop Parameters button clicked", "UI")
         myCropParametersMap = self.mCropParametersMap  # Pass the crops map
         myCropParameterManager = LaCropParameterManager(self)  # Pass parent if needed
         myCropParameterManager.exec_()  # Use exec_ to show the dialog modally
 
     def on_clicked_pbnNewAnimal(self):
-        print("open Manage Animals window printed")
-        self.tbReport.append("Manage Animals button clicked")
+        LaUtils.debug.log("Manage Animals button clicked", "UI")
         myAnimalManager = LaAnimalManager(self)  # Pass parent if needed
         myAnimalManager.exec_()  # Use exec_ to show the dialog modally
 
     def on_clicked_pbnNewAnimalParameter(self):
-        print("open Animal Parameters window")
-        self.tbReport.append("Manage Animal Parameters button clicked")
+        LaUtils.debug.log("Manage Animal Parameters button clicked", "UI")
         myAnimalParameterManager = LaAnimalParameterManager(self)  # Pass parent if needed
         myAnimalParameterManager.exec_()  # Use exec_ to show the dialog modally
 
@@ -201,17 +197,17 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             # Animal breakdown
             wildAnimalPercent = wildTameAnimalRatio
             tameAnimalPercent = 100 - wildTameAnimalRatio
-
+            
             # Plant breakdown
             wildPlantPercent = wildTamePlantRatio
             tamePlantPercent = 100 - wildTamePlantRatio
-
+            
             # Calculate absolute percentages (of total diet)
             absoluteWildAnimalPercent = (animalPercent * wildAnimalPercent) / 100
             absoluteTameAnimalPercent = (animalPercent * tameAnimalPercent) / 100
             absoluteWildPlantPercent = (plantPercent * wildPlantPercent) / 100
             absoluteTamePlantPercent = (plantPercent * tamePlantPercent) / 100
-
+            
             # Update the main percentage labels which we know exist
             self.labelMeatPercent.setText(str(animalPercent))
             self.labelCropPercent.setText(str(plantPercent))
@@ -219,7 +215,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             self.labelMeatTamePercent.setText(str(tameAnimalPercent))
             self.labelCropWildPercent.setText(str(wildPlantPercent))
             self.labelCropTamePercent.setText(str(tamePlantPercent))
-
+            
             # Try to update additional percentage breakdown labels if they exist
             # Use hasattr to safely check if the attribute exists before trying to access it
             label_map = {
@@ -228,36 +224,34 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                 'labelWildCropsPercentage': f"{absoluteWildPlantPercent:.1f}%",
                 'labelTameCropsPercentage': f"{absoluteTamePlantPercent:.1f}%"
             }
-
+            
             for label_name, value in label_map.items():
                 if hasattr(self, label_name):
                     getattr(self, label_name).setText(value)
                 else:
                     # Optional: Create a debug message
-                    self.tbReport.append(f"Note: Label '{label_name}' not found in the UI")
-
+                    LaUtils.debug.log(f"Note: Label '{label_name}' not found in the UI", "UI")
+            
             # Update the model if needed
             if hasattr(self, 'model'):
                 self.model.setPlantAnimalRatio(plantAnimalRatio)
                 self.model.setWildTameAnimalRatio(wildTameAnimalRatio)
                 self.model.setWildTamePlantRatio(wildTamePlantRatio)
-
+            
             # Also update any visualization or graph that depends on these values
             if hasattr(self, 'updateDietPieChart'):
                 self.updateDietPieChart()
-
-            self.tbReport.append("Diet labels updated")
-
+                
+            LaUtils.debug.log("Diet labels updated", "Diet")
             # Show the calculated percentages in the report for debugging
-            self.tbReport.append(f"Animal: {animalPercent}%, Plant: {plantPercent}%")
-            self.tbReport.append(f"Wild Animal: {absoluteWildAnimalPercent:.1f}%, Tame Animal: {absoluteTameAnimalPercent:.1f}%")
-            self.tbReport.append(f"Wild Plant: {absoluteWildPlantPercent:.1f}%, Tame Plant: {absoluteTamePlantPercent:.1f}%")
-
+            LaUtils.debug.log(f"Animal: {animalPercent}%, Plant: {plantPercent}%", "Diet")
+            LaUtils.debug.log(f"Wild Animal: {absoluteWildAnimalPercent:.1f}%, Tame Animal: {absoluteTameAnimalPercent:.1f}%", "Diet")
+            LaUtils.debug.log(f"Wild Plant: {absoluteWildPlantPercent:.1f}%, Tame Plant: {absoluteTamePlantPercent:.1f}%", "Diet")
+            
         except Exception as e:
-            self.tbReport.append(f"Error updating diet labels: {str(e)}")
+            LaUtils.debug.log(f"Error updating diet labels: {str(e)}", "Error")
             import traceback
-            print(f"Error in setDietLabels: {traceback.format_exc()}")
-            self.tbReport.append(traceback.format_exc())
+            LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
 
     def setModel(self, *args):
         from la.lib.la import AreaUnits
@@ -310,7 +304,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                     myValue = (myValue[0], myParameterGuid)
                 if myValue[1] == myAnimalParameter.guid:
                     if myValue[0]:
-                        myRunningPercentage += myAnimalParameter.percentTameMeat
+                        myRunningPercentage += float(str(myAnimalParameter.percentTameMeat))
                     mypPercentItem = QtWidgets.QTableWidgetItem(str(myAnimalParameter.percentTameMeat))
                     self.tblAnimals.setItem(myCurrentRow, 3, mypPercentItem)
                 mypCombo.addItem(myIcon, myParameterName, myParameterGuid)
@@ -395,7 +389,8 @@ class LaMainFormBase(QDialog, FORM_CLASS):
 
         # The item text is the name of the help file
         helpFileName = current.text(0)
-        self.tbReport.append(f"Help item clicked: {helpFileName}")
+        LaUtils.debug.log(f"Help item clicked: {helpFileName}", "Help")
+
 
         # Load the help file content
         try:
@@ -409,6 +404,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                 self.textHelp.setHtml(f"<p>Could not open help file: {helpFilePath}</p>")
         except Exception as e:
             self.textHelp.setHtml(f"<p>Error loading help: {str(e)}</p>")
+            LaUtils.debug.log(f"Error loading help file: {str(e)}", "Error")
 
     def cropCalcClicked(self, current, previous):
         """Handle crop calculation item click event.
@@ -428,12 +424,12 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         if not cropGuid:
             return
 
-        self.tbReport.append(f"Crop calculation clicked: {current.text()} (GUID: {cropGuid})")
+        LaUtils.debug.log(f"Crop calculation clicked: {current.text()} (GUID: {cropGuid})", "Calculation")
 
         # Get the crop object
         crop = LaUtils.getCrop(cropGuid)
         if crop is None or crop.name == "":
-            self.tbReport.append("Could not find crop")
+            LaUtils.debug.log("Could not find crop", "Error")
             return
 
         # Display crop details in the text browser
@@ -449,19 +445,19 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         # Display crop image if available
         if hasattr(crop, 'imageFile') and crop.imageFile:
             imagePath = LaUtils.resolvePath(crop.imageFile, 'image')
-            self.tbReport.append(f"Attempting to load crop image for calculation: {imagePath}")
+            LaUtils.debug.log(f"Attempting to load crop image for calculation: {imagePath}", "UI")
 
             if imagePath and os.path.exists(imagePath):
                 pixmap = QPixmap(imagePath)
                 if not pixmap.isNull():
                     self.lblCropPicCalcs.setPixmap(pixmap)
-                    self.tbReport.append("Crop calculation image loaded successfully")
+                    LaUtils.debug.log("Crop calculation image loaded successfully", "UI")
                 else:
                     self.lblCropPicCalcs.clear()
-                    self.tbReport.append(f"Failed to create pixmap for calculation from {imagePath}")
+                    LaUtils.debug.log(f"Failed to create pixmap for calculation from {imagePath}", "Error")
             else:
                 self.lblCropPicCalcs.clear()
-                self.tbReport.append(f"Calculation image path doesn't exist: {imagePath}")
+                LaUtils.debug.log(f"Calculation image path doesn't exist: {imagePath}", "Warning")
         else:
             self.lblCropPicCalcs.clear()
 
@@ -486,12 +482,12 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         if not animalGuid:
             return
 
-        self.tbReport.append(f"Animal calculation clicked: {current.text()} (GUID: {animalGuid})")
+        LaUtils.debug.log(f"Animal calculation clicked: {current.text()} (GUID: {animalGuid})", "Calculation")
 
         # Get the animal object
         animal = LaUtils.getAnimal(animalGuid)
         if animal is None or animal.name == "":
-            self.tbReport.append("Could not find animal")
+            LaUtils.debug.log("Could not find animal", "Error")
             return
 
         # Display animal details - check widget names based on the UI form design
@@ -502,7 +498,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
 
         # Display animal image if available
         if hasattr(animal, 'imageFile') and animal.imageFile:
-            imagePath = LaUtils.resolvePath(animal.imageFile, 'image')
+            imagePath = LaUtils.resolvePath(str(animal.imageFile), 'image')
             if os.path.exists(imagePath):
                 pixmap = QtGui.QPixmap(imagePath)
                 if not pixmap.isNull():
@@ -626,7 +622,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                 # Update the total percentages if this animal is checked
                 self.updateTotalPercentages()
         except Exception as e:
-            self.tbReport.append(f"Error in animalCalcSelectionChanged: {str(e)}")
+            LaUtils.debug.log(f"Error in animalCalcSelectionChanged: {str(e)}", "Error")
 
     def cropCalcSelectionChanged(self, row, column):
         """Handle changes in crop calculations table.
@@ -669,7 +665,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                 # Update the total percentages if this crop is checked
                 self.updateTotalPercentages()
         except Exception as e:
-            self.tbReport.append(f"Error in cropCalcSelectionChanged: {str(e)}")
+            LaUtils.debug.log(f"Error in cropCalcSelectionChanged: {str(e)}", "Error")
 
     def on_cbDebug_clicked(self):
         """Handle debug checkbox click.
@@ -677,8 +673,8 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         This method toggles the visibility of debug information in the application.
         """
         isChecked = self.cbDebug.isChecked()
-        self.tbReport.setVisible(isChecked)
-        self.tbReport.append(f"Debug mode {'enabled' if isChecked else 'disabled'}")
+        self.tbLogs.setVisible(isChecked)
+        LaUtils.debug.log(f"Debug mode {'enabled' if isChecked else 'disabled'}", "Debug")
 
     def addAnimalToCalculationsList(self, animalGuid):
         """Add an animal to the calculations list.
@@ -695,7 +691,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         # Add the animal to the list
         animal = LaUtils.getAnimal(animalGuid)
         if animal and animal.name:
-            item = QListWidgetItem(animal.name)
+            item = QListWidgetItem(str(animal.name))
             item.setData(QtCore.Qt.UserRole, animalGuid)
             self.listWidgetCalculationsAnimal.addItem(item)
 
@@ -754,7 +750,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         for guid, value in self.mAnimalsMap.items():
             isChecked, parameterGuid = value
             if isChecked and parameterGuid in myAnimalParametersMap:
-                animalTotal += myAnimalParametersMap[parameterGuid].percentTameMeat
+                animalTotal += float(str(myAnimalParametersMap[parameterGuid].percentTameMeat))
 
         # Calculate crop percentages
         cropTotal = 0.0
@@ -790,10 +786,10 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             # If the above doesn't work, we'll just skip setting the icons
             # but still log the percentages
         except Exception as e:
-            self.tbReport.append(f"Warning: Could not update status icons: {str(e)}")
+            LaUtils.debug.log(f"Warning: Could not update status icons: {str(e)}", "Warning")
 
         # Log the updated percentages regardless of icon status
-        self.tbReport.append(f"Total percentages updated: Animals {animalTotal:.1f}%, Crops {cropTotal:.1f}%")
+        LaUtils.debug.log(f"Total percentages updated: Animals {animalTotal:.1f}%, Crops {cropTotal:.1f}%", "Calculation")
 
     def showSelectedAnimalDetails(self, row):
         """Show details for the selected animal.
@@ -812,13 +808,13 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                 self.lblAnimalPix.clear()
                 # Display image if available
                 if animal.imageFile:
-                    imagePath = LaUtils.resolvePath(animal.imageFile, 'image')
+                    imagePath = LaUtils.resolvePath(str(animal.imageFile), 'image')
                     if os.path.exists(imagePath):
                         pixmap = QtGui.QPixmap(imagePath)
                         if not pixmap.isNull():
                             self.lblAnimalPix.setPixmap(pixmap)
         except Exception as e:
-            self.tbReport.append(f"Error showing animal details: {str(e)}")
+            LaUtils.debug.log(f"Error showing animal details: {str(e)}", "Error")
 
     def showSelectedCropDetails(self, row):
         """Show details for the selected crop.
@@ -846,21 +842,21 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                 # Display image if available
                 if hasattr(crop, 'imageFile') and crop.imageFile:
                     imagePath = LaUtils.resolvePath(crop.imageFile, 'image')
-                    self.tbReport.append(f"Attempting to load crop image: {imagePath}")
+                    LaUtils.debug.log(f"Attempting to load crop image: {imagePath}", "UI")
 
                     if imagePath and os.path.exists(imagePath):
                         pixmap = QPixmap(imagePath)
                         if not pixmap.isNull():
                             self.lblCropPix.setPixmap(pixmap)
-                            self.tbReport.append("Crop image loaded successfully")
+                            LaUtils.debug.log("Crop image loaded successfully", "UI")
                         else:
-                            self.tbReport.append(f"Failed to create pixmap from {imagePath}")
+                            LaUtils.debug.log(f"Failed to create pixmap from {imagePath}", "Error")
                     else:
-                        self.tbReport.append(f"Image path doesn't exist: {imagePath}")
+                        LaUtils.debug.log(f"Image path doesn't exist: {imagePath}", "Warning")
         except Exception as e:
-            self.tbReport.append(f"Error showing crop details: {str(e)}")
+            LaUtils.debug.log(f"Error showing crop details: {str(e)}", "Error")
             import traceback
-            self.tbReport.append(traceback.format_exc())
+            LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
 
     def updateCropCalculations(self, crop):
         """Update calculations for a crop.

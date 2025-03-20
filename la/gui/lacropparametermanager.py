@@ -171,23 +171,16 @@ class LaCropParameterManager(LaCropParameterManagerBase):
         self.setComboToDefault(self.cboCrop, self.mCropParameter.cropGuid)
 
         # Handle numeric values with proper type conversion
-        try:
-            # Check if these are QDoubleSpinBox or QSpinBox widgets
-            if hasattr(self.sbPercentTameCrop, 'decimals'):  # It's a QDoubleSpinBox
-                self.sbPercentTameCrop.setValue(float(self.mCropParameter.percentTameCrop))
-                self.sbSpoilage.setValue(float(self.mCropParameter.spoilage))
-                self.sbReseed.setValue(float(self.mCropParameter.reseed))
-                self.sbFallowRatio.setValue(float(self.mCropParameter.fallowRatio))
-            else:  # It's a QSpinBox
-                self.sbPercentTameCrop.setValue(int(self.mCropParameter.percentTameCrop))
-                self.sbSpoilage.setValue(int(self.mCropParameter.spoilage))
-                self.sbReseed.setValue(int(self.mCropParameter.reseed))
-                self.sbFallowRatio.setValue(int(self.mCropParameter.fallowRatio))
+        # Check if these are QDoubleSpinBox or QSpinBox widgets
+        # use_float = hasattr(self.sbPercentTameCrop, 'decimals')  # It's a QDoubleSpinBox
 
-            # FallowValue should be an integer
-            self.sbFallowValue.setValue(int(self.mCropParameter.fallowValue))
-        except (ValueError, TypeError) as e:
-            print(f"Error converting values in showCropParameter: {e}")
+        # We know these are QDoubleSpinBox so they are floats 
+        self.sbPercentTameCrop.setValue(float(self.mCropParameter.percentTameCrop))
+        self.sbFallowRatio.setValue(float(self.mCropParameter.fallowRatio))
+        # We know these are QSpinBox so they are ints
+        self.sbSpoilage.setValue(int(self.mCropParameter.spoilage))
+        self.sbReseed.setValue(int(self.mCropParameter.reseed))
+        self.sbFallowValue.setValue(int(self.mCropParameter.fallowValue))
 
         # Boolean values
         self.grpCropRotation.setChecked(bool(self.mCropParameter.cropRotation))
@@ -195,7 +188,7 @@ class LaCropParameterManager(LaCropParameterManagerBase):
         self.checkBoxUseSpecificLand.setChecked(bool(self.mCropParameter.useSpecificLand))
 
         # Use the helper method for area units
-        self.set_area_units_index(self.mCropParameter.areaUnits)
+        self.setAreaUnitsIndex(self.mCropParameter.areaUnits)
 
     def resizeEvent(self, theEvent):
         """Handle resize event to adjust table columns"""

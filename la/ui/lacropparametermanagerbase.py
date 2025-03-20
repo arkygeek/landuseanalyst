@@ -45,7 +45,7 @@ class LaCropParameterManagerBase(QDialog, Ui_LaCropParameterManagerBase):
         # Basic initialization of UI elements
         self.mCropParameter = None
 
-    def set_area_units_index(self, area_units):
+    def setAreaUnitsIndex(self, area_units):
         """Set the area units combo box to the appropriate index for the given enum value.
 
         Args:

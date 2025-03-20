@@ -20,7 +20,7 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
     fallowRatioChanged = pyqtSignal(float)
     fallowEnergyTypeChanged = pyqtSignal(LaEnergyType)
     fallowValueChanged = pyqtSignal(int)
-    areaUnitsChanged = pyqtSignal(object)
+    areaUnitsChanged = pyqtSignal(LaAreaUnits)
     useCommonLandChanged = pyqtSignal(bool)
     useSpecificLandChanged = pyqtSignal(bool)
     rasterNameChanged = pyqtSignal(str)
@@ -80,12 +80,19 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
 
     @fallowRatio.setter
     def fallowRatio(self, theFallowRatio: float) -> None: ...
-    
+
+
     @property
-    def fallowEnergyType(self) -> LaEnergyType: ...
-    
+    def fallowEnergyType(self) -> Union[LaEnergyType, None]:
+        return self._fallowEnergyType
+
+    # Setter for fallowEnergyType
+    # We use the same type hint as the property
+    # to indicate that it can be None or an instance of LaEnergyType
+    # This is a workaround for the fact that PyQt doesn't support None as a valid type
     @fallowEnergyType.setter
-    def fallowEnergyType(self, theEnergyType: LaEnergyType) -> None: ...
+    def fallowEnergyType(self, theEnergyType: Union[LaEnergyType, None]) -> None:
+        self._fallowEnergyType = theEnergyType
 
     @property
     def fallowValue(self) -> int: ...
@@ -97,7 +104,7 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
     def areaUnits(self) -> LaAreaUnits: ...
 
     @areaUnits.setter
-    def areaUnits(self, theAreaUnit: LaAreaUnits) -> None: ...
+    def areaUnits(self, theAreaUnit: Optional[LaAreaUnits]) -> None: ...
 
     @property
     def useCommonLand(self) -> bool: ...

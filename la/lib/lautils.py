@@ -12,7 +12,7 @@ import sys
 import uuid
 from builtins import dict as Dict
 from builtins import list as List
-from typing import Tuple
+from typing import Tuple, Optional, Callable
 # Third party imports
 from qgis.PyQt.QtWidgets import QFileDialog
 from qgis.PyQt.QtCore import QFile, QTextStream, QObject, QDir, QSettings, QFileInfo, pyqtSignal
@@ -20,7 +20,7 @@ from qgis.PyQt.QtCore import QFile, QTextStream, QObject, QDir, QSettings, QFile
 from la.lib.laanimalparameter import LaAnimalParameter
 from la.lib.laanimal import LaAnimal
 from la.lib.lacropparameter import LaCropParameter
-from la.lib.lacrop import LaCrop
+# from la.lib.lacrop import LaCrop
 
 class LaMessageBus(QObject):
     """Super minimal implementation of a message bus.
@@ -31,9 +31,74 @@ class LaMessageBus(QObject):
     """
     # The signal that passes the message.
     messaged: pyqtSignal = pyqtSignal(str)
+    
+    # Add a debug signal for debugging messages
+    debugMessaged: pyqtSignal = pyqtSignal(str)
 
 # Modules are evaluated only once, therefore it works as a poor man version of singleton.
 MESSAGE_BUS: LaMessageBus = LaMessageBus()
+
+class LaDebugLogger:
+    """
+    A singleton logger class that handles debug messages for Land Use Analyst.
+    
+    This class provides methods for logging debug messages to different outputs
+    based on the current debug settings.
+    """
+    _mInstance = None
+    _mDebug_enabled = False
+    _mLog_callback = None
+    
+    def __new__(cls):
+        if cls._mInstance is None:
+            cls._mInstance = super(LaDebugLogger, cls).__new__(cls)
+        return cls._mInstance
+    
+    @classmethod
+    def initialize(cls, enabled: bool = False, callback: Optional[Callable[[str], None]] = None):
+        """
+        Initialize the debug logger.
+        
+        Args:
+            enabled: Whether debug logging is enabled
+            callback: Optional callback function that will receive debug messages
+        """
+        cls._mDebug_enabled = enabled
+        cls._mLog_callback = callback
+        print(f"Debug logger initialized with enabled={enabled}, callback={callback}")  # Diagnostic
+    
+    @classmethod
+    def set_enabled(cls, enabled: bool):
+        """
+        Enable or disable debug logging.
+        
+        Args:
+            enabled: Whether debug logging should be enabled
+        """
+        cls._mDebug_enabled = enabled
+        print(f"Debug logging set to: {enabled}")
+    
+    @classmethod
+    def log(cls, message: str, component: str = "General"):
+        """
+        Log a debug message if debug logging is enabled.
+        
+        Args:
+            message: The debug message to log
+            component: The component generating the message
+        """
+        if cls._mDebug_enabled:
+            myFormattedDebugMessage = f"[DEBUG] [{component}] {message}"
+            
+            # Print to console for development
+            print(myFormattedDebugMessage)
+            
+            # Send to callback if available (e.g., UI logger)
+            if cls._mLog_callback:
+                cls._mLog_callback(myFormattedDebugMessage)
+            
+            # Emit on message bus
+            MESSAGE_BUS.debugMessaged.emit(myFormattedDebugMessage)
 
 class LaUtils:
     """
@@ -44,6 +109,9 @@ class LaUtils:
     parameter profiles, and images. It also provides methods for encoding and decoding
     XML strings, sorting and removing duplicates from lists, and creating text files.
     """
+    # Initialize the debug logger
+    debug = LaDebugLogger()
+    
     @staticmethod
     def userSettingsDirPath() -> str:
         """
@@ -162,7 +230,8 @@ class LaUtils:
         return LaAnimal()
 
     @staticmethod
-    def getAvailableCrops() -> Dict[str, LaCrop]:
+    def getAvailableCrops(): # -> Dict[str, LaCrop]
+        from la.lib.lacrop import LaCrop  # Move the import here to avoid circular import
         """
         Returns a dictionary of available crops.
 
@@ -174,8 +243,10 @@ class LaUtils:
         myCropsMap = {}
         myDirectory = QDir(LaUtils.userCropProfilesDirPath())
         myList = myDirectory.entryInfoList(QDir.Files | QDir.NoSymLinks, QDir.Name)
-        print(f"DEBUG: Looking for crops in directory: {LaUtils.userCropProfilesDirPath()}")
-        print(f"DEBUG: Found {len(myList)} files")
+
+        LaUtils.debug.log(f"Looking for crops in directory: {LaUtils.userCropProfilesDirPath()}", "Crops")
+        LaUtils.debug.log(f"Found {len(myList)} files", "Crops")
+
         for myFileInfo in myList:
             # Ignore directories
             if myFileInfo.fileName() in [".", ".."]:
@@ -183,22 +254,23 @@ class LaUtils:
             # if the filename ends in .xml try to load it into our crops listing
             if myFileInfo.completeSuffix() == "xml":
                 filePath = myFileInfo.absoluteFilePath()
-                print(f"DEBUG: Loading crop from file: {filePath}")
+                LaUtils.debug.log(f"Loading crop from file: {filePath}", "Crops")
                 myCrop = LaCrop()
                 loadSuccess = myCrop.fromXmlFile(filePath)
                 if not loadSuccess:
-                    print(f"DEBUG: Failed to load crop from {filePath}")
+                    LaUtils.debug.log(f"Failed to load crop from {filePath}", "Crops")
                     continue
                 if myCrop.name == "":
-                    print(f"DEBUG: Crop from {filePath} has no name, skipping")
+                    LaUtils.debug.log(f"Crop from {filePath} has no name, skipping", "Crops")
                     continue
                 myCropsMap[myCrop.guid] = myCrop
-                print(f"DEBUG: Successfully loaded crop: {myCrop.name}, cropYield: {myCrop.cropYield}")
-        print(f"DEBUG: Returning {len(myCropsMap)} crops")
+                LaUtils.debug.log(f"Successfully loaded crop: {myCrop.name}, cropYield: {myCrop.cropYield}", "Crops")
+
+        LaUtils.debug.log(f"Returning {len(myCropsMap)} crops", "Crops")
         return myCropsMap
 
     @staticmethod
-    def getCrop(theGuid: str) -> LaCrop:
+    def getCrop(theGuid: str): # -> LaCrop
         """
         Returns a crop object with the given GUID.
 
@@ -209,6 +281,7 @@ class LaUtils:
         :return: A crop object
         :rtype: LaCrop
         """
+        from la.lib.lacrop import LaCrop  # Move the import here to avoid circular import
         myDirectory = QDir(LaUtils.userCropProfilesDirPath())
         myList = myDirectory.entryInfoList(QDir.Files | QDir.NoSymLinks)
         for myFileInfo in myList:
@@ -371,8 +444,10 @@ class LaUtils:
         myMap = {}
         myDirectory = QDir(LaUtils.userCropParameterProfilesDirPath())
         myList = myDirectory.entryInfoList(QDir.Dirs | QDir.Files | QDir.NoSymLinks)
-        print(f"Scanning for crop parameters in: {LaUtils.userCropParameterProfilesDirPath()}")
-        print(f"Found {len(myList)} entries")
+        
+        LaUtils.debug.log(f"Scanning for crop parameters in: {LaUtils.userCropParameterProfilesDirPath()}", "CropParams")
+        LaUtils.debug.log(f"Found {len(myList)} entries", "CropParams")
+        
         for myFileInfo in myList:
             # Ignore directories
             if myFileInfo.fileName() in [".", ".."]:
@@ -381,21 +456,22 @@ class LaUtils:
             if myFileInfo.completeSuffix() == "xml":
                 try:
                     filePath = myFileInfo.absoluteFilePath()
-                    print(f"Loading crop parameter from: {filePath}")
+                    LaUtils.debug.log(f"Loading crop parameter from: {filePath}", "CropParams")
                     myCropParameter = LaCropParameter()
                     success = myCropParameter.fromXmlFile(filePath)
                     if not success:
-                        print(f"Failed to load crop parameter from file: {filePath}")
+                        LaUtils.debug.log(f"Failed to load crop parameter from file: {filePath}", "CropParams")
                         continue
                     if not myCropParameter.name:
-                        print(f"Crop parameter from {filePath} has no name, skipping")
+                        LaUtils.debug.log(f"Crop parameter from {filePath} has no name, skipping", "CropParams")
                         continue
                     # Debug the parameter values
-                    print(f"Loaded crop parameter: '{myCropParameter.name}', percentTameCrop={myCropParameter.percentTameCrop}")
+                    LaUtils.debug.log(f"Loaded crop parameter: '{myCropParameter.name}', percentTameCrop={myCropParameter.percentTameCrop}", "CropParams")
                     myMap[myCropParameter.guid] = myCropParameter
                 except Exception as e:
-                    print(f"Error loading crop parameter: {str(e)}")
-        print(f"Returning {len(myMap)} crop parameters")
+                    LaUtils.debug.log(f"Error loading crop parameter: {str(e)}", "CropParams")
+        
+        LaUtils.debug.log(f"Returning {len(myMap)} crop parameters", "CropParams")
         return myMap
 
     @staticmethod

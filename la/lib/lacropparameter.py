@@ -70,41 +70,41 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
 
         :param theCropParameter: Optional crop parameter to copy from
         :type theCropParameter: Optional[LaCropParameter]
+        :param parent: Parent QObject
+        :type parent: QObject
         """
         super().__init__(parent)
-        # Initialize with empty GUID - LaGuid's __init__ will set proper GUID
-        self.setGuid(None)  # Call the method from LaGuid instead of setting property directly
-        self.mName = "No Name Set"
-        self.mDescription = "Not Set"
-        self.mCropGuid = ""
-        self.mPercentTameCrop = 0.0
-        self.mSpoilage = 0
-        self.mReseed = 0
-        self.mCropRotation = False
-        self.mFallowRatio = 0.0
-        self.mFallowEnergyType = LaEnergyType.KCalories
-        self.mFallowValue = 0
-        self.mAreaUnits = LaAreaUnits.Dunum
-        self.mUseCommonLand = False
-        self.mUseSpecificLand = False
-        self.mRasterName = ""
-
-        if theCropParameter is not None:
-            # Copy from existing parameter
-            self.setGuid(theCropParameter.guid())  # Use the method from LaGuid
-            self.mName = theCropParameter.name
-            self.mDescription = theCropParameter.description
-            self.mCropGuid = theCropParameter.cropGuid
-            self.mPercentTameCrop = theCropParameter.percentTameCrop
-            self.mSpoilage = theCropParameter.spoilage
-            self.mReseed = theCropParameter.reseed
-            self.mCropRotation = theCropParameter.cropRotation
-            self.mFallowRatio = theCropParameter.fallowRatio
-            self.mFallowValue = theCropParameter.fallowValue
-            self.mAreaUnits = theCropParameter.areaUnits
-            self.mUseCommonLand = theCropParameter.useCommonLand
-            self.mUseSpecificLand = theCropParameter.useSpecificLand
-            self.mRasterName = theCropParameter.rasterName
+        if theCropParameter is None:  # If NO crop parameter is provided, initialize with default values
+            self._mGuid = LaGuid.setGuid(self, None)  # Call with self as first parameter like in lacrop.py
+            self._mName = "No Name Set"
+            self._mDescription = "Not Set"
+            self._mCropGuid = ""
+            self._mPercentTameCrop = 0.0
+            self._mSpoilage = 0
+            self._mReseed = 0
+            self._mCropRotation = False
+            self._mFallowRatio = 0.0
+            self._mFallowEnergyType = LaEnergyType.KCalories
+            self._mFallowValue = 0
+            self._mAreaUnits = LaAreaUnits.Dunum
+            self._mUseCommonLand = False
+            self._mUseSpecificLand = False
+            self._mRasterName = ""
+        else:  # If a crop parameter IS provided, copy the values from the existing parameter
+            self._mGuid = theCropParameter.guid  # Use setter method from LaGuid
+            self._mName = theCropParameter.name
+            self._mDescription = theCropParameter.description
+            self._mCropGuid = theCropParameter.cropGuid
+            self._mPercentTameCrop = theCropParameter.percentTameCrop
+            self._mSpoilage = theCropParameter.spoilage
+            self._mReseed = theCropParameter.reseed
+            self._mCropRotation = theCropParameter.cropRotation
+            self._mFallowRatio = theCropParameter.fallowRatio
+            self._mFallowValue = theCropParameter.fallowValue
+            self._mAreaUnits = theCropParameter.areaUnits
+            self._mUseCommonLand = theCropParameter.useCommonLand
+            self._mUseSpecificLand = theCropParameter.useSpecificLand
+            self._mRasterName = theCropParameter.rasterName
 
     # Remove the conflicting property accessor methods
     # @property
@@ -127,202 +127,216 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
     @pyqtProperty(str, notify=nameChanged)
     def name(self) -> str: #type: ignore
         """Get the name of the crop parameter."""
-        return str(self.mName)
+        return str(self._mName)
 
     @name.setter
     def name(self, theName: str) -> None:
         """Set the name of the crop parameter."""
-        if self.mName != theName:
-            self.mName = theName
+        if self._mName != theName:
+            self._mName = theName
             self.nameChanged.emit(theName)
 
     @pyqtProperty(str, notify=descriptionChanged)
     def description(self) -> str: #type: ignore
         """Get the description of the crop parameter."""
-        return str(self.mDescription)
+        return str(self._mDescription)
 
     @description.setter
     def description(self, theDescription: str) -> None:
         """Set the description of the crop parameter."""
-        if self.mDescription != theDescription:
-            self.mDescription = theDescription
+        if self._mDescription != theDescription:
+            self._mDescription = theDescription
             self.descriptionChanged.emit(theDescription)
 
     @pyqtProperty(str, notify=cropGuidChanged)
     def cropGuid(self) -> str: #type: ignore
         """Get the crop GUID."""
-        return str(self.mCropGuid)
+        return str(self._mCropGuid)
 
     @cropGuid.setter
     def cropGuid(self, theCropGuid: str) -> None:
         """Set the crop GUID."""
-        if self.mCropGuid != theCropGuid:
-            self.mCropGuid = theCropGuid
+        if self._mCropGuid != theCropGuid:
+            self._mCropGuid = theCropGuid
             self.cropGuidChanged.emit(theCropGuid)
 
     @pyqtProperty(float, notify=percentTameCropChanged)
     def percentTameCrop(self) -> float: #type: ignore
         """Get the percentage of tame crop."""
-        return float(self.mPercentTameCrop)
+        return float(str(self._mPercentTameCrop))
 
     @percentTameCrop.setter
     def percentTameCrop(self, theValue: float) -> None:
         """Set the percentage of tame crop."""
         try:
             myFloatValue = float(theValue)
-            if self.mPercentTameCrop != myFloatValue:
-                self.mPercentTameCrop = myFloatValue
+            if self._mPercentTameCrop != myFloatValue:
+                self._mPercentTameCrop = myFloatValue
                 self.percentTameCropChanged.emit(myFloatValue)
         except (ValueError, TypeError):
             print(f"Warning: Failed to convert percentTameCrop value to float: {theValue}")
-            self.mPercentTameCrop = 0.0
+            self._mPercentTameCrop = 0.0
             self.percentTameCropChanged.emit(0.0)
 
     @pyqtProperty(int, notify=spoilageChanged)
     def spoilage(self) -> int: #type: ignore
         """Get the spoilage percentage."""
-        return int(self.mSpoilage)
+        try:
+            if not self._mSpoilage and self._mSpoilage != 0:  # Check if empty or None
+                return 0
+            return int(self._mSpoilage)
+        except (ValueError, TypeError):
+            # Default to 0 if conversion fails
+            return 0
 
     @spoilage.setter
     def spoilage(self, theValue: int) -> None:
         """Set the spoilage percentage."""
         try:
             myIntValue = int(theValue)
-            if self.mSpoilage != myIntValue:
-                self.mSpoilage = myIntValue
+            if self._mSpoilage != myIntValue:
+                self._mSpoilage = myIntValue
                 self.spoilageChanged.emit(myIntValue)
         except (ValueError, TypeError):
             print(f"Warning: Failed to convert spoilage value to int: {theValue}")
-            self.mSpoilage = 0
+            self._mSpoilage = 0
             self.spoilageChanged.emit(0)
 
     @pyqtProperty(int, notify=reseedChanged)
     def reseed(self) -> int: #type: ignore
         """Get the reseed percentage."""
-        return int(self.mReseed)
+        try:
+            if not self._mReseed and self._mReseed != 0:  # Check if empty or None
+                return 0
+            return int(self._mReseed)
+        except (ValueError, TypeError):
+            # Default to 0 if conversion fails
+            return 0
 
     @reseed.setter
     def reseed(self, theValue: int) -> None:
         """Set the reseed percentage."""
         try:
             myIntValue = int(theValue)
-            if self.mReseed != myIntValue:
-                self.mReseed = myIntValue
+            if self._mReseed != myIntValue:
+                self._mReseed = myIntValue
                 self.reseedChanged.emit(myIntValue)
         except (ValueError, TypeError):
             print(f"Warning: Failed to convert reseed value to int: {theValue}")
-            self.mReseed = 0
+            self._mReseed = 0
             self.reseedChanged.emit(0)
 
     @pyqtProperty(bool, notify=cropRotationChanged)
     def cropRotation(self) -> bool: #type: ignore
         """Get whether crop rotation is used."""
-        return bool(self.mCropRotation)
+        return bool(self._mCropRotation)
 
     @cropRotation.setter
     def cropRotation(self, theValue: bool) -> None:
         """Set whether crop rotation is used."""
         bool_value = bool(theValue)
-        if self.mCropRotation != bool_value:
-            self.mCropRotation = bool_value
+        if self._mCropRotation != bool_value:
+            self._mCropRotation = bool_value
             self.cropRotationChanged.emit(bool_value)
 
     @pyqtProperty(float, notify=fallowRatioChanged)
     def fallowRatio(self) -> float: #type: ignore
         """Get the fallow ratio."""
-        return float(self.mFallowRatio)
+        return float(str(self._mFallowRatio))
 
     @fallowRatio.setter
     def fallowRatio(self, theValue: float) -> None:
         """Set the fallow ratio."""
         try:
             myFloatValue = float(theValue)
-            if self.mFallowRatio != myFloatValue:
-                self.mFallowRatio = myFloatValue
+            if self._mFallowRatio != myFloatValue:
+                self._mFallowRatio = myFloatValue
                 self.fallowRatioChanged.emit(myFloatValue)
         except (ValueError, TypeError):
             print(f"Warning: Failed to convert fallowRatio value to float: {theValue}")
-            self.mFallowRatio = 0.0
+            self._mFallowRatio = 0.0
             self.fallowRatioChanged.emit(0.0)
 
     @pyqtProperty(LaEnergyType, notify=fallowEnergyTypeChanged)
-    def fallowEnergyType(self) -> LaEnergyType:
+    def fallowEnergyType(self) -> LaEnergyType: #type: ignore
         """Get the energy type for fallow."""
-        return LaEnergyType.mFallowEnergyType
+        return self._mFallowEnergyType
 
     @fallowEnergyType.setter
     def fallowEnergyType(self, theEnergyType: LaEnergyType) -> None:
         """Signal emitted when the fallow energy type changes."""
-        if self.mFallowEnergyType != theEnergyType:
-            self.mFallowEnergyType = theEnergyType
+        if self._mFallowEnergyType != theEnergyType:
+            self._mFallowEnergyType = theEnergyType
             self.fallowEnergyTypeChanged.emit(theEnergyType)
 
     @pyqtProperty(int, notify=fallowValueChanged)
     def fallowValue(self) -> int: #type: ignore
         """Get the fallow value."""
-        return int(self.mFallowValue)
+        return int(str(self._mFallowValue))
 
     @fallowValue.setter
     def fallowValue(self, theValue: int) -> None:
         """Set the fallow value."""
         try:
             myIntValue = int(theValue)
-            if self.mFallowValue != myIntValue:
-                self.mFallowValue = myIntValue
+            if self._mFallowValue != myIntValue:
+                self._mFallowValue = myIntValue
                 self.fallowValueChanged.emit(myIntValue)
         except (ValueError, TypeError):
             print(f"Warning: Failed to convert fallowValue to int: {theValue}")
-            self.mFallowValue = 0
+            self._mFallowValue = 0
             self.fallowValueChanged.emit(0)
 
     @pyqtProperty(LaAreaUnits, notify=areaUnitsChanged)
-    def areaUnits(self) -> LaAreaUnits: #type: ignore
+    def areaUnits(self): #type: ignore
         """Get the area units used."""
-        return self.mAreaUnits
+        return self._mAreaUnits
 
     @areaUnits.setter
-    def areaUnits(self, theValue: LaAreaUnits) -> None:
+    def areaUnits(self, theAreaUnit: Optional[LaAreaUnits]) -> None:
         """Set the area units used."""
-        if self.mAreaUnits != theValue:
-            self.mAreaUnits = theValue
-            self.areaUnitsChanged.emit(theValue)
+        # Provide a default if None is passed
+        myCurrentAreaUnitValue = theAreaUnit if theAreaUnit is not None else LaAreaUnits.Dunum
+        if self._mAreaUnits != myCurrentAreaUnitValue:
+            self._mAreaUnits = myCurrentAreaUnitValue
+            self.areaUnitsChanged.emit(myCurrentAreaUnitValue)
 
     @pyqtProperty(bool, notify=useCommonLandChanged)
     def useCommonLand(self) -> bool: #type: ignore
         """Get whether common land is used."""
-        return bool(self.mUseCommonLand)
+        return bool(self._mUseCommonLand)
 
     @useCommonLand.setter
     def useCommonLand(self, theValue: bool) -> None:
         """Set whether common land is used."""
         bool_value = bool(theValue)
-        if self.mUseCommonLand != bool_value:
-            self.mUseCommonLand = bool_value
+        if self._mUseCommonLand != bool_value:
+            self._mUseCommonLand = bool_value
             self.useCommonLandChanged.emit(bool_value)
 
     @pyqtProperty(bool, notify=useSpecificLandChanged)
     def useSpecificLand(self) -> bool: #type: ignore
         """Get whether specific land is used."""
-        return bool(self.mUseSpecificLand)
+        return bool(self._mUseSpecificLand)
 
     @useSpecificLand.setter
     def useSpecificLand(self, theValue: bool) -> None:
         """Set whether specific land is used."""
         bool_value = bool(theValue)
-        if self.mUseSpecificLand != bool_value:
-            self.mUseSpecificLand = bool_value
+        if self._mUseSpecificLand != bool_value:
+            self._mUseSpecificLand = bool_value
             self.useSpecificLandChanged.emit(bool_value)
 
     @pyqtProperty(str, notify=rasterNameChanged)
     def rasterName(self) -> str: #type: ignore
         """Get the name of the raster."""
-        return str(self.mRasterName)
+        return str(self._mRasterName)
 
     @rasterName.setter
     def rasterName(self, theValue: str) -> None:
         """Set the name of the raster."""
-        if self.mRasterName != theValue:
-            self.mRasterName = theValue
+        if self._mRasterName != theValue:
+            self._mRasterName = theValue
             self.rasterNameChanged.emit(theValue)
 
     # File I/O methods
@@ -388,7 +402,7 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
         myString += f"  <cropRotation>{1 if self.cropRotation else 0}</cropRotation>\n"
         myString += f"  <fallowRatio>{self.fallowRatio}</fallowRatio>\n"
         myString += f"  <fallowValue>{self.fallowValue}</fallowValue>\n"
-        myUnits = "Dunum" if self.mAreaUnits == LaAreaUnits.Dunum else "Hectare"
+        myUnits = "Dunum" if self._mAreaUnits == LaAreaUnits.Dunum else "Hectare"
         myString += f"  <areaUnits>{myUnits}</areaUnits>\n"
         myString += f"  <useCommonLand>{1 if self.useCommonLand else 0}</useCommonLand>\n"
         myString += f"  <useSpecificLand>{1 if self.useSpecificLand else 0}</useSpecificLand>\n"
@@ -418,48 +432,51 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
 
             # Use setGuid method from LaGuid instead of trying to assign to the property directly
             self.setGuid(myTopElement.attribute("guid"))
-            
+
             # Continue loading other parameters
-            self.mName = LaUtils.xmlDecode(myTopElement.firstChildElement("name").text())
-            self.mDescription = LaUtils.xmlDecode(myTopElement.firstChildElement("description").text())
-            self.mCropGuid = LaUtils.xmlDecode(myTopElement.firstChildElement("crop").text())
+            self._mName = LaUtils.xmlDecode(myTopElement.firstChildElement("name").text())
+            self._mDescription = LaUtils.xmlDecode(myTopElement.firstChildElement("description").text())
+            self._mCropGuid = LaUtils.xmlDecode(myTopElement.firstChildElement("crop").text())
 
             # Parse numeric values with proper conversion
             try:
-                self.mPercentTameCrop = float(myTopElement.firstChildElement("percentTameCrop").text())
+                self._mPercentTameCrop = float(myTopElement.firstChildElement("percentTameCrop").text())
             except (ValueError, TypeError):
-                self.mPercentTameCrop = 0.0
+                self._mPercentTameCrop = 0.0
 
             try:
-                self.mSpoilage = myTopElement.firstChildElement("spoilage").text()
+                self._mSpoilage = myTopElement.firstChildElement("spoilage").text()
             except (ValueError, TypeError):
-                self.mSpoilage = 0
+                self._mSpoilage = 0
 
             try:
-                self.mReseed = myTopElement.firstChildElement("reseed").text()
+                reseedText = myTopElement.firstChildElement("reseed").text()
+                self._mReseed = int(reseedText) if reseedText else 0
             except (ValueError, TypeError):
-                self.mReseed = 0
+                self._mReseed = 0
 
             # Parse boolean and other values similarly
-            self.mCropRotation = myTopElement.firstChildElement("cropRotation").text()
+            self._mCropRotation = myTopElement.firstChildElement("cropRotation").text()
 
             try:
-                self.mFallowRatio = float(myTopElement.firstChildElement("fallowRatio").text())
+                self._mFallowRatio = float(myTopElement.firstChildElement("fallowRatio").text())
             except (ValueError, TypeError):
-                self.mFallowRatio = 0.0
+                # Set default fallow ratio if parsing fails
+                self._mFallowRatio = 0.0
+                warnings.warn("Failed to parse fallowRatio from XML, using default value 0.0")
 
             try:
-                self.mFallowValue = int(myTopElement.firstChildElement("fallowValue").text())
+                self._mFallowValue = int(myTopElement.firstChildElement("fallowValue").text())
             except (ValueError, TypeError):
-                self.mFallowValue = 0
+                self._mFallowValue = 0
 
             # Handle area units
             myAreaUnits = myTopElement.firstChildElement("areaUnits").text()
-            self.mAreaUnits = LaAreaUnits.Dunum if myAreaUnits == "Dunum" else LaAreaUnits.Hectare
+            self._mAreaUnits = LaAreaUnits.Dunum if myAreaUnits == "Dunum" else LaAreaUnits.Hectare
 
-            self.mUseCommonLand = myTopElement.firstChildElement("useCommonLand").text()
-            self.mUseSpecificLand = myTopElement.firstChildElement("useSpecificLand").text()
-            self.mRasterName = LaUtils.xmlDecode(myTopElement.firstChildElement("rasterName").text())
+            self._mUseCommonLand = myTopElement.firstChildElement("useCommonLand").text()
+            self._mUseSpecificLand = myTopElement.firstChildElement("useSpecificLand").text()
+            self._mRasterName = LaUtils.xmlDecode(myTopElement.firstChildElement("rasterName").text())
 
             return True
         except Exception as e:
