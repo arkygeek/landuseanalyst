@@ -76,7 +76,7 @@ Refer to [CODING_STANDARDS.md](./CODING_STANDARDS.md) for detailed guidelines on
 
 ### Naming Conventions
 
-Refer to [NAMING_CONVENTIONS.md](./NAMING_CONVENTIONS.md) for detailed guidelines on:
+Refer to [NAMING_CONVENTIONS.md](./la/NAMING_CONVENTIONS.md) for detailed guidelines on:
 - Class names
 - Method and function names
 - Variable names (including the use of `the`, `my`, and `m` prefixes)
@@ -90,8 +90,8 @@ This plugin is designed to work across multiple platforms, including Linux, Wind
 ## Additional Resources
 
 For more detailed information on the project, including design decisions and implementation details, refer to the following documents:
-- [Thesis Document](https://www.researchgate.net/publication/311589270_The_Impact_of_South_Levantine_Early_Bronze_Age_Communities_On_Their_Landscapes)
-- [Project Documentation](./docs/)
+- [Thesis available here](https://www.researchgate.net/publication/311589270_The_Impact_of_South_Levantine_Early_Bronze_Age_Communities_On_Their_Landscapes)
+- [Project Documentation](./docs/index.html)
 
 ## Contact
 
