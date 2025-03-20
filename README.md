@@ -67,7 +67,7 @@ To maintain consistency and readability, all contributions must adhere to the fo
 
 ### Coding Standards
 
-Refer to [CODING_STANDARDS.md](./CODING_STANDARDS.md) for detailed guidelines on:
+Refer to [CODING_STANDARDS.md](./la/CODING_STANDARDS.md) for detailed guidelines on:
 - Class and method naming
 - Member variable conventions
 - Type hints
