@@ -6,7 +6,7 @@ Landuse Analyst is a comprehensive QGIS plugin designed to facilitate land use a
 
 ## Collaboration Guidelines
 
-Please submit all pull requests from the Developer Branch. Ensure that your code adheres to the coding standards and naming conventions outlined in the [CODING_STANDARDS.md](./CODING_STANDARDS.md) and [NAMING_CONVENTIONS.md](./NAMING_CONVENTIONS.md) files.
+Please submit all pull requests from the Developer Branch. Ensure that your code adheres to the coding standards and naming conventions outlined in the [CODING_STANDARDS.md](./la/CODING_STANDARDS.md) and [NAMING_CONVENTIONS.md](./la/NAMING_CONVENTIONS.md) files.
 
 ## Project Authors
 
