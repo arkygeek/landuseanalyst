@@ -13,7 +13,7 @@ from la.resources_rc import *
 
 class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
     # from la.lib.lautils import LaUtils
-    from la.lib.la import AreaUnits
+    from la.lib.la import AreaUnits, Priority  # Added Priority import
 
     _instances = []
 
@@ -26,7 +26,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
     useSpecificGrazingLandChanged = pyqtSignal(bool)
     fodderUseChanged = pyqtSignal(float)
     foodSourceMapChanged = pyqtSignal(str)
-    fallowUsageChanged = pyqtSignal(float)  # Added missing signal
+    fallowUsageChanged = pyqtSignal(object)  # Changed to object for enum
     rasterNameChanged = pyqtSignal(str)
 
     def __init__(self, theAnimalParameter: Optional['LaAnimalParameter'] = None, parent=None):
@@ -208,6 +208,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
 
     def fromXml(self, theXml: str) -> bool:
         from la.lib.lautils import LaUtils
+        from la.lib.la import Priority
         try:
             myDocument = QDomDocument("mydocument")
             myDocument.setContent(theXml)
@@ -224,7 +225,22 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self._mUseSpecificGrazingLand = bool(myTopElement.firstChildElement("useSpecificGrazingLand").text())
             self._mFodderUse = float(myTopElement.firstChildElement("fodderUse").text())
             self._mFoodSourceMap = LaUtils.xmlDecode(myTopElement.firstChildElement("foodSourceMap").text())
-            self._fallowUsage = float(myTopElement.firstChildElement("fallowUsage").text())
+            
+            # Handle fallowUsage as a Priority enum
+            fallowUsageElement = myTopElement.firstChildElement("fallowUsage")
+            if not fallowUsageElement.isNull():
+                fallowUsageText = fallowUsageElement.text()
+                if fallowUsageText == "High":
+                    self._fallowUsage = Priority.High
+                elif fallowUsageText == "Medium":
+                    self._fallowUsage = Priority.Medium
+                elif fallowUsageText == "Low":
+                    self._fallowUsage = Priority.Low
+                else:
+                    self._fallowUsage = Priority.None_  # Default to None if value doesn't match
+            else:
+                self._fallowUsage = Priority.None_  # Default if element is missing
+            
             self._rasterName = LaUtils.xmlDecode(myTopElement.firstChildElement("rasterName").text())
             return True
         except Exception as e:

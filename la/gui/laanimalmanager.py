@@ -8,6 +8,7 @@ from la.lib.laanimal import LaAnimal
 from la.lib.lautils import LaUtils
 from la.lib.la import EnergyType as LaEnergyType
 from la.lib.la import AreaUnits as LaAreaUnits
+from la.lib.la import Priority
 
 FORM_CLASS, _ = uic.loadUiType(
     os.path.join(
@@ -241,10 +242,58 @@ class LaAnimalManager(LaAnimalManagerBase):
 
         self.leName.setText(self.animal.name)
         self.leDescription.setText(self.animal.description)
+        self.sbMeatFoodValue.setValue(self.animal.meatFoodValue)
+        self.sbUsableMeatPercent.setValue(self.animal.usableMeat)
+        self.sbKillWeight.setValue(self.animal.killWeight)
+        self.sbAdultWeight.setValue(self.animal.adultWeight)
+        self.sbConceptionEfficiency.setValue(self.animal.conceptionEfficiency)
+        self.sbFemalesToMales.setValue(self.animal.femalesPerMale)
+        self.sbGrowTime.setValue(self.animal.growTime)
+        self.sbDeathRate.setValue(self.animal.deathRate)
+        # Handle the EnergyType enum in showAnimal
+        if isinstance(self.animal.feedEnergyType, LaEnergyType):
+            # If it's already an enum, use its value directly
+            energyTypeIndex = self.animal.feedEnergyType.value
+        else:
+            # Try to convert to int or look up in the enum
+            try:
+                energyTypeIndex = int(self.animal.feedEnergyType)
+            except (ValueError, TypeError):
+                # Convert string representation to enum value if possible
+                energyTypeStr = str(self.animal.feedEnergyType)
+                for etype in LaEnergyType:
+                    if etype.name in energyTypeStr:
+                        energyTypeIndex = etype.value
+                        break
+                else:
+                    energyTypeIndex = 0  # Default to first item
 
-        # Set other properties based on the animal
-        # This would include setting values for all the fields
-        # in the animal profile manager
+        # Use min/max to ensure the index is within valid range
+        energyTypeIndex = max(0, min(self.cbFeedEnergyType.count() - 1, energyTypeIndex))
+        self.cbFeedEnergyType.setCurrentIndex(energyTypeIndex)
+        self.sbEnergyForPregnant.setValue(self.animal.gestating)
+        self.sbEnergyForLactating.setValue(self.animal.lactating)
+        self.sbEnergyForMaintenance.setValue(self.animal.maintenance)
+        self.sbEnergyForJuvenilePerKg.setValue(self.animal.juvenile)
+        self.sbSexualMaturity.setValue(self.animal.sexualMaturity)
+        self.sbBreedingLife.setValue(self.animal.breedingExpectancy)
+        self.sbYoungPerBirth.setValue(self.animal.youngPerBirth)
+        self.sbWeaningAge.setValue(self.animal.weaningAge)
+        self.sbWeaningWeight.setValue(self.animal.weaningWeight)
+
+        # Update the image if available
+        if self.animal.imageFile:
+            image_path = LaUtils.resolvePath(str(self.animal.imageFile), 'image')
+            if os.path.exists(image_path):
+                pixmap = QPixmap(image_path)
+                if not pixmap.isNull():
+                    self.lblAnimalPix.setPixmap(pixmap)
+                else:
+                    self.lblAnimalPix.clear()
+            else:
+                self.lblAnimalPix.clear()
+        else:
+            self.lblAnimalPix.clear()
 
     def on_toolNew_clicked(self):
         """Create a new animal."""
@@ -317,7 +366,7 @@ class LaAnimalManager(LaAnimalManagerBase):
 
         # Set feed energy type
         if hasattr(self, 'cbFeedEnergyType'):
-            self.animal.feedEnergyType(LaEnergyType(self.cbFeedEnergyType.currentIndex()))
+            self.animal.feedEnergyType = LaEnergyType(self.cbFeedEnergyType.currentIndex())
 
         # Set reproduction parameters
         if hasattr(self, 'sbSexualMaturity'):
@@ -333,8 +382,8 @@ class LaAnimalManager(LaAnimalManagerBase):
 
         # Store just the filename, not the full path for the image
         if self.imageFile:
-            self.crop.imageFile = os.path.basename(self.imageFile)
-        LaUtils.debug.log(f"DEBUG: Saving crop with image: {self.crop.imageFile}")
+            self.animal.imageFile = os.path.basename(self.imageFile)
+        LaUtils.debug.log(f"DEBUG: Saving crop with image: {self.animal.imageFile}")
 
         # Save animal to file
         target_file = os.path.join(LaUtils.userAnimalProfilesDirPath(), f"{self.animal.guid}.xml")
@@ -373,7 +422,6 @@ class LaAnimalManager(LaAnimalManagerBase):
     def resizeEvent(self, event):
         """Handle resize event to adjust table columns."""
         super(LaAnimalManager, self).resizeEvent(event)
-
         # Adjust column widths
         self.tblAnimals.setColumnWidth(0, 0)  # Hide first column
         self.tblAnimals.setColumnWidth(1, self.tblAnimals.width())

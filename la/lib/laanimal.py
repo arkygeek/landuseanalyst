@@ -66,7 +66,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
     killWeightChanged = pyqtSignal(int)
     growTimeChanged = pyqtSignal(int)
     deathRateChanged = pyqtSignal(int)
-    feedEnergyTypeChanged = pyqtSignal(str)
+    feedEnergyTypeChanged = pyqtSignal(LaEnergyType)
     gestatingChanged = pyqtSignal(int)
     lactatingChanged = pyqtSignal(int)
     maintenanceChanged = pyqtSignal(int)
@@ -750,13 +750,21 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
         from la.lib.lautils import LaUtils # we do this to avoid circular import issues
 
         try:
+            LaUtils.debug.log(f"Loading animal XML: first 100 chars: {theXml[:100]}")
+            
             myDocument = QDomDocument()
             if not myDocument.setContent(theXml):
+                LaUtils.debug.log("Invalid XML content")
                 raise ValueError("Invalid XML content")
 
             myTopElement = myDocument.firstChildElement("animal")
             if myTopElement.isNull():
+                LaUtils.debug.log("Missing animal element")
                 raise ValueError("Missing animal element")
+
+            # Set GUID from attribute
+            self.setGuid(myTopElement.attribute("guid"))
+            LaUtils.debug.log(f"Loading animal with GUID: {self.guid}")
 
             # Helper function to safely get integer values
             def getIntValue(elementName: str, default: int = 0) -> int:
@@ -768,10 +776,20 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
                     return int(text)
                 except (ValueError, TypeError):
                     return default
+                    
+            # Helper function to get text from an element with a fallback element name
+            def getElementText(primaryName: str, fallbackName: str = "", defaultValue: str = "") -> str:
+                element = myTopElement.firstChildElement(primaryName)
+                if element.isNull() and fallbackName:
+                    element = myTopElement.firstChildElement(fallbackName)
+                if element.isNull():
+                    return defaultValue
+                return element.text()
 
-            # Basic info
-            self._name = LaUtils.xmlDecode(myTopElement.firstChildElement("name").text())
-            self._description = LaUtils.xmlDecode(myTopElement.firstChildElement("description").text())
+            # Basic info - try both 'name' and 'n' tags for compatibility
+            self._name = LaUtils.xmlDecode(getElementText("name", "n", "No Name Set"))
+            self._description = LaUtils.xmlDecode(getElementText("description", "", "No Description Set"))
+            LaUtils.debug.log(f"Loaded animal name: {self._name}")
 
             # Meat production
             self._meatFoodValue = getIntValue("meatFoodValue", 3000)
@@ -815,14 +833,16 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
             self._fleeceWeightKg = getIntValue("fleeceWeightKg", 0)
 
             # Image
-            self._imageFile = LaUtils.xmlDecode(myTopElement.firstChildElement("imageFile").text())
-
+            imageElement = myTopElement.firstChildElement("imageFile")
+            self._imageFile = LaUtils.xmlDecode(imageElement.text()) if not imageElement.isNull() else ""
+            
+            LaUtils.debug.log(f"Successfully loaded animal: {self._name}")
             return True
 
         except Exception as e:
-            print(f"Error loading animal from XML: {str(e)}")
+            LaUtils.debug.log(f"Error loading animal from XML: {str(e)}")
             import traceback
-            print(traceback.format_exc())
+            LaUtils.debug.log(traceback.format_exc())
             return False
 
     def toXml(self) -> str:
@@ -830,16 +850,16 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
 
         """Generate XML representation of animal data."""
         myString = f'<animal guid="{self.guid}">\n'
-        myString += f'  <n>{LaUtils.xmlEncode(str(cast(str, self._name)))}<n>\n'
+        myString += f'  <name>{LaUtils.xmlEncode(str(cast(str, self._name)))}</name>\n'
         myString += f'  <description>{LaUtils.xmlEncode(str(cast(str, self._description)))}</description>\n'
         myString += f'  <meatFoodValue>{self._meatFoodValue}</meatFoodValue>\n'
         myString += f'  <usableMeat>{self._usableMeat}</usableMeat>\n'
         myString += f'  <killWeight>{self._killWeight}</killWeight>\n'
-        myString += f'  <adultWeight>{self._adultWeight}</adultWeight>\n'  # Fixed closing tag
-        myString += f'  <conceptionEfficiency>{self._conceptionEfficiency}</conceptionEfficiency>\n'  # Fixed closing tag
+        myString += f'  <adultWeight>{self._adultWeight}</adultWeight>\n'
+        myString += f'  <breedingExpectancy>{self._breedingExpectancy}</breedingExpectancy>\n'
+        myString += f'  <conceptionEfficiency>{self._conceptionEfficiency}</conceptionEfficiency>\n'
         myString += f'  <femalesToMales>{self._femalesToMales}</femalesToMales>\n'
         myString += f'  <growTime>{self._growTime}</growTime>\n'
-        myString += f'  <deathRate>{self._deathRate}</deathRate>\n'
         if self._feedEnergyType == LaEnergyType.KCalories:
             myString += '  <feedEnergyType>KCalories</feedEnergyType>\n'
         elif self._feedEnergyType == LaEnergyType.TDN:
@@ -850,16 +870,16 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
         myString += f'  <juvenile>{self._juvenile}</juvenile>\n'
         myString += f'  <sexualMaturity>{self._sexualMaturity}</sexualMaturity>\n'
         myString += f'  <breedingExpectancy>{self._breedingExpectancy}</breedingExpectancy>\n'
-        myString += f'  <youngPerBirth>{self._youngPerBirth}\n'
+        myString += f'  <youngPerBirth>{self._youngPerBirth}</youngPerBirth>\n'
         myString += f'  <weaningAge>{self._weaningAge}</weaningAge>\n'
         myString += f'  <weaningWeight>{self._weaningWeight}</weaningWeight>\n'
         myString += f'  <gestationTime>{self._gestationTime}</gestationTime>\n'
         myString += f'  <estrousCycle>{self._estrousCycle}</estrousCycle>\n'
         myString += f'  <lactationTime>{self._lactationTime}</lactationTime>\n'
-        myString += f'  <milk>{self._milk}</milk>\n'
+        myString += f'  <milk>{bool(self._milk)}</milk>\n'
         myString += f'  <milkGramsPerDay>{self._milkGramsPerDay}</milkGramsPerDay>\n'
-        myString += f'  <milkFoodValue>{self._milkFoodValue}</milkFoodValue>\n'  # Fixed closing tag
-        myString += f'  <fleece>{self._fleece}</fleece>\n'
+        myString += f'  <milkFoodValue>{self._milkFoodValue}</milkFoodValue>\n'
+        myString += f'  <fleece>{bool(self._fleece)}</fleece>\n'
         myString += f'  <fleeceWeightKg>{self._fleeceWeightKg}</fleeceWeightKg>\n'
         myString += f'  <imageFile>{LaUtils.xmlEncode(str(self._imageFile))}</imageFile>\n'
         myString += '</animal>\n'
