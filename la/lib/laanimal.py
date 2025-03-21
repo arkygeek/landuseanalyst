@@ -1,45 +1,61 @@
-from typing import Optional, Type
-import warnings
-
-from PyQt5.QtXml import QDomElement
-
-from qgis.PyQt.QtCore import QObject, pyqtProperty, pyqtSignal
-from qgis.PyQt.QtXml import QDomDocument, QDomElement
+from typing import Optional, Type, Union, Dict, Any, cast
+from dataclasses import dataclass
+from PyQt5.QtCore import QObject, pyqtProperty, pyqtSignal
+from PyQt5.QtXml import QDomDocument, QDomElement
 from la.lib.laserialisable import LaSerialisable
 from la.lib.laguid import LaGuid
 from la.lib.la import EnergyType
-
+from la.resources_rc import *
 
 class LaAnimal(QObject, LaSerialisable, LaGuid):
-    """ This class defines an LaAnimal object (an animal)
+    """Represents an animal species and its characteristics for land use analysis.
+
+    This class defines all the biological, nutritional and production parameters
+    needed to model animal husbandry in archaeozoological contexts.
 
     Properties:
-        name: the name of the animal
-        description: the description of the animal
-        meatFoodValue: the meat food value of the animal
-        usableMeat: the usable meat of the animal
-        killWeight: the kill weight of the animal
-        growTime: the grow time of the animal
-        deathRate: the death rate of the animal
-        sexualMaturity: the sexual maturity of the animal
-        breedingExpectancy: the breeding expectancy of the animal
-        youngPerBirth: the young per birth of the animal
-        weaningAge: the weaning age of the animal
-        weaningWeight: the weaning weight of the animal
-        gestationTime: the gestation time of the animal
-        estrousCycle: the estrous cycle of the animal
+        Basic Info:
+            name (str): Common name of the animal species
+            description (str): Detailed description
+            imageFile (str): Path to image file representing the animal
 
-    Methods:
-        setName: sets the name of the animal
-        setDescription: sets the description of the animal
-        setMeatFoodValue: sets the meat food value of the animal
-        setUsableMeat: sets the usable meat of the animal
-        setSlaughterWeight: sets the kill weight of the animal
+        Meat Production:
+            meatFoodValue (int): Caloric value per kg of meat
+            usableMeat (int): Percentage of carcass weight usable for meat
+            killWeight (int): Weight at which animals are slaughtered in kg
+            adultWeight (int): Weight of mature adult in kg
+            growTime (int): Weeks from birth to slaughter weight
+            deathRate (int): Percentage mortality before reaching usable age
 
-    Decorators:
-        @pyqtProperty: defines a property
-        @pyqtSignal: defines a signal
-        @pyqtSlot: defines a slot
+        Reproduction:
+            conceptionEfficiency (int): Percentage success rate of breeding
+            femalesToMales (int): Ratio of breeding females to males
+            youngPerBirth (int): Average number of offspring per birth
+            gestationTime (int): Days of pregnancy
+            estrousCycle (int): Days between breeding cycles
+            sexualMaturity (int): Age in months when breeding can begin
+            breedingExpectancy (int): Years of productive breeding life
+
+        Early Life:
+            weaningAge (int): Weeks until offspring stop nursing
+            weaningWeight (int): Weight in kg at weaning
+
+        Dairy:
+            milk (bool): Whether species produces harvestable milk
+            milkGramsPerDay (int): Daily milk production in grams
+            milkFoodValue (int): Calories per kg of milk
+            lactationTime (int): Days milk production continues
+
+        Fibers:
+            fleece (bool): Whether species produces harvestable fiber
+            fleeceWeightKg (int): Annual fiber harvest per animal in kg
+
+        Energy Requirements:
+            feedEnergyType (EnergyType): Unit for feed requirements
+            gestating (int): Daily calories needed when pregnant
+            lactating (int): Daily calories needed when producing milk
+            maintenance (int): Daily calories for basic survival
+            juvenile (int): Daily calories needed by growing young
     """
 
     # Signal definitions
@@ -66,775 +82,761 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
     gestationTimeChanged = pyqtSignal(int)
     estrousCycleChanged = pyqtSignal(int)
     lactationTimeChanged = pyqtSignal(int)
-    milkChanged = pyqtSignal(int)
+    milkChanged = pyqtSignal(bool)  # Changed from int to bool to match property type
     milkGramsPerDayChanged = pyqtSignal(int)
     milkFoodValueChanged = pyqtSignal(int)
-    fleeceChanged = pyqtSignal(int)
-    fleeceWeightKgChanged = pyqtSignal(int)
+    fleeceChanged = pyqtSignal(bool)  # Changed from int to bool to match property type
+    fleeceWeightKgChanged = pyqtSignal(float)  # Changed to float for more precise measurements
     imageFileChanged = pyqtSignal(str)
+    femalesPerMaleChanged = pyqtSignal(int)  # Changed from femalesToMalesChanged
 
-    def __init__(self, theAnimal: Optional[Type['LaAnimal']] = None, parent=None):
-        super().__init__(parent)
-        if theAnimal is None:
-            self._guid = LaGuid.setGuid(self, None)
-            self._name = "No Name Set"
-            self._description = "Not Set"
-            self._meatFoodValue = 3000
-            self._usableMeat = 50
-            self._killWeight = 100
-            self._growTime = 10
-            self._deathRate = 10
-            self._sexualMaturity = 18
-            self._breedingExpectancy = 5
-            self._adultWeight = ""
-            self._youngPerBirth = 1
-            self._weaningAge = 12
-            self._weaningWeight = 30
-            self._gestationTime = 120
-            self._estrousCycle = 21
-            self._feedEnergyType = ""
-            self._gestating = ""
-            self._lactating = ""
-            self._maintenance = ""
-            self._juvenile = ""
-            self._conceptionEfficiency = ""
-            self._femalesToMales = ""
-            self._lactationTime = ""
-            self._milk = ""
-            self._milkGramsPerDay = ""
-            self._milkFoodValue = ""
-            self._fleece = ""
-            self._fleeceWeightKg = ""
-            self._imageFile = ""
-        else:
-            self._guid = theAnimal.guid
-            self._name = theAnimal.name
-            self._description = theAnimal.description
-            self._meatFoodValue = theAnimal.meatFoodValue
-            self._usableMeat = theAnimal.usableMeat
-            self._killWeight = theAnimal.killWeight
-            self._growTime = theAnimal.growTime
-            self._deathRate = theAnimal.deathRate
-            self._feedEnergyType = theAnimal.feedEnergyType
-            self._gestating = theAnimal.gestating
-            self._lactating = theAnimal.lactating
-            self._maintenance = theAnimal.maintenance
-            self._juvenile = theAnimal.juvenile
-            self._sexualMaturity = theAnimal.sexualMaturity
-            self._breedingExpectancy = theAnimal.breedingExpectancy
-            self._youngPerBirth = theAnimal.youngPerBirth
-            self._weaningAge = theAnimal.weaningAge
-            self._weaningWeight = theAnimal.weaningWeight
-            self._conceptionEfficiency = theAnimal.conceptionEfficiency
-            self._femalesToMales = theAnimal.femalesToMales
-            self._adultWeight = theAnimal.adultWeight
-            self._gestationTime = theAnimal.gestationTime
-            self._estrousCycle = theAnimal.estrousCycle
-            self._lactationTime = theAnimal.lactationTime
-            self._milk = theAnimal.milk
-            self._milkGramsPerDay = theAnimal.milkGramsPerDay
-            self._milkFoodValue = theAnimal.milkFoodValue
-            self._fleece = theAnimal.fleece
-            self._fleeceWeightKg = theAnimal.fleeceWeightKg
-            self._imageFile = theAnimal.imageFile
+    def __init__(self, theAnimal: Optional['LaAnimal'] = None, parent: Optional[QObject] = None):
+        """Initialize an animal with default values or copy from existing.
 
-    @pyqtProperty(str, notify=nameChanged)
-    def name(self):
-        """ Gets or sets the name of the animal
-
-        :return: The name of the animal as a string
-        :rtype: str
+        Args:
+            theAnimal: Optional existing animal to copy from
+            parent: Optional Qt parent object
         """
-        return self._name
+        super().__init__(parent)
+        self._initializeDefaults()
+
+        if isinstance(theAnimal, LaAnimal):
+            self._copyFromAnimal(theAnimal)
+
+    def _initializeDefaults(self) -> None:
+        """Set default values for all properties."""
+        self._guid = LaGuid.setGuid(self, None)
+        # Basic info
+        self._name = "No Name Set"
+        self._description = "Not Set"
+        self._imageFile = ""
+
+        # Meat production
+        self._meatFoodValue = 3000  # Calories per kg
+        self._usableMeat = 50  # Percent
+        self._killWeight = 100  # kg
+        self._adultWeight = 0  # kg
+        self._growTime = 10  # weeks
+        self._deathRate = 10  # percent
+
+        # Reproduction
+        self._sexualMaturity = 18  # months
+        self._breedingExpectancy = 5  # years
+        self._youngPerBirth = 1
+        self._gestationTime = 120  # days
+        self._estrousCycle = 21  # days
+        self._conceptionEfficiency = 0  # percent
+        self._femalesToMales = 0  # ratio
+
+        # Early life
+        self._weaningAge = 12  # weeks
+        self._weaningWeight = 30  # kg
+
+        # Dairy
+        self._milk = False
+        self._milkGramsPerDay = 0
+        self._milkFoodValue = 0
+        self._lactationTime = 0  # days
+
+        # Fiber
+        self._fleece = False
+        self._fleeceWeightKg = 0
+
+        # Energy
+        self._feedEnergyType = EnergyType.KCalories
+        self._gestating = 0  # calories/day
+        self._lactating = 0  # calories/day
+        self._maintenance = 0  # calories/day
+        self._juvenile = 0  # calories/day
+
+    def _copyFromAnimal(self, theAnimal: 'LaAnimal') -> None:
+        """Copy all attributes from another animal instance.
+
+        Args:
+            theAnimal: Source animal to copy from
+        """
+        self._guid = theAnimal.guid
+        self._name = theAnimal.name
+        self._description = theAnimal.description
+        self._meatFoodValue = theAnimal.meatFoodValue
+        self._usableMeat = theAnimal.usableMeat
+        self._killWeight = theAnimal.killWeight
+        self._growTime = theAnimal.growTime
+        self._deathRate = theAnimal.deathRate
+        self._feedEnergyType = theAnimal.feedEnergyType
+        self._gestating = theAnimal.gestating
+        self._lactating = theAnimal.lactating
+        self._maintenance = theAnimal.maintenance
+        self._juvenile = theAnimal.juvenile
+        self._sexualMaturity = theAnimal.sexualMaturity
+        self._breedingExpectancy = theAnimal.breedingExpectancy
+        self._youngPerBirth = theAnimal.youngPerBirth
+        self._weaningAge = theAnimal.weaningAge
+        self._weaningWeight = theAnimal.weaningWeight
+        self._conceptionEfficiency = theAnimal.conceptionEfficiency
+        self._femalesToMales = theAnimal.femalesPerMale
+        self._adultWeight = theAnimal.adultWeight
+        self._gestationTime = theAnimal.gestationTime
+        self._estrousCycle = theAnimal.estrousCycle
+        self._lactationTime = theAnimal.lactationTime
+        self._milk = theAnimal.milk
+        self._milkGramsPerDay = theAnimal.milkGramsPerDay
+        self._milkFoodValue = theAnimal.milkFoodValue
+        self._fleece = theAnimal.fleece
+        self._fleeceWeightKg = theAnimal.fleeceWeightKg
+        self._imageFile = theAnimal.imageFile
+
+    def validate(self) -> Dict[str, str]:
+        """Validate the animal's attributes.
+
+        Performs comprehensive validation of all animal attributes to ensure they are within
+        acceptable ranges and logically consistent.
+
+        Returns:
+            Dict[str, str]: Dictionary of field names and error messages for invalid fields
+        """
+        errors = {}
+
+        # Basic info validation
+        if not cast(str, self._name):
+            errors['name'] = "Name is required"
+        if not cast(str, self._description):
+            errors['description'] = "Description is required"
+
+        # Meat production validation
+        if cast(int, self._meatFoodValue) <= 0:
+            errors['meatFoodValue'] = "Meat food value must be positive"
+        if cast(int, self._usableMeat) < 0 or cast(int, self._usableMeat) > 100:
+            errors['usableMeat'] = "Usable meat must be between 0-100%"
+        if cast(int, self._killWeight) <= 0:
+            errors['killWeight'] = "Kill weight must be positive"
+        if cast(int, self._growTime) <= 0:
+            errors['growTime'] = "Grow time must be positive"
+        if cast(int, self._deathRate) < 0 or cast(int, self._deathRate) > 100:
+            errors['deathRate'] = "Death rate must be between 0-100%"
+
+        # Reproduction validation
+        if cast(int, self._sexualMaturity) <= 0:
+            errors['sexualMaturity'] = "Sexual maturity must be positive"
+        if cast(int, self._breedingExpectancy) <= 0:
+            errors['breedingExpectancy'] = "Breeding expectancy must be positive"
+        if cast(int, self._youngPerBirth) <= 0:
+            errors['youngPerBirth'] = "Young per birth must be positive"
+        if cast(int, self._gestationTime) <= 0:
+            errors['gestationTime'] = "Gestation time must be positive"
+        if cast(int, self._estrousCycle) <= 0:
+            errors['estrousCycle'] = "Estrous cycle must be positive"
+        if cast(int, self._conceptionEfficiency) < 0 or cast(int, self._conceptionEfficiency) > 100:
+            errors['conceptionEfficiency'] = "Conception efficiency must be between 0-100%"
+        if cast(int, self._femalesToMales) <= 0:
+            errors['femalesToMales'] = "Females to males ratio must be positive"
+
+        # Early life validation
+        if cast(int, self._weaningAge) <= 0:
+            errors['weaningAge'] = "Weaning age must be positive"
+        if cast(int, self._weaningWeight) <= 0:
+            errors['weaningWeight'] = "Weaning weight must be positive"
+
+        # Dairy validation
+        if self._milk:
+            if cast(int, self._milkGramsPerDay) <= 0:
+                errors['milkGramsPerDay'] = "Milk grams per day must be positive when milk is enabled"
+            if cast(int, self._milkFoodValue) <= 0:
+                errors['milkFoodValue'] = "Milk food value must be positive when milk is enabled"
+            if cast(int, self._lactationTime) <= 0:
+                errors['lactationTime'] = "Lactation time must be positive when milk is enabled"
+
+        # Fiber validation
+        if self._fleece and cast(float, self._fleeceWeightKg) <= 0:
+            errors['fleeceWeightKg'] = "Fleece weight must be positive when fleece is enabled"
+
+        # Energy requirements validation
+        if cast(int, self._gestating) < 0:
+            errors['gestating'] = "Gestating energy requirement cannot be negative"
+        if cast(int, self._lactating) < 0:
+            errors['lactating'] = "Lactating energy requirement cannot be negative"
+        if cast(int, self._maintenance) < 0:
+            errors['maintenance'] = "Maintenance energy requirement cannot be negative"
+        if cast(int, self._juvenile) < 0:
+            errors['juvenile'] = "Juvenile energy requirement cannot be negative"
+
+        # Logical consistency checks
+        if cast(int, self._killWeight) <= cast(int, self._weaningWeight):
+            errors['killWeight'] = "Kill weight must be greater than weaning weight"
+        if cast(int, self._adultWeight) <= cast(int, self._weaningWeight):
+            errors['adultWeight'] = "Adult weight must be greater than weaning weight"
+        if cast(int, self._weaningAge) >= cast(int, self._growTime):
+            errors['weaningAge'] = "Weaning age must be less than grow time"
+
+        return errors
+
+    # Properties with type hints and docstrings
+    @pyqtProperty(str, notify=nameChanged)
+    def name(self) -> str:
+        """Get the animal's common name."""
+        return cast(str, self._name)
 
     @name.setter
-    def name(self, theAnimalName):
-        """ Sets the name of the animal and emits a signal when done
+    def name(self, value: str) -> None:
+        """Set the animal's common name.
 
-        :param theAnimalName: The new name for the animal
-        :type theAnimalName: str
+        Args:
+            value: The name to set
         """
-        if self._name != theAnimalName:
-            self._name = theAnimalName
-            self.nameChanged.emit(theAnimalName)
+        if self._name != value:
+            self._name = value
+            self.nameChanged.emit(value)
 
     @pyqtProperty(str, notify=descriptionChanged)
-    def description(self):
-        """ Gets or sets the description of the animal
-
-        :return: The description of the animal as a string
-        :rtype: str
-        """
-        return self._description
+    def description(self) -> str:
+        """Get the animal's description."""
+        return cast(str, self._description)
 
     @description.setter
-    def description(self, description):
-        """ Sets the description of the animal and emits a signal when done
+    def description(self, value: str) -> None:
+        """Set the animal's description.
 
-        :param description: The new description for the animal
-        :type description: str
+        Args:
+            value: The description to set
         """
-        if self._description != description:
-            self._description = description
-            self.descriptionChanged.emit(description)
+        if self._description != value:
+            self._description = value
+            self.descriptionChanged.emit(value)
 
     @pyqtProperty(int, notify=meatFoodValueChanged)
-    def meatFoodValue(self):
-        """ Gets or sets the meat food value of the animal
-
-        :return: The meat food value as an integer
-        :rtype: int
-        """
-        return self._meatFoodValue
+    def meatFoodValue(self) -> int:
+        """Get the animal's meat food value."""
+        return cast(int, self._meatFoodValue)
 
     @meatFoodValue.setter
-    def meatFoodValue(self, meatFoodValue):
-        """ Sets the meat food value of the animal and emits a signal when done
+    def meatFoodValue(self, value: int) -> None:
+        """Set the animal's meat food value.
 
-        :param meatFoodValue: The new meat food value for the animal
-        :type meatFoodValue: int
+        Args:
+            value: The meat food value to set
         """
-        if self._meatFoodValue != meatFoodValue:
-            self._meatFoodValue = meatFoodValue
-            self.meatFoodValueChanged.emit(meatFoodValue)
+        if self._meatFoodValue != value:
+            self._meatFoodValue = value
+            self.meatFoodValueChanged.emit(value)
 
     @pyqtProperty(int, notify=usableMeatChanged)
-    def usableMeat(self):
-        """ Gets or sets the usable meat of the animal
-
-        :return: The usable meat as an integer (in percent)
-        :rtype: int
-        """
-        return self._usableMeat
+    def usableMeat(self) -> int:
+        """Get the animal's usable meat percentage."""
+        return cast(int, self._usableMeat)
 
     @usableMeat.setter
-    def usableMeat(self, usableMeat):
-        """ Sets the usable meat of the animal and emits a signal when done
+    def usableMeat(self, value: int) -> None:
+        """Set the animal's usable meat percentage.
 
-        :param usableMeat: The new usable meat value for the animal (in percent)
-        :type usableMeat: int
+        Args:
+            value: The usable meat percentage to set
         """
-        if self._usableMeat != usableMeat:
-            self._usableMeat = usableMeat
-            self.usableMeatChanged.emit(usableMeat)
+        if self._usableMeat != value:
+            self._usableMeat = value
+            self.usableMeatChanged.emit(value)
 
     @pyqtProperty(int, notify=killWeightChanged)
-    def killWeight(self):
-        """ Gets or sets the kill weight of the animal
-
-        :return: The kill weight as an integer (in kg)
-        :rtype: int
-        """
-        return self._killWeight
+    def killWeight(self) -> int:
+        """Get the animal's kill weight."""
+        return cast(int, self._killWeight)
 
     @killWeight.setter
-    def killWeight(self, killWeight):
-        """ Sets the kill weight of the animal and emits a signal when done
+    def killWeight(self, value: int) -> None:
+        """Set the animal's kill weight.
 
-        :param killWeight: The new kill weight value for the animal (in kg)
-        :type killWeight: int
+        Args:
+            value: The kill weight to set
         """
-        if self._killWeight != killWeight:
-            self._killWeight = killWeight
-            self.killWeightChanged.emit(killWeight)
+        if self._killWeight != value:
+            self._killWeight = value
+            self.killWeightChanged.emit(value)
 
     @pyqtProperty(int, notify=growTimeChanged)
-    def growTime(self):
-        """ Gets or sets the grow time of the animal
-
-        :return: The grow time as an integer (in years)
-        :rtype: int
-        """
-        return self._growTime
+    def growTime(self) -> int:
+        """Get the animal's grow time."""
+        return cast(int, self._growTime)
 
     @growTime.setter
-    def growTime(self, growTime):
-        """ Sets the grow time of the animal and emits a signal when done
+    def growTime(self, value: int) -> None:
+        """Set the animal's grow time.
 
-        :param growTime: The new grow time value for the animal (in years)
-        :type growTime: int
+        Args:
+            value: The grow time to set
         """
-        if self._growTime != growTime:
-            self._growTime = growTime
-            self.growTimeChanged.emit(growTime)
+        if self._growTime != value:
+            self._growTime = value
+            self.growTimeChanged.emit(value)
 
     @pyqtProperty(int, notify=deathRateChanged)
-    def deathRate(self):
-        """ Gets or sets the death rate of the animal
-
-        :return: The death rate as an integer (in percent)
-        :rtype: int
-        """
-        return self._deathRate
+    def deathRate(self) -> int:
+        """Get the animal's death rate."""
+        return cast(int, self._deathRate)
 
     @deathRate.setter
-    def deathRate(self, deathRate):
-        """ Sets the death rate of the animal and emits a signal when done
+    def deathRate(self, value: int) -> None:
+        """Set the animal's death rate.
 
-        :param deathRate: The new death rate value for the animal (in percent)
-        :type deathRate: int
+        Args:
+            value: The death rate to set
         """
-        if self._deathRate != deathRate:
-            self._deathRate = deathRate
-            self.deathRateChanged.emit(deathRate)
+        if self._deathRate != value:
+            self._deathRate = value
+            self.deathRateChanged.emit(value)
 
     @pyqtProperty(str, notify=feedEnergyTypeChanged)
-    def feedEnergyType(self):
-        """ Gets or sets the energy type for animal feed
-
-        :return: The energy type as a string (KCalories or TDN)
-        :rtype: str
-        """
-        return self._feedEnergyType
+    def feedEnergyType(self) -> str:
+        """Get the animal's feed energy type."""
+        return cast(str, self._feedEnergyType)
 
     @feedEnergyType.setter
-    def feedEnergyType(self, feedEnergyType):
-        """ Sets the energy type for animal feed and emits a signal when done
+    def feedEnergyType(self, value: str) -> None:
+        """Set the animal's feed energy type.
 
-        :param feedEnergyType: The new energy type value for animal feed (KCalories or TDN)
-        :type feedEnergyType: str
+        Args:
+            value: The feed energy type to set
         """
-        if self._feedEnergyType != feedEnergyType:
-            self._feedEnergyType = feedEnergyType
-            self.feedEnergyTypeChanged.emit(feedEnergyType)
+        if self._feedEnergyType != value:
+            self._feedEnergyType = value
+            self.feedEnergyTypeChanged.emit(value)
 
     @pyqtProperty(int, notify=gestatingChanged)
-    def gestating(self):
-        """ Gets or sets the number of gestating females
-
-        :return: The number of gestating females as an integer
-        :rtype: int
-        """
-        return self._gestating
+    def gestating(self) -> int:
+        """Get the animal's gestating value."""
+        return cast(int, self._gestating)
 
     @gestating.setter
-    def gestating(self, gestating):
-        """ Sets the number of gestating females and emits a signal when done
+    def gestating(self, value: int) -> None:
+        """Set the animal's gestating value.
 
-        :param gestating: The new number of gestating females for the animal
-        :type gestating: int
+        Args:
+            value: The gestating value to set
         """
-        if self._gestating != gestating:
-            self._gestating = gestating
-            self.gestatingChanged.emit(gestating)
+        if self._gestating != value:
+            self._gestating = value
+            self.gestatingChanged.emit(value)
 
     @pyqtProperty(int, notify=lactatingChanged)
-    def lactating(self):
-        """ Gets or sets the number of lactating females
-
-        :return: The number of lactating females as an integer
-        :rtype: int
-        """
-        return self._lactating
+    def lactating(self) -> int:
+        """Get the animal's lactating value."""
+        return cast(int, self._lactating)
 
     @lactating.setter
-    def lactating(self, lactating):
-        """ Sets the number of lactating females and emits a signal when done
+    def lactating(self, value: int) -> None:
+        """Set the animal's lactating value.
 
-        :param lactating: The new number of lactating females for the animal
-        :type lactating: int
+        Args:
+            value: The lactating value to set
         """
-        if self._lactating != lactating:
-            self._lactating = lactating
-            self.lactatingChanged.emit(lactating)
+        if self._lactating != value:
+            self._lactating = value
+            self.lactatingChanged.emit(value)
 
     @pyqtProperty(int, notify=maintenanceChanged)
-    def maintenance(self):
-        """ Gets or sets the adult maintenance value
-
-        :return: The adult maintenance value as an integer (in kg/day)
-        :rtype: int
-        """
-        return self._maintenance
+    def maintenance(self) -> int:
+        """Get the animal's maintenance value."""
+        return cast(int, self._maintenance)
 
     @maintenance.setter
-    def maintenance(self, maintenance):
-        """ Sets the adult maintenance value and emits a signal when done
+    def maintenance(self, value: int) -> None:
+        """Set the animal's maintenance value.
 
-        :param maintenance: The new adult maintenance value for the animal (in kg/day)
-        :type maintenance: int
+        Args:
+            value: The maintenance value to set
         """
-        if self._maintenance != maintenance:
-            self._maintenance = maintenance
-            self.maintenanceChanged.emit(maintenance)
+        if self._maintenance != value:
+            self._maintenance = value
+            self.maintenanceChanged.emit(value)
 
     @pyqtProperty(int, notify=juvenileChanged)
-    def juvenile(self):
-        """ Gets or sets the number of juveniles
-
-        :return: The number of juveniles as an integer
-        :rtype: int
-        """
-        return self._juvenile
+    def juvenile(self) -> int:
+        """Get the animal's juvenile value."""
+        return cast(int, self._juvenile)
 
     @juvenile.setter
-    def juvenile(self, juvenile):
-        """ Sets the number of juveniles and emits a signal when done
+    def juvenile(self, value: int) -> None:
+        """Set the animal's juvenile value.
 
-        :param juvenile: The new number of juveniles for the animal
-        :type juvenile: int
+        Args:
+            value: The juvenile value to set
         """
-        if self._juvenile != juvenile:
-            self._juvenile = juvenile
-            self.juvenileChanged.emit(juvenile)
+        if self._juvenile != value:
+            self._juvenile = value
+            self.juvenileChanged.emit(value)
 
     @pyqtProperty(int, notify=sexualMaturityChanged)
-    def sexualMaturity(self):
-        """ Gets or sets the sexual maturity value
-
-        :return: The sexual maturity value as an integer (in years)
-        :rtype: int
-        """
-        return self._sexualMaturity
+    def sexualMaturity(self) -> int:
+        """Get the animal's sexual maturity value."""
+        return cast(int, self._sexualMaturity)
 
     @sexualMaturity.setter
-    def sexualMaturity(self, sexualMaturity):
-        """ Sets the sexual maturity value and emits a signal when done
+    def sexualMaturity(self, value: int) -> None:
+        """Set the animal's sexual maturity value.
 
-        :param sexualMaturity: The new sexual maturity value for the animal (in years)
-        :type sexualMaturity: int
+        Args:
+            value: The sexual maturity value to set
         """
-        if self._sexualMaturity != sexualMaturity:
-            self._sexualMaturity = sexualMaturity
-            self.sexualMaturityChanged.emit(sexualMaturity)
+        if self._sexualMaturity != value:
+            self._sexualMaturity = value
+            self.sexualMaturityChanged.emit(value)
 
     @pyqtProperty(int, notify=breedingExpectancyChanged)
-    def breedingExpectancy(self):
-        """ Gets or sets the breeding expectancy value
-
-        :return: The breeding expectancy value as an integer (in years)
-        :rtype: int
-        """
-        return self._breedingExpectancy
+    def breedingExpectancy(self) -> int:
+        """Get the animal's breeding expectancy value."""
+        return cast(int, self._breedingExpectancy)
 
     @breedingExpectancy.setter
-    def breedingExpectancy(self, breedingExpectancy):
-        """ Sets the breeding expectancy value and emits a signal when done
+    def breedingExpectancy(self, value: int) -> None:
+        """Set the animal's breeding expectancy value.
 
-        :param breedingExpectancy: The new breeding expectancy value for the animal (in years)
-        :type breedingExpectancy: int
+        Args:
+            value: The breeding expectancy value to set
         """
-        if self._breedingExpectancy != breedingExpectancy:
-            self._breedingExpectancy = breedingExpectancy
-            self.breedingExpectancyChanged.emit(breedingExpectancy)
+        if self._breedingExpectancy != value:
+            self._breedingExpectancy = value
+            self.breedingExpectancyChanged.emit(value)
 
     @pyqtProperty(int, notify=conceptionEfficiencyChanged)
-    def conceptionEfficiency(self):
-        """ Gets or sets the conception efficiency value
-
-        :return: The conception efficiency value as an integer (in percent)
-        :rtype: int
-        """
-        return self._conceptionEfficiency
+    def conceptionEfficiency(self) -> int:
+        """Get the animal's conception efficiency value."""
+        return cast(int, self._conceptionEfficiency)
 
     @conceptionEfficiency.setter
-    def conceptionEfficiency(self, conceptionEfficiency):
-        """ Sets the conception efficiency value and emits a signal when done
+    def conceptionEfficiency(self, value: int) -> None:
+        """Set the animal's conception efficiency value.
 
-        :param conceptionEfficiency: The new conception efficiency value for the animal (in percent)
-        :type conceptionEfficiency: int
+        Args:
+            value: The conception efficiency value to set
         """
-        if self._conceptionEfficiency != conceptionEfficiency:
-            self._conceptionEfficiency = conceptionEfficiency
-            self.conceptionEfficiencyChanged.emit(conceptionEfficiency)
+        if self._conceptionEfficiency != value:
+            self._conceptionEfficiency = value
+            self.conceptionEfficiencyChanged.emit(value)
 
-    @pyqtProperty(int, notify=femalesToMalesChanged)
-    def femalesPerMale(self):
-        """ Gets or sets the number of females to males for breeding
-
-        :return: The number of females to males as an integer
-        :rtype: int
-        """
-        return self._femalesToMales
+    @pyqtProperty(int, notify=femalesPerMaleChanged)
+    def femalesPerMale(self) -> int:
+        """Get the animal's females to males ratio."""
+        return cast(int, self._femalesToMales)
 
     @femalesPerMale.setter
-    def femalesPerMale(self, femalesPerMale):
-        """ Sets the number of females to males for breeding and emits a signal when done
+    def femalesPerMale(self, value: int) -> None:
+        """Set the animal's females to males ratio.
 
-        :param femalesPerMale: The new number of females to males for the animal (for breeding)
-        :type femalesPerMale: int
+        Args:
+            value: The females to males ratio to set
         """
-        if self._femalesToMales != femalesPerMale:
-            self._femalesToMales = femalesPerMale
-            self.femalesPerMaleChanged.emit(femalesPerMale)
+        if self._femalesToMales != value:
+            self._femalesToMales = value
+            self.femalesPerMaleChanged.emit(value)
 
     @pyqtProperty(str, notify=adultWeightChanged)
-    def adultWeight(self):
-        """ Gets or sets the adult weight value
-
-        :return: The adult weight as a string (in kg)
-        :rtype: str
-        """
-        return self._adultWeight
+    def adultWeight(self) -> str:
+        """Get the animal's adult weight."""
+        return cast(str, self._adultWeight)
 
     @adultWeight.setter
-    def adultWeight(self, adultWeight):
-        """ Sets the adult weight value and emits a signal when done
+    def adultWeight(self, value: str) -> None:
+        """Set the animal's adult weight.
 
-        :param adultWeight: The new adult weight value for the animal (in kg)
-        :type adultWeight: str
+        Args:
+            value: The adult weight to set
         """
-        if self._adultWeight != adultWeight:
-            self._adultWeight = adultWeight
-            self.adultWeightChanged.emit(adultWeight)
+        if self._adultWeight != value:
+            self._adultWeight = value
+            self.adultWeightChanged.emit(value)
 
     @pyqtProperty(int, notify=youngPerBirthChanged)
-    def youngPerBirth(self):
-        """ Gets or sets the number of young per birth
-
-        :return: The number of young per birth as an integer
-        :rtype: int
-        """
-        return self._youngPerBirth
+    def youngPerBirth(self) -> int:
+        """Get the animal's young per birth value."""
+        return cast(int, self._youngPerBirth)
 
     @youngPerBirth.setter
-    def youngPerBirth(self, youngPerBirth):
-        """ Sets the number of young per birth and emits a signal when done
+    def youngPerBirth(self, value: int) -> None:
+        """Set the animal's young per birth value.
 
-        :param youngPerBirth: The new number of young per birth for the animal
-        :type youngPerBirth: int
+        Args:
+            value: The young per birth value to set
         """
-        if self._youngPerBirth != youngPerBirth:
-            self._youngPerBirth = youngPerBirth
-            self.youngPerBirthChanged.emit(youngPerBirth)
+        if self._youngPerBirth != value:
+            self._youngPerBirth = value
+            self.youngPerBirthChanged.emit(value)
 
     @pyqtProperty(int, notify=weaningAgeChanged)
-    def weaningAge(self):
-        """ Gets or sets the weaning age value
-
-        :return: The weaning age as an integer (in days)
-        :rtype: int
-        """
-        return self._weaningAge
+    def weaningAge(self) -> int:
+        """Get the animal's weaning age."""
+        return cast(int, self._weaningAge)
 
     @weaningAge.setter
-    def weaningAge(self, weaningAge):
-        """ Sets the weaning age value and emits a signal when done
+    def weaningAge(self, value: int) -> None:
+        """Set the animal's weaning age.
 
-        :param weaningAge: The new weaning age value for the animal (in days)
-        :type weaningAge: int
+        Args:
+            value: The weaning age to set
         """
-        if self._weaningAge != weaningAge:
-            self._weaningAge = weaningAge
-            self.weaningAgeChanged.emit(weaningAge)
+        if self._weaningAge != value:
+            self._weaningAge = value
+            self.weaningAgeChanged.emit(value)
 
     @pyqtProperty(int, notify=weaningWeightChanged)
-    def weaningWeight(self):
-        """ Gets or sets the weaning weight value
-
-        :return: The weaning weight as an integer (in kg)
-        :rtype: int
-        """
-        return self._weaningWeight
+    def weaningWeight(self) -> int:
+        """Get the animal's weaning weight."""
+        return cast(int, self._weaningWeight)
 
     @weaningWeight.setter
-    def weaningWeight(self, weaningWeight):
-        """ Sets the weaning weight value and emits a signal when done
+    def weaningWeight(self, value: int) -> None:
+        """Set the animal's weaning weight.
 
-        :param weaningWeight: The new weaning weight value for the animal (in kg)
-        :type weaningWeight: int
+        Args:
+            value: The weaning weight to set
         """
-        if self._weaningWeight != weaningWeight:
-            self._weaningWeight = weaningWeight
-            self.weaningWeightChanged.emit(weaningWeight)
+        if self._weaningWeight != value:
+            self._weaningWeight = value
+            self.weaningWeightChanged.emit(value)
 
     @pyqtProperty(int, notify=gestationTimeChanged)
-    def gestationTime(self):
-        """ Gets or sets the gestation time value
-
-        :return: The gestation time as an integer (in days)
-        :rtype: int
-        """
-        return self._gestationTime
+    def gestationTime(self) -> int:
+        """Get the animal's gestation time."""
+        return cast(int, self._gestationTime)
 
     @gestationTime.setter
-    def gestationTime(self, gestationTime):
-        """ Sets the gestation time value and emits a signal when done
+    def gestationTime(self, value: int) -> None:
+        """Set the animal's gestation time.
 
-        :param gestationTime: The new gestation time value for the animal (in days)
-        :type gestationTime: int
+        Args:
+            value: The gestation time to set
         """
-        if self._gestationTime != gestationTime:
-            self._gestationTime = gestationTime
-            self.gestationTimeChanged.emit(gestationTime)
+        if self._gestationTime != value:
+            self._gestationTime = value
+            self.gestationTimeChanged.emit(value)
 
     @pyqtProperty(int, notify=estrousCycleChanged)
-    def estrousCycle(self):
-        """ Gets or sets the estrous cycle value
-
-        :return: The estrous cycle as an integer (in days)
-        :rtype: int
-        """
-        return self._estrousCycle
+    def estrousCycle(self) -> int:
+        """Get the animal's estrous cycle."""
+        return cast(int, self._estrousCycle)
 
     @estrousCycle.setter
-    def estrousCycle(self, estrousCycle):
-        """ Sets the estrous cycle value and emits a signal when done
+    def estrousCycle(self, value: int) -> None:
+        """Set the animal's estrous cycle.
 
-        :param estrousCycle: The new estrous cycle value for the animal (in days)
-        :type estrousCycle: int
+        Args:
+            value: The estrous cycle to set
         """
-        if self._estrousCycle != estrousCycle:
-            self._estrousCycle = estrousCycle
-            self.estrousCycleChanged.emit(estrousCycle)
+        if self._estrousCycle != value:
+            self._estrousCycle = value
+            self.estrousCycleChanged.emit(value)
 
     @pyqtProperty(int, notify=lactationTimeChanged)
-    def lactationTime(self):
-        """ Gets or sets the lactation time value
-
-        :return: The lactation time as an integer (in days)
-        :rtype: int
-        """
-        return self._lactationTime
+    def lactationTime(self) -> int:
+        """Get the animal's lactation time."""
+        return cast(int, self._lactationTime)
 
     @lactationTime.setter
-    def lactationTime(self, lactationTime):
-        """ Sets the lactation time value and emits a signal when done
+    def lactationTime(self, value: int) -> None:
+        """Set the animal's lactation time.
 
-        :param lactationTime: The new lactation time value for the animal (in days)
-        :type lactationTime: int
+        Args:
+            value: The lactation time to set
         """
-        if self._lactationTime != lactationTime:
-            self._lactationTime = lactationTime
-            self.lactationTimeChanged.emit(lactationTime)
+        if self._lactationTime != value:
+            self._lactationTime = value
+            self.lactationTimeChanged.emit(value)
 
-    @pyqtProperty(int, notify=milkChanged)
-    def milk(self):
-        """ Gets or sets the milk value
-
-        :return: The milk value as an integer (in liters)
-        :rtype: int
-        """
-        return self._milk
+    @pyqtProperty(bool, notify=milkChanged)
+    def milk(self) -> bool:
+        """Get the animal's milk value."""
+        return cast(bool, self._milk)
 
     @milk.setter
-    def milk(self, milk):
-        """ Sets the milk value and emits a signal when done
+    def milk(self, value: bool) -> None:
+        """Set the animal's milk value.
 
-        :param milk: The new milk value for the animal (in liters)
-        :type milk: int
+        Args:
+            value: The milk value to set
         """
-        if self._milk != milk:
-            self._milk = milk
-            self.milkChanged.emit(milk)
+        if self._milk != value:
+            self._milk = value
+            self.milkChanged.emit(value)
 
     @pyqtProperty(int, notify=milkGramsPerDayChanged)
-    def milkGramsPerDay(self):
-        """ Gets or sets the milk grams per day value
-
-        :return: The milk grams per day value as an integer (in grams)
-        :rtype: int
-        """
-        return self._milkGramsPerDay
+    def milkGramsPerDay(self) -> int:
+        """Get the animal's milk grams per day value."""
+        return cast(int, self._milkGramsPerDay)
 
     @milkGramsPerDay.setter
-    def milkGramsPerDay(self, milkGramsPerDay):
-        """ Sets the milk grams per day value and emits a signal when done
+    def milkGramsPerDay(self, value: int) -> None:
+        """Set the animal's milk grams per day value.
 
-        :param milkGramsPerDay: The new milk grams per day value for the animal (in grams)
-        :type milkGramsPerDay: int
+        Args:
+            value: The milk grams per day value to set
         """
-        if self._milkGramsPerDay != milkGramsPerDay:
-            self._milkGramsPerDay = milkGramsPerDay
-            self.milkGramsPerDayChanged.emit(milkGramsPerDay)
+        if self._milkGramsPerDay != value:
+            self._milkGramsPerDay = value
+            self.milkGramsPerDayChanged.emit(value)
 
     @pyqtProperty(int, notify=milkFoodValueChanged)
-    def milkFoodValue(self):
-        """ Gets or sets the milk food value
-
-        :return: The milk food value as an integer (in calories)
-        :rtype: int
-        """
-        return self._milkFoodValue
+    def milkFoodValue(self) -> int:
+        """Get the animal's milk food value."""
+        return cast(int, self._milkFoodValue)
 
     @milkFoodValue.setter
-    def milkFoodValue(self, milkFoodValue):
-        """ Sets the milk food value and emits a signal when done
+    def milkFoodValue(self, value: int) -> None:
+        """Set the animal's milk food value.
 
-        :param milkFoodValue: The new milk food value for the animal (in calories)
-        :type milkFoodValue: int
+        Args:
+            value: The milk food value to set
         """
-        if self._milkFoodValue != milkFoodValue:
-            self._milkFoodValue = milkFoodValue
-            self.milkFoodValueChanged.emit(milkFoodValue)
+        if self._milkFoodValue != value:
+            self._milkFoodValue = value
+            self.milkFoodValueChanged.emit(value)
 
-    @pyqtProperty(int, notify=fleeceChanged)
-    def fleece(self):
-        """ Gets or sets the fleece value
-
-        :return: The fleece value as an integer (in kg)
-        :rtype: int
-        """
-        return self._fleece
+    @pyqtProperty(bool, notify=fleeceChanged)
+    def fleece(self) -> bool:
+        """Get the animal's fleece value."""
+        return cast(bool, self._fleece)
 
     @fleece.setter
-    def fleece(self, fleece):
-        """ Sets the fleece value and emits a signal when done
+    def fleece(self, value: bool) -> None:
+        """Set the animal's fleece value.
 
-        :param fleece: The new fleece value for the animal (in kg)
-        :type fleece: int
+        Args:
+            value: The fleece value to set
         """
-        if self._fleece != fleece:
-            self._fleece = fleece
-            self.fleeceChanged.emit(fleece)
+        if self._fleece != value:
+            self._fleece = value
+            self.fleeceChanged.emit(value)
 
-    @pyqtProperty(int, notify=fleeceWeightKgChanged)
-    def fleeceWeightKg(self):
-        """ Gets or sets the fleece weight value
-
-        :return: The fleece weight value as an integer (in kg)
-        :rtype: int
-        """
-        return self._fleeceWeightKg
+    @pyqtProperty(float, notify=fleeceWeightKgChanged)
+    def fleeceWeightKg(self) -> float:
+        """Get the animal's fleece weight value."""
+        return cast(float, self._fleeceWeightKg)
 
     @fleeceWeightKg.setter
-    def fleeceWeightKg(self, fleeceWeightKg):
-        """ Sets the fleece weight value and emits a signal when done
+    def fleeceWeightKg(self, value: float) -> None:
+        """Set the animal's fleece weight value.
 
-        :param fleeceWeightKg: The new fleece weight value for the animal (in kg)
-        :type fleeceWeightKg: int
+        Args:
+            value: The fleece weight value to set
         """
-        if self._fleeceWeightKg != fleeceWeightKg:
-            self._fleeceWeightKg = fleeceWeightKg
-            self.fleeceWeightKgChanged.emit(fleeceWeightKg)
+        if self._fleeceWeightKg != value:
+            self._fleeceWeightKg = value
+            self.fleeceWeightKgChanged.emit(value)
 
     @pyqtProperty(str, notify=imageFileChanged)
-    def imageFile(self):
-        """ Gets or sets the image file path
-
-        :return: The image file path as a string
-        :rtype: str
-        """
-        return self._imageFile
+    def imageFile(self) -> str:
+        """Get the animal's image file path."""
+        return cast(str, self._imageFile)
 
     @imageFile.setter
-    def imageFile(self, imageFile):
-        """ Sets the image file path and emits a signal when done
+    def imageFile(self, value: str) -> None:
+        """Set the animal's image file path.
 
-        :param imageFile: The new image file path for the animal
-        :type imageFile: str
+        Args:
+            value: The image file path to set
         """
-        if self._imageFile != imageFile:
-            self._imageFile = imageFile
-            self.imageFileChanged.emit(imageFile)
+        if self._imageFile != value:
+            self._imageFile = value
+            self.imageFileChanged.emit(value)
 
     def fromXml(self, theXml: str) -> bool:
-        """
-        Parses an XML string and sets the properties of the animal object accordingly.
+        """Load animal data from XML string.
 
-        :param theXml: The XML string to parse.
-        :type theXml: str
-        :return: True if the parsing was successful, False otherwise.
-        :rtype: bool
-        """
-        # the following import is here to avoid a circular import
-        from la.lib.lautils import LaUtils  # , xmlEncode, xmlDecode
-        myDocument = QDomDocument("mydocument")
-        myDocument.setContent(theXml)
-        myTopElement: QDomElement = myDocument.firstChildElement("animal")
+        Args:
+            theXml: XML string containing animal data
 
-        # gracefully handle the case where the top element is null
-        if myTopElement.isNull():
-            warnings.warn("Failed to parse XML: myTopElement is null. The XML \
-                element could not be found or parsed.")
+        Returns:
+            True if loaded successfully, False otherwise
+
+        Raises:
+            ValueError: If required elements are missing or invalid
+        """
+        from la.lib.lautils import LaUtils # we do this to avoid circular import issues
+
+        try:
+            myDocument = QDomDocument()
+            if not myDocument.setContent(theXml):
+                raise ValueError("Invalid XML content")
+
+            myTopElement = myDocument.firstChildElement("animal")
+            if myTopElement.isNull():
+                raise ValueError("Missing animal element")
+
+            # Helper function to safely get integer values
+            def getIntValue(elementName: str, default: int = 0) -> int:
+                element = myTopElement.firstChildElement(elementName)
+                if element.isNull():
+                    return default
+                text = element.text()
+                try:
+                    return int(text)
+                except (ValueError, TypeError):
+                    return default
+
+            # Basic info
+            self._name = LaUtils.xmlDecode(myTopElement.firstChildElement("name").text())
+            self._description = LaUtils.xmlDecode(myTopElement.firstChildElement("description").text())
+
+            # Meat production
+            self._meatFoodValue = getIntValue("meatFoodValue", 3000)
+            self._usableMeat = getIntValue("usableMeat", 50)
+            self._killWeight = getIntValue("killWeight", 100)
+            self._adultWeight = getIntValue("adultWeight", 0)
+            self._growTime = getIntValue("growTime", 10)
+            self._deathRate = getIntValue("deathRate", 10)
+
+            # Reproduction
+            self._conceptionEfficiency = getIntValue("conceptionEfficiency", 0)
+            self._femalesToMales = getIntValue("femalesToMales", 0)
+            self._sexualMaturity = getIntValue("sexualMaturity", 18)
+            self._breedingExpectancy = getIntValue("breedingExpectancy", 5)
+            self._youngPerBirth = getIntValue("youngPerBirth", 1)
+            self._gestationTime = getIntValue("gestationTime", 120)
+            self._estrousCycle = getIntValue("estrousCycle", 21)
+
+            # Early life
+            self._weaningAge = getIntValue("weaningAge", 12)
+            self._weaningWeight = getIntValue("weaningWeight", 30)
+
+            # Energy requirements type
+            myFeedEnergyType = myTopElement.firstChildElement("feedEnergyType").text()
+            self._feedEnergyType = EnergyType.TDN if myFeedEnergyType == "TDN" else EnergyType.KCalories
+
+            # Energy requirements
+            self._gestating = getIntValue("gestating", 0)
+            self._lactating = getIntValue("lactating", 0)
+            self._maintenance = getIntValue("maintenance", 0)
+            self._juvenile = getIntValue("juvenile", 0)
+
+            # Dairy
+            self._milk = bool(getIntValue("milk", 0))
+            self._milkGramsPerDay = getIntValue("milkGramsPerDay", 0)
+            self._milkFoodValue = getIntValue("milkFoodValue", 0)
+            self._lactationTime = getIntValue("lactationTime", 0)
+
+            # Fiber
+            self._fleece = bool(getIntValue("fleece", 0))
+            self._fleeceWeightKg = getIntValue("fleeceWeightKg", 0)
+
+            # Image
+            self._imageFile = LaUtils.xmlDecode(myTopElement.firstChildElement("imageFile").text())
+
+            return True
+
+        except Exception as e:
+            print(f"Error loading animal from XML: {str(e)}")
+            import traceback
+            print(traceback.format_exc())
             return False
 
-        self.setGuid(myTopElement.attribute("guid"))
-        myName = LaUtils.xmlDecode(myTopElement.firstChildElement("name").text())
-        myDescription = LaUtils.xmlDecode(myTopElement.firstChildElement("description").text())
-
-        getIntValue = lambda elementName: int(myTopElement.firstChildElement(elementName).text()) if myTopElement.firstChildElement(elementName).text() else 0
-
-
-        myMeatFoodValue = getIntValue("meatFoodValue")
-        myUsableMeat = getIntValue("usableMeat")
-        myKillWeight = getIntValue("killWeight")
-        myAdultWeight = getIntValue("adultWeight")
-        myConceptionEfficiency = getIntValue("conceptionEfficiency")
-        myFemalesToMales = getIntValue("femalesToMales")
-        myGrowTime = getIntValue("growTime")
-        myDeathRate = getIntValue("deathRate")
-        myGestating = getIntValue("gestating")
-        myLactating = getIntValue("lactating")
-        myMaintenance = getIntValue("maintenance")
-        myJuvenile = getIntValue("juvenile")
-        mySexualMaturity = getIntValue("sexualMaturity")
-        myBreedingExpectancy = getIntValue("breedingExpectancy")
-        myYoungPerBirth = getIntValue("youngPerBirth")
-        myWeaningAge = getIntValue("weaningAge")
-        myWeaningWeight = getIntValue("weaningWeight")
-        myGestationTime = getIntValue("gestationTime")
-        myEstrousCycle = getIntValue("estrousCycle")
-        myLactationTime = getIntValue("lactationTime")
-        myMilk = getIntValue("milk")
-        myMilkGramsPerDay = getIntValue("milkGramsPerDay")
-        myMilkFoodValue = getIntValue("milkFoodValue")
-        myFleece = getIntValue("fleece")
-        myFleeceWeightKg = getIntValue("fleeceWeightKg")
-        myImageFile = LaUtils.xmlDecode(myTopElement.firstChildElement("imageFile").text())
-
-        # the following is a hack to get around the fact that the feedEnergyType
-        # property is an enum, and the enum values are not being saved to the
-        # XML file
-        myFeedEnergyType: str = myTopElement.firstChildElement("feedEnergyType").text()
-        if myFeedEnergyType == "KCalories":
-            self.mFeedEnergyType = "KCalories"
-        elif myFeedEnergyType == "TDN":
-            self.mFeedEnergyType = "TDN"
-
-        self._name = myName
-        self._description = myDescription
-        self._meatFoodValue = myMeatFoodValue
-        self._usableMeat = myUsableMeat
-        self._killWeight = myKillWeight
-        self._adultWeight = myAdultWeight
-        self._conceptionEfficiency = myConceptionEfficiency
-        self._femalesToMales = myFemalesToMales
-        self._growTime = myGrowTime
-        self._deathRate = myDeathRate
-        self._gestating = myGestating
-        self._lactating = myLactating
-        self._maintenance = myMaintenance
-        self._juvenile = myJuvenile
-        self._sexualMaturity = mySexualMaturity
-        self._breedingExpectancy = myBreedingExpectancy
-        self._youngPerBirth = myYoungPerBirth
-        self._weaningAge = myWeaningAge
-        self._weaningWeight = myWeaningWeight
-        self._gestationTime = myGestationTime
-        self._estrousCycle = myEstrousCycle
-        self._lactationTime = myLactationTime
-        self._milk = myMilk
-        self._milkGramsPerDay = myMilkGramsPerDay
-        self._milkFoodValue = myMilkFoodValue
-        self._fleece = myFleece
-        self._fleeceWeightKg = myFleeceWeightKg
-        self._imageFile = myImageFile
-
-        return True
-
-
     def toXml(self) -> str:
-        from la.lib.lautils import LaUtils  # we import this here to avoid a circular import
-        myString: str = f'<animal guid="{self.guid}">\n'
-        """ NOTE: The LaUtils.xmlEncode function is likely used here to escape
-            special characters that have specific meanings in XML. This is done
-            to ensure that the _name value can be safely included in an XML
-            document without causing parsing errors.
+        from la.lib.lautils import LaUtils # we do this to avoid circular import issues
 
-            For example chars like <, >, and & are used in XML tags/entities.
-            If these chars appear in _name they could cause malformed XML code.
-
-            The xmlEncode function would replace these characters with their corresponding
-            XML entities (&lt;, &gt;, and &amp; respectively).
-        """
-        myString += f'  <name>{LaUtils.xmlEncode(str(self._name))}</name>\n'
-        myString += f'  <description>{LaUtils.xmlEncode(str(self._description))}</description>\n'
+        """Generate XML representation of animal data."""
+        myString = f'<animal guid="{self.guid}">\n'
+        myString += f'  <n>{LaUtils.xmlEncode(str(cast(str, self._name)))}<n>\n'
+        myString += f'  <description>{LaUtils.xmlEncode(str(cast(str, self._description)))}</description>\n'
         myString += f'  <meatFoodValue>{self._meatFoodValue}</meatFoodValue>\n'
         myString += f'  <usableMeat>{self._usableMeat}</usableMeat>\n'
         myString += f'  <killWeight>{self._killWeight}</killWeight>\n'
-        myString += f'  <adultWeight>{self._adultWeight}</adultWeight>\n'
-        myString += f'  <conceptionEfficiency>{self._conceptionEfficiency}</conceptionEfficiency>\n'
+        myString += f'  <adultWeight>{self._adultWeight}</adultWeight>\n'  # Fixed closing tag
+        myString += f'  <conceptionEfficiency>{self._conceptionEfficiency}</conceptionEfficiency>\n'  # Fixed closing tag
         myString += f'  <femalesToMales>{self._femalesToMales}</femalesToMales>\n'
         myString += f'  <growTime>{self._growTime}</growTime>\n'
         myString += f'  <deathRate>{self._deathRate}</deathRate>\n'
@@ -848,7 +850,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
         myString += f'  <juvenile>{self._juvenile}</juvenile>\n'
         myString += f'  <sexualMaturity>{self._sexualMaturity}</sexualMaturity>\n'
         myString += f'  <breedingExpectancy>{self._breedingExpectancy}</breedingExpectancy>\n'
-        myString += f'  <youngPerBirth>{self._youngPerBirth}</youngPerBirth>\n'
+        myString += f'  <youngPerBirth>{self._youngPerBirth}\n'
         myString += f'  <weaningAge>{self._weaningAge}</weaningAge>\n'
         myString += f'  <weaningWeight>{self._weaningWeight}</weaningWeight>\n'
         myString += f'  <gestationTime>{self._gestationTime}</gestationTime>\n'
@@ -856,63 +858,23 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
         myString += f'  <lactationTime>{self._lactationTime}</lactationTime>\n'
         myString += f'  <milk>{self._milk}</milk>\n'
         myString += f'  <milkGramsPerDay>{self._milkGramsPerDay}</milkGramsPerDay>\n'
-        myString += f'  <milkFoodValue>{self._milkFoodValue}</milkFoodValue>\n'
+        myString += f'  <milkFoodValue>{self._milkFoodValue}</milkFoodValue>\n'  # Fixed closing tag
         myString += f'  <fleece>{self._fleece}</fleece>\n'
         myString += f'  <fleeceWeightKg>{self._fleeceWeightKg}</fleeceWeightKg>\n'
         myString += f'  <imageFile>{LaUtils.xmlEncode(str(self._imageFile))}</imageFile>\n'
         myString += '</animal>\n'
         return myString
 
-
     def toText(self) -> str:
-        """
-        Returns a string representation of the animal object.
-        The string contains the following fields:
-        - guid
-        - name
-        - description
-        - meatFoodValue
-        - usableMeat
-        - killWeight
-        - adultWeight
-        - conceptionEfficiency
-        - femalesToMales
-        - growTime
-        - deathRate
-        - feedEnergyType
-        - gestating
-        - lactating
-        - maintenance
-        - juvenile
-        - sexualMaturity
-        - breedingExpectancy
-        - youngPerBirth
-        - weaningAge
-        - weaningWeight
-        - gestationTime
-        - estrousCycle
-        - lactationTime
-        - milk
-        - milkGramsPerDay
-        - milkFoodValue
-        - fleece
-        - fleeceWeightKg
-        """
-        from la.lib.lautils import LaUtils  # we import this here to avoid a circular import
-        myString: str = f'guid=>{self.guid()}\n'
-        """ NOTE:
-            The LaUtils.xmlEncode function is likely used here to escape special
-             characters that have specific meanings in XML. This is done to ensure
-             that the _name value can be safely included in an XML document without
-             causing parsing errors.
-             For example, chars like <, >, and & are used in XML tags/entities
-             These characters could cause the XML to be malformed.
+        """Generate plain text representation of animal data.
 
-             The xmlEncode function replaces these characters with their corresponding
-            XML entities (&lt;, &gt;, and &amp; respectively).
+        Returns:
+            Text string with animal attributes in key=>value format
         """
-        myString += f'name=>{LaUtils.xmlEncode(self._name)}\n'
-        myString += f'description=>{LaUtils.xmlEncode(self._description)}\n'
+        from la.lib.lautils import LaUtils # we do this to avoid circular import issues
+        myString: str = f'guid=>{self.guid()}\n'
+        myString += f'name=>{LaUtils.xmlEncode(str(cast(str, self._name)))}\n'
+        myString += f'description=>{LaUtils.xmlEncode(str(cast(str, self._description)))}\n'
         myString += f'meatFoodValue=>{self._meatFoodValue}\n'
         myString += f'usableMeat=>{self._usableMeat}\n'
         myString += f'killWeight=>{self._killWeight}\n'
@@ -944,16 +906,14 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
         myString += f'fleeceWeightKg=>{self._fleeceWeightKg}\n'
         return myString
 
-
     def toHtml(self) -> str:
-        """
-        Returns an HTML string containing details of the animal object.
+        """Generate HTML table representation of animal data.
 
-        The string contains the following fields:
-        -
+        Returns:
+            HTML string containing formatted animal attributes
         """
-        from la.lib.lautils import LaUtils  # we import this here to avoid a circular import
-        myString = f'<h2>Details for {LaUtils.xmlEncode(self._name)}</h2>'
+        from la.lib.lautils import LaUtils # we do this to avoid circular import issues
+        myString = f'<h2>Details for {LaUtils.xmlEncode(str(cast(str, self._name)))}</h2>'
         myString += '<table>'
         myString += f'<tr><td><b>Description:</b></td><td>{self._description}</td></tr>'
         myString += f'<tr><td><b>Meat Food Value:</b></td><td>{self._meatFoodValue}</td></tr>'

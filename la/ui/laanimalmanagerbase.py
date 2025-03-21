@@ -24,27 +24,35 @@ import numpy as np
 from enum import Enum
 
 from qgis.PyQt import QtGui, QtWidgets, uic
-from qgis.PyQt.QtWidgets import QMessageBox, QToolTip, QStackedWidget, QHBoxLayout, QVBoxLayout, QSplitter, QFormLayout, QLabel, QFrame, QPushButton, QTableWidget, QTableWidgetItem
+from qgis.PyQt.QtWidgets import QMessageBox, QToolTip, QStackedWidget, QHBoxLayout, QVBoxLayout, QSplitter, QFormLayout, QLabel, QFrame, QPushButton, QTableWidget, QTableWidgetItem, QDialog
 from qgis.PyQt.QtWidgets import QApplication, QFileSystemModel, QTreeView, QWidget, QHeaderView
 from qgis.PyQt.QtGui import QPainter, QBrush, QPen, QColor, QFont, QIcon
 from qgis.PyQt.QtCore import Qt, QPoint, QRect, QObject, QEvent, pyqtSignal, pyqtSlot, QSize, QDir
+import os
 
 ## IMPORTS:
 # from landuse_analyst.ui import laanimalmanagerbase # <-- this cannot be resolved
 # from landuse_analyst import laanimalmanagerbase  # <-- this CAN be resolved
 
+# Load the UI file
+FORM_CLASS, _ = uic.loadUiType(
+    os.path.join(
+        os.path.dirname(__file__),
+        'laanimalmanagerbase.ui'))
 
-class LaAnimalManagerBase(QWidget):
-	def __init__(self, parent=None):
-		super().__init__(parent=parent)  # Call the inherited classes __init__ method
-		self.ui = uic.loadUi("landuse_analyst/ui/laanimalmanagerbase.ui", self)  # Load the .ui file
-		self.initUI()
-		self.show() # Show the GUI
+class LaAnimalManagerBase(QDialog, FORM_CLASS):
+    """Base class for the Animal Manager dialog.
 
+    This class handles loading the UI. All implementation logic
+    should be in the LaAnimalManager class.
+    """
+    def __init__(self, parent=None):
+        super(LaAnimalManagerBase, self).__init__(parent)
+        self.setupUi(self)
 
-	def initUI(self):
-		pass
+        # Basic UI initialization
+        self.lblAnimalPix.setScaledContents(True)
 
-
-	def __str__(self):
- 		return
+        # Set up table headers
+        self.tblAnimals.horizontalHeader().hide()
+        self.tblAnimals.verticalHeader().hide()

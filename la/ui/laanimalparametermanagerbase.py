@@ -24,28 +24,47 @@ import numpy as np
 from enum import Enum
 
 from qgis.PyQt import QtGui, QtWidgets, uic
-from qgis.PyQt.QtWidgets import QMessageBox, QToolTip, QStackedWidget, QHBoxLayout, QVBoxLayout, QSplitter, QFormLayout, QLabel, QFrame, QPushButton, QTableWidget, QTableWidgetItem
+from qgis.PyQt.QtWidgets import QMessageBox, QToolTip, QStackedWidget, QHBoxLayout, QVBoxLayout, QSplitter, QFormLayout, QLabel, QFrame, QPushButton, QTableWidget, QTableWidgetItem, QDialog
 from qgis.PyQt.QtWidgets import QApplication, QFileSystemModel, QTreeView, QWidget, QHeaderView
 from qgis.PyQt.QtGui import QPainter, QBrush, QPen, QColor, QFont, QIcon
 from qgis.PyQt.QtCore import Qt, QPoint, QRect, QObject, QEvent, pyqtSignal, pyqtSlot, QSize, QDir
+import os
 
-## IMPORTS:
-# from gui.laanimalparametermanager import laanimalparametermanager
+# Load the UI file
+FORM_CLASS, _ = uic.loadUiType(
+    os.path.join(
+        os.path.dirname(__file__),
+        'laanimalparametermanagerbase.ui'))
 
+class LaAnimalParameterManagerBase(QDialog, FORM_CLASS):
+    """Base class for the Animal Parameter Manager dialog.
 
-class LaAnimalParameterManagerBase(QWidget):
-	def __init__(self, parent=None):
-		super().__init__(parent=parent) # Call the inherited classes __init__ method
-		self.ui = uic.loadUi("landuse_analyst/ui/laanimalparametermanagerbase.ui", self) # Load the .ui file
+    This class handles loading the UI. All implementation logic
+    should be in the LaAnimalParameterManager class.
+    """
+    def __init__(self, parent=None, flags=Qt.WindowFlags()):
+        super(LaAnimalParameterManagerBase, self).__init__(parent, flags)
+        self.setupUi(self)
 
+        # Basic UI initialization
+        self.lblAnimalPic.setScaledContents(True)
 
-		self.initUI()
-		self.show() # Show the GUI
+        # Set up table headers
+        self.tblAnimalParameterProfiles.horizontalHeader().hide()
+        self.tblAnimalParameterProfiles.verticalHeader().hide()
 
+    def setAreaUnitsIndex(self, area_units):
+        """Helper method to set the correct area units in combo box."""
+        if hasattr(self, 'cbAreaUnits'):
+            from la.lib.la import AreaUnits
+            if area_units == AreaUnits.Dunum:
+                self.cbAreaUnits.setCurrentText("Dunum")
+            elif area_units == AreaUnits.Hectare:
+                self.cbAreaUnits.setCurrentText("Hectare")
 
-	def initUI(self):
-		pass
-
-
-	def __str__(self):
- 		return
+    def setComboToDefault(self, combo_box, default_value):
+        """Helper method to set a combo box to a default value."""
+        if combo_box:
+            index = combo_box.findText(str(default_value))
+            if index >= 0:
+                combo_box.setCurrentIndex(index)

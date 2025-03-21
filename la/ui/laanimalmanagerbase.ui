@@ -13,7 +13,7 @@
    <string>Animal Profile Manager</string>
   </property>
   <property name="windowIcon" >
-   <iconset resource="../resources/resources.qrc" >:/la_icon.png</iconset>
+   <iconset resource="../resources.qrc" >:/la_icon.png</iconset>
   </property>
   <layout class="QGridLayout" >
    <item rowspan="3" row="0" column="0" >
@@ -974,7 +974,7 @@ p, li { white-space: pre-wrap; }
            <string>...</string>
           </property>
           <property name="icon" >
-           <iconset resource="../resources/resources.qrc" >:/copy.png</iconset>
+           <iconset resource="../resources.qrc" >:/copy.png</iconset>
           </property>
          </widget>
         </item>
@@ -996,7 +996,7 @@ p, li { white-space: pre-wrap; }
            <string>...</string>
           </property>
           <property name="icon" >
-           <iconset resource="../resources/resources.qrc" >:/new.png</iconset>
+           <iconset resource="../resources.qrc" >:/new.png</iconset>
           </property>
          </widget>
         </item>
@@ -1012,7 +1012,7 @@ p, li { white-space: pre-wrap; }
            <string>...</string>
           </property>
           <property name="icon" >
-           <iconset resource="../resources/resources.qrc" >:/delete.png</iconset>
+           <iconset resource="../resources.qrc" >:/delete.png</iconset>
           </property>
          </widget>
         </item>
@@ -1526,9 +1526,7 @@ p, li { white-space: pre-wrap; }
   <tabstop>sbEnergyForLactating</tabstop>
   <tabstop>sbEnergyForJuvenilePerKg</tabstop>
  </tabstops>
- <resources>
-  <include location="../resources/resources.qrc" />
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>pbnClose</sender>

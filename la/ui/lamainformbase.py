@@ -151,7 +151,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
 
     def on_clicked_pbnNewAnimal(self):
         LaUtils.debug.log("Manage Animals button clicked", "UI")
-        myAnimalManager = LaAnimalManager(self)  # Pass parent if needed
+        myAnimalManager = LaAnimalManager(parent=self)  # Remove the empty dict and just pass parent
         myAnimalManager.exec_()  # Use exec_ to show the dialog modally
 
     def on_clicked_pbnNewAnimalParameter(self):

@@ -25,7 +25,7 @@
    <string>Animal Parameter Manager</string>
   </property>
   <property name="windowIcon" >
-   <iconset resource="../resources/resources.qrc" >
+   <iconset resource="../resources.qrc" >
     <normaloff>:/la_icon.png</normaloff>:/la_icon.png</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout_4" >
@@ -108,7 +108,7 @@ p, li { white-space: pre-wrap; }
             <string>...</string>
            </property>
            <property name="icon" >
-            <iconset resource="../resources/resources.qrc" >
+            <iconset resource="../resources.qrc" >
              <normaloff>:/copy.png</normaloff>:/copy.png</iconset>
            </property>
           </widget>
@@ -125,7 +125,7 @@ p, li { white-space: pre-wrap; }
             <string>...</string>
            </property>
            <property name="icon" >
-            <iconset resource="../resources/resources.qrc" >
+            <iconset resource="../resources.qrc" >
              <normaloff>:/delete.png</normaloff>:/delete.png</iconset>
            </property>
           </widget>
@@ -148,7 +148,7 @@ p, li { white-space: pre-wrap; }
             <string>...</string>
            </property>
            <property name="icon" >
-            <iconset resource="../resources/resources.qrc" >
+            <iconset resource="../resources.qrc" >
              <normaloff>:/new.png</normaloff>:/new.png</iconset>
            </property>
           </widget>
@@ -817,9 +817,7 @@ p, li { white-space: pre-wrap; }
   <tabstop>cbFallowUsage</tabstop>
   <tabstop>pbnClose</tabstop>
  </tabstops>
- <resources>
-  <include location="../resources/resources.qrc" />
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>pbnClose</sender>
