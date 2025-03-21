@@ -16,7 +16,7 @@ from qgis.PyQt.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QSpinBox
 from la.ui.laanimalparametermanagerbase import LaAnimalParameterManagerBase
 from la.lib.laanimalparameter import LaAnimalParameter
 from la.lib.lautils import LaUtils
-from la.lib.la import AreaUnits, EnergyType, Priority
+from la.lib.la import AreaUnits, EnergyType as LaEnergyType, Priority
 from la.lib.lagrass import LaGrass
 import os
 
@@ -150,23 +150,23 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
         """Handle copy button click."""
         currentRow = self.tblAnimalParameterProfiles.currentRow()
         if currentRow < 0:
+            QMessageBox.information(self, "Copy Animal Parameter", "Please select an Animal Parameter to copy.")
             return
 
         myGuid = self.tblAnimalParameterProfiles.item(currentRow, 0).text()
         if not myGuid:
             return
 
-        myOriginalFileName = os.path.join(LaUtils.userAnimalParameterProfilesDirPath(), 
-                                        f"{myGuid}.xml")
+        myOriginalFileName = LaUtils.userAnimalParameterProfilesDirPath() + f"{myGuid}.xml"
         myAnimalParameter = LaAnimalParameter()
         myAnimalParameter.fromXmlFile(myOriginalFileName)
-        myAnimalParameter.setGuid()
-        myAnimalParameter.name = f"Copy of {myAnimalParameter.name}"
+        myAnimalParameter.setGuid(None)
+        myAnimalParameter.name = "Copy of " + myAnimalParameter.name
 
         myNewFileName = os.path.join(LaUtils.userAnimalParameterProfilesDirPath(), 
                                    f"{myAnimalParameter.guid}.xml")
         myAnimalParameter.toXmlFile(myNewFileName)
-        self.refreshAnimalParameterTable(myAnimalParameter.guid)
+        self.refreshAnimalParameterTable(str(myAnimalParameter.guid))
         self.refreshFodderTable()
 
     def on_toolDelete_clicked(self):
@@ -194,7 +194,7 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
         self.mAnimalParameter.useSpecificGrazingLand = self.checkBoxSpecificRaster.isChecked()
 
         # Set energy type and area units
-        energyType = EnergyType.KCalories if self.cbSpecificLandEnergyType.currentText() == "KCalories" else EnergyType.TDN
+        energyType = LaEnergyType.KCalories if self.cbSpecificLandEnergyType.currentText() == "KCalories" else LaEnergyType.TDN
         areaUnits = AreaUnits.Dunum if self.cbAreaUnits.currentText() == "Dunum" else AreaUnits.Hectare
 
         # Set fallow usage

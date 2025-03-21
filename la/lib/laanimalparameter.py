@@ -97,7 +97,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             myFile.write(myXmlContent)
 
     @pyqtProperty(str, notify=nameChanged)
-    def name(self) -> str:
+    def name(self): # type: ignore
         return self._mName
 
     @name.setter

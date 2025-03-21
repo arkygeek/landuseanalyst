@@ -4,7 +4,7 @@ from PyQt5.QtCore import QObject, pyqtProperty, pyqtSignal
 from PyQt5.QtXml import QDomDocument, QDomElement
 from la.lib.laserialisable import LaSerialisable
 from la.lib.laguid import LaGuid
-from la.lib.la import EnergyType
+from la.lib.la import EnergyType as LaEnergyType
 from la.resources_rc import *
 
 class LaAnimal(QObject, LaSerialisable, LaGuid):
@@ -143,7 +143,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
         self._fleeceWeightKg = 0
 
         # Energy
-        self._feedEnergyType = EnergyType.KCalories
+        self._feedEnergyType = LaEnergyType.KCalories
         self._gestating = 0  # calories/day
         self._lactating = 0  # calories/day
         self._maintenance = 0  # calories/day
@@ -383,21 +383,21 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
             self._deathRate = value
             self.deathRateChanged.emit(value)
 
-    @pyqtProperty(str, notify=feedEnergyTypeChanged)
-    def feedEnergyType(self) -> str:
+    @pyqtProperty(LaEnergyType, notify=feedEnergyTypeChanged)
+    def feedEnergyType(self):
         """Get the animal's feed energy type."""
-        return cast(str, self._feedEnergyType)
+        return self._feedEnergyType
 
     @feedEnergyType.setter
-    def feedEnergyType(self, value: str) -> None:
+    def feedEnergyType(self, theFeedEnergyType):
         """Set the animal's feed energy type.
 
         Args:
             value: The feed energy type to set
         """
-        if self._feedEnergyType != value:
-            self._feedEnergyType = value
-            self.feedEnergyTypeChanged.emit(value)
+        if self._feedEnergyType != theFeedEnergyType:
+            self._feedEnergyType = theFeedEnergyType
+            self.feedEnergyTypeChanged.emit(theFeedEnergyType)
 
     @pyqtProperty(int, notify=gestatingChanged)
     def gestating(self) -> int:
@@ -796,7 +796,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
 
             # Energy requirements type
             myFeedEnergyType = myTopElement.firstChildElement("feedEnergyType").text()
-            self._feedEnergyType = EnergyType.TDN if myFeedEnergyType == "TDN" else EnergyType.KCalories
+            self._feedEnergyType = LaEnergyType.TDN if myFeedEnergyType == "TDN" else LaEnergyType.KCalories
 
             # Energy requirements
             self._gestating = getIntValue("gestating", 0)
@@ -840,9 +840,9 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
         myString += f'  <femalesToMales>{self._femalesToMales}</femalesToMales>\n'
         myString += f'  <growTime>{self._growTime}</growTime>\n'
         myString += f'  <deathRate>{self._deathRate}</deathRate>\n'
-        if self._feedEnergyType == EnergyType.KCalories:
+        if self._feedEnergyType == LaEnergyType.KCalories:
             myString += '  <feedEnergyType>KCalories</feedEnergyType>\n'
-        elif self._feedEnergyType == EnergyType.TDN:
+        elif self._feedEnergyType == LaEnergyType.TDN:
             myString += '  <feedEnergyType>TDN</feedEnergyType>\n'
         myString += f'  <gestating>{self._gestating}</gestating>\n'
         myString += f'  <lactating>{self._lactating}</lactating>\n'
@@ -883,9 +883,9 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
         myString += f'femalesToMales=>{self._femalesToMales}\n'
         myString += f'growTime=>{self._growTime}\n'
         myString += f'deathRate=>{self._deathRate}\n'
-        if self._feedEnergyType == EnergyType.KCalories:
+        if self._feedEnergyType == LaEnergyType.KCalories:
             myString += 'feedEnergyType=>KCalories\n'
-        elif self._feedEnergyType == EnergyType.TDN:
+        elif self._feedEnergyType == LaEnergyType.TDN:
             myString += 'feedEnergyType=>TDN\n'
         myString += f'gestating=>{self._gestating}\n'
         myString += f'lactating=>{self._lactating}\n'
@@ -939,9 +939,9 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
         myString += f'<tr><td><b>fleeceWeightKg:</b></td><td>{self._fleeceWeightKg}</td></tr>'
         myString += '<tr><td></td><td>'
         myString += '<tr><td><FONT COLOR="#0063F7">Feed Requirements (pa)</FONT></td><td>'
-        if self._feedEnergyType == EnergyType.KCalories:
+        if self._feedEnergyType == LaEnergyType.KCalories:
             myString += '<tr><td><b>EnergyType:</b></td><td>KCalories</td></tr>'
-        elif self._feedEnergyType == EnergyType.TDN:
+        elif self._feedEnergyType == LaEnergyType.TDN:
             myString += '<tr><td><b>EnergyType:</b></td><td>TDN</td></tr>'
         myString += f'<tr><td><b>Gestating Female:</b></td><td>{self._gestating}</td></tr>'
         myString += f'<tr><td><b>Lactating Female:</b></td><td>{self._lactating}</td></tr>'

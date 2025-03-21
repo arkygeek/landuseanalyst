@@ -33,7 +33,7 @@ from qgis.PyQt.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QFileDia
 from la.ui.lacropmanagerbase import LaCropManagerBase
 from la.lib.lautils import LaUtils, LaMessageBus
 from la.lib.lacrop import LaCrop
-from la.lib.la import AreaUnits, EnergyType
+from la.lib.la import AreaUnits as LaAreaUnits, EnergyType as LaEnergyType
 
 MESSAGE_BUS: LaMessageBus = LaMessageBus()
 
@@ -347,7 +347,7 @@ class LaCropManager(LaCropManagerBase):
                 self.sbCropFodderValue.setValue(0)
 
             # For area units, find the enum value index directly
-            if isinstance(self.crop.areaUnits, AreaUnits):
+            if isinstance(self.crop.areaUnits,LaAreaUnits):
                 # If it's already an enum, use its value directly
                 areaUnitsValue = self.crop.areaUnits.value
             else:
@@ -357,7 +357,7 @@ class LaCropManager(LaCropManagerBase):
                 except (ValueError, TypeError):
                     # Convert string representation to enum value if possible
                     areaUnitsStr = str(self.crop.areaUnits)
-                    for unit in AreaUnits:
+                    for unit in LaAreaUnits:
                         if unit.name in areaUnitsStr:
                             areaUnitsValue = unit.value
                             break
@@ -369,14 +369,14 @@ class LaCropManager(LaCropManagerBase):
             self.cbAreaUnits.setCurrentIndex(areaUnitsIndex)
 
             # Similarly for energy type
-            if isinstance(self.crop.cropFodderEnergyType, EnergyType):
+            if isinstance(self.crop.cropFodderEnergyType, LaEnergyType):
                 energyTypeValue = self.crop.cropFodderEnergyType.value
             else:
                 try:
                     energyTypeValue = int(self.crop.cropFodderEnergyType)
                 except (ValueError, TypeError):
                     energyTypeStr = str(self.crop.cropFodderEnergyType)
-                    for etype in EnergyType:
+                    for etype in LaEnergyType:
                         if etype.name in energyTypeStr:
                             energyTypeValue = etype.value
                             break
@@ -462,8 +462,8 @@ class LaCropManager(LaCropManagerBase):
             self.crop.cropCalories = self.sbCropCalories.value()
             self.crop.cropFodderProduction = self.sbCropFodderProduction.value()
             self.crop.cropFodderValue = self.sbCropFodderValue.value()
-            self.crop.areaUnits = AreaUnits(self.cbAreaUnits.currentIndex())
-            self.crop.cropFodderEnergyType = EnergyType(self.cbFodderEnergyType.currentIndex())
+            self.crop.areaUnits =LaAreaUnits(self.cbAreaUnits.currentIndex())
+            self.crop.cropFodderEnergyType = LaEnergyType(self.cbFodderEnergyType.currentIndex())
 
             # Store just the filename, not the full path for the image
             if self.imageFile:
@@ -529,12 +529,12 @@ class LaCropManager(LaCropManagerBase):
         """Initialize combo boxes with values from enums."""
         # Area Units combo box
         self.cbAreaUnits.clear()
-        for unit in AreaUnits:
+        for unit in LaAreaUnits:
             self.cbAreaUnits.addItem(unit.name.replace("_", " ").title(), unit.value)
 
         # Energy Type combo box
         self.cbFodderEnergyType.clear()
-        for energy in EnergyType:
+        for energy in LaEnergyType:
             self.cbFodderEnergyType.addItem(energy.name.replace("_", " ").title(), energy.value)
 
     def on_pbnImport_clicked(self):
