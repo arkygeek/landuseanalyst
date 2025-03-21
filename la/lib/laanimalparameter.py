@@ -264,3 +264,33 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
         myString += f"  <rasterName>{self.rasterName}</rasterName>\n"
         myString += "</animalParameter>\n"
         return myString
+
+    def toHtml(self) -> str:
+        """Generate HTML table representation of animal parameter data.
+        
+        Returns:
+            HTML string containing formatted parameter attributes
+        """
+        from la.lib.lautils import LaUtils  # Import here to avoid circular imports
+        myString = f'<h2>Details for {LaUtils.xmlEncode(str(self._mName))}</h2>'
+        myString += '<table>'
+        myString += f'<tr><td><b>Description:</b></td><td>{self._mDescription}</td></tr>'
+        myString += f'<tr><td><b>Percentage of Tame Meat:</b></td><td>{self._mPercentTameMeat}</td></tr>'
+        myString += f'<tr><td><b>Use Common Grazing Land:</b></td><td>{self._mUseCommonGrazingLand}</td></tr>'
+        myString += f'<tr><td><b>Use Specific Grazing Land:</b></td><td>{self._mUseSpecificGrazingLand}</td></tr>'
+        
+        if self._mFodderUse:
+            myString += '<tr><td><b>Uses Fodder:</b></td><td>Yes</td></tr>'
+            if self._mFoodSourceMap:
+                myString += f'<tr><td><b>Food Sources:</b></td><td>{self._mFoodSourceMap}</td></tr>'
+        else:
+            myString += '<tr><td><b>Uses Fodder:</b></td><td>No</td></tr>'
+
+        if self._fallowUsage is not None:
+            myString += f'<tr><td><b>Fallow Usage:</b></td><td>{self._fallowUsage}</td></tr>'
+        
+        if self._rasterName:
+            myString += f'<tr><td><b>Raster Mask:</b></td><td>{self._rasterName}</td></tr>'
+            
+        myString += '</table>'
+        return myString
