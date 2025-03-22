@@ -294,46 +294,46 @@ class LaMainForm(LaMainFormBase):
         """Override base class method to prevent double-handling"""
         pass  # Let our on_cbDebug_clicked handle it
 
-    def on_cbDebug_clicked(self):
-        """Handle debug checkbox clicked - toggle debug mode."""
-        isChecked = self.cbDebug.isChecked()
+    # def on_cbDebug_clicked(self):
+    #     """Handle debug checkbox clicked - toggle debug mode."""
+    #     isChecked = self.cbDebug.isChecked()
         
-        # Update the debug logger first
-        LaUtils.debug.set_enabled(isChecked)
+    #     # Update the debug logger first
+    #     LaUtils.debug.set_enabled(isChecked)
         
-        try:
-            # Import and use our debug dialog
-            from la.gui.ladebugdialog import LaDebugDialog
+    #     try:
+    #         # Import and use our debug dialog
+    #         from la.gui.ladebugdialog import LaDebugDialog
             
-            if isChecked:
-                # Get dialog instance using proper singleton pattern
-                self._debug_dialog = LaDebugDialog.get_instance(parent=self)
+    #         if isChecked:
+    #             # Get dialog instance using proper singleton pattern
+    #             self._debug_dialog = LaDebugDialog.get_instance(parent=self)
                 
-                # Show the dialog and force it to appear at front
-                self._debug_dialog.show()
-                self._debug_dialog.raise_()
-                self._debug_dialog.activateWindow()
+    #             # Show the dialog and force it to appear at front
+    #             self._debug_dialog.show()
+    #             self._debug_dialog.raise_()
+    #             self._debug_dialog.activateWindow()
                 
-                # Test message
-                LaUtils.debug.log("Debug dialog opened", "Debug")
-            else:
-                # Hide the dialog but don't destroy it
-                if self._debug_dialog is not None:
-                    self._debug_dialog.hide()
-                    LaUtils.debug.log("Debug dialog hidden", "Debug")
-        except Exception as e:
-            print(f"Debug dialog error: {str(e)}")
-            import traceback
-            traceback.print_exc()
+    #             # Test message
+    #             LaUtils.debug.log("Debug dialog opened", "Debug")
+    #         else:
+    #             # Hide the dialog but don't destroy it
+    #             if self._debug_dialog is not None:
+    #                 self._debug_dialog.hide()
+    #                 LaUtils.debug.log("Debug dialog hidden", "Debug")
+    #     except Exception as e:
+    #         print(f"Debug dialog error: {str(e)}")
+    #         import traceback
+    #         traceback.print_exc()
         
-        # Keep the original debug UI components hidden
-        if hasattr(self, 'tbLogs'):
-            self.tbLogs.setVisible(False)
-        if hasattr(self, 'tbReport'):
-            self.tbReport.setVisible(False)
+    #     # Keep the original debug UI components hidden
+    #     if hasattr(self, 'tbLogs'):
+    #         self.tbLogs.setVisible(False)
+    #     if hasattr(self, 'tbReport'):
+    #         self.tbReport.setVisible(False)
             
-        # Save debug setting
-        QSettings().setValue("landuse_analyst/debug", isChecked)
+    #     # Save debug setting
+    #     QSettings().setValue("landuse_analyst/debug", isChecked)
 
     def _on_debug_dialog_closed(self):
         """Handle dialog closure cleanup"""

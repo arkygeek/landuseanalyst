@@ -26,7 +26,7 @@ from qgis.PyQt.QtWidgets import QListWidgetItem, QTableWidgetItem, QComboBox
 from qgis.PyQt import uic
 from qgis.PyQt import QtCore
 from qgis.PyQt.QtWidgets import QDialog
-from qgis.PyQt.QtCore import QFile
+from qgis.PyQt.QtCore import QFile, QSettings
 from qgis.PyQt.QtCore import QTextStream
 from qgis.PyQt.QtGui import QIcon
 
@@ -762,7 +762,8 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             
             if isChecked:
                 # Get dialog instance using proper singleton pattern
-                self._debug_dialog = LaDebugDialog.get_instance(parent=self)
+                if not hasattr(self, '_debug_dialog') or self._debug_dialog is None:
+                    self._debug_dialog = LaDebugDialog.get_instance(parent=self)
                 
                 # Show the dialog and force it to appear at front
                 self._debug_dialog.show()
@@ -773,13 +774,13 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                 LaUtils.debug.log("Debug dialog opened", "Debug")
             else:
                 # Hide the dialog but don't destroy it
-                if self._debug_dialog is not None:
+                if hasattr(self, '_debug_dialog') and self._debug_dialog is not None:
                     self._debug_dialog.hide()
                     LaUtils.debug.log("Debug dialog hidden", "Debug")
         except Exception as e:
-            print(f"Debug dialog error: {str(e)}")
+            LaUtils.debug.log(f"Debug dialog error: {str(e)}", "Error")
             import traceback
-            traceback.print_exc()
+            LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
         
         # Keep the original debug UI components hidden
         if hasattr(self, 'tbLogs'):
