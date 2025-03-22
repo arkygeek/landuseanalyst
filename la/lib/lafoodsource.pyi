@@ -1,4 +1,5 @@
-from qgis.PyQt.QtCore import QObject, pyqtProperty, pyqtSignal
+from typing import Optional, Union
+from qgis.PyQt.QtCore import QObject, pyqtSignal
 
 class LaFoodSource(QObject):
     """
@@ -23,132 +24,123 @@ class LaFoodSource(QObject):
         cropGuidChanged: Emitted when cropGuid changes.
     """
 
-    grainChanged = pyqtSignal(int)
-    fodderChanged = pyqtSignal(int)
-    daysChanged = pyqtSignal(int)
-    usedChanged = pyqtSignal(bool)
-    cropGuidChanged = pyqtSignal(str)
+    # Signal declarations
+    grainChanged: pyqtSignal
+    fodderChanged: pyqtSignal
+    daysChanged: pyqtSignal
+    usedChanged: pyqtSignal
+    cropGuidChanged: pyqtSignal
 
-    def __init__(self, parent=None):
+    def __init__(self, parent: Optional[QObject] = None) -> None:
         """
         Initialize a new LaFoodSource instance with default values.
 
         Args:
-            parent (QObject, optional): The parent QObject. Defaults to None.
+            parent: The parent QObject. Defaults to None.
         """
-        super().__init__(parent)
-        self._mGrain = 0
-        self._mFodder = 0
-        self._mDays = 0
-        self._mUsed = False
-        self._mCropGuid = ""
+        ...
 
-    @pyqtProperty(int, notify=grainChanged)
-    def grain(self): #type: ignore
+    # Property: grain
+    @property
+    def grain(self) -> int:
         """
         Get the amount of grain produced by this food source.
 
         Returns:
-            int: The grain amount.
+            The grain amount.
         """
-        return self._mGrain
+        ...
 
     @grain.setter
-    def grain(self, value):
+    def grain(self, value: int) -> None:
         """
         Set the amount of grain produced by this food source.
 
         Args:
-            value (int): The new grain amount.
+            value: The new grain amount.
         """
-        if self._mGrain != value:
-            self._mGrain = value
-            self.grainChanged.emit(value)
+        ...
 
-    @pyqtProperty(int, notify=fodderChanged)
-    def fodder(self): #type: ignore
+    # Property: fodder
+    @property
+    def fodder(self) -> int:
         """
         Get the amount of fodder produced by this food source.
 
         Returns:
-            int: The fodder amount.
+            The fodder amount.
         """
-        return self._mFodder
+        ...
 
     @fodder.setter
-    def fodder(self, value):
+    def fodder(self, value: int) -> None:
         """
         Set the amount of fodder produced by this food source.
 
         Args:
-            value (int): The new fodder amount.
+            value: The new fodder amount.
         """
-        if self._mFodder != value:
-            self._mFodder = value
-            self.fodderChanged.emit(value)
+        ...
 
-    @pyqtProperty(int, notify=daysChanged)
-    def days(self): #type: ignore
+    # Property: days
+    @property
+    def days(self) -> int:
         """
         Get the number of days this food source is available/productive.
 
         Returns:
-            int: Number of days.
+            Number of days.
         """
-        return self._mDays
+        ...
 
     @days.setter
-    def days(self, value):
+    def days(self, value: int) -> None:
         """
         Set the number of days this food source is available/productive.
 
         Args:
-            value (int): The new number of days.
+            value: The new number of days.
         """
-        if self._mDays != value:
-            self._mDays = value
-            self.daysChanged.emit(value)
+        ...
 
-    @pyqtProperty(bool, notify=usedChanged)
-    def used(self): #type: ignore
+    # Property: used
+    @property
+    def used(self) -> bool:
         """
         Get whether this food source is being used in the current simulation.
 
         Returns:
-            bool: True if the food source is used, False otherwise.
+            True if the food source is used, False otherwise.
         """
-        return self._mUsed
+        ...
 
     @used.setter
-    def used(self, value):
+    def used(self, value: bool) -> None:
         """
         Set whether this food source is being used in the current simulation.
 
         Args:
-            value (bool): The new used status.
+            value: The new used status.
         """
-        if self._mUsed != value:
-            self._mUsed = value
-            self.usedChanged.emit(value)
+        ...
 
-    @pyqtProperty(str, notify=cropGuidChanged)
-    def cropGuid(self): #type: ignore
+    # Property: cropGuid
+    @property
+    def cropGuid(self) -> str:
         """
         Get the unique identifier for the crop associated with this food source.
 
         Returns:
-            str: The crop GUID (Globally Unique Identifier).
+            The crop GUID (Globally Unique Identifier).
         """
-        return self._mCropGuid
+        ...
 
     @cropGuid.setter
-    def cropGuid(self, value):
+    def cropGuid(self, value: str) -> None:
         """
         Set the unique identifier for the crop associated with this food source.
 
         Args:
-            value (str): The new crop GUID.
+            value: The new crop GUID.
         """
-        if self._mCropGuid != value:
-            self._mCropGuid = value
-            self.cropGuidChanged.emit(value)
+        ...

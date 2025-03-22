@@ -4,7 +4,7 @@ from PyQt5.QtCore import QObject, pyqtProperty, pyqtSignal
 from PyQt5.QtXml import QDomDocument, QDomElement
 from la.lib.laserialisable import LaSerialisable
 from la.lib.laguid import LaGuid
-from la.lib.la import EnergyType as LaEnergyType
+from la.lib.la import EnergyType as LaEnergyType, AreaUnits as LaAreaUnits
 from la.resources_rc import *
 
 class LaAnimal(QObject, LaSerialisable, LaGuid):

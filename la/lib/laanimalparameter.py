@@ -1,22 +1,19 @@
 import os
-from typing import Optional, Type
+from typing import Optional, Type, Dict
 import warnings
 from qgis.PyQt.QtCore import QObject, pyqtSignal, pyqtProperty
-from qgis.PyQt.QtXml import QDomDocument
+from qgis.PyQt.QtXml import QDomDocument, QDomElement, QDomNodeList
 from la.lib.laserialisable import LaSerialisable
 from la.lib.laguid import LaGuid
+from la.lib.lafoodsource import LaFoodSource
+# Import LaFoodSourceMap type definition from la
+from la.lib.la import LaFoodSourceMap, Priority
 from la.resources_rc import *
-
-# from la.lib.la import AreaUnits
-# from la.lib.lautils import LaUtils
-
 
 class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
     # from la.lib.lautils import LaUtils
-    from la.lib.la import AreaUnits, Priority  # Added Priority import
-
+    from la.lib.la import AreaUnits  # Priority import moved to global imports
     _instances = []
-
     nameChanged = pyqtSignal(str)
     descriptionChanged = pyqtSignal(str)
     guidChanged = pyqtSignal(str)
@@ -25,7 +22,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
     useCommonGrazingLandChanged = pyqtSignal(bool)
     useSpecificGrazingLandChanged = pyqtSignal(bool)
     fodderUseChanged = pyqtSignal(float)
-    foodSourceMapChanged = pyqtSignal(str)
+    foodSourceMapChanged = pyqtSignal(dict)  # Signal for LaFoodSourceMap changes
     fallowUsageChanged = pyqtSignal(object)  # Changed to object for enum
     rasterNameChanged = pyqtSignal(str)
 
@@ -40,7 +37,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self._mUseCommonGrazingLand = False
             self._mUseSpecificGrazingLand = False
             self._mFodderUse = 0.0
-            self._mFoodSourceMap = ""
+            self._mFoodSourceMap = {}  # Initialize as empty LaFoodSourceMap
             self._fallowUsage = 0.0  # Initialize fallow usage
             self._rasterName = ""    # Initialize raster name
         else:
@@ -55,7 +52,6 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self._mFoodSourceMap = theAnimalParameter.foodSourceMap
             self._fallowUsage = theAnimalParameter.fallowUsage  # Copy fallow usage
             self._rasterName = theAnimalParameter.rasterName    # Copy raster name
-
         self.__class__._instances.append(self)
 
     def __eq__(self, other):
@@ -108,7 +104,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
 
     @pyqtProperty(str, notify=descriptionChanged)
     def description(self) -> str:
-        return self._mDescription
+        return str(self._mDescription)
 
     @description.setter
     def description(self, theDescription: str) -> None:
@@ -128,7 +124,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
 
     @pyqtProperty(str, notify=animalGuidChanged)
     def animalGuid(self) -> str:
-        return self._mAnimalGuid
+        return str(self._mAnimalGuid)
 
     @animalGuid.setter
     def animalGuid(self, theAnimalGuid: str) -> None:
@@ -138,7 +134,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
 
     @pyqtProperty(float, notify=percentTameMeatChanged)
     def percentTameMeat(self) -> float:
-        return self._mPercentTameMeat
+        return float(str(self._mPercentTameMeat))
 
     @percentTameMeat.setter
     def percentTameMeat(self, thePercentTameMeat: float) -> None:
@@ -148,7 +144,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
 
     @pyqtProperty(bool, notify=useCommonGrazingLandChanged)
     def useCommonGrazingLand(self) -> bool:
-        return self._mUseCommonGrazingLand
+        return bool(self._mUseCommonGrazingLand)
 
     @useCommonGrazingLand.setter
     def useCommonGrazingLand(self, theUseCommonGrazingLand: bool) -> None:
@@ -176,12 +172,13 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self._mFodderUse = theFodderUse
             self.fodderUseChanged.emit(theFodderUse)
 
-    @pyqtProperty(str, notify=foodSourceMapChanged)
-    def foodSourceMap(self) -> str:
+    @pyqtProperty(dict, notify=foodSourceMapChanged)
+    def foodSourceMap(self) -> LaFoodSourceMap:
+        """Returns a mapping of food source IDs to LaFoodSource objects using LaFoodSourceMap type"""
         return self._mFoodSourceMap
 
     @foodSourceMap.setter
-    def foodSourceMap(self, theFoodSourceMap: str) -> None:
+    def foodSourceMap(self, theFoodSourceMap: LaFoodSourceMap) -> None:
         if self._mFoodSourceMap != theFoodSourceMap:
             self._mFoodSourceMap = theFoodSourceMap
             self.foodSourceMapChanged.emit(theFoodSourceMap)
@@ -208,7 +205,6 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
 
     def fromXml(self, theXml: str) -> bool:
         from la.lib.lautils import LaUtils
-        from la.lib.la import Priority
         try:
             myDocument = QDomDocument("mydocument")
             myDocument.setContent(theXml)
@@ -224,8 +220,29 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self._mUseCommonGrazingLand = bool(myTopElement.firstChildElement("useCommonGrazingLand").text())
             self._mUseSpecificGrazingLand = bool(myTopElement.firstChildElement("useSpecificGrazingLand").text())
             self._mFodderUse = float(myTopElement.firstChildElement("fodderUse").text())
-            self._mFoodSourceMap = LaUtils.xmlDecode(myTopElement.firstChildElement("foodSourceMap").text())
-            
+
+            # Parse food source map from XML
+            self._mFoodSourceMap = {}  # Initialize as empty LaFoodSourceMap
+            if self._mFodderUse:
+                fodderCropsElement = myTopElement.firstChildElement("fodderCrops")
+                if not fodderCropsElement.isNull():
+                    foodSourceNode = fodderCropsElement.firstChildElement("foodSource")
+                    while not foodSourceNode.isNull():
+                        myFoodSource = LaFoodSource()
+                        # Load the data from XML into LaFoodSource object
+                        cropGuid = foodSourceNode.firstChildElement("fodderCropGuid").text()
+                        myFoodSource.cropGuid = cropGuid
+                        myFoodSource.fodder = int(foodSourceNode.firstChildElement("fodderStrawChaff").text())
+                        myFoodSource.grain = int(foodSourceNode.firstChildElement("fodderGrain").text())
+                        myFoodSource.days = int(foodSourceNode.firstChildElement("fodderDays").text())
+                        myFoodSource.used = bool(int(foodSourceNode.firstChildElement("fodderUse").text()))
+
+                        # Insert data into LaFoodSourceMap
+                        self._mFoodSourceMap[cropGuid] = myFoodSource
+
+                        # Move to next food source
+                        foodSourceNode = foodSourceNode.nextSiblingElement("foodSource")
+
             # Handle fallowUsage as a Priority enum
             fallowUsageElement = myTopElement.firstChildElement("fallowUsage")
             if not fallowUsageElement.isNull():
@@ -240,7 +257,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
                     self._fallowUsage = Priority.None_  # Default to None if value doesn't match
             else:
                 self._fallowUsage = Priority.None_  # Default if element is missing
-            
+
             self._rasterName = LaUtils.xmlDecode(myTopElement.firstChildElement("rasterName").text())
             return True
         except Exception as e:
@@ -252,22 +269,45 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
     def toXml(self) -> str:
         from la.lib.lautils import LaUtils
         myString = f"<animalParameter guid=\"{self.guid}\">\n"
-        myString += f"  <name>{self.name}</name>\n"
-        myString += f"  <description>{self.description}</description>\n"
-        myString += f"  <animal>{self.animalGuid}</animal>\n"
+        myString += f"  <name>{LaUtils.xmlEncode(str(self.name))}</name>\n"  # Fixed tag name from <n> to <name>
+        myString += f"  <description>{LaUtils.xmlEncode(str(self.description))}</description>\n"
+        myString += f"  <animal>{LaUtils.xmlEncode(str(self.animalGuid))}</animal>\n"
         myString += f"  <percentTameMeat>{self.percentTameMeat}</percentTameMeat>\n"
         myString += f"  <useCommonGrazingLand>{1 if self.useCommonGrazingLand else 0}</useCommonGrazingLand>\n"
         myString += f"  <useSpecificGrazingLand>{1 if self.useSpecificGrazingLand else 0}</useSpecificGrazingLand>\n"
         myString += f"  <fodderUse>{self.fodderUse}</fodderUse>\n"
-        myString += f"  <foodSourceMap>{self.foodSourceMap}</foodSourceMap>\n"
-        myString += f"  <fallowUsage>{self.fallowUsage}</fallowUsage>\n"
-        myString += f"  <rasterName>{self.rasterName}</rasterName>\n"
+
+        # Add food source map data
+        if self._mFodderUse and self._mFoodSourceMap:
+            myString += "  <fodderCrops>\n"
+            # Write out the map for fodder info to xml
+            for cropGuid, foodSource in self._mFoodSourceMap.items():
+                myString += "    <foodSource>\n"
+                myString += f"      <fodderCropGuid>{cropGuid}</fodderCropGuid>\n"
+                myString += f"      <fodderStrawChaff>{foodSource.fodder}</fodderStrawChaff>\n"
+                myString += f"      <fodderGrain>{foodSource.grain}</fodderGrain>\n"
+                myString += f"      <fodderUse>{1 if foodSource.used else 0}</fodderUse>\n"
+                myString += f"      <fodderDays>{foodSource.days}</fodderDays>\n"  # Fixed missing closing bracket
+                myString += "    </foodSource>\n"
+            myString += "  </fodderCrops>\n"
+
+        # Handle fallowUsage based on Priority enum
+        fallowUsageStr = "None"
+        if self._fallowUsage == self.Priority.High:
+            fallowUsageStr = "High"
+        elif self._fallowUsage == self.Priority.Medium:
+            fallowUsageStr = "Medium"
+        elif self._fallowUsage == self.Priority.Low:
+            fallowUsageStr = "Low"
+
+        myString += f"  <fallowUsage>{fallowUsageStr}</fallowUsage>\n"
+        myString += f"  <rasterName>{LaUtils.xmlEncode(str(self.rasterName))}</rasterName>\n"
         myString += "</animalParameter>\n"
         return myString
 
     def toHtml(self) -> str:
         """Generate HTML table representation of animal parameter data.
-        
+
         Returns:
             HTML string containing formatted parameter attributes
         """
@@ -278,19 +318,37 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
         myString += f'<tr><td><b>Percentage of Tame Meat:</b></td><td>{self._mPercentTameMeat}</td></tr>'
         myString += f'<tr><td><b>Use Common Grazing Land:</b></td><td>{self._mUseCommonGrazingLand}</td></tr>'
         myString += f'<tr><td><b>Use Specific Grazing Land:</b></td><td>{self._mUseSpecificGrazingLand}</td></tr>'
-        
+
         if self._mFodderUse:
             myString += '<tr><td><b>Uses Fodder:</b></td><td>Yes</td></tr>'
             if self._mFoodSourceMap:
-                myString += f'<tr><td><b>Food Sources:</b></td><td>{self._mFoodSourceMap}</td></tr>'
+                myString += '<tr><td colspan="2"><b>Food Sources:</b></td></tr>'
+                counter = 0
+                for cropGuid, foodSource in self._mFoodSourceMap.items():
+                    counter += 1
+                    myString += f'<tr><td colspan="2">Fodder Source #{counter}</td></tr>'
+                    myString += f'<tr><td>Crop GUID:</td><td>{cropGuid}</td></tr>'
+                    myString += f'<tr><td>Straw and Chaff:</td><td>{foodSource.fodder}</td></tr>'
+                    myString += f'<tr><td>Grain:</td><td>{foodSource.grain}</td></tr>'
+                    myString += f'<tr><td>Days:</td><td>{foodSource.days}</td></tr>'
+                    myString += f'<tr><td>Used:</td><td>{"Yes" if foodSource.used else "No"}</td></tr>'
         else:
             myString += '<tr><td><b>Uses Fodder:</b></td><td>No</td></tr>'
 
-        if self._fallowUsage is not None:
-            myString += f'<tr><td><b>Fallow Usage:</b></td><td>{self._fallowUsage}</td></tr>'
-        
+        # Handle fallowUsage based on Priority enum
+        fallowUsageStr = "None"
+        if hasattr(self, "_fallowUsage"):
+            if self._fallowUsage == self.Priority.High:
+                fallowUsageStr = "High"
+            elif self._fallowUsage == self.Priority.Medium:
+                fallowUsageStr = "Medium"
+            elif self._fallowUsage == self.Priority.Low:
+                fallowUsageStr = "Low"
+
+        myString += f'<tr><td><b>Fallow Usage:</b></td><td>{fallowUsageStr}</td></tr>'
+
         if self._rasterName:
             myString += f'<tr><td><b>Raster Mask:</b></td><td>{self._rasterName}</td></tr>'
-            
+
         myString += '</table>'
         return myString
