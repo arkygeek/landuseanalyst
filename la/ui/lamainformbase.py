@@ -317,57 +317,139 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         self.labelAnimalCheck.setText(f"{myPercentItem}%")
 
     def loadCrops(self):
-        self.listWidgetCalculationsCrop.clear()
-        self.tblCrops.clear()
-        self.tblCrops.setRowCount(0)
-        self.tblCrops.setColumnCount(4)
-        myCurrentRow = 0
-        myRunningPercentage = 0.0
-        myCropsMap = LaUtils.getAvailableCrops()
-        myCropParametersMap = LaUtils.getAvailableCropParameters()
-        for myGuid, myCrop in myCropsMap.items():
-            myName = myCrop.name
-            myValue = self.mCropsMap.get(myGuid, (False, ""))
-            if myGuid not in self.mCropsMap:
-                self.mCropsMap[myGuid] = myValue
-            myIcon = QIcon(":/localdata.png")
-            self.tblCrops.insertRow(myCurrentRow)
-            mypUsedItem = QtWidgets.QTableWidgetItem("Used?")
-            if myValue[0]:
-                mypUsedItem.setCheckState(QtCore.Qt.Checked)
-                myItem = QtWidgets.QListWidgetItem(myCrop.name)
-                myItem.setData(QtCore.Qt.UserRole, myCrop.guid)
-                self.listWidgetCalculationsCrop.addItem(myItem)
-            else:
-                mypUsedItem.setCheckState(QtCore.Qt.Unchecked)
-            self.tblCrops.setItem(myCurrentRow, 0, mypUsedItem)
-            mypNameItem = QtWidgets.QTableWidgetItem(myCrop.name)
-            mypNameItem.setData(QtCore.Qt.UserRole, myGuid)
-            self.tblCrops.setItem(myCurrentRow, 1, mypNameItem)
-            mypNameItem.setIcon(myIcon)
-            mypCombo = QtWidgets.QComboBox(self)
-            for myParameterGuid, myCropParameter in myCropParametersMap.items():
-                myParameterName = f"{myCropParameter.name}  ({myCropParameter.description})"
-                if myGuid != myCropParameter.cropGuid:
+        """Load crops into the table widget."""
+        try:
+            # Clear the lists first
+            if hasattr(self, 'listWidgetCalculationsCrop'):
+                self.listWidgetCalculationsCrop.clear()
+            
+            # Clear and setup the table if it exists
+            if not hasattr(self, 'tblCrops') or self.tblCrops is None:
+                LaUtils.debug.log("Cannot load crops: table widget not found", "Error")
+                return
+                
+            self.tblCrops.clear()
+            self.tblCrops.setRowCount(0)
+            self.tblCrops.setColumnCount(4)
+            
+            # Initialize tracking variables
+            myCurrentRow = 0
+            myRunningPercentage = 0.0
+            
+            # Get available crops and parameters
+            try:
+                myCropsMap = LaUtils.getAvailableCrops()
+                if not myCropsMap:
+                    LaUtils.debug.log("No crops available to load", "Warning")
+                    return
+            except Exception as e:
+                LaUtils.debug.log(f"Error getting available crops: {str(e)}", "Error")
+                return
+                
+            try:
+                myCropParametersMap = LaUtils.getAvailableCropParameters()
+                if not myCropParametersMap:
+                    LaUtils.debug.log("No crop parameters available", "Warning")
+                    return
+            except Exception as e:
+                LaUtils.debug.log(f"Error getting crop parameters: {str(e)}", "Error")
+                return
+            
+            # Initialize crops map if needed
+            if not hasattr(self, 'mCropsMap'):
+                self.mCropsMap = {}
+                
+            # Process each crop
+            for myGuid, myCrop in myCropsMap.items():
+                if myCrop is None or not hasattr(myCrop, 'name'):
+                    LaUtils.debug.log(f"Invalid crop data for GUID: {myGuid}", "Warning")
                     continue
-                if not myValue[1]:
-                    myValue = (myValue[0], myParameterGuid)
-                if myValue[1] == myCropParameter.guid:
-                    if myValue[0]:
-                        myRunningPercentage += float(myCropParameter.percentTameCrop)
-                        myItem = QtWidgets.QListWidgetItem(myCrop.name)
-                        myItem.setData(QtCore.Qt.UserRole, myCrop.guid)
-                        self.listWidgetCalculationsCrop.addItem(myItem)
-                    mypPercentItem = QtWidgets.QTableWidgetItem(str(myCropParameter.percentTameCrop))
-                    self.tblCrops.setItem(myCurrentRow, 3, mypPercentItem)
-                mypCombo.addItem(myIcon, myParameterName, myParameterGuid)
-            self.setComboToDefault(mypCombo, myValue[1])
-            self.mCropsMap[myGuid] = myValue
-            self.tblCrops.setCellWidget(myCurrentRow, 2, mypCombo)
-            myCurrentRow += 1
-        myIcon = QIcon(":/status_ok.png") if myRunningPercentage == 100 else QIcon(":/status_error.png")
-        myPercentItem = str(myRunningPercentage)
-        self.labelCropCheck.setText(f"{myPercentItem}%")
+                    
+                myName = myCrop.name
+                myValue = self.mCropsMap.get(myGuid, (False, ""))
+                
+                # Update crops map
+                if myGuid not in self.mCropsMap:
+                    self.mCropsMap[myGuid] = myValue
+                    
+                # Create table row
+                myIcon = QIcon(":/localdata.png")
+                self.tblCrops.insertRow(myCurrentRow)
+                
+                # Used checkbox column
+                mypUsedItem = QtWidgets.QTableWidgetItem("Used?")
+                mypUsedItem.setCheckState(QtCore.Qt.Checked if myValue[0] else QtCore.Qt.Unchecked)
+                self.tblCrops.setItem(myCurrentRow, 0, mypUsedItem)
+                
+                # If checked, ensure it's in calculations list
+                if myValue[0]:
+                    try:
+                        self.addCropToCalculationsList(myGuid)
+                    except Exception as e:
+                        LaUtils.debug.log(f"Error adding crop to calculations: {str(e)}", "Error")
+                
+                # Name column with GUID data
+                mypNameItem = QtWidgets.QTableWidgetItem(myName)
+                mypNameItem.setData(QtCore.Qt.UserRole, myGuid)
+                self.tblCrops.setItem(myCurrentRow, 1, mypNameItem)
+                mypNameItem.setIcon(myIcon)
+                
+                # Parameters combo box
+                mypCombo = QtWidgets.QComboBox(self)
+                
+                # Add parameters to combo
+                for myParameterGuid, myCropParameter in myCropParametersMap.items():
+                    if myCropParameter is None:
+                        continue
+                        
+                    if not hasattr(myCropParameter, 'cropGuid') or myCropParameter.cropGuid != myGuid:
+                        continue
+                        
+                    # Format parameter name
+                    myParameterName = f"{myCropParameter.name}  ({myCropParameter.description})"
+                    
+                    # Update value if needed
+                    if not myValue[1]:
+                        myValue = (myValue[0], myParameterGuid)
+                        
+                    # Update percentage if this is the selected parameter
+                    if myValue[1] == myCropParameter.guid:
+                        if myValue[0] and hasattr(myCropParameter, 'percentTameCrop'):
+                            try:
+                                myRunningPercentage += float(myCropParameter.percentTameCrop)
+                            except (ValueError, TypeError):
+                                LaUtils.debug.log(f"Invalid percentTameCrop for parameter {myParameterGuid}", "Warning")
+                                
+                        # Add percentage column
+                        if hasattr(myCropParameter, 'percentTameCrop'):
+                            mypPercentItem = QtWidgets.QTableWidgetItem(str(myCropParameter.percentTameCrop))
+                            self.tblCrops.setItem(myCurrentRow, 3, mypPercentItem)
+                            
+                    # Add to combo box
+                    mypCombo.addItem(myIcon, myParameterName, myParameterGuid)
+                
+                # Set default combo selection and add to table
+                self.setComboToDefault(mypCombo, myValue[1])
+                self.mCropsMap[myGuid] = myValue
+                self.tblCrops.setCellWidget(myCurrentRow, 2, mypCombo)
+                
+                myCurrentRow += 1
+            
+            # Update total percentage display
+            if hasattr(self, 'labelCropCheck'):
+                self.labelCropCheck.setText(f"{myRunningPercentage:.1f}%")
+                
+            # Update status icon
+            if hasattr(self, 'labelCropIcon'):
+                iconPath = ":/status_ok.png" if abs(myRunningPercentage - 100.0) < 0.1 else ":/status_error.png"
+                self.labelCropIcon.setPixmap(QIcon(iconPath).pixmap(16, 16))
+                
+            LaUtils.debug.log(f"Loaded {myCurrentRow} crops with total percentage {myRunningPercentage:.1f}%", "Crops")
+            
+        except Exception as e:
+            LaUtils.debug.log(f"Error loading crops: {str(e)}", "Error")
+            import traceback
+            LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
 
     def setComboToDefault(self, combo, default):
         index = combo.findData(default)
@@ -668,13 +750,73 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             LaUtils.debug.log(f"Error in cropCalcSelectionChanged: {str(e)}", "Error")
 
     def on_cbDebug_clicked(self):
-        """Handle debug checkbox click.
-
-        This method toggles the visibility of debug information in the application.
-        """
+        """Handle debug checkbox clicked - toggle debug mode."""
         isChecked = self.cbDebug.isChecked()
-        self.tbLogs.setVisible(isChecked)
-        LaUtils.debug.log(f"Debug mode {'enabled' if isChecked else 'disabled'}", "Debug")
+        
+        # Update the debug logger first
+        LaUtils.debug.set_enabled(isChecked)
+        
+        try:
+            # Import and use our debug dialog
+            from la.gui.ladebugdialog import LaDebugDialog
+            
+            if isChecked:
+                # Get dialog instance using proper singleton pattern
+                self._debug_dialog = LaDebugDialog.get_instance(parent=self)
+                
+                # Show the dialog and force it to appear at front
+                self._debug_dialog.show()
+                self._debug_dialog.raise_()
+                self._debug_dialog.activateWindow()
+                
+                # Test message
+                LaUtils.debug.log("Debug dialog opened", "Debug")
+            else:
+                # Hide the dialog but don't destroy it
+                if self._debug_dialog is not None:
+                    self._debug_dialog.hide()
+                    LaUtils.debug.log("Debug dialog hidden", "Debug")
+        except Exception as e:
+            print(f"Debug dialog error: {str(e)}")
+            import traceback
+            traceback.print_exc()
+        
+        # Keep the original debug UI components hidden
+        if hasattr(self, 'tbLogs'):
+            self.tbLogs.setVisible(False)
+        if hasattr(self, 'tbReport'):
+            self.tbReport.setVisible(False)
+            
+        # Save debug setting
+        QSettings().setValue("landuse_analyst/debug", isChecked)
+
+    def _on_debug_dialog_closed(self):
+        """Handle dialog closure cleanup"""
+        if hasattr(self, '_debug_dialog') and self._debug_dialog is not None:
+            try:
+                # Check if connection exists before disconnecting
+                try:
+                    MESSAGE_BUS.debugMessaged.disconnect(self._debug_dialog.add_debug_message)
+                except (TypeError, RuntimeError):
+                    # Signal was not connected or other disconnect error
+                    pass
+                self._debug_dialog.deleteLater()
+            except:
+                pass
+            finally:
+                self._debug_dialog = None
+        self.cbDebug.setChecked(False)
+
+    def _ensure_debug_dialog_visible(self):
+        """Helper method to ensure debug dialog remains visible after initial showing."""
+        if hasattr(self, '_debug_dialog') and self._debug_dialog is not None and self.cbDebug.isChecked():
+            try:
+                if not self._debug_dialog.isVisible():
+                    self._debug_dialog.show()
+                self._debug_dialog.raise_()
+                self._debug_dialog.activateWindow()
+            except:
+                pass  # Silently ignore any errors in this helper method
 
     def addAnimalToCalculationsList(self, animalGuid):
         """Add an animal to the calculations list.

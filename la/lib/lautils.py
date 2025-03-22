@@ -23,82 +23,48 @@ from la.lib.lacropparameter import LaCropParameter
 # from la.lib.lacrop import LaCrop
 
 class LaMessageBus(QObject):
-    """Super minimal implementation of a message bus.
-    Allows communication between unrelated parts of the plugin.
-    This class inherits from QObject and provides a PyQt signal for message passing.
-    Attributes:
-        messaged (pyqtSignal): The signal that passes the message. Emits a string.
-    """
-    # The signal that passes the message.
-    messaged: pyqtSignal = pyqtSignal(str)
-
-    # Add a debug signal for debugging messages
-    debugMessaged: pyqtSignal = pyqtSignal(str)
-
-# Modules are evaluated only once, therefore it works as a poor man version of singleton.
-MESSAGE_BUS: LaMessageBus = LaMessageBus()
+    """Message bus for communication between components."""
+    debugMessaged = pyqtSignal(str)  # Signal emitted when debug messages are logged
 
 class LaDebugLogger:
-    """
-    A singleton logger class that handles debug messages for Land Use Analyst.
-
-    This class provides methods for logging debug messages to different outputs
-    based on the current debug settings.
-    """
-    _mInstance = None
-    _mDebug_enabled = False
-    _mLog_callback = None
-
-    def __new__(cls): # cls is not following naming conventions (ex. theCls would normally be used here) but we have to
-        if cls._mInstance is None:
-            cls._mInstance = super(LaDebugLogger, cls).__new__(cls)
-        return cls._mInstance
+    """A singleton logger class that handles debug messages."""
+    _instance = None
+    _enabled = False
+    _history = []
+    _max_history = 1000
 
     @classmethod
-    def initialize(cls, enabled: bool = False, callback: Optional[Callable[[str], None]] = None):
-        """
-        Initialize the debug logger.
-
-        Args:
-            enabled: Whether debug logging is enabled
-            callback: Optional callback function that will receive debug messages
-        """
-        cls._mDebug_enabled = enabled
-        cls._mLog_callback = callback
-        print(f"Debug logger initialized with enabled={enabled}, callback={callback}")  # Diagnostic
+    def initialize(cls, enabled=False):
+        """Initialize the debug logger."""
+        if cls._instance is None:
+            cls._instance = cls()
+        cls._enabled = enabled
+        return cls._instance
 
     @classmethod
-    def set_enabled(cls, enabled: bool):
-        """
-        Enable or disable debug logging.
-
-        Args:
-            enabled: Whether debug logging should be enabled
-        """
-        cls._mDebug_enabled = enabled
-        print(f"Debug logging set to: {enabled}")
+    def set_enabled(cls, enabled):
+        """Enable or disable debug logging."""
+        cls._enabled = enabled
 
     @classmethod
-    def log(cls, message: str, component: str = "General"):
-        """
-        Log a debug message if debug logging is enabled.
+    def log(cls, message, component="General"):
+        """Log a debug message."""
+        if cls._enabled:
+            formatted = f"{component}: {message}"
+            cls._history.append(formatted)
+            # Trim history if too long
+            if len(cls._history) > cls._max_history:
+                cls._history = cls._history[-cls._max_history:]
+            # Emit via message bus
+            MESSAGE_BUS.debugMessaged.emit(formatted)
 
-        Args:
-            message: The debug message to log
-            component: The component generating the message
-        """
-        if cls._mDebug_enabled:
-            myFormattedDebugMessage = f"[DEBUG] [{component}] {message}"
+    @classmethod
+    def get_history(cls):
+        """Get the message history."""
+        return cls._history.copy()
 
-            # Print to console for development
-            print(myFormattedDebugMessage)
-
-            # Send to callback if available (e.g., UI logger)
-            if cls._mLog_callback:
-                cls._mLog_callback(myFormattedDebugMessage)
-
-            # Emit on message bus
-            MESSAGE_BUS.debugMessaged.emit(myFormattedDebugMessage)
+# Global message bus instance
+MESSAGE_BUS = LaMessageBus()
 
 class LaUtils:
     """

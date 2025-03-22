@@ -45,52 +45,36 @@ class LaMainForm(LaMainFormBase):
         # Initialize the model
         self.model = LaModel()
 
+        # Initialize debug logger before anything else
+        debugMode = QSettings().value("landuse_analyst/debug", False, type=bool)
+        LaUtils.debug.initialize(enabled=debugMode)
+
+        # Create debug dialog if debug mode is enabled
+        self._debug_dialog = None
+        if debugMode:
+            from la.gui.ladebugdialog import LaDebugDialog
+            self._debug_dialog = LaDebugDialog.get_instance()
+            # Connect debug message bus after dialog creation
+            MESSAGE_BUS.debugMessaged.connect(self._debug_dialog.add_debug_message)
+            # Load existing messages
+            self._debug_dialog.add_messages_from_history(LaUtils.debug.get_message_history())
+            # Show dialog
+            self._debug_dialog.show()
+
         # Additional initialization specific to the main form
         self.setup()
 
-        # Initialize settings and debug state first
+        # Initialize settings and debug state
         self.readSettings()
 
         # Connect item changed signal for the animals table
         self.tblAnimals.itemChanged.connect(self.on_tblAnimals_itemChanged)
 
-        # Verify tbLogs exists
-        if not hasattr(self, 'tbLogs'):
-            import traceback
-            print(f"ERROR: tbLogs widget not found in UI form!")
-            for widget in self.findChildren(QtWidgets.QTextBrowser):
-                print(f"Available QTextBrowser: {widget.objectName()}")
-        else:
-            # Ensure tbLogs is properly initialized
-            self.tbLogs.clear()
-            self.tbLogs.append("Debug log initialized")
-            # Force UI update immediately
-            self.tbLogs.repaint()
-            QtWidgets.QApplication.processEvents()
-
-        # Initialize debug logger before connecting message bus
-        debugMode = self.cbDebug.isChecked()
-        LaUtils.debug.initialize(
-            enabled=debugMode,
-            callback=self.logToAllChannels
-        )
-
-        # Now connect debug message bus after logger is initialized
+        # Connect debug message bus to main form
         MESSAGE_BUS.debugMessaged.connect(self.on_debug_message)
-
-        # Configure UI debug state
-        if hasattr(self, 'tbLogs'):
-            self.tbLogs.setVisible(debugMode)
-        if hasattr(self, 'tbReport'):
-            self.tbReport.setVisible(debugMode)
 
         # Test log message to verify the system is working
         LaUtils.debug.log("Application initialized", "MainForm")
-
-        # Force a message to appear even if debug is off (for testing)
-        self.logToAllChannels("Debug system test message - should always appear")
-        # Force UI update again
-        QtWidgets.QApplication.processEvents()
 
     def logToAllChannels(self, message):
         """
@@ -313,44 +297,71 @@ class LaMainForm(LaMainFormBase):
     def on_cbDebug_clicked(self):
         """Handle debug checkbox clicked - toggle debug mode."""
         isChecked = self.cbDebug.isChecked()
-
+        
         # Update the debug logger first
         LaUtils.debug.set_enabled(isChecked)
-
-        # Show/hide debug UI components and verify they exist
-        if hasattr(self, 'tbLogs'):
-            self.tbLogs.setVisible(isChecked)
-            print(f"tbLogs visibility set to {isChecked}")
+        
+        try:
+            # Import and use our debug dialog
+            from la.gui.ladebugdialog import LaDebugDialog
+            
             if isChecked:
-                # Add a test message when enabling debug mode
-                self.tbLogs.append("Debug logging enabled - test message")
-        else:
-            print("ERROR: tbLogs widget not found!")
-
+                # Get dialog instance using proper singleton pattern
+                self._debug_dialog = LaDebugDialog.get_instance(parent=self)
+                
+                # Show the dialog and force it to appear at front
+                self._debug_dialog.show()
+                self._debug_dialog.raise_()
+                self._debug_dialog.activateWindow()
+                
+                # Test message
+                LaUtils.debug.log("Debug dialog opened", "Debug")
+            else:
+                # Hide the dialog but don't destroy it
+                if self._debug_dialog is not None:
+                    self._debug_dialog.hide()
+                    LaUtils.debug.log("Debug dialog hidden", "Debug")
+        except Exception as e:
+            print(f"Debug dialog error: {str(e)}")
+            import traceback
+            traceback.print_exc()
+        
+        # Keep the original debug UI components hidden
+        if hasattr(self, 'tbLogs'):
+            self.tbLogs.setVisible(False)
         if hasattr(self, 'tbReport'):
-            self.tbReport.setVisible(isChecked)
-        else:
-            print("ERROR: tbReport widget not found!")
-
-        # Show/hide the Logs tab
-        if hasattr(self, 'MainTabs') and hasattr(self, 'log_tab'):
-            tabIndex = self.MainTabs.indexOf(self.log_tab)
-            if tabIndex >= 0:
-                self.MainTabs.setTabEnabled(tabIndex, isChecked)
-                self.log_tab.setVisible(isChecked)
-        else:
-            print("Note: MainTabs or log_tab not found")
-
-        # Save setting
+            self.tbReport.setVisible(False)
+            
+        # Save debug setting
         QSettings().setValue("landuse_analyst/debug", isChecked)
 
-        # Log the debug mode change last
-        message = "Debug mode enabled" if isChecked else "Debug mode disabled"
-        LaUtils.debug.log(message, "Debug")
+    def _on_debug_dialog_closed(self):
+        """Handle dialog closure cleanup"""
+        if hasattr(self, '_debug_dialog') and self._debug_dialog is not None:
+            try:
+                # Check if connection exists before disconnecting
+                try:
+                    MESSAGE_BUS.debugMessaged.disconnect(self._debug_dialog.add_debug_message)
+                except (TypeError, RuntimeError):
+                    # Signal was not connected or other disconnect error
+                    pass
+                self._debug_dialog.deleteLater()
+            except:
+                pass
+            finally:
+                self._debug_dialog = None
+        self.cbDebug.setChecked(False)
 
-        # Force a message to appear in tbLogs even if debug logger doesn't work
-        if hasattr(self, 'tbLogs') and isChecked:
-            self.tbLogs.append(f"Debug checkbox was clicked: {isChecked}")
+    def _ensure_debug_dialog_visible(self):
+        """Helper method to ensure debug dialog remains visible after initial showing."""
+        if hasattr(self, '_debug_dialog') and self._debug_dialog is not None and self.cbDebug.isChecked():
+            try:
+                if not self._debug_dialog.isVisible():
+                    self._debug_dialog.show()
+                self._debug_dialog.raise_()
+                self._debug_dialog.activateWindow()
+            except:
+                pass  # Silently ignore any errors in this helper method
 
     def on_debug_message(self, message: str):
         """Handle debug messages from the message bus."""
@@ -369,3 +380,125 @@ class LaMainForm(LaMainFormBase):
         """
         # Delegate to our unified logging method
         self.logToAllChannels(message)
+
+    def loadAnimals(self):
+        """Load animals into the table widget."""
+        try:
+            # Clear the table first
+            if hasattr(self, 'tblAnimals') and self.tblAnimals is not None:
+                self.tblAnimals.clearContents()
+                self.tblAnimals.setRowCount(0)
+                
+            # Check if model and its animals map exist
+            if not hasattr(self, 'model') or self.model is None:
+                LaUtils.debug.log("Cannot load animals: model is None", "Error")
+                return
+                
+            if not hasattr(self.model, 'animals') or self.model.animals is None:
+                LaUtils.debug.log("Cannot load animals: model.animals is None", "Error")
+                return
+                
+            # Get animals from the model
+            animals = self.model.animals
+            
+            # Setup animals table if we have animals to display
+            if animals and hasattr(self, 'tblAnimals') and self.tblAnimals is not None:
+                # Set row count
+                self.tblAnimals.setRowCount(len(animals))
+                
+                # Populate rows
+                for row, animal in enumerate(animals):
+                    if animal is None:
+                        continue
+                        
+                    # Store reference to the animal object for later use
+                    if not hasattr(self, 'mAnimalsMap'):
+                        self.mAnimalsMap = {}
+                    self.mAnimalsMap[row] = animal
+                    
+                    # Name column
+                    nameItem = QtWidgets.QTableWidgetItem(animal.name if hasattr(animal, 'name') else "Unknown")
+                    self.tblAnimals.setItem(row, 0, nameItem)
+                    
+                    # Enable column
+                    enableCheckbox = QtWidgets.QTableWidgetItem()
+                    enableCheckbox.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
+                    enableCheckbox.setCheckState(
+                        QtCore.Qt.Checked if hasattr(animal, 'enabled') and animal.enabled else QtCore.Qt.Unchecked
+                    )
+                    self.tblAnimals.setItem(row, 1, enableCheckbox)
+                    
+                    # Additional parameters columns if needed
+                    # ...
+                
+                LaUtils.debug.log(f"Loaded {len(animals)} animals", "Animals")
+            else:
+                LaUtils.debug.log("No animals to load", "Animals")
+                
+        except Exception as e:
+            LaUtils.debug.log(f"Error loading animals: {str(e)}", "Error")
+            import traceback
+            LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
+
+    def on_tblAnimals_itemChanged(self, item):
+        """Handle item change in the animals table."""
+        try:
+            if item is None:
+                return
+                
+            row = item.row()
+            col = item.column()
+            
+            # Check if we have a reference to this animal
+            if not hasattr(self, 'mAnimalsMap') or self.mAnimalsMap is None or row not in self.mAnimalsMap:
+                LaUtils.debug.log(f"Cannot update animal parameters: no animal at row {row}", "Error")
+                return
+                
+            animal = self.mAnimalsMap[row]
+            if animal is None:
+                return
+                
+            # Column 1 is the enable/disable checkbox
+            if col == 1:
+                animal.enabled = (item.checkState() == QtCore.Qt.Checked)
+                LaUtils.debug.log(f"Animal '{animal.name}' {'enabled' if animal.enabled else 'disabled'}", "Animals")
+                # Update calculations when animal is enabled/disabled
+                self.updateCalculations()
+            
+            # Handle other columns/parameters as needed
+            # ...
+            
+        except Exception as e:
+            LaUtils.debug.log(f"Error updating animal parameter: {str(e)}", "Error")
+            import traceback
+            LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
+
+    # Add a method to save animal parameters if not already present
+    def saveAnimalParameters(self):
+        """Save the current animal parameters to the model."""
+        try:
+            if not hasattr(self, 'model') or self.model is None:
+                return
+                
+            if not hasattr(self, 'mAnimalsMap') or self.mAnimalsMap is None:
+                return
+                
+            # Update model with values from UI
+            for row, animal in self.mAnimalsMap.items():
+                if animal is None:
+                    continue
+                
+                # Get enable state from checkbox
+                enableItem = self.tblAnimals.item(row, 1)
+                if enableItem is not None:
+                    animal.enabled = (enableItem.checkState() == QtCore.Qt.Checked)
+                
+                # Get other parameters from table if applicable
+                # ...
+                
+            LaUtils.debug.log("Animal parameters saved", "Animals")
+            
+        except Exception as e:
+            LaUtils.debug.log(f"Error saving animal parameters: {str(e)}", "Error")
+            import traceback
+            LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")

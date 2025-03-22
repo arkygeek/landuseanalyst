@@ -173,12 +173,12 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self.fodderUseChanged.emit(theFodderUse)
 
     @pyqtProperty(dict, notify=foodSourceMapChanged)
-    def foodSourceMap(self) -> LaFoodSourceMap:
+    def foodSourceMap(self):
         """Returns a mapping of food source IDs to LaFoodSource objects using LaFoodSourceMap type"""
         return self._mFoodSourceMap
 
     @foodSourceMap.setter
-    def foodSourceMap(self, theFoodSourceMap: LaFoodSourceMap) -> None:
+    def foodSourceMap(self, theFoodSourceMap) -> None:
         if self._mFoodSourceMap != theFoodSourceMap:
             self._mFoodSourceMap = theFoodSourceMap
             self.foodSourceMapChanged.emit(theFoodSourceMap)
@@ -399,11 +399,11 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
         # Handle fallowUsage based on Priority enum
         fallowUsageStr = "None"
         if hasattr(self, "_fallowUsage"):
-            if self._fallowUsage == self.Priority.High:
+            if self._fallowUsage == Priority.High:
                 fallowUsageStr = "High"
-            elif self._fallowUsage == self.Priority.Medium:
+            elif self._fallowUsage == Priority.Medium:
                 fallowUsageStr = "Medium"
-            elif self._fallowUsage == self.Priority.Low:
+            elif self._fallowUsage == Priority.Low:
                 fallowUsageStr = "Low"
 
         myString += f'<tr><td><b>Fallow Usage:</b></td><td>{fallowUsageStr}</td></tr>'
