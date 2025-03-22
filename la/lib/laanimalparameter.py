@@ -206,70 +206,131 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
     def fromXml(self, theXml: str) -> bool:
         from la.lib.lautils import LaUtils
         try:
+            LaUtils.debug.log(f"Loading animal parameter XML, first 100 chars: {theXml[:100]}")
             myDocument = QDomDocument("mydocument")
             myDocument.setContent(theXml)
             myTopElement = myDocument.firstChildElement("animalParameter")
             if myTopElement.isNull():
                 warnings.warn("Failed to parse XML: myTopElement is null. The XML element could not be found or parsed.")
                 return False
+                
+            # Set GUID from attribute
             self.setGuid(myTopElement.attribute("guid"))
-            self._mName = LaUtils.xmlDecode(myTopElement.firstChildElement("name").text())
+            LaUtils.debug.log(f"Loading animal parameter with GUID: {self.guid}")
+            
+            # Check for both name tag styles (<name> and <n>)
+            nameElement = myTopElement.firstChildElement("name")
+            if nameElement.isNull():
+                nameElement = myTopElement.firstChildElement("n")
+            
+            self._mName = LaUtils.xmlDecode(nameElement.text())
+            LaUtils.debug.log(f"Loaded animal parameter name: {self._mName}")
+                
             self._mDescription = LaUtils.xmlDecode(myTopElement.firstChildElement("description").text())
             self._mAnimalGuid = LaUtils.xmlDecode(myTopElement.firstChildElement("animal").text())
-            self._mPercentTameMeat = float(myTopElement.firstChildElement("percentTameMeat").text())
-            self._mUseCommonGrazingLand = bool(myTopElement.firstChildElement("useCommonGrazingLand").text())
-            self._mUseSpecificGrazingLand = bool(myTopElement.firstChildElement("useSpecificGrazingLand").text())
-            self._mFodderUse = float(myTopElement.firstChildElement("fodderUse").text())
+            
+            # Parse numeric values safely
+            try:
+                self._mPercentTameMeat = float(myTopElement.firstChildElement("percentTameMeat").text())
+            except (ValueError, TypeError):
+                self._mPercentTameMeat = 0.0
+                LaUtils.debug.log("Failed to parse percentTameMeat, using 0.0")
+                
+            # Parse boolean values safely
+            useCommonElement = myTopElement.firstChildElement("useCommonGrazingLand")
+            self._mUseCommonGrazingLand = bool(int(useCommonElement.text())) if not useCommonElement.isNull() else False
+            
+            useSpecificElement = myTopElement.firstChildElement("useSpecificGrazingLand")
+            self._mUseSpecificGrazingLand = bool(int(useSpecificElement.text())) if not useSpecificElement.isNull() else False
+            
+            fodderUseElement = myTopElement.firstChildElement("fodderUse")
+            self._mFodderUse = float(fodderUseElement.text()) if not fodderUseElement.isNull() else 0.0
 
             # Parse food source map from XML
             self._mFoodSourceMap = {}  # Initialize as empty LaFoodSourceMap
             if self._mFodderUse:
+                # Check both "fodderCrops" (Python version) and older "fodderCrop" (C++ version) tags
                 fodderCropsElement = myTopElement.firstChildElement("fodderCrops")
+                if fodderCropsElement.isNull():
+                    # Try alternate tag
+                    fodderCropsElement = myTopElement.firstChildElement("fodderCrop")
+                
                 if not fodderCropsElement.isNull():
+                    # Try different possible element names for individual food sources
                     foodSourceNode = fodderCropsElement.firstChildElement("foodSource")
+                    if foodSourceNode.isNull():
+                        foodSourceNode = fodderCropsElement.firstChildElement("fodderCrop")
+                    
                     while not foodSourceNode.isNull():
                         myFoodSource = LaFoodSource()
-                        # Load the data from XML into LaFoodSource object
-                        cropGuid = foodSourceNode.firstChildElement("fodderCropGuid").text()
+                        
+                        # First check for "fodderCropGuid" then fall back to "cropGuid"
+                        guidElement = foodSourceNode.firstChildElement("fodderCropGuid")
+                        if guidElement.isNull():
+                            guidElement = foodSourceNode.firstChildElement("cropGuid")
+                        
+                        cropGuid = guidElement.text()
                         myFoodSource.cropGuid = cropGuid
-                        myFoodSource.fodder = int(foodSourceNode.firstChildElement("fodderStrawChaff").text())
-                        myFoodSource.grain = int(foodSourceNode.firstChildElement("fodderGrain").text())
-                        myFoodSource.days = int(foodSourceNode.firstChildElement("fodderDays").text())
-                        myFoodSource.used = bool(int(foodSourceNode.firstChildElement("fodderUse").text()))
+                        
+                        # Handle different tag names between C++ and Python versions
+                        fodderElement = foodSourceNode.firstChildElement("fodderStrawChaff")
+                        myFoodSource.fodder = int(fodderElement.text()) if not fodderElement.isNull() else 0
+                        
+                        grainElement = foodSourceNode.firstChildElement("fodderGrain")
+                        myFoodSource.grain = int(grainElement.text()) if not grainElement.isNull() else 0
+                        
+                        daysElement = foodSourceNode.firstChildElement("fodderDays")
+                        myFoodSource.days = int(daysElement.text()) if not daysElement.isNull() else 0
+                        
+                        usedElement = foodSourceNode.firstChildElement("fodderUse")
+                        if usedElement.isNull():
+                            usedElement = foodSourceNode.firstChildElement("used")
+                        myFoodSource.used = bool(int(usedElement.text())) if not usedElement.isNull() else False
 
                         # Insert data into LaFoodSourceMap
                         self._mFoodSourceMap[cropGuid] = myFoodSource
+                        LaUtils.debug.log(f"Added food source with guid {cropGuid} to parameter {self._mName}")
 
                         # Move to next food source
+                        prevNode = foodSourceNode
                         foodSourceNode = foodSourceNode.nextSiblingElement("foodSource")
+                        if foodSourceNode.isNull():
+                            foodSourceNode = prevNode.nextSiblingElement("fodderCrop")
 
-            # Handle fallowUsage as a Priority enum
+            # Handle fallowUsage as a Priority enum - carefully handle various formats
             fallowUsageElement = myTopElement.firstChildElement("fallowUsage")
             if not fallowUsageElement.isNull():
                 fallowUsageText = fallowUsageElement.text()
-                if fallowUsageText == "High":
+                if fallowUsageText.upper() == "HIGH":
                     self._fallowUsage = Priority.High
-                elif fallowUsageText == "Medium":
+                elif fallowUsageText.upper() == "MEDIUM":
                     self._fallowUsage = Priority.Medium
-                elif fallowUsageText == "Low":
+                elif fallowUsageText.upper() == "LOW":
                     self._fallowUsage = Priority.Low
                 else:
-                    self._fallowUsage = Priority.None_  # Default to None if value doesn't match
+                    self._fallowUsage = Priority.None_
             else:
-                self._fallowUsage = Priority.None_  # Default if element is missing
+                self._fallowUsage = Priority.None_
 
-            self._rasterName = LaUtils.xmlDecode(myTopElement.firstChildElement("rasterName").text())
+            # Get raster name with proper fallback
+            rasterNameElement = myTopElement.firstChildElement("rasterName")
+            if rasterNameElement.isNull():
+                rasterNameElement = myTopElement.firstChildElement("RasterName")
+            self._rasterName = LaUtils.xmlDecode(rasterNameElement.text()) if not rasterNameElement.isNull() else ""
+            
+            LaUtils.debug.log(f"Successfully loaded animal parameter: {self._mName}")
             return True
         except Exception as e:
-            print(f"DEBUG: Error in fromXml: {str(e)}")
+            LaUtils.debug.log(f"Error loading animal parameter from XML: {str(e)}")
             import traceback
-            print(traceback.format_exc())
+            LaUtils.debug.log(traceback.format_exc())
             return False
 
     def toXml(self) -> str:
         from la.lib.lautils import LaUtils
         myString = f"<animalParameter guid=\"{self.guid}\">\n"
-        myString += f"  <name>{LaUtils.xmlEncode(str(self.name))}</name>\n"  # Fixed tag name from <n> to <name>
+        # Use both name tags for maximum compatibility
+        myString += f"  <name>{LaUtils.xmlEncode(str(self.name))}</name>\n"  # Standard name tag 
         myString += f"  <description>{LaUtils.xmlEncode(str(self.description))}</description>\n"
         myString += f"  <animal>{LaUtils.xmlEncode(str(self.animalGuid))}</animal>\n"
         myString += f"  <percentTameMeat>{self.percentTameMeat}</percentTameMeat>\n"
@@ -287,17 +348,17 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
                 myString += f"      <fodderStrawChaff>{foodSource.fodder}</fodderStrawChaff>\n"
                 myString += f"      <fodderGrain>{foodSource.grain}</fodderGrain>\n"
                 myString += f"      <fodderUse>{1 if foodSource.used else 0}</fodderUse>\n"
-                myString += f"      <fodderDays>{foodSource.days}</fodderDays>\n"  # Fixed missing closing bracket
+                myString += f"      <fodderDays>{foodSource.days}</fodderDays>\n"
                 myString += "    </foodSource>\n"
             myString += "  </fodderCrops>\n"
 
         # Handle fallowUsage based on Priority enum
         fallowUsageStr = "None"
-        if self._fallowUsage == self.Priority.High:
+        if self._fallowUsage == Priority.High:
             fallowUsageStr = "High"
-        elif self._fallowUsage == self.Priority.Medium:
+        elif self._fallowUsage == Priority.Medium:
             fallowUsageStr = "Medium"
-        elif self._fallowUsage == self.Priority.Low:
+        elif self._fallowUsage == Priority.Low:
             fallowUsageStr = "Low"
 
         myString += f"  <fallowUsage>{fallowUsageStr}</fallowUsage>\n"
