@@ -214,10 +214,16 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
                 warnings.warn("Failed to parse XML: myTopElement is null. The XML element could not be found or parsed.")
                 return False
                 
-            # Set GUID from attribute - make sure to get actual value, not method reference
+            # Get GUID directly from the XML attribute
             guid_value = myTopElement.attribute("guid")
-            self._mGuid = guid_value  # Directly assign to the instance variable
-            LaUtils.debug.log(f"Loading animal parameter with GUID: {guid_value}")
+            if guid_value:
+                self._mGuid = str(guid_value)  # Ensure it's a string
+                LaUtils.debug.log(f"Loading animal parameter with GUID: {self._mGuid}")
+            else:
+                LaUtils.debug.log("No GUID found in XML, generating a new one")
+                import uuid
+                self._mGuid = str(uuid.uuid4())
+                LaUtils.debug.log(f"Generated new GUID: {self._mGuid}")
             
             # Check for both name tag styles (<name> and <n>)
             nameElement = myTopElement.firstChildElement("name")
@@ -226,13 +232,18 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             
             self._mName = LaUtils.xmlDecode(nameElement.text())
             LaUtils.debug.log(f"Loaded animal parameter name: {self._mName}")
-                
-            self._mDescription = LaUtils.xmlDecode(myTopElement.firstChildElement("description").text())
-            self._mAnimalGuid = LaUtils.xmlDecode(myTopElement.firstChildElement("animal").text())
+            
+            # Continue with the rest of the XML parsing
+            descriptionElement = myTopElement.firstChildElement("description")
+            self._mDescription = LaUtils.xmlDecode(descriptionElement.text()) if not descriptionElement.isNull() else ""
+            
+            animalElement = myTopElement.firstChildElement("animal")
+            self._mAnimalGuid = LaUtils.xmlDecode(animalElement.text()) if not animalElement.isNull() else ""
             
             # Parse numeric values safely
             try:
-                self._mPercentTameMeat = float(myTopElement.firstChildElement("percentTameMeat").text())
+                percentElement = myTopElement.firstChildElement("percentTameMeat")
+                self._mPercentTameMeat = float(percentElement.text()) if not percentElement.isNull() else 0.0
             except (ValueError, TypeError):
                 self._mPercentTameMeat = 0.0
                 LaUtils.debug.log("Failed to parse percentTameMeat, using 0.0")
