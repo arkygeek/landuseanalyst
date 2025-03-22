@@ -50,10 +50,10 @@ class LaMainForm(LaMainFormBase):
 
         # Initialize settings and debug state first
         self.readSettings()
-        
+
         # Connect item changed signal for the animals table
         self.tblAnimals.itemChanged.connect(self.on_tblAnimals_itemChanged)
-        
+
         # Verify tbLogs exists
         if not hasattr(self, 'tbLogs'):
             import traceback
@@ -67,14 +67,14 @@ class LaMainForm(LaMainFormBase):
             # Force UI update immediately
             self.tbLogs.repaint()
             QtWidgets.QApplication.processEvents()
-        
+
         # Initialize debug logger before connecting message bus
         debugMode = self.cbDebug.isChecked()
         LaUtils.debug.initialize(
             enabled=debugMode,
             callback=self.logToAllChannels
         )
-        
+
         # Now connect debug message bus after logger is initialized
         MESSAGE_BUS.debugMessaged.connect(self.on_debug_message)
 
@@ -83,10 +83,10 @@ class LaMainForm(LaMainFormBase):
             self.tbLogs.setVisible(debugMode)
         if hasattr(self, 'tbReport'):
             self.tbReport.setVisible(debugMode)
-            
+
         # Test log message to verify the system is working
         LaUtils.debug.log("Application initialized", "MainForm")
-        
+
         # Force a message to appear even if debug is off (for testing)
         self.logToAllChannels("Debug system test message - should always appear")
         # Force UI update again
@@ -94,20 +94,20 @@ class LaMainForm(LaMainFormBase):
 
         # Add signal connection for table cell clicks
         self.tblAnimals.cellClicked.connect(self.animalCellClicked)
-        
+
         # Connect table selection change signal
         self.tblAnimals.itemSelectionChanged.connect(self.on_animal_selection_changed)
 
     def logToAllChannels(self, message):
         """
         Unified logging method that sends messages to all log channels.
-        
+
         Args:
             message: The message to log
         """
         # Force console output for debugging
         print(f"LOG: {message}")
-        
+
         # Add the message to the logs tab
         if hasattr(self, 'tbLogs'):
             self.tbLogs.append(message)
@@ -117,7 +117,7 @@ class LaMainForm(LaMainFormBase):
             QtWidgets.QApplication.processEvents()
         else:
             print("Warning: tbLogs widget not found!")
-        
+
         # Add the message to the report tab
         if hasattr(self, 'tbReport'):
             self.tbReport.append(message)
@@ -133,23 +133,23 @@ class LaMainForm(LaMainFormBase):
         self.loadAnimals()
         if hasattr(self, 'loadCrops'):
             self.loadCrops()
-        
+
         # Update diet info
         if hasattr(self, 'updateDietPieChart'):
             self.updateDietPieChart()
-            
+
         # Force UI update
         QtWidgets.QApplication.processEvents()
-        
+
     def setup(self):
         """Perform additional setup beyond what's in the base class."""
         # Update the application title
         self.setWindowTitle("Land Use Analyst")
-        
+
         # Initialize animals map if not already done
         if not hasattr(self, 'mAnimalsMap'):
             self.mAnimalsMap = {}
-            
+
         # Load images or set additional properties not handled in the base class
         self.loadImages()
         # Set up any additional connections not in the base class
@@ -182,20 +182,20 @@ class LaMainForm(LaMainFormBase):
         # Connect the area units combo box to update calculations
         if hasattr(self, 'cbAreaUnits'):
             self.cbAreaUnits.currentIndexChanged.connect(self.updateCalculations)
-        
+
         # Connect the debug checkbox to enable/disable debug logging
         if hasattr(self, 'cbDebug'):
             self.cbDebug.clicked.connect(self.on_cbDebug_clicked)
-            
+
         # Connect animal and crop table cell clicks
         if hasattr(self, 'tblAnimals'):
             self.tblAnimals.cellClicked.connect(self.animalCellClicked)
             # Connect parameter combo box changes
             self.tblAnimals.cellWidget = self.create_parameter_combo
-            
+
         if hasattr(self, 'tblCrops'):
             self.tblCrops.cellClicked.connect(self.cropCellClicked)
-            
+
         # Override the base class's on_cbDebug_clicked to use our version
         if hasattr(LaMainFormBase, 'on_cbDebug_clicked'):
             self.on_cbDebug_clicked = self._override_on_cbDebug_clicked
@@ -207,10 +207,10 @@ class LaMainForm(LaMainFormBase):
             combo.currentIndexChanged.connect(lambda idx, r=row: self.on_parameter_changed(r, idx))
             return combo
         return QtWidgets.QComboBox()  # Return empty combo box instead of None
-        
+
     def on_parameter_changed(self, row: int, index: int):
         """Handle parameter combo box selection changes.
-        
+
         Args:
             row: Table row number
             index: Selected index in combo box
@@ -220,32 +220,32 @@ class LaMainForm(LaMainFormBase):
             combo = self.tblAnimals.cellWidget(row, 2)
             if not combo:
                 return
-                
+
             # Get the animal GUID from the name column
             nameItem = self.tblAnimals.item(row, 1)
             if not nameItem:
                 return
-                
+
             guid = nameItem.data(QtCore.Qt.UserRole)
             if not guid or guid not in self.mAnimalsMap:
                 return
-                
+
             # Get the newly selected parameter GUID
             parameter_guid = combo.itemData(index)
             if not parameter_guid:
                 return
-                
+
             # Update the parameter in mAnimalsMap while preserving enabled state
             oldValue = self.mAnimalsMap[guid]
             self.mAnimalsMap[guid] = (oldValue[0], parameter_guid)
-            
+
             # Update the animal details display if this row is selected
             if self.tblAnimals.currentRow() == row:
                 self.animalCellClicked(row, 1)
-            
+
             # Refresh the table to update percentages
             self.loadAnimals()
-            
+
         except Exception as e:
             LaUtils.debug.log(f"Error handling parameter change: {str(e)}")
             import traceback
@@ -374,7 +374,7 @@ class LaMainForm(LaMainFormBase):
         """Handle window close event - save settings before closing."""
         self.writeSettings()
         super(LaMainForm, self).closeEvent(event)
-        
+
     def _override_on_cbDebug_clicked(self):
         """Override base class method to prevent double-handling"""
         pass  # Let our on_cbDebug_clicked handle it
@@ -416,7 +416,7 @@ class LaMainForm(LaMainFormBase):
         # Log the debug mode change last
         message = "Debug mode enabled" if isChecked else "Debug mode disabled"
         LaUtils.debug.log(message, "Debug")
-        
+
         # Force a message to appear in tbLogs even if debug logger doesn't work
         if hasattr(self, 'tbLogs') and isChecked:
             self.tbLogs.append(f"Debug checkbox was clicked: {isChecked}")
@@ -432,7 +432,7 @@ class LaMainForm(LaMainFormBase):
         """
         Add a message to the log.
         This method is maintained for backward compatibility.
-        
+
         Args:
             message: The message to add
         """
@@ -441,82 +441,108 @@ class LaMainForm(LaMainFormBase):
 
     def animalCellClicked(self, row: int, column: int) -> None:
         """Handle clicks on the animals table.
-        
+
         Updates the text browser with details about the selected animal
         and its parameters.
-        
+
         Args:
             row: The clicked row index
             column: The clicked column index
         """
         # Clear the calculations list first
         self.listWidgetCalculationsAnimal.clear()
-        
+
         try:
             # Get the animal GUID from the name column (column 1)
             item = self.tblAnimals.item(row, 1)
             if not item:
+                LaUtils.debug.log("No item found in column 1")
                 return
-                
+
             animal_guid = item.data(QtCore.Qt.UserRole)
             if not animal_guid:
+                LaUtils.debug.log("No animal GUID found in item data")
                 return
+
+            LaUtils.debug.log(f"Animal clicked - GUID: {animal_guid}")
                 
             # Get the animal data
-            from la.lib.lautils import LaUtils
             animals_map = LaUtils.getAvailableAnimals()
             if animal_guid not in animals_map:
                 LaUtils.debug.log(f"Animal with GUID {animal_guid} not found in available animals")
                 return
+            
             animal = animals_map[animal_guid]
-                
-            # Get the parameter GUID from the combo box in column 2
+            LaUtils.debug.log(f"Found animal: {animal.name}")
+            
+            # Get the animal parameter GUID from the combo box
             combo = self.tblAnimals.cellWidget(row, 2)
             if not combo:
-                LaUtils.debug.log("Parameter combo box not found")
+                LaUtils.debug.log("No combo box found in column 2")
                 return
-            parameter_guid = combo.itemData(combo.currentIndex(), QtCore.Qt.UserRole)
             
-            # Get the parameter data
-            parameters_map = LaUtils.getAvailableAnimalParameters()
-            if parameter_guid not in parameters_map:
-                LaUtils.debug.log(f"Parameter with GUID {parameter_guid} not found in available parameters")
+            param_guid = combo.itemData(combo.currentIndex(), QtCore.Qt.UserRole)
+            if not param_guid:
+                LaUtils.debug.log("No parameter GUID found in combo box")
                 return
-            parameter = parameters_map[parameter_guid]
             
-            # Log animal and parameter data for debugging
-            LaUtils.debug.log(f"Selected animal: {animal.name} (GUID: {animal_guid})")
-            LaUtils.debug.log(f"Selected parameter: {parameter.name} (GUID: {parameter_guid})")
-            LaUtils.debug.log(f"Animal image file: {animal.imageFile}")
+            LaUtils.debug.log(f"Parameter GUID: {param_guid}")
+            
+            # Get the animal parameter data
+            param_map = LaUtils.getAvailableAnimalParameters()
+            if param_guid not in param_map:
+                LaUtils.debug.log(f"Animal parameter with GUID {param_guid} not found")
+                return
+                
+            parameter = param_map[param_guid]
+            LaUtils.debug.log(f"Found parameter: {parameter.name}")
             
             # Display the animal and parameter details
             self.showAnimalDefinitionReport(animal, parameter)
             
-            # Update the animal image if available - using more robust loading approach
-            if hasattr(self, 'lblAnimalPix') and animal.imageFile:
-                # Resolve full path to image
-                image_path = LaUtils.resolvePath(str(animal.imageFile), 'image')
-                LaUtils.debug.log(f"Resolved image path: {image_path}")
-                
-                if os.path.exists(image_path):
-                    pixmap = QPixmap(image_path)
-                    if not pixmap.isNull():
-                        self.lblAnimalPix.setPixmap(pixmap)
-                        self.lblAnimalPix.setScaledContents(True)
-                        LaUtils.debug.log("Successfully loaded animal image")
+            # Update the animal image
+            if hasattr(animal, 'imageFile') and animal.imageFile:
+                try:
+                    # This follows the approach from the C++ version
+                    image_path = LaUtils.resolvePath(str(animal.imageFile), 'image')
+                    LaUtils.debug.log(f"Trying to load image from: {image_path}")
+                    
+                    if os.path.exists(image_path):
+                        pixmap = QPixmap(image_path)
+                        if not pixmap.isNull():
+                            self.lblAnimalPix.setPixmap(pixmap)
+                            self.lblAnimalPix.setScaledContents(True)
+                            LaUtils.debug.log(f"Successfully loaded image: {image_path}")
+                        else:
+                            LaUtils.debug.log(f"Failed to create pixmap from {image_path}")
+                            self.lblAnimalPix.clear()
                     else:
-                        self.lblAnimalPix.clear()
-                        LaUtils.debug.log("Failed to load animal image: pixmap is null")
-                else:
+                        # Try the direct path as fallback
+                        fallback_path = str(animal.imageFile)
+                        LaUtils.debug.log(f"Trying fallback image path: {fallback_path}")
+                        
+                        if os.path.exists(fallback_path):
+                            pixmap = QPixmap(fallback_path)
+                            if not pixmap.isNull():
+                                self.lblAnimalPix.setPixmap(pixmap)
+                                self.lblAnimalPix.setScaledContents(True)
+                                LaUtils.debug.log(f"Successfully loaded image from fallback path")
+                            else:
+                                LaUtils.debug.log(f"Failed to create pixmap from fallback path")
+                                self.lblAnimalPix.clear()
+                        else:
+                            LaUtils.debug.log("Image not found at any path")
+                            self.lblAnimalPix.clear()
+                except Exception as e:
+                    LaUtils.debug.log(f"Error loading animal image: {str(e)}")
+                    import traceback
+                    LaUtils.debug.log(traceback.format_exc())
                     self.lblAnimalPix.clear()
-                    LaUtils.debug.log(f"Animal image file does not exist: {image_path}")
             else:
-                if hasattr(self, 'lblAnimalPix'):
-                    self.lblAnimalPix.clear()
-                LaUtils.debug.log("No image file for animal or lblAnimalPix not found")
-                
+                LaUtils.debug.log("No image file specified for animal")
+                self.lblAnimalPix.clear()
+
         except Exception as e:
-            from la.lib.lautils import LaUtils
             LaUtils.debug.log(f"Error in animalCellClicked: {str(e)}")
             import traceback
             LaUtils.debug.log(traceback.format_exc())
@@ -529,33 +555,32 @@ class LaMainForm(LaMainFormBase):
             animal_parameter: The LaAnimalParameter instance to display
         """
         try:
-            # Log HTML data for debugging
+            # Generate HTML representations of the animal and parameter
             animal_html = animal.toHtml()
             param_html = animal_parameter.toHtml()
             
-            LaUtils.debug.log(f"Animal HTML length: {len(animal_html)}")
-            LaUtils.debug.log(f"Parameter HTML length: {len(param_html)}")
+            LaUtils.debug.log(f"Animal HTML generated, length: {len(animal_html)}")
+            LaUtils.debug.log(f"Parameter HTML generated, length: {len(param_html)}")
             
+            # Format the HTML in a table with two columns - just like cropDefinitionReport
             html = "<body>"
             html += "<table width=\"100%\">"
             html += "<tr>"
-            html += "<td>"
+            html += "<td style=\"vertical-align:top; width:50%\">"
             html += animal_html
             html += "</td>"
-            html += "<td>"
+            html += "<td style=\"vertical-align:top; width:50%\">"
             html += param_html
             html += "</td>"
             html += "</tr>"
             html += "</table>"
             html += "</body>"
             
+            # Get the standard CSS
+            css = LaUtils.getStandardCss()
+            
             # Apply standard CSS and set the HTML content
             if hasattr(self, 'textBrowserAnimalDefinition'):
-                # Get CSS
-                css = LaUtils.getStandardCss()
-                LaUtils.debug.log(f"Standard CSS length: {len(css)}")
-                
-                # Apply CSS and HTML
                 self.textBrowserAnimalDefinition.document().setDefaultStyleSheet(css)
                 self.textBrowserAnimalDefinition.setHtml(html)
                 
@@ -563,13 +588,13 @@ class LaMainForm(LaMainFormBase):
                 self.textBrowserAnimalDefinition.update()
                 QtWidgets.QApplication.processEvents()
                 
-                LaUtils.debug.log("Set HTML content to textBrowserAnimalDefinition")
+                LaUtils.debug.log("HTML content set to textBrowserAnimalDefinition")
             else:
                 LaUtils.debug.log("ERROR: textBrowserAnimalDefinition widget not found")
-                # Debug all QTextBrowser widgets
-                for browser in self.findChildren(QtWidgets.QTextBrowser):
-                    LaUtils.debug.log(f"Found QTextBrowser: {browser.objectName()}")
-
+                # Debug available QTextBrowser widgets
+                for widget in self.findChildren(QtWidgets.QTextBrowser):
+                    LaUtils.debug.log(f"Found QTextBrowser: {widget.objectName()}")
+        
         except Exception as e:
             LaUtils.debug.log(f"Error in showAnimalDefinitionReport: {str(e)}")
             import traceback
@@ -579,24 +604,24 @@ class LaMainForm(LaMainFormBase):
         """Load and display animals in the main form table."""
         # Clear existing items
         self.listWidgetCalculationsAnimal.clear()
-        
+
         # Clear and setup the animals table
         self.tblAnimals.clear()
         self.tblAnimals.setRowCount(0)
         self.tblAnimals.setColumnCount(4)
-        
+
         # Initialize tracking variables
         myCurrentRow = 0
         myRunningPercentage = 0.0
-        
+
         # Get available animals and parameters
         myAnimalsMap = LaUtils.getAvailableAnimals()
         myAnimalParametersMap = LaUtils.getAvailableAnimalParameters()
-        
+
         # Set up table headers
         headers = ["Used?", "Name", "Parameters", "Diet %"]
         self.tblAnimals.setHorizontalHeaderLabels(headers)
-        
+
         # Iterate through available animals
         for myGuid, myAnimal in myAnimalsMap.items():
             myName = str(myAnimal.name)  # Convert property to string
@@ -604,17 +629,17 @@ class LaMainForm(LaMainFormBase):
             myValue = self.mAnimalsMap.get(myGuid, (False, ""))
             if myGuid not in self.mAnimalsMap:
                 self.mAnimalsMap[myGuid] = myValue
-            
+
             # Add new row
             self.tblAnimals.insertRow(myCurrentRow)
-            
+
             # Create Used? checkbox item
             mypUsedItem = QtWidgets.QTableWidgetItem()
             mypUsedItem.setText("Used?")
             mypUsedItem.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
             mypUsedItem.setCheckState(QtCore.Qt.Checked if myValue[0] else QtCore.Qt.Unchecked)
             self.tblAnimals.setItem(myCurrentRow, 0, mypUsedItem)
-            
+
             # Add name item with icon
             mypNameItem = QtWidgets.QTableWidgetItem()
             mypNameItem.setText(myName)
@@ -622,45 +647,45 @@ class LaMainForm(LaMainFormBase):
             myIcon = QtGui.QIcon(":/localdata.png")
             mypNameItem.setIcon(myIcon)
             self.tblAnimals.setItem(myCurrentRow, 1, mypNameItem)
-            
+
             # Create and populate parameters combo box
             mypCombo = QtWidgets.QComboBox()
             for paramGuid, param in myAnimalParametersMap.items():
                 if myGuid == param.animalGuid:
                     myParameterName = f"{str(param.name)} ({str(param.description)})"
                     mypCombo.addItem(myIcon, myParameterName, paramGuid)
-                    
+
                     # If this is the selected parameter, add its percentage to running total
                     if myValue[0] and myValue[1] == paramGuid:
                         myRunningPercentage += float(str(param.percentTameMeat))
-                        
+
                         # Add percentage to table
                         mypPercentItem = QtWidgets.QTableWidgetItem()
                         mypPercentItem.setText(str(param.percentTameMeat))
                         self.tblAnimals.setItem(myCurrentRow, 3, mypPercentItem)
-            
+
             # Set the default parameter in combo if one exists
             if myValue[1]:
                 index = mypCombo.findData(myValue[1])
                 if index >= 0:
                     mypCombo.setCurrentIndex(index)
-            
+
             # Add combo to table
             self.tblAnimals.setCellWidget(myCurrentRow, 2, mypCombo)
-            
+
             # Add to calculations list if enabled
             if myValue[0]:
                 myItem = QtWidgets.QListWidgetItem()
                 myItem.setText(myName)
                 myItem.setData(QtCore.Qt.UserRole, myGuid)
                 self.listWidgetCalculationsAnimal.addItem(myItem)
-            
+
             myCurrentRow += 1
-        
+
         # Show total percentage indicator
         myIcon = QtGui.QIcon(":/status_ok.png" if myRunningPercentage == 100 else ":/status_error.png")
         self.labelAnimalCheck.setText(f"{myRunningPercentage}%")
-        
+
         # Resize columns to content
         self.tblAnimals.resizeColumnsToContents()
         self.tblAnimals.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
@@ -673,20 +698,20 @@ class LaMainForm(LaMainFormBase):
                 nameItem = self.tblAnimals.item(item.row(), 1)
                 if not nameItem:
                     return
-                    
+
                 guid = nameItem.data(QtCore.Qt.UserRole)
                 if not guid:
                     return
-                    
+
                 # Update the enabled state in mAnimalsMap
                 if guid in self.mAnimalsMap:
                     oldValue = self.mAnimalsMap[guid]
                     # Update tuple with new checked state but keep same parameter GUID
                     self.mAnimalsMap[guid] = (item.checkState() == QtCore.Qt.Checked, oldValue[1])
-                    
+
                 # Refresh the table to update percentages
                 self.loadAnimals()
-                
+
             except Exception as e:
                 LaUtils.debug.log(f"Error handling checkbox change: {str(e)}")
                 import traceback
