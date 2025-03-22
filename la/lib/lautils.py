@@ -343,20 +343,16 @@ class LaUtils:
     def getAvailableAnimalParameters() -> Dict[str, LaAnimalParameter]:
         """
         Returns a dictionary of available animal parameters.
-
         This method scans the directory returned by `userAnimalParameterProfilesDirPath()`
         for XML files, each of which is expected to define an animal parameter.
         Each file is parsed into an `LaAnimalParameter` object.
-
         :return: A dictionary of available animal parameters
         :rtype: Dict[str, LaAnimalParameter]
         """
         myMap = {}
         myDirectory = QDir(LaUtils.userAnimalParameterProfilesDirPath())
-
         # Log the directory being scanned
         LaUtils.debug.log(f"Scanning for animal parameters in: {LaUtils.userAnimalParameterProfilesDirPath()}", "AnimalParams")
-
         # Check if the directory exists
         if not os.path.exists(LaUtils.userAnimalParameterProfilesDirPath()):
             LaUtils.debug.log(f"Animal parameters directory does not exist: {LaUtils.userAnimalParameterProfilesDirPath()}", "AnimalParams")
@@ -366,44 +362,46 @@ class LaUtils:
             except Exception as e:
                 LaUtils.debug.log(f"Failed to create animal parameters directory: {str(e)}", "AnimalParams")
                 return myMap
-
         myList = myDirectory.entryInfoList(QDir.Dirs | QDir.Files | QDir.NoSymLinks)
         LaUtils.debug.log(f"Found {len(myList)} entries in the animal parameters directory", "AnimalParams")
-
         for myFileInfo in myList:
             # Ignore directories
             if myFileInfo.fileName() in [".", ".."]:
                 continue
-
             # if the filename ends in .xml try to load it into our layerSets listing
             if myFileInfo.completeSuffix() == "xml":
                 try:
                     filePath = myFileInfo.absoluteFilePath()
                     LaUtils.debug.log(f"Loading animal parameter from: {filePath}", "AnimalParams")
-
                     myAnimalParameter = LaAnimalParameter()
                     success = myAnimalParameter.fromXmlFile(filePath)
-
                     if not success:
                         LaUtils.debug.log(f"Failed to load animal parameter from file: {filePath}", "AnimalParams")
                         continue
-
                     if not myAnimalParameter.name:
                         LaUtils.debug.log(f"Animal parameter from {filePath} has no name, skipping", "AnimalParams")
                         continue
-
+                    
+                    # Get the actual GUID string, not a method reference
+                    guidValue = myAnimalParameter._mGuid
+                    
                     # Debug the parameter values
                     LaUtils.debug.log(f"Loaded animal parameter: '{myAnimalParameter.name}', linked to animal: {myAnimalParameter.animalGuid}, percentTameMeat: {myAnimalParameter.percentTameMeat}", "AnimalParams")
-
-                    # Add the animal parameter to the map
-                    myMap[myAnimalParameter.guid] = myAnimalParameter
-                    LaUtils.debug.log(f"Added animal parameter to map with GUID: {myAnimalParameter.guid}", "AnimalParams")
-
+                    
+                    # Add the animal parameter to the map using the actual GUID string
+                    if guidValue:
+                        myMap[guidValue] = myAnimalParameter
+                        LaUtils.debug.log(f"Added animal parameter to map with GUID: {guidValue}", "AnimalParams")
+                    else:
+                        LaUtils.debug.log(f"WARNING: Animal parameter '{myAnimalParameter.name}' has no GUID, generating one", "AnimalParams")
+                        guidValue = str(uuid.uuid4())
+                        myAnimalParameter._mGuid = guidValue
+                        myMap[guidValue] = myAnimalParameter
+                        LaUtils.debug.log(f"Generated and added animal parameter with new GUID: {guidValue}", "AnimalParams")
                 except Exception as e:
                     LaUtils.debug.log(f"Error loading animal parameter from {myFileInfo.absoluteFilePath()}: {str(e)}", "Error")
                     import traceback
                     LaUtils.debug.log(traceback.format_exc(), "Error")
-
         LaUtils.debug.log(f"Loaded {len(myMap)} animal parameters successfully", "AnimalParams")
         return myMap
 

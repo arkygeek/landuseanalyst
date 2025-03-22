@@ -214,9 +214,10 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
                 warnings.warn("Failed to parse XML: myTopElement is null. The XML element could not be found or parsed.")
                 return False
                 
-            # Set GUID from attribute
-            self.setGuid(myTopElement.attribute("guid"))
-            LaUtils.debug.log(f"Loading animal parameter with GUID: {self.guid}")
+            # Set GUID from attribute - make sure to get actual value, not method reference
+            guid_value = myTopElement.attribute("guid")
+            self._mGuid = guid_value  # Directly assign to the instance variable
+            LaUtils.debug.log(f"Loading animal parameter with GUID: {guid_value}")
             
             # Check for both name tag styles (<name> and <n>)
             nameElement = myTopElement.firstChildElement("name")

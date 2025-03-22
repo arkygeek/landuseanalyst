@@ -294,46 +294,103 @@ class LaMainForm(LaMainFormBase):
         """Override base class method to prevent double-handling"""
         pass  # Let our on_cbDebug_clicked handle it
 
-    # def on_cbDebug_clicked(self):
-    #     """Handle debug checkbox clicked - toggle debug mode."""
-    #     isChecked = self.cbDebug.isChecked()
-        
-    #     # Update the debug logger first
-    #     LaUtils.debug.set_enabled(isChecked)
-        
-    #     try:
-    #         # Import and use our debug dialog
-    #         from la.gui.ladebugdialog import LaDebugDialog
-            
-    #         if isChecked:
-    #             # Get dialog instance using proper singleton pattern
-    #             self._debug_dialog = LaDebugDialog.get_instance(parent=self)
+    def showSelectedAnimalDetails(self, row):
+        """Show details for the selected animal.
+
+        Args:
+            row: The row index of the selected animal
+        """
+        if row < 0 or row >= self.tblAnimals.rowCount():
+            return
+
+        try:
+            # Get the animal GUID from the name item (which contains the GUID as user data)
+            nameItem = self.tblAnimals.item(row, 1)  # Assuming column 1 has name with GUID
+            if nameItem is None:
+                LaUtils.debug.log(f"No name item found at row {row}", "Error")
+                return
                 
-    #             # Show the dialog and force it to appear at front
-    #             self._debug_dialog.show()
-    #             self._debug_dialog.raise_()
-    #             self._debug_dialog.activateWindow()
-                
-    #             # Test message
-    #             LaUtils.debug.log("Debug dialog opened", "Debug")
-    #         else:
-    #             # Hide the dialog but don't destroy it
-    #             if self._debug_dialog is not None:
-    #                 self._debug_dialog.hide()
-    #                 LaUtils.debug.log("Debug dialog hidden", "Debug")
-    #     except Exception as e:
-    #         print(f"Debug dialog error: {str(e)}")
-    #         import traceback
-    #         traceback.print_exc()
-        
-    #     # Keep the original debug UI components hidden
-    #     if hasattr(self, 'tbLogs'):
-    #         self.tbLogs.setVisible(False)
-    #     if hasattr(self, 'tbReport'):
-    #         self.tbReport.setVisible(False)
+            guid = nameItem.data(QtCore.Qt.UserRole)
+            if not guid:
+                LaUtils.debug.log("No GUID found in name item", "Error")
+                return
             
-    #     # Save debug setting
-    #     QSettings().setValue("landuse_analyst/debug", isChecked)
+            # Get the animal object
+            animal = LaUtils.getAnimal(guid)
+            if animal is None or not hasattr(animal, 'name') or not animal.name:
+                LaUtils.debug.log(f"Could not find valid animal for GUID: {guid}", "Error")
+                return
+
+            # Format and display animal details in text browser
+            if hasattr(self, 'textBrowserAnimalDefinition'):
+                html_content = f"<h2>{animal.name}</h2>"
+                if hasattr(animal, 'description') and animal.description:
+                    html_content += f"<p><strong>Description:</strong> {animal.description}</p>"
+                if hasattr(animal, 'animalCalories'):
+                    html_content += f"<p><strong>Calories:</strong> {animal.animalCalories}</p>"
+                
+                # Add any other animal properties you want to display
+                self.textBrowserAnimalDefinition.setHtml(html_content)
+                LaUtils.debug.log(f"Displayed animal details for {animal.name}", "UI")
+            else:
+                LaUtils.debug.log("textBrowserAnimalDefinition not found in UI", "Error")
+
+            # Display image if available
+            if hasattr(self, 'lblAnimalPix') and hasattr(animal, 'imageFile') and animal.imageFile:
+                imagePath = LaUtils.resolvePath(str(animal.imageFile), 'image')
+                LaUtils.debug.log(f"Attempting to load animal image: {imagePath}", "UI")
+                
+                if os.path.exists(imagePath):
+                    pixmap = QPixmap(imagePath)
+                    if not pixmap.isNull():
+                        self.lblAnimalPix.setPixmap(pixmap)
+                        LaUtils.debug.log("Animal image loaded successfully", "UI") 
+                    else:
+                        LaUtils.debug.log(f"Failed to create pixmap from {imagePath}", "Error")
+                else:
+                    LaUtils.debug.log(f"Image path doesn't exist: {imagePath}", "Warning")
+                    self.lblAnimalPix.clear()
+        except Exception as e:
+            LaUtils.debug.log(f"Error showing animal details: {str(e)}", "Error")
+            import traceback
+            LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
+
+    def animalCellClicked(self, row, column):
+        """Handle animal table cell click event.
+
+        This method is called when a user clicks on a cell in the animals table.
+        It handles the selection and display of animal details.
+
+        Args:
+            row: The row index of the clicked cell
+            column: The column index of the clicked cell
+        """
+        if column == 0:  # Checkbox column
+            item = self.tblAnimals.item(row, column)
+            guid = self.tblAnimals.item(row, 1).data(QtCore.Qt.UserRole)
+
+            # Get the current check state
+            isChecked = item.checkState() == QtCore.Qt.Checked
+
+            # Update the animals map
+            if guid in self.mAnimalsMap:
+                currentValue = self.mAnimalsMap[guid]
+                self.mAnimalsMap[guid] = (isChecked, currentValue[1])
+
+                # Update the animal calculations list
+                if isChecked:
+                    # Add to calculations list if not already there
+                    self.addAnimalToCalculationsList(guid)
+                else:
+                    # Remove from calculations list
+                    self.removeAnimalFromCalculationsList(guid)
+                self.updateTotalPercentages()
+
+        # Always show selected animal details when any cell in the row is clicked
+        self.showSelectedAnimalDetails(row)
+        
+        # Debugging
+        LaUtils.debug.log(f"Animal cell clicked - row: {row}, column: {column}", "UI")
 
     def _on_debug_dialog_closed(self):
         """Handle dialog closure cleanup"""
