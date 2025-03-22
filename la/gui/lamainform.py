@@ -25,12 +25,16 @@ This file implements the main form functionality.
 
 from qgis.PyQt import QtGui, QtCore, QtWidgets
 from qgis.PyQt.QtGui import QPixmap
-from qgis.PyQt.QtCore import QSettings
+from qgis.PyQt.QtCore import QSettings, Qt, pyqtSlot
+from qgis.PyQt.QtWidgets import QApplication, QMessageBox
 import os
+from typing import Dict, List, Optional, Union
+from la.lib.laanimal import LaAnimal
 
 from la.ui.lamainformbase import LaMainFormBase
 from la.lib.lamodel import LaModel
 from la.lib.lautils import LaUtils, MESSAGE_BUS
+from la.lib.lamaincontroller import LaMainController
 
 class LaMainForm(LaMainFormBase):
     """
@@ -45,19 +49,23 @@ class LaMainForm(LaMainFormBase):
         # Initialize the model
         self.model = LaModel()
 
+        # Initialize the controller
+        self.controller = LaMainController(self.model)
+
         # Initialize debug logger before anything else
         debugMode = QSettings().value("landuse_analyst/debug", False, type=bool)
         LaUtils.debug.initialize(enabled=debugMode)
 
         # Create debug dialog if debug mode is enabled
         self._debug_dialog = None
-        if debugMode:
+        if (debugMode):
             from la.gui.ladebugdialog import LaDebugDialog
             self._debug_dialog = LaDebugDialog.get_instance()
             # Connect debug message bus after dialog creation
             MESSAGE_BUS.debugMessaged.connect(self._debug_dialog.add_debug_message)
             # Load existing messages
-            self._debug_dialog.add_messages_from_history(LaUtils.debug.get_message_history())
+            if hasattr(LaUtils.debug, 'get_history'):
+                self._debug_dialog.add_messages_from_history(LaUtils.debug.get_history())
             # Show dialog
             self._debug_dialog.show()
 
@@ -107,8 +115,8 @@ class LaMainForm(LaMainFormBase):
 
     def refresh(self):
         """Refresh all displays in the form."""
-        # Load animals and crops
-        self.loadAnimals()
+        # Call base class loadAnimals()
+        super().loadAnimals()
         if hasattr(self, 'loadCrops'):
             self.loadCrops()
 
@@ -170,38 +178,48 @@ class LaMainForm(LaMainFormBase):
             self.on_cbDebug_clicked = self._override_on_cbDebug_clicked
 
     def setDietLabels(self):
-        """Update the diet information display.
-        This method calculates the diet percentages based on slider values
-        and updates relevant labels in the UI.
-        """
+        """Update the diet information display."""
         try:
             # Get current slider values
-            plantAnimalRatio = self.sliderDiet.value()  # Plant % vs Animal %
-            wildTameAnimalRatio = self.sliderMeat.value()  # Wild % vs Tame % for animal portion
-            wildTamePlantRatio = self.sliderCrop.value()  # Wild % vs Tame % for plant portion
+            plantAnimalRatio = self.sliderDiet.value()
+            wildTameAnimalRatio = self.sliderMeat.value()
+            wildTamePlantRatio = self.sliderCrop.value()
 
-            # Calculate percentages
-            animalPercent = plantAnimalRatio
-            plantPercent = 100 - plantAnimalRatio
+            # Delegate calculation to controller
+            diet_breakdown = self.controller.calculateDietBreakdown(
+                plantAnimalRatio,
+                wildTameAnimalRatio,
+                wildTamePlantRatio
+            )
 
-            wildAnimalPercent = (animalPercent * wildTameAnimalRatio) / 100
-            tameAnimalPercent = (animalPercent * (100 - wildTameAnimalRatio)) / 100
-            wildPlantPercent = (plantPercent * wildTamePlantRatio) / 100
-            tamePlantPercent = (plantPercent * (100 - wildTamePlantRatio)) / 100
+            # Update UI with calculated values (UI code stays in form)
+            self.labelMeatPercent.setText(str(diet_breakdown['animalPercent']))
+            self.labelCropPercent.setText(str(diet_breakdown['plantPercent']))
+            self.labelMeatWildPercent.setText(str(diet_breakdown['wildAnimalPercent']))
+            self.labelMeatTamePercent.setText(str(diet_breakdown['tameAnimalPercent']))
+            self.labelCropWildPercent.setText(str(diet_breakdown['wildPlantPercent']))
+            self.labelCropTamePercent.setText(str(diet_breakdown['tamePlantPercent']))
 
-            # Update the labels with calculated values
-            if hasattr(self, 'labelWildMeatPercentage'):
-                self.labelWildMeatPercentage.setText(f"{wildAnimalPercent:.1f}%")
-            if hasattr(self, 'labelTameMeatPercentage'):
-                self.labelTameMeatPercentage.setText(f"{tameAnimalPercent:.1f}%")
-            if hasattr(self, 'labelWildCropsPercentage'):
-                self.labelWildCropsPercentage.setText(f"{wildPlantPercent:.1f}%")
-            if hasattr(self, 'labelTameCropsPercentage'):
-                self.labelTameCropsPercentage.setText(f"{tamePlantPercent:.1f}%")
+            # Update additional labels if they exist
+            labels_map = {
+                'labelWildMeatPercentage': f"{diet_breakdown['absoluteWildAnimalPercent']:.1f}%",
+                'labelTameMeatPercentage': f"{diet_breakdown['absoluteTameAnimalPercent']:.1f}%",
+                'labelWildCropsPercentage': f"{diet_breakdown['absoluteWildPlantPercent']:.1f}%",
+                'labelTameCropsPercentage': f"{diet_breakdown['absoluteTamePlantPercent']:.1f}%"
+            }
 
-            LaUtils.debug.log("Diet percentages updated", "Diet")
+            for label_name, value in labels_map.items():
+                if hasattr(self, label_name):
+                    getattr(self, label_name).setText(value)
+
+            # Update any visualization dependent on these values
+            if hasattr(self, 'updateDietPieChart'):
+                self.updateDietPieChart()
+
+            LaUtils.debug.log("Diet labels updated", "Diet")
+
         except Exception as e:
-            LaUtils.debug.log(f"Error updating diet percentages: {str(e)}", "Error")
+            LaUtils.debug.log(f"Error updating diet labels: {str(e)}", "Error")
             import traceback
             LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
 
@@ -228,25 +246,32 @@ class LaMainForm(LaMainFormBase):
     def calculateTotalLandNeeded(self):
         """Calculate and display the total land needed."""
         try:
-            # This would calculate the total land needed based on:
-            # - Population
-            # - Selected crops and animals
-            # - Diet ratios
-            # - Crop yields and animal parameters
-
-            # Dummy calculation for demonstration
+            # Get inputs for calculation
             population = self.sbPopulation.value() if hasattr(self, 'sbPopulation') else 100
-            landNeeded = population * 0.5  # Simple example - would be much more complex in reality
 
-            # Display the result
+            # Package diet settings
+            diet_settings = {
+                'plantAnimalRatio': self.sliderDiet.value(),
+                'wildTameAnimalRatio': self.sliderMeat.value(),
+                'wildTamePlantRatio': self.sliderCrop.value()
+            }
+
+            # Delegate calculation to controller
+            land_needed = self.controller.calculateTotalLandNeeded(
+                population=population,
+                diet_settings=diet_settings,
+                enabled_animals=self.getEnabledAnimals(),
+                enabled_crops=self.getEnabledCrops() if hasattr(self, 'getEnabledCrops') else []
+            )
+
+            # Display the result (UI code stays in form)
             if hasattr(self, 'lblTotalLandNeeded'):
-                self.lblTotalLandNeeded.setText(f"{landNeeded:.2f}")
+                self.lblTotalLandNeeded.setText(f"{land_needed:.2f}")
 
-            LaUtils.debug.log(f"Total land needed calculated: {landNeeded:.2f} units", "Calculation")
+            LaUtils.debug.log(f"Total land needed calculated: {land_needed:.2f} units", "Calculation")
 
         except Exception as e:
             LaUtils.debug.log(f"Error calculating land needed: {str(e)}", "Error")
-
     def readSettings(self):
         """Read application settings."""
         settings = QSettings()
@@ -263,7 +288,7 @@ class LaMainForm(LaMainFormBase):
         # Also set up the Logs tab based on debug mode
         if hasattr(self, 'MainTabs') and hasattr(self, 'log_tab'):
             tabIndex = self.MainTabs.indexOf(self.log_tab)
-            if tabIndex >= 0:
+            if (tabIndex >= 0):
                 self.MainTabs.setTabEnabled(tabIndex, debugMode)
             self.log_tab.setVisible(debugMode)
 
@@ -293,67 +318,6 @@ class LaMainForm(LaMainFormBase):
     def _override_on_cbDebug_clicked(self):
         """Override base class method to prevent double-handling"""
         pass  # Let our on_cbDebug_clicked handle it
-
-    def showSelectedAnimalDetails(self, row):
-        """Show details for the selected animal.
-
-        Args:
-            row: The row index of the selected animal
-        """
-        if row < 0 or row >= self.tblAnimals.rowCount():
-            return
-
-        try:
-            # Get the animal GUID from the name item (which contains the GUID as user data)
-            nameItem = self.tblAnimals.item(row, 1)  # Assuming column 1 has name with GUID
-            if nameItem is None:
-                LaUtils.debug.log(f"No name item found at row {row}", "Error")
-                return
-                
-            guid = nameItem.data(QtCore.Qt.UserRole)
-            if not guid:
-                LaUtils.debug.log("No GUID found in name item", "Error")
-                return
-            
-            # Get the animal object
-            animal = LaUtils.getAnimal(guid)
-            if animal is None or not hasattr(animal, 'name') or not animal.name:
-                LaUtils.debug.log(f"Could not find valid animal for GUID: {guid}", "Error")
-                return
-
-            # Format and display animal details in text browser
-            if hasattr(self, 'textBrowserAnimalDefinition'):
-                html_content = f"<h2>{animal.name}</h2>"
-                if hasattr(animal, 'description') and animal.description:
-                    html_content += f"<p><strong>Description:</strong> {animal.description}</p>"
-                if hasattr(animal, 'animalCalories'):
-                    html_content += f"<p><strong>Calories:</strong> {animal.animalCalories}</p>"
-                
-                # Add any other animal properties you want to display
-                self.textBrowserAnimalDefinition.setHtml(html_content)
-                LaUtils.debug.log(f"Displayed animal details for {animal.name}", "UI")
-            else:
-                LaUtils.debug.log("textBrowserAnimalDefinition not found in UI", "Error")
-
-            # Display image if available
-            if hasattr(self, 'lblAnimalPix') and hasattr(animal, 'imageFile') and animal.imageFile:
-                imagePath = LaUtils.resolvePath(str(animal.imageFile), 'image')
-                LaUtils.debug.log(f"Attempting to load animal image: {imagePath}", "UI")
-                
-                if os.path.exists(imagePath):
-                    pixmap = QPixmap(imagePath)
-                    if not pixmap.isNull():
-                        self.lblAnimalPix.setPixmap(pixmap)
-                        LaUtils.debug.log("Animal image loaded successfully", "UI") 
-                    else:
-                        LaUtils.debug.log(f"Failed to create pixmap from {imagePath}", "Error")
-                else:
-                    LaUtils.debug.log(f"Image path doesn't exist: {imagePath}", "Warning")
-                    self.lblAnimalPix.clear()
-        except Exception as e:
-            LaUtils.debug.log(f"Error showing animal details: {str(e)}", "Error")
-            import traceback
-            LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
 
     def animalCellClicked(self, row, column):
         """Handle animal table cell click event.
@@ -388,7 +352,7 @@ class LaMainForm(LaMainFormBase):
 
         # Always show selected animal details when any cell in the row is clicked
         self.showSelectedAnimalDetails(row)
-        
+
         # Debugging
         LaUtils.debug.log(f"Animal cell clicked - row: {row}, column: {column}", "UI")
 
@@ -438,97 +402,47 @@ class LaMainForm(LaMainFormBase):
         # Delegate to our unified logging method
         self.logToAllChannels(message)
 
-    def loadAnimals(self):
-        """Load animals into the table widget."""
-        try:
-            # Clear the table first
-            if hasattr(self, 'tblAnimals') and self.tblAnimals is not None:
-                self.tblAnimals.clearContents()
-                self.tblAnimals.setRowCount(0)
-                
-            # Check if model and its animals map exist
-            if not hasattr(self, 'model') or self.model is None:
-                LaUtils.debug.log("Cannot load animals: model is None", "Error")
-                return
-                
-            if not hasattr(self.model, 'animals') or self.model.animals is None:
-                LaUtils.debug.log("Cannot load animals: model.animals is None", "Error")
-                return
-                
-            # Get animals from the model
-            animals = self.model.animals
-            
-            # Setup animals table if we have animals to display
-            if animals and hasattr(self, 'tblAnimals') and self.tblAnimals is not None:
-                # Set row count
-                self.tblAnimals.setRowCount(len(animals))
-                
-                # Populate rows
-                for row, animal in enumerate(animals):
-                    if animal is None:
-                        continue
-                        
-                    # Store reference to the animal object for later use
-                    if not hasattr(self, 'mAnimalsMap'):
-                        self.mAnimalsMap = {}
-                    self.mAnimalsMap[row] = animal
-                    
-                    # Name column
-                    nameItem = QtWidgets.QTableWidgetItem(animal.name if hasattr(animal, 'name') else "Unknown")
-                    self.tblAnimals.setItem(row, 0, nameItem)
-                    
-                    # Enable column
-                    enableCheckbox = QtWidgets.QTableWidgetItem()
-                    enableCheckbox.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
-                    enableCheckbox.setCheckState(
-                        QtCore.Qt.Checked if hasattr(animal, 'enabled') and animal.enabled else QtCore.Qt.Unchecked
-                    )
-                    self.tblAnimals.setItem(row, 1, enableCheckbox)
-                    
-                    # Additional parameters columns if needed
-                    # ...
-                
-                LaUtils.debug.log(f"Loaded {len(animals)} animals", "Animals")
-            else:
-                LaUtils.debug.log("No animals to load", "Animals")
-                
-        except Exception as e:
-            LaUtils.debug.log(f"Error loading animals: {str(e)}", "Error")
-            import traceback
-            LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
-
     def on_tblAnimals_itemChanged(self, item):
         """Handle item change in the animals table."""
         try:
             if item is None:
                 return
-                
+
             row = item.row()
             col = item.column()
-            
+
             # Check if we have a reference to this animal
             if not hasattr(self, 'mAnimalsMap') or self.mAnimalsMap is None or row not in self.mAnimalsMap:
                 LaUtils.debug.log(f"Cannot update animal parameters: no animal at row {row}", "Error")
                 return
-                
+
             animal = self.mAnimalsMap[row]
             if animal is None:
                 return
-                
+
             # Column 1 is the enable/disable checkbox
             if col == 1:
                 animal.enabled = (item.checkState() == QtCore.Qt.Checked)
                 LaUtils.debug.log(f"Animal '{animal.name}' {'enabled' if animal.enabled else 'disabled'}", "Animals")
                 # Update calculations when animal is enabled/disabled
                 self.updateCalculations()
-            
+
             # Handle other columns/parameters as needed
             # ...
-            
+
         except Exception as e:
             LaUtils.debug.log(f"Error updating animal parameter: {str(e)}", "Error")
             import traceback
             LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
+    
+    def getEnabledAnimals(self):
+        """Get list of enabled animals to pass to controller."""
+        enabled_animals = []
+        if hasattr(self, 'mAnimalsMap'):
+            for guid, animal in self.mAnimalsMap.items():
+                if hasattr(animal, 'enabled') and animal.enabled:
+                    enabled_animals.append(guid)
+        return enabled_animals
 
     # Add a method to save animal parameters if not already present
     def saveAnimalParameters(self):
@@ -536,25 +450,25 @@ class LaMainForm(LaMainFormBase):
         try:
             if not hasattr(self, 'model') or self.model is None:
                 return
-                
+
             if not hasattr(self, 'mAnimalsMap') or self.mAnimalsMap is None:
                 return
-                
+
             # Update model with values from UI
             for row, animal in self.mAnimalsMap.items():
                 if animal is None:
                     continue
-                
+
                 # Get enable state from checkbox
                 enableItem = self.tblAnimals.item(row, 1)
                 if enableItem is not None:
                     animal.enabled = (enableItem.checkState() == QtCore.Qt.Checked)
-                
+
                 # Get other parameters from table if applicable
                 # ...
-                
+
             LaUtils.debug.log("Animal parameters saved", "Animals")
-            
+
         except Exception as e:
             LaUtils.debug.log(f"Error saving animal parameters: {str(e)}", "Error")
             import traceback

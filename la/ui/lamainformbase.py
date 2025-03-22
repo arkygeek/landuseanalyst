@@ -967,7 +967,11 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         LaUtils.debug.log(f"Total percentages updated: Animals {animalTotal:.1f}%, Crops {cropTotal:.1f}%", "Calculation")
 
     def showSelectedAnimalDetails(self, row):
-        """Show details for the selected animal."""
+        """Show details for the selected animal.
+        
+        Args:
+            row: The row index of the selected animal
+        """
         if row < 0 or row >= self.tblAnimals.rowCount():
             return
 
@@ -978,88 +982,51 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                 LaUtils.debug.log(f"No name item found at row {row}", "Error")
                 return
 
-            # Get the actual GUID string
+            # Get the GUID string
             guid = nameItem.data(QtCore.Qt.UserRole)
             if not guid:
                 LaUtils.debug.log(f"No GUID found in name item at row {row}", "Error")
                 return
 
-            # If guid is a method (bound method of LaGuid), call it to get the string
-            if hasattr(guid, '__call__'):
-                guid = guid()
-
-            LaUtils.debug.log(f"Getting animal with GUID string: {guid}", "UI")
-            
-            # Get the animal object and ensure it has name and description
+            # Get the animal object
             animal = LaUtils.getAnimal(guid)
-            if not animal:
-                LaUtils.debug.log(f"Could not get animal for GUID: {guid}", "Error")
+            if not animal or not hasattr(animal, 'name') or not animal.name:
+                LaUtils.debug.log(f"Could not find valid animal for GUID: {guid}", "Error")
                 return
 
-            # Dump animal object attributes for debugging
-            LaUtils.debug.log(f"Animal object attributes: {dir(animal)}", "Debug")
-            LaUtils.debug.log(f"Animal name: {getattr(animal, 'name', 'No name')}", "Debug")
-            LaUtils.debug.log(f"Animal description: {getattr(animal, 'description', 'No description')}", "Debug")
-
-            # Verify animal has required attributes
-            if not hasattr(animal, 'name') or not animal.name:
-                LaUtils.debug.log(f"Animal {guid} has no name attribute or name is empty", "Error")
-                return
-
-            LaUtils.debug.log(f"Retrieved animal: {animal.name}", "UI")
-
-            # Format HTML content with verified data
-            html_content = []
-            html_content.append(f"<h2>{animal.name}</h2>")
-            
-            if hasattr(animal, 'description') and animal.description:
-                html_content.append(f"<p><strong>Description:</strong> {animal.description}</p>")
-            if hasattr(animal, 'animalCalories') and animal.animalCalories:
-                html_content.append(f"<p><strong>Calories:</strong> {animal.animalCalories}</p>")
-
-            # Get and display any animal parameters associated with this animal
-            animalParams = LaUtils.getAvailableAnimalParameters()
-            if animalParams:
-                for paramGuid, param in animalParams.items():
-                    # Check if param.animalGuid is a method and call it if needed
-                    paramAnimalGuid = param.animalGuid() if hasattr(param.animalGuid, '__call__') else param.animalGuid
-                    if paramAnimalGuid == guid:
-                        html_content.append("<h3>Parameters</h3>")
-                        if hasattr(param, 'percentTameMeat'):
-                            html_content.append(f"<p><strong>% Tame Meat:</strong> {param.percentTameMeat}%</p>")
-                        break
-
-            # Join all HTML content
-            final_html = "\n".join(html_content)
-
-            # Set the content in the text browser
+            # Display animal details in text browser
             if hasattr(self, 'textBrowserAnimalDefinition'):
-                self.textBrowserAnimalDefinition.setHtml(final_html)
+                html_content = animal.toHtml()
+                self.textBrowserAnimalDefinition.setHtml(html_content)
                 LaUtils.debug.log(f"Displayed animal details for {animal.name}", "UI")
-            else:
-                LaUtils.debug.log("textBrowserAnimalDefinition not found", "Error")
-                return
-
+            
             # Handle image display
             if hasattr(self, 'lblAnimalPix'):
                 self.lblAnimalPix.clear()  # Clear existing image
                 
-                if hasattr(animal, 'imageFile') and animal.imageFile:
-                    # If imageFile is a method, call it
-                    imagePath = animal.imageFile() if hasattr(animal.imageFile, '__call__') else animal.imageFile
-                    imagePath = LaUtils.resolvePath(str(imagePath), 'image')
-                    LaUtils.debug.log(f"Attempting to load animal image: {imagePath}", "UI")
+                # Get image path, handling both property and method cases
+                image_path = ""
+                if hasattr(animal, 'imageFile'):
+                    if callable(getattr(animal, 'imageFile')):
+                        image_path = animal.imageFile()
+                    else:
+                        image_path = animal.imageFile
+                
+                if image_path:
+                    # Try to resolve the image path
+                    resolved_path = LaUtils.resolvePath(str(image_path), 'image')
+                    LaUtils.debug.log(f"Attempting to load animal image: {resolved_path}", "UI")
                     
-                    if os.path.exists(imagePath):
-                        pixmap = QPixmap(imagePath)
+                    if os.path.exists(resolved_path):
+                        pixmap = QPixmap(resolved_path)
                         if not pixmap.isNull():
                             self.lblAnimalPix.setPixmap(pixmap)
                             LaUtils.debug.log("Animal image loaded successfully", "UI")
                         else:
-                            LaUtils.debug.log(f"Failed to create pixmap from {imagePath}", "Error")
-                            # Try alternative path
+                            # Try alternative path in user images directory
+                            LaUtils.debug.log(f"Failed to create pixmap from {resolved_path}", "Error")
                             imagesDir = LaUtils.userImagesDirPath()
-                            imageFileName = os.path.basename(str(animal.imageFile))
+                            imageFileName = os.path.basename(str(image_path))
                             alternativePath = os.path.join(imagesDir, imageFileName)
                             
                             if os.path.exists(alternativePath):
@@ -1069,10 +1036,10 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                                     LaUtils.debug.log(f"Successfully loaded image from alternative path: {alternativePath}", "UI")
                                 else:
                                     LaUtils.debug.log(f"Failed to load image from alternative path: {alternativePath}", "Error")
+                            else:
+                                LaUtils.debug.log(f"No valid image path found", "Warning")
                     else:
-                        LaUtils.debug.log(f"Image path doesn't exist: {imagePath}", "Warning")
-            else:
-                LaUtils.debug.log("lblAnimalPix not found", "Error")
+                        LaUtils.debug.log(f"Image path doesn't exist: {resolved_path}", "Warning")
 
         except Exception as e:
             LaUtils.debug.log(f"Error showing animal details: {str(e)}", "Error")

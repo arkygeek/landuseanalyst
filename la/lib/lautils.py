@@ -769,34 +769,53 @@ class LaUtils:
         return myDestinationFilePathName
 
     @staticmethod
-    def resolvePath(path: str, fileType: str = None) -> str:
+    def resolvePath(path: str, type: str = '') -> str:
+        """Resolve a path to a resource, searching in multiple possible locations.
+        
+        Args:
+            path: The path or filename to resolve
+            type: The type of resource ('image', 'data', etc.)
+            
+        Returns:
+            str: The full resolved path if found, otherwise the original path
         """
-        Resolve path across platforms maintaining consistency with C++ version.
-
-        :param path: The path to resolve
-        :type path: str
-        :param fileType: The type of file (optional)
-        :type fileType: str
-        :return: The resolved path
-        :rtype: str
-        """
-        # If path exists as-is, use it (matches original C++ behavior)
-        if path and os.path.exists(path):
+        if not path:
             return path
-        # If not found as absolute path, try user data directory
-        basename = os.path.basename(path) if path else ''
-        if not basename:
-            return ""
-        # Define standard locations based on original C++ structure
-        userDataPath = os.path.join(os.path.expanduser('~'), '.landuseAnalyst')
-        # Try standard locations
-        if fileType == 'image':
-            userPath = os.path.join(userDataPath, 'images', basename)
-            if os.path.exists(userPath):
-                return userPath
-        # Try resource path as fallback (matching Qt resource system)
-        resourcePath = f":/images/{basename}"
-        return resourcePath
+            
+        # If it's already an absolute path and exists, return it
+        if os.path.isabs(path) and os.path.exists(path):
+            return path
+            
+        # Get the filename only
+        filename = os.path.basename(path)
+        
+        # List of possible directories to search in
+        search_paths = []
+        
+        if type.lower() == 'image':
+            # Add image-specific paths
+            search_paths.extend([
+                LaUtils.userImagesDirPath(),
+                os.path.join(LaUtils.userProfilesDirPath(), 'images'),
+                os.path.join(LaUtils.pluginPath(), 'images')
+            ])
+        
+        # Add general paths
+        search_paths.extend([
+            LaUtils.userProfilesDirPath(),
+            LaUtils.pluginPath()
+        ])
+        
+        # Search for the file
+        for search_path in search_paths:
+            full_path = os.path.join(search_path, filename)
+            if os.path.exists(full_path):
+                LaUtils.debug.log(f"Found resource at: {full_path}")
+                return full_path
+                
+        # If not found, return original path
+        LaUtils.debug.log(f"Could not resolve path: {path}", "Warning")
+        return path
 
     @staticmethod
     def userDataPath() -> str:
@@ -846,3 +865,18 @@ class LaUtils:
         target_dir = os.path.join(LaUtils.userDataPath(), subdir)
         LaUtils.ensureDirectoryExists(target_dir)
         return os.path.join(target_dir, os.path.basename(sourceFile))
+
+    @staticmethod
+    def userProfilesDirPath() -> str:
+        """Returns the path to user profiles directory."""
+        return os.path.join(LaUtils.userSettingsDirPath(), "profiles")
+
+    @staticmethod
+    def pluginPath() -> str:
+        """Returns the path to the plugin directory."""
+        return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+    @staticmethod 
+    def get_message_history() -> List[str]:
+        """Returns the debug message history."""
+        return LaDebugLogger._history.copy()
