@@ -85,18 +85,23 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
     def setupAnimalsCombo(self):
         """Set up the animals combo box."""
         myAnimalsMap = LaUtils.getAvailableAnimals()
-        self.cboAnimal.clear()  # Clear existing items
-        
+        self.cboAnimal.clear()
+
         for guid, animal in myAnimalsMap.items():
-            # Store the GUID as a string, not as an object with a guid method
-            guid_str = str(guid)
+            # Call the guid method to get the actual GUID string
+            if callable(getattr(animal, 'guid', None)):
+                guid_str = animal.guid()
+            else:
+                guid_str = str(guid)
+
             myName = animal.name
-            
-            LaUtils.debug.log(f"setupAnimalsCombo: Adding animal {myName} with GUID {guid_str}")
-            
+            LaUtils.debug.log(f"setupAnimalsCombo: Adding animal {myName} with actual GUID {guid_str}")
+
             myIcon = QIcon()
             myIcon.addFile(":/localdata.png")
+            # Store the actual GUID string as the item data
             self.cboAnimal.addItem(myIcon, myName, guid_str)
+
 
     def setupAreaUnitsCombo(self):
         """Set up the area units combo box."""
@@ -163,24 +168,24 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
         """Display the current animal parameter in the UI."""
         LaUtils.debug.log(f"showAnimalParameter: Displaying animal parameter: {self.mAnimalParameter._mName}")
         LaUtils.debug.log(f"showAnimalParameter: Properties: animalGuid={self.mAnimalParameter._mAnimalGuid}, percentTameMeat={self.mAnimalParameter._mPercentTameMeat}")
-    
+
         # Set UI elements with parameter values
         self.leName.setText(str(self.mAnimalParameter._mName))
         LaUtils.debug.log(f"showAnimalParameter: Set name text to: {self.mAnimalParameter._mName}")
-        
+
         self.leDescription.setText(str(self.mAnimalParameter._mDescription))
         LaUtils.debug.log(f"showAnimalParameter: Set description text to: {self.mAnimalParameter._mDescription}")
-        
+
         # Handle matching the correct animal in the combo box
         LaUtils.debug.log(f"showAnimalParameter: cboAnimal item count: {self.cboAnimal.count()}")
-        
+
         found_match = False
         if self.mAnimalParameter._mAnimalGuid:
             # Try to find a direct string match first
             for i in range(self.cboAnimal.count()):
                 animal = self.cboAnimal.itemData(i)
                 animal_guid = ""
-                
+
                 # Get the guid as a string
                 if hasattr(animal, 'guid'):
                     if callable(animal.guid):
@@ -192,7 +197,7 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
                         animal_guid = animal.guid
                 else:
                     animal_guid = str(animal)
-                    
+
                 # Compare the last part of the guid string
                 target_guid = str(self.mAnimalParameter._mAnimalGuid)
                 if target_guid in animal_guid or animal_guid in target_guid:
@@ -200,16 +205,16 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
                     LaUtils.debug.log(f"showAnimalParameter: Found matching animal at index {i}")
                     found_match = True
                     break
-        
+
         if not found_match:
             # Fall back to setComboToDefault
             result = self.setComboToDefault(self.cboAnimal, self.mAnimalParameter._mAnimalGuid)
             LaUtils.debug.log(f"showAnimalParameter: setComboToDefault for animal guid returned: {result}")
-        
+
         # Set other parameters
         self.sbPercentTameMeat.setValue(float(self.mAnimalParameter._mPercentTameMeat))
         LaUtils.debug.log(f"showAnimalParameter: Set percent tame meat to: {self.mAnimalParameter._mPercentTameMeat}")
-        
+
         # Update the animal picture
         LaUtils.debug.log(f"showAnimalParameter: Updating animal picture for animal GUID: {self.mAnimalParameter._mAnimalGuid}")
         self.update_animal_picture()
@@ -220,10 +225,10 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
         if not animalGuid:
             self.lblAnimalPic.clear()
             return
-            
+
         animals_map = LaUtils.getAvailableAnimals()
         LaUtils.debug.log(f"update_animal_picture: Found {len(animals_map)} animals")
-        
+
         for guid, animal in animals_map.items():
             # Convert guid to string
             guid_str = str(guid)
@@ -232,9 +237,9 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
                     guid_str = animal.guid()
                 except:
                     guid_str = str(guid)
-            
+
             LaUtils.debug.log(f"update_animal_picture: Available animal - GUID: {guid_str}, Name: {animal.name}")
-            
+
             # Compare to find match
             if guid_str == animalGuid or animalGuid in guid_str:
                 # Get image file
@@ -242,9 +247,9 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
                     image_file = animal.imageFile
                     if callable(image_file):
                         image_file = image_file()
-                        
+
                     if image_file:
-                        # Try to resolve path 
+                        # Try to resolve path
                         image_path = LaUtils.resolveImagePath(image_file)
                         if os.path.exists(image_path):
                             pixmap = QPixmap(image_path)
@@ -252,11 +257,11 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
                                 self.lblAnimalPic.setPixmap(pixmap)
                                 self.lblAnimalPic.setScaledContents(True)
                                 return
-        
+
         # If we get here, no image was found
         LaUtils.debug.log("update_animal_picture: No valid image found, clearing picture label")
         self.lblAnimalPic.clear()
-        
+
     def on_toolNew_clicked(self):
         """Handle new button click."""
         self.mAnimalParameter = LaAnimalParameter()
@@ -376,34 +381,22 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
         # Implementation for populating fodder table
         pass
 
-    def setComboToDefault(self, combo, default):
-        """Set a combo box to a default value."""
-        LaUtils.debug.log(f"setComboToDefault: Looking for {default} in combo with {combo.count()} items")
+    def setComboToDefault(self, combo, default_guid):
+        """Set a combo box to a default value based on GUID."""
+        if not default_guid:
+            return False
 
-        # We need to extract the raw GUID string value from potential method
-        default_guid_str = str(default)
+        LaUtils.debug.log(f"setComboToDefault: Looking for GUID {default_guid} in combo with {combo.count()} items")
+
+        # Convert default_guid to string if it isn't already
+        default_guid_str = str(default_guid)
 
         for i in range(combo.count()):
-            item = combo.itemData(i)
+            # Get the stored GUID string from the combo box item data
+            item_guid = combo.itemData(i)
+            LaUtils.debug.log(f"setComboToDefault: Comparing '{default_guid_str}' with combo item {i} GUID: '{item_guid}'")
 
-            # Extract the GUID string from the combo box item
-            item_guid_str = ""
-            if hasattr(item, 'guid'):
-                if callable(item.guid):
-                    try:
-                        # Call the guid method to get actual GUID string
-                        item_guid_str = item.guid()
-                    except:
-                        item_guid_str = str(item.guid)
-                else:
-                    item_guid_str = str(item.guid)
-            else:
-                item_guid_str = str(item)
-
-            LaUtils.debug.log(f"setComboToDefault: Item {i}: '{combo.itemText(i)}' has GUID '{item_guid_str}'")
-
-            # Now compare actual string values
-            if default_guid_str == item_guid_str or default_guid_str in item_guid_str:
+            if item_guid == default_guid_str:
                 LaUtils.debug.log(f"setComboToDefault: Found match at index {i}")
                 combo.setCurrentIndex(i)
                 return True
@@ -420,41 +413,41 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
         """Handle animal combo box change event."""
         if index < 0:
             return
-        
+
         # Get the selected animal GUID as a string
         selected_guid = str(self.cboAnimal.currentData())
         LaUtils.debug.log(f"on_cboAnimal_changed: Selected animal GUID: {selected_guid}")
-        
+
         # Update the animal parameter with this GUID
         if hasattr(self, 'mAnimalParameter'):
             self.mAnimalParameter._mAnimalGuid = selected_guid
-        
+
         # Find the animal object matching this GUID
         animals_map = LaUtils.getAvailableAnimals()
         for guid, animal in animals_map.items():
             guid_str = str(guid)
-            
+
             # Compare string GUIDs
             if guid_str == selected_guid:
                 LaUtils.debug.log(f"on_cboAnimal_changed: Found matching animal: {animal.name}")
-                
+
                 # Get image file from animal object
                 if hasattr(animal, 'imageFile') and animal.imageFile:
                     image_file = str(animal.imageFile)
                     LaUtils.debug.log(f"on_cboAnimal_changed: Animal has image file: {image_file}")
-                    
+
                     # First try to use LaUtils.resolveImagePath
                     image_path = LaUtils.resolveImagePath(image_file)
-                    
-                    # If not found, try direct path to images directory 
+
+                    # If not found, try direct path to images directory
                     if not image_path or not os.path.exists(image_path):
                         image_path = os.path.join(os.path.expanduser("~"), ".landuseAnalyst", "images", image_file)
                         LaUtils.debug.log(f"on_cboAnimal_changed: Trying direct path: {image_path}")
-                    
+
                     # Check if file exists
                     if os.path.exists(image_path):
                         LaUtils.debug.log(f"on_cboAnimal_changed: Found image at: {image_path}")
-                        
+
                         pixmap = QPixmap(image_path)
                         if not pixmap.isNull():
                             LaUtils.debug.log(f"on_cboAnimal_changed: Successfully loaded pixmap")
@@ -470,7 +463,7 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
                         LaUtils.debug.log(f"on_cboAnimal_changed: Image file not found: {image_path}")
                 else:
                     LaUtils.debug.log(f"on_cboAnimal_changed: Animal has no image file")
-        
+
         # If we get here, no image was found
         LaUtils.debug.log("on_cboAnimal_changed: No valid image found, clearing picture label")
         self.lblAnimalPic.clear()
