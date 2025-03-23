@@ -1,0 +1,160 @@
+@startuml "Landuse Analyst Architecture"
+
+' Core package
+package "la" {
+  class LanduseAnalyst {
+    +__init__(iface)
+    +initGui()
+    +unload()
+    +run()
+    +tr(message)
+    +add_action()
+    -first_start: bool
+    -actions: list
+  }
+}
+
+' UI Layer
+package "la.ui" {
+  abstract class LaMainFormBase {
+    +__init__()
+    +setDietLabels()
+    +loadAnimals()
+    +loadCrops()
+    +connectSignalsSlots()
+    +updateTotalPercentages()
+    +showSelectedAnimalDetails()
+    +showSelectedCropDetails()
+    +on_cbDebug_clicked()
+    #_debug_dialog
+  }
+  
+  class LaAnimalParameterManagerBase
+  class LaCropParameterManagerBase
+  class LaAnimalManagerBase
+  class LaCropManagerBase
+  class LaReportTargets
+  class LaReportHerds
+  class LaReportFallow
+  class LaExperimentBase
+  class LaGrassProcessBase
+  class LaAssemblageConversionBase
+}
+
+' GUI Implementation Layer
+package "la.gui" {
+  class LaMainForm {
+    +__init__()
+    +setup()
+    +refresh()
+    +connect_additional_signals()
+    +loadImages()
+    +logToAllChannels()
+    +updateCalculations()
+    +calculateTotalLandNeeded()
+    +getEnabledAnimals()
+    +getEnabledCrops()
+  }
+  
+  class LaAnimalManager
+  class LaCropManager
+  class LaAnimalParameterManager
+  class LaCropParameterManager
+  class LaDebugDialog
+}
+
+' Business Logic Layer
+package "la.lib" {
+  class LaMainController {
+    +__init__(model)
+    +getAvailableAnimals()
+    +getAvailableCrops()
+    +calculateDietBreakdown()
+    +calculateTotalLandNeeded()
+    +saveAnimalParameters()
+    +saveCropParameters()
+  }
+  
+  class LaModel {
+    +setPlantAnimalRatio()
+    +setWildTameAnimalRatio()
+    +setWildTamePlantRatio()
+    +doCalcsAnimalsFirstIncludeDiary()
+    +doCalcsPlantsFirstDairySeperate()
+  }
+  
+  class LaUtils {
+    +{static} debug: LaDebugLogger
+    +{static} userSettingsDirPath()
+    +{static} getModelOutputDir()
+    +{static} userAnimalProfilesDirPath()
+    +{static} userCropProfilesDirPath()
+    +{static} getAvailableAnimals()
+    +{static} getAnimal(guid)
+    +{static} getAvailableCrops()
+    +{static} getCrop(guid)
+  }
+  
+  class LaDebugLogger {
+    +initialize(enabled)
+    +log(message, category)
+    +get_history()
+  }
+  
+  class LaAnimal {
+    +name()
+    +enabled: bool
+  }
+  
+  class LaCrop {
+    +name()
+    +enabled: bool
+  }
+  
+  class LaAnimalParameter
+  class LaCropParameter
+}
+
+' Relationships
+LaMainFormBase <|-- LaMainForm
+LanduseAnalyst --> LaMainForm : creates
+
+LaMainForm --> LaMainController : uses
+LaMainController --> LaModel : manages
+LaMainController --> LaUtils : uses
+LaMainForm ..> LaUtils : uses
+
+LaUtils --> LaAnimal : creates/manages
+LaUtils --> LaCrop : creates/manages
+
+LaAnimalManagerBase <|-- LaAnimalManager
+LaCropManagerBase <|-- LaCropManager
+LaAnimalParameterManagerBase <|-- LaAnimalParameterManager
+LaCropParameterManagerBase <|-- LaCropParameterManager
+
+LaMainForm --> LaAnimalManager : opens
+LaMainForm --> LaCropManager : opens
+LaMainForm --> LaAnimalParameterManager : opens
+LaMainForm --> LaCropParameterManager : opens
+
+LaAnimalManager --> LaAnimal : manages
+LaCropManager --> LaCrop : manages
+LaAnimalParameterManager --> LaAnimalParameter : manages
+LaCropParameterManager --> LaCropParameter : manages
+
+LaMainForm --> LaDebugDialog : creates
+
+' Additional relationships
+LaMainController ..> LaAnimal : manages
+LaMainController ..> LaCrop : manages
+LaMainController ..> LaAnimalParameter : manages
+LaMainController ..> LaCropParameter : manages
+
+' MESSAGE_BUS relationships
+note "MESSAGE_BUS is a global\nevent communication system" as N1
+LaUtils --> N1
+LaDebugLogger --> N1
+LaMainForm --> N1
+LaDebugDialog --> N1
+
+@enduml

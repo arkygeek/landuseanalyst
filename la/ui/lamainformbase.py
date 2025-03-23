@@ -197,17 +197,17 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             # Animal breakdown
             wildAnimalPercent = wildTameAnimalRatio
             tameAnimalPercent = 100 - wildTameAnimalRatio
-            
+
             # Plant breakdown
             wildPlantPercent = wildTamePlantRatio
             tamePlantPercent = 100 - wildTamePlantRatio
-            
+
             # Calculate absolute percentages (of total diet)
             absoluteWildAnimalPercent = (animalPercent * wildAnimalPercent) / 100
             absoluteTameAnimalPercent = (animalPercent * tameAnimalPercent) / 100
             absoluteWildPlantPercent = (plantPercent * wildPlantPercent) / 100
             absoluteTamePlantPercent = (plantPercent * tamePlantPercent) / 100
-            
+
             # Update the main percentage labels which we know exist
             self.labelMeatPercent.setText(str(animalPercent))
             self.labelCropPercent.setText(str(plantPercent))
@@ -215,7 +215,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             self.labelMeatTamePercent.setText(str(tameAnimalPercent))
             self.labelCropWildPercent.setText(str(wildPlantPercent))
             self.labelCropTamePercent.setText(str(tamePlantPercent))
-            
+
             # Try to update additional percentage breakdown labels if they exist
             # Use hasattr to safely check if the attribute exists before trying to access it
             label_map = {
@@ -224,30 +224,30 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                 'labelWildCropsPercentage': f"{absoluteWildPlantPercent:.1f}%",
                 'labelTameCropsPercentage': f"{absoluteTamePlantPercent:.1f}%"
             }
-            
+
             for label_name, value in label_map.items():
                 if hasattr(self, label_name):
                     getattr(self, label_name).setText(value)
                 else:
                     # Optional: Create a debug message
                     LaUtils.debug.log(f"Note: Label '{label_name}' not found in the UI", "UI")
-            
+
             # Update the model if needed
             if hasattr(self, 'model'):
                 self.model.setPlantAnimalRatio(plantAnimalRatio)
                 self.model.setWildTameAnimalRatio(wildTameAnimalRatio)
                 self.model.setWildTamePlantRatio(wildTamePlantRatio)
-            
+
             # Also update any visualization or graph that depends on these values
             if hasattr(self, 'updateDietPieChart'):
                 self.updateDietPieChart()
-                
+
             LaUtils.debug.log("Diet labels updated", "Diet")
             # Show the calculated percentages in the report for debugging
             LaUtils.debug.log(f"Animal: {animalPercent}%, Plant: {plantPercent}%", "Diet")
             LaUtils.debug.log(f"Wild Animal: {absoluteWildAnimalPercent:.1f}%, Tame Animal: {absoluteTameAnimalPercent:.1f}%", "Diet")
             LaUtils.debug.log(f"Wild Plant: {absoluteWildPlantPercent:.1f}%, Tame Plant: {absoluteTamePlantPercent:.1f}%", "Diet")
-            
+
         except Exception as e:
             LaUtils.debug.log(f"Error updating diet labels: {str(e)}", "Error")
             import traceback
@@ -268,28 +268,28 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         self.tblAnimals.clear()
         self.tblAnimals.setRowCount(0)
         self.tblAnimals.setColumnCount(4)
-        
+
         myCurrentRow = 0
         myRunningPercentage = 0.0
-        
+
         # Get available animals and parameters
         myAnimalsMap = LaUtils.getAvailableAnimals()
         myAnimalParametersMap = LaUtils.getAvailableAnimalParameters()
-        
+
         for myGuid, myAnimal in myAnimalsMap.items():
             # Get the actual GUID string
             if hasattr(myGuid, '__call__'):
                 myGuid = myGuid()
-            
+
             myName = myAnimal.name
             myValue = self.mAnimalsMap.get(myGuid, (False, ""))
-            
+
             if myGuid not in self.mAnimalsMap:
                 self.mAnimalsMap[myGuid] = myValue
-                
+
             myIcon = QIcon(":/localdata.png")
             self.tblAnimals.insertRow(myCurrentRow)
-            
+
             # Add used checkbox
             mypUsedItem = QtWidgets.QTableWidgetItem("Used?")
             if myValue[0]:
@@ -303,16 +303,16 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                 myItem = QListWidgetItem(str(myAnimal.name))
                 myItem.setData(QtCore.Qt.UserRole, str(myGuid))
                 self.listWidgetCalculationsAnimal.takeItem(self.listWidgetCalculationsAnimal.row(myItem))
-                
+
             self.tblAnimals.setItem(myCurrentRow, 0, mypUsedItem)
-            
+
             # Add name with GUID
             mypNameItem = QTableWidgetItem(str(myAnimal.name))
             # Store the actual GUID string
             mypNameItem.setData(QtCore.Qt.UserRole, str(myGuid))
             self.tblAnimals.setItem(myCurrentRow, 1, mypNameItem)
             mypNameItem.setIcon(myIcon)
-            
+
             # Add parameters combo
             mypCombo = QComboBox(self)
             for myParameterGuid, myAnimalParameter in myAnimalParametersMap.items():
@@ -320,29 +320,29 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                     paramAnimalGuid = myAnimalParameter.animalGuid()
                 else:
                     paramAnimalGuid = myAnimalParameter.animalGuid
-                    
+
                 if str(myGuid) != str(paramAnimalGuid):
                     continue
-                    
+
                 myParameterName = f"{myAnimalParameter.name}  ({myAnimalParameter.description})"
-                
+
                 if not myValue[1]:
                     myValue = (myValue[0], str(myParameterGuid))
-                    
+
                 if str(myValue[1]) == str(myAnimalParameter.guid):
                     if myValue[0]:
                         myRunningPercentage += float(str(myAnimalParameter.percentTameMeat))
                     mypPercentItem = QtWidgets.QTableWidgetItem(str(myAnimalParameter.percentTameMeat))
                     self.tblAnimals.setItem(myCurrentRow, 3, mypPercentItem)
-                    
-                # Store the actual GUID string    
+
+                # Store the actual GUID string
                 mypCombo.addItem(myIcon, myParameterName, str(myParameterGuid))
-                
+
             self.setComboToDefault(mypCombo, myValue[1])
             self.mAnimalsMap[str(myGuid)] = myValue
             self.tblAnimals.setCellWidget(myCurrentRow, 2, mypCombo)
             myCurrentRow += 1
-            
+
         # Set status icon based on total percentage
         myIcon = QIcon(":/status_ok.png") if myRunningPercentage == 100 else QIcon(":/status_error.png")
         myPercentItem = str(myRunningPercentage)
@@ -354,20 +354,20 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             # Clear the lists first
             if hasattr(self, 'listWidgetCalculationsCrop'):
                 self.listWidgetCalculationsCrop.clear()
-            
+
             # Clear and setup the table if it exists
             if not hasattr(self, 'tblCrops') or self.tblCrops is None:
                 LaUtils.debug.log("Cannot load crops: table widget not found", "Error")
                 return
-                
+
             self.tblCrops.clear()
             self.tblCrops.setRowCount(0)
             self.tblCrops.setColumnCount(4)
-            
+
             # Initialize tracking variables
             myCurrentRow = 0
             myRunningPercentage = 0.0
-            
+
             # Get available crops and parameters
             try:
                 myCropsMap = LaUtils.getAvailableCrops()
@@ -377,7 +377,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             except Exception as e:
                 LaUtils.debug.log(f"Error getting available crops: {str(e)}", "Error")
                 return
-                
+
             try:
                 myCropParametersMap = LaUtils.getAvailableCropParameters()
                 if not myCropParametersMap:
@@ -386,64 +386,64 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             except Exception as e:
                 LaUtils.debug.log(f"Error getting crop parameters: {str(e)}", "Error")
                 return
-            
+
             # Initialize crops map if needed
             if not hasattr(self, 'mCropsMap'):
                 self.mCropsMap = {}
-                
+
             # Process each crop
             for myGuid, myCrop in myCropsMap.items():
                 if myCrop is None or not hasattr(myCrop, 'name'):
                     LaUtils.debug.log(f"Invalid crop data for GUID: {myGuid}", "Warning")
                     continue
-                    
+
                 myName = myCrop.name
                 myValue = self.mCropsMap.get(myGuid, (False, ""))
-                
+
                 # Update crops map
                 if myGuid not in self.mCropsMap:
                     self.mCropsMap[myGuid] = myValue
-                    
+
                 # Create table row
                 myIcon = QIcon(":/localdata.png")
                 self.tblCrops.insertRow(myCurrentRow)
-                
+
                 # Used checkbox column
                 mypUsedItem = QtWidgets.QTableWidgetItem("Used?")
                 mypUsedItem.setCheckState(QtCore.Qt.Checked if myValue[0] else QtCore.Qt.Unchecked)
                 self.tblCrops.setItem(myCurrentRow, 0, mypUsedItem)
-                
+
                 # If checked, ensure it's in calculations list
                 if myValue[0]:
                     try:
                         self.addCropToCalculationsList(myGuid)
                     except Exception as e:
                         LaUtils.debug.log(f"Error adding crop to calculations: {str(e)}", "Error")
-                
+
                 # Name column with GUID data
                 mypNameItem = QtWidgets.QTableWidgetItem(myName)
                 mypNameItem.setData(QtCore.Qt.UserRole, myGuid)
                 self.tblCrops.setItem(myCurrentRow, 1, mypNameItem)
                 mypNameItem.setIcon(myIcon)
-                
+
                 # Parameters combo box
                 mypCombo = QtWidgets.QComboBox(self)
-                
+
                 # Add parameters to combo
                 for myParameterGuid, myCropParameter in myCropParametersMap.items():
                     if myCropParameter is None:
                         continue
-                        
+
                     if not hasattr(myCropParameter, 'cropGuid') or myCropParameter.cropGuid != myGuid:
                         continue
-                        
+
                     # Format parameter name
                     myParameterName = f"{myCropParameter.name}  ({myCropParameter.description})"
-                    
+
                     # Update value if needed
                     if not myValue[1]:
                         myValue = (myValue[0], myParameterGuid)
-                        
+
                     # Update percentage if this is the selected parameter
                     if myValue[1] == myCropParameter.guid:
                         if myValue[0] and hasattr(myCropParameter, 'percentTameCrop'):
@@ -451,33 +451,33 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                                 myRunningPercentage += float(myCropParameter.percentTameCrop)
                             except (ValueError, TypeError):
                                 LaUtils.debug.log(f"Invalid percentTameCrop for parameter {myParameterGuid}", "Warning")
-                                
+
                         # Add percentage column
                         if hasattr(myCropParameter, 'percentTameCrop'):
                             mypPercentItem = QtWidgets.QTableWidgetItem(str(myCropParameter.percentTameCrop))
                             self.tblCrops.setItem(myCurrentRow, 3, mypPercentItem)
-                            
+
                     # Add to combo box
                     mypCombo.addItem(myIcon, myParameterName, myParameterGuid)
-                
+
                 # Set default combo selection and add to table
                 self.setComboToDefault(mypCombo, myValue[1])
                 self.mCropsMap[myGuid] = myValue
                 self.tblCrops.setCellWidget(myCurrentRow, 2, mypCombo)
-                
+
                 myCurrentRow += 1
-            
+
             # Update total percentage display
             if hasattr(self, 'labelCropCheck'):
                 self.labelCropCheck.setText(f"{myRunningPercentage:.1f}%")
-                
+
             # Update status icon
             if hasattr(self, 'labelCropIcon'):
                 iconPath = ":/status_ok.png" if abs(myRunningPercentage - 100.0) < 0.1 else ":/status_error.png"
                 self.labelCropIcon.setPixmap(QIcon(iconPath).pixmap(16, 16))
-                
+
             LaUtils.debug.log(f"Loaded {myCurrentRow} crops with total percentage {myRunningPercentage:.1f}%", "Crops")
-            
+
         except Exception as e:
             LaUtils.debug.log(f"Error loading crops: {str(e)}", "Error")
             import traceback
@@ -784,24 +784,24 @@ class LaMainFormBase(QDialog, FORM_CLASS):
     def on_cbDebug_clicked(self):
         """Handle debug checkbox clicked - toggle debug mode."""
         isChecked = self.cbDebug.isChecked()
-        
+
         # Update the debug logger first
         LaUtils.debug.set_enabled(isChecked)
-        
+
         try:
             # Import and use our debug dialog
             from la.gui.ladebugdialog import LaDebugDialog
-            
+
             if isChecked:
                 # Get dialog instance using proper singleton pattern
                 if not hasattr(self, '_debug_dialog') or self._debug_dialog is None:
                     self._debug_dialog = LaDebugDialog.get_instance(parent=self)
-                
+
                 # Show the dialog and force it to appear at front
                 self._debug_dialog.show()
                 self._debug_dialog.raise_()
                 self._debug_dialog.activateWindow()
-                
+
                 # Test message
                 LaUtils.debug.log("Debug dialog opened", "Debug")
             else:
@@ -813,13 +813,13 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             LaUtils.debug.log(f"Debug dialog error: {str(e)}", "Error")
             import traceback
             LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
-        
+
         # Keep the original debug UI components hidden
         if hasattr(self, 'tbLogs'):
             self.tbLogs.setVisible(False)
         if hasattr(self, 'tbReport'):
             self.tbReport.setVisible(False)
-            
+
         # Save debug setting
         QSettings().setValue("landuse_analyst/debug", isChecked)
 
@@ -968,7 +968,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
 
     def showSelectedAnimalDetails(self, row):
         """Show details for the selected animal.
-        
+
         Args:
             row: The row index of the selected animal
         """
@@ -999,11 +999,11 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                 html_content = animal.toHtml()
                 self.textBrowserAnimalDefinition.setHtml(html_content)
                 LaUtils.debug.log(f"Displayed animal details for {animal.name}", "UI")
-            
+
             # Handle image display
             if hasattr(self, 'lblAnimalPix'):
                 self.lblAnimalPix.clear()  # Clear existing image
-                
+
                 # Get image path, handling both property and method cases
                 image_path = ""
                 if hasattr(animal, 'imageFile'):
@@ -1011,12 +1011,12 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                         image_path = animal.imageFile()
                     else:
                         image_path = animal.imageFile
-                
+
                 if image_path:
                     # Try to resolve the image path
                     resolved_path = LaUtils.resolvePath(str(image_path), 'image')
                     LaUtils.debug.log(f"Attempting to load animal image: {resolved_path}", "UI")
-                    
+
                     if os.path.exists(resolved_path):
                         pixmap = QPixmap(resolved_path)
                         if not pixmap.isNull():
@@ -1028,7 +1028,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                             imagesDir = LaUtils.userImagesDirPath()
                             imageFileName = os.path.basename(str(image_path))
                             alternativePath = os.path.join(imagesDir, imageFileName)
-                            
+
                             if os.path.exists(alternativePath):
                                 pixmap = QPixmap(alternativePath)
                                 if not pixmap.isNull():
