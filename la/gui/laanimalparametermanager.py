@@ -118,10 +118,14 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
     def setupFallowComboBox(self):
         """Set up the fallow usage combo box with proper priority values."""
         self.cbFallowUsage.clear()
+        
+        # Store both display text and actual Priority enum value
         self.cbFallowUsage.addItem("HIGH Fallow Priority", Priority.High)
         self.cbFallowUsage.addItem("MED Fallow Priority", Priority.Medium)
         self.cbFallowUsage.addItem("LOW Fallow Priority", Priority.Low)
-        self.cbFallowUsage.addItem("No Fallow Priority", Priority.None_)
+        self.cbFallowUsage.addItem("Do Not Graze Fallow", Priority.None_)
+        
+        LaUtils.debug.log("setupFallowComboBox: Initialized fallow priority combo box")
 
     def readSettings(self):
         """Read window settings."""
@@ -200,7 +204,7 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
 
                 # Compare the last part of the guid string
                 target_guid = str(self.mAnimalParameter._mAnimalGuid)
-                if target_guid in animal_guid or animal_guid in target_guid:
+                if target_guid in str(animal_guid) or str(animal_guid) in target_guid:
                     self.cboAnimal.setCurrentIndex(i)
                     LaUtils.debug.log(f"showAnimalParameter: Found matching animal at index {i}")
                     found_match = True
@@ -214,6 +218,18 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
         # Set other parameters
         self.sbPercentTameMeat.setValue(float(self.mAnimalParameter._mPercentTameMeat))
         LaUtils.debug.log(f"showAnimalParameter: Set percent tame meat to: {self.mAnimalParameter._mPercentTameMeat}")
+
+        # Set the fallow usage combo box
+        current_fallow = self.mAnimalParameter._fallowUsage
+        LaUtils.debug.log(f"showAnimalParameter: Setting fallow usage to: {current_fallow}")
+        
+        # Find the matching index in the combo box
+        for i in range(self.cbFallowUsage.count()):
+            combo_priority = self.cbFallowUsage.itemData(i)
+            if combo_priority == current_fallow:
+                self.cbFallowUsage.setCurrentIndex(i)
+                LaUtils.debug.log(f"showAnimalParameter: Found matching fallow priority at index {i}")
+                break
 
         # Update the animal picture
         LaUtils.debug.log(f"showAnimalParameter: Updating animal picture for animal GUID: {self.mAnimalParameter._mAnimalGuid}")
