@@ -673,7 +673,271 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         myString += '</model>\n'
         return myString
 
+    def doCalcsAnimalsFirstDairySeparate(self) -> LaDietLabels:
+        """
+        Calculate diet portions with animals first and dairy separate.
+        Dairy products from animal herds are considered separately from meat.
+        Plant-based portion is derived from these calculations.
 
+        Returns:
+            LaDietLabels: Object containing all diet calculations and reports
+        """
+        # Clear calculation maps
+        self._calcsCropsMap = {}
+        self._calcsAnimalsMap = {}
+        self._valueMap = {}
+        self._animalCalcReport = {}
+
+        cropCalcsReportMap = {}
+        animalCalcsReportMap = {}
+        animalsMap = {}  # For storing calculations to send to fallow allocation
+
+        # Initialize counters
+        foodSourceMapCounter = {}
+        for cropGuid in self._crops.keys():
+            foodSourceMapCounter[cropGuid] = 0
+
+        # Basic calorie calculations
+        mCalsIndividualAnnual = self._caloriesPerPersonDaily * 365.0 * 0.001  # Convert to MCal
+        mCalsSettlementAnnual = mCalsIndividualAnnual * self._population
+        dairyMCalorieCounter = 0.0
+        tameMeatMCalorieCounter = 0.0
+
+        # Diet percentage calculations
+        plantPercent = 1.0 - self._dietPercent
+        domesticCropPortion = self._percentOfDietThatIsFromCrops
+        wildMeatPortion = 1.0 - self._meatPercent
+        dairyUtilization = self._dairyUtilisation * 0.01
+
+        # Process each animal
+        for animalGuid, animalParamGuid in self._animals.items():
+            animal = LaUtils.getAnimal(animalGuid)
+            animalParam = LaUtils.getAnimalParameter(animalParamGuid)
+
+            # Basic animal parameters
+            milkKgPerDay = animal.milkGramsPerDay * 0.001
+            milkFoodValue = animal.milkFoodValue * 0.001
+            lactationTime = animal.lactationTime
+            weaningAge = animal.weaningAge
+            gestatingTime = animal.gestationTime
+            estrousCycle = animal.estrousCycle
+            babiesPerBirth = animal.youngPerBirth
+
+            deathRate = animal.deathRate * 0.01
+            breedingRatio = animal.femalesPerMale
+            killWeight = animal.killWeight
+            usablePortionOfAnimal = animal.usableMeat * 0.01
+            adultWeight = animal.adultWeight
+            femalesToMales = animal.femalesPerMale
+            conceptionEfficiency = animal.conceptionEfficiency * 0.01
+            meatValueMCal = animal.meatFoodValue * 0.001
+            sexualMaturity = animal.sexualMaturity  # in months
+            breedingYears = animal.breedingExpectancy  # in years
+
+            # Calculate animal contribution to meat portion
+            animalContributionToMeatPortion = animalParam.percentTameMeat * 0.01
+            animalMCalTarget = (animalContributionToMeatPortion * mCalsSettlementAnnual *
+                              self._dietPercent * self._meatPercent)
+
+            # Calculate dairy values
+            potentialDairyPerOffspring = milkKgPerDay * milkFoodValue * (lactationTime - weaningAge)
+            valuePerOffspring = killWeight * usablePortionOfAnimal * meatValueMCal
+            actualDairyValueOfOffspring = potentialDairyPerOffspring * dairyUtilization
+
+            # Calculate birthing events
+            birthingEventsPerYear1 = 365.0 / (weaningAge + gestatingTime + estrousCycle + lactationTime)
+            birthingEventsPerYear = 1.0 if birthingEventsPerYear1 < 1.0 else birthingEventsPerYear1
+
+            # Calculate culling values
+            culledMothersValue1 = (adultWeight * meatValueMCal * usablePortionOfAnimal *
+                                 (1.0 / ((sexualMaturity / 12.0) + breedingYears)))
+            culledMothersValue = culledMothersValue1 / (babiesPerBirth * birthingEventsPerYear)
+            culledAdultMalesValue = culledMothersValue / femalesToMales
+            finalOffspringValue = valuePerOffspring + culledMothersValue + culledAdultMalesValue
+
+            # Calculate offspring needed and resulting calories
+            offspringNeededPerYear = animalMCalTarget / finalOffspringValue
+            mCalsFromTheMeat = offspringNeededPerYear * finalOffspringValue
+            mCalsUtilizedFromDairy = actualDairyValueOfOffspring * offspringNeededPerYear
+
+            # Update calorie counters
+            tameMeatMCalorieCounter += mCalsFromTheMeat
+            dairyMCalorieCounter += mCalsUtilizedFromDairy
+
+            # Process fodder requirements
+            foodSourceMap = animalParam.fodderSourceMap
+            meatPercent = mCalsFromTheMeat / mCalsSettlementAnnual
+            dairyPercent = mCalsUtilizedFromDairy / mCalsSettlementAnnual
+
+            # Calculate herd size
+            offspringPerMotherPerYear = (birthingEventsPerYear * babiesPerBirth *
+                                       (1.0 - deathRate) * conceptionEfficiency)
+            mothersNeededStepOne = offspringNeededPerYear / offspringPerMotherPerYear
+            malesStepOne = mothersNeededStepOne * offspringPerMotherPerYear * 0.5
+            femalesStepOne = malesStepOne
+
+            replacementMothersPerYear = (mothersNeededStepOne + (sexualMaturity/12.0)) / breedingYears
+            breedingMalesRequired = ((mothersNeededStepOne / breedingRatio) + mothersNeededStepOne) / breedingRatio
+            additionalMothers = ((replacementMothersPerYear/offspringPerMotherPerYear)*2.0) + (breedingMalesRequired * 2.0)
+            malesStepTwo = additionalMothers * offspringPerMotherPerYear * 0.5
+            femalesStepTwo = malesStepTwo
+
+            totalMothers = mothersNeededStepOne + replacementMothersPerYear
+            totalMaleOffspring = malesStepOne + malesStepTwo
+            totalFemaleOffspring = femalesStepOne - femalesStepTwo
+            totalOffspring = totalMaleOffspring * 2.0
+
+            # Calculate feed requirements
+            feedForGestating = animal.gestating * 0.001
+            feedForLactating = animal.lactating * 0.001
+            feedForMaintenance = animal.maintenance * 0.001
+            feedForOffspringPerKg = animal.juvenile * 0.001
+
+            gestatingMCals = totalOffspring * gestatingTime * feedForGestating
+            lactatingMCals = totalOffspring * lactationTime * feedForLactating
+
+            # Calculate maintenance requirements
+            daysForMaintenance = max(0, 365 - (gestatingTime + lactationTime))
+            dryMothers = max(0, totalMothers - totalOffspring)
+            dryMothersMCals = dryMothers * 365.0 * feedForMaintenance
+            otherMaintenanceMCals = daysForMaintenance * totalOffspring * feedForMaintenance
+            maintenanceMCals = dryMothersMCals + otherMaintenanceMCals
+            adultMalesMCals = breedingMalesRequired * feedForMaintenance * 365.0
+            offspringMCals = totalOffspring * killWeight * feedForOffspringPerKg * (365.0 - weaningAge)
+
+            # Process fodder sources
+            additionalMCalCounter = 0.0
+            additionalMCalCounter1 = 0.0
+            for cropGuid, foodSource in foodSourceMap.items():
+                grain = foodSource.grain * 0.001
+                fodder = foodSource.fodder * 0.001
+                days = foodSource.days
+                grainToAdd = grain * days * totalOffspring
+                grainTotal = foodSourceMapCounter.get(cropGuid, 0) + grainToAdd
+                foodSourceMapCounter[cropGuid] = grainTotal
+
+                crop = LaUtils.getCrop(cropGuid)
+                foodValueOfCrop = crop.cropCalories * 0.001
+                foodValueOfFodder = crop.fodderValue * 0.001
+
+                grainMCal = grainToAdd * foodValueOfCrop
+                fodderMCal = fodder * days * foodValueOfFodder * totalOffspring
+                additionalMCalCounter1 += fodderMCal
+                additionalMCalCounter += grainMCal + fodderMCal
+
+            # Calculate total herd requirements
+            animalHerdMCalsRequired1 = (gestatingMCals + lactatingMCals + maintenanceMCals +
+                                      adultMalesMCals + offspringMCals)
+            animalHerdMCalsRequired = animalHerdMCalsRequired1 - additionalMCalCounter
+
+            # Store calculations in report map
+            animalReport = self._generateAnimalReport(
+                animal.name, milkKgPerDay, milkFoodValue, lactationTime, weaningAge,
+                killWeight, usablePortionOfAnimal, adultWeight, femalesToMales,
+                meatValueMCal, sexualMaturity, breedingYears, animalContributionToMeatPortion,
+                animalMCalTarget, potentialDairyPerOffspring, valuePerOffspring,
+                actualDairyValueOfOffspring, culledMothersValue, culledAdultMalesValue,
+                finalOffspringValue, offspringNeededPerYear, mCalsFromTheMeat,
+                mCalsUtilizedFromDairy, tameMeatMCalorieCounter, dairyMCalorieCounter,
+                birthingEventsPerYear, offspringPerMotherPerYear, mothersNeededStepOne,
+                malesStepOne, femalesStepOne, replacementMothersPerYear, breedingMalesRequired,
+                additionalMothers, malesStepTwo, femalesStepTwo, totalMothers,
+                totalMaleOffspring, totalFemaleOffspring, totalOffspring, feedForGestating,
+                feedForLactating, feedForMaintenance, feedForOffspringPerKg, gestatingMCals,
+                lactatingMCals, daysForMaintenance, gestatingTime, lactationTime,
+                dryMothers, dryMothersMCals, otherMaintenanceMCals, maintenanceMCals,
+                adultMalesMCals, offspringMCals, animalHerdMCalsRequired1,
+                animalHerdMCalsRequired, meatPercent, dairyPercent)
+
+            reportAndAreaTarget = (animalReport, animalHerdMCalsRequired)
+            animalCalcsReportMap[animalGuid] = reportAndAreaTarget
+            animalsMap[animalGuid] = animalHerdMCalsRequired
+            self._valueMap[animalGuid] = animalHerdMCalsRequired
+
+        # Calculate dairy limits
+        dairyLimit = self._limitDairyPercent * 0.01 if self._limitDairy else 1.0
+        domesticMeatPercent = tameMeatMCalorieCounter / mCalsSettlementAnnual
+        wildMeatPercent = wildMeatPortion * self._dietPercent
+        limitSatisfies = (domesticMeatPercent + wildMeatPercent + dairyLimit) > 1.0
+        newLimit = (1.0 - domesticMeatPercent - wildMeatPercent) if limitSatisfies else dairyLimit
+
+        # Calculate final percentages
+        potentialDairyLessThanLimitBool = (dairyMCalorieCounter / mCalsSettlementAnnual) < dairyLimit
+        newDairy = dairyMCalorieCounter if potentialDairyLessThanLimitBool else newLimit * mCalsSettlementAnnual
+        overallDairyPercent = newDairy / mCalsSettlementAnnual
+
+        overallMeatPercent = wildMeatPercent + domesticMeatPercent
+        overallPlantPercent = 1.0 - overallMeatPercent - overallDairyPercent
+
+        # Calculate crop percentages
+        overallCropPercent = overallPlantPercent * domesticCropPortion
+        overallWildPlantPercent = overallPlantPercent * (1.0 - plantPercent)
+
+        # Calculate final calorie values
+        overallDomesticMeatMCals = tameMeatMCalorieCounter
+        overallDairyMCals = overallDairyPercent * mCalsSettlementAnnual
+        overallWildMeatMCals = wildMeatPercent * mCalsSettlementAnnual
+        overallCropsMCals = overallCropPercent * mCalsSettlementAnnual
+        overallWildPlantsMCals = overallWildPlantPercent * mCalsSettlementAnnual
+
+        overallMeatMCals = overallWildMeatMCals + overallDomesticMeatMCals
+        firstDairySurplusBool = dairyMCalorieCounter - overallDairyMCals
+        overallDairySurplusMCals = max(0, firstDairySurplusBool)
+
+        # Create and populate diet labels
+        dietLabels = LaDietLabels()
+        dietLabels.dairyMCalories = overallDairyMCals
+        dietLabels.cropMCalories = overallCropsMCals
+        dietLabels.animalMCalories = overallMeatMCals
+        dietLabels.wildAnimalMCalories = overallWildMeatMCals
+        dietLabels.wildPlantsMCalories = overallWildPlantsMCals
+        dietLabels.dairyPortionPct = overallDairyPercent * 100.0
+        dietLabels.tameMeatPortionPct = domesticMeatPercent * 100.0
+        dietLabels.cropsPortionPct = overallCropPercent * 100.0
+        dietLabels.wildAnimalPortionPct = wildMeatPercent * 100.0
+        dietLabels.wildPlantsPortionPct = overallWildPlantPercent * 100.0
+        dietLabels.animalPortionPct = overallMeatPercent * 100.0
+        dietLabels.plantsPortionPct = overallPlantPercent * 100.0
+        dietLabels.kiloCaloriesIndividualAnnual = mCalsIndividualAnnual
+        dietLabels.megaCaloriesSettlementAnnual = mCalsSettlementAnnual
+        dietLabels.dairySurplusMCalories = overallDairySurplusMCals
+
+        # Set report maps
+        dietLabels.cropCalcsReportMap = cropCalcsReportMap
+        dietLabels.animalCalcsReportMap = animalCalcsReportMap
+
+        return dietLabels
+
+    def _generateAnimalReport(self, *args) -> str:
+        """Generate a formatted report string for animal calculations."""
+        # Template for animal report - actual implementation would format all the args
+        report = []
+        params = [
+            "Animal Name", "Milk kg/day", "Milk food value", "Lactation time",
+            "Weaning age", "Kill weight", "Usable portion", "Adult weight",
+            "Females to males ratio", "Meat value (MCal)", "Sexual maturity",
+            "Breeding years", "Meat portion contribution", "MCal target",
+            "Potential dairy per offspring", "Value per offspring",
+            "Actual dairy value", "Culled mothers value", "Culled males value",
+            "Final offspring value", "Offspring needed/year", "MCals from meat",
+            "MCals from dairy", "Total tame meat MCals", "Total dairy MCals",
+            "Birthing events/year", "Offspring per mother/year", "Mothers needed",
+            "Males step 1", "Females step 1", "Replacement mothers/year",
+            "Breeding males required", "Additional mothers", "Males step 2",
+            "Females step 2", "Total mothers", "Total male offspring",
+            "Total female offspring", "Total offspring", "Feed for gestating",
+            "Feed for lactating", "Feed for maintenance", "Feed for offspring/kg",
+            "Gestating MCals", "Lactating MCals", "Days for maintenance",
+            "Gestating time", "Lactation time", "Dry mothers",
+            "Dry mothers MCals", "Other maintenance MCals", "Total maintenance MCals",
+            "Adult males MCals", "Offspring MCals", "Herd MCals required (initial)",
+            "Herd MCals required (final)", "Meat percent", "Dairy percent"
+        ]
+
+        for param, value in zip(params, args):
+            report.append(f"{param} = {value}")
+
+        return "\n".join(report)
 
     """ The following defines a series of PyQt signals.
 

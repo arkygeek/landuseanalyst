@@ -7,7 +7,7 @@ from la.lib.laserialisable import LaSerialisable
 from la.lib.laguid import LaGuid
 # from la.lib.la import La
 
-class LaDietLabels(LaSerialisable, LaGuid):
+class LaDietLabels(QObject, LaSerialisable, LaGuid):
     """
     LaDietLabels class for managing dietary information in the Land Use Analyst.
 
@@ -38,13 +38,16 @@ class LaDietLabels(LaSerialisable, LaGuid):
     cropCalcsReportMapChanged = pyqtSignal(dict)
     animalCalcsReportMapChanged = pyqtSignal(dict)
 
-    def __init__(self):
+    def __init__(self, parent=None):
         """
         Initialize a new LaDietLabels instance with default values.
 
         All numeric values are initialized to 0.0 and dictionaries are empty.
         """
-        super().__init__()
+        super().__init__(parent)
+        LaSerialisable.__init__(self)
+        LaGuid.__init__(self)
+
         self._dairyMCalories: float = 0.0
         self._cropMCalories: float = 0.0
         self._animalMCalories: float = 0.0
@@ -76,7 +79,9 @@ class LaDietLabels(LaSerialisable, LaGuid):
         :return: A new LaDietLabels instance with the same values
         :rtype: LaDietLabels
         """
-        return LaDietLabels(self)
+        other = LaDietLabels()
+        other.__dict__.update(self.__dict__)
+        return other
 
     def __deepcopy__(self, memo):
         """
@@ -87,10 +92,14 @@ class LaDietLabels(LaSerialisable, LaGuid):
         :return: A new LaDietLabels instance with copies of all values
         :rtype: LaDietLabels
         """
-        return LaDietLabels(self)
+        other = LaDietLabels()
+        memo[id(self)] = other
+        for k, v in self.__dict__.items():
+            setattr(other, k, copy.deepcopy(v, memo))
+        return other
 
     @pyqtProperty(float, notify=dairyMCaloriesChanged)
-    def dairyMCalories(self) -> float:
+    def dairyMCalories(self) -> float: # type: ignore
         """
         Get the dairy mega-calories value.
 
@@ -112,7 +121,7 @@ class LaDietLabels(LaSerialisable, LaGuid):
             self.dairyMCaloriesChanged.emit(theDairyMCalories)
 
     @pyqtProperty(float, notify=cropMCaloriesChanged)
-    def cropMCalories(self) -> float:
+    def cropMCalories(self) -> float: # type: ignore
         """
         Get the crop mega-calories value.
 
@@ -134,7 +143,7 @@ class LaDietLabels(LaSerialisable, LaGuid):
             self.cropMCaloriesChanged.emit(theCropMCalories)
 
     @pyqtProperty(float, notify=animalMCaloriesChanged)
-    def animalMCalories(self) -> float:
+    def animalMCalories(self) -> float: # type: ignore
         """
         Get the animal mega-calories value.
 
@@ -156,7 +165,7 @@ class LaDietLabels(LaSerialisable, LaGuid):
             self.animalMCaloriesChanged.emit(theAnimalMCalories)
 
     @pyqtProperty(float, notify=wildAnimalMCaloriesChanged)
-    def wildAnimalMCalories(self) -> float:
+    def wildAnimalMCalories(self) -> float: # type: ignore
         """
         Get the wild animal mega-calories value.
 
@@ -178,7 +187,7 @@ class LaDietLabels(LaSerialisable, LaGuid):
             self.wildAnimalMCaloriesChanged.emit(theWildAnimalMCalories)
 
     @pyqtProperty(float, notify=wildPlantsMCaloriesChanged)
-    def wildPlantsMCalories(self) -> float:
+    def wildPlantsMCalories(self) -> float: # type: ignore
         """
         Get the wild plants mega-calories value.
 
@@ -200,7 +209,7 @@ class LaDietLabels(LaSerialisable, LaGuid):
             self.wildPlantsMCaloriesChanged.emit(theWildPlantsMCalories)
 
     @pyqtProperty(float, notify=dairyPortionPctChanged)
-    def dairyPortionPct(self) -> float:
+    def dairyPortionPct(self) -> float: # type: ignore
         """
         Get the dairy portion percentage value.
 
@@ -222,7 +231,7 @@ class LaDietLabels(LaSerialisable, LaGuid):
             self.dairyPortionPctChanged.emit(theDairyPortionPct)
 
     @pyqtProperty(float, notify=tameMeatPortionPctChanged)
-    def tameMeatPortionPct(self) -> float:
+    def tameMeatPortionPct(self) -> float: # type: ignore
         """
         Get the domesticated meat portion percentage value.
 
@@ -244,7 +253,7 @@ class LaDietLabels(LaSerialisable, LaGuid):
             self.tameMeatPortionPctChanged.emit(theTameMeatPortionPct)
 
     @pyqtProperty(float, notify=cropsPortionPctChanged)
-    def cropsPortionPct(self) -> float:
+    def cropsPortionPct(self) -> float: # type: ignore
         """
         Get the crops portion percentage value.
 
@@ -266,7 +275,7 @@ class LaDietLabels(LaSerialisable, LaGuid):
             self.cropsPortionPctChanged.emit(theCropsPortionPct)
 
     @pyqtProperty(float, notify=wildAnimalPortionPctChanged)
-    def wildAnimalPortionPct(self) -> float:
+    def wildAnimalPortionPct(self) -> float: # type: ignore
         """
         Get the wild animal portion percentage value.
 
@@ -288,7 +297,7 @@ class LaDietLabels(LaSerialisable, LaGuid):
             self.wildAnimalPortionPctChanged.emit(theWildAnimalPortionPct)
 
     @pyqtProperty(float, notify=wildPlantsPortionPctChanged)
-    def wildPlantsPortionPct(self) -> float:
+    def wildPlantsPortionPct(self) -> float: # type: ignore
         """
         Get the wild plants portion percentage value.
 
@@ -310,7 +319,7 @@ class LaDietLabels(LaSerialisable, LaGuid):
             self.wildPlantsPortionPctChanged.emit(theWildPlantsPortionPct)
 
     @pyqtProperty(float, notify=plantsPortionPctChanged)
-    def plantsPortionPct(self) -> float:
+    def plantsPortionPct(self) -> float: # type: ignore
         """
         Get the plants portion percentage value (both wild and cultivated).
 
@@ -332,7 +341,7 @@ class LaDietLabels(LaSerialisable, LaGuid):
             self.plantsPortionPctChanged.emit(thePlantsPortionPct)
 
     @pyqtProperty(float, notify=animalPortionPctChanged)
-    def animalPortionPct(self) -> float:
+    def animalPortionPct(self) -> float: # type: ignore
         """
         Get the animal portion percentage value (both wild and domestic).
 
@@ -354,7 +363,7 @@ class LaDietLabels(LaSerialisable, LaGuid):
             self.animalPortionPctChanged.emit(theAnimalPortionPct)
 
     @pyqtProperty(float, notify=kiloCaloriesIndividualAnnualChanged)
-    def kiloCaloriesIndividualAnnual(self) -> float:
+    def kiloCaloriesIndividualAnnual(self) -> float: # type: ignore
         """
         Get the individual annual kilocalories requirement.
 
@@ -376,7 +385,7 @@ class LaDietLabels(LaSerialisable, LaGuid):
             self.kiloCaloriesIndividualAnnualChanged.emit(theKiloCaloriesIndividualAnnual)
 
     @pyqtProperty(float, notify=megaCaloriesSettlementAnnualChanged)
-    def megaCaloriesSettlementAnnual(self) -> float:
+    def megaCaloriesSettlementAnnual(self) -> float: # type: ignore
         """
         Get the settlement annual megacalories requirement.
 
@@ -398,7 +407,7 @@ class LaDietLabels(LaSerialisable, LaGuid):
             self.megaCaloriesSettlementAnnualChanged.emit(theMegaCaloriesSettlementAnnual)
 
     @pyqtProperty(float, notify=dairySurplusMCaloriesChanged)
-    def dairySurplusMCalories(self) -> float:
+    def dairySurplusMCalories(self) -> float: # type: ignore
         """
         Get the dairy surplus megacalories value.
 
@@ -420,7 +429,7 @@ class LaDietLabels(LaSerialisable, LaGuid):
             self.dairySurplusMCaloriesChanged.emit(theDairySurplusMCalories)
 
     @pyqtProperty(dict, notify=cropCalcsReportMapChanged)
-    def cropCalcsReportMap(self) -> Dict[str, Tuple[str, float]]:
+    def cropCalcsReportMap(self) -> Dict[str, Tuple[str, float]]: # type: ignore
         """
         Get the crop calculations report map.
 
@@ -442,7 +451,7 @@ class LaDietLabels(LaSerialisable, LaGuid):
             self.cropCalcsReportMapChanged.emit(theCropCalcsReportMap)
 
     @pyqtProperty(dict, notify=animalCalcsReportMapChanged)
-    def animalCalcsReportMap(self) -> Dict[str, Tuple[str, float]]:
+    def animalCalcsReportMap(self) -> Dict[str, Tuple[str, float]]: # type: ignore
         """
         Get the animal calculations report map.
 
@@ -462,3 +471,54 @@ class LaDietLabels(LaSerialisable, LaGuid):
         if self._animalCalcsReportMap != theAnimalCalcsReportMap:
             self._animalCalcsReportMap = theAnimalCalcsReportMap
             self.animalCalcsReportMapChanged.emit(theAnimalCalcsReportMap)
+
+    def toXml(self) -> str:
+        """Convert the diet labels to XML format.
+
+        Returns:
+            str: XML representation of the diet labels
+        """
+        xml = f'<dietLabels guid="{self.guid}">\n'
+        xml += f'  <dairyMCalories>{self._dairyMCalories}</dairyMCalories>\n'
+        xml += f'  <cropMCalories>{self._cropMCalories}</cropMCalories>\n'
+        xml += f'  <animalMCalories>{self._animalMCalories}</animalMCalories>\n'
+        xml += f'  <wildAnimalMCalories>{self._wildAnimalMCalories}</wildAnimalMCalories>\n'
+        xml += f'  <wildPlantsMCalories>{self._wildPlantsMCalories}</wildPlantsMCalories>\n'
+        xml += f'  <dairyPortionPct>{self._dairyPortionPct}</dairyPortionPct>\n'
+        xml += f'  <tameMeatPortionPct>{self._tameMeatPortionPct}</tameMeatPortionPct>\n'
+        xml += f'  <cropsPortionPct>{self._cropsPortionPct}</cropsPortionPct>\n'
+        xml += f'  <wildAnimalPortionPct>{self._wildAnimalPortionPct}</wildAnimalPortionPct>\n'
+        xml += f'  <wildPlantsPortionPct>{self._wildPlantsPortionPct}</wildPlantsPortionPct>\n'
+        xml += f'  <plantsPortionPct>{self._plantsPortionPct}</plantsPortionPct>\n'
+        xml += f'  <animalPortionPct>{self._animalPortionPct}</animalPortionPct>\n'
+        xml += f'  <kiloCaloriesIndividualAnnual>{self._kiloCaloriesIndividualAnnual}</kiloCaloriesIndividualAnnual>\n'
+        xml += f'  <megaCaloriesSettlementAnnual>{self._megaCaloriesSettlementAnnual}</megaCaloriesSettlementAnnual>\n'
+        xml += f'  <dairySurplusMCalories>{self._dairySurplusMCalories}</dairySurplusMCalories>\n'
+        xml += '</dietLabels>\n'
+        return xml
+
+    def fromXml(self, xmlStr: str) -> None:
+        """Initialize this object from XML data.
+
+        Args:
+            xmlStr (str): XML string containing diet label data
+        """
+        import xml.etree.ElementTree as ET
+        root = ET.fromstring(xmlStr)
+
+        self.guid = root.attrib.get('guid', None)
+        self._dairyMCalories = float(root.findtext('dairyMCalories', '0'))
+        self._cropMCalories = float(root.findtext('cropMCalories', '0'))
+        self._animalMCalories = float(root.findtext('animalMCalories', '0'))
+        self._wildAnimalMCalories = float(root.findtext('wildAnimalMCalories', '0'))
+        self._wildPlantsMCalories = float(root.findtext('wildPlantsMCalories', '0'))
+        self._dairyPortionPct = float(root.findtext('dairyPortionPct', '0'))
+        self._tameMeatPortionPct = float(root.findtext('tameMeatPortionPct', '0'))
+        self._cropsPortionPct = float(root.findtext('cropsPortionPct', '0'))
+        self._wildAnimalPortionPct = float(root.findtext('wildAnimalPortionPct', '0'))
+        self._wildPlantsPortionPct = float(root.findtext('wildPlantsPortionPct', '0'))
+        self._plantsPortionPct = float(root.findtext('plantsPortionPct', '0'))
+        self._animalPortionPct = float(root.findtext('animalPortionPct', '0'))
+        self._kiloCaloriesIndividualAnnual = float(root.findtext('kiloCaloriesIndividualAnnual', '0'))
+        self._megaCaloriesSettlementAnnual = float(root.findtext('megaCaloriesSettlementAnnual', '0'))
+        self._dairySurplusMCalories = float(root.findtext('dairySurplusMCalories', '0'))
