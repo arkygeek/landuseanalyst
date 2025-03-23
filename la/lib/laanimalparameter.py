@@ -1,19 +1,16 @@
 import os
-from typing import Optional, Type, Dict
+from typing import Optional, Type, Dict, Any, cast
 import warnings
 from qgis.PyQt.QtCore import QObject, pyqtSignal, pyqtProperty
 from qgis.PyQt.QtXml import QDomDocument, QDomElement, QDomNodeList
 from la.lib.laserialisable import LaSerialisable
 from la.lib.laguid import LaGuid
 from la.lib.lafoodsource import LaFoodSource
-# Import LaFoodSourceMap type definition from la
-from la.lib.la import LaFoodSourceMap, Priority
+from la.lib.la import LaFoodSourceMap, Priority, AreaUnits, EnergyType
 from la.resources_rc import *
 
 class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
-    # from la.lib.lautils import LaUtils
-    from la.lib.la import AreaUnits  # Priority import moved to global imports
-    _instances = []
+    # Signal definitions
     nameChanged = pyqtSignal(str)
     descriptionChanged = pyqtSignal(str)
     guidChanged = pyqtSignal(str)
@@ -22,12 +19,21 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
     useCommonGrazingLandChanged = pyqtSignal(bool)
     useSpecificGrazingLandChanged = pyqtSignal(bool)
     fodderUseChanged = pyqtSignal(float)
-    foodSourceMapChanged = pyqtSignal(dict)  # Signal for LaFoodSourceMap changes
-    fallowUsageChanged = pyqtSignal(object)  # Changed to object for enum
+    foodSourceMapChanged = pyqtSignal(dict)
+    fallowUsageChanged = pyqtSignal(object)
     rasterNameChanged = pyqtSignal(str)
+    areaUnitsChanged = pyqtSignal(object)  # Added signal for area units
+    energyTypeChanged = pyqtSignal(object)  # Added signal for energy type
+
+    _instances = []
 
     def __init__(self, theAnimalParameter: Optional['LaAnimalParameter'] = None, parent=None):
         super().__init__(parent)
+        self._init_properties(theAnimalParameter)
+        self.__class__._instances.append(self)
+
+    def _init_properties(self, theAnimalParameter: Optional['LaAnimalParameter'] = None):
+        """Initialize all properties with proper type conversion."""
         if theAnimalParameter is None:
             self._mGuid = LaGuid.setGuid(self, None)
             self._mName = "No Name Set"
@@ -37,22 +43,26 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self._mUseCommonGrazingLand = False
             self._mUseSpecificGrazingLand = False
             self._mFodderUse = 0.0
-            self._mFoodSourceMap = {}  # Initialize as empty LaFoodSourceMap
-            self._fallowUsage = 0.0  # Initialize fallow usage
-            self._rasterName = ""    # Initialize raster name
+            self._mFoodSourceMap: Dict[str, LaFoodSource] = {}
+            self._fallowUsage = Priority.None_
+            self._rasterName = ""
+            self._areaUnits = AreaUnits.Dunum
+            self._energyType = EnergyType.KCalories
         else:
-            self._mGuid = theAnimalParameter.guid
-            self._mName = theAnimalParameter.name
-            self._mDescription = theAnimalParameter.description
-            self._mAnimalGuid = theAnimalParameter.animalGuid
-            self._mPercentTameMeat = theAnimalParameter.percentTameMeat
-            self._mUseCommonGrazingLand = theAnimalParameter.useCommonGrazingLand
-            self._mUseSpecificGrazingLand = theAnimalParameter.useSpecificGrazingLand
-            self._mFodderUse = theAnimalParameter.fodderUse
-            self._mFoodSourceMap = theAnimalParameter.foodSourceMap
-            self._fallowUsage = theAnimalParameter.fallowUsage  # Copy fallow usage
-            self._rasterName = theAnimalParameter.rasterName    # Copy raster name
-        self.__class__._instances.append(self)
+            # Copy properties with safe type conversion
+            self._mGuid = str(getattr(theAnimalParameter, '_mGuid', ''))
+            self._mName = str(getattr(theAnimalParameter, '_mName', ''))
+            self._mDescription = str(getattr(theAnimalParameter, '_mDescription', ''))
+            self._mAnimalGuid = str(getattr(theAnimalParameter, '_mAnimalGuid', ''))
+            self._mPercentTameMeat = float(getattr(theAnimalParameter, '_mPercentTameMeat', 0.0))
+            self._mUseCommonGrazingLand = bool(getattr(theAnimalParameter, '_mUseCommonGrazingLand', False))
+            self._mUseSpecificGrazingLand = bool(getattr(theAnimalParameter, '_mUseSpecificGrazingLand', False))
+            self._mFodderUse = float(getattr(theAnimalParameter, '_mFodderUse', 0.0))
+            self._mFoodSourceMap = dict(getattr(theAnimalParameter, '_mFoodSourceMap', {}))
+            self._fallowUsage = getattr(theAnimalParameter, '_fallowUsage', Priority.None_)
+            self._rasterName = str(getattr(theAnimalParameter, '_rasterName', ''))
+            self._areaUnits = getattr(theAnimalParameter, '_areaUnits', AreaUnits.Dunum)
+            self._energyType = getattr(theAnimalParameter, '_energyType', EnergyType.KCalories)
 
     def __eq__(self, other):
         if not isinstance(other, LaAnimalParameter):
@@ -93,24 +103,30 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             myFile.write(myXmlContent)
 
     @pyqtProperty(str, notify=nameChanged)
-    def name(self): # type: ignore
-        return self._mName
+    def name(self) -> str:
+        """Get the name of the animal parameter."""
+        return str(self._mName)
 
     @name.setter
-    def name(self, theName: str) -> None:
-        if self._mName != theName:
-            self._mName = theName
-            self.nameChanged.emit(theName)
+    def name(self, value: str) -> None:
+        """Set the name of the animal parameter."""
+        value = str(value)
+        if self._mName != value:
+            self._mName = value
+            self.nameChanged.emit(value)
 
     @pyqtProperty(str, notify=descriptionChanged)
-    def description(self) -> str: # type: ignore
+    def description(self) -> str:
+        """Get the description of the animal parameter."""
         return str(self._mDescription)
 
     @description.setter
-    def description(self, theDescription: str) -> None:
-        if self._mDescription != theDescription:
-            self._mDescription = theDescription
-            self.descriptionChanged.emit(theDescription)
+    def description(self, value: str) -> None:
+        """Set the description of the animal parameter."""
+        value = str(value)
+        if self._mDescription != value:
+            self._mDescription = value
+            self.descriptionChanged.emit(value)
 
     @pyqtProperty(str, notify=guidChanged)
     def guid(self): # type: ignore
@@ -123,75 +139,94 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self.guidChanged.emit(guid)
 
     @pyqtProperty(str, notify=animalGuidChanged)
-    def animalGuid(self) -> str: # type: ignore
+    def animalGuid(self) -> str:
+        """Get the animal GUID."""
         return str(self._mAnimalGuid)
 
     @animalGuid.setter
-    def animalGuid(self, theAnimalGuid: str) -> None:
-        if self._mAnimalGuid != theAnimalGuid:
-            self._mAnimalGuid = theAnimalGuid
-            self.animalGuidChanged.emit(theAnimalGuid)
+    def animalGuid(self, value: str) -> None:
+        """Set the animal GUID."""
+        value = str(value)
+        if self._mAnimalGuid != value:
+            self._mAnimalGuid = value
+            self.animalGuidChanged.emit(value)
 
     @pyqtProperty(float, notify=percentTameMeatChanged)
-    def percentTameMeat(self) -> float: # type: ignore
-        return float(str(self._mPercentTameMeat))
+    def percentTameMeat(self) -> float:
+        """Get the percentage of tame meat."""
+        return float(self._mPercentTameMeat)
 
     @percentTameMeat.setter
-    def percentTameMeat(self, thePercentTameMeat: float) -> None:
-        if self._mPercentTameMeat != thePercentTameMeat:
-            self._mPercentTameMeat = thePercentTameMeat
-            self.percentTameMeatChanged.emit(thePercentTameMeat)
+    def percentTameMeat(self, value: float) -> None:
+        """Set the percentage of tame meat."""
+        value = float(value)
+        if self._mPercentTameMeat != value:
+            self._mPercentTameMeat = value
+            self.percentTameMeatChanged.emit(value)
 
     @pyqtProperty(bool, notify=useCommonGrazingLandChanged)
-    def useCommonGrazingLand(self) -> bool: # type: ignore
+    def useCommonGrazingLand(self) -> bool:
+        """Get whether common grazing land is used."""
         return bool(self._mUseCommonGrazingLand)
 
     @useCommonGrazingLand.setter
-    def useCommonGrazingLand(self, theUseCommonGrazingLand: bool) -> None:
-        if self._mUseCommonGrazingLand != theUseCommonGrazingLand:
-            self._mUseCommonGrazingLand = theUseCommonGrazingLand
-            self.useCommonGrazingLandChanged.emit(theUseCommonGrazingLand)
+    def useCommonGrazingLand(self, value: bool) -> None:
+        """Set whether common grazing land is used."""
+        value = bool(value)
+        if self._mUseCommonGrazingLand != value:
+            self._mUseCommonGrazingLand = value
+            self.useCommonGrazingLandChanged.emit(value)
 
     @pyqtProperty(bool, notify=useSpecificGrazingLandChanged)
-    def useSpecificGrazingLand(self) -> bool: # type: ignore
-        return self._mUseSpecificGrazingLand
+    def useSpecificGrazingLand(self) -> bool:
+        """Get whether specific grazing land is used."""
+        return bool(self._mUseSpecificGrazingLand)
 
     @useSpecificGrazingLand.setter
-    def useSpecificGrazingLand(self, theUseSpecificGrazingLand: bool) -> None:
-        if self._mUseSpecificGrazingLand != theUseSpecificGrazingLand:
-            self._mUseSpecificGrazingLand = theUseSpecificGrazingLand
-            self.useSpecificGrazingLandChanged.emit(theUseSpecificGrazingLand)
+    def useSpecificGrazingLand(self, value: bool) -> None:
+        """Set whether specific grazing land is used."""
+        value = bool(value)
+        if self._mUseSpecificGrazingLand != value:
+            self._mUseSpecificGrazingLand = value
+            self.useSpecificGrazingLandChanged.emit(value)
 
     @pyqtProperty(float, notify=fodderUseChanged)
-    def fodderUse(self) -> float: # type: ignore
-        return self._mFodderUse
+    def fodderUse(self) -> float:
+        """Get the fodder use value."""
+        return float(self._mFodderUse)
 
     @fodderUse.setter
-    def fodderUse(self, theFodderUse: float) -> None:
-        if self._mFodderUse != theFodderUse:
-            self._mFodderUse = theFodderUse
-            self.fodderUseChanged.emit(theFodderUse)
+    def fodderUse(self, value: float) -> None:
+        """Set the fodder use value."""
+        value = float(value)
+        if self._mFodderUse != value:
+            self._mFodderUse = value
+            self.fodderUseChanged.emit(value)
 
-    @pyqtProperty(dict, notify=foodSourceMapChanged)
-    def foodSourceMap(self): # type: ignore
-        """Returns a mapping of food source IDs to LaFoodSource objects using LaFoodSourceMap type"""
-        return self._mFoodSourceMap
+    @pyqtProperty('QVariantMap', notify=foodSourceMapChanged)
+    def foodSourceMap(self) -> Dict[str, LaFoodSource]:
+        """Get the food source map."""
+        return dict(self._mFoodSourceMap)
 
-    @foodSourceMap.setter
-    def foodSourceMap(self, theFoodSourceMap) -> None:
-        if self._mFoodSourceMap != theFoodSourceMap:
-            self._mFoodSourceMap = theFoodSourceMap
-            self.foodSourceMapChanged.emit(theFoodSourceMap)
+    @foodSourceMap.setter 
+    def foodSourceMap(self, value: Dict[str, LaFoodSource]) -> None:
+        """Set the food source map."""
+        value = dict(value)
+        if self._mFoodSourceMap != value:
+            self._mFoodSourceMap = value
+            self.foodSourceMapChanged.emit(value)
 
-    @pyqtProperty(float, notify=fallowUsageChanged)
-    def fallowUsage(self): # type: ignore
-        return self._fallowUsage
+    @pyqtProperty(object, notify=fallowUsageChanged)
+    def fallowUsage(self) -> Priority:
+        """Get the fallow usage priority."""
+        return Priority(self._fallowUsage)
 
     @fallowUsage.setter
-    def fallowUsage(self, fallowUsage):
-        if self._fallowUsage != fallowUsage:
-            self._fallowUsage = fallowUsage
-            self.fallowUsageChanged.emit(fallowUsage)
+    def fallowUsage(self, value: Priority) -> None:
+        """Set the fallow usage priority."""
+        if isinstance(value, Priority) and self._fallowUsage != value:
+            self._fallowUsage = value
+            self.fallowUsageChanged.emit(value)
 
     @pyqtProperty(str, notify=rasterNameChanged)
     def rasterName(self): # type: ignore
@@ -202,6 +237,30 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
         if self._rasterName != rasterName:
             self._rasterName = rasterName
             self.rasterNameChanged.emit(rasterName)
+
+    @pyqtProperty(object, notify=areaUnitsChanged)  # Updated to use signal
+    def areaUnits(self) -> AreaUnits:
+        """Get the area units."""
+        return AreaUnits(self._areaUnits)
+
+    @areaUnits.setter
+    def areaUnits(self, value: AreaUnits) -> None:
+        """Set the area units."""
+        if isinstance(value, AreaUnits) and self._areaUnits != value:
+            self._areaUnits = value
+            self.areaUnitsChanged.emit(value)  # Emit signal when value changes
+
+    @pyqtProperty(object, notify=energyTypeChanged)  # Updated to use signal
+    def energyType(self) -> EnergyType:
+        """Get the energy type."""
+        return EnergyType(self._energyType)
+
+    @energyType.setter
+    def energyType(self, value: EnergyType) -> None:
+        """Set the energy type."""
+        if isinstance(value, EnergyType) and self._energyType != value:
+            self._energyType = value
+            self.energyTypeChanged.emit(value)  # Emit signal when value changes
 
     def fromXml(self, theXml: str) -> bool:
         from la.lib.lautils import LaUtils
@@ -353,8 +412,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
         # Add food source map data
         if self._mFodderUse and self._mFoodSourceMap:
             myString += "  <fodderCrops>\n"
-            # Write out the map for fodder info to xml
-            for cropGuid, foodSource in self._mFoodSourceMap.items():
+            for cropGuid, foodSource in dict(self._mFoodSourceMap).items():
                 myString += "    <foodSource>\n"
                 myString += f"      <fodderCropGuid>{cropGuid}</fodderCropGuid>\n"
                 myString += f"      <fodderStrawChaff>{foodSource.fodder}</fodderStrawChaff>\n"

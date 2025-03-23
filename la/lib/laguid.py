@@ -2,31 +2,35 @@ from qgis.PyQt.QtCore import QUuid
 from typing import Optional
 
 class LaGuid:
-    """
-    A class that represents a unique identifier (GUID) used in Land Use Analyst.
-
-    The class provides two methods:
-    - guid: Returns the GUID value.
-    - setGuid: Sets the GUID value.
-    """
+    """Base class for objects that need a GUID."""
+    
     def __init__(self):
-        """Initialize with a new GUID - matches C++ behavior"""
-        self._guid = ""
-        self.setGuid()  # Automatically generate GUID like C++ version
+        """Initialize the guid."""
+        self._mGuid = ""
+    
+    @property
+    def guid(self):
+        """Get the GUID as a string."""
+        return str(self._mGuid)
 
-    def guid(self) -> str:
+    # Add method-style accessor for backward compatibility
+    def guid(self):  # type: ignore
+        """Method-style accessor for GUID - for backward compatibility."""
+        return str(self._mGuid)
+    
+    def setGuid(self, guid=None):
         """
-        Returns the GUID value.
+        Set the GUID to the given value or generate a new one.
+        
+        Args:
+            guid: The GUID to set (optional)
+            
+        Returns:
+            The new GUID
         """
-        return self._guid
-
-    def setGuid(self, theGuid: Optional[str] = None) -> None:
-        """
-        Sets the GUID value. If no GUID is provided, generates a new one.
-        Matches C++ behavior by stripping braces.
-        """
-        if theGuid is None or theGuid == "":
-            # Match C++ behavior of removing braces
-            self._guid = QUuid.createUuid().toString(QUuid.StringFormat.WithoutBraces)
+        if guid is None:
+            import uuid
+            self._mGuid = str(uuid.uuid4())
         else:
-            self._guid = theGuid
+            self._mGuid = str(guid)
+        return self._mGuid

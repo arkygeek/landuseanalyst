@@ -49,9 +49,33 @@ class LaAnimalParameterManagerBase(QDialog, FORM_CLASS):
         # Basic UI initialization
         self.lblAnimalPic.setScaledContents(True)
 
-        # Set up table headers
+        # Set up table headers and properties
         self.tblAnimalParameterProfiles.horizontalHeader().hide()
         self.tblAnimalParameterProfiles.verticalHeader().hide()
+        self.tblAnimalParameterProfiles.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
+        self.tblAnimalParameterProfiles.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
+        self.tblAnimalParameterProfiles.setAlternatingRowColors(True)
+        
+        # Hide experimental features
+        self.pbnImport.setVisible(False)
+        self.pbnExport.setVisible(False)
+        
+        # Set up table columns
+        self.tblAnimalParameterProfiles.setColumnCount(2)
+        self.resizeTableColumns()
+
+    def resizeTableColumns(self):
+        """Resize table columns to fit content"""
+        if self.tblAnimalParameterProfiles:
+            self.tblAnimalParameterProfiles.setColumnWidth(0, 0)  # Hide first column
+            header = self.tblAnimalParameterProfiles.horizontalHeader()
+            if header:
+                header.setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
+
+    def resizeEvent(self, event):
+        """Handle window resize events"""
+        super().resizeEvent(event)
+        self.resizeTableColumns()
 
     def setAreaUnitsIndex(self, area_units):
         """Helper method to set the correct area units in combo box."""

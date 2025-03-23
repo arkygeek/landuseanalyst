@@ -11,33 +11,42 @@ Date created: [12-OCT-2023]
 
 from qgis.PyQt.QtCore import Qt, QSettings
 from qgis.PyQt.QtGui import QIcon, QPixmap
-from qgis.PyQt.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QSpinBox
+from qgis.PyQt.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QSpinBox, QTableWidget
 
 from la.ui.laanimalparametermanagerbase import LaAnimalParameterManagerBase
 from la.lib.laanimalparameter import LaAnimalParameter
 from la.lib.lautils import LaUtils
-from la.lib.la import AreaUnits, EnergyType as LaEnergyType, Priority
+from la.lib.la import AreaUnits, EnergyType, Priority
 from la.lib.lagrass import LaGrass
 import os
 
 class LaAnimalParameterManager(LaAnimalParameterManagerBase):
-    """Manager for animal parameters.
-
-    This class provides the functionality for managing animal parameters, including
-    creating, editing, copying, and deleting animal parameters.
-    """
+    """Manager for animal parameters."""
 
     def __init__(self, thePair=None, parent=None, flags=Qt.WindowFlags()):
-        """Initialize the Animal Parameter Manager.
-
-        Args:
-            thePair: A tuple containing selected crops map and common grazed land value
-            parent: Parent widget
-            flags: Window flags
-        """
-        super(LaAnimalParameterManager, self).__init__(parent, flags)
+        """Initialize the Animal Parameter Manager."""
+        super().__init__(parent, flags)
         self.readSettings()
-
+        
+        # Debug log to check UI initialization
+        LaUtils.debug.log("Animal Parameter Manager: Initializing UI")
+        
+        # Verify key widgets exist
+        for widget_name in ["leName", "leDescription", "cboAnimal", "sbPercentTameMeat", 
+                            "checkBoxCommonRaster", "checkBoxSpecificRaster", "lblAnimalPic"]:
+            if hasattr(self, widget_name):
+                LaUtils.debug.log(f"Widget {widget_name} found")
+            else:
+                LaUtils.debug.log(f"WARNING: Widget {widget_name} not found!")
+        
+        # Make sure the animal parameters table is visible and has correct properties
+        if hasattr(self, "tblAnimalParameterProfiles"):
+            self.tblAnimalParameterProfiles.setVisible(True)
+            self.tblAnimalParameterProfiles.horizontalHeader().setStretchLastSection(True)
+            self.tblAnimalParameterProfiles.setAlternatingRowColors(True)
+            self.tblAnimalParameterProfiles.setSelectionMode(QTableWidget.SingleSelection)
+            self.tblAnimalParameterProfiles.setSelectionBehavior(QTableWidget.SelectRows)
+        
         # Initialize member variables
         self.mAnimalParameterMap = {}
         self.mAnimalParameter = LaAnimalParameter()
@@ -48,53 +57,59 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
         # Connect signals
         self.tblAnimalParameterProfiles.cellClicked.connect(self.cellClicked)
         self.cboAnimal.currentIndexChanged.connect(self.on_cboAnimal_changed)
-
+        
         # Set up the raster combo box with available maps
-        myList = []
-        myGrass = LaGrass()
-        myMapsetList = []  # myGrass.getMapsetList() @TODO get Grass stuff working
+        myList = []  # Will be populated by grass module later
+        myMapsetList = []  # Will be populated by grass module later
         self.cboRaster.addItems(myList)
 
-        # Hide import/export buttons for now
+        # Hide experimental features
         self.pbnImport.setVisible(False)
         self.pbnExport.setVisible(False)
 
-        # Set up combo boxes
+        # Set up combo boxes and initial values
         self.setupAnimalsCombo()
         self.setupAreaUnitsCombo()
         self.setupEnergyTypeCombo()
         self.setupFallowComboBox()
+        
+        # Make the common raster value read-only
+        if hasattr(self, 'sbCommonRasterValue'):
+            self.sbCommonRasterValue.setReadOnly(True)
+            self.sbCommonRasterValue.setValue(self.mCommonGrazedLandValue)
 
-        # Initialize the parameters table
+        # Initialize table and fodder
         self.refreshAnimalParameterTable()
         self.populateFodder()
 
     def setupAnimalsCombo(self):
-        """Set up the animals combo box with available animals."""
+        """Set up the animals combo box."""
         myAnimalsMap = LaUtils.getAvailableAnimals()
-
-        for animalGuid, myAnimal in myAnimalsMap.items():
-            myName = myAnimal.name
+        for guid, animal in myAnimalsMap.items():
+            myName = animal.name
             myIcon = QIcon()
             myIcon.addFile(":/localdata.png")
-            self.cboAnimal.addItem(myName, animalGuid)
+            self.cboAnimal.addItem(myIcon, myName, guid)
 
     def setupAreaUnitsCombo(self):
         """Set up the area units combo box."""
+        self.cbAreaUnits.clear()
         self.cbAreaUnits.addItem("Dunum")
         self.cbAreaUnits.addItem("Hectare")
 
     def setupEnergyTypeCombo(self):
         """Set up the energy type combo box."""
+        self.cbSpecificLandEnergyType.clear()
         self.cbSpecificLandEnergyType.addItem("KCalories")
         self.cbSpecificLandEnergyType.addItem("TDN")
 
     def setupFallowComboBox(self):
-        """Set up the fallow usage combo box."""
-        self.cbFallowUsage.addItem("Do Not Graze Fallow", "None")
-        self.cbFallowUsage.addItem("HIGH Fallow Priority", "High")
-        self.cbFallowUsage.addItem("MED Fallow Priority", "Medium")
-        self.cbFallowUsage.addItem("LOW Fallow Priority", "Low")
+        """Set up the fallow usage combo box with proper priority values."""
+        self.cbFallowUsage.clear()
+        self.cbFallowUsage.addItem("HIGH Fallow Priority", Priority.High)
+        self.cbFallowUsage.addItem("MED Fallow Priority", Priority.Medium)
+        self.cbFallowUsage.addItem("LOW Fallow Priority", Priority.Low)
+        self.cbFallowUsage.addItem("No Fallow Priority", Priority.None_)
 
     def readSettings(self):
         """Read window settings."""
@@ -115,31 +130,98 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
 
     def selectAnimalParameter(self, theFileName: str):
         """Load and display the selected animal parameter."""
+        LaUtils.debug.log(f"Selecting animal parameter with guid: {theFileName}")
+        
+        # Make sure we have the .xml suffix
+        if not theFileName.endswith(".xml"):
+            theFileName = f"{theFileName}.xml"
+        
         myAnimalParameterDir = LaUtils.userAnimalParameterProfilesDirPath()
-        self.mAnimalParameter = LaAnimalParameter()
-        self.mAnimalParameter.fromXmlFile(os.path.join(myAnimalParameterDir, theFileName))
-        self.showAnimalParameter()
+        filePath = os.path.join(myAnimalParameterDir, theFileName)
+        
+        LaUtils.debug.log(f"Loading animal parameter from file: {filePath}")
+        
+        if os.path.exists(filePath):
+            self.mAnimalParameter = LaAnimalParameter()
+            result = self.mAnimalParameter.fromXmlFile(filePath)
+            LaUtils.debug.log(f"File loaded successfully: {result}")
+            if result:
+                self.showAnimalParameter()
+            else:
+                LaUtils.debug.log("ERROR: Failed to load animal parameter from XML file")
+        else:
+            LaUtils.debug.log(f"ERROR: Animal parameter file does not exist: {filePath}")
 
     def showAnimalParameter(self):
         """Display the current animal parameter in the UI."""
-        self.leName.setText(self.mAnimalParameter.name)
-        self.leDescription.setText(self.mAnimalParameter.description)
-        self.setComboToDefault(self.cboAnimal, self.mAnimalParameter.animalGuid)
-        self.sbPercentTameMeat.setValue(self.mAnimalParameter.percentTameMeat)
-        self.checkBoxCommonRaster.setChecked(self.mAnimalParameter.useCommonGrazingLand)
-        self.checkBoxSpecificRaster.setChecked(self.mAnimalParameter.useSpecificGrazingLand)
-        self.refreshFodderTable()
+        # Debug log to see what we're trying to display
+        LaUtils.debug.log(f"showAnimalParameter: Displaying animal parameter: {self.mAnimalParameter._mName}")
+        LaUtils.debug.log(f"showAnimalParameter: Properties: animalGuid={self.mAnimalParameter.animalGuid}, percentTameMeat={self.mAnimalParameter.percentTameMeat}")
+        
+        # Set text fields and checkboxes
+        self.leName.setText(str(self.mAnimalParameter.name))
+        LaUtils.debug.log(f"showAnimalParameter: Set name text to: {self.mAnimalParameter.name}")
+        
+        self.leDescription.setText(str(self.mAnimalParameter.description))
+        LaUtils.debug.log(f"showAnimalParameter: Set description text to: {self.mAnimalParameter.description}")
+        
+        # Check if animals combo exists and has items
+        LaUtils.debug.log(f"showAnimalParameter: cboAnimal item count: {self.cboAnimal.count()}")
+        
+        result = self.setComboToDefault(self.cboAnimal, str(self.mAnimalParameter.animalGuid))
+        LaUtils.debug.log(f"showAnimalParameter: setComboToDefault for animal guid returned: {result}")
+        
+        self.sbPercentTameMeat.setValue(float(self.mAnimalParameter.percentTameMeat))
+        LaUtils.debug.log(f"showAnimalParameter: Set percent tame meat to: {float(self.mAnimalParameter.percentTameMeat)}")
+        
+        # Continue with other widgets...
+        
+        self.checkBoxCommonRaster.setChecked(bool(getattr(self.mAnimalParameter, '_mUseCommonGrazingLand', False)))
+        self.checkBoxSpecificRaster.setChecked(bool(getattr(self.mAnimalParameter, '_mUseSpecificGrazingLand', False)))
+        
+        # Set area units and energy type
+        areaUnits = getattr(self.mAnimalParameter, '_areaUnits', AreaUnits.Dunum)
+        self.cbAreaUnits.setCurrentText("Dunum" if areaUnits == AreaUnits.Dunum else "Hectare")
+        
+        energyType = getattr(self.mAnimalParameter, '_energyType', EnergyType.KCalories)
+        self.cbSpecificLandEnergyType.setCurrentText("KCalories" if energyType == EnergyType.KCalories else "TDN")
 
-        # Set fallow usage combo box
-        fallowUsage = self.mAnimalParameter.fallowUsage
+        # Update animal picture if available
+        animalGuid = str(getattr(self.mAnimalParameter, '_mAnimalGuid', ""))
+        if animalGuid:
+            animals_map = LaUtils.getAvailableAnimals()
+            if animalGuid in animals_map:
+                animal = animals_map[animalGuid]
+                if hasattr(animal, 'imageFile') and animal.imageFile:
+                    image_path = LaUtils.resolvePath(str(animal.imageFile), 'image')
+                    if os.path.exists(image_path):
+                        pixmap = QPixmap(image_path)
+                        if not pixmap.isNull():
+                            self.lblAnimalPic.setPixmap(pixmap.scaled(
+                                self.lblAnimalPic.width(),
+                                self.lblAnimalPic.height(),
+                                Qt.KeepAspectRatio,
+                                Qt.SmoothTransformation
+                            ))
+                            return
+            self.lblAnimalPic.clear()
+
+        # Set fallow usage combo box based on Priority enum
+        fallowUsage = getattr(self.mAnimalParameter, '_fallowUsage', Priority.None_)
+        index = -1
         if fallowUsage == Priority.High:
-            self.setComboToDefault(self.cbFallowUsage, "High")
+            index = self.cbFallowUsage.findText("HIGH Fallow Priority")
         elif fallowUsage == Priority.Medium:
-            self.setComboToDefault(self.cbFallowUsage, "Medium")
+            index = self.cbFallowUsage.findText("MED Fallow Priority")
         elif fallowUsage == Priority.Low:
-            self.setComboToDefault(self.cbFallowUsage, "Low")
+            index = self.cbFallowUsage.findText("LOW Fallow Priority")
         else:
-            self.setComboToDefault(self.cbFallowUsage, "None")
+            index = self.cbFallowUsage.findText("No Fallow Priority")
+        
+        if index >= 0:
+            self.cbFallowUsage.setCurrentIndex(index)
+
+        self.refreshFodderTable()
 
     def on_toolNew_clicked(self):
         """Handle new button click."""
@@ -189,32 +271,29 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
 
     def on_pbnApply_clicked(self):
         """Handle apply button click."""
-        self.mAnimalParameter.name = self.leName.text()
-        self.mAnimalParameter.description = self.leDescription.text()
-        self.mAnimalParameter.animalGuid = self.cboAnimal.currentData()
-        self.mAnimalParameter.percentTameMeat = self.sbPercentTameMeat.value()
-        self.mAnimalParameter.useCommonGrazingLand = self.checkBoxCommonRaster.isChecked()
-        self.mAnimalParameter.useSpecificGrazingLand = self.checkBoxSpecificRaster.isChecked()
+        # Basic parameters
+        self.mAnimalParameter._mName = self.leName.text()
+        self.mAnimalParameter._mDescription = self.leDescription.text()
+        self.mAnimalParameter._mAnimalGuid = self.cboAnimal.currentData()
+        self.mAnimalParameter._mPercentTameMeat = self.sbPercentTameMeat.value()
+        self.mAnimalParameter._mUseCommonGrazingLand = self.checkBoxCommonRaster.isChecked()
+        self.mAnimalParameter._mUseSpecificGrazingLand = self.checkBoxSpecificRaster.isChecked()
 
         # Set energy type and area units
-        energyType = LaEnergyType.KCalories if self.cbSpecificLandEnergyType.currentText() == "KCalories" else LaEnergyType.TDN
-        areaUnits = AreaUnits.Dunum if self.cbAreaUnits.currentText() == "Dunum" else AreaUnits.Hectare
+        self.mAnimalParameter._energyType = EnergyType.KCalories if self.cbSpecificLandEnergyType.currentText() == "KCalories" else EnergyType.TDN
+        self.mAnimalParameter._areaUnits = AreaUnits.Dunum if self.cbAreaUnits.currentText() == "Dunum" else AreaUnits.Hectare
 
-        # Set fallow usage
-        fallowText = self.cbFallowUsage.currentText()
-        if fallowText == "HIGH Fallow Priority":
-            self.mAnimalParameter.fallowUsage = Priority.High
-        elif fallowText == "MED Fallow Priority":
-            self.mAnimalParameter.fallowUsage = Priority.Medium
-        elif fallowText == "LOW Fallow Priority":
-            self.mAnimalParameter.fallowUsage = Priority.Low
-        else:
-            self.mAnimalParameter.fallowUsage = Priority.None_
+        # Set fallow usage based on combo box data
+        index = self.cbFallowUsage.currentIndex()
+        if index >= 0:
+            self.mAnimalParameter._fallowUsage = self.cbFallowUsage.itemData(index)
 
-        # Save to file
+        # Save parameter to file
         filepath = os.path.join(LaUtils.userAnimalParameterProfilesDirPath(),
                               f"{self.mAnimalParameter.guid}.xml")
         self.mAnimalParameter.toXmlFile(filepath)
+        
+        # Refresh displays
         self.refreshAnimalParameterTable(str(self.mAnimalParameter.guid))
         self.refreshFodderTable()
 
@@ -231,8 +310,8 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
 
         for guid, parameter in self.mAnimalParameterMap.items():
             self.tblAnimalParameterProfiles.insertRow(myCurrentRow)
-            myFileItem = QTableWidgetItem(guid)
-            myNameItem = QTableWidgetItem(parameter.name)
+            myFileItem = QTableWidgetItem(str(guid))
+            myNameItem = QTableWidgetItem(str(getattr(parameter, '_mName', "")))
 
             self.tblAnimalParameterProfiles.setItem(myCurrentRow, 0, myFileItem)
             self.tblAnimalParameterProfiles.setItem(myCurrentRow, 1, myNameItem)
@@ -247,7 +326,7 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
 
         # Set headers
         self.tblAnimalParameterProfiles.setHorizontalHeaderLabels(["File Name", "Name"])
-        self.tblAnimalParameterProfiles.setColumnWidth(0, 0)
+        self.tblAnimalParameterProfiles.setColumnWidth(0, 0)  # Hide GUID column
         self.tblAnimalParameterProfiles.setColumnWidth(1, self.tblAnimalParameterProfiles.width())
         self.tblAnimalParameterProfiles.horizontalHeader().hide()
         self.tblAnimalParameterProfiles.verticalHeader().hide()
