@@ -103,7 +103,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             myFile.write(myXmlContent)
 
     @pyqtProperty(str, notify=nameChanged)
-    def name(self) -> str:
+    def name(self) -> str: # type: ignore
         """Get the name of the animal parameter."""
         return str(self._mName)
 
@@ -116,7 +116,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self.nameChanged.emit(value)
 
     @pyqtProperty(str, notify=descriptionChanged)
-    def description(self) -> str:
+    def description(self) -> str: # type: ignore
         """Get the description of the animal parameter."""
         return str(self._mDescription)
 
@@ -139,7 +139,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self.guidChanged.emit(guid)
 
     @pyqtProperty(str, notify=animalGuidChanged)
-    def animalGuid(self) -> str:
+    def animalGuid(self) -> str: # type: ignore
         """Get the animal GUID."""
         return str(self._mAnimalGuid)
 
@@ -152,7 +152,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self.animalGuidChanged.emit(value)
 
     @pyqtProperty(float, notify=percentTameMeatChanged)
-    def percentTameMeat(self) -> float:
+    def percentTameMeat(self) -> float: # type: ignore
         """Get the percentage of tame meat."""
         return float(self._mPercentTameMeat)
 
@@ -165,7 +165,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self.percentTameMeatChanged.emit(value)
 
     @pyqtProperty(bool, notify=useCommonGrazingLandChanged)
-    def useCommonGrazingLand(self) -> bool:
+    def useCommonGrazingLand(self) -> bool: # type: ignore
         """Get whether common grazing land is used."""
         return bool(self._mUseCommonGrazingLand)
 
@@ -178,7 +178,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self.useCommonGrazingLandChanged.emit(value)
 
     @pyqtProperty(bool, notify=useSpecificGrazingLandChanged)
-    def useSpecificGrazingLand(self) -> bool:
+    def useSpecificGrazingLand(self) -> bool: # type: ignore
         """Get whether specific grazing land is used."""
         return bool(self._mUseSpecificGrazingLand)
 
@@ -191,7 +191,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self.useSpecificGrazingLandChanged.emit(value)
 
     @pyqtProperty(float, notify=fodderUseChanged)
-    def fodderUse(self) -> float:
+    def fodderUse(self) -> float: # type: ignore
         """Get the fodder use value."""
         return float(self._mFodderUse)
 
@@ -204,11 +204,11 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self.fodderUseChanged.emit(value)
 
     @pyqtProperty('QVariantMap', notify=foodSourceMapChanged)
-    def foodSourceMap(self) -> Dict[str, LaFoodSource]:
+    def foodSourceMap(self) -> Dict[str, LaFoodSource]: # type: ignore
         """Get the food source map."""
         return dict(self._mFoodSourceMap)
 
-    @foodSourceMap.setter 
+    @foodSourceMap.setter
     def foodSourceMap(self, value: Dict[str, LaFoodSource]) -> None:
         """Set the food source map."""
         value = dict(value)
@@ -217,7 +217,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self.foodSourceMapChanged.emit(value)
 
     @pyqtProperty(object, notify=fallowUsageChanged)
-    def fallowUsage(self) -> Priority:
+    def fallowUsage(self) -> Priority: # type: ignore
         """Get the fallow usage priority."""
         return Priority(self._fallowUsage)
 
@@ -239,7 +239,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self.rasterNameChanged.emit(rasterName)
 
     @pyqtProperty(object, notify=areaUnitsChanged)  # Updated to use signal
-    def areaUnits(self) -> AreaUnits:
+    def areaUnits(self) -> AreaUnits: # type: ignore
         """Get the area units."""
         return AreaUnits(self._areaUnits)
 
@@ -251,7 +251,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self.areaUnitsChanged.emit(value)  # Emit signal when value changes
 
     @pyqtProperty(object, notify=energyTypeChanged)  # Updated to use signal
-    def energyType(self) -> EnergyType:
+    def energyType(self) -> EnergyType: # type: ignore
         """Get the energy type."""
         return EnergyType(self._energyType)
 

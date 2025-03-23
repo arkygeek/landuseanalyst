@@ -167,19 +167,16 @@ class LaUtils:
                 filePath = myFileInfo.absoluteFilePath()
                 LaUtils.debug.log(f"Loading animal from file: {filePath}", "Animals")
                 myAnimal = LaAnimal()
-                loadSuccess = myAnimal.fromXmlFile(filePath)
-                if not loadSuccess:
-                    LaUtils.debug.log(f"Failed to load animal from {filePath}", "Animals")
-                    continue
-                if myAnimal.name == "":
-                    LaUtils.debug.log(f"Animal from {filePath} has no name, skipping", "Animals")
-                    continue
-
-                # Get the actual string GUID value
-                actualGuid = str(myAnimal.guid) if callable(getattr(myAnimal, 'guid', None)) else myAnimal.guid
-
-                myAnimalsMap[actualGuid] = myAnimal
-                LaUtils.debug.log(f"Successfully loaded animal: {myAnimal.name} with GUID: {actualGuid}", "Animals")
+                if myAnimal.fromXmlFile(filePath):
+                    # Store the GUID as a string
+                    guid_str = str(myAnimal.guid)
+                    LaUtils.debug.log(f"Loading animal with GUID: {guid_str}")
+                    if myAnimal.name:
+                        LaUtils.debug.log(f"Loaded animal name: {myAnimal.name}")
+                        myAnimalsMap[guid_str] = myAnimal
+                        LaUtils.debug.log(f"Successfully loaded animal: {myAnimal.name}")
+                        continue
+                    LaUtils.debug.log(f"Animal has no name, skipping")
 
         LaUtils.debug.log(f"Returning {len(myAnimalsMap)} animals", "Animals")
         return myAnimalsMap
@@ -905,3 +902,40 @@ class LaUtils:
     def get_message_history() -> List[str]:
         """Returns the debug message history."""
         return LaDebugLogger._history.copy()
+
+    @staticmethod
+    def userImagesPaths() -> List[str]:
+        """Returns a list of paths where images may be located."""
+        paths = [
+            LaUtils.userImagesDirPath(),  # User's images directory
+            os.path.join(LaUtils.userDataPath(), 'images'),  # User data images
+            os.path.join(LaUtils.pluginPath(), 'images')  # Plugin images
+        ]
+        return [p for p in paths if os.path.exists(p)]
+
+    @staticmethod
+    def resolveImagePath(filename: str) -> str:
+        """Resolve the path to an image file by searching in multiple locations.
+    
+        Args:
+            filename: Name of the image file to find
+    
+        Returns:
+            Full path to the image if found, empty string if not found
+        """
+        if not filename:
+            return ""
+    
+        # If it's an absolute path and exists, return it
+        if os.path.isabs(filename) and os.path.exists(filename):
+            return filename
+    
+        # Search in each images directory
+        for path in LaUtils.userImagesPaths():
+            full_path = os.path.join(path, filename)
+            if os.path.exists(full_path):
+                LaUtils.debug.log(f"Found image at: {full_path}")
+                return full_path
+    
+        LaUtils.debug.log(f"Could not find image: {filename}")
+        return ""

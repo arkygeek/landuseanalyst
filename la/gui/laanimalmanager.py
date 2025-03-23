@@ -240,8 +240,11 @@ class LaAnimalManager(LaAnimalManagerBase):
         if not self.animal:
             return
 
+        # Basic info
         self.leName.setText(self.animal.name)
         self.leDescription.setText(self.animal.description)
+
+        # Meat production
         self.sbMeatFoodValue.setValue(self.animal.meatFoodValue)
         self.sbUsableMeatPercent.setValue(self.animal.usableMeat)
         self.sbKillWeight.setValue(self.animal.killWeight)
@@ -250,49 +253,60 @@ class LaAnimalManager(LaAnimalManagerBase):
         self.sbFemalesToMales.setValue(self.animal.femalesPerMale)
         self.sbGrowTime.setValue(self.animal.growTime)
         self.sbDeathRate.setValue(self.animal.deathRate)
-        # Handle the EnergyType enum in showAnimal
-        if isinstance(self.animal.feedEnergyType, LaEnergyType):
-            # If it's already an enum, use its value directly
-            energyTypeIndex = self.animal.feedEnergyType.value
-        else:
-            # Try to convert to int or look up in the enum
-            try:
-                energyTypeIndex = int(self.animal.feedEnergyType)
-            except (ValueError, TypeError):
-                # Convert string representation to enum value if possible
-                energyTypeStr = str(self.animal.feedEnergyType)
-                for etype in LaEnergyType:
-                    if etype.name in energyTypeStr:
-                        energyTypeIndex = etype.value
-                        break
-                else:
-                    energyTypeIndex = 0  # Default to first item
 
-        # Use min/max to ensure the index is within valid range
-        energyTypeIndex = max(0, min(self.cbFeedEnergyType.count() - 1, energyTypeIndex))
-        self.cbFeedEnergyType.setCurrentIndex(energyTypeIndex)
+        # Handle feed energy type - get the actual enum value
+        energy_type = self.animal._feedEnergyType  # Access the internal value directly
+        try:
+            if isinstance(energy_type, LaEnergyType):
+                energy_index = energy_type.value
+            else:
+                energy_index = 0  # Default to first item
+        except (ValueError, TypeError):
+            energy_index = 0
+
+        energy_index = max(0, min(self.cbFeedEnergyType.count() - 1, energy_index))
+        self.cbFeedEnergyType.setCurrentIndex(energy_index)
+
+        # Energy values
         self.sbEnergyForPregnant.setValue(self.animal.gestating)
         self.sbEnergyForLactating.setValue(self.animal.lactating)
         self.sbEnergyForMaintenance.setValue(self.animal.maintenance)
         self.sbEnergyForJuvenilePerKg.setValue(self.animal.juvenile)
+
+        # Reproduction
         self.sbSexualMaturity.setValue(self.animal.sexualMaturity)
         self.sbBreedingLife.setValue(self.animal.breedingExpectancy)
         self.sbYoungPerBirth.setValue(self.animal.youngPerBirth)
         self.sbWeaningAge.setValue(self.animal.weaningAge)
         self.sbWeaningWeight.setValue(self.animal.weaningWeight)
 
-        # Update the image if available
-        if self.animal.imageFile:
-            image_path = LaUtils.resolvePath(str(self.animal.imageFile), 'image')
+        # Update the image display
+        image_file = getattr(self.animal, '_imageFile', '')  # Access internal value directly
+        if image_file:
+            # Use LaUtils.resolveImagePath to find the image
+            image_path = LaUtils.resolveImagePath(image_file)
+            LaUtils.debug.log(f"Loading animal image from: {image_path}")
+
             if os.path.exists(image_path):
                 pixmap = QPixmap(image_path)
                 if not pixmap.isNull():
-                    self.lblAnimalPix.setPixmap(pixmap)
+                    # Scale the pixmap to fit the label while maintaining aspect ratio
+                    scaled_pixmap = pixmap.scaled(
+                        self.lblAnimalPix.width(),
+                        self.lblAnimalPix.height(),
+                        Qt.KeepAspectRatio,
+                        Qt.SmoothTransformation
+                    )
+                    self.lblAnimalPix.setPixmap(scaled_pixmap)
+                    LaUtils.debug.log(f"Successfully loaded and displayed image: {image_path}")
                 else:
+                    LaUtils.debug.log(f"Failed to load image into pixmap: {image_path}")
                     self.lblAnimalPix.clear()
             else:
+                LaUtils.debug.log(f"Image file not found: {image_path}")
                 self.lblAnimalPix.clear()
         else:
+            LaUtils.debug.log("No image file specified for animal")
             self.lblAnimalPix.clear()
 
     def on_toolNew_clicked(self):
@@ -350,49 +364,57 @@ class LaAnimalManager(LaAnimalManagerBase):
         self.animal.name = self.leName.text()
         self.animal.description = self.leDescription.text()
 
-        # Set additional animal properties from form values
-        if hasattr(self, 'sbMeatFoodValue'):
-            self.animal.meatFoodValue = self.sbMeatFoodValue.value()
-        if hasattr(self, 'sbUsableMeatPercent'):
-            self.animal.usableMeat = self.sbUsableMeatPercent.value()
-        if hasattr(self, 'sbKillWeight'):
-            self.animal.killWeight = self.sbKillWeight.value()
-        if hasattr(self, 'sbAdultWeight'):
-            self.animal.adultWeight = self.sbAdultWeight.value()
-        if hasattr(self, 'sbGrowTime'):
-            self.animal.growTime = self.sbGrowTime.value()
-        if hasattr(self, 'sbDeathRate'):
-            self.animal.deathRate = self.sbDeathRate.value()
+        # Set basic properties
+        self.animal.meatFoodValue = self.sbMeatFoodValue.value()
+        self.animal.usableMeat = self.sbUsableMeatPercent.value()
+        self.animal.killWeight = self.sbKillWeight.value()
+        self.animal.adultWeight = self.sbAdultWeight.value()
+        self.animal.growTime = self.sbGrowTime.value()
+        self.animal.deathRate = self.sbDeathRate.value()
 
-        # Set feed energy type
-        if hasattr(self, 'cbFeedEnergyType'):
-            self.animal.feedEnergyType = LaEnergyType(self.cbFeedEnergyType.currentIndex())
+        # Set feed energy type using internal attribute
+        self.animal._feedEnergyType = LaEnergyType(self.cbFeedEnergyType.currentIndex())
 
         # Set reproduction parameters
-        if hasattr(self, 'sbSexualMaturity'):
-            self.animal.sexualMaturity = self.sbSexualMaturity.value()
-        if hasattr(self, 'sbBreedingLife'):
-            self.animal.breedingExpectancy = self.sbBreedingLife.value()
-        if hasattr(self, 'sbYoungPerBirth'):
-            self.animal.youngPerBirth = self.sbYoungPerBirth.value()
-        if hasattr(self, 'sbWeaningAge'):
-            self.animal.weaningAge = self.sbWeaningAge.value()
-        if hasattr(self, 'sbWeaningWeight'):
-            self.animal.weaningWeight = self.sbWeaningWeight.value()
+        self.animal.sexualMaturity = self.sbSexualMaturity.value()
+        self.animal.breedingExpectancy = self.sbBreedingLife.value()
+        self.animal.youngPerBirth = self.sbYoungPerBirth.value()
+        self.animal.weaningAge = self.sbWeaningAge.value()
+        self.animal.weaningWeight = self.sbWeaningWeight.value()
 
-        # Store just the filename, not the full path for the image
+        # Handle image file
         if self.imageFile:
-            self.animal.imageFile = os.path.basename(self.imageFile)
-        LaUtils.debug.log(f"DEBUG: Saving crop with image: {self.animal.imageFile}")
+            # Get just the filename
+            image_filename = os.path.basename(self.imageFile)
+            # Copy image to images directory if needed
+            target_image_path = os.path.join(LaUtils.userImagesDirPath(), image_filename)
+
+            if self.imageFile != target_image_path:  # Only copy if source is different
+                try:
+                    # Ensure images directory exists
+                    os.makedirs(LaUtils.userImagesDirPath(), exist_ok=True)
+                    # Copy the image file
+                    import shutil
+                    shutil.copy2(self.imageFile, target_image_path)
+                    LaUtils.debug.log(f"Copied image to: {target_image_path}")
+                    # Update animal's image file property to just the filename
+                    self.animal._imageFile = image_filename  # Set internal attribute directly
+                except Exception as e:
+                    LaUtils.debug.log(f"Failed to copy image file: {str(e)}")
+                    QMessageBox.warning(self, "Image Copy Failed",
+                                     f"Failed to copy image file to {target_image_path}: {str(e)}")
+                    return
 
         # Save animal to file
         target_file = os.path.join(LaUtils.userAnimalProfilesDirPath(), f"{self.animal.guid}.xml")
+        LaUtils.debug.log(f"Saving animal to: {target_file}")
         success = self.animal.toXmlFile(target_file)
 
         if success:
             self.refreshAnimalTable(self.animal.guid)
         else:
             QMessageBox.warning(self, "Landuse Analyst", f"Failed to save animal to {target_file}")
+            return
 
     def on_pbnAnimalPic_clicked(self):
         """Select an image for the animal."""

@@ -1,3 +1,4 @@
+import os
 from typing import Optional, Type, Union, Dict, Any, cast
 from dataclasses import dataclass
 from PyQt5.QtCore import QObject, pyqtProperty, pyqtSignal
@@ -743,9 +744,6 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
 
         Returns:
             True if loaded successfully, False otherwise
-
-        Raises:
-            ValueError: If required elements are missing or invalid
         """
         from la.lib.lautils import LaUtils # we do this to avoid circular import issues
 
@@ -771,9 +769,8 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
                 element = myTopElement.firstChildElement(elementName)
                 if element.isNull():
                     return default
-                text = element.text()
                 try:
-                    return int(text)
+                    return int(element.text())
                 except (ValueError, TypeError):
                     return default
 
@@ -782,9 +779,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
                 element = myTopElement.firstChildElement(primaryName)
                 if element.isNull() and fallbackName:
                     element = myTopElement.firstChildElement(fallbackName)
-                if element.isNull():
-                    return defaultValue
-                return element.text()
+                return element.text() if not element.isNull() else defaultValue
 
             # Basic info - try both 'name' and 'n' tags for compatibility
             self._name = LaUtils.xmlDecode(getElementText("name", "n", "No Name Set"))
@@ -835,12 +830,20 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
             # Image
             imageElement = myTopElement.firstChildElement("imageFile")
             if not imageElement.isNull():
-                self._imageFile = LaUtils.xmlDecode(imageElement.text())
+                image_file = LaUtils.xmlDecode(imageElement.text())
+                # Store just the filename, not the full path
+                self._imageFile = os.path.basename(image_file)
+                LaUtils.debug.log(f"Set animal image file to: {self._imageFile}")
             else:
-                # Set default image file based on animal name
-                defaultImage = str(self._name).lower() + ".png"
-                self._imageFile = defaultImage
-                LaUtils.debug.log(f"No image file specified, using default: {defaultImage}", "UI")
+                # Try to set a default image based on animal name
+                default_image = str(self._name).lower() + ".png"
+                image_path = LaUtils.resolvePath(default_image, 'image')
+                if os.path.exists(image_path):
+                    self._imageFile = default_image
+                    LaUtils.debug.log(f"Using default image file: {self._imageFile}")
+                else:
+                    self._imageFile = ""
+                    LaUtils.debug.log("No image file found")
 
             LaUtils.debug.log(f"Successfully loaded animal: {self._name}")
             return True
@@ -854,17 +857,16 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
     def toXml(self) -> str:
         from la.lib.lautils import LaUtils # we do this to avoid circular import issues
 
-        """Generate XML representation of animal data."""
         myString = f'<animal guid="{self.guid}">\n'
-        myString += f'  <name>{LaUtils.xmlEncode(str(cast(str, self._name)))}</name>\n'
-        myString += f'  <description>{LaUtils.xmlEncode(str(cast(str, self._description)))}</description>\n'
+        myString += f'  <n>{LaUtils.xmlEncode(str(self._name))}</n>\n'
+        myString += f'  <description>{LaUtils.xmlEncode(str(self._description))}</description>\n'
         myString += f'  <meatFoodValue>{self._meatFoodValue}</meatFoodValue>\n'
         myString += f'  <usableMeat>{self._usableMeat}</usableMeat>\n'
         myString += f'  <killWeight>{self._killWeight}</killWeight>\n'
         myString += f'  <adultWeight>{self._adultWeight}</adultWeight>\n'
         myString += f'  <breedingExpectancy>{self._breedingExpectancy}</breedingExpectancy>\n'
         myString += f'  <conceptionEfficiency>{self._conceptionEfficiency}</conceptionEfficiency>\n'
-        myString += f'  <femalesToMales>{self._femalesToMales}</femalesToMales>\n'
+        myString += f'  <femalesToMales>{self._femalesToMales}</femalesToMales>\n'  # Fixed closing tag
         myString += f'  <growTime>{self._growTime}</growTime>\n'
         if self._feedEnergyType == LaEnergyType.KCalories:
             myString += '  <feedEnergyType>KCalories</feedEnergyType>\n'
@@ -882,10 +884,10 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
         myString += f'  <gestationTime>{self._gestationTime}</gestationTime>\n'
         myString += f'  <estrousCycle>{self._estrousCycle}</estrousCycle>\n'
         myString += f'  <lactationTime>{self._lactationTime}</lactationTime>\n'
-        myString += f'  <milk>{bool(self._milk)}</milk>\n'
+        myString += f'  <milk>{1 if self._milk else 0}</milk>\n'
         myString += f'  <milkGramsPerDay>{self._milkGramsPerDay}</milkGramsPerDay>\n'
         myString += f'  <milkFoodValue>{self._milkFoodValue}</milkFoodValue>\n'
-        myString += f'  <fleece>{bool(self._fleece)}</fleece>\n'
+        myString += f'  <fleece>{1 if self._fleece else 0}</fleece>\n'
         myString += f'  <fleeceWeightKg>{self._fleeceWeightKg}</fleeceWeightKg>\n'
         myString += f'  <imageFile>{LaUtils.xmlEncode(str(self._imageFile))}</imageFile>\n'
         myString += '</animal>\n'
