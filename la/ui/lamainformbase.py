@@ -309,7 +309,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             for myGuid, myAnimal in myAnimalsMap.items():
                 # Get the actual GUID string
                 actualGuid = str(myAnimal.guid()) if callable(getattr(myAnimal, 'guid', None)) else str(myGuid)
-                
+
                 LaUtils.debug.log(f"Processing animal: {myAnimal.name} (GUID: {actualGuid})", "Animals")
 
                 myName = myAnimal.name
@@ -356,7 +356,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                     if myAnimalParameter is None:
                         continue
 
-                    # Get animal GUID from parameter, handling both property and method cases 
+                    # Get animal GUID from parameter, handling both property and method cases
                     paramAnimalGuid = None
                     if hasattr(myAnimalParameter, 'animalGuid'):
                         if isinstance(myAnimalParameter.animalGuid, str):
@@ -927,7 +927,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         """
         # Ensure we have a string GUID
         animalGuid = str(animalGuid)
-        
+
         # Check if the animal is already in the list
         for i in range(self.listWidgetCalculationsAnimal.count()):
             item = self.listWidgetCalculationsAnimal.item(i)

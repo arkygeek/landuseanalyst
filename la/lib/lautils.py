@@ -174,10 +174,10 @@ class LaUtils:
                 if myAnimal.name == "":
                     LaUtils.debug.log(f"Animal from {filePath} has no name, skipping", "Animals")
                     continue
-                
+
                 # Get the actual string GUID value
                 actualGuid = str(myAnimal.guid) if callable(getattr(myAnimal, 'guid', None)) else myAnimal.guid
-                
+
                 myAnimalsMap[actualGuid] = myAnimal
                 LaUtils.debug.log(f"Successfully loaded animal: {myAnimal.name} with GUID: {actualGuid}", "Animals")
 
@@ -209,14 +209,14 @@ class LaUtils:
                 if myAnimal.name == "":
                     LaUtils.debug.log(f"Animal from {myFileInfo.absoluteFilePath()} has no name, skipping", "Animals")
                     continue
-                
+
                 # Get the actual string GUID value for comparison
                 animalGuid = myAnimal.guid() if callable(getattr(myAnimal, 'guid', None)) else myAnimal.guid
-                
+
                 if animalGuid == theGuid:
                     LaUtils.debug.log(f"Found animal matching GUID {theGuid}", "Animals")
                     return myAnimal
-                    
+
         LaUtils.debug.log(f"No animal found with GUID {theGuid}, returning blank animal", "Animals")
         return LaAnimal()
 
@@ -406,13 +406,13 @@ class LaUtils:
                     if not myAnimalParameter.name:
                         LaUtils.debug.log(f"Animal parameter from {filePath} has no name, skipping", "AnimalParams")
                         continue
-                    
+
                     # Get the actual GUID string, not a method reference
                     guidValue = myAnimalParameter._mGuid
-                    
+
                     # Debug the parameter values
                     LaUtils.debug.log(f"Loaded animal parameter: '{myAnimalParameter.name}', linked to animal: {myAnimalParameter.animalGuid}, percentTameMeat: {myAnimalParameter.percentTameMeat}", "AnimalParams")
-                    
+
                     # Add the animal parameter to the map using the actual GUID string
                     if guidValue:
                         myMap[guidValue] = myAnimalParameter
@@ -796,27 +796,27 @@ class LaUtils:
     @staticmethod
     def resolvePath(path: str, type: str = '') -> str:
         """Resolve a path to a resource, searching in multiple possible locations.
-        
+
         Args:
             path: The path or filename to resolve
             type: The type of resource ('image', 'data', etc.)
-            
+
         Returns:
             str: The full resolved path if found, otherwise the original path
         """
         if not path:
             return path
-            
+
         # If it's already an absolute path and exists, return it
         if os.path.isabs(path) and os.path.exists(path):
             return path
-            
+
         # Get the filename only
         filename = os.path.basename(path)
-        
+
         # List of possible directories to search in
         search_paths = []
-        
+
         if type.lower() == 'image':
             # Add image-specific paths
             search_paths.extend([
@@ -824,20 +824,20 @@ class LaUtils:
                 os.path.join(LaUtils.userProfilesDirPath(), 'images'),
                 os.path.join(LaUtils.pluginPath(), 'images')
             ])
-        
+
         # Add general paths
         search_paths.extend([
             LaUtils.userProfilesDirPath(),
             LaUtils.pluginPath()
         ])
-        
+
         # Search for the file
         for search_path in search_paths:
             full_path = os.path.join(search_path, filename)
             if os.path.exists(full_path):
                 LaUtils.debug.log(f"Found resource at: {full_path}")
                 return full_path
-                
+
         # If not found, return original path
         LaUtils.debug.log(f"Could not resolve path: {path}", "Warning")
         return path
@@ -901,7 +901,7 @@ class LaUtils:
         """Returns the path to the plugin directory."""
         return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-    @staticmethod 
+    @staticmethod
     def get_message_history() -> List[str]:
         """Returns the debug message history."""
         return LaDebugLogger._history.copy()

@@ -272,7 +272,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
 
     # Properties with type hints and docstrings
     @pyqtProperty(str, notify=nameChanged)
-    def name(self) -> str:
+    def name(self) -> str: # type: ignore
         """Get the animal's common name."""
         return cast(str, self._name)
 
@@ -288,7 +288,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
             self.nameChanged.emit(value)
 
     @pyqtProperty(str, notify=descriptionChanged)
-    def description(self) -> str:
+    def description(self) -> str: # type: ignore
         """Get the animal's description."""
         return cast(str, self._description)
 
@@ -304,7 +304,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
             self.descriptionChanged.emit(value)
 
     @pyqtProperty(int, notify=meatFoodValueChanged)
-    def meatFoodValue(self) -> int:
+    def meatFoodValue(self) -> int: # type: ignore
         """Get the animal's meat food value."""
         return cast(int, self._meatFoodValue)
 
@@ -320,7 +320,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
             self.meatFoodValueChanged.emit(value)
 
     @pyqtProperty(int, notify=usableMeatChanged)
-    def usableMeat(self) -> int:
+    def usableMeat(self) -> int: # type: ignore
         """Get the animal's usable meat percentage."""
         return cast(int, self._usableMeat)
 
@@ -336,7 +336,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
             self.usableMeatChanged.emit(value)
 
     @pyqtProperty(int, notify=killWeightChanged)
-    def killWeight(self) -> int:
+    def killWeight(self) -> int: # type: ignore
         """Get the animal's kill weight."""
         return cast(int, self._killWeight)
 
@@ -352,7 +352,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
             self.killWeightChanged.emit(value)
 
     @pyqtProperty(int, notify=growTimeChanged)
-    def growTime(self) -> int:
+    def growTime(self) -> int: # type: ignore
         """Get the animal's grow time."""
         return cast(int, self._growTime)
 
@@ -368,7 +368,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
             self.growTimeChanged.emit(value)
 
     @pyqtProperty(int, notify=deathRateChanged)
-    def deathRate(self) -> int:
+    def deathRate(self) -> int: # type: ignore
         """Get the animal's death rate."""
         return cast(int, self._deathRate)
 
@@ -384,7 +384,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
             self.deathRateChanged.emit(value)
 
     @pyqtProperty(LaEnergyType, notify=feedEnergyTypeChanged)
-    def feedEnergyType(self):
+    def feedEnergyType(self): # type: ignore
         """Get the animal's feed energy type."""
         return self._feedEnergyType
 
@@ -400,7 +400,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
             self.feedEnergyTypeChanged.emit(theFeedEnergyType)
 
     @pyqtProperty(int, notify=gestatingChanged)
-    def gestating(self) -> int:
+    def gestating(self) -> int: # type: ignore
         """Get the animal's gestating value."""
         return cast(int, self._gestating)
 
@@ -416,7 +416,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
             self.gestatingChanged.emit(value)
 
     @pyqtProperty(int, notify=lactatingChanged)
-    def lactating(self) -> int:
+    def lactating(self) -> int: # type: ignore
         """Get the animal's lactating value."""
         return cast(int, self._lactating)
 
@@ -432,7 +432,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
             self.lactatingChanged.emit(value)
 
     @pyqtProperty(int, notify=maintenanceChanged)
-    def maintenance(self) -> int:
+    def maintenance(self) -> int: # type: ignore
         """Get the animal's maintenance value."""
         return cast(int, self._maintenance)
 
@@ -448,7 +448,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
             self.maintenanceChanged.emit(value)
 
     @pyqtProperty(int, notify=juvenileChanged)
-    def juvenile(self) -> int:
+    def juvenile(self) -> int: # type: ignore
         """Get the animal's juvenile value."""
         return cast(int, self._juvenile)
 
@@ -464,7 +464,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
             self.juvenileChanged.emit(value)
 
     @pyqtProperty(int, notify=sexualMaturityChanged)
-    def sexualMaturity(self) -> int:
+    def sexualMaturity(self) -> int: # type: ignore
         """Get the animal's sexual maturity value."""
         return cast(int, self._sexualMaturity)
 
@@ -480,7 +480,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
             self.sexualMaturityChanged.emit(value)
 
     @pyqtProperty(int, notify=breedingExpectancyChanged)
-    def breedingExpectancy(self) -> int:
+    def breedingExpectancy(self) -> int: # type: ignore
         """Get the animal's breeding expectancy value."""
         return cast(int, self._breedingExpectancy)
 
@@ -496,7 +496,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
             self.breedingExpectancyChanged.emit(value)
 
     @pyqtProperty(int, notify=conceptionEfficiencyChanged)
-    def conceptionEfficiency(self) -> int:
+    def conceptionEfficiency(self) -> int: # type: ignore
         """Get the animal's conception efficiency value."""
         return cast(int, self._conceptionEfficiency)
 
@@ -512,7 +512,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
             self.conceptionEfficiencyChanged.emit(value)
 
     @pyqtProperty(int, notify=femalesPerMaleChanged)
-    def femalesPerMale(self) -> int:
+    def femalesPerMale(self) -> int: # type: ignore
         """Get the animal's females to males ratio."""
         return cast(int, self._femalesToMales)
 
@@ -528,7 +528,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
             self.femalesPerMaleChanged.emit(value)
 
     @pyqtProperty(str, notify=adultWeightChanged)
-    def adultWeight(self) -> str:
+    def adultWeight(self) -> str: # type: ignore
         """Get the animal's adult weight."""
         return cast(str, self._adultWeight)
 
@@ -544,7 +544,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
             self.adultWeightChanged.emit(value)
 
     @pyqtProperty(int, notify=youngPerBirthChanged)
-    def youngPerBirth(self) -> int:
+    def youngPerBirth(self) -> int: # type: ignore
         """Get the animal's young per birth value."""
         return cast(int, self._youngPerBirth)
 
@@ -560,7 +560,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
             self.youngPerBirthChanged.emit(value)
 
     @pyqtProperty(int, notify=weaningAgeChanged)
-    def weaningAge(self) -> int:
+    def weaningAge(self) -> int: # type: ignore
         """Get the animal's weaning age."""
         return cast(int, self._weaningAge)
 
@@ -576,7 +576,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
             self.weaningAgeChanged.emit(value)
 
     @pyqtProperty(int, notify=weaningWeightChanged)
-    def weaningWeight(self) -> int:
+    def weaningWeight(self) -> int: # type: ignore
         """Get the animal's weaning weight."""
         return cast(int, self._weaningWeight)
 
@@ -592,7 +592,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
             self.weaningWeightChanged.emit(value)
 
     @pyqtProperty(int, notify=gestationTimeChanged)
-    def gestationTime(self) -> int:
+    def gestationTime(self) -> int: # type: ignore
         """Get the animal's gestation time."""
         return cast(int, self._gestationTime)
 
@@ -608,7 +608,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
             self.gestationTimeChanged.emit(value)
 
     @pyqtProperty(int, notify=estrousCycleChanged)
-    def estrousCycle(self) -> int:
+    def estrousCycle(self) -> int: # type: ignore
         """Get the animal's estrous cycle."""
         return cast(int, self._estrousCycle)
 
@@ -624,7 +624,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
             self.estrousCycleChanged.emit(value)
 
     @pyqtProperty(int, notify=lactationTimeChanged)
-    def lactationTime(self) -> int:
+    def lactationTime(self) -> int: # type: ignore
         """Get the animal's lactation time."""
         return cast(int, self._lactationTime)
 
@@ -640,7 +640,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
             self.lactationTimeChanged.emit(value)
 
     @pyqtProperty(bool, notify=milkChanged)
-    def milk(self) -> bool:
+    def milk(self) -> bool: # type: ignore
         """Get the animal's milk value."""
         return cast(bool, self._milk)
 
@@ -656,7 +656,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
             self.milkChanged.emit(value)
 
     @pyqtProperty(int, notify=milkGramsPerDayChanged)
-    def milkGramsPerDay(self) -> int:
+    def milkGramsPerDay(self) -> int: # type: ignore
         """Get the animal's milk grams per day value."""
         return cast(int, self._milkGramsPerDay)
 
@@ -672,7 +672,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
             self.milkGramsPerDayChanged.emit(value)
 
     @pyqtProperty(int, notify=milkFoodValueChanged)
-    def milkFoodValue(self) -> int:
+    def milkFoodValue(self) -> int: # type: ignore
         """Get the animal's milk food value."""
         return cast(int, self._milkFoodValue)
 
@@ -688,7 +688,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
             self.milkFoodValueChanged.emit(value)
 
     @pyqtProperty(bool, notify=fleeceChanged)
-    def fleece(self) -> bool:
+    def fleece(self) -> bool: # type: ignore
         """Get the animal's fleece value."""
         return cast(bool, self._fleece)
 
@@ -704,7 +704,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
             self.fleeceChanged.emit(value)
 
     @pyqtProperty(float, notify=fleeceWeightKgChanged)
-    def fleeceWeightKg(self) -> float:
+    def fleeceWeightKg(self) -> float: # type: ignore
         """Get the animal's fleece weight value."""
         return cast(float, self._fleeceWeightKg)
 
@@ -720,7 +720,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
             self.fleeceWeightKgChanged.emit(value)
 
     @pyqtProperty(str, notify=imageFileChanged)
-    def imageFile(self) -> str:
+    def imageFile(self) -> str: # type: ignore
         """Get the animal's image file path."""
         return cast(str, self._imageFile)
 
@@ -751,7 +751,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
 
         try:
             LaUtils.debug.log(f"Loading animal XML: first 100 chars: {theXml[:100]}")
-            
+
             myDocument = QDomDocument()
             if not myDocument.setContent(theXml):
                 LaUtils.debug.log("Invalid XML content")
@@ -776,7 +776,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
                     return int(text)
                 except (ValueError, TypeError):
                     return default
-                    
+
             # Helper function to get text from an element with a fallback element name
             def getElementText(primaryName: str, fallbackName: str = "", defaultValue: str = "") -> str:
                 element = myTopElement.firstChildElement(primaryName)
@@ -841,7 +841,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
                 defaultImage = str(self._name).lower() + ".png"
                 self._imageFile = defaultImage
                 LaUtils.debug.log(f"No image file specified, using default: {defaultImage}", "UI")
-            
+
             LaUtils.debug.log(f"Successfully loaded animal: {self._name}")
             return True
 
