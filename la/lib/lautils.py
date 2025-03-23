@@ -154,17 +154,34 @@ class LaUtils:
         myAnimalsMap = {}
         myDirectory = QDir(LaUtils.userAnimalProfilesDirPath())
         myList = myDirectory.entryInfoList(QDir.Files | QDir.NoSymLinks, QDir.Name)
+
+        LaUtils.debug.log(f"Looking for animals in directory: {LaUtils.userAnimalProfilesDirPath()}", "Animals")
+        LaUtils.debug.log(f"Found {len(myList)} files", "Animals")
+
         for myFileInfo in myList:
             # Ignore directories
             if myFileInfo.fileName() in [".", ".."]:
                 continue
-            # if the filename ends in .xml try to load it into our layerSets listing
+            # if the filename ends in .xml try to load it into our animals listing
             if myFileInfo.completeSuffix() == "xml":
+                filePath = myFileInfo.absoluteFilePath()
+                LaUtils.debug.log(f"Loading animal from file: {filePath}", "Animals")
                 myAnimal = LaAnimal()
-                myAnimal.fromXmlFile(myFileInfo.absoluteFilePath())
-                if myAnimal.name == "":
+                loadSuccess = myAnimal.fromXmlFile(filePath)
+                if not loadSuccess:
+                    LaUtils.debug.log(f"Failed to load animal from {filePath}", "Animals")
                     continue
-                myAnimalsMap[myAnimal.guid] = myAnimal
+                if myAnimal.name == "":
+                    LaUtils.debug.log(f"Animal from {filePath} has no name, skipping", "Animals")
+                    continue
+                
+                # Get the actual string GUID value
+                actualGuid = str(myAnimal.guid) if callable(getattr(myAnimal, 'guid', None)) else myAnimal.guid
+                
+                myAnimalsMap[actualGuid] = myAnimal
+                LaUtils.debug.log(f"Successfully loaded animal: {myAnimal.name} with GUID: {actualGuid}", "Animals")
+
+        LaUtils.debug.log(f"Returning {len(myAnimalsMap)} animals", "Animals")
         return myAnimalsMap
 
     @staticmethod
@@ -190,9 +207,17 @@ class LaUtils:
                 myAnimal = LaAnimal()
                 myAnimal.fromXmlFile(myFileInfo.absoluteFilePath())
                 if myAnimal.name == "":
+                    LaUtils.debug.log(f"Animal from {myFileInfo.absoluteFilePath()} has no name, skipping", "Animals")
                     continue
-                if myAnimal.guid == theGuid:
+                
+                # Get the actual string GUID value for comparison
+                animalGuid = myAnimal.guid() if callable(getattr(myAnimal, 'guid', None)) else myAnimal.guid
+                
+                if animalGuid == theGuid:
+                    LaUtils.debug.log(f"Found animal matching GUID {theGuid}", "Animals")
                     return myAnimal
+                    
+        LaUtils.debug.log(f"No animal found with GUID {theGuid}, returning blank animal", "Animals")
         return LaAnimal()
 
     @staticmethod

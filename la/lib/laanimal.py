@@ -834,7 +834,13 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
 
             # Image
             imageElement = myTopElement.firstChildElement("imageFile")
-            self._imageFile = LaUtils.xmlDecode(imageElement.text()) if not imageElement.isNull() else ""
+            if not imageElement.isNull():
+                self._imageFile = LaUtils.xmlDecode(imageElement.text())
+            else:
+                # Set default image file based on animal name
+                defaultImage = str(self._name).lower() + ".png"
+                self._imageFile = defaultImage
+                LaUtils.debug.log(f"No image file specified, using default: {defaultImage}", "UI")
             
             LaUtils.debug.log(f"Successfully loaded animal: {self._name}")
             return True

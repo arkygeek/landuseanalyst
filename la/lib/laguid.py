@@ -10,7 +10,9 @@ class LaGuid:
     - setGuid: Sets the GUID value.
     """
     def __init__(self):
-        self._guid = QUuid.createUuid().toString(QUuid.Id128)
+        """Initialize with a new GUID - matches C++ behavior"""
+        self._guid = ""
+        self.setGuid()  # Automatically generate GUID like C++ version
 
     def guid(self) -> str:
         """
@@ -18,11 +20,13 @@ class LaGuid:
         """
         return self._guid
 
-    def setGuid(self, theGuid: Optional[str]) -> None:
+    def setGuid(self, theGuid: Optional[str] = None) -> None:
         """
-        Sets the GUID value.
+        Sets the GUID value. If no GUID is provided, generates a new one.
+        Matches C++ behavior by stripping braces.
         """
-        if theGuid is None:
-            self._guid = QUuid.createUuid().toString(QUuid.Id128)
+        if theGuid is None or theGuid == "":
+            # Match C++ behavior of removing braces
+            self._guid = QUuid.createUuid().toString(QUuid.StringFormat.WithoutBraces)
         else:
             self._guid = theGuid

@@ -263,90 +263,164 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         print(mySelectedAreaUnit, myAreaUnits, myCommonRasterValue)
 
     def loadAnimals(self):
-        self.listWidgetCalculationsAnimal.clear()
-        myModel = LaModel()
-        self.tblAnimals.clear()
-        self.tblAnimals.setRowCount(0)
-        self.tblAnimals.setColumnCount(4)
+        """Load animals into the table widget."""
+        try:
+            # Clear the lists first
+            if hasattr(self, 'listWidgetCalculationsAnimal'):
+                self.listWidgetCalculationsAnimal.clear()
 
-        myCurrentRow = 0
-        myRunningPercentage = 0.0
+            # Clear and setup the table if it exists
+            if not hasattr(self, 'tblAnimals') or self.tblAnimals is None:
+                LaUtils.debug.log("Cannot load animals: table widget not found", "Error")
+                return
 
-        # Get available animals and parameters
-        myAnimalsMap = LaUtils.getAvailableAnimals()
-        myAnimalParametersMap = LaUtils.getAvailableAnimalParameters()
+            self.tblAnimals.clear()
+            self.tblAnimals.setRowCount(0)
+            self.tblAnimals.setColumnCount(4)
 
-        for myGuid, myAnimal in myAnimalsMap.items():
-            # Get the actual GUID string
-            if hasattr(myGuid, '__call__'):
-                myGuid = myGuid()
+            # Initialize tracking variables
+            myCurrentRow = 0
+            myRunningPercentage = 0.0
 
-            myName = myAnimal.name
-            myValue = self.mAnimalsMap.get(myGuid, (False, ""))
+            # Get available animals and parameters
+            try:
+                myAnimalsMap = LaUtils.getAvailableAnimals()
+                if not myAnimalsMap:
+                    LaUtils.debug.log("No animals available to load", "Warning")
+                    return
+            except Exception as e:
+                LaUtils.debug.log(f"Error getting available animals: {str(e)}", "Error")
+                return
 
-            if myGuid not in self.mAnimalsMap:
-                self.mAnimalsMap[myGuid] = myValue
+            try:
+                myAnimalParametersMap = LaUtils.getAvailableAnimalParameters()
+                if not myAnimalParametersMap:
+                    LaUtils.debug.log("No animal parameters available", "Warning")
+                    return
+            except Exception as e:
+                LaUtils.debug.log(f"Error getting animal parameters: {str(e)}", "Error")
+                return
 
-            myIcon = QIcon(":/localdata.png")
-            self.tblAnimals.insertRow(myCurrentRow)
+            # Initialize animals map if needed
+            if not hasattr(self, 'mAnimalsMap'):
+                self.mAnimalsMap = {}
 
-            # Add used checkbox
-            mypUsedItem = QtWidgets.QTableWidgetItem("Used?")
-            if myValue[0]:
-                mypUsedItem.setCheckState(QtCore.Qt.Checked)
-                myItem = QListWidgetItem(str(myAnimal.name))
-                # Store the actual GUID string
-                myItem.setData(QtCore.Qt.UserRole, str(myGuid))
-                self.listWidgetCalculationsAnimal.addItem(myItem)
-            else:
-                mypUsedItem.setCheckState(QtCore.Qt.Unchecked)
-                myItem = QListWidgetItem(str(myAnimal.name))
-                myItem.setData(QtCore.Qt.UserRole, str(myGuid))
-                self.listWidgetCalculationsAnimal.takeItem(self.listWidgetCalculationsAnimal.row(myItem))
+            # Process each animal
+            for myGuid, myAnimal in myAnimalsMap.items():
+                # Get the actual GUID string
+                actualGuid = str(myAnimal.guid()) if callable(getattr(myAnimal, 'guid', None)) else str(myGuid)
+                
+                LaUtils.debug.log(f"Processing animal: {myAnimal.name} (GUID: {actualGuid})", "Animals")
 
-            self.tblAnimals.setItem(myCurrentRow, 0, mypUsedItem)
+                myName = myAnimal.name
+                myValue = self.mAnimalsMap.get(actualGuid, (False, ""))
 
-            # Add name with GUID
-            mypNameItem = QTableWidgetItem(str(myAnimal.name))
-            # Store the actual GUID string
-            mypNameItem.setData(QtCore.Qt.UserRole, str(myGuid))
-            self.tblAnimals.setItem(myCurrentRow, 1, mypNameItem)
-            mypNameItem.setIcon(myIcon)
+                # Update animals map
+                if actualGuid not in self.mAnimalsMap:
+                    self.mAnimalsMap[actualGuid] = myValue
 
-            # Add parameters combo
-            mypCombo = QComboBox(self)
-            for myParameterGuid, myAnimalParameter in myAnimalParametersMap.items():
-                if hasattr(myAnimalParameter.animalGuid, '__call__'):
-                    paramAnimalGuid = myAnimalParameter.animalGuid()
+                # Create table row
+                myIcon = QIcon(":/localdata.png")
+                self.tblAnimals.insertRow(myCurrentRow)
+
+                # Used checkbox column
+                mypUsedItem = QtWidgets.QTableWidgetItem("Used?")
+                mypUsedItem.setCheckState(QtCore.Qt.Checked if myValue[0] else QtCore.Qt.Unchecked)
+                self.tblAnimals.setItem(myCurrentRow, 0, mypUsedItem)
+
+                # If checked, ensure it's in calculations list
+                if myValue[0]:
+                    try:
+                        self.addAnimalToCalculationsList(actualGuid)
+                    except Exception as e:
+                        LaUtils.debug.log(f"Error adding animal to calculations: {str(e)}", "Error")
                 else:
-                    paramAnimalGuid = myAnimalParameter.animalGuid
+                    # Remove from calculations list if unchecked
+                    try:
+                        self.removeAnimalFromCalculationsList(actualGuid)
+                    except Exception as e:
+                        LaUtils.debug.log(f"Error removing animal from calculations: {str(e)}", "Error")
 
-                if str(myGuid) != str(paramAnimalGuid):
-                    continue
+                # Name column with GUID data
+                mypNameItem = QtWidgets.QTableWidgetItem(str(myName))
+                mypNameItem.setData(QtCore.Qt.UserRole, actualGuid)
+                self.tblAnimals.setItem(myCurrentRow, 1, mypNameItem)
+                mypNameItem.setIcon(myIcon)
 
-                myParameterName = f"{myAnimalParameter.name}  ({myAnimalParameter.description})"
+                # Parameters combo box
+                mypCombo = QtWidgets.QComboBox(self)
 
-                if not myValue[1]:
-                    myValue = (myValue[0], str(myParameterGuid))
+                # Add parameters to combo
+                paramsFound = False
+                for myParameterGuid, myAnimalParameter in myAnimalParametersMap.items():
+                    if myAnimalParameter is None:
+                        continue
 
-                if str(myValue[1]) == str(myAnimalParameter.guid):
-                    if myValue[0]:
-                        myRunningPercentage += float(str(myAnimalParameter.percentTameMeat))
-                    mypPercentItem = QtWidgets.QTableWidgetItem(str(myAnimalParameter.percentTameMeat))
-                    self.tblAnimals.setItem(myCurrentRow, 3, mypPercentItem)
+                    # Get animal GUID from parameter, handling both property and method cases 
+                    paramAnimalGuid = None
+                    if hasattr(myAnimalParameter, 'animalGuid'):
+                        if isinstance(myAnimalParameter.animalGuid, str):
+                            paramAnimalGuid = str(myAnimalParameter.animalGuid)
+                        else:
+                            paramAnimalGuid = str(myAnimalParameter.animalGuid)
 
-                # Store the actual GUID string
-                mypCombo.addItem(myIcon, myParameterName, str(myParameterGuid))
+                    # Skip if parameter is not for this animal
+                    if str(actualGuid) != paramAnimalGuid:
+                        continue
 
-            self.setComboToDefault(mypCombo, myValue[1])
-            self.mAnimalsMap[str(myGuid)] = myValue
-            self.tblAnimals.setCellWidget(myCurrentRow, 2, mypCombo)
-            myCurrentRow += 1
+                    paramsFound = True
+                    LaUtils.debug.log(f"Found parameter {myAnimalParameter.name} for animal {myName}", "Animals")
 
-        # Set status icon based on total percentage
-        myIcon = QIcon(":/status_ok.png") if myRunningPercentage == 100 else QIcon(":/status_error.png")
-        myPercentItem = str(myRunningPercentage)
-        self.labelAnimalCheck.setText(f"{myPercentItem}%")
+                    # Format parameter name
+                    myParameterName = f"{myAnimalParameter.name}  ({myAnimalParameter.description})"
+
+                    # Update value if needed
+                    if not myValue[1]:
+                        myValue = (myValue[0], str(myParameterGuid))
+
+                    # Update percentage if this is the selected parameter
+                    if str(myValue[1]) == str(myAnimalParameter.guid):
+                        if myValue[0] and hasattr(myAnimalParameter, 'percentTameMeat'):
+                            try:
+                                myRunningPercentage += float(str(myAnimalParameter.percentTameMeat))
+                            except (ValueError, TypeError):
+                                LaUtils.debug.log(f"Invalid percentTameMeat for parameter {myParameterGuid}", "Warning")
+
+                        # Add percentage column
+                        if hasattr(myAnimalParameter, 'percentTameMeat'):
+                            mypPercentItem = QtWidgets.QTableWidgetItem(str(myAnimalParameter.percentTameMeat))
+                            self.tblAnimals.setItem(myCurrentRow, 3, mypPercentItem)
+
+                    # Add to combo box
+                    mypCombo.addItem(myIcon, myParameterName, str(myParameterGuid))
+
+                if not paramsFound:
+                    LaUtils.debug.log(f"No parameters found for animal {myName} with GUID {actualGuid}", "Warning")
+                    # Add empty option
+                    mypCombo.addItem(myIcon, "No Parameters Available", "")
+
+                # Set default combo selection and add to table
+                self.setComboToDefault(mypCombo, myValue[1])
+                self.mAnimalsMap[str(actualGuid)] = myValue
+                self.tblAnimals.setCellWidget(myCurrentRow, 2, mypCombo)
+
+                myCurrentRow += 1
+
+            # Update total percentage display
+            if hasattr(self, 'labelAnimalCheck'):
+                self.labelAnimalCheck.setText(f"{myRunningPercentage:.1f}%")
+
+            # Update status icon
+            if hasattr(self, 'labelAnimalIcon'):
+                iconPath = ":/status_ok.png" if abs(myRunningPercentage - 100.0) < 0.1 else ":/status_error.png"
+                self.labelAnimalIcon.setPixmap(QIcon(iconPath).pixmap(16, 16))
+
+            LaUtils.debug.log(f"Loaded {myCurrentRow} animals with total percentage {myRunningPercentage:.1f}%", "Animals")
+
+        except Exception as e:
+            LaUtils.debug.log(f"Error loading animals: {str(e)}", "Error")
+            import traceback
+            LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
 
     def loadCrops(self):
         """Load crops into the table widget."""
@@ -827,18 +901,12 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         """Handle dialog closure cleanup"""
         if hasattr(self, '_debug_dialog') and self._debug_dialog is not None:
             try:
-                # Check if connection exists before disconnecting
-                try:
-                    MESSAGE_BUS.debugMessaged.disconnect(self._debug_dialog.add_debug_message)
-                except (TypeError, RuntimeError):
-                    # Signal was not connected or other disconnect error
-                    pass
                 self._debug_dialog.deleteLater()
             except:
                 pass
             finally:
                 self._debug_dialog = None
-        self.cbDebug.setChecked(False)
+            self.cbDebug.setChecked(False)
 
     def _ensure_debug_dialog_visible(self):
         """Helper method to ensure debug dialog remains visible after initial showing."""
@@ -857,18 +925,23 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         Args:
             animalGuid: The GUID of the animal to add
         """
+        # Ensure we have a string GUID
+        animalGuid = str(animalGuid)
+        
         # Check if the animal is already in the list
         for i in range(self.listWidgetCalculationsAnimal.count()):
             item = self.listWidgetCalculationsAnimal.item(i)
-            if item.data(QtCore.Qt.UserRole) == animalGuid:
+            if str(item.data(QtCore.Qt.UserRole)) == animalGuid:
                 return
 
-        # Add the animal to the list
+        # Get the animal object
         animal = LaUtils.getAnimal(animalGuid)
         if animal and animal.name:
             item = QListWidgetItem(str(animal.name))
+            # Store the actual GUID string
             item.setData(QtCore.Qt.UserRole, animalGuid)
             self.listWidgetCalculationsAnimal.addItem(item)
+            LaUtils.debug.log(f"Added animal {animal.name} with GUID {animalGuid} to calculations list", "UI")
 
     def removeAnimalFromCalculationsList(self, animalGuid):
         """Remove an animal from the calculations list.
@@ -967,79 +1040,102 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         LaUtils.debug.log(f"Total percentages updated: Animals {animalTotal:.1f}%, Crops {cropTotal:.1f}%", "Calculation")
 
     def showSelectedAnimalDetails(self, row):
-        """Show details for the selected animal.
-
-        Args:
-            row: The row index of the selected animal
-        """
+        """Show details for the selected animal."""
         if row < 0 or row >= self.tblAnimals.rowCount():
             return
 
         try:
-            # Get name item which contains the GUID
+            # Get the GUID from the selected row
             nameItem = self.tblAnimals.item(row, 1)
-            if nameItem is None:
-                LaUtils.debug.log(f"No name item found at row {row}", "Error")
+            if not nameItem:
+                LaUtils.debug.log("No name item found", "Error")
                 return
 
             # Get the GUID string
-            guid = nameItem.data(QtCore.Qt.UserRole)
+            guid = str(nameItem.data(QtCore.Qt.UserRole))
             if not guid:
-                LaUtils.debug.log(f"No GUID found in name item at row {row}", "Error")
+                LaUtils.debug.log("No GUID found in name item", "Error")
                 return
+
+            LaUtils.debug.log(f"Getting animal details for GUID: {guid}", "UI")
 
             # Get the animal object
             animal = LaUtils.getAnimal(guid)
-            if not animal or not hasattr(animal, 'name') or not animal.name:
-                LaUtils.debug.log(f"Could not find valid animal for GUID: {guid}", "Error")
+            if not animal:
+                LaUtils.debug.log(f"Could not find animal for GUID: {guid}", "Error")
                 return
 
-            # Display animal details in text browser
+            LaUtils.debug.log(f"Found animal: {animal.name}", "UI")
+
+            # Get parameter from combobox
+            paramCombo = self.tblAnimals.cellWidget(row, 2)
+            if paramCombo:
+                paramGuid = paramCombo.currentData()
+                if paramGuid:
+                    paramGuid = str(paramGuid)  # Ensure GUID is string
+                    animalParametersMap = LaUtils.getAvailableAnimalParameters()
+                    parameter = animalParametersMap.get(paramGuid)
+                else:
+                    parameter = None
+            else:
+                parameter = None
+
+            # Display HTML report
             if hasattr(self, 'textBrowserAnimalDefinition'):
-                html_content = animal.toHtml()
-                self.textBrowserAnimalDefinition.setHtml(html_content)
+                html = self.generateAnimalDefinitionReport(animal, parameter)
+                self.textBrowserAnimalDefinition.setHtml(html)
                 LaUtils.debug.log(f"Displayed animal details for {animal.name}", "UI")
 
             # Handle image display
             if hasattr(self, 'lblAnimalPix'):
-                self.lblAnimalPix.clear()  # Clear existing image
+                self.lblAnimalPix.clear()
 
-                # Get image path, handling both property and method cases
-                image_path = ""
+                # Get image file path
+                image_file = None
                 if hasattr(animal, 'imageFile'):
-                    if callable(getattr(animal, 'imageFile')):
-                        image_path = animal.imageFile()
+                    LaUtils.debug.log(f"Animal has imageFile attribute", "UI")
+                    # Handle both property and method cases
+                    if isinstance(animal.imageFile, str):
+                        image_file = animal.imageFile
+                        LaUtils.debug.log(f"imageFile is string property, value: {image_file}", "UI")
                     else:
-                        image_path = animal.imageFile
+                        try:
+                            image_file = str(animal.imageFile)
+                            LaUtils.debug.log(f"imageFile converted to string: {image_file}", "UI")
+                        except Exception as e:
+                            LaUtils.debug.log(f"Error getting imageFile: {str(e)}", "Error")
 
-                if image_path:
-                    # Try to resolve the image path
-                    resolved_path = LaUtils.resolvePath(str(image_path), 'image')
-                    LaUtils.debug.log(f"Attempting to load animal image: {resolved_path}", "UI")
+                if image_file:
+                    # Try standard path first
+                    resolved_path = LaUtils.resolvePath(str(image_file), 'image')
+                    LaUtils.debug.log(f"Resolved image path: {resolved_path}", "UI")
 
                     if os.path.exists(resolved_path):
+                        LaUtils.debug.log(f"Image file exists at: {resolved_path}", "UI")
                         pixmap = QPixmap(resolved_path)
                         if not pixmap.isNull():
-                            self.lblAnimalPix.setPixmap(pixmap)
-                            LaUtils.debug.log("Animal image loaded successfully", "UI")
+                            self.lblAnimalPix.setPixmap(pixmap.scaled(100, 100, QtCore.Qt.KeepAspectRatio))
+                            LaUtils.debug.log(f"Successfully loaded and scaled animal image", "UI")
                         else:
-                            # Try alternative path in user images directory
-                            LaUtils.debug.log(f"Failed to create pixmap from {resolved_path}", "Error")
-                            imagesDir = LaUtils.userImagesDirPath()
-                            imageFileName = os.path.basename(str(image_path))
-                            alternativePath = os.path.join(imagesDir, imageFileName)
-
-                            if os.path.exists(alternativePath):
-                                pixmap = QPixmap(alternativePath)
-                                if not pixmap.isNull():
-                                    self.lblAnimalPix.setPixmap(pixmap)
-                                    LaUtils.debug.log(f"Successfully loaded image from alternative path: {alternativePath}", "UI")
-                                else:
-                                    LaUtils.debug.log(f"Failed to load image from alternative path: {alternativePath}", "Error")
-                            else:
-                                LaUtils.debug.log(f"No valid image path found", "Warning")
+                            LaUtils.debug.log(f"Failed to create pixmap from: {resolved_path}", "Error")
                     else:
-                        LaUtils.debug.log(f"Image path doesn't exist: {resolved_path}", "Warning")
+                        # Try alternate path in images directory
+                        imagesDir = LaUtils.userImagesDirPath()
+                        imageFileName = os.path.basename(str(image_file))
+                        alternativePath = os.path.join(imagesDir, imageFileName)
+                        LaUtils.debug.log(f"Trying alternate image path: {alternativePath}", "UI")
+
+                        if os.path.exists(alternativePath):
+                            pixmap = QPixmap(alternativePath)
+                            if not pixmap.isNull():
+                                self.lblAnimalPix.setPixmap(pixmap.scaled(100, 100, QtCore.Qt.KeepAspectRatio))
+                                LaUtils.debug.log(f"Successfully loaded animal image from alternate path", "UI")
+                            else:
+                                LaUtils.debug.log(f"Failed to create pixmap from alternate path", "Error")
+                        else:
+                            LaUtils.debug.log(f"No valid image file found at any location", "Warning")
+                else:
+                    LaUtils.debug.log(f"No image file specified for animal: {animal.name}", "Warning")
 
         except Exception as e:
             LaUtils.debug.log(f"Error showing animal details: {str(e)}", "Error")
@@ -1059,55 +1155,55 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             if nameItem is None:
                 LaUtils.debug.log(f"No name item found at row {row}", "Error")
                 return
-            
+
             # Get the GUID string
             guid = nameItem.data(QtCore.Qt.UserRole)
             if not guid:
                 LaUtils.debug.log(f"No GUID found in name item at row {row}", "Error")
                 return
-            
+
             # Get the crop object
             crop = LaUtils.getCrop(guid)
             if not crop or not hasattr(crop, 'name') or not crop.name:
                 LaUtils.debug.log(f"Could not find valid crop for GUID: {guid}", "Error")
                 return
-            
+
             # Get the parameter GUID from combobox
             comboBox = self.tblCrops.cellWidget(row, 2)
             parameterGuid = comboBox.currentData() if comboBox else None
-            
+
             # Get the crop parameter
             cropParameter = None
             if parameterGuid:
                 cropParametersMap = LaUtils.getAvailableCropParameters()
                 if parameterGuid in cropParametersMap:
                     cropParameter = cropParametersMap[parameterGuid]
-            
+
             # Generate HTML content combining crop and parameter details
             html_content = self.generateCropDefinitionReport(crop, cropParameter)
-            
+
             # Display in text browser
             if hasattr(self, 'textBrowserCropDefinition'):
                 self.textBrowserCropDefinition.setHtml(html_content)
                 LaUtils.debug.log(f"Displayed crop details for {crop.name}", "UI")
-            
+
             # Handle image display
             if hasattr(self, 'lblCropPix'):
                 self.lblCropPix.clear()  # Clear existing image
-                
+
                 # Get image path, handling both property and method cases
                 image_path = ""
                 if hasattr(crop, 'imageFile'):
-                    if callable(getattr(crop, 'imageFile')):
-                        image_path = crop.imageFile()
-                    else:
+                    if isinstance(crop.imageFile, str):
                         image_path = crop.imageFile
-                
+                    else:
+                        image_path = str(crop.imageFile)
+
                 if image_path:
                     # Try to resolve the image path
                     resolved_path = LaUtils.resolvePath(str(image_path), 'image')
                     LaUtils.debug.log(f"Attempting to load crop image: {resolved_path}", "UI")
-                    
+
                     if os.path.exists(resolved_path):
                         pixmap = QPixmap(resolved_path)
                         if not pixmap.isNull():
@@ -1119,7 +1215,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                             imagesDir = LaUtils.userImagesDirPath()
                             imageFileName = os.path.basename(str(image_path))
                             alternativePath = os.path.join(imagesDir, imageFileName)
-                            
+
                             if os.path.exists(alternativePath):
                                 pixmap = QPixmap(alternativePath)
                                 if not pixmap.isNull():
@@ -1135,14 +1231,14 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             LaUtils.debug.log(f"Error showing crop details: {str(e)}", "Error")
             import traceback
             LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
-            
+
     def generateCropDefinitionReport(self, crop, cropParameter):
         """Generate an HTML report showing crop details and crop parameter details.
-        
+
         Args:
             crop: The crop object
             cropParameter: The crop parameter object
-        
+
         Returns:
             HTML string containing formatted crop and parameter details
         """
@@ -1150,68 +1246,134 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         html = "<body>"
         html += "<table width=\"100%\">"
         html += "<tr>"
-        
+
         # Left column: Crop details
         html += "<td style=\"vertical-align:top; width:50%;\">"
         if crop:
             html += crop.toHtml()
         html += "</td>"
-        
+
         # Right column: Parameter details
         html += "<td style=\"vertical-align:top; width:50%;\">"
         if cropParameter:
             # Add parameter details header
             html += f"<h3>Parameters for {crop.name}</h3>"
             html += "<table>"
-            
+
             # Add parameter details
             html += f"<tr><td><b>Parameter Name:</b></td><td>{cropParameter.name}</td></tr>"
             html += f"<tr><td><b>Description:</b></td><td>{cropParameter.description}</td></tr>"
             html += f"<tr><td><b>Portion of Tame Crop Diet:</b></td><td>{cropParameter.percentTameCrop}%</td></tr>"
-            
+
             # Add spoilage if it exists
             if hasattr(cropParameter, 'spoilage'):
                 html += f"<tr><td><b>Spoilage:</b></td><td>{cropParameter.spoilage}%</td></tr>"
-            
+
             # Add reseed if it exists
             if hasattr(cropParameter, 'reseed'):
                 html += f"<tr><td><b>Reseed:</b></td><td>{cropParameter.reseed}%</td></tr>"
-            
+
             # Add crop rotation if it exists
             if hasattr(cropParameter, 'cropRotation'):
                 cropRotationText = "Yes" if cropParameter.cropRotation else "No"
                 html += f"<tr><td><b>Crop Rotation:</b></td><td>{cropRotationText}</td></tr>"
-            
+
             # Add fallow ratio if it exists
             if hasattr(cropParameter, 'fallowRatio') and cropParameter.fallowRatio > 0:
                 html += f"<tr><td><b>Fallow Ratio:</b></td><td>{cropParameter.fallowRatio}</td></tr>"
-                
+
                 # Add fallow value if fallowRatio is used
                 if hasattr(cropParameter, 'fallowValue'):
                     html += f"<tr><td><b>Fallow Value:</b></td><td>{cropParameter.fallowValue}</td></tr>"
-            
+
             # Add land use information
             if hasattr(cropParameter, 'useCommonLand'):
                 commonLandText = "Yes" if cropParameter.useCommonLand else "No"
                 html += f"<tr><td><b>Use Common Land:</b></td><td>{commonLandText}</td></tr>"
-            
+
             if hasattr(cropParameter, 'useSpecificLand'):
                 specificLandText = "Yes" if cropParameter.useSpecificLand else "No"
                 html += f"<tr><td><b>Use Specific Land:</b></td><td>{specificLandText}</td></tr>"
-            
+
             # Add raster name if it exists and is being used
             if hasattr(cropParameter, 'rasterName') and cropParameter.rasterName:
                 html += f"<tr><td><b>Raster:</b></td><td>{cropParameter.rasterName}</td></tr>"
-            
+
             html += "</table>"
         else:
             html += "<p>No parameters selected for this crop.</p>"
-        
+
         html += "</td>"
         html += "</tr>"
         html += "</table>"
         html += "</body>"
-        
+
+        return html
+
+    def generateAnimalDefinitionReport(self, animal, animalParameter):
+        """Generate an HTML report showing animal details and animal parameter details.
+
+        Args:
+            animal: The animal object
+            animalParameter: The animal parameter object
+
+        Returns:
+            HTML string containing formatted animal and parameter details
+        """
+        # Start with the HTML structure
+        html = "<body>"
+        html += "<table width=\"100%\">"
+        html += "<tr>"
+
+        # Left column: Animal details
+        html += "<td style=\"vertical-align:top; width:50%;\">"
+        if animal:
+            html += animal.toHtml()
+        html += "</td>"
+
+        # Right column: Parameter details
+        html += "<td style=\"vertical-align:top; width:50%;\">"
+        if animalParameter:
+            # Add parameter details header
+            html += f"<h3>Parameters for {animal.name}</h3>"
+            html += "<table>"
+
+            # Add parameter details
+            html += f"<tr><td><b>Parameter Name:</b></td><td>{animalParameter.name}</td></tr>"
+            html += f"<tr><td><b>Description:</b></td><td>{animalParameter.description}</td></tr>"
+            html += f"<tr><td><b>Portion of Tame Meat Diet:</b></td><td>{animalParameter.percentTameMeat}%</td></tr>"
+
+            # Add grazing land information
+            if hasattr(animalParameter, 'useCommonGrazingLand'):
+                commonLandText = "Yes" if animalParameter.useCommonGrazingLand else "No"
+                html += f"<tr><td><b>Use Common Grazing Land:</b></td><td>{commonLandText}</td></tr>"
+
+            if hasattr(animalParameter, 'useSpecificGrazingLand'):
+                specificLandText = "Yes" if animalParameter.useSpecificGrazingLand else "No"
+                html += f"<tr><td><b>Use Specific Grazing Land:</b></td><td>{specificLandText}</td></tr>"
+
+            # Add fodder use if it exists
+            if hasattr(animalParameter, 'fodderUse') and animalParameter.fodderUse:
+                html += f"<tr><td><b>Fodder Use:</b></td><td>Yes</td></tr>"
+
+            # Add fallow usage if it exists
+            if hasattr(animalParameter, 'fallowUsage'):
+                fallowPriority = str(animalParameter.fallowUsage).split('.')[-1].replace('_', ' ')
+                html += f"<tr><td><b>Fallow Usage Priority:</b></td><td>{fallowPriority}</td></tr>"
+
+            # Add raster name if it exists and is being used
+            if hasattr(animalParameter, 'rasterName') and animalParameter.rasterName:
+                html += f"<tr><td><b>Raster:</b></td><td>{animalParameter.rasterName}</td></tr>"
+
+            html += "</table>"
+        else:
+            html += "<p>No parameters selected for this animal.</p>"
+
+        html += "</td>"
+        html += "</tr>"
+        html += "</table>"
+        html += "</body>"
+
         return html
 
     def updateCropCalculations(self, crop):
@@ -1273,3 +1435,74 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         self.tblCrops.cellClicked.connect(self.cropCellClicked)
         self.tblCrops.cellChanged.connect(self.cropCalcSelectionChanged)
         self.cbDebug.clicked.connect(self.on_cbDebug_clicked)
+
+    def on_tblAnimals_itemChanged(self, item):
+        """Handle item change in the animals table."""
+        try:
+            if item is None:
+                return
+
+            row = item.row()
+            col = item.column()
+
+            # Check if we have a reference to this animal
+            if not hasattr(self, 'mAnimalsMap') or self.mAnimalsMap is None or row not in self.mAnimalsMap:
+                LaUtils.debug.log(f"Cannot update animal parameters: no animal at row {row}", "Error")
+                return
+
+            animal = self.mAnimalsMap[row]
+            if animal is None:
+                return
+
+            # Column 1 is the enable/disable checkbox
+            if col == 1:
+                animal.enabled = (item.checkState() == QtCore.Qt.Checked)
+                LaUtils.debug.log(f"Animal '{animal.name}' {'enabled' if animal.enabled else 'disabled'}", "Animals")
+                # Update calculations when animal is enabled/disabled
+                self.updateCalculations()
+
+            # Handle other columns/parameters as needed
+            # ...
+
+        except Exception as e:
+            LaUtils.debug.log(f"Error updating animal parameter: {str(e)}", "Error")
+            import traceback
+            LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
+
+    def getEnabledAnimals(self):
+        """Get list of enabled animals to pass to controller."""
+        enabled_animals = []
+        if hasattr(self, 'mAnimalsMap'):
+            for guid, animal in self.mAnimalsMap.items():
+                if hasattr(animal, 'enabled') and animal.enabled:
+                    enabled_animals.append(guid)
+        return enabled_animals
+
+    def saveAnimalParameters(self):
+        """Save the current animal parameters to the model."""
+        try:
+            if not hasattr(self, 'model') or self.model is None:
+                return
+
+            if not hasattr(self, 'mAnimalsMap') or self.mAnimalsMap is None:
+                return
+
+            # Update model with values from UI
+            for row, animal in self.mAnimalsMap.items():
+                if animal is None:
+                    continue
+
+                # Get enable state from checkbox
+                enableItem = self.tblAnimals.item(row, 1)
+                if enableItem is not None:
+                    animal.enabled = (enableItem.checkState() == QtCore.Qt.Checked)
+
+                # Get other parameters from table if applicable
+                # ...
+
+            LaUtils.debug.log("Animal parameters saved", "Animals")
+
+        except Exception as e:
+            LaUtils.debug.log(f"Error saving animal parameters: {str(e)}", "Error")
+            import traceback
+            LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")

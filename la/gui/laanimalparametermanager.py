@@ -157,13 +157,16 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
         if not myGuid:
             return
 
-        myOriginalFileName = LaUtils.userAnimalParameterProfilesDirPath() + f"{myGuid}.xml"
-        myAnimalParameter = LaAnimalParameter()
-        myAnimalParameter.fromXmlFile(myOriginalFileName)
-        myAnimalParameter.setGuid(None)
-        myAnimalParameter.name = "Copy of " + myAnimalParameter.name
+        myOriginalFileNameWithAddedPath = LaUtils.userAnimalParameterProfilesDirPath() + f"{myGuid}.xml"
+        myAnimalParameter = LaAnimalParameter() # Load the original animal parameter
+        myAnimalParameter.fromXmlFile(myOriginalFileNameWithAddedPath)
+        myAnimalParameter.setGuid(None) # Clear the old GUID so the new copy will be unique
+        myTempName = f"Copy of {myAnimalParameter.name}"
+        myAnimalParameter._mName = myTempName
+        myTempDescription = f"Copy of {myAnimalParameter.description}"
+        myAnimalParameter._mDescription = myTempDescription
 
-        myNewFileName = os.path.join(LaUtils.userAnimalParameterProfilesDirPath(), 
+        myNewFileName = os.path.join(LaUtils.userAnimalParameterProfilesDirPath(),
                                    f"{myAnimalParameter.guid}.xml")
         myAnimalParameter.toXmlFile(myNewFileName)
         self.refreshAnimalParameterTable(str(myAnimalParameter.guid))
@@ -230,7 +233,7 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
             self.tblAnimalParameterProfiles.insertRow(myCurrentRow)
             myFileItem = QTableWidgetItem(guid)
             myNameItem = QTableWidgetItem(parameter.name)
-            
+
             self.tblAnimalParameterProfiles.setItem(myCurrentRow, 0, myFileItem)
             self.tblAnimalParameterProfiles.setItem(myCurrentRow, 1, myNameItem)
 
@@ -272,7 +275,7 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
         """Handle window close event."""
         self.writeSettings()
         super().closeEvent(event)
-    
+
     def on_cboAnimal_changed(self, index):
         """Handle animal combo box change event."""
         # Implementation for animal combo change

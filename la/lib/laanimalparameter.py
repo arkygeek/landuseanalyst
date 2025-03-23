@@ -103,7 +103,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self.nameChanged.emit(theName)
 
     @pyqtProperty(str, notify=descriptionChanged)
-    def description(self) -> str:
+    def description(self) -> str: # type: ignore
         return str(self._mDescription)
 
     @description.setter
@@ -113,7 +113,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self.descriptionChanged.emit(theDescription)
 
     @pyqtProperty(str, notify=guidChanged)
-    def guid(self):
+    def guid(self): # type: ignore
         return self._mGuid
 
     @guid.setter
@@ -123,7 +123,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self.guidChanged.emit(guid)
 
     @pyqtProperty(str, notify=animalGuidChanged)
-    def animalGuid(self) -> str:
+    def animalGuid(self) -> str: # type: ignore
         return str(self._mAnimalGuid)
 
     @animalGuid.setter
@@ -133,7 +133,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self.animalGuidChanged.emit(theAnimalGuid)
 
     @pyqtProperty(float, notify=percentTameMeatChanged)
-    def percentTameMeat(self) -> float:
+    def percentTameMeat(self) -> float: # type: ignore
         return float(str(self._mPercentTameMeat))
 
     @percentTameMeat.setter
@@ -143,7 +143,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self.percentTameMeatChanged.emit(thePercentTameMeat)
 
     @pyqtProperty(bool, notify=useCommonGrazingLandChanged)
-    def useCommonGrazingLand(self) -> bool:
+    def useCommonGrazingLand(self) -> bool: # type: ignore
         return bool(self._mUseCommonGrazingLand)
 
     @useCommonGrazingLand.setter
@@ -153,7 +153,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self.useCommonGrazingLandChanged.emit(theUseCommonGrazingLand)
 
     @pyqtProperty(bool, notify=useSpecificGrazingLandChanged)
-    def useSpecificGrazingLand(self) -> bool:
+    def useSpecificGrazingLand(self) -> bool: # type: ignore
         return self._mUseSpecificGrazingLand
 
     @useSpecificGrazingLand.setter
@@ -163,7 +163,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self.useSpecificGrazingLandChanged.emit(theUseSpecificGrazingLand)
 
     @pyqtProperty(float, notify=fodderUseChanged)
-    def fodderUse(self) -> float:
+    def fodderUse(self) -> float: # type: ignore
         return self._mFodderUse
 
     @fodderUse.setter
@@ -173,7 +173,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self.fodderUseChanged.emit(theFodderUse)
 
     @pyqtProperty(dict, notify=foodSourceMapChanged)
-    def foodSourceMap(self):
+    def foodSourceMap(self): # type: ignore
         """Returns a mapping of food source IDs to LaFoodSource objects using LaFoodSourceMap type"""
         return self._mFoodSourceMap
 
@@ -184,7 +184,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self.foodSourceMapChanged.emit(theFoodSourceMap)
 
     @pyqtProperty(float, notify=fallowUsageChanged)
-    def fallowUsage(self):
+    def fallowUsage(self): # type: ignore
         return self._fallowUsage
 
     @fallowUsage.setter
@@ -194,7 +194,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self.fallowUsageChanged.emit(fallowUsage)
 
     @pyqtProperty(str, notify=rasterNameChanged)
-    def rasterName(self):
+    def rasterName(self): # type: ignore
         return self._rasterName
 
     @rasterName.setter
@@ -213,7 +213,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             if myTopElement.isNull():
                 warnings.warn("Failed to parse XML: myTopElement is null. The XML element could not be found or parsed.")
                 return False
-                
+
             # Get GUID directly from the XML attribute
             guid_value = myTopElement.attribute("guid")
             if guid_value:
@@ -224,22 +224,22 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
                 import uuid
                 self._mGuid = str(uuid.uuid4())
                 LaUtils.debug.log(f"Generated new GUID: {self._mGuid}")
-            
+
             # Check for both name tag styles (<name> and <n>)
             nameElement = myTopElement.firstChildElement("name")
             if nameElement.isNull():
                 nameElement = myTopElement.firstChildElement("n")
-            
+
             self._mName = LaUtils.xmlDecode(nameElement.text())
             LaUtils.debug.log(f"Loaded animal parameter name: {self._mName}")
-            
+
             # Continue with the rest of the XML parsing
             descriptionElement = myTopElement.firstChildElement("description")
             self._mDescription = LaUtils.xmlDecode(descriptionElement.text()) if not descriptionElement.isNull() else ""
-            
+
             animalElement = myTopElement.firstChildElement("animal")
             self._mAnimalGuid = LaUtils.xmlDecode(animalElement.text()) if not animalElement.isNull() else ""
-            
+
             # Parse numeric values safely
             try:
                 percentElement = myTopElement.firstChildElement("percentTameMeat")
@@ -247,14 +247,14 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             except (ValueError, TypeError):
                 self._mPercentTameMeat = 0.0
                 LaUtils.debug.log("Failed to parse percentTameMeat, using 0.0")
-                
+
             # Parse boolean values safely
             useCommonElement = myTopElement.firstChildElement("useCommonGrazingLand")
             self._mUseCommonGrazingLand = bool(int(useCommonElement.text())) if not useCommonElement.isNull() else False
-            
+
             useSpecificElement = myTopElement.firstChildElement("useSpecificGrazingLand")
             self._mUseSpecificGrazingLand = bool(int(useSpecificElement.text())) if not useSpecificElement.isNull() else False
-            
+
             fodderUseElement = myTopElement.firstChildElement("fodderUse")
             self._mFodderUse = float(fodderUseElement.text()) if not fodderUseElement.isNull() else 0.0
 
@@ -266,34 +266,34 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
                 if fodderCropsElement.isNull():
                     # Try alternate tag
                     fodderCropsElement = myTopElement.firstChildElement("fodderCrop")
-                
+
                 if not fodderCropsElement.isNull():
                     # Try different possible element names for individual food sources
                     foodSourceNode = fodderCropsElement.firstChildElement("foodSource")
                     if foodSourceNode.isNull():
                         foodSourceNode = fodderCropsElement.firstChildElement("fodderCrop")
-                    
+
                     while not foodSourceNode.isNull():
                         myFoodSource = LaFoodSource()
-                        
+
                         # First check for "fodderCropGuid" then fall back to "cropGuid"
                         guidElement = foodSourceNode.firstChildElement("fodderCropGuid")
                         if guidElement.isNull():
                             guidElement = foodSourceNode.firstChildElement("cropGuid")
-                        
+
                         cropGuid = guidElement.text()
                         myFoodSource.cropGuid = cropGuid
-                        
+
                         # Handle different tag names between C++ and Python versions
                         fodderElement = foodSourceNode.firstChildElement("fodderStrawChaff")
                         myFoodSource.fodder = int(fodderElement.text()) if not fodderElement.isNull() else 0
-                        
+
                         grainElement = foodSourceNode.firstChildElement("fodderGrain")
                         myFoodSource.grain = int(grainElement.text()) if not grainElement.isNull() else 0
-                        
+
                         daysElement = foodSourceNode.firstChildElement("fodderDays")
                         myFoodSource.days = int(daysElement.text()) if not daysElement.isNull() else 0
-                        
+
                         usedElement = foodSourceNode.firstChildElement("fodderUse")
                         if usedElement.isNull():
                             usedElement = foodSourceNode.firstChildElement("used")
@@ -329,7 +329,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             if rasterNameElement.isNull():
                 rasterNameElement = myTopElement.firstChildElement("RasterName")
             self._rasterName = LaUtils.xmlDecode(rasterNameElement.text()) if not rasterNameElement.isNull() else ""
-            
+
             LaUtils.debug.log(f"Successfully loaded animal parameter: {self._mName}")
             return True
         except Exception as e:
@@ -342,7 +342,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
         from la.lib.lautils import LaUtils
         myString = f"<animalParameter guid=\"{self.guid}\">\n"
         # Use both name tags for maximum compatibility
-        myString += f"  <name>{LaUtils.xmlEncode(str(self.name))}</name>\n"  # Standard name tag 
+        myString += f"  <name>{LaUtils.xmlEncode(str(self.name))}</name>\n"  # Standard name tag
         myString += f"  <description>{LaUtils.xmlEncode(str(self.description))}</description>\n"
         myString += f"  <animal>{LaUtils.xmlEncode(str(self.animalGuid))}</animal>\n"
         myString += f"  <percentTameMeat>{self.percentTameMeat}</percentTameMeat>\n"

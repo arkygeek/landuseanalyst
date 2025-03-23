@@ -75,9 +75,6 @@ class LaMainForm(LaMainFormBase):
         # Initialize settings and debug state
         self.readSettings()
 
-        # Connect item changed signal for the animals table
-        self.tblAnimals.itemChanged.connect(self.on_tblAnimals_itemChanged)
-
         # Connect debug message bus to main form
         MESSAGE_BUS.debugMessaged.connect(self.on_debug_message)
 
@@ -147,6 +144,9 @@ class LaMainForm(LaMainFormBase):
         self.sbPopulation.setValue(100)
         # Refresh all displays
         self.refresh()
+
+        # Connect item changed signal for the animals table
+        self.tblAnimals.itemChanged.connect(self.on_tblAnimals_itemChanged)
 
     def loadImages(self):
         """Load images for the application."""
@@ -319,43 +319,6 @@ class LaMainForm(LaMainFormBase):
         """Override base class method to prevent double-handling"""
         pass  # Let our on_cbDebug_clicked handle it
 
-    def animalCellClicked(self, row, column):
-        """Handle animal table cell click event.
-
-        This method is called when a user clicks on a cell in the animals table.
-        It handles the selection and display of animal details.
-
-        Args:
-            row: The row index of the clicked cell
-            column: The column index of the clicked cell
-        """
-        if column == 0:  # Checkbox column
-            item = self.tblAnimals.item(row, column)
-            guid = self.tblAnimals.item(row, 1).data(QtCore.Qt.UserRole)
-
-            # Get the current check state
-            isChecked = item.checkState() == QtCore.Qt.Checked
-
-            # Update the animals map
-            if guid in self.mAnimalsMap:
-                currentValue = self.mAnimalsMap[guid]
-                self.mAnimalsMap[guid] = (isChecked, currentValue[1])
-
-                # Update the animal calculations list
-                if isChecked:
-                    # Add to calculations list if not already there
-                    self.addAnimalToCalculationsList(guid)
-                else:
-                    # Remove from calculations list
-                    self.removeAnimalFromCalculationsList(guid)
-                self.updateTotalPercentages()
-
-        # Always show selected animal details when any cell in the row is clicked
-        self.showSelectedAnimalDetails(row)
-
-        # Debugging
-        LaUtils.debug.log(f"Animal cell clicked - row: {row}, column: {column}", "UI")
-
     def _on_debug_dialog_closed(self):
         """Handle dialog closure cleanup"""
         if hasattr(self, '_debug_dialog') and self._debug_dialog is not None:
@@ -401,75 +364,3 @@ class LaMainForm(LaMainFormBase):
         """
         # Delegate to our unified logging method
         self.logToAllChannels(message)
-
-    def on_tblAnimals_itemChanged(self, item):
-        """Handle item change in the animals table."""
-        try:
-            if item is None:
-                return
-
-            row = item.row()
-            col = item.column()
-
-            # Check if we have a reference to this animal
-            if not hasattr(self, 'mAnimalsMap') or self.mAnimalsMap is None or row not in self.mAnimalsMap:
-                LaUtils.debug.log(f"Cannot update animal parameters: no animal at row {row}", "Error")
-                return
-
-            animal = self.mAnimalsMap[row]
-            if animal is None:
-                return
-
-            # Column 1 is the enable/disable checkbox
-            if col == 1:
-                animal.enabled = (item.checkState() == QtCore.Qt.Checked)
-                LaUtils.debug.log(f"Animal '{animal.name}' {'enabled' if animal.enabled else 'disabled'}", "Animals")
-                # Update calculations when animal is enabled/disabled
-                self.updateCalculations()
-
-            # Handle other columns/parameters as needed
-            # ...
-
-        except Exception as e:
-            LaUtils.debug.log(f"Error updating animal parameter: {str(e)}", "Error")
-            import traceback
-            LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
-    
-    def getEnabledAnimals(self):
-        """Get list of enabled animals to pass to controller."""
-        enabled_animals = []
-        if hasattr(self, 'mAnimalsMap'):
-            for guid, animal in self.mAnimalsMap.items():
-                if hasattr(animal, 'enabled') and animal.enabled:
-                    enabled_animals.append(guid)
-        return enabled_animals
-
-    # Add a method to save animal parameters if not already present
-    def saveAnimalParameters(self):
-        """Save the current animal parameters to the model."""
-        try:
-            if not hasattr(self, 'model') or self.model is None:
-                return
-
-            if not hasattr(self, 'mAnimalsMap') or self.mAnimalsMap is None:
-                return
-
-            # Update model with values from UI
-            for row, animal in self.mAnimalsMap.items():
-                if animal is None:
-                    continue
-
-                # Get enable state from checkbox
-                enableItem = self.tblAnimals.item(row, 1)
-                if enableItem is not None:
-                    animal.enabled = (enableItem.checkState() == QtCore.Qt.Checked)
-
-                # Get other parameters from table if applicable
-                # ...
-
-            LaUtils.debug.log("Animal parameters saved", "Animals")
-
-        except Exception as e:
-            LaUtils.debug.log(f"Error saving animal parameters: {str(e)}", "Error")
-            import traceback
-            LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
