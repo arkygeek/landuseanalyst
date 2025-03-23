@@ -1048,45 +1048,171 @@ class LaMainFormBase(QDialog, FORM_CLASS):
 
     def showSelectedCropDetails(self, row):
         """Show details for the selected crop.
-
         Args:
             row: The row index of the selected crop
         """
         if row < 0 or row >= self.tblCrops.rowCount():
             return
-
         try:
-            guid = self.tblCrops.item(row, 1).data(QtCore.Qt.UserRole)
+            # Get name item which contains the GUID
+            nameItem = self.tblCrops.item(row, 1)
+            if nameItem is None:
+                LaUtils.debug.log(f"No name item found at row {row}", "Error")
+                return
+            
+            # Get the GUID string
+            guid = nameItem.data(QtCore.Qt.UserRole)
+            if not guid:
+                LaUtils.debug.log(f"No GUID found in name item at row {row}", "Error")
+                return
+            
+            # Get the crop object
             crop = LaUtils.getCrop(guid)
-            if crop and crop.name:
-                # Display basic crop details in the text browser
-                html_content = "<h2>" + crop.name + "</h2>"
-                html_content += "<p><strong>Description:</strong> " + crop.description + "</p>"
-                html_content += "<p><strong>Calories:</strong> " + str(crop.cropCalories) + "</p>"
-                # Add any other crop properties you want to display
+            if not crop or not hasattr(crop, 'name') or not crop.name:
+                LaUtils.debug.log(f"Could not find valid crop for GUID: {guid}", "Error")
+                return
+            
+            # Get the parameter GUID from combobox
+            comboBox = self.tblCrops.cellWidget(row, 2)
+            parameterGuid = comboBox.currentData() if comboBox else None
+            
+            # Get the crop parameter
+            cropParameter = None
+            if parameterGuid:
+                cropParametersMap = LaUtils.getAvailableCropParameters()
+                if parameterGuid in cropParametersMap:
+                    cropParameter = cropParametersMap[parameterGuid]
+            
+            # Generate HTML content combining crop and parameter details
+            html_content = self.generateCropDefinitionReport(crop, cropParameter)
+            
+            # Display in text browser
+            if hasattr(self, 'textBrowserCropDefinition'):
                 self.textBrowserCropDefinition.setHtml(html_content)
-
-                # Clear existing image
-                self.lblCropPix.clear()
-
-                # Display image if available
-                if hasattr(crop, 'imageFile') and crop.imageFile:
-                    imagePath = LaUtils.resolvePath(crop.imageFile, 'image')
-                    LaUtils.debug.log(f"Attempting to load crop image: {imagePath}", "UI")
-
-                    if imagePath and os.path.exists(imagePath):
-                        pixmap = QPixmap(imagePath)
+                LaUtils.debug.log(f"Displayed crop details for {crop.name}", "UI")
+            
+            # Handle image display
+            if hasattr(self, 'lblCropPix'):
+                self.lblCropPix.clear()  # Clear existing image
+                
+                # Get image path, handling both property and method cases
+                image_path = ""
+                if hasattr(crop, 'imageFile'):
+                    if callable(getattr(crop, 'imageFile')):
+                        image_path = crop.imageFile()
+                    else:
+                        image_path = crop.imageFile
+                
+                if image_path:
+                    # Try to resolve the image path
+                    resolved_path = LaUtils.resolvePath(str(image_path), 'image')
+                    LaUtils.debug.log(f"Attempting to load crop image: {resolved_path}", "UI")
+                    
+                    if os.path.exists(resolved_path):
+                        pixmap = QPixmap(resolved_path)
                         if not pixmap.isNull():
                             self.lblCropPix.setPixmap(pixmap)
                             LaUtils.debug.log("Crop image loaded successfully", "UI")
                         else:
-                            LaUtils.debug.log(f"Failed to create pixmap from {imagePath}", "Error")
+                            # Try alternative path in user images directory
+                            LaUtils.debug.log(f"Failed to create pixmap from {resolved_path}", "Error")
+                            imagesDir = LaUtils.userImagesDirPath()
+                            imageFileName = os.path.basename(str(image_path))
+                            alternativePath = os.path.join(imagesDir, imageFileName)
+                            
+                            if os.path.exists(alternativePath):
+                                pixmap = QPixmap(alternativePath)
+                                if not pixmap.isNull():
+                                    self.lblCropPix.setPixmap(pixmap)
+                                    LaUtils.debug.log(f"Successfully loaded image from alternative path: {alternativePath}", "UI")
+                                else:
+                                    LaUtils.debug.log(f"Failed to load image from alternative path: {alternativePath}", "Error")
+                            else:
+                                LaUtils.debug.log(f"No valid image path found", "Warning")
                     else:
-                        LaUtils.debug.log(f"Image path doesn't exist: {imagePath}", "Warning")
+                        LaUtils.debug.log(f"Image path doesn't exist: {resolved_path}", "Warning")
         except Exception as e:
             LaUtils.debug.log(f"Error showing crop details: {str(e)}", "Error")
             import traceback
             LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
+            
+    def generateCropDefinitionReport(self, crop, cropParameter):
+        """Generate an HTML report showing crop details and crop parameter details.
+        
+        Args:
+            crop: The crop object
+            cropParameter: The crop parameter object
+        
+        Returns:
+            HTML string containing formatted crop and parameter details
+        """
+        # Start with the HTML structure
+        html = "<body>"
+        html += "<table width=\"100%\">"
+        html += "<tr>"
+        
+        # Left column: Crop details
+        html += "<td style=\"vertical-align:top; width:50%;\">"
+        if crop:
+            html += crop.toHtml()
+        html += "</td>"
+        
+        # Right column: Parameter details
+        html += "<td style=\"vertical-align:top; width:50%;\">"
+        if cropParameter:
+            # Add parameter details header
+            html += f"<h3>Parameters for {crop.name}</h3>"
+            html += "<table>"
+            
+            # Add parameter details
+            html += f"<tr><td><b>Parameter Name:</b></td><td>{cropParameter.name}</td></tr>"
+            html += f"<tr><td><b>Description:</b></td><td>{cropParameter.description}</td></tr>"
+            html += f"<tr><td><b>Portion of Tame Crop Diet:</b></td><td>{cropParameter.percentTameCrop}%</td></tr>"
+            
+            # Add spoilage if it exists
+            if hasattr(cropParameter, 'spoilage'):
+                html += f"<tr><td><b>Spoilage:</b></td><td>{cropParameter.spoilage}%</td></tr>"
+            
+            # Add reseed if it exists
+            if hasattr(cropParameter, 'reseed'):
+                html += f"<tr><td><b>Reseed:</b></td><td>{cropParameter.reseed}%</td></tr>"
+            
+            # Add crop rotation if it exists
+            if hasattr(cropParameter, 'cropRotation'):
+                cropRotationText = "Yes" if cropParameter.cropRotation else "No"
+                html += f"<tr><td><b>Crop Rotation:</b></td><td>{cropRotationText}</td></tr>"
+            
+            # Add fallow ratio if it exists
+            if hasattr(cropParameter, 'fallowRatio') and cropParameter.fallowRatio > 0:
+                html += f"<tr><td><b>Fallow Ratio:</b></td><td>{cropParameter.fallowRatio}</td></tr>"
+                
+                # Add fallow value if fallowRatio is used
+                if hasattr(cropParameter, 'fallowValue'):
+                    html += f"<tr><td><b>Fallow Value:</b></td><td>{cropParameter.fallowValue}</td></tr>"
+            
+            # Add land use information
+            if hasattr(cropParameter, 'useCommonLand'):
+                commonLandText = "Yes" if cropParameter.useCommonLand else "No"
+                html += f"<tr><td><b>Use Common Land:</b></td><td>{commonLandText}</td></tr>"
+            
+            if hasattr(cropParameter, 'useSpecificLand'):
+                specificLandText = "Yes" if cropParameter.useSpecificLand else "No"
+                html += f"<tr><td><b>Use Specific Land:</b></td><td>{specificLandText}</td></tr>"
+            
+            # Add raster name if it exists and is being used
+            if hasattr(cropParameter, 'rasterName') and cropParameter.rasterName:
+                html += f"<tr><td><b>Raster:</b></td><td>{cropParameter.rasterName}</td></tr>"
+            
+            html += "</table>"
+        else:
+            html += "<p>No parameters selected for this crop.</p>"
+        
+        html += "</td>"
+        html += "</tr>"
+        html += "</table>"
+        html += "</body>"
+        
+        return html
 
     def updateCropCalculations(self, crop):
         """Update calculations for a crop.
