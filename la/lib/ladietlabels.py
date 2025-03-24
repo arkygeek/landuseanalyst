@@ -1,11 +1,10 @@
-import json
-from typing import Dict, Tuple
 # ladietlabels.py
+import copy
+from typing import Dict, Tuple
 from qgis.PyQt.QtCore import QObject, pyqtProperty, pyqtSignal, pyqtSlot, Qt
 
 from la.lib.laserialisable import LaSerialisable
 from la.lib.laguid import LaGuid
-# from la.lib.la import La
 
 class LaDietLabels(QObject, LaSerialisable, LaGuid):
     """
@@ -106,7 +105,7 @@ class LaDietLabels(QObject, LaSerialisable, LaGuid):
         :return: The dairy mega-calories value
         :rtype: float
         """
-        return self._dairyMCalories
+        return float(str(self._dairyMCalories))
 
     @dairyMCalories.setter
     def dairyMCalories(self, theDairyMCalories: float) -> None:

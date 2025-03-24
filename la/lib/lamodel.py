@@ -11,6 +11,7 @@ from la.lib.ladietlabels import LaDietLabels
 from la.lib.lautils import LaUtils, LaMessageBus
 from la.lib.la import AreaUnits, Status, Priority, LandBeingGrazed, LandFound
 from la.lib.laanimal import LaAnimal
+from la.lib.lafoodsource import LaFoodSource
 
 MESSAGE_BUS: LaMessageBus = LaMessageBus()
 
@@ -104,67 +105,67 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         """
         super().__init__(parent)
         if theModel is not None:
-            self._name = theModel.name
-            self._population = theModel.population
+            self._mName = theModel.name
+            self._mPopulation = theModel.population
             self.setGuid(str(theModel.guid))
-            self._period = theModel.period
-            self._projection = theModel.projection
-            self._easting = theModel.easting
-            self._northing = theModel.northing
-            self._euclideanDistance = theModel.euclideanDistance
-            self._walkingTime = theModel.walkingTime
-            self._pathDistance = theModel.pathDistance
-            self._precision = theModel.precision
-            self._dietPercent = theModel.dietPercent
-            self._percentOfDietThatIsFromCrops = theModel.percentOfDietThatIsFromCrops
-            self._meatPercent = theModel.meatPercent
-            self._caloriesPerPersonDaily = theModel.caloriesPerPersonDaily
-            self._dairyUtilisation = theModel.dairyUtilisation
-            self._baseOnPlants = theModel.baseOnPlants
-            self._includeDairy = theModel.includeDairy
-            self._limitDairy = theModel.limitDairy
-            self._limitDairyPercent = theModel.limitDairyPercent
-            self._fallowStatus = theModel.fallowStatus
-            self._fallowRatio = theModel.fallowRatio
-            self._landBeingGrazed = theModel.landBeingGrazed
-            self._landFound = theModel.landFound
+            self._mPeriod = theModel.period
+            self._mProjection = theModel.projection
+            self._mEasting = theModel.easting
+            self._mNorthing = theModel.northing
+            self._mEuclideanDistance = theModel.euclideanDistance
+            self._mWalkingTime = theModel.walkingTime
+            self._mPathDistance = theModel.pathDistance
+            self._mPrecision = theModel.precision
+            self._mDietPercent = theModel.dietPercent
+            self._mPercentOfDietThatIsFromCrops = theModel.percentOfDietThatIsFromCrops
+            self._mMeatPercent = theModel.meatPercent
+            self._mCaloriesPerPersonDaily = theModel.caloriesPerPersonDaily
+            self._mDairyUtilisation = theModel.dairyUtilisation
+            self._mBaseOnPlants = theModel.baseOnPlants
+            self._mIncludeDairy = theModel.includeDairy
+            self._mLimitDairy = theModel.limitDairy
+            self._mLimitDairyPercent = theModel.limitDairyPercent
+            self._mFallowStatus = theModel.fallowStatus
+            self._mFallowRatio = theModel.fallowRatio
+            self._mLandBeingGrazed = theModel.landBeingGrazed
+            self._mLandFound = theModel.landFound
         else:
             self.setGuid(None)
-            self._name = "No Name Set"
-            self._population = 1000
-            self._period = "No Period Set"
-            self._projection = 100
-            self._precision = 5
-            self._dietPercent = 25
-            self._percentOfDietThatIsFromCrops = 10
-            self._meatPercent = 10
-            self._caloriesPerPersonDaily = 2500
-            self._dairyUtilisation = 100
-            self._baseOnPlants = True
-            self._includeDairy = True
-            self._limitDairy = False
-            self._limitDairyPercent = 10
-            self._fallowStatus = Status.MoreThanEnoughToCompletelySatisfy
-            self._fallowRatio = 1
-            self._easting = 0
-            self._northing = 0
-            self._euclideanDistance = True
-            self._walkingTime = False
-            self._pathDistance = False
-            self._commonLandValue = 0.0
-            self._commonLandAreaUnits = AreaUnits.Hectare
-            self._herdSize = 0
-            self._animals = {}
-            self._crops = {}
-            self._diets = {}
-            self._dietLabels = []
-            self._landBeingGrazed = LandBeingGrazed.Common
-            self._landFound = LandFound.NotEnough
-            self._priority = Priority.None_
-            self._description = "No Description Set"
-            self._areaUnits = AreaUnits.Hectare
-            self._status = Status.MoreThanEnoughToCompletelySatisfy
-            self._icon = None
+            self._mName = "No Name Set"
+            self._mPopulation = 1000
+            self._mPeriod = "No Period Set"
+            self._mProjection = 100
+            self._mPrecision = 5
+            self._mDietPercent = 25
+            self._mPercentOfDietThatIsFromCrops = 10
+            self._mMeatPercent = 10
+            self._mCaloriesPerPersonDaily = 2500
+            self._mDairyUtilisation = 100
+            self._mBaseOnPlants = True
+            self._mIncludeDairy = True
+            self._mLimitDairy = False
+            self._mLimitDairyPercent = 10
+            self._mFallowStatus = Status.MoreThanEnoughToCompletelySatisfy
+            self._mFallowRatio = 1
+            self._mEasting = 0
+            self._mNorthing = 0
+            self._mEuclideanDistance = True
+            self._mWalkingTime = False
+            self._mPathDistance = False
+            self._mCommonLandValue = 0.0
+            self._mCommonLandAreaUnits = AreaUnits.Hectare
+            self._mHerdSize = 0
+            self._mAnimals = {}
+            self._mCrops = {}
+            self._mDiets = {}
+            self._mDietLabels = []
+            self._mLandBeingGrazed = LandBeingGrazed.Common
+            self._mLandFound = LandFound.NotEnough
+            self._mPriority = Priority.None_
+            self._mDescription = "No Description Set"
+            self._mAreaUnits = AreaUnits.Hectare
+            self._mStatus = Status.MoreThanEnoughToCompletelySatisfy
+            self._mIcon = None
         self.logger = logging.getLogger(__name__)
 
     def logMessage(self, theMessage: str):
@@ -181,7 +182,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
     def __copy__(self):
         myModel: LaModel = LaModel()
-        myModel.name = self._name
+        myModel.name = self._mName
 
         return LaModel(self)
 
@@ -190,109 +191,109 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
     @pyqtProperty(str, notify=nameChanged)
     def name(self) -> str: # type: ignore
-        return self._name
+        return self._mName
 
     @name.setter
     def name(self, theName: str):
-        if self._name != theName:
-            self._name = theName
+        if self._mName != theName:
+            self._mName = theName
             self.nameChanged.emit()
 
     @pyqtProperty(int, notify=populationChanged)
     def population(self) -> int: # type: ignore
-        return int(str(self._population))
+        return int(str(self._mPopulation))
 
     @population.setter
     def population(self, thePopulation: int):
-        if self._population != thePopulation:
-            self._population = thePopulation
+        if self._mPopulation != thePopulation:
+            self._mPopulation = thePopulation
             self.populationChanged.emit()
 
     @pyqtProperty(str, notify=periodChanged)
     def period(self) -> str: # type: ignore
-        return str(self._period)
+        return str(self._mPeriod)
 
     @period.setter
     def period(self, thePeriod: str):
-        if self._period != thePeriod:
-            self._period = thePeriod
+        if self._mPeriod != thePeriod:
+            self._mPeriod = thePeriod
             self.periodChanged.emit()
 
 
 
     @pyqtProperty(int, notify=projectionChanged)
     def projection(self) -> int: # type: ignore
-        return int(str(self._projection))
+        return int(str(self._mProjection))
 
     @projection.setter
     def projection(self, theProjection: int):
-        if self._projection != theProjection:
-            self._projection = theProjection
+        if self._mProjection != theProjection:
+            self._mProjection = theProjection
             self.projectionChanged.emit()
 
     @pyqtProperty(int, notify=precisionChanged)
     def precision(self) -> int: # type: ignore
-        return int(str(self._precision))
+        return int(str(self._mPrecision))
 
     @precision.setter
     def precision(self, thePrecision: int):
-        if self._precision != thePrecision:
-            self._precision = thePrecision
+        if self._mPrecision != thePrecision:
+            self._mPrecision = thePrecision
             self.precisionChanged.emit()
 
     @pyqtProperty(int, notify=dietPercentChanged)
     def dietPercent(self) -> int: # type: ignore
-        return int(str(self._dietPercent))
+        return int(str(self._mDietPercent))
 
     @dietPercent.setter
     def dietPercent(self, theDietPercent: int):
-        if self._dietPercent != theDietPercent:
-            self._dietPercent = theDietPercent
+        if self._mDietPercent != theDietPercent:
+            self._mDietPercent = theDietPercent
             self.dietPercentChanged.emit()
 
     @pyqtProperty(int, notify=percentOfDietThatIsFromCropsChanged)
     def percentOfDietThatIsFromCrops(self) -> int: # type: ignore
-        return int(str(self._percentOfDietThatIsFromCrops))
+        return int(str(self._mPercentOfDietThatIsFromCrops))
 
     @percentOfDietThatIsFromCrops.setter
     def percentOfDietThatIsFromCrops(self, thePercent: int):
-        if self._percentOfDietThatIsFromCrops != thePercent:
-            self._percentOfDietThatIsFromCrops = thePercent
+        if self._mPercentOfDietThatIsFromCrops != thePercent:
+            self._mPercentOfDietThatIsFromCrops = thePercent
             self.percentOfDietThatIsFromCropsChanged.emit()
 
     @pyqtProperty(int, notify=meatPercentChanged)
     def meatPercent(self) -> int: # type: ignore
-        return int(str(self._meatPercent))
+        return int(str(self._mMeatPercent))
 
     @meatPercent.setter
     def meatPercent(self, theMeatPercent: int):
-        if self._meatPercent != theMeatPercent:
-            self._meatPercent = theMeatPercent
+        if self._mMeatPercent != theMeatPercent:
+            self._mMeatPercent = theMeatPercent
             self.meatPercentChanged.emit()
 
     @pyqtProperty(int, notify=caloriesPerPersonDailyChanged)
     def caloriesPerPersonDaily(self) -> int: # type: ignore
-        return int(str(self._caloriesPerPersonDaily))
+        return int(str(self._mCaloriesPerPersonDaily))
 
     @caloriesPerPersonDaily.setter
     def caloriesPerPersonDaily(self, theCaloriesPerPersonDaily: int):
-        if self._caloriesPerPersonDaily != theCaloriesPerPersonDaily:
-            self._caloriesPerPersonDaily = theCaloriesPerPersonDaily
+        if self._mCaloriesPerPersonDaily != theCaloriesPerPersonDaily:
+            self._mCaloriesPerPersonDaily = theCaloriesPerPersonDaily
             self.caloriesPerPersonDailyChanged.emit()
 
     @pyqtProperty(int, notify=dairyUtilisationChanged)
     def dairyUtilisation(self) -> int: # type: ignore
-        return int(str(self._dairyUtilisation))
+        return int(str(self._mDairyUtilisation))
 
     @dairyUtilisation.setter
     def dairyUtilisation(self, thePercent: int):
-        if self._dairyUtilisation != thePercent:
-            self._dairyUtilisation = thePercent
+        if self._mDairyUtilisation != thePercent:
+            self._mDairyUtilisation = thePercent
             self.dairyUtilisationChanged.emit()
 
     @pyqtProperty(bool, notify=baseOnPlantsChanged)
     def baseOnPlants(self) -> bool: # type: ignore
-        return bool(self._baseOnPlants)
+        return bool(self._mBaseOnPlants)
         """ Hint on usage to read and set the checkbox state
             # When reading from checkbox
             self._baseOnPlants = self.cboxBaseOnPlants.isChecked()
@@ -302,247 +303,247 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
     @baseOnPlants.setter
     def baseOnPlants(self, theBool: bool):
-        if self._baseOnPlants != theBool:
-            self._baseOnPlants = theBool
+        if self._mBaseOnPlants != theBool:
+            self._mBaseOnPlants = theBool
             self.baseOnPlantsChanged.emit()
 
     @pyqtProperty(bool, notify=includeDairyChanged)
     def includeDairy(self) -> bool: # type: ignore
-        return bool(self._includeDairy)
+        return bool(self._mIncludeDairy)
 
     @includeDairy.setter
     def includeDairy(self, theBool: bool):
-        if self._includeDairy != theBool:
-            self._includeDairy = theBool
+        if self._mIncludeDairy != theBool:
+            self._mIncludeDairy = theBool
             self.includeDairyChanged.emit()
 
     @pyqtProperty(bool, notify=limitDairyChanged)
     def limitDairy(self) -> bool: # type: ignore
-        return bool(self._limitDairy)
+        return bool(self._mLimitDairy)
 
     @limitDairy.setter
     def limitDairy(self, theBool: bool):
-        if self._limitDairy != theBool:
-            self._limitDairy = theBool
+        if self._mLimitDairy != theBool:
+            self._mLimitDairy = theBool
             self.limitDairyChanged.emit()
 
     @pyqtProperty(int, notify=limitDairyPercentChanged)
     def limitDairyPercent(self) -> int: # type: ignore
-        return int(str(self._limitDairyPercent))
+        return int(str(self._mLimitDairyPercent))
 
     @limitDairyPercent.setter
     def limitDairyPercent(self, thePercent: int):
-        if self._limitDairyPercent != thePercent:
-            self._limitDairyPercent = thePercent
+        if self._mLimitDairyPercent != thePercent:
+            self._mLimitDairyPercent = thePercent
             self.limitDairyPercentChanged.emit()
 
     @pyqtProperty(str, notify=fallowStatusChanged) # TODO: set this to the correct return type
     def fallowStatus(self) -> Status: # type: ignore
-        return (self._fallowStatus)
+        return (self._mFallowStatus)
 
     @fallowStatus.setter
     def fallowStatus(self, theStatus: Status):
-        if self._fallowStatus != theStatus:
-            self._fallowStatus = theStatus
+        if self._mFallowStatus != theStatus:
+            self._mFallowStatus = theStatus
             self.fallowStatusChanged.emit()
 
     @pyqtProperty(int, notify=fallowRatioChanged)
     def fallowRatio(self) -> int: # type: ignore
-        return int(str(self._fallowRatio))
+        return int(str(self._mFallowRatio))
 
     @fallowRatio.setter
     def fallowRatio(self, theRatio: int):
-        if self._fallowRatio != theRatio:
-            self._fallowRatio = theRatio
+        if self._mFallowRatio != theRatio:
+            self._mFallowRatio = theRatio
             self.fallowRatioChanged.emit()
 
     @pyqtProperty(int, notify=eastingChanged)
     def easting(self) -> int: # type: ignore
-        return int(str(self._easting))
+        return int(str(self._mEasting))
 
     @easting.setter
     def easting(self, theEasting: int):
-        if self._easting != theEasting:
-            self._easting = theEasting
+        if self._mEasting != theEasting:
+            self._mEasting = theEasting
             self.eastingChanged.emit()
 
     @pyqtProperty(int, notify=northingChanged)
     def northing(self) -> int: # type: ignore
-        return int(str(self._northing))
+        return int(str(self._mNorthing))
 
     @northing.setter
     def northing(self, theNorthing: int):
-        if self._northing != theNorthing:
-            self._northing = theNorthing
+        if self._mNorthing != theNorthing:
+            self._mNorthing = theNorthing
             self.northingChanged.emit()
 
     @pyqtProperty(bool, notify=euclideanDistanceChanged)
     def euclideanDistance(self) -> bool: # type: ignore
-        return bool(self._euclideanDistance)
+        return bool(self._mEuclideanDistance)
 
     @euclideanDistance.setter
     def euclideanDistance(self, theBool: bool):
-        if self._euclideanDistance != theBool:
-            self._euclideanDistance = theBool
+        if self._mEuclideanDistance != theBool:
+            self._mEuclideanDistance = theBool
             self.euclideanDistanceChanged.emit()
 
     @pyqtProperty(bool, notify=walkingTimeChanged)
     def walkingTime(self) -> bool: # type: ignore
-        return bool(self._walkingTime)
+        return bool(self._mWalkingTime)
 
     @walkingTime.setter
     def walkingTime(self, theBool: bool):
-        if self._walkingTime != theBool:
-            self._walkingTime = theBool
+        if self._mWalkingTime != theBool:
+            self._mWalkingTime = theBool
             self.walkingTimeChanged.emit()
 
     @pyqtProperty(bool, notify=pathDistanceChanged)
     def pathDistance(self) -> bool: # type: ignore
-        return bool(self._pathDistance)
+        return bool(self._mPathDistance)
 
     @pathDistance.setter
     def pathDistance(self, theBool: bool):
-        if self._pathDistance != theBool:
-            self._pathDistance = theBool
+        if self._mPathDistance != theBool:
+            self._mPathDistance = theBool
             self.pathDistanceChanged.emit()
 
     @pyqtProperty(float, notify=commonLandValueChanged)
     def commonLandValue(self) -> float: # type: ignore
-        return float(str(self._commonLandValue))
+        return float(str(self._mCommonLandValue))
 
     @commonLandValue.setter
     def commonLandValue(self, theValue: float):
-        if self._commonLandValue != theValue:
-            self._commonLandValue = theValue
+        if self._mCommonLandValue != theValue:
+            self._mCommonLandValue = theValue
             self.commonLandValueChanged.emit()
 
     @pyqtProperty(AreaUnits, notify=commonLandAreaUnitsChanged)
     def commonLandAreaUnits(self) -> AreaUnits: # type: ignore
-        return self._commonLandAreaUnits # TODO: figure out how to do this
+        return self._mCommonLandAreaUnits # TODO: figure out how to do this
 
     @commonLandAreaUnits.setter
     def commonLandAreaUnits(self, theAreaUnits: AreaUnits):
-        if self._commonLandAreaUnits != theAreaUnits:
-            self._commonLandAreaUnits = theAreaUnits
+        if self._mCommonLandAreaUnits != theAreaUnits:
+            self._mCommonLandAreaUnits = theAreaUnits
             self.commonLandAreaUnitsChanged.emit()
 
     @pyqtProperty(int, notify=herdSizeChanged)
     def herdSize(self) -> int: # type: ignore
-        return int(str(self._herdSize))
+        return int(str(self._mHerdSize))
 
     @herdSize.setter
     def herdSize(self, theAnimalGuid: str):
-        if self._herdSize != theAnimalGuid:
-            self._herdSize = theAnimalGuid
+        if self._mHerdSize != theAnimalGuid:
+            self._mHerdSize = theAnimalGuid
             self.herdSizeChanged.emit()
 
-    @pyqtProperty(Dict[str, str], notify=animalsChanged) # TODO: check this I think Dict type might be wrong
+    @pyqtProperty(str, notify=animalsChanged) # TODO: check this I think Dict type might be wrong
     def animals(self) -> Dict[str, str]: # type: ignore
-        return self._animals
+        return self._mAnimals
 
     @animals.setter
     def animals(self, theAnimals: Dict[str, str]):
-        if self._animals != theAnimals:
-            self._animals = theAnimals
+        if self._mAnimals != theAnimals:
+            self._mAnimals = theAnimals
             self.animalsChanged.emit()
 
     @pyqtProperty(str, notify=cropsChanged) # TODO: check this to see if it is correct
     def crops(self) -> Dict[str, str]: # type: ignore
-        return self._crops
+        return self._mCrops
 
     @crops.setter
     def crops(self, theCrops: Dict[str, str]):
-        if self._crops != theCrops:
-            self._crops = theCrops
+        if self._mCrops != theCrops:
+            self._mCrops = theCrops
             self.cropsChanged.emit()
 
     @pyqtProperty(str, notify=dietsChanged) # TODO: check this to see if it is correct
     def diets(self) -> Dict[str, LaDietLabels]: # type: ignore
-        return self._diets
+        return self._mDiets
 
     @diets.setter
     def diets(self, theDiets: Dict[str, LaDietLabels]):
-        if self._diets != theDiets:
-            self._diets = theDiets
+        if self._mDiets != theDiets:
+            self._mDiets = theDiets
             self.dietsChanged.emit()
 
     @pyqtProperty(str, notify=dietLabelsChanged) # TODO: check this to see if it is correct
     def dietLabels(self) -> List[LaDietLabels]: # type: ignore
-        return self._dietLabels
+        return self._mDietLabels
 
     @dietLabels.setter
     def dietLabels(self, theDietLabels: List[LaDietLabels]):
-        if self._dietLabels != theDietLabels:
-            self._dietLabels = theDietLabels
+        if self._mDietLabels != theDietLabels:
+            self._mDietLabels = theDietLabels
             self.dietLabelsChanged.emit()
 
     @pyqtProperty(str, notify=landBeingGrazedChanged) # TODO: check this to see if it is correct
     def landBeingGrazed(self) -> LandBeingGrazed: # type: ignore
-        return self._landBeingGrazed
+        return self._mLandBeingGrazed
 
     @landBeingGrazed.setter
     def landBeingGrazed(self, theLandBeingGrazed: LandBeingGrazed):
-        if self._landBeingGrazed != theLandBeingGrazed:
-            self._landBeingGrazed = theLandBeingGrazed
+        if self._mLandBeingGrazed != theLandBeingGrazed:
+            self._mLandBeingGrazed = theLandBeingGrazed
             self.landBeingGrazedChanged.emit()
 
     @pyqtProperty(str, notify=landFoundChanged)
     def landFound(self) -> LandFound: # type: ignore
-        return self._landFound
+        return self._mLandFound
 
     @landFound.setter
     def landFound(self, theLandFound: LandFound):
-        if self._landFound != theLandFound:
-            self._landFound = theLandFound
+        if self._mLandFound != theLandFound:
+            self._mLandFound = theLandFound
             self.landFoundChanged.emit()
 
     @pyqtProperty(str, notify=priorityChanged)
     def priority(self) -> Priority: # type: ignore
-        return self._priority
+        return self._mPriority
 
     @priority.setter
     def priority(self, thePriority: Priority):
-        if self._priority != thePriority:
-            self._priority = thePriority
+        if self._mPriority != thePriority:
+            self._mPriority = thePriority
             self.priorityChanged.emit()
 
     @pyqtProperty(str, notify=descriptionChanged)
     def description(self) -> str: # type: ignore
-        return self._description
+        return self._mDescription
 
     @description.setter
     def description(self, theDescription: str):
-        if self._description != theDescription:
-            self._description = theDescription
+        if self._mDescription != theDescription:
+            self._mDescription = theDescription
             self.descriptionChanged.emit()
 
     @pyqtProperty(str, notify=areaUnitsChanged)
     def areaUnits(self) -> AreaUnits: # type: ignore
-        return self._areaUnits
+        return self._mAreaUnits
 
     @areaUnits.setter
     def areaUnits(self, theAreaUnits: AreaUnits):
-        if self._areaUnits != theAreaUnits:
-            self._areaUnits = theAreaUnits
+        if self._mAreaUnits != theAreaUnits:
+            self._mAreaUnits = theAreaUnits
             self.areaUnitsChanged.emit()
 
     @pyqtProperty(str, notify=statusChanged)
     def status(self) -> Status: # type: ignore
-        return self._status
+        return self._mStatus
 
     @status.setter
     def status(self, theStatus: Status):
-        if self._status != theStatus:
-            self._status = theStatus
+        if self._mStatus != theStatus:
+            self._mStatus = theStatus
             self.statusChanged.emit()
 
     @property
     def guid(self) -> str:
-        return self._guid
+        return self._mGuid
 
     @guid.setter
     def guid(self, theGuid: str):
-        if self._guid != theGuid:
+        if self._mGuid != theGuid:
             self.setGuid(theGuid)
             self.guidChanged.emit()
 
@@ -615,68 +616,68 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         """
         root = ET.fromstring(theXmlData)
 
-        self._guid = root.attrib.get('guid', QUuid.createUuid().toString(QUuid.StringFormat.Id128))
-        self._name = root.findtext('name', default="No Name Set")
-        self._population = int(root.findtext('population', default="1000"))
-        self._period = root.findtext('period', default="No Period Set")
-        self._projection = int(root.findtext('projection', default="100"))
-        self._easting = int(root.findtext('easting', default="0"))
-        self._northing = int(root.findtext('northing', default="0"))
-        self._euclideanDistance = root.findtext('euclideanDistance', default="True") == "True"
-        self._walkingTime = root.findtext('walkingTime', default="False") == "False"
-        self._pathDistance = root.findtext('pathDistance', default="False") == "False"
-        self._precision = int(root.findtext('precision', default="5"))
-        self._dietPercent = int(root.findtext('dietPercent', default="25"))
-        self._percentOfDietThatIsFromCrops = int(root.findtext('plantPercent', default="10"))
-        self._meatPercent = int(root.findtext('meatPercent', default="10"))
-        self._caloriesPerPersonDaily = int(root.findtext('caloriesPerPersonDaily', default="2500"))
-        self._baseOnPlants = root.findtext('baseOnPlants', default="True") == "True"
-        self._includeDairy = root.findtext('includeDairy', default="True") == "True"
-        self._limitDairy = root.findtext('limitDairy', default="False") == "False"
-        self._limitDairyPercent = int(root.findtext('limitDairyPercent', default="10"))
-        self._dairyUtilisation = int(root.findtext('dairyUtilisation', default="100"))
-        self._fallowStatus = Status[root.findtext('fallowStatus', default="FALLOW")]
-        self._fallowRatio = int(root.findtext('fallowRatio', default="1"))
-        self._commonLandValue = float(root.findtext('commonLandValue', default="0.0"))
-        self._commonLandAreaUnits = AreaUnits[root.findtext('commonLandAreaUnits', default="HECTARES")]
-        self._herdSize = int(root.findtext('herdSize', default="0"))
-        self._animals = {}  # Assuming animals are stored in a more complex structure
-        self._crops = {}  # Assuming crops are stored in a more complex structure
-        self._diets = {}  # Assuming diets are stored in a more complex structure
-        self._dietLabels = []  # Assuming diet labels are stored in a more complex structure
-        self._landBeingGrazed = LandBeingGrazed[root.findtext('landBeingGrazed', default="NO")]
-        self._landFound = LandFound[root.findtext('landFound', default="NO")]
-        self._priority = Priority[root.findtext('priority', default="NORMAL")]
-        self._description = root.findtext('description', default="No Description Set")
-        self._areaUnits = AreaUnits[root.findtext('areaUnits', default="HECTARES")]
-        self._status = Status[root.findtext('status', default="FALLOW")]
-        self._icon = None  # Assuming icon is handled separately
+        self._mGuid = root.attrib.get('guid', QUuid.createUuid().toString(QUuid.StringFormat.Id128))
+        self._mName = root.findtext('name', default="No Name Set")
+        self._mPopulation = int(root.findtext('population', default="1000"))
+        self._mPeriod = root.findtext('period', default="No Period Set")
+        self._mProjection = int(root.findtext('projection', default="100"))
+        self._mEasting = int(root.findtext('easting', default="0"))
+        self._mNorthing = int(root.findtext('northing', default="0"))
+        self._mEuclideanDistance = root.findtext('euclideanDistance', default="True") == "True"
+        self._mWalkingTime = root.findtext('walkingTime', default="False") == "False"
+        self._mPathDistance = root.findtext('pathDistance', default="False") == "False"
+        self._mPrecision = int(root.findtext('precision', default="5"))
+        self._mDietPercent = int(root.findtext('dietPercent', default="25"))
+        self._mPercentOfDietThatIsFromCrops = int(root.findtext('plantPercent', default="10"))
+        self._mMeatPercent = int(root.findtext('meatPercent', default="10"))
+        self._mCaloriesPerPersonDaily = int(root.findtext('caloriesPerPersonDaily', default="2500"))
+        self._mBaseOnPlants = root.findtext('baseOnPlants', default="True") == "True"
+        self._mIncludeDairy = root.findtext('includeDairy', default="True") == "True"
+        self._mLimitDairy = root.findtext('limitDairy', default="False") == "False"
+        self._mLimitDairyPercent = int(root.findtext('limitDairyPercent', default="10"))
+        self._mDairyUtilisation = int(root.findtext('dairyUtilisation', default="100"))
+        self._mFallowStatus = Status[root.findtext('fallowStatus', default="FALLOW")]
+        self._mFallowRatio = int(root.findtext('fallowRatio', default="1"))
+        self._mCommonLandValue = float(root.findtext('commonLandValue', default="0.0"))
+        self._mCommonLandAreaUnits = AreaUnits[root.findtext('commonLandAreaUnits', default="HECTARES")]
+        self._mHerdSize = int(root.findtext('herdSize', default="0"))
+        self._mAnimals = {}  # Assuming animals are stored in a more complex structure
+        self._mCrops = {}  # Assuming crops are stored in a more complex structure
+        self._mDiets = {}  # Assuming diets are stored in a more complex structure
+        self._mDietLabels = []  # Assuming diet labels are stored in a more complex structure
+        self._mLandBeingGrazed = LandBeingGrazed[root.findtext('landBeingGrazed', default="NO")]
+        self._mLandFound = LandFound[root.findtext('landFound', default="NO")]
+        self._mPriority = Priority[root.findtext('priority', default="NORMAL")]
+        self._mDescription = root.findtext('description', default="No Description Set")
+        self._mAreaUnits = AreaUnits[root.findtext('areaUnits', default="HECTARES")]
+        self._mStatus = Status[root.findtext('status', default="FALLOW")]
+        self._mIcon = None  # Assuming icon is handled separately
 
     def toXml(self) -> str:
         myString = f'<model guid="{self.guid}">\n'
-        myString += f'  <name>{LaUtils.xmlEncode(self._name)}</name>\n'
-        myString += f'  <population>{self._population}</population>\n'
-        myString += f'  <period>{LaUtils.xmlEncode(self._period)}</period>\n'
-        myString += f'  <projection>{self._projection}</projection>\n'
-        myString += f'  <easting>{self._easting}</easting>\n'
-        myString += f'  <northing>{self._northing}</northing>\n'
-        myString += f'  <euclideanDistance>{self._euclideanDistance}</euclideanDistance>\n'
-        myString += f'  <walkingTime>{self._walkingTime}</walkingTime>\n'
-        myString += f'  <pathDistance>{self._pathDistance}</pathDistance>\n'
-        myString += f'  <precision>{self._precision}</precision>\n'
-        myString += f'  <dietPercent>{self._dietPercent}</dietPercent>\n'
-        myString += f'  <plantPercent>{self._percentOfDietThatIsFromCrops}</plantPercent>\n'
-        myString += f'  <meatPercent>{self._meatPercent}</meatPercent>\n'
-        myString += f'  <caloriesPerPersonDaily>{self._caloriesPerPersonDaily}</caloriesPerPersonDaily>\n'
-        myString += f'  <baseOnPlants>{self._baseOnPlants}</baseOnPlants>\n'
-        myString += f'  <includeDairy>{self._includeDairy}</includeDairy>\n'
-        myString += f'  <limitDairy>{self._limitDairy}</limitDairy>\n'
-        myString += f'  <limitDairyPercent>{self._limitDairyPercent}</limitDairyPercent>\n'
-        myString += f'  <dairyUtilisation>{self._dairyUtilisation}</dairyUtilisation>\n'
+        myString += f'  <name>{LaUtils.xmlEncode(self._mName)}</name>\n'
+        myString += f'  <population>{self._mPopulation}</population>\n'
+        myString += f'  <period>{LaUtils.xmlEncode(self._mPeriod)}</period>\n'
+        myString += f'  <projection>{self._mProjection}</projection>\n'
+        myString += f'  <easting>{self._mEasting}</easting>\n'
+        myString += f'  <northing>{self._mNorthing}</northing>\n'
+        myString += f'  <euclideanDistance>{self._mEuclideanDistance}</euclideanDistance>\n'
+        myString += f'  <walkingTime>{self._mWalkingTime}</walkingTime>\n'
+        myString += f'  <pathDistance>{self._mPathDistance}</pathDistance>\n'
+        myString += f'  <precision>{self._mPrecision}</precision>\n'
+        myString += f'  <dietPercent>{self._mDietPercent}</dietPercent>\n'
+        myString += f'  <plantPercent>{self._mPercentOfDietThatIsFromCrops}</plantPercent>\n'
+        myString += f'  <meatPercent>{self._mMeatPercent}</meatPercent>\n'
+        myString += f'  <caloriesPerPersonDaily>{self._mCaloriesPerPersonDaily}</caloriesPerPersonDaily>\n'
+        myString += f'  <baseOnPlants>{self._mBaseOnPlants}</baseOnPlants>\n'
+        myString += f'  <includeDairy>{self._mIncludeDairy}</includeDairy>\n'
+        myString += f'  <limitDairy>{self._mLimitDairy}</limitDairy>\n'
+        myString += f'  <limitDairyPercent>{self._mLimitDairyPercent}</limitDairyPercent>\n'
+        myString += f'  <dairyUtilisation>{self._mDairyUtilisation}</dairyUtilisation>\n'
         myString += '</model>\n'
         return myString
 
-    def _get_animal_value(self, animal, prop_name: str) -> float:
+    def _getAnimalValue(self, animal, prop_name: str) -> float:
         """Helper method to safely get float values from animal properties."""
         prop = getattr(animal, prop_name, None)
         if prop is None:
@@ -685,7 +686,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             return float(prop.__get__(animal, type(animal)))
         return float(prop)
 
-    def _get_animal_param_value(self, param, prop_name: str) -> float:
+    def _getAnimalParamValue(self, param, prop_name: str) -> float:
         """Helper method to safely get float values from animal parameter properties."""
         prop = getattr(param, prop_name, None)
         if prop is None:
@@ -694,62 +695,76 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             return float(prop.__get__(param, type(param)))
         return float(prop)
 
-    def _set_diet_labels(self, dietLabels: LaDietLabels,
-                        overallDairyMCals: float,
-                        overallCropsMCals: float,
-                        overallMeatMCals: float,
-                        overallWildMeatMCals: float,
-                        overallWildPlantsMCals: float,
-                        overallDairyPercent: float,
-                        domesticMeatPercent: float,
-                        overallCropPercent: float,
-                        wildMeatPercent: float,
-                        overallWildPlantPercent: float,
-                        overallMeatPercent: float,
-                        overallPlantPercent: float,
-                        mCalsIndividualAnnual: float,
-                        mCalsSettlementAnnual: float,
-                        overallDairySurplusMCals: float,
-                        cropCalcsReportMap: Dict[str, Tuple[str, float]],
-                        animalCalcsReportMap: Dict[str, Tuple[str, float]]) -> None:
-        """Helper method to safely set all diet label properties."""
-        # Access the private attributes directly since these are our own internal changes
-        dietLabels._dairyMCalories = overallDairyMCals
-        dietLabels._cropMCalories = overallCropsMCals
-        dietLabels._animalMCalories = overallMeatMCals
-        dietLabels._wildAnimalMCalories = overallWildMeatMCals
-        dietLabels._wildPlantsMCalories = overallWildPlantsMCals
-        dietLabels._dairyPortionPct = overallDairyPercent * 100.0
-        dietLabels._tameMeatPortionPct = domesticMeatPercent * 100.0
-        dietLabels._cropsPortionPct = overallCropPercent * 100.0
-        dietLabels._wildAnimalPortionPct = wildMeatPercent * 100.0
-        dietLabels._wildPlantsPortionPct = overallWildPlantPercent * 100.0
-        dietLabels._plantsPortionPct = overallPlantPercent * 100.0
-        dietLabels._animalPortionPct = overallMeatPercent * 100.0
-        dietLabels._kiloCaloriesIndividualAnnual = mCalsIndividualAnnual
-        dietLabels._megaCaloriesSettlementAnnual = mCalsSettlementAnnual
-        dietLabels._dairySurplusMCalories = overallDairySurplusMCals
-        dietLabels._cropCalcsReportMap = cropCalcsReportMap
-        dietLabels._animalCalcsReportMap = animalCalcsReportMap
+    def _set_diet_labels(self, theDietLabels: LaDietLabels,
+                        theOverallDairyMCals: float,
+                        theOverallCropsMCals: float,
+                        theOverallMeatMCals: float,
+                        theOverallWildMeatMCals: float,
+                        theOverallWildPlantsMCals: float,
+                        theOverallDairyPercent: float,
+                        theDomesticMeatPercent: float,
+                        theOverallCropPercent: float,
+                        theWildMeatPercent: float,
+                        theOverallWildPlantPercent: float,
+                        theOverallMeatPercent: float,
+                        theOverallPlantPercent: float,
+                        theMCalsIndividualAnnual: float,
+                        theMCalsSettlementAnnual: float,
+                        theOverallDairySurplusMCals: float,
+                        theCropCalcsReportMap: Dict[str, Tuple[str, float]],
+                        theAnimalCalcsReportMap: Dict[str, Tuple[str, float]]) -> None:
+        """Helper method to safely set all diet label private attributes."""
+        try:
+            # Set values using private attributes
+            theDietLabels._dairyMCalories = theOverallDairyMCals
+            theDietLabels._cropMCalories = theOverallCropsMCals
+            theDietLabels._animalMCalories = theOverallMeatMCals
+            theDietLabels._wildAnimalMCalories = theOverallWildMeatMCals
+            theDietLabels._wildPlantsMCalories = theOverallWildPlantsMCals
+            theDietLabels._dairyPortionPct = theOverallDairyPercent * 100.0
+            theDietLabels._tameMeatPortionPct = theDomesticMeatPercent * 100.0
+            theDietLabels._cropsPortionPct = theOverallCropPercent * 100.0
+            theDietLabels._wildAnimalPortionPct = theWildMeatPercent * 100.0
+            theDietLabels._wildPlantsPortionPct = theOverallWildPlantPercent * 100.0
+            theDietLabels._plantsPortionPct = theOverallPlantPercent * 100.0
+            theDietLabels._animalPortionPct = theOverallMeatPercent * 100.0
+            theDietLabels._kiloCaloriesIndividualAnnual = theMCalsIndividualAnnual
+            theDietLabels._megaCaloriesSettlementAnnual = theMCalsSettlementAnnual
+            theDietLabels._dairySurplusMCalories = theOverallDairySurplusMCals
+            theDietLabels._cropCalcsReportMap = theCropCalcsReportMap
+            theDietLabels._animalCalcsReportMap = theAnimalCalcsReportMap
 
-        # Emit all the change signals
-        dietLabels.dairyMCaloriesChanged.emit(overallDairyMCals)
-        dietLabels.cropMCaloriesChanged.emit(overallCropsMCals)
-        dietLabels.animalMCaloriesChanged.emit(overallMeatMCals)
-        dietLabels.wildAnimalMCaloriesChanged.emit(overallWildMeatMCals)
-        dietLabels.wildPlantsMCaloriesChanged.emit(overallWildPlantsMCals)
-        dietLabels.dairyPortionPctChanged.emit(overallDairyPercent * 100.0)
-        dietLabels.tameMeatPortionPctChanged.emit(domesticMeatPercent * 100.0)
-        dietLabels.cropsPortionPctChanged.emit(overallCropPercent * 100.0)
-        dietLabels.wildAnimalPortionPctChanged.emit(wildMeatPercent * 100.0)
-        dietLabels.wildPlantsPortionPctChanged.emit(overallWildPlantPercent * 100.0)
-        dietLabels.plantsPortionPctChanged.emit(overallPlantPercent * 100.0)
-        dietLabels.animalPortionPctChanged.emit(overallMeatPercent * 100.0)
-        dietLabels.kiloCaloriesIndividualAnnualChanged.emit(mCalsIndividualAnnual)
-        dietLabels.megaCaloriesSettlementAnnualChanged.emit(mCalsSettlementAnnual)
-        dietLabels.dairySurplusMCaloriesChanged.emit(overallDairySurplusMCals)
-        dietLabels.cropCalcsReportMapChanged.emit(cropCalcsReportMap)
-        dietLabels.animalCalcsReportMapChanged.emit(animalCalcsReportMap)
+            # Emit all the change signals
+            theDietLabels.dairyMCaloriesChanged.emit(theOverallDairyMCals)
+            theDietLabels.cropMCaloriesChanged.emit(theOverallCropsMCals)
+            theDietLabels.animalMCaloriesChanged.emit(theOverallMeatMCals)
+            theDietLabels.wildAnimalMCaloriesChanged.emit(theOverallWildMeatMCals)
+            theDietLabels.wildPlantsMCaloriesChanged.emit(theOverallWildPlantsMCals)
+            theDietLabels.dairyPortionPctChanged.emit(theOverallDairyPercent * 100.0)
+            theDietLabels.tameMeatPortionPctChanged.emit(theDomesticMeatPercent * 100.0)
+            theDietLabels.cropsPortionPctChanged.emit(theOverallCropPercent * 100.0)
+            theDietLabels.wildAnimalPortionPctChanged.emit(theWildMeatPercent * 100.0)
+            theDietLabels.wildPlantsPortionPctChanged.emit(theOverallWildPlantPercent * 100.0)
+            theDietLabels.plantsPortionPctChanged.emit(theOverallPlantPercent * 100.0)
+            theDietLabels.animalPortionPctChanged.emit(theOverallMeatPercent * 100.0)
+            theDietLabels.kiloCaloriesIndividualAnnualChanged.emit(theMCalsIndividualAnnual)
+            theDietLabels.megaCaloriesSettlementAnnualChanged.emit(theMCalsSettlementAnnual)
+            theDietLabels.dairySurplusMCaloriesChanged.emit(theOverallDairySurplusMCals)
+            theDietLabels.cropCalcsReportMapChanged.emit(theCropCalcsReportMap)
+            theDietLabels.animalCalcsReportMapChanged.emit(theAnimalCalcsReportMap)
+
+            # Debug log the updates
+            from la.lib.lautils import LaUtils
+            LaUtils.debug.log("Diet labels updated in model", "Diet")
+            LaUtils.debug.log(f"Animal: {theOverallMeatPercent*100:.1f}%, Plant: {theOverallPlantPercent*100:.1f}%", "Diet")
+            LaUtils.debug.log(f"Wild Animal: {theWildMeatPercent*100:.1f}%, Tame Animal: {theDomesticMeatPercent*100:.1f}%", "Diet")
+            LaUtils.debug.log(f"Wild Plant: {theOverallWildPlantPercent*100:.1f}%, Tame Plant: {theOverallCropPercent*100:.1f}%", "Diet")
+
+        except Exception as e:
+            from la.lib.lautils import LaUtils
+            LaUtils.debug.log(f"Error updating diet labels in model: {str(e)}", "Error")
+            import traceback
+            LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
 
     def doCalcsAnimalsFirstDairySeparate(self) -> LaDietLabels:
         """Calculate diet portions with animals first and dairy separate.
@@ -761,232 +776,233 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             LaDietLabels: Object containing all diet calculations and reports
         """
         # Clear calculation maps
-        self._calcsCropsMap = {}
-        self._calcsAnimalsMap = {}
-        self._valueMap = {}
-        self._animalCalcReport = {}
+        self._mCalcsCropsMap = {}
+        self._mCalcsAnimalsMap = {}
+        self._mValueMap = {}
+        self._mAnimalCalcReport = {}
         
-        cropCalcsReportMap = {}
-        animalCalcsReportMap = {}
-        animalsMap = {}  # For storing calculations to send to fallow allocation
+        myCropCalcsReportMap = {}
+        myAnimalCalcsReportMap = {}
+        myAnimalsMap = {}  # For storing calculations to send to fallow allocation
         
         # Initialize counters
-        foodSourceMapCounter = {}
-        for cropGuid in self._crops.keys():
-            foodSourceMapCounter[cropGuid] = 0
+        myFoodSourceMapCounter = {}
+        for myCropGuid in self._mCrops.keys():
+            myFoodSourceMapCounter[myCropGuid] = 0
             
         # Basic calorie calculations
-        mCalsIndividualAnnual = self._caloriesPerPersonDaily * 365.0 * 0.001  # Convert to MCal
-        mCalsSettlementAnnual = mCalsIndividualAnnual * self._population
-        dairyMCalorieCounter = 0.0
-        tameMeatMCalorieCounter = 0.0
+        myCalsIndividualAnnual = self._mCaloriesPerPersonDaily * 365.0 * 0.001  # Convert to MCal
+        myCalsSettlementAnnual = myCalsIndividualAnnual * self._mPopulation
+        myDairyMCalorieCounter = 0.0
+        myTameMeatMCalorieCounter = 0.0
         
         # Diet percentage calculations
-        plantPercent = 1.0 - self._dietPercent
-        domesticCropPortion = self._percentOfDietThatIsFromCrops
-        wildMeatPortion = 1.0 - self._meatPercent
-        dairyUtilization = self._dairyUtilisation * 0.01
+        myPlantPercent = 1.0 - self._mDietPercent
+        myDomesticCropPortion = self._mPercentOfDietThatIsFromCrops
+        myWildMeatPortion = 1.0 - self._mMeatPercent
+        myDairyUtilization = self._mDairyUtilisation * 0.01
         
         # Process each animal
-        for animalGuid, animalParamGuid in self._animals.items():
-            animal = LaUtils.getAnimal(animalGuid)
-            animalParam = LaUtils.getAnimalParameter(animalParamGuid)
+        for myAnimalGuid, myAnimalParamGuid in self._mAnimals.items():
+            myAnimal = LaUtils.getAnimal(myAnimalGuid)
+            myAnimalParam = LaUtils.getAnimalParameter(myAnimalParamGuid)
             
             # Basic animal parameters
-            milkKgPerDay = self._get_animal_value(animal, 'milkGramsPerDay') * 0.001
-            milkFoodValue = self._get_animal_value(animal, 'milkFoodValue') * 0.001
-            lactationTime = self._get_animal_value(animal, 'lactationTime')
-            weaningAge = self._get_animal_value(animal, 'weaningAge')
-            gestatingTime = self._get_animal_value(animal, 'gestationTime')
-            estrousCycle = self._get_animal_value(animal, 'estrousCycle')
-            babiesPerBirth = self._get_animal_value(animal, 'youngPerBirth')
+            myMilkKgPerDay = self._getAnimalValue(myAnimal, 'milkGramsPerDay') * 0.001
+            myMilkFoodValue = self._getAnimalValue(myAnimal, 'milkFoodValue') * 0.001
+            myLactationTime = self._getAnimalValue(myAnimal, 'lactationTime')
+            myWeaningAge = self._getAnimalValue(myAnimal, 'weaningAge')
+            myGestatingTime = self._getAnimalValue(myAnimal, 'gestationTime')
+            myEstrousCycle = self._getAnimalValue(myAnimal, 'estrousCycle')
+            myBabiesPerBirth = self._getAnimalValue(myAnimal, 'youngPerBirth')
             
-            deathRate = self._get_animal_value(animal, 'deathRate') * 0.01
-            breedingRatio = self._get_animal_value(animal, 'femalesPerMale')
-            killWeight = self._get_animal_value(animal, 'killWeight')
-            usablePortionOfAnimal = self._get_animal_value(animal, 'usableMeat') * 0.01
-            adultWeight = self._get_animal_value(animal, 'adultWeight')
-            femalesToMales = self._get_animal_value(animal, 'femalesPerMale')
-            conceptionEfficiency = self._get_animal_value(animal, 'conceptionEfficiency') * 0.01
-            meatValueMCal = self._get_animal_value(animal, 'meatFoodValue') * 0.001
-            sexualMaturity = self._get_animal_value(animal, 'sexualMaturity')  # in months
-            breedingYears = self._get_animal_value(animal, 'breedingExpectancy')  # in years
+            myDeathRate = self._getAnimalValue(myAnimal, 'deathRate') * 0.01
+            myBreedingRatio = self._getAnimalValue(myAnimal, 'femalesPerMale')
+            myKillWeight = self._getAnimalValue(myAnimal, 'killWeight')
+            myUsablePortionOfAnimal = self._getAnimalValue(myAnimal, 'usableMeat') * 0.01
+            myAdultWeight = self._getAnimalValue(myAnimal, 'adultWeight')
+            myFemalesToMales = self._getAnimalValue(myAnimal, 'femalesPerMale')
+            myConceptionEfficiency = self._getAnimalValue(myAnimal, 'conceptionEfficiency') * 0.01
+            myMeatValueMCal = self._getAnimalValue(myAnimal, 'meatFoodValue') * 0.001
+            mySexualMaturity = self._getAnimalValue(myAnimal, 'sexualMaturity')  # in months
+            myBreedingYears = self._getAnimalValue(myAnimal, 'breedingExpectancy')  # in years
             
             # Calculate animal contribution to meat portion
-            animalContributionToMeatPortion = self._get_animal_param_value(animalParam, 'percentTameMeat') * 0.01
-            animalMCalTarget = (animalContributionToMeatPortion * mCalsSettlementAnnual * 
-                              self._dietPercent * self._meatPercent)
+            myAnimalContributionToMeatPortion = self._getAnimalParamValue(myAnimalParam, 'percentTameMeat') * 0.01
+            myAnimalMCalTarget = (myAnimalContributionToMeatPortion * myCalsSettlementAnnual * 
+                              self._mDietPercent * self._mMeatPercent)
             
             # Calculate dairy values
-            potentialDairyPerOffspring = milkKgPerDay * milkFoodValue * (lactationTime - weaningAge)
-            valuePerOffspring = killWeight * usablePortionOfAnimal * meatValueMCal
-            actualDairyValueOfOffspring = potentialDairyPerOffspring * dairyUtilization
+            myPotentialDairyPerOffspring = myMilkKgPerDay * myMilkFoodValue * (myLactationTime - myWeaningAge)
+            myValuePerOffspring = myKillWeight * myUsablePortionOfAnimal * myMeatValueMCal
+            myActualDairyValueOfOffspring = myPotentialDairyPerOffspring * myDairyUtilization
             
             # Calculate birthing events
-            birthingEventsPerYear1 = 365.0 / (weaningAge + gestatingTime + estrousCycle + lactationTime)
-            birthingEventsPerYear = 1.0 if birthingEventsPerYear1 < 1.0 else birthingEventsPerYear1
+            myBirthingEventsPerYear1 = 365.0 / (myWeaningAge + myGestatingTime + myEstrousCycle + myLactationTime)
+            myBirthingEventsPerYear = 1.0 if myBirthingEventsPerYear1 < 1.0 else myBirthingEventsPerYear1
             
             # Calculate culling values
-            culledMothersValue1 = (adultWeight * meatValueMCal * usablePortionOfAnimal * 
-                                 (1.0 / ((sexualMaturity / 12.0) + breedingYears)))
-            culledMothersValue = culledMothersValue1 / (babiesPerBirth * birthingEventsPerYear)
-            culledAdultMalesValue = culledMothersValue / femalesToMales
-            finalOffspringValue = valuePerOffspring + culledMothersValue + culledAdultMalesValue
+            myCulledMothersValue1 = (myAdultWeight * myMeatValueMCal * myUsablePortionOfAnimal * 
+                                 (1.0 / ((mySexualMaturity / 12.0) + myBreedingYears)))
+            myCulledMothersValue = myCulledMothersValue1 / (myBabiesPerBirth * myBirthingEventsPerYear)
+            myCulledAdultMalesValue = myCulledMothersValue / myFemalesToMales
+            myFinalOffspringValue = myValuePerOffspring + myCulledMothersValue + myCulledAdultMalesValue
             
             # Calculate offspring needed and resulting calories
-            offspringNeededPerYear = animalMCalTarget / finalOffspringValue
-            mCalsFromTheMeat = offspringNeededPerYear * finalOffspringValue
-            mCalsUtilizedFromDairy = actualDairyValueOfOffspring * offspringNeededPerYear
+            myOffspringNeededPerYear = myAnimalMCalTarget / myFinalOffspringValue
+            myMCalsFromTheMeat = myOffspringNeededPerYear * myFinalOffspringValue
+            myMCalsUtilizedFromDairy = myActualDairyValueOfOffspring * myOffspringNeededPerYear
             
             # Update calorie counters
-            tameMeatMCalorieCounter += mCalsFromTheMeat
-            dairyMCalorieCounter += mCalsUtilizedFromDairy
+            myTameMeatMCalorieCounter += myMCalsFromTheMeat
+            myDairyMCalorieCounter += myMCalsUtilizedFromDairy
             
             # Process fodder requirements
-            fodderSourceMap = self._get_animal_param_value(animalParam, 'fodderSources')
-            meatPercent = mCalsFromTheMeat / mCalsSettlementAnnual
-            dairyPercent = mCalsUtilizedFromDairy / mCalsSettlementAnnual
+            myFodderSourceMap: Dict[str, str] = self._getAnimalParamValue(myAnimalParam, 'fodderSources')
+            myMeatPercent = myMCalsFromTheMeat / myCalsSettlementAnnual
+            myDairyPercent = myMCalsUtilizedFromDairy / myCalsSettlementAnnual
             
             # Calculate herd size
-            offspringPerMotherPerYear = (birthingEventsPerYear * babiesPerBirth * 
-                                       (1.0 - deathRate) * conceptionEfficiency)
-            mothersNeededStepOne = offspringNeededPerYear / offspringPerMotherPerYear
-            malesStepOne = mothersNeededStepOne * offspringPerMotherPerYear * 0.5
-            femalesStepOne = malesStepOne
+            myOffspringPerMotherPerYear = (myBirthingEventsPerYear * myBabiesPerBirth * 
+                                       (1.0 - myDeathRate) * myConceptionEfficiency)
+            myMothersNeededStepOne = myOffspringNeededPerYear / myOffspringPerMotherPerYear
+            myMalesStepOne = myMothersNeededStepOne * myOffspringPerMotherPerYear * 0.5
+            myFemalesStepOne = myMalesStepOne
             
-            replacementMothersPerYear = (mothersNeededStepOne + (sexualMaturity/12.0)) / breedingYears
-            breedingMalesRequired = ((mothersNeededStepOne / breedingRatio) + mothersNeededStepOne) / breedingRatio
-            additionalMothers = ((replacementMothersPerYear/offspringPerMotherPerYear)*2.0) + (breedingMalesRequired * 2.0)
-            malesStepTwo = additionalMothers * offspringPerMotherPerYear * 0.5
-            femalesStepTwo = malesStepTwo
+            myReplacementMothersPerYear = (myMothersNeededStepOne + (mySexualMaturity/12.0)) / myBreedingYears
+            myBreedingMalesRequired = ((myMothersNeededStepOne / myBreedingRatio) + myMothersNeededStepOne) / myBreedingRatio
+            myAdditionalMothers = ((myReplacementMothersPerYear/myOffspringPerMotherPerYear)*2.0) + (myBreedingMalesRequired * 2.0)
+            myMalesStepTwo = myAdditionalMothers * myOffspringPerMotherPerYear * 0.5
+            myFemalesStepTwo = myMalesStepTwo
             
-            totalMothers = mothersNeededStepOne + replacementMothersPerYear
-            totalMaleOffspring = malesStepOne + malesStepTwo
-            totalFemaleOffspring = femalesStepOne - femalesStepTwo
-            totalOffspring = totalMaleOffspring * 2.0
+            myTotalMothers = myMothersNeededStepOne + myReplacementMothersPerYear
+            myTotalMaleOffspring = myMalesStepOne + myMalesStepTwo
+            myTotalFemaleOffspring = myFemalesStepOne - myFemalesStepTwo
+            totalOffspring = myTotalMaleOffspring * 2.0
             
             # Calculate feed requirements
-            feedForGestating = self._get_animal_value(animal, 'gestating') * 0.001
-            feedForLactating = self._get_animal_value(animal, 'lactating') * 0.001
-            feedForMaintenance = self._get_animal_value(animal, 'maintenance') * 0.001
-            feedForOffspringPerKg = self._get_animal_value(animal, 'juvenile') * 0.001
+            myFeedForGestating = self._getAnimalValue(myAnimal, 'gestating') * 0.001
+            myFeedForLactating = self._getAnimalValue(myAnimal, 'lactating') * 0.001
+            myFeedForMaintenance = self._getAnimalValue(myAnimal, 'maintenance') * 0.001
+            myFeedForOffspringPerKg = self._getAnimalValue(myAnimal, 'juvenile') * 0.001
             
-            gestatingMCals = totalOffspring * gestatingTime * feedForGestating
-            lactatingMCals = totalOffspring * lactationTime * feedForLactating
+            myGestatingMCals = totalOffspring * myGestatingTime * myFeedForGestating
+            myLactatingMCals = totalOffspring * myLactationTime * myFeedForLactating
             
             # Calculate maintenance requirements
-            daysForMaintenance = max(0, 365 - (gestatingTime + lactationTime))
-            dryMothers = max(0, totalMothers - totalOffspring)
-            dryMothersMCals = dryMothers * 365.0 * feedForMaintenance
-            otherMaintenanceMCals = daysForMaintenance * totalOffspring * feedForMaintenance
-            maintenanceMCals = dryMothersMCals + otherMaintenanceMCals
-            adultMalesMCals = breedingMalesRequired * feedForMaintenance * 365.0
-            offspringMCals = totalOffspring * killWeight * feedForOffspringPerKg * (365.0 - weaningAge)
+            myDaysForMaintenance = max(0, 365 - (myGestatingTime + myLactationTime))
+            myDryMothers = max(0, myTotalMothers - totalOffspring)
+            myDryMothersMCals = myDryMothers * 365.0 * myFeedForMaintenance
+            myOtherMaintenanceMCals = myDaysForMaintenance * totalOffspring * myFeedForMaintenance
+            myMaintenanceMCals = myDryMothersMCals + myOtherMaintenanceMCals
+            myAdultMalesMCals = myBreedingMalesRequired * myFeedForMaintenance * 365.0
+            offspringMCals = totalOffspring * myKillWeight * myFeedForOffspringPerKg * (365.0 - myWeaningAge)
             
             # Process fodder sources
-            additionalMCalCounter = 0.0
-            additionalMCalCounter1 = 0.0
-            for cropGuid, foodSource in fodderSourceMap.items():
-                grain = foodSource.grain * 0.001
-                fodder = foodSource.fodder * 0.001
-                days = foodSource.days
+            myAdditionalMCalCounter = 0.0
+            myAdditionalMCalCounter1 = 0.0
+            myFoodSource = LaFoodSource()
+            for myCropGuid, myFoodSource in myFodderSourceMap.items():
+                grain = myFoodSource.grain * 0.001
+                fodder = myFoodSource.fodder * 0.001
+                days = myFoodSource.days
                 grainToAdd = grain * days * totalOffspring
-                grainTotal = foodSourceMapCounter.get(cropGuid, 0) + grainToAdd
-                foodSourceMapCounter[cropGuid] = grainTotal
+                grainTotal = myFoodSourceMapCounter.get(myCropGuid, 0) + grainToAdd
+                myFoodSourceMapCounter[myCropGuid] = grainTotal
                 
-                crop = LaUtils.getCrop(cropGuid)
-                foodValueOfCrop = self._get_animal_value(crop, 'cropCalories') * 0.001
-                foodValueOfFodder = self._get_animal_value(crop, 'fodderEnergy') * 0.001  # Using fodderEnergy instead
+                crop = LaUtils.getCrop(myCropGuid)
+                foodValueOfCrop = self._getAnimalValue(crop, 'cropCalories') * 0.001
+                foodValueOfFodder = self._getAnimalValue(crop, 'fodderEnergy') * 0.001  # Using fodderEnergy instead
                 
                 grainMCal = grainToAdd * foodValueOfCrop
                 fodderMCal = fodder * days * foodValueOfFodder * totalOffspring
-                additionalMCalCounter1 += fodderMCal
-                additionalMCalCounter += grainMCal + fodderMCal
+                myAdditionalMCalCounter1 += fodderMCal
+                myAdditionalMCalCounter += grainMCal + fodderMCal
             
             # Calculate total herd requirements
-            animalHerdMCalsRequired1 = (gestatingMCals + lactatingMCals + maintenanceMCals + 
-                                      adultMalesMCals + offspringMCals)
-            animalHerdMCalsRequired = animalHerdMCalsRequired1 - additionalMCalCounter
+            animalHerdMCalsRequired1 = (myGestatingMCals + myLactatingMCals + myMaintenanceMCals + 
+                                      myAdultMalesMCals + offspringMCals)
+            animalHerdMCalsRequired = animalHerdMCalsRequired1 - myAdditionalMCalCounter
             
             # Store calculations in report map
             animalReport = self._generateAnimalReport(
-                animal.name, milkKgPerDay, milkFoodValue, lactationTime, weaningAge,
-                killWeight, usablePortionOfAnimal, adultWeight, femalesToMales,
-                meatValueMCal, sexualMaturity, breedingYears, animalContributionToMeatPortion,
-                animalMCalTarget, potentialDairyPerOffspring, valuePerOffspring,
-                actualDairyValueOfOffspring, culledMothersValue, culledAdultMalesValue,
-                finalOffspringValue, offspringNeededPerYear, mCalsFromTheMeat,
-                mCalsUtilizedFromDairy, tameMeatMCalorieCounter, dairyMCalorieCounter,
-                birthingEventsPerYear, offspringPerMotherPerYear, mothersNeededStepOne,
-                malesStepOne, femalesStepOne, replacementMothersPerYear, breedingMalesRequired,
-                additionalMothers, malesStepTwo, femalesStepTwo, totalMothers,
-                totalMaleOffspring, totalFemaleOffspring, totalOffspring, feedForGestating,
-                feedForLactating, feedForMaintenance, feedForOffspringPerKg, gestatingMCals,
-                lactatingMCals, daysForMaintenance, gestatingTime, lactationTime,
-                dryMothers, dryMothersMCals, otherMaintenanceMCals, maintenanceMCals,
-                adultMalesMCals, offspringMCals, animalHerdMCalsRequired1,
-                animalHerdMCalsRequired, meatPercent, dairyPercent)
+                myAnimal.name, myMilkKgPerDay, myMilkFoodValue, myLactationTime, myWeaningAge,
+                myKillWeight, myUsablePortionOfAnimal, myAdultWeight, myFemalesToMales,
+                myMeatValueMCal, mySexualMaturity, myBreedingYears, myAnimalContributionToMeatPortion,
+                myAnimalMCalTarget, myPotentialDairyPerOffspring, myValuePerOffspring,
+                myActualDairyValueOfOffspring, myCulledMothersValue, myCulledAdultMalesValue,
+                myFinalOffspringValue, myOffspringNeededPerYear, myMCalsFromTheMeat,
+                myMCalsUtilizedFromDairy, myTameMeatMCalorieCounter, myDairyMCalorieCounter,
+                myBirthingEventsPerYear, myOffspringPerMotherPerYear, myMothersNeededStepOne,
+                myMalesStepOne, myFemalesStepOne, myReplacementMothersPerYear, myBreedingMalesRequired,
+                myAdditionalMothers, myMalesStepTwo, myFemalesStepTwo, myTotalMothers,
+                myTotalMaleOffspring, myTotalFemaleOffspring, totalOffspring, myFeedForGestating,
+                myFeedForLactating, myFeedForMaintenance, myFeedForOffspringPerKg, myGestatingMCals,
+                myLactatingMCals, myDaysForMaintenance, myGestatingTime, myLactationTime,
+                myDryMothers, myDryMothersMCals, myOtherMaintenanceMCals, myMaintenanceMCals,
+                myAdultMalesMCals, offspringMCals, animalHerdMCalsRequired1,
+                animalHerdMCalsRequired, myMeatPercent, myDairyPercent)
             
             reportAndAreaTarget = (animalReport, animalHerdMCalsRequired)
-            animalCalcsReportMap[animalGuid] = reportAndAreaTarget
-            animalsMap[animalGuid] = animalHerdMCalsRequired
-            self._valueMap[animalGuid] = animalHerdMCalsRequired
+            myAnimalCalcsReportMap[myAnimalGuid] = reportAndAreaTarget
+            myAnimalsMap[myAnimalGuid] = animalHerdMCalsRequired
+            self._mValueMap[myAnimalGuid] = animalHerdMCalsRequired
         
         # Calculate dairy limits
-        dairyLimit = self._limitDairyPercent * 0.01 if self._limitDairy else 1.0
-        domesticMeatPercent = tameMeatMCalorieCounter / mCalsSettlementAnnual
-        wildMeatPercent = wildMeatPortion * self._dietPercent
+        dairyLimit = self._mLimitDairyPercent * 0.01 if self._mLimitDairy else 1.0
+        domesticMeatPercent = myTameMeatMCalorieCounter / myCalsSettlementAnnual
+        wildMeatPercent = myWildMeatPortion * self._mDietPercent
         limitSatisfies = (domesticMeatPercent + wildMeatPercent + dairyLimit) > 1.0
         newLimit = (1.0 - domesticMeatPercent - wildMeatPercent) if limitSatisfies else dairyLimit
         
         # Calculate final percentages
-        potentialDairyLessThanLimitBool = (dairyMCalorieCounter / mCalsSettlementAnnual) < dairyLimit
-        newDairy = dairyMCalorieCounter if potentialDairyLessThanLimitBool else newLimit * mCalsSettlementAnnual
-        overallDairyPercent = newDairy / mCalsSettlementAnnual
+        potentialDairyLessThanLimitBool = (myDairyMCalorieCounter / myCalsSettlementAnnual) < dairyLimit
+        newDairy = myDairyMCalorieCounter if potentialDairyLessThanLimitBool else newLimit * myCalsSettlementAnnual
+        overallDairyPercent = newDairy / myCalsSettlementAnnual
         
         overallMeatPercent = wildMeatPercent + domesticMeatPercent
         overallPlantPercent = 1.0 - overallMeatPercent - overallDairyPercent
         
         # Calculate crop percentages
-        overallCropPercent = overallPlantPercent * domesticCropPortion
-        overallWildPlantPercent = overallPlantPercent * (1.0 - plantPercent)
+        overallCropPercent = overallPlantPercent * myDomesticCropPortion
+        overallWildPlantPercent = overallPlantPercent * (1.0 - myPlantPercent)
         
         # Calculate final calorie values
-        overallDomesticMeatMCals = tameMeatMCalorieCounter
-        overallDairyMCals = overallDairyPercent * mCalsSettlementAnnual
-        overallWildMeatMCals = wildMeatPercent * mCalsSettlementAnnual
-        overallCropsMCals = overallCropPercent * mCalsSettlementAnnual
-        overallWildPlantsMCals = overallWildPlantPercent * mCalsSettlementAnnual
+        overallDomesticMeatMCals = myTameMeatMCalorieCounter
+        overallDairyMCals = overallDairyPercent * myCalsSettlementAnnual
+        overallWildMeatMCals = wildMeatPercent * myCalsSettlementAnnual
+        overallCropsMCals = overallCropPercent * myCalsSettlementAnnual
+        overallWildPlantsMCals = overallWildPlantPercent * myCalsSettlementAnnual
         
         overallMeatMCals = overallWildMeatMCals + overallDomesticMeatMCals
-        firstDairySurplusBool = dairyMCalorieCounter - overallDairyMCals
+        firstDairySurplusBool = myDairyMCalorieCounter - overallDairyMCals
         overallDairySurplusMCals = max(0, firstDairySurplusBool)
         
         # Create and populate diet labels
-        dietLabels = LaDietLabels()
+        myDietLabels = LaDietLabels()
         
         # Set values using properties
-        dietLabels.dairyMCalories = overallDairyMCals
-        dietLabels.cropMCalories = overallCropsMCals
-        dietLabels.animalMCalories = overallMeatMCals
-        dietLabels.wildAnimalMCalories = overallWildMeatMCals
-        dietLabels.wildPlantsMCalories = overallWildPlantsMCals
-        dietLabels.dairyPortionPct = overallDairyPercent * 100.0
-        dietLabels.tameMeatPortionPct = domesticMeatPercent * 100.0
-        dietLabels.cropsPortionPct = overallCropPercent * 100.0
-        dietLabels.wildAnimalPortionPct = wildMeatPercent * 100.0
-        dietLabels.wildPlantsPortionPct = overallWildPlantPercent * 100.0
-        dietLabels.animalPortionPct = overallMeatPercent * 100.0
-        dietLabels.plantsPortionPct = overallPlantPercent * 100.0
-        dietLabels.kiloCaloriesIndividualAnnual = mCalsIndividualAnnual
-        dietLabels.megaCaloriesSettlementAnnual = mCalsSettlementAnnual
-        dietLabels.dairySurplusMCalories = overallDairySurplusMCals
+        myDietLabels.dairyMCalories = overallDairyMCals
+        myDietLabels.cropMCalories = overallCropsMCals
+        myDietLabels.animalMCalories = overallMeatMCals
+        myDietLabels.wildAnimalMCalories = overallWildMeatMCals
+        myDietLabels.wildPlantsMCalories = overallWildPlantsMCals
+        myDietLabels.dairyPortionPct = overallDairyPercent * 100.0
+        myDietLabels.tameMeatPortionPct = domesticMeatPercent * 100.0
+        myDietLabels.cropsPortionPct = overallCropPercent * 100.0
+        myDietLabels.wildAnimalPortionPct = wildMeatPercent * 100.0
+        myDietLabels.wildPlantsPortionPct = overallWildPlantPercent * 100.0
+        myDietLabels.animalPortionPct = overallMeatPercent * 100.0
+        myDietLabels.plantsPortionPct = overallPlantPercent * 100.0
+        myDietLabels.kiloCaloriesIndividualAnnual = myCalsIndividualAnnual
+        myDietLabels.megaCaloriesSettlementAnnual = myCalsSettlementAnnual
+        myDietLabels.dairySurplusMCalories = overallDairySurplusMCals
         
         # Set report maps
-        dietLabels.cropCalcsReportMap = cropCalcsReportMap
-        dietLabels.animalCalcsReportMap = animalCalcsReportMap
+        myDietLabels.cropCalcsReportMap = myCropCalcsReportMap
+        myDietLabels.animalCalcsReportMap = myAnimalCalcsReportMap
         
-        return dietLabels
+        return myDietLabels
 
     def _generateAnimalReport(self, *args) -> str:
         """Generate a formatted report string for animal calculations."""
@@ -1034,8 +1050,8 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         dietLabels = LaDietLabels()
         
         # Basic calorie calculations
-        mCalsIndividualAnnual = self._caloriesPerPersonDaily * 365.0
-        mCalsSettlementAnnual = mCalsIndividualAnnual * self._population
+        mCalsIndividualAnnual = self._mCaloriesPerPersonDaily * 365.0
+        mCalsSettlementAnnual = mCalsIndividualAnnual * self._mPopulation
         
         # Initialize counters
         dairyMCalorieCounter = 0.0
@@ -1043,29 +1059,29 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         wildMeatMCalorieCounter = 0.0
         
         # Calculate basic ratios
-        plantVsAnimalRatio = 1.0 - self._meatPercent  # c1
-        dairyUtilization = self._dairyUtilisation * 0.01  # c8
-        population = self._population  # c10
-        caloriesPerPersonDaily = self._caloriesPerPersonDaily  # c11
+        plantVsAnimalRatio = 1.0 - self._mMeatPercent  # c1
+        dairyUtilization = self._mDairyUtilisation * 0.01  # c8
+        population = self._mPopulation  # c10
+        caloriesPerPersonDaily = self._mCaloriesPerPersonDaily  # c11
         totalAnnualCalories = population * caloriesPerPersonDaily * 365.0  # c14
-        dietPercent = self._dietPercent * 0.01  # c15
-        cropPercent = self._percentOfDietThatIsFromCrops * 0.01  # c12
+        dietPercent = self._mDietPercent * 0.01  # c15
+        cropPercent = self._mPercentOfDietThatIsFromCrops * 0.01  # c12
         
         # Calculate target calories for animals
         targetAnimalCalories = totalAnnualCalories * dietPercent  # e15
         
         # Process each animal
-        for animalGuid, animalParamGuid in self._animals.items():
+        for animalGuid, animalParamGuid in self._mAnimals.items():
             animal = LaUtils.getAnimal(animalGuid)
             animalParam = LaUtils.getAnimalParameter(animalParamGuid)
             
             # Get milk production values
-            milkKgPerDay = self._get_animal_value(animal, 'milkGramsPerDay') * 0.001  # c2
-            milkFoodValue = self._get_animal_value(animal, 'milkFoodValue')  # c3
-            lactationTime = self._get_animal_value(animal, 'lactationTime')  # c4
-            weaningAge = self._get_animal_value(animal, 'weaningAge')  # c5
-            killWeight = self._get_animal_value(animal, 'killWeight')  # c6
-            usablePortionOfAnimal = self._get_animal_value(animal, 'usableMeat') * 0.01  # c7
+            milkKgPerDay = self._getAnimalValue(animal, 'milkGramsPerDay') * 0.001  # c2
+            milkFoodValue = self._getAnimalValue(animal, 'milkFoodValue')  # c3
+            lactationTime = self._getAnimalValue(animal, 'lactationTime')  # c4
+            weaningAge = self._getAnimalValue(animal, 'weaningAge')  # c5
+            killWeight = self._getAnimalValue(animal, 'killWeight')  # c6
+            usablePortionOfAnimal = self._getAnimalValue(animal, 'usableMeat') * 0.01  # c7
             
             # Calculate dairy potential
             dairyValuePerDay = milkKgPerDay * milkFoodValue  # e2 part 1
@@ -1073,7 +1089,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             actualDairyValue = potentialDairyValue * dairyUtilization  # e3
             
             # Calculate meat value
-            meatFoodValue = self._get_animal_value(animal, 'meatFoodValue')  # c9
+            meatFoodValue = self._getAnimalValue(animal, 'meatFoodValue')  # c9
             meatValue = killWeight * usablePortionOfAnimal * meatFoodValue  # meat portion of e10
             totalAnimalValue = actualDairyValue + meatValue  # e10
             
@@ -1112,24 +1128,24 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         
         # Set diet label values safely using _set_diet_labels helper method
         self._set_diet_labels(
-            dietLabels=dietLabels,
-            overallDairyMCals=dairyMCals,
-            overallCropsMCals=cropMCals,
-            overallMeatMCals=tameMeatMCals,
-            overallWildMeatMCals=wildMeatMCals,
-            overallWildPlantsMCals=wildPlantMCals,
-            overallDairyPercent=dairyPercent,
-            domesticMeatPercent=tameMeatPercent,
-            overallCropPercent=cropPercent_final,
-            wildMeatPercent=wildMeatPercent,
-            overallWildPlantPercent=wildPlantPercent,
-            overallMeatPercent=self._dietPercent - dairyPercent,
-            overallPlantPercent=(1.0 - self._dietPercent),
-            mCalsIndividualAnnual=mCalsIndividualAnnual * 0.001,
-            mCalsSettlementAnnual=mCalsSettlementAnnual * 0.001 * 0.001,
-            overallDairySurplusMCals=0.0,
-            cropCalcsReportMap=cropCalcsReportMap,
-            animalCalcsReportMap=animalCalcsReportMap
+            theDietLabels=dietLabels,
+            theOverallDairyMCals=dairyMCals,
+            theOverallCropsMCals=cropMCals,
+            theOverallMeatMCals=tameMeatMCals,
+            theOverallWildMeatMCals=wildMeatMCals,
+            theOverallWildPlantsMCals=wildPlantMCals,
+            theOverallDairyPercent=dairyPercent,
+            theDomesticMeatPercent=tameMeatPercent,
+            theOverallCropPercent=cropPercent_final,
+            theWildMeatPercent=wildMeatPercent,
+            theOverallWildPlantPercent=wildPlantPercent,
+            theOverallMeatPercent=self._mDietPercent - dairyPercent,
+            theOverallPlantPercent=(1.0 - self._mDietPercent),
+            theMCalsIndividualAnnual=mCalsIndividualAnnual * 0.001,
+            theMCalsSettlementAnnual=mCalsSettlementAnnual * 0.001 * 0.001,
+            theOverallDairySurplusMCals=0.0,
+            theCropCalcsReportMap=cropCalcsReportMap,
+            theAnimalCalcsReportMap=animalCalcsReportMap
         )
         
         return dietLabels
@@ -1149,8 +1165,8 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         dietLabels = LaDietLabels()
         
         # Basic calorie calculations - these stay in calories (not MCal) until the end
-        mCalsIndividualAnnual = self._caloriesPerPersonDaily * 365.0
-        mCalsSettlementAnnual = mCalsIndividualAnnual * self._population
+        mCalsIndividualAnnual = self._mCaloriesPerPersonDaily * 365.0
+        mCalsSettlementAnnual = mCalsIndividualAnnual * self._mPopulation
         
         # Initialize counters
         dairyMCalorieCounter = 0.0
@@ -1167,35 +1183,35 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         wildPlantsPortionPct = 0.0
         
         # First, process all the animals to calculate dairy and meat contributions
-        for animalGuid, animalParamGuid in self._animals.items():
+        for animalGuid, animalParamGuid in self._mAnimals.items():
             animal = LaUtils.getAnimal(animalGuid)
             animalParam = LaUtils.getAnimalParameter(animalParamGuid)
             
             # Calculate dairy contribution
-            milkKgPerDay = self._get_animal_value(animal, 'milkGramsPerDay') * 0.001
-            milkFoodValue = self._get_animal_value(animal, 'milkFoodValue')
-            lactationTime = self._get_animal_value(animal, 'lactationTime')
-            weaningAge = self._get_animal_value(animal, 'weaningAge')
+            milkKgPerDay = self._getAnimalValue(animal, 'milkGramsPerDay') * 0.001
+            milkFoodValue = self._getAnimalValue(animal, 'milkFoodValue')
+            lactationTime = self._getAnimalValue(animal, 'lactationTime')
+            weaningAge = self._getAnimalValue(animal, 'weaningAge')
             
             # Calculate dairy calories per animal
             dairyCaloriesPerAnimal = milkKgPerDay * milkFoodValue * (lactationTime - weaningAge)
             
             # Apply dairy utilization percentage
-            dairyCaloriesPerAnimal *= (self._dairyUtilisation * 0.01)
+            dairyCaloriesPerAnimal *= (self._mDairyUtilisation * 0.01)
             
             # Calculate meat contribution
-            killWeight = self._get_animal_value(animal, 'killWeight')
-            usableMeat = self._get_animal_value(animal, 'usableMeat') * 0.01
-            meatFoodValue = self._get_animal_value(animal, 'meatFoodValue')
+            killWeight = self._getAnimalValue(animal, 'killWeight')
+            usableMeat = self._getAnimalValue(animal, 'usableMeat') * 0.01
+            meatFoodValue = self._getAnimalValue(animal, 'meatFoodValue')
             
             # Calculate meat calories per animal
             meatCaloriesPerAnimal = killWeight * usableMeat * meatFoodValue
             
             # Get the percentage this animal contributes to meat portion
-            animalContribution = self._get_animal_param_value(animalParam, 'percentTameMeat') * 0.01
+            animalContribution = self._getAnimalParamValue(animalParam, 'percentTameMeat') * 0.01
             
             # Calculate target calories for this animal
-            targetCalories = mCalsSettlementAnnual * self._dietPercent * (1.0 - self._percentOfDietThatIsFromCrops * 0.01) * animalContribution
+            targetCalories = mCalsSettlementAnnual * self._mDietPercent * (1.0 - self._mPercentOfDietThatIsFromCrops * 0.01) * animalContribution
             
             # If the animal provides both dairy and meat, calculate the split
             totalAnimalCalories = dairyCaloriesPerAnimal + meatCaloriesPerAnimal
@@ -1212,17 +1228,17 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             tameMeatMCalorieCounter += meatCalories
         
         # Calculate remaining calories for wild meat (this could be more sophisticated)
-        wildMeatCalories = (mCalsSettlementAnnual * self._dietPercent * 
-                          (1.0 - self._percentOfDietThatIsFromCrops * 0.01) - 
+        wildMeatCalories = (mCalsSettlementAnnual * self._mDietPercent * 
+                          (1.0 - self._mPercentOfDietThatIsFromCrops * 0.01) - 
                           tameMeatMCalorieCounter - dairyMCalorieCounter)
         
         # Make sure wild meat calories don't go negative
         wildMeatMCalorieCounter = max(0, wildMeatCalories)
         
         # Calculate plant portions
-        plantCalories = mCalsSettlementAnnual * (1.0 - self._dietPercent)
-        cropsMCalorieCounter = plantCalories * (self._percentOfDietThatIsFromCrops * 0.01)
-        wildPlantsMCalorieCounter = plantCalories * (1.0 - self._percentOfDietThatIsFromCrops * 0.01)
+        plantCalories = mCalsSettlementAnnual * (1.0 - self._mDietPercent)
+        cropsMCalorieCounter = plantCalories * (self._mPercentOfDietThatIsFromCrops * 0.01)
+        wildPlantsMCalorieCounter = plantCalories * (1.0 - self._mPercentOfDietThatIsFromCrops * 0.01)
         
         # Calculate the percentage each source makes up of the total diet
         totalCalories = mCalsSettlementAnnual
@@ -1280,8 +1296,8 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         dietLabels = LaDietLabels()
         
         # Basic calorie calculations
-        mCalsIndividualAnnual = self._caloriesPerPersonDaily * 365.0
-        mCalsSettlementAnnual = mCalsIndividualAnnual * self._population
+        mCalsIndividualAnnual = self._mCaloriesPerPersonDaily * 365.0
+        mCalsSettlementAnnual = mCalsIndividualAnnual * self._mPopulation
         
         # Initialize counters
         dairyMCalorieCounter = 0.0
@@ -1289,36 +1305,36 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         wildMeatMCalorieCounter = 0.0
         
         # Calculate basic ratios
-        c1 = 1.0 - self._meatPercent  # Plant vs Animal ratio
-        c8 = self._dairyUtilisation * 0.01  # Dairy utilization percentage
-        c10 = self._population  # Population
-        c11 = self._caloriesPerPersonDaily  # Calories per person daily
+        c1 = 1.0 - self._mMeatPercent  # Plant vs Animal ratio
+        c8 = self._mDairyUtilisation * 0.01  # Dairy utilization percentage
+        c10 = self._mPopulation  # Population
+        c11 = self._mCaloriesPerPersonDaily  # Calories per person daily
         c14 = c10 * c11 * 365.0  # Total annual calories
-        c15 = self._dietPercent * 0.01  # Diet percentage
-        c12 = self._percentOfDietThatIsFromCrops * 0.01  # Crop percentage
+        c15 = self._mDietPercent * 0.01  # Diet percentage
+        c12 = self._mPercentOfDietThatIsFromCrops * 0.01  # Crop percentage
         
         # Calculate target calories for this calculation
         e15 = c14 * c15  # Target animal calories
         
         # Process each animal
-        for animalGuid, animalParamGuid in self._animals.items():
+        for animalGuid, animalParamGuid in self._mAnimals.items():
             animal = LaUtils.getAnimal(animalGuid)
             animalParam = LaUtils.getAnimalParameter(animalParamGuid)
             
             # Get milk production values
-            c2 = self._get_animal_value(animal, 'milkGramsPerDay') * 0.001  # Milk kg per day
-            c3 = self._get_animal_value(animal, 'milkFoodValue')  # Milk food value
-            c4 = self._get_animal_value(animal, 'lactationTime')  # Lactation time
-            c5 = self._get_animal_value(animal, 'weaningAge')  # Weaning age
-            c6 = self._get_animal_value(animal, 'killWeight')  # Kill weight
-            c7 = self._get_animal_value(animal, 'usableMeat') * 0.01  # Usable portion
+            c2 = self._getAnimalValue(animal, 'milkGramsPerDay') * 0.001  # Milk kg per day
+            c3 = self._getAnimalValue(animal, 'milkFoodValue')  # Milk food value
+            c4 = self._getAnimalValue(animal, 'lactationTime')  # Lactation time
+            c5 = self._getAnimalValue(animal, 'weaningAge')  # Weaning age
+            c6 = self._getAnimalValue(animal, 'killWeight')  # Kill weight
+            c7 = self._getAnimalValue(animal, 'usableMeat') * 0.01  # Usable portion
             
             # Calculate dairy potential
             e2 = c2 * c3 * (c4 - c5)  # Potential dairy value
             e3 = e2 * c8  # Actual dairy value
             
             # Calculate meat value
-            c9 = self._get_animal_value(animal, 'meatFoodValue')  # Meat food value
+            c9 = self._getAnimalValue(animal, 'meatFoodValue')  # Meat food value
             e10 = e3 + (c9 * c7 * c6)  # Total animal value (dairy + meat)
             
             # Calculate portion of diet from this animal
@@ -1356,8 +1372,8 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         dietLabels.cropsPortionPct = c31 * 100.0
         dietLabels.wildAnimalPortionPct = c28 * 100.0
         dietLabels.wildPlantsPortionPct = c30 * 100.0
-        dietLabels.animalPortionPct = self._dietPercent - (c27 * 100.0)
-        dietLabels.plantsPortionPct = (1.0 - self._dietPercent) * 100.0
+        dietLabels.animalPortionPct = self._mDietPercent - (c27 * 100.0)
+        dietLabels.plantsPortionPct = (1.0 - self._mDietPercent) * 100.0
         
         # Set calorie values
         dietLabels.kiloCaloriesIndividualAnnual = mCalsIndividualAnnual * 0.001
