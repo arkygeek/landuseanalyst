@@ -235,11 +235,11 @@ class LaMainForm(LaMainFormBase):
                         self._current_diet_labels = self.model.doCalcsPlantsFirstIncludeDairy()
                         LaUtils.debug.log("Used doCalcsPlantsFirstIncludeDairy calculation method", "Diet")
                     else:
-                        self._current_diet_labels = self.model.doCalcsPlantsFirstDairySeperate()
+                        self._current_diet_labels = self.model.doCalcsPlantsFirstDairySeparate()
                         LaUtils.debug.log("Used doCalcsPlantsFirstDairySeperate calculation method", "Diet")
                 else:
                     if self.model.includeDairy:
-                        self._current_diet_labels = self.model.doCalcsAnimalsFirstIncludeDiary()
+                        self._current_diet_labels = self.model.doCalcsAnimalsFirstIncludeDairy()
                         LaUtils.debug.log("Used doCalcsAnimalsFirstIncludeDiary calculation method", "Diet")
                     else:
                         self._current_diet_labels = self.model.doCalcsAnimalsFirstDairySeparate()
@@ -462,10 +462,10 @@ class LaMainForm(LaMainFormBase):
                 if self.model.includeDairy:
                     dietLabels = self.model.doCalcsPlantsFirstIncludeDairy()
                 else:
-                    dietLabels = self.model.doCalcsPlantsFirstDairySeperate()
+                    dietLabels = self.model.doCalcsPlantsFirstDairySeparate()
             else:
                 if self.model.includeDairy:
-                    dietLabels = self.model.doCalcsAnimalsFirstIncludeDiary()
+                    dietLabels = self.model.doCalcsAnimalsFirstIncludeDairy()
                 else:
                     dietLabels = self.model.doCalcsAnimalsFirstDairySeparate()
             

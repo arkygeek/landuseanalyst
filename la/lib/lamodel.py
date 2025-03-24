@@ -839,7 +839,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             # Create an empty diet labels object instead of returning None
             return LaDietLabels()
 
-    def doCalcsPlantsFirstDairySeperate(self) -> LaDietLabels:
+    def doCalcsPlantsFirstDairySeparate(self) -> LaDietLabels:
         """Calculate diet proportions with plants first and dairy separate."""
         try:
             LaUtils.debug.log("Starting plants-first (dairy separate) diet calculations", "Diet")
@@ -892,7 +892,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             LaUtils.debug.log(f"Error in plants-first (dairy separate) calculations: {str(e)}", "Error")
             return LaDietLabels()
 
-    def doCalcsAnimalsFirstIncludeDiary(self) -> LaDietLabels:
+    def doCalcsAnimalsFirstIncludeDairy(self) -> LaDietLabels:
         """Calculate diet proportions with animals first and including dairy."""
         try:
             LaUtils.debug.log("Starting animals-first (with dairy) diet calculations", "Diet")
