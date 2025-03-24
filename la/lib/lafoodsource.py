@@ -51,7 +51,7 @@ class LaFoodSource(QObject):
         Returns:
             int: The grain amount.
         """
-        return self._mGrain
+        return int(self._mGrain)
 
     @grain.setter
     def grain(self, value):
@@ -73,7 +73,7 @@ class LaFoodSource(QObject):
         Returns:
             int: The fodder amount.
         """
-        return self._mFodder
+        return int(self._mFodder)
 
     @fodder.setter
     def fodder(self, value):
@@ -95,7 +95,7 @@ class LaFoodSource(QObject):
         Returns:
             int: Number of days.
         """
-        return self._mDays
+        return int(self._mDays)
 
     @days.setter
     def days(self, value):
@@ -117,7 +117,7 @@ class LaFoodSource(QObject):
         Returns:
             bool: True if the food source is used, False otherwise.
         """
-        return self._mUsed
+        return bool(self._mUsed)
 
     @used.setter
     def used(self, value):
@@ -139,7 +139,7 @@ class LaFoodSource(QObject):
         Returns:
             str: The crop GUID (Globally Unique Identifier).
         """
-        return self._mCropGuid
+        return str(self._mCropGuid)
 
     @cropGuid.setter
     def cropGuid(self, value):
