@@ -1,4 +1,4 @@
-from qgis.PyQt.QtCore import pyqtSignal, QUuid
+from qgis.PyQt.QtCore import pyqtProperty, pyqtSignal, QUuid
 from qgis.PyQt.QtWidgets import QDialog
 
 import xml.etree.ElementTree as ET
@@ -188,8 +188,8 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
     def __deepcopy__(self, memo):
         return LaModel(self)
 
-    @property
-    def name(self) -> str:
+    @pyqtProperty(str, notify=nameChanged)
+    def name(self) -> str: # type: ignore
         return self._name
 
     @name.setter
@@ -198,9 +198,9 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             self._name = theName
             self.nameChanged.emit()
 
-    @property
-    def population(self) -> int:
-        return self._population
+    @pyqtProperty(int, notify=populationChanged)
+    def population(self) -> int: # type: ignore
+        return int(str(self._population))
 
     @population.setter
     def population(self, thePopulation: int):
@@ -208,9 +208,9 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             self._population = thePopulation
             self.populationChanged.emit()
 
-    @property
-    def period(self) -> str:
-        return self._period
+    @pyqtProperty(str, notify=periodChanged)
+    def period(self) -> str: # type: ignore
+        return str(self._period)
 
     @period.setter
     def period(self, thePeriod: str):
@@ -220,9 +220,9 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
 
 
-    @property
-    def projection(self) -> int:
-        return self._projection
+    @pyqtProperty(int, notify=projectionChanged)
+    def projection(self) -> int: # type: ignore
+        return int(str(self._projection))
 
     @projection.setter
     def projection(self, theProjection: int):
@@ -230,9 +230,9 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             self._projection = theProjection
             self.projectionChanged.emit()
 
-    @property
-    def precision(self) -> int:
-        return self._precision
+    @pyqtProperty(int, notify=precisionChanged)
+    def precision(self) -> int: # type: ignore
+        return int(str(self._precision))
 
     @precision.setter
     def precision(self, thePrecision: int):
@@ -240,9 +240,9 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             self._precision = thePrecision
             self.precisionChanged.emit()
 
-    @property
-    def dietPercent(self) -> int:
-        return self._dietPercent
+    @pyqtProperty(int, notify=dietPercentChanged)
+    def dietPercent(self) -> int: # type: ignore
+        return int(str(self._dietPercent))
 
     @dietPercent.setter
     def dietPercent(self, theDietPercent: int):
@@ -250,9 +250,9 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             self._dietPercent = theDietPercent
             self.dietPercentChanged.emit()
 
-    @property
-    def percentOfDietThatIsFromCrops(self) -> int:
-        return self._percentOfDietThatIsFromCrops
+    @pyqtProperty(int, notify=percentOfDietThatIsFromCropsChanged)
+    def percentOfDietThatIsFromCrops(self) -> int: # type: ignore
+        return int(str(self._percentOfDietThatIsFromCrops))
 
     @percentOfDietThatIsFromCrops.setter
     def percentOfDietThatIsFromCrops(self, thePercent: int):
@@ -260,9 +260,9 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             self._percentOfDietThatIsFromCrops = thePercent
             self.percentOfDietThatIsFromCropsChanged.emit()
 
-    @property
-    def meatPercent(self) -> int:
-        return self._meatPercent
+    @pyqtProperty(int, notify=meatPercentChanged)
+    def meatPercent(self) -> int: # type: ignore
+        return int(str(self._meatPercent))
 
     @meatPercent.setter
     def meatPercent(self, theMeatPercent: int):
@@ -270,9 +270,9 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             self._meatPercent = theMeatPercent
             self.meatPercentChanged.emit()
 
-    @property
-    def caloriesPerPersonDaily(self) -> int:
-        return self._caloriesPerPersonDaily
+    @pyqtProperty(int, notify=caloriesPerPersonDailyChanged)
+    def caloriesPerPersonDaily(self) -> int: # type: ignore
+        return int(str(self._caloriesPerPersonDaily))
 
     @caloriesPerPersonDaily.setter
     def caloriesPerPersonDaily(self, theCaloriesPerPersonDaily: int):
@@ -280,9 +280,9 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             self._caloriesPerPersonDaily = theCaloriesPerPersonDaily
             self.caloriesPerPersonDailyChanged.emit()
 
-    @property
-    def dairyUtilisation(self) -> int:
-        return self._dairyUtilisation
+    @pyqtProperty(int, notify=dairyUtilisationChanged)
+    def dairyUtilisation(self) -> int: # type: ignore
+        return int(str(self._dairyUtilisation))
 
     @dairyUtilisation.setter
     def dairyUtilisation(self, thePercent: int):
@@ -290,9 +290,15 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             self._dairyUtilisation = thePercent
             self.dairyUtilisationChanged.emit()
 
-    @property
-    def baseOnPlants(self) -> bool:
-        return self._baseOnPlants
+    @pyqtProperty(bool, notify=baseOnPlantsChanged)
+    def baseOnPlants(self) -> bool: # type: ignore
+        return bool(self._baseOnPlants)
+        """ Hint on usage to read and set the checkbox state
+            # When reading from checkbox
+            self._baseOnPlants = self.cboxBaseOnPlants.isChecked()
+            # When setting checkbox state
+            self.cboxBaseOnPlants.setChecked(self._baseOnPlants)
+        """
 
     @baseOnPlants.setter
     def baseOnPlants(self, theBool: bool):
@@ -300,9 +306,9 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             self._baseOnPlants = theBool
             self.baseOnPlantsChanged.emit()
 
-    @property
-    def includeDairy(self) -> bool:
-        return self._includeDairy
+    @pyqtProperty(bool, notify=includeDairyChanged)
+    def includeDairy(self) -> bool: # type: ignore
+        return bool(self._includeDairy)
 
     @includeDairy.setter
     def includeDairy(self, theBool: bool):
@@ -310,9 +316,9 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             self._includeDairy = theBool
             self.includeDairyChanged.emit()
 
-    @property
-    def limitDairy(self) -> bool:
-        return self._limitDairy
+    @pyqtProperty(bool, notify=limitDairyChanged)
+    def limitDairy(self) -> bool: # type: ignore
+        return bool(self._limitDairy)
 
     @limitDairy.setter
     def limitDairy(self, theBool: bool):
@@ -320,9 +326,9 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             self._limitDairy = theBool
             self.limitDairyChanged.emit()
 
-    @property
-    def limitDairyPercent(self) -> int:
-        return self._limitDairyPercent
+    @pyqtProperty(int, notify=limitDairyPercentChanged)
+    def limitDairyPercent(self) -> int: # type: ignore
+        return int(str(self._limitDairyPercent))
 
     @limitDairyPercent.setter
     def limitDairyPercent(self, thePercent: int):
@@ -330,9 +336,9 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             self._limitDairyPercent = thePercent
             self.limitDairyPercentChanged.emit()
 
-    @property
-    def fallowStatus(self) -> Status:
-        return self._fallowStatus
+    @pyqtProperty(str, notify=fallowStatusChanged) # TODO: set this to the correct return type
+    def fallowStatus(self) -> Status: # type: ignore
+        return (self._fallowStatus)
 
     @fallowStatus.setter
     def fallowStatus(self, theStatus: Status):
@@ -340,9 +346,9 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             self._fallowStatus = theStatus
             self.fallowStatusChanged.emit()
 
-    @property
-    def fallowRatio(self) -> int:
-        return self._fallowRatio
+    @pyqtProperty(int, notify=fallowRatioChanged)
+    def fallowRatio(self) -> int: # type: ignore
+        return int(str(self._fallowRatio))
 
     @fallowRatio.setter
     def fallowRatio(self, theRatio: int):
@@ -350,9 +356,9 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             self._fallowRatio = theRatio
             self.fallowRatioChanged.emit()
 
-    @property
-    def easting(self) -> int:
-        return self._easting
+    @pyqtProperty(int, notify=eastingChanged)
+    def easting(self) -> int: # type: ignore
+        return int(str(self._easting))
 
     @easting.setter
     def easting(self, theEasting: int):
@@ -360,9 +366,9 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             self._easting = theEasting
             self.eastingChanged.emit()
 
-    @property
-    def northing(self) -> int:
-        return self._northing
+    @pyqtProperty(int, notify=northingChanged)
+    def northing(self) -> int: # type: ignore
+        return int(str(self._northing))
 
     @northing.setter
     def northing(self, theNorthing: int):
@@ -370,9 +376,9 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             self._northing = theNorthing
             self.northingChanged.emit()
 
-    @property
-    def euclideanDistance(self) -> bool:
-        return self._euclideanDistance
+    @pyqtProperty(bool, notify=euclideanDistanceChanged)
+    def euclideanDistance(self) -> bool: # type: ignore
+        return bool(self._euclideanDistance)
 
     @euclideanDistance.setter
     def euclideanDistance(self, theBool: bool):
@@ -380,9 +386,9 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             self._euclideanDistance = theBool
             self.euclideanDistanceChanged.emit()
 
-    @property
-    def walkingTime(self) -> bool:
-        return self._walkingTime
+    @pyqtProperty(bool, notify=walkingTimeChanged)
+    def walkingTime(self) -> bool: # type: ignore
+        return bool(self._walkingTime)
 
     @walkingTime.setter
     def walkingTime(self, theBool: bool):
@@ -390,9 +396,9 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             self._walkingTime = theBool
             self.walkingTimeChanged.emit()
 
-    @property
-    def pathDistance(self) -> bool:
-        return self._pathDistance
+    @pyqtProperty(bool, notify=pathDistanceChanged)
+    def pathDistance(self) -> bool: # type: ignore
+        return bool(self._pathDistance)
 
     @pathDistance.setter
     def pathDistance(self, theBool: bool):
@@ -400,9 +406,9 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             self._pathDistance = theBool
             self.pathDistanceChanged.emit()
 
-    @property
-    def commonLandValue(self) -> float:
-        return self._commonLandValue
+    @pyqtProperty(float, notify=commonLandValueChanged)
+    def commonLandValue(self) -> float: # type: ignore
+        return float(str(self._commonLandValue))
 
     @commonLandValue.setter
     def commonLandValue(self, theValue: float):
@@ -410,9 +416,9 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             self._commonLandValue = theValue
             self.commonLandValueChanged.emit()
 
-    @property
-    def commonLandAreaUnits(self) -> AreaUnits:
-        return self._commonLandAreaUnits
+    @pyqtProperty(AreaUnits, notify=commonLandAreaUnitsChanged)
+    def commonLandAreaUnits(self) -> AreaUnits: # type: ignore
+        return self._commonLandAreaUnits # TODO: figure out how to do this
 
     @commonLandAreaUnits.setter
     def commonLandAreaUnits(self, theAreaUnits: AreaUnits):
@@ -420,9 +426,9 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             self._commonLandAreaUnits = theAreaUnits
             self.commonLandAreaUnitsChanged.emit()
 
-    @property
-    def herdSize(self) -> int:
-        return int(self._herdSize)
+    @pyqtProperty(int, notify=herdSizeChanged)
+    def herdSize(self) -> int: # type: ignore
+        return int(str(self._herdSize))
 
     @herdSize.setter
     def herdSize(self, theAnimalGuid: str):
@@ -430,8 +436,8 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             self._herdSize = theAnimalGuid
             self.herdSizeChanged.emit()
 
-    @property
-    def animals(self) -> Dict[str, str]:
+    @pyqtProperty(Dict[str, str], notify=animalsChanged) # TODO: check this I think Dict type might be wrong
+    def animals(self) -> Dict[str, str]: # type: ignore
         return self._animals
 
     @animals.setter
@@ -440,8 +446,8 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             self._animals = theAnimals
             self.animalsChanged.emit()
 
-    @property
-    def crops(self) -> Dict[str, str]:
+    @pyqtProperty(str, notify=cropsChanged) # TODO: check this to see if it is correct
+    def crops(self) -> Dict[str, str]: # type: ignore
         return self._crops
 
     @crops.setter
@@ -450,8 +456,8 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             self._crops = theCrops
             self.cropsChanged.emit()
 
-    @property
-    def diets(self) -> Dict[str, LaDietLabels]:
+    @pyqtProperty(str, notify=dietsChanged) # TODO: check this to see if it is correct
+    def diets(self) -> Dict[str, LaDietLabels]: # type: ignore
         return self._diets
 
     @diets.setter
@@ -460,8 +466,8 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             self._diets = theDiets
             self.dietsChanged.emit()
 
-    @property
-    def dietLabels(self) -> List[LaDietLabels]:
+    @pyqtProperty(str, notify=dietLabelsChanged) # TODO: check this to see if it is correct
+    def dietLabels(self) -> List[LaDietLabels]: # type: ignore
         return self._dietLabels
 
     @dietLabels.setter
@@ -470,8 +476,8 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             self._dietLabels = theDietLabels
             self.dietLabelsChanged.emit()
 
-    @property
-    def landBeingGrazed(self) -> LandBeingGrazed:
+    @pyqtProperty(str, notify=landBeingGrazedChanged) # TODO: check this to see if it is correct
+    def landBeingGrazed(self) -> LandBeingGrazed: # type: ignore
         return self._landBeingGrazed
 
     @landBeingGrazed.setter
@@ -480,8 +486,8 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             self._landBeingGrazed = theLandBeingGrazed
             self.landBeingGrazedChanged.emit()
 
-    @property
-    def landFound(self) -> LandFound:
+    @pyqtProperty(str, notify=landFoundChanged)
+    def landFound(self) -> LandFound: # type: ignore
         return self._landFound
 
     @landFound.setter
@@ -490,8 +496,8 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             self._landFound = theLandFound
             self.landFoundChanged.emit()
 
-    @property
-    def priority(self) -> Priority:
+    @pyqtProperty(str, notify=priorityChanged)
+    def priority(self) -> Priority: # type: ignore
         return self._priority
 
     @priority.setter
@@ -500,8 +506,8 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             self._priority = thePriority
             self.priorityChanged.emit()
 
-    @property
-    def description(self) -> str:
+    @pyqtProperty(str, notify=descriptionChanged)
+    def description(self) -> str: # type: ignore
         return self._description
 
     @description.setter
@@ -510,8 +516,8 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             self._description = theDescription
             self.descriptionChanged.emit()
 
-    @property
-    def areaUnits(self) -> AreaUnits:
+    @pyqtProperty(str, notify=areaUnitsChanged)
+    def areaUnits(self) -> AreaUnits: # type: ignore
         return self._areaUnits
 
     @areaUnits.setter
@@ -520,8 +526,8 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             self._areaUnits = theAreaUnits
             self.areaUnitsChanged.emit()
 
-    @property
-    def status(self) -> Status:
+    @pyqtProperty(str, notify=statusChanged)
+    def status(self) -> Status: # type: ignore
         return self._status
 
     @status.setter
@@ -551,13 +557,13 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         """
         myAnimal = LaUtils.getAnimal(theAnimalGuid)
         myAnimalProductionTarget = 1
-        myAnimalsRequired = (myAnimalProductionTarget / myAnimal.killWeight) / (myAnimal.usableMeat * 0.01)
-        myBirthsPerYear = 365.0 / (myAnimal.gestationTime + myAnimal.estrousCycle + myAnimal.weaningAge)
-        myOffspringPerMotherYearly = myBirthsPerYear * myAnimal.youngPerBirth * (1.0 - (0.01 * myAnimal.deathRate))
+        myAnimalsRequired = (myAnimalProductionTarget / float(str(myAnimal.killWeight))) / (float(str(myAnimal.usableMeat)) * 0.01)
+        myBirthsPerYear = 365.0 / (float(str(myAnimal.gestationTime)) + float(str(myAnimal.estrousCycle)) + float(str(myAnimal.weaningAge)))
+        myOffspringPerMotherYearly = myBirthsPerYear * float(str(myAnimal.youngPerBirth)) * (1.0 - (0.01 * float(str(myAnimal.deathRate))))
         myMothersNeededStepOne = myAnimalsRequired / myOffspringPerMotherYearly
         myMalesStepOne = (myMothersNeededStepOne * myOffspringPerMotherYearly) / 2.0
         myFemalesStepOne = myMalesStepOne
-        myMotherReplacementsPerYear = myMothersNeededStepOne / myAnimal.breedingExpectancy
+        myMotherReplacementsPerYear = myMothersNeededStepOne / float(str(myAnimal.breedingExpectancy))
         myAdditionalMothers = (myMotherReplacementsPerYear / myOffspringPerMotherYearly) * 2.0
         myMalesStepTwo = (myAdditionalMothers * myOffspringPerMotherYearly) / 2.0
         myFemalesStepTwo = (myAdditionalMothers * myOffspringPerMotherYearly) / 2.0
@@ -565,8 +571,8 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         myTotalMales = myMalesStepOne + myMalesStepTwo
         myTotalFemales = myFemalesStepOne - myFemalesStepTwo
         myTotalJuveniles = myTotalMales + myTotalFemales
-        myTotalMothersValueRequired = myTotalMothers * myAnimal.gestating
-        myTotalJuvenilesValueRequired = myTotalJuveniles * myAnimal.juvenile
+        myTotalMothersValueRequired = myTotalMothers * float(str(myAnimal.gestating))
+        myTotalJuvenilesValueRequired = myTotalJuveniles * float(str(myAnimal.juvenile))
         myValueNeededToFeedAnimals = myTotalMothersValueRequired + myTotalJuvenilesValueRequired
         myReturnValue = float(myValueNeededToFeedAnimals)
 
@@ -1042,8 +1048,11 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         population = self._population  # c10
         caloriesPerPersonDaily = self._caloriesPerPersonDaily  # c11
         totalAnnualCalories = population * caloriesPerPersonDaily * 365.0  # c14
-        dietPercent = self._dietPercent  # c15
-        cropPercent = self._percentOfDietThatIsFromCrops  # c12
+        dietPercent = self._dietPercent * 0.01  # c15
+        cropPercent = self._percentOfDietThatIsFromCrops * 0.01  # c12
+        
+        # Calculate target calories for animals
+        targetAnimalCalories = totalAnnualCalories * dietPercent  # e15
         
         # Process each animal
         for animalGuid, animalParamGuid in self._animals.items():
@@ -1069,11 +1078,10 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             totalAnimalValue = actualDairyValue + meatValue  # e10
             
             # Calculate portion of diet from this animal
-            targetCalories = totalAnnualCalories * dietPercent  # e15
-            animalPortion = (targetCalories * (1.0 - plantVsAnimalRatio)) / totalAnimalValue  # e7
+            animalPortion = (targetAnimalCalories * (1.0 - plantVsAnimalRatio)) / totalAnimalValue  # e7
             dairyCalories = animalPortion * actualDairyValue  # c21
             meatCalories = animalPortion * killWeight * usablePortionOfAnimal * meatFoodValue  # c23
-            wildMeatCalories = targetCalories - dairyCalories - meatCalories  # c22
+            wildMeatCalories = targetAnimalCalories - dairyCalories - meatCalories  # c22
             
             # Update calorie counters
             dairyMCalorieCounter += dairyCalories
@@ -1081,36 +1089,47 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             tameMeatMCalorieCounter += meatCalories
             
         # Calculate final portions
-        wildPlantCalories = (1.0 - cropPercent) * (totalAnnualCalories - e15)  # c24
-        cropCalories = cropPercent * (totalAnnualCalories - e15)  # c25
+        wildPlantCalories = (1.0 - cropPercent) * (totalAnnualCalories - targetAnimalCalories)  # c24
+        cropCalories = cropPercent * (totalAnnualCalories - targetAnimalCalories)  # c25
         
         # Calculate percentages
         wildPlantPercent = wildPlantCalories / totalAnnualCalories  # c30
-        cropPercent = cropCalories / totalAnnualCalories  # c31
+        cropPercent_final = cropCalories / totalAnnualCalories  # c31
         wildMeatPercent = wildMeatMCalorieCounter / totalAnnualCalories  # c28
         tameMeatPercent = tameMeatMCalorieCounter / totalAnnualCalories  # c29
         dairyPercent = dairyMCalorieCounter / totalAnnualCalories  # c27
         
-        # Set diet label values using the helper method
+        # Create report maps - empty for now
+        cropCalcsReportMap = {}
+        animalCalcsReportMap = {}
+        
+        # Convert values to megacalories for output
+        dairyMCals = dairyMCalorieCounter * 0.001 * 0.001
+        cropMCals = cropCalories * 0.001 * 0.001
+        tameMeatMCals = tameMeatMCalorieCounter * 0.001 * 0.001
+        wildMeatMCals = wildMeatMCalorieCounter * 0.001 * 0.001
+        wildPlantMCals = wildPlantCalories * 0.001 * 0.001
+        
+        # Set diet label values safely using _set_diet_labels helper method
         self._set_diet_labels(
             dietLabels=dietLabels,
-            overallDairyMCals=dairyMCalorieCounter * 0.001 * 0.001,  # Convert to megacalories
-            overallCropsMCals=cropCalories * 0.001 * 0.001,
-            overallMeatMCals=tameMeatMCalorieCounter * 0.001 * 0.001,
-            overallWildMeatMCals=wildMeatMCalorieCounter * 0.001 * 0.001,
-            overallWildPlantsMCals=wildPlantCalories * 0.001 * 0.001,
+            overallDairyMCals=dairyMCals,
+            overallCropsMCals=cropMCals,
+            overallMeatMCals=tameMeatMCals,
+            overallWildMeatMCals=wildMeatMCals,
+            overallWildPlantsMCals=wildPlantMCals,
             overallDairyPercent=dairyPercent,
             domesticMeatPercent=tameMeatPercent,
-            overallCropPercent=cropPercent,
+            overallCropPercent=cropPercent_final,
             wildMeatPercent=wildMeatPercent,
             overallWildPlantPercent=wildPlantPercent,
             overallMeatPercent=self._dietPercent - dairyPercent,
-            overallPlantPercent=1.0 - self._dietPercent,
+            overallPlantPercent=(1.0 - self._dietPercent),
             mCalsIndividualAnnual=mCalsIndividualAnnual * 0.001,
-            mCalsSettlementAnnual=mCalsSettlementAnnual * 0.001,
-            overallDairySurplusMCals=0.0,  # No surplus in this calculation method
-            cropCalcsReportMap={},  # Will be populated when crop calcs are implemented
-            animalCalcsReportMap={}  # Will be populated when detailed animal reports are implemented
+            mCalsSettlementAnnual=mCalsSettlementAnnual * 0.001 * 0.001,
+            overallDairySurplusMCals=0.0,
+            cropCalcsReportMap=cropCalcsReportMap,
+            animalCalcsReportMap=animalCalcsReportMap
         )
         
         return dietLabels

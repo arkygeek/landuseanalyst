@@ -3,7 +3,7 @@ import pickle, json
 # lamodel_interface.py
 from qgis.PyQt.QtCore import QObject, pyqtSignal, pyqtSlot, QByteArray
 from typing import Dict, List, Tuple
-from .la import La
+from la.lib.la import *
 from lib.ladietlabels import LaDietLabels
 
 class LaModelInterface(QObject):
