@@ -916,26 +916,26 @@ class LaUtils:
     @staticmethod
     def resolveImagePath(filename: str) -> str:
         """Resolve the path to an image file by searching in multiple locations.
-    
+
         Args:
             filename: Name of the image file to find
-    
+
         Returns:
             Full path to the image if found, empty string if not found
         """
         if not filename:
             return ""
-    
+
         # If it's an absolute path and exists, return it
         if os.path.isabs(filename) and os.path.exists(filename):
             return filename
-    
+
         # Search in each images directory
         for path in LaUtils.userImagesPaths():
             full_path = os.path.join(path, filename)
             if os.path.exists(full_path):
                 LaUtils.debug.log(f"Found image at: {full_path}")
                 return full_path
-    
+
         LaUtils.debug.log(f"Could not find image: {filename}")
         return ""

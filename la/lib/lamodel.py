@@ -768,10 +768,10 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
     def doCalcsAnimalsFirstDairySeparate(self) -> LaDietLabels:
         """Calculate diet portions with animals first and dairy separate.
-        
+
         Dairy products from animal herds are considered separately from meat.
         Plant-based portion is derived from these calculations.
-        
+
         Returns:
             LaDietLabels: Object containing all diet calculations and reports
         """
@@ -780,33 +780,33 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         self._mCalcsAnimalsMap = {}
         self._mValueMap = {}
         self._mAnimalCalcReport = {}
-        
+
         myCropCalcsReportMap = {}
         myAnimalCalcsReportMap = {}
         myAnimalsMap = {}  # For storing calculations to send to fallow allocation
-        
+
         # Initialize counters
         myFoodSourceMapCounter = {}
         for myCropGuid in self._mCrops.keys():
             myFoodSourceMapCounter[myCropGuid] = 0
-            
+
         # Basic calorie calculations
         myCalsIndividualAnnual = self._mCaloriesPerPersonDaily * 365.0 * 0.001  # Convert to MCal
         myCalsSettlementAnnual = myCalsIndividualAnnual * self._mPopulation
         myDairyMCalorieCounter = 0.0
         myTameMeatMCalorieCounter = 0.0
-        
+
         # Diet percentage calculations
         myPlantPercent = 1.0 - self._mDietPercent
         myDomesticCropPortion = self._mPercentOfDietThatIsFromCrops
         myWildMeatPortion = 1.0 - self._mMeatPercent
         myDairyUtilization = self._mDairyUtilisation * 0.01
-        
+
         # Process each animal
         for myAnimalGuid, myAnimalParamGuid in self._mAnimals.items():
             myAnimal = LaUtils.getAnimal(myAnimalGuid)
             myAnimalParam = LaUtils.getAnimalParameter(myAnimalParamGuid)
-            
+
             # Basic animal parameters
             myMilkKgPerDay = self._getAnimalValue(myAnimal, 'milkGramsPerDay') * 0.001
             myMilkFoodValue = self._getAnimalValue(myAnimal, 'milkFoodValue') * 0.001
@@ -815,7 +815,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             myGestatingTime = self._getAnimalValue(myAnimal, 'gestationTime')
             myEstrousCycle = self._getAnimalValue(myAnimal, 'estrousCycle')
             myBabiesPerBirth = self._getAnimalValue(myAnimal, 'youngPerBirth')
-            
+
             myDeathRate = self._getAnimalValue(myAnimal, 'deathRate') * 0.01
             myBreedingRatio = self._getAnimalValue(myAnimal, 'femalesPerMale')
             myKillWeight = self._getAnimalValue(myAnimal, 'killWeight')
@@ -826,69 +826,69 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             myMeatValueMCal = self._getAnimalValue(myAnimal, 'meatFoodValue') * 0.001
             mySexualMaturity = self._getAnimalValue(myAnimal, 'sexualMaturity')  # in months
             myBreedingYears = self._getAnimalValue(myAnimal, 'breedingExpectancy')  # in years
-            
+
             # Calculate animal contribution to meat portion
             myAnimalContributionToMeatPortion = self._getAnimalParamValue(myAnimalParam, 'percentTameMeat') * 0.01
-            myAnimalMCalTarget = (myAnimalContributionToMeatPortion * myCalsSettlementAnnual * 
+            myAnimalMCalTarget = (myAnimalContributionToMeatPortion * myCalsSettlementAnnual *
                               self._mDietPercent * self._mMeatPercent)
-            
+
             # Calculate dairy values
             myPotentialDairyPerOffspring = myMilkKgPerDay * myMilkFoodValue * (myLactationTime - myWeaningAge)
             myValuePerOffspring = myKillWeight * myUsablePortionOfAnimal * myMeatValueMCal
             myActualDairyValueOfOffspring = myPotentialDairyPerOffspring * myDairyUtilization
-            
+
             # Calculate birthing events
             myBirthingEventsPerYear1 = 365.0 / (myWeaningAge + myGestatingTime + myEstrousCycle + myLactationTime)
             myBirthingEventsPerYear = 1.0 if myBirthingEventsPerYear1 < 1.0 else myBirthingEventsPerYear1
-            
+
             # Calculate culling values
-            myCulledMothersValue1 = (myAdultWeight * myMeatValueMCal * myUsablePortionOfAnimal * 
+            myCulledMothersValue1 = (myAdultWeight * myMeatValueMCal * myUsablePortionOfAnimal *
                                  (1.0 / ((mySexualMaturity / 12.0) + myBreedingYears)))
             myCulledMothersValue = myCulledMothersValue1 / (myBabiesPerBirth * myBirthingEventsPerYear)
             myCulledAdultMalesValue = myCulledMothersValue / myFemalesToMales
             myFinalOffspringValue = myValuePerOffspring + myCulledMothersValue + myCulledAdultMalesValue
-            
+
             # Calculate offspring needed and resulting calories
             myOffspringNeededPerYear = myAnimalMCalTarget / myFinalOffspringValue
             myMCalsFromTheMeat = myOffspringNeededPerYear * myFinalOffspringValue
             myMCalsUtilizedFromDairy = myActualDairyValueOfOffspring * myOffspringNeededPerYear
-            
+
             # Update calorie counters
             myTameMeatMCalorieCounter += myMCalsFromTheMeat
             myDairyMCalorieCounter += myMCalsUtilizedFromDairy
-            
+
             # Process fodder requirements
             myFodderSourceMap: Dict[str, str] = self._getAnimalParamValue(myAnimalParam, 'fodderSources')
             myMeatPercent = myMCalsFromTheMeat / myCalsSettlementAnnual
             myDairyPercent = myMCalsUtilizedFromDairy / myCalsSettlementAnnual
-            
+
             # Calculate herd size
-            myOffspringPerMotherPerYear = (myBirthingEventsPerYear * myBabiesPerBirth * 
+            myOffspringPerMotherPerYear = (myBirthingEventsPerYear * myBabiesPerBirth *
                                        (1.0 - myDeathRate) * myConceptionEfficiency)
             myMothersNeededStepOne = myOffspringNeededPerYear / myOffspringPerMotherPerYear
             myMalesStepOne = myMothersNeededStepOne * myOffspringPerMotherPerYear * 0.5
             myFemalesStepOne = myMalesStepOne
-            
+
             myReplacementMothersPerYear = (myMothersNeededStepOne + (mySexualMaturity/12.0)) / myBreedingYears
             myBreedingMalesRequired = ((myMothersNeededStepOne / myBreedingRatio) + myMothersNeededStepOne) / myBreedingRatio
             myAdditionalMothers = ((myReplacementMothersPerYear/myOffspringPerMotherPerYear)*2.0) + (myBreedingMalesRequired * 2.0)
             myMalesStepTwo = myAdditionalMothers * myOffspringPerMotherPerYear * 0.5
             myFemalesStepTwo = myMalesStepTwo
-            
+
             myTotalMothers = myMothersNeededStepOne + myReplacementMothersPerYear
             myTotalMaleOffspring = myMalesStepOne + myMalesStepTwo
             myTotalFemaleOffspring = myFemalesStepOne - myFemalesStepTwo
             totalOffspring = myTotalMaleOffspring * 2.0
-            
+
             # Calculate feed requirements
             myFeedForGestating = self._getAnimalValue(myAnimal, 'gestating') * 0.001
             myFeedForLactating = self._getAnimalValue(myAnimal, 'lactating') * 0.001
             myFeedForMaintenance = self._getAnimalValue(myAnimal, 'maintenance') * 0.001
             myFeedForOffspringPerKg = self._getAnimalValue(myAnimal, 'juvenile') * 0.001
-            
+
             myGestatingMCals = totalOffspring * myGestatingTime * myFeedForGestating
             myLactatingMCals = totalOffspring * myLactationTime * myFeedForLactating
-            
+
             # Calculate maintenance requirements
             myDaysForMaintenance = max(0, 365 - (myGestatingTime + myLactationTime))
             myDryMothers = max(0, myTotalMothers - totalOffspring)
@@ -897,7 +897,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             myMaintenanceMCals = myDryMothersMCals + myOtherMaintenanceMCals
             myAdultMalesMCals = myBreedingMalesRequired * myFeedForMaintenance * 365.0
             offspringMCals = totalOffspring * myKillWeight * myFeedForOffspringPerKg * (365.0 - myWeaningAge)
-            
+
             # Process fodder sources
             myAdditionalMCalCounter = 0.0
             myAdditionalMCalCounter1 = 0.0
@@ -909,21 +909,21 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                 grainToAdd = grain * days * totalOffspring
                 grainTotal = myFoodSourceMapCounter.get(myCropGuid, 0) + grainToAdd
                 myFoodSourceMapCounter[myCropGuid] = grainTotal
-                
+
                 crop = LaUtils.getCrop(myCropGuid)
                 foodValueOfCrop = self._getAnimalValue(crop, 'cropCalories') * 0.001
                 foodValueOfFodder = self._getAnimalValue(crop, 'fodderEnergy') * 0.001  # Using fodderEnergy instead
-                
+
                 grainMCal = grainToAdd * foodValueOfCrop
                 fodderMCal = fodder * days * foodValueOfFodder * totalOffspring
                 myAdditionalMCalCounter1 += fodderMCal
                 myAdditionalMCalCounter += grainMCal + fodderMCal
-            
+
             # Calculate total herd requirements
-            animalHerdMCalsRequired1 = (myGestatingMCals + myLactatingMCals + myMaintenanceMCals + 
+            animalHerdMCalsRequired1 = (myGestatingMCals + myLactatingMCals + myMaintenanceMCals +
                                       myAdultMalesMCals + offspringMCals)
             animalHerdMCalsRequired = animalHerdMCalsRequired1 - myAdditionalMCalCounter
-            
+
             # Store calculations in report map
             animalReport = self._generateAnimalReport(
                 myAnimal.name, myMilkKgPerDay, myMilkFoodValue, myLactationTime, myWeaningAge,
@@ -942,45 +942,45 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                 myDryMothers, myDryMothersMCals, myOtherMaintenanceMCals, myMaintenanceMCals,
                 myAdultMalesMCals, offspringMCals, animalHerdMCalsRequired1,
                 animalHerdMCalsRequired, myMeatPercent, myDairyPercent)
-            
+
             reportAndAreaTarget = (animalReport, animalHerdMCalsRequired)
             myAnimalCalcsReportMap[myAnimalGuid] = reportAndAreaTarget
             myAnimalsMap[myAnimalGuid] = animalHerdMCalsRequired
             self._mValueMap[myAnimalGuid] = animalHerdMCalsRequired
-        
+
         # Calculate dairy limits
         dairyLimit = self._mLimitDairyPercent * 0.01 if self._mLimitDairy else 1.0
         domesticMeatPercent = myTameMeatMCalorieCounter / myCalsSettlementAnnual
         wildMeatPercent = myWildMeatPortion * self._mDietPercent
         limitSatisfies = (domesticMeatPercent + wildMeatPercent + dairyLimit) > 1.0
         newLimit = (1.0 - domesticMeatPercent - wildMeatPercent) if limitSatisfies else dairyLimit
-        
+
         # Calculate final percentages
         potentialDairyLessThanLimitBool = (myDairyMCalorieCounter / myCalsSettlementAnnual) < dairyLimit
         newDairy = myDairyMCalorieCounter if potentialDairyLessThanLimitBool else newLimit * myCalsSettlementAnnual
         overallDairyPercent = newDairy / myCalsSettlementAnnual
-        
+
         overallMeatPercent = wildMeatPercent + domesticMeatPercent
         overallPlantPercent = 1.0 - overallMeatPercent - overallDairyPercent
-        
+
         # Calculate crop percentages
         overallCropPercent = overallPlantPercent * myDomesticCropPortion
         overallWildPlantPercent = overallPlantPercent * (1.0 - myPlantPercent)
-        
+
         # Calculate final calorie values
         overallDomesticMeatMCals = myTameMeatMCalorieCounter
         overallDairyMCals = overallDairyPercent * myCalsSettlementAnnual
         overallWildMeatMCals = wildMeatPercent * myCalsSettlementAnnual
         overallCropsMCals = overallCropPercent * myCalsSettlementAnnual
         overallWildPlantsMCals = overallWildPlantPercent * myCalsSettlementAnnual
-        
+
         overallMeatMCals = overallWildMeatMCals + overallDomesticMeatMCals
         firstDairySurplusBool = myDairyMCalorieCounter - overallDairyMCals
         overallDairySurplusMCals = max(0, firstDairySurplusBool)
-        
+
         # Create and populate diet labels
         myDietLabels = LaDietLabels()
-        
+
         # Set values using properties
         myDietLabels.dairyMCalories = overallDairyMCals
         myDietLabels.cropMCalories = overallCropsMCals
@@ -997,11 +997,11 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         myDietLabels.kiloCaloriesIndividualAnnual = myCalsIndividualAnnual
         myDietLabels.megaCaloriesSettlementAnnual = myCalsSettlementAnnual
         myDietLabels.dairySurplusMCalories = overallDairySurplusMCals
-        
+
         # Set report maps
         myDietLabels.cropCalcsReportMap = myCropCalcsReportMap
         myDietLabels.animalCalcsReportMap = myAnimalCalcsReportMap
-        
+
         return myDietLabels
 
     def _generateAnimalReport(self, *args) -> str:
@@ -1037,27 +1037,27 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
     def doCalcsPlantsFirstIncludeDairy(self) -> LaDietLabels:
         """Calculate diet portions with plants first and dairy included.
-        
+
         In this calculation method:
         1. Plants portion is calculated first
         2. Dairy products are included with meat calculations
         3. All components must sum to 100% of diet
-        
+
         Returns:
             LaDietLabels: Object containing all diet calculations and reports
         """
         # Initialize diet labels
         dietLabels = LaDietLabels()
-        
+
         # Basic calorie calculations
         mCalsIndividualAnnual = self._mCaloriesPerPersonDaily * 365.0
         mCalsSettlementAnnual = mCalsIndividualAnnual * self._mPopulation
-        
+
         # Initialize counters
         dairyMCalorieCounter = 0.0
         tameMeatMCalorieCounter = 0.0
         wildMeatMCalorieCounter = 0.0
-        
+
         # Calculate basic ratios
         plantVsAnimalRatio = 1.0 - self._mMeatPercent  # c1
         dairyUtilization = self._mDairyUtilisation * 0.01  # c8
@@ -1066,15 +1066,15 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         totalAnnualCalories = population * caloriesPerPersonDaily * 365.0  # c14
         dietPercent = self._mDietPercent * 0.01  # c15
         cropPercent = self._mPercentOfDietThatIsFromCrops * 0.01  # c12
-        
+
         # Calculate target calories for animals
         targetAnimalCalories = totalAnnualCalories * dietPercent  # e15
-        
+
         # Process each animal
         for animalGuid, animalParamGuid in self._mAnimals.items():
             animal = LaUtils.getAnimal(animalGuid)
             animalParam = LaUtils.getAnimalParameter(animalParamGuid)
-            
+
             # Get milk production values
             milkKgPerDay = self._getAnimalValue(animal, 'milkGramsPerDay') * 0.001  # c2
             milkFoodValue = self._getAnimalValue(animal, 'milkFoodValue')  # c3
@@ -1082,50 +1082,50 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             weaningAge = self._getAnimalValue(animal, 'weaningAge')  # c5
             killWeight = self._getAnimalValue(animal, 'killWeight')  # c6
             usablePortionOfAnimal = self._getAnimalValue(animal, 'usableMeat') * 0.01  # c7
-            
+
             # Calculate dairy potential
             dairyValuePerDay = milkKgPerDay * milkFoodValue  # e2 part 1
             potentialDairyValue = dairyValuePerDay * (lactationTime - weaningAge)  # e2
             actualDairyValue = potentialDairyValue * dairyUtilization  # e3
-            
+
             # Calculate meat value
             meatFoodValue = self._getAnimalValue(animal, 'meatFoodValue')  # c9
             meatValue = killWeight * usablePortionOfAnimal * meatFoodValue  # meat portion of e10
             totalAnimalValue = actualDairyValue + meatValue  # e10
-            
+
             # Calculate portion of diet from this animal
             animalPortion = (targetAnimalCalories * (1.0 - plantVsAnimalRatio)) / totalAnimalValue  # e7
             dairyCalories = animalPortion * actualDairyValue  # c21
             meatCalories = animalPortion * killWeight * usablePortionOfAnimal * meatFoodValue  # c23
             wildMeatCalories = targetAnimalCalories - dairyCalories - meatCalories  # c22
-            
+
             # Update calorie counters
             dairyMCalorieCounter += dairyCalories
             wildMeatMCalorieCounter += wildMeatCalories
             tameMeatMCalorieCounter += meatCalories
-            
+
         # Calculate final portions
         wildPlantCalories = (1.0 - cropPercent) * (totalAnnualCalories - targetAnimalCalories)  # c24
         cropCalories = cropPercent * (totalAnnualCalories - targetAnimalCalories)  # c25
-        
+
         # Calculate percentages
         wildPlantPercent = wildPlantCalories / totalAnnualCalories  # c30
         cropPercent_final = cropCalories / totalAnnualCalories  # c31
         wildMeatPercent = wildMeatMCalorieCounter / totalAnnualCalories  # c28
         tameMeatPercent = tameMeatMCalorieCounter / totalAnnualCalories  # c29
         dairyPercent = dairyMCalorieCounter / totalAnnualCalories  # c27
-        
+
         # Create report maps - empty for now
         cropCalcsReportMap = {}
         animalCalcsReportMap = {}
-        
+
         # Convert values to megacalories for output
         dairyMCals = dairyMCalorieCounter * 0.001 * 0.001
         cropMCals = cropCalories * 0.001 * 0.001
         tameMeatMCals = tameMeatMCalorieCounter * 0.001 * 0.001
         wildMeatMCals = wildMeatMCalorieCounter * 0.001 * 0.001
         wildPlantMCals = wildPlantCalories * 0.001 * 0.001
-        
+
         # Set diet label values safely using _set_diet_labels helper method
         self._set_diet_labels(
             theDietLabels=dietLabels,
@@ -1147,99 +1147,99 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             theCropCalcsReportMap=cropCalcsReportMap,
             theAnimalCalcsReportMap=animalCalcsReportMap
         )
-        
+
         return dietLabels
 
     def doCalcsPlantsFirstDairySeperate(self) -> LaDietLabels:
         """Calculate diet portions with plants first and dairy separate from meat.
-        
+
         In this calculation method:
         1. Plants portion is calculated first
         2. Dairy products are considered separately from meat
         3. All components must sum to 100% of diet
-        
+
         Returns:
             LaDietLabels: Object containing all diet calculations and reports
         """
         # Initialize diet labels and counters
         dietLabels = LaDietLabels()
-        
+
         # Basic calorie calculations - these stay in calories (not MCal) until the end
         mCalsIndividualAnnual = self._mCaloriesPerPersonDaily * 365.0
         mCalsSettlementAnnual = mCalsIndividualAnnual * self._mPopulation
-        
+
         # Initialize counters
         dairyMCalorieCounter = 0.0
         tameMeatMCalorieCounter = 0.0
         wildMeatMCalorieCounter = 0.0
         wildPlantsMCalorieCounter = 0.0
         cropsMCalorieCounter = 0.0
-        
+
         # Calculate the percent of diet from each source
         dairyPortionPct = 0.0
         tameMeatPortionPct = 0.0
         cropsPortionPct = 0.0
         wildAnimalPortionPct = 0.0
         wildPlantsPortionPct = 0.0
-        
+
         # First, process all the animals to calculate dairy and meat contributions
         for animalGuid, animalParamGuid in self._mAnimals.items():
             animal = LaUtils.getAnimal(animalGuid)
             animalParam = LaUtils.getAnimalParameter(animalParamGuid)
-            
+
             # Calculate dairy contribution
             milkKgPerDay = self._getAnimalValue(animal, 'milkGramsPerDay') * 0.001
             milkFoodValue = self._getAnimalValue(animal, 'milkFoodValue')
             lactationTime = self._getAnimalValue(animal, 'lactationTime')
             weaningAge = self._getAnimalValue(animal, 'weaningAge')
-            
+
             # Calculate dairy calories per animal
             dairyCaloriesPerAnimal = milkKgPerDay * milkFoodValue * (lactationTime - weaningAge)
-            
+
             # Apply dairy utilization percentage
             dairyCaloriesPerAnimal *= (self._mDairyUtilisation * 0.01)
-            
+
             # Calculate meat contribution
             killWeight = self._getAnimalValue(animal, 'killWeight')
             usableMeat = self._getAnimalValue(animal, 'usableMeat') * 0.01
             meatFoodValue = self._getAnimalValue(animal, 'meatFoodValue')
-            
+
             # Calculate meat calories per animal
             meatCaloriesPerAnimal = killWeight * usableMeat * meatFoodValue
-            
+
             # Get the percentage this animal contributes to meat portion
             animalContribution = self._getAnimalParamValue(animalParam, 'percentTameMeat') * 0.01
-            
+
             # Calculate target calories for this animal
             targetCalories = mCalsSettlementAnnual * self._mDietPercent * (1.0 - self._mPercentOfDietThatIsFromCrops * 0.01) * animalContribution
-            
+
             # If the animal provides both dairy and meat, calculate the split
             totalAnimalCalories = dairyCaloriesPerAnimal + meatCaloriesPerAnimal
-            
+
             # Number of animals needed
             animalsNeeded = targetCalories / totalAnimalCalories
-            
+
             # Total dairy and meat calories from this animal
             dairyCalories = animalsNeeded * dairyCaloriesPerAnimal
             meatCalories = animalsNeeded * meatCaloriesPerAnimal
-            
+
             # Add to counters
             dairyMCalorieCounter += dairyCalories
             tameMeatMCalorieCounter += meatCalories
-        
+
         # Calculate remaining calories for wild meat (this could be more sophisticated)
-        wildMeatCalories = (mCalsSettlementAnnual * self._mDietPercent * 
-                          (1.0 - self._mPercentOfDietThatIsFromCrops * 0.01) - 
+        wildMeatCalories = (mCalsSettlementAnnual * self._mDietPercent *
+                          (1.0 - self._mPercentOfDietThatIsFromCrops * 0.01) -
                           tameMeatMCalorieCounter - dairyMCalorieCounter)
-        
+
         # Make sure wild meat calories don't go negative
         wildMeatMCalorieCounter = max(0, wildMeatCalories)
-        
+
         # Calculate plant portions
         plantCalories = mCalsSettlementAnnual * (1.0 - self._mDietPercent)
         cropsMCalorieCounter = plantCalories * (self._mPercentOfDietThatIsFromCrops * 0.01)
         wildPlantsMCalorieCounter = plantCalories * (1.0 - self._mPercentOfDietThatIsFromCrops * 0.01)
-        
+
         # Calculate the percentage each source makes up of the total diet
         totalCalories = mCalsSettlementAnnual
         dairyPortionPct = (dairyMCalorieCounter / totalCalories) * 100.0
@@ -1247,18 +1247,18 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         wildAnimalPortionPct = (wildMeatMCalorieCounter / totalCalories) * 100.0
         cropsPortionPct = (cropsMCalorieCounter / totalCalories) * 100.0
         wildPlantsPortionPct = (wildPlantsMCalorieCounter / totalCalories) * 100.0
-        
+
         # Calculate other percentages
         plantsPortionPct = cropsPortionPct + wildPlantsPortionPct
         animalPortionPct = tameMeatPortionPct + wildAnimalPortionPct
-        
+
         # Set diet label values - convert to megacalories (MCal)
         dietLabels.dairyMCalories = dairyMCalorieCounter * 0.001 * 0.001  # Convert to MCal
         dietLabels.cropMCalories = cropsMCalorieCounter * 0.001 * 0.001
         dietLabels.animalMCalories = tameMeatMCalorieCounter * 0.001 * 0.001
         dietLabels.wildAnimalMCalories = wildMeatMCalorieCounter * 0.001 * 0.001
         dietLabels.wildPlantsMCalories = wildPlantsMCalorieCounter * 0.001 * 0.001
-        
+
         # Set percentages
         dietLabels.dairyPortionPct = dairyPortionPct
         dietLabels.tameMeatPortionPct = tameMeatPortionPct
@@ -1267,43 +1267,43 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         dietLabels.wildPlantsPortionPct = wildPlantsPortionPct
         dietLabels.plantsPortionPct = plantsPortionPct
         dietLabels.animalPortionPct = animalPortionPct
-        
+
         # Set calorie values
         dietLabels.kiloCaloriesIndividualAnnual = mCalsIndividualAnnual * 0.001  # Convert to KCal
         dietLabels.megaCaloriesSettlementAnnual = mCalsSettlementAnnual * 0.001 * 0.001  # Convert to MCal
-        
+
         # No dairy surplus in this method
         dietLabels.dairySurplusMCalories = 0.0
-        
+
         # Set empty report maps for now
         dietLabels.cropCalcsReportMap = {}
         dietLabels.animalCalcsReportMap = {}
-        
+
         return dietLabels
 
     def doCalcsAnimalsFirstIncludeDiary(self) -> LaDietLabels:
         """Calculate diet portions with animals first and dairy included with meat.
-        
+
         In this calculation method:
         1. Animal portion (meat + dairy) is calculated first
         2. Dairy products are included with meat calculations
         3. Plant-based portion is derived from these calculations
-        
+
         Returns:
             LaDietLabels: Object containing all diet calculations and reports
         """
         # Initialize diet labels and counters
         dietLabels = LaDietLabels()
-        
+
         # Basic calorie calculations
         mCalsIndividualAnnual = self._mCaloriesPerPersonDaily * 365.0
         mCalsSettlementAnnual = mCalsIndividualAnnual * self._mPopulation
-        
+
         # Initialize counters
         dairyMCalorieCounter = 0.0
         tameMeatMCalorieCounter = 0.0
         wildMeatMCalorieCounter = 0.0
-        
+
         # Calculate basic ratios
         c1 = 1.0 - self._mMeatPercent  # Plant vs Animal ratio
         c8 = self._mDairyUtilisation * 0.01  # Dairy utilization percentage
@@ -1312,15 +1312,15 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         c14 = c10 * c11 * 365.0  # Total annual calories
         c15 = self._mDietPercent * 0.01  # Diet percentage
         c12 = self._mPercentOfDietThatIsFromCrops * 0.01  # Crop percentage
-        
+
         # Calculate target calories for this calculation
         e15 = c14 * c15  # Target animal calories
-        
+
         # Process each animal
         for animalGuid, animalParamGuid in self._mAnimals.items():
             animal = LaUtils.getAnimal(animalGuid)
             animalParam = LaUtils.getAnimalParameter(animalParamGuid)
-            
+
             # Get milk production values
             c2 = self._getAnimalValue(animal, 'milkGramsPerDay') * 0.001  # Milk kg per day
             c3 = self._getAnimalValue(animal, 'milkFoodValue')  # Milk food value
@@ -1328,44 +1328,44 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             c5 = self._getAnimalValue(animal, 'weaningAge')  # Weaning age
             c6 = self._getAnimalValue(animal, 'killWeight')  # Kill weight
             c7 = self._getAnimalValue(animal, 'usableMeat') * 0.01  # Usable portion
-            
+
             # Calculate dairy potential
             e2 = c2 * c3 * (c4 - c5)  # Potential dairy value
             e3 = e2 * c8  # Actual dairy value
-            
+
             # Calculate meat value
             c9 = self._getAnimalValue(animal, 'meatFoodValue')  # Meat food value
             e10 = e3 + (c9 * c7 * c6)  # Total animal value (dairy + meat)
-            
+
             # Calculate portion of diet from this animal
             e7 = (e15 * (1.0 - c1)) / e10  # Animal portion
             c21 = e7 * e3  # Dairy calories
             c23 = e7 * c6 * c7 * c9  # Meat calories
             c22 = e15 - c21 - c23  # Wild meat calories
-            
+
             # Update calorie counters
             dairyMCalorieCounter += c21
             wildMeatMCalorieCounter += c22
             tameMeatMCalorieCounter += c23
-        
+
         # Calculate plant portions
         c24 = (1.0 - c12) * (c14 - e15)  # Wild plant calories
         c25 = c12 * (c14 - e15)  # Crop calories
-        
+
         # Calculate percentages
         c30 = c24 / c14  # Wild plant percentage
         c31 = c25 / c14  # Crop percentage
         c28 = wildMeatMCalorieCounter / c14  # Wild meat percentage
         c29 = tameMeatMCalorieCounter / c14  # Tame meat percentage
         c27 = dairyMCalorieCounter / c14  # Dairy percentage
-        
+
         # Create and populate diet labels
         dietLabels.dairyMCalories = dairyMCalorieCounter * 0.001 * 0.001  # Convert to megacalories
         dietLabels.cropMCalories = c25 * 0.001 * 0.001
         dietLabels.animalMCalories = tameMeatMCalorieCounter * 0.001 * 0.001
         dietLabels.wildAnimalMCalories = wildMeatMCalorieCounter * 0.001 * 0.001
         dietLabels.wildPlantsMCalories = c24 * 0.001 * 0.001
-        
+
         # Set percentages
         dietLabels.dairyPortionPct = c27 * 100.0
         dietLabels.tameMeatPortionPct = c29 * 100.0
@@ -1374,18 +1374,18 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         dietLabels.wildPlantsPortionPct = c30 * 100.0
         dietLabels.animalPortionPct = self._mDietPercent - (c27 * 100.0)
         dietLabels.plantsPortionPct = (1.0 - self._mDietPercent) * 100.0
-        
+
         # Set calorie values
         dietLabels.kiloCaloriesIndividualAnnual = mCalsIndividualAnnual * 0.001
         dietLabels.megaCaloriesSettlementAnnual = mCalsSettlementAnnual * 0.001 * 0.001
-        
+
         # No dairy surplus calculation in this method
         dietLabels.dairySurplusMCalories = 0.0
-        
+
         # Set empty report maps for now
         dietLabels.cropCalcsReportMap = {}
         dietLabels.animalCalcsReportMap = {}
-        
+
         return dietLabels
 
     """ The following defines a series of PyQt signals.

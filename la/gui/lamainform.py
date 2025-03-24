@@ -45,12 +45,19 @@ class LaMainForm(LaMainFormBase):
     def __init__(self, parent=None):
         """Constructor for LaMainForm"""
         super(LaMainForm, self).__init__(parent)
-
-        # Initialize the model
-        self.model = LaModel()
-
-        # Initialize the controller
-        self.controller = LaMainController(self.model)
+        
+        # Initialize the model first
+        self.model = LaModel(self)
+        
+        # Basic UI setup
+        self.setup()
+        self.loadImages()
+        self.refresh()
+        self.readSettings()
+        self.connect_additional_signals()
+        
+        # Initialize diet labels with default values
+        self.setDietLabels()  # This will calculate initial values based on default slider positions
 
         # Initialize debug logger before anything else
         debugMode = QSettings().value("landuse_analyst/debug", False, type=bool)

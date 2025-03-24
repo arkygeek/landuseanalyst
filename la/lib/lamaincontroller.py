@@ -190,13 +190,13 @@ class LaMainController(QObject):
     def calculateTotalLandNeeded(self, population, diet_settings, enabled_animals, enabled_crops):
         """Calculate total land needed based on population and diet settings."""
         # Set diet ratio settings - convert to integers since model expects int
-        self.model.dietPercent = int(float(diet_settings['plantAnimalRatio']))
-        self.model.percentOfDietThatIsFromCrops = int(float(diet_settings['wildTamePlantRatio']))
-        self.model.meatPercent = int(float(diet_settings['wildTameAnimalRatio']))
+        self.model.dietPercent = diet_settings['plantAnimalRatio']
+        self.model.percentOfDietThatIsFromCrops = diet_settings['wildTamePlantRatio']
+        self.model.meatPercent = diet_settings['wildTameAnimalRatio']
 
         # Update population
         if hasattr(self.model, 'population'):
-            self.model.population = int(float(population))
+            self.model.population = population
 
         # Update enabled animals and crops
         if enabled_animals and hasattr(self.model, 'animals'):

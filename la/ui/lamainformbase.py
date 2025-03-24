@@ -184,55 +184,31 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         """Update the diet information display including visual indicators."""
         try:
             # Calculate basic percentages from slider values
-            animalPercent = self.sliderDiet.value()
-            plantPercent = 100 - animalPercent
+            myAnimalPercent = self.sliderDiet.value()
+            myPlantPercent = 100 - myAnimalPercent
             
-            wildAnimalPercent = self.sliderMeat.value()
-            tameAnimalPercent = 100 - wildAnimalPercent
+            myWildAnimalPercent = self.sliderMeat.value()
+            myTameAnimalPercent = 100 - myWildAnimalPercent
             
-            wildPlantPercent = self.sliderCrop.value()
-            tamePlantPercent = 100 - wildPlantPercent
+            myWildPlantPercent = self.sliderCrop.value()
+            myTamePlantPercent = 100 - myWildPlantPercent
 
             # Calculate absolute percentages
-            absoluteWildAnimalPercent = (animalPercent * wildAnimalPercent) / 100.0
-            absoluteTameAnimalPercent = (animalPercent * tameAnimalPercent) / 100.0
-            absoluteWildPlantPercent = (plantPercent * wildPlantPercent) / 100.0
-            absoluteTamePlantPercent = (plantPercent * tamePlantPercent) / 100.0
+            myAbsoluteWildAnimalPercent = (myAnimalPercent * myWildAnimalPercent) / 100.0
+            myAbsoluteTameAnimalPercent = (myAnimalPercent * myTameAnimalPercent) / 100.0
+            myAbsoluteWildPlantPercent = (myPlantPercent * myWildPlantPercent) / 100.0
+            myAbsoluteTamePlantPercent = (myPlantPercent * myTamePlantPercent) / 100.0
 
-            # Define all possible labels with their values
-            label_map = {
-                'labelPortionMeat': str(animalPercent),
-                'labelPortionCrops': str(plantPercent),
-                'labelPortionMeatWild': str(wildAnimalPercent),
-                'labelPortionMeatTame': str(tameAnimalPercent),
-                'labelPortionCropWild': str(wildPlantPercent),
-                'labelPortionCropTame': str(tamePlantPercent),
-                'labelPortionWildMeat': f"{absoluteWildAnimalPercent:.1f}%",
-                'labelPortionMeat': f"{absoluteTameAnimalPercent:.1f}%",
-                'labelPortionWildCrops': f"{absoluteWildPlantPercent:.1f}%",
-                'labelPortionCrops': f"{absoluteTamePlantPercent:.1f}%"
-            }
+            # Update basic percentage labels
+            self.labelAnimalCheck.setText("100%" if myAnimalPercent + myPlantPercent == 100 else f"{myAnimalPercent + myPlantPercent}%")
+            self.labelCropCheck.setText("100%" if myWildPlantPercent + myTamePlantPercent == 100 else f"{myWildPlantPercent + myTamePlantPercent}%")
 
-            # Update each label if it exists
-            for label_name, value in label_map.items():
-                if hasattr(self, label_name):
-                    label = getattr(self, label_name)
-                    if label is not None:
-                        label.setText(value)
-                    else:
-                        from la.lib.lautils import LaUtils
-                        LaUtils.debug.log(f"Label widget '{label_name}' exists but is None", "UI")
-                else:
-                    from la.lib.lautils import LaUtils
-                    LaUtils.debug.log(f"Label '{label_name}' not found in UI", "UI")
-
-            # Update diet labels in model if available
+            # Update the model's diet percentages
             if hasattr(self, 'model'):
-                # Update the model's diet percentages
-                self.model.dietPercent = animalPercent
-                self.model.meatPercent = wildAnimalPercent
-                self.model.percentOfDietThatIsFromCrops = wildPlantPercent
-                
+                self.model.dietPercent = myAnimalPercent
+                self.model.meatPercent = myWildAnimalPercent
+                self.model.percentOfDietThatIsFromCrops = myWildPlantPercent
+
                 # Force recalculation of diet values
                 if self.model.baseOnPlants:
                     if self.model.includeDairy:
@@ -245,12 +221,50 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                     else:
                         dietLabels = self.model.doCalcsAnimalsFirstDairySeparate()
 
-                # Log the calculated values for debugging
+                # Update all labels with calculated values
+                if hasattr(self, 'labelPortionMeat'):
+                    self.labelPortionMeat.setText(f"{dietLabels.animalPortionPct:.1f}%")
+                if hasattr(self, 'labelPortionCrops'):
+                    self.labelPortionCrops.setText(f"{dietLabels.plantsPortionPct:.1f}%")
+                if hasattr(self, 'labelPortionAllDairy'):
+                    self.labelPortionAllDairy.setText(f"{dietLabels.dairyPortionPct:.1f}%")
+                if hasattr(self, 'labelPortionDairy'):
+                    self.labelPortionDairy.setText(f"{dietLabels.dairyPortionPct:.1f}%")
+                if hasattr(self, 'labelPortionTameMeat'):
+                    self.labelPortionTameMeat.setText(f"{dietLabels.tameMeatPortionPct:.1f}%")
+                if hasattr(self, 'labelPortionWildMeat'):
+                    self.labelPortionWildMeat.setText(f"{dietLabels.wildAnimalPortionPct:.1f}%")
+                if hasattr(self, 'labelPortionWildPlants'):
+                    self.labelPortionWildPlants.setText(f"{dietLabels.wildPlantsPortionPct:.1f}%")
+                
+                # Update calorie labels
+                if hasattr(self, 'labelCaloriesCrops'):
+                    self.labelCaloriesCrops.setText(f"{dietLabels.cropMCalories:.1f}")
+                if hasattr(self, 'labelCaloriesTameMeat'):
+                    self.labelCaloriesTameMeat.setText(f"{dietLabels.animalMCalories:.1f}")
+                if hasattr(self, 'labelCaloriesDairy'):
+                    self.labelCaloriesDairy.setText(f"{dietLabels.dairyMCalories:.1f}")
+                if hasattr(self, 'labelCaloriesWildMeat'):
+                    self.labelCaloriesWildMeat.setText(f"{dietLabels.wildAnimalMCalories:.1f}")
+                if hasattr(self, 'labelCaloriesWildPlants'):
+                    self.labelCaloriesWildPlants.setText(f"{dietLabels.wildPlantsMCalories:.1f}")
+                
+                # Update settlement and individual calorie labels
+                if hasattr(self, 'labelCaloriesIndividual'):
+                    self.labelCaloriesIndividual.setText(f"{dietLabels.kiloCaloriesIndividualAnnual:.1f}")
+                if hasattr(self, 'labelCaloriesSettlement'):
+                    self.labelCaloriesSettlement.setText(f"{dietLabels.megaCaloriesSettlementAnnual:.1f}")
+                
+                # Update dairy surplus if available
+                if hasattr(self, 'labelDairySurplus'):
+                    self.labelDairySurplus.setText(f"{dietLabels.dairySurplusMCalories:.1f}")
+
+                # Log debug information
                 from la.lib.lautils import LaUtils
                 LaUtils.debug.log("Diet labels updated", "Diet")
-                LaUtils.debug.log(f"Animal: {animalPercent}%, Plant: {plantPercent}%", "Diet")
-                LaUtils.debug.log(f"Wild Animal: {absoluteWildAnimalPercent:.1f}%, Tame Animal: {absoluteTameAnimalPercent:.1f}%", "Diet")
-                LaUtils.debug.log(f"Wild Plant: {absoluteWildPlantPercent:.1f}%, Tame Plant: {absoluteTamePlantPercent:.1f}%", "Diet")
+                LaUtils.debug.log(f"Animal: {myAnimalPercent}%, Plant: {myPlantPercent}%", "Diet")
+                LaUtils.debug.log(f"Wild Animal: {myAbsoluteWildAnimalPercent:.1f}%, Tame Animal: {myAbsoluteTameAnimalPercent:.1f}%", "Diet")
+                LaUtils.debug.log(f"Wild Plant: {myAbsoluteWildPlantPercent:.1f}%, Tame Plant: {myAbsoluteTamePlantPercent:.1f}%", "Diet")
 
         except Exception as e:
             from la.lib.lautils import LaUtils

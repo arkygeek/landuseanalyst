@@ -36,6 +36,7 @@ class LaDietLabels(QObject, LaSerialisable, LaGuid):
     dairySurplusMCaloriesChanged = pyqtSignal(float)
     cropCalcsReportMapChanged = pyqtSignal(dict)
     animalCalcsReportMapChanged = pyqtSignal(dict)
+    guidChanged = pyqtSignal(str)
 
     def __init__(self, parent=None):
         """
@@ -505,7 +506,7 @@ class LaDietLabels(QObject, LaSerialisable, LaGuid):
         import xml.etree.ElementTree as ET
         root = ET.fromstring(xmlStr)
 
-        self.guid = root.attrib.get('guid', None)
+        self.setGuid(root.attrib.get('guid', ''))
         self._dairyMCalories = float(root.findtext('dairyMCalories', '0'))
         self._cropMCalories = float(root.findtext('cropMCalories', '0'))
         self._animalMCalories = float(root.findtext('animalMCalories', '0'))
