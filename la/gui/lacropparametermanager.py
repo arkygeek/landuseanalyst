@@ -148,7 +148,7 @@ class LaCropParameterManager(LaCropParameterManagerBase):
         myFileName = myGuid + ".xml"
         self.selectCropParameter(myFileName)
         self.updateCropPicture()
-    
+
     def updateCropPicture(self):
         """Update the crop picture based on the selected crop"""
         if self.cboCrop.currentIndex() >= 0:
@@ -161,18 +161,18 @@ class LaCropParameterManager(LaCropParameterManagerBase):
                     if not pixmap.isNull():
                         self.lblCropPic.setPixmap(pixmap)
                         return
-                
+
                 # Try alternative path in images directory
                 imagesDir = LaUtils.userImagesDirPath()
                 imageFileName = os.path.basename(myCrop.imageFile)
                 alternativePath = os.path.join(imagesDir, imageFileName)
-                
+
                 if os.path.exists(alternativePath):
                     pixmap = QPixmap(alternativePath)
                     if not pixmap.isNull():
                         self.lblCropPic.setPixmap(pixmap)
                         return
-            
+
             # Clear the label if no valid image was found
             self.lblCropPic.clear()
 
@@ -193,7 +193,7 @@ class LaCropParameterManager(LaCropParameterManagerBase):
         # Check if these are QDoubleSpinBox or QSpinBox widgets
         # use_float = hasattr(self.sbPercentTameCrop, 'decimals')  # It's a QDoubleSpinBox
 
-        # We know these are QDoubleSpinBox so they are floats 
+        # We know these are QDoubleSpinBox so they are floats
         self.sbPercentTameCrop.setValue(float(self.mCropParameter.percentTameCrop))
         self.sbFallowRatio.setValue(float(self.mCropParameter.fallowRatio))
         # We know these are QSpinBox so they are ints
@@ -313,7 +313,7 @@ class LaCropParameterManager(LaCropParameterManagerBase):
         myCropParameter.name = "Copy of " + myCropParameter.name
 
         # Save the copy to a new file named with its GUID
-        myNewFileName = os.path.join(LaUtils.userCropParameterProfilesDirPath(), 
+        myNewFileName = os.path.join(LaUtils.userCropParameterProfilesDirPath(),
                                    f"{myCropParameter.guid}.xml")
         myCropParameter.toXmlFile(myNewFileName)
 
