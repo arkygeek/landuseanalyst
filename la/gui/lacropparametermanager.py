@@ -153,13 +153,32 @@ class LaCropParameterManager(LaCropParameterManagerBase):
         """Update the crop picture based on the selected crop"""
         if self.cboCrop.currentIndex() >= 0:
             myCrop = LaUtils.getCrop(self.cboCrop.itemData(self.cboCrop.currentIndex(), Qt.UserRole))
-            self.lblCropPic.setPixmap(QPixmap(myCrop.imageFile))
+            if myCrop and myCrop.imageFile:
+                # Resolve the image path
+                imagePath = LaUtils.resolvePath(myCrop.imageFile, 'image')
+                if os.path.exists(imagePath):
+                    pixmap = QPixmap(imagePath)
+                    if not pixmap.isNull():
+                        self.lblCropPic.setPixmap(pixmap)
+                        return
+                
+                # Try alternative path in images directory
+                imagesDir = LaUtils.userImagesDirPath()
+                imageFileName = os.path.basename(myCrop.imageFile)
+                alternativePath = os.path.join(imagesDir, imageFileName)
+                
+                if os.path.exists(alternativePath):
+                    pixmap = QPixmap(alternativePath)
+                    if not pixmap.isNull():
+                        self.lblCropPic.setPixmap(pixmap)
+                        return
+            
+            # Clear the label if no valid image was found
+            self.lblCropPic.clear()
 
     def on_cboCrop_changed(self, theIndex):
         """Handle change in crop selection"""
-        myCrop = LaUtils.getCrop(self.cboCrop.itemData(self.cboCrop.currentIndex(), Qt.UserRole))
-        myCropPic = QPixmap(myCrop.imageFile)
-        self.lblCropPic.setPixmap(myCropPic)
+        self.updateCropPicture()
 
     def showCropParameter(self):
         """Display crop parameter in the form"""
@@ -189,6 +208,7 @@ class LaCropParameterManager(LaCropParameterManagerBase):
 
         # Use the helper method for area units
         self.setAreaUnitsIndex(self.mCropParameter.areaUnits)
+        self.updateCropPicture()
 
     def resizeEvent(self, theEvent):
         """Handle resize event to adjust table columns"""
