@@ -13,8 +13,8 @@ class LaGuid:
         """Get the GUID as a string."""
         return str(self._mGuid)
 
-    # Add method-style accessor for backward compatibility
-    def guid(self):  # type: ignore
+    # @guid.setter
+    def guid(self):
         """Method-style accessor for GUID - for backward compatibility."""
         return str(self._mGuid)
 
