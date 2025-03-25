@@ -19,7 +19,7 @@ This file implements the controller that handles business logic for the main for
 """
 
 import os
-from typing import Dict, List, Optional, Union, Tuple
+from typing import Dict, Tuple
 from qgis.PyQt.QtCore import QObject
 
 from la.lib.lamodel import LaModel

@@ -98,6 +98,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         # region LOAD CROPS AND ANIMALS
         self.loadAnimals()
         self.loadCrops()
+
         # endregion
 
         # region COMBO BOX ITEMS LOADED
@@ -113,6 +114,8 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         self.sliderCrop.valueChanged.connect(self.on_sliderCrop_valueChanged)
         # endregion
 
+        LaMainFormBase.setDietLabels(self)  # recalculates model (to update the diet labels!)
+        
         # connect the change in tree to it's def
         self.treeHelp.currentItemChanged.connect(self.current_item_changed)
 
@@ -164,21 +167,21 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         myMaxString = str(100 - theValue)
         self.labelMeatPercent.setText(myMinString)
         self.labelCropPercent.setText(myMaxString)
-        self.setDietLabels()  # recalculates model (to update the diet labels!)
+        LaMainFormBase.setDietLabels(self)  # recalculates model (to update the diet labels!)
 
     def on_sliderMeat_valueChanged(self, theValue):
         myMinString = str(theValue)
         myMaxString = str(100 - theValue)
         self.labelMeatWildPercent.setText(myMinString)
         self.labelMeatTamePercent.setText(myMaxString)
-        self.setDietLabels()  # recalculates model (to update the diet labels!)
+        LaMainFormBase.setDietLabels(self)  # recalculates model (to update the diet labels!)
 
     def on_sliderCrop_valueChanged(self, theValue):
         myMinString = str(theValue)
         myMaxString = str(100 - theValue)
         self.labelCropWildPercent.setText(myMinString)
         self.labelCropTamePercent.setText(myMaxString)
-        self.setDietLabels()  # recalculates model (to update the diet labels!)
+        LaMainFormBase.setDietLabels(self)  # recalculates model (to update the diet labels!)
 
     def setDietLabels(self):
         """Update the diet information display including visual indicators."""

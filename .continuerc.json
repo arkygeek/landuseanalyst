@@ -1,0 +1,10 @@
+{
+  "tools": [
+    {
+      "name": "qgis-processing",
+      "description": "QGIS Processing Framework integration",
+      "model": "llama-3.1-8b-qgis-processing-instruct",
+      "endpoint": "http://192.168.2.2:1234/v1/chat/completions"
+    }
+  ]
+}

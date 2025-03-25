@@ -43,7 +43,13 @@ class LaMainForm(LaMainFormBase):
     """
 
     def __init__(self, parent=None):
-        """Constructor for LaMainForm"""
+        """
+        Constructor for LaMainForm.
+        
+        Initializes the model first and then sets up the UI. It also connects the diet label signals to UI update slots.
+        Additionally, it initializes the debug logger before anything else and creates a debug dialog if debug mode is enabled.
+        Finally, it loads existing messages from the history and shows the dialog.
+        """
         super(LaMainForm, self).__init__(parent)
         
         # Initialize the model first
@@ -61,33 +67,36 @@ class LaMainForm(LaMainFormBase):
         
         # Initialize diet labels with default values
         self.setDietLabels()  # This will calculate initial values based on default slider positions
-
+        
         # Initialize debug logger before anything else
         debugMode = QSettings().value("landuse_analyst/debug", False, type=bool)
         LaUtils.debug.initialize(enabled=debugMode)
-
+        
         # Create debug dialog if debug mode is enabled
         self._debug_dialog = None
         if (debugMode):
             from la.gui.ladebugdialog import LaDebugDialog
-            self._debug_dialog = LaDebugDialog.get_instance()
-            # Connect debug message bus after dialog creation
-            MESSAGE_BUS.debugMessaged.connect(self._debug_dialog.add_debug_message)
-            # Load existing messages
-            if hasattr(LaUtils.debug, 'get_history'):
-                self._debug_dialog.add_messages_from_history(LaUtils.debug.get_history())
-            # Show dialog
-            self._debug_dialog.show()
-
+            self._debug_dialog = LaDebugDialog.get_instance(parent=self)
+            
+        # Connect debug message bus after dialog creation
+        MESSAGE_BUS.debugMessaged.connect(self._debug_dialog.add_debug_message)
+        
+        # Load existing messages
+        if hasattr(LaUtils.debug, 'get_history'):
+            self._debug_dialog.add_messages_from_history(LaUtils.debug.get_history())
+        
+        # Show dialog
+        self._debug_dialog.show()
+        
         # Additional initialization specific to the main form
         self.setup()
-
+        
         # Initialize settings and debug state
         self.readSettings()
-
+        
         # Connect debug message bus to main form
         MESSAGE_BUS.debugMessaged.connect(self.on_debug_message)
-
+        
         # Test log message to verify the system is working
         LaUtils.debug.log("Application initialized", "MainForm")
 
@@ -188,6 +197,18 @@ class LaMainForm(LaMainFormBase):
             self.on_cbDebug_clicked = self._override_on_cbDebug_clicked
 
     def setDietLabels(self):
+        """Calculate and update diet labels with current values."""
+        # Get the current population value from the spin box
+        population = self.sbPopulation.value()
+
+        # Update the model with the new population value
+        self.model.population(population)
+
+        # Calculate the land area required for food production based on the model's calculations
+        land_area_required = self.model.calculate_land_area_required()
+
+        # Update the diet labels with the calculated values
+        self.dietLabels.update_labels(land_area_required)
         """Update the diet information display including visual indicators."""
         try:
             # Calculate basic percentages from slider values
