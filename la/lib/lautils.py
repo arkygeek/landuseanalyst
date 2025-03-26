@@ -170,7 +170,7 @@ class LaUtils:
                 if myAnimal.fromXmlFile(filePath):
                     # Store the GUID as a string
                     guid_str = str(myAnimal.guid)
-                    LaUtils.debug.log(f"Loading animal with GUID: {guid_str}")
+                    LaUtils.debug.log(f"Loading animal with GUID in lautils.py: {guid_str}")
                     if myAnimal.name:
                         LaUtils.debug.log(f"Loaded animal name: {myAnimal.name}")
                         myAnimalsMap[guid_str] = myAnimal
@@ -201,22 +201,22 @@ class LaUtils:
                 continue
             # if the filename ends in .xml try to load it into our layerSets listing
             if myFileInfo.completeSuffix() == "xml":
-                myAnimal = LaAnimal()
-                myAnimal.fromXmlFile(myFileInfo.absoluteFilePath())
-                if myAnimal.name == "":
+                myLaAnimal = LaAnimal()
+                myLaAnimal.fromXmlFile(myFileInfo.absoluteFilePath())
+                if myLaAnimal.name == "":
                     LaUtils.debug.log(f"Animal from {myFileInfo.absoluteFilePath()} has no name, skipping", "Animals")
                     continue
 
                 # Get the actual string GUID value for comparison
-                animalGuid = myAnimal.guid() if callable(getattr(myAnimal, 'guid', None)) else myAnimal.guid
-                LaUtils.debug.log(f"Checking animal {myAnimal.name} with GUID {animalGuid} against requested GUID {theGuid}", "Animals")
+                myAnimalGuid = myLaAnimal.guid() if callable(getattr(myLaAnimal, 'guid', None)) else myLaAnimal.guid
+                LaUtils.debug.log(f"Checking animal {myLaAnimal.name} with GUID {myAnimalGuid} against requested GUID {theGuid}", "Animals")
                 
-                if animalGuid == theGuid:
+                if myAnimalGuid == theGuid:
                     LaUtils.debug.log(f"Found animal matching GUID {theGuid}", "Animals")
-                    return myAnimal
+                    return myLaAnimal
 
         LaUtils.debug.log(f"No animal found with GUID {theGuid}, returning blank animal", "Animals")
-        return LaAnimal()
+        return myLaAnimal
 
     @staticmethod
     def getAvailableCrops(): # -> Dict[str, LaCrop]

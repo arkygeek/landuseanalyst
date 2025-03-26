@@ -761,8 +761,12 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
                 raise ValueError("Missing animal element")
 
             # Set GUID from attribute
-            self.setGuid(myTopElement.attribute("guid"))
-            LaUtils.debug.log(f"Loading animal with GUID: {self.guid}")
+            self.guid = LaUtils.xmlDecode(myTopElement.attribute("guid"))
+
+            
+
+
+            LaUtils.debug.log(f"Loading animal with GUID in laanimal.py: {self.guid}")
 
             # Helper function to safely get integer values
             def getIntValue(elementName: str, default: int = 0) -> int:

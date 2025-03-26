@@ -13,12 +13,14 @@ class LaGuid:
         """Get the GUID as a string."""
         return str(self._mGuid)
 
-    # @guid.setter
-    def guid(self):
-        """Method-style accessor for GUID - for backward compatibility."""
-        return str(self._mGuid)
+    # Method-style accessor for GUID - for backward compatibility.
+    def guid(self, value=None):
+        if value is not None:
+            self.setGuid(value)
+        else:
+            return str(self._mGuid)
 
-    def setGuid(self, guid=None):
+    def setGuid(self, theGuid=None):
         """
         Set the GUID to the given value or generate a new one.
 
@@ -28,9 +30,9 @@ class LaGuid:
         Returns:
             The new GUID
         """
-        if guid is None:
+        if theGuid is None:
             import uuid
             self._mGuid = str(uuid.uuid4())
         else:
-            self._mGuid = str(guid)
+            self._mGuid = str(theGuid)
         return self._mGuid

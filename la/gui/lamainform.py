@@ -618,110 +618,81 @@ class LaMainForm(LaMainFormBase):
     def animalCalcClicked(self, current_item, previous_item):
         """
         Display calculation details when an animal is clicked in the calculations list.
-        This replicates the functionality from the original C++ version.
-        
-        Args:
-            current_item: The current selected QListWidgetItem
-            previous_item: The previously selected QListWidgetItem
         """
         try:
             # If no item is selected, do nothing
             if current_item is None:
                 return
-            
-            # Check that both animal and crop percentages are at 100%
-            if self.labelAnimalCheck.text() != "100%" or self.labelCropCheck.text() != "100%":
-                self.tbReport.setText("Check that Animals and Crops are both at 100%\n")
-                self.tbReport.append("I am NOT going to do anything until they are!")
-                return
-                
-            LaUtils.debug.log("Calculating for selected animal", "Calculation")
-            
+
             # Get the GUID of the selected animal
             animal_guid = current_item.data(Qt.UserRole)
-            if not animal_guid:
-                LaUtils.debug.log("No GUID found for selected animal", "Error")
-                return
-                
+            if hasattr(animal_guid, 'guid') and callable(animal_guid.guid):
+                animal_guid = animal_guid.guid()  # Call the method to get the GUID string
+            
+            # Make sure we have a string GUID
+            animal_guid = str(animal_guid)
+            
+            LaUtils.debug.log(f"Using animal GUID: {animal_guid}", "Calculation")
+
             # Get the animal object
             animal = LaUtils.getAnimal(animal_guid)
             if not animal:
                 LaUtils.debug.log(f"Could not find animal with GUID: {animal_guid}", "Error")
                 return
-                
-            # Set up model with current UI values
-            self._configureModelFromUi()
-            
-            # Display the animal image if available
-            if hasattr(self, 'lblAnimalPicCalcs') and hasattr(animal, 'imageFile'):
-                image_path = str(animal.imageFile)  # Convert pyqtProperty to string
-                if image_path and os.path.exists(image_path):
-                    self.lblAnimalPicCalcs.setPixmap(QtGui.QPixmap(image_path))
-                else:
-                    self.lblAnimalPicCalcs.clear()
-            
+
             # Perform calculations based on diet settings
             diet_labels = None
             if self.cboxBaseOnPlants.isChecked():
                 if self.cboxIncludeDairy.isChecked():
                     diet_labels = self.model.doCalcsPlantsFirstIncludeDairy()
-                    LaUtils.debug.log("Using plants-first with dairy included calculation", "Diet")
                 else:
                     diet_labels = self.model.doCalcsPlantsFirstDairySeparate()
-                    LaUtils.debug.log("Using plants-first with dairy separate calculation", "Diet")
             else:
                 if self.cboxIncludeDairy.isChecked():
-                    diet_labels = self.model.doCalcsAnimalsFirstIncludeDairy()  # Fixed method name
-                    LaUtils.debug.log("Using animals-first with dairy included calculation", "Diet")
+                    diet_labels = self.model.doCalcsAnimalsFirstIncludeDairy()
                 else:
                     diet_labels = self.model.doCalcsAnimalsFirstDairySeparate()
-                    LaUtils.debug.log("Using animals-first with dairy separate calculation", "Diet")
-                    
+
             # Get the calculation report for this animal
             if hasattr(diet_labels, 'animalCalcsReportMap'):
                 report_map = self._getPropertyValue(diet_labels, 'animalCalcsReportMap')
                 if isinstance(report_map, dict):
-                    actual_guid = str(animal_guid)
-                    if actual_guid in report_map:
-                        report_pair = report_map[actual_guid]
+                    if animal_guid in report_map:
+                        report_pair = report_map[animal_guid]
                         if isinstance(report_pair, tuple) and len(report_pair) > 0:
                             report_string = report_pair[0]
                             if hasattr(self, 'textBrowserResultsAnimals'):
                                 self.textBrowserResultsAnimals.setText(report_string)
                                 LaUtils.debug.log(f"Animal {animal.name} calculation report displayed", "Calculation")
-                
-            # Also display model HTML in the report tab for debugging
-            self.tbReport.setHtml(self.model.toHtml())
-                
+
         except Exception as e:
             LaUtils.debug.log(f"Error displaying animal calculations: {str(e)}", "Error")
-            import traceback
-            LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
-            if hasattr(self, 'textBrowserResultsAnimals'):
-                self.textBrowserResultsAnimals.setText(f"Error calculating: {str(e)}")
 
     @pyqtSlot(QtWidgets.QListWidgetItem, QtWidgets.QListWidgetItem)
     def cropCalcClicked(self, current_item, previous_item):
         """
         Display calculation details when a crop is clicked in the calculations list.
-        This replicates the functionality from the original C++ version.
-        
-        Args:
-            current_item: The current selected QListWidgetItem
-            previous_item: The previously selected QListWidgetItem
         """
         try:
             # If no item is selected, do nothing
             if current_item is None:
                 return
-            
+                
             # Check that both animal and crop percentages are at 100%
             if self.labelAnimalCheck.text() != "100%" or self.labelCropCheck.text() != "100%":
                 self.tbReport.setText("Check that Animals and Crops are both at 100%\n")
                 self.tbReport.append("I am NOT going to do anything until they are!")
                 return
                 
-            LaUtils.debug.log("Calculating for selected crop", "Calculation")
+            # Get the GUID of the selected crop
+            crop_guid = current_item.data(Qt.UserRole)
+            if hasattr(crop_guid, 'guid') and callable(crop_guid.guid):
+                crop_guid = crop_guid.guid()  # Call the method to get the GUID string
+                
+            # Make sure we have a string GUID
+            crop_guid = str(crop_guid)
+            
+            LaUtils.debug.log(f"Using crop GUID: {crop_guid}", "Calculation")
             
             # Get the GUID of the selected crop
             crop_guid = current_item.data(Qt.UserRole)
