@@ -79,7 +79,7 @@ package "la.lib" {
     +setPlantAnimalRatio()
     +setWildTameAnimalRatio()
     +setWildTamePlantRatio()
-    +doCalcsAnimalsFirstIncludeDiary()
+    +doCalcsAnimalsFirstIncludeDairy()
     +doCalcsPlantsFirstDairySeperate()
   }
   

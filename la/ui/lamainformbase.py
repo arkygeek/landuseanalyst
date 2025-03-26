@@ -274,7 +274,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                             dietLabels = self.model.doCalcsPlantsFirstDairySeperate()
                     else:
                         if self.model.includeDairy:
-                            dietLabels = self.model.doCalcsAnimalsFirstIncludeDiary()
+                            dietLabels = self.model.doCalcsAnimalsFirstIncludeDairy()
                         else:
                             dietLabels = self.model.doCalcsAnimalsFirstDairySeparate()
 
@@ -1501,7 +1501,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                         diet_labels = self.model.doCalcsPlantsFirstDairySeperate()
                 else:
                     if self.model.includeDairy:
-                        diet_labels = self.model.doCalcsAnimalsFirstIncludeDiary()
+                        diet_labels = self.model.doCalcsAnimalsFirstIncludeDairy()
                     else:
                         diet_labels = self.model.doCalcsAnimalsFirstDairySeparate()
                 
@@ -1570,7 +1570,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                         diet_labels = self.model.doCalcsPlantsFirstDairySeperate()
                 else:
                     if self.model.includeDairy:
-                        diet_labels = self.model.doCalcsAnimalsFirstIncludeDiary()
+                        diet_labels = self.model.doCalcsAnimalsFirstIncludeDairy()
                     else:
                         diet_labels = self.model.doCalcsAnimalsFirstDairySeparate()
                 

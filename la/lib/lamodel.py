@@ -857,13 +857,13 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         
         return myDietLabels
         
-    def doCalcsAnimalsFirstIncludeDiary(self) -> LaDietLabels:
+    def doCalcsAnimalsFirstIncludeDairy(self) -> LaDietLabels:
         """Calculate diet values when animals are prioritized and dairy is included with meat."""
         from la.lib.lautils import LaUtils
         myDietLabels = LaDietLabels()
 
         # Log start of calculation
-        LaUtils.debug.log("Starting doCalcsAnimalsFirstIncludeDiary calculation", "Diet")
+        LaUtils.debug.log("Starting doCalcsAnimalsFirstIncludeDairy calculation", "Diet")
 
         try:
             # Get base values from internal attributes
@@ -927,7 +927,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             myDietLabels._dairySurplusMCalories = 0.0
             
             LaUtils.debug.log(f"Final percentages - Animal: {animalPercent*100:.1f}%, Plant: {plantPercent*100:.1f}%", "Diet")
-            LaUtils.debug.log("doCalcsAnimalsFirstIncludeDiary calculation completed successfully", "Diet")
+            LaUtils.debug.log("doCalcsAnimalsFirstIncludeDairy calculation completed successfully", "Diet")
             
         except Exception as e:
             LaUtils.debug.log(f"Error in diet calculation: {str(e)}", "Error")
@@ -1173,3 +1173,24 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
         
         return myDietLabels
+
+    def toHtml(self) -> str:
+        """Generate an HTML representation of the model."""
+        html = f"<h1>Model Report</h1>\n"
+        html += f"<p><strong>Name:</strong> {self.name}</p>\n"
+        html += f"<p><strong>Population:</strong> {self.population}</p>\n"
+        html += f"<p><strong>Period:</strong> {self.period}</p>\n"
+        html += f"<p><strong>Projection:</strong> {self.projection}</p>\n"
+        html += f"<p><strong>Easting:</strong> {self.easting}</p>\n"
+        html += f"<p><strong>Northing:</strong> {self.northing}</p>\n"
+        html += f"<p><strong>Diet Percent:</strong> {self.dietPercent}%</p>\n"
+        html += f"<p><strong>Meat Percent:</strong> {self.meatPercent}%</p>\n"
+        html += f"<p><strong>Calories Per Person Daily:</strong> {self.caloriesPerPersonDaily}</p>\n"
+        html += f"<p><strong>Dairy Utilisation:</strong> {self.dairyUtilisation}%</p>\n"
+        html += f"<p><strong>Base on Plants:</strong> {self.baseOnPlants}</p>\n"
+        html += f"<p><strong>Include Dairy:</strong> {self.includeDairy}</p>\n"
+        html += f"<p><strong>Limit Dairy:</strong> {self.limitDairy}</p>\n"
+        html += f"<p><strong>Limit Dairy Percent:</strong> {self.limitDairyPercent}%</p>\n"
+        html += f"<p><strong>Common Land Value:</strong> {self.commonLandValue}</p>\n"
+        html += f"<p><strong>Common Land Area Units:</strong> {self.commonLandAreaUnits}</p>\n"
+        return html
