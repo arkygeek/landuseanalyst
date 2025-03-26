@@ -26,7 +26,7 @@ This file implements the main form functionality.
 from qgis.PyQt import QtGui, QtCore, QtWidgets
 from qgis.PyQt.QtGui import QPixmap
 from qgis.PyQt.QtCore import QSettings, Qt, pyqtSlot
-from qgis.PyQt.QtWidgets import QApplication, QMessageBox
+from qgis.PyQt.QtWidgets import QApplication, QMessageBox, QDialog
 import os
 from typing import Dict, List, Optional, Union
 from la.lib.laanimal import LaAnimal
@@ -35,6 +35,7 @@ from la.ui.lamainformbase import LaMainFormBase
 from la.lib.lamodel import LaModel
 from la.lib.lautils import LaUtils, MESSAGE_BUS
 from la.lib.lamaincontroller import LaMainController
+from la.lib.ladietlabels import LaDietLabels
 
 class LaMainForm(LaMainFormBase):
     """
@@ -45,59 +46,50 @@ class LaMainForm(LaMainFormBase):
     def __init__(self, parent=None):
         """
         Constructor for LaMainForm.
-        
+
         Initializes the model first and then sets up the UI. It also connects the diet label signals to UI update slots.
         Additionally, it initializes the debug logger before anything else and creates a debug dialog if debug mode is enabled.
         Finally, it loads existing messages from the history and shows the dialog.
         """
         super(LaMainForm, self).__init__(parent)
-        
+
         # Initialize the model first
         self.model = LaModel(self)
-        
+
+        # Initialize diet labels
+        self.diet_labels = LaDietLabels(parent=self)
+
+        # Connect diet label signals to UI update slots
+        self._connect_diet_label_signals(self.diet_labels)
+
         # Basic UI setup
         self.setup()
         self.loadImages()
         self.refresh()
         self.readSettings()
         self.connect_additional_signals()
-        
+
         # Connect the diet label signals to UI update slots
-        self.connect_diet_label_signals()
-        
+        self._connect_diet_label_signals(self.diet_labels)  # Ensure this is called
+
         # Initialize diet labels with default values
         self.setDietLabels()  # This will calculate initial values based on default slider positions
-        
-        # Initialize debug logger before anything else
+
+        # Initialize debug dialog
+        self._debug_dialog = None
         debugMode = QSettings().value("landuse_analyst/debug", False, type=bool)
         LaUtils.debug.initialize(enabled=debugMode)
         
-        # Create debug dialog if debug mode is enabled
-        self._debug_dialog = None
-        if (debugMode):
+        if debugMode:
             from la.gui.ladebugdialog import LaDebugDialog
-            self._debug_dialog = LaDebugDialog.get_instance(parent=self)
-            
-        # Connect debug message bus after dialog creation
-        MESSAGE_BUS.debugMessaged.connect(self._debug_dialog.add_debug_message)
-        
-        # Load existing messages
-        if hasattr(LaUtils.debug, 'get_history'):
-            self._debug_dialog.add_messages_from_history(LaUtils.debug.get_history())
-        
-        # Show dialog
-        self._debug_dialog.show()
-        
-        # Additional initialization specific to the main form
-        self.setup()
-        
-        # Initialize settings and debug state
-        self.readSettings()
-        
+            self._debug_dialog = LaDebugDialog(parent=self)
+            if hasattr(self._debug_dialog, 'add_debug_message'):
+                MESSAGE_BUS.debugMessaged.connect(self._debug_dialog.add_debug_message)
+            if self._debug_dialog is not None:
+                self._debug_dialog.show()
+
         # Connect debug message bus to main form
         MESSAGE_BUS.debugMessaged.connect(self.on_debug_message)
-        
-        # Test log message to verify the system is working
         LaUtils.debug.log("Application initialized", "MainForm")
 
     def logToAllChannels(self, message):
@@ -137,8 +129,8 @@ class LaMainForm(LaMainFormBase):
             self.loadCrops()
 
         # Update diet info
-        if hasattr(self, 'updateDietPieChart'):
-            self.updateDietPieChart()
+        if hasattr(self, 'updateDietLabels'):
+            self.updateDietLabels()
 
         # Force UI update
         QtWidgets.QApplication.processEvents()
@@ -157,8 +149,8 @@ class LaMainForm(LaMainFormBase):
         # Set up any additional connections not in the base class
         self.connect_additional_signals()
         # Initialize the diet pie chart if it exists
-        if hasattr(self, 'updateDietPieChart'):
-            self.updateDietPieChart()
+        if hasattr(self, 'updateDietLabels'):
+            self.updateDietLabels()
         # Set default values for the population fields
         self.sbPopulation.setValue(100)
         # Refresh all displays
@@ -197,131 +189,39 @@ class LaMainForm(LaMainFormBase):
             self.on_cbDebug_clicked = self._override_on_cbDebug_clicked
 
     def setDietLabels(self):
-        """Calculate and update diet labels with current values."""
-        # Get the current population value from the spin box
-        population = self.sbPopulation.value()
-
-        # Update the model with the new population value
-        self.model.population(population)
-
-        # Calculate the land area required for food production based on the model's calculations
-        land_area_required = self.model.calculate_land_area_required()
-
-        # Update the diet labels with the calculated values
-        self.dietLabels.update_labels(land_area_required)
-        """Update the diet information display including visual indicators."""
+        """Update all diet-related labels based on current values"""
         try:
-            # Calculate basic percentages from slider values
-            myAnimalPercent = self.sliderDiet.value()
-            myPlantPercent = 100 - myAnimalPercent
+            diet_percent = self.sliderDiet.value()
+            meat_percent = self.sliderMeat.value()
+            daily_calories = self.sbDailyCalories.value()
+            include_dairy = self.cboxIncludeDairy.isChecked()
+            limit_dairy = self.cboxLimitDairy.isChecked()
+
+            # Create diet labels object and populate with current values
+            diet_labels = LaDietLabels()
+            diet_labels.plantsPortionPct = 100 - diet_percent
+            diet_labels.animalPortionPct = diet_percent
+            diet_labels.tameMeatPortionPct = meat_percent
+            diet_labels.wildAnimalPortionPct = 100 - meat_percent
+            diet_labels.kiloCaloriesIndividualAnnual = daily_calories * 365
             
-            myWildAnimalPercent = self.sliderMeat.value()
-            myTameAnimalPercent = 100 - myWildAnimalPercent
-            
-            myWildPlantPercent = self.sliderCrop.value()
-            myTamePlantPercent = 100 - myWildPlantPercent
-    
-            # Calculate absolute percentages
-            myAbsoluteWildAnimalPercent = (myAnimalPercent * myWildAnimalPercent) / 100.0
-            myAbsoluteTameAnimalPercent = (myAnimalPercent * myTameAnimalPercent) / 100.0
-            myAbsoluteWildPlantPercent = (myPlantPercent * myWildPlantPercent) / 100.0
-            myAbsoluteTamePlantPercent = (myPlantPercent * myTamePlantPercent) / 100.0
-    
-            # Update basic percentage labels
-            self.labelMeatPercent.setText(f"{myAnimalPercent}%")
-            self.labelCropPercent.setText(f"{myPlantPercent}%")
-            self.labelMeatWildPercent.setText(f"{myWildAnimalPercent}%")
-            self.labelMeatTamePercent.setText(f"{myTameAnimalPercent}%")
-            self.labelCropWildPercent.setText(f"{myWildPlantPercent}%")
-            self.labelCropTamePercent.setText(f"{myTamePlantPercent}%")
-    
-            self.labelAnimalCheck.setText("100%" if myAnimalPercent + myPlantPercent == 100 else f"{myAnimalPercent + myPlantPercent}%")
-            self.labelCropCheck.setText("100%" if myWildPlantPercent + myTamePlantPercent == 100 else f"{myWildPlantPercent + myTamePlantPercent}%")
-    
-            # Update the model's diet percentages
-            if hasattr(self, 'model'):
-                # Store these changes to model
-                LaUtils.debug.log(f"Setting model diet percentages - Animal: {myAnimalPercent}%, Wild animal: {myWildAnimalPercent}%, Wild plant: {myWildPlantPercent}%", "Diet")
-                self.model.dietPercent = myAnimalPercent
-                self.model.meatPercent = myWildAnimalPercent
-                self.model.percentOfDietThatIsFromCrops = myWildPlantPercent
-    
-                # Store reference to any previously calculated diet labels
-                self._previous_diet_labels = getattr(self, '_current_diet_labels', None)
-    
-                # Force recalculation of diet values based on slider positions
-                LaUtils.debug.log("Recalculating diet values...", "Diet")
-                if self.model.baseOnPlants:
-                    if self.model.includeDairy:
-                        self._current_diet_labels = self.model.doCalcsPlantsFirstIncludeDairy()
-                        LaUtils.debug.log("Used doCalcsPlantsFirstIncludeDairy calculation method", "Diet")
-                    else:
-                        self._current_diet_labels = self.model.doCalcsPlantsFirstDairySeparate()
-                        LaUtils.debug.log("Used doCalcsPlantsFirstDairySeperate calculation method", "Diet")
+            if include_dairy:
+                # Call appropriate calculation method based on dairy settings
+                if limit_dairy:
+                    diet_labels = self.model.doCalcsAnimalsFirstDairySeparate()
                 else:
-                    if self.model.includeDairy:
-                        self._current_diet_labels = self.model.doCalcsAnimalsFirstIncludeDairy()
-                        LaUtils.debug.log("Used doCalcsAnimalsFirstIncludeDiary calculation method", "Diet")
-                    else:
-                        self._current_diet_labels = self.model.doCalcsAnimalsFirstDairySeparate()
-                        LaUtils.debug.log("Used doCalcsAnimalsFirstDairySeparate calculation method", "Diet")
-                
-                # Store reference to the new diet labels and connect its signals
-                dietLabels = self._current_diet_labels
-                
-                if dietLabels is None:
-                    LaUtils.debug.log("Error: Diet labels calculation returned None", "Error")
-                    return
-                
-                LaUtils.debug.log(f"New diet labels object created with ID: {id(dietLabels)}", "Diet")
-                LaUtils.debug.log(f"Diet values - Dairy: {dietLabels.dairyMCalories:.2f}, Crops: {dietLabels.cropMCalories:.2f}", "Diet")
-                LaUtils.debug.log(f"Diet percentages - Animal: {dietLabels.animalPortionPct:.2f}%, Plants: {dietLabels.plantsPortionPct:.2f}%", "Diet")
-                
-                # Connect signals from the newly calculated diet labels object
-                self._connect_diet_label_signals(dietLabels)
-                
-                # Directly update all UI elements with the new values for immediate feedback
-                # Update portion labels
-                if hasattr(self, 'labelPortionMeat'):
-                    self.labelPortionMeat.setText(f"{dietLabels.animalPortionPct:.1f}%")
-                if hasattr(self, 'labelPortionCrops'):
-                    self.labelPortionCrops.setText(f"{dietLabels.plantsPortionPct:.1f}%")
-                if hasattr(self, 'labelPortionAllDairy'):
-                    self.labelPortionAllDairy.setText(f"{dietLabels.dairyPortionPct:.1f}%")
-                if hasattr(self, 'labelPortionDairy'):
-                    self.labelPortionDairy.setText(f"{dietLabels.dairyPortionPct:.1f}%")
-                if hasattr(self, 'labelPortionTameMeat'):
-                    self.labelPortionTameMeat.setText(f"{dietLabels.tameMeatPortionPct:.1f}%")
-                if hasattr(self, 'labelPortionWildMeat'):
-                    self.labelPortionWildMeat.setText(f"{dietLabels.wildAnimalPortionPct:.1f}%")
-                if hasattr(self, 'labelPortionWildPlants'):
-                    self.labelPortionWildPlants.setText(f"{dietLabels.wildPlantsPortionPct:.1f}%")
-                
-                # Update calorie labels
-                if hasattr(self, 'labelCaloriesCrops'):
-                    self.labelCaloriesCrops.setText(f"{dietLabels.cropMCalories:.1f}")
-                if hasattr(self, 'labelCaloriesTameMeat'):
-                    self.labelCaloriesTameMeat.setText(f"{dietLabels.animalMCalories:.1f}")
-                if hasattr(self, 'labelCaloriesDairy'):
-                    self.labelCaloriesDairy.setText(f"{dietLabels.dairyMCalories:.1f}")
-                if hasattr(self, 'labelCaloriesWildMeat'):
-                    self.labelCaloriesWildMeat.setText(f"{dietLabels.wildAnimalMCalories:.1f}")
-                if hasattr(self, 'labelCaloriesWildPlants'):
-                    self.labelCaloriesWildPlants.setText(f"{dietLabels.wildPlantsMCalories:.1f}")
-                
-                # Update settlement and individual calorie labels
-                if hasattr(self, 'labelCaloriesIndividual'):
-                    self.labelCaloriesIndividual.setText(f"{dietLabels.kiloCaloriesIndividualAnnual:.1f}")
-                if hasattr(self, 'labelCaloriesSettlement'):
-                    self.labelCaloriesSettlement.setText(f"{dietLabels.megaCaloriesSettlementAnnual:.1f}")
-                
-                # Update dairy surplus if available
-                if hasattr(self, 'labelDairySurplus'):
-                    self.labelDairySurplus.setText(f"{dietLabels.dairySurplusMCalories:.1f}")
-                
-                # Log successful update
-                LaUtils.debug.log("Diet labels UI updated directly from calculation results", "Diet")
-    
+                    diet_labels = self.model.doCalcsAnimalsFirstIncludeDiary()
+            else:
+                # Call non-dairy calculation methods
+                if diet_percent >= 50:  # Plants first
+                    diet_labels = self.model.doCalcsPlantsFirstDairySeparate()
+                else:  # Animals first
+                    diet_labels = self.model.doCalcsAnimalsFirstDairySeparate()
+
+            # Connect signals and update labels
+            self._connect_diet_label_signals(diet_labels)
+            
+            LaUtils.debug.log("Diet labels updated successfully", "Diet")
         except Exception as e:
             LaUtils.debug.log(f"Error updating diet labels: {str(e)}", "Error")
             import traceback
@@ -376,6 +276,7 @@ class LaMainForm(LaMainFormBase):
 
         except Exception as e:
             LaUtils.debug.log(f"Error calculating land needed: {str(e)}", "Error")
+
     def readSettings(self):
         """Read application settings."""
         settings = QSettings()
@@ -476,7 +377,7 @@ class LaMainForm(LaMainFormBase):
             if not hasattr(self, 'model'):
                 LaUtils.debug.log("Cannot connect diet label signals - no model available", "Error")
                 return
-                
+
             # First attempt to get diet labels from the most recent calculation
             dietLabels = None
             if self.model.baseOnPlants:
@@ -489,7 +390,7 @@ class LaMainForm(LaMainFormBase):
                     dietLabels = self.model.doCalcsAnimalsFirstIncludeDairy()
                 else:
                     dietLabels = self.model.doCalcsAnimalsFirstDairySeparate()
-            
+
             if not dietLabels:
                 LaUtils.debug.log("No diet labels object available to connect signals", "Error")
                 return
@@ -501,7 +402,7 @@ class LaMainForm(LaMainFormBase):
             dietLabels.animalMCaloriesChanged.connect(self.update_animal_calories)
             dietLabels.wildAnimalMCaloriesChanged.connect(self.update_wild_animal_calories)
             dietLabels.wildPlantsMCaloriesChanged.connect(self.update_wild_plants_calories)
-            
+
             # Portion percentage signals
             dietLabels.dairyPortionPctChanged.connect(self.update_dairy_portion)
             dietLabels.tameMeatPortionPctChanged.connect(self.update_tame_meat_portion)
@@ -510,188 +411,196 @@ class LaMainForm(LaMainFormBase):
             dietLabels.wildPlantsPortionPctChanged.connect(self.update_wild_plants_portion)
             dietLabels.plantsPortionPctChanged.connect(self.update_plants_portion)
             dietLabels.animalPortionPctChanged.connect(self.update_animal_portion)
-            
+
             # Other calorie values
             dietLabels.kiloCaloriesIndividualAnnualChanged.connect(self.update_calories_individual)
             dietLabels.megaCaloriesSettlementAnnualChanged.connect(self.update_calories_settlement)
             dietLabels.dairySurplusMCaloriesChanged.connect(self.update_dairy_surplus)
-            
+
             LaUtils.debug.log("Diet label signals connected successfully", "Diet")
         except Exception as e:
             LaUtils.debug.log(f"Error connecting diet label signals: {str(e)}", "Error")
             import traceback
             LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
-            
+
     # Signal handler slots for diet label updates
     def update_dairy_calories(self, value):
         """Update dairy calories label"""
         if hasattr(self, 'labelCaloriesDairy'):
             self.labelCaloriesDairy.setText(f"{value:.1f}")
-            
+
     def update_crop_calories(self, value):
         """Update crop calories label"""
         if hasattr(self, 'labelCaloriesCrops'):
             self.labelCaloriesCrops.setText(f"{value:.1f}")
-            
+
     def update_animal_calories(self, value):
         """Update animal calories label"""
         if hasattr(self, 'labelCaloriesTameMeat'):
             self.labelCaloriesTameMeat.setText(f"{value:.1f}")
-            
+
     def update_wild_animal_calories(self, value):
         """Update wild animal calories label"""
         if hasattr(self, 'labelCaloriesWildMeat'):
             self.labelCaloriesWildMeat.setText(f"{value:.1f}")
-            
+
     def update_wild_plants_calories(self, value):
         """Update wild plants calories label"""
         if hasattr(self, 'labelCaloriesWildPlants'):
             self.labelCaloriesWildPlants.setText(f"{value:.1f}")
-            
+
     def update_dairy_portion(self, value):
         """Update dairy portion labels"""
         if hasattr(self, 'labelPortionDairy'):
             self.labelPortionDairy.setText(f"{value:.1f}%")
         if hasattr(self, 'labelPortionAllDairy'):
             self.labelPortionAllDairy.setText(f"{value:.1f}%")
-            
+
     def update_tame_meat_portion(self, value):
         """Update tame meat portion label"""
         if hasattr(self, 'labelPortionTameMeat'):
             self.labelPortionTameMeat.setText(f"{value:.1f}%")
-            
+
     def update_crops_portion(self, value):
         """Update crops portion label"""
         if hasattr(self, 'labelPortionCrops'):
             self.labelPortionCrops.setText(f"{value:.1f}%")
-            
+
     def update_wild_animal_portion(self, value):
         """Update wild animal portion label"""
         if hasattr(self, 'labelPortionWildMeat'):
             self.labelPortionWildMeat.setText(f"{value:.1f}%")
-            
+
     def update_wild_plants_portion(self, value):
         """Update wild plants portion label"""
         if hasattr(self, 'labelPortionWildPlants'):
             self.labelPortionWildPlants.setText(f"{value:.1f}%")
-            
+
     def update_plants_portion(self, value):
         """Update plants portion label"""
         if hasattr(self, 'labelPortionPlants'):
             self.labelPortionPlants.setText(f"{value:.1f}%")
-            
+
     def update_animal_portion(self, value):
         """Update animal portion label"""
         if hasattr(self, 'labelPortionMeat'):
             self.labelPortionMeat.setText(f"{value:.1f}%")
-            
+
     def update_calories_individual(self, value):
         """Update individual calories label"""
         if hasattr(self, 'labelCaloriesIndividual'):
             self.labelCaloriesIndividual.setText(f"{value:.1f}")
-            
+
     def update_calories_settlement(self, value):
         """Update settlement calories label"""
         if hasattr(self, 'labelCaloriesSettlement'):
             self.labelCaloriesSettlement.setText(f"{value:.1f}")
-            
+
     def update_dairy_surplus(self, value):
         """Update dairy surplus label"""
         if hasattr(self, 'labelDairySurplus'):
             self.labelDairySurplus.setText(f"{value:.1f}")
 
     def _connect_diet_label_signals(self, dietLabels):
-        """Connect signals from a specific diet labels object to UI update slots.
-        
-        Args:
-            dietLabels: The LaDietLabels object whose signals should be connected
+        """
+        Connect signals from diet labels to appropriate slots.
+        This method is called from base class to update the UI when diet values change.
         """
         try:
-            if not dietLabels:
-                LaUtils.debug.log("No diet labels object provided to connect signals", "Error")
-                return
+            # Connect signals if they exist
+            if hasattr(dietLabels, 'dairyMCaloriesChanged'):
+                dietLabels.dairyMCaloriesChanged.connect(self.update_dairy_calories)
+            if hasattr(dietLabels, 'cropMCaloriesChanged'):
+                dietLabels.cropMCaloriesChanged.connect(self.update_crop_calories)
+            if hasattr(dietLabels, 'animalMCaloriesChanged'):
+                dietLabels.animalMCaloriesChanged.connect(self.update_animal_calories)
+            if hasattr(dietLabels, 'wildAnimalMCaloriesChanged'):
+                dietLabels.wildAnimalMCaloriesChanged.connect(self.update_wild_animal_calories)
+            if hasattr(dietLabels, 'wildPlantsMCaloriesChanged'):
+                dietLabels.wildPlantsMCaloriesChanged.connect(self.update_wild_plants_calories)
 
-            # Add debug logging to trace the object we're connecting to
-            LaUtils.debug.log(f"Connecting diet label signals from object: {dietLabels}", "Diet")
-            LaUtils.debug.log(f"Diet labels object ID: {id(dietLabels)}", "Diet")
-            LaUtils.debug.log(f"Diet values - Dairy: {dietLabels.dairyMCalories}, Crops: {dietLabels.cropMCalories}", "Diet")
+            # Portion percentage signals
+            if hasattr(dietLabels, 'dairyPortionPctChanged'):
+                dietLabels.dairyPortionPctChanged.connect(self.update_dairy_portion)
+            if hasattr(dietLabels, 'tameMeatPortionPctChanged'):
+                dietLabels.tameMeatPortionPctChanged.connect(self.update_tame_meat_portion)
+            if hasattr(dietLabels, 'cropsPortionPctChanged'):
+                dietLabels.cropsPortionPctChanged.connect(self.update_crops_portion)
+            if hasattr(dietLabels, 'wildAnimalPortionPctChanged'):
+                dietLabels.wildAnimalPortionPctChanged.connect(self.update_wild_animal_portion)
+            if hasattr(dietLabels, 'wildPlantsPortionPctChanged'):
+                dietLabels.wildPlantsPortionPctChanged.connect(self.update_wild_plants_portion)
+            if hasattr(dietLabels, 'plantsPortionPctChanged'):
+                dietLabels.plantsPortionPctChanged.connect(self.update_plants_portion)
+            if hasattr(dietLabels, 'animalPortionPctChanged'):
+                dietLabels.animalPortionPctChanged.connect(self.update_animal_portion)
 
-            # Disconnect signals from previous diet labels object if it exists
-            if hasattr(self, '_previous_diet_labels') and self._previous_diet_labels:
-                try:
-                    # Debug which object we're disconnecting from
-                    LaUtils.debug.log(f"Disconnecting from previous object ID: {id(self._previous_diet_labels)}", "Diet")
-                    
-                    self._previous_diet_labels.dairyMCaloriesChanged.disconnect(self.update_dairy_calories)
-                    self._previous_diet_labels.cropMCaloriesChanged.disconnect(self.update_crop_calories)
-                    self._previous_diet_labels.animalMCaloriesChanged.disconnect(self.update_animal_calories)
-                    self._previous_diet_labels.wildAnimalMCaloriesChanged.disconnect(self.update_wild_animal_calories)
-                    self._previous_diet_labels.wildPlantsMCaloriesChanged.disconnect(self.update_wild_plants_calories)
-                    
-                    self._previous_diet_labels.dairyPortionPctChanged.disconnect(self.update_dairy_portion)
-                    self._previous_diet_labels.tameMeatPortionPctChanged.disconnect(self.update_tame_meat_portion)
-                    self._previous_diet_labels.cropsPortionPctChanged.disconnect(self.update_crops_portion)
-                    self._previous_diet_labels.wildAnimalPortionPctChanged.disconnect(self.update_wild_animal_portion)
-                    self._previous_diet_labels.wildPlantsPortionPctChanged.disconnect(self.update_wild_plants_portion)
-                    self._previous_diet_labels.plantsPortionPctChanged.disconnect(self.update_plants_portion)
-                    self._previous_diet_labels.animalPortionPctChanged.disconnect(self.update_animal_portion)
-                    
-                    self._previous_diet_labels.kiloCaloriesIndividualAnnualChanged.disconnect(self.update_calories_individual)
-                    self._previous_diet_labels.megaCaloriesSettlementAnnualChanged.disconnect(self.update_calories_settlement)
-                    self._previous_diet_labels.dairySurplusMCaloriesChanged.disconnect(self.update_dairy_surplus)
-                    
-                    LaUtils.debug.log("Successfully disconnected previous signals", "Diet")
-                except Exception as e:
-                    # Log specific disconnect errors but continue execution
-                    LaUtils.debug.log(f"Error disconnecting signals: {str(e)}", "Diet")
-                    pass
-
-            # Connect calorie value signals from the new diet labels object
-            LaUtils.debug.log("Connecting signals for calorie values", "Diet")
-            dietLabels.dairyMCaloriesChanged.connect(self.update_dairy_calories)
-            dietLabels.cropMCaloriesChanged.connect(self.update_crop_calories)
-            dietLabels.animalMCaloriesChanged.connect(self.update_animal_calories)
-            dietLabels.wildAnimalMCaloriesChanged.connect(self.update_wild_animal_calories)
-            dietLabels.wildPlantsMCaloriesChanged.connect(self.update_wild_plants_calories)
+            # Other calorie values
+            if hasattr(dietLabels, 'kiloCaloriesIndividualAnnualChanged'):
+                dietLabels.kiloCaloriesIndividualAnnualChanged.connect(self.update_calories_individual)
+            if hasattr(dietLabels, 'megaCaloriesSettlementAnnualChanged'):
+                dietLabels.megaCaloriesSettlementAnnualChanged.connect(self.update_calories_settlement)
+            if hasattr(dietLabels, 'dairySurplusMCaloriesChanged'):
+                dietLabels.dairySurplusMCaloriesChanged.connect(self.update_dairy_surplus)
             
-            # Connect portion percentage signals
-            LaUtils.debug.log("Connecting signals for portion percentages", "Diet")
-            dietLabels.dairyPortionPctChanged.connect(self.update_dairy_portion)
-            dietLabels.tameMeatPortionPctChanged.connect(self.update_tame_meat_portion)
-            dietLabels.cropsPortionPctChanged.connect(self.update_crops_portion)
-            dietLabels.wildAnimalPortionPctChanged.connect(self.update_wild_animal_portion)
-            dietLabels.wildPlantsPortionPctChanged.connect(self.update_wild_plants_portion)
-            dietLabels.plantsPortionPctChanged.connect(self.update_plants_portion)
-            dietLabels.animalPortionPctChanged.connect(self.update_animal_portion)
-            
-            # Connect other calorie values
-            LaUtils.debug.log("Connecting signals for settlement calories", "Diet")
-            dietLabels.kiloCaloriesIndividualAnnualChanged.connect(self.update_calories_individual)
-            dietLabels.megaCaloriesSettlementAnnualChanged.connect(self.update_calories_settlement)
-            dietLabels.dairySurplusMCaloriesChanged.connect(self.update_dairy_surplus)
-            
-            # Force a manual update of all UI labels to ensure they match the diet labels object
-            LaUtils.debug.log("Manually updating UI labels from diet labels object", "Diet")
-            self.update_dairy_calories(dietLabels.dairyMCalories)
-            self.update_crop_calories(dietLabels.cropMCalories)
-            self.update_animal_calories(dietLabels.animalMCalories)
-            self.update_wild_animal_calories(dietLabels.wildAnimalMCalories)
-            self.update_wild_plants_calories(dietLabels.wildPlantsMCalories)
-            
-            self.update_dairy_portion(dietLabels.dairyPortionPct)
-            self.update_tame_meat_portion(dietLabels.tameMeatPortionPct)
-            self.update_crops_portion(dietLabels.cropsPortionPct)
-            self.update_wild_animal_portion(dietLabels.wildAnimalPortionPct)
-            self.update_wild_plants_portion(dietLabels.wildPlantsPortionPct)
-            self.update_plants_portion(dietLabels.plantsPortionPct)
-            self.update_animal_portion(dietLabels.animalPortionPct)
-            
-            self.update_calories_individual(dietLabels.kiloCaloriesIndividualAnnual)
-            self.update_calories_settlement(dietLabels.megaCaloriesSettlementAnnual)
-            self.update_dairy_surplus(dietLabels.dairySurplusMCalories)
-            
-            LaUtils.debug.log("Diet label signals connected and UI updated for specific instance", "Diet")
+            LaUtils.debug.log("Diet label signals connected successfully", "Diet")
         except Exception as e:
-            LaUtils.debug.log(f"Error connecting specific diet label signals: {str(e)}", "Error")
+            LaUtils.debug.log(f"Error connecting diet label signals: {str(e)}", "Error")
             import traceback
             LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
+
+    def connectSignalsSlots(self):
+        """Connect signals to slots for UI interaction."""
+        # Diet slider connections
+        self.sliderDiet.valueChanged.connect(self.on_sliderDiet_valueChanged)
+        self.sliderMeat.valueChanged.connect(self.on_sliderMeat_valueChanged)
+        self.sbDailyCalories.valueChanged.connect(self.on_sbDailyCalories_valueChanged)
+        self.cboxIncludeDairy.clicked.connect(self.on_cboxIncludeDairy_clicked)
+        self.cboxLimitDairy.clicked.connect(self.on_cboxLimitDairy_clicked)
+        self.sbLimitDairyPercent.valueChanged.connect(self.on_sbLimitDairyPercent_valueChanged)
+        self.cboxBaseOnPlants.clicked.connect(self.on_cboxBaseOnPlants_clicked)
+        self.sbDairyUtilisation.valueChanged.connect(self.on_sbDairyUtilisation_valueChanged)
+
+    @pyqtSlot(int)
+    def on_sliderDiet_valueChanged(self, value):
+        """Handle diet slider value changes."""
+        self.labelMeatPercent.setText(str(value))
+        self.labelCropPercent.setText(str(100 - value))
+        self.setDietLabels()
+
+    @pyqtSlot(int)  
+    def on_sliderMeat_valueChanged(self, value):
+        """Handle meat ratio slider value changes."""
+        self.labelMeatWildPercent.setText(str(100 - value))
+        self.labelMeatTamePercent.setText(str(value))
+        self.setDietLabels()
+
+    @pyqtSlot(int)
+    def on_sbDailyCalories_valueChanged(self, value):
+        """Handle daily calories spinbox value changes."""
+        self.setDietLabels()
+
+    @pyqtSlot(bool)
+    def on_cboxIncludeDairy_clicked(self, checked):
+        """Handle include dairy checkbox changes."""
+        self.setDietLabels()
+
+    @pyqtSlot(bool)
+    def on_cboxLimitDairy_clicked(self, checked):
+        """Handle limit dairy checkbox changes."""
+        self.setDietLabels()
+
+    @pyqtSlot(int)
+    def on_sbLimitDairyPercent_valueChanged(self, value):
+        """Handle dairy limit percentage spinbox value changes."""
+        self.setDietLabels()
+
+    @pyqtSlot(bool)
+    def on_cboxBaseOnPlants_clicked(self, checked):
+        """Handle base on plants checkbox changes."""
+        self.setDietLabels()
+
+    @pyqtSlot(int)
+    def on_sbDairyUtilisation_valueChanged(self, value):
+        """Handle dairy utilisation spinbox value changes."""
+        self.setDietLabels()

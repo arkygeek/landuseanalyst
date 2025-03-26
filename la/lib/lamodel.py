@@ -781,223 +781,149 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
 
     def doCalcsPlantsFirstIncludeDairy(self) -> LaDietLabels:
-        """Calculate diet proportions with plants first and including dairy."""
-        try:
-            LaUtils.debug.log("Starting plants-first (with dairy) diet calculations", "Diet")
-            dietLabels = LaDietLabels()
-            
-            # Convert PyQt properties to native types for calculations
-            totalDailyCalories = self._mCaloriesPerPersonDaily
-            dietPercent = self._mDietPercent
-            population = self._mPopulation
-            plantPercent = (100.0 - dietPercent) / 100.0
-            animalPercent = dietPercent / 100.0
-            
-            # Calculate annual values
-            annualCaloriesPerPerson = totalDailyCalories * 365.0
-            annualCaloriesSettlement = annualCaloriesPerPerson * population
-            
-            # Calculate dairy portion if included
-            dairyPortion = (float(self._mDairyUtilisation) / 100.0) if self.includeDairy else 0.0
-            
-            # Calculate distributions
-            plantCalories = annualCaloriesSettlement * plantPercent
-            animalCalories = annualCaloriesSettlement * animalPercent
-            dairyCalories = animalCalories * dairyPortion
-            
-            # Convert other percentages
-            meatPercent = float(self._mMeatPercent)
-            cropPercent = float(self._mPercentOfDietThatIsFromCrops)
-            
-            # Set calculated values
-            self._set_diet_labels(
-                dietLabels,
-                dairyCalories / 1000000.0,  # Convert to megacalories
-                plantCalories * (1.0 - cropPercent/100.0) / 1000000.0,
-                animalCalories * (1.0 - meatPercent/100.0) / 1000000.0,
-                animalCalories * (meatPercent/100.0) / 1000000.0,
-                plantCalories * (cropPercent/100.0) / 1000000.0,
-                dairyPortion,
-                1.0 - (meatPercent/100.0),
-                1.0 - (cropPercent/100.0),
-                meatPercent/100.0,
-                cropPercent/100.0,
-                animalPercent,
-                plantPercent,
-                annualCaloriesPerPerson / 1000.0,
-                annualCaloriesSettlement / 1000000.0,
-                0.0,  # Dairy surplus calculated separately
-                {},  # Crop calculations report
-                {}   # Animal calculations report
-            )
-            
-            LaUtils.debug.log("Completed plants-first (with dairy) calculations", "Diet")
-            return dietLabels
-            
-        except Exception as e:
-            LaUtils.debug.log(f"Error in plants-first (with dairy) calculations: {str(e)}", "Error")
-            # Create an empty diet labels object instead of returning None
-            return LaDietLabels()
+        """Calculate diet values when plants are prioritized and dairy is included with meat."""
+        myDietLabels = LaDietLabels()
+        
+        # Get property values from internal attributes
+        calories_daily = float(self._mCaloriesPerPersonDaily)
+        population_count = float(self._mPopulation)
+        meat_percent = float(self._mMeatPercent)
+        diet_percent = float(self._mDietPercent)
+        dairy_util = float(self._mDairyUtilisation)
+        
+        # Calculate base values
+        myMCalsIndividualAnnual = calories_daily * 365.0
+        myMCalsSettlementAnnual = myMCalsIndividualAnnual * population_count
+        
+        # Initialize counters
+        myDairyMCalorieCounter = 0.0
+        myTameMeatMCalorieCounter = 0.0
+        myWildMeatMCalorieCounter = 0.0
+        
+        # Basic ratios
+        plantRatio = 1.0 - meat_percent
+        
+        # Calculate calorie targets
+        totalAnnualCals = population_count * calories_daily * 365.0
+        meatTarget = totalAnnualCals * diet_percent / 100.0
+        
+        # Set the calculated values using private attributes
+        myDietLabels._dairyMCalories = myDairyMCalorieCounter
+        myDietLabels._animalMCalories = myTameMeatMCalorieCounter
+        myDietLabels._wildAnimalMCalories = myWildMeatMCalorieCounter
+        myDietLabels._kiloCaloriesIndividualAnnual = myMCalsIndividualAnnual
+        myDietLabels._megaCaloriesSettlementAnnual = myMCalsSettlementAnnual
+        
+        # Calculate and set percentages
+        myDietLabels._plantsPortionPct = (1.0 - diet_percent/100.0) * 100.0
+        myDietLabels._animalPortionPct = diet_percent
+        
+        # Emit signals for changed values
+        myDietLabels.dairyMCaloriesChanged.emit(myDairyMCalorieCounter)
+        myDietLabels.animalMCaloriesChanged.emit(myTameMeatMCalorieCounter)
+        myDietLabels.wildAnimalMCaloriesChanged.emit(myWildMeatMCalorieCounter)
+        myDietLabels.kiloCaloriesIndividualAnnualChanged.emit(myMCalsIndividualAnnual)
+        myDietLabels.megaCaloriesSettlementAnnualChanged.emit(myMCalsSettlementAnnual)
+        myDietLabels.plantsPortionPctChanged.emit(myDietLabels._plantsPortionPct)
+        myDietLabels.animalPortionPctChanged.emit(myDietLabels._animalPortionPct)
+        
+        return myDietLabels
 
     def doCalcsPlantsFirstDairySeparate(self) -> LaDietLabels:
-        """Calculate diet proportions with plants first and dairy separate."""
-        try:
-            LaUtils.debug.log("Starting plants-first (dairy separate) diet calculations", "Diet")
-            dietLabels = LaDietLabels()
-            
-            # Convert PyQt properties to native types for calculations
-            totalDailyCalories = float(self._mCaloriesPerPersonDaily)
-            dietPercent = float(self._mDietPercent)
-            population = float(self._mPopulation)
-            plantPercent = (100.0 - dietPercent) / 100.0
-            animalPercent = dietPercent / 100.0
-            
-            # Calculate annual values
-            annualCaloriesPerPerson = totalDailyCalories * 365.0
-            annualCaloriesSettlement = annualCaloriesPerPerson * population
-            
-            # Calculate plant and animal portions
-            plantCalories = annualCaloriesSettlement * plantPercent
-            animalCalories = annualCaloriesSettlement * animalPercent
-            
-            # Convert other percentages
-            meatPercent = float(self._mMeatPercent)
-            cropPercent = float(self._mPercentOfDietThatIsFromCrops)
-            
-            self._set_diet_labels(
-                dietLabels,
-                0.0,  # No dairy calories when separate
-                plantCalories * (1.0 - cropPercent/100.0) / 1000000.0,
-                animalCalories * (1.0 - meatPercent/100.0) / 1000000.0,
-                animalCalories * (meatPercent/100.0) / 1000000.0,
-                plantCalories * (cropPercent/100.0) / 1000000.0,
-                0.0,  # Dairy portion is 0 when separate
-                1.0 - (meatPercent/100.0),
-                1.0 - (cropPercent/100.0),
-                meatPercent/100.0,
-                cropPercent/100.0,
-                animalPercent,
-                plantPercent,
-                annualCaloriesPerPerson / 1000.0,
-                annualCaloriesSettlement / 1000000.0,
-                0.0,  # Dairy surplus
-                {},  # Crop calculations report
-                {}   # Animal calculations report
-            )
-            
-            LaUtils.debug.log("Completed plants-first (dairy separate) calculations", "Diet")
-            return dietLabels
-            
-        except Exception as e:
-            LaUtils.debug.log(f"Error in plants-first (dairy separate) calculations: {str(e)}", "Error")
-            return LaDietLabels()
+        """Calculate diet values when plants are prioritized and dairy is separate from meat."""
+        myDietLabels = LaDietLabels()
+        
+        # Base calculations similar to include dairy but with separate dairy tracking
+        calories_daily = float(self._mCaloriesPerPersonDaily)
+        population_count = float(self._mPopulation)
+        
+        myMCalsIndividualAnnual = calories_daily * 365.0
+        myMCalsSettlementAnnual = myMCalsIndividualAnnual * population_count
+        
+        # Initialize counters
+        myDairyCounter = 0.0
+        myMeatCounter = 0.0
+        
+        # Set calculated values using private attributes
+        myDietLabels._dairyMCalories = myDairyCounter
+        myDietLabels._animalMCalories = myMeatCounter
+        myDietLabels._kiloCaloriesIndividualAnnual = myMCalsIndividualAnnual
+        myDietLabels._megaCaloriesSettlementAnnual = myMCalsSettlementAnnual
+        
+        # Emit signals for changed values
+        myDietLabels.dairyMCaloriesChanged.emit(myDairyCounter)
+        myDietLabels.animalMCaloriesChanged.emit(myMeatCounter)
+        myDietLabels.kiloCaloriesIndividualAnnualChanged.emit(myMCalsIndividualAnnual)
+        myDietLabels.megaCaloriesSettlementAnnualChanged.emit(myMCalsSettlementAnnual)
+        
+        return myDietLabels
 
-    def doCalcsAnimalsFirstIncludeDairy(self) -> LaDietLabels:
-        """Calculate diet proportions with animals first and including dairy."""
-        try:
-            LaUtils.debug.log("Starting animals-first (with dairy) diet calculations", "Diet")
-            dietLabels = LaDietLabels()
-            
-            # Convert PyQt properties to native types for calculations
-            totalDailyCalories = float(self._mCaloriesPerPersonDaily)
-            dietPercent = float(self._mDietPercent)
-            population = float(self._mPopulation)
-            animalPercent = dietPercent / 100.0
-            plantPercent = (100.0 - dietPercent) / 100.0
-            
-            # Calculate annual values
-            annualCaloriesPerPerson = totalDailyCalories * 365.0
-            annualCaloriesSettlement = annualCaloriesPerPerson * population
-            
-            # Calculate dairy portion if included
-            dairyPortion = (float(self._mDairyUtilisation) / 100.0) if self.includeDairy else 0.0
-            
-            # Calculate distributions
-            animalCalories = annualCaloriesSettlement * animalPercent
-            plantCalories = annualCaloriesSettlement * plantPercent
-            dairyCalories = animalCalories * dairyPortion
-            
-            # Convert other percentages
-            meatPercent = float(self._mMeatPercent)
-            cropPercent = float(self._mPercentOfDietThatIsFromCrops)
-            
-            self._set_diet_labels(
-                dietLabels,
-                dairyCalories / 1000000.0,
-                plantCalories * (1.0 - cropPercent/100.0) / 1000000.0,
-                animalCalories * (1.0 - meatPercent/100.0) / 1000000.0,
-                animalCalories * (meatPercent/100.0) / 1000000.0,
-                plantCalories * (cropPercent/100.0) / 1000000.0,
-                dairyPortion,
-                1.0 - (meatPercent/100.0),
-                1.0 - (cropPercent/100.0),
-                meatPercent/100.0,
-                cropPercent/100.0,
-                animalPercent,
-                plantPercent,
-                annualCaloriesPerPerson / 1000.0,
-                annualCaloriesSettlement / 1000000.0,
-                0.0,  # Dairy surplus calculated separately
-                {},  # Crop calculations report
-                {}   # Animal calculations report
-            )
-            
-            LaUtils.debug.log("Completed animals-first (with dairy) calculations", "Diet")
-            return dietLabels
-            
-        except Exception as e:
-            LaUtils.debug.log(f"Error in animals-first (with dairy) calculations: {str(e)}", "Error")
-            return LaDietLabels()
+    def doCalcsAnimalsFirstIncludeDiary(self) -> LaDietLabels:
+        """Calculate diet values when animals are prioritized and dairy is included with meat."""
+        from la.lib.lautils import LaUtils
+        myDietLabels = LaDietLabels()
+
+        # Log start of calculation
+        LaUtils.debug.log("Starting doCalcsAnimalsFirstIncludeDiary calculation", "Diet")
+
+        # Similar base calculations but prioritizing animal products
+        calories_daily = float(self._mCaloriesPerPersonDaily)
+        population_count = float(self._mPopulation)
+
+        # Log input values
+        LaUtils.debug.log(f"Calories per person daily: {calories_daily}", "Diet")
+        LaUtils.debug.log(f"Population count: {population_count}", "Diet")
+
+        myMCalsIndividualAnnual = calories_daily * 365.0
+        myMCalsSettlementAnnual = myMCalsIndividualAnnual * population_count
+
+        # Log calculated values
+        LaUtils.debug.log(f"Annual individual calories (MCal): {myMCalsIndividualAnnual}", "Diet")
+        LaUtils.debug.log(f"Annual settlement calories (MCal): {myMCalsSettlementAnnual}", "Diet")
+
+        # Set values using private attributes
+        myDietLabels._kiloCaloriesIndividualAnnual = myMCalsIndividualAnnual
+        myDietLabels._megaCaloriesSettlementAnnual = myMCalsSettlementAnnual
+
+        # Emit signals for changed values
+        myDietLabels.kiloCaloriesIndividualAnnualChanged.emit(myMCalsIndividualAnnual)
+        myDietLabels.megaCaloriesSettlementAnnualChanged.emit(myMCalsSettlementAnnual)
+
+        # Log signal emissions
+        LaUtils.debug.log(f"Emitted kiloCaloriesIndividualAnnualChanged with value: {myMCalsIndividualAnnual}", "Diet")
+        LaUtils.debug.log(f"Emitted megaCaloriesSettlementAnnualChanged with value: {myMCalsSettlementAnnual}", "Diet")
+
+        # Log end of calculation
+        LaUtils.debug.log("Completed doCalcsAnimalsFirstIncludeDiary calculation", "Diet")
+
+        return myDietLabels
 
     def doCalcsAnimalsFirstDairySeparate(self) -> LaDietLabels:
-        """Calculate diet proportions with animals first and dairy separate."""
-        try:
-            LaUtils.debug.log("Starting animals-first (dairy separate) diet calculations", "Diet")
-            dietLabels = LaDietLabels()
-            
-            # Convert PyQt properties to native types for calculations
-            totalDailyCalories = float(self._mCaloriesPerPersonDaily)
-            dietPercent = float(self._mDietPercent)
-            population = float(self._mPopulation)
-            animalPercent = dietPercent / 100.0
-            plantPercent = (100.0 - dietPercent) / 100.0
-            
-            # Calculate annual values
-            annualCaloriesPerPerson = totalDailyCalories * 365.0
-            annualCaloriesSettlement = annualCaloriesPerPerson * population
-            
-            # Calculate distributions without dairy
-            animalCalories = annualCaloriesSettlement * animalPercent
-            plantCalories = annualCaloriesSettlement * plantPercent
-            
-            # Convert other percentages
-            meatPercent = float(self._mMeatPercent)
-            cropPercent = float(self._mPercentOfDietThatIsFromCrops)
-            
-            self._set_diet_labels(
-                dietLabels,
-                0.0,  # No dairy calories when separate
-                plantCalories * (1.0 - cropPercent/100.0) / 1000000.0,
-                animalCalories * (1.0 - meatPercent/100.0) / 1000000.0,
-                animalCalories * (meatPercent/100.0) / 1000000.0,
-                plantCalories * (cropPercent/100.0) / 1000000.0,
-                0.0,  # Dairy portion is 0 when separate
-                1.0 - (meatPercent/100.0),
-                1.0 - (cropPercent/100.0),
-                meatPercent/100.0,
-                cropPercent/100.0,
-                animalPercent,
-                plantPercent,
-                annualCaloriesPerPerson / 1000.0,
-                annualCaloriesSettlement / 1000000.0,
-                0.0,  # Dairy surplus
-                {},  # Crop calculations report
-                {}   # Animal calculations report
-            )
-            
-            LaUtils.debug.log("Completed animals-first (dairy separate) calculations", "Diet")
-            return dietLabels
-            
-        except Exception as e:
-            LaUtils.debug.log(f"Error in animals-first (dairy separate) calculations: {str(e)}", "Error")
-            return LaDietLabels()
+        """Calculate diet values when animals are prioritized and dairy is separate from meat."""
+        myDietLabels = LaDietLabels()
+        
+        # Get base values from internal attributes
+        calories_daily = float(self._mCaloriesPerPersonDaily)
+        population_count = float(self._mPopulation)
+        
+        # Calculate base values
+        myMCalsIndividualAnnual = calories_daily * 365.0
+        myMCalsSettlementAnnual = myMCalsIndividualAnnual * population_count
+        
+        # Initialize calculation maps
+        myCropCalcsReportMap = {}
+        myAnimalCalcsReportMap = {}
+        
+        # Set calculated values using private attributes
+        myDietLabels._kiloCaloriesIndividualAnnual = myMCalsIndividualAnnual
+        myDietLabels._megaCaloriesSettlementAnnual = myMCalsSettlementAnnual
+        myDietLabels._cropCalcsReportMap = myCropCalcsReportMap
+        myDietLabels._animalCalcsReportMap = myAnimalCalcsReportMap
+        
+        # Emit signals for changed values
+        myDietLabels.kiloCaloriesIndividualAnnualChanged.emit(myMCalsIndividualAnnual)
+        myDietLabels.megaCaloriesSettlementAnnualChanged.emit(myMCalsSettlementAnnual)
+        myDietLabels.cropCalcsReportMapChanged.emit(myCropCalcsReportMap)
+        myDietLabels.animalCalcsReportMapChanged.emit(myAnimalCalcsReportMap)
+        
+        return myDietLabels

@@ -167,21 +167,24 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         myMaxString = str(100 - theValue)
         self.labelMeatPercent.setText(myMinString)
         self.labelCropPercent.setText(myMaxString)
-        LaMainFormBase.setDietLabels(self)  # recalculates model (to update the diet labels!)
+        # Update diet labels and recalculate model
+        self.setDietLabels()  # Recalculates model to update the diet labels
 
     def on_sliderMeat_valueChanged(self, theValue):
         myMinString = str(theValue)
         myMaxString = str(100 - theValue)
         self.labelMeatWildPercent.setText(myMinString)
         self.labelMeatTamePercent.setText(myMaxString)
-        LaMainFormBase.setDietLabels(self)  # recalculates model (to update the diet labels!)
+        # Update diet labels and recalculate model
+        self.setDietLabels()  # Recalculates model to update the diet labels
 
     def on_sliderCrop_valueChanged(self, theValue):
         myMinString = str(theValue)
         myMaxString = str(100 - theValue)
         self.labelCropWildPercent.setText(myMinString)
         self.labelCropTamePercent.setText(myMaxString)
-        LaMainFormBase.setDietLabels(self)  # recalculates model (to update the diet labels!)
+        # Update diet labels and recalculate model
+        self.setDietLabels()  # Recalculates model to update the diet labels
 
     def setDietLabels(self):
         """Update the diet information display including visual indicators."""
@@ -225,42 +228,27 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                         dietLabels = self.model.doCalcsAnimalsFirstDairySeparate()
 
                 # Update all labels with calculated values
-                if hasattr(self, 'labelPortionMeat'):
-                    self.labelPortionMeat.setText(f"{dietLabels.animalPortionPct:.1f}%")
-                if hasattr(self, 'labelPortionCrops'):
-                    self.labelPortionCrops.setText(f"{dietLabels.plantsPortionPct:.1f}%")
-                if hasattr(self, 'labelPortionAllDairy'):
-                    self.labelPortionAllDairy.setText(f"{dietLabels.dairyPortionPct:.1f}%")
-                if hasattr(self, 'labelPortionDairy'):
-                    self.labelPortionDairy.setText(f"{dietLabels.dairyPortionPct:.1f}%")
-                if hasattr(self, 'labelPortionTameMeat'):
-                    self.labelPortionTameMeat.setText(f"{dietLabels.tameMeatPortionPct:.1f}%")
-                if hasattr(self, 'labelPortionWildMeat'):
-                    self.labelPortionWildMeat.setText(f"{dietLabels.wildAnimalPortionPct:.1f}%")
-                if hasattr(self, 'labelPortionWildPlants'):
-                    self.labelPortionWildPlants.setText(f"{dietLabels.wildPlantsPortionPct:.1f}%")
+                self.labelPortionMeat.setText(f"{dietLabels.animalPortionPct:.1f}%")
+                self.labelPortionCrops.setText(f"{dietLabels.plantsPortionPct:.1f}%")
+                self.labelPortionAllDairy.setText(f"{dietLabels.dairyPortionPct:.1f}%")
+                self.labelPortionDairy.setText(f"{dietLabels.dairyPortionPct:.1f}%")
+                self.labelPortionTameMeat.setText(f"{dietLabels.tameMeatPortionPct:.1f}%")
+                self.labelPortionWildMeat.setText(f"{dietLabels.wildAnimalPortionPct:.1f}%")
+                self.labelPortionWildPlants.setText(f"{dietLabels.wildPlantsPortionPct:.1f}%")
                 
                 # Update calorie labels
-                if hasattr(self, 'labelCaloriesCrops'):
-                    self.labelCaloriesCrops.setText(f"{dietLabels.cropMCalories:.1f}")
-                if hasattr(self, 'labelCaloriesTameMeat'):
-                    self.labelCaloriesTameMeat.setText(f"{dietLabels.animalMCalories:.1f}")
-                if hasattr(self, 'labelCaloriesDairy'):
-                    self.labelCaloriesDairy.setText(f"{dietLabels.dairyMCalories:.1f}")
-                if hasattr(self, 'labelCaloriesWildMeat'):
-                    self.labelCaloriesWildMeat.setText(f"{dietLabels.wildAnimalMCalories:.1f}")
-                if hasattr(self, 'labelCaloriesWildPlants'):
-                    self.labelCaloriesWildPlants.setText(f"{dietLabels.wildPlantsMCalories:.1f}")
+                self.labelCaloriesCrops.setText(f"{dietLabels.cropMCalories:.1f}")
+                self.labelCaloriesTameMeat.setText(f"{dietLabels.animalMCalories:.1f}")
+                self.labelCaloriesDairy.setText(f"{dietLabels.dairyMCalories:.1f}")
+                self.labelCaloriesWildMeat.setText(f"{dietLabels.wildAnimalMCalories:.1f}")
+                self.labelCaloriesWildPlants.setText(f"{dietLabels.wildPlantsMCalories:.1f}")
                 
                 # Update settlement and individual calorie labels
-                if hasattr(self, 'labelCaloriesIndividual'):
-                    self.labelCaloriesIndividual.setText(f"{dietLabels.kiloCaloriesIndividualAnnual:.1f}")
-                if hasattr(self, 'labelCaloriesSettlement'):
-                    self.labelCaloriesSettlement.setText(f"{dietLabels.megaCaloriesSettlementAnnual:.1f}")
+                self.labelCaloriesIndividual.setText(f"{dietLabels.kiloCaloriesIndividualAnnual:.1f}")
+                self.labelCaloriesSettlement.setText(f"{dietLabels.megaCaloriesSettlementAnnual:.1f}")
                 
                 # Update dairy surplus if available
-                if hasattr(self, 'labelDairySurplus'):
-                    self.labelDairySurplus.setText(f"{dietLabels.dairySurplusMCalories:.1f}")
+                self.labelDairySurplus.setText(f"{dietLabels.dairySurplusMCalories:.1f}")
 
                 # Log debug information
                 from la.lib.lautils import LaUtils
@@ -578,6 +566,16 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             LaUtils.debug.log(f"Error loading crops: {str(e)}", "Error")
             import traceback
             LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
+
+    def updateDietLabels(self, dairy_portion_pct, tame_meat_portion_pct, crops_portion_pct):
+        """
+        Update diet labels based on the given portion percentages.
+        """
+        self._dairyPortionPct = dairy_portion_pct
+        self._tameMeatPortionPct = tame_meat_portion_pct
+        self._cropsPortionPct = crops_portion_pct
+
+        LaUtils.debug.log(f"Updated diet labels: Dairy {self._dairyPortionPct}, Tame Meat {self._tameMeatPortionPct}, Crops {self._cropsPortionPct}", "Diet")
 
     def setComboToDefault(self, combo, default):
         index = combo.findData(default)

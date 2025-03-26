@@ -5,6 +5,7 @@ from qgis.PyQt.QtCore import QObject, pyqtProperty, pyqtSignal, pyqtSlot, Qt
 
 from la.lib.laserialisable import LaSerialisable
 from la.lib.laguid import LaGuid
+from la.lib.lautils import LaUtils
 
 class LaDietLabels(QObject, LaSerialisable, LaGuid):
     """
@@ -65,7 +66,7 @@ class LaDietLabels(QObject, LaSerialisable, LaGuid):
         self._dairySurplusMCalories: float = 0.0
         self._cropCalcsReportMap: Dict[str, Tuple[str, float]] = {}
         self._animalCalcsReportMap: Dict[str, Tuple[str, float]] = {}
-
+        LaUtils.debug.log("LaDietLabels initialized with default values", "Diet")
     def __del__(self):
         """
         Destructor method for the LaDietLabels class.
