@@ -66,8 +66,12 @@ class LaMainFormBase(QDialog, FORM_CLASS):
     def __init__(self, parent=None):
         """Constructor for LaMainFormBase (.ui file)"""
         super(LaMainFormBase, self).__init__(parent)
-        
+
         self.setupUi(self)
+
+        # Enable checkboxes that start disabled in the UI
+        self.cboxIncludeDairy.setEnabled(True)
+        self.cboxBaseOnPlants.setEnabled(True)
 
         # Initialize model with default values
         from la.lib.lamodel import LaModel
@@ -75,7 +79,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         self.model.dietPercent = self.sliderDiet.value()
         self.model.meatPercent = self.sliderMeat.value()
         self.model.percentOfDietThatIsFromCrops = self.sliderCrop.value()
-        
+
         # Initialize diet labels with default values
         self.initializeDietLabels()
 
@@ -126,7 +130,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         # endregion
 
         LaMainFormBase.setDietLabels(self)  # recalculates model (to update the diet labels!)
-        
+
         # connect the change in tree to it's def
         self.treeHelp.currentItemChanged.connect(self.current_item_changed)
 
@@ -152,24 +156,24 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             self.labelPortionTameMeat.setText("0.0%")
             self.labelPortionWildMeat.setText("0.0%")
             self.labelPortionWildPlants.setText("0.0%")
-            
+
             # Set default calorie values
             self.labelCaloriesCrops.setText("0.0")
             self.labelCaloriesTameMeat.setText("0.0")
             self.labelCaloriesDairy.setText("0.0")
             self.labelCaloriesWildMeat.setText("0.0")
             self.labelCaloriesWildPlants.setText("0.0")
-            
+
             # Set default settlement and individual calorie labels
             self.labelCaloriesIndividual.setText("0.0")
             self.labelCaloriesSettlement.setText("0.0")
-            
+
             # Set default dairy surplus
             self.labelDairySurplus.setText("0.0")
-            
+
             from la.lib.lautils import LaUtils
             LaUtils.debug.log("Diet labels initialized with default values", "Diet")
-            
+
         except Exception as e:
             from la.lib.lautils import LaUtils
             LaUtils.debug.log(f"Error initializing diet labels: {str(e)}", "Error")
@@ -238,10 +242,10 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             # Calculate basic percentages from slider values
             myAnimalPercent = self.sliderDiet.value()
             myPlantPercent = 100 - myAnimalPercent
-            
+
             myWildAnimalPercent = self.sliderMeat.value()
             myTameAnimalPercent = 100 - myWildAnimalPercent
-            
+
             myWildPlantPercent = self.sliderCrop.value()
             myTamePlantPercent = 100 - myWildPlantPercent
 
@@ -282,18 +286,18 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                     self.labelPortionTameMeat.setText(f"{dietLabels.tameMeatPortionPct:.1f}")
                     self.labelPortionWildMeat.setText(f"{dietLabels.wildAnimalPortionPct:.1f}")
                     self.labelPortionWildPlants.setText(f"{dietLabels.wildPlantsPortionPct:.1f}")
-                    
+
                     # Update calorie labels
                     self.labelCaloriesCrops.setText(f"{dietLabels.cropMCalories:.1f}")
                     self.labelCaloriesTameMeat.setText(f"{dietLabels.animalMCalories:.1f}")
                     self.labelCaloriesDairy.setText(f"{dietLabels.dairyMCalories:.1f}")
                     self.labelCaloriesWildMeat.setText(f"{dietLabels.wildAnimalMCalories:.1f}")
                     self.labelCaloriesWildPlants.setText(f"{dietLabels.wildPlantsMCalories:.1f}")
-                    
+
                     # Update settlement and individual calorie labels
                     self.labelCaloriesIndividual.setText(f"{dietLabels.kiloCaloriesIndividualAnnual:.1f}")
                     self.labelCaloriesSettlement.setText(f"{dietLabels.megaCaloriesSettlementAnnual:.1f}")
-                    
+
                     # Update dairy surplus if available
                     self.labelDairySurplus.setText(f"{dietLabels.dairySurplusMCalories:.1f}")
                 else:
@@ -1249,7 +1253,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             parameterGuid = comboBox.currentData() if comboBox else None
 
             # Get the crop parameter
-            cropParameter = None
+            cropParameter = None 
             if parameterGuid:
                 cropParametersMap = LaUtils.getAvailableCropParameters()
                 if parameterGuid in cropParametersMap:
@@ -1263,7 +1267,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                 self.textBrowserCropDefinition.setHtml(html_content)
                 LaUtils.debug.log(f"Displayed crop details for {crop.name}", "UI")
 
-            # Handle image display
+            # Handle image display 
             if hasattr(self, 'lblCropPix'):
                 self.lblCropPix.clear()  # Clear existing image
 
@@ -1454,23 +1458,141 @@ class LaMainFormBase(QDialog, FORM_CLASS):
 
     def updateCropCalculations(self, crop):
         """Update calculations for a crop.
-
         Args:
             crop: The crop object to calculate values for
         """
-        # Implement any specific calculation logic for crops here
-        # This method would typically update display values based on the crop's properties
-        pass
+        try:
+            # Get the crop GUID
+            cropGuid = crop.guid
+            
+            # Get parameter if available
+            parameter_guid = None
+            for guid, value in self.mCropsMap.items():
+                if guid == cropGuid:
+                    parameter_guid = value[1]
+                    break
+            
+            # Setup model with proper parameters
+            self.updateModelFromUI()
+            
+            # Get selected crops and animals
+            selected_crops = {cropGuid: parameter_guid}
+            selected_animals = {}
+            for guid, value in self.mAnimalsMap.items():
+                if value[0]:  # If checked
+                    selected_animals[guid] = value[1]
+            
+            if not selected_animals:
+                self.textBrowserResultsCrop.setText("No animals selected. Please select at least one animal.")
+                return
+                
+            # Set model parameters - using direct property assignment instead of setter methods
+            if hasattr(self, 'model'):
+                # Directly assign to the model's internal properties
+                self.model._mAnimals = selected_animals
+                self.model._mCrops = selected_crops
+                
+                # Calculate diet labels based on settings
+                diet_labels = None
+                if self.model.baseOnPlants:
+                    if self.model.includeDairy:
+                        diet_labels = self.model.doCalcsPlantsFirstIncludeDairy()
+                    else:
+                        diet_labels = self.model.doCalcsPlantsFirstDairySeperate()
+                else:
+                    if self.model.includeDairy:
+                        diet_labels = self.model.doCalcsAnimalsFirstIncludeDiary()
+                    else:
+                        diet_labels = self.model.doCalcsAnimalsFirstDairySeparate()
+                
+                # Get report from calculations
+                if diet_labels and hasattr(diet_labels, '_cropCalcsReportMap'):
+                    report_map = diet_labels._cropCalcsReportMap
+                    if cropGuid in report_map:
+                        report_pair = report_map[cropGuid]
+                        # The first item in the pair is the report string
+                        report_string = report_pair[0]
+                        # Display the calculation results in the text browser
+                        self.textBrowserResultsCrop.setText(report_string)
+                        LaUtils.debug.log("Crop calculation report displayed", "Calculation")
+                    else:
+                        self.textBrowserResultsCrop.setText(f"No calculation results available for this crop.")
+                else:
+                    self.textBrowserResultsCrop.setText("Calculations completed but no report was generated. Check model configuration.")
+        except Exception as e:
+            LaUtils.debug.log(f"Error updating crop calculations: {str(e)}", "Error")
+            import traceback
+            LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
+            self.textBrowserResultsCrop.setText(f"Error in calculations: {str(e)}")
 
     def updateAnimalCalculations(self, animal):
         """Update calculations for an animal.
-
         Args:
             animal: The animal object to calculate values for.
         """
-        # Implement any specific calculation logic for animals here
-        # This method would typically update display values based on the animal's properties
-        pass
+        try:
+            # Get the animal GUID
+            animalGuid = animal.guid
+            
+            # Get parameter if available
+            parameter_guid = None
+            for guid, value in self.mAnimalsMap.items():
+                if guid == animalGuid:
+                    parameter_guid = value[1]
+                    break
+            
+            # Setup model with proper parameters
+            self.updateModelFromUI()
+            
+            # Get selected animals and crops
+            selected_animals = {animalGuid: parameter_guid}
+            selected_crops = {}
+            for guid, value in self.mCropsMap.items():
+                if value[0]:  # If checked
+                    selected_crops[guid] = value[1]
+            
+            if not selected_crops:
+                self.textBrowserResultsAnimals.setText("No crops selected. Please select at least one crop.")
+                return
+                
+            # Set model parameters - using direct property assignment instead of setter methods
+            if hasattr(self, 'model'):
+                # Directly assign to the model's internal properties
+                self.model._mAnimals = selected_animals
+                self.model._mCrops = selected_crops
+                
+                # Calculate diet labels based on settings
+                diet_labels = None
+                if self.model.baseOnPlants:
+                    if self.model.includeDairy:
+                        diet_labels = self.model.doCalcsPlantsFirstIncludeDairy()
+                    else:
+                        diet_labels = self.model.doCalcsPlantsFirstDairySeperate()
+                else:
+                    if self.model.includeDairy:
+                        diet_labels = self.model.doCalcsAnimalsFirstIncludeDiary()
+                    else:
+                        diet_labels = self.model.doCalcsAnimalsFirstDairySeparate()
+                
+                # Get report from calculations
+                if diet_labels and hasattr(diet_labels, '_animalCalcsReportMap'):
+                    report_map = diet_labels._animalCalcsReportMap
+                    if animalGuid in report_map:
+                        report_pair = report_map[animalGuid]
+                        # The first item in the pair is the report string
+                        report_string = report_pair[0]
+                        # Display the calculation results in the text browser
+                        self.textBrowserResultsAnimals.setText(report_string)
+                        LaUtils.debug.log("Animal calculation report displayed", "Calculation")
+                    else:
+                        self.textBrowserResultsAnimals.setText(f"No calculation results available for this animal.")
+                else:
+                    self.textBrowserResultsAnimals.setText("Calculations completed but no report was generated. Check model configuration.")
+        except Exception as e:
+            LaUtils.debug.log(f"Error updating animal calculations: {str(e)}", "Error")
+            import traceback
+            LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
+            self.textBrowserResultsAnimals.setText(f"Error in calculations: {str(e)}")
 
     def refresh(self):
         """Refresh all components of the form."""
@@ -1597,35 +1719,35 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             LaUtils.debug.log(f"Include Dairy checkbox toggled: {checked}", "Diet")
             self.model.includeDairy = checked
             self.setDietLabels()
-            
+
     def on_cboxLimitDairy_toggled(self, checked):
         """Handle limit dairy checkbox changes."""
         if hasattr(self, 'model'):
             LaUtils.debug.log(f"Limit Dairy checkbox toggled: {checked}", "Diet")
             self.model.limitDairy = checked
             self.setDietLabels()
-            
+
     def on_cboxBaseOnPlants_toggled(self, checked):
         """Handle base on plants checkbox changes."""
         if hasattr(self, 'model'):
             LaUtils.debug.log(f"Base On Plants checkbox toggled: {checked}", "Diet")
             self.model.baseOnPlants = checked
             self.setDietLabels()
-            
+
     def on_sbLimitDairyPercent_valueChanged(self, value):
         """Handle dairy limit percentage changes."""
         if hasattr(self, 'model'):
             LaUtils.debug.log(f"Limit Dairy Percent changed to: {value}", "Diet")
             self.model.limitDairyPercent = value
             self.setDietLabels()
-            
+
     def on_sbDailyCalories_valueChanged(self, value):
         """Handle daily calories changes."""
         if hasattr(self, 'model'):
             LaUtils.debug.log(f"Daily Calories changed to: {value}", "Diet")
             self.model._mCaloriesPerPersonDaily = value
             self.setDietLabels()
-            
+
     def on_sbDairyUtilisation_valueChanged(self, value):
         """Handle dairy utilisation changes."""
         if hasattr(self, 'model'):
@@ -1638,45 +1760,45 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                     value = 100.0
             self.model._mDairyUtilisation = value
             self.setDietLabels()
-            
+
     def on_sbPopulation_valueChanged(self, value):
         """Handle population changes."""
         if hasattr(self, 'model'):
             LaUtils.debug.log(f"Population changed to: {value}", "Diet")
             self.model._mPopulation = value
             self.setDietLabels()
-    
+
     def updateModelFromUI(self):
         """Update all model properties from the UI widgets."""
         if not hasattr(self, 'model'):
             return
-            
+
         # Update all model properties that affect diet calculations
         self.model.dietPercent = self.sliderDiet.value()
         self.model.meatPercent = self.sliderMeat.value()
         self.model.percentOfDietThatIsFromCrops = self.sliderCrop.value()
-        
+
         # Update checkbox-based properties
         if hasattr(self, 'cboxIncludeDairy'):
             self.model.includeDairy = self.cboxIncludeDairy.isChecked()
-        
+
         if hasattr(self, 'cboxLimitDairy'):
             self.model.limitDairy = self.cboxLimitDairy.isChecked()
-            
+
         if hasattr(self, 'cboxBaseOnPlants'):
             self.model.baseOnPlants = self.cboxBaseOnPlants.isChecked()
-            
+
         # Update spinbox-based properties
         if hasattr(self, 'sbLimitDairyPercent'):
             self.model.limitDairyPercent = self.sbLimitDairyPercent.value()
-            
+
         if hasattr(self, 'sbDailyCalories'):
             self.model._mCaloriesPerPersonDaily = self.sbDailyCalories.value()
-            
+
         if hasattr(self, 'sbDairyUtilisation'):
             self.model.dairyUtilisation = self.sbDairyUtilisation.value()
-            
+
         if hasattr(self, 'sbPopulation'):
             self.model.population = self.sbPopulation.value()
-            
+
         LaUtils.debug.log("Model updated from UI", "Diet")

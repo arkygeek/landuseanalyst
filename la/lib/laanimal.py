@@ -323,10 +323,10 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
     @pyqtProperty(int, notify=usableMeatChanged)
     def usableMeat(self) -> int: # type: ignore
         """Get the animal's usable meat percentage."""
-        return cast(int, self._usableMeat)
+        return cast (int, int(str(self._usableMeat)))
 
     @usableMeat.setter
-    def usableMeat(self, value: int) -> None:
+    def usableMeat(self, value):
         """Set the animal's usable meat percentage.
 
         Args:

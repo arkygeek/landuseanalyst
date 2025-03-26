@@ -187,6 +187,15 @@ class LaMainForm(LaMainFormBase):
         # Override the base class's on_cbDebug_clicked to use our version
         if hasattr(LaMainFormBase, 'on_cbDebug_clicked'):
             self.on_cbDebug_clicked = self._override_on_cbDebug_clicked
+            
+        # Connect the calculation list item clicks to the handler methods
+        if hasattr(self, 'listWidgetCalculationsAnimal'):
+            self.listWidgetCalculationsAnimal.currentItemChanged.connect(self.animalCalcClicked)
+        
+        if hasattr(self, 'listWidgetCalculationsCrop'):
+            self.listWidgetCalculationsCrop.currentItemChanged.connect(self.cropCalcClicked)
+            
+        LaUtils.debug.log("Additional signals connected", "Setup")
 
     def setDietLabels(self):
         """Update all diet-related labels based on current values"""
@@ -604,3 +613,309 @@ class LaMainForm(LaMainFormBase):
     def on_sbDairyUtilisation_valueChanged(self, value):
         """Handle dairy utilisation spinbox value changes."""
         self.setDietLabels()
+
+    @pyqtSlot(QtWidgets.QListWidgetItem, QtWidgets.QListWidgetItem)
+    def animalCalcClicked(self, current_item, previous_item):
+        """
+        Display calculation details when an animal is clicked in the calculations list.
+        This replicates the functionality from the original C++ version.
+        
+        Args:
+            current_item: The current selected QListWidgetItem
+            previous_item: The previously selected QListWidgetItem
+        """
+        try:
+            # If no item is selected, do nothing
+            if current_item is None:
+                return
+            
+            # Check that both animal and crop percentages are at 100%
+            if self.labelAnimalCheck.text() != "100%" or self.labelCropCheck.text() != "100%":
+                self.tbReport.setText("Check that Animals and Crops are both at 100%\n")
+                self.tbReport.append("I am NOT going to do anything until they are!")
+                return
+                
+            LaUtils.debug.log("Calculating for selected animal", "Calculation")
+            
+            # Get the GUID of the selected animal
+            animal_guid = current_item.data(Qt.UserRole)
+            if not animal_guid:
+                LaUtils.debug.log("No GUID found for selected animal", "Error")
+                return
+                
+            # Get the animal object
+            animal = LaUtils.getAnimal(animal_guid)
+            if not animal:
+                LaUtils.debug.log(f"Could not find animal with GUID: {animal_guid}", "Error")
+                return
+                
+            # Set up model with current UI values
+            self._configureModelFromUi()
+            
+            # Display the animal image if available
+            if hasattr(self, 'lblAnimalPicCalcs') and hasattr(animal, 'imageFile'):
+                image_path = animal.imageFile
+                if image_path and os.path.exists(image_path):
+                    self.lblAnimalPicCalcs.setPixmap(QtGui.QPixmap(image_path))
+                else:
+                    self.lblAnimalPicCalcs.clear()
+            
+            # Perform calculations based on diet settings
+            diet_labels = None
+            if self.cboxBaseOnPlants.isChecked():
+                if self.cboxIncludeDairy.isChecked():
+                    diet_labels = self.model.doCalcsPlantsFirstIncludeDairy()
+                    LaUtils.debug.log("Using plants-first with dairy included calculation", "Diet")
+                else:
+                    diet_labels = self.model.doCalcsPlantsFirstDairySeparate()
+                    LaUtils.debug.log("Using plants-first with dairy separate calculation", "Diet")
+            else:
+                if self.cboxIncludeDairy.isChecked():
+                    diet_labels = self.model.doCalcsAnimalsFirstIncludeDiary()
+                    LaUtils.debug.log("Using animals-first with dairy included calculation", "Diet")
+                else:
+                    diet_labels = self.model.doCalcsAnimalsFirstDairySeparate()
+                    LaUtils.debug.log("Using animals-first with dairy separate calculation", "Diet")
+                    
+            # Get the calculation report for this animal
+            if hasattr(diet_labels, 'animalCalcsReportMap'):
+                report_map = diet_labels.animalCalcsReportMap
+                LaUtils.debug.log(f"Animal report map type: {type(report_map)}", "Debug")
+                LaUtils.debug.log(f"Animal report map keys: {list(report_map.keys()) if hasattr(report_map, 'keys') else 'No keys method'}", "Debug")
+                LaUtils.debug.log(f"Looking for animal GUID: {animal_guid}", "Debug")
+                
+                if animal_guid in report_map:
+                    report_pair = report_map[animal_guid]
+                    LaUtils.debug.log(f"Found report pair: {type(report_pair)}", "Debug")
+                    report_string = report_pair[0]  # First part of the pair is the report string
+                    LaUtils.debug.log(f"Report string length: {len(report_string)}", "Debug")
+                    
+                    # Display the report in the text browser
+                    if hasattr(self, 'textBrowserResultsAnimals'):
+                        LaUtils.debug.log(f"Setting text in textBrowserResultsAnimals", "UI")
+                        self.textBrowserResultsAnimals.setText(report_string)
+                        LaUtils.debug.log("Animal calculation report displayed", "Calculation")
+                    else:
+                        LaUtils.debug.log("textBrowserResultsAnimals widget not found", "Error")
+                else:
+                    LaUtils.debug.log(f"No calculation report found for animal {animal.name}", "Warning")
+                    if hasattr(self, 'textBrowserResultsAnimals'):
+                        self.textBrowserResultsAnimals.setText(f"No calculation details available for {animal.name}")
+            else:
+                LaUtils.debug.log("Animal calculation reports not available in diet labels", "Warning")
+                
+            # Also display model HTML in the report tab for debugging
+            self.tbReport.setHtml(self.model.toHtml())
+                
+        except Exception as e:
+            LaUtils.debug.log(f"Error displaying animal calculations: {str(e)}", "Error")
+            import traceback
+            LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
+            if hasattr(self, 'textBrowserResultsAnimals'):
+                self.textBrowserResultsAnimals.setText(f"Error calculating: {str(e)}")
+
+    @pyqtSlot(QtWidgets.QListWidgetItem, QtWidgets.QListWidgetItem)
+    def cropCalcClicked(self, current_item, previous_item):
+        """
+        Display calculation details when a crop is clicked in the calculations list.
+        This replicates the functionality from the original C++ version.
+        
+        Args:
+            current_item: The current selected QListWidgetItem
+            previous_item: The previously selected QListWidgetItem
+        """
+        try:
+            # If no item is selected, do nothing
+            if current_item is None:
+                return
+            
+            # Check that both animal and crop percentages are at 100%
+            if self.labelAnimalCheck.text() != "100%" or self.labelCropCheck.text() != "100%":
+                self.tbReport.setText("Check that Animals and Crops are both at 100%\n")
+                self.tbReport.append("I am NOT going to do anything until they are!")
+                return
+                
+            LaUtils.debug.log("Calculating for selected crop", "Calculation")
+            
+            # Get the GUID of the selected crop
+            crop_guid = current_item.data(Qt.UserRole)
+            if not crop_guid:
+                LaUtils.debug.log("No GUID found for selected crop", "Error")
+                return
+                
+            # Get the crop object
+            crop = LaUtils.getCrop(crop_guid)
+            if not crop:
+                LaUtils.debug.log(f"Could not find crop with GUID: {crop_guid}", "Error")
+                return
+                
+            # Set up model with current UI values
+            self._configureModelFromUi()
+            
+            # Display the crop image if available
+            if hasattr(self, 'lblCropPicCalcs') and hasattr(crop, 'imageFile'):
+                image_path = crop.imageFile
+                if image_path and os.path.exists(image_path):
+                    self.lblCropPicCalcs.setPixmap(QtGui.QPixmap(image_path))
+                else:
+                    self.lblCropPicCalcs.clear()
+            
+            # Perform calculations based on diet settings
+            diet_labels = None
+            if self.cboxBaseOnPlants.isChecked():
+                if self.cboxIncludeDairy.isChecked():
+                    diet_labels = self.model.doCalcsPlantsFirstIncludeDairy()
+                    LaUtils.debug.log("Using plants-first with dairy included calculation", "Diet")
+                else:
+                    diet_labels = self.model.doCalcsPlantsFirstDairySeparate()
+                    LaUtils.debug.log("Using plants-first with dairy separate calculation", "Diet")
+            else:
+                if self.cboxIncludeDairy.isChecked():
+                    diet_labels = self.model.doCalcsAnimalsFirstIncludeDiary()
+                    LaUtils.debug.log("Using animals-first with dairy included calculation", "Diet")
+                else:
+                    diet_labels = self.model.doCalcsAnimalsFirstDairySeparate()
+                    LaUtils.debug.log("Using animals-first with dairy separate calculation", "Diet")
+                    
+            # Get the calculation report for this crop
+            if hasattr(diet_labels, 'cropCalcsReportMap'):
+                report_map = diet_labels.cropCalcsReportMap
+                LaUtils.debug.log(f"Crop report map type: {type(report_map)}", "Debug")
+                LaUtils.debug.log(f"Crop report map keys: {list(report_map.keys()) if hasattr(report_map, 'keys') else 'No keys method'}", "Debug")
+                LaUtils.debug.log(f"Looking for crop GUID: {crop_guid}", "Debug")
+                
+                if crop_guid in report_map:
+                    report_pair = report_map[crop_guid]
+                    LaUtils.debug.log(f"Found crop report pair: {type(report_pair)}", "Debug")
+                    report_string = report_pair[0]  # First part of the pair is the report string
+                    LaUtils.debug.log(f"Crop report string length: {len(report_string)}", "Debug")
+                    
+                    # Display the report in the text browser
+                    if hasattr(self, 'textBrowserResultsCrop'):
+                        LaUtils.debug.log(f"Setting text in textBrowserResultsCrop", "UI")
+                        self.textBrowserResultsCrop.setText(report_string)
+                        LaUtils.debug.log("Crop calculation report displayed", "Calculation")
+                    else:
+                        LaUtils.debug.log("textBrowserResultsCrop widget not found", "Error")
+                else:
+                    LaUtils.debug.log(f"No calculation report found for crop {crop.name}", "Warning")
+                    if hasattr(self, 'textBrowserResultsCrop'):
+                        self.textBrowserResultsCrop.setText(f"No calculation details available for {crop.name}")
+            else:
+                LaUtils.debug.log("Crop calculation reports not available in diet labels", "Warning")
+                
+            # Also display model HTML in the report tab for debugging
+            self.tbReport.setHtml(self.model.toHtml())
+                
+        except Exception as e:
+            LaUtils.debug.log(f"Error displaying crop calculations: {str(e)}", "Error")
+            import traceback
+            LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
+            if hasattr(self, 'textBrowserResultsCrop'):
+                self.textBrowserResultsCrop.setText(f"Error calculating: {str(e)}")
+                
+    def _configureModelFromUi(self):
+        """
+        Configure the model with current UI values.
+        This helper method is used by both animalCalcClicked and cropCalcClicked.
+        """
+        # Set all the model values from UI
+        self.model.name = self.lineEditSiteName.text() if hasattr(self, 'lineEditSiteName') else "Default Site"
+        self.model.population = self.sbPopulation.value() if hasattr(self, 'sbPopulation') else 100
+        self.model.period = self.lineEditPeriod.text() if hasattr(self, 'lineEditPeriod') else "Default Period"
+        
+        # Coordinates and spatial settings
+        if hasattr(self, 'lineEditEasting'):
+            self.model.easting = int(self.lineEditEasting.text()) if self.lineEditEasting.text() else 0
+        if hasattr(self, 'lineEditNorthing'):
+            self.model.northing = int(self.lineEditNorthing.text()) if self.lineEditNorthing.text() else 0
+        if hasattr(self, 'radioButtonEuclidean'):
+            self.model.euclideanDistance = self.radioButtonEuclidean.isChecked()
+        if hasattr(self, 'radioButtonWalkingTime'):
+            self.model.walkingTime = self.radioButtonWalkingTime.isChecked()
+        if hasattr(self, 'radioButtonPathDistance'):
+            self.model.pathDistance = self.radioButtonPathDistance.isChecked()
+        if hasattr(self, 'sbModelPrecision'):
+            self.model.precision = self.sbModelPrecision.value()
+        
+        # Diet settings
+        if hasattr(self, 'sliderDiet'):
+            self.model.dietPercent = self.sliderDiet.value()
+        if hasattr(self, 'sliderCrop'):
+            self.model.percentOfDietThatIsFromCrops = self.sliderCrop.value()
+        if hasattr(self, 'sliderMeat'):
+            self.model.meatPercent = self.sliderMeat.value()
+        if hasattr(self, 'sbDailyCalories'):
+            self.model.caloriesPerPersonDaily = self.sbDailyCalories.value()
+        
+        # Dairy settings
+        if hasattr(self, 'cboxBaseOnPlants'):
+            self.model.baseOnPlants = self.cboxBaseOnPlants.isChecked()
+        if hasattr(self, 'cboxIncludeDairy'):
+            self.model.includeDairy = self.cboxIncludeDairy.isChecked()
+        if hasattr(self, 'cboxLimitDairy'):
+            self.model.limitDairy = self.cboxLimitDairy.isChecked()
+        if hasattr(self, 'sbLimitDairyPercent'):
+            self.model.limitDairyPercent = self.sbLimitDairyPercent.value()
+        if hasattr(self, 'sbDairyUtilisation'):
+            self.model.dairyUtilisation = self.sbDairyUtilisation.value()
+        
+        # Common land settings
+        if hasattr(self, 'cbAreaUnits') and hasattr(self, 'sbCommonRasterValue'):
+            from la.lib.la import AreaUnits
+            area_unit_text = self.cbAreaUnits.currentText()
+            area_units = AreaUnits.Hectare
+            if area_unit_text == "Dunum":
+                area_units = AreaUnits.Dunum
+            
+            # Set common land values
+            self.model.commonLandAreaUnits = area_units
+            self.model.commonLandValue = self.sbCommonRasterValue.value()
+        
+        # Get animals and crops
+        self.model.animals = self.getSelectedAnimals()
+        self.model.crops = self.getSelectedCrops()
+
+    def getSelectedAnimals(self) -> Dict[str, str]:
+        """
+        Get the dictionary of selected animals (animal_guid: parameter_guid).
+        This is used by the calculation methods.
+        
+        Returns:
+            Dict mapping animal GUIDs to their parameter GUIDs
+        """
+        selected_animals = {}
+        
+        if not hasattr(self, 'mAnimalsMap'):
+            LaUtils.debug.log("No animals map found", "Warning")
+            return selected_animals
+        
+        # Iterate through animals map and get selected animals
+        for animal_guid, value_pair in self.mAnimalsMap.items():
+            is_selected, param_guid = value_pair
+            if is_selected:
+                selected_animals[animal_guid] = param_guid
+                
+        return selected_animals
+        
+    def getSelectedCrops(self) -> Dict[str, str]:
+        """
+        Get the dictionary of selected crops (crop_guid: parameter_guid).
+        This is used by the calculation methods.
+        
+        Returns:
+            Dict mapping crop GUIDs to their parameter GUIDs
+        """
+        selected_crops = {}
+        
+        if not hasattr(self, 'mCropsMap'):
+            LaUtils.debug.log("No crops map found", "Warning")
+            return selected_crops
+        
+        # Iterate through crops map and get selected crops
+        for crop_guid, value_pair in self.mCropsMap.items():
+            is_selected, param_guid = value_pair
+            if is_selected:
+                selected_crops[crop_guid] = param_guid
+                
+        return selected_crops
