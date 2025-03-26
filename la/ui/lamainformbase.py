@@ -275,13 +275,13 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                             dietLabels = self.model.doCalcsAnimalsFirstDairySeparate()
 
                     # Update all labels with calculated values
-                    self.labelPortionMeat.setText(f"{dietLabels.animalPortionPct:.1f}%")
-                    self.labelPortionCrops.setText(f"{dietLabels.plantsPortionPct:.1f}%")
-                    self.labelPortionAllDairy.setText(f"{dietLabels.dairyPortionPct:.1f}%")
-                    self.labelPortionDairy.setText(f"{dietLabels.dairyPortionPct:.1f}%")
-                    self.labelPortionTameMeat.setText(f"{dietLabels.tameMeatPortionPct:.1f}%")
-                    self.labelPortionWildMeat.setText(f"{dietLabels.wildAnimalPortionPct:.1f}%")
-                    self.labelPortionWildPlants.setText(f"{dietLabels.wildPlantsPortionPct:.1f}%")
+                    self.labelPortionMeat.setText(f"{dietLabels.animalPortionPct:.1f}")
+                    self.labelPortionCrops.setText(f"{dietLabels.plantsPortionPct:.1f}")
+                    self.labelPortionAllDairy.setText(f"{dietLabels.dairyPortionPct:.1f}")
+                    self.labelPortionDairy.setText(f"{dietLabels.dairyPortionPct:.1f}")
+                    self.labelPortionTameMeat.setText(f"{dietLabels.tameMeatPortionPct:.1f}")
+                    self.labelPortionWildMeat.setText(f"{dietLabels.wildAnimalPortionPct:.1f}")
+                    self.labelPortionWildPlants.setText(f"{dietLabels.wildPlantsPortionPct:.1f}")
                     
                     # Update calorie labels
                     self.labelCaloriesCrops.setText(f"{dietLabels.cropMCalories:.1f}")
@@ -298,13 +298,13 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                     self.labelDairySurplus.setText(f"{dietLabels.dairySurplusMCalories:.1f}")
                 else:
                     # Fallback to simple percentages if model calculation is unavailable
-                    self.labelPortionMeat.setText(f"{myAnimalPercent:.1f}%")
-                    self.labelPortionCrops.setText(f"{myPlantPercent:.1f}%")
+                    self.labelPortionMeat.setText(f"{myAnimalPercent:.1f}")
+                    self.labelPortionCrops.setText(f"{myPlantPercent:.1f}")
                     self.labelPortionAllDairy.setText("0.0%")
                     self.labelPortionDairy.setText("0.0%")
-                    self.labelPortionTameMeat.setText(f"{myAbsoluteTameAnimalPercent:.1f}%")
-                    self.labelPortionWildMeat.setText(f"{myAbsoluteWildAnimalPercent:.1f}%")
-                    self.labelPortionWildPlants.setText(f"{myAbsoluteWildPlantPercent:.1f}%")
+                    self.labelPortionTameMeat.setText(f"{myAbsoluteTameAnimalPercent:.1f}")
+                    self.labelPortionWildMeat.setText(f"{myAbsoluteWildAnimalPercent:.1f}")
+                    self.labelPortionWildPlants.setText(f"{myAbsoluteWildPlantPercent:.1f}")
 
                 # Log debug information
                 from la.lib.lautils import LaUtils
@@ -1502,6 +1502,14 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         self.sliderMeat.valueChanged.connect(self.on_sliderMeat_valueChanged)
         self.sliderCrop.valueChanged.connect(self.on_sliderCrop_valueChanged)
 
+        self.cboxIncludeDairy.toggled.connect(self.on_cboxIncludeDairy_toggled)
+        self.cboxLimitDairy.toggled.connect(self.on_cboxLimitDairy_toggled)
+        self.cboxBaseOnPlants.toggled.connect(self.on_cboxBaseOnPlants_toggled)
+        self.sbLimitDairyPercent.valueChanged.connect(self.on_sbLimitDairyPercent_valueChanged)
+        self.sbDailyCalories.valueChanged.connect(self.on_sbDailyCalories_valueChanged)
+        self.sbDairyUtilisation.valueChanged.connect(self.on_sbDairyUtilisation_valueChanged)
+        self.sbPopulation.valueChanged.connect(self.on_sbPopulation_valueChanged)
+
         # Connect list widgets and tables
         self.treeHelp.currentItemChanged.connect(self.helpItemClicked)
         self.listWidgetCalculationsCrop.currentItemChanged.connect(self.cropCalcClicked)
@@ -1582,3 +1590,87 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             LaUtils.debug.log(f"Error saving animal parameters: {str(e)}", "Error")
             import traceback
             LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
+
+    def on_cboxIncludeDairy_toggled(self, checked):
+        """Handle include dairy checkbox changes."""
+        if hasattr(self, 'model'):
+            LaUtils.debug.log(f"Include Dairy checkbox toggled: {checked}", "Diet")
+            self.model.includeDairy = checked
+            self.setDietLabels()
+            
+    def on_cboxLimitDairy_toggled(self, checked):
+        """Handle limit dairy checkbox changes."""
+        if hasattr(self, 'model'):
+            LaUtils.debug.log(f"Limit Dairy checkbox toggled: {checked}", "Diet")
+            self.model.limitDairy = checked
+            self.setDietLabels()
+            
+    def on_cboxBaseOnPlants_toggled(self, checked):
+        """Handle base on plants checkbox changes."""
+        if hasattr(self, 'model'):
+            LaUtils.debug.log(f"Base On Plants checkbox toggled: {checked}", "Diet")
+            self.model.baseOnPlants = checked
+            self.setDietLabels()
+            
+    def on_sbLimitDairyPercent_valueChanged(self, value):
+        """Handle dairy limit percentage changes."""
+        if hasattr(self, 'model'):
+            LaUtils.debug.log(f"Limit Dairy Percent changed to: {value}", "Diet")
+            self.model.limitDairyPercent = value
+            self.setDietLabels()
+            
+    def on_sbDailyCalories_valueChanged(self, value):
+        """Handle daily calories changes."""
+        if hasattr(self, 'model'):
+            LaUtils.debug.log(f"Daily Calories changed to: {value}", "Diet")
+            self.model.dailyCalories = value
+            self.setDietLabels()
+            
+    def on_sbDairyUtilisation_valueChanged(self, value):
+        """Handle dairy utilisation changes."""
+        if hasattr(self, 'model'):
+            LaUtils.debug.log(f"Dairy Utilisation changed to: {value}", "Diet")
+            self.model.dairyUtilisation = value
+            self.setDietLabels()
+            
+    def on_sbPopulation_valueChanged(self, value):
+        """Handle population changes."""
+        if hasattr(self, 'model'):
+            LaUtils.debug.log(f"Population changed to: {value}", "Diet")
+            self.model.population = value
+            self.setDietLabels()
+    
+    def updateModelFromUI(self):
+        """Update all model properties from the UI widgets."""
+        if not hasattr(self, 'model'):
+            return
+            
+        # Update all model properties that affect diet calculations
+        self.model.dietPercent = self.sliderDiet.value()
+        self.model.meatPercent = self.sliderMeat.value()
+        self.model.percentOfDietThatIsFromCrops = self.sliderCrop.value()
+        
+        # Update checkbox-based properties
+        if hasattr(self, 'cboxIncludeDairy'):
+            self.model.includeDairy = self.cboxIncludeDairy.isChecked()
+        
+        if hasattr(self, 'cboxLimitDairy'):
+            self.model.limitDairy = self.cboxLimitDairy.isChecked()
+            
+        if hasattr(self, 'cboxBaseOnPlants'):
+            self.model.baseOnPlants = self.cboxBaseOnPlants.isChecked()
+            
+        # Update spinbox-based properties
+        if hasattr(self, 'sbLimitDairyPercent'):
+            self.model.limitDairyPercent = self.sbLimitDairyPercent.value()
+            
+        if hasattr(self, 'sbDailyCalories'):
+            self.model.dailyCalories = self.sbDailyCalories.value()
+            
+        if hasattr(self, 'sbDairyUtilisation'):
+            self.model.dairyUtilisation = self.sbDairyUtilisation.value()
+            
+        if hasattr(self, 'sbPopulation'):
+            self.model.population = self.sbPopulation.value()
+            
+        LaUtils.debug.log("Model updated from UI", "Diet")
