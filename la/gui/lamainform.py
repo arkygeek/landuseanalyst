@@ -79,7 +79,7 @@ class LaMainForm(LaMainFormBase):
         self._debug_dialog = None
         debugMode = QSettings().value("landuse_analyst/debug", False, type=bool)
         LaUtils.debug.initialize(enabled=debugMode)
-        
+
         if debugMode:
             from la.gui.ladebugdialog import LaDebugDialog
             self._debug_dialog = LaDebugDialog(parent=self)
@@ -187,14 +187,14 @@ class LaMainForm(LaMainFormBase):
         # Override the base class's on_cbDebug_clicked to use our version
         if hasattr(LaMainFormBase, 'on_cbDebug_clicked'):
             self.on_cbDebug_clicked = self._override_on_cbDebug_clicked
-            
+
         # Connect the calculation list item clicks to the handler methods
         if hasattr(self, 'listWidgetCalculationsAnimal'):
             self.listWidgetCalculationsAnimal.currentItemChanged.connect(self.animalCalcClicked)
-        
+
         if hasattr(self, 'listWidgetCalculationsCrop'):
             self.listWidgetCalculationsCrop.currentItemChanged.connect(self.cropCalcClicked)
-            
+
         LaUtils.debug.log("Additional signals connected", "Setup")
 
     def setDietLabels(self):
@@ -213,7 +213,7 @@ class LaMainForm(LaMainFormBase):
             diet_labels.tameMeatPortionPct = meat_percent
             diet_labels.wildAnimalPortionPct = 100 - meat_percent
             diet_labels.kiloCaloriesIndividualAnnual = daily_calories * 365
-            
+
             if include_dairy:
                 # Call appropriate calculation method based on dairy settings
                 if limit_dairy:
@@ -229,7 +229,7 @@ class LaMainForm(LaMainFormBase):
 
             # Connect signals and update labels
             self._connect_diet_label_signals(diet_labels)
-            
+
             LaUtils.debug.log("Diet labels updated successfully", "Diet")
         except Exception as e:
             LaUtils.debug.log(f"Error updating diet labels: {str(e)}", "Error")
@@ -551,7 +551,7 @@ class LaMainForm(LaMainFormBase):
                 dietLabels.megaCaloriesSettlementAnnualChanged.connect(self.update_calories_settlement)
             if hasattr(dietLabels, 'dairySurplusMCaloriesChanged'):
                 dietLabels.dairySurplusMCaloriesChanged.connect(self.update_dairy_surplus)
-            
+
             LaUtils.debug.log("Diet label signals connected successfully", "Diet")
         except Exception as e:
             LaUtils.debug.log(f"Error connecting diet label signals: {str(e)}", "Error")
@@ -577,7 +577,7 @@ class LaMainForm(LaMainFormBase):
         self.labelCropPercent.setText(str(100 - value))
         self.setDietLabels()
 
-    @pyqtSlot(int)  
+    @pyqtSlot(int)
     def on_sliderMeat_valueChanged(self, value):
         """Handle meat ratio slider value changes."""
         self.labelMeatWildPercent.setText(str(100 - value))
@@ -628,10 +628,10 @@ class LaMainForm(LaMainFormBase):
             animal_guid = current_item.data(Qt.UserRole)
             if hasattr(animal_guid, 'guid') and callable(animal_guid.guid):
                 animal_guid = animal_guid.guid()  # Call the method to get the GUID string
-            
+
             # Make sure we have a string GUID
             animal_guid = str(animal_guid)
-            
+
             LaUtils.debug.log(f"Using animal GUID: {animal_guid}", "Calculation")
 
             # Get the animal object
@@ -677,38 +677,38 @@ class LaMainForm(LaMainFormBase):
             # If no item is selected, do nothing
             if current_item is None:
                 return
-                
+
             # Check that both animal and crop percentages are at 100%
             if self.labelAnimalCheck.text() != "100%" or self.labelCropCheck.text() != "100%":
                 self.tbReport.setText("Check that Animals and Crops are both at 100%\n")
                 self.tbReport.append("I am NOT going to do anything until they are!")
                 return
-                
+
             # Get the GUID of the selected crop
             crop_guid = current_item.data(Qt.UserRole)
             if hasattr(crop_guid, 'guid') and callable(crop_guid.guid):
                 crop_guid = crop_guid.guid()  # Call the method to get the GUID string
-                
+
             # Make sure we have a string GUID
             crop_guid = str(crop_guid)
-            
+
             LaUtils.debug.log(f"Using crop GUID: {crop_guid}", "Calculation")
-            
+
             # Get the GUID of the selected crop
             crop_guid = current_item.data(Qt.UserRole)
             if not crop_guid:
                 LaUtils.debug.log("No GUID found for selected crop", "Error")
                 return
-                
+
             # Get the crop object
             crop = LaUtils.getCrop(crop_guid)
             if not crop:
                 LaUtils.debug.log(f"Could not find crop with GUID: {crop_guid}", "Error")
                 return
-                
+
             # Set up model with current UI values
             self._configureModelFromUi()
-            
+
             # Display the crop image if available
             if hasattr(self, 'lblCropPicCalcs') and hasattr(crop, 'imageFile'):
                 image_path = crop.imageFile
@@ -716,7 +716,7 @@ class LaMainForm(LaMainFormBase):
                     self.lblCropPicCalcs.setPixmap(QtGui.QPixmap(image_path))
                 else:
                     self.lblCropPicCalcs.clear()
-            
+
             # Perform calculations based on diet settings
             diet_labels = None
             if self.cboxBaseOnPlants.isChecked():
@@ -733,7 +733,7 @@ class LaMainForm(LaMainFormBase):
                 else:
                     diet_labels = self.model.doCalcsAnimalsFirstDairySeparate()
                     LaUtils.debug.log("Using animals-first with dairy separate calculation", "Diet")
-                    
+
             # Get the calculation report for this crop
             if hasattr(diet_labels, 'cropCalcsReportMap'):
                 report_map = self._getPropertyValue(diet_labels, 'cropCalcsReportMap')
@@ -746,17 +746,17 @@ class LaMainForm(LaMainFormBase):
                             if hasattr(self, 'textBrowserResultsCrop'):
                                 self.textBrowserResultsCrop.setText(report_string)
                                 LaUtils.debug.log(f"Crop {crop.name} calculation report displayed", "Calculation")
-                
+
             # Also display model HTML in the report tab for debugging
             self.tbReport.setHtml(self.model.toHtml())
-                
+
         except Exception as e:
             LaUtils.debug.log(f"Error displaying crop calculations: {str(e)}", "Error")
             import traceback
             LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
             if hasattr(self, 'textBrowserResultsCrop'):
                 self.textBrowserResultsCrop.setText(f"Error calculating: {str(e)}")
-                
+
     def _configureModelFromUi(self):
         """Configure the model with current UI values using proper property setters."""
         if hasattr(self, 'model'):
@@ -764,21 +764,21 @@ class LaMainForm(LaMainFormBase):
             self.model.name = self.lineEditSiteName.text() if hasattr(self, 'lineEditSiteName') else "Default Site"
             self.model.population = self.sbPopulation.value() if hasattr(self, 'sbPopulation') else 100
             self.model.period = self.lineEditPeriod.text() if hasattr(self, 'lineEditPeriod') else "Default Period"
-            
+
             # Coordinates and spatial settings
             if hasattr(self, 'lineEditEasting'):
                 self.model.easting = int(self.lineEditEasting.text()) if self.lineEditEasting.text() else 0
             if hasattr(self, 'lineEditNorthing'):
                 self.model.northing = int(self.lineEditNorthing.text()) if self.lineEditNorthing.text() else 0
-            
-            # Analysis method settings    
+
+            # Analysis method settings
             if hasattr(self, 'radioButtonEuclidean'):
                 self.model.euclideanDistance = self.radioButtonEuclidean.isChecked()
             if hasattr(self, 'radioButtonWalkingTime'):
                 self.model.walkingTime = self.radioButtonWalkingTime.isChecked()
             if hasattr(self, 'radioButtonPathDistance'):
                 self.model.pathDistance = self.radioButtonPathDistance.isChecked()
-            
+
             # Diet settings
             if hasattr(self, 'sliderDiet'):
                 self.model.dietPercent = self.sliderDiet.value()
@@ -786,7 +786,7 @@ class LaMainForm(LaMainFormBase):
                 self.model.meatPercent = self.sliderMeat.value()
             if hasattr(self, 'sbDailyCalories'):
                 self.model.caloriesPerPersonDaily = self.sbDailyCalories.value()
-            
+
             # Dairy settings
             if hasattr(self, 'cboxBaseOnPlants'):
                 self.model.baseOnPlants = self.cboxBaseOnPlants.isChecked()
@@ -798,7 +798,7 @@ class LaMainForm(LaMainFormBase):
                 self.model.limitDairyPercent = self.sbLimitDairyPercent.value()
             if hasattr(self, 'sbDairyUtilisation'):
                 self.model.dairyUtilisation = self.sbDairyUtilisation.value()
-            
+
             # Get animals and crops
             if hasattr(self, 'getSelectedAnimals'):
                 self.model.animals = self.getSelectedAnimals()
@@ -809,44 +809,44 @@ class LaMainForm(LaMainFormBase):
         """
         Get the dictionary of selected animals (animal_guid: parameter_guid).
         This is used by the calculation methods.
-        
+
         Returns:
             Dict mapping animal GUIDs to their parameter GUIDs
         """
         selected_animals = {}
-        
+
         if not hasattr(self, 'mAnimalsMap'):
             LaUtils.debug.log("No animals map found", "Warning")
             return selected_animals
-        
+
         # Iterate through animals map and get selected animals
         for animal_guid, value_pair in self.mAnimalsMap.items():
             is_selected, param_guid = value_pair
             if is_selected:
                 selected_animals[animal_guid] = param_guid
-                
+
         return selected_animals
-        
+
     def getSelectedCrops(self) -> Dict[str, str]:
         """
         Get the dictionary of selected crops (crop_guid: parameter_guid).
         This is used by the calculation methods.
-        
+
         Returns:
             Dict mapping crop GUIDs to their parameter GUIDs
         """
         selected_crops = {}
-        
+
         if not hasattr(self, 'mCropsMap'):
             LaUtils.debug.log("No crops map found", "Warning")
             return selected_crops
-        
+
         # Iterate through crops map and get selected crops
         for crop_guid, value_pair in self.mCropsMap.items():
             is_selected, param_guid = value_pair
             if is_selected:
                 selected_crops[crop_guid] = param_guid
-                
+
         return selected_crops
 
     def _getPropertyValue(self, obj, prop_name):
@@ -867,20 +867,20 @@ class LaMainForm(LaMainFormBase):
                 self.labelPortionTameMeat.setText(f"{tame_meat_portion_pct:.1f}%")
             if hasattr(self, 'labelPortionCrops'):
                 self.labelPortionCrops.setText(f"{crops_portion_pct:.1f}%")
-                
+
             # Calculate and update wild portions
             wild_meat_portion = 100.0 - tame_meat_portion_pct if tame_meat_portion_pct <= 100 else 0.0
             if hasattr(self, 'labelPortionWildMeat'):
                 self.labelPortionWildMeat.setText(f"{wild_meat_portion:.1f}%")
-                
+
             # Update totals
             total_animal = dairy_portion_pct + tame_meat_portion_pct + wild_meat_portion
             total_plant = crops_portion_pct + (100.0 - crops_portion_pct)  # Including wild plants
-            
+
             if hasattr(self, 'labelTotalAnimal'):
                 self.labelTotalAnimal.setText(f"{total_animal:.1f}%")
             if hasattr(self, 'labelTotalPlant'):
                 self.labelTotalPlant.setText(f"{total_plant:.1f}%")
-                
+
         except Exception as e:
             LaUtils.debug.log(f"Error updating diet labels: {str(e)}", "Error")

@@ -719,7 +719,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             from la.lib.lautils import LaUtils
             LaUtils.debug.log(f"Setting values for diet labels object with ID: {id(theDietLabels)}", "Diet")
             LaUtils.debug.log(f"Previous values - Dairy: {theDietLabels.dairyMCalories:.2f}, Crops: {theDietLabels.cropMCalories:.2f}", "Diet")
-            
+
             # Set values directly to attributes first
             theDietLabels._dairyMCalories = theOverallDairyMCals
             theDietLabels._cropMCalories = theOverallCropsMCals
@@ -738,21 +738,21 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             theDietLabels._dairySurplusMCalories = theOverallDairySurplusMCals
             theDietLabels._cropCalcsReportMap = theCropCalcsReportMap
             theDietLabels._animalCalcsReportMap = theAnimalCalcsReportMap
-            
+
             # Log new values before emitting signals
             LaUtils.debug.log(f"New values set - Dairy: {theOverallDairyMCals:.2f}, Crops: {theOverallCropsMCals:.2f}", "Diet")
             LaUtils.debug.log(f"New percentages - Animal: {theOverallMeatPercent*100:.2f}%, Plants: {theOverallPlantPercent*100:.2f}%", "Diet")
-            
+
             # Now emit all the signals after setting the attributes directly
             LaUtils.debug.log("Emitting diet value change signals", "Diet")
-            
+
             try:
                 theDietLabels.dairyMCaloriesChanged.emit(theOverallDairyMCals)
                 LaUtils.debug.log(f"Emitted dairyMCaloriesChanged with value {theOverallDairyMCals:.2f}", "Diet")
-                
+
                 theDietLabels.cropMCaloriesChanged.emit(theOverallCropsMCals)
                 LaUtils.debug.log(f"Emitted cropMCaloriesChanged with value {theOverallCropsMCals:.2f}", "Diet")
-                
+
                 theDietLabels.animalMCaloriesChanged.emit(theOverallMeatMCals)
                 theDietLabels.wildAnimalMCaloriesChanged.emit(theOverallWildMeatMCals)
                 theDietLabels.wildPlantsMCaloriesChanged.emit(theOverallWildPlantsMCals)
@@ -768,10 +768,10 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                 theDietLabels.dairySurplusMCaloriesChanged.emit(theOverallDairySurplusMCals)
                 theDietLabels.cropCalcsReportMapChanged.emit(theCropCalcsReportMap)
                 theDietLabels.animalCalcsReportMapChanged.emit(theAnimalCalcsReportMap)
-                
+
                 LaUtils.debug.log("All diet label signals emitted successfully", "Diet")
             except Exception as e:
-                LaUtils.debug.log(f"Error emitting diet label signals: {str(e)}", "Error") 
+                LaUtils.debug.log(f"Error emitting diet label signals: {str(e)}", "Error")
                 import traceback
                 LaUtils.debug.log(f"Signal error details: {traceback.format_exc()}", "Error")
         except Exception as e:
@@ -784,10 +784,10 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         """Calculate diet values when plants are prioritized and dairy is included with meat."""
         from la.lib.lautils import LaUtils
         myDietLabels = LaDietLabels()
-        
+
         # Log calculation start
         LaUtils.debug.log("Starting doCalcsPlantsFirstIncludeDairy calculation", "Diet")
-        
+
         # Get property values from internal attributes
         try:
             calories_daily = float(self._mCaloriesPerPersonDaily)
@@ -798,65 +798,65 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
             LaUtils.debug.log(f"Input parameters - calories_daily: {calories_daily}, population: {population_count}", "Diet")
             LaUtils.debug.log(f"Diet parameters - meat_percent: {meat_percent*100}%, diet_percent: {diet_percent*100}%", "Diet")
-            
+
             # Calculate base values - these are the most important for updating UI
             myMCalsIndividualAnnual = calories_daily * 365.0 / 1000.0  # Convert to annual MCals
             myMCalsSettlementAnnual = myMCalsIndividualAnnual * population_count
-            
+
             LaUtils.debug.log(f"Calculated annual MCals - individual: {myMCalsIndividualAnnual}, settlement: {myMCalsSettlementAnnual}", "Diet")
-            
+
             # Initialize counters for simplicity (real calculation would be more complex)
             myDairyMCalorieCounter = myMCalsSettlementAnnual * diet_percent * 0.05  # 5% of animal diet
             myTameMeatMCalorieCounter = myMCalsSettlementAnnual * diet_percent * 0.05  # 5% of animal diet
             myWildMeatMCalorieCounter = myMCalsSettlementAnnual * diet_percent * 0.9  # 90% of animal diet
             myCropMCalories = myMCalsSettlementAnnual * (1.0 - diet_percent) * 0.1  # 10% of plant diet
             myWildPlantsMCalories = myMCalsSettlementAnnual * (1.0 - diet_percent) * 0.9  # 90% of plant diet
-            
+
             # Calculate percentages
             totalMCalories = myMCalsSettlementAnnual
-            
+
             dairyPercent = myDairyMCalorieCounter / totalMCalories
             tameMeatPercent = myTameMeatMCalorieCounter / totalMCalories
             wildMeatPercent = myWildMeatMCalorieCounter / totalMCalories
             cropPercent = myCropMCalories / totalMCalories
             wildPlantPercent = myWildPlantsMCalories / totalMCalories
-            
+
             animalPercent = diet_percent
             plantPercent = 1.0 - diet_percent
-            
+
             # Set calculated values on diet labels
             myDietLabels._dairyMCalories = myDairyMCalorieCounter
             myDietLabels._animalMCalories = myTameMeatMCalorieCounter
             myDietLabels._wildAnimalMCalories = myWildMeatMCalorieCounter
             myDietLabels._cropMCalories = myCropMCalories
             myDietLabels._wildPlantsMCalories = myWildPlantsMCalories
-            
+
             myDietLabels._dairyPortionPct = dairyPercent * 100.0
             myDietLabels._tameMeatPortionPct = tameMeatPercent * 100.0
             myDietLabels._wildAnimalPortionPct = wildMeatPercent * 100.0
             myDietLabels._cropsPortionPct = cropPercent * 100.0
             myDietLabels._wildPlantsPortionPct = wildPlantPercent * 100.0
-            
+
             myDietLabels._animalPortionPct = animalPercent * 100.0
             myDietLabels._plantsPortionPct = plantPercent * 100.0
-            
+
             myDietLabels._kiloCaloriesIndividualAnnual = myMCalsIndividualAnnual * 1000.0  # Convert back to kCal
             myDietLabels._megaCaloriesSettlementAnnual = myMCalsSettlementAnnual
-            
+
             # No dairy surplus in this simple calculation
             myDietLabels._dairySurplusMCalories = 0.0
-            
+
             # Log results
             LaUtils.debug.log(f"Calculation results - Animal: {animalPercent*100:.2f}%, Plant: {plantPercent*100:.2f}%", "Diet")
             LaUtils.debug.log("doCalcsPlantsFirstIncludeDairy calculation completed successfully", "Diet")
-            
+
         except Exception as e:
             LaUtils.debug.log(f"Error in diet calculation: {str(e)}", "Error")
             import traceback
             LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
-        
+
         return myDietLabels
-        
+
     def doCalcsAnimalsFirstIncludeDairy(self) -> LaDietLabels:
         """Calculate diet values when animals are prioritized and dairy is included with meat."""
         from la.lib.lautils import LaUtils
@@ -871,277 +871,439 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             population_count = float(self._mPopulation)
             meat_percent = float(self._mMeatPercent) / 100.0  # Convert to decimal
             diet_percent = float(self._mDietPercent) / 100.0  # Convert to decimal
-            
+
             # Log input values
             LaUtils.debug.log(f"Calories per person daily: {calories_daily}", "Diet")
             LaUtils.debug.log(f"Population count: {population_count}", "Diet")
             LaUtils.debug.log(f"Meat percent: {meat_percent*100:.1f}%, Diet percent: {diet_percent*100:.1f}%", "Diet")
-            
+
             # Calculate basic values that are required for all calculations
             myMCalsIndividualAnnual = calories_daily * 365.0 / 1000.0  # Convert to MCal
             myMCalsSettlementAnnual = myMCalsIndividualAnnual * population_count
-            
+
             # Log calculated values
             LaUtils.debug.log(f"Annual individual calories (MCal): {myMCalsIndividualAnnual}", "Diet")
             LaUtils.debug.log(f"Annual settlement calories (MCal): {myMCalsSettlementAnnual}", "Diet")
-            
+
             # Initialize MCal counters for simplified calculation
             myDairyMCalorieCounter = myMCalsSettlementAnnual * diet_percent * 0.05  # 5% of animal diet
             myTameMeatMCalorieCounter = myMCalsSettlementAnnual * diet_percent * 0.05  # 5% of animal diet
             myWildMeatMCalorieCounter = myMCalsSettlementAnnual * diet_percent * 0.9  # 90% of animal diet
             myCropMCalories = myMCalsSettlementAnnual * (1.0 - diet_percent) * 0.1  # 10% of plant diet
             myWildPlantsMCalories = myMCalsSettlementAnnual * (1.0 - diet_percent) * 0.9  # 90% of plant diet
-            
+
             # Calculate percentages
             totalMCalories = myMCalsSettlementAnnual
-            
+
             dairyPercent = myDairyMCalorieCounter / totalMCalories
             tameMeatPercent = myTameMeatMCalorieCounter / totalMCalories
             wildMeatPercent = myWildMeatMCalorieCounter / totalMCalories
             cropPercent = myCropMCalories / totalMCalories
             wildPlantPercent = myWildPlantsMCalories / totalMCalories
-            
+
             animalPercent = diet_percent
             plantPercent = 1.0 - diet_percent
-            
+
             # Set calculated values on diet labels
             myDietLabels._dairyMCalories = myDairyMCalorieCounter
             myDietLabels._animalMCalories = myTameMeatMCalorieCounter
             myDietLabels._wildAnimalMCalories = myWildMeatMCalorieCounter
             myDietLabels._cropMCalories = myCropMCalories
             myDietLabels._wildPlantsMCalories = myWildPlantsMCalories
-            
+
             myDietLabels._dairyPortionPct = dairyPercent * 100.0
             myDietLabels._tameMeatPortionPct = tameMeatPercent * 100.0
             myDietLabels._wildAnimalPortionPct = wildMeatPercent * 100.0
             myDietLabels._cropsPortionPct = cropPercent * 100.0
             myDietLabels._wildPlantsPortionPct = wildPlantPercent * 100.0
-            
+
             myDietLabels._animalPortionPct = animalPercent * 100.0
             myDietLabels._plantsPortionPct = plantPercent * 100.0
-            
+
             myDietLabels._kiloCaloriesIndividualAnnual = myMCalsIndividualAnnual * 1000.0  # Convert back to kCal
             myDietLabels._megaCaloriesSettlementAnnual = myMCalsSettlementAnnual
-            
+
             # No dairy surplus in this simple calculation
             myDietLabels._dairySurplusMCalories = 0.0
-            
+
             LaUtils.debug.log(f"Final percentages - Animal: {animalPercent*100:.1f}%, Plant: {plantPercent*100:.1f}%", "Diet")
             LaUtils.debug.log("doCalcsAnimalsFirstIncludeDairy calculation completed successfully", "Diet")
-            
+
         except Exception as e:
             LaUtils.debug.log(f"Error in diet calculation: {str(e)}", "Error")
             import traceback
             LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
-        
+
         return myDietLabels
 
     def doCalcsPlantsFirstDairySeparate(self) -> LaDietLabels:
         """Calculate diet values when plants are prioritized and dairy is separate from meat."""
         from la.lib.lautils import LaUtils
         myDietLabels = LaDietLabels()
-        
+
         # Log calculation start
         LaUtils.debug.log("Starting doCalcsPlantsFirstDairySeparate calculation", "Diet")
-        
+
         try:
             # Base calculations similar to include dairy but with separate dairy tracking
             calories_daily = float(self._mCaloriesPerPersonDaily)
             population_count = float(self._mPopulation)
             meat_percent = float(self._mMeatPercent) / 100.0  # Convert to decimal
             diet_percent = float(self._mDietPercent) / 100.0  # Convert to decimal
-            
+
             LaUtils.debug.log(f"Input parameters - calories_daily: {calories_daily}, population: {population_count}", "Diet")
             LaUtils.debug.log(f"Diet parameters - meat_percent: {meat_percent*100}%, diet_percent: {diet_percent*100}%", "Diet")
-            
+
             myMCalsIndividualAnnual = calories_daily * 365.0 / 1000.0  # Convert to MCal
             myMCalsSettlementAnnual = myMCalsIndividualAnnual * population_count
-            
+
             LaUtils.debug.log(f"Calculated annual MCals - individual: {myMCalsIndividualAnnual}, settlement: {myMCalsSettlementAnnual}", "Diet")
-            
+
             # Initialize counters with simplified approach for testing
             myDairyCounter = myMCalsSettlementAnnual * 0.05  # Separate counter for dairy (5% of total)
             myTameMeatCounter = myMCalsSettlementAnnual * diet_percent * 0.05  # 5% of animal diet
             myWildMeatCounter = myMCalsSettlementAnnual * diet_percent * 0.9  # 90% of animal diet
             myCropCounter = myMCalsSettlementAnnual * (1.0 - diet_percent) * 0.1  # 10% of plant diet
             myWildPlantCounter = myMCalsSettlementAnnual * (1.0 - diet_percent) * 0.9  # 90% of plant diet
-            
+
             # Calculate percentages (adjusted for separate dairy)
             totalMCaloriesWithoutDairy = myMCalsSettlementAnnual - myDairyCounter
-            
+
             dairyPercent = myDairyCounter / myMCalsSettlementAnnual
             tameMeatPercent = myTameMeatCounter / myMCalsSettlementAnnual
             wildMeatPercent = myWildMeatCounter / myMCalsSettlementAnnual
             cropPercent = myCropCounter / myMCalsSettlementAnnual
             wildPlantPercent = myWildPlantCounter / myMCalsSettlementAnnual
-            
+
             animalPercent = (myTameMeatCounter + myWildMeatCounter) / myMCalsSettlementAnnual
             plantPercent = (myCropCounter + myWildPlantCounter) / myMCalsSettlementAnnual
-            
+
             # Set calculated values using private attributes
             myDietLabels._dairyMCalories = myDairyCounter
             myDietLabels._animalMCalories = myTameMeatCounter
             myDietLabels._wildAnimalMCalories = myWildMeatCounter
             myDietLabels._cropMCalories = myCropCounter
             myDietLabels._wildPlantsMCalories = myWildPlantCounter
-            
+
             myDietLabels._dairyPortionPct = dairyPercent * 100.0
             myDietLabels._tameMeatPortionPct = tameMeatPercent * 100.0
             myDietLabels._wildAnimalPortionPct = wildMeatPercent * 100.0
             myDietLabels._cropsPortionPct = cropPercent * 100.0
             myDietLabels._wildPlantsPortionPct = wildPlantPercent * 100.0
-            
+
             myDietLabels._animalPortionPct = animalPercent * 100.0
             myDietLabels._plantsPortionPct = plantPercent * 100.0
-            
+
             myDietLabels._kiloCaloriesIndividualAnnual = myMCalsIndividualAnnual * 1000.0
             myDietLabels._megaCaloriesSettlementAnnual = myMCalsSettlementAnnual
-            
+
             # Log results
             LaUtils.debug.log(f"Calculation results - Animal: {animalPercent*100:.2f}%, Plant: {plantPercent*100:.2f}%, Dairy: {dairyPercent*100:.2f}%", "Diet")
             LaUtils.debug.log("doCalcsPlantsFirstDairySeparate calculation completed successfully", "Diet")
-            
+
         except Exception as e:
             LaUtils.debug.log(f"Error in diet calculation: {str(e)}", "Error")
             import traceback
             LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
-        
+
         return myDietLabels
 
     def doCalcsAnimalsFirstDairySeparate(self) -> LaDietLabels:
         """Calculate diet values when animals are prioritized and dairy is separate from meat."""
         from la.lib.lautils import LaUtils
         myDietLabels = LaDietLabels()
-        
+
         # Log calculation start
         LaUtils.debug.log("Starting doCalcsAnimalsFirstDairySeparate calculation", "Diet")
-        
+
         try:
             # Get base values from internal attributes
             calories_daily = float(self._mCaloriesPerPersonDaily)
             population_count = float(self._mPopulation)
             meat_percent = float(self._mMeatPercent) / 100.0  # Convert to decimal
             diet_percent = float(self._mDietPercent) / 100.0  # Convert to decimal
-            
+
             LaUtils.debug.log(f"Input parameters - calories_daily: {calories_daily}, population: {population_count}", "Diet")
             LaUtils.debug.log(f"Diet parameters - meat_percent: {meat_percent*100}%, diet_percent: {diet_percent*100}%", "Diet")
-            
+
             # Calculate basic values
             myMCalsIndividualAnnual = calories_daily * 365.0 / 1000.0  # Convert to MCal
             myMCalsSettlementAnnual = myMCalsIndividualAnnual * population_count
-            
+
             LaUtils.debug.log(f"Calculated annual MCals - individual: {myMCalsIndividualAnnual}, settlement: {myMCalsSettlementAnnual}", "Diet")
-            
+
             # Initialize counters with a simplified calculation approach
             myDairyCounter = myMCalsSettlementAnnual * 0.05  # Separate dairy calculation (5% of total)
             myTameMeatCounter = myMCalsSettlementAnnual * diet_percent * meat_percent  # Tame meat portion
             myWildMeatCounter = myMCalsSettlementAnnual * diet_percent * (1.0 - meat_percent)  # Wild meat portion
             myCropCounter = myMCalsSettlementAnnual * (1.0 - diet_percent) * 0.8  # Crops portion (80% of plant calories)
             myWildPlantCounter = myMCalsSettlementAnnual * (1.0 - diet_percent) * 0.2  # Wild plants (20% of plant calories)
-            
+
             # Calculate percentages
             totalMCalories = myMCalsSettlementAnnual
-            
+
             dairyPercent = myDairyCounter / totalMCalories
             tameMeatPercent = myTameMeatCounter / totalMCalories
             wildMeatPercent = myWildMeatCounter / totalMCalories
             cropPercent = myCropCounter / totalMCalories
             wildPlantPercent = myWildPlantCounter / totalMCalories
-            
+
             animalPercent = (myTameMeatCounter + myWildMeatCounter) / totalMCalories
             plantPercent = (myCropCounter + myWildPlantCounter) / totalMCalories
-            
+
             # Create report maps for crops and animals
             cropCalcsReportMap = {}
             animalCalcsReportMap = {}
-            
+
             # Populate crop report map with some sample data for each crop
             for cropGuid, paramGuid in self._mCrops.items():
                 try:
                     crop = LaUtils.getCrop(cropGuid)
-                    if crop:
-                        # Calculate this crop's share of the total crop calories
-                        cropShare = 1.0 / len(self._mCrops) if self._mCrops else 0.0
-                        cropCalories = myCropCounter * cropShare
-                        
-                        # Create a detailed report for this crop
+                    cropParameter = LaUtils.getCropParameter(paramGuid)
+
+                    if crop and cropParameter:
+                        # Calculate this crop's share of the total crop calories using crop parameter percentages
+                        cropContributionPercent = 1.0
+                        try:
+                            # Use the crop parameter's percent tame crop value if available
+                            cropContributionPercent = float(str(cropParameter.percentTameCrop)) * 0.01
+                        except:
+                            # Fall back to equal distribution if parameter not available
+                            cropContributionPercent = 1.0 / len(self._mCrops) if self._mCrops else 0.0
+
+                        # Calculate crop calories following the C++ approach
+                        cropPercent = cropContributionPercent * cropPercent
+                        myCropFoodValue = float(str(crop.cropCalories)) * 0.001  # Convert to MCal/kg
+                        myMCalsFromTheCrop = cropPercent * myMCalsSettlementAnnual
+
+                        # Calculate kg needed for people (initial calculation before adjustments)
+                        myKgForPeople1 = myMCalsFromTheCrop / myCropFoodValue
+
+                        # Get spoilage and reseeding percentages from crop parameters
+                        mySpoilagePercent = 0.1  # Default 10% if not available
+                        myReseedPercent = 0.1    # Default 10% if not available
+
+                        try:
+                            mySpoilagePercent = float(str(cropParameter.spoilage)) * 0.01
+                            myReseedPercent = float(str(cropParameter.reseed)) * 0.01
+                        except Exception as e:
+                            LaUtils.debug.log(f"Error getting spoilage/reseed parameters for {crop.name}: {e}", "Warning")
+
+                        # Calculate additional kg needed for spoilage and reseeding
+                        myKgForPeopleSpoilage = myKgForPeople1 * mySpoilagePercent
+                        myKgForPeopleReseed = myKgForPeople1 * myReseedPercent
+
+                        # Total kg needed for people after accounting for spoilage and reseeding
+                        myKgForPeople = myKgForPeople1 + myKgForPeopleSpoilage + myKgForPeopleReseed
+
+                        # Get crop yield in kg/hectare (adjust for area units if needed)
+                        myCropYield = float(str(crop.cropYield))
+                        if hasattr(crop, 'areaUnits') and str(crop.areaUnits) == "Dunum":
+                            myCropYield = myCropYield * 10.0  # Convert from Dunum to hectare
+
+                        # Calculate area needed in hectares
+                        myCropAreaTarget = myKgForPeople / myCropYield
+
+                        # Calculate fallow land area if applicable
+                        myFallowArea = 0.0
+                        myFallowMCals = 0.0
+
+                        if hasattr(cropParameter, 'fallowRatio') and hasattr(cropParameter, 'fallowValue'):
+                            myRatio = float(str(cropParameter.fallowRatio))
+                            myFallowValue = float(str(cropParameter.fallowValue))
+                            myFallowArea = myRatio * (myCropAreaTarget / (1.0 + myRatio))
+                            myFallowMCals = myFallowArea * myFallowValue
+
+                        # Create detailed report for this crop including all calculation steps
                         cropReport = f"Calculation Report for {crop.name}\n"
                         cropReport += f"===========================\n"
-                        cropReport += f"Crop calories: {cropCalories:.2f} MCal\n"
+                        cropReport += f"Crop calories: {myMCalsFromTheCrop:.2f} MCal\n"
                         cropReport += f"Population: {population_count} people\n"
                         cropReport += f"Individual needs: {myMCalsIndividualAnnual:.2f} MCal/year\n"
                         cropReport += f"Settlement needs: {myMCalsSettlementAnnual:.2f} MCal/year\n"
                         cropReport += f"Plant portion: {plantPercent*100:.2f}% of diet\n"
                         cropReport += f"Crop portion: {cropPercent*100:.2f}% of diet\n"
-                        
-                        # If crop has yield and calories information, calculate area needed
-                        if hasattr(crop, 'cropYield') and hasattr(crop, 'cropCalories'):
-                            cropYield = float(crop.cropYield)  # kg/hectare
-                            cropCaloriesPerKg = float(crop.cropCalories)  # calories/kg
-                            
-                            # Calculate production needed for this crop
-                            kgNeeded = cropCalories * 1000000 / cropCaloriesPerKg  # Convert MCal to cal then divide by cal/kg
-                            areaNeeded = kgNeeded / cropYield  # hectares
-                            
-                            cropReport += f"\nProduction Calculations:\n"
-                            cropReport += f"Crop yield: {cropYield:.2f} kg/hectare\n"
-                            cropReport += f"Crop calories: {cropCaloriesPerKg:.2f} cal/kg\n"
-                            cropReport += f"Required production: {kgNeeded:.2f} kg\n"
-                            cropReport += f"Required area: {areaNeeded:.2f} hectares\n"
-                            
-                        # Store the report in the map
-                        cropCalcsReportMap[cropGuid] = (cropReport, cropCalories)
-                        LaUtils.debug.log(f"Added crop report for {crop.name} (GUID: {cropGuid})", "Diet")
-                        
+                        cropReport += f"Crop food value: {myCropFoodValue:.2f} MCal/kg\n"
+
+                        cropReport += f"\nProduction Calculations:\n"
+                        cropReport += f"Base production needed: {myKgForPeople1:.2f} kg\n"
+                        cropReport += f"Spoilage adjustment ({mySpoilagePercent*100:.1f}%): {myKgForPeopleSpoilage:.2f} kg\n"
+                        cropReport += f"Reseed adjustment ({myReseedPercent*100:.1f}%): {myKgForPeopleReseed:.2f} kg\n"
+                        cropReport += f"Total production needed: {myKgForPeople:.2f} kg\n"
+
+                        cropReport += f"\nArea Calculations:\n"
+                        cropReport += f"Crop yield: {myCropYield:.2f} kg/hectare\n"
+                        cropReport += f"Required crop area: {myCropAreaTarget:.2f} hectares\n"
+
+                        if myFallowArea > 0:
+                            cropReport += f"Fallow land area: {myFallowArea:.2f} hectares\n"
+                            cropReport += f"Fallow land value: {myFallowValue:.2f} MCal/hectare\n"
+                            cropReport += f"Fallow land calories: {myFallowMCals:.2f} MCal\n"
+
+                        # Store the report in the map with the required production as the second value
+                        cropCalcsReportMap[cropGuid] = (cropReport, myKgForPeople)
+                        LaUtils.debug.log(f"Added detailed crop calculation for {crop.name}", "Diet")
+                    else:
+                        LaUtils.debug.log(f"Missing crop or crop parameter for GUID {cropGuid}", "Warning")
+
                 except Exception as e:
-                    LaUtils.debug.log(f"Error creating crop report: {str(e)}", "Error")
-            
+                    LaUtils.debug.log(f"Error creating crop report for GUID {cropGuid}: {str(e)}", "Error")
+                    import traceback
+                    LaUtils.debug.log(f"Detailed error: {traceback.format_exc()}", "Error")
+
             # Populate animal report map with some sample data for each animal
             for animalGuid, paramGuid in self._mAnimals.items():
                 try:
-                    # Make sure to use the string GUID, not a method reference
                     animal = LaUtils.getAnimal(animalGuid)
+                    animalParameter = LaUtils.getAnimalParameter(paramGuid)
+
                     if animal:
-                        # Calculate this animal's share of the total meat calories
-                        animalShare = 1.0 / len(self._mAnimals) if self._mAnimals else 0.0
-                        animalCalories = myTameMeatCounter * animalShare
-                        
-                        # Create a detailed report for this animal
+                        # Following the C++ approach from doCalcsAnimalsFirstDairySeparate
+                        LaUtils.debug.log(f"Processing animal: {animal.name} (GUID: {animalGuid})", "Diet")
+
+                        # Get animal values safely
+                        myMilkKgPerDay = float(str(animal.milkGramsPerDay)) * 0.001  # Convert g to kg
+                        myMilkFoodValue = float(str(animal.milkFoodValue)) * 0.001   # Convert to MCal
+                        myLactationTime = float(str(animal.lactationTime))
+                        myWeaningAge = float(str(animal.weaningAge))
+                        myGestatingTime = float(str(animal.gestationTime))
+                        myEstrousCycle = float(str(animal.estrousCycle))
+                        myBabiesPerBirth = float(str(animal.youngPerBirth))
+                        myDeathRate = float(str(animal.deathRate)) * 0.01  # Convert from percent
+                        myBreedingRatio = float(str(animal.femalesPerMale))
+                        myKillWeight = float(str(animal.killWeight))
+                        myUsablePortionOfAnimal = float(str(animal.usableMeat)) * 0.01  # Convert from percent
+                        myAdultWeight = float(str(animal.adultWeight))
+                        myConceptionEfficiency = float(str(animal.conceptionEfficiency)) * 0.01  # Convert from percent
+                        myMeatValueMCal = float(str(animal.meatFoodValue)) * 0.001  # Convert to MCal
+                        mySexualMaturity = float(str(animal.sexualMaturity))
+                        myBreedingYears = float(str(animal.breedingExpectancy))
+
+                        # Get parameter values
+                        myAnimalContributionToMeatPortion = 0
+                        if animalParameter:
+                            try:
+                                myAnimalContributionToMeatPortion = float(str(animalParameter.percentTameMeat)) * 0.01
+                            except:
+                                myAnimalContributionToMeatPortion = 1.0 / len(self._mAnimals) if len(self._mAnimals) > 0 else 0
+
+                        # Calculate animal targets using the C++ approach
+                        myAnimalMCalTarget = myAnimalContributionToMeatPortion * myMCalsSettlementAnnual * diet_percent * meat_percent
+                        myPotentialDairyPerOffspring = myMilkKgPerDay * myMilkFoodValue * (myLactationTime - myWeaningAge)
+                        myValuePerOffspring = myKillWeight * myUsablePortionOfAnimal * myMeatValueMCal
+
+                        # Get dairy utilization as a decimal (0-1)
+                        myDairyUtilization = float(self._mDairyUtilisation) / 100.0
+                        myActualDairyValueOfOffspring = myPotentialDairyPerOffspring * myDairyUtilization
+
+                        # Calculate birthing events per year, handling edge case for too many days
+                        myBirthingEventsPerYear1 = 365.0 / (myWeaningAge + myGestatingTime + myEstrousCycle + myLactationTime)
+                        myBirthingEventsPerYear = 1.0 if myBirthingEventsPerYear1 < 1.0 else myBirthingEventsPerYear1
+
+                        # Calculate culled mothers value
+                        myCulledMothersValue1 = (myAdultWeight * myMeatValueMCal * myUsablePortionOfAnimal *
+                                                (1.0 / ((mySexualMaturity / 12.0) + myBreedingYears)))
+                        myCulledMothersValue = myCulledMothersValue1 / (myBabiesPerBirth * myBirthingEventsPerYear)
+
+                        # Calculate culled adult males value
+                        myCulledAdultMalesValue = myCulledMothersValue / myBreedingRatio
+
+                        # Calculate final offspring value
+                        myFinalOffspringValue = myValuePerOffspring + myCulledMothersValue + myCulledAdultMalesValue
+
+                        # Calculate number of offspring needed per year
+                        myOffspringNeededPerYear = myAnimalMCalTarget / myFinalOffspringValue
+
+                        # Calculate MCals from meat and utilized from dairy
+                        myMCalsFromTheMeat = myOffspringNeededPerYear * myFinalOffspringValue
+                        myMCalsUtilizedFromDairy = myActualDairyValueOfOffspring * myOffspringNeededPerYear
+
+                        # Add to the diet counters
+                        myTameMeatCounter += myMCalsFromTheMeat
+                        myDairyCounter += myMCalsUtilizedFromDairy
+
+                        # Calculate meat and dairy percentages
+                        myMeatPercent = myMCalsFromTheMeat / myMCalsSettlementAnnual
+                        myDairyPercent = myMCalsUtilizedFromDairy / myMCalsSettlementAnnual
+
+                        # Calculate herd size based on birthing cycles
+                        myOffspringPerMotherPerYear = myBirthingEventsPerYear * myBabiesPerBirth * (1.0 - myDeathRate) * myConceptionEfficiency
+                        myMothersNeededStepOne = myOffspringNeededPerYear / myOffspringPerMotherPerYear
+                        myMalesStepOne = myMothersNeededStepOne * myOffspringPerMotherPerYear * 0.5
+                        myFemalesStepOne = myMalesStepOne
+                        myReplacementMothersPerYear = (myMothersNeededStepOne + (mySexualMaturity / 12.0)) / myBreedingYears
+                        myBreedingMalesRequired = ((myMothersNeededStepOne / myBreedingRatio) + myMothersNeededStepOne) / myBreedingRatio
+                        myAdditionalMothers = ((myReplacementMothersPerYear / myOffspringPerMotherPerYear) * 2.0) + (myBreedingMalesRequired * 2.0)
+
+                        myMalesStepTwo = myAdditionalMothers * myOffspringPerMotherPerYear * 0.5
+                        myFemalesStepTwo = myMalesStepTwo
+                        myTotalMothers = myMothersNeededStepOne + myReplacementMothersPerYear
+                        myTotalMaleOffspring = myMalesStepOne + myMalesStepTwo
+                        myTotalFemaleOffspring = myFemalesStepOne - myFemalesStepTwo
+                        myTotalOffspring = myTotalMaleOffspring * 2.0  # Total offspring
+
+                        # Calculate feed requirements
+                        try:
+                            myFeedForGestating = float(str(animal.gestating)) * 0.001
+                            myFeedForLactating = float(str(animal.lactating)) * 0.001
+                            myFeedForMaintenance = float(str(animal.maintenance)) * 0.001
+                            myFeedForOffspringPerKg = float(str(animal.juvenile)) * 0.001
+                        except Exception as e:
+                            LaUtils.debug.log(f"Error getting feed values for {animal.name}: {e}", "Error")
+                            myFeedForGestating = 0.01
+                            myFeedForLactating = 0.01
+                            myFeedForMaintenance = 0.01
+                            myFeedForOffspringPerKg = 0.01
+
+                        # Calculate MCals needed for each phase
+                        myGestatingMCals = myTotalOffspring * myGestatingTime * myFeedForGestating
+                        myLactatingMCals = myTotalOffspring * myLactationTime * myFeedForLactating
+                        myDaysForMaintenance = max(0, 365 - (myGestatingTime + myLactationTime))
+
+                        myDryMothers = max(0, myTotalMothers - myTotalOffspring)
+                        myDryMothersMCals = myDryMothers * 365.0 * myFeedForMaintenance
+                        myOtherMaintenanceMCals = myDaysForMaintenance * myTotalOffspring * myFeedForMaintenance
+                        myMaintenanceMCals = myDryMothersMCals + myOtherMaintenanceMCals
+                        myAdultMalesMCals = myBreedingMalesRequired * myFeedForMaintenance * 365.0
+                        myOffspringMCals = myTotalOffspring * myKillWeight * myFeedForOffspringPerKg * (365.0 - myWeaningAge)
+
+                        # Calculate total herd feed requirements before grain adjustment (will add grain later)
+                        myAnimalHerdMCalsRequired = myGestatingMCals + myLactatingMCals + myMaintenanceMCals + myAdultMalesMCals + myOffspringMCals
+
+                        # Create the animal report with detailed calculations
                         animalReport = f"Calculation Report for {animal.name}\n"
                         animalReport += f"===========================\n"
-                        animalReport += f"Animal calories: {animalCalories:.2f} MCal\n"
+                        animalReport += f"Animal meat calories: {myMCalsFromTheMeat:.2f} MCal\n"
+                        animalReport += f"Animal dairy calories: {myMCalsUtilizedFromDairy:.2f} MCal\n"
                         animalReport += f"Population: {population_count} people\n"
-                        animalReport += f"Individual needs: {myMCalsIndividualAnnual:.2f} MCal/year\n"
-                        animalReport += f"Settlement needs: {myMCalsSettlementAnnual:.2f} MCal/year\n"
-                        animalReport += f"Animal portion: {animalPercent*100:.2f}% of diet\n"
-                        animalReport += f"Tame meat portion: {tameMeatPercent*100:.2f}% of diet\n"
-                        
-                        # If animal has meat data, calculate herd needed
-                        if hasattr(animal, 'usableMeat') and hasattr(animal, 'killWeight') and hasattr(animal, 'meatFoodValue'):
-                            usableMeatPercent = float(str(animal.usableMeat))
-                            killWeight = float(str(animal.killWeight))
-                            caloriesPerKg = float(str(animal.meatFoodValue))
-                            
-                            # Calculate animals needed
-                            kgMeatPerAnimal = killWeight * (usableMeatPercent / 100.0)
-                            caloriesPerAnimal = kgMeatPerAnimal * caloriesPerKg
-                            animalsNeeded = animalCalories * 1000000 / caloriesPerAnimal  # Convert MCal to cal
-                            
-                            animalReport += f"\nHerd Calculations:\n"
-                            animalReport += f"Usable meat: {usableMeatPercent:.2f}%\n"
-                            animalReport += f"Kill weight: {killWeight:.2f} kg\n"
-                            animalReport += f"Calories per kg: {caloriesPerKg:.2f}\n"
-                            animalReport += f"Meat per animal: {kgMeatPerAnimal:.2f} kg\n"
-                            animalReport += f"Calories per animal: {caloriesPerAnimal:.2f}\n"
-                            animalReport += f"Animals needed: {animalsNeeded:.2f}\n"
-                            
-                        # Store the report in the map using the string GUID
-                        animalCalcsReportMap[animalGuid] = (animalReport, animalCalories)
-                        LaUtils.debug.log(f"Added animal report for {animal.name} (GUID: {animalGuid})", "Diet")
-                        
+                        animalReport += f"Annual diet needs: {myMCalsSettlementAnnual:.2f} MCal\n"
+                        animalReport += f"Meat portion: {myMeatPercent*100:.2f}% of diet\n"
+                        animalReport += f"Dairy portion: {myDairyPercent*100:.2f}% of diet\n"
+
+                        animalReport += f"\nHerd Size Calculations:\n"
+                        animalReport += f"Birthing events per year: {myBirthingEventsPerYear:.2f}\n"
+                        animalReport += f"Offspring per mother per year: {myOffspringPerMotherPerYear:.2f}\n"
+                        animalReport += f"Mothers needed: {myMothersNeededStepOne:.2f}\n"
+                        animalReport += f"Breeding males needed: {myBreedingMalesRequired:.2f}\n"
+                        animalReport += f"Total mothers: {myTotalMothers:.2f}\n"
+                        animalReport += f"Total offspring: {myTotalOffspring:.2f}\n"
+
+                        animalReport += f"\nFeed Requirements:\n"
+                        animalReport += f"Gestating feed: {myGestatingMCals:.2f} MCal\n"
+                        animalReport += f"Lactating feed: {myLactatingMCals:.2f} MCal\n"
+                        animalReport += f"Maintenance feed: {myMaintenanceMCals:.2f} MCal\n"
+                        animalReport += f"Offspring feed: {myOffspringMCals:.2f} MCal\n"
+                        animalReport += f"Total herd requirements: {myAnimalHerdMCalsRequired:.2f} MCal\n"
+
+                        # Store the report in the map using the animal guid
+                        animalCalcsReportMap[animalGuid] = (animalReport, myAnimalHerdMCalsRequired)
+                        LaUtils.debug.log(f"Added detailed animal calculation for {animal.name}", "Diet")
+
                 except Exception as e:
-                    LaUtils.debug.log(f"Error creating animal report: {str(e)}", "Error")
-            
+                    LaUtils.debug.log(f"Error in animal calculation for GUID {animalGuid}: {str(e)}", "Error")
+                    import traceback
+                    LaUtils.debug.log(f"Detailed error: {traceback.format_exc()}", "Error")
+
             # Set all values in the diet labels object
             self._set_diet_labels(
                 myDietLabels,
@@ -1163,15 +1325,15 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                 cropCalcsReportMap,       # Crop calcs report map
                 animalCalcsReportMap      # Animal calcs report map
             )
-            
+
             LaUtils.debug.log(f"Created report maps with {len(cropCalcsReportMap)} crops and {len(animalCalcsReportMap)} animals", "Diet")
             LaUtils.debug.log("doCalcsAnimalsFirstDairySeparate calculation completed successfully", "Diet")
-            
+
         except Exception as e:
             LaUtils.debug.log(f"Error in doCalcsAnimalsFirstDairySeparate: {str(e)}", "Error")
             import traceback
             LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
-        
+
         return myDietLabels
 
     def toHtml(self) -> str:

@@ -1253,7 +1253,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             parameterGuid = comboBox.currentData() if comboBox else None
 
             # Get the crop parameter
-            cropParameter = None 
+            cropParameter = None
             if parameterGuid:
                 cropParametersMap = LaUtils.getAvailableCropParameters()
                 if parameterGuid in cropParametersMap:
@@ -1267,7 +1267,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                 self.textBrowserCropDefinition.setHtml(html_content)
                 LaUtils.debug.log(f"Displayed crop details for {crop.name}", "UI")
 
-            # Handle image display 
+            # Handle image display
             if hasattr(self, 'lblCropPix'):
                 self.lblCropPix.clear()  # Clear existing image
 
@@ -1464,47 +1464,47 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         try:
             # Get the crop GUID
             cropGuid = crop.guid
-            
+
             # Get parameter if available
             parameter_guid = None
             for guid, value in self.mCropsMap.items():
                 if guid == cropGuid:
                     parameter_guid = value[1]
                     break
-            
+
             # Setup model with proper parameters
             self.updateModelFromUI()
-            
+
             # Get selected crops and animals
             selected_crops = {cropGuid: parameter_guid}
             selected_animals = {}
             for guid, value in self.mAnimalsMap.items():
                 if value[0]:  # If checked
                     selected_animals[guid] = value[1]
-            
+
             if not selected_animals:
                 self.textBrowserResultsCrop.setText("No animals selected. Please select at least one animal.")
                 return
-                
+
             # Set model parameters - using direct property assignment instead of setter methods
             if hasattr(self, 'model'):
                 # Directly assign to the model's internal properties
                 self.model._mAnimals = selected_animals
                 self.model._mCrops = selected_crops
-                
+
                 # Calculate diet labels based on settings
                 diet_labels = None
                 if self.model.baseOnPlants:
                     if self.model.includeDairy:
                         diet_labels = self.model.doCalcsPlantsFirstIncludeDairy()
                     else:
-                        diet_labels = self.model.doCalcsPlantsFirstDairySeperate()
+                        diet_labels = self.model.doCalcsPlantsFirstDairySeparate()
                 else:
                     if self.model.includeDairy:
                         diet_labels = self.model.doCalcsAnimalsFirstIncludeDairy()
                     else:
                         diet_labels = self.model.doCalcsAnimalsFirstDairySeparate()
-                
+
                 # Get report from calculations
                 if diet_labels and hasattr(diet_labels, '_cropCalcsReportMap'):
                     report_map = diet_labels._cropCalcsReportMap
@@ -1533,47 +1533,47 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         try:
             # Get the animal GUID
             animalGuid = animal.guid
-            
+
             # Get parameter if available
             parameter_guid = None
             for guid, value in self.mAnimalsMap.items():
                 if guid == animalGuid:
                     parameter_guid = value[1]
                     break
-            
+
             # Setup model with proper parameters
             self.updateModelFromUI()
-            
+
             # Get selected animals and crops
             selected_animals = {animalGuid: parameter_guid}
             selected_crops = {}
             for guid, value in self.mCropsMap.items():
                 if value[0]:  # If checked
                     selected_crops[guid] = value[1]
-            
+
             if not selected_crops:
                 self.textBrowserResultsAnimals.setText("No crops selected. Please select at least one crop.")
                 return
-                
+
             # Set model parameters - using direct property assignment instead of setter methods
             if hasattr(self, 'model'):
                 # Directly assign to the model's internal properties
                 self.model._mAnimals = selected_animals
                 self.model._mCrops = selected_crops
-                
+
                 # Calculate diet labels based on settings
                 diet_labels = None
                 if self.model.baseOnPlants:
                     if self.model.includeDairy:
                         diet_labels = self.model.doCalcsPlantsFirstIncludeDairy()
                     else:
-                        diet_labels = self.model.doCalcsPlantsFirstDairySeperate()
+                        diet_labels = self.model.doCalcsPlantsFirstDairySeparate()
                 else:
                     if self.model.includeDairy:
                         diet_labels = self.model.doCalcsAnimalsFirstIncludeDairy()
                     else:
                         diet_labels = self.model.doCalcsAnimalsFirstDairySeparate()
-                
+
                 # Get report from calculations
                 if diet_labels and hasattr(diet_labels, '_animalCalcsReportMap'):
                     report_map = diet_labels._animalCalcsReportMap
