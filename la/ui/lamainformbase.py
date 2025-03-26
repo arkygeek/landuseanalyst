@@ -1623,21 +1623,27 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         """Handle daily calories changes."""
         if hasattr(self, 'model'):
             LaUtils.debug.log(f"Daily Calories changed to: {value}", "Diet")
-            self.model.dailyCalories = value
+            self.model._mCaloriesPerPersonDaily = value
             self.setDietLabels()
             
     def on_sbDairyUtilisation_valueChanged(self, value):
         """Handle dairy utilisation changes."""
         if hasattr(self, 'model'):
             LaUtils.debug.log(f"Dairy Utilisation changed to: {value}", "Diet")
-            self.model.dairyUtilisation = value
+            # Make sure we don't pass a string with % symbol
+            if isinstance(value, str) and "%" in value:
+                try:
+                    value = float(value.replace("%", "").strip())
+                except (ValueError, TypeError):
+                    value = 100.0
+            self.model._mDairyUtilisation = value
             self.setDietLabels()
             
     def on_sbPopulation_valueChanged(self, value):
         """Handle population changes."""
         if hasattr(self, 'model'):
             LaUtils.debug.log(f"Population changed to: {value}", "Diet")
-            self.model.population = value
+            self.model._mPopulation = value
             self.setDietLabels()
     
     def updateModelFromUI(self):
@@ -1665,7 +1671,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             self.model.limitDairyPercent = self.sbLimitDairyPercent.value()
             
         if hasattr(self, 'sbDailyCalories'):
-            self.model.dailyCalories = self.sbDailyCalories.value()
+            self.model._mCaloriesPerPersonDaily = self.sbDailyCalories.value()
             
         if hasattr(self, 'sbDairyUtilisation'):
             self.model.dairyUtilisation = self.sbDairyUtilisation.value()
