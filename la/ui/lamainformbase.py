@@ -66,7 +66,18 @@ class LaMainFormBase(QDialog, FORM_CLASS):
     def __init__(self, parent=None):
         """Constructor for LaMainFormBase (.ui file)"""
         super(LaMainFormBase, self).__init__(parent)
+        
         self.setupUi(self)
+
+        # Initialize model with default values
+        from la.lib.lamodel import LaModel
+        self.model = LaModel()
+        self.model.dietPercent = self.sliderDiet.value()
+        self.model.meatPercent = self.sliderMeat.value()
+        self.model.percentOfDietThatIsFromCrops = self.sliderCrop.value()
+        
+        # Initialize diet labels with default values
+        self.initializeDietLabels()
 
         # Initialize maps
         self.mAnimalsMap = {}
@@ -129,6 +140,41 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         self.tblCrops.cellClicked.connect(self.cropCellClicked)
         self.tblCrops.cellChanged.connect(self.cropCalcSelectionChanged)
         self.cbDebug.clicked.connect(self.on_cbDebug_clicked)
+
+    def initializeDietLabels(self):
+        """Initialize all diet labels with default values."""
+        try:
+            # Set default values for all diet labels
+            self.labelPortionMeat.setText("0.0%")
+            self.labelPortionCrops.setText("0.0%")
+            self.labelPortionAllDairy.setText("0.0%")
+            self.labelPortionDairy.setText("0.0%")
+            self.labelPortionTameMeat.setText("0.0%")
+            self.labelPortionWildMeat.setText("0.0%")
+            self.labelPortionWildPlants.setText("0.0%")
+            
+            # Set default calorie values
+            self.labelCaloriesCrops.setText("0.0")
+            self.labelCaloriesTameMeat.setText("0.0")
+            self.labelCaloriesDairy.setText("0.0")
+            self.labelCaloriesWildMeat.setText("0.0")
+            self.labelCaloriesWildPlants.setText("0.0")
+            
+            # Set default settlement and individual calorie labels
+            self.labelCaloriesIndividual.setText("0.0")
+            self.labelCaloriesSettlement.setText("0.0")
+            
+            # Set default dairy surplus
+            self.labelDairySurplus.setText("0.0")
+            
+            from la.lib.lautils import LaUtils
+            LaUtils.debug.log("Diet labels initialized with default values", "Diet")
+            
+        except Exception as e:
+            from la.lib.lautils import LaUtils
+            LaUtils.debug.log(f"Error initializing diet labels: {str(e)}", "Error")
+            import traceback
+            LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
 
     # read/load/display help file corresponding to selected item in helpTree
     @QtCore.pyqtSlot(QtWidgets.QTreeWidgetItem, QtWidgets.QTreeWidgetItem)
@@ -216,39 +262,49 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                 self.model.percentOfDietThatIsFromCrops = myWildPlantPercent
 
                 # Force recalculation of diet values
-                if self.model.baseOnPlants:
-                    if self.model.includeDairy:
-                        dietLabels = self.model.doCalcsPlantsFirstIncludeDairy()
+                if hasattr(self.model, 'baseOnPlants') and hasattr(self.model, 'includeDairy'):
+                    if self.model.baseOnPlants:
+                        if self.model.includeDairy:
+                            dietLabels = self.model.doCalcsPlantsFirstIncludeDairy()
+                        else:
+                            dietLabels = self.model.doCalcsPlantsFirstDairySeperate()
                     else:
-                        dietLabels = self.model.doCalcsPlantsFirstDairySeperate()
-                else:
-                    if self.model.includeDairy:
-                        dietLabels = self.model.doCalcsAnimalsFirstIncludeDiary()
-                    else:
-                        dietLabels = self.model.doCalcsAnimalsFirstDairySeparate()
+                        if self.model.includeDairy:
+                            dietLabels = self.model.doCalcsAnimalsFirstIncludeDiary()
+                        else:
+                            dietLabels = self.model.doCalcsAnimalsFirstDairySeparate()
 
-                # Update all labels with calculated values
-                self.labelPortionMeat.setText(f"{dietLabels.animalPortionPct:.1f}%")
-                self.labelPortionCrops.setText(f"{dietLabels.plantsPortionPct:.1f}%")
-                self.labelPortionAllDairy.setText(f"{dietLabels.dairyPortionPct:.1f}%")
-                self.labelPortionDairy.setText(f"{dietLabels.dairyPortionPct:.1f}%")
-                self.labelPortionTameMeat.setText(f"{dietLabels.tameMeatPortionPct:.1f}%")
-                self.labelPortionWildMeat.setText(f"{dietLabels.wildAnimalPortionPct:.1f}%")
-                self.labelPortionWildPlants.setText(f"{dietLabels.wildPlantsPortionPct:.1f}%")
-                
-                # Update calorie labels
-                self.labelCaloriesCrops.setText(f"{dietLabels.cropMCalories:.1f}")
-                self.labelCaloriesTameMeat.setText(f"{dietLabels.animalMCalories:.1f}")
-                self.labelCaloriesDairy.setText(f"{dietLabels.dairyMCalories:.1f}")
-                self.labelCaloriesWildMeat.setText(f"{dietLabels.wildAnimalMCalories:.1f}")
-                self.labelCaloriesWildPlants.setText(f"{dietLabels.wildPlantsMCalories:.1f}")
-                
-                # Update settlement and individual calorie labels
-                self.labelCaloriesIndividual.setText(f"{dietLabels.kiloCaloriesIndividualAnnual:.1f}")
-                self.labelCaloriesSettlement.setText(f"{dietLabels.megaCaloriesSettlementAnnual:.1f}")
-                
-                # Update dairy surplus if available
-                self.labelDairySurplus.setText(f"{dietLabels.dairySurplusMCalories:.1f}")
+                    # Update all labels with calculated values
+                    self.labelPortionMeat.setText(f"{dietLabels.animalPortionPct:.1f}%")
+                    self.labelPortionCrops.setText(f"{dietLabels.plantsPortionPct:.1f}%")
+                    self.labelPortionAllDairy.setText(f"{dietLabels.dairyPortionPct:.1f}%")
+                    self.labelPortionDairy.setText(f"{dietLabels.dairyPortionPct:.1f}%")
+                    self.labelPortionTameMeat.setText(f"{dietLabels.tameMeatPortionPct:.1f}%")
+                    self.labelPortionWildMeat.setText(f"{dietLabels.wildAnimalPortionPct:.1f}%")
+                    self.labelPortionWildPlants.setText(f"{dietLabels.wildPlantsPortionPct:.1f}%")
+                    
+                    # Update calorie labels
+                    self.labelCaloriesCrops.setText(f"{dietLabels.cropMCalories:.1f}")
+                    self.labelCaloriesTameMeat.setText(f"{dietLabels.animalMCalories:.1f}")
+                    self.labelCaloriesDairy.setText(f"{dietLabels.dairyMCalories:.1f}")
+                    self.labelCaloriesWildMeat.setText(f"{dietLabels.wildAnimalMCalories:.1f}")
+                    self.labelCaloriesWildPlants.setText(f"{dietLabels.wildPlantsMCalories:.1f}")
+                    
+                    # Update settlement and individual calorie labels
+                    self.labelCaloriesIndividual.setText(f"{dietLabels.kiloCaloriesIndividualAnnual:.1f}")
+                    self.labelCaloriesSettlement.setText(f"{dietLabels.megaCaloriesSettlementAnnual:.1f}")
+                    
+                    # Update dairy surplus if available
+                    self.labelDairySurplus.setText(f"{dietLabels.dairySurplusMCalories:.1f}")
+                else:
+                    # Fallback to simple percentages if model calculation is unavailable
+                    self.labelPortionMeat.setText(f"{myAnimalPercent:.1f}%")
+                    self.labelPortionCrops.setText(f"{myPlantPercent:.1f}%")
+                    self.labelPortionAllDairy.setText("0.0%")
+                    self.labelPortionDairy.setText("0.0%")
+                    self.labelPortionTameMeat.setText(f"{myAbsoluteTameAnimalPercent:.1f}%")
+                    self.labelPortionWildMeat.setText(f"{myAbsoluteWildAnimalPercent:.1f}%")
+                    self.labelPortionWildPlants.setText(f"{myAbsoluteWildPlantPercent:.1f}%")
 
                 # Log debug information
                 from la.lib.lautils import LaUtils
