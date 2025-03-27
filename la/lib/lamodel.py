@@ -166,6 +166,9 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             self._mAreaUnits = AreaUnits.Hectare
             self._mStatus = Status.MoreThanEnoughToCompletelySatisfy
             self._mIcon = None
+        
+        # Initialize value map for fallow allocation
+        self._mValueMap = {}
         self.logger = logging.getLogger(__name__)
 
     def logMessage(self, theMessage: str):
@@ -1171,6 +1174,12 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                         myBabiesPerBirth = float(str(animal.youngPerBirth))
                         myDeathRate = float(str(animal.deathRate)) * 0.01  # Convert from percent
                         myBreedingRatio = float(str(animal.femalesPerMale))
+
+                        # Check for zero breeding ratio to avoid division by zero
+                        if myBreedingRatio <= 0:
+                            LaUtils.debug.log(f"Warning: Animal {animal.name} has a breeding ratio of {myBreedingRatio}, using default of 1.0", "Warning")
+                            myBreedingRatio = 1.0  # Default to 1 if zero or negative
+
                         myKillWeight = float(str(animal.killWeight))
                         myUsablePortionOfAnimal = float(str(animal.usableMeat)) * 0.01  # Convert from percent
                         myAdultWeight = float(str(animal.adultWeight))
@@ -1228,10 +1237,17 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
                         # Calculate herd size based on birthing cycles
                         myOffspringPerMotherPerYear = myBirthingEventsPerYear * myBabiesPerBirth * (1.0 - myDeathRate) * myConceptionEfficiency
+                        
+                        # Check for zero offspring per mother per year to avoid division by zero
+                        if myOffspringPerMotherPerYear <= 0:
+                            LaUtils.debug.log(f"Warning: Animal {animal.name} has zero or negative offspring per mother per year calculation. Using default value of 1.0", "Warning")
+                            myOffspringPerMotherPerYear = 1.0  # Default to 1 if zero or negative
+                            
                         myMothersNeededStepOne = myOffspringNeededPerYear / myOffspringPerMotherPerYear
                         myMalesStepOne = myMothersNeededStepOne * myOffspringPerMotherPerYear * 0.5
                         myFemalesStepOne = myMalesStepOne
                         myReplacementMothersPerYear = (myMothersNeededStepOne + (mySexualMaturity / 12.0)) / myBreedingYears
+                        # Match original C++ implementation exactly
                         myBreedingMalesRequired = ((myMothersNeededStepOne / myBreedingRatio) + myMothersNeededStepOne) / myBreedingRatio
                         myAdditionalMothers = ((myReplacementMothersPerYear / myOffspringPerMotherPerYear) * 2.0) + (myBreedingMalesRequired * 2.0)
 
@@ -1273,53 +1289,53 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                         # Track grain and fodder requirements for each animal
                         myFoodSourceMap = {}
                         myFodderRequirements = 0.0
-                        
+
                         # If we have animal parameters and animal has fodder requirements
                         if animalParameter and hasattr(animalParameter, 'fodderSourceMap'):
                             try:
                                 # Get the fodder source map from parameters
                                 fodderSourceMap = animalParameter.fodderSourceMap()
-                                
+
                                 # Process each food source in the fodder map
                                 for cropGuid, foodSource in fodderSourceMap.items():
                                     if not hasattr(foodSource, 'grain') or not hasattr(foodSource, 'fodder'):
                                         continue
-                                        
+
                                     # Get grain and fodder values in kg
                                     myGrain = float(str(foodSource.grain())) * 0.001  # Convert g to kg
                                     myFodder = float(str(foodSource.fodder())) * 0.001  # Convert g to kg
                                     myDays = float(str(foodSource.days()))
-                                    
+
                                     # Calculate total grain requirements for the herd
                                     myGrainRequirement = myGrain * myDays * myTotalOffspring
-                                    
+
                                     # Get the crop to calculate food values
                                     crop = LaUtils.getCrop(cropGuid)
                                     if crop:
                                         myFoodValueOfCrop = float(str(crop.cropCalories)) * 0.001  # Convert to MCal/kg
                                         myFoodValueOfFodder = getattr(crop, 'fodderValue', 0) * 0.001  # Convert to MCal/kg
-                                        
+
                                         # Calculate MCal from grain and fodder
                                         myGrainMCal = myGrainRequirement * myFoodValueOfCrop
-                                        myFodderMCal = myFodder * myDays * myFoodValueOfFodder * myTotalOffspring
-                                        
+                                        myFodderMCal = myFodder * myDays * myTotalOffspring * myFoodValueOfFodder
+
                                         # Track these in the food source map
                                         if cropGuid not in myFoodSourceMap:
                                             myFoodSourceMap[cropGuid] = 0.0
-                                            
+
                                         myFoodSourceMap[cropGuid] = myFoodSourceMap.get(cropGuid, 0) + myGrainRequirement
-                                        
+
                                         # Reduce the animal's MCal requirements by the grain calories
                                         myAnimalHerdMCalsRequired = max(0, myAnimalHerdMCalsRequired - myGrainMCal - myFodderMCal)
-                                        
+
                                         animalReport += f"\nFeed Supplementation:\n"
                                         animalReport += f"Grain from {crop.name}: {myGrainRequirement:.2f} kg ({myGrainMCal:.2f} MCal)\n"
                                         animalReport += f"Fodder from {crop.name}: {myFodder * myDays * myTotalOffspring:.2f} kg ({myFodderMCal:.2f} MCal)\n"
                                         animalReport += f"Adjusted herd requirements: {myAnimalHerdMCalsRequired:.2f} MCal\n"
-                                    
+
                             except Exception as e:
                                 LaUtils.debug.log(f"Error calculating fodder requirements for {animal.name}: {e}", "Error")
-                        
+
                         # Update animal report with feed sources
                         if myFoodSourceMap:
                             # Store grain requirements in the report
@@ -1328,12 +1344,12 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                                 crop = LaUtils.getCrop(cropGuid)
                                 cropName = crop.name if crop else f"Crop {cropGuid}"
                                 cropRequirementsStr += f"  - {cropName}: {grainRequired:.2f} kg\n"
-                            
+
                             animalReport += f"\nCrop requirements for feed:\n{cropRequirementsStr}"
-                            
+
                             # Also pass these grain requirements to the crop calculations
                             LaUtils.debug.log(f"Animal {animal.name} requires grain from crops: {myFoodSourceMap}", "Diet")
-                        
+
                         # Store animal mcal requirements in a value map that will be used later for fallow allocation
                         self._mValueMap[animalGuid] = myAnimalHerdMCalsRequired
 
@@ -1404,40 +1420,40 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                     try:
                         fallowRatio = float(str(cropParameter.fallowRatio))
                         fallowValue = float(str(cropParameter.fallowValue))
-                        
+
                         # Get the area from the report pair's second value
                         productionTarget = reportPair[1]
-                        
+
                         # Get the crop to calculate yield
                         crop = LaUtils.getCrop(cropGuid)
                         if crop:
                             myCropYield = float(str(crop.cropYield))
                             if hasattr(crop, 'areaUnits') and str(crop.areaUnits) == "Dunum":
                                 myCropYield = myCropYield * 10.0  # Convert from Dunum to hectare
-                            
+
                             # Calculate area and fallow MCals
                             cropArea = productionTarget / myCropYield
                             fallowArea = cropArea * (fallowRatio / (1.0 + fallowRatio))
                             fallowMCals = fallowArea * fallowValue
-                            
+
                             myMCalsFromFallowCounter += fallowMCals
                             LaUtils.debug.log(f"Fallow from crop {crop.name}: {fallowArea:.2f} ha producing {fallowMCals:.2f} MCal", "Diet")
                     except Exception as e:
                         LaUtils.debug.log(f"Error calculating fallow for crop {cropGuid}: {str(e)}", "Error")
-            
+
             # Now allocate the fallow grazing calories to reduce animal requirements
             if myMCalsFromFallowCounter > 0:
                 LaUtils.debug.log(f"Allocating {myMCalsFromFallowCounter:.2f} MCal from fallow land to animals", "Diet")
-                
+
                 # Create a map of animal requirements for allocation
                 animalMCalRequirementMap = {}
                 for animalGuid in self._mValueMap:
                     if animalGuid in self._mAnimals:  # Only include animals in the current diet
                         animalMCalRequirementMap[animalGuid] = self._mValueMap[animalGuid]
-                
+
                 # Allocate the fallow land to animals
                 self.allocateFallowGrazingLand(myMCalsFromFallowCounter, animalMCalRequirementMap)
-                
+
                 # Update the animal calculation reports with the new values after fallow allocation
                 for animalGuid, requirements in self._mValueMap.items():
                     if animalGuid in animalCalcsReportMap:
@@ -1447,18 +1463,18 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                             animalReport += f"\nFallow Land Grazing:\n"
                             animalReport += f"Feed requirement reduced by {reductionAmount:.2f} MCal from fallow grazing\n"
                             animalReport += f"Final feed requirement: {requirements:.2f} MCal\n"
-                            
+
                             # Update the report with new value
                             animalCalcsReportMap[animalGuid] = (animalReport, requirements)
                             LaUtils.debug.log(f"Updated animal {animalGuid} with fallow grazing allocation", "Diet")
-                
+
                 # Recalculate overall values with the reduced requirements
                 LaUtils.debug.log("Recalculating targets after fallow allocation", "Diet")
-                
+
                 # Update crop area targets to account for animal feed requirements
                 for cropGuid, reportPair in cropCalcsReportMap.items():
                     cropReport, productionTarget = reportPair
-                    
+
                     # Check if any animals need grain from this crop
                     totalGrainNeeded = 0.0
                     for animalGuid, (animalReport, requirements) in animalCalcsReportMap.items():
@@ -1475,21 +1491,21 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                                     totalGrainNeeded += requirements * 0.1  # Simplified - 10% of requirements as grain
                             except:
                                 pass
-                    
+
                     if totalGrainNeeded > 0:
                         # Add the grain needs to the crop target
                         newProductionTarget = productionTarget + totalGrainNeeded
                         cropReport += f"\nGrain for Animal Feed:\n"
                         cropReport += f"Additional production for animal feed: {totalGrainNeeded:.2f} kg\n"
                         cropReport += f"Total production target: {newProductionTarget:.2f} kg\n"
-                        
+
                         # Update the report
                         cropCalcsReportMap[cropGuid] = (cropReport, newProductionTarget)
                         LaUtils.debug.log(f"Updated crop {cropGuid} with animal feed requirements", "Diet")
-            
+
             # Final diet percentages may need adjustment after all calculations
             LaUtils.debug.log("Finalizing diet calculations", "Diet")
-            
+
             # Update the diet labels with final values including all reports
             myDietLabels._cropCalcsReportMap = cropCalcsReportMap
             myDietLabels._animalCalcsReportMap = animalCalcsReportMap
@@ -1524,39 +1540,39 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
     def allocateFallowGrazingLand(self, theFallowMCalsAvailable: float, theAnimalMCalRequirementMap: Dict[str, float]) -> None:
         """Allocate fallow grazing land to animals based on their priority.
-        
+
         Args:
             theFallowMCalsAvailable: MCals available from fallow land
             theAnimalMCalRequirementMap: Map of animal GUIDs to MCal requirements
         """
         from la.lib.lautils import LaUtils
         from la.lib.la import Priority
-        
+
         LaUtils.debug.log(f"Starting fallow grazing land allocation with {theFallowMCalsAvailable:.2f} MCal available", "Diet")
-        
+
         if theFallowMCalsAvailable <= 0 or not theAnimalMCalRequirementMap:
             LaUtils.debug.log("No fallow land or no animals to allocate to", "Diet")
             return
-        
+
         # Create maps to hold animals by priority
         highPriorityMap = {}
         mediumPriorityMap = {}
         lowPriorityMap = {}
-        
+
         # Group animals by fallow access priority
         for animalGuid, mCalRequirement in theAnimalMCalRequirementMap.items():
             if mCalRequirement <= 0:
                 continue
-                
+
             # Get animal parameter
             paramGuid = self._mAnimals.get(animalGuid, "")
             if not paramGuid:
                 continue
-                
+
             animalParameter = LaUtils.getAnimalParameter(paramGuid)
             if not animalParameter:
                 continue
-                
+
             # Get fallow usage priority
             try:
                 fallowUsage = getattr(animalParameter, 'fallowUsage', Priority.None_)
@@ -1568,47 +1584,47 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                     lowPriorityMap[animalGuid] = mCalRequirement
             except Exception as e:
                 LaUtils.debug.log(f"Error getting fallow usage for animal {animalGuid}: {str(e)}", "Error")
-        
+
         # Track remaining MCals to distribute
         remainingMCals = theFallowMCalsAvailable
-        
+
         # Allocate to high priority animals first
         if highPriorityMap:
             LaUtils.debug.log(f"Allocating to {len(highPriorityMap)} high priority animals", "Diet")
             remainingMCals = self.doTheFallowAllocation(Priority.High, remainingMCals, highPriorityMap)
-        
+
         # Then to medium priority animals
         if mediumPriorityMap and remainingMCals > 0:
             LaUtils.debug.log(f"Allocating to {len(mediumPriorityMap)} medium priority animals", "Diet")
             remainingMCals = self.doTheFallowAllocation(Priority.Medium, remainingMCals, mediumPriorityMap)
-        
+
         # Finally to low priority animals
         if lowPriorityMap and remainingMCals > 0:
             LaUtils.debug.log(f"Allocating to {len(lowPriorityMap)} low priority animals", "Diet")
             remainingMCals = self.doTheFallowAllocation(Priority.Low, remainingMCals, lowPriorityMap)
-        
+
         LaUtils.debug.log(f"Fallow allocation complete. {remainingMCals:.2f} MCal remains unallocated.", "Diet")
-    
-    def doTheFallowAllocation(self, thePriority: Priority, theAvailableFallowValue: float, 
+
+    def doTheFallowAllocation(self, thePriority: Priority, theAvailableFallowValue: float,
                             theAnimalMCalRequirementMap: Dict[str, float]) -> float:
         """Allocate fallow land to animals of a specific priority.
-        
+
         Args:
             thePriority: Priority level being processed
             theAvailableFallowValue: MCals available from fallow land
             theAnimalMCalRequirementMap: Map of animal GUIDs to MCal requirements
-        
+
         Returns:
             float: Remaining MCals after allocation
         """
         from la.lib.lautils import LaUtils
-        
+
         if theAvailableFallowValue <= 0 or not theAnimalMCalRequirementMap:
             return theAvailableFallowValue
-        
+
         # Calculate total MCals needed by this priority group
         totalNeeded = sum(theAnimalMCalRequirementMap.values())
-        
+
         # If we have more than enough fallow land
         if theAvailableFallowValue >= totalNeeded:
             # Each animal gets 100% of what it needs
@@ -1618,10 +1634,10 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                 if animalGuid in self._mValueMap:
                     self._mValueMap[animalGuid] = max(0, self._mValueMap[animalGuid] - mCalRequirement)
                     LaUtils.debug.log(f"Animal {animalGuid} requirement reduced by {mCalRequirement:.2f} MCal", "Diet")
-            
+
             # Return remaining MCals
             return theAvailableFallowValue - totalNeeded
-        
+
         # Otherwise, distribute proportionally
         else:
             LaUtils.debug.log(f"Not enough fallow land for all {thePriority} priority animals. Distributing {theAvailableFallowValue:.2f} MCal proportionally.", "Diet")
@@ -1629,11 +1645,11 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                 # Calculate proportion
                 proportion = mCalRequirement / totalNeeded
                 allocatedMCals = theAvailableFallowValue * proportion
-                
+
                 # Adjust the animal's MCal requirement
                 if animalGuid in self._mValueMap:
                     self._mValueMap[animalGuid] = max(0, self._mValueMap[animalGuid] - allocatedMCals)
                     LaUtils.debug.log(f"Animal {animalGuid} requirement reduced by {allocatedMCals:.2f} MCal", "Diet")
-            
+
             # All MCals have been allocated
             return 0.0
