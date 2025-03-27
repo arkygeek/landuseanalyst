@@ -612,7 +612,7 @@ class LaMainForm(LaMainFormBase):
             self.model.includeDairy = self.cboxIncludeDairy.isChecked()
             self.model.limitDairy = self.cboxLimitDairy.isChecked()
             self.model.limitDairyPercent = self.sbLimitDairyPercent.value()
-            self.model.dailyCalories = self.sbDailyCalories.value()
+            self.model.caloriesPerPersonDaily = self.sbDailyCalories.value()
             
             # Configure model with selected animals and crops
             self.model._mAnimals = self.getSelectedAnimals()
