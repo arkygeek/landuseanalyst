@@ -20,80 +20,79 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
     LaModel class represents the main model for the Landuse Analyst plugin.
 
     Attributes:
-        nameChanged (pyqtSignal): Signal emitted when the name changes.
-        populationChanged (pyqtSignal): Signal emitted when the population changes.
-        periodChanged (pyqtSignal): Signal emitted when the period changes.
-        projectionChanged (pyqtSignal): Signal emitted when the projection changes.
-        precisionChanged (pyqtSignal): Signal emitted when the precision changes.
-        dietPercentChanged (pyqtSignal): Signal emitted when the diet percent changes.
-        percentOfDietThatIsFromCropsChanged (pyqtSignal): Signal emitted when the percent of diet from crops changes.
-        meatPercentChanged (pyqtSignal): Signal emitted when the meat percent changes.
-        caloriesPerPersonDailyChanged (pyqtSignal): Signal emitted when the calories per person daily changes.
-        dairyUtilisationChanged (pyqtSignal): Signal emitted when the dairy utilisation changes.
-        baseOnPlantsChanged (pyqtSignal): Signal emitted when the base on plants changes.
-        includeDairyChanged (pyqtSignal): Signal emitted when the include dairy changes.
-        limitDairyChanged (pyqtSignal): Signal emitted when the limit dairy changes.
-        limitDairyPercentChanged (pyqtSignal): Signal emitted when the limit dairy percent changes.
-        fallowStatusChanged (pyqtSignal): Signal emitted when the fallow status changes.
-        fallowRatioChanged (pyqtSignal): Signal emitted when the fallow ratio changes.
-        eastingChanged (pyqtSignal): Signal emitted when the easting changes.
-        northingChanged (pyqtSignal): Signal emitted when the northing changes.
-        euclideanDistanceChanged (pyqtSignal): Signal emitted when the euclidean distance changes.
-        walkingTimeChanged (pyqtSignal): Signal emitted when the walking time changes.
-        pathDistanceChanged (pyqtSignal): Signal emitted when the path distance changes.
-        commonLandValueChanged (pyqtSignal): Signal emitted when the common land value changes.
-        commonLandAreaUnitsChanged (pyqtSignal): Signal emitted when the common land area units changes.
-        herdSizeChanged (pyqtSignal): Signal emitted when the herd size changes.
         animalsChanged (pyqtSignal): Signal emitted when the animals change.
+        areaUnitsChanged (pyqtSignal): Signal emitted when the area units change.
+        baseOnPlantsChanged (pyqtSignal): Signal emitted when the base on plants changes.
+        caloriesPerPersonDailyChanged (pyqtSignal): Signal emitted when the calories per person daily changes.
+        commonLandAreaUnitsChanged (pyqtSignal): Signal emitted when the common land area units changes.
+        commonLandValueChanged (pyqtSignal): Signal emitted when the common land value changes.
         cropsChanged (pyqtSignal): Signal emitted when the crops change.
-        dietsChanged (pyqtSignal): Signal emitted when the diets change.
+        dairyUtilisationChanged (pyqtSignal): Signal emitted when the dairy utilisation changes.
+        descriptionChanged (pyqtSignal): Signal emitted when the description changes.
         dietLabelsChanged (pyqtSignal): Signal emitted when the diet labels change.
+        dietPercentChanged (pyqtSignal): Signal emitted when the diet percent changes.
+        dietsChanged (pyqtSignal): Signal emitted when the diets change.
+        eastingChanged (pyqtSignal): Signal emitted when the easting changes.
+        euclideanDistanceChanged (pyqtSignal): Signal emitted when the euclidean distance changes.
+        fallowRatioChanged (pyqtSignal): Signal emitted when the fallow ratio changes.
+        fallowStatusChanged (pyqtSignal): Signal emitted when the fallow status changes.
+        guidChanged (pyqtSignal): Signal emitted when the GUID changes.
+        herdSizeChanged (pyqtSignal): Signal emitted when the herd size changes.
+        iconChanged (pyqtSignal): Signal emitted when the icon changes.
+        includeDairyChanged (pyqtSignal): Signal emitted when the include dairy changes.
         landBeingGrazedChanged (pyqtSignal): Signal emitted when the land being grazed changes.
         landFoundChanged (pyqtSignal): Signal emitted when the land found changes.
+        limitDairyChanged (pyqtSignal): Signal emitted when the limit dairy changes.
+        limitDairyPercentChanged (pyqtSignal): Signal emitted when the limit dairy percent changes.
+        meatPercentChanged (pyqtSignal): Signal emitted when the meat percent changes.
+        nameChanged (pyqtSignal): Signal emitted when the name changes.
+        northingChanged (pyqtSignal): Signal emitted when the northing changes.
+        pathDistanceChanged (pyqtSignal): Signal emitted when the path distance changes.
+        percentOfDietThatIsFromCropsChanged (pyqtSignal): Signal emitted when the percent of diet from crops changes.
+        periodChanged (pyqtSignal): Signal emitted when the period changes.
+        populationChanged (pyqtSignal): Signal emitted when the population changes.
+        precisionChanged (pyqtSignal): Signal emitted when the precision changes.
         priorityChanged (pyqtSignal): Signal emitted when the priority changes.
-        descriptionChanged (pyqtSignal): Signal emitted when the description changes.
-        areaUnitsChanged (pyqtSignal): Signal emitted when the area units change.
+        projectionChanged (pyqtSignal): Signal emitted when the projection changes.
         statusChanged (pyqtSignal): Signal emitted when the status changes.
-        guidChanged (pyqtSignal): Signal emitted when the GUID changes.
-        iconChanged (pyqtSignal): Signal emitted when the icon changes.
+        walkingTimeChanged (pyqtSignal): Signal emitted when the walking time changes.
     """
-
-    nameChanged = pyqtSignal()
-    populationChanged = pyqtSignal()
-    periodChanged = pyqtSignal()
-    projectionChanged = pyqtSignal()
-    precisionChanged = pyqtSignal()
-    dietPercentChanged = pyqtSignal()
-    percentOfDietThatIsFromCropsChanged = pyqtSignal()
-    meatPercentChanged = pyqtSignal()
-    caloriesPerPersonDailyChanged = pyqtSignal()
-    dairyUtilisationChanged = pyqtSignal()
-    baseOnPlantsChanged = pyqtSignal()
-    includeDairyChanged = pyqtSignal()
-    limitDairyChanged = pyqtSignal()
-    limitDairyPercentChanged = pyqtSignal()
-    fallowStatusChanged = pyqtSignal()
-    fallowRatioChanged = pyqtSignal()
-    eastingChanged = pyqtSignal()
-    northingChanged = pyqtSignal()
-    euclideanDistanceChanged = pyqtSignal()
-    walkingTimeChanged = pyqtSignal()
-    pathDistanceChanged = pyqtSignal()
-    commonLandValueChanged = pyqtSignal()
-    commonLandAreaUnitsChanged = pyqtSignal()
-    herdSizeChanged = pyqtSignal()
     animalsChanged = pyqtSignal()
+    areaUnitsChanged = pyqtSignal()
+    baseOnPlantsChanged = pyqtSignal()
+    caloriesPerPersonDailyChanged = pyqtSignal()
+    commonLandAreaUnitsChanged = pyqtSignal()
+    commonLandValueChanged = pyqtSignal()
     cropsChanged = pyqtSignal()
-    dietsChanged = pyqtSignal()
+    dairyUtilisationChanged = pyqtSignal()
+    descriptionChanged = pyqtSignal()
     dietLabelsChanged = pyqtSignal()
+    dietPercentChanged = pyqtSignal()
+    dietsChanged = pyqtSignal()
+    eastingChanged = pyqtSignal()
+    euclideanDistanceChanged = pyqtSignal()
+    fallowRatioChanged = pyqtSignal()
+    fallowStatusChanged = pyqtSignal()
+    guidChanged = pyqtSignal()
+    herdSizeChanged = pyqtSignal()
+    iconChanged = pyqtSignal()
+    includeDairyChanged = pyqtSignal()
     landBeingGrazedChanged = pyqtSignal()
     landFoundChanged = pyqtSignal()
+    limitDairyChanged = pyqtSignal()
+    limitDairyPercentChanged = pyqtSignal()
+    meatPercentChanged = pyqtSignal()
+    nameChanged = pyqtSignal()
+    northingChanged = pyqtSignal()
+    pathDistanceChanged = pyqtSignal()
+    percentOfDietThatIsFromCropsChanged = pyqtSignal()
+    periodChanged = pyqtSignal()
+    populationChanged = pyqtSignal()
+    precisionChanged = pyqtSignal()
     priorityChanged = pyqtSignal()
-    descriptionChanged = pyqtSignal()
-    areaUnitsChanged = pyqtSignal()
+    projectionChanged = pyqtSignal()
     statusChanged = pyqtSignal()
-    guidChanged = pyqtSignal()
-    iconChanged = pyqtSignal()
+    walkingTimeChanged = pyqtSignal()
 
     def __init__(self, parent=None, theModel=None):
         """

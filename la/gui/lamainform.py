@@ -89,414 +89,8 @@ class LaMainForm(LaMainFormBase):
         MESSAGE_BUS.debugMessaged.connect(self.on_debug_message)
         LaUtils.debug.log("Application initialized", "MainForm")
 
-    def logToAllChannels(self, message):
-        """
-        Unified logging method that sends messages to all log channels.
-        This is the central logging method that all other logging methods should use.
-
-        Args:
-            message: The message to log
-        """
-        # Force console output for debugging
-        print(f"LOG: {message}")
-
-        # Add the message to the logs tab
-        if hasattr(self, 'tbLogs'):
-            self.tbLogs.append(message)
-            self.tbLogs.ensureCursorVisible()
-            # Force UI update immediately
-            self.tbLogs.repaint()
-            QtWidgets.QApplication.processEvents()
-
-        # Add the message to the report tab
-        if hasattr(self, 'tbReport'):
-            self.tbReport.append(message)
-            # Force UI update
-            self.tbReport.repaint()
-            QtWidgets.QApplication.processEvents()
-
-        # Log to debug dialog if exists and visible
-        if hasattr(self, '_debug_dialog') and self._debug_dialog is not None and self._debug_dialog.isVisible():
-            self._debug_dialog.add_debug_message(message)
-
-    def refresh(self):
-        """Refresh all displays in the form."""
-        # Call base class loadAnimals()
-        super().loadAnimals()
-        if hasattr(self, 'loadCrops'):
-            self.loadCrops()
-
-        # Update diet info
-        if hasattr(self, 'updateDietLabels'):
-            self.updateDietLabels()
-
-        # Force UI update
-        QtWidgets.QApplication.processEvents()
-
-    def setup(self):
-        """Perform additional setup beyond what's in the base class."""
-        # Update the application title
-        self.setWindowTitle("Land Use Analyst")
-
-        # Initialize animals map if not already done
-        if not hasattr(self, 'mAnimalsMap'):
-            self.mAnimalsMap = {}
-
-        # Load images or set additional properties not handled in the base class
-        self.loadImages()
-        # Set up any additional connections not in the base class
-        self.connect_additional_signals()
-        # Initialize the diet pie chart if it exists
-        if hasattr(self, 'updateDietLabels'):
-            self.updateDietLabels()
-        # Set default values for the population fields
-        self.sbPopulation.setValue(100)
-        # Refresh all displays
-        self.refresh()
-
-        # Connect item changed signal for the animals table
-        self.tblAnimals.itemChanged.connect(self.on_tblAnimals_itemChanged)
-
-    def loadImages(self):
-        """Load images for the application."""
-        try:
-            # Load application logo or other static images
-            logoPath = ":/la_icon.png"
-            if os.path.exists(logoPath):
-                self.lblLogo.setPixmap(QPixmap(logoPath))
-                self.lblLogo.setScaledContents(True)
-        except Exception as e:
-            LaUtils.debug.log(f"Error loading images: {str(e)}", "Error")
-
-    def connect_additional_signals(self):
-        """Connect additional signals not handled in the base class."""
-        # Connect the population spin box to update calculations
-        if hasattr(self, 'sbPopulation'):
-            self.sbPopulation.valueChanged.connect(self.updateCalculations)
-
-        # Connect the area units combo box to update calculations
-        if hasattr(self, 'cbAreaUnits'):
-            self.cbAreaUnits.currentIndexChanged.connect(self.updateCalculations)
-
-        # Connect the debug checkbox to enable/disable debug logging
-        if hasattr(self, 'cbDebug'):
-            self.cbDebug.clicked.connect(self.on_cbDebug_clicked)
-
-        # Override the base class's on_cbDebug_clicked to use our version
-        if hasattr(LaMainFormBase, 'on_cbDebug_clicked'):
-            self.on_cbDebug_clicked = self._override_on_cbDebug_clicked
-
-        # Connect the calculation list item clicks to the handler methods
-        if hasattr(self, 'listWidgetCalculationsAnimal'):
-            self.listWidgetCalculationsAnimal.currentItemChanged.connect(self.animalCalcClicked)
-
-        if hasattr(self, 'listWidgetCalculationsCrop'):
-            self.listWidgetCalculationsCrop.currentItemChanged.connect(self.cropCalcClicked)
-
-        LaUtils.debug.log("Additional signals connected", "Setup")
-
-    def setDietLabels(self):
-        """Update all diet-related labels based on current values"""
-        try:
-            diet_percent = self.sliderDiet.value()
-            meat_percent = self.sliderMeat.value()
-            daily_calories = self.sbDailyCalories.value()
-            include_dairy = self.cboxIncludeDairy.isChecked()
-            limit_dairy = self.cboxLimitDairy.isChecked()
-
-            # Create diet labels object and populate with current values
-            diet_labels = LaDietLabels()
-            diet_labels.plantsPortionPct = 100 - diet_percent
-            diet_labels.animalPortionPct = diet_percent
-            diet_labels.tameMeatPortionPct = meat_percent
-            diet_labels.wildAnimalPortionPct = 100 - meat_percent
-            diet_labels.kiloCaloriesIndividualAnnual = daily_calories * 365
-
-            if include_dairy:
-                # Call appropriate calculation method based on dairy settings
-                if limit_dairy:
-                    diet_labels = self.model.doCalcsAnimalsFirstDairySeparate()
-                else:
-                    diet_labels = self.model.doCalcsAnimalsFirstIncludeDairy()
-            else:
-                # Call non-dairy calculation methods
-                if diet_percent >= 50:  # Plants first
-                    diet_labels = self.model.doCalcsPlantsFirstDairySeparate()
-                else:  # Animals first
-                    diet_labels = self.model.doCalcsAnimalsFirstDairySeparate()
-
-            # Connect signals and update labels
-            self._connect_diet_label_signals(diet_labels)
-
-            LaUtils.debug.log("Diet labels updated successfully", "Diet")
-        except Exception as e:
-            LaUtils.debug.log(f"Error updating diet labels: {str(e)}", "Error")
-            import traceback
-            LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
-
-    def updateCalculations(self):
-        """Update all calculations based on current settings and selections."""
-        try:
-            # Get the current population
-            population = self.sbPopulation.value() if hasattr(self, 'sbPopulation') else 100
-
-            # Update text fields with calculated values
-            LaUtils.debug.log(f"Updating calculations for population: {population}", "Calculation")
-
-            # Call setDietLabels to update percentages
-            self.setDietLabels()
-
-            # Calculate and display total land needed
-            self.calculateTotalLandNeeded()
-
-        except Exception as e:
-            LaUtils.debug.log(f"Error updating calculations: {str(e)}", "Error")
-            import traceback
-            LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
-
-    def calculateTotalLandNeeded(self):
-        """Calculate and display the total land needed."""
-        try:
-            # Get inputs for calculation
-            population = self.sbPopulation.value() if hasattr(self, 'sbPopulation') else 100
-
-            # Package diet settings
-            diet_settings = {
-                'plantAnimalRatio': self.sliderDiet.value(),
-                'wildTameAnimalRatio': self.sliderMeat.value(),
-                'wildTamePlantRatio': self.sliderCrop.value()
-            }
-
-            # Delegate calculation to controller
-            land_needed = self.controller.calculateTotalLandNeeded(
-                population=population,
-                diet_settings=diet_settings,
-                enabled_animals=self.getEnabledAnimals(),
-                enabled_crops=self.getEnabledCrops() if hasattr(self, 'getEnabledCrops') else []
-            )
-
-            # Display the result (UI code stays in form)
-            if hasattr(self, 'lblTotalLandNeeded'):
-                self.lblTotalLandNeeded.setText(f"{land_needed:.2f}")
-
-            LaUtils.debug.log(f"Total land needed calculated: {land_needed:.2f} units", "Calculation")
-
-        except Exception as e:
-            LaUtils.debug.log(f"Error calculating land needed: {str(e)}", "Error")
-
-    def readSettings(self):
-        """Read application settings."""
-        settings = QSettings()
-
-        # Window geometry
-        if settings.contains("landuse_analyst/geometry"):
-            self.restoreGeometry(settings.value("landuse_analyst/geometry"))
-
-        # Debug mode
-        debugMode = settings.value("landuse_analyst/debug", False, type=bool)
-        self.cbDebug.setChecked(debugMode)
-        self.tbReport.setVisible(debugMode)
-
-        # Also set up the Logs tab based on debug mode
-        if hasattr(self, 'MainTabs') and hasattr(self, 'log_tab'):
-            tabIndex = self.MainTabs.indexOf(self.log_tab)
-            if (tabIndex >= 0):
-                self.MainTabs.setTabEnabled(tabIndex, debugMode)
-            self.log_tab.setVisible(debugMode)
-
-        # Load most recently used values
-        if hasattr(self, 'sbPopulation'):
-            self.sbPopulation.setValue(settings.value("landuse_analyst/population", 100, type=int))
-
-    def writeSettings(self):
-        """Save application settings."""
-        settings = QSettings()
-
-        # Window geometry
-        settings.setValue("landuse_analyst/geometry", self.saveGeometry())
-
-        # Debug mode
-        settings.setValue("landuse_analyst/debug", self.cbDebug.isChecked())
-
-        # Save most recently used values
-        if hasattr(self, 'sbPopulation'):
-            settings.setValue("landuse_analyst/population", self.sbPopulation.value())
-
-    def closeEvent(self, event):
-        """Handle window close event - save settings before closing."""
-        self.writeSettings()
-        super(LaMainForm, self).closeEvent(event)
-
-    def _override_on_cbDebug_clicked(self):
-        """Override base class method to prevent double-handling"""
-        pass  # Let our on_cbDebug_clicked handle it
-
-    def _on_debug_dialog_closed(self):
-        """Handle dialog closure cleanup"""
-        if hasattr(self, '_debug_dialog') and self._debug_dialog is not None:
-            try:
-                # Check if connection exists before disconnecting
-                try:
-                    MESSAGE_BUS.debugMessaged.disconnect(self._debug_dialog.add_debug_message)
-                except (TypeError, RuntimeError):
-                    # Signal was not connected or other disconnect error
-                    pass
-                self._debug_dialog.deleteLater()
-            except:
-                pass
-            finally:
-                self._debug_dialog = None
-        self.cbDebug.setChecked(False)
-
-    def _ensure_debug_dialog_visible(self):
-        """Helper method to ensure debug dialog remains visible after initial showing."""
-        if hasattr(self, '_debug_dialog') and self._debug_dialog is not None and self.cbDebug.isChecked():
-            try:
-                if not self._debug_dialog.isVisible():
-                    self._debug_dialog.show()
-                self._debug_dialog.raise_()
-                self._debug_dialog.activateWindow()
-            except:
-                pass  # Silently ignore any errors in this helper method
-
-    def on_debug_message(self, message: str):
-        """Handle debug messages from the message bus."""
-        # Simply delegate to our unified logging method
-        self.logToAllChannels(message)
-
-    def logMessage(self, message: str):
-        """
-        Add a message to the log.
-        This method is maintained for backward compatibility.
-
-        Args:
-            message: The message to add
-        """
-        # Delegate to our unified logging method
-        self.logToAllChannels(message)
-
-    def connect_diet_label_signals(self):
-        """This method is deprecated - use _connect_diet_label_signals() instead"""
-        # Delegate to the main connection method for compatibility with any existing calls
-        dietLabels = self.diet_labels if hasattr(self, 'diet_labels') else None
-        if dietLabels:
-            self._connect_diet_label_signals(dietLabels)
-        else:
-            LaUtils.debug.log("Warning: deprecated connect_diet_label_signals called with no diet_labels available", "Warning")
-        
-    # def updateDietLabels(self):
-    #     """Update all diet labels from current model state.
-    #     This is a UI-focused method that gets values from the current calculation results.
-    #     """
-    #     # Use the setDietLabels method which centralizes the calculation logic
-    #     self.setDietLabels()
-
-        # The UI labels will be updated automatically through signal connections
-
-    def _connect_diet_label_signals(self, dietLabels):
-        """
-        Connect signals from diet labels to appropriate slots.
-        This method is called from base class to update the UI when diet values change.
-        """
-        try:
-            # Connect signals if they exist
-            if hasattr(dietLabels, 'dairyMCaloriesChanged'):
-                dietLabels.dairyMCaloriesChanged.connect(self.update_dairy_calories)
-            if hasattr(dietLabels, 'cropMCaloriesChanged'):
-                dietLabels.cropMCaloriesChanged.connect(self.update_crop_calories)
-            if hasattr(dietLabels, 'animalMCaloriesChanged'):
-                dietLabels.animalMCaloriesChanged.connect(self.update_animal_calories)
-            if hasattr(dietLabels, 'wildAnimalMCaloriesChanged'):
-                dietLabels.wildAnimalMCaloriesChanged.connect(self.update_wild_animal_calories)
-            if hasattr(dietLabels, 'wildPlantsMCaloriesChanged'):
-                dietLabels.wildPlantsMCaloriesChanged.connect(self.update_wild_plants_calories)
-
-            # Portion percentage signals
-            if hasattr(dietLabels, 'dairyPortionPctChanged'):
-                dietLabels.dairyPortionPctChanged.connect(self.update_dairy_portion)
-            if hasattr(dietLabels, 'tameMeatPortionPctChanged'):
-                dietLabels.tameMeatPortionPctChanged.connect(self.update_tame_meat_portion)
-            if hasattr(dietLabels, 'cropsPortionPctChanged'):
-                dietLabels.cropsPortionPctChanged.connect(self.update_crops_portion)
-            if hasattr(dietLabels, 'wildAnimalPortionPctChanged'):
-                dietLabels.wildAnimalPortionPctChanged.connect(self.update_wild_animal_portion)
-            if hasattr(dietLabels, 'wildPlantsPortionPctChanged'):
-                dietLabels.wildPlantsPortionPctChanged.connect(self.update_wild_plants_portion)
-            if hasattr(dietLabels, 'plantsPortionPctChanged'):
-                dietLabels.plantsPortionPctChanged.connect(self.update_plants_portion)
-            if hasattr(dietLabels, 'animalPortionPctChanged'):
-                dietLabels.animalPortionPctChanged.connect(self.update_animal_portion)
-
-            # Other calorie values
-            if hasattr(dietLabels, 'kiloCaloriesIndividualAnnualChanged'):
-                dietLabels.kiloCaloriesIndividualAnnualChanged.connect(self.update_calories_individual)
-            if hasattr(dietLabels, 'megaCaloriesSettlementAnnualChanged'):
-                dietLabels.megaCaloriesSettlementAnnualChanged.connect(self.update_calories_settlement)
-            if hasattr(dietLabels, 'dairySurplusMCaloriesChanged'):
-                dietLabels.dairySurplusMCaloriesChanged.connect(self.update_dairy_surplus)
-
-            LaUtils.debug.log("Diet label signals connected successfully", "Diet")
-        except Exception as e:
-            LaUtils.debug.log(f"Error connecting diet label signals: {str(e)}", "Error")
-            import traceback
-            LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
-
-    def connectSignalsSlots(self):
-        """Connect signals to slots for UI interaction."""
-        # Diet slider connections
-        self.sliderDiet.valueChanged.connect(self.on_sliderDiet_valueChanged)
-        self.sliderMeat.valueChanged.connect(self.on_sliderMeat_valueChanged)
-        self.sbDailyCalories.valueChanged.connect(self.on_sbDailyCalories_valueChanged)
-        self.cboxIncludeDairy.clicked.connect(self.on_cboxIncludeDairy_clicked)
-        self.cboxLimitDairy.clicked.connect(self.on_cboxLimitDairy_clicked)
-        self.sbLimitDairyPercent.valueChanged.connect(self.on_sbLimitDairyPercent_valueChanged)
-        self.cboxBaseOnPlants.clicked.connect(self.on_cboxBaseOnPlants_clicked)
-        self.sbDairyUtilisation.valueChanged.connect(self.on_sbDairyUtilisation_valueChanged)
-
-    @pyqtSlot(int)
-    def on_sliderDiet_valueChanged(self, value):
-        """Handle diet slider value changes."""
-        self.labelMeatPercent.setText(str(value))
-        self.labelCropPercent.setText(str(100 - value))
-        self.setDietLabels()
-
-    @pyqtSlot(int)
-    def on_sliderMeat_valueChanged(self, value):
-        """Handle meat ratio slider value changes."""
-        self.labelMeatWildPercent.setText(str(100 - value))
-        self.labelMeatTamePercent.setText(str(value))
-        self.setDietLabels()
-
-    @pyqtSlot(int)
-    def on_sbDailyCalories_valueChanged(self, value):
-        """Handle daily calories spinbox value changes."""
-        self.setDietLabels()
-
-    @pyqtSlot(bool)
-    def on_cboxIncludeDairy_clicked(self, checked):
-        """Handle include dairy checkbox changes."""
-        self.setDietLabels()
-
-    @pyqtSlot(bool)
-    def on_cboxLimitDairy_clicked(self, checked):
-        """Handle limit dairy checkbox changes."""
-        self.setDietLabels()
-
-    @pyqtSlot(int)
-    def on_sbLimitDairyPercent_valueChanged(self, value):
-        """Handle dairy limit percentage spinbox value changes."""
-        self.setDietLabels()
-
-    @pyqtSlot(bool)
-    def on_cboxBaseOnPlants_clicked(self, checked):
-        """Handle base on plants checkbox changes."""
-        self.setDietLabels()
-
-    @pyqtSlot(int)
-    def on_sbDairyUtilisation_valueChanged(self, value):
-        """Handle dairy utilisation spinbox value changes."""
-        self.setDietLabels()
-
+    # --- alphabetically ordered methods ---
+    
     @pyqtSlot(QtWidgets.QListWidgetItem, QtWidgets.QListWidgetItem)
     def animalCalcClicked(self, current_item, previous_item):
         """
@@ -551,6 +145,77 @@ class LaMainForm(LaMainFormBase):
         except Exception as e:
             LaUtils.debug.log(f"Error displaying animal calculations: {str(e)}", "Error")
 
+    def calculateTotalLandNeeded(self):
+        """Calculate and display the total land needed."""
+        try:
+            # Get inputs for calculation
+            population = self.sbPopulation.value() if hasattr(self, 'sbPopulation') else 100
+
+            # Package diet settings
+            diet_settings = {
+                'plantAnimalRatio': self.sliderDiet.value(),
+                'wildTameAnimalRatio': self.sliderMeat.value(),
+                'wildTamePlantRatio': self.sliderCrop.value()
+            }
+
+            # Delegate calculation to controller
+            land_needed = self.controller.calculateTotalLandNeeded(
+                population=population,
+                diet_settings=diet_settings,
+                enabled_animals=self.getEnabledAnimals(),
+                enabled_crops=self.getEnabledCrops() if hasattr(self, 'getEnabledCrops') else []
+            )
+
+            # Display the result (UI code stays in form)
+            if hasattr(self, 'lblTotalLandNeeded'):
+                self.lblTotalLandNeeded.setText(f"{land_needed:.2f}")
+
+            LaUtils.debug.log(f"Total land needed calculated: {land_needed:.2f} units", "Calculation")
+
+        except Exception as e:
+            LaUtils.debug.log(f"Error calculating land needed: {str(e)}", "Error")
+
+    def closeEvent(self, event):
+        """Handle window close event - save settings before closing."""
+        self.writeSettings()
+        super(LaMainForm, self).closeEvent(event)
+
+    def connect_additional_signals(self):
+        """Connect additional signals not handled in the base class."""
+        # Connect the population spin box to update calculations
+        if hasattr(self, 'sbPopulation'):
+            self.sbPopulation.valueChanged.connect(self.updateCalculations)
+
+        # Connect the area units combo box to update calculations
+        if hasattr(self, 'cbAreaUnits'):
+            self.cbAreaUnits.currentIndexChanged.connect(self.updateCalculations)
+
+        # Connect the debug checkbox to enable/disable debug logging
+        if hasattr(self, 'cbDebug'):
+            self.cbDebug.clicked.connect(self.on_cbDebug_clicked)
+
+        # Override the base class's on_cbDebug_clicked to use our version
+        if hasattr(LaMainFormBase, 'on_cbDebug_clicked'):
+            self.on_cbDebug_clicked = self._override_on_cbDebug_clicked
+
+        # Connect the calculation list item clicks to the handler methods
+        if hasattr(self, 'listWidgetCalculationsAnimal'):
+            self.listWidgetCalculationsAnimal.currentItemChanged.connect(self.animalCalcClicked)
+
+        if hasattr(self, 'listWidgetCalculationsCrop'):
+            self.listWidgetCalculationsCrop.currentItemChanged.connect(self.cropCalcClicked)
+
+        LaUtils.debug.log("Additional signals connected", "Setup")
+
+    def connect_diet_label_signals(self):
+        """This method is deprecated - use _connect_diet_label_signals() instead"""
+        # Delegate to the main connection method for compatibility with any existing calls
+        dietLabels = self.diet_labels if hasattr(self, 'diet_labels') else None
+        if dietLabels:
+            self._connect_diet_label_signals(dietLabels)
+        else:
+            LaUtils.debug.log("Warning: deprecated connect_diet_label_signals called with no diet_labels available", "Warning")
+        
     @pyqtSlot(QtWidgets.QListWidgetItem, QtWidgets.QListWidgetItem)
     def cropCalcClicked(self, current_item, previous_item):
         """
@@ -640,54 +305,6 @@ class LaMainForm(LaMainFormBase):
             if hasattr(self, 'textBrowserResultsCrop'):
                 self.textBrowserResultsCrop.setText(f"Error calculating: {str(e)}")
 
-    def _configureModelFromUi(self):
-        """Configure the model with current UI values using proper property setters."""
-        if hasattr(self, 'model'):
-            # Basic model settings
-            self.model.name = self.lineEditSiteName.text() if hasattr(self, 'lineEditSiteName') else "Default Site"
-            self.model.population = self.sbPopulation.value() if hasattr(self, 'sbPopulation') else 100
-            self.model.period = self.lineEditPeriod.text() if hasattr(self, 'lineEditPeriod') else "Default Period"
-
-            # Coordinates and spatial settings
-            if hasattr(self, 'lineEditEasting'):
-                self.model.easting = int(self.lineEditEasting.text()) if self.lineEditEasting.text() else 0
-            if hasattr(self, 'lineEditNorthing'):
-                self.model.northing = int(self.lineEditNorthing.text()) if self.lineEditNorthing.text() else 0
-
-            # Analysis method settings
-            if hasattr(self, 'radioButtonEuclidean'):
-                self.model.euclideanDistance = self.radioButtonEuclidean.isChecked()
-            if hasattr(self, 'radioButtonWalkingTime'):
-                self.model.walkingTime = self.radioButtonWalkingTime.isChecked()
-            if hasattr(self, 'radioButtonPathDistance'):
-                self.model.pathDistance = self.radioButtonPathDistance.isChecked()
-
-            # Diet settings
-            if hasattr(self, 'sliderDiet'):
-                self.model.dietPercent = self.sliderDiet.value()
-            if hasattr(self, 'sliderMeat'):
-                self.model.meatPercent = self.sliderMeat.value()
-            if hasattr(self, 'sbDailyCalories'):
-                self.model.caloriesPerPersonDaily = self.sbDailyCalories.value()
-
-            # Dairy settings
-            if hasattr(self, 'cboxBaseOnPlants'):
-                self.model.baseOnPlants = self.cboxBaseOnPlants.isChecked()
-            if hasattr(self, 'cboxIncludeDairy'):
-                self.model.includeDairy = self.cboxIncludeDairy.isChecked()
-            if hasattr(self, 'cboxLimitDairy'):
-                self.model.limitDairy = self.cboxLimitDairy.isChecked()
-            if hasattr(self, 'sbLimitDairyPercent'):
-                self.model.limitDairyPercent = self.sbLimitDairyPercent.value()
-            if hasattr(self, 'sbDairyUtilisation'):
-                self.model.dairyUtilisation = self.sbDairyUtilisation.value()
-
-            # Get animals and crops
-            if hasattr(self, 'getSelectedAnimals'):
-                self.model.animals = self.getSelectedAnimals()
-            if hasattr(self, 'getSelectedCrops'):
-                self.model.crops = self.getSelectedCrops()
-
     def getSelectedAnimals(self) -> Dict[str, str]:
         """
         Get the dictionary of selected animals (animal_guid: parameter_guid).
@@ -732,7 +349,288 @@ class LaMainForm(LaMainFormBase):
 
         return selected_crops
 
-    def _getPropertyValue(self, obj, prop_name):
+    def loadImages(self):
+        """Load images for the application."""
+        try:
+            # Load application logo or other static images
+            logoPath = ":/la_icon.png"
+            if os.path.exists(logoPath):
+                self.lblLogo.setPixmap(QPixmap(logoPath))
+                self.lblLogo.setScaledContents(True)
+        except Exception as e:
+            LaUtils.debug.log(f"Error loading images: {str(e)}", "Error")
+
+    def logMessage(self, message: str):
+        """
+        Add a message to the log.
+        This method is maintained for backward compatibility.
+
+        Args:
+            message: The message to add
+        """
+        # Delegate to our unified logging method
+        self.logToAllChannels(message)
+
+    def logToAllChannels(self, message):
+        """
+        Unified logging method that sends messages to all log channels.
+        This is the central logging method that all other logging methods should use.
+
+        Args:
+            message: The message to log
+        """
+        # Force console output for debugging
+        print(f"LOG: {message}")
+
+        # Add the message to the logs tab
+        if hasattr(self, 'tbLogs'):
+            self.tbLogs.append(message)
+            self.tbLogs.ensureCursorVisible()
+            # Force UI update immediately
+            self.tbLogs.repaint()
+            QtWidgets.QApplication.processEvents()
+
+        # Add the message to the report tab
+        if hasattr(self, 'tbReport'):
+            self.tbReport.append(message)
+            # Force UI update
+            self.tbReport.repaint()
+            QtWidgets.QApplication.processEvents()
+
+        # Log to debug dialog if exists and visible
+        if hasattr(self, '_debug_dialog') and self._debug_dialog is not None and self._debug_dialog.isVisible():
+            self._debug_dialog.add_debug_message(message)
+
+    def on_debug_message(self, message: str):
+        """Handle debug messages from the message bus."""
+        # Simply delegate to our unified logging method
+        self.logToAllChannels(message)
+
+    @pyqtSlot(bool)
+    def on_cboxBaseOnPlants_clicked(self, checked):
+        """Handle base on plants checkbox changes."""
+        self.setDietLabels()
+
+    @pyqtSlot(bool)
+    def on_cboxIncludeDairy_clicked(self, checked):
+        """Handle include dairy checkbox changes."""
+        self.setDietLabels()
+
+    @pyqtSlot(bool)
+    def on_cboxLimitDairy_clicked(self, checked):
+        """Handle limit dairy checkbox changes."""
+        self.setDietLabels()
+
+    @pyqtSlot(int)
+    def on_sbDailyCalories_valueChanged(self, value):
+        """Handle daily calories spinbox value changes."""
+        self.setDietLabels()
+
+    @pyqtSlot(int)
+    def on_sbDairyUtilisation_valueChanged(self, value):
+        """Handle dairy utilisation spinbox value changes."""
+        self.setDietLabels()
+
+    @pyqtSlot(int)
+    def on_sbLimitDairyPercent_valueChanged(self, value):
+        """Handle dairy limit percentage spinbox value changes."""
+        self.setDietLabels()
+
+    @pyqtSlot(int)
+    def on_sliderDiet_valueChanged(self, value):
+        """Handle diet slider value changes."""
+        self.labelMeatPercent.setText(str(value))
+        self.labelCropPercent.setText(str(100 - value))
+        self.setDietLabels()
+
+    @pyqtSlot(int)
+    def on_sliderMeat_valueChanged(self, value):
+        """Handle meat ratio slider value changes."""
+        self.labelMeatWildPercent.setText(str(100 - value))
+        self.labelMeatTamePercent.setText(str(value))
+        self.setDietLabels()
+
+    def readSettings(self):
+        """Read application settings."""
+        settings = QSettings()
+
+        # Window geometry
+        if settings.contains("landuse_analyst/geometry"):
+            self.restoreGeometry(settings.value("landuse_analyst/geometry"))
+
+        # Debug mode
+        debugMode = settings.value("landuse_analyst/debug", False, type=bool)
+        self.cbDebug.setChecked(debugMode)
+        self.tbReport.setVisible(debugMode)
+
+        # Also set up the Logs tab based on debug mode
+        if hasattr(self, 'MainTabs') and hasattr(self, 'log_tab'):
+            tabIndex = self.MainTabs.indexOf(self.log_tab)
+            if (tabIndex >= 0):
+                self.MainTabs.setTabEnabled(tabIndex, debugMode)
+            self.log_tab.setVisible(debugMode)
+
+        # Load most recently used values
+        if hasattr(self, 'sbPopulation'):
+            self.sbPopulation.setValue(settings.value("landuse_analyst/population", 100, type=int))
+
+    def refresh(self):
+        """Refresh all displays in the form."""
+        # Update all UI elements
+        self.loadAnimals()
+        self.loadCrops()
+        self.updateCalculations()
+        self.setDietLabels()
+
+    def setDietLabels(self):
+        """Update all diet-related labels based on current values"""
+        try:
+            if not hasattr(self, 'model'):
+                return
+
+            # Configure model from current UI state
+            self._configureModelFromUi()
+
+            # Calculate diet labels based on settings
+            if self.cboxBaseOnPlants.isChecked():
+                if self.cboxIncludeDairy.isChecked():
+                    self.diet_labels = self.model.doCalcsPlantsFirstIncludeDairy()
+                else:
+                    self.diet_labels = self.model.doCalcsPlantsFirstDairySeparate()
+            else:
+                if self.cboxIncludeDairy.isChecked():
+                    self.diet_labels = self.model.doCalcsAnimalsFirstIncludeDairy()
+                else:
+                    self.diet_labels = self.model.doCalcsAnimalsFirstDairySeparate()
+
+            # Connect signals from the new diet labels
+            self._connect_diet_label_signals(self.diet_labels)
+
+            # Update calculations
+            self.updateCalculations()
+
+        except Exception as e:
+            from la.lib.lautils import LaUtils
+            LaUtils.debug.log(f"Error updating diet labels: {str(e)}", "Error")
+            import traceback
+            LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
+
+    def setup(self):
+        """Perform additional setup beyond what's in the base class."""
+        try:
+            # Initialize the main controller
+            self.controller = LaMainController(self)
+
+            # Set up initial UI state
+            if hasattr(self, 'cbDebug'):
+                self.cbDebug.setChecked(False)
+
+            # Initialize model properties
+            self.mAnimalsMap = {}
+            self.mCropsMap = {}
+            
+            # Initial GUI setup
+            self.loadImages()
+            self.refresh()
+            self.readSettings()
+
+        except Exception as e:
+            LaUtils.debug.log(f"Error in setup: {str(e)}", "Error")
+
+    def updateCalculations(self):
+        """Update all calculations based on current settings and selections."""
+        # Recalculate total land needed
+        self.calculateTotalLandNeeded()
+
+        # Update animal and crop calculations if items are selected
+        if hasattr(self, 'listWidgetCalculationsAnimal') and self.listWidgetCalculationsAnimal.currentItem():
+            self.animalCalcClicked(self.listWidgetCalculationsAnimal.currentItem(), None)
+        
+        if hasattr(self, 'listWidgetCalculationsCrop') and self.listWidgetCalculationsCrop.currentItem():
+            self.cropCalcClicked(self.listWidgetCalculationsCrop.currentItem(), None)
+
+    def writeSettings(self):
+        """Save application settings."""
+        settings = QSettings()
+        
+        # Save window geometry
+        settings.setValue("landuse_analyst/geometry", self.saveGeometry())
+        
+        # Save debug mode state
+        settings.setValue("landuse_analyst/debug", self.cbDebug.isChecked())
+        
+        # Save most recently used values
+        if hasattr(self, 'sbPopulation'):
+            settings.setValue("landuse_analyst/population", self.sbPopulation.value())
+
+    # --- private methods ---
+
+    def _connect_diet_label_signals(self, dietLabels):
+        """Connect diet label signals to UI update slots."""
+        try:
+            if not dietLabels:
+                LaUtils.debug.log("No diet labels to connect signals to", "Warning")
+                return
+
+            # Portion percentage signals
+            if hasattr(dietLabels, 'dairyPortionPctChanged'):
+                dietLabels.dairyPortionPctChanged.connect(self.update_dairy_portion)
+            if hasattr(dietLabels, 'tameMeatPortionPctChanged'):
+                dietLabels.tameMeatPortionPctChanged.connect(self.update_tame_meat_portion)
+            if hasattr(dietLabels, 'cropsPortionPctChanged'):
+                dietLabels.cropsPortionPctChanged.connect(self.update_crops_portion)
+            if hasattr(dietLabels, 'wildAnimalPortionPctChanged'):
+                dietLabels.wildAnimalPortionPctChanged.connect(self.update_wild_animal_portion)
+            if hasattr(dietLabels, 'wildPlantsPortionPctChanged'):
+                dietLabels.wildPlantsPortionPctChanged.connect(self.update_wild_plants_portion)
+
+            # Total portion signals
+            if hasattr(dietLabels, 'plantsPortionPctChanged'):
+                dietLabels.plantsPortionPctChanged.connect(self.update_plants_portion)
+            if hasattr(dietLabels, 'animalPortionPctChanged'):
+                dietLabels.animalPortionPctChanged.connect(self.update_animal_portion)
+
+            # Other calorie values
+            if hasattr(dietLabels, 'kiloCaloriesIndividualAnnualChanged'):
+                dietLabels.kiloCaloriesIndividualAnnualChanged.connect(self.update_calories_individual)
+            if hasattr(dietLabels, 'megaCaloriesSettlementAnnualChanged'):
+                dietLabels.megaCaloriesSettlementAnnualChanged.connect(self.update_calories_settlement)
+            if hasattr(dietLabels, 'dairySurplusMCaloriesChanged'):
+                dietLabels.dairySurplusMCaloriesChanged.connect(self.update_dairy_surplus)
+
+            LaUtils.debug.log("Diet label signals connected successfully", "Diet")
+        except Exception as e:
+            LaUtils.debug.log(f"Error connecting diet label signals: {str(e)}", "Error")
+            import traceback
+            LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
+
+    def _configureModelFromUi(self):
+        """Configure the model with current UI values."""
+        if hasattr(self, 'model'):
+            # Configure basic settings
+            self.model.baseOnPlants = self.cboxBaseOnPlants.isChecked()
+            self.model.includeDairy = self.cboxIncludeDairy.isChecked()
+            self.model.limitDairy = self.cboxLimitDairy.isChecked()
+            self.model.limitDairyPercent = self.sbLimitDairyPercent.value()
+            self.model.dailyCalories = self.sbDailyCalories.value()
+            
+            # Configure model with selected animals and crops
+            self.model._mAnimals = self.getSelectedAnimals()
+            self.model._mCrops = self.getSelectedCrops()
+
+            # Configure dairy utilisation if available
+            if hasattr(self, 'sbDairyUtilisation'):
+                self.model.dairyUtilisation = self.sbDairyUtilisation.value()
+
+    def _ensure_debug_dialog_visible(self):
+        """Ensure the debug dialog is created and visible."""
+        if not self._debug_dialog:
+            from la.gui.ladebugdialog import LaDebugDialog
+            self._debug_dialog = LaDebugDialog(parent=self)
+            MESSAGE_BUS.debugMessaged.connect(self._debug_dialog.add_debug_message)
+        self._debug_dialog.show()
+
+    def _getPropertyValue(self, obj, prop_name: str):
         """Helper method to safely get PyQt property values"""
         if hasattr(obj, prop_name):
             prop = getattr(obj, prop_name)
@@ -741,29 +639,13 @@ class LaMainForm(LaMainFormBase):
             return prop
         return None
 
-    def updateDietLabels(self, dairy_portion_pct: float = 0.0, tame_meat_portion_pct: float = 0.0, crops_portion_pct: float = 0.0):
-        """Update diet-related labels with new values"""
-        try:
-            if hasattr(self, 'labelPortionDairy'):
-                self.labelPortionDairy.setText(f"{dairy_portion_pct:.1f}%")
-            if hasattr(self, 'labelPortionTameMeat'):
-                self.labelPortionTameMeat.setText(f"{tame_meat_portion_pct:.1f}%")
-            if hasattr(self, 'labelPortionCrops'):
-                self.labelPortionCrops.setText(f"{crops_portion_pct:.1f}%")
+    def _on_debug_dialog_closed(self):
+        """Handle debug dialog close event."""
+        self._debug_dialog = None
 
-            # Calculate and update wild portions
-            wild_meat_portion = 100.0 - tame_meat_portion_pct if tame_meat_portion_pct <= 100 else 0.0
-            if hasattr(self, 'labelPortionWildMeat'):
-                self.labelPortionWildMeat.setText(f"{wild_meat_portion:.1f}%")
-
-            # Update totals
-            total_animal = dairy_portion_pct + tame_meat_portion_pct + wild_meat_portion
-            total_plant = crops_portion_pct + (100.0 - crops_portion_pct)  # Including wild plants
-
-            if hasattr(self, 'labelTotalAnimal'):
-                self.labelTotalAnimal.setText(f"{total_animal:.1f}%")
-            if hasattr(self, 'labelTotalPlant'):
-                self.labelTotalPlant.setText(f"{total_plant:.1f}%")
-
-        except Exception as e:
-            LaUtils.debug.log(f"Error updating diet labels: {str(e)}", "Error")
+    def _override_on_cbDebug_clicked(self):
+        """Override for debug checkbox click handler."""
+        if self.cbDebug.isChecked():
+            self._ensure_debug_dialog_visible()
+        elif self._debug_dialog:
+            self._debug_dialog.close()

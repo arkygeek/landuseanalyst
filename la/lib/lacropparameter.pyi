@@ -1,5 +1,5 @@
 from typing import Optional, Union
-from qgis.PyQt.QtCore import QObject, pyqtSignal
+from PyQt5.QtCore import QObject, pyqtSignal
 from la.lib.laserialisable import LaSerialisable
 from la.lib.laguid import LaGuid
 from la.lib.la import AreaUnits as LaAreaUnits
