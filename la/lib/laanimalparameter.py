@@ -24,6 +24,8 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
     rasterNameChanged = pyqtSignal(str)
     areaUnitsChanged = pyqtSignal(object)  # Added signal for area units
     energyTypeChanged = pyqtSignal(object)  # Added signal for energy type
+    valueCommonGrazingLandChanged = pyqtSignal(int)  # Added signal for common grazing land value
+    valueSpecificGrazingLandChanged = pyqtSignal(int)  # Added signal for specific grazing land value
 
     _instances = []
 
@@ -48,6 +50,9 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self._rasterName = ""
             self._areaUnits = AreaUnits.Dunum
             self._energyType = EnergyType.KCalories
+            # No default values for grazing land productivity, matching C++ implementation
+            self._mValueCommonGrazingLand = 0
+            self._mValueSpecificGrazingLand = 0
         else:
             # Copy properties with safe type conversion
             self._mGuid = str(getattr(theAnimalParameter, '_mGuid', ''))
@@ -59,10 +64,12 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self._mUseSpecificGrazingLand = bool(getattr(theAnimalParameter, '_mUseSpecificGrazingLand', False))
             self._mFodderUse = float(getattr(theAnimalParameter, '_mFodderUse', 0.0))
             self._mFoodSourceMap = dict(getattr(theAnimalParameter, '_mFoodSourceMap', {}))
-            self._fallowUsage = getattr(theAnimalParameter, '_fallowUsage', Priority.None_)
+            self._fallowUsage = getattr(theAnimalParameter, '_fallowUsage', Priority)
             self._rasterName = str(getattr(theAnimalParameter, '_rasterName', ''))
-            self._areaUnits = getattr(theAnimalParameter, '_areaUnits', AreaUnits.Dunum)
-            self._energyType = getattr(theAnimalParameter, '_energyType', EnergyType.KCalories)
+            self._areaUnits = getattr(theAnimalParameter, '_areaUnits', AreaUnits)
+            self._energyType = getattr(theAnimalParameter, '_energyType', EnergyType)
+            self._mValueCommonGrazingLand = int(getattr(theAnimalParameter, '_mValueCommonGrazingLand', 0))
+            self._mValueSpecificGrazingLand = int(getattr(theAnimalParameter, '_mValueSpecificGrazingLand', 0))
 
     def __eq__(self, other):
         if not isinstance(other, LaAnimalParameter):
@@ -265,6 +272,33 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
         if isinstance(value, EnergyType) and self._energyType != value:
             self._energyType = value
             self.energyTypeChanged.emit(value)  # Emit signal when value changes
+
+    @pyqtProperty(int, notify=valueCommonGrazingLandChanged)
+    def valueCommonGrazingLand(self) -> int: # type: ignore
+        """Get the value of common grazing land in calories per hectare."""
+        return int(self._mValueCommonGrazingLand)
+
+    @valueCommonGrazingLand.setter
+    def valueCommonGrazingLand(self, value: int) -> None:
+        """Set the value of common grazing land in calories per hectare."""
+        value = int(value)
+        if self._mValueCommonGrazingLand != value:
+            self._mValueCommonGrazingLand = value
+            self.valueCommonGrazingLandChanged.emit(value)
+
+    @pyqtProperty(int, notify=valueSpecificGrazingLandChanged)
+    def valueSpecificGrazingLand(self) -> int: # type: ignore
+        """Get the value of specific grazing land in calories per hectare."""
+        return int(self._mValueSpecificGrazingLand)
+
+    @valueSpecificGrazingLand.setter
+    def valueSpecificGrazingLand(self, value: int) -> None:
+        """Set the value of specific grazing land in calories per hectare."""
+        value = int(value)
+        if self._mValueSpecificGrazingLand != value:
+            self._mValueSpecificGrazingLand = value
+            self.valueSpecificGrazingLandChanged.emit(value)
+
 
     def fromXml(self, theXml: str) -> bool:
         from la.lib.lautils import LaUtils

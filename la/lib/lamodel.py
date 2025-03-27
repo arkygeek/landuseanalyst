@@ -719,10 +719,8 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         try:
             # Log the ID of the object we're updating to help with debugging
             from la.lib.lautils import LaUtils
-            LaUtils.debug.log(f"Setting values for diet labels object with ID: {id(theDietLabels)}", "Diet")
-            LaUtils.debug.log(f"Previous values - Dairy: {theDietLabels.dairyMCalories:.2f}, Crops: {theDietLabels.cropMCalories:.2f}", "Diet")
-
-            # Set values directly to attributes first
+            
+            # Set values directly to attributes first - using naming from C++ version
             theDietLabels._dairyMCalories = theOverallDairyMCals
             theDietLabels._cropMCalories = theOverallCropsMCals
             theDietLabels._animalMCalories = theOverallMeatMCals
@@ -743,18 +741,10 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
             # Log new values before emitting signals
             LaUtils.debug.log(f"New values set - Dairy: {theOverallDairyMCals:.2f}, Crops: {theOverallCropsMCals:.2f}", "Diet")
-            LaUtils.debug.log(f"New percentages - Animal: {theOverallMeatPercent*100:.2f}%, Plants: {theOverallPlantPercent*100:.2f}%", "Diet")
-
-            # Now emit all the signals after setting the attributes directly
-            LaUtils.debug.log("Emitting diet value change signals", "Diet")
 
             try:
                 theDietLabels.dairyMCaloriesChanged.emit(theOverallDairyMCals)
-                LaUtils.debug.log(f"Emitted dairyMCaloriesChanged with value {theOverallDairyMCals:.2f}", "Diet")
-
                 theDietLabels.cropMCaloriesChanged.emit(theOverallCropsMCals)
-                LaUtils.debug.log(f"Emitted cropMCaloriesChanged with value {theOverallCropsMCals:.2f}", "Diet")
-
                 theDietLabels.animalMCaloriesChanged.emit(theOverallMeatMCals)
                 theDietLabels.wildAnimalMCaloriesChanged.emit(theOverallWildMeatMCals)
                 theDietLabels.wildPlantsMCaloriesChanged.emit(theOverallWildPlantsMCals)
@@ -770,87 +760,88 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                 theDietLabels.dairySurplusMCaloriesChanged.emit(theOverallDairySurplusMCals)
                 theDietLabels.cropCalcsReportMapChanged.emit(theCropCalcsReportMap)
                 theDietLabels.animalCalcsReportMapChanged.emit(theAnimalCalcsReportMap)
-
-                LaUtils.debug.log("All diet label signals emitted successfully", "Diet")
             except Exception as e:
                 LaUtils.debug.log(f"Error emitting diet label signals: {str(e)}", "Error")
-                import traceback
-                LaUtils.debug.log(f"Signal error details: {traceback.format_exc()}", "Error")
+                
         except Exception as e:
             from la.lib.lautils import LaUtils
             LaUtils.debug.log(f"Error updating diet labels in model: {str(e)}", "Error")
-            import traceback
-            LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
 
     def doCalcsPlantsFirstIncludeDairy(self) -> LaDietLabels:
         """Calculate diet values when plants are prioritized and dairy is included with meat."""
         from la.lib.lautils import LaUtils
         myDietLabels = LaDietLabels()
+        LaAnimal = None  # Matches C++ declaration but not used in this simplified version
 
-        # Log calculation start
-        LaUtils.debug.log("Starting doCalcsPlantsFirstIncludeDairy calculation", "Diet")
-
-        # Get property values from internal attributes
+        # Get property values from internal attributes (following C++ variable naming)
         try:
-            calories_daily = float(self._mCaloriesPerPersonDaily)
-            population_count = float(self._mPopulation)
-            meat_percent = float(self._mMeatPercent) / 100.0  # Convert to decimal
-            diet_percent = float(self._mDietPercent) / 100.0  # Convert to decimal
-            dairy_util = float(self._mDairyUtilisation) / 100.0  # Convert to decimal
+            # Base values - matching C++ variable names
+            myMCalsIndividualAnnual = self._mCaloriesPerPersonDaily * 365.0 / 1000.0  # Convert to annual MCals
+            myMCalsSettlementAnnual = myMCalsIndividualAnnual * self._mPopulation
+            myDairyMCalorieCounter = 0.0
+            myTameMeatMCalorieCounter = 0.0
+            myWildMeatMCalorieCounter = 0.0
+            mySelectedAnimalsMap = self._mAnimals  # Similar to C++ QMap<QString,QString>
+            
+            # C++ style variable declarations (c1, c8, etc.)
+            c1 = 1.0 - (self._mMeatPercent / 100.0)  # Decimal form of meat percent
+            c8 = self._mDairyUtilisation / 100.0     # Decimal form of dairy utilization
+            c10 = self._mPopulation
+            c11 = self._mCaloriesPerPersonDaily
+            c14 = c10 * c11 * 365.0 / 1000.0         # Settlement annual MCal
+            c15 = self._mDietPercent / 100.0         # Decimal form of diet percent
+            
+            # Calculate MCals for different food sources
+            # In this simplified version, we'll estimate values that would normally 
+            # come from detailed animal and crop calculations
+            
+            # Initialize counters (simplified calculation)
+            myDairyMCalorieCounter = myMCalsSettlementAnnual * c15 * 0.05  # 5% of animal diet
+            myTameMeatMCalorieCounter = myMCalsSettlementAnnual * c15 * (self._mMeatPercent / 100.0)  # Tame meat percent
+            myWildMeatMCalorieCounter = myMCalsSettlementAnnual * c15 * c1  # Wild meat percent
+            myCropMCalories = myMCalsSettlementAnnual * (1.0 - c15) * (self._mPercentOfDietThatIsFromCrops / 100.0)  # Crop percent
+            myWildPlantsMCalories = myMCalsSettlementAnnual * (1.0 - c15) * (1.0 - self._mPercentOfDietThatIsFromCrops / 100.0)  # Wild plant percent
 
-            LaUtils.debug.log(f"Input parameters - calories_daily: {calories_daily}, population: {population_count}", "Diet")
-            LaUtils.debug.log(f"Diet parameters - meat_percent: {meat_percent*100}%, diet_percent: {diet_percent*100}%", "Diet")
-
-            # Calculate base values - these are the most important for updating UI
-            myMCalsIndividualAnnual = calories_daily * 365.0 / 1000.0  # Convert to annual MCals
-            myMCalsSettlementAnnual = myMCalsIndividualAnnual * population_count
-
-            LaUtils.debug.log(f"Calculated annual MCals - individual: {myMCalsIndividualAnnual}, settlement: {myMCalsSettlementAnnual}", "Diet")
-
-            # Initialize counters for simplicity (real calculation would be more complex)
-            myDairyMCalorieCounter = myMCalsSettlementAnnual * diet_percent * 0.05  # 5% of animal diet
-            myTameMeatMCalorieCounter = myMCalsSettlementAnnual * diet_percent * 0.05  # 5% of animal diet
-            myWildMeatMCalorieCounter = myMCalsSettlementAnnual * diet_percent * 0.9  # 90% of animal diet
-            myCropMCalories = myMCalsSettlementAnnual * (1.0 - diet_percent) * 0.1  # 10% of plant diet
-            myWildPlantsMCalories = myMCalsSettlementAnnual * (1.0 - diet_percent) * 0.9  # 90% of plant diet
-
-            # Calculate percentages
+            # Calculate percentages (as in C++ implementation)
             totalMCalories = myMCalsSettlementAnnual
-
-            dairyPercent = myDairyMCalorieCounter / totalMCalories
             tameMeatPercent = myTameMeatMCalorieCounter / totalMCalories
             wildMeatPercent = myWildMeatMCalorieCounter / totalMCalories
             cropPercent = myCropMCalories / totalMCalories
             wildPlantPercent = myWildPlantsMCalories / totalMCalories
+            dairyPercent = myDairyMCalorieCounter / totalMCalories
 
-            animalPercent = diet_percent
-            plantPercent = 1.0 - diet_percent
+            # Calculate overall percentages
+            myOverallMeatPercent = tameMeatPercent + wildMeatPercent  # Combined meat percent
+            myOverallPlantPercent = cropPercent + wildPlantPercent    # Combined plant percent
+            
+            # Report maps for crops and animals (empty in simplified version)
+            myCropCalcsReportMap = {}
+            myAnimalCalcsReportMap = {}
 
-            # Set calculated values on diet labels
-            myDietLabels._dairyMCalories = myDairyMCalorieCounter
-            myDietLabels._animalMCalories = myTameMeatMCalorieCounter
-            myDietLabels._wildAnimalMCalories = myWildMeatMCalorieCounter
-            myDietLabels._cropMCalories = myCropMCalories
-            myDietLabels._wildPlantsMCalories = myWildPlantsMCalories
-
-            myDietLabels._dairyPortionPct = dairyPercent * 100.0
-            myDietLabels._tameMeatPortionPct = tameMeatPercent * 100.0
-            myDietLabels._wildAnimalPortionPct = wildMeatPercent * 100.0
-            myDietLabels._cropsPortionPct = cropPercent * 100.0
-            myDietLabels._wildPlantsPortionPct = wildPlantPercent * 100.0
-
-            myDietLabels._animalPortionPct = animalPercent * 100.0
-            myDietLabels._plantsPortionPct = plantPercent * 100.0
-
-            myDietLabels._kiloCaloriesIndividualAnnual = myMCalsIndividualAnnual * 1000.0  # Convert back to kCal
-            myDietLabels._megaCaloriesSettlementAnnual = myMCalsSettlementAnnual
-
-            # No dairy surplus in this simple calculation
-            myDietLabels._dairySurplusMCalories = 0.0
+            # Set all values in the diet labels object
+            self._set_diet_labels(
+                myDietLabels,
+                myDairyMCalorieCounter,      # Overall dairy MCals
+                myCropMCalories,              # Overall crop MCals
+                myTameMeatMCalorieCounter,    # Tame meat MCals
+                myWildMeatMCalorieCounter,    # Wild meat MCals
+                myWildPlantsMCalories,        # Wild plants MCals
+                dairyPercent,                # Overall dairy percent
+                tameMeatPercent,             # Domestic meat percent
+                cropPercent,                 # Overall crop percent
+                wildMeatPercent,             # Wild meat percent
+                wildPlantPercent,            # Overall wild plant percent
+                myOverallMeatPercent,        # Overall meat percent
+                myOverallPlantPercent,       # Overall plant percent
+                myMCalsIndividualAnnual * 1000.0,  # Convert back to kCal
+                myMCalsSettlementAnnual,     # MCals settlement annual
+                0.0,                         # No dairy surplus in this simplified calculation
+                myCropCalcsReportMap,        # Empty crop calcs report map
+                myAnimalCalcsReportMap       # Empty animal calcs report map
+            )
 
             # Log results
-            LaUtils.debug.log(f"Calculation results - Animal: {animalPercent*100:.2f}%, Plant: {plantPercent*100:.2f}%", "Diet")
-            LaUtils.debug.log("doCalcsPlantsFirstIncludeDairy calculation completed successfully", "Diet")
+            LaUtils.debug.log(f"doCalcsPlantsFirstIncludeDairy - Animal: {myOverallMeatPercent*100:.2f}%, Plant: {myOverallPlantPercent*100:.2f}%", "Diet")
 
         except Exception as e:
             LaUtils.debug.log(f"Error in diet calculation: {str(e)}", "Error")
@@ -1100,7 +1091,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
                         # Calculate area needed based on yield
                         myCropYield = float(str(crop.cropYield))
-                        
+
                         # Determine area units and convert values if needed
                         areaUnitName = "hectares"
                         if hasattr(self, '_mAreaUnits') and self._mAreaUnits == AreaUnits.Dunum:
@@ -1111,7 +1102,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                         elif hasattr(crop, 'areaUnits') and str(crop.areaUnits) == "Dunum":
                             # If crop yield is in dunums but we want hectares, adjust the yield
                             myCropYield = myCropYield * 10.0  # Convert dunums to hectares
-                        
+
                         # Calculate area needed in the appropriate units
                         myCropAreaTarget = myKgForPeople / myCropYield
 
@@ -1125,7 +1116,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                             myFallowValue = 0.0
                             if hasattr(cropParameter, 'fallowValue'):
                                 myFallowValue = float(str(cropParameter.fallowValue))
-                            
+
                             myFallowArea = myCropAreaTarget * (myRatio / (1.0 + myRatio))
                             myFallowMCals = myFallowArea * myFallowValue
                             myTotalAreaNeeded = myCropAreaTarget + myFallowArea
@@ -1282,19 +1273,37 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                             myFeedForGestating = float(str(animal.gestating))      # kg feed per day
                             myFeedForLactating = float(str(animal.lactating))      # kg feed per day
                             myFeedForOffspringPerKg = float(str(animal.juvenile))  # kg feed per kg weight of offspring
-                            
+
                             # Get values needed for grazing land calculations from animal parameter
                             myUseCommonGrazingLand = True
                             myUseSpecificGrazingLand = False
-                            myGrazingLandProductivity = 1000.0  # Default kg/hectare if not specified
-                            
+
+                            # Get grazing land productivity from parameters - critical for correct area calculation
+                            # In the original C++ code, this is ValueCommonGrazingLand or ValueSpecificGrazingLand
+                            # representing calories per hectare/dunum
+                            myGrazingLandCalories: float = 0.0
+
                             if animalParameter:
                                 if hasattr(animalParameter, 'useCommonGrazingLand'):
                                     myUseCommonGrazingLand = bool(animalParameter.useCommonGrazingLand)
                                 if hasattr(animalParameter, 'useSpecificGrazingLand'):
                                     myUseSpecificGrazingLand = bool(animalParameter.useSpecificGrazingLand)
-                                if hasattr(animalParameter, 'grazingLandProductivity'):
-                                    myGrazingLandProductivity = float(str(animalParameter.grazingLandProductivity))
+
+                                # Get the correct grazing land caloric value
+                                if myUseCommonGrazingLand and hasattr(animalParameter, 'ValueCommonGrazingLand'):
+                                    myGrazingLandCalories = float(str(animalParameter.valueCommonGrazingLand))
+                                elif myUseSpecificGrazingLand and hasattr(animalParameter, 'ValueSpecificGrazingLand'):
+                                    myGrazingLandCalories = float(str(animalParameter.valueSpecificGrazingLand))
+
+                            # If we couldn't get a value from parameters, use the model's common grazing value
+                            if myGrazingLandCalories <= 0.0 and hasattr(self, '_mCommonLandValue'):
+                                myGrazingLandCalories = float(str(self._mCommonLandValue))
+
+                            # Default fallback if no values available
+                            if myGrazingLandCalories <= 0.0:
+                                myGrazingLandCalories = 7500.0  # Default calories per hectare (reasonable value)
+                                LaUtils.debug.log(f"Using default grazing land value of {myGrazingLandCalories} calories/hectare", "Warning")
+
                         except Exception as e:
                             # Default values if there's an error getting feed requirements
                             LaUtils.debug.log(f"Error getting feed requirements for {animal.name}: {e}", "Error")
@@ -1304,7 +1313,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                             myFeedForOffspringPerKg = 0.1
                             myUseCommonGrazingLand = True
                             myUseSpecificGrazingLand = False
-                            myGrazingLandProductivity = 1000.0  # Default kg/hectare
+                            myGrazingLandCalories = 7500.0  # Default calories per hectare
 
                         # Calculate MCals needed for each phase
                         myGestatingMCals = myTotalMothers * myGestatingTime * myFeedForGestating
@@ -1319,25 +1328,31 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                         myOffspringMCals = myTotalOffspring * myKillWeight * myFeedForOffspringPerKg * (365.0 - myWeaningAge)
 
                         # Set the total herd requirements in kg feed per year
-                        myAnimalHerdMCalsRequired = (myGestatingMCals + myLactatingMCals + 
-                                                   myMaintenanceMCals + myAdultMalesMCals + 
+                        myAnimalHerdMCalsRequired = (myGestatingMCals + myLactatingMCals +
+                                                   myMaintenanceMCals + myAdultMalesMCals +
                                                    myOffspringMCals)
-                        
-                        # Calculate total annual feed requirement in kg
+
+                        # Calculate total feed required in kg - this is what was missing
                         myTotalFeedRequiredKg = myAnimalHerdMCalsRequired
-                        
-                        # Calculate grazing land area needed in hectares
-                        myGrazingAreaNeeded = myTotalFeedRequiredKg / myGrazingLandProductivity
-                        
+
+                        # Calculate grazing land area needed
+                        # Convert feed requirements to calories using an approximation
+                        # Average feed is about 2000 calories per kg (rough estimate)
+                        feedToCaloriesFactor = 2000.0  # calories per kg of feed
+                        totalCaloriesRequired = myAnimalHerdMCalsRequired * feedToCaloriesFactor
+
+                        # Calculate area needed - divide total calories needed by calories per hectare provided by land
+                        myGrazingAreaNeeded = totalCaloriesRequired / myGrazingLandCalories if myGrazingLandCalories > 0 else 0
+
                         # Convert to appropriate area units for display
                         areaUnitName = "hectares"
                         if hasattr(self, '_mAreaUnits') and self._mAreaUnits == AreaUnits.Dunum:
                             myGrazingAreaNeeded = myGrazingAreaNeeded * 10.0  # Convert hectares to dunum
                             areaUnitName = "dunums"
-                        
+
                         # Format the herd information for the report
                         totalHerd = myTotalMothers + myBreedingMalesRequired + myTotalOffspring
-                        
+
                         # Create the animal report
                         myAnimalReport = f"Calculation Report for {animal.name}\n"
                         myAnimalReport += f"===========================\n"
@@ -1346,13 +1361,13 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                         myAnimalReport += f"Population: {population_count} people\n"
                         myAnimalReport += f"Individual needs: {myMCalsIndividualAnnual:.2f} MCal/year\n"
                         myAnimalReport += f"Settlement needs: {myMCalsSettlementAnnual:.2f} MCal/year\n\n"
-                        
+
                         myAnimalReport += f"Herd Composition:\n"
                         myAnimalReport += f"- Adult females (breeding): {myTotalMothers:.1f}\n"
                         myAnimalReport += f"- Adult males (breeding): {myBreedingMalesRequired:.1f}\n"
                         myAnimalReport += f"- Offspring: {myTotalOffspring:.1f}\n"
                         myAnimalReport += f"- Total herd size: {totalHerd:.1f}\n\n"
-                        
+
                         myAnimalReport += f"Feed Requirements:\n"
                         myAnimalReport += f"- Gestating females: {myGestatingMCals:.1f} kg/year\n"
                         myAnimalReport += f"- Lactating females: {myLactatingMCals:.1f} kg/year\n"
@@ -1360,11 +1375,11 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                         myAnimalReport += f"- Adult males: {myAdultMalesMCals:.1f} kg/year\n"
                         myAnimalReport += f"- Offspring growth: {myOffspringMCals:.1f} kg/year\n"
                         myAnimalReport += f"- Total feed required: {myTotalFeedRequiredKg:.1f} kg/year\n\n"
-                        
+
                         myAnimalReport += f"Land Requirements:\n"
-                        myAnimalReport += f"- Grazing land productivity: {myGrazingLandProductivity:.1f} kg/{areaUnitName}\n"
+                        myAnimalReport += f"- Grazing land productivity: {myGrazingLandCalories:.1f} calories/{areaUnitName}\n"
                         myAnimalReport += f"- Grazing area needed: {myGrazingAreaNeeded:.2f} {areaUnitName}\n"
-                        
+
                         if myUseCommonGrazingLand:
                             myAnimalReport += f"- Using common grazing land: Yes\n"
                         if myUseSpecificGrazingLand:
