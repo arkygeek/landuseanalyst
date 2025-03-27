@@ -761,7 +761,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
                 raise ValueError("Missing animal element")
 
             # Set GUID from attribute
-            self.guid = LaUtils.xmlDecode(myTopElement.attribute("guid"))
+            self.guid = myTopElement.attribute("guid")
 
 
 

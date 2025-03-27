@@ -131,7 +131,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             self._mLandFound = theModel.landFound
         else:
             self.setGuid(None)
-            self._mName = "No Name Set"
+            self._mName = "Default Site"
             self._mPopulation = 1000
             self._mPeriod = "No Period Set"
             self._mProjection = 100
@@ -1160,11 +1160,11 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                     animal = LaUtils.getAnimal(animalGuid)
                     animalParameter = LaUtils.getAnimalParameter(paramGuid)
 
-                    # Initialize animalReport at the beginning of the animal calculation
-                    animalReport = ""
+                    # Initialize variables at the start
+                    myAnimalReport = ""
+                    myAnimalHerdMCalsRequired = 0.0
 
                     if animal:
-                        # Following the C++ approach from doCalcsAnimalsFirstDairySeparate
                         LaUtils.debug.log(f"Processing animal: {animal.name} (GUID: {animalGuid})", "Diet")
 
                         # Get animal values safely
@@ -1286,77 +1286,12 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                         myAdultMalesMCals = myBreedingMalesRequired * myFeedForMaintenance * 365.0
                         myOffspringMCals = myTotalOffspring * myKillWeight * myFeedForOffspringPerKg * (365.0 - myWeaningAge)
 
-                        # Calculate total herd feed requirements before grain adjustment (will add grain later)
-                        myAnimalHerdMCalsRequired = myGestatingMCals + myLactatingMCals + myMaintenanceMCals + myAdultMalesMCals + myOffspringMCals
+                        # Set the total herd requirements
+                        myAnimalHerdMCalsRequired = (myGestatingMCals + myLactatingMCals + 
+                                                   myMaintenanceMCals + myAdultMalesMCals + 
+                                                   myOffspringMCals)
 
-                        # Track grain and fodder requirements for each animal
-                        myFoodSourceMap = {}
-                        myFodderRequirements = 0.0
-                        myAnimalReport = myAnimalReport or ""
-                        # If we have animal parameters and animal has fodder requirements
-                        if animalParameter and hasattr(animalParameter, 'fodderSourceMap'):
-                            try:
-                                # Get the fodder source map from parameters
-                                fodderSourceMap = animalParameter.fodderSourceMap()
-
-                                # Process each food source in the fodder map
-                                for cropGuid, foodSource in fodderSourceMap.items():
-                                    if not hasattr(foodSource, 'grain') or not hasattr(foodSource, 'fodder'):
-                                        continue
-
-                                    # Get grain and fodder values in kg
-                                    myGrain = float(str(foodSource.grain)) * 0.001  # Convert g to kg
-                                    myFodder = float(str(foodSource.fodder)) * 0.001  # Convert g to kg
-                                    myDays = float(str(foodSource.days))
-
-                                    # Calculate total grain requirements for the herd
-                                    myGrainRequirement = myGrain * myDays * myTotalOffspring
-
-                                    # Get the crop to calculate food values
-                                    crop = LaUtils.getCrop(cropGuid)
-                                    if crop:
-                                        myFoodValueOfCrop = float(str(crop.cropCalories)) * 0.001  # Convert to MCal/kg
-                                        myFoodValueOfFodder = getattr(crop, 'fodderValue', 0) * 0.001  # Convert to MCal/kg
-
-                                        # Calculate MCal from grain and fodder
-                                        myGrainMCal = myGrainRequirement * myFoodValueOfCrop
-                                        myFodderMCal = myFodder * myDays * myTotalOffspring * myFoodValueOfFodder
-
-                                        # Track these in the food source map
-                                        if cropGuid not in myFoodSourceMap:
-                                            myFoodSourceMap[cropGuid] = 0.0
-
-                                        myFoodSourceMap[cropGuid] = myFoodSourceMap.get(cropGuid, 0) + myGrainRequirement
-
-                                        # Reduce the animal's MCal requirements by the grain calories
-                                        myAnimalHerdMCalsRequired = max(0, myAnimalHerdMCalsRequired - myGrainMCal - myFodderMCal)
-
-                                        myAnimalReport += "\nFeed Supplementation:\n"
-                                        myAnimalReport += f"Grain from {crop.name}: {myGrainRequirement:.2f} kg ({myGrainMCal:.2f} MCal)\n"
-                                        myAnimalReport += f"Fodder from {crop.name}: {myFodder * myDays * myTotalOffspring:.2f} kg ({myFodderMCal:.2f} MCal)\n"
-                                        myAnimalReport += f"Adjusted herd requirements: {myAnimalHerdMCalsRequired:.2f} MCal\n"
-
-                            except Exception as e:
-                                LaUtils.debug.log(f"Error calculating fodder requirements for {animal.name}: {e}", "Error")
-
-                        # Update animal report with feed sources
-                        if myFoodSourceMap:
-                            # Store grain requirements in the report
-                            cropRequirementsStr = ""
-                            for cropGuid, grainRequired in myFoodSourceMap.items():
-                                crop = LaUtils.getCrop(cropGuid)
-                                cropName = crop.name if crop else f"Crop {cropGuid}"
-                                cropRequirementsStr += f"  - {cropName}: {grainRequired:.2f} kg\n"
-
-                            myAnimalReport += f"\nCrop requirements for feed:\n{cropRequirementsStr}"
-
-                            # Also pass these grain requirements to the crop calculations
-                            LaUtils.debug.log(f"Animal {animal.name} requires grain from crops: {myFoodSourceMap}", "Diet")
-
-                        # Store animal mcal requirements in a value map that will be used later for fallow allocation
-                        self._mValueMap[animalGuid] = myAnimalHerdMCalsRequired
-
-                        # Create the animal report with detailed calculations
+                        # Create the animal report
                         myAnimalReport = f"Calculation Report for {animal.name}\n"
                         myAnimalReport += f"===========================\n"
                         myAnimalReport += f"Animal meat calories: {myMCalsFromTheMeat:.2f} MCal\n"
@@ -1367,10 +1302,6 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                         myAnimalReport += f"Dairy portion: {myDairyPercent*100:.2f}% of diet\n"
 
                         myAnimalReport += f"\nHerd Size Calculations:\n"
-                        myAnimalReport += f"Birthing events per year: {myBirthingEventsPerYear:.2f}\n"
-                        myAnimalReport += f"Offspring per mother per year: {myOffspringPerMotherPerYear:.2f}\n"
-                        myAnimalReport += f"Mothers needed: {myMothersNeededStepOne:.2f}\n"
-                        myAnimalReport += f"Breeding males needed: {myBreedingMalesRequired:.2f}\n"
                         myAnimalReport += f"Total mothers: {myTotalMothers:.2f}\n"
                         myAnimalReport += f"Total offspring: {myTotalOffspring:.2f}\n"
 
@@ -1381,14 +1312,14 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                         myAnimalReport += f"Offspring feed: {myOffspringMCals:.2f} MCal\n"
                         myAnimalReport += f"Total herd requirements: {myAnimalHerdMCalsRequired:.2f} MCal\n"
 
-                        # Store the report in the map using the animal guid
-                        animalCalcsReportMap[animalGuid] = (myAnimalReport, myAnimalHerdMCalsRequired)
-                        LaUtils.debug.log(f"Added detailed animal calculation for {animal.name}", "Diet")
+                    # Now we can safely store both the report and requirements
+                    animalCalcsReportMap[animalGuid] = (myAnimalReport, myAnimalHerdMCalsRequired)
+                    LaUtils.debug.log(f"Added detailed animal calculation for {animal.name if animal else animalGuid}", "Diet")
 
                 except Exception as e:
                     LaUtils.debug.log(f"Error in animal calculation for GUID {animalGuid}: {str(e)}", "Error")
                     import traceback
-                    LaUtils.debug.log(f"Detailed error: {traceback.format_exc()}", "Error")
+                    LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
 
             # Set all values in the diet labels object
             self._set_diet_labels(
