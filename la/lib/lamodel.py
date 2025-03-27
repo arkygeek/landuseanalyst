@@ -1098,23 +1098,37 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                         # Total kg needed for people after accounting for spoilage and reseeding
                         myKgForPeople = myKgForPeople1 + myKgForPeopleSpoilage + myKgForPeopleReseed
 
-                        # Get crop yield in kg/hectare (adjust for area units if needed)
+                        # Calculate area needed based on yield
                         myCropYield = float(str(crop.cropYield))
-                        if hasattr(crop, 'areaUnits') and str(crop.areaUnits) == "Dunum":
-                            myCropYield = myCropYield * 10.0  # Convert from Dunum to hectare
-
-                        # Calculate area needed in hectares
+                        
+                        # Determine area units and convert values if needed
+                        areaUnitName = "hectares"
+                        if hasattr(self, '_mAreaUnits') and self._mAreaUnits == AreaUnits.Dunum:
+                            areaUnitName = "dunums"
+                            # If crop yield is in hectares but we want dunums, adjust the yield
+                            if hasattr(crop, 'areaUnits') and str(crop.areaUnits) == "Hectare":
+                                myCropYield = myCropYield / 10.0  # Convert hectares to dunums
+                        elif hasattr(crop, 'areaUnits') and str(crop.areaUnits) == "Dunum":
+                            # If crop yield is in dunums but we want hectares, adjust the yield
+                            myCropYield = myCropYield * 10.0  # Convert dunums to hectares
+                        
+                        # Calculate area needed in the appropriate units
                         myCropAreaTarget = myKgForPeople / myCropYield
 
                         # Calculate fallow land area if applicable
                         myFallowArea = 0.0
                         myFallowMCals = 0.0
+                        myTotalAreaNeeded = myCropAreaTarget
 
-                        if hasattr(cropParameter, 'fallowRatio') and hasattr(cropParameter, 'fallowValue'):
+                        if hasattr(cropParameter, 'fallowRatio') and cropParameter.fallowRatio > 0:
                             myRatio = float(str(cropParameter.fallowRatio))
-                            myFallowValue = float(str(cropParameter.fallowValue))
-                            myFallowArea = myRatio * (myCropAreaTarget / (1.0 + myRatio))
+                            myFallowValue = 0.0
+                            if hasattr(cropParameter, 'fallowValue'):
+                                myFallowValue = float(str(cropParameter.fallowValue))
+                            
+                            myFallowArea = myCropAreaTarget * (myRatio / (1.0 + myRatio))
                             myFallowMCals = myFallowArea * myFallowValue
+                            myTotalAreaNeeded = myCropAreaTarget + myFallowArea
 
                         # Create detailed report for this crop including all calculation steps
                         cropReport = f"Calculation Report for {crop.name}\n"
@@ -1134,13 +1148,14 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                         cropReport += f"Total production needed: {myKgForPeople:.2f} kg\n"
 
                         cropReport += f"\nArea Calculations:\n"
-                        cropReport += f"Crop yield: {myCropYield:.2f} kg/hectare\n"
-                        cropReport += f"Required crop area: {myCropAreaTarget:.2f} hectares\n"
+                        cropReport += f"Crop yield: {myCropYield:.2f} kg/{areaUnitName}\n"
+                        cropReport += f"Required crop area: {myCropAreaTarget:.2f} {areaUnitName}\n"
 
                         if myFallowArea > 0:
-                            cropReport += f"Fallow land area: {myFallowArea:.2f} hectares\n"
-                            cropReport += f"Fallow land value: {myFallowValue:.2f} MCal/hectare\n"
+                            cropReport += f"Fallow land area: {myFallowArea:.2f} {areaUnitName}\n"
+                            cropReport += f"Fallow land value: {myFallowValue:.2f} MCal/{areaUnitName}\n"
                             cropReport += f"Fallow land calories: {myFallowMCals:.2f} MCal\n"
+                            cropReport += f"Total area needed (crop + fallow): {myTotalAreaNeeded:.2f} {areaUnitName}\n"
 
                         # Store the report in the map with the required production as the second value
                         cropCalcsReportMap[cropGuid] = (cropReport, myKgForPeople)
@@ -1262,20 +1277,38 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
                         # Calculate feed requirements
                         try:
-                            myFeedForGestating = float(str(animal.gestating)) * 0.001
-                            myFeedForLactating = float(str(animal.lactating)) * 0.001
-                            myFeedForMaintenance = float(str(animal.maintenance)) * 0.001
-                            myFeedForOffspringPerKg = float(str(animal.juvenile)) * 0.001
+                            # Get animal feed values from animal parameters
+                            myFeedForMaintenance = float(str(animal.maintenance))  # kg feed per day
+                            myFeedForGestating = float(str(animal.gestating))      # kg feed per day
+                            myFeedForLactating = float(str(animal.lactating))      # kg feed per day
+                            myFeedForOffspringPerKg = float(str(animal.juvenile))  # kg feed per kg weight of offspring
+                            
+                            # Get values needed for grazing land calculations from animal parameter
+                            myUseCommonGrazingLand = True
+                            myUseSpecificGrazingLand = False
+                            myGrazingLandProductivity = 1000.0  # Default kg/hectare if not specified
+                            
+                            if animalParameter:
+                                if hasattr(animalParameter, 'useCommonGrazingLand'):
+                                    myUseCommonGrazingLand = bool(animalParameter.useCommonGrazingLand)
+                                if hasattr(animalParameter, 'useSpecificGrazingLand'):
+                                    myUseSpecificGrazingLand = bool(animalParameter.useSpecificGrazingLand)
+                                if hasattr(animalParameter, 'grazingLandProductivity'):
+                                    myGrazingLandProductivity = float(str(animalParameter.grazingLandProductivity))
                         except Exception as e:
-                            LaUtils.debug.log(f"Error getting feed values for {animal.name}: {e}", "Error")
-                            myFeedForGestating = 0.01
-                            myFeedForLactating = 0.01
-                            myFeedForMaintenance = 0.01
-                            myFeedForOffspringPerKg = 0.01
+                            # Default values if there's an error getting feed requirements
+                            LaUtils.debug.log(f"Error getting feed requirements for {animal.name}: {e}", "Error")
+                            myFeedForMaintenance = 1.0  # Default values
+                            myFeedForGestating = 1.5
+                            myFeedForLactating = 2.0
+                            myFeedForOffspringPerKg = 0.1
+                            myUseCommonGrazingLand = True
+                            myUseSpecificGrazingLand = False
+                            myGrazingLandProductivity = 1000.0  # Default kg/hectare
 
                         # Calculate MCals needed for each phase
-                        myGestatingMCals = myTotalOffspring * myGestatingTime * myFeedForGestating
-                        myLactatingMCals = myTotalOffspring * myLactationTime * myFeedForLactating
+                        myGestatingMCals = myTotalMothers * myGestatingTime * myFeedForGestating
+                        myLactatingMCals = myTotalMothers * myLactationTime * myFeedForLactating
                         myDaysForMaintenance = max(0, 365 - (myGestatingTime + myLactationTime))
 
                         myDryMothers = max(0, myTotalMothers - myTotalOffspring)
@@ -1285,31 +1318,57 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                         myAdultMalesMCals = myBreedingMalesRequired * myFeedForMaintenance * 365.0
                         myOffspringMCals = myTotalOffspring * myKillWeight * myFeedForOffspringPerKg * (365.0 - myWeaningAge)
 
-                        # Set the total herd requirements
+                        # Set the total herd requirements in kg feed per year
                         myAnimalHerdMCalsRequired = (myGestatingMCals + myLactatingMCals + 
                                                    myMaintenanceMCals + myAdultMalesMCals + 
                                                    myOffspringMCals)
-
+                        
+                        # Calculate total annual feed requirement in kg
+                        myTotalFeedRequiredKg = myAnimalHerdMCalsRequired
+                        
+                        # Calculate grazing land area needed in hectares
+                        myGrazingAreaNeeded = myTotalFeedRequiredKg / myGrazingLandProductivity
+                        
+                        # Convert to appropriate area units for display
+                        areaUnitName = "hectares"
+                        if hasattr(self, '_mAreaUnits') and self._mAreaUnits == AreaUnits.Dunum:
+                            myGrazingAreaNeeded = myGrazingAreaNeeded * 10.0  # Convert hectares to dunum
+                            areaUnitName = "dunums"
+                        
+                        # Format the herd information for the report
+                        totalHerd = myTotalMothers + myBreedingMalesRequired + myTotalOffspring
+                        
                         # Create the animal report
                         myAnimalReport = f"Calculation Report for {animal.name}\n"
                         myAnimalReport += f"===========================\n"
                         myAnimalReport += f"Animal meat calories: {myMCalsFromTheMeat:.2f} MCal\n"
                         myAnimalReport += f"Animal dairy calories: {myMCalsUtilizedFromDairy:.2f} MCal\n"
                         myAnimalReport += f"Population: {population_count} people\n"
-                        myAnimalReport += f"Annual diet needs: {myMCalsSettlementAnnual:.2f} MCal\n"
-                        myAnimalReport += f"Meat portion: {myMeatPercent*100:.2f}% of diet\n"
-                        myAnimalReport += f"Dairy portion: {myDairyPercent*100:.2f}% of diet\n"
-
-                        myAnimalReport += f"\nHerd Size Calculations:\n"
-                        myAnimalReport += f"Total mothers: {myTotalMothers:.2f}\n"
-                        myAnimalReport += f"Total offspring: {myTotalOffspring:.2f}\n"
-
-                        myAnimalReport += f"\nFeed Requirements:\n"
-                        myAnimalReport += f"Gestating feed: {myGestatingMCals:.2f} MCal\n"
-                        myAnimalReport += f"Lactating feed: {myLactatingMCals:.2f} MCal\n"
-                        myAnimalReport += f"Maintenance feed: {myMaintenanceMCals:.2f} MCal\n"
-                        myAnimalReport += f"Offspring feed: {myOffspringMCals:.2f} MCal\n"
-                        myAnimalReport += f"Total herd requirements: {myAnimalHerdMCalsRequired:.2f} MCal\n"
+                        myAnimalReport += f"Individual needs: {myMCalsIndividualAnnual:.2f} MCal/year\n"
+                        myAnimalReport += f"Settlement needs: {myMCalsSettlementAnnual:.2f} MCal/year\n\n"
+                        
+                        myAnimalReport += f"Herd Composition:\n"
+                        myAnimalReport += f"- Adult females (breeding): {myTotalMothers:.1f}\n"
+                        myAnimalReport += f"- Adult males (breeding): {myBreedingMalesRequired:.1f}\n"
+                        myAnimalReport += f"- Offspring: {myTotalOffspring:.1f}\n"
+                        myAnimalReport += f"- Total herd size: {totalHerd:.1f}\n\n"
+                        
+                        myAnimalReport += f"Feed Requirements:\n"
+                        myAnimalReport += f"- Gestating females: {myGestatingMCals:.1f} kg/year\n"
+                        myAnimalReport += f"- Lactating females: {myLactatingMCals:.1f} kg/year\n"
+                        myAnimalReport += f"- Adult maintenance: {myMaintenanceMCals:.1f} kg/year\n"
+                        myAnimalReport += f"- Adult males: {myAdultMalesMCals:.1f} kg/year\n"
+                        myAnimalReport += f"- Offspring growth: {myOffspringMCals:.1f} kg/year\n"
+                        myAnimalReport += f"- Total feed required: {myTotalFeedRequiredKg:.1f} kg/year\n\n"
+                        
+                        myAnimalReport += f"Land Requirements:\n"
+                        myAnimalReport += f"- Grazing land productivity: {myGrazingLandProductivity:.1f} kg/{areaUnitName}\n"
+                        myAnimalReport += f"- Grazing area needed: {myGrazingAreaNeeded:.2f} {areaUnitName}\n"
+                        
+                        if myUseCommonGrazingLand:
+                            myAnimalReport += f"- Using common grazing land: Yes\n"
+                        if myUseSpecificGrazingLand:
+                            myAnimalReport += f"- Using specific grazing land: Yes\n"
 
                     # Now we can safely store both the report and requirements
                     animalCalcsReportMap[animalGuid] = (myAnimalReport, myAnimalHerdMCalsRequired)
