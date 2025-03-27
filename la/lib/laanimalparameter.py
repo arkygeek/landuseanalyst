@@ -208,6 +208,10 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
         """Get the food source map."""
         return dict(self._mFoodSourceMap)
 
+    def fodderSourceMap(self) -> Dict[str, LaFoodSource]:
+        """Get the fodder source map. This is an alias for foodSourceMap for compatibility with C++ code."""
+        return dict(self._mFoodSourceMap)
+
     @foodSourceMap.setter
     def foodSourceMap(self, value: Dict[str, LaFoodSource]) -> None:
         """Set the food source map."""

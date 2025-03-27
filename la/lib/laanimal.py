@@ -763,7 +763,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
             # Set GUID from attribute
             self.guid = LaUtils.xmlDecode(myTopElement.attribute("guid"))
 
-            
+
 
 
             LaUtils.debug.log(f"Loading animal with GUID in laanimal.py: {self.guid}")

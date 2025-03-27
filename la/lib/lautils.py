@@ -210,7 +210,7 @@ class LaUtils:
                 # Get the actual string GUID value for comparison
                 myAnimalGuid = myLaAnimal.guid() if callable(getattr(myLaAnimal, 'guid', None)) else myLaAnimal.guid
                 LaUtils.debug.log(f"Checking animal {myLaAnimal.name} with GUID {myAnimalGuid} against requested GUID {theGuid}", "Animals")
-                
+
                 if myAnimalGuid == theGuid:
                     LaUtils.debug.log(f"Found animal matching GUID {theGuid}", "Animals")
                     return myLaAnimal

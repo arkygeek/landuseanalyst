@@ -166,7 +166,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             self._mAreaUnits = AreaUnits.Hectare
             self._mStatus = Status.MoreThanEnoughToCompletelySatisfy
             self._mIcon = None
-        
+
         # Initialize value map for fallow allocation
         self._mValueMap = {}
         self.logger = logging.getLogger(__name__)
@@ -1160,6 +1160,9 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                     animal = LaUtils.getAnimal(animalGuid)
                     animalParameter = LaUtils.getAnimalParameter(paramGuid)
 
+                    # Initialize animalReport at the beginning of the animal calculation
+                    animalReport = ""
+
                     if animal:
                         # Following the C++ approach from doCalcsAnimalsFirstDairySeparate
                         LaUtils.debug.log(f"Processing animal: {animal.name} (GUID: {animalGuid})", "Diet")
@@ -1237,12 +1240,12 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
                         # Calculate herd size based on birthing cycles
                         myOffspringPerMotherPerYear = myBirthingEventsPerYear * myBabiesPerBirth * (1.0 - myDeathRate) * myConceptionEfficiency
-                        
+
                         # Check for zero offspring per mother per year to avoid division by zero
                         if myOffspringPerMotherPerYear <= 0:
                             LaUtils.debug.log(f"Warning: Animal {animal.name} has zero or negative offspring per mother per year calculation. Using default value of 1.0", "Warning")
                             myOffspringPerMotherPerYear = 1.0  # Default to 1 if zero or negative
-                            
+
                         myMothersNeededStepOne = myOffspringNeededPerYear / myOffspringPerMotherPerYear
                         myMalesStepOne = myMothersNeededStepOne * myOffspringPerMotherPerYear * 0.5
                         myFemalesStepOne = myMalesStepOne
@@ -1289,7 +1292,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                         # Track grain and fodder requirements for each animal
                         myFoodSourceMap = {}
                         myFodderRequirements = 0.0
-
+                        myAnimalReport = myAnimalReport or ""
                         # If we have animal parameters and animal has fodder requirements
                         if animalParameter and hasattr(animalParameter, 'fodderSourceMap'):
                             try:
@@ -1302,9 +1305,9 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                                         continue
 
                                     # Get grain and fodder values in kg
-                                    myGrain = float(str(foodSource.grain())) * 0.001  # Convert g to kg
-                                    myFodder = float(str(foodSource.fodder())) * 0.001  # Convert g to kg
-                                    myDays = float(str(foodSource.days()))
+                                    myGrain = float(str(foodSource.grain)) * 0.001  # Convert g to kg
+                                    myFodder = float(str(foodSource.fodder)) * 0.001  # Convert g to kg
+                                    myDays = float(str(foodSource.days))
 
                                     # Calculate total grain requirements for the herd
                                     myGrainRequirement = myGrain * myDays * myTotalOffspring
@@ -1328,10 +1331,10 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                                         # Reduce the animal's MCal requirements by the grain calories
                                         myAnimalHerdMCalsRequired = max(0, myAnimalHerdMCalsRequired - myGrainMCal - myFodderMCal)
 
-                                        animalReport += f"\nFeed Supplementation:\n"
-                                        animalReport += f"Grain from {crop.name}: {myGrainRequirement:.2f} kg ({myGrainMCal:.2f} MCal)\n"
-                                        animalReport += f"Fodder from {crop.name}: {myFodder * myDays * myTotalOffspring:.2f} kg ({myFodderMCal:.2f} MCal)\n"
-                                        animalReport += f"Adjusted herd requirements: {myAnimalHerdMCalsRequired:.2f} MCal\n"
+                                        myAnimalReport += "\nFeed Supplementation:\n"
+                                        myAnimalReport += f"Grain from {crop.name}: {myGrainRequirement:.2f} kg ({myGrainMCal:.2f} MCal)\n"
+                                        myAnimalReport += f"Fodder from {crop.name}: {myFodder * myDays * myTotalOffspring:.2f} kg ({myFodderMCal:.2f} MCal)\n"
+                                        myAnimalReport += f"Adjusted herd requirements: {myAnimalHerdMCalsRequired:.2f} MCal\n"
 
                             except Exception as e:
                                 LaUtils.debug.log(f"Error calculating fodder requirements for {animal.name}: {e}", "Error")
@@ -1345,7 +1348,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                                 cropName = crop.name if crop else f"Crop {cropGuid}"
                                 cropRequirementsStr += f"  - {cropName}: {grainRequired:.2f} kg\n"
 
-                            animalReport += f"\nCrop requirements for feed:\n{cropRequirementsStr}"
+                            myAnimalReport += f"\nCrop requirements for feed:\n{cropRequirementsStr}"
 
                             # Also pass these grain requirements to the crop calculations
                             LaUtils.debug.log(f"Animal {animal.name} requires grain from crops: {myFoodSourceMap}", "Diet")
@@ -1354,32 +1357,32 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                         self._mValueMap[animalGuid] = myAnimalHerdMCalsRequired
 
                         # Create the animal report with detailed calculations
-                        animalReport = f"Calculation Report for {animal.name}\n"
-                        animalReport += f"===========================\n"
-                        animalReport += f"Animal meat calories: {myMCalsFromTheMeat:.2f} MCal\n"
-                        animalReport += f"Animal dairy calories: {myMCalsUtilizedFromDairy:.2f} MCal\n"
-                        animalReport += f"Population: {population_count} people\n"
-                        animalReport += f"Annual diet needs: {myMCalsSettlementAnnual:.2f} MCal\n"
-                        animalReport += f"Meat portion: {myMeatPercent*100:.2f}% of diet\n"
-                        animalReport += f"Dairy portion: {myDairyPercent*100:.2f}% of diet\n"
+                        myAnimalReport = f"Calculation Report for {animal.name}\n"
+                        myAnimalReport += f"===========================\n"
+                        myAnimalReport += f"Animal meat calories: {myMCalsFromTheMeat:.2f} MCal\n"
+                        myAnimalReport += f"Animal dairy calories: {myMCalsUtilizedFromDairy:.2f} MCal\n"
+                        myAnimalReport += f"Population: {population_count} people\n"
+                        myAnimalReport += f"Annual diet needs: {myMCalsSettlementAnnual:.2f} MCal\n"
+                        myAnimalReport += f"Meat portion: {myMeatPercent*100:.2f}% of diet\n"
+                        myAnimalReport += f"Dairy portion: {myDairyPercent*100:.2f}% of diet\n"
 
-                        animalReport += f"\nHerd Size Calculations:\n"
-                        animalReport += f"Birthing events per year: {myBirthingEventsPerYear:.2f}\n"
-                        animalReport += f"Offspring per mother per year: {myOffspringPerMotherPerYear:.2f}\n"
-                        animalReport += f"Mothers needed: {myMothersNeededStepOne:.2f}\n"
-                        animalReport += f"Breeding males needed: {myBreedingMalesRequired:.2f}\n"
-                        animalReport += f"Total mothers: {myTotalMothers:.2f}\n"
-                        animalReport += f"Total offspring: {myTotalOffspring:.2f}\n"
+                        myAnimalReport += f"\nHerd Size Calculations:\n"
+                        myAnimalReport += f"Birthing events per year: {myBirthingEventsPerYear:.2f}\n"
+                        myAnimalReport += f"Offspring per mother per year: {myOffspringPerMotherPerYear:.2f}\n"
+                        myAnimalReport += f"Mothers needed: {myMothersNeededStepOne:.2f}\n"
+                        myAnimalReport += f"Breeding males needed: {myBreedingMalesRequired:.2f}\n"
+                        myAnimalReport += f"Total mothers: {myTotalMothers:.2f}\n"
+                        myAnimalReport += f"Total offspring: {myTotalOffspring:.2f}\n"
 
-                        animalReport += f"\nFeed Requirements:\n"
-                        animalReport += f"Gestating feed: {myGestatingMCals:.2f} MCal\n"
-                        animalReport += f"Lactating feed: {myLactatingMCals:.2f} MCal\n"
-                        animalReport += f"Maintenance feed: {myMaintenanceMCals:.2f} MCal\n"
-                        animalReport += f"Offspring feed: {myOffspringMCals:.2f} MCal\n"
-                        animalReport += f"Total herd requirements: {myAnimalHerdMCalsRequired:.2f} MCal\n"
+                        myAnimalReport += f"\nFeed Requirements:\n"
+                        myAnimalReport += f"Gestating feed: {myGestatingMCals:.2f} MCal\n"
+                        myAnimalReport += f"Lactating feed: {myLactatingMCals:.2f} MCal\n"
+                        myAnimalReport += f"Maintenance feed: {myMaintenanceMCals:.2f} MCal\n"
+                        myAnimalReport += f"Offspring feed: {myOffspringMCals:.2f} MCal\n"
+                        myAnimalReport += f"Total herd requirements: {myAnimalHerdMCalsRequired:.2f} MCal\n"
 
                         # Store the report in the map using the animal guid
-                        animalCalcsReportMap[animalGuid] = (animalReport, myAnimalHerdMCalsRequired)
+                        animalCalcsReportMap[animalGuid] = (myAnimalReport, myAnimalHerdMCalsRequired)
                         LaUtils.debug.log(f"Added detailed animal calculation for {animal.name}", "Diet")
 
                 except Exception as e:
@@ -1457,15 +1460,16 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                 # Update the animal calculation reports with the new values after fallow allocation
                 for animalGuid, requirements in self._mValueMap.items():
                     if animalGuid in animalCalcsReportMap:
-                        animalReport, oldRequirements = animalCalcsReportMap[animalGuid]
+                        myAnimalReport, oldRequirements = animalCalcsReportMap[animalGuid]
+                        myAnimalReport = myAnimalReport or ""  # Initialize as an empty string if None or unbound
                         if oldRequirements > requirements:
                             reductionAmount = oldRequirements - requirements
-                            animalReport += f"\nFallow Land Grazing:\n"
-                            animalReport += f"Feed requirement reduced by {reductionAmount:.2f} MCal from fallow grazing\n"
-                            animalReport += f"Final feed requirement: {requirements:.2f} MCal\n"
+                            myAnimalReport += f"\nFallow Land Grazing:\n"
+                            myAnimalReport += f"Feed requirement reduced by {reductionAmount:.2f} MCal from fallow grazing\n"
+                            myAnimalReport += f"Final feed requirement: {requirements:.2f} MCal\n"
 
                             # Update the report with new value
-                            animalCalcsReportMap[animalGuid] = (animalReport, requirements)
+                            animalCalcsReportMap[animalGuid] = (myAnimalReport, requirements)
                             LaUtils.debug.log(f"Updated animal {animalGuid} with fallow grazing allocation", "Diet")
 
                 # Recalculate overall values with the reduced requirements
@@ -1477,23 +1481,23 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
                     # Check if any animals need grain from this crop
                     totalGrainNeeded = 0.0
-                    for animalGuid, (animalReport, requirements) in animalCalcsReportMap.items():
-                        # This is where we would track how much of this crop is needed for each animal
-                        # For now, we'll use a simplified approach
+                    for animalGuid, (myAnimalReport, requirements) in animalCalcsReportMap.items():
+                        myAnimalReport = myAnimalReport or ""  # Initialize as an empty string if None or unbound
+
                         animalParameter = LaUtils.getAnimalParameter(self._mAnimals.get(animalGuid, ""))
                         if animalParameter and hasattr(animalParameter, 'fodderSourceMap'):
                             try:
                                 fodderSources = animalParameter.fodderSourceMap()
                                 if cropGuid in fodderSources:
-                                    # We found a fodder source for this crop, calculate requirement
+                                    # Calculate requirement (simplified example)
                                     foodSource = fodderSources[cropGuid]
-                                    # This would be a more detailed calculation in the full implementation
-                                    totalGrainNeeded += requirements * 0.1  # Simplified - 10% of requirements as grain
-                            except:
-                                pass
+                                    totalGrainNeeded += requirements * 0.1  # Simplified calculation
+                            except Exception as e:
+                                LaUtils.debug.log(f"Error accessing fodderSourceMap for animal {animalGuid}: {e}", "Diet")
+
+                    cropReport = cropReport or ""  # Initialize as an empty string if None or unbound
 
                     if totalGrainNeeded > 0:
-                        # Add the grain needs to the crop target
                         newProductionTarget = productionTarget + totalGrainNeeded
                         cropReport += f"\nGrain for Animal Feed:\n"
                         cropReport += f"Additional production for animal feed: {totalGrainNeeded:.2f} kg\n"
