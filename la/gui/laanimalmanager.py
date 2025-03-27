@@ -177,14 +177,14 @@ class LaAnimalManager(LaAnimalManagerBase):
                 theGuid = guid
 
             # Select the row if the GUID matches
-            if animal.guid() == theGuid:  # Call guid() method
+            if animal.guid == theGuid:  # Call guid() method
                 mySelectedRow = myCurrentRow
 
             # Add row
             self.tblAnimals.insertRow(myCurrentRow)
 
             # Add GUID (hidden)
-            mypFileNameItem = QTableWidgetItem(animal.guid())  # Call guid() method
+            mypFileNameItem = QTableWidgetItem(str(animal.guid))  # Call guid() method
             self.tblAnimals.setItem(myCurrentRow, 0, mypFileNameItem)
 
             # Add name and description
