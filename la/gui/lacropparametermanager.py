@@ -79,13 +79,7 @@ class LaCropParameterManager(LaCropParameterManagerBase):
     """
 
     def __init__(self, parent=None, flags=Qt.WindowFlags()):
-        """
-        Initializes a new instance of the LaCropParameterManager class.
-
-        Args:
-            parent: The parent widget.
-            flags: Window flags.
-        """
+        """Initialize the crop parameter manager."""
         super(LaCropParameterManager, self).__init__(parent, flags)
         self.readSettings()
         self.tblCropParameterProfiles.cellClicked.connect(self.cellClicked)
@@ -117,8 +111,12 @@ class LaCropParameterManager(LaCropParameterManagerBase):
         self.cbAreaUnits.addItem("Hectare")
         
         # Initialize the fallow energy type combo box
+        self.cbFallowEnergyType.clear()
         self.cbFallowEnergyType.addItem("KCalories", LaEnergyType.KCalories)
         self.cbFallowEnergyType.addItem("TDN", LaEnergyType.TDN)
+        
+        # Connect the combo box changed signal
+        self.cbFallowEnergyType.currentIndexChanged.connect(self.on_cbFallowEnergyType_changed)
 
         # Connect signals
         self.toolNew.clicked.connect(self.on_toolNew_clicked)
@@ -184,8 +182,17 @@ class LaCropParameterManager(LaCropParameterManagerBase):
         """Handle change in crop selection"""
         self.updateCropPicture()
 
+    def on_cbFallowEnergyType_changed(self, index):
+        """Handle changes to the fallow energy type combo box."""
+        if not self.mCropParameter:
+            return
+            
+        energyType = self.cbFallowEnergyType.itemData(index)
+        if isinstance(energyType, LaEnergyType):
+            self.mCropParameter.fallowEnergyType = energyType
+
     def showCropParameter(self):
-        """Display crop parameter in the form"""
+        """Display crop parameter in the form."""
         if not self.mCropParameter:
             return
 
@@ -194,21 +201,19 @@ class LaCropParameterManager(LaCropParameterManagerBase):
         self.setComboToDefault(self.cboCrop, self.mCropParameter.cropGuid)
 
         # Handle numeric values with proper type conversion
-        # Check if these are QDoubleSpinBox or QSpinBox widgets
-        # use_float = hasattr(self.sbPercentTameCrop, 'decimals')  # It's a QDoubleSpinBox
-
-        # We know these are QDoubleSpinBox so they are floats
         self.sbPercentTameCrop.setValue(float(self.mCropParameter.percentTameCrop))
         self.sbFallowRatio.setValue(float(self.mCropParameter.fallowRatio))
-        # We know these are QSpinBox so they are ints
         self.sbSpoilage.setValue(int(self.mCropParameter.spoilage))
         self.sbReseed.setValue(int(self.mCropParameter.reseed))
-        self.sbFallowValue.setValue(int(self.mCropParameter.fallowValue))
+        # Remove float conversion since fallowValue is already an integer
+        self.sbFallowValue.setValue(self.mCropParameter.fallowValue)
 
-        # Boolean values
-        self.grpCropRotation.setChecked(bool(self.mCropParameter.cropRotation))
-        self.checkBoxUseCommonLand.setChecked(bool(self.mCropParameter.useCommonLand))
-        self.checkBoxUseSpecificLand.setChecked(bool(self.mCropParameter.useSpecificLand))
+        # Handle fallow energy type
+        energyType = self.mCropParameter.fallowEnergyType
+        for i in range(self.cbFallowEnergyType.count()):
+            if self.cbFallowEnergyType.itemData(i) == energyType:
+                self.cbFallowEnergyType.setCurrentIndex(i)
+                break
 
         # Use the helper method for area units
         self.setAreaUnitsIndex(self.mCropParameter.areaUnits)

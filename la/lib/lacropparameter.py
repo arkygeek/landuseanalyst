@@ -121,8 +121,9 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
     @pyqtProperty(str, notify=guidChanged)
     def guid(self) -> str:
         """Get the GUID of the crop parameter."""
-        # Call the inherited method from LaGuid
-        return super().guid()
+        # Call the inherited method from LaGuid and ensure we always return a string
+        result = super().guid()
+        return result if result is not None else ""
 
     @pyqtProperty(str, notify=nameChanged)
     def name(self) -> str: #type: ignore
@@ -402,6 +403,8 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
         myString += f"  <cropRotation>{1 if self.cropRotation else 0}</cropRotation>\n"
         myString += f"  <fallowRatio>{self.fallowRatio}</fallowRatio>\n"
         myString += f"  <fallowValue>{self.fallowValue}</fallowValue>\n"
+        # Access the underlying enum value directly from the instance variable
+        myString += f"  <fallowEnergyType>{self._mFallowEnergyType.name}</fallowEnergyType>\n"
         myUnits = "Dunum" if self._mAreaUnits == LaAreaUnits.Dunum else "Hectare"
         myString += f"  <areaUnits>{myUnits}</areaUnits>\n"
         myString += f"  <useCommonLand>{1 if self.useCommonLand else 0}</useCommonLand>\n"
@@ -469,6 +472,26 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
                 self._mFallowValue = int(myTopElement.firstChildElement("fallowValue").text())
             except (ValueError, TypeError):
                 self._mFallowValue = 0
+
+            # Handle fallow energy type - look for the tag and parse the enum name
+            try:
+                energyTypeElement = myTopElement.firstChildElement("fallowEnergyType")
+                if not energyTypeElement.isNull():
+                    energyTypeText = energyTypeElement.text().strip()
+                    # Match the enum name exactly
+                    if energyTypeText == "TDN":
+                        self._mFallowEnergyType = LaEnergyType.TDN
+                    elif energyTypeText == "KCalories":
+                        self._mFallowEnergyType = LaEnergyType.KCalories
+                    else:
+                        print(f"Warning: Unknown energy type '{energyTypeText}', defaulting to KCalories")
+                        self._mFallowEnergyType = LaEnergyType.KCalories
+                else:
+                    print("Warning: No fallowEnergyType tag found, defaulting to KCalories")
+                    self._mFallowEnergyType = LaEnergyType.KCalories
+            except Exception as e:
+                print(f"Warning: Error parsing fallowEnergyType: {e}, defaulting to KCalories")
+                self._mFallowEnergyType = LaEnergyType.KCalories
 
             # Handle area units
             myAreaUnits = myTopElement.firstChildElement("areaUnits").text()
