@@ -834,8 +834,8 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             myTameMeatMCalorieCounter += c23
             
         
-        c24 = (1.0 - c12) * (c14 - e15)
-        c25 = c12 * (c14 - e15)
+        c24: float = (1.0 - c12) * (c14 - e15)
+        c25: float = c12 * (c14 - e15)
         c30: float = c24 / c14
         c31: float = c25 / c14
 

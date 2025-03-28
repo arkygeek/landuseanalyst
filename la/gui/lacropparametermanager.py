@@ -8,7 +8,7 @@ from la.ui.lacropparametermanagerbase import LaCropParameterManagerBase
 from la.lib.lacropparameter import LaCropParameter
 from la.lib.lautils import LaUtils
 from la.lib.laguid import LaGuid
-from la.lib.la import AreaUnits
+from la.lib.la import AreaUnits as LaAreaUnits, EnergyType as LaEnergyType
 from la.lib.lagrass import LaGrass
 import os
 
@@ -115,6 +115,10 @@ class LaCropParameterManager(LaCropParameterManagerBase):
         self.cboCrop.currentIndexChanged.connect(self.on_cboCrop_changed)
         self.cbAreaUnits.addItem("Dunum")
         self.cbAreaUnits.addItem("Hectare")
+        
+        # Initialize the fallow energy type combo box
+        self.cbFallowEnergyType.addItem("KCalories", LaEnergyType.KCalories)
+        self.cbFallowEnergyType.addItem("TDN", LaEnergyType.TDN)
 
         # Connect signals
         self.toolNew.clicked.connect(self.on_toolNew_clicked)
