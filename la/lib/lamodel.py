@@ -1,3 +1,4 @@
+from la.lib.laanimalparameter import LaAnimalParameter
 from qgis.PyQt.QtCore import pyqtProperty, pyqtSignal, QUuid
 from qgis.PyQt.QtWidgets import QDialog
 
@@ -691,7 +692,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         myString += '</model>\n'
         return myString
 
-    def _GetAnimalValue(self, animal, prop_name: str) -> float:
+    def getAnimalValue(self, animal, prop_name: str) -> float:
         """Helper method to safely get float values from animal properties."""
         prop = getattr(animal, prop_name, None)
         if prop is None:
@@ -700,7 +701,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             return float(prop.__get__(animal, type(animal)))
         return float(prop)
 
-    def _getAnimalParamValue(self, param, prop_name: str) -> float:
+    def getAnimalParamValue(self, param, prop_name: str) -> float:
         """Helper method to safely get float values from animal parameter properties."""
         prop = getattr(param, prop_name, None)
         if prop is None:
@@ -709,7 +710,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             return float(prop.__get__(param, type(param)))
         return float(prop)
 
-    def _set_diet_labels(self, theDietLabels: LaDietLabels,
+    def setDietLabels(self, theDietLabels: LaDietLabels,
                         theOverallDairyMCals: float,
                         theOverallCropsMCals: float,
                         theOverallMeatMCals: float,
@@ -773,7 +774,8 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
     def doCalcsPlantsFirstIncludeDairy(self) -> LaDietLabels:
         from la.lib.lautils import LaUtils
-        
+        myMCalsIndividualAnnual: float = self.caloriesPerPersonDaily * 365.0;
+        myMCalsSettlementAnnual: float = myMCalsIndividualAnnual * self.population;
         myDietLabels = LaDietLabels()
         myDairyMCalorieCounter = 0.0
         myTameMeatMCalorieCounter = 0.0
@@ -786,114 +788,75 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         LaUtils.debug.log(f"Annual settlement calories (MCal): {self.caloriesPerPersonDaily * 365.0 * self.population / 1000.0}", "Diet")
         
         # Initialize calculation variables
-        c1 = 1.0 - self.meatPercent
-        c8 = self.dairyUtilisation
-        c10 = self.population
-        c11 = self.caloriesPerPersonDaily
-        c14 = c10 * c11 * 365.0
-        c15 = self.dietPercent
-        c12 = self.cropPercent
-        e15 = c14 * c15
+        c1: float = 1.0 - self.meatPercent
+        c8: float = self.dairyUtilisation
+        c10: float = self.population
+        c11: float = self.caloriesPerPersonDaily
+        c14: float = c10 * c11 * 365.0
+        c15: float = self.dietPercent
+        c12: float = self.percentOfDietThatIsFromCrops
+        e15: float = c14 * c15
         
         # Process each animal
-        mySelectedAnimalsMap = self.animalsMasterMap.copy()
+        mySelectedAnimalsMap: dict[str, str] = self._mAnimals.copy() if hasattr(self, '_mAnimals') else {}
         
         # Loop through each animal to calculate its contribution
         for animalGuid, animalParamGuid in mySelectedAnimalsMap.items():
             from la.lib.lautils import LaUtils
-            myAnimal = LaUtils.getAnimal(animalGuid)
-            myAnimalParameter = LaUtils.getAnimalParameter(animalParamGuid)
+            myAnimal: LaAnimal = LaUtils.getAnimal(animalGuid)
+            myAnimalParameter: LaAnimalParameter = LaUtils.getAnimalParameter(animalParamGuid)
             
             if not myAnimal or not myAnimalParameter:
                 LaUtils.debug.log(f"Could not find animal or parameter for GUID {animalGuid}", "Diet")
                 continue
                 
             # Calculate dairy contribution for this animal
-            c2 = myAnimal.milkGramsPerDay() * 0.001  # convert g to kg
-            c3 = myAnimal.milkFoodValue()
-            c4 = myAnimal.lactationTime()
-            c5 = myAnimal.weaningAge()
-            c6 = myAnimal.killWeight()
-            c7 = myAnimal.usableMeat() * 0.01  # convert percentage to decimal
+            c2: float = myAnimal.milkGramsPerDay * 0.001
+            c3: float = myAnimal.milkFoodValue
+            c4: float = myAnimal.lactationTime
+            c5: float = myAnimal.weaningAge
+            c6: float = myAnimal.killWeight
+            c7: float = myAnimal.usableMeat * 0.01
             
-            # Calculate dairy and meat energy for this animal
-            e2 = c2 * c3 * (c4 - c5)
-            e3 = e2 * c8  # apply dairy utilisation factor
-            c9 = myAnimal.meatFoodValue()
-            e10 = e3 + (c9 * c7 * c6)  # total value from this animal
+            e2: float = c2 * c3 * (c4 - c5)
+            e3: float = e2 * c8
+            c9: float = myAnimal.meatFoodValue
+            e10: float = e3 + (c9 * c7 * c6)
             
-            # Avoid division by zero
-            if e10 > 0:
-                e7 = (e15 * (1.0 - c1)) / e10
-                c21 = e7 * e3  # dairy calories
-                c23 = e7 * c6 * c7 * c9  # meat calories
-                c22 = max(0, e15 - c21 - c23)  # ensure non-negative
-                
-                # Add to counters
-                myDairyMCalorieCounter += c21
-                myWildMeatMCalorieCounter += c22
-                myTameMeatMCalorieCounter += c23
-                
-                # Add a report for this animal
-                myReport = f"Animal: {myAnimal.name()}\n"
-                myReport += f"Dairy MCal: {c21/1000:.2f}\n"
-                myReport += f"Meat MCal: {c23/1000:.2f}\n"
-                myAnimalCalcsReportMap[animalGuid] = (myReport, c21 + c23)
+            e7 = (e15 * (1.0 - c1)) / e10
+            c21 = e7 * e3
+            c23 = e7 * c6 * c7 * c9
+            c22 = e15 - c21 - c23
+            
+            # Add to counters
+            myDairyMCalorieCounter += c21
+            myWildMeatMCalorieCounter += c22
+            myTameMeatMCalorieCounter += c23
+            
         
-        # Calculate plant contributions
-        c24 = max(0, (1.0 - c12) * (c14 - e15))  # wild plants
-        c25 = max(0, c12 * (c14 - e15))  # crops
+        c24 = (1.0 - c12) * (c14 - e15)
+        c25 = c12 * (c14 - e15)
+        c30: float = c24 / c14
+        c31: float = c25 / c14
+
+        c28: float = myWildMeatMCalorieCounter / c14
+        c29: float = myTameMeatMCalorieCounter / c14
+        c27: float = myDairyMCalorieCounter / c14
         
-        # Calculate percentages - ensure non-negative values
-        c30 = max(0, c24 / c14) if c14 > 0 else 0  # wild plants percent
-        c31 = max(0, c25 / c14) if c14 > 0 else 0  # crops percent
-        c28 = max(0, myWildMeatMCalorieCounter / c14) if c14 > 0 else 0  # wild meat percent
-        c29 = max(0, myTameMeatMCalorieCounter / c14) if c14 > 0 else 0  # tame meat percent
-        c27 = max(0, myDairyMCalorieCounter / c14) if c14 > 0 else 0  # dairy percent
-        
-        # Get overall values
-        overallDairyPercent = c27 * 100.0
-        overallMeatPercent = (c28 + c29) * 100.0
-        overallPlantPercent = (c30 + c31) * 100.0
-        domesticMeatPercent = c29 * 100.0
-        wildMeatPercent = c28 * 100.0
-        overallCropPercent = c31 * 100.0
-        overallWildPlantPercent = c30 * 100.0
-        
-        # Individual and settlement calories
-        myMCalsIndividualAnnual = c11 * 365.0 / 1000.0  # Convert to MCal
-        myMCalsSettlementAnnual = myMCalsIndividualAnnual * c10
-        
-        # Calculate dairy surplus
-        overallDairyMCals = myDairyMCalorieCounter
-        
-        # Log the calculated values
-        LaUtils.debug.log(f"New values set - Dairy: {overallDairyMCals:.2f}, Crops: {c25:.2f}", "Diet")
-        LaUtils.debug.log(f"Final percentages - Animal: {overallMeatPercent:.1f}%, Plant: {overallPlantPercent:.1f}%", "Diet")
-        LaUtils.debug.log("doCalcsPlantsFirstIncludeDairy calculation completed successfully", "Diet")
-        
-        # Set all calculated values to the diet labels object
-        self._set_diet_labels(
-            myDietLabels,
-            overallDairyMCals,
-            c25,
-            myTameMeatMCalorieCounter + myWildMeatMCalorieCounter,
-            myWildMeatMCalorieCounter,
-            c24,
-            overallDairyPercent,
-            domesticMeatPercent,
-            overallCropPercent,
-            wildMeatPercent,
-            overallWildPlantPercent,
-            overallMeatPercent,
-            overallPlantPercent,
-            myMCalsIndividualAnnual,
-            myMCalsSettlementAnnual,
-            0.0,  # Surplus dairy is not calculated here
-            myCropCalcsReportMap,
-            myAnimalCalcsReportMap
-        )
-        
+        myDietLabels.dairyMCalories = myDairyMCalorieCounter * .001 * .001
+        myDietLabels.cropMCalories = c25 * .001 * .001
+        myDietLabels.wildAnimalMCalories = myWildMeatMCalorieCounter * .001 * .001
+        myDietLabels.wildPlantsMCalories = c24 * .001 * .001
+        myDietLabels.dairyPortionPct = c27 *100.
+        myDietLabels.tameMeatPortionPct = c29 * 100.
+        myDietLabels.cropsPortionPct = c31 * 100.
+        myDietLabels.wildAnimalPortionPct = c28 * 100.
+        myDietLabels.wildPlantsPortionPct = c30 * 100.
+        myDietLabels.animalPortionPct = self._mDietPercent * 100. - c27 * 100.
+        myDietLabels.plantsPortionPct = (1. - self._mDietPercent) * 100.
+        myDietLabels.kiloCaloriesIndividualAnnual = myMCalsIndividualAnnual
+        myDietLabels.megaCaloriesSettlementAnnual = myMCalsSettlementAnnual
+    
         return myDietLabels
 
     def doCalcsAnimalsFirstIncludeDairy(self) -> LaDietLabels:
@@ -967,7 +930,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             myAnimalCalcsReportMap = {}
 
             # Set all values in the diet labels object
-            self._set_diet_labels(
+            self.setDietLabels(
                 myDietLabels,
                 myDairyMCalorieCounter,      # Overall dairy MCals
                 myCropMCalorieCounter,        # Overall crop MCals
@@ -981,7 +944,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                 myWildPlantPercent,           # Overall wild plant percent
                 animalPercent,                # Overall animal percent
                 plantPercent,                 # Overall plant percent
-                myMCalsIndividualAnnual * 1000.0,  # Individual annual kCal
+                myMCalsIndividualAnnual * 1000.0,  # Convert to kCal
                 myMCalsSettlementAnnual,      # Settlement annual MCal
                 0.0,                          # No dairy surplus in simplified calculation
                 myCropCalcsReportMap,         # Empty crop calcs report map
@@ -1065,7 +1028,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             myAnimalCalcsReportMap = {}
 
             # Set all values in the diet labels object
-            self._set_diet_labels(
+            self.setDietLabels(
                 myDietLabels,
                 myDairyMCalorieCounter,     # Overall dairy MCals
                 myOverallCropsMCals,        # Overall crop MCals
@@ -1491,7 +1454,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                     LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
 
             # Set all values in the diet labels object
-            self._set_diet_labels(
+            self.setDietLabels(
                 myDietLabels,
                 myDairyCounter,           # Overall dairy MCals
                 myCropCounter,            # Overall crop MCals

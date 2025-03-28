@@ -651,19 +651,19 @@ LaDietLabels LaModel::doCalcsPlantsFirstIncludeDairy()
    // qDebug()JASON << "c28 = " << c28;
    // qDebug()JASON << "c29 = " << c29;
 
-  myDietLabels.setDairyMCalories(myDairyMCalorieCounter*.001*.001);
-  myDietLabels.setCropMCalories(c25*.001*.001);
-  myDietLabels.setWildAnimalMCalories(myWildMeatMCalorieCounter*.001*.001);
-  myDietLabels.setWildPlantsMCalories(c24*.001*.001);
-  myDietLabels.setDairyPortionPct(c27*100.);
-  myDietLabels.setTameMeatPortionPct(c29*100.);
-  myDietLabels.setCropsPortionPct(c31*100.);
-  myDietLabels.setWildAnimalPortionPct(c28*100.);
-  myDietLabels.setWildPlantsPortionPct(c30*100.);
-  myDietLabels.setAnimalPortionPct(mDietPercent*100.-c27*100.);
-  myDietLabels.setPlantsPortionPct((1.-mDietPercent)*100.);
-  myDietLabels.setMCalsIndividualAnnual(myMCalsIndividualAnnual);
-  myDietLabels.setMCalsSettlementAnnual(myMCalsSettlementAnnual);
+    myDietLabels.setDairyMCalories(myDairyMCalorieCounter*.001*.001);
+    myDietLabels.setCropMCalories(c25*.001*.001);
+    myDietLabels.setWildAnimalMCalories(myWildMeatMCalorieCounter*.001*.001);
+    myDietLabels.setWildPlantsMCalories(c24*.001*.001);
+    myDietLabels.setDairyPortionPct(c27*100.);
+    myDietLabels.setTameMeatPortionPct(c29*100.);
+    myDietLabels.setCropsPortionPct(c31*100.);
+    myDietLabels.setWildAnimalPortionPct(c28*100.);
+    myDietLabels.setWildPlantsPortionPct(c30*100.);
+    myDietLabels.setAnimalPortionPct(mDietPercent*100.-c27*100.);
+    myDietLabels.setPlantsPortionPct((1.-mDietPercent)*100.);
+    myDietLabels.setMCalsIndividualAnnual(myMCalsIndividualAnnual);
+    myDietLabels.setMCalsSettlementAnnual(myMCalsSettlementAnnual);
   return myDietLabels;
 }
 

@@ -49,16 +49,16 @@ class LaDietLabels(QObject, LaSerialisable, LaGuid):
         LaSerialisable.__init__(self)
         LaGuid.__init__(self)
 
-        self._dairyMCalories: float = 0.0
-        self._cropMCalories: float = 0.0
-        self._animalMCalories: float = 0.0
-        self._wildAnimalMCalories: float = 0.0
-        self._wildPlantsMCalories: float = 0.0
-        self._dairyPortionPct: float = 0.0
-        self._tameMeatPortionPct: float = 0.0
-        self._cropsPortionPct: float = 0.0
-        self._wildAnimalPortionPct: float = 0.0
-        self._wildPlantsPortionPct: float = 0.0
+        self.mDairyMCalories: float = 0.0
+        self.mCropMCalories: float = 0.0
+        self.mAnimalMCalories: float = 0.0
+        self.mWildAnimalMCalories: float = 0.0
+        self.mWildPlantsMCalories: float = 0.0
+        self.mDairyPortionPct: float = 0.0
+        self.mTameMeatPortionPct: float = 0.0
+        self.mCropsPortionPct: float = 0.0
+        self.mWildAnimalPortionPct: float = 0.0
+        self.mWildPlantsPortionPct: float = 0.0
         self._plantsPortionPct: float = 0.0
         self._animalPortionPct: float = 0.0
         self._kiloCaloriesIndividualAnnual: float = 0.0
@@ -107,7 +107,7 @@ class LaDietLabels(QObject, LaSerialisable, LaGuid):
         :return: The dairy mega-calories value
         :rtype: float
         """
-        return float(str(self._dairyMCalories))
+        return float(str(self.mDairyMCalories))
 
     @dairyMCalories.setter
     def dairyMCalories(self, theDairyMCalories: float) -> None:
@@ -117,8 +117,8 @@ class LaDietLabels(QObject, LaSerialisable, LaGuid):
         :param theDairyMCalories: The new dairy mega-calories value
         :type theDairyMCalories: float
         """
-        if self._dairyMCalories != theDairyMCalories:
-            self._dairyMCalories = theDairyMCalories
+        if self.mDairyMCalories != theDairyMCalories:
+            self.mDairyMCalories = theDairyMCalories
             self.dairyMCaloriesChanged.emit(theDairyMCalories)
 
     @pyqtProperty(float, notify=cropMCaloriesChanged)
@@ -480,7 +480,7 @@ class LaDietLabels(QObject, LaSerialisable, LaGuid):
             str: XML representation of the diet labels
         """
         xml = f'<dietLabels guid="{self.guid}">\n'
-        xml += f'  <dairyMCalories>{self._dairyMCalories}</dairyMCalories>\n'
+        xml += f'  <dairyMCalories>{self.mDairyMCalories}</dairyMCalories>\n'
         xml += f'  <cropMCalories>{self._cropMCalories}</cropMCalories>\n'
         xml += f'  <animalMCalories>{self._animalMCalories}</animalMCalories>\n'
         xml += f'  <wildAnimalMCalories>{self._wildAnimalMCalories}</wildAnimalMCalories>\n'
@@ -508,7 +508,7 @@ class LaDietLabels(QObject, LaSerialisable, LaGuid):
         root = ET.fromstring(xmlStr)
 
         self.setGuid(root.attrib.get('guid', ''))
-        self._dairyMCalories = float(root.findtext('dairyMCalories', '0'))
+        self.mDairyMCalories = float(root.findtext('dairyMCalories', '0'))
         self._cropMCalories = float(root.findtext('cropMCalories', '0'))
         self._animalMCalories = float(root.findtext('animalMCalories', '0'))
         self._wildAnimalMCalories = float(root.findtext('wildAnimalMCalories', '0'))
@@ -525,7 +525,7 @@ class LaDietLabels(QObject, LaSerialisable, LaGuid):
         self._dairySurplusMCalories = float(root.findtext('dairySurplusMCalories', '0'))
 
         # Emit signals for all changed values
-        self.dairyMCaloriesChanged.emit(self._dairyMCalories)
+        self.dairyMCaloriesChanged.emit(self.mDairyMCalories)
         self.cropMCaloriesChanged.emit(self._cropMCalories)
         self.animalMCaloriesChanged.emit(self._animalMCalories)
         self.wildAnimalMCaloriesChanged.emit(self._wildAnimalMCalories)
