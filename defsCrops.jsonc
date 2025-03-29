@@ -1,0 +1,125 @@
+/**
+ * This JSON array represents a dataset of various crops and their associated properties.
+ * Each object in the array contains the following fields:
+ *
+ * - "Crop": (string) The name of the crop.
+ * - "Yield": (number) The yield of the crop per hectare (Ha).
+ * - "Units": (string) The unit of measurement for the yield, typically "Ha" (hectares).
+ * - "Mcals kg-1": (number) The energy content of the crop in megacalories per kilogram.
+ * - "Fallow Ratio": (number) The ratio of land left fallow for the crop.
+ * - "Fallow MCals": (number) The energy contribution from fallow land in megacalories.
+ * - "Fodder Kg": (number) The amount of fodder produced by the crop in kilograms.
+ * - "Fodder MCals": (number) The energy content of the fodder in megacalories per kilogram.
+ */
+[
+  {
+    "Crop": "Horse Bean",
+    "Yield": 500,
+    "Units": "Ha",
+    "Mcals kg-1": 3,
+    "Fallow Ratio": 1,
+    "Fallow MCals": 500,
+    "Fodder Kg": 300,
+    "Fodder MCals": 0.8
+  },
+  {
+    "Crop": "Einkorn",
+    "Yield": 500,
+    "Units": "Ha",
+    "Mcals kg-1": 3,
+    "Fallow Ratio": 1,
+    "Fallow MCals": 500,
+    "Fodder Kg": 300,
+    "Fodder MCals": 0.8
+  },
+  {
+    "Crop": "Emmer",
+    "Yield": 500,
+    "Units": "Ha",
+    "Mcals kg-1": 3,
+    "Fallow Ratio": 1,
+    "Fallow MCals": 500,
+    "Fodder Kg": 300,
+    "Fodder MCals": 0.8
+  },
+  {
+    "Crop": "Lentils",
+    "Yield": 300,
+    "Units": "Ha",
+    "Mcals kg-1": 3,
+    "Fallow Ratio": 1,
+    "Fallow MCals": 500,
+    "Fodder Kg": 300,
+    "Fodder MCals": 0.8
+  },
+  {
+    "Crop": "Peas",
+    "Yield": 150,
+    "Units": "Ha",
+    "Mcals kg-1": 3.25,
+    "Fallow Ratio": 1,
+    "Fallow MCals": 500,
+    "Fodder Kg": 100,
+    "Fodder MCals": 0.8
+  },
+  {
+    "Crop": "Olives",
+    "Yield": 600,
+    "Units": "Ha",
+    "Mcals kg-1": 4,
+    "Fallow Ratio": 0,
+    "Fallow MCals": 500,
+    "Fodder Kg": 0,
+    "Fodder MCals": 0.8
+  },
+  {
+    "Crop": "Grapes",
+    "Yield": 600,
+    "Units": "Ha",
+    "Mcals kg-1": 3,
+    "Fallow Ratio": 0,
+    "Fallow MCals": 500,
+    "Fodder Kg": 0,
+    "Fodder MCals": 0.8
+  },
+  {
+    "Crop": "Grass Peas",
+    "Yield": 500,
+    "Units": "Ha",
+    "Mcals kg-1": 3,
+    "Fallow Ratio": 1,
+    "Fallow MCals": 500,
+    "Fodder Kg": 300,
+    "Fodder MCals": 0.8
+  },
+  {
+    "Crop": "Bitter Vetch",
+    "Yield": 400,
+    "Units": "Ha",
+    "Mcals kg-1": 3,
+    "Fallow Ratio": 1,
+    "Fallow MCals": 500,
+    "Fodder Kg": 300,
+    "Fodder MCals": 0.8
+  },
+  {
+    "Crop": "Barley",
+    "Yield": 500,
+    "Units": "Ha",
+    "Mcals kg-1": 3,
+    "Fallow Ratio": 1,
+    "Fallow MCals": 500,
+    "Fodder Kg": 300,
+    "Fodder MCals": 1.42
+  },
+  {
+    "Crop": "Free Hull Barley",
+    "Yield": 500,
+    "Units": "Ha",
+    "Mcals kg-1": 3,
+    "Fallow Ratio": 1,
+    "Fallow MCals": 500,
+    "Fodder Kg": 300,
+    "Fodder MCals": 0.8
+  }
+]

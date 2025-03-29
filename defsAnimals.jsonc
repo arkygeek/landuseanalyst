@@ -1,0 +1,162 @@
+  // This JSON object contains data for various livestock animals, including Sheep, Pig, Cow, and Goat.
+  // Each animal has detailed attributes related to their nutritional requirements, growth, reproduction, and feeding.
+  //
+  // Attributes:
+  // - Mcalories: Energy requirement in megacalories.
+  // - Usable: Percentage of usable body weight.
+  // - Average Kill Weight: Average weight at slaughter (in kg).
+  // - Weaning Weight: Weight at weaning (in kg).
+  // - Adult Weight: Average adult weight (in kg).
+  // - Grow Time: Time required to reach maturity (in days).
+  // - Death Rate: Mortality rate percentage.
+  // - Conception Efficiency: Percentage efficiency of conception.
+  // - Sex Maturity: Age of sexual maturity (in months).
+  // - Breeding Years: Number of years an animal can breed.
+  // - Babies Birth - 1: Average number of offspring per birth.
+  // - Wean Age: Age at which offspring are weaned (in days).
+  // - Gestation: Gestation period (in days).
+  // - Oestrous Cycle: Length of the oestrous cycle (in days).
+  // - Lactation Time: Duration of lactation (in days).
+  // - Ratio F : M breedstock: Female-to-male ratio in breeding stock.
+  // - Desired Herd Size: Target size of the herd.
+  // - Mixed Herd Numbers: Number of animals in a mixed herd.
+  // - Milk grams day - 1: Milk production per day (in grams).
+  // - Milk Mcals Kg-1: Energy content of milk (in megacalories per kg).
+  // - Gestation Reqd: Energy requirement during gestation (in megacalories).
+  // - Lactation Reqd: Energy requirement during lactation (in megacalories).
+  // - Maintenance Reqd: Energy requirement for maintenance (in megacalories).
+  // - Juveniles Req kg - 1: Energy requirement for juveniles (in megacalories per kg).
+  // - Land Energy Hectare - 1: Energy yield per hectare of land (in megacalories).
+  // - Fodder Fed From Crop: Type of crop used as fodder.
+  // - Grams Straw / Chaff: Amount of straw or chaff fed (in grams).
+  // - Grams Grain: Amount of grain fed (in grams).
+  // - Days on supplemental feed: Number of days animals are fed supplemental feed.
+
+[
+  {
+    "Sheep": {
+      "Mcalories": 3.200,
+      "Usable": "50.00 %",
+      "Average Kill Weight": 30,
+      "Weaning Weight": 8,
+      "Adult Weight": 60,
+      "Grow Time": 40,
+      "Death Rate": "30.00 %",
+      "Conception Efficiency": "80.00 %",
+      "Sex Maturity": 18.00,
+      "Breeding Years": 5,
+      "Babies Birth - 1": 1,
+      "Wean Age": 60,
+      "Gestation": 150,
+      "Oestrous Cycle": 21,
+      "Lactation Time": 210,
+      "Ratio F : M breedstock": 20,
+      "Desired Herd Size": 50,
+      "Mixed Herd Numbers": 25,
+      "Milk grams day - 1": 0.94,
+      "Milk Mcals Kg-1": 0.940,
+      "Gestation Reqd": 3.970,
+      "Lactation Reqd": 5.410,
+      "Maintenance Reqd": 3.200,
+      "Juveniles Req kg - 1": 0.030,
+      "Land Energy Hectare - 1": 1500,
+      "Fodder Fed From Crop": "Crop10 Barley",
+      "Grams Straw / Chaff": 1000,
+      "Grams Grain": 750,
+      "Days on supplemental feed": 90
+    },
+    "Pig": {
+      "Mcalories": 3.200,
+      "Usable": "50.00 %",
+      "Average Kill Weight": 100,
+      "Weaning Weight": 2,
+      "Adult Weight": 200,
+      "Grow Time": 40,
+      "Death Rate": "30.00 %",
+      "Conception Efficiency": "70.00 %",
+      "Sex Maturity": 18,
+      "Breeding Years": 5,
+      "Babies Birth - 1": 6,
+      "Wean Age": 30,
+      "Gestation": 115,
+      "Oestrous Cycle": 21,
+      "Lactation Time": 30,
+      "Ratio F : M breedstock": 20,
+      "Desired Herd Size": 0,
+      "Mixed Herd Numbers": 0,
+      "Milk grams day - 1": 0,
+      "Milk Mcals Kg-1": 0,
+      "Gestation Reqd": 5.410,
+      "Lactation Reqd": 5.410,
+      "Maintenance Reqd": 0,
+      "Juveniles Req kg - 1": 0.030,
+      "Land Energy Hectare - 1": 1500,
+      "Fodder Fed From Crop": "Crop10 Barley",
+      "Grams Straw / Chaff": 0,
+      "Grams Grain": 750,
+      "Days on supplemental feed": 90
+    },
+    "Cow": {
+      "Mcalories": 3.200,
+      "Usable": "50.00 %",
+      "Average Kill Weight": 400,
+      "Weaning Weight": 50,
+      "Adult Weight": 625,
+      "Grow Time": 50,
+      "Death Rate": "20.00 %",
+      "Conception Efficiency": "85.00 %",
+      "Sex Maturity": 18,
+      "Breeding Years": 8,
+      "Babies Birth - 1": 1,
+      "Wean Age": 60,
+      "Gestation": 279,
+      "Oestrous Cycle": 21,
+      "Lactation Time": 240,
+      "Ratio F : M breedstock": 20,
+      "Desired Herd Size": 10,
+      "Mixed Herd Numbers": 2,
+      "Milk grams day - 1": 6,
+      "Milk Mcals Kg-1": 0.94,
+      "Gestation Reqd": 6,
+      "Lactation Reqd": 7.5,
+      "Maintenance Reqd": 5.8,
+      "Juveniles Req kg - 1": 0.030,
+      "Land Energy Hectare - 1": 1500,
+      "Fodder Fed From Crop": "Barley",
+      "Grams Straw / Chaff": 4956,
+      "Grams Grain": 1500,
+      "Days on supplemental feed": 90
+    },
+    "Goat": {
+      "Mcalories": 3.200,
+      "Usable": "50.00 %",
+      "Average Kill Weight": 30,
+      "Weaning Weight": 8,
+      "Adult Weight": 60,
+      "Grow Time": 40,
+      "Death Rate": "30.00 %",
+      "Conception Efficiency": "80.00 %",
+      "Sex Maturity": 18,
+      "Breeding Years": 5,
+      "Babies Birth - 1": 1,
+      "Wean Age": 60,
+      "Gestation": 150,
+      "Oestrous Cycle": 21,
+      "Lactation Time": 210,
+      "Ratio F : M breedstock": 20,
+      "Desired Herd Size": 50,
+      "Mixed Herd Numbers": 25,
+      "Milk grams day - 1": 0.9,
+      "Milk Mcals Kg-1": 0.940,
+      "Gestation Reqd": 3.970,
+      "Lactation Reqd": 5.410,
+      "Maintenance Reqd": 3.2,
+      "Juveniles Req kg - 1": 0.030,
+      "Land Energy Hectare - 1": 1500,
+      "Fodder Fed From Crop": "Crop10 Barley",
+      "Grams Straw / Chaff": 1000,
+      "Grams Grain": 750,
+      "Days on supplemental feed": 90
+    }
+  }
+]
