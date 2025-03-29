@@ -622,3 +622,11 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
         # If we get here, no image was found
         LaUtils.debug.log("on_cboAnimal_changed: No valid image found, clearing picture label")
         self.lblAnimalPic.clear()
+
+    def on_pbnMore_clicked(self):
+        """Handle the 'More' button click to launch the Assemblage Conversion Utility dialog."""
+        from la.gui.laassemblageconversion import LaAssemblageConversion
+
+        # Create and show the Assemblage Conversion Utility dialog
+        assemblage_conversion_dialog = LaAssemblageConversion(self)
+        assemblage_conversion_dialog.exec_()
