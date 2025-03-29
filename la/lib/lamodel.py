@@ -688,16 +688,16 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             return float(prop.__get__(animal, type(animal)))
         return float(prop)
 
-    def _getAnimalParamValue(self, param, prop_name: str) -> float:
+    def _GetAnimalParamValue(self, theParam, thePropName: str) -> float:
         """Helper method to safely get float values from animal parameter properties."""
-        prop = getattr(param, prop_name, None)
-        if prop is None:
+        myProp = getattr(theParam, thePropName, None)
+        if myProp is None:
             return 0.0
-        if isinstance(prop, property):
-            return float(prop.__get__(param, type(param)))
-        return float(prop)
+        if isinstance(myProp, property):
+            return float(myProp.__get__(theParam, type(theParam)))
+        return float(myProp)
 
-    def _set_diet_labels(self, theDietLabels: LaDietLabels,
+    def _setDietLabels(self, theDietLabels: LaDietLabels,
                         theOverallDairyMCals: float,
                         theOverallCropsMCals: float,
                         theOverallMeatMCals: float,
@@ -719,28 +719,27 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         try:
             # Log the ID of the object we're updating to help with debugging
             from la.lib.lautils import LaUtils
-            
-            # Set values directly to attributes first - using naming from C++ version
-            theDietLabels._dairyMCalories = theOverallDairyMCals
-            theDietLabels._cropMCalories = theOverallCropsMCals
-            theDietLabels._animalMCalories = theOverallMeatMCals
-            theDietLabels._wildAnimalMCalories = theOverallWildMeatMCals
-            theDietLabels._wildPlantsMCalories = theOverallWildPlantsMCals
-            theDietLabels._dairyPortionPct = theOverallDairyPercent * 100.0
-            theDietLabels._tameMeatPortionPct = theDomesticMeatPercent * 100.0
-            theDietLabels._cropsPortionPct = theOverallCropPercent * 100.0
-            theDietLabels._wildAnimalPortionPct = theWildMeatPercent * 100.0
-            theDietLabels._wildPlantsPortionPct = theOverallWildPlantPercent * 100.0
-            theDietLabels._plantsPortionPct = theOverallPlantPercent * 100.0
-            theDietLabels._animalPortionPct = theOverallMeatPercent * 100.0
-            theDietLabels._kiloCaloriesIndividualAnnual = theMCalsIndividualAnnual
-            theDietLabels._megaCaloriesSettlementAnnual = theMCalsSettlementAnnual
-            theDietLabels._dairySurplusMCalories = theOverallDairySurplusMCals
-            theDietLabels._cropCalcsReportMap = theCropCalcsReportMap
-            theDietLabels._animalCalcsReportMap = theAnimalCalcsReportMap
-
             # Log new values before emitting signals
-            LaUtils.debug.log(f"New values set - Dairy: {theOverallDairyMCals:.2f}, Crops: {theOverallCropsMCals:.2f}", "Diet")
+            LaUtils.debug.log(f"New values set - Dairy: {theOverallDairyMCals:.2f},\
+                                Crops: {theOverallCropsMCals:.2f}", "Diet")
+            # Set values directly to attributes first - using naming from C++ version
+            theDietLabels.dairyMCalories = theOverallDairyMCals # type: ignore
+            theDietLabels.cropMCalories = theOverallCropsMCals  # type: ignore
+            theDietLabels.animalMCalories = theOverallMeatMCals # type: ignore
+            theDietLabels.wildAnimalMCalories = theOverallWildMeatMCals # type: ignore
+            theDietLabels.wildPlantsMCalories = theOverallWildPlantsMCals # type: ignore
+            theDietLabels.dairyPortionPct = theOverallDairyPercent * 100.0 # type: ignore
+            theDietLabels.tameMeatPortionPct = theDomesticMeatPercent * 100.0 # type: ignore
+            theDietLabels.cropsPortionPct = theOverallCropPercent * 100.0 # type: ignore
+            theDietLabels.wildAnimalPortionPct = theWildMeatPercent * 100.0 # type: ignore
+            theDietLabels.wildPlantsPortionPct = theOverallWildPlantPercent * 100.0 # type: ignore
+            theDietLabels.plantsPortionPct = theOverallPlantPercent * 100.0 # type: ignore
+            theDietLabels.animalPortionPct = theOverallMeatPercent * 100.0 # type: ignore
+            theDietLabels.kiloCaloriesIndividualAnnual = theMCalsIndividualAnnual # type: ignore
+            theDietLabels.megaCaloriesSettlementAnnual = theMCalsSettlementAnnual # type: ignore
+            theDietLabels.dairySurplusMCalories = theOverallDairySurplusMCals # type: ignore
+            theDietLabels.cropCalcsReportMap = theCropCalcsReportMap # type: ignore
+            theDietLabels.animalCalcsReportMap = theAnimalCalcsReportMap # type: ignore
 
             try:
                 theDietLabels.dairyMCaloriesChanged.emit(theOverallDairyMCals)
@@ -762,7 +761,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                 theDietLabels.animalCalcsReportMapChanged.emit(theAnimalCalcsReportMap)
             except Exception as e:
                 LaUtils.debug.log(f"Error emitting diet label signals: {str(e)}", "Error")
-                
+
         except Exception as e:
             from la.lib.lautils import LaUtils
             LaUtils.debug.log(f"Error updating diet labels in model: {str(e)}", "Error")
@@ -782,7 +781,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             myTameMeatMCalorieCounter = 0.0
             myWildMeatMCalorieCounter = 0.0
             mySelectedAnimalsMap = self._mAnimals  # Similar to C++ QMap<QString,QString>
-            
+
             # C++ style variable declarations (c1, c8, etc.)
             c1 = 1.0 - (self._mMeatPercent / 100.0)  # Decimal form of meat percent
             c8 = self._mDairyUtilisation / 100.0     # Decimal form of dairy utilization
@@ -790,11 +789,11 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             c11 = self._mCaloriesPerPersonDaily
             c14 = c10 * c11 * 365.0 / 1000.0         # Settlement annual MCal
             c15 = self._mDietPercent / 100.0         # Decimal form of diet percent
-            
+
             # Calculate MCals for different food sources
-            # In this simplified version, we'll estimate values that would normally 
+            # In this simplified version, we'll estimate values that would normally
             # come from detailed animal and crop calculations
-            
+
             # Initialize counters (simplified calculation)
             myDairyMCalorieCounter = myMCalsSettlementAnnual * c15 * 0.05  # 5% of animal diet
             myTameMeatMCalorieCounter = myMCalsSettlementAnnual * c15 * (self._mMeatPercent / 100.0)  # Tame meat percent
@@ -813,13 +812,13 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             # Calculate overall percentages
             myOverallMeatPercent = tameMeatPercent + wildMeatPercent  # Combined meat percent
             myOverallPlantPercent = cropPercent + wildPlantPercent    # Combined plant percent
-            
+
             # Report maps for crops and animals (empty in simplified version)
             myCropCalcsReportMap = {}
             myAnimalCalcsReportMap = {}
-
+            myDairySurplus = 0.0 # No surplus dairy
             # Set all values in the diet labels object
-            self._set_diet_labels(
+            self._setDietLabels(
                 myDietLabels,
                 myDairyMCalorieCounter,      # Overall dairy MCals
                 myCropMCalories,              # Overall crop MCals
@@ -853,17 +852,17 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
     def doCalcsAnimalsFirstIncludeDairy(self) -> LaDietLabels:
         """Calculate diet values when animals are prioritized and dairy is included with meat."""
         from la.lib.lautils import LaUtils
-        myDietLabels = LaDietLabels()
-
+        myDietLabels: LaDietLabels = LaDietLabels()
+        myAnimal: LaAnimal = LaAnimal()
         # Log start of calculation
         LaUtils.debug.log("Starting doCalcsAnimalsFirstIncludeDairy calculation", "Diet")
 
         try:
             # Get base values from internal attributes
-            calories_daily = float(self._mCaloriesPerPersonDaily)
-            population_count = float(self._mPopulation)
-            meat_percent = float(self._mMeatPercent) / 100.0  # Convert to decimal
-            diet_percent = float(self._mDietPercent) / 100.0  # Convert to decimal
+            calories_daily = self._mCaloriesPerPersonDaily
+            population_count = self._mPopulation
+            meat_percent = self._mMeatPercent / 100.0  # Convert to decimal
+            diet_percent = self._mDietPercent / 100.0  # Convert to decimal
 
             # Log input values
             LaUtils.debug.log(f"Calories per person daily: {calories_daily}", "Diet")
@@ -1307,13 +1306,13 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                         except Exception as e:
                             # Default values if there's an error getting feed requirements
                             LaUtils.debug.log(f"Error getting feed requirements for {animal.name}: {e}", "Error")
-                            myFeedForMaintenance = 1.0  # Default values
-                            myFeedForGestating = 1.5
-                            myFeedForLactating = 2.0
-                            myFeedForOffspringPerKg = 0.1
+                            myFeedForMaintenance = 3.3  # Default values
+                            myFeedForGestating = 3.3
+                            myFeedForLactating = 3.3
+                            myFeedForOffspringPerKg = 3.3
                             myUseCommonGrazingLand = True
                             myUseSpecificGrazingLand = False
-                            myGrazingLandCalories = 7500.0  # Default calories per hectare
+                            myGrazingLandCalories = 3333.3  # Default calories per hectare
 
                         # Calculate MCals needed for each phase
                         myGestatingMCals = myTotalMothers * myGestatingTime * myFeedForGestating
@@ -1395,7 +1394,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                     LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
 
             # Set all values in the diet labels object
-            self._set_diet_labels(
+            self._setDietLabels(
                 myDietLabels,
                 myDairyCounter,           # Overall dairy MCals
                 myCropCounter,            # Overall crop MCals
