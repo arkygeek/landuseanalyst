@@ -219,6 +219,15 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
         self.sbPercentTameMeat.setValue(float(self.mAnimalParameter._mPercentTameMeat))
         LaUtils.debug.log(f"showAnimalParameter: Set percent tame meat to: {self.mAnimalParameter._mPercentTameMeat}")
 
+        # Set the specific land energy type combo box
+        current_energy_type = self.mAnimalParameter.specificLandEnergyType # Use the property
+        LaUtils.debug.log(f"showAnimalParameter: Setting specific land energy type to: {current_energy_type.name}") # Access .name on the returned enum
+        for i in range(self.cbSpecificLandEnergyType.count()):
+            if self.cbSpecificLandEnergyType.itemText(i) == current_energy_type.name: # Access .name on the returned enum
+                self.cbSpecificLandEnergyType.setCurrentIndex(i)
+                LaUtils.debug.log(f"showAnimalParameter: Found matching energy type at index {i}")
+                break
+
         # Set the fallow usage combo box
         current_fallow = self.mAnimalParameter._fallowUsage
         LaUtils.debug.log(f"showAnimalParameter: Setting fallow usage to: {current_fallow}")
@@ -257,12 +266,15 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
             LaUtils.debug.log(f"update_animal_picture: Available animal - GUID: {guid_str}, Name: {animal.name}")
 
             # Compare to find match
-            if guid_str == animalGuid or animalGuid in guid_str:
+            # Ensure animalGuid is a string for comparison
+            target_guid_str = str(animalGuid)
+            if guid_str == target_guid_str or target_guid_str in guid_str:
                 # Get image file
                 if hasattr(animal, 'imageFile'):
                     image_file = animal.imageFile
-                    if callable(image_file):
-                        image_file = image_file()
+                    # No need to call image_file() again here, it's handled if callable below
+                    # if callable(image_file):
+                    #     image_file = image_file()
 
                     if image_file:
                         # Try to resolve path
@@ -373,17 +385,26 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
             self.mAnimalParameter._mFoodSourceMap = myFoodSourceMap
             LaUtils.debug.log(f"on_pbnApply_clicked: Saved {len(myFoodSourceMap)} fodder crops")
 
-        # Set energy type and area units
-        self.mAnimalParameter._energyType = EnergyType.KCalories if self.cbSpecificLandEnergyType.currentText() == "KCalories" else EnergyType.TDN
-        self.mAnimalParameter._areaUnits = AreaUnits.Dunum if self.cbAreaUnits.currentText() == "Dunum" else AreaUnits.Hectare
+        # Set energy type and area units using property setters
+        self.mAnimalParameter.areaUnits = AreaUnits.Dunum if self.cbAreaUnits.currentText() == "Dunum" else AreaUnits.Hectare
+
+        # Set specific land energy type using the property setter
+        mySelectedEnergyTypeText = self.cbSpecificLandEnergyType.currentText()
+        try:
+            self.mAnimalParameter.specificLandEnergyType = EnergyType[mySelectedEnergyTypeText]
+            LaUtils.debug.log(f"on_pbnApply_clicked: Set specificLandEnergyType to {mySelectedEnergyTypeText}")
+        except KeyError:
+            LaUtils.debug.log(f"on_pbnApply_clicked: Invalid energy type selected: {mySelectedEnergyTypeText}, defaulting to KCalories")
+            self.mAnimalParameter.specificLandEnergyType = EnergyType.KCalories
 
         # Save raster name
-        self.mAnimalParameter._rasterName = self.cboRaster.currentText()
+        self.mAnimalParameter.rasterName = self.cboRaster.currentText() # Use property setter
         
         # Set fallow usage based on combo box data
         index = self.cbFallowUsage.currentIndex()
         if index >= 0:
-            self.mAnimalParameter._fallowUsage = self.cbFallowUsage.itemData(index)
+            # Use property setter for fallowUsage
+            self.mAnimalParameter.fallowUsage = self.cbFallowUsage.itemData(index)
 
         # Save parameter to file
         filepath = os.path.join(LaUtils.userAnimalParameterProfilesDirPath(),

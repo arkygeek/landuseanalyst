@@ -1489,8 +1489,8 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             # Set model parameters - using direct property assignment instead of setter methods
             if hasattr(self, 'model'):
                 # Directly assign to the model's internal properties
-                self.model._mAnimals = selected_animals
-                self.model._mCrops = selected_crops
+                self.model.mAnimals = selected_animals
+                self.model.mCrops = selected_crops
 
                 # Calculate diet labels based on settings
                 diet_labels = None
@@ -1558,8 +1558,8 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             # Set model parameters - using direct property assignment instead of setter methods
             if hasattr(self, 'model'):
                 # Directly assign to the model's internal properties
-                self.model._mAnimals = selected_animals
-                self.model._mCrops = selected_crops
+                self.model.mAnimals = selected_animals
+                self.model.mCrops = selected_crops
 
                 # Calculate diet labels based on settings
                 diet_labels = None
@@ -1745,7 +1745,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         """Handle daily calories changes."""
         if hasattr(self, 'model'):
             LaUtils.debug.log(f"Daily Calories changed to: {value}", "Diet")
-            self.model._mCaloriesPerPersonDaily = value
+            self.model.mCaloriesPerPersonDaily = value
             self.setDietLabels()
 
     def on_sbDairyUtilisation_valueChanged(self, value):
@@ -1758,14 +1758,14 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                     value = float(value.replace("%", "").strip())
                 except (ValueError, TypeError):
                     value = 100.0
-            self.model._mDairyUtilisation = value
+            self.model.mDairyUtilisation = value
             self.setDietLabels()
 
     def on_sbPopulation_valueChanged(self, value):
         """Handle population changes."""
         if hasattr(self, 'model'):
             LaUtils.debug.log(f"Population changed to: {value}", "Diet")
-            self.model._mPopulation = value
+            self.model.mPopulation = value
             self.setDietLabels()
 
     def updateModelFromUI(self):
@@ -1793,7 +1793,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             self.model.limitDairyPercent = self.sbLimitDairyPercent.value()
 
         if hasattr(self, 'sbDailyCalories'):
-            self.model._mCaloriesPerPersonDaily = self.sbDailyCalories.value()
+            self.model.mCaloriesPerPersonDaily = self.sbDailyCalories.value()
 
         if hasattr(self, 'sbDairyUtilisation'):
             self.model.dairyUtilisation = self.sbDairyUtilisation.value()

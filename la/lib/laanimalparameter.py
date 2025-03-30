@@ -24,6 +24,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
     rasterNameChanged = pyqtSignal(str)
     areaUnitsChanged = pyqtSignal(object)  # Added signal for area units
     energyTypeChanged = pyqtSignal(object)  # Added signal for energy type
+    specificLandEnergyTypeChanged = pyqtSignal(object) # Added signal for specific land energy type
     valueCommonGrazingLandChanged = pyqtSignal(int)  # Added signal for common grazing land value
     valueSpecificGrazingLandChanged = pyqtSignal(int)  # Added signal for specific grazing land value
 
@@ -50,6 +51,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self._rasterName = ""
             self._areaUnits = AreaUnits.Dunum
             self._energyType = EnergyType.KCalories
+            self._specificLandEnergyType = EnergyType.KCalories # Added default
             # No default values for grazing land productivity, matching C++ implementation
             self._mValueCommonGrazingLand = 0
             self._mValueSpecificGrazingLand = 0
@@ -68,6 +70,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self._rasterName = str(getattr(theAnimalParameter, '_rasterName', ''))
             self._areaUnits = getattr(theAnimalParameter, '_areaUnits', AreaUnits)
             self._energyType = getattr(theAnimalParameter, '_energyType', EnergyType)
+            self._specificLandEnergyType = getattr(theAnimalParameter, '_specificLandEnergyType', EnergyType.KCalories) # Added assignment
             self._mValueCommonGrazingLand = int(getattr(theAnimalParameter, '_mValueCommonGrazingLand', 0))
             self._mValueSpecificGrazingLand = int(getattr(theAnimalParameter, '_mValueSpecificGrazingLand', 0))
 
@@ -273,6 +276,18 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self._energyType = value
             self.energyTypeChanged.emit(value)  # Emit signal when value changes
 
+    @pyqtProperty(object, notify=specificLandEnergyTypeChanged) # Added property
+    def specificLandEnergyType(self) -> EnergyType: # type: ignore
+        """Get the specific land energy type."""
+        return EnergyType(self._specificLandEnergyType)
+
+    @specificLandEnergyType.setter
+    def specificLandEnergyType(self, value: EnergyType) -> None:
+        """Set the specific land energy type."""
+        if isinstance(value, EnergyType) and self._specificLandEnergyType != value:
+            self._specificLandEnergyType = value
+            self.specificLandEnergyTypeChanged.emit(value)
+
     @pyqtProperty(int, notify=valueCommonGrazingLandChanged)
     def valueCommonGrazingLand(self) -> int: # type: ignore
         """Get the value of common grazing land in calories per hectare."""
@@ -427,6 +442,49 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
                 rasterNameElement = myTopElement.firstChildElement("RasterName")
             self._rasterName = LaUtils.xmlDecode(rasterNameElement.text()) if not rasterNameElement.isNull() else ""
 
+            # Parse AreaUnits
+            areaUnitsElement = myTopElement.firstChildElement("areaUnits")
+            if not areaUnitsElement.isNull():
+                try:
+                    self._areaUnits = AreaUnits[areaUnitsElement.text()]
+                except KeyError:
+                    self._areaUnits = AreaUnits.Dunum # Default if invalid
+            else:
+                self._areaUnits = AreaUnits.Dunum # Default if tag missing
+
+            # Parse EnergyType
+            energyTypeElement = myTopElement.firstChildElement("energyType")
+            if not energyTypeElement.isNull():
+                try:
+                    self._energyType = EnergyType[energyTypeElement.text()]
+                except KeyError:
+                    self._energyType = EnergyType.KCalories # Default if invalid
+            else:
+                self._energyType = EnergyType.KCalories # Default if tag missing
+
+            # Parse SpecificLandEnergyType
+            specificEnergyTypeElement = myTopElement.firstChildElement("specificLandEnergyType")
+            if not specificEnergyTypeElement.isNull():
+                try:
+                    self._specificLandEnergyType = EnergyType[specificEnergyTypeElement.text()]
+                except KeyError:
+                    self._specificLandEnergyType = EnergyType.KCalories # Default if invalid
+            else:
+                self._specificLandEnergyType = EnergyType.KCalories # Default if tag missing
+
+            # Parse grazing land values
+            try:
+                commonValueElement = myTopElement.firstChildElement("valueCommonGrazingLand")
+                self._mValueCommonGrazingLand = int(commonValueElement.text()) if not commonValueElement.isNull() else 0
+            except (ValueError, TypeError):
+                self._mValueCommonGrazingLand = 0
+
+            try:
+                specificValueElement = myTopElement.firstChildElement("valueSpecificGrazingLand")
+                self._mValueSpecificGrazingLand = int(specificValueElement.text()) if not specificValueElement.isNull() else 0
+            except (ValueError, TypeError):
+                self._mValueSpecificGrazingLand = 0
+
             LaUtils.debug.log(f"Successfully loaded animal parameter: {self._mName}")
             return True
         except Exception as e:
@@ -471,6 +529,11 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
 
         myString += f"  <fallowUsage>{fallowUsageStr}</fallowUsage>\n"
         myString += f"  <rasterName>{LaUtils.xmlEncode(str(self.rasterName))}</rasterName>\n"
+        myString += f"  <areaUnits>{self.areaUnits.name}</areaUnits>\n" # Added areaUnits
+        myString += f"  <energyType>{self.energyType.name}</energyType>\n" # Added energyType
+        myString += f"  <specificLandEnergyType>{self.specificLandEnergyType.name}</specificLandEnergyType>\n" # Added specificLandEnergyType
+        myString += f"  <valueCommonGrazingLand>{self.valueCommonGrazingLand}</valueCommonGrazingLand>\n" # Added common grazing value
+        myString += f"  <valueSpecificGrazingLand>{self.valueSpecificGrazingLand}</valueSpecificGrazingLand>\n" # Added specific grazing value
         myString += "</animalParameter>\n"
         return myString
 

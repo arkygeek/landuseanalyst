@@ -615,8 +615,8 @@ class LaMainForm(LaMainFormBase):
             self.model.caloriesPerPersonDaily = self.sbDailyCalories.value()
             
             # Configure model with selected animals and crops
-            self.model._mAnimals = self.getSelectedAnimals()
-            self.model._mCrops = self.getSelectedCrops()
+            self.model.mAnimals = self.getSelectedAnimals()
+            self.model.mCrops = self.getSelectedCrops()
 
             # Configure dairy utilisation if available
             if hasattr(self, 'sbDairyUtilisation'):
