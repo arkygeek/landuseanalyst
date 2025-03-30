@@ -20,37 +20,28 @@ on a multitude of demographic and dietary inputs.
     the Free Software Foundation; either version 3 of the License, or
     (at your option) any later version.
 """
+import os
 
 # region imports
 from qgis.PyQt.QtWidgets import QListWidgetItem, QTableWidgetItem, QComboBox
 from qgis.PyQt import uic
-from qgis.PyQt import QtCore
 from qgis.PyQt.QtWidgets import QDialog
 from qgis.PyQt.QtCore import QFile, QSettings
 from qgis.PyQt.QtCore import QTextStream
 from qgis.PyQt.QtGui import QIcon
 
-import os
+from qgis.PyQt import QtWidgets, QtCore, QtGui
+from qgis.PyQt.QtWidgets import QDialog
+from qgis.PyQt.QtCore import QFile, QTextStream
+from qgis.PyQt.QtGui import QIcon, QPixmap
 
-from la.lib.lamodel import LaModel
 from la.lib.lautils import LaUtils
-
-from la.ui.lacropmanagerbase import LaCropManagerBase
-from la.ui.lacropparametermanagerbase import LaCropParameterManagerBase
-from la.ui.laanimalmanagerbase import LaAnimalManagerBase
-from la.ui.laanimalparameterbase import LaAnimalParameterBase
 
 # Add imports for implementation classes
 from la.gui.lacropmanager import LaCropManager
 from la.gui.lacropparametermanager import LaCropParameterManager
 from la.gui.laanimalmanager import LaAnimalManager
 from la.gui.laanimalparametermanager import LaAnimalParameterManager
-
-# Make sure we have the proper imports at the top
-from qgis.PyQt import QtWidgets, QtCore, QtGui
-from qgis.PyQt.QtWidgets import QDialog
-from qgis.PyQt.QtCore import QFile, QTextStream
-from qgis.PyQt.QtGui import QIcon, QPixmap
 
 # endregion
 
@@ -144,6 +135,26 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         self.tblCrops.cellClicked.connect(self.cropCellClicked)
         self.tblCrops.cellChanged.connect(self.cropCalcSelectionChanged)
         self.cbDebug.clicked.connect(self.on_cbDebug_clicked)
+
+        # Connect tab widget change signal
+        if hasattr(self, 'tabWidgetMain'):
+            self.tabWidgetMain.currentChanged.connect(self.on_tabWidgetMain_currentChanged)
+
+    def on_tabWidgetMain_currentChanged(self, index):
+        """Handle tab changes in the main tab widget."""
+        # Assuming Calculations tab is the 4th tab (index 3)
+        if index == 3: # Index of the Calculations tab
+            LaUtils.debug.log("Calculations tab selected", "UI")
+            # Check if the animal list has items
+            if self.listWidgetCalculationsAnimal.count() > 0:
+                # Check if no item is currently selected or if the first item isn't selected
+                if self.listWidgetCalculationsAnimal.currentRow() != 0:
+                    LaUtils.debug.log("Selecting first animal in calculations list", "UI")
+                    # Select the first item programmatically
+                    self.listWidgetCalculationsAnimal.setCurrentRow(0)
+                    # The currentItemChanged signal connected to animalCalcClicked should handle the rest
+            else:
+                LaUtils.debug.log("Animal calculations list is empty", "UI")
 
     def initializeDietLabels(self):
         """Initialize all diet labels with default values."""
@@ -271,7 +282,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                         if self.model.includeDairy:
                             dietLabels = self.model.doCalcsPlantsFirstIncludeDairy()
                         else:
-                            dietLabels = self.model.doCalcsPlantsFirstDairySeperate()
+                            dietLabels = self.model.doCalcsPlantsFirstDairySeparate()
                     else:
                         if self.model.includeDairy:
                             dietLabels = self.model.doCalcsAnimalsFirstIncludeDairy()
@@ -725,9 +736,6 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                     LaUtils.debug.log(f"Failed to create pixmap for calculation from {imagePath}", "Error")
             else:
                 self.lblCropPicCalcs.clear()
-                LaUtils.debug.log(f"Calculation image path doesn't exist: {imagePath}", "Warning")
-        else:
-            self.lblCropPicCalcs.clear()
 
         # Update any calculations
         self.updateCropCalculations(crop)
@@ -1211,7 +1219,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                                 self.lblAnimalPix.setPixmap(pixmap.scaled(100, 100, QtCore.Qt.KeepAspectRatio))
                                 LaUtils.debug.log(f"Successfully loaded animal image from alternate path", "UI")
                             else:
-                                LaUtils.debug.log(f"Failed to create pixmap from alternate path", "Error")
+                                LaUtils.debug.log(f"Failed to load animal image from alternate path", "Error")
                         else:
                             LaUtils.debug.log(f"No valid image file found at any location", "Warning")
                 else:
@@ -1305,8 +1313,6 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                                     LaUtils.debug.log(f"Failed to load image from alternative path: {alternativePath}", "Error")
                             else:
                                 LaUtils.debug.log(f"No valid image path found", "Warning")
-                    else:
-                        LaUtils.debug.log(f"Image path doesn't exist: {resolved_path}", "Warning")
         except Exception as e:
             LaUtils.debug.log(f"Error showing crop details: {str(e)}", "Error")
             import traceback
@@ -1489,8 +1495,10 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             # Set model parameters - using direct property assignment instead of setter methods
             if hasattr(self, 'model'):
                 # Directly assign to the model's internal properties
-                self.model.mAnimals = selected_animals
-                self.model.mCrops = selected_crops
+                # self.model.mAnimals = selected_animals # Incorrect: Use property setter
+                # self.model.mCrops = selected_crops # Incorrect: Use property setter
+                self.model.animals = selected_animals # Correct: Use property setter
+                self.model.crops = selected_crops # Correct: Use property setter
 
                 # Calculate diet labels based on settings
                 diet_labels = None
@@ -1558,8 +1566,8 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             # Set model parameters - using direct property assignment instead of setter methods
             if hasattr(self, 'model'):
                 # Directly assign to the model's internal properties
-                self.model.mAnimals = selected_animals
-                self.model.mCrops = selected_crops
+                self.model.animals = selected_animals
+                self.model.crops = selected_crops
 
                 # Calculate diet labels based on settings
                 diet_labels = None
@@ -1752,7 +1760,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         """Handle dairy utilisation changes."""
         if hasattr(self, 'model'):
             LaUtils.debug.log(f"Dairy Utilisation changed to: {value}", "Diet")
-            # Make sure we don't pass a string with % symbol
+            # Make sure wedon't pass a string with % symbol
             if isinstance(value, str) and "%" in value:
                 try:
                     value = float(value.replace("%", "").strip())

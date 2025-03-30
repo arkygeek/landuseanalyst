@@ -252,7 +252,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self._rasterName = rasterName
             self.rasterNameChanged.emit(rasterName)
 
-    @pyqtProperty(object, notify=areaUnitsChanged)  # Updated to use signal
+    @pyqtProperty(AreaUnits, notify=areaUnitsChanged)  # Changed type hint from object
     def areaUnits(self) -> AreaUnits: # type: ignore
         """Get the area units."""
         return AreaUnits(self._areaUnits)
@@ -264,7 +264,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self._areaUnits = value
             self.areaUnitsChanged.emit(value)  # Emit signal when value changes
 
-    @pyqtProperty(object, notify=energyTypeChanged)  # Updated to use signal
+    @pyqtProperty(EnergyType, notify=energyTypeChanged)  # Changed type hint from object
     def energyType(self) -> EnergyType: # type: ignore
         """Get the energy type."""
         return EnergyType(self._energyType)
@@ -276,7 +276,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self._energyType = value
             self.energyTypeChanged.emit(value)  # Emit signal when value changes
 
-    @pyqtProperty(object, notify=specificLandEnergyTypeChanged) # Added property
+    @pyqtProperty(EnergyType, notify=specificLandEnergyTypeChanged) # Changed type hint from object
     def specificLandEnergyType(self) -> EnergyType: # type: ignore
         """Get the specific land energy type."""
         return EnergyType(self._specificLandEnergyType)
@@ -529,9 +529,9 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
 
         myString += f"  <fallowUsage>{fallowUsageStr}</fallowUsage>\n"
         myString += f"  <rasterName>{LaUtils.xmlEncode(str(self.rasterName))}</rasterName>\n"
-        myString += f"  <areaUnits>{self.areaUnits.name}</areaUnits>\n" # Added areaUnits
-        myString += f"  <energyType>{self.energyType.name}</energyType>\n" # Added energyType
-        myString += f"  <specificLandEnergyType>{self.specificLandEnergyType.name}</specificLandEnergyType>\n" # Added specificLandEnergyType
+        myString += f"  <areaUnits>{self._areaUnits.name}</areaUnits>\n" # Corrected access
+        myString += f"  <energyType>{self._energyType.name}</energyType>\n" # Corrected access
+        myString += f"  <specificLandEnergyType>{self._specificLandEnergyType.name}</specificLandEnergyType>\n" # Corrected access
         myString += f"  <valueCommonGrazingLand>{self.valueCommonGrazingLand}</valueCommonGrazingLand>\n" # Added common grazing value
         myString += f"  <valueSpecificGrazingLand>{self.valueSpecificGrazingLand}</valueSpecificGrazingLand>\n" # Added specific grazing value
         myString += "</animalParameter>\n"

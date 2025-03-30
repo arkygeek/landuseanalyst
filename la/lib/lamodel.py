@@ -1153,7 +1153,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                         myKgForPeople = myKgForPeople1 + myKgForPeopleSpoilage + myKgForPeopleReseed
 
                         # Calculate area needed based on yield
-                        myCropYield = float(str(crop.cropYield))
+                        myCropYield = crop.cropYield
 
                         # Determine area units and convert values if needed
                         areaUnitName = "hectares"

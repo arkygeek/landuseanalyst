@@ -13,14 +13,51 @@ best practices where appropriate.
 
 ## Methods/Functions
 
-- Methods and functions use camelCase
-  - Example: `cropYield()`, `refreshCropTable()`
-- Getter methods do not include "get" prefix
-  - Example: `name()` instead of `getName()`
-- Setter methods use "set" prefix
-  - Example: `setName()`, `setCropYield()`
-- Event handlers and slots follow Qt naming convention with `on_` prefix
-  - Example: `on_pbnApply_clicked()`, `on_toolNew_clicked()`
+- Methods and functions use camelCase without prefixes.
+  - Example: `calculateYield()`, `refreshCropTable()`
+- Properties exposed to Qt via `pyqtProperty` use camelCase without prefixes.
+  - Getter and setter methods referenced by `pyqtProperty` (if needed) also follow the standard method naming convention (camelCase, no prefix). If it is signal or slot related variable, it should be prefixed with `_` and use camelCase.
+  - Example:
+    ```python
+    # In a class definition
+    _cropYieldChanged = pyqtSignal() # Define the notify signal
+
+    def getCropYield(self) -> int:
+        """Getter for cropYield property."""
+        return self.mCropYield
+
+    def setCropYield(self, theValue: int):
+        """Setter for cropYield property."""
+        if self.mCropYield != theValue:
+            self.mCropYield = theValue
+            self._cropYieldChanged.emit() # Emit signal on change
+
+    # Define the property
+    cropYield = pyqtProperty(int, fget=getCropYield, fset=setCropYield, notify=cropYieldChanged)
+    ```
+- For standard Python properties (not directly exposed via `pyqtProperty` or when providing a Pythonic interface), use `@property` and `@<propertyName>.setter` decorators.
+  - The property name itself uses camelCase without prefixes.
+  - The internal member variable follows the `_m` prefix convention.
+  - Example (Read/Write):
+    ```python
+    @property
+    def description(self) -> str:
+        return self._mDescription
+
+    @description.setter
+    def description(self, theValue: str):
+        self._mDescription = theValue
+    ```
+  - Example (Read-Only):
+    ```python
+    @property
+    def guid(self) -> str:
+        # Assuming mGuid is intended to be read-only after creation
+        return self.mGuid
+    ```
+- **Type Hinting with `pyqtProperty`:** Since `pyqtProperty` can obscure type information from static analyzers, consider using `.pyi` stub files to declare the properties with standard `@property` syntax for improved type checking and autocompletion in the IDE.
+- Event handlers (slots) connected to Qt signals follow the `on_<objectName>_<signalName>` convention.
+  - Example: `on_pbnApply_clicked()`, `on_tblCrops_itemSelectionChanged()`
 
 ### Special Case: Class Methods
 
