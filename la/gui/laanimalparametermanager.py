@@ -219,6 +219,15 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
         self.sbPercentTameMeat.setValue(float(self.mAnimalParameter._mPercentTameMeat))
         LaUtils.debug.log(f"showAnimalParameter: Set percent tame meat to: {self.mAnimalParameter._mPercentTameMeat}")
 
+        # Set the specific land energy type combo box
+        current_energy_type = self.mAnimalParameter.specificLandEnergyType # Use the property
+        LaUtils.debug.log(f"showAnimalParameter: Setting specific land energy type to: {current_energy_type.name}") # Access .name on the returned enum
+        for i in range(self.cbSpecificLandEnergyType.count()):
+            if self.cbSpecificLandEnergyType.itemText(i) == current_energy_type.name: # Access .name on the returned enum
+                self.cbSpecificLandEnergyType.setCurrentIndex(i)
+                LaUtils.debug.log(f"showAnimalParameter: Found matching energy type at index {i}")
+                break
+
         # Set the fallow usage combo box
         current_fallow = self.mAnimalParameter._fallowUsage
         LaUtils.debug.log(f"showAnimalParameter: Setting fallow usage to: {current_fallow}")
@@ -257,12 +266,15 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
             LaUtils.debug.log(f"update_animal_picture: Available animal - GUID: {guid_str}, Name: {animal.name}")
 
             # Compare to find match
-            if guid_str == animalGuid or animalGuid in guid_str:
+            # Ensure animalGuid is a string for comparison
+            target_guid_str = str(animalGuid)
+            if guid_str == target_guid_str or target_guid_str in guid_str:
                 # Get image file
                 if hasattr(animal, 'imageFile'):
                     image_file = animal.imageFile
-                    if callable(image_file):
-                        image_file = image_file()
+                    # No need to call image_file() again here, it's handled if callable below
+                    # if callable(image_file):
+                    #     image_file = image_file()
 
                     if image_file:
                         # Try to resolve path
@@ -333,20 +345,72 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
         self.mAnimalParameter._mPercentTameMeat = self.sbPercentTameMeat.value()
         self.mAnimalParameter._mUseCommonGrazingLand = self.checkBoxCommonRaster.isChecked()
         self.mAnimalParameter._mUseSpecificGrazingLand = self.checkBoxSpecificRaster.isChecked()
+        self.mAnimalParameter._mValueSpecificGrazingLand = self.sbSpecificRasterValue.value()
+        
+        # Set fodder use from group box checked state
+        self.mAnimalParameter._mFodderUse = float(self.grpFodderUse.isChecked())
+        
+        # Save fodder data from the table
+        if self.grpFodderUse.isChecked():
+            from la.lib.lafoodsource import LaFoodSource
+            myFoodSourceMap = {}
+            
+            # Loop through all rows in the fodder table
+            for myCurrentRow in range(self.tblFodder.rowCount()):
+                mypNameWidget = self.tblFodder.item(myCurrentRow, 0)
+                if not mypNameWidget or mypNameWidget.checkState() != Qt.Checked:
+                    continue
+                
+                # Get the crop GUID
+                myGuid = mypNameWidget.data(Qt.UserRole)
+                if not myGuid:
+                    continue
+                
+                # Get the spin box values
+                mypFodderSpinBox = self.tblFodder.cellWidget(myCurrentRow, 1)
+                mypGrainSpinBox = self.tblFodder.cellWidget(myCurrentRow, 2)
+                mypDaysSpinBox = self.tblFodder.cellWidget(myCurrentRow, 3)
+                
+                # Create a new food source
+                myFoodSource = LaFoodSource()
+                myFoodSource.used = True
+                myFoodSource.fodder = mypFodderSpinBox.value()
+                myFoodSource.grain = mypGrainSpinBox.value()
+                myFoodSource.days = mypDaysSpinBox.value()
+                
+                # Add to the map
+                myFoodSourceMap[myGuid] = myFoodSource
+            
+            # Save the food source map to the animal parameter
+            self.mAnimalParameter._mFoodSourceMap = myFoodSourceMap
+            LaUtils.debug.log(f"on_pbnApply_clicked: Saved {len(myFoodSourceMap)} fodder crops")
 
-        # Set energy type and area units
-        self.mAnimalParameter._energyType = EnergyType.KCalories if self.cbSpecificLandEnergyType.currentText() == "KCalories" else EnergyType.TDN
-        self.mAnimalParameter._areaUnits = AreaUnits.Dunum if self.cbAreaUnits.currentText() == "Dunum" else AreaUnits.Hectare
+        # Set energy type and area units using property setters
+        self.mAnimalParameter.areaUnits = AreaUnits.Dunum if self.cbAreaUnits.currentText() == "Dunum" else AreaUnits.Hectare
 
+        # Set specific land energy type using the property setter
+        mySelectedEnergyTypeText = self.cbSpecificLandEnergyType.currentText()
+        try:
+            self.mAnimalParameter.specificLandEnergyType = EnergyType[mySelectedEnergyTypeText]
+            LaUtils.debug.log(f"on_pbnApply_clicked: Set specificLandEnergyType to {mySelectedEnergyTypeText}")
+        except KeyError:
+            LaUtils.debug.log(f"on_pbnApply_clicked: Invalid energy type selected: {mySelectedEnergyTypeText}, defaulting to KCalories")
+            self.mAnimalParameter.specificLandEnergyType = EnergyType.KCalories
+
+        # Save raster name
+        self.mAnimalParameter.rasterName = self.cboRaster.currentText() # Use property setter
+        
         # Set fallow usage based on combo box data
         index = self.cbFallowUsage.currentIndex()
         if index >= 0:
-            self.mAnimalParameter._fallowUsage = self.cbFallowUsage.itemData(index)
+            # Use property setter for fallowUsage
+            self.mAnimalParameter.fallowUsage = self.cbFallowUsage.itemData(index)
 
         # Save parameter to file
         filepath = os.path.join(LaUtils.userAnimalParameterProfilesDirPath(),
                               f"{self.mAnimalParameter.guid}.xml")
         self.mAnimalParameter.toXmlFile(filepath)
+        LaUtils.debug.log(f"on_pbnApply_clicked: Saved animal parameter to {filepath}")
 
         # Refresh displays
         self.refreshAnimalParameterTable(str(self.mAnimalParameter.guid))
@@ -388,14 +452,110 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
         self.tblAnimalParameterProfiles.sortItems(1, Qt.AscendingOrder)
 
     def refreshFodderTable(self):
-        """Refresh the fodder table."""
-        # Implementation for fodder table refresh
-        pass
+        """Refresh the fodder table with values from the selected animal parameter."""
+        LaUtils.debug.log("refreshFodderTable: Updating fodder table for animal parameter")
+        
+        # Get the food source map from the current animal parameter
+        myFoodSourceMap = self.mAnimalParameter.fodderSourceMap()
+        
+        # Update each row in the fodder table
+        for myCurrentRow in range(self.tblFodder.rowCount()):
+            # Get item and guid
+            mypItem = self.tblFodder.item(myCurrentRow, 0)
+            if not mypItem:
+                continue
+                
+            myGuid = mypItem.data(Qt.UserRole)
+            LaUtils.debug.log(f"refreshFodderTable: Processing crop with GUID: {myGuid}")
+            
+            # Get the spin box widgets
+            mypFodderSpinBox = self.tblFodder.cellWidget(myCurrentRow, 1)
+            mypGrainSpinBox = self.tblFodder.cellWidget(myCurrentRow, 2)
+            mypDaysSpinBox = self.tblFodder.cellWidget(myCurrentRow, 3)
+            
+            # If this crop is in the food source map, set the values
+            if myGuid in myFoodSourceMap:
+                myFoodSource = myFoodSourceMap[myGuid]
+                LaUtils.debug.log(f"refreshFodderTable: Found in food sources: fodder={myFoodSource.fodder}, grain={myFoodSource.grain}, days={myFoodSource.days}")
+                
+                mypFodderSpinBox.setValue(myFoodSource.fodder)
+                mypGrainSpinBox.setValue(myFoodSource.grain)
+                mypDaysSpinBox.setValue(myFoodSource.days)
+                
+                # Mark as checked
+                mypItem.setCheckState(Qt.Checked)
+            else:
+                # Reset values to 0
+                mypFodderSpinBox.setValue(0)
+                mypGrainSpinBox.setValue(0)
+                mypDaysSpinBox.setValue(0)
+                
+                # Mark as unchecked
+                mypItem.setCheckState(Qt.Unchecked)
 
     def populateFodder(self):
-        """Populate the fodder table."""
-        # Implementation for populating fodder table
-        pass
+        """Populate the fodder table with available crops."""
+        from la.lib.lacrop import LaCrop
+
+        LaUtils.debug.log("populateFodder: Setting up fodder table")
+        
+        # Clear the table
+        self.tblFodder.clear()
+        self.tblFodder.setRowCount(0)
+        self.tblFodder.setColumnCount(4)
+        
+        # Set column headers
+        self.tblFodder.setHorizontalHeaderLabels(["Used", "Crop", "Fodder", "Grain"])
+        
+        myCurrentRow = 0
+        myCropsMap = LaUtils.getAvailableCrops()
+        LaUtils.debug.log(f"populateFodder: Found {len(myCropsMap)} available crops")
+        myCrop: LaCrop = LaCrop()
+        for myGuid, myCrop in myCropsMap.items():
+            # Insert a new row
+            self.tblFodder.insertRow(myCurrentRow)
+            
+            # Create item for crop name with checkbox
+            mypNameItem = QTableWidgetItem(myCrop.name)
+            mypNameItem.setData(Qt.UserRole, myGuid)  # Store guid for reference
+            
+            # Set appropriate icon based on selection status
+            if hasattr(self, 'mSelectedCropsMap') and myGuid in self.mSelectedCropsMap:
+                pair = self.mSelectedCropsMap.get(myGuid)
+                if pair and pair[0]:
+                    mypNameItem.setIcon(QIcon(":/status_ok.png"))
+                else:
+                    mypNameItem.setIcon(QIcon(":/status_error.png"))
+            else:
+                mypNameItem.setIcon(QIcon(":/status_error.png"))
+            
+            mypNameItem.setCheckState(Qt.Unchecked)
+            self.tblFodder.setItem(myCurrentRow, 0, mypNameItem)
+            
+            # Create spin boxes for fodder, grain, and days values
+            mypSpinFodder = QSpinBox(self)
+            mypSpinGrain = QSpinBox(self)
+            mypSpinDays = QSpinBox(self)
+            
+            # Set maximum values
+            mypSpinFodder.setMaximum(10000)
+            mypSpinGrain.setMaximum(10000)
+            mypSpinDays.setMaximum(365)
+            
+            # Set default values
+            mypSpinFodder.setValue(0)
+            mypSpinGrain.setValue(0)
+            mypSpinDays.setValue(0)
+            
+            # Add spin boxes to table
+            self.tblFodder.setCellWidget(myCurrentRow, 1, mypSpinFodder)
+            self.tblFodder.setCellWidget(myCurrentRow, 2, mypSpinGrain)
+            self.tblFodder.setCellWidget(myCurrentRow, 3, mypSpinDays)
+            
+            # Increment row counter
+            myCurrentRow += 1
+            
+        LaUtils.debug.log(f"populateFodder: Populated {myCurrentRow} crops in fodder table")
 
     def setComboToDefault(self, combo, default_guid):
         """Set a combo box to a default value based on GUID."""
@@ -483,3 +643,11 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
         # If we get here, no image was found
         LaUtils.debug.log("on_cboAnimal_changed: No valid image found, clearing picture label")
         self.lblAnimalPic.clear()
+
+    def on_pbnMore_clicked(self):
+        """Handle the 'More' button click to launch the Assemblage Conversion Utility dialog."""
+        from la.gui.laassemblageconversion import LaAssemblageConversion
+
+        # Create and show the Assemblage Conversion Utility dialog
+        assemblage_conversion_dialog = LaAssemblageConversion(self)
+        assemblage_conversion_dialog.exec_()

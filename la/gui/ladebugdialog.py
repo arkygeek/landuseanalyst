@@ -6,12 +6,126 @@ Debug dialog for Landuse Analyst - Singleton Pattern Implementation
 import os
 from qgis.PyQt.QtWidgets import (
     QDialog, QVBoxLayout, QHBoxLayout,
-    QTextEdit, QPushButton, QCheckBox,
-    QLabel, QSplitter
+    QPlainTextEdit, QPushButton, QCheckBox,
+    QLabel, QWidget
 )
-from qgis.PyQt.QtCore import Qt, QSettings, QSize, pyqtSignal
-from qgis.PyQt.QtGui import QFont, QTextCursor
+from qgis.PyQt.QtCore import Qt, QSettings, QSize, QRect, pyqtSignal, QPoint
+from qgis.PyQt.QtGui import QFont, QTextCursor, QPainter, QColor, QPen, QTextFormat
 from la.lib.lautils import MESSAGE_BUS
+
+
+class LineNumberArea(QWidget):
+    """Line number area widget for QPlainTextEdit."""
+    
+    def __init__(self, editor):
+        """Initialize with parent editor."""
+        super().__init__(editor)
+        self.editor = editor
+    
+    def sizeHint(self):
+        """Return recommended size for the widget."""
+        return QSize(self.editor.line_number_area_width(), 0)
+    
+    def paintEvent(self, event):
+        """Paint the line numbers."""
+        if not self.editor.show_line_numbers.isChecked():
+            return
+            
+        # Set the background color
+        painter = QPainter(self)
+        painter.fillRect(event.rect(), QColor("#F0F0F0"))  # Light gray background
+        
+        # Paint the line numbers
+        block = self.editor.firstVisibleBlock()
+        block_number = block.blockNumber()
+        top = int(self.editor.blockBoundingGeometry(block).translated(
+            self.editor.contentOffset()).top())
+        bottom = top + int(self.editor.blockBoundingRect(block).height())
+        width = self.width() - 5  # Right margin
+        
+        # Maintain alignment with wrapped or unwrapped lines
+        while block.isValid() and top <= event.rect().bottom():
+            if block.isVisible() and bottom >= event.rect().top():
+                # Draw line number in red
+                painter.setPen(QColor("#CC0000"))  # Red color
+                painter.setFont(self.editor.font())
+                painter.drawText(0, top, width, self.editor.fontMetrics().height(),
+                                Qt.AlignRight, str(block_number + 1))
+            
+            block = block.next()
+            top = bottom
+            bottom = top + int(self.editor.blockBoundingRect(block).height())
+            block_number += 1
+
+
+class DebugTextEdit(QPlainTextEdit):
+    """Enhanced QPlainTextEdit with line numbers."""
+    
+    def __init__(self, parent=None):
+        """Initialize with parent."""
+        super().__init__(parent)
+        self.setReadOnly(True)
+        self.setLineWrapMode(QPlainTextEdit.NoWrap)
+        
+        # Configure the editor
+        font = QFont("Monospace")
+        font.setStyleHint(QFont.TypeWriter)
+        self.setFont(font)
+        
+        # Create line number area
+        self.line_number_area = LineNumberArea(self)
+        
+        # This checkbox will be set by the parent dialog
+        self.show_line_numbers = None
+        
+        # Connect signals
+        self.blockCountChanged.connect(self.update_line_number_area_width)
+        self.updateRequest.connect(self.update_line_number_area)
+        
+    def line_number_area_width(self):
+        """Calculate the width of the line number area."""
+        if not hasattr(self, 'show_line_numbers') or not self.show_line_numbers or not self.show_line_numbers.isChecked():
+            return 0
+            
+        max_width = 0
+        block_count = self.blockCount()
+        
+        # Calculate space needed for the highest line number
+        digits = len(str(block_count))
+        digits = max(digits, 2)  # At least 2 digits for aesthetics
+        
+        # Width = number of digits * width of a single digit + padding
+        max_width = digits * self.fontMetrics().width('9') + 10
+        
+        return max_width
+    
+    def update_line_number_area_width(self):
+        """Update the viewport margins to accommodate line numbers."""
+        self.setViewportMargins(self.line_number_area_width(), 0, 0, 0)
+    
+    def update_line_number_area(self, rect, dy):
+        """Update the line number area when the text view is scrolled."""
+        if dy:
+            self.line_number_area.scroll(0, dy)
+        else:
+            self.line_number_area.update(0, rect.y(), self.line_number_area.width(), rect.height())
+        
+        if rect.contains(self.viewport().rect()):
+            self.update_line_number_area_width()
+    
+    def resizeEvent(self, event):
+        """Handle resize events to update line number area."""
+        super().resizeEvent(event)
+        
+        cr = self.contentsRect()
+        self.line_number_area.setGeometry(QRect(cr.left(), cr.top(), 
+                                             self.line_number_area_width(), cr.height()))
+    
+    def toggle_line_numbers(self, show):
+        """Toggle the display of line numbers."""
+        self.update_line_number_area_width()
+        self.line_number_area.update()
+
 
 class LaDebugDialog(QDialog):
     """
@@ -44,7 +158,6 @@ class LaDebugDialog(QDialog):
         )
         
         # Do NOT set WA_DeleteOnClose as we want the singleton to persist
-        # self.setAttribute(Qt.WA_DeleteOnClose)
         
         # Restore saved size
         settings = QSettings()
@@ -68,13 +181,8 @@ class LaDebugDialog(QDialog):
         layout = QVBoxLayout()
         self.setLayout(layout)
         
-        # Text area
-        self.text_edit = QTextEdit()
-        self.text_edit.setReadOnly(True)
-        self.text_edit.setLineWrapMode(QTextEdit.NoWrap)
-        font = QFont("Monospace")
-        font.setStyleHint(QFont.TypeWriter)
-        self.text_edit.setFont(font)
+        # Text area - using custom QPlainTextEdit with line numbers
+        self.text_edit = DebugTextEdit(self)
         layout.addWidget(self.text_edit)
         
         # Button row
@@ -88,6 +196,21 @@ class LaDebugDialog(QDialog):
         self.auto_scroll.setChecked(True)
         button_layout.addWidget(self.auto_scroll)
         
+        # Add line numbers checkbox
+        self.show_line_numbers = QCheckBox("Show line numbers")
+        self.show_line_numbers.setChecked(False)  # Default to no line numbers
+        self.show_line_numbers.toggled.connect(self.toggle_line_numbers)
+        button_layout.addWidget(self.show_line_numbers)
+        
+        # Assign line numbers checkbox to the text edit
+        self.text_edit.show_line_numbers = self.show_line_numbers
+        
+        # Add word wrap checkbox
+        self.word_wrap = QCheckBox("Word wrap")
+        self.word_wrap.setChecked(False)  # Default to no word wrap
+        self.word_wrap.toggled.connect(self.toggle_word_wrap)
+        button_layout.addWidget(self.word_wrap)
+        
         button_layout.addStretch()
         
         self.copy_button = QPushButton("Copy All")
@@ -99,13 +222,24 @@ class LaDebugDialog(QDialog):
         button_layout.addWidget(self.close_button)
         
         layout.addLayout(button_layout)
+        
+        # Load preferences from settings
+        settings = QSettings()
+        show_lines = settings.value("landuse_analyst/debug_show_line_numbers", False, type=bool)
+        self.show_line_numbers.setChecked(show_lines)
+        
+        word_wrap = settings.value("landuse_analyst/debug_word_wrap", False, type=bool)
+        self.word_wrap.setChecked(word_wrap)
+        
+        # Initialize word wrap based on saved preference
+        self.toggle_word_wrap(word_wrap)
 
     def add_debug_message(self, message: str):
         """Add message to log with auto-scroll handling"""
         if not message:
             return
   
-        self.text_edit.append(message)
+        self.text_edit.appendPlainText(message)
         if self.auto_scroll.isChecked():
             cursor = self.text_edit.textCursor()
             cursor.movePosition(QTextCursor.End)
@@ -115,8 +249,16 @@ class LaDebugDialog(QDialog):
         """Bulk load historical messages"""
         if not messages_list:
             return
-  
-        self.text_edit.append("\n".join(messages_list))
+        
+        # Temporarily disable updates to improve performance
+        self.text_edit.setUpdatesEnabled(False)
+        
+        # Add all messages
+        self.text_edit.appendPlainText("\n".join(messages_list))
+        
+        # Re-enable updates
+        self.text_edit.setUpdatesEnabled(True)
+        
         if self.auto_scroll.isChecked():
             cursor = self.text_edit.textCursor()
             cursor.movePosition(QTextCursor.End)
@@ -145,3 +287,36 @@ class LaDebugDialog(QDialog):
         event.ignore()
         
         # Do NOT disconnect signals as we want to keep receiving them
+
+    def toggle_line_numbers(self, checked):
+        """Toggle line numbers visibility
+        
+        Args:
+            checked: Whether line numbers should be shown
+        """
+        # Save the setting
+        settings = QSettings()
+        settings.setValue("landuse_analyst/debug_show_line_numbers", checked)
+        
+        # Update the line number area
+        self.text_edit.toggle_line_numbers(checked)
+
+    def toggle_word_wrap(self, checked):
+        """Toggle word wrap setting
+        
+        Args:
+            checked: Whether word wrap should be enabled
+        """
+        # Save the setting
+        settings = QSettings()
+        settings.setValue("landuse_analyst/debug_word_wrap", checked)
+        
+        # Update the text edit widget
+        if checked:
+            self.text_edit.setLineWrapMode(QPlainTextEdit.WidgetWidth)
+        else:
+            self.text_edit.setLineWrapMode(QPlainTextEdit.NoWrap)
+        
+        # Update the line number area since line wrapping may change layout
+        self.text_edit.update_line_number_area_width()
+        self.text_edit.line_number_area.update()
