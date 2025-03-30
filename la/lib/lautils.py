@@ -32,19 +32,26 @@ class LaDebugLogger:
     _enabled = False
     _history = []
     _max_history = 1000
+    _show_line_numbers = False  # Added flag to track line number display preference
 
     @classmethod
-    def initialize(cls, enabled=False):
+    def initialize(cls, enabled=False, show_line_numbers=False):
         """Initialize the debug logger."""
         if cls._instance is None:
             cls._instance = cls()
         cls._enabled = enabled
+        cls._show_line_numbers = show_line_numbers
         return cls._instance
 
     @classmethod
     def set_enabled(cls, enabled):
         """Enable or disable debug logging."""
         cls._enabled = enabled
+    
+    @classmethod
+    def set_show_line_numbers(cls, show_line_numbers):
+        """Enable or disable showing line numbers in debug messages."""
+        cls._show_line_numbers = show_line_numbers
 
     @classmethod
     def log(cls, message, component="General"):
@@ -59,9 +66,27 @@ class LaDebugLogger:
             MESSAGE_BUS.debugMessaged.emit(formatted)
 
     @classmethod
-    def get_history(cls):
-        """Get the message history."""
-        return cls._history.copy()
+    def get_history(cls, with_line_numbers=None):
+        """Get the message history.
+        
+        Args:
+            with_line_numbers: Override class setting if provided, otherwise use class setting
+            
+        Returns:
+            List of log messages, optionally with line numbers
+        """
+        # Use provided value if given, otherwise use the class setting
+        show_numbers = cls._show_line_numbers if with_line_numbers is None else with_line_numbers
+        
+        if not show_numbers:
+            return cls._history.copy()
+        else:
+            # Add line numbers to each line in red color using HTML
+            numbered_history = []
+            for i, message in enumerate(cls._history, 1):
+                # Format line number in red using HTML
+                numbered_history.append(f'<span style="color:red">{i}:</span> {message}')
+            return numbered_history
 
 # Global message bus instance
 MESSAGE_BUS = LaMessageBus()
