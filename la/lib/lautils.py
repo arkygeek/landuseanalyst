@@ -47,7 +47,7 @@ class LaDebugLogger:
     def set_enabled(cls, enabled):
         """Enable or disable debug logging."""
         cls._enabled = enabled
-    
+
     @classmethod
     def set_show_line_numbers(cls, show_line_numbers):
         """Enable or disable showing line numbers in debug messages."""
@@ -68,16 +68,16 @@ class LaDebugLogger:
     @classmethod
     def get_history(cls, with_line_numbers=None):
         """Get the message history.
-        
+
         Args:
             with_line_numbers: Override class setting if provided, otherwise use class setting
-            
+
         Returns:
             List of log messages, optionally with line numbers
         """
         # Use provided value if given, otherwise use the class setting
         show_numbers = cls._show_line_numbers if with_line_numbers is None else with_line_numbers
-        
+
         if not show_numbers:
             return cls._history.copy()
         else:

@@ -90,7 +90,7 @@ class LaMainForm(LaMainFormBase):
         LaUtils.debug.log("Application initialized", "MainForm")
 
     # --- alphabetically ordered methods ---
-    
+
     @pyqtSlot(QtWidgets.QListWidgetItem, QtWidgets.QListWidgetItem)
     def animalCalcClicked(self, current_item, previous_item):
         """
@@ -215,7 +215,7 @@ class LaMainForm(LaMainFormBase):
             self._connect_diet_label_signals(dietLabels)
         else:
             LaUtils.debug.log("Warning: deprecated connect_diet_label_signals called with no diet_labels available", "Warning")
-        
+
     @pyqtSlot(QtWidgets.QListWidgetItem, QtWidgets.QListWidgetItem)
     def cropCalcClicked(self, current_item, previous_item):
         """
@@ -528,7 +528,7 @@ class LaMainForm(LaMainFormBase):
             # Initialize model properties
             self.mAnimalsMap = {}
             self.mCropsMap = {}
-            
+
             # Initial GUI setup
             self.loadImages()
             self.refresh()
@@ -545,20 +545,20 @@ class LaMainForm(LaMainFormBase):
         # Update animal and crop calculations if items are selected
         if hasattr(self, 'listWidgetCalculationsAnimal') and self.listWidgetCalculationsAnimal.currentItem():
             self.animalCalcClicked(self.listWidgetCalculationsAnimal.currentItem(), None)
-        
+
         if hasattr(self, 'listWidgetCalculationsCrop') and self.listWidgetCalculationsCrop.currentItem():
             self.cropCalcClicked(self.listWidgetCalculationsCrop.currentItem(), None)
 
     def writeSettings(self):
         """Save application settings."""
         settings = QSettings()
-        
+
         # Save window geometry
         settings.setValue("landuse_analyst/geometry", self.saveGeometry())
-        
+
         # Save debug mode state
         settings.setValue("landuse_analyst/debug", self.cbDebug.isChecked())
-        
+
         # Save most recently used values
         if hasattr(self, 'sbPopulation'):
             settings.setValue("landuse_analyst/population", self.sbPopulation.value())
@@ -613,7 +613,7 @@ class LaMainForm(LaMainFormBase):
             self.model.limitDairy = self.cboxLimitDairy.isChecked()
             self.model.limitDairyPercent = self.sbLimitDairyPercent.value()
             self.model.caloriesPerPersonDaily = self.sbDailyCalories.value()
-            
+
             # Configure model with selected animals and crops
             self.model.mAnimals = self.getSelectedAnimals()
             self.model.mCrops = self.getSelectedCrops()
