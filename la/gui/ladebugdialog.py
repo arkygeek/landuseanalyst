@@ -6,11 +6,10 @@ Debug dialog for Landuse Analyst - Singleton Pattern Implementation
 import os
 from qgis.PyQt.QtWidgets import (
     QDialog, QVBoxLayout, QHBoxLayout,
-    QPlainTextEdit, QPushButton, QCheckBox,
-    QLabel, QWidget
+    QPlainTextEdit, QPushButton, QCheckBox, QWidget
 )
-from qgis.PyQt.QtCore import Qt, QSettings, QSize, QRect, pyqtSignal, QPoint
-from qgis.PyQt.QtGui import QFont, QTextCursor, QPainter, QColor, QPen, QTextFormat
+from qgis.PyQt.QtCore import Qt, QSettings, QSize, QRect
+from qgis.PyQt.QtGui import QFont, QTextCursor, QPainter, QColor
 from la.lib.lautils import MESSAGE_BUS
 
 
