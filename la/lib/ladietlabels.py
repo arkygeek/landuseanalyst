@@ -35,6 +35,8 @@ class LaDietLabels(QObject, LaSerialisable, LaGuid):
     kiloCaloriesIndividualAnnualChanged = pyqtSignal(float)
     megaCaloriesSettlementAnnualChanged = pyqtSignal(float)
     dairySurplusMCaloriesChanged = pyqtSignal(float)
+    cropAreaTargetsMapChanged = pyqtSignal(dict)
+    animalAreaTargetsMapChanged = pyqtSignal(dict)
     cropCalcsReportMapChanged = pyqtSignal(dict)
     animalCalcsReportMapChanged = pyqtSignal(dict)
     guidChanged = pyqtSignal(str)
@@ -64,6 +66,8 @@ class LaDietLabels(QObject, LaSerialisable, LaGuid):
         self._kiloCaloriesIndividualAnnual: float = 0.0
         self._megaCaloriesSettlementAnnual: float = 0.0
         self._dairySurplusMCalories: float = 0.0
+        self._cropAreaTargetsMap = {}  # Map of crop GUID to area target
+        self._animalAreaTargetsMap = {}  # Map of animal GUID to area target
         self._cropCalcsReportMap: Dict[str, Tuple[str, float]] = {}
         self._animalCalcsReportMap: Dict[str, Tuple[str, float]] = {}
         LaUtils.debug.log("LaDietLabels initialized with default values", "Diet")
@@ -430,6 +434,45 @@ class LaDietLabels(QObject, LaSerialisable, LaGuid):
             self._dairySurplusMCalories = theDairySurplusMCalories
             self.dairySurplusMCaloriesChanged.emit(theDairySurplusMCalories)
 
+    @pyqtProperty(dict, notify=cropAreaTargetsMapChanged)
+    def cropAreaTargetsMap(self) -> Dict[str, float]: # type: ignore
+        """
+        Get the crop area targets map.
+        :return: A dictionary mapping crop GUIDs to area targets
+        :rtype: Dict[str, float]
+        """
+        return self._cropAreaTargetsMap
+    @cropAreaTargetsMap.setter
+    def cropAreaTargetsMap(self, theCropAreaTargetsMap: Dict[str, float]) -> None:
+        """
+        Set the crop area targets map and emit a signal if changed.
+
+        :param theCropAreaTargetsMap: The new crop area targets map
+        :type theCropAreaTargetsMap: Dict[str, float]
+        """
+        if self._cropAreaTargetsMap != theCropAreaTargetsMap:
+            self._cropAreaTargetsMap = theCropAreaTargetsMap
+            self.cropAreaTargetsMapChanged.emit(theCropAreaTargetsMap)
+    @pyqtProperty(dict, notify=animalAreaTargetsMapChanged)
+    def animalAreaTargetsMap(self) -> Dict[str, float]: # type: ignore
+        """
+        Get the animal area targets map.
+        :return: A dictionary mapping animal GUIDs to area targets
+        :rtype: Dict[str, float]
+        """
+        return self._animalAreaTargetsMap
+    @animalAreaTargetsMap.setter
+    def animalAreaTargetsMap(self, theAnimalAreaTargetsMap: Dict[str, float]) -> None:
+        """
+        Set the animal area targets map and emit a signal if changed.
+
+        :param theAnimalAreaTargetsMap: The new animal area targets map
+        :type theAnimalAreaTargetsMap: Dict[str, float]
+        """
+        if self._animalAreaTargetsMap != theAnimalAreaTargetsMap:
+            self._animalAreaTargetsMap = theAnimalAreaTargetsMap
+            self.animalAreaTargetsMapChanged.emit(theAnimalAreaTargetsMap)
+
     @pyqtProperty(dict, notify=cropCalcsReportMapChanged)
     def cropCalcsReportMap(self) -> Dict[str, Tuple[str, float]]: # type: ignore
         """
@@ -473,6 +516,98 @@ class LaDietLabels(QObject, LaSerialisable, LaGuid):
         if self._animalCalcsReportMap != theAnimalCalcsReportMap:
             self._animalCalcsReportMap = theAnimalCalcsReportMap
             self.animalCalcsReportMapChanged.emit(theAnimalCalcsReportMap)
+
+    def calculateFodderNeeds(self, animalGuid, animalParameter, herdSize):
+        """Calculate fodder needs for an animal's herd.
+        
+        Args:
+            animalGuid: The GUID of the animal
+            animalParameter: The animal parameter containing fodder settings
+            herdSize: Dictionary of herd size components (mothers, offspring, etc.)
+        
+        Returns:
+            Dictionary mapping crop GUIDs to additional kg needed for fodder
+        """
+        fodderNeeds = {}
+        
+        # Skip if animal doesn't use fodder
+        if not animalParameter.fodderUse:
+            return fodderNeeds
+            
+        # Get the fodder source map
+        fodderSourceMap = animalParameter.fodderSourceMap
+        
+        # For each fodder source
+        for cropGuid, foodSource in fodderSourceMap.items():
+            # Get crop info
+            crop = self.getCrop(cropGuid)
+            if crop is None:
+                continue
+                
+            # Calculate daily fodder/grain needs
+            dailyFodderKcal = foodSource.fodder * foodSource.fodderValue
+            dailyGrainKcal = foodSource.grain * foodSource.grainValue
+            
+            # Calculate total requirements based on herd composition
+            # This should account for different animals in the herd having
+            # different requirements (mothers, males, offspring)
+            totalDays = foodSource.days
+            totalAnimals = (herdSize['mothers'] + herdSize['males'] + 
+                            herdSize['offspring'] + herdSize['motherReplacements'] +
+                            herdSize['maleReplacements'])
+            
+            # Total KCal needed as fodder/grain from this crop
+            totalKcalNeeded = (dailyFodderKcal + dailyGrainKcal) * totalDays * totalAnimals
+            
+            # Convert to kg based on crop calories/fodder value
+            if crop.cropCalories > 0:
+                kgNeeded = totalKcalNeeded / crop.cropCalories
+                
+                # Add to the fodder needs map
+                if cropGuid in fodderNeeds:
+                    fodderNeeds[cropGuid] += kgNeeded
+                else:
+                    fodderNeeds[cropGuid] = kgNeeded
+                    
+        return fodderNeeds
+
+    def calculateAnimalAreaTarget(self, animalGuid, animalParameter, adjustedFeedRequirement):
+        """Calculate grazing area needed for an animal.
+        
+        Args:
+            animalGuid: The GUID of the animal
+            animalParameter: The animal parameter
+            adjustedFeedRequirement: The feed requirement adjusted for fallow/fodder
+        
+        Returns:
+            The calculated area target in area units
+        """
+        # Determine land productivity value based on parameter settings
+        landValue = 0.0
+        
+        if animalParameter.useCommonGrazingLand:
+            # Use common grazing land value
+            if self.specificLandEnergyType == EnergyType.KCalories:
+                landValue = self.commonLandValue  # KCal/area unit
+            else:
+                # Handle TDN case appropriately
+                landValue = self.commonLandValue  # TDN/area unit
+        elif animalParameter.useSpecificGrazingLand:
+            # Use specific grazing land value
+            if self.specificLandEnergyType == EnergyType.KCalories:
+                landValue = animalParameter.valueSpecificGrazingLand  # KCal/area unit
+            else:
+                # Handle TDN case appropriately
+                landValue = animalParameter.valueSpecificGrazingLand  # TDN/area unit
+        
+        if landValue <= 0:
+            return 0.0  # Cannot calculate area if land value is zero or negative
+        
+        # Calculate grazing area by dividing adjusted requirement by land value
+        # NOTE: No arbitrary conversion factor needed - use the requirement directly
+        grazingAreaNeeded = adjustedFeedRequirement / landValue
+        
+        return grazingAreaNeeded
 
     def toXml(self) -> str:
         """Convert the diet labels to XML format.

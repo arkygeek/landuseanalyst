@@ -1104,8 +1104,8 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             LaUtils.debug.log(f"Calculated annual MCals - individual: {myMCalsIndividualAnnual}, settlement: {myMCalsSettlementAnnual}", "Diet")
 
             # Initialize counters with a simplified calculation approach
-            myDairyCounter = myMCalsSettlementAnnual * 0.05  # Separate dairy calculation (5% of total)
-            myTameMeatCounter = myMCalsSettlementAnnual * diet_percent * meat_percent  # Tame meat portion
+            myDairyMCalorieCounter = myMCalsSettlementAnnual * 0.05  # Separate dairy calculation (5% of total)
+            myTameMeatMCalorieCounter = myMCalsSettlementAnnual * diet_percent * meat_percent  # Tame meat portion
             myWildMeatCounter = myMCalsSettlementAnnual * diet_percent * (1.0 - meat_percent)  # Wild meat portion
             myCropCounter = myMCalsSettlementAnnual * (1.0 - diet_percent) * 0.8  # Crops portion (80% of plant calories)
             myWildPlantCounter = myMCalsSettlementAnnual * (1.0 - diet_percent) * 0.2  # Wild plants (20% of plant calories)
@@ -1113,14 +1113,14 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             # Calculate percentages
             totalMCalories = myMCalsSettlementAnnual
 
-            dairyPercent = myDairyCounter / totalMCalories
-            tameMeatPercent = myTameMeatCounter / totalMCalories
-            wildMeatPercent = myWildMeatCounter / totalMCalories
-            cropPercent = myCropCounter / totalMCalories
-            wildPlantPercent = myWildPlantCounter / totalMCalories
+            myDairyPercent = myDairyMCalorieCounter / totalMCalories
+            myDomesticMeatPercent = myTameMeatMCalorieCounter / totalMCalories
+            myWildMeatPercent = myWildMeatCounter / totalMCalories
+            myCropPercent = myCropCounter / totalMCalories
+            myWildPlantPercent = myWildPlantCounter / totalMCalories
 
-            animalPercent = (myTameMeatCounter + myWildMeatCounter) / totalMCalories
-            plantPercent = (myCropCounter + myWildPlantCounter) / totalMCalories
+            myAnimalPercent = (myTameMeatMCalorieCounter + myWildMeatCounter) / totalMCalories
+            myPlantPercent = (myCropCounter + myWildPlantCounter) / totalMCalories
 
             # Create report maps for crops and animals
             cropCalcsReportMap = {}
@@ -1143,9 +1143,9 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                             cropContributionPercent = 1.0 / len(self.mCrops) if self.mCrops else 0.0
 
                         # Calculate crop calories following the C++ approach
-                        cropPercent = cropContributionPercent * cropPercent
+                        myCropPercent = cropContributionPercent * myCropPercent
                         myCropFoodValue = float(str(crop.cropCalories)) * 0.001  # Convert to MCal/kg
-                        myMCalsFromTheCrop = cropPercent * myMCalsSettlementAnnual
+                        myMCalsFromTheCrop = myCropPercent * myMCalsSettlementAnnual
 
                         # Calculate kg needed for people (initial calculation before adjustments)
                         myKgForPeople1 = myMCalsFromTheCrop / myCropFoodValue
@@ -1206,8 +1206,8 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                         cropReport += f"Population: {population_count} people\n"
                         cropReport += f"Individual needs: {myMCalsIndividualAnnual:.2f} MCal/year\n"
                         cropReport += f"Settlement needs: {myMCalsSettlementAnnual:.2f} MCal/year\n"
-                        cropReport += f"Plant portion: {plantPercent*100:.2f}% of diet\n"
-                        cropReport += f"Crop portion: {cropPercent*100:.2f}% of diet\n"
+                        cropReport += f"Plant portion: {myPlantPercent*100:.2f}% of diet\n"
+                        cropReport += f"Crop portion: {myCropPercent*100:.2f}% of diet\n"
                         cropReport += f"Crop food value: {myCropFoodValue:.2f} MCal/kg\n"
 
                         cropReport += f"\nProduction Calculations:\n"
@@ -1259,12 +1259,12 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                         myEstrousCycle = float(str(animal.estrousCycle))
                         myBabiesPerBirth = float(str(animal.youngPerBirth))
                         myDeathRate = float(str(animal.deathRate)) * 0.01  # Convert from percent
-                        myBreedingRatio = float(str(animal.femalesPerMale))
+                        myFemalesToMales = float(str(animal.femalesPerMale))
 
                         # Check for zero breeding ratio to avoid division by zero
-                        if myBreedingRatio <= 0:
-                            LaUtils.debug.log(f"Warning: Animal {animal.name} has a breeding ratio of {myBreedingRatio}, using default of 1.0", "Warning")
-                            myBreedingRatio = 1.0  # Default to 1 if zero or negative
+                        if myFemalesToMales <= 0:
+                            LaUtils.debug.log(f"Warning: Animal {animal.name} has a breeding ratio of {myFemalesToMales}, using default of 1.0", "Warning")
+                            myFemalesToMales = 1.0  # Default to 1 if zero or negative
 
                         myKillWeight = float(str(animal.killWeight))
                         myUsablePortionOfAnimal = float(str(animal.usableMeat)) * 0.01  # Convert from percent
@@ -1301,7 +1301,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                         myCulledMothersValue = myCulledMothersValue1 / (myBabiesPerBirth * myBirthingEventsPerYear)
 
                         # Calculate culled adult males value
-                        myCulledAdultMalesValue = myCulledMothersValue / myBreedingRatio
+                        myCulledAdultMalesValue = myCulledMothersValue / myFemalesToMales
 
                         # Calculate final offspring value
                         myFinalOffspringValue = myValuePerOffspring + myCulledMothersValue + myCulledAdultMalesValue
@@ -1314,8 +1314,8 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                         myMCalsUtilizedFromDairy = myActualDairyValueOfOffspring * myOffspringNeededPerYear
 
                         # Add to the diet counters
-                        myTameMeatCounter += myMCalsFromTheMeat
-                        myDairyCounter += myMCalsUtilizedFromDairy
+                        myTameMeatMCalorieCounter += myMCalsFromTheMeat
+                        myDairyMCalorieCounter += myMCalsUtilizedFromDairy
 
                         # Calculate meat and dairy percentages
                         myMeatPercent = myMCalsFromTheMeat / myMCalsSettlementAnnual
@@ -1334,7 +1334,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                         myFemalesStepOne = myMalesStepOne
                         myReplacementMothersPerYear = (myMothersNeededStepOne + (mySexualMaturity / 12.0)) / myBreedingYears
                         # Match original C++ implementation exactly
-                        myBreedingMalesRequired = ((myMothersNeededStepOne / myBreedingRatio) + myMothersNeededStepOne) / myBreedingRatio
+                        myBreedingMalesRequired = ((myMothersNeededStepOne / myFemalesToMales) + myMothersNeededStepOne) / myFemalesToMales
                         myAdditionalMothers = ((myReplacementMothersPerYear / myOffspringPerMotherPerYear) * 2.0) + (myBreedingMalesRequired * 2.0)
 
                         myMalesStepTwo = myAdditionalMothers * myOffspringPerMotherPerYear * 0.5
@@ -1431,33 +1431,69 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                         # Format the herd information for the report
                         totalHerd = myTotalMothers + myBreedingMalesRequired + myTotalOffspring
 
-                        # Create the animal report
-                        myAnimalReport = f"Calculation Report for {animal.name}\n"
+                        myAnimalReport: str = f"Calculation Report for {animal.name}\n"
                         myAnimalReport += f"===========================\n"
-                        myAnimalReport += f"Animal meat calories: {myMCalsFromTheMeat:.2f} MCal\n"
-                        myAnimalReport += f"Animal dairy calories: {myMCalsUtilizedFromDairy:.2f} MCal\n"
-                        myAnimalReport += f"Population: {population_count} people\n"
-                        myAnimalReport += f"Individual needs: {myMCalsIndividualAnnual:.2f} MCal/year\n"
-                        myAnimalReport += f"Settlement needs: {myMCalsSettlementAnnual:.2f} MCal/year\n\n"
+                        # Create the animal report mirroring the C++ version
+                        myAnimalReport = f"myMilkKgPerDay = {myMilkKgPerDay}\n"
+                        myAnimalReport += f"myMilkFoodValue = {myMilkFoodValue}\n"
+                        myAnimalReport += f"myLactationTime = {myLactationTime}\n"
+                        myAnimalReport += f"myWeaningAge = {myWeaningAge}\n"
+                        myAnimalReport += f"myKillWeight = {myKillWeight}\n"
+                        myAnimalReport += f"myUsablePortionOfAnimal = {myUsablePortionOfAnimal}\n"
+                        myAnimalReport += f"myAdultWeight = {myAdultWeight}\n"
+                        myAnimalReport += f"myFemalesToMales = {myFemalesToMales}\n"
+                        myAnimalReport += f"myMeatValueMCal = {myMeatValueMCal}\n"
+                        myAnimalReport += f"mySexualMaturity = {mySexualMaturity}\n"
+                        myAnimalReport += f"myBreedingYears = {myBreedingYears}\n"
+                        myAnimalReport += f"myAnimalContributionToMeatPortion = {myAnimalContributionToMeatPortion}\n"
+                        myAnimalReport += f"myAnimalMCalTarget = {myAnimalMCalTarget}\n"
+                        myAnimalReport += f"myPotentialDairyPerOffspring = {myPotentialDairyPerOffspring}\n"
+                        myAnimalReport += f"myValuePerOffspring = {myValuePerOffspring}\n"
+                        myAnimalReport += f"myActualDairyValueOfOffspring = {myActualDairyValueOfOffspring}\n"
+                        myAnimalReport += f"myCulledMothersValue = {myCulledMothersValue}\n"
+                        myAnimalReport += f"myCulledAdultMalesValue = {myCulledAdultMalesValue}\n"
+                        myAnimalReport += f"myFinalOffspringValue = {myFinalOffspringValue}\n"
+                        myAnimalReport += f"myOffspringNeededPerYear = {myOffspringNeededPerYear}\n"
+                        myAnimalReport += f"myMCalsFromTheMeat = {myMCalsFromTheMeat}\n"
+                        myAnimalReport += f"myMCalsUtilizedFromDairy = {myMCalsUtilizedFromDairy}\n"
+                        myAnimalReport += f"myTameMeatMCalorieCounter = {myTameMeatMCalorieCounter}\n"
+                        myAnimalReport += f"myDairyMCalorieCounter = {myDairyMCalorieCounter}\n"
+                        myAnimalReport += "\n"
+                        myAnimalReport += f"myBirthingEventsPerYear = {myBirthingEventsPerYear}\n"
+                        myAnimalReport += f"myOffspringPerMotherPerYear = {myOffspringPerMotherPerYear}\n"
+                        myAnimalReport += f"myMothersNeededStepOne = {myMothersNeededStepOne}\n"
+                        myAnimalReport += f"myMalesStepOne = {myMalesStepOne}\n"
+                        myAnimalReport += f"myFemalesStepOne = {myFemalesStepOne}\n"
+                        myAnimalReport += f"myReplacementMothersPerYear = {myReplacementMothersPerYear}\n"
+                        myAnimalReport += f"myBreedingMalesRequired = {myBreedingMalesRequired}\n"
+                        myAnimalReport += f"myAdditionalMothers = {myAdditionalMothers}\n"
+                        myAnimalReport += f"myMalesStepTwo = {myMalesStepTwo}\n"
+                        myAnimalReport += f"myFemalesStepTwo = {myFemalesStepTwo}\n"
+                        myAnimalReport += "\n"
+                        myAnimalReport += f"myTotalMothers = {myTotalMothers}\n"
+                        myAnimalReport += f"myTotalMaleOffspring = {myTotalMaleOffspring}\n"
+                        myAnimalReport += f"myTotalFemaleOffspring = {myTotalFemaleOffspring}\n"
+                        myAnimalReport += f"myTotalOffspring = {myTotalOffspring}\n"
+                        myAnimalReport += f"myFeedForGestating = {myFeedForGestating}\n"
+                        myAnimalReport += f"myFeedForLactating = {myFeedForLactating}\n"
+                        myAnimalReport += f"myFeedForMaintenance = {myFeedForMaintenance}\n"
+                        myAnimalReport += f"myFeedForOffspringPerKg = {myFeedForOffspringPerKg}\n"
+                        myAnimalReport += f"myGestatingMCals = {myGestatingMCals}\n"
+                        myAnimalReport += f"myLactatingMCals = {myLactatingMCals}\n"
+                        myAnimalReport += f"myDaysForMaintenance = {myDaysForMaintenance}\n"
+                        myAnimalReport += f"myGestatingTime = {myGestatingTime}\n"
+                        myAnimalReport += f"myLactationTime = {myLactationTime}\n"
+                        myAnimalReport += f"myDryMothers = {myDryMothers}\n"
+                        myAnimalReport += f"myDryMothersMCals = {myDryMothersMCals}\n"
+                        myAnimalReport += f"myOtherMaintenanceMCals = {myOtherMaintenanceMCals}\n"
+                        myAnimalReport += f"myMaintenanceMCals = {myMaintenanceMCals}\n"
+                        myAnimalReport += f"myAdultMalesMCals = {myAdultMalesMCals}\n"
+                        myAnimalReport += f"myOffspringMCals = {myOffspringMCals}\n"
 
-                        myAnimalReport += f"Herd Composition:\n"
-                        myAnimalReport += f"- Adult females (breeding): {myTotalMothers:.1f}\n"
-                        myAnimalReport += f"- Adult males (breeding): {myBreedingMalesRequired:.1f}\n"
-                        myAnimalReport += f"- Offspring: {myTotalOffspring:.1f}\n"
-                        myAnimalReport += f"- Total herd size: {totalHerd:.1f}\n\n"
-
-                        myAnimalReport += f"Feed Requirements:\n"
-                        myAnimalReport += f"- Gestating females: {myGestatingMCals:.1f} kg/year\n"
-                        myAnimalReport += f"- Lactating females: {myLactatingMCals:.1f} kg/year\n"
-                        myAnimalReport += f"- Adult maintenance: {myMaintenanceMCals:.1f} kg/year\n"
-                        myAnimalReport += f"- Adult males: {myAdultMalesMCals:.1f} kg/year\n"
-                        myAnimalReport += f"- Offspring growth: {myOffspringMCals:.1f} kg/year\n"
-                        myAnimalReport += f"- Total feed required: {myTotalFeedRequiredKg:.1f} kg/year\n\n"
-
-                        myAnimalReport += f"Land Requirements:\n"
+                        # Append grazing land info
+                        myAnimalReport += f"\nGrazing Land Info:\n"
                         myAnimalReport += f"- Grazing land productivity: {myGrazingLandCalories:.1f} calories/{areaUnitName}\n"
                         myAnimalReport += f"- Grazing area needed: {myGrazingAreaNeeded:.2f} {areaUnitName}\n"
-
                         if myUseCommonGrazingLand:
                             myAnimalReport += f"- Using common grazing land: Yes\n"
                         if myUseSpecificGrazingLand:
@@ -1475,18 +1511,18 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             # Set all values in the diet labels object
             self._setDietLabels(
                 myDietLabels,
-                myDairyCounter,           # Overall dairy MCals
+                myDairyMCalorieCounter,           # Overall dairy MCals
                 myCropCounter,            # Overall crop MCals
-                myTameMeatCounter,        # Overall meat MCals
+                myTameMeatMCalorieCounter,        # Overall meat MCals
                 myWildMeatCounter,        # Overall wild meat MCals
                 myWildPlantCounter,       # Overall wild plants MCals
-                dairyPercent,             # Overall dairy percent
-                tameMeatPercent,          # Domestic meat percent
-                cropPercent,              # Overall crop percent
-                wildMeatPercent,          # Wild meat percent
-                wildPlantPercent,         # Overall wild plant percent
-                animalPercent,            # Overall meat percent
-                plantPercent,             # Overall plant percent
+                myDairyPercent,           # Overall dairy percent
+                myDomesticMeatPercent,          # Domestic meat percent
+                myCropPercent,              # Overall crop percent
+                myWildMeatPercent,          # Wild meat percent
+                myWildPlantPercent,         # Overall wild plant percent
+                myAnimalPercent,            # Overall meat percent
+                myPlantPercent,             # Overall plant percent
                 myMCalsIndividualAnnual,  # MCals individual annual
                 myMCalsSettlementAnnual,  # MCals settlement annual
                 0.0,                      # Overall dairy surplus MCals
