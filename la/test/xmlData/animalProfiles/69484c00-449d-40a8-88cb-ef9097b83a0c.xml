@@ -1,6 +1,6 @@
 <animal guid="69484c00-449d-40a8-88cb-ef9097b83a0c">
-  <name>Sample Animal 1</name>
-  <description>Sample Animal 1</description>
+  <name>Goat</name>
+  <description>Sample Goat</description>
   <meatFoodValue>3000</meatFoodValue>
   <usableMeat>50</usableMeat>
   <killWeight>100</killWeight>
@@ -15,4 +15,5 @@
   <weaningAge>12</weaningAge>
   <gestationTime>120</gestationTime>
   <estrousCycle>21</estrousCycle>
+  <imageFile>/home/arkygeek/.landuseAnalyst/images/Goat.png</imageFile>
 </animal>

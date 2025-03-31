@@ -1459,9 +1459,9 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                         myAnimalReport += f"- Grazing area needed: {myGrazingAreaNeeded:.2f} {areaUnitName}\n"
 
                         if myUseCommonGrazingLand:
-                            myAnimalReport += f"- Using common grazing land: Yes\\n"
+                            myAnimalReport += f"- Using common grazing land: Yes\n"
                         if myUseSpecificGrazingLand:
-                            myAnimalReport += f"- Using specific grazing land: Yes\\n"
+                            myAnimalReport += f"- Using specific grazing land: Yes\n"
 
                     # Now we can safely store both the report and requirements
                     animalCalcsReportMap[animalGuid] = (myAnimalReport, myAnimalHerdMCalsRequired)
