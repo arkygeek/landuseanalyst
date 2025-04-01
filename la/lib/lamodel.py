@@ -1,9 +1,9 @@
 from la.lib.laanimalparameter import LaAnimalParameter
-from qgis.PyQt.QtCore import pyqtProperty, pyqtSignal, QUuid
+from qgis.PyQt.QtCore import pyqtSignal, pyqtProperty, QObject # Ensure QObject is imported if not already
 from qgis.PyQt.QtWidgets import QDialog
 
 import xml.etree.ElementTree as ET
-import logging
+import logging # Keep standard logging
 from typing import Dict, List, Tuple, Union
 
 from la.lib.laserialisable import LaSerialisable
@@ -98,6 +98,9 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
     _projectionChanged = pyqtSignal()
     _statusChanged = pyqtSignal()
     _walkingTimeChanged = pyqtSignal()
+
+    # Add a new signal for logging calculation steps to the UI
+    logCalculationStep = pyqtSignal(str)
 
     def __init__(self, parent=None, theModel=None):
         """
@@ -1798,49 +1801,88 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
     def doTheFallowAllocation(self, thePriority: Priority, theAvailableFallowValue: float,
                             theAnimalMCalRequirementMap: Dict[str, float]) -> float:
-        """Allocate fallow land to animals of a specific priority.
+        """Allocate fallow land to animals of a specific priority using match case.
 
         Args:
             thePriority: Priority level being processed
             theAvailableFallowValue: MCals available from fallow land
             theAnimalMCalRequirementMap: Map of animal GUIDs to MCal requirements
+                                         for the current priority group.
 
         Returns:
             float: Remaining MCals after allocation
         """
         from la.lib.lautils import LaUtils
+        from la.lib.la import Status # Ensure Status enum is imported
 
         if theAvailableFallowValue <= 0 or not theAnimalMCalRequirementMap:
+            LaUtils.debug.log(f"No fallow allocation needed for priority {thePriority.name}. Available: {theAvailableFallowValue}, Animals: {len(theAnimalMCalRequirementMap)}", "Diet")
             return theAvailableFallowValue
 
         # Calculate total MCals needed by this priority group
-        totalNeeded = sum(theAnimalMCalRequirementMap.values())
+        myTotalNeeded = sum(theAnimalMCalRequirementMap.values())
+        LaUtils.debug.log(f"Priority {thePriority.name}: Total Needed = {myTotalNeeded:.2f} MCal, Available Fallow = {theAvailableFallowValue:.2f} MCal", "Diet")
 
-        # If we have more than enough fallow land
-        if theAvailableFallowValue >= totalNeeded:
-            # Each animal gets 100% of what it needs
-            LaUtils.debug.log(f"Enough fallow land for all {thePriority} priority animals", "Diet")
-            for animalGuid, mCalRequirement in theAnimalMCalRequirementMap.items():
-                # Adjust the animal's MCal requirement in the value map
-                if animalGuid in self._mValueMap:
-                    self._mValueMap[animalGuid] = max(0, self._mValueMap[animalGuid] - mCalRequirement)
-                    LaUtils.debug.log(f"Animal {animalGuid} requirement reduced by {mCalRequirement:.2f} MCal", "Diet")
+        # Determine the fallow status based on C++ logic
+        myFallowDifference = theAvailableFallowValue - myTotalNeeded
+        myFallowStatus = Status.MoreThanEnoughToCompletelySatisfy if myFallowDifference > 0 else Status.NotEnoughToCompletelySatisfy
 
-            # Return remaining MCals
-            return theAvailableFallowValue - totalNeeded
+        myFallowStatusString = "More than Enough" if myFallowStatus == Status.MoreThanEnoughToCompletelySatisfy else "Not Enough"
+        LaUtils.debug.log(f"Fallow Status: {myFallowStatusString}", "Diet")
 
-        # Otherwise, distribute proportionally
-        else:
-            LaUtils.debug.log(f"Not enough fallow land for all {thePriority} priority animals. Distributing {theAvailableFallowValue:.2f} MCal proportionally.", "Diet")
-            for animalGuid, mCalRequirement in theAnimalMCalRequirementMap.items():
-                # Calculate proportion
-                proportion = mCalRequirement / totalNeeded
-                allocatedMCals = theAvailableFallowValue * proportion
+        myRemainingFallow = 0.0
 
-                # Adjust the animal's MCal requirement
-                if animalGuid in self._mValueMap:
-                    self._mValueMap[animalGuid] = max(0, self._mValueMap[animalGuid] - allocatedMCals)
-                    LaUtils.debug.log(f"Animal {animalGuid} requirement reduced by {allocatedMCals:.2f} MCal", "Diet")
+        # Use match case based on the calculated status
+        match myFallowStatus:
+            case Status.MoreThanEnoughToCompletelySatisfy:
+                LaUtils.debug.log("CASE: MoreThanEnoughToCompletelySatisfy", "Diet")
+                # Each animal in this group gets its full requirement met by fallow.
+                # Reduce their remaining requirement in the main value map (_mValueMap) to zero.
+                for myAnimalGuid, myMCalRequirement in theAnimalMCalRequirementMap.items():
+                    if myAnimalGuid in self._mValueMap:
+                        # Check if the current requirement is less than or equal to the value in the map
+                        # This prevents accidentally reducing requirement below zero if it was already partially met
+                        myReduction = min(myMCalRequirement, self._mValueMap[myAnimalGuid])
+                        self._mValueMap[myAnimalGuid] -= myReduction
+                        # Ensure it doesn't go below zero due to floating point issues
+                        self._mValueMap[myAnimalGuid] = max(0, self._mValueMap[myAnimalGuid])
+                        LaUtils.debug.log(f"  Animal {myAnimalGuid}: Requirement fully met by fallow. Reduced by {myReduction:.2f}. Remaining need: {self._mValueMap[myAnimalGuid]:.2f}", "Diet")
+                    else:
+                        LaUtils.debug.log(f"  Animal {myAnimalGuid} not found in _mValueMap during fallow allocation.", "Warning")
 
-            # All MCals have been allocated
-            return 0.0
+                # Calculate and return the leftover fallow value
+                myRemainingFallow = myFallowDifference # or theAvailableFallowValue - totalNeeded
+                LaUtils.debug.log(f"Remaining Fallow Value after allocation: {myRemainingFallow:.2f}", "Diet")
+
+            case Status.NotEnoughToCompletelySatisfy:
+                LaUtils.debug.log("CASE: NotEnoughToCompletelySatisfy", "Diet")
+                # Distribute the available fallow proportionally among animals in this group.
+                if myTotalNeeded > 0: # Avoid division by zero
+                    for myAnimalGuid, myMCalRequirement in theAnimalMCalRequirementMap.items():
+                        if myAnimalGuid in self._mValueMap:
+                            # Calculate the proportion of available fallow this animal gets
+                            myProportion = myMCalRequirement / myTotalNeeded
+                            myAllocatedMCals = theAvailableFallowValue * myProportion
+                            LaUtils.debug.log(f"  Animal {myAnimalGuid}: Needs {myMCalRequirement:.2f}, Proportion {myProportion:.4f}, Allocated {myAllocatedMCals:.2f}", "Diet")
+
+                            # Reduce the animal's requirement in the main value map
+                            # Check if the current requirement is less than or equal to the value in the map
+                            myReduction = min(myAllocatedMCals, self._mValueMap[myAnimalGuid])
+                            self._mValueMap[myAnimalGuid] -= myReduction
+                            # Ensure it doesn't go below zero
+                            self._mValueMap[myAnimalGuid] = max(0, self._mValueMap[myAnimalGuid])
+                            LaUtils.debug.log(f"  Animal {myAnimalGuid}: Requirement reduced by {myReduction:.2f}. Remaining need: {self._mValueMap[myAnimalGuid]:.2f}", "Diet")
+                        else:
+                            LaUtils.debug.log(f"  Animal {myAnimalGuid} not found in _mValueMap during fallow allocation.", "Warning")
+                else:
+                    LaUtils.debug.log("  Total needed is zero, skipping proportional allocation.", "Diet")
+
+                # All available fallow has been used
+                myRemainingFallow = 0.0
+                LaUtils.debug.log(f"All available fallow allocated. Remaining Fallow Value: {myRemainingFallow:.2f}", "Diet")
+
+            case _: # Default case, should not happen with Status enum
+                LaUtils.debug.log(f"Unexpected fallow status: {myFallowStatus}", "Error")
+                myRemainingFallow = theAvailableFallowValue # Return original value if status is unknown
+
+        return myRemainingFallow

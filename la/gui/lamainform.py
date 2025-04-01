@@ -55,6 +55,8 @@ class LaMainForm(LaMainFormBase):
 
         # Initialize the model first
         self.model = LaModel(self)
+        # Connect the new signal for calculation logging
+        self.model.logCalculationStep.connect(self.logToAllChannels) # Add this line
 
         # Initialize diet labels
         self.diet_labels = LaDietLabels(parent=self)
@@ -491,7 +493,14 @@ class LaMainForm(LaMainFormBase):
             # Configure model from current UI state
             self._configureModelFromUi()
 
+            # Disconnect previous model's signal if necessary (optional, depends on how model is managed)
+            # try:
+            #     self.model.logCalculationStep.disconnect(self.logToAllChannels)
+            # except TypeError: # Signal not connected or already disconnected
+            #     pass
+
             # Calculate diet labels based on settings
+            # NOTE: The doCalcs methods themselves now emit the signals
             if self.cboxBaseOnPlants.isChecked():
                 if self.cboxIncludeDairy.isChecked():
                     self.diet_labels = self.model.doCalcsPlantsFirstIncludeDairy()
@@ -503,10 +512,16 @@ class LaMainForm(LaMainFormBase):
                 else:
                     self.diet_labels = self.model.doCalcsAnimalsFirstDairySeparate()
 
-            # Connect signals from the new diet labels
+            # Reconnect the signal from the current model instance (important if model instance changes)
+            # If self.model instance *doesn't* change, this reconnect isn't strictly needed here
+            # but doesn't hurt. If the doCalcs methods *returned* a new model, it would be crucial.
+            # Since they seem to modify the existing self.model, the initial connection in __init__ is likely sufficient.
+            # self.model.logCalculationStep.connect(self.logToAllChannels) # Reconnect (likely optional here)
+
+            # Connect signals from the new diet labels object (if it emits signals)
             self._connect_diet_label_signals(self.diet_labels)
 
-            # Update calculations
+            # Update calculations (this might trigger more logging)
             self.updateCalculations()
 
         except Exception as e:
