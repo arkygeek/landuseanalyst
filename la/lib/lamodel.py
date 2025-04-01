@@ -4,7 +4,7 @@ from qgis.PyQt.QtWidgets import QDialog
 
 import xml.etree.ElementTree as ET
 import logging
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Union
 
 from la.lib.laserialisable import LaSerialisable
 from la.lib.laguid import LaGuid
@@ -311,12 +311,40 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
     @pyqtProperty(int, notify=_dairyUtilisationChanged)
     def dairyUtilisation(self) -> int: # type: ignore
-        return int(self.mDairyUtilisation)
+        # Ensure we return an integer, handling potential stored strings
+        try:
+            # Attempt to convert directly if it's already numeric or a clean string
+            return int(self.mDairyUtilisation)
+        except (ValueError, TypeError):
+            # If conversion fails, try cleaning the string (remove '%', spaces)
+            try:
+                cleaned_value = str(self.mDairyUtilisation).replace('%', '').strip()
+                return int(cleaned_value)
+            except (ValueError, TypeError):
+                # If cleaning also fails, return a default value (e.g., 0 or handle as error)
+                self.logger.warning(f"Could not convert mDairyUtilisation '{self.mDairyUtilisation}' to int. Returning 0.")
+                return 0
     @dairyUtilisation.setter
-    def dairyUtilisation(self, thePercent: int):
-        if self.mDairyUtilisation != thePercent:
-            self.mDairyUtilisation = thePercent
-            self._dairyUtilisationChanged.emit()
+    def dairyUtilisation(self, thePercent: Union[int, float, str]): # Allow string input
+        try:
+            # Try to convert input to a numeric value
+            numeric_value = 0
+            if isinstance(thePercent, str):
+                # Clean the string if it's passed
+                cleaned_value = thePercent.replace('%', '').strip()
+                numeric_value = int(float(cleaned_value)) # Use float first for potential decimals
+            else:
+                numeric_value = int(thePercent)
+
+            # Store the numeric value and emit signal if changed
+            if not hasattr(self, 'mDairyUtilisation') or self.mDairyUtilisation != numeric_value:
+                self.mDairyUtilisation = numeric_value
+                self._dairyUtilisationChanged.emit()
+        except (ValueError, TypeError) as e:
+            self.logger.error(f"Failed to set dairyUtilisation with value '{thePercent}': {e}")
+            # Optionally set a default value or raise the error
+            # self.mDairyUtilisation = 0 # Example default
+            # self._dairyUtilisationChanged.emit()
 
 
     @pyqtProperty(bool, notify=_baseOnPlantsChanged)
@@ -829,8 +857,8 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
     def doCalcsPlantsFirstIncludeDairy(self) -> LaDietLabels:
         from la.lib.lautils import LaUtils
-        myMCalsIndividualAnnual: float = self.caloriesPerPersonDaily * 365.0;
-        myMCalsSettlementAnnual: float = myMCalsIndividualAnnual * self.population;
+        myMCalsIndividualAnnual: float = self.caloriesPerPersonDaily * 365.0
+        myMCalsSettlementAnnual: float = myMCalsIndividualAnnual * self.population
         myDietLabels = LaDietLabels()
         LaAnimal = None  # Matches C++ declaration but not used in this simplified version
 
@@ -1067,7 +1095,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                 myAnimalCalcsReportMap      # Animal calcs report map
             )
 
-            # Log results matching the pattern in C++ implementation
+            # Log results
             LaUtils.debug.log(f"Results - Meat: {myOverallMeatPercent*100:.2f}%, Plant: {myOverallPlantPercent*100:.2f}%, Dairy: {myOverallDairyPercent*100:.2f}%", "Diet")
             LaUtils.debug.log("doCalcsPlantsFirstDairySeparate calculation completed successfully", "Diet")
 
