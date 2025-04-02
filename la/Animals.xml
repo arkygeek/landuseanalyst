@@ -1,0 +1,227 @@
+<Animals>
+    <animal guid="f1a2b3c4-d5e6-f7a8-b9c0-d1e2f3a4b5c6">
+      <name>Sheep</name>
+      <description>Sheep</description> <!-- Assuming name as description -->
+      <meatFoodValue>3200</meatFoodValue> <!-- Mcal/Kg * 1000 -->
+      <usableMeat>50</usableMeat> <!-- Usable % -->
+      <killWeight>30</killWeight>
+      <adultWeight>60</adultWeight>
+      <breedingExpectancy>5</breedingExpectancy>
+      <conceptionEfficiency>80</conceptionEfficiency>
+      <femalesToMales>20</femalesToMales> <!-- Ratio F:M -->
+      <growTime>40</growTime>
+      <feedEnergyType>KCalories</feedEnergyType> <!-- Assuming KCalories -->
+      <gestating>3.97</gestating> <!-- Gestation Req'd -->
+      <lactating>5.41</lactating> <!-- Lactation Req'd -->
+      <maintenance>3.2</maintenance> <!-- Maintenance Req'd -->
+      <juvenile>0.03</juvenile> <!-- Juvenile's Req kg-1 -->
+      <sexualMaturity>18</sexualMaturity>
+      <youngPerBirth>1</youngPerBirth>
+      <weaningAge>60</weaningAge>
+      <weaningWeight>8</weaningWeight>
+      <gestationTime>150</gestationTime>
+      <estrousCycle>21</estrousCycle>
+      <lactationTime>210</lactationTime>
+      <milk>1</milk> <!-- Has milk -->
+      <milkGramsPerDay>940</milkGramsPerDay> <!-- Milk grams day-1 * 1000 -->
+      <milkFoodValue>940</milkFoodValue> <!-- Milk Mcals Kg-1 * 1000 -->
+      <fleece>1</fleece> <!-- Has fleece -->
+      <fleeceWeightKg>2.25</fleeceWeightKg> <!-- Ewe Fleece Kg Yr-1 -->
+      <imageFile>sheep.png</imageFile> <!-- Assuming default image -->
+      <!-- Parameter Profile GUID is not part of LaAnimal XML structure -->
+      <!-- Herd size and fodder info are part of LaAnimalParameter -->
+    </animal>
+    <animal guid="1f2a3b4c-5d6e-7f8a-9b0c-d1e2f3a4b5c6">
+      <name>Pig</name>
+      <description>Pig</description>
+      <meatFoodValue>3200</meatFoodValue>
+      <usableMeat>50</usableMeat>
+      <killWeight>100</killWeight>
+      <adultWeight>200</adultWeight>
+      <breedingExpectancy>5</breedingExpectancy>
+      <conceptionEfficiency>70</conceptionEfficiency>
+      <femalesToMales>20</femalesToMales>
+      <growTime>40</growTime>
+      <feedEnergyType>KCalories</feedEnergyType>
+      <gestating>3.97</gestating>
+      <lactating>5.41</lactating>
+      <maintenance>0</maintenance> <!-- Maintenance Req'd is 0 -->
+      <juvenile>0.03</juvenile>
+      <sexualMaturity>18</sexualMaturity>
+      <youngPerBirth>6</youngPerBirth>
+      <weaningAge>30</weaningAge>
+      <weaningWeight>2</weaningWeight>
+      <gestationTime>115</gestationTime>
+      <estrousCycle>21</estrousCycle>
+      <lactationTime>30</lactationTime>
+      <milk>0</milk>
+      <milkGramsPerDay>0</milkGramsPerDay>
+      <milkFoodValue>0</milkFoodValue>
+      <fleece>0</fleece>
+      <fleeceWeightKg>0</fleeceWeightKg>
+      <imageFile>pig.png</imageFile>
+    </animal>
+    <animal guid="2a3b4c5d-6e7f-8a9b-0c1d-e2f3a4b5c6d7">
+      <name>Cow</name>
+      <description>Cow</description>
+      <meatFoodValue>3200</meatFoodValue>
+      <usableMeat>50</usableMeat>
+      <killWeight>400</killWeight>
+      <adultWeight>625</adultWeight>
+      <breedingExpectancy>8</breedingExpectancy>
+      <conceptionEfficiency>85</conceptionEfficiency>
+      <femalesToMales>20</femalesToMales>
+      <growTime>50</growTime>
+      <feedEnergyType>KCalories</feedEnergyType>
+      <gestating>6</gestating>
+      <lactating>7.5</lactating>
+      <maintenance>5.8</maintenance>
+      <juvenile>0.03</juvenile>
+      <sexualMaturity>18</sexualMaturity>
+      <youngPerBirth>1</youngPerBirth>
+      <weaningAge>60</weaningAge>
+      <weaningWeight>50</weaningWeight>
+      <gestationTime>279</gestationTime>
+      <estrousCycle>21</estrousCycle>
+      <lactationTime>240</lactationTime>
+      <milk>1</milk>
+      <milkGramsPerDay>6000</milkGramsPerDay> <!-- 6 * 1000 -->
+      <milkFoodValue>940</milkFoodValue> <!-- 0.94 * 1000 -->
+      <fleece>0</fleece>
+      <fleeceWeightKg>0</fleeceWeightKg>
+      <imageFile>cow.png</imageFile>
+    </animal>
+    <animal guid="3b4c5d6e-7f8a-9b0c-1d2e-f3a4b5c6d7e8">
+      <name>Goat</name>
+      <description>Goat</description>
+      <meatFoodValue>3200</meatFoodValue>
+      <usableMeat>50</usableMeat>
+      <killWeight>30</killWeight>
+      <adultWeight>60</adultWeight>
+      <breedingExpectancy>5</breedingExpectancy>
+      <conceptionEfficiency>80</conceptionEfficiency>
+      <femalesToMales>20</femalesToMales>
+      <growTime>40</growTime>
+      <feedEnergyType>KCalories</feedEnergyType>
+      <gestating>3.97</gestating>
+      <lactating>5.41</lactating>
+      <maintenance>3.2</maintenance>
+      <juvenile>0.03</juvenile>
+      <sexualMaturity>18</sexualMaturity>
+      <youngPerBirth>1</youngPerBirth>
+      <weaningAge>60</weaningAge>
+      <weaningWeight>8</weaningWeight>
+      <gestationTime>150</gestationTime>
+      <estrousCycle>21</estrousCycle>
+      <lactationTime>210</lactationTime>
+      <milk>1</milk>
+      <milkGramsPerDay>900</milkGramsPerDay> <!-- 0.9 * 1000 -->
+      <milkFoodValue>940</milkFoodValue> <!-- 0.94 * 1000 -->
+      <fleece>0</fleece>
+      <fleeceWeightKg>0</fleeceWeightKg>
+      <imageFile>goat.png</imageFile>
+    </animal>
+</Animals>
+
+<AnimalParameterProfiles>
+    <animalParameter guid="a1b2c3d4-e5f6-a7b8-c9d0-e1f2a3b4c5d6">
+      <name>Sheep Parameters</name>
+      <description>test scenario 1</description>
+      <animal>f1a2b3c4-d5e6-f7a8-b9c0-d1e2f3a4b5c6</animal> <!-- Link to Sheep GUID -->
+      <percentTameMeat>50.0</percentTameMeat>
+      <useCommonGrazingLand>1</useCommonGrazingLand>
+      <useSpecificGrazingLand>0</useSpecificGrazingLand>
+      <fodderUse>1</fodderUse>
+      <fodderCrops>
+        <foodSource>
+          <fodderCropGuid>Crop 10</fodderCropGuid> <!-- Assuming Crop 10 is Barley GUID -->
+          <fodderStrawChaff>1000</fodderStrawChaff>
+          <fodderGrain>750</fodderGrain>
+          <fodderUse>1</fodderUse>
+          <fodderDays>90</fodderDays>
+        </foodSource>
+      </fodderCrops>
+      <fallowUsage>None</fallowUsage>
+      <rasterName></rasterName>
+      <areaUnits>Dunum</areaUnits>
+      <energyType>KCalories</energyType>
+      <specificLandEnergyType>KCalories</specificLandEnergyType>
+      <valueCommonGrazingLand>1500</valueCommonGrazingLand>
+      <valueSpecificGrazingLand>0</valueSpecificGrazingLand>
+    </animalParameter>
+    <animalParameter guid="b1c2d3e4-f5a6-b7c8-d9e0-f1a2b3c4d5e6">
+      <name>Pig Parameters</name>
+      <description>Parameters for Pig</description>
+      <animal>1f2a3b4c-5d6e-7f8a-9b0c-d1e2f3a4b5c6</animal> <!-- Link to Pig GUID -->
+      <percentTameMeat>50.0</percentTameMeat>
+      <useCommonGrazingLand>0</useCommonGrazingLand>
+      <useSpecificGrazingLand>0</useSpecificGrazingLand>
+      <fodderUse>1</fodderUse>
+      <fodderCrops>
+        <foodSource>
+          <fodderCropGuid>Crop 10</fodderCropGuid>
+          <fodderStrawChaff>0</fodderStrawChaff> <!-- Value not provided -->
+          <fodderGrain>750</fodderGrain>
+          <fodderUse>1</fodderUse>
+          <fodderDays>90</fodderDays>
+        </foodSource>
+      </fodderCrops>
+      <fallowUsage>None</fallowUsage>
+      <rasterName></rasterName>
+      <areaUnits>Dunum</areaUnits>
+      <energyType>KCalories</energyType>
+      <specificLandEnergyType>KCalories</specificLandEnergyType>
+      <valueCommonGrazingLand>1500</valueCommonGrazingLand>
+      <valueSpecificGrazingLand>0</valueSpecificGrazingLand>
+    </animalParameter>
+    <animalParameter guid="c1d2e3f4-a5b6-c7d8-e9f0-a1b2c3d4e5f6">
+      <name>Cow Parameters</name>
+      <description>Parameters for Cow</description>
+      <animal>2a3b4c5d-6e7f-8a9b-0c1d-e2f3a4b5c6d7</animal> <!-- Link to Cow GUID -->
+      <percentTameMeat>50.0</percentTameMeat>
+      <useCommonGrazingLand>0</useCommonGrazingLand>
+      <useSpecificGrazingLand>0</useSpecificGrazingLand>
+      <fodderUse>1</fodderUse>
+      <fodderCrops>
+        <foodSource>
+          <fodderCropGuid>Crop 10</fodderCropGuid>
+          <fodderStrawChaff>4956</fodderStrawChaff>
+          <fodderGrain>1500</fodderGrain>
+          <fodderUse>1</fodderUse>
+          <fodderDays>90</fodderDays>
+        </foodSource>
+      </fodderCrops>
+      <fallowUsage>None</fallowUsage>
+      <rasterName></rasterName>
+      <areaUnits>Dunum</areaUnits>
+      <energyType>KCalories</energyType>
+      <specificLandEnergyType>KCalories</specificLandEnergyType>
+      <valueCommonGrazingLand>1500</valueCommonGrazingLand>
+      <valueSpecificGrazingLand>0</valueSpecificGrazingLand>
+    </animalParameter>
+    <animalParameter guid="d1e2f3a4-b5c6-d7e8-f9a0-b1c2d3e4f5a6">
+      <name>Goat Parameters</name>
+      <description>Parameters for Goat</description>
+      <animal>3b4c5d6e-7f8a-9b0c-1d2e-f3a4b5c6d7e8</animal> <!-- Link to Goat GUID -->
+      <percentTameMeat>50.0</percentTameMeat>
+      <useCommonGrazingLand>0</useCommonGrazingLand>
+      <useSpecificGrazingLand>0</useSpecificGrazingLand>
+      <fodderUse>1</fodderUse>
+      <fodderCrops>
+        <foodSource>
+          <fodderCropGuid>Crop 10</fodderCropGuid>
+          <fodderStrawChaff>1000</fodderStrawChaff>
+          <fodderGrain>750</fodderGrain>
+          <fodderUse>1</fodderUse>
+          <fodderDays>90</fodderDays>
+        </foodSource>
+      </fodderCrops>
+      <fallowUsage>None</fallowUsage>
+      <rasterName></rasterName>
+      <areaUnits>Dunum</areaUnits>
+      <energyType>KCalories</energyType>
+      <specificLandEnergyType>KCalories</specificLandEnergyType>
+      <valueCommonGrazingLand>1500</valueCommonGrazingLand>
+      <valueSpecificGrazingLand>0</valueSpecificGrazingLand>
+    </animalParameter>
+</AnimalParameterProfiles>

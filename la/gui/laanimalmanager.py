@@ -5,6 +5,7 @@ from qgis.PyQt import uic
 import os
 
 from la.lib.laanimal import LaAnimal
+from la.ui.laanimalmanagerbase import LaAnimalManagerBase
 from la.lib.lautils import LaUtils
 from la.lib.la import EnergyType as LaEnergyType
 from la.lib.la import AreaUnits as LaAreaUnits
@@ -75,22 +76,22 @@ class LaAnimalTableModel(QAbstractTableModel):
         return self.animals[index]
 
 
-class LaAnimalManagerBase(QDialog, FORM_CLASS):
-    """Base class for the Animal Manager dialog.
+# class LaAnimalManagerBase(QDialog, FORM_CLASS):
+#     """Base class for the Animal Manager dialog.
 
-    This class handles loading the UI. All implementation logic
-    should be in the LaAnimalManager class.
-    """
-    def __init__(self, parent=None):
-        super(LaAnimalManagerBase, self).__init__(parent)
-        self.setupUi(self)
+#     This class handles loading the UI. All implementation logic
+#     should be in the LaAnimalManager class.
+#     """
+#     def __init__(self, parent=None):
+#         super(LaAnimalManagerBase, self).__init__(parent)
+#         self.setupUi(self)
 
-        # Basic UI initialization
-        self.lblAnimalPix.setScaledContents(True)
+#         # Basic UI initialization
+#         self.lblAnimalPix.setScaledContents(True)
 
-        # Set up table headers
-        self.tblAnimals.horizontalHeader().hide()
-        self.tblAnimals.verticalHeader().hide()
+#         # Set up table headers
+#         self.tblAnimals.horizontalHeader().hide()
+#         self.tblAnimals.verticalHeader().hide()
 
 
 class LaAnimalManager(LaAnimalManagerBase):

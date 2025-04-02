@@ -76,7 +76,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
     breedingExpectancyChanged = pyqtSignal(int)
     conceptionEfficiencyChanged = pyqtSignal(int)
     femalesToMalesChanged = pyqtSignal(int)
-    adultWeightChanged = pyqtSignal(str)
+    adultWeightChanged = pyqtSignal(int)
     youngPerBirthChanged = pyqtSignal(int)
     weaningAgeChanged = pyqtSignal(int)
     weaningWeightChanged = pyqtSignal(int)
@@ -528,13 +528,13 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
             self._femalesToMales = value
             self.femalesPerMaleChanged.emit(value)
 
-    @pyqtProperty(str, notify=adultWeightChanged)
-    def adultWeight(self) -> str: # type: ignore
+    @pyqtProperty(int, notify=adultWeightChanged)
+    def adultWeight(self) -> int: # type: ignore
         """Get the animal's adult weight."""
-        return cast(str, self._adultWeight)
+        return cast(int, self._adultWeight)
 
     @adultWeight.setter
-    def adultWeight(self, value: str) -> None:
+    def adultWeight(self, value: int) -> None:
         """Set the animal's adult weight.
 
         Args:
@@ -738,10 +738,8 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
 
     def fromXml(self, theXml: str) -> bool:
         """Load animal data from XML string.
-
         Args:
             theXml: XML string containing animal data
-
         Returns:
             True if loaded successfully, False otherwise
         """
@@ -753,125 +751,121 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
             myDocument = QDomDocument()
             if not myDocument.setContent(theXml):
                 LaUtils.debug.log("Invalid XML content")
-                raise ValueError("Invalid XML content")
+                # Mimic C++ behavior: continue processing even if content is invalid,
+                # relying on subsequent checks for null elements.
 
             myTopElement = myDocument.firstChildElement("animal")
             if myTopElement.isNull():
-                LaUtils.debug.log("Missing animal element")
-                raise ValueError("Missing animal element")
+                LaUtils.debug.log("Warning: Missing top-level 'animal' element")
+                # Mimic C++ behavior: don't raise an error immediately
 
             # Set GUID from attribute
-            self.guid = myTopElement.attribute("guid")
-
-
-
-
+            self.guid = myTopElement.attribute("guid") # guid setter handles None
             LaUtils.debug.log(f"Loading animal with GUID in laanimal.py: {self.guid}")
 
-            # Helper function to safely get integer values
-            def getIntValue(elementName: str, default: int = 0) -> int:
-                element = myTopElement.firstChildElement(elementName)
-                if element.isNull():
-                    return default
+            # Helper to convert text to int, returning 0 on failure (like C++ toInt())
+            def safe_int(text: str) -> int:
                 try:
-                    return int(element.text())
+                    # Explicitly handle empty string like Qt's toInt() which returns 0
+                    return int(text) if text else 0
                 except (ValueError, TypeError):
-                    return default
+                    return 0 # Return 0 on conversion error
 
-            # Helper function to get text from an element with a fallback element name
-            def getElementText(primaryName: str, fallbackName: str = "", defaultValue: str = "") -> str:
-                element = myTopElement.firstChildElement(primaryName)
-                if element.isNull() and fallbackName:
-                    element = myTopElement.firstChildElement(fallbackName)
-                return element.text() if not element.isNull() else defaultValue
+            # Helper to convert text to float, returning 0.0 on failure
+            def safe_float(text: str) -> float:
+                try:
+                    # Explicitly handle empty string like Qt's toFloat() which returns 0.0
+                    return float(text) if text else 0.0
+                except (ValueError, TypeError):
+                    return 0.0 # Return 0.0 on conversion error
+
+            # Helper to convert text to bool (1=True, else False)
+            def safe_bool(text: str) -> bool:
+                # Conversion to int handles empty string returning 0 -> False
+                return safe_int(text) == 1
 
             # Basic info - try both 'name' and 'n' tags for compatibility
-            self._name = LaUtils.xmlDecode(getElementText("name", "n", "No Name Set"))
-            self._description = LaUtils.xmlDecode(getElementText("description", "", "No Description Set"))
+            # Mimic C++: get text (empty if null), then decode
+            name_element = myTopElement.firstChildElement("name")
+            if name_element.isNull():
+                name_element = myTopElement.firstChildElement("n") # Fallback
+            self._name = LaUtils.xmlDecode(name_element.text()) # Handles null element returning empty text
+            self._description = LaUtils.xmlDecode(myTopElement.firstChildElement("description").text())
             LaUtils.debug.log(f"Loaded animal name: {self._name}")
 
-            # Meat production
-            self._meatFoodValue = getIntValue("meatFoodValue", 3000)
-            self._usableMeat = getIntValue("usableMeat", 50)
-            self._killWeight = getIntValue("killWeight", 100)
-            self._adultWeight = getIntValue("adultWeight", 0)
-            self._growTime = getIntValue("growTime", 10)
-            self._deathRate = getIntValue("deathRate", 10)
+            # Meat production - remove default values
+            self._meatFoodValue = safe_int(myTopElement.firstChildElement("meatFoodValue").text())
+            self._usableMeat = safe_int(myTopElement.firstChildElement("usableMeat").text())
+            self._killWeight = safe_int(myTopElement.firstChildElement("killWeight").text())
+            self._adultWeight = safe_int(myTopElement.firstChildElement("adultWeight").text())
+            self._growTime = safe_int(myTopElement.firstChildElement("growTime").text())
+            self._deathRate = safe_int(myTopElement.firstChildElement("deathRate").text())
 
-            # Reproduction
-            self._conceptionEfficiency = getIntValue("conceptionEfficiency", 0)
-            self._femalesToMales = getIntValue("femalesToMales", 0)
-            self._sexualMaturity = getIntValue("sexualMaturity", 18)
-            self._breedingExpectancy = getIntValue("breedingExpectancy", 5)
-            self._youngPerBirth = getIntValue("youngPerBirth", 1)
-            self._gestationTime = getIntValue("gestationTime", 120)
-            self._estrousCycle = getIntValue("estrousCycle", 21)
+            # Reproduction - remove default values
+            self._conceptionEfficiency = safe_int(myTopElement.firstChildElement("conceptionEfficiency").text())
+            self._femalesToMales = safe_int(myTopElement.firstChildElement("femalesToMales").text())
+            self._sexualMaturity = safe_int(myTopElement.firstChildElement("sexualMaturity").text())
+            self._breedingExpectancy = safe_int(myTopElement.firstChildElement("breedingExpectancy").text())
+            self._youngPerBirth = safe_int(myTopElement.firstChildElement("youngPerBirth").text())
+            self._gestationTime = safe_int(myTopElement.firstChildElement("gestationTime").text())
+            self._estrousCycle = safe_int(myTopElement.firstChildElement("estrousCycle").text())
 
-            # Early life
-            self._weaningAge = getIntValue("weaningAge", 12)
-            self._weaningWeight = getIntValue("weaningWeight", 30)
+            # Early life - remove default values
+            self._weaningAge = safe_int(myTopElement.firstChildElement("weaningAge").text())
+            self._weaningWeight = safe_int(myTopElement.firstChildElement("weaningWeight").text())
 
             # Energy requirements type
             myFeedEnergyType = myTopElement.firstChildElement("feedEnergyType").text()
+            # Default to KCalories if not TDN or element missing/empty
             self._feedEnergyType = LaEnergyType.TDN if myFeedEnergyType == "TDN" else LaEnergyType.KCalories
 
-            # Energy requirements
-            self._gestating = getIntValue("gestating", 0)
-            self._lactating = getIntValue("lactating", 0)
-            self._maintenance = getIntValue("maintenance", 0)
-            self._juvenile = getIntValue("juvenile", 0)
+            # Energy requirements - remove default values
+            self._gestating = safe_int(myTopElement.firstChildElement("gestating").text())
+            self._lactating = safe_int(myTopElement.firstChildElement("lactating").text())
+            self._maintenance = safe_int(myTopElement.firstChildElement("maintenance").text())
+            self._juvenile = safe_int(myTopElement.firstChildElement("juvenile").text())
 
-            # Dairy
-            self._milk = bool(getIntValue("milk", 0))
-            self._milkGramsPerDay = getIntValue("milkGramsPerDay", 0)
-            self._milkFoodValue = getIntValue("milkFoodValue", 0)
-            self._lactationTime = getIntValue("lactationTime", 0)
+            # Dairy - remove default values
+            self._milk = safe_bool(myTopElement.firstChildElement("milk").text())
+            self._milkGramsPerDay = safe_int(myTopElement.firstChildElement("milkGramsPerDay").text())
+            self._milkFoodValue = safe_int(myTopElement.firstChildElement("milkFoodValue").text())
+            self._lactationTime = safe_int(myTopElement.firstChildElement("lactationTime").text())
 
-            # Fiber
-            self._fleece = bool(getIntValue("fleece", 0))
-            self._fleeceWeightKg = getIntValue("fleeceWeightKg", 0)
+            # Fiber - remove default values
+            self._fleece = safe_bool(myTopElement.firstChildElement("fleece").text())
+            self._fleeceWeightKg = safe_float(myTopElement.firstChildElement("fleeceWeightKg").text())
 
-            # Image
-            imageElement = myTopElement.firstChildElement("imageFile")
-            if not imageElement.isNull():
-                image_file = LaUtils.xmlDecode(imageElement.text())
-                # Store just the filename, not the full path
-                self._imageFile = os.path.basename(image_file)
-                LaUtils.debug.log(f"Set animal image file to: {self._imageFile}")
-            else:
-                # Try to set a default image based on animal name
-                default_image = str(self._name).lower() + ".png"
-                image_path = LaUtils.resolvePath(default_image, 'image')
-                if os.path.exists(image_path):
-                    self._imageFile = default_image
-                    LaUtils.debug.log(f"Using default image file: {self._imageFile}")
-                else:
-                    self._imageFile = ""
-                    LaUtils.debug.log("No image file found")
+            # Image - Mimic C++: assign decoded text directly, then get basename
+            image_file_text = LaUtils.xmlDecode(myTopElement.firstChildElement("imageFile").text())
+            self._imageFile = os.path.basename(image_file_text) if image_file_text else ""
+            LaUtils.debug.log(f"Set animal image file to: {self._imageFile}")
 
-            LaUtils.debug.log(f"Successfully loaded animal: {self._name}")
-            return True
+
+            LaUtils.debug.log(f"Successfully processed XML for animal: {self._name}")
+            return True # Mimic C++ return true even if some elements were missing/invalid
 
         except Exception as e:
-            LaUtils.debug.log(f"Error loading animal from XML: {str(e)}")
+            LaUtils.debug.log(f"Critical error loading animal from XML: {str(e)}")
             import traceback
             LaUtils.debug.log(traceback.format_exc())
-            return False
+            return False # Return False on major exceptions
 
     def toXml(self) -> str:
+        """Generate XML representation consistent with C++ version."""
         from la.lib.lautils import LaUtils # we do this to avoid circular import issues
 
         myString = f'<animal guid="{self.guid}">\n'
-        myString += f'  <n>{LaUtils.xmlEncode(str(self._name))}</n>\n'
+        # Use 'name' tag for consistency with C++ output and fromXml reading
+        myString += f'  <name>{LaUtils.xmlEncode(str(self._name))}</name>\n'
         myString += f'  <description>{LaUtils.xmlEncode(str(self._description))}</description>\n'
         myString += f'  <meatFoodValue>{self._meatFoodValue}</meatFoodValue>\n'
         myString += f'  <usableMeat>{self._usableMeat}</usableMeat>\n'
         myString += f'  <killWeight>{self._killWeight}</killWeight>\n'
         myString += f'  <adultWeight>{self._adultWeight}</adultWeight>\n'
-        myString += f'  <breedingExpectancy>{self._breedingExpectancy}</breedingExpectancy>\n'
         myString += f'  <conceptionEfficiency>{self._conceptionEfficiency}</conceptionEfficiency>\n'
-        myString += f'  <femalesToMales>{self._femalesToMales}</femalesToMales>\n'  # Fixed closing tag
+        myString += f'  <femalesToMales>{self._femalesToMales}</femalesToMales>\n'
         myString += f'  <growTime>{self._growTime}</growTime>\n'
+        myString += f'  <deathRate>{self._deathRate}</deathRate>\n' # Ensure deathRate is present
         if self._feedEnergyType == LaEnergyType.KCalories:
             myString += '  <feedEnergyType>KCalories</feedEnergyType>\n'
         elif self._feedEnergyType == LaEnergyType.TDN:
@@ -881,30 +875,30 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
         myString += f'  <maintenance>{self._maintenance}</maintenance>\n'
         myString += f'  <juvenile>{self._juvenile}</juvenile>\n'
         myString += f'  <sexualMaturity>{self._sexualMaturity}</sexualMaturity>\n'
-        myString += f'  <breedingExpectancy>{self._breedingExpectancy}</breedingExpectancy>\n'
+        myString += f'  <breedingExpectancy>{self._breedingExpectancy}</breedingExpectancy>\n' # Ensure not duplicated
         myString += f'  <youngPerBirth>{self._youngPerBirth}</youngPerBirth>\n'
         myString += f'  <weaningAge>{self._weaningAge}</weaningAge>\n'
         myString += f'  <weaningWeight>{self._weaningWeight}</weaningWeight>\n'
         myString += f'  <gestationTime>{self._gestationTime}</gestationTime>\n'
         myString += f'  <estrousCycle>{self._estrousCycle}</estrousCycle>\n'
         myString += f'  <lactationTime>{self._lactationTime}</lactationTime>\n'
+        # Output booleans as 0/1 like C++ QString::number(bool)
         myString += f'  <milk>{1 if self._milk else 0}</milk>\n'
         myString += f'  <milkGramsPerDay>{self._milkGramsPerDay}</milkGramsPerDay>\n'
         myString += f'  <milkFoodValue>{self._milkFoodValue}</milkFoodValue>\n'
         myString += f'  <fleece>{1 if self._fleece else 0}</fleece>\n'
+        # Outputting float for fleeceWeightKg as defined in Python property, read by fromXml
+        # C++ version stores int, but Python uses float.
         myString += f'  <fleeceWeightKg>{self._fleeceWeightKg}</fleeceWeightKg>\n'
         myString += f'  <imageFile>{LaUtils.xmlEncode(str(self._imageFile))}</imageFile>\n'
         myString += '</animal>\n'
         return myString
 
     def toText(self) -> str:
-        """Generate plain text representation of animal data.
-
-        Returns:
-            Text string with animal attributes in key=>value format
-        """
+        """Generate plain text representation consistent with C++ version."""
         from la.lib.lautils import LaUtils # we do this to avoid circular import issues
-        myString: str = f'guid=>{self.guid()}\n'
+        # Use self.guid which is the property access
+        myString: str = f'guid=>{self.guid}\n'
         myString += f'name=>{LaUtils.xmlEncode(str(cast(str, self._name)))}\n'
         myString += f'description=>{LaUtils.xmlEncode(str(cast(str, self._description)))}\n'
         myString += f'meatFoodValue=>{self._meatFoodValue}\n'
@@ -931,19 +925,17 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
         myString += f'gestationTime=>{self._gestationTime}\n'
         myString += f'estrousCycle=>{self._estrousCycle}\n'
         myString += f'lactationTime=>{self._lactationTime}\n'
-        myString += f'milk=>{self._milk}\n'
+        # Output booleans as 0/1 like C++ QString::number(bool)
+        myString += f'milk=>{1 if self._milk else 0}\n'
         myString += f'milkGramsPerDay=>{self._milkGramsPerDay}\n'
         myString += f'milkFoodValue=>{self._milkFoodValue}\n'
-        myString += f'fleece=>{self._fleece}\n'
+        myString += f'fleece=>{1 if self._fleece else 0}\n'
         myString += f'fleeceWeightKg=>{self._fleeceWeightKg}\n'
+        # imageFile is not included in C++ toText, omitting here too for consistency
         return myString
 
     def toHtml(self) -> str:
-        """Generate HTML table representation of animal data.
-
-        Returns:
-            HTML string containing formatted animal attributes
-        """
+        """Generate HTML table representation consistent with C++ version."""
         from la.lib.lautils import LaUtils # we do this to avoid circular import issues
         myString = f'<h2>Details for {LaUtils.xmlEncode(str(cast(str, self._name)))}</h2>'
         myString += '<table>'
@@ -964,11 +956,14 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
         myString += f'<tr><td><b>Gestation Time:</b></td><td>{self._gestationTime}</td></tr>'
         myString += f'<tr><td><b>Estrous Cycle:</b></td><td>{self._estrousCycle}</td></tr>'
         myString += f'<tr><td><b>lactationTime:</b></td><td>{self._lactationTime}</td></tr>'
-        myString += f'<tr><td><b>milk:</b></td><td>{self._milk}</td></tr>'
+        # Output booleans as 0/1 like C++ QString::number(bool)
+        myString += f'<tr><td><b>milk:</b></td><td>{1 if self._milk else 0}</td></tr>'
         myString += f'<tr><td><b>milkGramsPerDay:</b></td><td>{self._milkGramsPerDay}</td></tr>'
         myString += f'<tr><td><b>milkFoodValue:</b></td><td>{self._milkFoodValue}</td></tr>'
-        myString += f'<tr><td><b>fleece:</b></td><td>{self._fleece}</td></tr>'
+        myString += f'<tr><td><b>fleece:</b></td><td>{1 if self._fleece else 0}</td></tr>'
         myString += f'<tr><td><b>fleeceWeightKg:</b></td><td>{self._fleeceWeightKg}</td></tr>'
+        # imageFile is not included in C++ toHtml, omitting here too for consistency
+        # The C++ version has an empty <tr><td></td><td>, keeping it for now
         myString += '<tr><td></td><td>'
         myString += '<tr><td><FONT COLOR="#0063F7">Feed Requirements (pa)</FONT></td><td>'
         if self._feedEnergyType == LaEnergyType.KCalories:
