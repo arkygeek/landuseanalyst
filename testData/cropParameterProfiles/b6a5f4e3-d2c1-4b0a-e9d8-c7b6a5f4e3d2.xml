@@ -1,0 +1,15 @@
+<cropParameter guid="b6a5f4e3-d2c1-4b0a-e9d8-c7b6a5f4e3d2">
+  <name>Peas Params</name>
+  <description>Peas crop parameters</description>
+  <crop>e5f6a7b8-c9d0-1234-efgh-567890123cde</crop>
+  <percentTameCrop>3.28</percentTameCrop>
+  <spoilage>30</spoilage>
+  <reseed>20</reseed>
+  <cropRotation>1</cropRotation>
+  <fallowRatio>1.0</fallowRatio>
+  <fallowValue>21196</fallowValue>
+  <areaUnits>Hectare</areaUnits>
+  <useCommonLand>1</useCommonLand>
+  <useSpecificLand>0</useSpecificLand>
+  <rasterName></rasterName>
+</cropParameter>

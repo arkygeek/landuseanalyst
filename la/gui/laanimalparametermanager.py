@@ -348,7 +348,7 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
         self.mAnimalParameter._mValueSpecificGrazingLand = self.sbSpecificRasterValue.value()
 
         # Set fodder use from group box checked state
-        self.mAnimalParameter._mFodderUse = float(self.grpFodderUse.isChecked())
+        self.mAnimalParameter._mFodderUse = bool(self.grpFodderUse.isChecked())
 
         # Save fodder data from the table
         if self.grpFodderUse.isChecked():

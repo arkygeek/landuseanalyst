@@ -1,0 +1,31 @@
+<animal guid="f1a2b3c4-d5e6-f7a8-b9c0-d1e2f3a4b5c6">
+  <name>Sheep</name>
+  <description>Sheep notes</description>
+  <meatFoodValue>3200</meatFoodValue>
+  <usableMeat>50</usableMeat>
+  <killWeight>30</killWeight>
+  <adultWeight>60</adultWeight>
+  <conceptionEfficiency>80</conceptionEfficiency>
+  <femalesToMales>20</femalesToMales>
+  <growTime>40</growTime>
+  <deathRate>0</deathRate>
+  <feedEnergyType>KCalories</feedEnergyType>
+  <gestating>30</gestating>
+  <lactating>40</lactating>
+  <maintenance>250</maintenance>
+  <juvenile>15</juvenile>
+  <sexualMaturity>18</sexualMaturity>
+  <breedingExpectancy>5</breedingExpectancy>
+  <youngPerBirth>1</youngPerBirth>
+  <weaningAge>60</weaningAge>
+  <weaningWeight>8</weaningWeight>
+  <gestationTime>150</gestationTime>
+  <estrousCycle>21</estrousCycle>
+  <lactationTime>210</lactationTime>
+  <milk>1</milk>
+  <milkGramsPerDay>940</milkGramsPerDay>
+  <milkFoodValue>940</milkFoodValue>
+  <fleece>1</fleece>
+  <fleeceWeightKg>10.0</fleeceWeightKg>
+  <imageFile>sheep.png</imageFile>
+</animal>

@@ -123,105 +123,106 @@
     </animal>
 </Animals>
 
-<AnimalParameterProfiles>
-    <animalParameter guid="a1b2c3d4-e5f6-a7b8-c9d0-e1f2a3b4c5d6">
-      <name>Sheep Parameters</name>
-      <description>test scenario 1</description>
-      <animal>f1a2b3c4-d5e6-f7a8-b9c0-d1e2f3a4b5c6</animal> <!-- Link to Sheep GUID -->
-      <percentTameMeat>50.0</percentTameMeat>
-      <useCommonGrazingLand>1</useCommonGrazingLand>
-      <useSpecificGrazingLand>0</useSpecificGrazingLand>
+<animalParameter guid="a1b2c3d4-e5f6-a7b8-c9d0-e1f2a3b4c5d6">
+  <name>Sheep Parameters</name>
+  <description>test scenario 1</description>
+  <animal>f1a2b3c4-d5e6-f7a8-b9c0-d1e2f3a4b5c6</animal> <!-- Link to Sheep GUID -->
+  <percentTameMeat>50.0</percentTameMeat>
+  <useCommonGrazingLand>1</useCommonGrazingLand>
+  <useSpecificGrazingLand>0</useSpecificGrazingLand>
+  <fodderUse>1</fodderUse>
+  <fodderCrops>
+    <foodSource>
+      <fodderCropGuid>d413884f-45d8-457b-9c2f-e479f291bbeb</fodderCropGuid> <!-- Assuming d413884f-45d8-457b-9c2f-e479f291bbeb is Barley GUID -->
+      <fodderStrawChaff>1000</fodderStrawChaff>
+      <fodderGrain>750</fodderGrain>
       <fodderUse>1</fodderUse>
-      <fodderCrops>
-        <foodSource>
-          <fodderCropGuid>Crop 10</fodderCropGuid> <!-- Assuming Crop 10 is Barley GUID -->
-          <fodderStrawChaff>1000</fodderStrawChaff>
-          <fodderGrain>750</fodderGrain>
-          <fodderUse>1</fodderUse>
-          <fodderDays>90</fodderDays>
-        </foodSource>
-      </fodderCrops>
-      <fallowUsage>None</fallowUsage>
-      <rasterName></rasterName>
-      <areaUnits>Dunum</areaUnits>
-      <energyType>KCalories</energyType>
-      <specificLandEnergyType>KCalories</specificLandEnergyType>
-      <valueCommonGrazingLand>1500</valueCommonGrazingLand>
-      <valueSpecificGrazingLand>0</valueSpecificGrazingLand>
-    </animalParameter>
-    <animalParameter guid="b1c2d3e4-f5a6-b7c8-d9e0-f1a2b3c4d5e6">
-      <name>Pig Parameters</name>
-      <description>Parameters for Pig</description>
-      <animal>1f2a3b4c-5d6e-7f8a-9b0c-d1e2f3a4b5c6</animal> <!-- Link to Pig GUID -->
-      <percentTameMeat>50.0</percentTameMeat>
-      <useCommonGrazingLand>0</useCommonGrazingLand>
-      <useSpecificGrazingLand>0</useSpecificGrazingLand>
+      <fodderDays>90</fodderDays>
+    </foodSource>
+  </fodderCrops>
+  <fallowUsage>None</fallowUsage>
+  <rasterName></rasterName>
+  <areaUnits>Dunum</areaUnits>
+  <energyType>KCalories</energyType>
+  <specificLandEnergyType>KCalories</specificLandEnergyType>
+  <valueCommonGrazingLand>1500</valueCommonGrazingLand>
+  <valueSpecificGrazingLand>0</valueSpecificGrazingLand>
+</animalParameter>
+
+<animalParameter guid="b1c2d3e4-f5a6-b7c8-d9e0-f1a2b3c4d5e6">
+  <name>Pig Parameters</name>
+  <description>Parameters for Pig</description>
+  <animal>1f2a3b4c-5d6e-7f8a-9b0c-d1e2f3a4b5c6</animal> <!-- Link to Pig GUID -->
+  <percentTameMeat>50.0</percentTameMeat>
+  <useCommonGrazingLand>0</useCommonGrazingLand>
+  <useSpecificGrazingLand>0</useSpecificGrazingLand>
+  <fodderUse>1</fodderUse>
+  <fodderCrops>
+    <foodSource>
+      <fodderCropGuid>d413884f-45d8-457b-9c2f-e479f291bbeb</fodderCropGuid>
+      <fodderStrawChaff>0</fodderStrawChaff> <!-- Value not provided -->
+      <fodderGrain>750</fodderGrain>
       <fodderUse>1</fodderUse>
-      <fodderCrops>
-        <foodSource>
-          <fodderCropGuid>Crop 10</fodderCropGuid>
-          <fodderStrawChaff>0</fodderStrawChaff> <!-- Value not provided -->
-          <fodderGrain>750</fodderGrain>
-          <fodderUse>1</fodderUse>
-          <fodderDays>90</fodderDays>
-        </foodSource>
-      </fodderCrops>
-      <fallowUsage>None</fallowUsage>
-      <rasterName></rasterName>
-      <areaUnits>Dunum</areaUnits>
-      <energyType>KCalories</energyType>
-      <specificLandEnergyType>KCalories</specificLandEnergyType>
-      <valueCommonGrazingLand>1500</valueCommonGrazingLand>
-      <valueSpecificGrazingLand>0</valueSpecificGrazingLand>
-    </animalParameter>
-    <animalParameter guid="c1d2e3f4-a5b6-c7d8-e9f0-a1b2c3d4e5f6">
-      <name>Cow Parameters</name>
-      <description>Parameters for Cow</description>
-      <animal>2a3b4c5d-6e7f-8a9b-0c1d-e2f3a4b5c6d7</animal> <!-- Link to Cow GUID -->
-      <percentTameMeat>50.0</percentTameMeat>
-      <useCommonGrazingLand>0</useCommonGrazingLand>
-      <useSpecificGrazingLand>0</useSpecificGrazingLand>
+      <fodderDays>90</fodderDays>
+    </foodSource>
+  </fodderCrops>
+  <fallowUsage>None</fallowUsage>
+  <rasterName></rasterName>
+  <areaUnits>Dunum</areaUnits>
+  <energyType>KCalories</energyType>
+  <specificLandEnergyType>KCalories</specificLandEnergyType>
+  <valueCommonGrazingLand>1500</valueCommonGrazingLand>
+  <valueSpecificGrazingLand>0</valueSpecificGrazingLand>
+</animalParameter>
+
+<animalParameter guid="c1d2e3f4-a5b6-c7d8-e9f0-a1b2c3d4e5f6">
+  <name>Cow Parameters</name>
+  <description>Parameters for Cow</description>
+  <animal>2a3b4c5d-6e7f-8a9b-0c1d-e2f3a4b5c6d7</animal> <!-- Link to Cow GUID -->
+  <percentTameMeat>50.0</percentTameMeat>
+  <useCommonGrazingLand>0</useCommonGrazingLand>
+  <useSpecificGrazingLand>0</useSpecificGrazingLand>
+  <fodderUse>1</fodderUse>
+  <fodderCrops>
+    <foodSource>
+      <fodderCropGuid>d413884f-45d8-457b-9c2f-e479f291bbeb</fodderCropGuid>
+      <fodderStrawChaff>4956</fodderStrawChaff>
+      <fodderGrain>1500</fodderGrain>
       <fodderUse>1</fodderUse>
-      <fodderCrops>
-        <foodSource>
-          <fodderCropGuid>Crop 10</fodderCropGuid>
-          <fodderStrawChaff>4956</fodderStrawChaff>
-          <fodderGrain>1500</fodderGrain>
-          <fodderUse>1</fodderUse>
-          <fodderDays>90</fodderDays>
-        </foodSource>
-      </fodderCrops>
-      <fallowUsage>None</fallowUsage>
-      <rasterName></rasterName>
-      <areaUnits>Dunum</areaUnits>
-      <energyType>KCalories</energyType>
-      <specificLandEnergyType>KCalories</specificLandEnergyType>
-      <valueCommonGrazingLand>1500</valueCommonGrazingLand>
-      <valueSpecificGrazingLand>0</valueSpecificGrazingLand>
-    </animalParameter>
-    <animalParameter guid="d1e2f3a4-b5c6-d7e8-f9a0-b1c2d3e4f5a6">
-      <name>Goat Parameters</name>
-      <description>Parameters for Goat</description>
-      <animal>3b4c5d6e-7f8a-9b0c-1d2e-f3a4b5c6d7e8</animal> <!-- Link to Goat GUID -->
-      <percentTameMeat>50.0</percentTameMeat>
-      <useCommonGrazingLand>0</useCommonGrazingLand>
-      <useSpecificGrazingLand>0</useSpecificGrazingLand>
+      <fodderDays>90</fodderDays>
+    </foodSource>
+  </fodderCrops>
+  <fallowUsage>None</fallowUsage>
+  <rasterName></rasterName>
+  <areaUnits>Dunum</areaUnits>
+  <energyType>KCalories</energyType>
+  <specificLandEnergyType>KCalories</specificLandEnergyType>
+  <valueCommonGrazingLand>1500</valueCommonGrazingLand>
+  <valueSpecificGrazingLand>0</valueSpecificGrazingLand>
+</animalParameter>
+
+<animalParameter guid="d1e2f3a4-b5c6-d7e8-f9a0-b1c2d3e4f5a6">
+  <name>Goat Parameters</name>
+  <description>Parameters for Goat</description>
+  <animal>3b4c5d6e-7f8a-9b0c-1d2e-f3a4b5c6d7e8</animal> <!-- Link to Goat GUID -->
+  <percentTameMeat>50.0</percentTameMeat>
+  <useCommonGrazingLand>0</useCommonGrazingLand>
+  <useSpecificGrazingLand>0</useSpecificGrazingLand>
+  <fodderUse>1</fodderUse>
+  <fodderCrops>
+    <foodSource>
+      <fodderCropGuid>d413884f-45d8-457b-9c2f-e479f291bbeb</fodderCropGuid>
+      <fodderStrawChaff>1000</fodderStrawChaff>
+      <fodderGrain>750</fodderGrain>
       <fodderUse>1</fodderUse>
-      <fodderCrops>
-        <foodSource>
-          <fodderCropGuid>Crop 10</fodderCropGuid>
-          <fodderStrawChaff>1000</fodderStrawChaff>
-          <fodderGrain>750</fodderGrain>
-          <fodderUse>1</fodderUse>
-          <fodderDays>90</fodderDays>
-        </foodSource>
-      </fodderCrops>
-      <fallowUsage>None</fallowUsage>
-      <rasterName></rasterName>
-      <areaUnits>Dunum</areaUnits>
-      <energyType>KCalories</energyType>
-      <specificLandEnergyType>KCalories</specificLandEnergyType>
-      <valueCommonGrazingLand>1500</valueCommonGrazingLand>
-      <valueSpecificGrazingLand>0</valueSpecificGrazingLand>
-    </animalParameter>
-</AnimalParameterProfiles>
+      <fodderDays>90</fodderDays>
+    </foodSource>
+  </fodderCrops>
+  <fallowUsage>None</fallowUsage>
+  <rasterName></rasterName>
+  <areaUnits>Dunum</areaUnits>
+  <energyType>KCalories</energyType>
+  <specificLandEnergyType>KCalories</specificLandEnergyType>
+  <valueCommonGrazingLand>1500</valueCommonGrazingLand>
+  <valueSpecificGrazingLand>0</valueSpecificGrazingLand>
+</animalParameter>

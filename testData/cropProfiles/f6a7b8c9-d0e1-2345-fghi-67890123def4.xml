@@ -1,0 +1,10 @@
+<crop guid="f6a7b8c9-d0e1-2345-fghi-67890123def4">
+  <name>Olives</name>
+  <description>Olives crop</description>
+  <cropYield>600</cropYield>
+  <cropCalories>4</cropCalories>
+  <fodderProduction>0</fodderProduction>
+  <fodderCalories>0.8</fodderCalories>
+  <yieldUnits>0</yieldUnits>
+  <imageFile>olives.png</imageFile>
+</crop>

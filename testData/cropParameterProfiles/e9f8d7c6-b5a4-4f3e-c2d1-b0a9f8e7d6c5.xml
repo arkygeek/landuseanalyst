@@ -1,0 +1,15 @@
+<cropParameter guid="e9f8d7c6-b5a4-4f3e-c2d1-b0a9f8e7d6c5">
+  <name>Einkorn Params</name>
+  <description>Einkorn crop parameters</description>
+  <crop>b2c3d4e5-f6a7-8901-bcde-f23456789012</crop>
+  <percentTameCrop>5.47</percentTameCrop>
+  <spoilage>30</spoilage>
+  <reseed>20</reseed>
+  <cropRotation>1</cropRotation>
+  <fallowRatio>1.0</fallowRatio>
+  <fallowValue>11488</fallowValue>
+  <areaUnits>Hectare</areaUnits>
+  <useCommonLand>1</useCommonLand>
+  <useSpecificLand>0</useSpecificLand>
+  <rasterName></rasterName>
+</cropParameter>

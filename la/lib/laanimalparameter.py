@@ -368,7 +368,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self._mUseSpecificGrazingLand = bool(int(myUseSpecificElement.text())) if not myUseSpecificElement.isNull() else False
 
             myFodderUseElement = myTopElement.firstChildElement("fodderUse")
-            self._mFodderUse = float(myFodderUseElement.text()) if not myFodderUseElement.isNull() else 0.0
+            self._mFodderUse = myFodderUseElement if not myFodderUseElement.isNull() else False
 
             # Parse food source map from XML
             self._mFoodSourceMap = {}  # Initialize as empty LaFoodSourceMap

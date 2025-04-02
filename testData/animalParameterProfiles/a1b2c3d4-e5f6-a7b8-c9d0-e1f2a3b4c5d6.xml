@@ -1,0 +1,16 @@
+<animalParameter guid="a1b2c3d4-e5f6-a7b8-c9d0-e1f2a3b4c5d6">
+  <name>Sheep Parameters</name>
+  <description>test scenario 1</description>
+  <animal>f1a2b3c4-d5e6-f7a8-b9c0-d1e2f3a4b5c6</animal>
+  <percentTameMeat>3.59</percentTameMeat>
+  <useCommonGrazingLand>0</useCommonGrazingLand>
+  <useSpecificGrazingLand>1</useSpecificGrazingLand>
+  <fodderUse>0.0</fodderUse>
+  <fallowUsage>None</fallowUsage>
+  <rasterName></rasterName>
+  <areaUnits>Dunum</areaUnits>
+  <energyType>KCalories</energyType>
+  <specificLandEnergyType>KCalories</specificLandEnergyType>
+  <valueCommonGrazingLand>1500</valueCommonGrazingLand>
+  <valueSpecificGrazingLand>10</valueSpecificGrazingLand>
+</animalParameter>

@@ -1,0 +1,15 @@
+<cropParameter guid="a7f6e5d4-c3b2-4a1f-d0c9-b8a7f6e5d4c3">
+  <name>Lentils Params</name>
+  <description>Lentils crop parameters</description>
+  <crop>d4e5f6a7-b8c9-0123-defg-4567890123bc</crop>
+  <percentTameCrop>1.09</percentTameCrop>
+  <spoilage>30</spoilage>
+  <reseed>20</reseed>
+  <cropRotation>1</cropRotation>
+  <fallowRatio>1.0</fallowRatio>
+  <fallowValue>3815</fallowValue>
+  <areaUnits>Hectare</areaUnits>
+  <useCommonLand>1</useCommonLand>
+  <useSpecificLand>0</useSpecificLand>
+  <rasterName></rasterName>
+</cropParameter>

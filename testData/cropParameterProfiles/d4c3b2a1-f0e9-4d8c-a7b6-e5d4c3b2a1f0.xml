@@ -1,0 +1,15 @@
+<cropParameter guid="d4c3b2a1-f0e9-4d8c-a7b6-e5d4c3b2a1f0">
+  <name>Bitter Vetch Params</name>
+  <description>Bitter Vetch crop parameters</description>
+  <crop>c9d0e1f2-a3b4-5678-ijkl-90123a789012</crop>
+  <percentTameCrop>2.19</percentTameCrop>
+  <spoilage>30</spoilage>
+  <reseed>20</reseed>
+  <cropRotation>1</cropRotation>
+  <fallowRatio>1.0</fallowRatio>
+  <fallowValue>5749</fallowValue>
+  <areaUnits>Hectare</areaUnits>
+  <useCommonLand>1</useCommonLand>
+  <useSpecificLand>0</useSpecificLand>
+  <rasterName></rasterName>
+</cropParameter>

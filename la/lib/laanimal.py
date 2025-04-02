@@ -835,9 +835,22 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
             self._fleece = safe_bool(myTopElement.firstChildElement("fleece").text())
             self._fleeceWeightKg = safe_float(myTopElement.firstChildElement("fleeceWeightKg").text())
 
-            # Image - Mimic C++: assign decoded text directly, then get basename
+            # Image - Store the full image path correctly
             image_file_text = LaUtils.xmlDecode(myTopElement.firstChildElement("imageFile").text())
-            self._imageFile = os.path.basename(image_file_text) if image_file_text else ""
+            # Check if the path exists directly
+            if image_file_text and os.path.exists(image_file_text):
+                self._imageFile = image_file_text
+            else:
+                # Try to find the file in the images directory
+                images_dir = LaUtils.userImagesDirPath()
+                basename = os.path.basename(image_file_text) if image_file_text else ""
+                possible_path = os.path.join(images_dir, basename) if basename else ""
+                if basename and os.path.exists(possible_path):
+                    self._imageFile = possible_path
+                else:
+                    # Just store the filename, resolution will be handled on display
+                    self._imageFile = basename
+            
             LaUtils.debug.log(f"Set animal image file to: {self._imageFile}")
 
 

@@ -1,0 +1,15 @@
+<cropParameter guid="d9e8c7b6-a5f4-4e3d-b2c1-a0f9e8d7c6b5">
+  <name>Horse Bean Params</name>
+  <description>Horse Bean crop parameters</description>
+  <crop>a1b2c3d4-e5f6-7890-abcd-ef1234567890</crop>
+  <percentTameCrop>1.09</percentTameCrop>
+  <spoilage>30</spoilage>
+  <reseed>20</reseed>
+  <cropRotation>1</cropRotation>
+  <fallowRatio>1.0</fallowRatio>
+  <fallowValue>2289</fallowValue>
+  <areaUnits>Hectare</areaUnits>
+  <useCommonLand>1</useCommonLand>
+  <useSpecificLand>0</useSpecificLand>
+  <rasterName></rasterName>
+</cropParameter>

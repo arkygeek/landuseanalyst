@@ -411,26 +411,49 @@ class LaAnimalManager(LaAnimalManagerBase):
 
         # Handle image file
         if self.imageFile:
-            # Get just the filename
+            # Get just the filename without path
             image_filename = os.path.basename(self.imageFile)
-            # Copy image to images directory if needed
-            target_image_path = os.path.join(LaUtils.userImagesDirPath(), image_filename)
-
-            if self.imageFile != target_image_path:  # Only copy if source is different
-                try:
-                    # Ensure images directory exists
-                    os.makedirs(LaUtils.userImagesDirPath(), exist_ok=True)
-                    # Copy the image file
+            
+            # Create a proper target path in the user's .landuseAnalyst/images directory
+            images_dir = LaUtils.userImagesDirPath()
+            os.makedirs(images_dir, exist_ok=True)
+            target_image_path = os.path.join(images_dir, image_filename)
+            
+            try:
+                # Load the image and resize it to a reasonable size (max 400x400 pixels)
+                pixmap = QPixmap(self.imageFile)
+                if not pixmap.isNull():
+                    # Resize while maintaining aspect ratio
+                    maxSize = 400
+                    if pixmap.width() > maxSize or pixmap.height() > maxSize:
+                        pixmap = pixmap.scaled(
+                            maxSize, maxSize, 
+                            Qt.KeepAspectRatio, 
+                            Qt.SmoothTransformation
+                        )
+                    
+                    # Save the resized image to the target location
+                    success = pixmap.save(target_image_path)
+                    if success:
+                        LaUtils.debug.log(f"Image resized and saved to: {target_image_path}")
+                        # Update animal's image file path with the full path to ensure it can be found
+                        self.animal.imageFile = target_image_path
+                    else:
+                        LaUtils.debug.log(f"Failed to save resized image to: {target_image_path}")
+                        QMessageBox.warning(self, "Image Save Failed", 
+                                        f"Failed to save resized image to {target_image_path}")
+                        return
+                else:
+                    # If pixmap can't load the image, try direct file copy
                     import shutil
                     shutil.copy2(self.imageFile, target_image_path)
-                    LaUtils.debug.log(f"Copied image to: {target_image_path}")
-                    # Update animal's image file property to just the filename
-                    self.animal._imageFile = image_filename  # Set internal attribute directly
-                except Exception as e:
-                    LaUtils.debug.log(f"Failed to copy image file: {str(e)}")
-                    QMessageBox.warning(self, "Image Copy Failed",
-                                     f"Failed to copy image file to {target_image_path}: {str(e)}")
-                    return
+                    LaUtils.debug.log(f"Image copied to: {target_image_path}")
+                    self.animal.imageFile = target_image_path
+            except Exception as e:
+                LaUtils.debug.log(f"Failed to process image file: {str(e)}")
+                QMessageBox.warning(self, "Image Processing Failed",
+                                 f"Failed to process image file: {str(e)}")
+                return
 
         # Save animal to file
         target_file = os.path.join(LaUtils.userAnimalProfilesDirPath(), f"{self.animal.guid}.xml")
@@ -445,20 +468,29 @@ class LaAnimalManager(LaAnimalManagerBase):
 
     def on_pbnAnimalPic_clicked(self):
         """Select an image for the animal."""
-        fileDialog = QFileDialog()
-        fileDialog.setFileMode(QFileDialog.ExistingFile)
-        fileDialog.setNameFilter("Images (*.png *.jpg *.jpeg *.bmp *.gif)")
-
-        if fileDialog.exec_():
-            filenames = fileDialog.selectedFiles()
-            if filenames:
-                imagePath = filenames[0]
-                self.imageFile = imagePath
-
-                # Display the image
-                pixmap = QPixmap(imagePath)
-                if not pixmap.isNull():
-                    self.lblAnimalPix.setPixmap(pixmap)
+        # Use the static method instead of creating an instance
+        # This approach avoids potential issues with multiple dialogs
+        imagePath = QFileDialog.getOpenFileName(
+            self,
+            "Select Animal Image",
+            "",
+            "Images (*.png *.jpg *.jpeg *.bmp *.gif)"
+        )[0]  # getOpenFileName returns (filename, filter)
+        
+        if imagePath:
+            self.imageFile = imagePath
+            
+            # Display the image
+            pixmap = QPixmap(imagePath)
+            if not pixmap.isNull():
+                scaled_pixmap = pixmap.scaled(
+                    self.lblAnimalPix.width(),
+                    self.lblAnimalPix.height(),
+                    Qt.KeepAspectRatio,
+                    Qt.SmoothTransformation
+                )
+                self.lblAnimalPix.setPixmap(scaled_pixmap)
+                LaUtils.debug.log(f"Selected image: {imagePath}")
 
     def on_tblAnimals_itemSelectionChanged(self):
         """Handle selection change in the animals table."""

@@ -1,0 +1,16 @@
+<animalParameter guid="b1c2d3e4-f5a6-b7c8-d9e0-f1a2b3c4d5e6">
+  <name>Pig Parameters</name>
+  <description>Parameters for Pig</description>
+  <animal>1f2a3b4c-5d6e-7f8a-9b0c-d1e2f3a4b5c6</animal>
+  <percentTameMeat>36.65</percentTameMeat>
+  <useCommonGrazingLand>0</useCommonGrazingLand>
+  <useSpecificGrazingLand>1</useSpecificGrazingLand>
+  <fodderUse>0.0</fodderUse>
+  <fallowUsage>None</fallowUsage>
+  <rasterName></rasterName>
+  <areaUnits>Dunum</areaUnits>
+  <energyType>KCalories</energyType>
+  <specificLandEnergyType>KCalories</specificLandEnergyType>
+  <valueCommonGrazingLand>1500</valueCommonGrazingLand>
+  <valueSpecificGrazingLand>10</valueSpecificGrazingLand>
+</animalParameter>

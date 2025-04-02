@@ -1,0 +1,31 @@
+<animal guid="2a3b4c5d-6e7f-8a9b-0c1d-e2f3a4b5c6d7">
+  <name>Cow</name>
+  <description>Cow</description>
+  <meatFoodValue>3200</meatFoodValue>
+  <usableMeat>50</usableMeat>
+  <killWeight>400</killWeight>
+  <adultWeight>625</adultWeight>
+  <conceptionEfficiency>85</conceptionEfficiency>
+  <femalesToMales>20</femalesToMales>
+  <growTime>50</growTime>
+  <deathRate>0</deathRate>
+  <feedEnergyType>KCalories</feedEnergyType>
+  <gestating>6</gestating>
+  <lactating>7.5</lactating>
+  <maintenance>5.8</maintenance>
+  <juvenile>0.03</juvenile>
+  <sexualMaturity>18</sexualMaturity>
+  <breedingExpectancy>8</breedingExpectancy>
+  <youngPerBirth>1</youngPerBirth>
+  <weaningAge>60</weaningAge>
+  <weaningWeight>50</weaningWeight>
+  <gestationTime>279</gestationTime>
+  <estrousCycle>21</estrousCycle>
+  <lactationTime>240</lactationTime>
+  <milk>1</milk>
+  <milkGramsPerDay>6000</milkGramsPerDay> <!-- 6 * 1000 -->
+  <milkFoodValue>940</milkFoodValue> <!-- 0.94 * 1000 -->
+  <fleece>0</fleece>
+  <fleeceWeightKg>0</fleeceWeightKg>
+  <imageFile>cow.png</imageFile>
+</animal>

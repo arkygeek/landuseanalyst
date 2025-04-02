@@ -1,0 +1,16 @@
+<animalParameter guid="c1d2e3f4-a5b6-c7d8-e9f0-a1b2c3d4e5f6">
+  <name>Cow Parameters</name>
+  <description>Parameters for Cow</description>
+  <animal>2a3b4c5d-6e7f-8a9b-0c1d-e2f3a4b5c6d7</animal>
+  <percentTameMeat>47.81</percentTameMeat>
+  <useCommonGrazingLand>0</useCommonGrazingLand>
+  <useSpecificGrazingLand>1</useSpecificGrazingLand>
+  <fodderUse>0.0</fodderUse>
+  <fallowUsage>None</fallowUsage>
+  <rasterName></rasterName>
+  <areaUnits>Dunum</areaUnits>
+  <energyType>KCalories</energyType>
+  <specificLandEnergyType>KCalories</specificLandEnergyType>
+  <valueCommonGrazingLand>1500</valueCommonGrazingLand>
+  <valueSpecificGrazingLand>10</valueSpecificGrazingLand>
+</animalParameter>

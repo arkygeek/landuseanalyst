@@ -1,0 +1,10 @@
+<crop guid="b2c3d4e5-f6a7-8901-bcde-f23456789012">
+  <name>Einkorn</name>
+  <description>Einkorn wheat crop</description>
+  <cropYield>500</cropYield>
+  <cropCalories>3</cropCalories>
+  <fodderProduction>300</fodderProduction>
+  <fodderCalories>0.8</fodderCalories>
+  <yieldUnits>0</yieldUnits>
+  <imageFile>einkorn.png</imageFile>
+</crop>
