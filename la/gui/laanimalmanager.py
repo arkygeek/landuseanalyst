@@ -246,14 +246,14 @@ class LaAnimalManager(LaAnimalManagerBase):
         self.leDescription.setText(self.animal.description)
 
         # Meat production
-        self.sbMeatFoodValue.setValue(self.animal.meatFoodValue)
-        self.sbUsableMeatPercent.setValue(self.animal.usableMeat)
-        self.sbKillWeight.setValue(self.animal.killWeight)
-        self.sbAdultWeight.setValue(self.animal.adultWeight)
-        self.sbConceptionEfficiency.setValue(self.animal.conceptionEfficiency)
-        self.sbFemalesToMales.setValue(self.animal.femalesPerMale)
-        self.sbGrowTime.setValue(self.animal.growTime)
-        self.sbDeathRate.setValue(self.animal.deathRate)
+        self.sbMeatFoodValue.setValue(int(self.animal.meatFoodValue))
+        self.sbUsableMeatPercent.setValue(int(self.animal.usableMeat))
+        self.sbKillWeight.setValue(int(self.animal.killWeight))
+        self.sbAdultWeight.setValue(int(self.animal.adultWeight))
+        self.sbConceptionEfficiency.setValue(int(self.animal.conceptionEfficiency))
+        self.sbFemalesToMales.setValue(int(self.animal.femalesPerMale))
+        self.sbGrowTime.setValue(int(self.animal.growTime))
+        self.sbDeathRate.setValue(int(self.animal.deathRate))
 
         # Handle feed energy type - get the actual enum value
         energy_type = self.animal._feedEnergyType  # Access the internal value directly
@@ -269,17 +269,27 @@ class LaAnimalManager(LaAnimalManagerBase):
         self.cbFeedEnergyType.setCurrentIndex(energy_index)
 
         # Energy values
-        self.sbEnergyForPregnant.setValue(self.animal.gestating)
-        self.sbEnergyForLactating.setValue(self.animal.lactating)
-        self.sbEnergyForMaintenance.setValue(self.animal.maintenance)
-        self.sbEnergyForJuvenilePerKg.setValue(self.animal.juvenile)
+        self.sbEnergyForPregnant.setValue(int(self.animal.gestating))
+        self.sbEnergyForLactating.setValue(int(self.animal.lactating))
+        self.sbEnergyForMaintenance.setValue(int(self.animal.maintenance))
+        self.sbEnergyForJuvenilePerKg.setValue(int(self.animal.juvenile))
 
         # Reproduction
-        self.sbSexualMaturity.setValue(self.animal.sexualMaturity)
-        self.sbBreedingLife.setValue(self.animal.breedingExpectancy)
-        self.sbYoungPerBirth.setValue(self.animal.youngPerBirth)
-        self.sbWeaningAge.setValue(self.animal.weaningAge)
-        self.sbWeaningWeight.setValue(self.animal.weaningWeight)
+        self.sbSexualMaturity.setValue(int(self.animal.sexualMaturity))
+        self.sbBreedingLife.setValue(int(self.animal.breedingExpectancy))
+        self.sbYoungPerBirth.setValue(int(self.animal.youngPerBirth))
+        self.sbWeaningAge.setValue(int(self.animal.weaningAge))
+        self.sbWeaningWeight.setValue(int(self.animal.weaningWeight))
+        self.sbGestationTime.setValue(int(self.animal.gestationTime))
+        self.sbEstrousCycleTime.setValue(int(self.animal.estrousCycle))
+        self.sbLactationTime.setValue(int(self.animal.lactationTime))
+
+        # By-products - Missing in original implementation
+        self.checkBoxMilk.setChecked(bool(self.animal.milk))
+        self.sbMilk.setValue(int(self.animal.milkGramsPerDay))
+        self.sbMilkFoodValue.setValue(int(self.animal.milkFoodValue))
+        self.checkBoxFleece.setChecked(bool(self.animal.fleece))
+        self.sbFleeceWeight.setValue(int(self.animal.fleeceWeightKg))
 
         # Update the image display
         image_file = getattr(self.animal, '_imageFile', '')  # Access internal value directly
@@ -376,12 +386,28 @@ class LaAnimalManager(LaAnimalManagerBase):
         # Set feed energy type using internal attribute
         self.animal._feedEnergyType = LaEnergyType(self.cbFeedEnergyType.currentIndex())
 
+        # Set feed energy requirements - missing in original implementation
+        self.animal.gestating = self.sbEnergyForPregnant.value()
+        self.animal.lactating = self.sbEnergyForLactating.value()
+        self.animal.maintenance = self.sbEnergyForMaintenance.value()
+        self.animal.juvenile = self.sbEnergyForJuvenilePerKg.value()
+
         # Set reproduction parameters
         self.animal.sexualMaturity = self.sbSexualMaturity.value()
         self.animal.breedingExpectancy = self.sbBreedingLife.value()
         self.animal.youngPerBirth = self.sbYoungPerBirth.value()
         self.animal.weaningAge = self.sbWeaningAge.value()
         self.animal.weaningWeight = self.sbWeaningWeight.value()
+        self.animal.gestationTime = self.sbGestationTime.value()
+        self.animal.estrousCycle = self.sbEstrousCycleTime.value()
+        self.animal.lactationTime = self.sbLactationTime.value()
+
+        # Set by-products - missing in original implementation
+        self.animal.milk = self.checkBoxMilk.isChecked()
+        self.animal.milkGramsPerDay = self.sbMilk.value()
+        self.animal.milkFoodValue = self.sbMilkFoodValue.value()
+        self.animal.fleece = self.checkBoxFleece.isChecked()
+        self.animal.fleeceWeightKg = self.sbFleeceWeight.value()
 
         # Handle image file
         if self.imageFile:
