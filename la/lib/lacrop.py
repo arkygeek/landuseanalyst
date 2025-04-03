@@ -351,79 +351,45 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
     def fromXml(self, theXml):
         """
         Parses an XML string and sets the properties of the crop object accordingly.
+        Direct port from C++ version.
+
         Args:
-        theXml (str): The XML string to parse.
+            theXml (str): The XML string to parse.
         Returns:
-        bool: True if the parsing was successful, False otherwise.
+            bool: True if successful.
         """
         from la.lib.lautils import LaUtils  # we import this here to avoid a circular import
 
-        try:
-            myDocument = QDomDocument("mydocument")
-            myDocument.setContent(theXml)
-            myTopElement = myDocument.firstChildElement("crop")
+        myDocument = QDomDocument("mydocument")
+        myDocument.setContent(theXml)
+        myTopElement = myDocument.firstChildElement("crop")
+        if myTopElement.isNull():
+            # C++ version just continues
+            LaUtils.debug.log("Failed to parse XML: top element could not be found!", "Warning")
 
-            # gracefully handle the case where the top element is null
-            if myTopElement.isNull():
-                warnings.warn("Failed to parse XML: myTopElement is null. The XML element could not be found or parsed.")
-                return False
+        # Directly set attributes, mirroring C++
+        self.guid = myTopElement.attribute("guid")
+        self._mName = LaUtils.xmlDecode(myTopElement.firstChildElement("name").text())
+        self._mDescription = LaUtils.xmlDecode(myTopElement.firstChildElement("description").text())
+        self._mCropYield = int(myTopElement.firstChildElement("cropYield").text())
+        self._mCalories = int(myTopElement.firstChildElement("cropCalories").text())
+        self._mFodderProduction = int(myTopElement.firstChildElement("fodderProduction").text())
+        self._mFodderValue = int(myTopElement.firstChildElement("fodderCalories").text())
 
-            self.guid = myTopElement.attribute("guid")
-            self._mName = LaUtils.xmlDecode(myTopElement.firstChildElement("name").text())
-            self._mDescription = LaUtils.xmlDecode(myTopElement.firstChildElement("description").text())
-
-            # Look for cropYield element - this is the main issue
-            cropYieldElement = myTopElement.firstChildElement("cropYield")
-            if not cropYieldElement.isNull():
-                try:
-                    self._mCropYield = int(cropYieldElement.text())
-                    LaUtils.debug.log(f"Found cropYield in XML: {self._mCropYield}")
-                except (ValueError, TypeError) as e:
-                    LaUtils.debug.log(f"Error parsing cropYield from XML: {e}")
-                    self._mCropYield = 60  # Default value
-            else:
-                LaUtils.debug.log("cropYield element not found in XML")
-                self._mCropYield = 60  # Default value
-
-            # Parse other elements similarly
-            try:
-                self._mCalories = int(myTopElement.firstChildElement("cropCalories").text())
-            except (ValueError, TypeError):
-                self._mCalories = 3000  # Default value
-
-            try:
-                self._mFodderProduction = int(myTopElement.firstChildElement("fodderProduction").text())
-            except (ValueError, TypeError):
-                self._mFodderProduction = 50  # Default value
-
-            try:
-                self._mFodderValue = int(myTopElement.firstChildElement("fodderCalories").text())
-            except (ValueError, TypeError):
-                self._mFodderValue = 1000  # Default value
-
-            # Area units (stored as "yieldUnits" in XML with numeric value)
-            yieldUnitsElement = myTopElement.firstChildElement("yieldUnits")
-            if not yieldUnitsElement.isNull():
-                try:
-                    yieldUnitsValue = int(yieldUnitsElement.text())
-                    if yieldUnitsValue == 0:
-                        self._mAreaUnits = LaAreaUnits.Dunum
-                    elif yieldUnitsValue == 1:
-                        self._mAreaUnits = LaAreaUnits.Hectare
-                except (ValueError, TypeError):
-                    self._mAreaUnits = LaAreaUnits.Dunum  # Default
-
-            # Image path
-            imageFileElement = myTopElement.firstChildElement("imageFile")
-            if not imageFileElement.isNull():
-                self._mImageFile = imageFileElement.text()
-
-            return True
-        except Exception as e:
-            import traceback
-            LaUtils.debug.log(f"Error in fromXml: {str(e)}")
-            LaUtils.debug.log(traceback.format_exc())
-            return False
+        # Parse cropFodderEnergyType using match-case
+        myCropFodderEnergyType = myTopElement.firstChildElement("cropFodderEnergyType").text()
+        match myCropFodderEnergyType:
+            case "KCalories": self._mFodderEnergyType = LaEnergyType.KCalories
+            case "TDN": self._mFodderEnergyType = LaEnergyType.TDN
+        
+        # Parse areaUnits using match-case
+        myAreaUnits = myTopElement.firstChildElement("areaUnits").text()
+        match myAreaUnits:
+            case "Dunum": self._mAreaUnits = LaAreaUnits.Dunum
+            case "Hectare": self._mAreaUnits = LaAreaUnits.Hectare
+        
+        self._mImageFile = myTopElement.firstChildElement("imageFile").text()
+        return True
 
     def fromXmlFile(self, filePath):
         """
@@ -467,22 +433,25 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
 
         # Build XML directly matching the existing structure
         xml = f'<crop guid="{self.guid}">\n'
-        xml += f'  <name>{self.name}</name>\n'
-        xml += f'  <description>{self.description}</description>\n'
+        xml += f'  <name>{LaUtils.xmlEncode(self.name)}</name>\n'
+        xml += f'  <description>{LaUtils.xmlEncode(self.description)}</description>\n'
         xml += f'  <cropYield>{self.cropYield}</cropYield>\n'
         xml += f'  <cropCalories>{self.cropCalories}</cropCalories>\n'
         xml += f'  <fodderProduction>{self.cropFodderProduction}</fodderProduction>\n'
         xml += f'  <fodderCalories>{self.cropFodderValue}</fodderCalories>\n'
-
-        # Convert enum to number for yieldUnits
-        yieldUnitsValue = "0"  # Default to Dunum
-        if self.areaUnits == LaAreaUnits.Hectare:
-            yieldUnitsValue = "1"
-
-        xml += f'  <yieldUnits>{yieldUnitsValue}</yieldUnits>\n'
-        xml += f'  <imageFile>{self.imageFile}</imageFile>\n'
-        xml += f'</crop>\n'
-
+        # Convert energy type enum to string using match-case
+        match self._mFodderEnergyType:
+            case LaEnergyType.KCalories: myCropFodderEnergyTypeString = "KCalories"
+            case LaEnergyType.TDN: myCropFodderEnergyTypeString = "TDN"
+        # Convert area units enum to string using match-case
+        match self._mAreaUnits:
+            case LaAreaUnits.Dunum: myAreaUnitsString = "Dunum"
+            case LaAreaUnits.Hectare: myAreaUnitsString = "Hectare"
+        xml += f'  <cropFodderEnergyType>{myCropFodderEnergyTypeString}</cropFodderEnergyType>\n'
+        xml += f'  <areaUnits>{myAreaUnitsString}</areaUnits>\n'
+        xml += f'  <imageFile>{LaUtils.xmlEncode(str(self.imageFile))}</imageFile>\n'
+        xml += '</crop>\n'
+        
         return xml
 
     def toText(self):

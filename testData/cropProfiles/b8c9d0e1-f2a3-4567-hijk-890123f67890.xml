@@ -5,6 +5,6 @@
   <cropCalories>3</cropCalories>
   <fodderProduction>300</fodderProduction>
   <fodderCalories>0.8</fodderCalories>
-  <yieldUnits>0</yieldUnits>
-  <imageFile>grasspeas.png</imageFile>
+  <cropFodderEnergyType>KCalories</cropFodderEnergyType>
+  <yieldUnits>Dunum</yieldUnits>  <imageFile>grasspeas.png</imageFile>
 </crop>

@@ -440,57 +440,27 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
             self._mName = LaUtils.xmlDecode(myTopElement.firstChildElement("name").text())
             self._mDescription = LaUtils.xmlDecode(myTopElement.firstChildElement("description").text())
             self._mCropGuid = LaUtils.xmlDecode(myTopElement.firstChildElement("crop").text())
+            # Parse numeric values without try-except blocks
+            self._mPercentTameCrop = float(myTopElement.firstChildElement("percentTameCrop").text())
+            self._mSpoilage = myTopElement.firstChildElement("spoilage").text()
+            reseedText = myTopElement.firstChildElement("reseed").text()
+            self._mReseed = int(reseedText) if reseedText else 0
 
-            # Parse numeric values with proper conversion
-            try:
-                self._mPercentTameCrop = float(myTopElement.firstChildElement("percentTameCrop").text())
-            except (ValueError, TypeError):
-                self._mPercentTameCrop = 0.0
-
-            try:
-                self._mSpoilage = myTopElement.firstChildElement("spoilage").text()
-            except (ValueError, TypeError):
-                self._mSpoilage = 0
-
-            try:
-                reseedText = myTopElement.firstChildElement("reseed").text()
-                self._mReseed = int(reseedText) if reseedText else 0
-            except (ValueError, TypeError):
-                self._mReseed = 0
-
-            # Parse boolean and other values similarly
+            # Parse boolean and other values
             self._mCropRotation = myTopElement.firstChildElement("cropRotation").text()
+            self._mFallowRatio = float(myTopElement.firstChildElement("fallowRatio").text())
+            self._mFallowValue = int(myTopElement.firstChildElement("fallowValue").text())
 
-            try:
-                self._mFallowRatio = float(myTopElement.firstChildElement("fallowRatio").text())
-            except (ValueError, TypeError):
-                # Set default fallow ratio if parsing fails
-                self._mFallowRatio = 0.0
-                warnings.warn("Failed to parse fallowRatio from XML, using default value 0.0")
-
-            try:
-                self._mFallowValue = int(myTopElement.firstChildElement("fallowValue").text())
-            except (ValueError, TypeError):
-                self._mFallowValue = 0
-
-            # Handle fallow energy type - look for the tag and parse the enum name
-            try:
-                energyTypeElement = myTopElement.firstChildElement("fallowEnergyType")
-                if not energyTypeElement.isNull():
-                    energyTypeText = energyTypeElement.text().strip()
-                    # Match the enum name exactly
-                    if energyTypeText == "TDN":
-                        self._mFallowEnergyType = LaEnergyType.TDN
-                    elif energyTypeText == "KCalories":
-                        self._mFallowEnergyType = LaEnergyType.KCalories
-                    else:
-                        print(f"Warning: Unknown energy type '{energyTypeText}', defaulting to KCalories")
-                        self._mFallowEnergyType = LaEnergyType.KCalories
-                else:
-                    print("Warning: No fallowEnergyType tag found, defaulting to KCalories")
-                    self._mFallowEnergyType = LaEnergyType.KCalories
-            except Exception as e:
-                print(f"Warning: Error parsing fallowEnergyType: {e}, defaulting to KCalories")
+            # Handle fallow energy type
+            energyTypeElement = myTopElement.firstChildElement("fallowEnergyType")
+            energyTypeText = energyTypeElement.text().strip()
+            # Match the enum name exactly
+            if energyTypeText == "TDN":
+                self._mFallowEnergyType = LaEnergyType.TDN
+            elif energyTypeText == "KCalories":
+                self._mFallowEnergyType = LaEnergyType.KCalories
+            else:
+                print(f"Warning: Unknown energy type '{energyTypeText}', defaulting to KCalories")
                 self._mFallowEnergyType = LaEnergyType.KCalories
 
             # Handle area units

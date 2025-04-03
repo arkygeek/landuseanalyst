@@ -315,197 +315,86 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self.valueSpecificGrazingLandChanged.emit(value)
 
 
-    def fromXml(self, theXml: str) -> bool:
+    def fromXml(self, theXml):
+        """
+        Parse animal parameter data from XML string.
+        Direct port from C++ version.
+        """
         from la.lib.lautils import LaUtils
-        try:
-            LaUtils.debug.log(f"Loading animal parameter XML, first 100 chars: {theXml[:100]}")
-            myDocument = QDomDocument("mydocument")
-            myDocument.setContent(theXml)
-            myTopElement: QDomElement = myDocument.firstChildElement("animalParameter")
-            if myTopElement.isNull():
-                warnings.warn("Failed to parse XML: myTopElement is null. The XML element could not be found or parsed.")
-                return False
+        from la.lib.lafoodsource import LaFoodSource
+        from qgis.PyQt.QtXml import QDomDocument
+        from la.lib.la import EnergyType, AreaUnits, Priority
 
-            # Get GUID directly from the XML attribute
-            myGuidValue: str = myTopElement.attribute("guid")
-            if myGuidValue:
-                self._mGuid = str(myGuidValue)  # Ensure it's a string
-                LaUtils.debug.log(f"Loading animal parameter with GUID: {self._mGuid}")
-            else:
-                LaUtils.debug.log("No GUID found in XML, generating a new one")
-                import uuid
-                self._mGuid = str(uuid.uuid4())
-                LaUtils.debug.log(f"Generated new GUID: {self._mGuid}")
+        myDocument = QDomDocument("mydocument")
+        myDocument.setContent(theXml)
+        myTopElement = myDocument.firstChildElement("animalParameter")
+        if myTopElement.isNull():
+            LaUtils.debug.log("top element could not be found!")
 
-            # Check for both name tag styles (<name> and <n>)
-            myNameElement: QDomElement = myTopElement.firstChildElement("name")
-            if myNameElement.isNull():
-                myNameElement = myTopElement.firstChildElement("n")
+        self.setGuid(myTopElement.attribute("guid"))
+        self._mName = LaUtils.xmlDecode(myTopElement.firstChildElement("name").text())
+        self._mDescription = LaUtils.xmlDecode(myTopElement.firstChildElement("description").text())
+        self._mAnimalGuid = LaUtils.xmlDecode(myTopElement.firstChildElement("animal").text())
+        self._mPercentTameMeat = myTopElement.firstChildElement("percentTameMeat").text()
+        self._mUseCommonGrazingLand = myTopElement.firstChildElement("useCommonGrazingLand").text()
+        self._mUseSpecificGrazingLand = myTopElement.firstChildElement("useSpecificGrazingLand").text()
+        self._mValueCommonGrazingLand = myTopElement.firstChildElement("foodValueOfCommonGrazingLand").text()
+        self._mValueSpecificGrazingLand = myTopElement.firstChildElement("foodValueOfSpecificGrazingLand").text()
 
-            self._mName = LaUtils.xmlDecode(myNameElement.text())
-            LaUtils.debug.log(f"Loaded animal parameter name: {self._mName}")
+        # Parse area units
+        myAreaUnits = myTopElement.firstChildElement("areaUnits").text()
+        match myAreaUnits:
+            case "Dunum": self._mAreaUnits = AreaUnits.Dunum
+            case "Hectare": self._mAreaUnits = AreaUnits.Hectare
 
-            # Continue with the rest of the XML parsing
-            myDescriptionElement = myTopElement.firstChildElement("description")
-            self._mDescription = LaUtils.xmlDecode(myDescriptionElement.text()) if not myDescriptionElement.isNull() else ""
+        # Parse energy type
+        myEnergyType = myTopElement.firstChildElement("energyType").text()
+        match myEnergyType:
+            case "KCalories": self._mEnergyType = EnergyType.KCalories
+            case "TDN": self._mEnergyType = EnergyType.TDN
 
-            myAnimalElement = myTopElement.firstChildElement("animal")
-            self._mAnimalGuid = LaUtils.xmlDecode(myAnimalElement.text()) if not myAnimalElement.isNull() else ""
+        self._mFodderUse = myTopElement.firstChildElement("fodderUse").text()
 
-            # Parse numeric values safely
-            try:
-                myPercentElement = myTopElement.firstChildElement("percentTameMeat")
-                self._mPercentTameMeat = float(myPercentElement.text()) if not myPercentElement.isNull() else 0.0
-            except (ValueError, TypeError):
-                self._mPercentTameMeat = 0.0
-                LaUtils.debug.log("Failed to parse percentTameMeat, using 0.0")
+        # populate the fodder map
+        self._mFoodSourceMap.clear()
+        myFodderCropsList = myDocument.elementsByTagName("fodderCrop")
+        for myCounter in range(myFodderCropsList.size()):
+            myFoodSourceNode = myFodderCropsList.item(myCounter)
+            myFoodSourceElement = myFoodSourceNode.toElement()
 
-            # Parse boolean values safely
-            myUseCommonElement = myTopElement.firstChildElement("useCommonGrazingLand")
-            self._mUseCommonGrazingLand = bool(int(myUseCommonElement.text())) if not myUseCommonElement.isNull() else False
+            # load the data from the xml into local variables
+            myCropGuid = myFoodSourceElement.firstChildElement("fodderCropGuid").text()
+            myFodderStrawChaff = int(myFoodSourceElement.firstChildElement("fodderStrawChaff").text())
+            myGrain = int(myFoodSourceElement.firstChildElement("fodderGrain").text())
+            myUsed = bool(int(myFoodSourceElement.firstChildElement("fodderUse").text()))
+            myDays = int(myFoodSourceElement.firstChildElement("fodderDays").text())
+            myFoodSource = LaFoodSource()
 
-            myUseSpecificElement = myTopElement.firstChildElement("useSpecificGrazingLand")
-            self._mUseSpecificGrazingLand = bool(int(myUseSpecificElement.text())) if not myUseSpecificElement.isNull() else False
+            # setup the data to insert into the map
+            myFoodSource.fodder = myFodderStrawChaff
+            myFoodSource.grain = myGrain
+            myFoodSource.days = myDays
+            myFoodSource.used = myUsed
+            myFoodSource.cropGuid = myCropGuid
+            # insert data into map
+            self._mFoodSourceMap[myCropGuid] = myFoodSource
 
-            # Fix for the fodderUse element parsing - extract text and convert to boolean
-            myFodderUseElement = myTopElement.firstChildElement("fodderUse")
-            if not myFodderUseElement.isNull():
-                try:
-                    self._mFodderUse = bool(int(myFodderUseElement.text()))
-                except (ValueError, TypeError):
-                    self._mFodderUse = False
-                    LaUtils.debug.log("Failed to parse fodderUse, using False")
-            else:
-                self._mFodderUse = False
+        # Parse fallow usage
+        myFallowUsage = myTopElement.firstChildElement("fallowUsage").text()
+        match myFallowUsage:
+            case "High": self._mFallowUsage = Priority.High
+            case "Medium": self._mFallowUsage = Priority.Medium
+            case "Low": self._mFallowUsage = Priority.Low
+            case _: self._mFallowUsage = Priority.None_
 
-            # Parse food source map from XML
-            self._mFoodSourceMap = {}  # Initialize as empty LaFoodSourceMap
-            if self._mFodderUse:
-                # Check both "fodderCrops" (Python version) and older "fodderCrop" (C++ version) tags
-                myFodderCropsElement = myTopElement.firstChildElement("fodderCrops")
-                if myFodderCropsElement.isNull():
-                    # Try alternate tag
-                    myFodderCropsElement = myTopElement.firstChildElement("fodderCrop")
-
-                if not myFodderCropsElement.isNull():
-                    # Try different possible element names for individual food sources
-                    myFoodSourceNode = myFodderCropsElement.firstChildElement("foodSource")
-                    if myFoodSourceNode.isNull():
-                        myFoodSourceNode = myFodderCropsElement.firstChildElement("fodderCrop")
-
-                    while not myFoodSourceNode.isNull():
-                        myFoodSource = LaFoodSource()
-
-                        # First check for "fodderCropGuid" then fall back to "cropGuid"
-                        myGuidElement = myFoodSourceNode.firstChildElement("fodderCropGuid")
-                        if myGuidElement.isNull():
-                            myGuidElement = myFoodSourceNode.firstChildElement("cropGuid")
-
-                        myCropGuid = myGuidElement.text()
-                        myFoodSource.cropGuid = myCropGuid
-
-                        # Handle different tag names between C++ and Python versions
-                        myFodderElement = myFoodSourceNode.firstChildElement("fodderStrawChaff")
-                        myFoodSource.fodder = int(myFodderElement.text()) if not myFodderElement.isNull() else 0
-
-                        myGrainElement = myFoodSourceNode.firstChildElement("fodderGrain")
-                        myFoodSource.grain = int(myGrainElement.text()) if not myGrainElement.isNull() else 0
-
-                        myDaysElement = myFoodSourceNode.firstChildElement("fodderDays")
-                        myFoodSource.days = int(myDaysElement.text()) if not myDaysElement.isNull() else 0
-
-                        myUsedElement = myFoodSourceNode.firstChildElement("fodderUse")
-                        if myUsedElement.isNull():
-                            myUsedElement = myFoodSourceNode.firstChildElement("used")
-                        myFoodSource.used = bool(int(myUsedElement.text())) if not myUsedElement.isNull() else False
-
-                        # Insert data into LaFoodSourceMap
-                        self._mFoodSourceMap[myCropGuid] = myFoodSource
-                        LaUtils.debug.log(f"Added food source with guid {myCropGuid} to parameter {self._mName}")
-
-                        # Move to next food source
-                        myPrevNode = myFoodSourceNode
-                        myFoodSourceNode = myFoodSourceNode.nextSiblingElement("foodSource")
-                        if myFoodSourceNode.isNull():
-                            myFoodSourceNode = myPrevNode.nextSiblingElement("fodderCrop")
-
-            # Handle fallowUsage as a Priority enum - carefully handle various formats
-            myFallowUsageElement = myTopElement.firstChildElement("fallowUsage")
-            if not myFallowUsageElement.isNull():
-                myFallowUsageText = myFallowUsageElement.text()
-                if myFallowUsageText.upper() == "HIGH":
-                    self._fallowUsage = Priority.High
-                elif myFallowUsageText.upper() == "MEDIUM":
-                    self._fallowUsage = Priority.Medium
-                elif myFallowUsageText.upper() == "LOW":
-                    self._fallowUsage = Priority.Low
-                else:
-                    self._fallowUsage = Priority.None_
-            else:
-                self._fallowUsage = Priority.None_
-
-            # Get raster name with proper fallback
-            myRasterNameElement = myTopElement.firstChildElement("rasterName")
-            if myRasterNameElement.isNull():
-                myRasterNameElement = myTopElement.firstChildElement("RasterName")
-            self._rasterName = LaUtils.xmlDecode(myRasterNameElement.text()) if not myRasterNameElement.isNull() else ""
-
-            # Parse AreaUnits
-            myAreaUnitsElement = myTopElement.firstChildElement("areaUnits")
-            if not myAreaUnitsElement.isNull():
-                try:
-                    self._areaUnits = AreaUnits[myAreaUnitsElement.text()]
-                except KeyError:
-                    self._areaUnits = AreaUnits.Dunum # Default if invalid
-            else:
-                self._areaUnits = AreaUnits.Dunum # Default if tag missing
-
-            # Parse EnergyType
-            myEnergyTypeElement = myTopElement.firstChildElement("energyType")
-            if not myEnergyTypeElement.isNull():
-                try:
-                    self._energyType = EnergyType[myEnergyTypeElement.text()]
-                except KeyError:
-                    self._energyType = EnergyType.KCalories # Default if invalid
-            else:
-                self._energyType = EnergyType.KCalories # Default if tag missing
-
-            # Parse SpecificLandEnergyType
-            mySpecificEnergyTypeElement = myTopElement.firstChildElement("specificLandEnergyType")
-            if not mySpecificEnergyTypeElement.isNull():
-                try:
-                    self._specificLandEnergyType = EnergyType[mySpecificEnergyTypeElement.text()]
-                except KeyError:
-                    self._specificLandEnergyType = EnergyType.KCalories # Default if invalid
-            else:
-                self._specificLandEnergyType = EnergyType.KCalories # Default if tag missing
-
-            # Parse grazing land values
-            try:
-                myCommonValueElement = myTopElement.firstChildElement("valueCommonGrazingLand")
-                self._mValueCommonGrazingLand = int(myCommonValueElement.text()) if not myCommonValueElement.isNull() else 0
-            except (ValueError, TypeError):
-                self._mValueCommonGrazingLand = 0
-
-            try:
-                mySpecificValueElement = myTopElement.firstChildElement("valueSpecificGrazingLand")
-                self._mValueSpecificGrazingLand = int(mySpecificValueElement.text()) if not mySpecificValueElement.isNull() else 0
-            except (ValueError, TypeError):
-                self._mValueSpecificGrazingLand = 0
-
-            LaUtils.debug.log(f"Successfully loaded animal parameter: {self._mName}")
-            return True
-        except Exception as e:
-            LaUtils.debug.log(f"Error loading animal parameter from XML: {str(e)}")
-            import traceback
-            LaUtils.debug.log(traceback.format_exc())
-            return False
+        self._mRasterName = LaUtils.xmlDecode(myTopElement.firstChildElement("rasterName").text())
+        return True
 
     def toXml(self) -> str:
         from la.lib.lautils import LaUtils
         myString = f"<animalParameter guid=\"{self.guid}\">\n"
         # Use both name tags for maximum compatibility
-        myString += f"  <name>{LaUtils.xmlEncode(str(self.name))}</name>\n"  # Standard name tag
+        myString += f"  <n>{LaUtils.xmlEncode(str(self.name))}<n>\n"  # Standard name tag
         myString += f"  <description>{LaUtils.xmlEncode(str(self.description))}</description>\n"
         myString += f"  <animal>{LaUtils.xmlEncode(str(self.animalGuid))}</animal>\n"
         myString += f"  <percentTameMeat>{self.percentTameMeat}</percentTameMeat>\n"
@@ -537,11 +426,11 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
 
         myString += f"  <fallowUsage>{fallowUsageStr}</fallowUsage>\n"
         myString += f"  <rasterName>{LaUtils.xmlEncode(str(self.rasterName))}</rasterName>\n"
-        myString += f"  <areaUnits>{self._areaUnits.name}</areaUnits>\n" # Corrected access
-        myString += f"  <energyType>{self._energyType.name}</energyType>\n" # Corrected access
-        myString += f"  <specificLandEnergyType>{self._specificLandEnergyType.name}</specificLandEnergyType>\n" # Corrected access
-        myString += f"  <valueCommonGrazingLand>{self.valueCommonGrazingLand}</valueCommonGrazingLand>\n" # Added common grazing value
-        myString += f"  <valueSpecificGrazingLand>{self.valueSpecificGrazingLand}</valueSpecificGrazingLand>\n" # Added specific grazing value
+        myString += f"  <areaUnits>{self._areaUnits.name}</areaUnits>\n"
+        myString += f"  <energyType>{self._energyType.name}</energyType>\n"
+        myString += f"  <specificLandEnergyType>{self._specificLandEnergyType.name}</specificLandEnergyType>\n"
+        myString += f"  <valueCommonGrazingLand>{self.valueCommonGrazingLand}</valueCommonGrazingLand>\n"
+        myString += f"  <valueSpecificGrazingLand>{self.valueSpecificGrazingLand}</valueSpecificGrazingLand>\n"
         myString += "</animalParameter>\n"
         return myString
 

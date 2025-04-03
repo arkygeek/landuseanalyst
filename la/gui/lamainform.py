@@ -666,3 +666,102 @@ class LaMainForm(LaMainFormBase):
             self._ensure_debug_dialog_visible()
         elif self._debug_dialog:
             self._debug_dialog.close()
+
+    def on_pushButtonRun_clicked(self):
+        """
+        Handle the Run button click event.
+        
+        This method configures the model with the current UI values,
+        performs the calculations, and displays the results in the report tab.
+        """
+        try:
+            # Update progress
+            if hasattr(self, 'statusBar'):
+                self.statusBar().showMessage("Running model calculations...")
+            
+            # Configure model from UI
+            self._configureModelFromUi()
+            
+            # Check that animal and crop percentages add up to 100%
+            animalPercentTotal = float(self.labelAnimalCheck.text().replace('%', ''))
+            cropPercentTotal = float(self.labelCropCheck.text().replace('%', ''))
+            
+            if abs(animalPercentTotal - 100.0) > 0.1 or abs(cropPercentTotal - 100.0) > 0.1:
+                self.tbReport.setHtml("<h2>Error: Percentages Must Equal 100%</h2>")
+                self.tbReport.append("<p>Check that Animals and Crops are both at 100%.</p>")
+                self.tbReport.append("<p>I am NOT going to do anything until they are!</p>")
+                return
+            
+            # Perform calculations based on diet settings
+            diet_labels = None
+            calculation_type = ""
+            
+            if self.cboxBaseOnPlants.isChecked():
+                if self.cboxIncludeDairy.isChecked():
+                    diet_labels = self.model.doCalcsPlantsFirstIncludeDairy()
+                    calculation_type = "Plants First (Include Dairy)"
+                else:
+                    diet_labels = self.model.doCalcsPlantsFirstDairySeparate()
+                    calculation_type = "Plants First (Dairy Separate)"
+            else:
+                if self.cboxIncludeDairy.isChecked():
+                    diet_labels = self.model.doCalcsAnimalsFirstIncludeDairy()
+                    calculation_type = "Animals First (Include Dairy)"
+                else:
+                    diet_labels = self.model.doCalcsAnimalsFirstDairySeparate()
+                    calculation_type = "Animals First (Dairy Separate)"
+            
+            # Store the diet labels for future reference
+            self.model.lastDietLabels = diet_labels
+            
+            # Generate the report
+            self.tbReport.clear()
+            
+            # Main HTML report
+            self.tbReport.setHtml(f"<h1>LanduseAnalyst Calculation Results</h1>")
+            self.tbReport.append(f"<h2>Calculation Method: {calculation_type}</h2>")
+            
+            # Add basic model information
+            self.tbReport.append(self.model.toHtml())
+            
+            # Add specific reports
+            self.tbReport.append("<hr>")
+            self.tbReport.append(self.model.toHtmlCalorieCropTargets())
+            self.tbReport.append("<hr>")
+            self.tbReport.append(self.model.toHtmlCalorieAnimalTargets())
+            self.tbReport.append("<hr>")
+            self.tbReport.append(self.model.toHtmlProductionCropTargets())
+            self.tbReport.append("<hr>")
+            self.tbReport.append(self.model.toHtmlProductionAnimalTargets())
+            self.tbReport.append("<hr>")
+            self.tbReport.append(self.model.toHtmlAreaCropTargets())
+            self.tbReport.append("<hr>")
+            self.tbReport.append(self.model.toHtmlAreaAnimalTargets())
+            
+            # Switch to the report tab
+            if hasattr(self, 'tabWidgetMain'):
+                reportTabIndex = self.findTabIndex('Report')
+                if reportTabIndex >= 0:
+                    self.tabWidgetMain.setCurrentIndex(reportTabIndex)
+            
+            # Update status
+            if hasattr(self, 'statusBar'):
+                self.statusBar().showMessage("Calculation complete", 3000)
+            
+            LaUtils.debug.log("Model calculations completed successfully", "Calculation")
+            
+        except Exception as e:
+            LaUtils.debug.log(f"Error running model: {str(e)}", "Error")
+            import traceback
+            LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
+            self.tbReport.setHtml(f"<h2>Error Running Model</h2><p>{str(e)}</p>")
+            
+    def findTabIndex(self, tabName):
+        """Find the index of a tab by name."""
+        if not hasattr(self, 'tabWidgetMain'):
+            return -1
+            
+        for i in range(self.tabWidgetMain.count()):
+            if self.tabWidgetMain.tabText(i) == tabName:
+                return i
+        return -1

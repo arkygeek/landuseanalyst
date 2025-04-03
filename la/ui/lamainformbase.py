@@ -1527,61 +1527,58 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             self.updateModelFromUI() # *** This call needs the method to exist ***
 
             # Get selected crops and animals for this specific calculation context
-            selected_crops = {cropGuid: parameter_guid} if parameter_guid else {} # Only calculate for this crop
-            selected_animals = {}
+            mySelectedCropsDict = {cropGuid: parameter_guid} if parameter_guid else {} # Only calculate for this crop
+            mySelectedAnimalsDict = {}
             for guid, value in self.mAnimalsMap.items():
                 if value[0]:  # If checked
-                    selected_animals[str(guid)] = str(value[1]) # Ensure strings
+                    mySelectedAnimalsDict[str(guid)] = str(value[1]) # Ensure strings
 
             # Check if essential selections are made
-            if not selected_animals:
+            if not mySelectedAnimalsDict:
                 self.textBrowserResultsCrop.setText("No animals selected. Please select at least one animal on the 'Diet' tab.")
                 return
-            if not selected_crops:
-                 self.textBrowserResultsCrop.setText("No parameter selected for this crop.")
-                 # Optionally clear other fields or return
-                 # return # Decide if calculation should proceed without parameters
+            if not mySelectedCropsDict:
+                self.textBrowserResultsCrop.setText("No parameter selected for this crop.")
+                # Optionally clear other fields or return
+                # return # Decide if calculation should proceed without parameters
 
             # Set model parameters for the calculation run
-            if hasattr(self, 'model'):
-                self.model.animals = selected_animals
-                self.model.crops = selected_crops
+            self.model.animals = mySelectedAnimalsDict
+            self.model.crops = mySelectedCropsDict
 
-                # Calculate diet labels based on settings
-                diet_labels = None
-                if self.model.baseOnPlants:
-                    if self.model.includeDairy:
-                        diet_labels = self.model.doCalcsPlantsFirstIncludeDairy()
-                    else:
-                        diet_labels = self.model.doCalcsPlantsFirstDairySeparate()
+            # Calculate diet labels based on settings
+            myDietLabels = None
+            if self.model.baseOnPlants:
+                if self.model.includeDairy:
+                    myDietLabels = self.model.doCalcsPlantsFirstIncludeDairy()
                 else:
-                    if self.model.includeDairy:
-                        diet_labels = self.model.doCalcsAnimalsFirstIncludeDairy()
-                    else:
-                        diet_labels = self.model.doCalcsAnimalsFirstDairySeparate()
+                    myDietLabels = self.model.doCalcsPlantsFirstDairySeparate()
+            else:
+                if self.model.includeDairy:
+                    myDietLabels = self.model.doCalcsAnimalsFirstIncludeDairy()
+                else:
+                    myDietLabels = self.model.doCalcsAnimalsFirstDairySeparate()
 
-                # Get report from calculations
-                if diet_labels and hasattr(diet_labels, '_cropCalcsReportMap'):
-                    report_map = diet_labels._cropCalcsReportMap
-                    if cropGuid in report_map:
-                        report_pair = report_map[cropGuid]
-                        report_string = report_pair[0]
-                        self.textBrowserResultsCrop.setText(report_string)
-                        LaUtils.debug.log("Crop calculation report displayed", "Calculation")
-                    else:
-                        self.textBrowserResultsCrop.setText(f"No calculation results available for this crop (GUID: {cropGuid}). Check parameters.")
-                elif diet_labels:
-                     self.textBrowserResultsCrop.setText("Calculations completed but no specific crop report was generated.")
+            # Get report from calculations
+            if myDietLabels:
+                report_map = myDietLabels._cropCalcsReportMap
+                if cropGuid in report_map:
+                    report_pair = report_map[cropGuid]
+                    report_string = report_pair[0]
+                    self.textBrowserResultsCrop.setText(report_string)
+                    LaUtils.debug.log("Crop calculation report displayed", "Calculation")
                 else:
-                    self.textBrowserResultsCrop.setText("Calculation failed or did not produce results. Check model configuration and logs.")
+                    self.textBrowserResultsCrop.setText(f"No calculation results available for this crop (GUID: {cropGuid}). Check parameters.")
+            else:
+                self.textBrowserResultsCrop.setText("Calculation failed or did not produce results. Check model configuration and logs.")
         except AttributeError as ae:
-             # Catch the specific error if updateModelFromUI is still missing
-             if 'updateModelFromUI' in str(ae):
-                  LaUtils.debug.log(f"Critical Error: updateModelFromUI method is missing!", "Error")
-                  self.textBrowserResultsCrop.setText("Error: Required method 'updateModelFromUI' is missing.")
-             else:
-                  LaUtils.debug.log(f"Attribute error during crop calculations: {str(ae)}", "Error")
-                  self.textBrowserResultsCrop.setText(f"Error: {str(ae)}")
+            # Catch the specific error if updateModelFromUI is still missing
+            if 'updateModelFromUI' in str(ae):
+                LaUtils.debug.log(f"Critical Error: updateModelFromUI method is missing!", "Error")
+                self.textBrowserResultsCrop.setText("Error: Required method 'updateModelFromUI' is missing.")
+            else:
+                LaUtils.debug.log(f"Attribute error during crop calculations: {str(ae)}", "Error")
+                self.textBrowserResultsCrop.setText(f"Error: {str(ae)}")
         except Exception as e:
             LaUtils.debug.log(f"Error updating crop calculations: {str(e)}", "Error")
             import traceback

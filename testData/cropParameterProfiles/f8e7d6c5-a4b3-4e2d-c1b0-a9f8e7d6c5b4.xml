@@ -8,6 +8,7 @@
   <cropRotation>1</cropRotation>
   <fallowRatio>1.0</fallowRatio>
   <fallowValue>110305</fallowValue>
+  <fallowEnergyType>KCalories</fallowEnergyType>
   <areaUnits>Hectare</areaUnits>
   <useCommonLand>1</useCommonLand>
   <useSpecificLand>0</useSpecificLand>
