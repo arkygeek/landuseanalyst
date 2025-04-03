@@ -18,7 +18,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
     percentTameMeatChanged = pyqtSignal(float)
     useCommonGrazingLandChanged = pyqtSignal(bool)
     useSpecificGrazingLandChanged = pyqtSignal(bool)
-    fodderUseChanged = pyqtSignal(float)
+    fodderUseChanged = pyqtSignal(bool)
     foodSourceMapChanged = pyqtSignal(dict)
     fallowUsageChanged = pyqtSignal(object)
     rasterNameChanged = pyqtSignal(str)
@@ -200,15 +200,15 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self._mUseSpecificGrazingLand = value
             self.useSpecificGrazingLandChanged.emit(value)
 
-    @pyqtProperty(float, notify=fodderUseChanged)
-    def fodderUse(self) -> float: # type: ignore
+    @pyqtProperty(bool, notify=fodderUseChanged)
+    def fodderUse(self) -> bool: # type: ignore
         """Get the fodder use value."""
-        return float(self._mFodderUse)
+        return bool(self._mFodderUse)
 
     @fodderUse.setter
-    def fodderUse(self, value: float) -> None:
+    def fodderUse(self, value: bool) -> None:
         """Set the fodder use value."""
-        value = float(value)
+        value = bool(value)
         if self._mFodderUse != value:
             self._mFodderUse = value
             self.fodderUseChanged.emit(value)
@@ -367,8 +367,16 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             myUseSpecificElement = myTopElement.firstChildElement("useSpecificGrazingLand")
             self._mUseSpecificGrazingLand = bool(int(myUseSpecificElement.text())) if not myUseSpecificElement.isNull() else False
 
+            # Fix for the fodderUse element parsing - extract text and convert to boolean
             myFodderUseElement = myTopElement.firstChildElement("fodderUse")
-            self._mFodderUse = myFodderUseElement if not myFodderUseElement.isNull() else False
+            if not myFodderUseElement.isNull():
+                try:
+                    self._mFodderUse = bool(int(myFodderUseElement.text()))
+                except (ValueError, TypeError):
+                    self._mFodderUse = False
+                    LaUtils.debug.log("Failed to parse fodderUse, using False")
+            else:
+                self._mFodderUse = False
 
             # Parse food source map from XML
             self._mFoodSourceMap = {}  # Initialize as empty LaFoodSourceMap
