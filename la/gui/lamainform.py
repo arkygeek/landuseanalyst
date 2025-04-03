@@ -446,10 +446,12 @@ class LaMainForm(LaMainFormBase):
         self.setDietLabels()
 
     @pyqtSlot(int)
-    def on_sliderMeat_valueChanged(self, value):
+    def on_sliderMeat_valueChanged(self, theValue):
         """Handle meat ratio slider value changes."""
-        self.labelMeatWildPercent.setText(str(100 - value))
-        self.labelMeatTamePercent.setText(str(value))
+        myMinString = 100 - theValue
+        myMaxString = theValue
+        self.labelMeatWildPercent.setText(str(myMinString))
+        self.labelMeatTamePercent.setText(str(myMaxString))
         self.setDietLabels()
 
     def readSettings(self):

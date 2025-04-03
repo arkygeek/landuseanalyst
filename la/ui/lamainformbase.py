@@ -1493,12 +1493,11 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             self.model.specificLandEnergyType = EnergyType.KCalories if self.cbCommonLandEnergyType.currentText() == "KCalories" else EnergyType.TDN
 
             # Update common raster value
-            common_raster_value = self.sbCommonRasterValue.value()
-            selected_area_unit = self.model.commonLandAreaUnits # Use the already set unit
-            if hasattr(self.model, 'setCommonLandValue'):
-                 self.model.setCommonLandValue(common_raster_value, selected_area_unit)
-            elif hasattr(self.model, 'commonLandValue'):
-                 self.model.commonLandValue = common_raster_value # Check property name
+            myCommonRasterValue = self.sbCommonRasterValue.value()
+            mySelectedAreaUnit = self.model.commonLandAreaUnits # Use the already set unit
+            self.model.areaUnits = mySelectedAreaUnit
+            self.model.commonLandValue = self.cbAreaUnits.currentText() # Ensure this is set correctly
+
 
             # Note: Selected animals/crops are updated directly in updateCrop/AnimalCalculations
 
