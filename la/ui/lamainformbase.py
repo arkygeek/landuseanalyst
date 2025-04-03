@@ -233,11 +233,11 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         self.setDietLabels()  # Recalculates model to update the diet labels
 
     def on_sliderMeat_valueChanged(self, theValue):
-        myMinString = str(100 - theValue)
-        myMaxString = str(theValue)
+        myWildPercent = str(100 - theValue)
+        myTamePercent = str(theValue)
         # Fix for swapped labels - theValue is the wild meat percentage
-        self.labelMeatWildPercent.setText(myMinString)  # Wild meat percentage
-        self.labelMeatTamePercent.setText(myMaxString)  # Tame meat percentage
+        self.labelMeatWildPercent.setText(myWildPercent)  # Wild meat percentage
+        self.labelMeatTamePercent.setText(myTamePercent)  # Tame meat percentage
         # Update diet labels and recalculate model
         self.setDietLabels()  # Recalculates model to update the diet labels
 
