@@ -504,7 +504,7 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
         self.tblFodder.setColumnCount(4)
 
         # Set column headers
-        self.tblFodder.setHorizontalHeaderLabels(["Used", "Crop", "Fodder", "Grain"])
+        self.tblFodder.setHorizontalHeaderLabels(["Crop", "Straw/Chaff", "Grain", "Days"])
 
         myCurrentRow = 0
         myCropsMap = LaUtils.getAvailableCrops()

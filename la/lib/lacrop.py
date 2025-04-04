@@ -366,29 +366,66 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         if myTopElement.isNull():
             # C++ version just continues
             LaUtils.debug.log("Failed to parse XML: top element could not be found!", "Warning")
+            return False
 
-        # Directly set attributes, mirroring C++
+        # Directly set attributes, mirroring C++ but with safe conversions
         self.guid = myTopElement.attribute("guid")
-        self._mName = LaUtils.xmlDecode(myTopElement.firstChildElement("name").text())
-        self._mDescription = LaUtils.xmlDecode(myTopElement.firstChildElement("description").text())
-        self._mCropYield = int(myTopElement.firstChildElement("cropYield").text())
-        self._mCalories = int(myTopElement.firstChildElement("cropCalories").text())
-        self._mFodderProduction = int(myTopElement.firstChildElement("fodderProduction").text())
-        self._mFodderValue = int(myTopElement.firstChildElement("fodderCalories").text())
-
-        # Parse cropFodderEnergyType using match-case
-        myCropFodderEnergyType = myTopElement.firstChildElement("cropFodderEnergyType").text()
-        match myCropFodderEnergyType:
-            case "KCalories": self._mFodderEnergyType = LaEnergyType.KCalories
-            case "TDN": self._mFodderEnergyType = LaEnergyType.TDN
         
-        # Parse areaUnits using match-case
+        # Parse name - check for both name and n tags for backward compatibility
+        self._mName = LaUtils.xmlDecode(myTopElement.firstChildElement("name").text())
+        if not self._mName:
+            self._mName = LaUtils.xmlDecode(myTopElement.firstChildElement("n").text())
+        
+        self._mDescription = LaUtils.xmlDecode(myTopElement.firstChildElement("description").text())
+        
+        # Safe integer conversions with default values
+        try:
+            crop_yield_text = myTopElement.firstChildElement("cropYield").text()
+            self._mCropYield = int(crop_yield_text) if crop_yield_text else 60
+        except (ValueError, TypeError):
+            self._mCropYield = 60
+            
+        try:
+            calories_text = myTopElement.firstChildElement("cropCalories").text()
+            self._mCalories = int(calories_text) if calories_text else 3000
+        except (ValueError, TypeError):
+            self._mCalories = 3000
+            
+        try:
+            fodder_production_text = myTopElement.firstChildElement("fodderProduction").text()
+            self._mFodderProduction = int(fodder_production_text) if fodder_production_text else 50
+        except (ValueError, TypeError):
+            self._mFodderProduction = 50
+            
+        try:
+            fodder_calories_text = myTopElement.firstChildElement("fodderCalories").text()
+            self._mFodderValue = int(fodder_calories_text) if fodder_calories_text else 1000
+        except (ValueError, TypeError):
+            self._mFodderValue = 1000
+
+        # Parse cropFodderEnergyType using match-case with safe default
+        myCropFodderEnergyType = myTopElement.firstChildElement("cropFodderEnergyType").text()
+        if myCropFodderEnergyType == "KCalories":
+            self._mFodderEnergyType = LaEnergyType.KCalories
+        elif myCropFodderEnergyType == "TDN":
+            self._mFodderEnergyType = LaEnergyType.TDN
+        else:
+            self._mFodderEnergyType = LaEnergyType.KCalories  # Default
+        
+        # Parse areaUnits using match-case with safe default
         myAreaUnits = myTopElement.firstChildElement("areaUnits").text()
-        match myAreaUnits:
-            case "Dunum": self._mAreaUnits = LaAreaUnits.Dunum
-            case "Hectare": self._mAreaUnits = LaAreaUnits.Hectare
+        if myAreaUnits == "Dunum":
+            self._mAreaUnits = LaAreaUnits.Dunum
+        elif myAreaUnits == "Hectare":
+            self._mAreaUnits = LaAreaUnits.Hectare
+        else:
+            self._mAreaUnits = LaAreaUnits.Dunum  # Default
         
         self._mImageFile = myTopElement.firstChildElement("imageFile").text()
+        
+        # Log successful parsing
+        LaUtils.debug.log(f"After fromXml - cropYield: {self._mCropYield}, cropFodderProduction: {self._mFodderProduction}")
+        
         return True
 
     def fromXmlFile(self, filePath):

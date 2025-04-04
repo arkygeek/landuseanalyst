@@ -5,12 +5,20 @@
   <percentTameMeat>3.59</percentTameMeat>
   <useCommonGrazingLand>0</useCommonGrazingLand>
   <useSpecificGrazingLand>1</useSpecificGrazingLand>
-  <fodderUse>0.0</fodderUse>
+  <fodderUse>1</fodderUse>
+  <fodderCrops>
+    <fodderCrop>
+      <fodderCropGuid>d0e1f2a3-b4c5-6789-jklm-0123b8901234</fodderCropGuid>
+      <fodderStrawChaff>1000</fodderStrawChaff>
+      <fodderGrain>750</fodderGrain>
+      <fodderDays>90</fodderDays>
+    </fodderCrop>
+  </fodderCrops>
   <fallowUsage>None</fallowUsage>
   <rasterName></rasterName>
   <areaUnits>Dunum</areaUnits>
   <energyType>KCalories</energyType>
   <specificLandEnergyType>KCalories</specificLandEnergyType>
-  <valueCommonGrazingLand>1500</valueCommonGrazingLand>
-  <valueSpecificGrazingLand>10</valueSpecificGrazingLand>
+  <foodValueCommonGrazingLand>1500</foodValueCommonGrazingLand>
+  <foodValueOfSpecificGrazingLand>10</foodValueOfSpecificGrazingLand>
 </animalParameter>

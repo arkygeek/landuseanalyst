@@ -1155,19 +1155,19 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
             # Create report maps for crops and animals
             cropCalcsReportMap = {}
-            animalCalcsReportMap = {}
+            myAnimalCalcsReportMap = {}
             # Map to store animal requirements for fallow allocation
             animalMCalRequirementMap = {}
             # Map to store fodder needs per crop
             fodderNeedsPerCrop = {}
 
             # Populate animal report map with detailed calculations
-            for animalGuid, paramGuid in self.mAnimals.items():
+            for myAnimalGuid, paramGuid in self.mAnimals.items():
                 LaUtils.debug.log("--------==--------------------------------------------==-------", "Diet")
                 LaUtils.debug.log("--------==        Looping through the animals         ==-------", "Diet")
                 LaUtils.debug.log("--------==--------------------------------------------==-------", "Diet")
                 try:
-                    animal = LaUtils.getAnimal(animalGuid)
+                    animal = LaUtils.getAnimal(myAnimalGuid)
                     animalParameter = LaUtils.getAnimalParameter(paramGuid)
 
                     # Initialize variables at the start
@@ -1175,7 +1175,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                     myAnimalHerdMCalsRequired = 0.0
 
                     if animal and animalParameter:
-                        LaUtils.debug.log(f"Processing animal: {animal.name} (GUID: {animalGuid})", "Diet")
+                        LaUtils.debug.log(f"Processing animal: {animal.name} (GUID: {myAnimalGuid})", "Diet")
 
                         # Get animal values safely
                         myMilkKgPerDay = float(str(animal.milkGramsPerDay)) * 0.001  # Convert g to kg
@@ -1299,18 +1299,18 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                         LaUtils.debug.log(f"    ----==--------------------------------------------==----", "Diet")
                         LaUtils.debug.log(f"    ----==          Adding to the fodder Map          ==----", "Diet")
                         LaUtils.debug.log(f"    ----==--------------------------------------------==----", "Diet")
-                        for cropGuid, foodSource in myFoodSourceMap.items():
-                            LaUtils.debug.log(f"Processing fodder source: Crop GUID {cropGuid}", "Diet")
-                            crop = LaUtils.getCrop(cropGuid)
-                            if not crop:
-                                LaUtils.debug.log(f"        Crop {cropGuid} not found for fodder source.", "Warning")
+                        for myCropGuid, myFoodSource in myFoodSourceMap.items():
+                            LaUtils.debug.log(f"Processing fodder source: Crop GUID {myCropGuid}", "Diet")
+                            myCrop = LaUtils.getCrop(myCropGuid)
+                            if not myCrop:
+                                LaUtils.debug.log(f"        Crop {myCropGuid} not found for fodder source.", "Warning")
                                 continue
 
-                            myGrain = float(str(foodSource.grain)) * 0.001 # kg/day
-                            myFodder = float(str(foodSource.fodder)) * 0.001 # kg/day
-                            myDays = float(str(foodSource.days))
-                            myFoodValueOfCrop = float(str(crop.cropCalories)) * 0.001 # MCal/kg
-                            myFoodValueofFodder = float(str(crop.fodderValue)) * 0.001 # MCal/kg
+                            myGrain = float(str(myFoodSource.grain)) * 0.001 # kg/day
+                            myFodder = float(str(myFoodSource.fodder)) * 0.001 # kg/day
+                            myDays = float(str(myFoodSource.days))
+                            myFoodValueOfCrop = float(str(myCrop.cropCalories)) * 0.001 # MCal/kg
+                            myFoodValueofFodder = float(str(myCrop.cropFodderValue)) * 0.001 # MCal/kg
 
                             # Calculate total kg of grain needed from this crop for the entire herd
                             # Note: C++ calculates grain *per offspring*, which seems wrong. Calculating per animal in herd.
@@ -1319,14 +1319,14 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                             myFodderToAddKg = myFodder * myDays * total_herd_size_for_fodder
 
                             # Add grain requirement to the crop's fodder map
-                            if cropGuid not in fodderNeedsPerCrop:
-                                fodderNeedsPerCrop[cropGuid] = 0.0
-                            fodderNeedsPerCrop[cropGuid] += myGrainToAddKg
+                            if myCropGuid not in fodderNeedsPerCrop:
+                                fodderNeedsPerCrop[myCropGuid] = 0.0
+                            fodderNeedsPerCrop[myCropGuid] += myGrainToAddKg
                             LaUtils.debug.log(f"        myGrain = {myGrain}", "Diet")
                             LaUtils.debug.log(f"        myFodder = {myFodder}", "Diet")
                             LaUtils.debug.log(f"        myDays = {myDays}", "Diet")
-                            LaUtils.debug.log(f"        Grain to add (kg) for {animal.name} from {crop.name}: {myGrainToAddKg}", "Diet")
-                            LaUtils.debug.log(f"        Current total grain needed for {crop.name}: {fodderNeedsPerCrop[cropGuid]}", "Diet")
+                            LaUtils.debug.log(f"        Grain to add (kg) for {animal.name} from {myCrop.name}: {myGrainToAddKg}", "Diet")
+                            LaUtils.debug.log(f"        Current total grain needed for {myCrop.name}: {fodderNeedsPerCrop[myCropGuid]}", "Diet")
 
                             # Calculate MCal provided by this fodder/grain source
                             myGrainMCal = myGrainToAddKg * myFoodValueOfCrop
@@ -1336,7 +1336,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                             LaUtils.debug.log(f"        Food Value of the Fodder: {myFoodValueofFodder}", "Diet")
                             LaUtils.debug.log(f"        myGrainMCal = {myGrainMCal}", "Diet")
                             LaUtils.debug.log(f"        myFodderMCal = {myFodderMCal}", "Diet")
-                            LaUtils.debug.log(f"        Crop Name: {crop.name}", "Diet")
+                            LaUtils.debug.log(f"        Crop Name: {myCrop.name}", "Diet")
                             LaUtils.debug.log(f"        Total MCals counted so far for grain/fodder feeding this animal: {myAdditionalMCalCounter}", "Diet")
 
                         # Adjust herd MCal requirement based on fodder/grain contribution
@@ -1345,7 +1345,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                         LaUtils.debug.log(f"  ---- AnimalHerd MCals Required *AFTER* accounting for grain/fodder feeding: {myAnimalHerdMCalsRequired}", "Diet")
 
                         # Store the initial requirement for fallow allocation
-                        animalMCalRequirementMap[animalGuid] = myAnimalHerdMCalsRequired
+                        animalMCalRequirementMap[myAnimalGuid] = myAnimalHerdMCalsRequired
 
                         # Build the detailed report string
                         myAnimalReport = f"myMilkKgPerDay = {myMilkKgPerDay}\n"
@@ -1418,13 +1418,13 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
                         # Store the report and the *initial* MCal requirement (before fallow)
                         # The second value will be updated later with the final area target
-                        animalCalcsReportMap[animalGuid] = (myAnimalReport, myAnimalHerdMCalsRequired)
+                        myAnimalCalcsReportMap[myAnimalGuid] = (myAnimalReport, myAnimalHerdMCalsRequired)
                         LaUtils.debug.log(f"Added detailed animal calculation for {animal.name}", "Diet")
                     else:
-                        LaUtils.debug.log(f"Missing animal or animal parameter for GUID {animalGuid}", "Warning")
+                        LaUtils.debug.log(f"Missing animal or animal parameter for GUID {myAnimalGuid}", "Warning")
 
                 except Exception as e:
-                    LaUtils.debug.log(f"Error in animal calculation for GUID {animalGuid}: {str(e)}", "Error")
+                    LaUtils.debug.log(f"Error in animal calculation for GUID {myAnimalGuid}: {str(e)}", "Error")
                     import traceback
                     LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
 
@@ -1481,18 +1481,18 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
             # ----------- Crop Calculation Loop -----------
             myMCalsFromFallowCounter = 0.0
-            for cropGuid, paramGuid in self.mCrops.items():
+            for myCropGuid, paramGuid in self.mCrops.items():
                 LaUtils.debug.log("        **--------------------------------------------**        ", "Diet")
                 LaUtils.debug.log("**********         Looping through the crops          **********", "Diet")
                 LaUtils.debug.log("        **--------------------------------------------**        ", "Diet")
                 try:
-                    crop = LaUtils.getCrop(cropGuid)
+                    myCrop = LaUtils.getCrop(myCropGuid)
                     cropParameter = LaUtils.getCropParameter(paramGuid)
 
-                    if crop and cropParameter:
+                    if myCrop and cropParameter:
                         myCropPortion = float(str(cropParameter.percentTameCrop)) * 0.01
                         LaUtils.debug.log(f"          myCropPortion = {myCropPortion}", "Diet")
-                        myCropFoodValue = float(str(crop.cropCalories)) * 0.001  # MCal/kg
+                        myCropFoodValue = float(str(myCrop.cropCalories)) * 0.001  # MCal/kg
                         LaUtils.debug.log(f"          myCropFoodValue = {myCropFoodValue}", "Diet")
                         # Calculate this crop's MCal target based on its portion of the overall crop MCal target
                         myMCalsFromTheCrop = myCropPortion * myOverallCropsMCals
@@ -1512,7 +1512,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                         myKgForPeople = myKgForPeople1 + myKgForPeopleSpoilage + myKgForPeopleReseed
 
                         # Get additional kg needed for animal fodder/grain from the map populated earlier
-                        myAnimalKgAdd1 = fodderNeedsPerCrop.get(cropGuid, 0.0)
+                        myAnimalKgAdd1 = fodderNeedsPerCrop.get(myCropGuid, 0.0)
 
                         # Adjust animal fodder/grain needs for spoilage and reseeding
                         myAnimalKgAddSpoilage = myAnimalKgAdd1 * mySpoilagePercent
@@ -1530,11 +1530,11 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                         LaUtils.debug.log(f"          myAdjustedTarget = {myAdjustedTarget}", "Diet")
 
                         # Calculate area needed based on yield
-                        myCropYield = float(str(crop.cropYield)) # kg/area_unit
+                        myCropYield = float(str(myCrop.cropYield)) # kg/area_unit
                         # Adjust yield to kg/hectare if necessary
-                        if hasattr(crop, 'areaUnits') and str(crop.areaUnits) == "Dunum":
+                        if hasattr(myCrop, 'areaUnits') and str(myCrop.areaUnits) == "Dunum":
                             myCropYield = myCropYield * 10.0  # Convert from Dunum to hectare
-                        LaUtils.debug.log(f"          myCrop.cropYield() = {crop.cropYield}", "Diet")
+                        LaUtils.debug.log(f"          myCrop.cropYield() = {myCrop.cropYield}", "Diet")
                         LaUtils.debug.log(f"          myCropYield (kg/ha) = {myCropYield}", "Diet")
 
                         # Calculate initial crop area target (before fallow)
@@ -1578,7 +1578,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                         cropReport += f"myMCalsFromTheCrop = {myMCalsFromTheCrop:.2f}\n"
                         cropReport += f"myAnimalKgAdd = {myAnimalKgAdd:.2f}\n"
                         cropReport += f"myAdjustedTarget = {myAdjustedTarget:.2f}\n"
-                        cropReport += f"myCrop.cropYield() = {crop.cropYield}\n"
+                        cropReport += f"myCrop.cropYield() = {myCrop.cropYield}\n"
                         cropReport += f"myCropYield (kg/ha) = {myCropYield:.2f}\n"
                         cropReport += f"Crop Production People before adjusting= {myKgForPeople1:.2f}\n"
                         cropReport += f"Extra Kg to account for spoilage= {myKgForPeopleSpoilage:.2f}\n"
@@ -1602,13 +1602,13 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                         cropReport += f"MCals from Fallow: {myFallowMCals:.2f}\n"
 
                         # Store the report and the final area target
-                        cropCalcsReportMap[cropGuid] = (cropReport, myTotalAreaNeeded)
-                        LaUtils.debug.log(f"Added crop calculation for {crop.name}", "Diet")
+                        cropCalcsReportMap[myCropGuid] = (cropReport, myTotalAreaNeeded)
+                        LaUtils.debug.log(f"Added crop calculation for {myCrop.name}", "Diet")
                     else:
-                        LaUtils.debug.log(f"Missing crop or crop parameter for GUID {cropGuid}", "Warning")
+                        LaUtils.debug.log(f"Missing crop or crop parameter for GUID {myCropGuid}", "Warning")
 
                 except Exception as e:
-                    LaUtils.debug.log(f"Error creating crop report for GUID {cropGuid}: {str(e)}", "Error")
+                    LaUtils.debug.log(f"Error creating crop report for GUID {myCropGuid}: {str(e)}", "Error")
                     import traceback
                     LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
 
@@ -1625,16 +1625,16 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             LaUtils.debug.log("--------==---------------------------------------------==-------", "Diet")
             LaUtils.debug.log("--------==        Looping to Update Animal Map         ==-------", "Diet")
             LaUtils.debug.log("--------==---------------------------------------------==-------", "Diet")
-            finalAnimalAreaTargets = {} # Store final area targets separately
-            for animalGuid, reportPair in animalCalcsReportMap.items():
+            myFinalAnimalAreaTargets = {} # Store final area targets separately
+            for myAnimalGuid, myReportPair in myAnimalCalcsReportMap.items():
                 try:
-                    myReport, _ = reportPair # Original report, second value is initial MCal req
-                    myAdjustedMCalTarget = animalMCalRequirementMap.get(animalGuid, 0.0) # Get requirement *after* fallow
-                    LaUtils.debug.log(f"        *** Processing animal {animalGuid}", "Diet")
+                    myReport, _ = myReportPair # Original report, second value is initial MCal req
+                    myAdjustedMCalTarget = animalMCalRequirementMap.get(myAnimalGuid, 0.0) # Get requirement *after* fallow
+                    LaUtils.debug.log(f"        *** Processing animal {myAnimalGuid}", "Diet")
                     LaUtils.debug.log(f"        *** Adjusted MCal Target (after fallow): {myAdjustedMCalTarget}", "Diet")
 
                     # Get land productivity value
-                    paramGuid = self.mAnimals.get(animalGuid, "")
+                    paramGuid = self.mAnimals.get(myAnimalGuid, "")
                     animalParameter = LaUtils.getAnimalParameter(paramGuid) if paramGuid else None
                     myLandValue = 0.0
                     if animalParameter:
@@ -1651,7 +1651,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                          LaUtils.debug.log(f"        *** Using common land value: {myLandValue}", "Diet")
 
                     if myLandValue <= 0:
-                        LaUtils.debug.log(f"        *** Warning: Land value is zero for animal {animalGuid}. Area target will be zero.", "Warning")
+                        LaUtils.debug.log(f"        *** Warning: Land value is zero for animal {myAnimalGuid}. Area target will be zero.", "Warning")
                         myAreaTarget = 0.0
                     else:
                         myAreaTarget = myAdjustedMCalTarget / myLandValue
@@ -1663,15 +1663,15 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                     myReport += f"Final Area Target = {myAreaTarget:.2f}\n"
 
                     # Update the report map with the final area target
-                    animalCalcsReportMap[animalGuid] = (myReport, myAreaTarget)
-                    finalAnimalAreaTargets[animalGuid] = myAreaTarget # Store for LaDietLabels
+                    myAnimalCalcsReportMap[myAnimalGuid] = (myReport, myAreaTarget)
+                    myFinalAnimalAreaTargets[myAnimalGuid] = myAreaTarget # Store for LaDietLabels
 
                 except Exception as e:
-                    LaUtils.debug.log(f"Error calculating final area target for animal {animalGuid}: {str(e)}", "Error")
+                    LaUtils.debug.log(f"Error calculating final area target for animal {myAnimalGuid}: {str(e)}", "Error")
                     import traceback
                     LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
 
-            LaUtils.debug.log(f"myFinal Calculations for animals map: \n{animalCalcsReportMap}", "Diet")
+            LaUtils.debug.log(f"myFinal Calculations for animals map: \n{myAnimalCalcsReportMap}", "Diet")
 
             # ----------- Set Final Diet Labels -----------
             self._setDietLabels(
@@ -1692,12 +1692,12 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                 myMCalsSettlementAnnual,
                 myOverallDairySurplusMCals,
                 cropCalcsReportMap,
-                animalCalcsReportMap # Pass the map with updated reports and area targets
+                myAnimalCalcsReportMap # Pass the map with updated reports and area targets
             )
 
             # Add the final area target maps to the diet labels object
             myDietLabels.cropAreaTargetsMap = {guid: area for guid, (_, area) in cropCalcsReportMap.items()}
-            myDietLabels.animalAreaTargetsMap = finalAnimalAreaTargets
+            myDietLabels.animalAreaTargetsMap = myFinalAnimalAreaTargets
 
             LaUtils.debug.log("doCalcsAnimalsFirstDairySeparate calculation completed successfully", "Diet")
 

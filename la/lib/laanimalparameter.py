@@ -333,61 +333,137 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
 
         self.setGuid(myTopElement.attribute("guid"))
         self._mName = LaUtils.xmlDecode(myTopElement.firstChildElement("name").text())
+        if self._mName == "":
+            # Try alternative name tag (n) for backward compatibility
+            self._mName = LaUtils.xmlDecode(myTopElement.firstChildElement("n").text())
+        
         self._mDescription = LaUtils.xmlDecode(myTopElement.firstChildElement("description").text())
         self._mAnimalGuid = LaUtils.xmlDecode(myTopElement.firstChildElement("animal").text())
-        self._mPercentTameMeat = myTopElement.firstChildElement("percentTameMeat").text()
-        self._mUseCommonGrazingLand = myTopElement.firstChildElement("useCommonGrazingLand").text()
-        self._mUseSpecificGrazingLand = myTopElement.firstChildElement("useSpecificGrazingLand").text()
-        self._mValueCommonGrazingLand = myTopElement.firstChildElement("foodValueOfCommonGrazingLand").text()
-        self._mValueSpecificGrazingLand = myTopElement.firstChildElement("foodValueOfSpecificGrazingLand").text()
+        
+        # Safe value extraction with defaults
+        try:
+            self._mPercentTameMeat = float(myTopElement.firstChildElement("percentTameMeat").text() or 0)
+        except (ValueError, TypeError):
+            self._mPercentTameMeat = 0.0
+            
+        try:
+            self._mUseCommonGrazingLand = bool(int(myTopElement.firstChildElement("useCommonGrazingLand").text() or 0))
+        except (ValueError, TypeError):
+            self._mUseCommonGrazingLand = False
+            
+        try:
+            self._mUseSpecificGrazingLand = bool(int(myTopElement.firstChildElement("useSpecificGrazingLand").text() or 0))
+        except (ValueError, TypeError):
+            self._mUseSpecificGrazingLand = False
+            
+        try:
+            self._mValueCommonGrazingLand = int(myTopElement.firstChildElement("foodValueCommonGrazingLand").text() or 0)
+        except (ValueError, TypeError):
+            self._mValueCommonGrazingLand = 0
+            
+        try:
+            self._mValueSpecificGrazingLand = int(myTopElement.firstChildElement("foodValueOfSpecificGrazingLand").text() or 0)
+        except (ValueError, TypeError):
+            self._mValueSpecificGrazingLand = 0
 
         # Parse area units
         myAreaUnits = myTopElement.firstChildElement("areaUnits").text()
-        match myAreaUnits:
-            case "Dunum": self._mAreaUnits = AreaUnits.Dunum
-            case "Hectare": self._mAreaUnits = AreaUnits.Hectare
+        if myAreaUnits == "Dunum":
+            self._areaUnits = AreaUnits.Dunum
+        elif myAreaUnits == "Hectare":
+            self._areaUnits = AreaUnits.Hectare
+        else:
+            self._areaUnits = AreaUnits.Dunum  # Default
 
         # Parse energy type
         myEnergyType = myTopElement.firstChildElement("energyType").text()
-        match myEnergyType:
-            case "KCalories": self._mEnergyType = EnergyType.KCalories
-            case "TDN": self._mEnergyType = EnergyType.TDN
+        if myEnergyType == "KCalories":
+            self._energyType = EnergyType.KCalories
+        elif myEnergyType == "TDN":
+            self._energyType = EnergyType.TDN
+        else:
+            self._energyType = EnergyType.KCalories  # Default
+            
+        # Parse specific land energy type
+        mySpecificLandEnergyType = myTopElement.firstChildElement("specificLandEnergyType").text()
+        if mySpecificLandEnergyType == "KCalories":
+            self._specificLandEnergyType = EnergyType.KCalories
+        elif mySpecificLandEnergyType == "TDN":
+            self._specificLandEnergyType = EnergyType.TDN
+        else:
+            self._specificLandEnergyType = EnergyType.KCalories  # Default
 
-        self._mFodderUse = myTopElement.firstChildElement("fodderUse").text()
+        # Parse fodder use with safe conversion
+        try:
+            self._mFodderUse = bool(int(myTopElement.firstChildElement("fodderUse").text() or 0))
+        except (ValueError, TypeError):
+            self._mFodderUse = False
 
         # populate the fodder map
         self._mFoodSourceMap.clear()
-        myFodderCropsList = myDocument.elementsByTagName("fodderCrop")
-        for myCounter in range(myFodderCropsList.size()):
-            myFoodSourceNode = myFodderCropsList.item(myCounter)
-            myFoodSourceElement = myFoodSourceNode.toElement()
-
-            # load the data from the xml into local variables
-            myCropGuid = myFoodSourceElement.firstChildElement("fodderCropGuid").text()
-            myFodderStrawChaff = int(myFoodSourceElement.firstChildElement("fodderStrawChaff").text())
-            myGrain = int(myFoodSourceElement.firstChildElement("fodderGrain").text())
-            myUsed = bool(int(myFoodSourceElement.firstChildElement("fodderUse").text()))
-            myDays = int(myFoodSourceElement.firstChildElement("fodderDays").text())
-            myFoodSource = LaFoodSource()
-
-            # setup the data to insert into the map
-            myFoodSource.fodder = myFodderStrawChaff
-            myFoodSource.grain = myGrain
-            myFoodSource.days = myDays
-            myFoodSource.used = myUsed
-            myFoodSource.cropGuid = myCropGuid
-            # insert data into map
-            self._mFoodSourceMap[myCropGuid] = myFoodSource
+        
+        # Check for fodderCrops container element
+        myFodderCropsElement = myTopElement.firstChildElement("fodderCrops")
+        if not myFodderCropsElement.isNull():
+            # Get all fodderCrop elements
+            myFodderCropList = myFodderCropsElement.elementsByTagName("fodderCrop")
+            
+            for i in range(myFodderCropList.count()):
+                myFoodSourceElement = myFodderCropList.at(i).toElement()
+                if myFoodSourceElement.isNull():
+                    continue
+                    
+                # Extract crop GUID
+                myCropGuid = myFoodSourceElement.firstChildElement("fodderCropGuid").text()
+                if not myCropGuid:
+                    continue
+                
+                # Create food source with safe conversions
+                myFoodSource = LaFoodSource()
+                
+                try:
+                    myFoodSource.fodder = int(myFoodSourceElement.firstChildElement("fodderStrawChaff").text() or 0)
+                except (ValueError, TypeError):
+                    myFoodSource.fodder = 0
+                    
+                try:
+                    myFoodSource.grain = int(myFoodSourceElement.firstChildElement("fodderGrain").text() or 0)
+                except (ValueError, TypeError):
+                    myFoodSource.grain = 0
+                
+                # In XML files, the fodder use element might exist at the individual food source level
+                myUsedElement = myFoodSourceElement.firstChildElement("fodderUse")
+                if not myUsedElement.isNull():
+                    try:
+                        myFoodSource.used = bool(int(myUsedElement.text() or 0))
+                    except (ValueError, TypeError):
+                        myFoodSource.used = False
+                else:
+                    # If not found at the individual level, use the global fodderUse setting
+                    myFoodSource.used = bool(self._mFodderUse)
+                
+                try:
+                    myFoodSource.days = int(myFoodSourceElement.firstChildElement("fodderDays").text() or 0)
+                except (ValueError, TypeError):
+                    myFoodSource.days = 0
+                
+                myFoodSource.cropGuid = myCropGuid
+                
+                # Add to map
+                self._mFoodSourceMap[myCropGuid] = myFoodSource
 
         # Parse fallow usage
         myFallowUsage = myTopElement.firstChildElement("fallowUsage").text()
-        match myFallowUsage:
-            case "High": self._mFallowUsage = Priority.High
-            case "Medium": self._mFallowUsage = Priority.Medium
-            case "Low": self._mFallowUsage = Priority.Low
-            case _: self._mFallowUsage = Priority.None_
+        if myFallowUsage == "High":
+            self._fallowUsage = Priority.High
+        elif myFallowUsage == "Medium":
+            self._fallowUsage = Priority.Medium
+        elif myFallowUsage == "Low":
+            self._fallowUsage = Priority.Low
+        else:
+            self._fallowUsage = Priority.None_
 
-        self._mRasterName = LaUtils.xmlDecode(myTopElement.firstChildElement("rasterName").text())
+        self._rasterName = LaUtils.xmlDecode(myTopElement.firstChildElement("rasterName").text())
         return True
 
     def toXml(self) -> str:
