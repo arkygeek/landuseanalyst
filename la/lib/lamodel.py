@@ -139,8 +139,8 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
             self.mCommonLandValue = theModel.commonLandValue
             self.mCommonLandAreaUnits = theModel.commonLandAreaUnits
-            self.mSpecificLandAreaUnits = theModel.specificLandAreaUnits # Added assignment
-            self.mSpecificLandEnergyType = theModel.specificLandEnergyType # Added assignment
+            self.mSpecificLandAreaUnits = theModel.specificLandAreaUnits
+            self.mSpecificLandEnergyType = theModel.specificLandEnergyType
             self.mHerdSize = theModel.herdSize
             self.mAnimals = {}
             self.mCrops = {}
@@ -942,98 +942,6 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
         return myDietLabels
 
-
-    def doCalcsAnimalsFirstIncludeDairy(self) -> LaDietLabels:
-        """Calculate diet values when animals are prioritized and dairy is included with meat."""
-        from la.lib.lautils import LaUtils
-        myDietLabels = LaDietLabels()
-        myAnimal = LaAnimal()
-
-        # Initialize base calculations
-        myMCalsIndividualAnnual = self.mCaloriesPerPersonDaily * 365.0
-        myMCalsSettlementAnnual = myMCalsIndividualAnnual * self.mPopulation
-        myDairyMCalorieCounter = 0.0
-        myTameMeatMCalorieCounter = 0.0
-        myWildMeatMCalorieCounter = 0.0
-        mySelectedAnimalsMap = self.mAnimals
-
-        # Calculate coefficients
-        c1 = 1.0 - self.mMeatPercent
-        c8 = self.mDairyUtilisation
-        c10 = self.mPopulation
-        c11 = self.mCaloriesPerPersonDaily
-        c14 = c10 * c11 * 365.0
-        c15 = self.mDietPercent
-        c12 = self.mPercentOfDietThatIsFromCrops
-        e15 = c14 * c15
-
-        LaUtils.debug.log("Starting animal calculations", "Diet")
-        
-        # Process each animal in the map
-        for myAnimalGuid, myAnimalParameterGuid in mySelectedAnimalsMap.items():
-            try:
-                myAnimal = LaUtils.getAnimal(myAnimalGuid)
-                myAnimalParameter = LaUtils.getAnimalParameter(myAnimalParameterGuid)
-
-                # Calculate animal-specific coefficients
-                c2 = myAnimal.milkGramsPerDay * 0.001
-                c3 = myAnimal.milkFoodValue
-                c4 = myAnimal.lactationTime
-                c5 = myAnimal.weaningAge
-                c6 = myAnimal.killWeight
-                c7 = myAnimal.usableMeat * 0.01
-                e2 = c2 * c3 * (c4 - c5)
-                e3 = e2 * c8
-                c9 = myAnimal.meatFoodValue
-                e10 = e3 + (c9 * c7 * c6)
-                e7 = (e15 * (1.0 - c1)) / e10
-                c21 = e7 * e3
-                c23 = e7 * c6 * c7 * c9
-                c22 = e15 - c21 - c23
-
-                # Update counters
-                myDairyMCalorieCounter += c21
-                myWildMeatMCalorieCounter += c22
-                myTameMeatMCalorieCounter += c23
-
-                LaUtils.debug.log(f"Animal {myAnimal.name} processed - Dairy: {c21}, Wild: {c22}, Tame: {c23}", "Diet")
-
-            except Exception as e:
-                LaUtils.debug.log(f"Error processing animal {myAnimalGuid}: {str(e)}", "Error")
-
-        # Calculate final coefficients
-        c24 = (1.0 - c12) * (c14 - e15)
-        c25 = c12 * (c14 - e15)
-        c30 = c24 / c14
-        c31 = c25 / c14
-
-        c28 = myWildMeatMCalorieCounter / c14
-        c29 = myTameMeatMCalorieCounter / c14
-        c27 = myDairyMCalorieCounter / c14
-
-        LaUtils.debug.log(f"Final coefficients - c27: {c27}, c28: {c28}, c29: {c29}", "Diet")
-
-        # Set diet label values
-        myDietLabels.dairyMCalories = myDairyMCalorieCounter * 0.001 * 0.001
-        myDietLabels.cropMCalories = c25 * 0.001 * 0.001
-        myDietLabels.animalMCalories = myTameMeatMCalorieCounter * 0.001 * 0.001
-        myDietLabels.wildAnimalMCalories = myWildMeatMCalorieCounter * 0.001 * 0.001
-        myDietLabels.wildPlantsMCalories = c24 * 0.001 * 0.001
-        myDietLabels.dairyPortionPct = c27 * 100.0
-        myDietLabels.tameMeatPortionPct = c29 * 100.0
-        myDietLabels.cropsPortionPct = c31 * 100.0
-        myDietLabels.wildAnimalPortionPct = c28 * 100.0
-        myDietLabels.wildPlantsPortionPct = c30 * 100.0
-        myDietLabels.animalPortionPct = self.mDietPercent * 100.0 - c27 * 100.0
-        myDietLabels.plantsPortionPct = (1.0 - self.mDietPercent) * 100.0
-        myDietLabels.kiloCaloriesIndividualAnnual = myMCalsIndividualAnnual
-        myDietLabels.megaCaloriesSettlementAnnual = myMCalsSettlementAnnual * 0.001
-
-        LaUtils.debug.log("Diet calculations completed successfully", "Diet")
-
-        return myDietLabels
-
-
     def doCalcsPlantsFirstDairySeparate(self) -> LaDietLabels:
         """Calculate diet values when plants are prioritized and dairy is separate from meat."""
         from la.lib.lautils import LaUtils
@@ -1050,8 +958,8 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             meat_percent = float(self.mMeatPercent) / 100.0  # Convert to decimal
             diet_percent = float(self.mDietPercent) / 100.0  # Convert to decimal
 
-            LaUtils.debug.log(f"Input parameters - calories_daily: {self._mCaloriesPerPersonDaily}, population: {self._mPopulation}", "Diet")
-            LaUtils.debug.log(f"Diet parameters - meat_percent: {self._mMeatPercent}%, diet_percent: {self._mDietPercent}%", "Diet")
+            LaUtils.debug.log(f"Input parameters - calories_daily: {self.mCaloriesPerPersonDaily}, population: {self.mPopulation}", "Diet")
+            LaUtils.debug.log(f"Diet parameters - meat_percent: {self.mMeatPercent}%, diet_percent: {self.mDietPercent}%", "Diet")
             LaUtils.debug.log(f"Calculated annual MCals - individual: {myMCalsIndividualAnnual}, settlement: {myMCalsSettlementAnnual}", "Diet")
 
             # Initialize counters with simplified approach to match C++ variable names
@@ -1122,8 +1030,159 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
         return myDietLabels
 
+    def doCalcsAnimalsFirstIncludeDairy(self) -> LaDietLabels: # this was working in c++
+        """
+        Calculate diet values when animals are prioritized and dairy is included with meat.
+        Ported directly from C++ version, using PyQt property getters.
+        """
+        # from la.lib.lautils import LaUtils
+        # from la.lib.ladietlabels import LaDietLabels
+        # from la.lib.laanimal import LaAnimal
+        # from la.lib.laanimalparameter import LaAnimalParameter # Assuming this is needed for LaUtils.getAnimalParameter
 
-    def doCalcsAnimalsFirstDairySeparate(self) -> LaDietLabels:
+        myDietLabels = LaDietLabels()
+        # myAnimal instance is created inside the loop
+
+        try:
+            # Initialize base calculations using getter methods
+            # Convert Python properties (0-100) to fractions (0.0-1.0) where C++ uses fractions
+            myMCalsIndividualAnnual = float(self.caloriesPerPersonDaily) * 365.0 # Assume kCal
+            myMCalsSettlementAnnual = myMCalsIndividualAnnual * float(self.population) # Assume kCal
+            myDairyMCalorieCounter = 0.0 # Assume kCal counter
+            myTameMeatMCalorieCounter = 0.0 # Assume kCal counter
+            myWildMeatMCalorieCounter = 0.0 # Assume kCal counter
+            mySelectedAnimalsMap = self.animals() # Use getter
+
+            # Calculate coefficients using getter methods and converting % to fractions
+            # C++ mMeatPercent, mDietPercent etc. are likely fractions (0.0-1.0)
+            # Python properties return int (0-100), so divide by 100.0
+            c1 = 1.0 - (float(self.meatPercent) / 100.0)
+            c8 = float(self.dairyUtilisation) / 100.0
+            c10 = float(self.population)
+            c11 = float(self.caloriesPerPersonDaily) # kCal/person/day
+            c14 = c10 * c11 * 365.0 # Total annual kCal
+            c15 = float(self.dietPercent) / 100.0
+            c12 = float(self.percentOfDietThatIsFromCrops) / 100.0
+            e15 = c14 * c15 # Total kCal from animal portion
+
+            LaUtils.debug.log("Starting animal calculations (Animals First, Include Dairy - Strict Port)", "Diet")
+
+            # Process each animal in the map
+            for myAnimalGuid, myAnimalParameterGuid in mySelectedAnimalsMap.items():
+                # Get animal and parameter objects
+                myAnimal = LaUtils.getAnimal(myAnimalGuid)
+                myAnimalParameter = LaUtils.getAnimalParameter(myAnimalParameterGuid)
+
+                if not myAnimal or not myAnimalParameter:
+                    LaUtils.debug.log(f"Skipping animal {myAnimalGuid} due to missing data.", "Warning")
+                    continue
+
+                # Calculate animal-specific coefficients using getter methods
+                # Perform calculations exactly as in C++
+                c2 = float(myAnimal.getMilkGramsPerDay) * 0.001 # g -> kg
+                c3 = float(myAnimal.milkFoodValue)
+                c4 = float(myAnimal.lactationTime) # days
+                c5 = float(myAnimal. weaningAge) # days
+                c6 = float(myAnimal.killWeight) # kg
+                c7 = float(myAnimal.usableMeat) * 0.01 # % -> fraction
+                # Ensure non-negative lactation period for calculation
+                e2 = c2 * c3 * max(0.0, (c4 - c5)) # kCal/animal/cycle
+                e3 = e2 * c8 # Usable kCal/animal/cycle (uses fractional c8)
+                c9 = float(myAnimal.meatFoodValue) # Assume kCal/kg
+                e10 = e3 + (c9 * c7 * c6) # Total usable kCal (milk+meat) / animal cycle
+
+                # Calculate number of animal cycles needed (e7)
+                # Check for division by zero, matching C++ implicit handling
+                e7 = (e15 * (1.0 - c1)) / e10 if e10 != 0.0 else 0.0 # Uses fractional c1
+
+                # Calculate kCal contributions for this animal type
+                c21 = e7 * e3 # Dairy kCal
+                c23 = e7 * c6 * c7 * c9 # Tame Meat kCal
+                c22 = e15 - c21 - c23 # Wild Meat kCal (remainder)
+
+                # Update total counters
+                myDairyMCalorieCounter += c21
+                myWildMeatMCalorieCounter += c22
+                myTameMeatMCalorieCounter += c23
+
+                # Optional: Add detailed debug logging if needed, mirroring C++ qDebug comments
+                # LaUtils.debug.log(f"  Animal {myAnimal.getName()}: c1={c1:.3f}, c2={c2:.3f}, c3={c3:.1f}, c4={c4}, c5={c5}, c6={c6}, c7={c7:.3f}", "DietDebug")
+                # LaUtils.debug.log(f"  Animal {myAnimal.getName()}: e2={e2:.1f}, e3={e3:.1f}, c9={c9:.1f}, e10={e10:.1f}, e7={e7:.2f}", "DietDebug")
+                # LaUtils.debug.log(f"  Animal {myAnimal.getName()}: c21(Dairy)={c21:.1f}, c23(Tame)={c23:.1f}, c22(Wild)={c22:.1f}", "DietDebug")
+
+            # Calculate final coefficients (plant kCals and overall portions)
+
+                c24 = (1.0 - c12) * (c14 - e15) # Wild plant kCal
+                c25 = c12 * (c14 - e15)         # Crop kCal
+                c30 = c24 / c14                 # Wild plant portion
+                c31 = c25 / c14                 # Crop portion
+                c28 = myWildMeatMCalorieCounter / c14 # Wild meat portion
+                c29 = myTameMeatMCalorieCounter / c14 # Tame meat portion
+                c27 = myDairyMCalorieCounter / c14    # Dairy portion
+
+            # Set diet label values using setter methods
+            # Use C++ conversion factors exactly (e.g., *.001*.001 for MCals)
+            # Assuming counters are kCal and target is MCal/GCal as per C++ factors
+            myMCalConversionFactor: float = 0.001 * 0.001 # Matches C++ *.001*.001
+
+            myDietLabels.dairyMCalories = myDairyMCalorieCounter * 0.001 * 0.001
+            myDietLabels.cropMCalories = c25 * myMCalConversionFactor
+            myDietLabels.animalMCalories = myTameMeatMCalorieCounter * myMCalConversionFactor
+            myDietLabels.wildAnimalMCalories = myWildMeatMCalorieCounter * myMCalConversionFactor
+            myDietLabels.wildPlantsMCalories = c24 * myMCalConversionFactor
+
+            # Set percentages (portions c27, c29 etc. are fractions, convert to %)
+            myDietLabels.dairyPortionPct = c27 * 100.0
+            myDietLabels.tameMeatPortionPct = c29 * 100.0
+            myDietLabels.cropsPortionPct = c31 * 100.0
+            myDietLabels.wildAnimalPortionPct = c28 * 100.0
+            myDietLabels.wildPlantsPortionPct = c30 * 100.0
+
+            # Set overall animal/plant portions based on input diet percent (0-100)
+            # Matches C++ logic: mDietPercent*100. - c27*100. -> (mDietPercent_frac * 100.0) - (c27 * 100.0)
+            # Python property self.dietPercent() is already 0-100
+            myDietLabels.animalPortionPct = ((float(self.dietPercent) * 100.0) - (c27 * 100.0))
+            myDietLabels.plantsPortionPct = (1.0 - (float(self.dietPercent))) * 100.0
+
+            # Set annual calorie values
+            myDietLabels.kiloCaloriesIndividualAnnual = myMCalsIndividualAnnual # Already in kCal
+            # C++ uses *.001 for settlement MCals
+            myDietLabels.megaCaloriesSettlementAnnual = myMCalsSettlementAnnual * 0.001
+
+            # ----------- Set Final Diet Labels -----------
+            self._setDietLabels(
+                myDietLabels,
+                myOverallDairyMCals,
+                myOverallCropsMCals,
+                myOverallDomesticMeatMCals, # Use domestic meat MCals here
+                myOverallWildMeatMCals,
+                myOverallWildPlantsMCals,
+                myOverallDairyPercent,
+                myDomesticMeatPercent,
+                myOverallCropPercent,
+                myWildMeatPercent,
+                myOverallWildPlantPercent,
+                myOverallMeatPercent, # Use combined meat percent
+                myOverallPlantPercent,
+                myMCalsIndividualAnnual,
+                myMCalsSettlementAnnual,
+                myOverallDairySurplusMCals,
+                cropCalcsReportMap,
+                myAnimalCalcsReportMap # Pass the map with updated reports and area targets
+            )
+
+            LaUtils.debug.log("Diet calculations completed successfully (Animals First, Include Dairy - Strict Port)", "Diet")
+
+        except Exception as e:
+            LaUtils.debug.log(f"Error during strict port of doCalcsAnimalsFirstIncludeDairy: {str(e)}", "Error")
+            import traceback
+            LaUtils.debug.log(traceback.format_exc(), "Error")
+            # Return empty labels on error to prevent downstream issues
+            return LaDietLabels()
+
+        return myDietLabels
+
+    def doCalcsAnimalsFirstDairySeparate(self) -> LaDietLabels: # this was working in c++
         """Calculate diet values when animals are prioritized and dairy is separate from meat."""
         from la.lib.lautils import LaUtils
         myDietLabels = LaDietLabels()
