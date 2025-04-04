@@ -171,77 +171,50 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
     def showAnimalParameter(self):
         """Display the current animal parameter in the UI."""
         LaUtils.debug.log(f"showAnimalParameter: Displaying animal parameter: {self.mAnimalParameter._mName}")
-        LaUtils.debug.log(f"showAnimalParameter: Properties: animalGuid={self.mAnimalParameter._mAnimalGuid}, percentTameMeat={self.mAnimalParameter._mPercentTameMeat}")
-
-        # Set UI elements with parameter values
+        
+        # Set basic parameters
         self.leName.setText(str(self.mAnimalParameter._mName))
-        LaUtils.debug.log(f"showAnimalParameter: Set name text to: {self.mAnimalParameter._mName}")
-
         self.leDescription.setText(str(self.mAnimalParameter._mDescription))
-        LaUtils.debug.log(f"showAnimalParameter: Set description text to: {self.mAnimalParameter._mDescription}")
-
-        # Handle matching the correct animal in the combo box
-        LaUtils.debug.log(f"showAnimalParameter: cboAnimal item count: {self.cboAnimal.count()}")
-
+        self.sbPercentTameMeat.setValue(float(self.mAnimalParameter._mPercentTameMeat))
+        self.checkBoxCommonRaster.setChecked(bool(self.mAnimalParameter._mUseCommonGrazingLand))
+        self.checkBoxSpecificRaster.setChecked(bool(self.mAnimalParameter._mUseSpecificGrazingLand))
+        
+        # Set fodder use group box checked state
+        self.grpFodderUse.setChecked(bool(self.mAnimalParameter._mFodderUse))
+        LaUtils.debug.log(f"showAnimalParameter: Set fodder use to: {self.mAnimalParameter._mFodderUse}")
+        
+        # Match animal in combo box
         found_match = False
         if self.mAnimalParameter._mAnimalGuid:
-            # Try to find a direct string match first
             for i in range(self.cboAnimal.count()):
-                animal = self.cboAnimal.itemData(i)
-                animal_guid = ""
-
-                # Get the guid as a string
-                if hasattr(animal, 'guid'):
-                    if callable(animal.guid):
-                        try:
-                            animal_guid = animal.guid()
-                        except:
-                            animal_guid = str(animal.guid)
-                    else:
-                        animal_guid = animal.guid
-                else:
-                    animal_guid = str(animal)
-
-                # Compare the last part of the guid string
-                target_guid = str(self.mAnimalParameter._mAnimalGuid)
-                if target_guid in str(animal_guid) or str(animal_guid) in target_guid:
+                item_data = str(self.cboAnimal.itemData(i))
+                if self.mAnimalParameter._mAnimalGuid in item_data:
                     self.cboAnimal.setCurrentIndex(i)
-                    LaUtils.debug.log(f"showAnimalParameter: Found matching animal at index {i}")
                     found_match = True
                     break
-
+                    
         if not found_match:
-            # Fall back to setComboToDefault
-            result = self.setComboToDefault(self.cboAnimal, self.mAnimalParameter._mAnimalGuid)
-            LaUtils.debug.log(f"showAnimalParameter: setComboToDefault for animal guid returned: {result}")
-
-        # Set other parameters
-        self.sbPercentTameMeat.setValue(float(self.mAnimalParameter._mPercentTameMeat))
-        LaUtils.debug.log(f"showAnimalParameter: Set percent tame meat to: {self.mAnimalParameter._mPercentTameMeat}")
-
-        # Set the specific land energy type combo box
-        current_energy_type = self.mAnimalParameter._specificLandEnergyType # Access private attribute
-        LaUtils.debug.log(f"showAnimalParameter: Setting specific land energy type to: {current_energy_type.name}")
+            self.setComboToDefault(self.cboAnimal, self.mAnimalParameter._mAnimalGuid)
+            
+        # Set energy type
+        current_energy_type = self.mAnimalParameter._specificLandEnergyType
         for i in range(self.cbSpecificLandEnergyType.count()):
             if self.cbSpecificLandEnergyType.itemText(i) == current_energy_type.name:
                 self.cbSpecificLandEnergyType.setCurrentIndex(i)
-                LaUtils.debug.log(f"showAnimalParameter: Found matching energy type at index {i}")
                 break
-
-        # Set the fallow usage combo box
+                
+        # Set fallow usage
         current_fallow = self.mAnimalParameter._fallowUsage
-        LaUtils.debug.log(f"showAnimalParameter: Setting fallow usage to: {current_fallow}")
-
-        # Find the matching index in the combo box
         for i in range(self.cbFallowUsage.count()):
             combo_priority = self.cbFallowUsage.itemData(i)
             if combo_priority == current_fallow:
                 self.cbFallowUsage.setCurrentIndex(i)
-                LaUtils.debug.log(f"showAnimalParameter: Found matching fallow priority at index {i}")
                 break
-
-        # Update the animal picture
-        LaUtils.debug.log(f"showAnimalParameter: Updating animal picture for animal GUID: {self.mAnimalParameter._mAnimalGuid}")
+                
+        # Update the fodder table AFTER setting fodder use state
+        self.refreshFodderTable()
+        
+        # Update animal picture
         self.update_animal_picture()
 
     def update_animal_picture(self):
