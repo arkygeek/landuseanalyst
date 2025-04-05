@@ -98,6 +98,25 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
     _projectionChanged = pyqtSignal()
     _statusChanged = pyqtSignal()
     _walkingTimeChanged = pyqtSignal()
+    dairyMCaloriesChanged = pyqtSignal()
+    cropMCaloriesChanged = pyqtSignal()
+    animalMCaloriesChanged = pyqtSignal()
+    wildAnimalMCaloriesChanged = pyqtSignal()
+    wildPlantsMCaloriesChanged = pyqtSignal()
+    dairyPortionPctChanged = pyqtSignal()
+    tameMeatPortionPctChanged = pyqtSignal()
+    cropsPortionPctChanged = pyqtSignal()
+    wildAnimalPortionPctChanged = pyqtSignal()
+    wildPlantsPortionPctChanged = pyqtSignal()
+    animalPortionPctChanged = pyqtSignal()
+    plantsPortionPctChanged = pyqtSignal()
+    kiloCaloriesIndividualAnnualChanged = pyqtSignal()
+    megaCaloriesSettlementAnnualChanged = pyqtSignal()
+    dairySurplusMCaloriesChanged = pyqtSignal()
+    cropCalcsReportMapChanged = pyqtSignal(dict)
+    animalCalcsReportMapChanged = pyqtSignal(dict)
+
+
 
     # Add a new signal for logging calculation steps to the UI
     logCalculationStep = pyqtSignal(str)
@@ -788,6 +807,75 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             return float(myProp.__get__(theParam, type(theParam)))
         return float(myProp)
 
+    def setDairyMCalories(self, value: float):
+        self.dairyMCalories = value
+        if hasattr(self, 'dairyMCaloriesChanged'):
+            self.dairyMCaloriesChanged.emit(value)
+
+    def setCropMCalories(self, value: float):
+        self.cropMCalories = value
+        if hasattr(self, 'cropMCaloriesChanged'):
+            self.cropMCaloriesChanged.emit(value)
+
+    def setAnimalMCalories(self, value: float):
+        self.animalMCalories = value
+        if hasattr(self, 'animalMCaloriesChanged'):
+            self.animalMCaloriesChanged.emit(value)
+
+    def setWildAnimalMCalories(self, value: float):
+        self.wildAnimalMCalories = value
+        if hasattr(self, 'wildAnimalMCaloriesChanged'):
+            self.wildAnimalMCaloriesChanged.emit(value)
+
+    def setWildPlantsMCalories(self, value: float):
+        self.wildPlantsMCalories = value
+        if hasattr(self, 'wildPlantsMCaloriesChanged'):
+            self.wildPlantsMCaloriesChanged.emit(value)
+
+    def setDairyPortionPct(self, value: float):
+        self.dairyPortionPct = value
+        if hasattr(self, 'dairyPortionPctChanged'):
+            self.dairyPortionPctChanged.emit(value)
+
+    def setTameMeatPortionPct(self, value: float):
+        self.tameMeatPortionPct = value
+        if hasattr(self, 'tameMeatPortionPctChanged'):
+            self.tameMeatPortionPctChanged.emit(value)
+
+    def setCropsPortionPct(self, value: float):
+        self.cropsPortionPct = value
+        if hasattr(self, 'cropsPortionPctChanged'):
+            self.cropsPortionPctChanged.emit(value)
+
+    def setWildAnimalPortionPct(self, value: float):
+        self.wildAnimalPortionPct = value
+        if hasattr(self, 'wildAnimalPortionPctChanged'):
+            self.wildAnimalPortionPctChanged.emit(value)
+
+    def setWildPlantsPortionPct(self, value: float):
+        self.wildPlantsPortionPct = value
+        if hasattr(self, 'wildPlantsPortionPctChanged'):
+            self.wildPlantsPortionPctChanged.emit(value)
+
+    def setAnimalPortionPct(self, value: float):
+        self.animalPortionPct = value
+        if hasattr(self, 'animalPortionPctChanged'):
+            self.animalPortionPctChanged.emit(value)
+
+    def setPlantsPortionPct(self, value: float):
+        self.plantsPortionPct = value
+        if hasattr(self, 'plantsPortionPctChanged'):
+            self.plantsPortionPctChanged.emit(value)
+
+    def setKiloCaloriesIndividualAnnual(self, value: float):
+        self.kiloCaloriesIndividualAnnual = value
+        if hasattr(self, 'kiloCaloriesIndividualAnnualChanged'):
+            self.kiloCaloriesIndividualAnnualChanged.emit(value)
+
+    def setMegaCaloriesSettlementAnnual(self, value: float):
+        self.megaCaloriesSettlementAnnual = value
+        if hasattr(self, 'megaCaloriesSettlementAnnualChanged'):
+            self.megaCaloriesSettlementAnnualChanged.emit(value)
 
     def _setDietLabels(self, theDietLabels: LaDietLabels,
                         theOverallDairyMCals: float,
@@ -1148,28 +1236,6 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             myDietLabels.kiloCaloriesIndividualAnnual = myMCalsIndividualAnnual # Already in kCal
             # C++ uses *.001 for settlement MCals
             myDietLabels.megaCaloriesSettlementAnnual = myMCalsSettlementAnnual * 0.001
-
-            # ----------- Set Final Diet Labels -----------
-            self._setDietLabels(
-                myDietLabels,
-                myOverallDairyMCals,
-                myOverallCropsMCals,
-                myOverallDomesticMeatMCals, # Use domestic meat MCals here
-                myOverallWildMeatMCals,
-                myOverallWildPlantsMCals,
-                myOverallDairyPercent,
-                myDomesticMeatPercent,
-                myOverallCropPercent,
-                myWildMeatPercent,
-                myOverallWildPlantPercent,
-                myOverallMeatPercent, # Use combined meat percent
-                myOverallPlantPercent,
-                myMCalsIndividualAnnual,
-                myMCalsSettlementAnnual,
-                myOverallDairySurplusMCals,
-                cropCalcsReportMap,
-                myAnimalCalcsReportMap # Pass the map with updated reports and area targets
-            )
 
             LaUtils.debug.log("Diet calculations completed successfully (Animals First, Include Dairy - Strict Port)", "Diet")
 
@@ -1754,28 +1820,26 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                 LaUtils.debug.log("--------------------------------------------", "Diet")
 
             # ----------- Set Final Diet Labels -----------
-            self._setDietLabels(
-                myDietLabels,
-                myOverallDairyMCals,
-                myOverallCropsMCals,
-                myOverallDomesticMeatMCals, # Use domestic meat MCals here
-                myOverallWildMeatMCals,
-                myOverallWildPlantsMCals,
-                myOverallDairyPercent,
-                myDomesticMeatPercent,
-                myOverallCropPercent,
-                myWildMeatPercent,
-                myOverallWildPlantPercent,
-                myOverallMeatPercent, # Use combined meat percent
-                myOverallPlantPercent,
-                myMCalsIndividualAnnual,
-                myMCalsSettlementAnnual,
-                myOverallDairySurplusMCals,
-                cropCalcsReportMap,
-                myAnimalCalcsReportMap # Pass the map with updated reports and area targets
-            )
+            # Directly set diet label values instead of using _setDietLabels
+            self.setDairyMCalories(myOverallDairyMCals)
+            self.setCropMCalories(myOverallCropsMCals)
+            self.setAnimalMCalories(myOverallDomesticMeatMCals)
+            self.setWildAnimalMCalories(myOverallWildMeatMCals)
+            self.setWildPlantsMCalories(myOverallWildPlantsMCals)
+            self.setDairyPortionPct(myOverallDairyPercent * 100.0)
+            self.setTameMeatPortionPct(myDomesticMeatPercent * 100.0)
+            self.setCropsPortionPct(myOverallCropPercent * 100.0)
+            self.setWildAnimalPortionPct(myWildMeatPercent * 100.0)
+            self.setWildPlantsPortionPct(myOverallWildPlantPercent * 100.0)
+            self.setAnimalPortionPct(myOverallMeatPercent * 100.0)
+            self.setPlantsPortionPct(myOverallPlantPercent * 100.0)
+            self.setKiloCaloriesIndividualAnnual(myMCalsIndividualAnnual * 1000.0)  # Convert back to kCal
+            self.setMegaCaloriesSettlementAnnual(myMCalsSettlementAnnual)
+            self.setDairySurplusMCalories(myOverallDairySurplusMCals)
 
             # Add the final area target maps to the diet labels object
+            myDietLabels.cropCalcsReportMap = cropCalcsReportMap
+            myDietLabels.animalCalcsReportMap = myAnimalCalcsReportMap
             myDietLabels.cropAreaTargetsMap = {guid: area for guid, (_, area) in cropCalcsReportMap.items()}
             myDietLabels.animalAreaTargetsMap = myFinalAnimalAreaTargets
 

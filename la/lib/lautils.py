@@ -431,7 +431,7 @@ class LaUtils:
                         continue
 
                     # Get the actual GUID string, not a method reference
-                    guidValue = myAnimalParameter._mGuid
+                    guidValue = myAnimalParameter.mGuid
 
                     # Debug the parameter values
                     LaUtils.debug.log(f"Loaded animal parameter: '{myAnimalParameter.name}', linked to animal: {myAnimalParameter.animalGuid}, percentTameMeat: {myAnimalParameter.percentTameMeat}", "AnimalParams")
@@ -443,7 +443,7 @@ class LaUtils:
                     else:
                         LaUtils.debug.log(f"WARNING: Animal parameter '{myAnimalParameter.name}' has no GUID, generating one", "AnimalParams")
                         guidValue = str(uuid.uuid4())
-                        myAnimalParameter._mGuid = guidValue
+                        myAnimalParameter.mGuid = guidValue
                         myMap[guidValue] = myAnimalParameter
                         LaUtils.debug.log(f"Generated and added animal parameter with new GUID: {guidValue}", "AnimalParams")
                 except Exception as e:

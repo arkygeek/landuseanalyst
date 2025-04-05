@@ -53,6 +53,17 @@ class LaMainForm(LaMainFormBase):
         """
         super(LaMainForm, self).__init__(parent)
 
+        # Disable and hide specific checkboxes programmatically
+        if hasattr(self, 'cboxIncludeDairy'):
+            self.cboxIncludeDairy.setEnabled(False)
+            self.cboxIncludeDairy.setVisible(False)
+            LaUtils.debug.log("cboxIncludeDairy disabled and hidden programmatically.", "UI Setup")
+
+        if hasattr(self, 'cboxBaseOnPlants'):
+            self.cboxBaseOnPlants.setEnabled(False)
+            self.cboxBaseOnPlants.setVisible(False)
+            LaUtils.debug.log("cboxBaseOnPlants disabled and hidden programmatically.", "UI Setup")
+
         # Initialize the model first
         self.model = LaModel(self)
         # Connect the new signal for calculation logging

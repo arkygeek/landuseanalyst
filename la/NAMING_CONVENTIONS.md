@@ -16,37 +16,37 @@ best practices where appropriate.
 - Methods and functions use camelCase without prefixes.
   - Example: `calculateYield()`, `refreshCropTable()`
 - Properties exposed to Qt via `pyqtProperty` use camelCase without prefixes.
-  - Getter and setter methods referenced by `pyqtProperty` (if needed) also follow the standard method naming convention (camelCase, no prefix). If it is signal or slot related variable, it should be prefixed with `_` and use camelCase.
+  - The preferred way to define these is using the `@pyqtProperty` decorator on the getter method and the `@<propertyName>.setter` decorator on the setter method.
+  - The notify signal should be defined separately, typically prefixed with `_`.
   - Example:
     ```python
     # In a class definition
     _cropYieldChanged = pyqtSignal() # Define the notify signal
 
-    def getCropYield(self) -> int:
+    @pyqtProperty(int, notify=_cropYieldChanged) # Decorator on the getter
+    def cropYield(self) -> int: # type: ignore
         """Getter for cropYield property."""
         return self.mCropYield
 
-    def setCropYield(self, theValue: int):
+    @cropYield.setter # Decorator for the setter
+    def cropYield(self, theValue: int):
         """Setter for cropYield property."""
         if self.mCropYield != theValue:
             self.mCropYield = theValue
             self._cropYieldChanged.emit() # Emit signal on change
-
-    # Define the property
-    cropYield = pyqtProperty(int, fget=getCropYield, fset=setCropYield, notify=cropYieldChanged)
     ```
 - For standard Python properties (not directly exposed via `pyqtProperty` or when providing a Pythonic interface), use `@property` and `@<propertyName>.setter` decorators.
   - The property name itself uses camelCase without prefixes.
-  - The internal member variable follows the `_m` prefix convention.
+  - The internal member variable follows the `m` prefix convention (or `_m` if intended as protected).
   - Example (Read/Write):
     ```python
     @property
     def description(self) -> str:
-        return self._mDescription
+        return self.mDescription
 
     @description.setter
-    def description(self, theValue: str):
-        self._mDescription = theValue
+    def description(self, theDescription: str):
+        self.mDescription = theDescription
     ```
   - Example (Read-Only):
     ```python
@@ -234,4 +234,4 @@ Qt Designer widgets should maintain consistent prefixes to indicate their type:
 
 ---
 
-*Note: These conventions aim to maintain consistency with the original C++ codebase while adopting Python-specific best practices where appropriate. The `the` prefix for parameters, `my` prefix for local variables, and `m` prefix for member variables are particularly important to maintain consistency with the original code.*
+*Note: These conventions aim to maintain consistency with the original C++ codebase while adopting Python-specific best practices where appropriate. Consistently using prefixs of `the` for parameters, `my` for local variables, and `m` for member variables are particularly important to maintain consistency with the original code.*

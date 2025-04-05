@@ -1,19 +1,31 @@
-<animal guid="7b71ee13-a992-4226-b5cf-5f69f071a265">
+<animal guid="2a3b4c5d-6e7f-8a9b-0c1d-e2f3a4b5c6d7">
   <name>Cow</name>
-  <description>no cow notes</description>
-  <meatFoodValue>3000</meatFoodValue>
+  <description>Cow</description>
+  <meatFoodValue>3200</meatFoodValue>
   <usableMeat>50</usableMeat>
   <killWeight>400</killWeight>
+  <adultWeight>625</adultWeight>
+  <conceptionEfficiency>85</conceptionEfficiency>
+  <femalesToMales>20</femalesToMales>
   <growTime>24</growTime>
   <deathRate>10</deathRate>
-  <gestating>1000</gestating>
-  <lactating>1000</lactating>
-  <juvenile>400</juvenile>
+  <feedEnergyType>KCalories</feedEnergyType>
+  <gestating>6000</gestating>
+  <lactating>7500</lactating>
+  <maintenance>5800</maintenance>
+  <juvenile>30</juvenile>
   <sexualMaturity>18</sexualMaturity>
   <breedingExpectancy>8</breedingExpectancy>
   <youngPerBirth>1</youngPerBirth>
   <weaningAge>8</weaningAge>
+  <weaningWeight>50</weaningWeight>
   <gestationTime>279</gestationTime>
   <estrousCycle>21</estrousCycle>
+  <lactationTime>240</lactationTime>
+  <milk>1</milk>
+  <milkGramsPerDay>6000</milkGramsPerDay>
+  <milkFoodValue>940</milkFoodValue>
+  <fleece>0</fleece>
+  <fleeceWeightKg>1.0</fleeceWeightKg>
   <imageFile>/home/arkygeek/.landuseAnalyst/images/cow.png</imageFile>
 </animal>

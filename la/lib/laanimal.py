@@ -867,7 +867,10 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
         """Generate XML representation consistent with C++ version."""
         from la.lib.lautils import LaUtils # we do this to avoid circular import issues
 
-        myString = f'<animal guid="{self.guid}">\n'
+        # Get the actual GUID string value using the property
+        guid_str = str(self.guid)  # Using the property getter correctly
+        
+        myString = f'<animal guid="{guid_str}">\n'
         # Use 'name' tag for consistency with C++ output and fromXml reading
         myString += f'  <name>{LaUtils.xmlEncode(str(self._name))}</name>\n'
         myString += f'  <description>{LaUtils.xmlEncode(str(self._description))}</description>\n'
@@ -878,7 +881,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
         myString += f'  <conceptionEfficiency>{self._conceptionEfficiency}</conceptionEfficiency>\n'
         myString += f'  <femalesToMales>{self._femalesToMales}</femalesToMales>\n'
         myString += f'  <growTime>{self._growTime}</growTime>\n'
-        myString += f'  <deathRate>{self._deathRate}</deathRate>\n' # Ensure deathRate is present
+        myString += f'  <deathRate>{self._deathRate}</deathRate>\n'
         if self._feedEnergyType == LaEnergyType.KCalories:
             myString += '  <feedEnergyType>KCalories</feedEnergyType>\n'
         elif self._feedEnergyType == LaEnergyType.TDN:
@@ -888,7 +891,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
         myString += f'  <maintenance>{self._maintenance}</maintenance>\n'
         myString += f'  <juvenile>{self._juvenile}</juvenile>\n'
         myString += f'  <sexualMaturity>{self._sexualMaturity}</sexualMaturity>\n'
-        myString += f'  <breedingExpectancy>{self._breedingExpectancy}</breedingExpectancy>\n' # Ensure not duplicated
+        myString += f'  <breedingExpectancy>{self._breedingExpectancy}</breedingExpectancy>\n'
         myString += f'  <youngPerBirth>{self._youngPerBirth}</youngPerBirth>\n'
         myString += f'  <weaningAge>{self._weaningAge}</weaningAge>\n'
         myString += f'  <weaningWeight>{self._weaningWeight}</weaningWeight>\n'

@@ -61,9 +61,11 @@ class LaMainFormBase(QDialog, FORM_CLASS):
 
         self.setupUi(self)
 
-        # Enable checkboxes that start disabled in the UI
-        self.cboxIncludeDairy.setEnabled(True)
-        self.cboxBaseOnPlants.setEnabled(True)
+        # Enable checkboxes that start disabled in the UI until I revisit this and get it implemented
+        self.cboxIncludeDairy.setEnabled(False)
+        self.cboxIncludeDairy.setVisible(False)
+        self.cboxBaseOnPlants.setEnabled(False)
+        self.cboxBaseOnPlants.setVisible(False)
 
         # Initialize model with default values
         from la.lib.lamodel import LaModel
