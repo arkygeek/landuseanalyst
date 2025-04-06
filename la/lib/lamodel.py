@@ -1,5 +1,4 @@
-from la.lib.laanimalparameter import LaAnimalParameter
-from qgis.PyQt.QtCore import pyqtSignal, pyqtProperty, QObject # Ensure QObject is imported if not already
+from qgis.PyQt.QtCore import pyqtSignal, pyqtProperty
 from qgis.PyQt.QtWidgets import QDialog
 
 import xml.etree.ElementTree as ET
@@ -10,9 +9,7 @@ from la.lib.laserialisable import LaSerialisable
 from la.lib.laguid import LaGuid
 from la.lib.ladietlabels import LaDietLabels
 from la.lib.lautils import LaUtils, LaMessageBus
-from la.lib.la import AreaUnits, Status, Priority, LandBeingGrazed, LandFound, EnergyType # Added EnergyType
-from la.lib.laanimal import LaAnimal
-from la.lib.lafoodsource import LaFoodSource
+from la.lib.la import AreaUnits, Status, Priority, LandBeingGrazed, LandFound, EnergyType
 
 MESSAGE_BUS: LaMessageBus = LaMessageBus()
 
@@ -21,45 +18,47 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
     LaModel class represents the main model for the Landuse Analyst plugin.
 
     Attributes:
-        animalsChanged (pyqtSignal): Signal emitted when the animals change.
-        areaUnitsChanged (pyqtSignal): Signal emitted when the area units change.
-        baseOnPlantsChanged (pyqtSignal): Signal emitted when the base on plants changes.
-        caloriesPerPersonDailyChanged (pyqtSignal): Signal emitted when the calories per person daily changes.
-        commonLandAreaUnitsChanged (pyqtSignal): Signal emitted when the common land area units changes.
-        commonLandValueChanged (pyqtSignal): Signal emitted when the common land value changes.
-        specificLandAreaUnitsChanged (pyqtSignal): Signal emitted when the specific land area units changes. # Added attribute doc
-        specificLandEnergyTypeChanged (pyqtSignal): Signal emitted when the specific land energy type changes. # Added attribute doc
-        cropsChanged (pyqtSignal): Signal emitted when the crops change.
-        dairyUtilisationChanged (pyqtSignal): Signal emitted when the dairy utilisation changes.
-        descriptionChanged (pyqtSignal): Signal emitted when the description changes.
-        dietLabelsChanged (pyqtSignal): Signal emitted when the diet labels change.
-        dietPercentChanged (pyqtSignal): Signal emitted when the diet percent changes.
-        dietsChanged (pyqtSignal): Signal emitted when the diets change.
-        eastingChanged (pyqtSignal): Signal emitted when the easting changes.
-        euclideanDistanceChanged (pyqtSignal): Signal emitted when the euclidean distance changes.
-        fallowRatioChanged (pyqtSignal): Signal emitted when the fallow ratio changes.
-        fallowStatusChanged (pyqtSignal): Signal emitted when the fallow status changes.
-        guidChanged (pyqtSignal): Signal emitted when the GUID changes.
-        herdSizeChanged (pyqtSignal): Signal emitted when the herd size changes.
-        iconChanged (pyqtSignal): Signal emitted when the icon changes.
-        includeDairyChanged (pyqtSignal): Signal emitted when the include dairy changes.
-        landBeingGrazedChanged (pyqtSignal): Signal emitted when the land being grazed changes.
-        landFoundChanged (pyqtSignal): Signal emitted when the land found changes.
-        limitDairyChanged (pyqtSignal): Signal emitted when the limit dairy changes.
-        limitDairyPercentChanged (pyqtSignal): Signal emitted when the limit dairy percent changes.
-        meatPercentChanged (pyqtSignal): Signal emitted when the meat percent changes.
-        nameChanged (pyqtSignal): Signal emitted when the name changes.
-        northingChanged (pyqtSignal): Signal emitted when the northing changes.
-        pathDistanceChanged (pyqtSignal): Signal emitted when the path distance changes.
-        percentOfDietThatIsFromCropsChanged (pyqtSignal): Signal emitted when the percent of diet from crops changes.
-        periodChanged (pyqtSignal): Signal emitted when the period changes.
-        populationChanged (pyqtSignal): Signal emitted when the population changes.
-        precisionChanged (pyqtSignal): Signal emitted when the precision changes.
-        priorityChanged (pyqtSignal): Signal emitted when the priority changes.
-        projectionChanged (pyqtSignal): Signal emitted when the projection changes.
-        statusChanged (pyqtSignal): Signal emitted when the status changes.
-        walkingTimeChanged (pyqtSignal): Signal emitted when the walking time changes.
+        _animalsChanged (pyqtSignal): Signal emitted when the animals change.
+        _areaUnitsChanged (pyqtSignal): Signal emitted when the area units change.
+        _baseOnPlantsChanged (pyqtSignal): Signal emitted when the base on plants changes.
+        _caloriesPerPersonDailyChanged (pyqtSignal): Signal emitted when the calories per person daily changes.
+        _commonLandAreaUnitsChanged (pyqtSignal): Signal emitted when the common land area units changes.
+        _commonLandValueChanged (pyqtSignal): Signal emitted when the common land value changes.
+        _specificLandAreaUnitsChanged (pyqtSignal): Signal emitted when the specific land area units changes. # Added attribute doc
+        _specificLandEnergyTypeChanged (pyqtSignal): Signal emitted when the specific land energy type changes. # Added attribute doc
+        _cropsChanged (pyqtSignal): Signal emitted when the crops change.
+        _dairyUtilisationChanged (pyqtSignal): Signal emitted when the dairy utilisation changes.
+        _descriptionChanged (pyqtSignal): Signal emitted when the description changes.
+        _dietLabelsChanged (pyqtSignal): Signal emitted when the diet labels change.
+        _dietPercentChanged (pyqtSignal): Signal emitted when the diet percent changes.
+        _dietsChanged (pyqtSignal): Signal emitted when the diets change.
+        _eastingChanged (pyqtSignal): Signal emitted when the easting changes.
+        _euclideanDistanceChanged (pyqtSignal): Signal emitted when the euclidean distance changes.
+        _fallowRatioChanged (pyqtSignal): Signal emitted when the fallow ratio changes.
+        _fallowStatusChanged (pyqtSignal): Signal emitted when the fallow status changes.
+        _guidChanged (pyqtSignal): Signal emitted when the GUID changes.
+        _herdSizeChanged (pyqtSignal): Signal emitted when the herd size changes.
+        _iconChanged (pyqtSignal): Signal emitted when the icon changes.
+        _includeDairyChanged (pyqtSignal): Signal emitted when the include dairy changes.
+        _landBeingGrazedChanged (pyqtSignal): Signal emitted when the land being grazed changes.
+        _landFoundChanged (pyqtSignal): Signal emitted when the land found changes.
+        _limitDairyChanged (pyqtSignal): Signal emitted when the limit dairy changes.
+        _limitDairyPercentChanged (pyqtSignal): Signal emitted when the limit dairy percent changes.
+        _meatPercentChanged (pyqtSignal): Signal emitted when the meat percent changes.
+        _nameChanged (pyqtSignal): Signal emitted when the name changes.
+        _northingChanged (pyqtSignal): Signal emitted when the northing changes.
+        _pathDistanceChanged (pyqtSignal): Signal emitted when the path distance changes.
+        _percentOfDietThatIsFromCropsChanged (pyqtSignal): Signal emitted when the percent of diet from crops changes.
+        _periodChanged (pyqtSignal): Signal emitted when the period changes.
+        _populationChanged (pyqtSignal): Signal emitted when the population changes.
+        _precisionChanged (pyqtSignal): Signal emitted when the precision changes.
+        _priorityChanged (pyqtSignal): Signal emitted when the priority changes.
+        _projectionChanged (pyqtSignal): Signal emitted when the projection changes.
+        _statusChanged (pyqtSignal): Signal emitted when the status changes.
+        _walkingTimeChanged (pyqtSignal): Signal emitted when the walking time changes.
     """
+
+    # region Signals
     _animalsChanged = pyqtSignal()
     _areaUnitsChanged = pyqtSignal()
     _baseOnPlantsChanged = pyqtSignal()
@@ -98,28 +97,25 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
     _projectionChanged = pyqtSignal()
     _statusChanged = pyqtSignal()
     _walkingTimeChanged = pyqtSignal()
-    dairyMCaloriesChanged = pyqtSignal()
-    cropMCaloriesChanged = pyqtSignal()
-    animalMCaloriesChanged = pyqtSignal()
-    wildAnimalMCaloriesChanged = pyqtSignal()
-    wildPlantsMCaloriesChanged = pyqtSignal()
-    dairyPortionPctChanged = pyqtSignal()
-    tameMeatPortionPctChanged = pyqtSignal()
-    cropsPortionPctChanged = pyqtSignal()
-    wildAnimalPortionPctChanged = pyqtSignal()
-    wildPlantsPortionPctChanged = pyqtSignal()
-    animalPortionPctChanged = pyqtSignal()
-    plantsPortionPctChanged = pyqtSignal()
-    kiloCaloriesIndividualAnnualChanged = pyqtSignal()
-    megaCaloriesSettlementAnnualChanged = pyqtSignal()
-    dairySurplusMCaloriesChanged = pyqtSignal()
-    cropCalcsReportMapChanged = pyqtSignal(dict)
-    animalCalcsReportMapChanged = pyqtSignal(dict)
-
-
-
-    # Add a new signal for logging calculation steps to the UI
-    logCalculationStep = pyqtSignal(str)
+    _dairyMCaloriesChanged = pyqtSignal()
+    _cropMCaloriesChanged = pyqtSignal()
+    _animalMCaloriesChanged = pyqtSignal()
+    _wildAnimalMCaloriesChanged = pyqtSignal()
+    _wildPlantsMCaloriesChanged = pyqtSignal()
+    _dairyPortionPctChanged = pyqtSignal()
+    _tameMeatPortionPctChanged = pyqtSignal()
+    _cropsPortionPctChanged = pyqtSignal()
+    _wildAnimalPortionPctChanged = pyqtSignal()
+    _wildPlantsPortionPctChanged = pyqtSignal()
+    _animalPortionPctChanged = pyqtSignal()
+    _plantsPortionPctChanged = pyqtSignal()
+    _kiloCaloriesIndividualAnnualChanged = pyqtSignal()
+    _megaCaloriesSettlementAnnualChanged = pyqtSignal()
+    _dairySurplusMCaloriesChanged = pyqtSignal()
+    _cropCalcsReportMapChanged = pyqtSignal(dict)
+    _animalCalcsReportMapChanged = pyqtSignal(dict)
+    _logCalculationStep = pyqtSignal(str) # for logging calculation steps to the UI
+    # endregion Signals
 
     def __init__(self, parent=None, theModel=None):
         """
@@ -133,7 +129,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         if theModel is not None:
             self.mName = theModel.name
             self.mPopulation = theModel.population
-            self.setGuid(str(theModel.guid))
+            self.setGuid(theModel.guid) # this sets the GUID
             self.mPeriod = theModel.period
             self.mProjection = theModel.projection
             self.mEasting = theModel.easting
@@ -637,7 +633,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
     @property
     def guid(self) -> str:
-        return self._mGuid
+        return self._mGuid # type: ignore
     @guid.setter
     def guid(self, theGuid: str):
         if self._mGuid != theGuid:
@@ -676,32 +672,32 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         myReturnValue = float(myValueNeededToFeedAnimals)
 
         # Log report
-        self.logMessage("method ==> float LaModel::requiredValue(QString theAnimalGuid)")
-        self.logMessage("animal prodn target = calorie target of animal / food value")
-        self.logMessage(f"Animal Production Target: {myAnimalProductionTarget}")
-        self.logMessage(f"Slaughter animals required: {myAnimalsRequired}")
-        self.logMessage(f"Birth events per year: {myBirthsPerYear}")
-        self.logMessage(f"Offspring per mother yearly = {myOffspringPerMotherYearly}")
-        self.logMessage(f"Mothers needed step one = {myMothersNeededStepOne}")
-        self.logMessage(f"Males step one = {myMalesStepOne}")
-        self.logMessage(f"Females step one = {myFemalesStepOne}")
-        self.logMessage(f"Mother replacements per year = {myMotherReplacementsPerYear}")
-        self.logMessage(f"Additional mothers = {myAdditionalMothers}")
-        self.logMessage(f"Males step two = {myMalesStepTwo}")
-        self.logMessage(f"Females step two = {myFemalesStepTwo}")
-        self.logMessage(f"Total mothers = {myTotalMothers}")
-        self.logMessage(f"Total males = {myTotalMales}")
-        self.logMessage(f"Total females = {myTotalFemales}")
-        self.logMessage(f"Total juveniles = {myTotalJuveniles}")
-        self.logMessage(f"Total adult females value (Kg) = {myTotalMothersValueRequired}")
-        self.logMessage(f"Total juveniles value (Kg) = {myTotalJuvenilesValueRequired}")
-        self.logMessage(f"Total value (Kg) needed to feed animals = {myValueNeededToFeedAnimals}")
-        self.logMessage("method ==> float LaModel::requiredValue(QString theAnimalGuid)")
-        self.logMessage(f"Animal: {myAnimal.name}")
-        self.logMessage(f"Breeding stock: {myTotalMothers}")
-        self.logMessage(f"Juveniles: {myTotalJuveniles}")
-        self.logMessage(f"Kg value needed annually to feed the entire herd: {myReturnValue}")
-        self.logMessage("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+        self.logMessage("method ==> def requiredValue(self, theAnimalGuid: str) -> float:\n")
+        self.logMessage("animal prodn target = calorie target of animal / food value\n")
+        self.logMessage(f"Animal Production Target: {myAnimalProductionTarget}\n")
+        self.logMessage(f"Slaughter animals required: {myAnimalsRequired}\n")
+        self.logMessage(f"Birth events per year: {myBirthsPerYear}\n")
+        self.logMessage(f"Offspring per mother yearly = {myOffspringPerMotherYearly}\n")
+        self.logMessage(f"Mothers needed step one = {myMothersNeededStepOne}\n")
+        self.logMessage(f"Males step one = {myMalesStepOne}\n")
+        self.logMessage(f"Females step one = {myFemalesStepOne}\n")
+        self.logMessage(f"Mother replacements per year = {myMotherReplacementsPerYear}\n")
+        self.logMessage(f"Additional mothers = {myAdditionalMothers}\n")
+        self.logMessage(f"Males step two = {myMalesStepTwo}\n")
+        self.logMessage(f"Females step two = {myFemalesStepTwo}\n")
+        self.logMessage(f"Total mothers = {myTotalMothers}\n")
+        self.logMessage(f"Total males = {myTotalMales}\n")
+        self.logMessage(f"Total females = {myTotalFemales}\n")
+        self.logMessage(f"Total juveniles = {myTotalJuveniles}\n")
+        self.logMessage(f"Total adult females value (Kg) = {myTotalMothersValueRequired}\n")
+        self.logMessage(f"Total juveniles value (Kg) = {myTotalJuvenilesValueRequired}\n")
+        self.logMessage(f"Total value (Kg) needed to feed animals = {myValueNeededToFeedAnimals}\n")
+        self.logMessage("method ==> method ==> def requiredValue(self, theAnimalGuid: str) -> float:\n")
+        self.logMessage(f"Animal: {myAnimal.name}\n")
+        self.logMessage(f"Breeding stock: {myTotalMothers}\n")
+        self.logMessage(f"Juveniles: {myTotalJuveniles}\n")
+        self.logMessage(f"Kg value needed annually to feed the entire herd: {myReturnValue}\n")
+        self.logMessage("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n")
 
         return myReturnValue
 
@@ -715,7 +711,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         """
         root = ET.fromstring(theXmlData)
 
-        self._mGuid = root.attrib.get('guid', QUuid.createUuid().toString(QUuid.StringFormat.Id128))
+        self.setGuid(root.get('guid'))
         self.mName = root.findtext('name', default="No Name Set")
         self.mPopulation = int(root.findtext('population', default="1000"))
         self.mPeriod = root.findtext('period', default="No Period Set")
@@ -810,72 +806,72 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
     def setDairyMCalories(self, value: float):
         self.dairyMCalories = value
         if hasattr(self, 'dairyMCaloriesChanged'):
-            self.dairyMCaloriesChanged.emit(value)
+            self._dairyMCaloriesChanged.emit(value)
 
     def setCropMCalories(self, value: float):
         self.cropMCalories = value
         if hasattr(self, 'cropMCaloriesChanged'):
-            self.cropMCaloriesChanged.emit(value)
+            self._cropMCaloriesChanged.emit(value)
 
     def setAnimalMCalories(self, value: float):
         self.animalMCalories = value
         if hasattr(self, 'animalMCaloriesChanged'):
-            self.animalMCaloriesChanged.emit(value)
+            self._animalMCaloriesChanged.emit(value)
 
     def setWildAnimalMCalories(self, value: float):
         self.wildAnimalMCalories = value
         if hasattr(self, 'wildAnimalMCaloriesChanged'):
-            self.wildAnimalMCaloriesChanged.emit(value)
+            self._wildAnimalMCaloriesChanged.emit(value)
 
     def setWildPlantsMCalories(self, value: float):
         self.wildPlantsMCalories = value
         if hasattr(self, 'wildPlantsMCaloriesChanged'):
-            self.wildPlantsMCaloriesChanged.emit(value)
+            self._wildPlantsMCaloriesChanged.emit(value)
 
     def setDairyPortionPct(self, value: float):
         self.dairyPortionPct = value
         if hasattr(self, 'dairyPortionPctChanged'):
-            self.dairyPortionPctChanged.emit(value)
+            self._dairyPortionPctChanged.emit(value)
 
     def setTameMeatPortionPct(self, value: float):
         self.tameMeatPortionPct = value
         if hasattr(self, 'tameMeatPortionPctChanged'):
-            self.tameMeatPortionPctChanged.emit(value)
+            self._tameMeatPortionPctChanged.emit(value)
 
     def setCropsPortionPct(self, value: float):
         self.cropsPortionPct = value
         if hasattr(self, 'cropsPortionPctChanged'):
-            self.cropsPortionPctChanged.emit(value)
+            self._cropsPortionPctChanged.emit(value)
 
     def setWildAnimalPortionPct(self, value: float):
         self.wildAnimalPortionPct = value
         if hasattr(self, 'wildAnimalPortionPctChanged'):
-            self.wildAnimalPortionPctChanged.emit(value)
+            self._wildAnimalPortionPctChanged.emit(value)
 
     def setWildPlantsPortionPct(self, value: float):
         self.wildPlantsPortionPct = value
         if hasattr(self, 'wildPlantsPortionPctChanged'):
-            self.wildPlantsPortionPctChanged.emit(value)
+            self._wildPlantsPortionPctChanged.emit(value)
 
     def setAnimalPortionPct(self, value: float):
         self.animalPortionPct = value
         if hasattr(self, 'animalPortionPctChanged'):
-            self.animalPortionPctChanged.emit(value)
+            self._animalPortionPctChanged.emit(value)
 
     def setPlantsPortionPct(self, value: float):
         self.plantsPortionPct = value
         if hasattr(self, 'plantsPortionPctChanged'):
-            self.plantsPortionPctChanged.emit(value)
+            self._plantsPortionPctChanged.emit(value)
 
     def setKiloCaloriesIndividualAnnual(self, value: float):
         self.kiloCaloriesIndividualAnnual = value
         if hasattr(self, 'kiloCaloriesIndividualAnnualChanged'):
-            self.kiloCaloriesIndividualAnnualChanged.emit(value)
+            self._kiloCaloriesIndividualAnnualChanged.emit(value)
 
     def setMegaCaloriesSettlementAnnual(self, value: float):
         self.megaCaloriesSettlementAnnual = value
         if hasattr(self, 'megaCaloriesSettlementAnnualChanged'):
-            self.megaCaloriesSettlementAnnualChanged.emit(value)
+            self._megaCaloriesSettlementAnnualChanged.emit(value)
 
     def _setDietLabels(self, theDietLabels: LaDietLabels,
                         theOverallDairyMCals: float,
@@ -921,23 +917,23 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             theDietLabels.animalCalcsReportMap = theAnimalCalcsReportMap # type: ignore
 
             try:
-                theDietLabels.dairyMCaloriesChanged.emit(theOverallDairyMCals)
-                theDietLabels.cropMCaloriesChanged.emit(theOverallCropsMCals)
-                theDietLabels.animalMCaloriesChanged.emit(theOverallMeatMCals)
-                theDietLabels.wildAnimalMCaloriesChanged.emit(theOverallWildMeatMCals)
-                theDietLabels.wildPlantsMCaloriesChanged.emit(theOverallWildPlantsMCals)
-                theDietLabels.dairyPortionPctChanged.emit(theOverallDairyPercent * 100.0)
-                theDietLabels.tameMeatPortionPctChanged.emit(theDomesticMeatPercent * 100.0)
-                theDietLabels.cropsPortionPctChanged.emit(theOverallCropPercent * 100.0)
-                theDietLabels.wildAnimalPortionPctChanged.emit(theWildMeatPercent * 100.0)
-                theDietLabels.wildPlantsPortionPctChanged.emit(theOverallWildPlantPercent * 100.0)
-                theDietLabels.plantsPortionPctChanged.emit(theOverallPlantPercent * 100.0)
-                theDietLabels.animalPortionPctChanged.emit(theOverallMeatPercent * 100.0)
-                theDietLabels.kiloCaloriesIndividualAnnualChanged.emit(theMCalsIndividualAnnual)
-                theDietLabels.megaCaloriesSettlementAnnualChanged.emit(theMCalsSettlementAnnual)
-                theDietLabels.dairySurplusMCaloriesChanged.emit(theOverallDairySurplusMCals)
-                theDietLabels.cropCalcsReportMapChanged.emit(theCropCalcsReportMap)
-                theDietLabels.animalCalcsReportMapChanged.emit(theAnimalCalcsReportMap)
+                theDietLabels._dairyMCaloriesChanged.emit(theOverallDairyMCals)
+                theDietLabels._cropMCaloriesChanged.emit(theOverallCropsMCals)
+                theDietLabels._animalMCaloriesChanged.emit(theOverallMeatMCals)
+                theDietLabels._wildAnimalMCaloriesChanged.emit(theOverallWildMeatMCals)
+                theDietLabels._wildPlantsMCaloriesChanged.emit(theOverallWildPlantsMCals)
+                theDietLabels._dairyPortionPctChanged.emit(theOverallDairyPercent * 100.0)
+                theDietLabels._tameMeatPortionPctChanged.emit(theDomesticMeatPercent * 100.0)
+                theDietLabels._cropsPortionPctChanged.emit(theOverallCropPercent * 100.0)
+                theDietLabels._wildAnimalPortionPctChanged.emit(theWildMeatPercent * 100.0)
+                theDietLabels._wildPlantsPortionPctChanged.emit(theOverallWildPlantPercent * 100.0)
+                theDietLabels._plantsPortionPctChanged.emit(theOverallPlantPercent * 100.0)
+                theDietLabels._animalPortionPctChanged.emit(theOverallMeatPercent * 100.0)
+                theDietLabels._kiloCaloriesIndividualAnnualChanged.emit(theMCalsIndividualAnnual)
+                theDietLabels._megaCaloriesSettlementAnnualChanged.emit(theMCalsSettlementAnnual)
+                theDietLabels._dairySurplusMCaloriesChanged.emit(theOverallDairySurplusMCals)
+                theDietLabels._cropCalcsReportMapChanged.emit(theCropCalcsReportMap)
+                theDietLabels._animalCalcsReportMapChanged.emit(theAnimalCalcsReportMap)
             except Exception as e:
                 LaUtils.debug.log(f"Error emitting diet label signals: {str(e)}", "Error")
 

@@ -20,26 +20,27 @@ class LaDietLabels(QObject, LaSerialisable, LaGuid):
         LaSerialisable: Provides serialization capabilities
         LaGuid: Provides unique identifier functionality
     """
-    dairyMCaloriesChanged = pyqtSignal(float)
-    cropMCaloriesChanged = pyqtSignal(float)
-    animalMCaloriesChanged = pyqtSignal(float)
-    wildAnimalMCaloriesChanged = pyqtSignal(float)
-    wildPlantsMCaloriesChanged = pyqtSignal(float)
-    dairyPortionPctChanged = pyqtSignal(float)
-    tameMeatPortionPctChanged = pyqtSignal(float)
-    cropsPortionPctChanged = pyqtSignal(float)
-    wildAnimalPortionPctChanged = pyqtSignal(float)
-    wildPlantsPortionPctChanged = pyqtSignal(float)
-    plantsPortionPctChanged = pyqtSignal(float)
-    animalPortionPctChanged = pyqtSignal(float)
-    kiloCaloriesIndividualAnnualChanged = pyqtSignal(float)
-    megaCaloriesSettlementAnnualChanged = pyqtSignal(float)
-    dairySurplusMCaloriesChanged = pyqtSignal(float)
-    cropAreaTargetsMapChanged = pyqtSignal(dict)
-    animalAreaTargetsMapChanged = pyqtSignal(dict)
-    cropCalcsReportMapChanged = pyqtSignal(dict)
-    animalCalcsReportMapChanged = pyqtSignal(dict)
-    guidChanged = pyqtSignal(str)
+    _dairyMCaloriesChanged = pyqtSignal(float)
+    _cropMCaloriesChanged = pyqtSignal(float)
+    _animalMCaloriesChanged = pyqtSignal(float)
+    _wildAnimalMCaloriesChanged = pyqtSignal(float)
+    _wildPlantsMCaloriesChanged = pyqtSignal(float)
+    _dairyPortionPctChanged = pyqtSignal(float)
+    _tameMeatPortionPctChanged = pyqtSignal(float)
+    _cropsPortionPctChanged = pyqtSignal(float)
+    _wildAnimalPortionPctChanged = pyqtSignal(float)
+    _wildPlantsPortionPctChanged = pyqtSignal(float)
+    _plantsPortionPctChanged = pyqtSignal(float)
+    _animalPortionPctChanged = pyqtSignal(float)
+    _kiloCaloriesIndividualAnnualChanged = pyqtSignal(float)
+    _megaCaloriesSettlementAnnualChanged = pyqtSignal(float)
+    _dairySurplusMCaloriesChanged = pyqtSignal(float)
+    _cropCalcsReportMapChanged = pyqtSignal(dict)
+    _animalCalcsReportMapChanged = pyqtSignal(dict)
+    _specificLandEnergyTypeChanged = pyqtSignal(str)
+    _commonLandValueChanged = pyqtSignal(float)
+    _animalAreaTargetsMapChanged = pyqtSignal(dict)
+    _cropAreaTargetsMapChanged = pyqtSignal(dict)
 
     def __init__(self, parent=None):
         """
@@ -104,7 +105,7 @@ class LaDietLabels(QObject, LaSerialisable, LaGuid):
             setattr(other, k, copy.deepcopy(v, memo))
         return other
 
-    @pyqtProperty(float, notify=dairyMCaloriesChanged)
+    @pyqtProperty(float, notify=_dairyMCaloriesChanged)
     def dairyMCalories(self) -> float: # type: ignore
         """
         Get the dairy mega-calories value.
@@ -124,9 +125,9 @@ class LaDietLabels(QObject, LaSerialisable, LaGuid):
         """
         if self._dairyMCalories != theDairyMCalories:
             self._dairyMCalories = theDairyMCalories
-            self.dairyMCaloriesChanged.emit(theDairyMCalories)
+            self._dairyMCaloriesChanged.emit(theDairyMCalories)
 
-    @pyqtProperty(float, notify=cropMCaloriesChanged)
+    @pyqtProperty(float, notify=_cropMCaloriesChanged)
     def cropMCalories(self) -> float: # type: ignore
         """
         Get the crop mega-calories value.
@@ -146,9 +147,9 @@ class LaDietLabels(QObject, LaSerialisable, LaGuid):
         """
         if self._cropMCalories != theCropMCalories:
             self._cropMCalories = theCropMCalories
-            self.cropMCaloriesChanged.emit(theCropMCalories)
+            self._cropMCaloriesChanged.emit(theCropMCalories)
 
-    @pyqtProperty(float, notify=animalMCaloriesChanged)
+    @pyqtProperty(float, notify=_animalMCaloriesChanged)
     def animalMCalories(self) -> float: # type: ignore
         """
         Get the animal mega-calories value.
@@ -168,9 +169,9 @@ class LaDietLabels(QObject, LaSerialisable, LaGuid):
         """
         if self._animalMCalories != theAnimalMCalories:
             self._animalMCalories = theAnimalMCalories
-            self.animalMCaloriesChanged.emit(theAnimalMCalories)
+            self._animalMCaloriesChanged.emit(theAnimalMCalories)
 
-    @pyqtProperty(float, notify=wildAnimalMCaloriesChanged)
+    @pyqtProperty(float, notify=_wildAnimalMCaloriesChanged)
     def wildAnimalMCalories(self) -> float: # type: ignore
         """
         Get the wild animal mega-calories value.
@@ -190,9 +191,9 @@ class LaDietLabels(QObject, LaSerialisable, LaGuid):
         """
         if self._wildAnimalMCalories != theWildAnimalMCalories:
             self._wildAnimalMCalories = theWildAnimalMCalories
-            self.wildAnimalMCaloriesChanged.emit(theWildAnimalMCalories)
+            self._wildAnimalMCaloriesChanged.emit(theWildAnimalMCalories)
 
-    @pyqtProperty(float, notify=wildPlantsMCaloriesChanged)
+    @pyqtProperty(float, notify=_wildPlantsMCaloriesChanged)
     def wildPlantsMCalories(self) -> float: # type: ignore
         """
         Get the wild plants mega-calories value.
@@ -212,9 +213,9 @@ class LaDietLabels(QObject, LaSerialisable, LaGuid):
         """
         if self._wildPlantsMCalories != theWildPlantsMCalories:
             self._wildPlantsMCalories = theWildPlantsMCalories
-            self.wildPlantsMCaloriesChanged.emit(theWildPlantsMCalories)
+            self._wildPlantsMCaloriesChanged.emit(theWildPlantsMCalories)
 
-    @pyqtProperty(float, notify=dairyPortionPctChanged)
+    @pyqtProperty(float, notify=_dairyPortionPctChanged)
     def dairyPortionPct(self) -> float: # type: ignore
         """
         Get the dairy portion percentage value.
@@ -234,9 +235,9 @@ class LaDietLabels(QObject, LaSerialisable, LaGuid):
         """
         if self._dairyPortionPct != theDairyPortionPct:
             self._dairyPortionPct = theDairyPortionPct
-            self.dairyPortionPctChanged.emit(theDairyPortionPct)
+            self._dairyPortionPctChanged.emit(theDairyPortionPct)
 
-    @pyqtProperty(float, notify=tameMeatPortionPctChanged)
+    @pyqtProperty(float, notify=_tameMeatPortionPctChanged)
     def tameMeatPortionPct(self) -> float: # type: ignore
         """
         Get the domesticated meat portion percentage value.
@@ -256,9 +257,9 @@ class LaDietLabels(QObject, LaSerialisable, LaGuid):
         """
         if self._tameMeatPortionPct != theTameMeatPortionPct:
             self._tameMeatPortionPct = theTameMeatPortionPct
-            self.tameMeatPortionPctChanged.emit(theTameMeatPortionPct)
+            self._tameMeatPortionPctChanged.emit(theTameMeatPortionPct)
 
-    @pyqtProperty(float, notify=cropsPortionPctChanged)
+    @pyqtProperty(float, notify=_cropsPortionPctChanged)
     def cropsPortionPct(self) -> float: # type: ignore
         """
         Get the crops portion percentage value.
@@ -278,9 +279,9 @@ class LaDietLabels(QObject, LaSerialisable, LaGuid):
         """
         if self._cropsPortionPct != theCropsPortionPct:
             self._cropsPortionPct = theCropsPortionPct
-            self.cropsPortionPctChanged.emit(theCropsPortionPct)
+            self._cropsPortionPctChanged.emit(theCropsPortionPct)
 
-    @pyqtProperty(float, notify=wildAnimalPortionPctChanged)
+    @pyqtProperty(float, notify=_wildAnimalPortionPctChanged)
     def wildAnimalPortionPct(self) -> float: # type: ignore
         """
         Get the wild animal portion percentage value.
@@ -300,9 +301,9 @@ class LaDietLabels(QObject, LaSerialisable, LaGuid):
         """
         if self._wildAnimalPortionPct != theWildAnimalPortionPct:
             self._wildAnimalPortionPct = theWildAnimalPortionPct
-            self.wildAnimalPortionPctChanged.emit(theWildAnimalPortionPct)
+            self._wildAnimalPortionPctChanged.emit(theWildAnimalPortionPct)
 
-    @pyqtProperty(float, notify=wildPlantsPortionPctChanged)
+    @pyqtProperty(float, notify=_wildPlantsPortionPctChanged)
     def wildPlantsPortionPct(self) -> float: # type: ignore
         """
         Get the wild plants portion percentage value.
@@ -322,9 +323,9 @@ class LaDietLabels(QObject, LaSerialisable, LaGuid):
         """
         if self._wildPlantsPortionPct != theWildPlantsPortionPct:
             self._wildPlantsPortionPct = theWildPlantsPortionPct
-            self.wildPlantsPortionPctChanged.emit(theWildPlantsPortionPct)
+            self._wildPlantsPortionPctChanged.emit(theWildPlantsPortionPct)
 
-    @pyqtProperty(float, notify=plantsPortionPctChanged)
+    @pyqtProperty(float, notify=_plantsPortionPctChanged)
     def plantsPortionPct(self) -> float: # type: ignore
         """
         Get the plants portion percentage value (both wild and cultivated).
@@ -344,9 +345,9 @@ class LaDietLabels(QObject, LaSerialisable, LaGuid):
         """
         if self._plantsPortionPct != thePlantsPortionPct:
             self._plantsPortionPct = thePlantsPortionPct
-            self.plantsPortionPctChanged.emit(thePlantsPortionPct)
+            self._plantsPortionPctChanged.emit(thePlantsPortionPct)
 
-    @pyqtProperty(float, notify=animalPortionPctChanged)
+    @pyqtProperty(float, notify=_animalPortionPctChanged)
     def animalPortionPct(self) -> float: # type: ignore
         """
         Get the animal portion percentage value (both wild and domestic).
@@ -366,9 +367,9 @@ class LaDietLabels(QObject, LaSerialisable, LaGuid):
         """
         if self._animalPortionPct != theAnimalPortionPct:
             self._animalPortionPct = theAnimalPortionPct
-            self.animalPortionPctChanged.emit(theAnimalPortionPct)
+            self._animalPortionPctChanged.emit(theAnimalPortionPct)
 
-    @pyqtProperty(float, notify=kiloCaloriesIndividualAnnualChanged)
+    @pyqtProperty(float, notify=_kiloCaloriesIndividualAnnualChanged)
     def kiloCaloriesIndividualAnnual(self) -> float: # type: ignore
         """
         Get the individual annual kilocalories requirement.
@@ -388,9 +389,9 @@ class LaDietLabels(QObject, LaSerialisable, LaGuid):
         """
         if self._kiloCaloriesIndividualAnnual != theKiloCaloriesIndividualAnnual:
             self._kiloCaloriesIndividualAnnual = theKiloCaloriesIndividualAnnual
-            self.kiloCaloriesIndividualAnnualChanged.emit(theKiloCaloriesIndividualAnnual)
+            self._kiloCaloriesIndividualAnnualChanged.emit(theKiloCaloriesIndividualAnnual)
 
-    @pyqtProperty(float, notify=megaCaloriesSettlementAnnualChanged)
+    @pyqtProperty(float, notify=_megaCaloriesSettlementAnnualChanged)
     def megaCaloriesSettlementAnnual(self) -> float: # type: ignore
         """
         Get the settlement annual megacalories requirement.
@@ -410,9 +411,9 @@ class LaDietLabels(QObject, LaSerialisable, LaGuid):
         """
         if self._megaCaloriesSettlementAnnual != theMegaCaloriesSettlementAnnual:
             self._megaCaloriesSettlementAnnual = theMegaCaloriesSettlementAnnual
-            self.megaCaloriesSettlementAnnualChanged.emit(theMegaCaloriesSettlementAnnual)
+            self._megaCaloriesSettlementAnnualChanged.emit(theMegaCaloriesSettlementAnnual)
 
-    @pyqtProperty(float, notify=dairySurplusMCaloriesChanged)
+    @pyqtProperty(float, notify=_dairySurplusMCaloriesChanged)
     def dairySurplusMCalories(self) -> float: # type: ignore
         """
         Get the dairy surplus megacalories value.
@@ -432,9 +433,9 @@ class LaDietLabels(QObject, LaSerialisable, LaGuid):
         """
         if self._dairySurplusMCalories != theDairySurplusMCalories:
             self._dairySurplusMCalories = theDairySurplusMCalories
-            self.dairySurplusMCaloriesChanged.emit(theDairySurplusMCalories)
+            self._dairySurplusMCaloriesChanged.emit(theDairySurplusMCalories)
 
-    @pyqtProperty(dict, notify=cropAreaTargetsMapChanged)
+    @pyqtProperty(dict, notify=_cropAreaTargetsMapChanged)
     def cropAreaTargetsMap(self) -> Dict[str, float]: # type: ignore
         """
         Get the crop area targets map.
@@ -452,8 +453,8 @@ class LaDietLabels(QObject, LaSerialisable, LaGuid):
         """
         if self._cropAreaTargetsMap != theCropAreaTargetsMap:
             self._cropAreaTargetsMap = theCropAreaTargetsMap
-            self.cropAreaTargetsMapChanged.emit(theCropAreaTargetsMap)
-    @pyqtProperty(dict, notify=animalAreaTargetsMapChanged)
+            self._cropAreaTargetsMapChanged.emit(theCropAreaTargetsMap)
+    @pyqtProperty(dict, notify=_animalAreaTargetsMapChanged)
     def animalAreaTargetsMap(self) -> Dict[str, float]: # type: ignore
         """
         Get the animal area targets map.
@@ -471,9 +472,9 @@ class LaDietLabels(QObject, LaSerialisable, LaGuid):
         """
         if self._animalAreaTargetsMap != theAnimalAreaTargetsMap:
             self._animalAreaTargetsMap = theAnimalAreaTargetsMap
-            self.animalAreaTargetsMapChanged.emit(theAnimalAreaTargetsMap)
+            self._animalAreaTargetsMapChanged.emit(theAnimalAreaTargetsMap)
 
-    @pyqtProperty(dict, notify=cropCalcsReportMapChanged)
+    @pyqtProperty(dict, notify=_cropCalcsReportMapChanged)
     def cropCalcsReportMap(self) -> Dict[str, Tuple[str, float]]: # type: ignore
         """
         Get the crop calculations report map.
@@ -493,9 +494,9 @@ class LaDietLabels(QObject, LaSerialisable, LaGuid):
         """
         if self._cropCalcsReportMap != theCropCalcsReportMap:
             self._cropCalcsReportMap = theCropCalcsReportMap
-            self.cropCalcsReportMapChanged.emit(theCropCalcsReportMap)
+            self._cropCalcsReportMapChanged.emit(theCropCalcsReportMap)
 
-    @pyqtProperty(dict, notify=animalCalcsReportMapChanged)
+    @pyqtProperty(dict, notify=_animalCalcsReportMapChanged)
     def animalCalcsReportMap(self) -> Dict[str, Tuple[str, float]]: # type: ignore
         """
         Get the animal calculations report map.
@@ -515,7 +516,7 @@ class LaDietLabels(QObject, LaSerialisable, LaGuid):
         """
         if self._animalCalcsReportMap != theAnimalCalcsReportMap:
             self._animalCalcsReportMap = theAnimalCalcsReportMap
-            self.animalCalcsReportMapChanged.emit(theAnimalCalcsReportMap)
+            self._animalCalcsReportMapChanged.emit(theAnimalCalcsReportMap)
 
     def calculateFodderNeeds(self, animalGuid, animalParameter, herdSize):
         """Calculate fodder needs for an animal's herd.
@@ -661,18 +662,18 @@ class LaDietLabels(QObject, LaSerialisable, LaGuid):
         self._dairySurplusMCalories = float(root.findtext('dairySurplusMCalories', '0'))
 
         # Emit signals for all changed values
-        self.dairyMCaloriesChanged.emit(self._dairyMCalories)
-        self.cropMCaloriesChanged.emit(self._cropMCalories)
-        self.animalMCaloriesChanged.emit(self._animalMCalories)
-        self.wildAnimalMCaloriesChanged.emit(self._wildAnimalMCalories)
-        self.wildPlantsMCaloriesChanged.emit(self._wildPlantsMCalories)
-        self.dairyPortionPctChanged.emit(self._dairyPortionPct)
-        self.tameMeatPortionPctChanged.emit(self._tameMeatPortionPct)
-        self.cropsPortionPctChanged.emit(self._cropsPortionPct)
-        self.wildAnimalPortionPctChanged.emit(self._wildAnimalPortionPct)
-        self.wildPlantsPortionPctChanged.emit(self._wildPlantsPortionPct)
-        self.plantsPortionPctChanged.emit(self._plantsPortionPct)
-        self.animalPortionPctChanged.emit(self._animalPortionPct)
-        self.kiloCaloriesIndividualAnnualChanged.emit(self._kiloCaloriesIndividualAnnual)
-        self.megaCaloriesSettlementAnnualChanged.emit(self._megaCaloriesSettlementAnnual)
-        self.dairySurplusMCaloriesChanged.emit(self._dairySurplusMCalories)
+        self._dairyMCaloriesChanged.emit(self._dairyMCalories)
+        self._cropMCaloriesChanged.emit(self._cropMCalories)
+        self._animalMCaloriesChanged.emit(self._animalMCalories)
+        self._wildAnimalMCaloriesChanged.emit(self._wildAnimalMCalories)
+        self._wildPlantsMCaloriesChanged.emit(self._wildPlantsMCalories)
+        self._dairyPortionPctChanged.emit(self._dairyPortionPct)
+        self._tameMeatPortionPctChanged.emit(self._tameMeatPortionPct)
+        self._cropsPortionPctChanged.emit(self._cropsPortionPct)
+        self._wildAnimalPortionPctChanged.emit(self._wildAnimalPortionPct)
+        self._wildPlantsPortionPctChanged.emit(self._wildPlantsPortionPct)
+        self._plantsPortionPctChanged.emit(self._plantsPortionPct)
+        self._animalPortionPctChanged.emit(self._animalPortionPct)
+        self._kiloCaloriesIndividualAnnualChanged.emit(self._kiloCaloriesIndividualAnnual)
+        self._megaCaloriesSettlementAnnualChanged.emit(self._megaCaloriesSettlementAnnual)
+        self._dairySurplusMCaloriesChanged.emit(self._dairySurplusMCalories)
