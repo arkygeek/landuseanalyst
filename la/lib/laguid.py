@@ -14,6 +14,7 @@ class LaGuid:
         return str(self._mGuid)
 
     # Method-style accessor for GUID - for backward compatibility.
+    @guid.setter
     def guid(self, value=None):
         if value is not None:
             self.setGuid(value)

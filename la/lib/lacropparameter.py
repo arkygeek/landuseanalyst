@@ -112,7 +112,7 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
     def guid(self) -> str:
         """Get the GUID of the crop parameter."""
         return super().guid
-    
+
     # No setter needed since we'll use the setter from the parent class
 
     @pyqtProperty(str, notify=_nameChanged)
@@ -358,10 +358,10 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
         :rtype: str
         """
         from la.lib.lautils import LaUtils
-        
+
         # Get the actual guid string using the property
         guid_str = str(self.guid)
-        
+
         myString = f"<cropParameter guid=\"{guid_str}\">\n"
         myString += f"  <name>{LaUtils.xmlEncode(self.name)}</name>\n"  # Fix name tag, was using <n>
         myString += f"  <description>{LaUtils.xmlEncode(self.description)}</description>\n"
