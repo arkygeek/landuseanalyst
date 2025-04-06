@@ -947,10 +947,10 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             LaUtils.debug.log(f"Error updating diet labels in model: {str(e)}", "Error")
 
 
-    def doCalcsPlantsFirstIncludeDairy(self) -> LaDietLabels:
+    def doCalcsPlantsFirstIncludeDairy(self) -> LaDietLabels: # NOT working
         from la.lib.lautils import LaUtils
-        myMCalsIndividualAnnual: float = self.caloriesPerPersonDaily * 365.0
-        myMCalsSettlementAnnual: float = myMCalsIndividualAnnual * self.population
+        myMCalsIndividualAnnual: float = int(str(self.caloriesPerPersonDaily)) * 365.0
+        myMCalsSettlementAnnual: float = myMCalsIndividualAnnual * int(str(self.population))
         myDietLabels = LaDietLabels()
         LaAnimal = None  # Matches C++ declaration but not used in this simplified version
 
@@ -1031,12 +1031,17 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
         return myDietLabels
 
-    def doCalcsPlantsFirstDairySeparate(self) -> LaDietLabels:
+    def doCalcsPlantsFirstDairySeparate(self) -> LaDietLabels: # NOT working
         """Calculate diet values when plants are prioritized and dairy is separate from meat."""
         from la.lib.lautils import LaUtils
         myDietLabels = LaDietLabels()
         LaAnimal = None  # Matches C++ declaration but not used in this simplified version
-
+        myMCalsSettlementAnnual = 0.0
+        myMCalsIndividualAnnual = 0.0
+        myDairyMCalorieCounter = 0.0
+        myDomesticMeatPercent = 0.0
+        myDomesticCropPortion = 0.0
+        myPlantPercent = 0.0
         # Log calculation start
         LaUtils.debug.log("Starting doCalcsPlantsFirstDairySeparate calculation", "Diet")
 
@@ -1053,8 +1058,8 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
             # Initialize counters with simplified approach to match C++ variable names
             myDairyMCalorieCounter = myMCalsSettlementAnnual * 0.05  # Separate counter for dairy (5% of total)
-            myTameMeatMCalorieCounter = myMCalsSettlementAnnual * (self._mDietPercent / 100.0) * (self._mMeatPercent / 100.0)  # tame meat
-            myWildMeatMCalorieCounter = myMCalsSettlementAnnual * (self._mDietPercent / 100.0) * myWildMeatPortion  # wild meat
+            myTameMeatMCalorieCounter = myMCalsSettlementAnnual * (self.dietPercent / 100.0) * (self._mMeatPercent / 100.0)  # tame meat
+            myWildMeatMCalorieCounter = myMCalsSettlementAnnual * (self.dietPercent / 100.0) * myWildMeatPortion  # wild meat
 
             # Following the same pattern from C++ for crop and plant calculations
             myOverallPlantPercent = myPlantPercent

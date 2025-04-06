@@ -363,8 +363,8 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
         guid_str = str(self.guid)
 
         myString = f"<cropParameter guid=\"{guid_str}\">\n"
-        myString += f"  <name>{LaUtils.xmlEncode(self.name)}</name>\n"  # Fix name tag, was using <n>
-        myString += f"  <description>{LaUtils.xmlEncode(self.description)}</description>\n"
+        myString += f"  <name>{LaUtils.xmlEncode(str(self.name))}</name>\n"  # Fix name tag, was using <n>
+        myString += f"  <description>{LaUtils.xmlEncode(str(self.description))}</description>\n"
         myString += f"  <crop>{self.cropGuid}</crop>\n"
         myString += f"  <percentTameCrop>{self.percentTameCrop}</percentTameCrop>\n"
         myString += f"  <spoilage>{self.spoilage}</spoilage>\n"
@@ -378,7 +378,7 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
         myString += f"  <areaUnits>{myUnits}</areaUnits>\n"
         myString += f"  <useCommonLand>{1 if self.useCommonLand else 0}</useCommonLand>\n"
         myString += f"  <useSpecificLand>{1 if self.useSpecificLand else 0}</useSpecificLand>\n"
-        myString += f"  <rasterName>{LaUtils.xmlEncode(self.rasterName)}</rasterName>\n"
+        myString += f"  <rasterName>{LaUtils.xmlEncode(str(self.rasterName))}</rasterName>\n"
         myString += "</cropParameter>\n"
         return myString
 
