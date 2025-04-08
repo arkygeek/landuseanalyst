@@ -9,7 +9,7 @@ from la.lib.laserialisable import LaSerialisable
 from la.lib.laguid import LaGuid
 from la.lib.ladietlabels import LaDietLabels
 from la.lib.lautils import LaUtils, LaMessageBus
-from la.lib.la import AreaUnits, Status, Priority, LandBeingGrazed, LandFound, EnergyType
+from la.lib.la import AreaUnits, Status, Priority, LandBeingGrazed, LandFound, EnergyType, LaReportMap
 from la.lib.laanimal import LaAnimal
 
 MESSAGE_BUS: LaMessageBus = LaMessageBus()
@@ -485,22 +485,31 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
     @pyqtProperty(float, notify=_commonLandValueChanged)
     def commonLandValue(self) -> float:
         """Get the common land value in calories per hectare."""
-        return float(str(self.mCommonLandValue)) if isinstance(self.mCommonLandValue, (int, float, str)) else 0.0
-        
-    @commonLandValue.setter 
-    def commonLandValue(self, theValue: float) -> None:
+        return float(self.mCommonLandValue) if isinstance(self.mCommonLandValue, (int, float)) else 0.0
+
+    @commonLandValue.setter
+    def commonLandValue(self, theValue: Union[float, str]) -> None:
         """Set the common land value in calories per hectare.
-        Converts the value to hectares if needed based on current area units."""
+        Converts the value to hectares if needed based on current area units.
+        """
         try:
-            value = float(str(theValue))
+            if isinstance(theValue, str):
+                # Handle non-numeric values like 'Dunum'
+                if theValue.lower() == 'dunum':
+                    value = 10.0  # Example conversion factor for 'Dunum' to hectares
+                else:
+                    raise ValueError(f"Invalid string value for commonLandValue: {theValue}")
+            else:
+                value = float(theValue)
+
             if self.mCommonLandAreaUnits == AreaUnits.Dunum:
                 # Convert from Dunum to Hectare if needed
-                from la.lib.lautils import LaUtils
-                value = LaUtils.convertAreaToHectares(str(self.mCommonLandAreaUnits.name), value)
+                value = LaUtils.convertAreaToHectares('Dunum', value)
+
             self.mCommonLandValue = value
             self._commonLandValueChanged.emit()
-        except (ValueError, TypeError):
-            LaUtils.debug.log(f"Invalid common land value: {theValue}", "Error")
+        except (ValueError, TypeError) as e:
+            LaUtils.debug.log(f"Error setting commonLandValue: {e}", "Error")
 
 
     @pyqtProperty(AreaUnits, notify=_commonLandAreaUnitsChanged)
@@ -1086,7 +1095,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             myDietLabels.dairySurplusMCalories = myOverallDairySurplusMCals
             myDietLabels.cropCalcsReportMap = myCropCalcsReportMap
             myDietLabels.animalCalcsReportMap = myAnimalCalcsReportMap
-            
+
             # Emit signals for changes (if applicable)
 
                         # ----------- Set Final Diet Labels -----------
@@ -1261,7 +1270,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         from la.lib.ladietlabels import LaDietLabels
         from la.lib.laanimal import LaAnimal
         from la.lib.laanimalparameter import LaAnimalParameter
-        
+
         # Initialize maps if they don't exist
         if not hasattr(self, '_mCalcsCropsMap'):
             self._mCalcsCropsMap = {}
@@ -1271,35 +1280,38 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             self._mValueMap = {}
         if not hasattr(self, '_mAnimalCalcReport'):
             self._mAnimalCalcReport = {}
-        
+
         # Clear maps
         self._mCalcsCropsMap.clear()
         self._mCalcsAnimalsMap.clear()
         self._mValueMap.clear()
         self._mAnimalCalcReport.clear()
-        
+
+        myCropCalcsReportMap = LaReportMap
+        myAnimalCalcsReportMap = LaReportMap
+
         myDietLabels = LaDietLabels()
         myMCalsIndividualAnnual = float(str(self.mCaloriesPerPersonDaily)) * 365.0 * 0.001  # Convert to MCal
         myMCalsSettlementAnnual = myMCalsIndividualAnnual * float(str(self.mPopulation))
         myDairyMCalorieCounter = 0.0
         myTameMeatMCalorieCounter = 0.0
-        
+
         # Base calculations using string conversion for PyQt properties
         myWildMeatPortion = 1.0 - float(str(self.mMeatPercent)) / 100.0
         myDomesticMeatPortion = float(str(self.mMeatPercent)) / 100.0
         myDairyUtilization = float(str(self.mDairyUtilisation)) / 100.0
         myDairyLimitPercent = float(str(self.mLimitDairyPercent)) / 100.0
         myLimitDairyBool = bool(self.mLimitDairy)
-        
+
         try:
             # Process each animal
             for myAnimalGuid, myAnimalParameterGuid in self.mAnimals.items():
                 myAnimal = LaUtils.getAnimal(myAnimalGuid)
                 myAnimalParameter = LaUtils.getAnimalParameter(myAnimalParameterGuid)
-                
+
                 if not myAnimal or not myAnimalParameter:
                     continue
-                    
+
                 # Calculate base animal values using string conversion for PyQt properties
                 myMilkKgPerDay = float(str(myAnimal.milkGramsPerDay)) * 0.001  # g -> kg
                 myMilkFoodValue = float(str(myAnimal.milkFoodValue)) * 0.001
@@ -1308,55 +1320,63 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                 myKillWeight = float(str(myAnimal.killWeight))
                 myUsablePortionOfAnimal = float(str(myAnimal.usableMeat)) * 0.01
                 myMeatValueMCal = float(str(myAnimal.meatFoodValue)) * 0.001
-                
+
                 # Calculate animal contribution
                 myAnimalContributionToMeatPortion = float(str(myAnimalParameter.percentTameMeat)) * 0.01
-                myAnimalMCalTarget = (myAnimalContributionToMeatPortion * myMCalsSettlementAnnual * 
+                myAnimalMCalTarget = (myAnimalContributionToMeatPortion * myMCalsSettlementAnnual *
                                     float(str(self.mDietPercent)) / 100.0 * float(str(self.mMeatPercent)) / 100.0)
-                
+
                 # Calculate dairy and meat values
                 myPotentialDairyPerOffspring = myMilkKgPerDay * myMilkFoodValue * (myLactationTime - myWeaningAge)
                 myValuePerOffspring = myKillWeight * myUsablePortionOfAnimal * myMeatValueMCal
                 myActualDairyValueOfOffspring = myPotentialDairyPerOffspring * myDairyUtilization
-                
+
                 # Calculate meat MCals
                 myFinalOffspringValue = myValuePerOffspring
                 myOffspringNeededPerYear = myAnimalMCalTarget / myFinalOffspringValue if myFinalOffspringValue > 0 else 0
                 myMCalsFromTheMeat = myOffspringNeededPerYear * myFinalOffspringValue
                 myMCalsUtilizedFromDairy = myActualDairyValueOfOffspring * myOffspringNeededPerYear
-                
+
                 # Update counters
                 myTameMeatMCalorieCounter += myMCalsFromTheMeat
                 myDairyMCalorieCounter += myMCalsUtilizedFromDairy
-                
+
                 # Record in value map
                 self._mValueMap[myAnimalGuid] = myAnimalMCalTarget
-                
+
+                # Add detailed report for this animal
+                myAnimalReport = f"Animal: {myAnimal.name}, Meat MCals: {myMCalsFromTheMeat:.2f}, Dairy MCals: {myMCalsUtilizedFromDairy:.2f}"
+                myAnimalCalcsReportMap[myAnimalGuid] = (myAnimal.name, myMCalsFromTheMeat + myMCalsUtilizedFromDairy)
+                LaUtils.debug.log(myAnimalReport, "AnimalReport")
+
+            # Assign the populated report map to the diet labels
+            myDietLabels.animalCalcsReportMap = myAnimalCalcsReportMap
+
             # Calculate final percentages
             myDairyLimit = myDairyLimitPercent if myLimitDairyBool else 1.0
             myDomesticMeatPercent = myTameMeatMCalorieCounter / myMCalsSettlementAnnual
             myWildMeatPercent = myWildMeatPortion * float(str(self.mDietPercent)) / 100.0
-            
+
             myLimitSatisfies = (myDomesticMeatPercent + myWildMeatPercent + myDairyLimit) > 1.0
             myNewLimit = min(1.0 - myDomesticMeatPercent - myWildMeatPercent, myDairyLimit) if myLimitSatisfies else myDairyLimit
-            
+
             myPotentialDairyLessThanLimitBool = (myDairyMCalorieCounter / myMCalsSettlementAnnual) < myDairyLimit
             myNewDairy = myDairyMCalorieCounter if myPotentialDairyLessThanLimitBool else myNewLimit * myMCalsSettlementAnnual
             myOverallDairyPercent = myNewDairy / myMCalsSettlementAnnual
-            
+
             # Calculate overall percentages
             myOverallMeatPercent = myWildMeatPercent + myDomesticMeatPercent
             myOverallPlantPercent = 1.0 - myOverallMeatPercent - myOverallDairyPercent
             myOverallCropPercent = myOverallPlantPercent * float(str(self.mPercentOfDietThatIsFromCrops)) / 100.0
             myOverallWildPlantPercent = myOverallPlantPercent * (1.0 - float(str(self.mPercentOfDietThatIsFromCrops)) / 100.0)
-            
+
             # Calculate MCal values
             myOverallDomesticMeatMCals = myTameMeatMCalorieCounter
             myOverallDairyMCals = myOverallDairyPercent * myMCalsSettlementAnnual
             myOverallWildMeatMCals = myWildMeatPercent * myMCalsSettlementAnnual
             myOverallCropsMCals = myOverallCropPercent * myMCalsSettlementAnnual
             myOverallWildPlantsMCals = myOverallWildPlantPercent * myMCalsSettlementAnnual
-            
+
             # Set diet label values
             myDietLabels.dairyMCalories = myOverallDairyMCals
             myDietLabels.cropMCalories = myOverallCropsMCals
@@ -1372,13 +1392,13 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             myDietLabels.plantsPortionPct = myOverallPlantPercent * 100.0
             myDietLabels.kiloCaloriesIndividualAnnual = myMCalsIndividualAnnual * 1000.0
             myDietLabels.megaCaloriesSettlementAnnual = myMCalsSettlementAnnual
-            
+
             # Handle dairy surplus
             myDairySurplusBool = myDairyMCalorieCounter - myOverallDairyMCals
             myDietLabels.dairySurplusMCalories = max(0.0, myDairySurplusBool)
-            
+
             return myDietLabels
-            
+
         except Exception as e:
             LaUtils.debug.log(f"Error in calculations: {str(e)}", "Error")
             import traceback
@@ -1389,7 +1409,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
     def getCommonLandValue(self) -> float:
         """Get the common land value in calories per hectare."""
         return float(str(self.mCommonLandValue)) if isinstance(self.mCommonLandValue, (int, float, str)) else 0.0
-    
+
     # Fix animal and crop attribute access
     def _GetAnimalValue(self, animal: LaAnimal, prop_name: str) -> float:
         """Helper method to safely get float values from animal properties."""

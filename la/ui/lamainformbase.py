@@ -1544,6 +1544,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         Args:
             crop: The crop object to calculate values for
         """
+        from la.lib.ladietlabels import LaDietLabels # Ensure this is imported
         try:
             # Get the crop GUID
             cropGuid = str(crop.guid) # Ensure string
@@ -1577,7 +1578,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             self.model.crops = mySelectedCropsDict
 
             # Calculate diet labels based on settings
-            myDietLabels = None
+            myDietLabels = LaDietLabels() # Ensure this is defined
             if self.model.baseOnPlants:
                 if self.model.includeDairy:
                     myDietLabels = self.model.doCalcsPlantsFirstIncludeDairy()
@@ -1591,7 +1592,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
 
             # Get report from calculations
             if myDietLabels:
-                report_map = myDietLabels._cropCalcsReportMap
+                report_map = myDietLabels.cropCalcsReportMap
                 if cropGuid in report_map:
                     report_pair = report_map[cropGuid]
                     report_string = report_pair[0]

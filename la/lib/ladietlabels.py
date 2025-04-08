@@ -460,6 +460,7 @@ class LaDietLabels(QObject):
             self.mAnimalAreaTargetsMap = theAnimalAreaTargetsMap
             self._animalAreaTargetsMapChanged.emit(theAnimalAreaTargetsMap)
 
+
     @pyqtProperty(dict, notify=_cropCalcsReportMapChanged)
     def cropCalcsReportMap(self) -> Dict[str, Tuple[str, float]]: # type: ignore
         """
@@ -469,7 +470,6 @@ class LaDietLabels(QObject):
         :rtype: Dict[str, Tuple[str, float]]
         """
         return self.mCropCalcsReportMap
-
     @cropCalcsReportMap.setter
     def cropCalcsReportMap(self, theCropCalcsReportMap: Dict[str, Tuple[str, float]]) -> None:
         """
@@ -482,6 +482,7 @@ class LaDietLabels(QObject):
             self.mCropCalcsReportMap = theCropCalcsReportMap
             self._cropCalcsReportMapChanged.emit(theCropCalcsReportMap)
 
+
     @pyqtProperty(dict, notify=_animalCalcsReportMapChanged)
     def animalCalcsReportMap(self) -> Dict[str, Tuple[str, float]]: # type: ignore
         """
@@ -491,7 +492,6 @@ class LaDietLabels(QObject):
         :rtype: Dict[str, Tuple[str, float]]
         """
         return self.mAnimalCalcsReportMap
-
     @animalCalcsReportMap.setter
     def animalCalcsReportMap(self, theAnimalCalcsReportMap: Dict[str, Tuple[str, float]]) -> None:
         """
