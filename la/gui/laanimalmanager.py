@@ -246,17 +246,17 @@ class LaAnimalManager(LaAnimalManagerBase):
         self.leDescription.setText(self.animal.description)
 
         # Meat production
-        self.sbMeatFoodValue.setValue(self.animal.meatFoodValue)
-        self.sbUsableMeatPercent.setValue(self.animal.usableMeat)
-        self.sbKillWeight.setValue(self.animal.killWeight)
-        self.sbAdultWeight.setValue(self.animal.adultWeight)
-        self.sbConceptionEfficiency.setValue(self.animal.conceptionEfficiency)
-        self.sbFemalesToMales.setValue(self.animal.femalesPerMale)
-        self.sbGrowTime.setValue(self.animal.growTime)
-        self.sbDeathRate.setValue(self.animal.deathRate)
+        self.sbMeatFoodValue.setValue(int(self.animal.meatFoodValue))
+        self.sbUsableMeatPercent.setValue(int(self.animal.usableMeat))
+        self.sbKillWeight.setValue(int(self.animal.killWeight))
+        self.sbAdultWeight.setValue(int(self.animal.adultWeight))
+        self.sbConceptionEfficiency.setValue(int(self.animal.conceptionEfficiency))
+        self.sbFemalesToMales.setValue(int(self.animal.femalesPerMale))
+        self.sbGrowTime.setValue(int(self.animal.growTime))
+        self.sbDeathRate.setValue(int(self.animal.deathRate))
 
         # Handle feed energy type - get the actual enum value
-        energy_type = self.animal.mFeedEnergyType  # Access the internal value directly
+        energy_type = self.animal._feedEnergyType  # Access the internal value directly
         try:
             if isinstance(energy_type, LaEnergyType):
                 energy_index = energy_type.value
@@ -269,27 +269,27 @@ class LaAnimalManager(LaAnimalManagerBase):
         self.cbFeedEnergyType.setCurrentIndex(energy_index)
 
         # Energy values
-        self.sbEnergyForPregnant.setValue(self.animal.gestating)
-        self.sbEnergyForLactating.setValue(self.animal.lactating)
-        self.sbEnergyForMaintenance.setValue(self.animal.maintenance)
-        self.sbEnergyForJuvenilePerKg.setValue(self.animal.juvenile)
+        self.sbEnergyForPregnant.setValue(int(self.animal.gestating))
+        self.sbEnergyForLactating.setValue(int(self.animal.lactating))
+        self.sbEnergyForMaintenance.setValue(int(self.animal.maintenance))
+        self.sbEnergyForJuvenilePerKg.setValue(int(self.animal.juvenile))
 
         # Reproduction
-        self.sbSexualMaturity.setValue(self.animal.sexualMaturity)
-        self.sbBreedingLife.setValue(self.animal.breedingExpectancy)
-        self.sbYoungPerBirth.setValue(self.animal.youngPerBirth)
-        self.sbWeaningAge.setValue(self.animal.weaningAge)
-        self.sbWeaningWeight.setValue(self.animal.weaningWeight)
-        self.sbGestationTime.setValue(self.animal.gestationTime)
-        self.sbEstrousCycleTime.setValue(self.animal.estrousCycle)
-        self.sbLactationTime.setValue(self.animal.lactationTime)
+        self.sbSexualMaturity.setValue(int(self.animal.sexualMaturity))
+        self.sbBreedingLife.setValue(int(self.animal.breedingExpectancy))
+        self.sbYoungPerBirth.setValue(int(self.animal.youngPerBirth))
+        self.sbWeaningAge.setValue(int(self.animal.weaningAge))
+        self.sbWeaningWeight.setValue(int(self.animal.weaningWeight))
+        self.sbGestationTime.setValue(int(self.animal.gestationTime))
+        self.sbEstrousCycleTime.setValue(int(self.animal.estrousCycle))
+        self.sbLactationTime.setValue(int(self.animal.lactationTime))
 
         # By-products - Missing in original implementation
         self.checkBoxMilk.setChecked(bool(self.animal.milk))
-        self.sbMilk.setValue(self.animal.milkGramsPerDay)
-        self.sbMilkFoodValue.setValue(self.animal.milkFoodValue)
+        self.sbMilk.setValue(int(self.animal.milkGramsPerDay))
+        self.sbMilkFoodValue.setValue(int(self.animal.milkFoodValue))
         self.checkBoxFleece.setChecked(bool(self.animal.fleece))
-        self.sbFleeceWeight.setValue(self.animal.fleeceWeightKg)
+        self.sbFleeceWeight.setValue(int(self.animal.fleeceWeightKg))
 
         # Update the image display
         image_file = getattr(self.animal, '_imageFile', '')  # Access internal value directly
@@ -384,7 +384,7 @@ class LaAnimalManager(LaAnimalManagerBase):
         self.animal.deathRate = self.sbDeathRate.value()
 
         # Set feed energy type using internal attribute
-        self.animal.mFeedEnergyType = LaEnergyType(self.cbFeedEnergyType.currentIndex())
+        self.animal._feedEnergyType = LaEnergyType(self.cbFeedEnergyType.currentIndex())
 
         # Set feed energy requirements - missing in original implementation
         self.animal.gestating = self.sbEnergyForPregnant.value()
@@ -412,13 +412,13 @@ class LaAnimalManager(LaAnimalManagerBase):
         # Handle image file
         if self.imageFile:
             # Get just the filename without path
-            myImageFilename = os.path.basename(self.imageFile)
-
+            image_filename = os.path.basename(self.imageFile)
+            
             # Create a proper target path in the user's .landuseAnalyst/images directory
-            myImagesDir = LaUtils.userImagesDirPath()
-            os.makedirs(myImagesDir, exist_ok=True)
-            myTargetImagePath = os.path.join(myImagesDir, myImageFilename)
-
+            images_dir = LaUtils.userImagesDirPath()
+            os.makedirs(images_dir, exist_ok=True)
+            target_image_path = os.path.join(images_dir, image_filename)
+            
             try:
                 # Load the image and resize it to a reasonable size (max 400x400 pixels)
                 pixmap = QPixmap(self.imageFile)
@@ -427,30 +427,28 @@ class LaAnimalManager(LaAnimalManagerBase):
                     maxSize = 400
                     if pixmap.width() > maxSize or pixmap.height() > maxSize:
                         pixmap = pixmap.scaled(
-                            maxSize, maxSize,
-                            Qt.KeepAspectRatio,
+                            maxSize, maxSize, 
+                            Qt.KeepAspectRatio, 
                             Qt.SmoothTransformation
                         )
-
+                    
                     # Save the resized image to the target location
-                    success = pixmap.save(myTargetImagePath)
+                    success = pixmap.save(target_image_path)
                     if success:
-                        LaUtils.debug.log(f"Image resized and saved to: {myTargetImagePath}")
+                        LaUtils.debug.log(f"Image resized and saved to: {target_image_path}")
                         # Update animal's image file path with the full path to ensure it can be found
-                        # TODO: Check if it is ok to ignore the type in the following line
-                        self.animal.imageFile = myTargetImagePath # type: ignore
+                        self.animal.imageFile = target_image_path
                     else:
-                        LaUtils.debug.log(f"Failed to save resized image to: {myTargetImagePath}")
-                        QMessageBox.warning(self, "Image Save Failed",
-                                        f"Failed to save resized image to {myTargetImagePath}")
+                        LaUtils.debug.log(f"Failed to save resized image to: {target_image_path}")
+                        QMessageBox.warning(self, "Image Save Failed", 
+                                        f"Failed to save resized image to {target_image_path}")
                         return
                 else:
                     # If pixmap can't load the image, try direct file copy
                     import shutil
-                    shutil.copy2(self.imageFile, myTargetImagePath)
-                    LaUtils.debug.log(f"Image copied to: {myTargetImagePath}")
-                    # TODO: Check if it is ok to ignore the type in the following line
-                    self.animal.imageFile = myTargetImagePath # type: ignore
+                    shutil.copy2(self.imageFile, target_image_path)
+                    LaUtils.debug.log(f"Image copied to: {target_image_path}")
+                    self.animal.imageFile = target_image_path
             except Exception as e:
                 LaUtils.debug.log(f"Failed to process image file: {str(e)}")
                 QMessageBox.warning(self, "Image Processing Failed",
@@ -478,10 +476,10 @@ class LaAnimalManager(LaAnimalManagerBase):
             "",
             "Images (*.png *.jpg *.jpeg *.bmp *.gif)"
         )[0]  # getOpenFileName returns (filename, filter)
-
+        
         if imagePath:
             self.imageFile = imagePath
-
+            
             # Display the image
             pixmap = QPixmap(imagePath)
             if not pixmap.isNull():

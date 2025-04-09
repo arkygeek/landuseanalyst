@@ -233,7 +233,7 @@ class LaUtils:
                     continue
 
                 # Get the actual string GUID value for comparison
-                myAnimalGuid = myLaAnimal.guid
+                myAnimalGuid = myLaAnimal.guid() if callable(getattr(myLaAnimal, 'guid', None)) else myLaAnimal.guid
                 LaUtils.debug.log(f"Checking animal {myLaAnimal.name} with GUID {myAnimalGuid} against requested GUID {theGuid}", "Animals")
 
                 if myAnimalGuid == theGuid:
@@ -431,7 +431,7 @@ class LaUtils:
                         continue
 
                     # Get the actual GUID string, not a method reference
-                    guidValue = myAnimalParameter.mGuid
+                    guidValue = myAnimalParameter._mGuid
 
                     # Debug the parameter values
                     LaUtils.debug.log(f"Loaded animal parameter: '{myAnimalParameter.name}', linked to animal: {myAnimalParameter.animalGuid}, percentTameMeat: {myAnimalParameter.percentTameMeat}", "AnimalParams")
@@ -443,7 +443,7 @@ class LaUtils:
                     else:
                         LaUtils.debug.log(f"WARNING: Animal parameter '{myAnimalParameter.name}' has no GUID, generating one", "AnimalParams")
                         guidValue = str(uuid.uuid4())
-                        myAnimalParameter.mGuid = guidValue
+                        myAnimalParameter._mGuid = guidValue
                         myMap[guidValue] = myAnimalParameter
                         LaUtils.debug.log(f"Generated and added animal parameter with new GUID: {guidValue}", "AnimalParams")
                 except Exception as e:
@@ -683,6 +683,94 @@ class LaUtils:
         return myStyle
 
     @staticmethod
+    def getAnimalParameters() -> List[LaAnimalParameter]:
+        """
+        Returns a list of all animal parameters.
+
+        :return: A list of all `LaAnimalParameter` instances
+        :rtype: List[LaAnimalParameter]
+        """
+        myList = LaAnimalParameter.getInstances()
+        return myList
+
+    @staticmethod
+    def addAnimalParameter(theAnimalParameter: LaAnimalParameter) -> None:
+        """
+        Adds a new animal parameter.
+
+        :param theAnimalParameter: The `LaAnimalParameter` instance to save
+        :type theAnimalParameter: LaAnimalParameter
+        """
+        theAnimalParameter.save()
+
+    @staticmethod
+    def removeAnimalParameter(theName: str) -> None:
+        """
+        Removes an animal parameter by name.
+
+        :param theName: The name of the `LaAnimalParameter` instance to remove
+        :type theName: str
+        """
+        myAnimalParameter = LaAnimalParameter.getInstanceByName(theName)
+        if myAnimalParameter is not None:
+            myAnimalParameter.remove()
+
+    @staticmethod
+    def editAnimalParameter(theAnimalParameter: LaAnimalParameter) -> None:
+        """
+        Edits an existing animal parameter by saving changes.
+
+        :param theAnimalParameter: The `LaAnimalParameter` instance to edit and save
+        :type theAnimalParameter: LaAnimalParameter
+        """
+        theAnimalParameter.save()
+
+    @staticmethod
+    def generateGuid() -> str:
+        """
+        Generates a new GUID.
+
+        :return: The generated GUID
+        :rtype: str
+        """
+        return str(uuid.uuid4())
+
+    @staticmethod
+    def saveToFile(theFilename: str, theData: str) -> None:
+        """
+        Saves data to a file with the specified filename.
+
+        :param theFilename: The name of the file to write to
+        :type theFilename: str
+        :param theData: The data to write to the file
+        :type theData: str
+        """
+        myFile = QFile(theFilename)
+        if myFile.open(QFile.WriteOnly | QFile.Text):
+            # Encode the string data to bytes and write directly to the file
+            myFile.write(theData.encode("utf-8"))
+            myFile.close()
+
+    @staticmethod
+    def loadFromFile(theFilename: str) -> str:
+        """
+        Loads data from a file with the specified filename.
+
+        :param theFilename: The name of the file to read from
+        :type theFilename: str
+        :return: The data read from the file, or an empty string if the file could not be opened
+        :rtype: str
+        """
+        myFile = QFile(theFilename)
+        if myFile.open(QFile.ReadOnly | QFile.Text):
+            myStream = QTextStream(myFile)
+            myData = myStream.readAll()
+            myFile.close()
+            return myData
+        else:
+            return ""
+
+    @staticmethod
     def getApplicationDirPath() -> str:
         """
         Returns the path to the directory containing the application executable.
@@ -802,6 +890,29 @@ class LaUtils:
         if not os.path.exists(path):
             os.makedirs(path, exist_ok=True)
         return path
+
+    @staticmethod
+    def saveFilePath(sourceFile: str, fileType: str) -> str:
+        """
+        Returns a path where a file should be saved based on its type.
+
+        :param sourceFile: The source file
+        :type sourceFile: str
+        :param fileType: The type of file
+        :type fileType: str
+        :return: The path where the file should be saved
+        :rtype: str
+        """
+        subdir = {
+            'image': 'images',
+            'crop': 'cropProfiles',
+            'cropParameter': 'cropParameterProfiles',
+            'animal': 'animalProfiles',
+            'animalParameter': 'animalParameterProfiles'
+        }.get(fileType, '')
+        target_dir = os.path.join(LaUtils.userDataPath(), subdir)
+        LaUtils.ensureDirectoryExists(target_dir)
+        return os.path.join(target_dir, os.path.basename(sourceFile))
 
     @staticmethod
     def userProfilesDirPath() -> str:

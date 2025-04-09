@@ -170,41 +170,41 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
 
     def showAnimalParameter(self):
         """Display the current animal parameter in the UI."""
-        LaUtils.debug.log(f"showAnimalParameter: Displaying animal parameter: {self.mAnimalParameter.mName}")
+        LaUtils.debug.log(f"showAnimalParameter: Displaying animal parameter: {self.mAnimalParameter._mName}")
         
         # Set basic parameters
-        self.leName.setText(str(self.mAnimalParameter.mName))
-        self.leDescription.setText(str(self.mAnimalParameter.mDescription))
-        self.sbPercentTameMeat.setValue(float(self.mAnimalParameter.mPercentTameMeat))
-        self.checkBoxCommonRaster.setChecked(bool(self.mAnimalParameter.mUseCommonGrazingLand))
-        self.checkBoxSpecificRaster.setChecked(bool(self.mAnimalParameter.mUseSpecificGrazingLand))
+        self.leName.setText(str(self.mAnimalParameter._mName))
+        self.leDescription.setText(str(self.mAnimalParameter._mDescription))
+        self.sbPercentTameMeat.setValue(float(self.mAnimalParameter._mPercentTameMeat))
+        self.checkBoxCommonRaster.setChecked(bool(self.mAnimalParameter._mUseCommonGrazingLand))
+        self.checkBoxSpecificRaster.setChecked(bool(self.mAnimalParameter._mUseSpecificGrazingLand))
         
         # Set fodder use group box checked state
-        self.grpFodderUse.setChecked(bool(self.mAnimalParameter.mFodderUse))
-        LaUtils.debug.log(f"showAnimalParameter: Set fodder use to: {self.mAnimalParameter.mFodderUse}")
+        self.grpFodderUse.setChecked(bool(self.mAnimalParameter._mFodderUse))
+        LaUtils.debug.log(f"showAnimalParameter: Set fodder use to: {self.mAnimalParameter._mFodderUse}")
         
         # Match animal in combo box
         found_match = False
-        if self.mAnimalParameter.mAnimalGuid:
+        if self.mAnimalParameter._mAnimalGuid:
             for i in range(self.cboAnimal.count()):
                 item_data = str(self.cboAnimal.itemData(i))
-                if self.mAnimalParameter.mAnimalGuid in item_data:
+                if self.mAnimalParameter._mAnimalGuid in item_data:
                     self.cboAnimal.setCurrentIndex(i)
                     found_match = True
                     break
                     
         if not found_match:
-            self.setComboToDefault(self.cboAnimal, self.mAnimalParameter.mAnimalGuid)
+            self.setComboToDefault(self.cboAnimal, self.mAnimalParameter._mAnimalGuid)
             
         # Set energy type
-        current_energy_type = self.mAnimalParameter.mSpecificLandEnergyType
+        current_energy_type = self.mAnimalParameter._specificLandEnergyType
         for i in range(self.cbSpecificLandEnergyType.count()):
             if self.cbSpecificLandEnergyType.itemText(i) == current_energy_type.name:
                 self.cbSpecificLandEnergyType.setCurrentIndex(i)
                 break
                 
         # Set fallow usage
-        current_fallow = self.mAnimalParameter.mFallowUsage
+        current_fallow = self.mAnimalParameter._fallowUsage
         for i in range(self.cbFallowUsage.count()):
             combo_priority = self.cbFallowUsage.itemData(i)
             if combo_priority == current_fallow:
@@ -219,7 +219,7 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
 
     def update_animal_picture(self):
         """Update the animal picture based on the selected animal in the parameter."""
-        animalGuid = str(self.mAnimalParameter.mAnimalGuid)
+        animalGuid = str(self.mAnimalParameter._mAnimalGuid)
         if not animalGuid:
             self.lblAnimalPic.clear()
             return
@@ -284,9 +284,9 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
         myAnimalParameter.fromXmlFile(myOriginalFileNameWithAddedPath)
         myAnimalParameter.setGuid(None) # Clear the old GUID so the new copy will be unique
         myTempName = f"Copy of {myAnimalParameter.name}"
-        myAnimalParameter.mName = myTempName
+        myAnimalParameter._mName = myTempName
         myTempDescription = f"Copy of {myAnimalParameter.description}"
-        myAnimalParameter.mDescription = myTempDescription
+        myAnimalParameter._mDescription = myTempDescription
 
         myNewFileName = os.path.join(LaUtils.userAnimalParameterProfilesDirPath(),
                                    f"{myAnimalParameter.guid}.xml")
@@ -312,16 +312,16 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
     def on_pbnApply_clicked(self):
         """Handle apply button click."""
         # Basic parameters
-        self.mAnimalParameter.mName = self.leName.text()
-        self.mAnimalParameter.mDescription = self.leDescription.text()
-        self.mAnimalParameter.mAnimalGuid = self.cboAnimal.currentData()
-        self.mAnimalParameter.mPercentTameMeat = self.sbPercentTameMeat.value()
-        self.mAnimalParameter.mUseCommonGrazingLand = self.checkBoxCommonRaster.isChecked()
-        self.mAnimalParameter.mUseSpecificGrazingLand = self.checkBoxSpecificRaster.isChecked()
-        self.mAnimalParameter.mValueSpecificGrazingLand = self.sbSpecificRasterValue.value()
+        self.mAnimalParameter._mName = self.leName.text()
+        self.mAnimalParameter._mDescription = self.leDescription.text()
+        self.mAnimalParameter._mAnimalGuid = self.cboAnimal.currentData()
+        self.mAnimalParameter._mPercentTameMeat = self.sbPercentTameMeat.value()
+        self.mAnimalParameter._mUseCommonGrazingLand = self.checkBoxCommonRaster.isChecked()
+        self.mAnimalParameter._mUseSpecificGrazingLand = self.checkBoxSpecificRaster.isChecked()
+        self.mAnimalParameter._mValueSpecificGrazingLand = self.sbSpecificRasterValue.value()
 
         # Set fodder use from group box checked state
-        self.mAnimalParameter.mFodderUse = bool(self.grpFodderUse.isChecked())
+        self.mAnimalParameter._mFodderUse = bool(self.grpFodderUse.isChecked())
 
         # Save fodder data from the table
         if self.grpFodderUse.isChecked():
@@ -355,28 +355,28 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
                 myFoodSourceMap[myGuid] = myFoodSource
 
             # Save the food source map to the animal parameter
-            self.mAnimalParameter.mFoodSourceMap = myFoodSourceMap
+            self.mAnimalParameter._mFoodSourceMap = myFoodSourceMap
             LaUtils.debug.log(f"on_pbnApply_clicked: Saved {len(myFoodSourceMap)} fodder crops")
 
         # Set energy type and area units by assigning to private attributes
-        self.mAnimalParameter.mAreaUnits = AreaUnits.Dunum if self.cbAreaUnits.currentText() == "Dunum" else AreaUnits.Hectare
+        self.mAnimalParameter._areaUnits = AreaUnits.Dunum if self.cbAreaUnits.currentText() == "Dunum" else AreaUnits.Hectare
 
         # Set specific land energy type by assigning to private attribute
         mySelectedEnergyTypeText = self.cbSpecificLandEnergyType.currentText() # Renamed variable
         try:
-            self.mAnimalParameter.mSpecificLandEnergyType = EnergyType[mySelectedEnergyTypeText]
+            self.mAnimalParameter._specificLandEnergyType = EnergyType[mySelectedEnergyTypeText]
             LaUtils.debug.log(f"on_pbnApply_clicked: Set _specificLandEnergyType to {mySelectedEnergyTypeText}")
         except KeyError:
             LaUtils.debug.log(f"on_pbnApply_clicked: Invalid energy type selected: {mySelectedEnergyTypeText}, defaulting to KCalories")
-            self.mAnimalParameter.mSpecificLandEnergyType = EnergyType.KCalories
+            self.mAnimalParameter._specificLandEnergyType = EnergyType.KCalories
 
         # Save raster name by assigning to private attribute
-        self.mAnimalParameter.mRrasterName = self.cboRaster.currentText()
+        self.mAnimalParameter._rasterName = self.cboRaster.currentText()
         
         # Set fallow usage based on combo box data by assigning to private attribute
         index = self.cbFallowUsage.currentIndex()
         if index >= 0:
-            self.mAnimalParameter.mFallowUsage = self.cbFallowUsage.itemData(index)
+            self.mAnimalParameter._fallowUsage = self.cbFallowUsage.itemData(index)
 
         # Save parameter to file
         filepath = os.path.join(LaUtils.userAnimalParameterProfilesDirPath(),
@@ -568,7 +568,7 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
 
         # Update the animal parameter with this GUID
         if hasattr(self, 'mAnimalParameter'):
-            self.mAnimalParameter.mAnimalGuid = selected_guid
+            self.mAnimalParameter._mAnimalGuid = selected_guid
 
         # Find the animal object matching this GUID
         animals_map = LaUtils.getAvailableAnimals()

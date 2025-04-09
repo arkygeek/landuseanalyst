@@ -36,7 +36,6 @@ from la.lib.lamodel import LaModel
 from la.lib.lautils import LaUtils, MESSAGE_BUS
 from la.lib.lamaincontroller import LaMainController
 from la.lib.ladietlabels import LaDietLabels
-from la.lib.la import AreaUnits, EnergyType
 
 class LaMainForm(LaMainFormBase):
     """
@@ -54,21 +53,10 @@ class LaMainForm(LaMainFormBase):
         """
         super(LaMainForm, self).__init__(parent)
 
-        # Disable and hide specific checkboxes programmatically
-        if hasattr(self, 'cboxIncludeDairy'):
-            self.cboxIncludeDairy.setEnabled(False)
-            self.cboxIncludeDairy.setVisible(False)
-            LaUtils.debug.log("cboxIncludeDairy disabled and hidden programmatically.", "UI Setup")
-
-        if hasattr(self, 'cboxBaseOnPlants'):
-            self.cboxBaseOnPlants.setEnabled(False)
-            self.cboxBaseOnPlants.setVisible(False)
-            LaUtils.debug.log("cboxBaseOnPlants disabled and hidden programmatically.", "UI Setup")
-
         # Initialize the model first
         self.model = LaModel(self)
         # Connect the new signal for calculation logging
-        self.model._logCalculationStep.connect(self.logToAllChannels) # Add this line
+        self.model.logCalculationStep.connect(self.logToAllChannels) # Add this line
 
         # Initialize diet labels
         self.diet_labels = LaDietLabels(parent=self)
@@ -108,107 +96,56 @@ class LaMainForm(LaMainFormBase):
     @pyqtSlot(QtWidgets.QListWidgetItem, QtWidgets.QListWidgetItem)
     def animalCalcClicked(self, current_item, previous_item):
         """
-        Handle animal calculation click event.
-        Ported from the original C++ implementation.
+        Display calculation details when an animal is clicked in the calculations list.
         """
         try:
-            # Zero trap to prevent errors
+            # If no item is selected, do nothing
             if current_item is None:
                 return
 
-            # Ensure that crops and animals are both at 100%
-            if self.labelCropCheck.text() != "100%" or self.labelAnimalCheck.text() != "100%":
-                self.tbReport.setText("Check that Animals and Crops are both at 100%\n")
-                self.tbReport.append("I am NOT going to do anything until they are!")
+            # Get the GUID of the selected animal
+            animal_guid = current_item.data(Qt.UserRole)
+            if hasattr(animal_guid, 'guid') and callable(animal_guid.guid):
+                animal_guid = animal_guid.guid()  # Call the method to get the GUID string
+
+            # Make sure we have a string GUID
+            animal_guid = str(animal_guid)
+
+            LaUtils.debug.log(f"Using animal GUID: {animal_guid}", "Calculation")
+
+            # Get the animal object
+            animal = LaUtils.getAnimal(animal_guid)
+            if not animal:
+                LaUtils.debug.log(f"Could not find animal with GUID: {animal_guid}", "Error")
                 return
 
-            # Initialize model and diet labels
-            myModel = LaModel()
-            myDietLabels = LaDietLabels()
-
-            # Clear maps
-            mSelectedCropsMap = {}
-            mSelectedAnimalsMap = {}
-
-            # Get area units
-            mySelectedAreaUnit = self.cbAreaUnits.currentText()
-            myCommonRasterValue = self.sbCommonRasterValue.value()
-            myAreaUnits = AreaUnits.Dunum if mySelectedAreaUnit == "Dunum" else AreaUnits.Hectare
-
-            # Get a list of the selected animals
-            for animal_guid, value_pair in self.mAnimalsMap.items():
-                is_selected, param_guid = value_pair
-                if is_selected:
-                    mSelectedAnimalsMap[animal_guid] = param_guid
-
-            # Get a list of the selected crops
-            for crop_guid, value_pair in self.mCropsMap.items():
-                is_selected, param_guid = value_pair
-                if is_selected:
-                    mSelectedCropsMap[crop_guid] = param_guid
-
-            # Configure the model
-            myModel.animals = mSelectedAnimalsMap
-            myModel.crops = mSelectedCropsMap
-            myModel.name = self.lineEditSiteName.text()
-            myModel.population = self.sbPopulation.value()
-            myModel.period = self.lineEditPeriod.text()
-            myModel.easting = int(self.lineEditEasting.text() or 0)
-            myModel.northing = int(self.lineEditNorthing.text() or 0)
-            myModel.euclideanDistance = self.radioButtonEuclidean.isChecked()
-            myModel.walkingTime = self.radioButtonWalkingTime.isChecked()
-            myModel.pathDistance = self.radioButtonPathDistance.isChecked()
-            myModel.precision = self.sbModelPrecision.value()
-            myModel.dietPercent = self.sliderDiet.value()
-            myModel.cropPercent = self.sliderCrop.value()
-            myModel.meatPercent = self.sliderMeat.value()
-            myModel.caloriesPerPersonDaily = self.sbDailyCalories.value()
-            myModel.dairyUtilisation = self.sbDairyUtilisation.value()
-            myModel.commonLandAreaUnits = myAreaUnits
-            myModel.commonLandValue = myCommonRasterValue
-            myModel.baseOnPlants = self.cboxBaseOnPlants.isChecked()
-            myModel.includeDairy = self.cboxIncludeDairy.isChecked()
-            myModel.limitDairy = self.cboxLimitDairy.isChecked()
-            myModel.limitDairyPercent = self.sbLimitDairyPercent.value()
-
-            # Perform diet calculations based on settings
+            # Perform calculations based on diet settings
+            diet_labels = None
             if self.cboxBaseOnPlants.isChecked():
                 if self.cboxIncludeDairy.isChecked():
-                    myDietLabels = myModel.doCalcsPlantsFirstIncludeDairy()
+                    diet_labels = self.model.doCalcsPlantsFirstIncludeDairy()
                 else:
-                    myDietLabels = myModel.doCalcsPlantsFirstDairySeparate()
+                    diet_labels = self.model.doCalcsPlantsFirstDairySeparate()
             else:
                 if self.cboxIncludeDairy.isChecked():
-                    myDietLabels = myModel.doCalcsAnimalsFirstIncludeDairy()
+                    diet_labels = self.model.doCalcsAnimalsFirstIncludeDairy()
                 else:
-                    myDietLabels = myModel.doCalcsAnimalsFirstDairySeparate()
+                    diet_labels = self.model.doCalcsAnimalsFirstDairySeparate()
 
-            # Update the report tab with model HTML
-            self.tbReport.setHtml(myModel.toHtml())
-
-            # Get the GUID of the selected animal
-            myGuid = current_item.data(Qt.UserRole)
-            myAnimal = LaUtils.getAnimal(myGuid)
-
-            # Update the animal picture
-            if hasattr(self, 'lblAnimalPicCalcs') and hasattr(myAnimal, 'imageFile'):
-                self.lblAnimalPicCalcs.setPixmap(myAnimal.imageFile)
-
-            # Get the calculation report for the selected animal
-            myReportMap = myDietLabels.animalCalcsReportMap
-            if myGuid in myReportMap:
-                myReportPair = myReportMap[myGuid]
-                myReportString = myReportPair[0]
-                self.textBrowserResultsAnimals.setText(myReportString)
-
-            # Update the progress bar
-            if hasattr(self, 'progressBarCalcs'):
-                self.progressBarCalcs.setMaximum(100)
+            # Get the calculation report for this animal
+            if hasattr(diet_labels, 'animalCalcsReportMap'):
+                report_map = self._getPropertyValue(diet_labels, 'animalCalcsReportMap')
+                if isinstance(report_map, dict):
+                    if animal_guid in report_map:
+                        report_pair = report_map[animal_guid]
+                        if isinstance(report_pair, tuple) and len(report_pair) > 0:
+                            report_string = report_pair[0]
+                            if hasattr(self, 'textBrowserResultsAnimals'):
+                                self.textBrowserResultsAnimals.setText(report_string)
+                                LaUtils.debug.log(f"Animal {animal.name} calculation report displayed", "Calculation")
 
         except Exception as e:
-            LaUtils.debug.log(f"Error in animalCalcClicked: {str(e)}", "Error")
-            import traceback
-            LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
+            LaUtils.debug.log(f"Error displaying animal calculations: {str(e)}", "Error")
 
     def calculateTotalLandNeeded(self):
         """Calculate and display the total land needed."""
@@ -550,119 +487,48 @@ class LaMainForm(LaMainFormBase):
         self.setDietLabels()
 
     def setDietLabels(self):
-        """Update diet labels based on current model state."""
+        """Update all diet-related labels based on current values"""
         try:
-            # Create local objects
-            myDietLabels = LaDietLabels()
-            myModel = LaModel()
-
-            # Clear maps
-            mSelectedCropsMap = {}
-            mSelectedAnimalsMap = {}
-
-            # Get area units
-            mySelectedAreaUnit = self.cbAreaUnits.currentText()
-            myCommonRasterValue = self.sbCommonRasterValue.value()
-            myAreaUnits = AreaUnits.Dunum if mySelectedAreaUnit == "Dunum" else AreaUnits.Hectare
-
-            # Get selected animals
-            for animalGuid, valuePair in self.mAnimalsMap.items():
-                isSelected, paramGuid = valuePair  # In Python this is a tuple, not QPair
-                if isSelected:
-                    mSelectedAnimalsMap[animalGuid] = paramGuid
-
-            # Get selected crops
-            for cropGuid, valuePair in self.mCropsMap.items():
-                isSelected, paramGuid = valuePair
-                if isSelected:
-                    mSelectedCropsMap[cropGuid] = paramGuid
-
-            # Configure model with current UI state
-            myModel.animals = mSelectedAnimalsMap
-            myModel.crops = mSelectedCropsMap
-            myModel.name = self.lineEditSiteName.text()
-            myModel.population = self.sbPopulation.value()
-            myModel.period = self.lineEditPeriod.text()
-            myModel.easting = int(self.lineEditEasting.text() or 0)
-            myModel.northing = int(self.lineEditNorthing.text() or 0)
-            myModel.euclideanDistance = self.radioButtonEuclidean.isChecked()
-            myModel.walkingTime = self.radioButtonWalkingTime.isChecked()
-            myModel.pathDistance = self.radioButtonPathDistance.isChecked()
-            myModel.precision = self.sbModelPrecision.value()
-            myModel.dietPercent = self.sliderDiet.value()
-            myModel.percentOfDietThatIsFromCrops = self.sliderCrop.value()
-            myModel.meatPercent = self.sliderMeat.value()
-            myModel.caloriesPerPersonDaily = self.sbDailyCalories.value()
-            myModel.dairyUtilisation = self.sbDairyUtilisation.value()
-            myModel.commonLandAreaUnits = myAreaUnits
-            myModel.commonLandValue = myCommonRasterValue
-            myModel.baseOnPlants = self.cboxBaseOnPlants.isChecked()
-            myModel.includeDairy = self.cboxIncludeDairy.isChecked()
-            myModel.limitDairy = self.cboxLimitDairy.isChecked()
-            myModel.limitDairyPercent = self.sbLimitDairyPercent.value()
-
-            # Check if percentages add up to 100%
-            if self.labelCropCheck.text() != "100%" or self.labelAnimalCheck.text() != "100%":
+            if not hasattr(self, 'model'):
                 return
 
-            # Perform diet calculations based on UI settings
+            # Configure model from current UI state
+            self._configureModelFromUi()
+
+            # Disconnect previous model's signal if necessary (optional, depends on how model is managed)
+            # try:
+            #     self.model.logCalculationStep.disconnect(self.logToAllChannels)
+            # except TypeError: # Signal not connected or already disconnected
+            #     pass
+
+            # Calculate diet labels based on settings
+            # NOTE: The doCalcs methods themselves now emit the signals
             if self.cboxBaseOnPlants.isChecked():
                 if self.cboxIncludeDairy.isChecked():
-                    myDietLabels = myModel.doCalcsPlantsFirstIncludeDairy()
-                    LaUtils.debug.log("doCalcsPlantsFirstIncludeDairy", "Diet")
+                    self.diet_labels = self.model.doCalcsPlantsFirstIncludeDairy()
                 else:
-                    myDietLabels = myModel.doCalcsPlantsFirstDairySeparate()
-                    LaUtils.debug.log("doCalcsPlantsFirstDairySeparate", "Diet")
+                    self.diet_labels = self.model.doCalcsPlantsFirstDairySeparate()
             else:
                 if self.cboxIncludeDairy.isChecked():
-                    myDietLabels = myModel.doCalcsAnimalsFirstIncludeDairy()
-                    LaUtils.debug.log("doCalcsAnimalsFirstIncludeDairy", "Diet")
+                    self.diet_labels = self.model.doCalcsAnimalsFirstIncludeDairy()
                 else:
-                    myDietLabels = myModel.doCalcsAnimalsFirstDairySeparate()
-                    LaUtils.debug.log("doCalcsAnimalsFirstDairySeparate", "Diet")
+                    self.diet_labels = self.model.doCalcsAnimalsFirstDairySeparate()
 
-            # Get values from diet labels
-            myDairyMCalories = myDietLabels.dairyMCalories
-            myCropMCalories = myDietLabels.cropMCalories  
-            myAnimalMCalories = myDietLabels.animalMCalories
-            myWildAnimalMCalories = myDietLabels.wildAnimalMCalories
-            myWildPlantsMCalories = myDietLabels.wildPlantsMCalories
-            myDairyPortionPct = myDietLabels.dairyPortionPct
-            myTameMeatPortionPct = myDietLabels.tameMeatPortionPct
-            myCropsPortionPct = myDietLabels.cropsPortionPct
-            myWildAnimalPortionPct = myDietLabels.wildAnimalPortionPct
-            myWildPlantsPortionPct = myDietLabels.wildPlantsPortionPct
-            myPlantsPortionPct = myDietLabels.plantsPortionPct
-            myAnimalPortionPct = myDietLabels.animalPortionPct
-            myMCalsIndividualAnnual = myDietLabels.kiloCaloriesIndividualAnnual
-            myMCalsSettlementAnnual = myDietLabels.megaCaloriesSettlementAnnual
-            myDairySurplusMCalories = myDietLabels.dairySurplusMCalories
+            # Reconnect the signal from the current model instance (important if model instance changes)
+            # If self.model instance *doesn't* change, this reconnect isn't strictly needed here
+            # but doesn't hurt. If the doCalcs methods *returned* a new model, it would be crucial.
+            # Since they seem to modify the existing self.model, the initial connection in __init__ is likely sufficient.
+            # self.model.logCalculationStep.connect(self.logToAllChannels) # Reconnect (likely optional here)
 
-            # Update UI labels with calculated values
-            self.labelCaloriesIndividual.setText(str(myMCalsIndividualAnnual))
-            self.labelCaloriesSettlement.setText(str(myMCalsSettlementAnnual))
-            self.labelPortionPlants.setText(str(myPlantsPortionPct))
-            self.labelPortionMeat.setText(str(myAnimalPortionPct))
-            self.labelPortionAllDairy.setText(str(myDairyPortionPct))
-            self.labelPortionCrops.setText(str(myCropsPortionPct))
-            self.labelPortionTameMeat.setText(str(myTameMeatPortionPct))
-            self.labelPortionDairy.setText(str(myDairyPortionPct))
-            self.labelPortionWildMeat.setText(str(myWildAnimalPortionPct))
-            self.labelPortionWildPlants.setText(str(myWildPlantsPortionPct))
-            self.labelCaloriesCrops.setText(str(myCropMCalories))
-            self.labelCaloriesTameMeat.setText(str(myAnimalMCalories))
-            self.labelCaloriesDairy.setText(str(myDairyMCalories))
-            self.labelCaloriesWildMeat.setText(str(myWildAnimalMCalories))
-            self.labelCaloriesWildPlants.setText(str(myWildPlantsMCalories))
+            # Connect signals from the new diet labels object (if it emits signals)
+            self._connect_diet_label_signals(self.diet_labels)
 
-            # Update dairy surplus label
-            if myDairySurplusMCalories > 0:
-                self.labelDairySurplus.setText(f"Dairy Surplus produced! {myDairySurplusMCalories} MCalories")
-            else:
-                self.labelDairySurplus.setText("No Surplus Dairy Produced")
+            # Update calculations (this might trigger more logging)
+            self.updateCalculations()
 
         except Exception as e:
-            LaUtils.debug.log(f"Error in setDietLabels: {str(e)}", "Error")
+            from la.lib.lautils import LaUtils
+            LaUtils.debug.log(f"Error updating diet labels: {str(e)}", "Error")
             import traceback
             LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
 
@@ -845,6 +711,9 @@ class LaMainForm(LaMainFormBase):
                     diet_labels = self.model.doCalcsAnimalsFirstDairySeparate()
                     calculation_type = "Animals First (Dairy Separate)"
             
+            # Store the diet labels for future reference
+            self.model.lastDietLabels = diet_labels
+            
             # Generate the report
             self.tbReport.clear()
             
@@ -852,46 +721,28 @@ class LaMainForm(LaMainFormBase):
             self.tbReport.setHtml(f"<h1>LanduseAnalyst Calculation Results</h1>")
             self.tbReport.append(f"<h2>Calculation Method: {calculation_type}</h2>")
             
-            # Add basic model information using existing toHtml method
-            if hasattr(self.model, 'toHtml'):
-                self.tbReport.append(self.model.toHtml())
+            # Add basic model information
+            self.tbReport.append(self.model.toHtml())
             
-            # Add calculation results
-            self.tbReport.append("<h3>Calculation Results</h3>")
-            self.tbReport.append("<p>Diet Percentages:</p>")
-            self.tbReport.append(f"<ul>")
-            self.tbReport.append(f"<li>Animal Portion: {diet_labels.animalPortionPct:.1f}%</li>")
-            self.tbReport.append(f"<li>Plant Portion: {diet_labels.plantsPortionPct:.1f}%</li>")
-            self.tbReport.append(f"<li>Dairy Portion: {diet_labels.dairyPortionPct:.1f}%</li>")
-            self.tbReport.append(f"<li>Tame Meat: {diet_labels.tameMeatPortionPct:.1f}%</li>")
-            self.tbReport.append(f"<li>Wild Meat: {diet_labels.wildAnimalPortionPct:.1f}%</li>")
-            self.tbReport.append(f"<li>Crops: {diet_labels.cropsPortionPct:.1f}%</li>")
-            self.tbReport.append(f"<li>Wild Plants: {diet_labels.wildPlantsPortionPct:.1f}%</li>")
-            self.tbReport.append(f"</ul>")
-
-            self.tbReport.append("<p>Calorie Values (MCal):</p>")
-            self.tbReport.append(f"<ul>")
-            self.tbReport.append(f"<li>Dairy: {diet_labels.dairyMCalories:.1f}</li>")
-            self.tbReport.append(f"<li>Crops: {diet_labels.cropMCalories:.1f}</li>")
-            self.tbReport.append(f"<li>Tame Meat: {diet_labels.animalMCalories:.1f}</li>")
-            self.tbReport.append(f"<li>Wild Meat: {diet_labels.wildAnimalMCalories:.1f}</li>")
-            self.tbReport.append(f"<li>Wild Plants: {diet_labels.wildPlantsMCalories:.1f}</li>")
-            self.tbReport.append(f"</ul>")
-
-            self.tbReport.append("<p>Settlement Values:</p>")
-            self.tbReport.append(f"<ul>")
-            self.tbReport.append(f"<li>Individual Annual (kCal): {diet_labels.kiloCaloriesIndividualAnnual:.1f}</li>")
-            self.tbReport.append(f"<li>Settlement Annual (MCal): {diet_labels.megaCaloriesSettlementAnnual:.1f}</li>")
-            if diet_labels.dairySurplusMCalories > 0:
-                self.tbReport.append(f"<li>Dairy Surplus (MCal): {diet_labels.dairySurplusMCalories:.1f}</li>")
-            self.tbReport.append(f"</ul>")
+            # Add specific reports
+            self.tbReport.append("<hr>")
+            self.tbReport.append(self.model.toHtmlCalorieCropTargets())
+            self.tbReport.append("<hr>")
+            self.tbReport.append(self.model.toHtmlCalorieAnimalTargets())
+            self.tbReport.append("<hr>")
+            self.tbReport.append(self.model.toHtmlProductionCropTargets())
+            self.tbReport.append("<hr>")
+            self.tbReport.append(self.model.toHtmlProductionAnimalTargets())
+            self.tbReport.append("<hr>")
+            self.tbReport.append(self.model.toHtmlAreaCropTargets())
+            self.tbReport.append("<hr>")
+            self.tbReport.append(self.model.toHtmlAreaAnimalTargets())
             
             # Switch to the report tab
-            if hasattr(self, 'MainTabs'):
-                for i in range(self.MainTabs.count()):
-                    if self.MainTabs.tabText(i) == "Report":
-                        self.MainTabs.setCurrentIndex(i)
-                        break
+            if hasattr(self, 'tabWidgetMain'):
+                reportTabIndex = self.findTabIndex('Report')
+                if reportTabIndex >= 0:
+                    self.tabWidgetMain.setCurrentIndex(reportTabIndex)
             
             # Update status
             if hasattr(self, 'statusBar'):
@@ -904,57 +755,13 @@ class LaMainForm(LaMainFormBase):
             import traceback
             LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
             self.tbReport.setHtml(f"<h2>Error Running Model</h2><p>{str(e)}</p>")
-
-    @pyqtSlot(float)
-    def update_dairy_portion(self, value):
-        """Update dairy portion percentage label."""
-        self.labelPortionDairy.setText(f"{value:.1f}")
-        self.labelPortionAllDairy.setText(f"{value:.1f}")
-
-    @pyqtSlot(float)
-    def update_tame_meat_portion(self, value):
-        """Update tame meat portion percentage label."""
-        self.labelPortionTameMeat.setText(f"{value:.1f}")
-
-    @pyqtSlot(float)
-    def update_crops_portion(self, value):
-        """Update crops portion percentage label."""
-        self.labelPortionCrops.setText(f"{value:.1f}")
-
-    @pyqtSlot(float)
-    def update_wild_animal_portion(self, value):
-        """Update wild animal portion percentage label."""
-        self.labelPortionWildMeat.setText(f"{value:.1f}")
-
-    @pyqtSlot(float)
-    def update_wild_plants_portion(self, value):
-        """Update wild plants portion percentage label."""
-        self.labelPortionWildPlants.setText(f"{value:.1f}")
-
-    @pyqtSlot(float)
-    def update_plants_portion(self, value):
-        """Update total plants portion percentage label."""
-        self.labelPortionPlants.setText(f"{value:.1f}")
-
-    @pyqtSlot(float)
-    def update_animal_portion(self, value):
-        """Update total animal portion percentage label."""
-        self.labelPortionMeat.setText(f"{value:.1f}")
-
-    @pyqtSlot(float)
-    def update_calories_individual(self, value):
-        """Update individual calories label."""
-        self.labelCaloriesIndividual.setText(f"{value:.1f}")
-
-    @pyqtSlot(float)
-    def update_calories_settlement(self, value):
-        """Update settlement calories label."""
-        self.labelCaloriesSettlement.setText(f"{value:.1f}")
-
-    @pyqtSlot(float)
-    def update_dairy_surplus(self, value):
-        """Update dairy surplus label."""
-        if value > 0:
-            self.labelDairySurplus.setText(f"Dairy Surplus produced! {value:.1f} MCalories")
-        else:
-            self.labelDairySurplus.setText("No Surplus Dairy Produced")
+            
+    def findTabIndex(self, tabName):
+        """Find the index of a tab by name."""
+        if not hasattr(self, 'tabWidgetMain'):
+            return -1
+            
+        for i in range(self.tabWidgetMain.count()):
+            if self.tabWidgetMain.tabText(i) == tabName:
+                return i
+        return -1

@@ -61,11 +61,9 @@ class LaMainFormBase(QDialog, FORM_CLASS):
 
         self.setupUi(self)
 
-        # Enable checkboxes that start disabled in the UI until I revisit this and get it implemented
-        self.cboxIncludeDairy.setEnabled(False)
-        self.cboxIncludeDairy.setVisible(False)
-        self.cboxBaseOnPlants.setEnabled(False)
-        self.cboxBaseOnPlants.setVisible(False)
+        # Enable checkboxes that start disabled in the UI
+        self.cboxIncludeDairy.setEnabled(True)
+        self.cboxBaseOnPlants.setEnabled(True)
 
         # Initialize model with default values
         from la.lib.lamodel import LaModel
@@ -392,8 +390,8 @@ class LaMainFormBase(QDialog, FORM_CLASS):
 
             # Process each animal
             for myGuid, myAnimal in myAnimalsMap.items():
-                # Get the actual GUID string - handle both property and method cases properly
-                actualGuid = str(myAnimal.guid) if hasattr(myAnimal, 'guid') else str(myGuid)
+                # Get the actual GUID string
+                actualGuid = str(myAnimal.guid()) if callable(getattr(myAnimal, 'guid', None)) else str(myGuid)
 
                 LaUtils.debug.log(f"Processing animal: {myAnimal.name} (GUID: {actualGuid})", "Animals")
 
@@ -642,43 +640,15 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             import traceback
             LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
 
-    def updateDietLabels(self, diet_labels):
-        """Update all diet-related widgets with values from diet_labels."""
-        try:
-            if not diet_labels:
-                return
+    def updateDietLabels(self, dairy_portion_pct, tame_meat_portion_pct, crops_portion_pct):
+        """
+        Update diet labels based on the given portion percentages.
+        """
+        self._dairyPortionPct = dairy_portion_pct
+        self._tameMeatPortionPct = tame_meat_portion_pct
+        self._cropsPortionPct = crops_portion_pct
 
-            # Update percentage labels
-            self.labelPortionMeat.setText(f"{diet_labels.animalPortionPct:.1f}")
-            self.labelPortionCrops.setText(f"{diet_labels.plantsPortionPct:.1f}")
-            self.labelPortionAllDairy.setText(f"{diet_labels.dairyPortionPct:.1f}")
-            self.labelPortionDairy.setText(f"{diet_labels.dairyPortionPct:.1f}")
-            self.labelPortionTameMeat.setText(f"{diet_labels.tameMeatPortionPct:.1f}")
-            self.labelPortionWildMeat.setText(f"{diet_labels.wildAnimalPortionPct:.1f}")
-            self.labelPortionWildPlants.setText(f"{diet_labels.wildPlantsPortionPct:.1f}")
-
-            # Update calorie labels
-            self.labelCaloriesCrops.setText(f"{diet_labels.cropMCalories:.1f}")
-            self.labelCaloriesTameMeat.setText(f"{diet_labels.animalMCalories:.1f}")
-            self.labelCaloriesDairy.setText(f"{diet_labels.dairyMCalories:.1f}")
-            self.labelCaloriesWildMeat.setText(f"{diet_labels.wildAnimalMCalories:.1f}")
-            self.labelCaloriesWildPlants.setText(f"{diet_labels.wildPlantsMCalories:.1f}")
-
-            # Update individual and settlement calorie labels using the correct property names
-            self.labelCaloriesIndividual.setText(f"{diet_labels.kiloCaloriesIndividualAnnual:.1f}")
-            self.labelCaloriesSettlement.setText(f"{diet_labels.megaCaloriesSettlementAnnual:.1f}")
-
-            # Update dairy surplus label
-            if diet_labels.dairySurplusMCalories > 0:
-                self.labelDairySurplus.setText(f"Dairy Surplus produced! {diet_labels.dairySurplusMCalories:.1f} MCalories")
-            else:
-                self.labelDairySurplus.setText("No Surplus Dairy Produced")
-
-        except Exception as e:
-            from la.lib.lautils import LaUtils
-            LaUtils.debug.log(f"Error updating diet labels: {str(e)}", "Error")
-            import traceback
-            LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
+        LaUtils.debug.log(f"Updated diet labels: Dairy {self._dairyPortionPct}, Tame Meat {self._tameMeatPortionPct}, Crops {self._cropsPortionPct}", "Diet")
 
     def setComboToDefault(self, combo, default):
         index = combo.findData(default)
@@ -1544,7 +1514,6 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         Args:
             crop: The crop object to calculate values for
         """
-        from la.lib.ladietlabels import LaDietLabels # Ensure this is imported
         try:
             # Get the crop GUID
             cropGuid = str(crop.guid) # Ensure string
@@ -1578,7 +1547,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             self.model.crops = mySelectedCropsDict
 
             # Calculate diet labels based on settings
-            myDietLabels = LaDietLabels() # Ensure this is defined
+            myDietLabels = None
             if self.model.baseOnPlants:
                 if self.model.includeDairy:
                     myDietLabels = self.model.doCalcsPlantsFirstIncludeDairy()
@@ -1592,7 +1561,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
 
             # Get report from calculations
             if myDietLabels:
-                report_map = myDietLabels.cropCalcsReportMap
+                report_map = myDietLabels._cropCalcsReportMap
                 if cropGuid in report_map:
                     report_pair = report_map[cropGuid]
                     report_string = report_pair[0]
@@ -1767,8 +1736,11 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             # Get the current area units
             selected_area_unit = AreaUnits.Dunum if self.cbAreaUnits.currentText() == "Dunum" else AreaUnits.Hectare
             
-            # Update the model's common land value directly
-            self.model.commonLandValue = value
+            # Update the model with the new value
+            if hasattr(self.model, 'setCommonLandValue'):
+                self.model.setCommonLandValue(value, selected_area_unit)
+            elif hasattr(self.model, 'commonLandValue'):
+                self.model.commonLandValue = value
             
             # Recalculate with the new value
             self.setDietLabels()
