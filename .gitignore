@@ -131,3 +131,4 @@ dmypy.json
 .qt_for_python
 la/gui/__pycache__/
 la/tmpDebugMessages.txt
+cppArchive/src/ui/ui_lacropparametermanagerbase.h

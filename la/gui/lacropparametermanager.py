@@ -205,6 +205,7 @@ class LaCropParameterManager(LaCropParameterManagerBase):
         self.sbFallowRatio.setValue(float(self.mCropParameter.fallowRatio))
         self.sbSpoilage.setValue(int(self.mCropParameter.spoilage))
         self.sbReseed.setValue(int(self.mCropParameter.reseed))
+        self.grpCropRotation.setChecked(self.mCropParameter.cropRotation)
         # Remove float conversion since fallowValue is already an integer
         self.sbFallowValue.setValue(self.mCropParameter.fallowValue)
 

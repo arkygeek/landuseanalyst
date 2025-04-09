@@ -704,13 +704,13 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
             self._fleece = value
             self.fleeceChanged.emit(value)
 
-    @pyqtProperty(float, notify=fleeceWeightKgChanged)
-    def fleeceWeightKg(self) -> float: # type: ignore
+    @pyqtProperty(int, notify=fleeceWeightKgChanged)
+    def fleeceWeightKg(self) -> int: # type: ignore
         """Get the animal's fleece weight value."""
-        return cast(float, self._fleeceWeightKg)
+        return cast(int, self._fleeceWeightKg)
 
     @fleeceWeightKg.setter
-    def fleeceWeightKg(self, value: float) -> None:
+    def fleeceWeightKg(self, value: int) -> None:
         """Set the animal's fleece weight value.
 
         Args:
@@ -763,77 +763,59 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
             self.guid = myTopElement.attribute("guid") # guid setter handles None
             LaUtils.debug.log(f"Loading animal with GUID in laanimal.py: {self.guid}")
 
-            # Helper to convert text to int, returning 0 on failure (like C++ toInt())
-            def safe_int(text: str) -> int:
-                try:
-                    # Explicitly handle empty string like Qt's toInt() which returns 0
-                    return int(text) if text else 0
-                except (ValueError, TypeError):
-                    return 0 # Return 0 on conversion error
-
-            # Helper to convert text to float, returning 0.0 on failure
-            def safe_float(text: str) -> float:
-                try:
-                    # Explicitly handle empty string like Qt's toFloat() which returns 0.0
-                    return float(text) if text else 0.0
-                except (ValueError, TypeError):
-                    return 0.0 # Return 0.0 on conversion error
-
-            # Helper to convert text to bool (1=True, else False)
-            def safe_bool(text: str) -> bool:
-                # Conversion to int handles empty string returning 0 -> False
-                return safe_int(text) == 1
 
             # Basic info - try both 'name' and 'n' tags for compatibility
             # Mimic C++: get text (empty if null), then decode
             name_element = myTopElement.firstChildElement("name")
             if name_element.isNull():
                 name_element = myTopElement.firstChildElement("n") # Fallback
-            self._name = LaUtils.xmlDecode(name_element.text()) # Handles null element returning empty text
+            self._name = LaUtils.xmlDecode(myTopElement.firstChildElement("name").text()) # Handles null element returning empty text
             self._description = LaUtils.xmlDecode(myTopElement.firstChildElement("description").text())
             LaUtils.debug.log(f"Loaded animal name: {self._name}")
 
-            # Meat production - remove default values
-            self._meatFoodValue = safe_int(myTopElement.firstChildElement("meatFoodValue").text())
-            self._usableMeat = safe_int(myTopElement.firstChildElement("usableMeat").text())
-            self._killWeight = safe_int(myTopElement.firstChildElement("killWeight").text())
-            self._adultWeight = safe_int(myTopElement.firstChildElement("adultWeight").text())
-            self._growTime = safe_int(myTopElement.firstChildElement("growTime").text())
-            self._deathRate = safe_int(myTopElement.firstChildElement("deathRate").text())
+            # Meat production
+            self._meatFoodValue = int(myTopElement.firstChildElement("meatFoodValue").text())
+            self._usableMeat = int(myTopElement.firstChildElement("usableMeat").text())
+            self._killWeight = int(myTopElement.firstChildElement("killWeight").text())
+            self._adultWeight = int(myTopElement.firstChildElement("adultWeight").text())
+            self._growTime = int(myTopElement.firstChildElement("growTime").text())
+            self._deathRate = int(myTopElement.firstChildElement("deathRate").text())
 
-            # Reproduction - remove default values
-            self._conceptionEfficiency = safe_int(myTopElement.firstChildElement("conceptionEfficiency").text())
-            self._femalesToMales = safe_int(myTopElement.firstChildElement("femalesToMales").text())
-            self._sexualMaturity = safe_int(myTopElement.firstChildElement("sexualMaturity").text())
-            self._breedingExpectancy = safe_int(myTopElement.firstChildElement("breedingExpectancy").text())
-            self._youngPerBirth = safe_int(myTopElement.firstChildElement("youngPerBirth").text())
-            self._gestationTime = safe_int(myTopElement.firstChildElement("gestationTime").text())
-            self._estrousCycle = safe_int(myTopElement.firstChildElement("estrousCycle").text())
+            # Reproduction
+            self._conceptionEfficiency = int(myTopElement.firstChildElement("conceptionEfficiency").text())
+            self._femalesToMales = int(myTopElement.firstChildElement("femalesToMales").text())
+            self._sexualMaturity = int(myTopElement.firstChildElement("sexualMaturity").text())
+            self._breedingExpectancy = int(myTopElement.firstChildElement("breedingExpectancy").text())
+            self._youngPerBirth = int(myTopElement.firstChildElement("youngPerBirth").text())
+            self._gestationTime = int(myTopElement.firstChildElement("gestationTime").text())
+            self._estrousCycle = int(myTopElement.firstChildElement("estrousCycle").text())
 
-            # Early life - remove default values
-            self._weaningAge = safe_int(myTopElement.firstChildElement("weaningAge").text())
-            self._weaningWeight = safe_int(myTopElement.firstChildElement("weaningWeight").text())
+            # Early life
+            self._weaningAge = int(myTopElement.firstChildElement("weaningAge").text())
+            self._weaningWeight = int(myTopElement.firstChildElement("weaningWeight").text())
 
             # Energy requirements type
             myFeedEnergyType = myTopElement.firstChildElement("feedEnergyType").text()
             # Default to KCalories if not TDN or element missing/empty
             self._feedEnergyType = LaEnergyType.TDN if myFeedEnergyType == "TDN" else LaEnergyType.KCalories
 
-            # Energy requirements - remove default values
-            self._gestating = safe_int(myTopElement.firstChildElement("gestating").text())
-            self._lactating = safe_int(myTopElement.firstChildElement("lactating").text())
-            self._maintenance = safe_int(myTopElement.firstChildElement("maintenance").text())
-            self._juvenile = safe_int(myTopElement.firstChildElement("juvenile").text())
+            # Energy requirements
+            self._gestating = int(myTopElement.firstChildElement("gestating").text())
+            self._lactating = int(myTopElement.firstChildElement("lactating").text())
+            self._maintenance = int(myTopElement.firstChildElement("maintenance").text())
+            self._juvenile = int(myTopElement.firstChildElement("juvenile").text())
 
-            # Dairy - remove default values
-            self._milk = safe_bool(myTopElement.firstChildElement("milk").text())
-            self._milkGramsPerDay = safe_int(myTopElement.firstChildElement("milkGramsPerDay").text())
-            self._milkFoodValue = safe_int(myTopElement.firstChildElement("milkFoodValue").text())
-            self._lactationTime = safe_int(myTopElement.firstChildElement("lactationTime").text())
+            # Dairy
+            milk_text = myTopElement.firstChildElement("milk").text().lower()
+            self._milk = milk_text == "true"
+            self._milkGramsPerDay = int(myTopElement.firstChildElement("milkGramsPerDay").text())
+            self._milkFoodValue = int(myTopElement.firstChildElement("milkFoodValue").text())
+            self._lactationTime = int(myTopElement.firstChildElement("lactationTime").text())
 
-            # Fiber - remove default values
-            self._fleece = safe_bool(myTopElement.firstChildElement("fleece").text())
-            self._fleeceWeightKg = safe_float(myTopElement.firstChildElement("fleeceWeightKg").text())
+            # Fiber
+            fleece_text = myTopElement.firstChildElement("fleece").text().lower()
+            self._fleece = fleece_text == "true"
+            self._fleeceWeightKg = float(myTopElement.firstChildElement("fleeceWeightKg").text())
 
             # Image - Store the full image path correctly
             image_file_text = LaUtils.xmlDecode(myTopElement.firstChildElement("imageFile").text())
@@ -896,10 +878,10 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
         myString += f'  <estrousCycle>{self._estrousCycle}</estrousCycle>\n'
         myString += f'  <lactationTime>{self._lactationTime}</lactationTime>\n'
         # Output booleans as 0/1 like C++ QString::number(bool)
-        myString += f'  <milk>{1 if self._milk else 0}</milk>\n'
+        myString += f'  <milk>{"True" if self._milk else "False"}</milk>\n'
         myString += f'  <milkGramsPerDay>{self._milkGramsPerDay}</milkGramsPerDay>\n'
         myString += f'  <milkFoodValue>{self._milkFoodValue}</milkFoodValue>\n'
-        myString += f'  <fleece>{1 if self._fleece else 0}</fleece>\n'
+        myString += f'  <fleece>{"True" if self._fleece else "False"}</fleece>\n'
         # Outputting float for fleeceWeightKg as defined in Python property, read by fromXml
         # C++ version stores int, but Python uses float.
         myString += f'  <fleeceWeightKg>{self._fleeceWeightKg}</fleeceWeightKg>\n'
