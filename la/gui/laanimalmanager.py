@@ -256,7 +256,7 @@ class LaAnimalManager(LaAnimalManagerBase):
         self.sbDeathRate.setValue(self.animal.deathRate)
 
         # Handle feed energy type - get the actual enum value
-        energy_type = self.animal._feedEnergyType  # Access the internal value directly
+        energy_type = self.animal.mFeedEnergyType  # Access the internal value directly
         try:
             if isinstance(energy_type, LaEnergyType):
                 energy_index = energy_type.value
@@ -384,7 +384,7 @@ class LaAnimalManager(LaAnimalManagerBase):
         self.animal.deathRate = self.sbDeathRate.value()
 
         # Set feed energy type using internal attribute
-        self.animal._feedEnergyType = LaEnergyType(self.cbFeedEnergyType.currentIndex())
+        self.animal.mFeedEnergyType = LaEnergyType(self.cbFeedEnergyType.currentIndex())
 
         # Set feed energy requirements - missing in original implementation
         self.animal.gestating = self.sbEnergyForPregnant.value()
