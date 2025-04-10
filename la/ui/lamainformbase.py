@@ -1561,7 +1561,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
 
             # Get report from calculations
             if myDietLabels:
-                report_map = myDietLabels._cropCalcsReportMap
+                report_map = myDietLabels.mCropCalcsReportMap
                 if cropGuid in report_map:
                     report_pair = report_map[cropGuid]
                     report_string = report_pair[0]
@@ -1638,7 +1638,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
 
                 # Get report from calculations
                 if diet_labels and hasattr(diet_labels, '_animalCalcsReportMap'):
-                    report_map = diet_labels._animalCalcsReportMap
+                    report_map = diet_labels.mAnimalCalcsReportMap
                     if animalGuid in report_map:
                         report_pair = report_map[animalGuid]
                         report_string = report_pair[0]
