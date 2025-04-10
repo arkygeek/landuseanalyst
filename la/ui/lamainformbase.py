@@ -23,7 +23,6 @@ on a multitude of demographic and dietary inputs.
 import os
 
 # region imports
-from la.lib.la import AreaUnits, EnergyType
 from qgis.PyQt.QtWidgets import QListWidgetItem, QTableWidgetItem, QComboBox, QCheckBox
 from qgis.PyQt import uic
 from qgis.PyQt.QtWidgets import QDialog
@@ -37,8 +36,13 @@ from qgis.PyQt.QtCore import QFile, QTextStream
 from qgis.PyQt.QtGui import QIcon, QPixmap
 
 from la.lib.lautils import LaUtils
+from la.lib.ladietlabels import LaDietLabels
 
 # Add imports for implementation classes
+from la.lib.lacrop import LaCrop
+from la.lib.laanimal import LaAnimal
+from la.lib.laanimalparameter import LaAnimalParameter
+from la.lib.la import AreaUnits, EnergyType
 from la.gui.lacropmanager import LaCropManager
 from la.gui.lacropparametermanager import LaCropParameterManager
 from la.gui.laanimalmanager import LaAnimalManager
@@ -250,91 +254,179 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         self.setDietLabels()  # Recalculates model to update the diet labels
 
     def setDietLabels(self):
-        """Update the diet information display including visual indicators."""
+        """
+        Update the model from the UI, perform diet calculations, and update
+        the diet information display labels. Mirrors C++ LaMainForm::setDietLabels.
+        """
         try:
-            # Calculate basic percentages from slider values
-            myAnimalPercent = self.sliderDiet.value()
-            myPlantPercent = 100 - myAnimalPercent
+            LaUtils.debug.log("Starting setDietLabels", "Diet")
 
-            myWildAnimalPercent = self.sliderMeat.value()
-            myTameAnimalPercent = 100 - myWildAnimalPercent
+            # --- 1. Update self.model thoroughly from ALL relevant UI elements ---
+            # (This replaces scattered updates and ensures model reflects current UI)
+            if not hasattr(self, 'model'):
+                LaUtils.debug.log("Model not initialized. Cannot set diet labels.", "Error")
+                return
 
-            myWildPlantPercent = self.sliderCrop.value()
-            myTamePlantPercent = 100 - myWildPlantPercent
+            # Site Info / Basic Params
+            self.model.name = self.lineEditSiteName.text() # Assuming lineEditSiteName exists
+            self.model.population = self.sbPopulation.value()
+            self.model.period = self.lineEditPeriod.text() # Assuming lineEditPeriod exists
+            self.model.caloriesPerPersonDaily = self.sbDailyCalories.value()
 
-            # Calculate absolute percentages
-            myAbsoluteWildAnimalPercent = (myAnimalPercent * myWildAnimalPercent) / 100.0
-            myAbsoluteTameAnimalPercent = (myAnimalPercent * myTameAnimalPercent) / 100.0
-            myAbsoluteWildPlantPercent = (myPlantPercent * myWildPlantPercent) / 100.0
-            myAbsoluteTamePlantPercent = (myPlantPercent * myTamePlantPercent) / 100.0
+            # Location / Distance (Assuming these widgets exist based on C++ code)
+            # Add try-except for text conversions that might fail
+            try:
+                self.model.easting = int(self.lineEditEasting.text() or 0) # type: ignore
+            except ValueError: self.model.easting = 0 # type: ignore
+            try:
+                self.model.northing = int(self.lineEditNorthing.text() or 0) # type: ignore
+            except ValueError: self.model.northing = 0 # type: ignore
+            # Assuming radio buttons exist: radioButtonEuclidean, radioButtonWalkingTime, radioButtonPathDistance
+            # self.model.euclideanDistance = self.radioButtonEuclidean.isChecked()
+            # self.model.walkingTime = self.radioButtonWalkingTime.isChecked()
+            # self.model.pathDistance = self.radioButtonPathDistance.isChecked()
+            # Assuming sbModelPrecision exists
+            # self.model.precision = self.sbModelPrecision.value()
 
-            # Update basic percentage labels
-            self.labelAnimalCheck.setText("100%" if myAnimalPercent + myPlantPercent == 100 else f"{myAnimalPercent + myPlantPercent}%")
-            self.labelCropCheck.setText("100%" if myWildPlantPercent + myTamePlantPercent == 100 else f"{myWildPlantPercent + myTamePlantPercent}%")
+            # Diet Sliders
+            self.model.dietPercent = self.sliderDiet.value()
+            self.model.meatPercent = self.sliderMeat.value() # This corresponds to TAME meat % in C++ slider logic, but WILD meat in model property logic? Check C++ UI vs Model property link. Let's assume model property is WILD animal %.
+            self.model.percentOfDietThatIsFromCrops = self.sliderCrop.value() # This corresponds to TAME crop % in C++ slider logic, but WILD plant in model property logic? Check C++ UI vs Model property link. Let's assume model property is WILD plant %.
 
-            # Update the model's diet percentages
-            if hasattr(self, 'model'):
-                self.model.dietPercent = myAnimalPercent
-                self.model.meatPercent = myWildAnimalPercent
-                self.model.percentOfDietThatIsFromCrops = myWildPlantPercent
+            # Dairy Settings
+            self.model.dairyUtilisation = self.sbDairyUtilisation.value()
+            self.model.includeDairy = self.cboxIncludeDairy.isChecked()
+            self.model.limitDairy = self.cboxLimitDairy.isChecked()
+            self.model.limitDairyPercent = self.sbLimitDairyPercent.value()
 
-                # Force recalculation of diet values
-                if hasattr(self.model, 'baseOnPlants') and hasattr(self.model, 'includeDairy'):
-                    if self.model.baseOnPlants:
-                        if self.model.includeDairy:
-                            dietLabels = self.model.doCalcsPlantsFirstIncludeDairy()
-                        else:
-                            dietLabels = self.model.doCalcsPlantsFirstDairySeparate()
-                    else:
-                        if self.model.includeDairy:
-                            dietLabels = self.model.doCalcsAnimalsFirstIncludeDairy()
-                        else:
-                            dietLabels = self.model.doCalcsAnimalsFirstDairySeparate()
+            # Calculation Base
+            self.model.baseOnPlants = self.cboxBaseOnPlants.isChecked()
 
-                    # Update all labels with calculated values
-                    self.labelPortionMeat.setText(f"{dietLabels.animalPortionPct:.1f}")
-                    self.labelPortionCrops.setText(f"{dietLabels.plantsPortionPct:.1f}")
-                    self.labelPortionAllDairy.setText(f"{dietLabels.dairyPortionPct:.1f}")
-                    self.labelPortionDairy.setText(f"{dietLabels.dairyPortionPct:.1f}")
-                    self.labelPortionTameMeat.setText(f"{dietLabels.tameMeatPortionPct:.1f}")
-                    self.labelPortionWildMeat.setText(f"{dietLabels.wildAnimalPortionPct:.1f}")
-                    self.labelPortionWildPlants.setText(f"{dietLabels.wildPlantsPortionPct:.1f}")
+            # Common Land Settings
+            selected_area_unit_text = self.cbAreaUnits.currentText()
+            myAreaUnits = AreaUnits.Dunum if selected_area_unit_text == "Dunum" else AreaUnits.Hectare
+            self.model.commonLandAreaUnits = myAreaUnits # type: ignore
+            # Ensure the setter handles conversion if necessary, or pass units
+            # Assuming commonLandValue property setter expects the raw value and units are handled internally or via separate property
+            myCommonRasterValue = self.sbCommonRasterValue.value()
+            self.model.commonLandValue = int(myCommonRasterValue) # type: ignore
 
-                    # Update calorie labels
-                    self.labelCaloriesCrops.setText(f"{dietLabels.cropMCalories:.1f}")
-                    self.labelCaloriesTameMeat.setText(f"{dietLabels.animalMCalories:.1f}")
-                    self.labelCaloriesDairy.setText(f"{dietLabels.dairyMCalories:.1f}")
-                    self.labelCaloriesWildMeat.setText(f"{dietLabels.wildAnimalMCalories:.1f}")
-                    self.labelCaloriesWildPlants.setText(f"{dietLabels.wildPlantsMCalories:.1f}")
+            # Energy Type (Assuming this maps to model's specificLandEnergyType based on C++)
+            mySelectedEnergyText = self.cbCommonLandEnergyType.currentText()
+            myEnergyType: EnergyType = EnergyType.KCalories if mySelectedEnergyText == "KCalories" else EnergyType.TDN
+            self.model.specificLandEnergyType = myEnergyType # type: ignore
 
-                    # Update settlement and individual calorie labels
-                    self.labelCaloriesIndividual.setText(f"{dietLabels.kiloCaloriesIndividualAnnual:.1f}")
-                    self.labelCaloriesSettlement.setText(f"{dietLabels.megaCaloriesSettlementAnnual:.1f}")
+            LaUtils.debug.log("Model updated from UI elements", "Diet")
 
-                    # Update dairy surplus if available
-                    self.labelDairySurplus.setText(f"{dietLabels.dairySurplusMCalories:.1f}")
+            # --- 2. Collect Selected Animals and Crops ---
+            # Build temporary dictionaries of selected items to pass to the model
+            mySelectedAnimalsMap = {}
+            if hasattr(self, 'mAnimalsMap'):
+                 for myAnimalGuid, (myAnimalIsSelected, myParamGuid) in self.mAnimalsMap.items():
+                     if myAnimalIsSelected:
+                         # Ensure GUIDs are strings, handle potential None param_guid
+                         mySelectedAnimalsMap[str(myAnimalGuid)] = str(myParamGuid) if myParamGuid else ""
+            else:
+                 LaUtils.debug.log("mAnimalsMap not found", "Warning")
+
+            mySelectedCropsMap = {}
+            if hasattr(self, 'mCropsMap'):
+                for myCropGuid, (myCropIsSelected, myParamGuid) in self.mCropsMap.items():
+                    if myCropIsSelected:
+                        # Ensure GUIDs are strings, handle potential None myParamGuid
+                        mySelectedCropsMap[str(myCropGuid)] = str(myParamGuid) if myParamGuid else ""
+            else:
+                LaUtils.debug.log("mCropsMap not found", "Warning")
+
+            # Set the collected selections on the model
+            self.model.animals = mySelectedAnimalsMap # type: ignore
+            self.model.crops = mySelectedCropsMap # type: ignore
+            LaUtils.debug.log(f"Selected Animals: {len(mySelectedAnimalsMap)}, Selected Crops: {len(mySelectedCropsMap)}", "Diet")
+
+            # --- 3. Guard Condition: Check Percentages ---
+            # Ensure the percentage check labels exist before accessing their text
+            myAnimalCheckText = ""
+            myCropCheckText = ""
+            if hasattr(self, 'labelAnimalCheck'):
+                myAnimalCheckText = self.labelAnimalCheck.text()
+            if hasattr(self, 'labelCropCheck'):
+                myCropCheckText = self.labelCropCheck.text()
+
+            # Use exact string comparison including '%'
+            if myAnimalCheckText != "100.0%" or myCropCheckText != "100.0%":
+                 LaUtils.debug.log(f"Skipping calculation: Animal%={myAnimalCheckText}, Crop%={myCropCheckText}", "Diet")
+                 # Optionally clear result labels or leave them as they are
+                 return # Exit early, mirroring C++ logic
+
+            # --- 4. Select and Run Calculation Method ---
+            dietLabels = LaDietLabels() # Initialize empty labels
+            if self.model.baseOnPlants:
+                if self.model.includeDairy:
+                    LaUtils.debug.log("Running doCalcsPlantsFirstIncludeDairy", "Diet")
+                    dietLabels = self.model.doCalcsPlantsFirstIncludeDairy()
                 else:
-                    # Fallback to simple percentages if model calculation is unavailable
-                    self.labelPortionMeat.setText(f"{myAnimalPercent:.1f}")
-                    self.labelPortionCrops.setText(f"{myPlantPercent:.1f}")
-                    self.labelPortionAllDairy.setText("0.0%")
-                    self.labelPortionDairy.setText("0.0%")
-                    self.labelPortionTameMeat.setText(f"{myAbsoluteTameAnimalPercent:.1f}")
-                    self.labelPortionWildMeat.setText(f"{myAbsoluteWildAnimalPercent:.1f}")
-                    self.labelPortionWildPlants.setText(f"{myAbsoluteWildPlantPercent:.1f}")
+                    LaUtils.debug.log("Running doCalcsPlantsFirstDairySeparate", "Diet")
+                    dietLabels = self.model.doCalcsPlantsFirstDairySeparate()
+            else:
+                if self.model.includeDairy:
+                    LaUtils.debug.log("Running doCalcsAnimalsFirstIncludeDairy", "Diet")
+                    # NOTE: C++ calls doCalcsAnimalsFirstIncludeDiary (typo in original?)
+                    # Assuming Python method is doCalcsAnimalsFirstIncludeDairy
+                    dietLabels = self.model.doCalcsAnimalsFirstIncludeDairy()
+                else:
+                    LaUtils.debug.log("Running doCalcsAnimalsFirstDairySeparate", "Diet")
+                    dietLabels = self.model.doCalcsAnimalsFirstDairySeparate()
 
-                # Log debug information
-                from la.lib.lautils import LaUtils
-                LaUtils.debug.log("Diet labels updated", "Diet")
-                LaUtils.debug.log(f"Animal: {myAnimalPercent}%, Plant: {myPlantPercent}%", "Diet")
-                LaUtils.debug.log(f"Wild Animal: {myAbsoluteWildAnimalPercent:.1f}%, Tame Animal: {myAbsoluteTameAnimalPercent:.1f}%", "Diet")
-                LaUtils.debug.log(f"Wild Plant: {myAbsoluteWildPlantPercent:.1f}%, Tame Plant: {myAbsoluteTamePlantPercent:.1f}%", "Diet")
+            # --- 5. Update UI Labels with Results ---
+            if dietLabels: # Check if calculation returned valid labels
+                # Use .1f formatting to match the previous Python version's precision
+                # If C++ doesn't specify precision, adjust as needed.
+                # Settlement / Individual Cals
+                self.labelCaloriesIndividual.setText(f"{dietLabels.kiloCaloriesIndividualAnnual:.1f}")
+                self.labelCaloriesSettlement.setText(f"{dietLabels.megaCaloriesSettlementAnnual:.1f}")
 
+                # Overall Portions
+                self.labelPortionPlants.setText(f"{dietLabels.plantsPortionPct:.1f}") # Assuming labelPortionPlants exists
+                self.labelPortionMeat.setText(f"{dietLabels.animalPortionPct:.1f}")
+                self.labelPortionAllDairy.setText(f"{dietLabels.dairyPortionPct:.1f}") # Overall dairy
+
+                # Detailed Portions
+                self.labelPortionCrops.setText(f"{dietLabels.cropsPortionPct:.1f}") # Tame Crops
+                self.labelPortionTameMeat.setText(f"{dietLabels.tameMeatPortionPct:.1f}")
+                self.labelPortionDairy.setText(f"{dietLabels.dairyPortionPct:.1f}") # Dairy again (matches C++)
+
+                self.labelPortionWildMeat.setText(f"{dietLabels.wildAnimalPortionPct:.1f}")
+                self.labelPortionWildPlants.setText(f"{dietLabels.wildPlantsPortionPct:.1f}")
+
+                # Detailed Calories (MCals)
+                self.labelCaloriesCrops.setText(f"{dietLabels.cropMCalories:.1f}")
+                self.labelCaloriesTameMeat.setText(f"{dietLabels.animalMCalories:.1f}")
+                self.labelCaloriesDairy.setText(f"{dietLabels.dairyMCalories:.1f}")
+                self.labelCaloriesWildMeat.setText(f"{dietLabels.wildAnimalMCalories:.1f}")
+                self.labelCaloriesWildPlants.setText(f"{dietLabels.wildPlantsMCalories:.1f}")
+
+                # Dairy Surplus Label (Conditional Text)
+                if dietLabels.dairySurplusMCalories > 0.0: # type: ignore
+                    self.labelDairySurplus.setText(f"Dairy Surplus produced! {dietLabels.dairySurplusMCalories:.1f} MCalories")
+                else:
+                    self.labelDairySurplus.setText("No Surplus Dairy Produced")
+
+                LaUtils.debug.log("Diet labels updated with calculation results", "Diet")
+            else:
+                LaUtils.debug.log("Calculation did not return valid DietLabels object.", "Warning")
+                # Optionally clear labels or display an error message
+
+        except AttributeError as ae:
+             # Catch missing attributes (e.g., UI elements not found)
+             LaUtils.debug.log(f"Missing attribute during setDietLabels: {str(ae)}", "Error")
+             import traceback
+             LaUtils.debug.log(f"Traceback: {traceback.format_exc()}", "Error")
+             # Optionally display error in UI
         except Exception as e:
-            from la.lib.lautils import LaUtils
-            LaUtils.debug.log(f"Error updating diet labels: {str(e)}", "Error")
+            LaUtils.debug.log(f"Error during setDietLabels: {str(e)}", "Error")
             import traceback
             LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
+            # Optionally display error in UI
 
     def setModel(self, *args):
         from la.lib.la import AreaUnits
@@ -950,7 +1042,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         isChecked = self.cbDebug.isChecked()
 
         # Update the debug logger first
-        LaUtils.debug.set_enabled(isChecked)
+        LaUtils.debug.setEnabled(isChecked)
 
         try:
             # Import and use our debug dialog
@@ -1129,14 +1221,14 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         # Log the updated percentages regardless of icon status
         LaUtils.debug.log(f"Total percentages updated: Animals {animalTotal:.1f}%, Crops {cropTotal:.1f}%", "Calculation")
 
-    def showSelectedAnimalDetails(self, row):
+    def showSelectedAnimalDetails(self, theRow):
         """Show details for the selected animal."""
-        if row < 0 or row >= self.tblAnimals.rowCount():
+        if theRow < 0 or theRow >= self.tblAnimals.rowCount():
             return
 
         try:
             # Get the GUID from the selected row
-            nameItem = self.tblAnimals.item(row, 1)
+            nameItem = self.tblAnimals.item(theRow, 1)
             if not nameItem:
                 LaUtils.debug.log("No name item found", "Error")
                 return
@@ -1158,7 +1250,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             LaUtils.debug.log(f"Found animal: {animal.name}", "UI")
 
             # Get parameter from combobox
-            paramCombo = self.tblAnimals.cellWidget(row, 2)
+            paramCombo = self.tblAnimals.cellWidget(theRow, 2)
             if paramCombo:
                 paramGuid = paramCombo.currentData()
                 if paramGuid:
@@ -1398,7 +1490,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
 
         return html
 
-    def generateAnimalDefinitionReport(self, animal, animalParameter):
+    def generateAnimalDefinitionReport(self, theAnimal: LaAnimal, theAnimalParameter: LaAnimalParameter):
         """Generate an HTML report showing animal details and animal parameter details.
 
         Args:
@@ -1415,43 +1507,43 @@ class LaMainFormBase(QDialog, FORM_CLASS):
 
         # Left column: Animal details
         html += "<td style=\"vertical-align:top; width:50%;\">"
-        if animal:
-            html += animal.toHtml()
+        if theAnimal:
+            html += theAnimal.toHtml()
         html += "</td>"
 
         # Right column: Parameter details
         html += "<td style=\"vertical-align:top; width:50%;\">"
-        if animalParameter:
+        if theAnimalParameter:
             # Add parameter details header
-            html += f"<h3>Parameters for {animal.name}</h3>"
+            html += f"<h3>Parameters for {theAnimal.name}</h3>"
             html += "<table>"
 
             # Add parameter details
-            html += f"<tr><td><b>Parameter Name:</b></td><td>{animalParameter.name}</td></tr>"
-            html += f"<tr><td><b>Description:</b></td><td>{animalParameter.description}</td></tr>"
-            html += f"<tr><td><b>Portion of Tame Meat Diet:</b></td><td>{animalParameter.percentTameMeat}%</td></tr>"
+            html += f"<tr><td><b>Parameter Name:</b></td><td>{theAnimalParameter.name}</td></tr>"
+            html += f"<tr><td><b>Description:</b></td><td>{theAnimalParameter.description}</td></tr>"
+            html += f"<tr><td><b>Portion of Tame Meat Diet:</b></td><td>{theAnimalParameter.percentTameMeat}%</td></tr>"
 
             # Add grazing land information
-            if hasattr(animalParameter, 'useCommonGrazingLand'):
-                commonLandText = "Yes" if animalParameter.useCommonGrazingLand else "No"
+            if hasattr(theAnimalParameter, 'useCommonGrazingLand'):
+                commonLandText = "Yes" if theAnimalParameter.useCommonGrazingLand else "No"
                 html += f"<tr><td><b>Use Common Grazing Land:</b></td><td>{commonLandText}</td></tr>"
 
-            if hasattr(animalParameter, 'useSpecificGrazingLand'):
-                specificLandText = "Yes" if animalParameter.useSpecificGrazingLand else "No"
+            if hasattr(theAnimalParameter, 'useSpecificGrazingLand'):
+                specificLandText = "Yes" if theAnimalParameter.useSpecificGrazingLand else "No"
                 html += f"<tr><td><b>Use Specific Grazing Land:</b></td><td>{specificLandText}</td></tr>"
 
             # Add fodder use if it exists
-            if hasattr(animalParameter, 'fodderUse') and animalParameter.fodderUse:
+            if hasattr(theAnimalParameter, 'fodderUse') and theAnimalParameter.fodderUse:
                 html += f"<tr><td><b>Fodder Use:</b></td><td>Yes</td></tr>"
 
             # Add fallow usage if it exists
-            if hasattr(animalParameter, 'fallowUsage'):
-                fallowPriority = str(animalParameter.fallowUsage).split('.')[-1].replace('_', ' ')
+            if hasattr(theAnimalParameter, 'fallowUsage'):
+                fallowPriority = str(theAnimalParameter.fallowUsage).split('.')[-1].replace('_', ' ')
                 html += f"<tr><td><b>Fallow Usage Priority:</b></td><td>{fallowPriority}</td></tr>"
 
             # Add raster name if it exists and is being used
-            if hasattr(animalParameter, 'rasterName') and animalParameter.rasterName:
-                html += f"<tr><td><b>Raster:</b></td><td>{animalParameter.rasterName}</td></tr>"
+            if hasattr(theAnimalParameter, 'rasterName') and theAnimalParameter.rasterName:
+                html += f"<tr><td><b>Raster:</b></td><td>{theAnimalParameter.rasterName}</td></tr>"
 
             html += "</table>"
         else:
@@ -1509,26 +1601,26 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             LaUtils.debug.log(f"Traceback: {traceback.format_exc()}", "Error")
 
 
-    def updateCropCalculations(self, crop):
+    def updateCropCalculations(self, theCrop: LaCrop):
         """Update calculations for a crop.
         Args:
             crop: The crop object to calculate values for
         """
         try:
             # Get the crop GUID
-            cropGuid = str(crop.guid) # Ensure string
+            myCropGuid = str(theCrop.guid) # Ensure string
 
             # Get parameter if available
-            parameter_guid = None
-            if cropGuid in self.mCropsMap:
-                parameter_guid = str(self.mCropsMap[cropGuid][1]) # Ensure string
+            myParameterGuid = None
+            if myCropGuid in self.mCropsMap:
+                myParameterGuid = str(self.mCropsMap[myCropGuid][1]) # Ensure string
 
             # Setup model with proper parameters from UI first
             self.updateModelFromUI() # *** This call needs the method to exist ***
 
             # Get selected crops and animals for this specific calculation context
-            mySelectedCropsDict = {cropGuid: parameter_guid} if parameter_guid else {} # Only calculate for this crop
-            mySelectedAnimalsDict = {}
+            mySelectedCropsDict: dict[str, str] = {myCropGuid: myParameterGuid} if myParameterGuid else {} # Only calculate for this crop
+            mySelectedAnimalsDict: dict[str, str] = {}
             for guid, value in self.mAnimalsMap.items():
                 if value[0]:  # If checked
                     mySelectedAnimalsDict[str(guid)] = str(value[1]) # Ensure strings
@@ -1562,13 +1654,13 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             # Get report from calculations
             if myDietLabels:
                 report_map = myDietLabels.mCropCalcsReportMap
-                if cropGuid in report_map:
-                    report_pair = report_map[cropGuid]
+                if myCropGuid in report_map:
+                    report_pair = report_map[myCropGuid]
                     report_string = report_pair[0]
                     self.textBrowserResultsCrop.setText(report_string)
                     LaUtils.debug.log("Crop calculation report displayed", "Calculation")
                 else:
-                    self.textBrowserResultsCrop.setText(f"No calculation results available for this crop (GUID: {cropGuid}). Check parameters.")
+                    self.textBrowserResultsCrop.setText(f"No calculation results available for this crop (GUID: {myCropGuid}). Check parameters.")
             else:
                 self.textBrowserResultsCrop.setText("Calculation failed or did not produce results. Check model configuration and logs.")
         except AttributeError as ae:
@@ -1585,14 +1677,14 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
             self.textBrowserResultsCrop.setText(f"Error in calculations: {str(e)}")
 
-    def updateAnimalCalculations(self, animal):
+    def updateAnimalCalculations(self, theAnimal: LaAnimal):
         """Update calculations for an animal.
         Args:
             animal: The animal object to calculate values for.
         """
         try:
             # Get the animal GUID
-            animalGuid = str(animal.guid) # Ensure string
+            animalGuid = str(theAnimal.guid) # Ensure string
 
             # Get parameter if available
             parameter_guid = None
@@ -1624,21 +1716,21 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                 self.model.crops = selected_crops
 
                 # Calculate diet labels based on settings
-                diet_labels = None
+                myDietLabels = LaDietLabels()
                 if self.model.baseOnPlants:
                     if self.model.includeDairy:
-                        diet_labels = self.model.doCalcsPlantsFirstIncludeDairy()
+                        myDietLabels = self.model.doCalcsPlantsFirstIncludeDairy()
                     else:
-                        diet_labels = self.model.doCalcsPlantsFirstDairySeparate()
+                        myDietLabels = self.model.doCalcsPlantsFirstDairySeparate()
                 else:
                     if self.model.includeDairy:
-                        diet_labels = self.model.doCalcsAnimalsFirstIncludeDairy()
+                        myDietLabels = self.model.doCalcsAnimalsFirstIncludeDairy()
                     else:
-                        diet_labels = self.model.doCalcsAnimalsFirstDairySeparate()
+                        myDietLabels = self.model.doCalcsAnimalsFirstDairySeparate()
 
                 # Get report from calculations
-                if diet_labels and hasattr(diet_labels, '_animalCalcsReportMap'):
-                    report_map = diet_labels.mAnimalCalcsReportMap
+                if myDietLabels and hasattr(myDietLabels, '_animalCalcsReportMap'):
+                    report_map = myDietLabels.mAnimalCalcsReportMap
                     if animalGuid in report_map:
                         report_pair = report_map[animalGuid]
                         report_string = report_pair[0]
@@ -1646,7 +1738,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                         LaUtils.debug.log("Animal calculation report displayed", "Calculation")
                     else:
                         self.textBrowserResultsAnimals.setText(f"No calculation results available for this animal (GUID: {animalGuid}). Check parameters.")
-                elif diet_labels:
+                elif myDietLabels:
                      self.textBrowserResultsAnimals.setText("Calculations completed but no specific animal report was generated.")
                 else:
                     self.textBrowserResultsAnimals.setText("Calculation failed or did not produce results. Check model configuration and logs.")

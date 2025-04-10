@@ -14,7 +14,10 @@ from builtins import dict as Dict
 from builtins import list as List
 from typing import Tuple, Optional, Callable
 # Third party imports
-from qgis.PyQt.QtWidgets import QFileDialog
+from qgis.PyQt.QtWidgets import (
+    QFileDialog, QDialog, QVBoxLayout, QHBoxLayout, QLabel,
+    QTextEdit, QCheckBox, QComboBox
+)
 from qgis.PyQt.QtCore import QFile, QTextStream, QObject, QDir, QSettings, QFileInfo, pyqtSignal
 # Local application imports
 from la.lib.laanimalparameter import LaAnimalParameter
@@ -26,70 +29,139 @@ class LaMessageBus(QObject):
     """Message bus for communication between components."""
     debugMessaged = pyqtSignal(str)  # Signal emitted when debug messages are logged
 
+# Create a global instance of the message bus that can be imported
+MESSAGE_BUS = LaMessageBus()
+
+
+class LaDebugForm(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setupUi()
+
+    def setupUi(self):
+        layout = QVBoxLayout()
+
+        # Add filter controls
+        filterLayout = QHBoxLayout()
+        self.filterCombo = QComboBox()
+        self.filterCombo.addItem("All Messages")
+        self.filterCombo.addItems(LaUtils.debug.getComponents())
+        self.filterCombo.currentTextChanged.connect(self.updateDisplay)
+        filterLayout.addWidget(QLabel("Filter by type:"))
+        filterLayout.addWidget(self.filterCombo)
+        filterLayout.addStretch()
+        layout.addLayout(filterLayout)
+
+        # Debug output text area
+        self.textEdit = QTextEdit()
+        self.textEdit.setReadOnly(True)
+        layout.addWidget(self.textEdit)
+
+        # Show line numbers checkbox
+        self.showLineNumbers = QCheckBox("Show Line Numbers")
+        self.showLineNumbers.setChecked(False)
+        self.showLineNumbers.stateChanged.connect(self.updateDisplay)
+        layout.addWidget(self.showLineNumbers)
+
+        self.setLayout(layout)
+        self.setWindowTitle("Debug Log")
+        self.resize(600, 400)
+
+        self.updateDisplay()
+
+    def updateDisplay(self):
+        component = None if self.filterCombo.currentText() == "All Messages" else self.filterCombo.currentText()
+        messages = LaUtils.debug.get_history(
+            component_filter=component,
+            with_line_numbers=self.showLineNumbers.isChecked()
+        )
+        self.textEdit.setHtml("<br>".join(messages))
+
+
 class LaDebugLogger:
-    """A singleton logger class that handles debug messages."""
-    _instance = None
-    _enabled = False
-    _history = []
-    _max_history = 1000
-    _show_line_numbers = False  # Added flag to track line number display preference
+    """Debug logger with component filtering support."""
+    mHistory = []  # List of tuples (component, message)
+    mKnownComponents = set()  # Track all unique component types
+    mMaxHistory = 25000  # Maximum number of messages to keep in history
 
-    @classmethod
-    def initialize(cls, enabled=False, show_line_numbers=False):
-        """Initialize the debug logger."""
-        if cls._instance is None:
-            cls._instance = cls()
-        cls._enabled = enabled
-        cls._show_line_numbers = show_line_numbers
-        return cls._instance
+    def __init__(self):
+        self.mEnabled = False
+        self.mShowLineNumbers = False
 
-    @classmethod
-    def set_enabled(cls, enabled):
-        """Enable or disable debug logging."""
-        cls._enabled = enabled
-
-    @classmethod
-    def set_show_line_numbers(cls, show_line_numbers):
-        """Enable or disable showing line numbers in debug messages."""
-        cls._show_line_numbers = show_line_numbers
-
-    @classmethod
-    def log(cls, message, component="General"):
-        """Log a debug message."""
-        if cls._enabled:
-            formatted = f"{component}: {message}"
-            cls._history.append(formatted)
-            # Trim history if too long
-            if len(cls._history) > cls._max_history:
-                cls._history = cls._history[-cls._max_history:]
-            # Emit via message bus
-            MESSAGE_BUS.debugMessaged.emit(formatted)
-
-    @classmethod
-    def get_history(cls, with_line_numbers=None):
-        """Get the message history.
+    def setEnabled(self, theDebugEnabledBool: bool):
+        """Enable or disable debug logging.
 
         Args:
-            with_line_numbers: Override class setting if provided, otherwise use class setting
+            theBool: Boolean indicating whether debug logging should be enabled
+        """
+        self.mEnabled = theDebugEnabledBool
+
+    def isEnabled(self) -> bool:
+        """Return whether debug logging is enabled.
 
         Returns:
-            List of log messages, optionally with line numbers
+            bool: True if debug logging is enabled, False otherwise
         """
-        # Use provided value if given, otherwise use the class setting
-        show_numbers = cls._show_line_numbers if with_line_numbers is None else with_line_numbers
+        return self.mEnabled
 
-        if not show_numbers:
-            return cls._history.copy()
+    def log(self, theMessage: str, theComponent: str = "General"):
+        """Log a debug message with component type.
+
+        Args:
+            theMessage: The message to log
+            theComponent: The component/category of the message (e.g., "Error", "Diet", "Calcs")
+        """
+        # Track the component type
+        self.mKnownComponents.add(theComponent)
+
+        # Add to history
+        self.mHistory.append((theComponent, theMessage))
+        if len(self.mHistory) > self.mMaxHistory:
+            self.mHistory = self.mHistory[-self.mMaxHistory:]
+
+        # Print the message
+        if self.mEnabled or theComponent == "Error":
+            print(f"[{theComponent}] {theMessage}")
+
+        # Emit the signal via MESSAGE_BUS if available
+        try:
+            MESSAGE_BUS.debugMessaged.emit(f"{theComponent}: {theMessage}")
+        except:
+            pass
+
+    def getComponents(self) -> list:
+        """Get a sorted list of all known message components/categories.
+
+        Returns:
+            List of unique component names
+        """
+        return sorted(self.mKnownComponents)
+
+    def getHistory(self, component_filter: str = None, with_line_numbers: bool = False) -> list:
+        """Get the message history with optional filtering and line numbers.
+
+        Args:
+            component_filter: If provided, only return messages of this component type
+            with_line_numbers: Whether to include line numbers in the output
+
+        Returns:
+            List of formatted log messages
+        """
+        # Filter messages by component if requested
+        myFilteredHistory = [
+            (myComp, myMsg) for myComp, myMsg in self.mHistory
+            if component_filter is None or myComp == component_filter
+        ]
+
+        # Format the messages
+        if with_line_numbers:
+            return [
+                f'<span style="color:red">{i}:</span> {comp}: {msg}'
+                for i, (comp, msg) in enumerate(myFilteredHistory, 1)
+            ]
         else:
-            # Add line numbers to each line in red color using HTML
-            numbered_history = []
-            for i, message in enumerate(cls._history, 1):
-                # Format line number in red using HTML
-                numbered_history.append(f'<span style="color:red">{i}:</span> {message}')
-            return numbered_history
+            return [f"{comp}: {msg}" for comp, msg in myFilteredHistory]
 
-# Global message bus instance
-MESSAGE_BUS = LaMessageBus()
 
 class LaUtils:
     """
@@ -927,7 +999,7 @@ class LaUtils:
     @staticmethod
     def get_message_history() -> List[str]:
         """Returns the debug message history."""
-        return LaDebugLogger._history.copy()
+        return LaDebugLogger.mHistory.copy()
 
     @staticmethod
     def userImagesPaths() -> List[str]:

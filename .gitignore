@@ -132,3 +132,8 @@ dmypy.json
 la/gui/__pycache__/
 la/tmpDebugMessages.txt
 cppArchive/src/ui/ui_lacropparametermanagerbase.h
+cppArchive/src/ui/ui_lamainformbase.h
+cppArchive/src/ui/ui_lagrassprocessbase.h
+cppArchive/src/ui/ui_lacropmanagerbase.h
+cppArchive/src/ui/ui_laanimalparametermanagerbase.h
+cppArchive/src/ui/ui_laanimalmanagerbase.h

@@ -1,4 +1,3 @@
-from la.lib.laanimalparameter import LaAnimalParameter
 from qgis.PyQt.QtCore import pyqtSignal, pyqtProperty, QObject # Ensure QObject is imported if not already
 from qgis.PyQt.QtWidgets import QDialog
 
@@ -12,6 +11,8 @@ from la.lib.ladietlabels import LaDietLabels
 from la.lib.lautils import LaUtils, LaMessageBus
 from la.lib.la import AreaUnits, Status, Priority, LandBeingGrazed, LandFound, EnergyType # Added EnergyType
 from la.lib.laanimal import LaAnimal
+from la.lib.lacrop import LaCrop
+from la.lib.laanimalparameter import LaAnimalParameter
 from la.lib.lafoodsource import LaFoodSource
 
 MESSAGE_BUS: LaMessageBus = LaMessageBus()
@@ -696,7 +697,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         """
         root = ET.fromstring(theXmlData)
 
-        self._mGuid = root.attrib.get('guid', QUuid.createUuid().toString(QUuid.StringFormat.Id128))
+        self.mGuid = self.setGuid(root.attrib.get('guid'))
         self.mName = root.findtext('name', default="No Name Set")
         self.mPopulation = int(root.findtext('population', default="1000"))
         self.mPeriod = root.findtext('period', default="No Period Set")
@@ -769,101 +770,14 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         return myString
 
 
-    def _GetAnimalValue(self, animal, prop_name: str) -> float:
-        """Helper method to safely get float values from animal properties."""
-        prop = getattr(animal, prop_name, None)
-        if prop is None:
-            return 0.0
-        if isinstance(prop, property):
-            return float(prop.__get__(animal, type(animal)))
-        return float(prop)
-
-
-    def _GetAnimalParamValue(self, theParam, thePropName: str) -> float:
-        """Helper method to safely get float values from animal parameter properties."""
-        myProp = getattr(theParam, thePropName, None)
-        if myProp is None:
-            return 0.0
-        if isinstance(myProp, property):
-            return float(myProp.__get__(theParam, type(theParam)))
-        return float(myProp)
-
-
-    def _setDietLabels(self, theDietLabels: LaDietLabels,
-                        theOverallDairyMCals: float,
-                        theOverallCropsMCals: float,
-                        theOverallMeatMCals: float,
-                        theOverallWildMeatMCals: float,
-                        theOverallWildPlantsMCals: float,
-                        theOverallDairyPercent: float,
-                        theDomesticMeatPercent: float,
-                        theOverallCropPercent: float,
-                        theWildMeatPercent: float,
-                        theOverallWildPlantPercent: float,
-                        theOverallMeatPercent: float,
-                        theOverallPlantPercent: float,
-                        theMCalsIndividualAnnual: float,
-                        theMCalsSettlementAnnual: float,
-                        theOverallDairySurplusMCals: float,
-                        theCropCalcsReportMap: Dict[str, Tuple[str, float]],
-                        theAnimalCalcsReportMap: Dict[str, Tuple[str, float]]) -> None:
-        try:
-            # Log the ID of the object we're updating to help with debugging
-            from la.lib.lautils import LaUtils
-            # Log new values before emitting signals
-            LaUtils.debug.log(f"New values set - Dairy: {theOverallDairyMCals:.2f},\
-                                Crops: {theOverallCropsMCals:.2f}", "Diet")
-            # Set values directly to attributes first - using naming from C++ version
-            theDietLabels.dairyMCalories = theOverallDairyMCals # type: ignore
-            theDietLabels.cropMCalories = theOverallCropsMCals  # type: ignore
-            theDietLabels.animalMCalories = theOverallMeatMCals # type: ignore
-            theDietLabels.wildAnimalMCalories = theOverallWildMeatMCals # type: ignore
-            theDietLabels.wildPlantsMCalories = theOverallWildPlantsMCals # type: ignore
-            theDietLabels.dairyPortionPct = theOverallDairyPercent * 100.0 # type: ignore
-            theDietLabels.tameMeatPortionPct = theDomesticMeatPercent * 100.0 # type: ignore
-            theDietLabels.cropsPortionPct = theOverallCropPercent * 100.0 # type: ignore
-            theDietLabels.wildAnimalPortionPct = theWildMeatPercent * 100.0 # type: ignore
-            theDietLabels.wildPlantsPortionPct = theOverallWildPlantPercent * 100.0 # type: ignore
-            theDietLabels.plantsPortionPct = theOverallPlantPercent * 100.0 # type: ignore
-            theDietLabels.animalPortionPct = theOverallMeatPercent * 100.0 # type: ignore
-            theDietLabels.kiloCaloriesIndividualAnnual = theMCalsIndividualAnnual # type: ignore
-            theDietLabels.megaCaloriesSettlementAnnual = theMCalsSettlementAnnual # type: ignore
-            theDietLabels.dairySurplusMCalories = theOverallDairySurplusMCals # type: ignore
-            theDietLabels.cropCalcsReportMap = theCropCalcsReportMap # type: ignore
-            theDietLabels.animalCalcsReportMap = theAnimalCalcsReportMap # type: ignore
-
-            try:
-                theDietLabels._dairyMCaloriesChanged.emit(theOverallDairyMCals)
-                theDietLabels._cropMCaloriesChanged.emit(theOverallCropsMCals)
-                theDietLabels._animalMCaloriesChanged.emit(theOverallMeatMCals)
-                theDietLabels._wildAnimalMCaloriesChanged.emit(theOverallWildMeatMCals)
-                theDietLabels._wildPlantsMCaloriesChanged.emit(theOverallWildPlantsMCals)
-                theDietLabels._dairyPortionPctChanged.emit(theOverallDairyPercent * 100.0)
-                theDietLabels._tameMeatPortionPctChanged.emit(theDomesticMeatPercent * 100.0)
-                theDietLabels._cropsPortionPctChanged.emit(theOverallCropPercent * 100.0)
-                theDietLabels._wildAnimalPortionPctChanged.emit(theWildMeatPercent * 100.0)
-                theDietLabels._wildPlantsPortionPctChanged.emit(theOverallWildPlantPercent * 100.0)
-                theDietLabels._plantsPortionPctChanged.emit(theOverallPlantPercent * 100.0)
-                theDietLabels._animalPortionPctChanged.emit(theOverallMeatPercent * 100.0)
-                theDietLabels._kiloCalsIndividualAnnualChanged.emit(theMCalsIndividualAnnual)
-                theDietLabels._megaCalSettlementAnnualChanged.emit(theMCalsSettlementAnnual)
-                theDietLabels._dairySurplusMCaloriesChanged.emit(theOverallDairySurplusMCals)
-                theDietLabels._cropCalcsReportMapChanged.emit(theCropCalcsReportMap)
-                theDietLabels._animalCalcsReportMapChanged.emit(theAnimalCalcsReportMap)
-            except Exception as e:
-                LaUtils.debug.log(f"Error emitting diet label signals: {str(e)}", "Error")
-
-        except Exception as e:
-            from la.lib.lautils import LaUtils
-            LaUtils.debug.log(f"Error updating diet labels in model: {str(e)}", "Error")
-
-
     def doCalcsPlantsFirstIncludeDairy(self) -> LaDietLabels:
         from la.lib.lautils import LaUtils
-        myMCalsIndividualAnnual: float = self.caloriesPerPersonDaily * 365.0
-        myMCalsSettlementAnnual: float = myMCalsIndividualAnnual * self.population
+
         myDietLabels = LaDietLabels()
-        LaAnimal = None  # Matches C++ declaration but not used in this simplified version
+        myMCalsIndividualAnnual: float = float(str(self.caloriesPerPersonDaily)) * 365.0
+        myMCalsSettlementAnnual: float = myMCalsIndividualAnnual * float(str(self.population))
+        myAnimal = LaAnimal()  # Matches C++ declaration but not used in this simplified version
+        myCrop = LaCrop()
 
         # Get property values from internal attributes (following C++ variable naming)
         try:
@@ -911,26 +825,26 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             myAnimalCalcsReportMap = {}
             myDairySurplus = 0.0 # No surplus dairy
             # Set all values in the diet labels object
-            self._setDietLabels(
-                myDietLabels,
-                myDairyMCalorieCounter,      # Overall dairy MCals
-                myCropMCalories,              # Overall crop MCals
-                myTameMeatMCalorieCounter,    # Tame meat MCals
-                myWildMeatMCalorieCounter,    # Wild meat MCals
-                myWildPlantsMCalories,        # Wild plants MCals
-                dairyPercent,                # Overall dairy percent
-                tameMeatPercent,             # Domestic meat percent
-                cropPercent,                 # Overall crop percent
-                wildMeatPercent,             # Wild meat percent
-                wildPlantPercent,            # Overall wild plant percent
-                myOverallMeatPercent,        # Overall meat percent
-                myOverallPlantPercent,       # Overall plant percent
-                myMCalsIndividualAnnual * 1000.0,  # Convert back to kCal
-                myMCalsSettlementAnnual,     # MCals settlement annual
-                0.0,                         # No dairy surplus in this simplified calculation
-                myCropCalcsReportMap,        # Empty crop calcs report map
-                myAnimalCalcsReportMap       # Empty animal calcs report map
-            )
+            # self._setDietLabels(
+            #     myDietLabels,
+            #     myDairyMCalorieCounter,      # Overall dairy MCals
+            #     myCropMCalories,              # Overall crop MCals
+            #     myTameMeatMCalorieCounter,    # Tame meat MCals
+            #     myWildMeatMCalorieCounter,    # Wild meat MCals
+            #     myWildPlantsMCalories,        # Wild plants MCals
+            #     dairyPercent,                # Overall dairy percent
+            #     tameMeatPercent,             # Domestic meat percent
+            #     cropPercent,                 # Overall crop percent
+            #     wildMeatPercent,             # Wild meat percent
+            #     wildPlantPercent,            # Overall wild plant percent
+            #     myOverallMeatPercent,        # Overall meat percent
+            #     myOverallPlantPercent,       # Overall plant percent
+            #     myMCalsIndividualAnnual * 1000.0,  # Convert back to kCal
+            #     myMCalsSettlementAnnual,     # MCals settlement annual
+            #     0.0,                         # No dairy surplus in this simplified calculation
+            #     myCropCalcsReportMap,        # Empty crop calcs report map
+            #     myAnimalCalcsReportMap       # Empty animal calcs report map
+            # )
 
             # Log results
             LaUtils.debug.log(f"doCalcsPlantsFirstIncludeDairy - Animal: {myOverallMeatPercent*100:.2f}%, Plant: {myOverallPlantPercent*100:.2f}%", "Diet")
@@ -968,7 +882,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         e15 = c14 * c15
 
         LaUtils.debug.log("Starting animal calculations", "Diet")
-        
+
         # Process each animal in the map
         for myAnimalGuid, myAnimalParameterGuid in mySelectedAnimalsMap.items():
             try:
@@ -976,7 +890,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                 myAnimalParameter = LaUtils.getAnimalParameter(myAnimalParameterGuid)
 
                 # Calculate animal-specific coefficients
-                c2 = myAnimal.milkGramsPerDay * 0.001
+                c2 = float(str(myAnimal.milkGramsPerDay)) * 0.001
                 c3 = myAnimal.milkFoodValue
                 c4 = myAnimal.lactationTime
                 c5 = myAnimal.weaningAge
@@ -1038,8 +952,12 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         """Calculate diet values when plants are prioritized and dairy is separate from meat."""
         from la.lib.lautils import LaUtils
         myDietLabels = LaDietLabels()
-        LaAnimal = None  # Matches C++ declaration but not used in this simplified version
-
+        LaAnimal = None  # Matches C++
+        myMCalsIndividualAnnual = float(str(self.caloriesPerPersonDaily)) * 365.0 / 1000.0  # Convert to MCal
+        myMCalsSettlementAnnual = myMCalsIndividualAnnual * int(str(self.population))
+        myPlantPercent = 1.0 - (self.mDietPercent / 100.0)  # Plant portion as decimal
+        myDomesticCropPortion = self.mPercentOfDietThatIsFromCrops / 100.0  # Crop portion of plants as decimal
+        myWildMeatPortion = 1.0 - (self.mMeatPercent / 100.0)  # Wild meat portion as decimal
         # Log calculation start
         LaUtils.debug.log("Starting doCalcsPlantsFirstDairySeparate calculation", "Diet")
 
@@ -1050,14 +968,14 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             meat_percent = float(self.mMeatPercent) / 100.0  # Convert to decimal
             diet_percent = float(self.mDietPercent) / 100.0  # Convert to decimal
 
-            LaUtils.debug.log(f"Input parameters - calories_daily: {self._mCaloriesPerPersonDaily}, population: {self._mPopulation}", "Diet")
-            LaUtils.debug.log(f"Diet parameters - meat_percent: {self._mMeatPercent}%, diet_percent: {self._mDietPercent}%", "Diet")
+            LaUtils.debug.log(f"Input parameters - calories_daily: {self.mCaloriesPerPersonDaily}, population: {self.mPopulation}", "Diet")
+            LaUtils.debug.log(f"Diet parameters - meat_percent: {self.mMeatPercent}%, diet_percent: {self.mDietPercent}%", "Diet")
             LaUtils.debug.log(f"Calculated annual MCals - individual: {myMCalsIndividualAnnual}, settlement: {myMCalsSettlementAnnual}", "Diet")
 
             # Initialize counters with simplified approach to match C++ variable names
             myDairyMCalorieCounter = myMCalsSettlementAnnual * 0.05  # Separate counter for dairy (5% of total)
-            myTameMeatMCalorieCounter = myMCalsSettlementAnnual * (self._mDietPercent / 100.0) * (self._mMeatPercent / 100.0)  # tame meat
-            myWildMeatMCalorieCounter = myMCalsSettlementAnnual * (self._mDietPercent / 100.0) * myWildMeatPortion  # wild meat
+            myTameMeatMCalorieCounter = myMCalsSettlementAnnual * (self.mDietPercent / 100.0) * (self.mMeatPercent / 100.0)  # tame meat
+            myWildMeatMCalorieCounter = myMCalsSettlementAnnual * (float(str(self.mDietPercent)) / 100.0) * myWildMeatPortion  # wild meat
 
             # Following the same pattern from C++ for crop and plant calculations
             myOverallPlantPercent = myPlantPercent
@@ -1090,26 +1008,26 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             myAnimalCalcsReportMap = {}
 
             # Set all values in the diet labels object
-            self.setDietLabels(
-                myDietLabels,
-                myDairyMCalorieCounter,     # Overall dairy MCals
-                myOverallCropsMCals,        # Overall crop MCals
-                myTameMeatMCalorieCounter,  # Tame meat MCals
-                myWildMeatMCalorieCounter,  # Wild meat MCals
-                myOverallWildPlantsMCals,   # Wild plants MCals
-                myOverallDairyPercent,      # Overall dairy percent
-                myDomesticMeatPercent,      # Domestic meat percent
-                myCropPercent,              # Overall crop percent
-                myWildMeatPercent,          # Wild meat percent
-                myWildPlantPercent,         # Overall wild plant percent
-                myOverallMeatPercent,       # Overall meat percent
-                myOverallPlantPercent,      # Overall plant percent
-                myMCalsIndividualAnnual * 1000.0,  # Convert back to kCal
-                myMCalsSettlementAnnual,    # MCals settlement annual
-                myOVerallDairySurplusMCals, # Dairy surplus MCals
-                myCropCalcsReportMap,       # Crop calcs report map
-                myAnimalCalcsReportMap      # Animal calcs report map
-            )
+            # self.setDietLabels(
+            #     myDietLabels,
+            #     myDairyMCalorieCounter,     # Overall dairy MCals
+            #     myOverallCropsMCals,        # Overall crop MCals
+            #     myTameMeatMCalorieCounter,  # Tame meat MCals
+            #     myWildMeatMCalorieCounter,  # Wild meat MCals
+            #     myOverallWildPlantsMCals,   # Wild plants MCals
+            #     myOverallDairyPercent,      # Overall dairy percent
+            #     myDomesticMeatPercent,      # Domestic meat percent
+            #     myCropPercent,              # Overall crop percent
+            #     myWildMeatPercent,          # Wild meat percent
+            #     myWildPlantPercent,         # Overall wild plant percent
+            #     myOverallMeatPercent,       # Overall meat percent
+            #     myOverallPlantPercent,      # Overall plant percent
+            #     myMCalsIndividualAnnual * 1000.0,  # Convert back to kCal
+            #     myMCalsSettlementAnnual,    # MCals settlement annual
+            #     myOVerallDairySurplusMCals, # Dairy surplus MCals
+            #     myCropCalcsReportMap,       # Crop calcs report map
+            #     myAnimalCalcsReportMap      # Animal calcs report map
+            # )
 
             # Log results
             LaUtils.debug.log(f"Results - Meat: {myOverallMeatPercent*100:.2f}%, Plant: {myOverallPlantPercent*100:.2f}%, Dairy: {myOverallDairyPercent*100:.2f}%", "Diet")
@@ -1124,7 +1042,71 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
 
     def doCalcsAnimalsFirstDairySeparate(self) -> LaDietLabels:
-        """Calculate diet values when animals are prioritized and dairy is separate from meat."""
+        """
+        Calculate diet values when animals are prioritized and dairy is separate from meat.
+
+        This method performs a detailed calculation of dietary requirements for a settlement,
+        prioritizing animal-based food sources (meat and dairy) while treating dairy as a
+        separate category from meat. It calculates the required caloric contributions from
+        various food sources (animals, crops, wild plants) and determines the land area
+        needed to meet these requirements.
+
+        Returns:
+            LaDietLabels: An object containing the calculated dietary labels, including
+                          percentages, caloric contributions, and area targets for crops
+                          and animals.
+
+        Key Steps:
+            1. Input Parameter Extraction:
+               - Extracts and logs input parameters such as daily caloric needs, population,
+                 diet percentages, and utilization rates.
+
+            2. Initial Caloric Calculations:
+               - Calculates the total annual caloric needs for the settlement and initializes
+                 counters for dairy, meat, crops, and wild plants.
+
+            3. Animal-Based Food Calculations:
+               - Iterates through the list of animals to calculate their contributions to
+                 meat and dairy portions of the diet.
+               - Determines herd sizes, feed requirements, and caloric contributions from
+                 meat and dairy.
+               - Accounts for fodder and grain needs for animals and adjusts caloric
+                 requirements accordingly.
+
+            4. Dairy Portion Adjustment:
+               - Adjusts the dairy portion based on utilization limits and recalculates
+                 percentages for meat, dairy, and plant-based food sources.
+
+            5. Crop-Based Food Calculations:
+               - Iterates through the list of crops to calculate their contributions to the
+                 diet.
+               - Determines the area needed for crop production, accounting for spoilage,
+                 reseeding, and fallow land requirements.
+
+            6. Fallow Land Allocation:
+               - Allocates fallow land for grazing and adjusts animal caloric requirements
+                 based on the contribution of fallow land.
+
+            7. Final Area Target Calculation:
+               - Calculates the final land area targets for animals and crops, considering
+                 adjusted caloric requirements and land productivity values.
+
+            8. Final Diet Labels:
+               - Sets the final dietary labels, including caloric contributions, percentages,
+                 and area targets for crops and animals.
+
+        Exceptions:
+            - Logs and handles any exceptions that occur during the calculation process,
+              providing detailed error messages and stack traces.
+
+        Notes:
+            - This method relies on several external utility functions and data structures
+              (e.g., LaUtils, LaDietLabels) for calculations and logging.
+            - The calculations are based on a detailed model that includes parameters such
+              as breeding cycles, feed requirements, spoilage rates, and land productivity.
+
+        """
+
         from la.lib.lautils import LaUtils
         myDietLabels = LaDietLabels()
 
@@ -1705,26 +1687,26 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                 LaUtils.debug.log("--------------------------------------------", "Diet")
 
             # ----------- Set Final Diet Labels -----------
-            self._setDietLabels(
-                myDietLabels,
-                myOverallDairyMCals,
-                myOverallCropsMCals,
-                myOverallDomesticMeatMCals, # Use domestic meat MCals here
-                myOverallWildMeatMCals,
-                myOverallWildPlantsMCals,
-                myOverallDairyPercent,
-                myDomesticMeatPercent,
-                myOverallCropPercent,
-                myWildMeatPercent,
-                myOverallWildPlantPercent,
-                myOverallMeatPercent, # Use combined meat percent
-                myOverallPlantPercent,
-                myMCalsIndividualAnnual,
-                myMCalsSettlementAnnual,
-                myOverallDairySurplusMCals,
-                cropCalcsReportMap,
-                myAnimalCalcsReportMap # Pass the map with updated reports and area targets
-            )
+            # self._setDietLabels(
+            #     myDietLabels,
+            #     myOverallDairyMCals,
+            #     myOverallCropsMCals,
+            #     myOverallDomesticMeatMCals, # Use domestic meat MCals here
+            #     myOverallWildMeatMCals,
+            #     myOverallWildPlantsMCals,
+            #     myOverallDairyPercent,
+            #     myDomesticMeatPercent,
+            #     myOverallCropPercent,
+            #     myWildMeatPercent,
+            #     myOverallWildPlantPercent,
+            #     myOverallMeatPercent, # Use combined meat percent
+            #     myOverallPlantPercent,
+            #     myMCalsIndividualAnnual,
+            #     myMCalsSettlementAnnual,
+            #     myOverallDairySurplusMCals,
+            #     cropCalcsReportMap,
+            #     myAnimalCalcsReportMap # Pass the map with updated reports and area targets
+            # )
 
             # Add the final area target maps to the diet labels object
             myDietLabels.cropAreaTargetsMap = {guid: area for guid, (_, area) in cropCalcsReportMap.items()}

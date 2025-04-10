@@ -3,7 +3,11 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/cppArchive/**",
+                "/home/arkygeek/dev/QGis-Projects/landuseanalyst/cppArchive/src/**",
+                "/home/arkygeek/dev/QGis-Projects/landuseanalyst/cppArchive/src/gui/**",
+                "/home/arkygeek/dev/QGis-Projects/landuseanalyst/cppArchive/src/lib/**",
+                "/home/arkygeek/dev/QGis-Projects/landuseanalyst/cppArchive/src/ui/**",
+                "/home/arkygeek/dev/QGis-Projects/landuseanalyst/cppArchive/src/resources/**",
                 "/usr/include/x86_64-linux-gnu/qt6/QtCore",
                 "/usr/include/x86_64-linux-gnu/qt6",
                 "/usr/include/x86_64-linux-gnu/qt6/QtWidgets",
