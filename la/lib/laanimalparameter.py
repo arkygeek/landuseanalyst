@@ -470,7 +470,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
         from la.lib.lautils import LaUtils
         myString = f"<animalParameter guid=\"{self.guid}\">\n"
         # Use both name tags for maximum compatibility
-        myString += f"  <n>{LaUtils.xmlEncode(str(self.name))}<n>\n"  # Standard name tag
+        myString += f"  <name>{LaUtils.xmlEncode(str(self.name))}</name>\n"  # Standard name tag
         myString += f"  <description>{LaUtils.xmlEncode(str(self.description))}</description>\n"
         myString += f"  <animal>{LaUtils.xmlEncode(str(self.animalGuid))}</animal>\n"
         myString += f"  <percentTameMeat>{self.percentTameMeat}</percentTameMeat>\n"

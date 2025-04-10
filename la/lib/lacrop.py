@@ -470,8 +470,8 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
 
         # Build XML directly matching the existing structure
         xml = f'<crop guid="{self.guid}">\n'
-        xml += f'  <name>{LaUtils.xmlEncode(self.name)}</name>\n'
-        xml += f'  <description>{LaUtils.xmlEncode(self.description)}</description>\n'
+        xml += f'  <name>{LaUtils.xmlEncode(self.name)}</name>\n' # type: ignore
+        xml += f'  <description>{LaUtils.xmlEncode(self.description)}</description>\n' # type: ignore
         xml += f'  <cropYield>{self.cropYield}</cropYield>\n'
         xml += f'  <cropCalories>{self.cropCalories}</cropCalories>\n'
         xml += f'  <fodderProduction>{self.cropFodderProduction}</fodderProduction>\n'

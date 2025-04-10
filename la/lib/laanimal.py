@@ -156,7 +156,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
         Args:
             theAnimal: Source animal to copy from
         """
-        self.mGuid = theAnimal.guid
+        self.setGuid(theAnimal.mGuid)
         self.mName = theAnimal.name
         self.mDescription = theAnimal.description
         self.mMeatFoodValue = theAnimal.meatFoodValue
@@ -760,7 +760,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
                 # Mimic C++ behavior: don't raise an error immediately
 
             # Set GUID from attribute
-            self.guid = myTopElement.attribute("guid") # guid setter handles None
+            self.guid = myTopElement.attribute("guid") # type: ignore
             LaUtils.debug.log(f"Loading animal with GUID in laanimal.py: {self.guid}")
 
 

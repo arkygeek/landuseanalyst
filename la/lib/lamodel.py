@@ -114,7 +114,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         if theModel is not None:
             self.mName = theModel.name
             self.mPopulation = theModel.population
-            self.setGuid(str(theModel.guid))
+            self.mGuid = theModel.guid
             self.mPeriod = theModel.period
             self.mProjection = theModel.projection
             self.mEasting = theModel.easting
@@ -618,10 +618,10 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
     @property
     def guid(self) -> str:
-        return self._mGuid
+        return self.mGuid
     @guid.setter
     def guid(self, theGuid: str):
-        if self._mGuid != theGuid:
+        if self.mGuid != theGuid:
             self.setGuid(theGuid)
             self._guidChanged.emit()
 
@@ -833,23 +833,23 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             theDietLabels.animalCalcsReportMap = theAnimalCalcsReportMap # type: ignore
 
             try:
-                theDietLabels.dairyMCaloriesChanged.emit(theOverallDairyMCals)
-                theDietLabels.cropMCaloriesChanged.emit(theOverallCropsMCals)
-                theDietLabels.animalMCaloriesChanged.emit(theOverallMeatMCals)
-                theDietLabels.wildAnimalMCaloriesChanged.emit(theOverallWildMeatMCals)
-                theDietLabels.wildPlantsMCaloriesChanged.emit(theOverallWildPlantsMCals)
-                theDietLabels.dairyPortionPctChanged.emit(theOverallDairyPercent * 100.0)
-                theDietLabels.tameMeatPortionPctChanged.emit(theDomesticMeatPercent * 100.0)
-                theDietLabels.cropsPortionPctChanged.emit(theOverallCropPercent * 100.0)
-                theDietLabels.wildAnimalPortionPctChanged.emit(theWildMeatPercent * 100.0)
-                theDietLabels.wildPlantsPortionPctChanged.emit(theOverallWildPlantPercent * 100.0)
-                theDietLabels.plantsPortionPctChanged.emit(theOverallPlantPercent * 100.0)
-                theDietLabels.animalPortionPctChanged.emit(theOverallMeatPercent * 100.0)
-                theDietLabels.kiloCaloriesIndividualAnnualChanged.emit(theMCalsIndividualAnnual)
-                theDietLabels.megaCaloriesSettlementAnnualChanged.emit(theMCalsSettlementAnnual)
-                theDietLabels.dairySurplusMCaloriesChanged.emit(theOverallDairySurplusMCals)
-                theDietLabels.cropCalcsReportMapChanged.emit(theCropCalcsReportMap)
-                theDietLabels.animalCalcsReportMapChanged.emit(theAnimalCalcsReportMap)
+                theDietLabels._dairyMCaloriesChanged.emit(theOverallDairyMCals)
+                theDietLabels._cropMCaloriesChanged.emit(theOverallCropsMCals)
+                theDietLabels._animalMCaloriesChanged.emit(theOverallMeatMCals)
+                theDietLabels._wildAnimalMCaloriesChanged.emit(theOverallWildMeatMCals)
+                theDietLabels._wildPlantsMCaloriesChanged.emit(theOverallWildPlantsMCals)
+                theDietLabels._dairyPortionPctChanged.emit(theOverallDairyPercent * 100.0)
+                theDietLabels._tameMeatPortionPctChanged.emit(theDomesticMeatPercent * 100.0)
+                theDietLabels._cropsPortionPctChanged.emit(theOverallCropPercent * 100.0)
+                theDietLabels._wildAnimalPortionPctChanged.emit(theWildMeatPercent * 100.0)
+                theDietLabels._wildPlantsPortionPctChanged.emit(theOverallWildPlantPercent * 100.0)
+                theDietLabels._plantsPortionPctChanged.emit(theOverallPlantPercent * 100.0)
+                theDietLabels._animalPortionPctChanged.emit(theOverallMeatPercent * 100.0)
+                theDietLabels._kiloCalsIndividualAnnualChanged.emit(theMCalsIndividualAnnual)
+                theDietLabels._megaCalSettlementAnnualChanged.emit(theMCalsSettlementAnnual)
+                theDietLabels._dairySurplusMCaloriesChanged.emit(theOverallDairySurplusMCals)
+                theDietLabels._cropCalcsReportMapChanged.emit(theCropCalcsReportMap)
+                theDietLabels._animalCalcsReportMapChanged.emit(theAnimalCalcsReportMap)
             except Exception as e:
                 LaUtils.debug.log(f"Error emitting diet label signals: {str(e)}", "Error")
 
@@ -1658,10 +1658,20 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                         # Handle energy type conversion if necessary (assuming values are MCal/ha for now)
                         # TODO: Implement TDN handling based on self.mSpecificLandEnergyType
 
-                    if myLandValue <= 0:
-                         # Fallback if specific value is zero or not set
-                         myLandValue = self.mCommonLandValue
-                         LaUtils.debug.log(f"        *** Using common land value: {myLandValue}", "Diet")
+                    try:
+                        # Convert myLandValue to float if it's not already
+                        myLandValue = float(myLandValue) if myLandValue else 0.0
+                    except (ValueError, TypeError):
+                        # If conversion fails, it's probably a string like "Dunum"
+                        LaUtils.debug.log(f"Warning: Land value '{myLandValue}' is not a number. Falling back to common land value.", "Warning")
+                        try:
+                            # Try to use the common land value as a fallback
+                            myLandValue = float(self.mCommonLandValue) if self.mCommonLandValue else 0.0
+                            LaUtils.debug.log(f"        *** Using common land value: {myLandValue}", "Diet")
+                        except (ValueError, TypeError):
+                            # If that also fails, default to 0
+                            LaUtils.debug.log(f"Warning: Common land value '{self.mCommonLandValue}' is also not a number.", "Warning")
+                            myLandValue = 0.0
 
                     if myLandValue <= 0:
                         LaUtils.debug.log(f"        *** Warning: Land value is zero for animal {myAnimalGuid}. Area target will be zero.", "Warning")
