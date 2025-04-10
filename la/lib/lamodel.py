@@ -913,7 +913,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                 LaUtils.debug.log(f"Animal {myAnimal.name} processed - Dairy: {c21}, Wild: {c22}, Tame: {c23}", "Diet")
 
             except Exception as e:
-                LaUtils.debug.log(f"Error processing animal {myAnimalGuid}: {str(e)}", "Error")
+                LaUtils.debug.log(f"Error processing animal 916-lamodel {myAnimalGuid}: {str(e)}", "Error")
 
         # Calculate final coefficients
         c24 = (1.0 - c12) * (c14 - e15)

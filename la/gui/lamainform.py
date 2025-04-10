@@ -134,7 +134,7 @@ class LaMainForm(LaMainFormBase):
 
             # Get the calculation report for this animal
             if hasattr(diet_labels, 'animalCalcsReportMap'):
-                report_map = self._getPropertyValue(diet_labels, 'animalCalcsReportMap')
+                report_map = self.getPropertyValue(diet_labels, 'animalCalcsReportMap')
                 if isinstance(report_map, dict):
                     if animal_guid in report_map:
                         report_pair = report_map[animal_guid]
@@ -198,7 +198,7 @@ class LaMainForm(LaMainFormBase):
 
         # Override the base class's on_cbDebug_clicked to use our version
         if hasattr(LaMainFormBase, 'on_cbDebug_clicked'):
-            self.on_cbDebug_clicked = self._override_on_cbDebug_clicked
+            self.on_cbDebug_clicked = self.override_on_cbDebug_clicked
 
         # Connect the calculation list item clicks to the handler methods
         if hasattr(self, 'listWidgetCalculationsAnimal'):
@@ -257,7 +257,7 @@ class LaMainForm(LaMainFormBase):
                 return
 
             # Set up model with current UI values
-            self._configureModelFromUi()
+            self.configureModelFromUi()
 
             # Display the crop image if available
             if hasattr(self, 'lblCropPicCalcs') and hasattr(crop, 'imageFile'):
@@ -286,7 +286,7 @@ class LaMainForm(LaMainFormBase):
 
             # Get the calculation report for this crop
             if hasattr(diet_labels, 'cropCalcsReportMap'):
-                report_map = self._getPropertyValue(diet_labels, 'cropCalcsReportMap')
+                report_map = self.getPropertyValue(diet_labels, 'cropCalcsReportMap')
                 if isinstance(report_map, dict):
                     actual_guid = str(crop_guid)
                     if actual_guid in report_map:
@@ -489,40 +489,15 @@ class LaMainForm(LaMainFormBase):
     def setDietLabels(self):
         """Update all diet-related labels based on current values"""
         try:
-            if not hasattr(self, 'model'):
-                return
-
-            # Configure model from current UI state
-            self._configureModelFromUi()
-
-            # Disconnect previous model's signal if necessary (optional, depends on how model is managed)
-            # try:
-            #     self.model.logCalculationStep.disconnect(self.logToAllChannels)
-            # except TypeError: # Signal not connected or already disconnected
-            #     pass
-
-            # Calculate diet labels based on settings
-            # NOTE: The doCalcs methods themselves now emit the signals
-            if self.cboxBaseOnPlants.isChecked():
-                if self.cboxIncludeDairy.isChecked():
-                    self.diet_labels = self.model.doCalcsPlantsFirstIncludeDairy()
-                else:
-                    self.diet_labels = self.model.doCalcsPlantsFirstDairySeparate()
-            else:
-                if self.cboxIncludeDairy.isChecked():
-                    self.diet_labels = self.model.doCalcsAnimalsFirstIncludeDairy()
-                else:
-                    self.diet_labels = self.model.doCalcsAnimalsFirstDairySeparate()
-
-            # Reconnect the signal from the current model instance (important if model instance changes)
-            # If self.model instance *doesn't* change, this reconnect isn't strictly needed here
-            # but doesn't hurt. If the doCalcs methods *returned* a new model, it would be crucial.
-            # Since they seem to modify the existing self.model, the initial connection in __init__ is likely sufficient.
-            # self.model.logCalculationStep.connect(self.logToAllChannels) # Reconnect (likely optional here)
-
-            # Connect signals from the new diet labels object (if it emits signals)
-            self._connect_diet_label_signals(self.diet_labels)
-
+            # Call the parent class implementation which has the complete implementation
+            super(LaMainForm, self).setDietLabels()
+            
+            # Store reference to the diet labels from the calculation for signal connections
+            # This assumes the base class method updated the model with calculations
+            if hasattr(self.model, 'lastDietLabels') and self.model.lastDietLabels:
+                self.diet_labels = self.model.lastDietLabels
+                self._connect_diet_label_signals(self.diet_labels)
+            
             # Update calculations (this might trigger more logging)
             self.updateCalculations()
 
@@ -621,7 +596,7 @@ class LaMainForm(LaMainFormBase):
             import traceback
             LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
 
-    def _configureModelFromUi(self):
+    def configureModelFromUi(self):
         """Configure the model with current UI values."""
         if hasattr(self, 'model'):
             # Configure basic settings
@@ -639,7 +614,7 @@ class LaMainForm(LaMainFormBase):
             if hasattr(self, 'sbDairyUtilisation'):
                 self.model.dairyUtilisation = self.sbDairyUtilisation.value()
 
-    def _ensure_debug_dialog_visible(self):
+    def ensure_debug_dialog_visible(self):
         """Ensure the debug dialog is created and visible."""
         if not self._debug_dialog:
             from la.gui.ladebugdialog import LaDebugDialog
@@ -647,7 +622,7 @@ class LaMainForm(LaMainFormBase):
             MESSAGE_BUS.debugMessaged.connect(self._debug_dialog.add_debug_message)
         self._debug_dialog.show()
 
-    def _getPropertyValue(self, obj, prop_name: str):
+    def getPropertyValue(self, obj, prop_name: str):
         """Helper method to safely get PyQt property values"""
         if hasattr(obj, prop_name):
             prop = getattr(obj, prop_name)
@@ -656,14 +631,14 @@ class LaMainForm(LaMainFormBase):
             return prop
         return None
 
-    def _on_debug_dialog_closed(self):
+    def on_debug_dialog_closed(self):
         """Handle debug dialog close event."""
         self._debug_dialog = None
 
-    def _override_on_cbDebug_clicked(self):
+    def override_on_cbDebug_clicked(self):
         """Override for debug checkbox click handler."""
         if self.cbDebug.isChecked():
-            self._ensure_debug_dialog_visible()
+            self.ensure_debug_dialog_visible()
         elif self._debug_dialog:
             self._debug_dialog.close()
 
@@ -680,7 +655,7 @@ class LaMainForm(LaMainFormBase):
                 self.statusBar().showMessage("Running model calculations...")
             
             # Configure model from UI
-            self._configureModelFromUi()
+            self.configureModelFromUi()
             
             # Check that animal and crop percentages add up to 100%
             animalPercentTotal = float(self.labelAnimalCheck.text().replace('%', ''))

@@ -6,7 +6,7 @@ Debug dialog for Landuse Analyst - Singleton Pattern Implementation
 import os
 from qgis.PyQt.QtWidgets import (
     QDialog, QVBoxLayout, QHBoxLayout,
-    QPlainTextEdit, QPushButton, QCheckBox, QWidget
+    QPlainTextEdit, QPushButton, QCheckBox, QWidget, QLabel, QComboBox
 )
 from qgis.PyQt.QtCore import Qt, QSettings, QSize, QRect
 from qgis.PyQt.QtGui import QFont, QTextCursor, QPainter, QColor
@@ -180,6 +180,31 @@ class LaDebugDialog(QDialog):
         layout = QVBoxLayout()
         self.setLayout(layout)
 
+        # Add filter controls at the top
+        filter_layout = QHBoxLayout()
+        
+        # Message type filter combo box
+        from la.lib.lautils import LaUtils
+        self.filter_combo = QComboBox(self)
+        self.filter_combo.addItem("All Messages")
+        
+        # Get current component types and ensure important ones are included
+        components = LaUtils.debug.getComponents()
+        
+        # Always include these important categories even if not in history
+        important_types = ["Error", "Calculations", "Diet", "Animals", "Crops"]
+        for item in important_types:
+            if item not in components:
+                components.append(item)
+                
+        self.filter_combo.addItems(sorted(components))
+        self.filter_combo.currentTextChanged.connect(self.apply_filter)
+        
+        filter_layout.addWidget(QLabel("Filter by type:"))
+        filter_layout.addWidget(self.filter_combo)
+        filter_layout.addStretch()
+        layout.addLayout(filter_layout)
+
         # Text area - using custom QPlainTextEdit with line numbers
         self.text_edit = DebugTextEdit(self)
         layout.addWidget(self.text_edit)
@@ -197,16 +222,16 @@ class LaDebugDialog(QDialog):
 
         # Add line numbers checkbox
         self.show_line_numbers = QCheckBox("Show line numbers")
-        self.show_line_numbers.setChecked(False)  # Default to no line numbers
+        self.show_line_numbers.setChecked(False)
         self.show_line_numbers.toggled.connect(self.toggle_line_numbers)
         button_layout.addWidget(self.show_line_numbers)
 
         # Assign line numbers checkbox to the text edit
-        self.text_edit.show_line_numbers = self.show_line_numbers
+        setattr(self.text_edit, 'show_line_numbers', self.show_line_numbers)
 
         # Add word wrap checkbox
         self.word_wrap = QCheckBox("Word wrap")
-        self.word_wrap.setChecked(False)  # Default to no word wrap
+        self.word_wrap.setChecked(False)
         self.word_wrap.toggled.connect(self.toggle_word_wrap)
         button_layout.addWidget(self.word_wrap)
 
@@ -217,7 +242,7 @@ class LaDebugDialog(QDialog):
         button_layout.addWidget(self.copy_button)
 
         self.close_button = QPushButton("Close")
-        self.close_button.clicked.connect(self.hide)  # Changed from close to hide to preserve the instance
+        self.close_button.clicked.connect(self.hide)
         button_layout.addWidget(self.close_button)
 
         layout.addLayout(button_layout)
@@ -229,16 +254,32 @@ class LaDebugDialog(QDialog):
 
         word_wrap = settings.value("landuse_analyst/debug_word_wrap", False, type=bool)
         self.word_wrap.setChecked(word_wrap)
+        
+        # Load saved filter preference
+        saved_filter = settings.value("landuse_analyst/debug_message_filter", "All Messages")
+        index = self.filter_combo.findText(saved_filter)
+        if index >= 0:
+            self.filter_combo.setCurrentIndex(index)
 
         # Initialize word wrap based on saved preference
         self.toggle_word_wrap(word_wrap)
 
     def add_debug_message(self, message: str):
-        """Add message to log with auto-scroll handling"""
+        """Add message to log with auto-scroll handling and filter respect"""
         if not message:
             return
 
-        self.text_edit.appendPlainText(message)
+        # Check if message matches current filter
+        current_filter = self.filter_combo.currentText()
+        if current_filter != "All Messages":
+            # Messages are in format "Component: Message"
+            if not message.startswith(current_filter + ":"):
+                return
+        
+        # Strip any HTML tags before displaying
+        clean_message = self._strip_html_tags(message)
+        self.text_edit.appendPlainText(clean_message)
+        
         if self.auto_scroll.isChecked():
             cursor = self.text_edit.textCursor()
             cursor.movePosition(QTextCursor.End)
@@ -252,8 +293,9 @@ class LaDebugDialog(QDialog):
         # Temporarily disable updates to improve performance
         self.text_edit.setUpdatesEnabled(False)
 
-        # Add all messages
-        self.text_edit.appendPlainText("\n".join(messages_list))
+        # Strip HTML tags and add messages
+        stripped_messages = [self._strip_html_tags(msg) for msg in messages_list]
+        self.text_edit.appendPlainText("\n".join(stripped_messages))
 
         # Re-enable updates
         self.text_edit.setUpdatesEnabled(True)
@@ -319,3 +361,42 @@ class LaDebugDialog(QDialog):
         # Update the line number area since line wrapping may change layout
         self.text_edit.update_line_number_area_width()
         self.text_edit.line_number_area.update()
+
+    def apply_filter(self, filter_type: str):
+        """Apply message type filter and update display.
+        
+        Args:
+            filter_type: The message type to filter by, or "All Messages" for no filter
+        """
+        # Save the filter preference
+        settings = QSettings()
+        settings.setValue("landuse_analyst/debug_message_filter", filter_type)
+
+        # Clear current display
+        self.text_edit.clear()
+
+        # Get filtered message history
+        from la.lib.lautils import LaUtils
+        messages = LaUtils.debug.getHistory(
+            component_filter="" if filter_type == "All Messages" else filter_type,
+            with_line_numbers=self.show_line_numbers.isChecked()
+        )
+
+        # Add filtered messages
+        self.add_messages_from_history(messages)
+
+    def _strip_html_tags(self, text):
+        """Remove HTML tags from text for proper display in QPlainTextEdit.
+        
+        Args:
+            text: Text containing HTML formatting
+            
+        Returns:
+            Plain text without HTML tags
+        """
+        import re
+        # Replace HTML color spans with their content
+        text = re.sub(r'<span[^>]*>(.*?)</span>', r'\1', text)
+        # Replace any other HTML tags
+        text = re.sub(r'<[^>]*>', '', text)
+        return text

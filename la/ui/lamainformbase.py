@@ -261,6 +261,13 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         try:
             LaUtils.debug.log("Starting setDietLabels", "Diet")
 
+            # Critical early return: Don't perform heavy calculations unless percentages total 100%
+            if hasattr(self, 'labelAnimalCheck') and hasattr(self, 'labelCropCheck'):
+                if self.labelAnimalCheck.text() != "100.0%" or self.labelCropCheck.text() != "100.0%":
+                    # Only update basic labels without performing heavy calculations
+                    self.updateBasicLabels()
+                    return
+
             # --- 1. Update self.model thoroughly from ALL relevant UI elements ---
             # (This replaces scattered updates and ensures model reflects current UI)
             if not hasattr(self, 'model'):
@@ -342,8 +349,55 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             self.model.animals = mySelectedAnimalsMap # type: ignore
             self.model.crops = mySelectedCropsMap # type: ignore
             LaUtils.debug.log(f"Selected Animals: {len(mySelectedAnimalsMap)}, Selected Crops: {len(mySelectedCropsMap)}", "Diet")
+            myDietLabels = LaDietLabels() # Initialize empty labels
 
-            # --- 3. Guard Condition: Check Percentages ---
+            # --- 3. Update Basic Percentages and Calories (These don't need full calculation) ---
+            # Get values from UI
+            overall_plant_percent = 100 - self.sliderDiet.value()  # Plant/Meat slider
+            overall_meat_percent = self.sliderDiet.value()
+
+            # Plant breakdown
+            tame_crop_percent = 100 - self.sliderCrop.value()  # Tame/Wild plant slider
+            wild_plant_percent = self.sliderCrop.value()
+
+            # Meat breakdown
+            tame_meat_percent = 100 - self.sliderMeat.value()  # Tame/Wild meat slider
+            wild_meat_percent = self.sliderMeat.value()
+
+            # Calculate actual percentages of total diet
+            crop_portion = (overall_plant_percent * tame_crop_percent) / 100.0
+            wild_plant_portion = (overall_plant_percent * wild_plant_percent) / 100.0
+            tame_meat_portion = (overall_meat_percent * tame_meat_percent) / 100.0
+            wild_meat_portion = (overall_meat_percent * wild_meat_percent) / 100.0
+
+            # Update percentage labels
+            self.labelPortionPlants.setText(f"{overall_plant_percent:.1f}")
+            self.labelPortionMeat.setText(f"{overall_meat_percent:.1f}")
+            self.labelPortionCrops.setText(f"{crop_portion:.1f}")
+            self.labelPortionTameMeat.setText(f"{tame_meat_portion:.1f}")
+            self.labelPortionWildMeat.setText(f"{wild_meat_portion:.1f}")
+            self.labelPortionWildPlants.setText(f"{wild_plant_portion:.1f}")
+
+            # Calculate calories
+            daily_cals = self.sbDailyCalories.value()
+            population = self.sbPopulation.value()
+            total_annual_mcals = (daily_cals * population * 365) / 1000000.0  # Convert to MCals
+
+            # Update calorie labels
+            self.labelCaloriesSettlement.setText(f"{total_annual_mcals:.1f}")
+            self.labelCaloriesIndividual.setText(f"{(daily_cals * 365 / 1000000.0):.1f}")
+
+            crop_mcals = total_annual_mcals * crop_portion / 100.0
+            tame_meat_mcals = total_annual_mcals * tame_meat_portion / 100.0
+            wild_meat_mcals = total_annual_mcals * wild_meat_portion / 100.0
+            wild_plant_mcals = total_annual_mcals * wild_plant_portion / 100.0
+
+            self.labelCaloriesCrops.setText(f"{crop_mcals:.1f}")
+            self.labelCaloriesTameMeat.setText(f"{tame_meat_mcals:.1f}")
+            self.labelCaloriesWildMeat.setText(f"{wild_meat_mcals:.1f}")
+            self.labelCaloriesWildPlants.setText(f"{wild_plant_mcals:.1f}")
+
+            # --- 4. Check if we should do full calculation for dairy ---
             # Ensure the percentage check labels exist before accessing their text
             myAnimalCheckText = ""
             myCropCheckText = ""
@@ -352,62 +406,65 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             if hasattr(self, 'labelCropCheck'):
                 myCropCheckText = self.labelCropCheck.text()
 
-            # Use exact string comparison including '%'
+            # Only proceed with full calculation if percentages total 100%
             if myAnimalCheckText != "100.0%" or myCropCheckText != "100.0%":
-                 LaUtils.debug.log(f"Skipping calculation: Animal%={myAnimalCheckText}, Crop%={myCropCheckText}", "Diet")
-                 # Optionally clear result labels or leave them as they are
-                 return # Exit early, mirroring C++ logic
+                LaUtils.debug.log(f"Skipping full calculation for dairy: Animal%={myAnimalCheckText}, Crop%={myCropCheckText}", "Diet")
+                # Clear dairy-related labels since we can't calculate them
+                self.labelPortionAllDairy.setText("0.0")
+                self.labelPortionDairy.setText("0.0")
+                self.labelCaloriesDairy.setText("0.0")
+                self.labelDairySurplus.setText("No Surplus Dairy Produced")
+                return
 
             # --- 4. Select and Run Calculation Method ---
-            dietLabels = LaDietLabels() # Initialize empty labels
             if self.model.baseOnPlants:
                 if self.model.includeDairy:
                     LaUtils.debug.log("Running doCalcsPlantsFirstIncludeDairy", "Diet")
-                    dietLabels = self.model.doCalcsPlantsFirstIncludeDairy()
+                    myDietLabels = self.model.doCalcsPlantsFirstIncludeDairy()
                 else:
                     LaUtils.debug.log("Running doCalcsPlantsFirstDairySeparate", "Diet")
-                    dietLabels = self.model.doCalcsPlantsFirstDairySeparate()
+                    myDietLabels = self.model.doCalcsPlantsFirstDairySeparate()
             else:
                 if self.model.includeDairy:
                     LaUtils.debug.log("Running doCalcsAnimalsFirstIncludeDairy", "Diet")
                     # NOTE: C++ calls doCalcsAnimalsFirstIncludeDiary (typo in original?)
                     # Assuming Python method is doCalcsAnimalsFirstIncludeDairy
-                    dietLabels = self.model.doCalcsAnimalsFirstIncludeDairy()
+                    myDietLabels = self.model.doCalcsAnimalsFirstIncludeDairy()
                 else:
                     LaUtils.debug.log("Running doCalcsAnimalsFirstDairySeparate", "Diet")
-                    dietLabels = self.model.doCalcsAnimalsFirstDairySeparate()
+                    myDietLabels = self.model.doCalcsAnimalsFirstDairySeparate()
 
             # --- 5. Update UI Labels with Results ---
-            if dietLabels: # Check if calculation returned valid labels
+            if myDietLabels: # Check if calculation returned valid labels
                 # Use .1f formatting to match the previous Python version's precision
                 # If C++ doesn't specify precision, adjust as needed.
                 # Settlement / Individual Cals
-                self.labelCaloriesIndividual.setText(f"{dietLabels.kiloCaloriesIndividualAnnual:.1f}")
-                self.labelCaloriesSettlement.setText(f"{dietLabels.megaCaloriesSettlementAnnual:.1f}")
+                self.labelCaloriesIndividual.setText(f"{myDietLabels.kiloCaloriesIndividualAnnual:.1f}")
+                self.labelCaloriesSettlement.setText(f"{myDietLabels.megaCaloriesSettlementAnnual:.1f}")
 
                 # Overall Portions
-                self.labelPortionPlants.setText(f"{dietLabels.plantsPortionPct:.1f}") # Assuming labelPortionPlants exists
-                self.labelPortionMeat.setText(f"{dietLabels.animalPortionPct:.1f}")
-                self.labelPortionAllDairy.setText(f"{dietLabels.dairyPortionPct:.1f}") # Overall dairy
+                self.labelPortionPlants.setText(f"{myDietLabels.plantsPortionPct:.1f}") # Assuming labelPortionPlants exists
+                self.labelPortionMeat.setText(f"{myDietLabels.animalPortionPct:.1f}")
+                self.labelPortionAllDairy.setText(f"{myDietLabels.dairyPortionPct:.1f}") # Overall dairy
 
                 # Detailed Portions
-                self.labelPortionCrops.setText(f"{dietLabels.cropsPortionPct:.1f}") # Tame Crops
-                self.labelPortionTameMeat.setText(f"{dietLabels.tameMeatPortionPct:.1f}")
-                self.labelPortionDairy.setText(f"{dietLabels.dairyPortionPct:.1f}") # Dairy again (matches C++)
+                self.labelPortionCrops.setText(f"{myDietLabels.cropsPortionPct:.1f}") # Tame Crops
+                self.labelPortionTameMeat.setText(f"{myDietLabels.tameMeatPortionPct:.1f}")
+                self.labelPortionDairy.setText(f"{myDietLabels.dairyPortionPct:.1f}") # Dairy again (matches C++)
 
-                self.labelPortionWildMeat.setText(f"{dietLabels.wildAnimalPortionPct:.1f}")
-                self.labelPortionWildPlants.setText(f"{dietLabels.wildPlantsPortionPct:.1f}")
+                self.labelPortionWildMeat.setText(f"{myDietLabels.wildAnimalPortionPct:.1f}")
+                self.labelPortionWildPlants.setText(f"{myDietLabels.wildPlantsPortionPct:.1f}")
 
                 # Detailed Calories (MCals)
-                self.labelCaloriesCrops.setText(f"{dietLabels.cropMCalories:.1f}")
-                self.labelCaloriesTameMeat.setText(f"{dietLabels.animalMCalories:.1f}")
-                self.labelCaloriesDairy.setText(f"{dietLabels.dairyMCalories:.1f}")
-                self.labelCaloriesWildMeat.setText(f"{dietLabels.wildAnimalMCalories:.1f}")
-                self.labelCaloriesWildPlants.setText(f"{dietLabels.wildPlantsMCalories:.1f}")
+                self.labelCaloriesCrops.setText(f"{myDietLabels.cropMCalories:.1f}")
+                self.labelCaloriesTameMeat.setText(f"{myDietLabels.animalMCalories:.1f}")
+                self.labelCaloriesDairy.setText(f"{myDietLabels.dairyMCalories:.1f}")
+                self.labelCaloriesWildMeat.setText(f"{myDietLabels.wildAnimalMCalories:.1f}")
+                self.labelCaloriesWildPlants.setText(f"{myDietLabels.wildPlantsMCalories:.1f}")
 
                 # Dairy Surplus Label (Conditional Text)
-                if dietLabels.dairySurplusMCalories > 0.0: # type: ignore
-                    self.labelDairySurplus.setText(f"Dairy Surplus produced! {dietLabels.dairySurplusMCalories:.1f} MCalories")
+                if myDietLabels.dairySurplusMCalories > 0.0: # type: ignore
+                    self.labelDairySurplus.setText(f"Dairy Surplus produced! {myDietLabels.dairySurplusMCalories:.1f} MCalories")
                 else:
                     self.labelDairySurplus.setText("No Surplus Dairy Produced")
 
@@ -732,15 +789,16 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             import traceback
             LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
 
-    def updateDietLabels(self, dairy_portion_pct, tame_meat_portion_pct, crops_portion_pct):
+    def updateDietLabels(self, theDairyPortionPct, theTameMeatPortionPct, theCropsPortionPct):
         """
         Update diet labels based on the given portion percentages.
         """
-        self._dairyPortionPct = dairy_portion_pct
-        self._tameMeatPortionPct = tame_meat_portion_pct
-        self._cropsPortionPct = crops_portion_pct
+        self.mDairyPortionPct = theDairyPortionPct
+        self.mTameMeatPortionPct = theTameMeatPortionPct
+        self.mCropsPortionPct = theCropsPortionPct
 
-        LaUtils.debug.log(f"Updated diet labels: Dairy {self._dairyPortionPct}, Tame Meat {self._tameMeatPortionPct}, Crops {self._cropsPortionPct}", "Diet")
+        LaUtils.debug.log(f"Updated diet labels: Dairy {self.mDairyPortionPct}, \
+                          Tame Meat {self.mTameMeatPortionPct}, Crops {self.mCropsPortionPct}", "Diet")
 
     def setComboToDefault(self, combo, default):
         index = combo.findData(default)
@@ -1282,10 +1340,11 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                         LaUtils.debug.log(f"imageFile is string property, value: {image_file}", "UI")
                     else:
                         try:
-                            image_file = str(animal.imageFile)
-                            LaUtils.debug.log(f"imageFile converted to string: {image_file}", "UI")
+                            image_file = animal.imageFile()  # Call as method
+                            LaUtils.debug.log(f"imageFile called as method, value: {image_file}", "UI")
                         except Exception as e:
-                            LaUtils.debug.log(f"Error getting imageFile: {str(e)}", "Error")
+                            LaUtils.debug.log(f"Error calling imageFile method: {str(e)}", "UI")
+                            image_file = None
 
                 if image_file:
                     # Try standard path first
@@ -1297,9 +1356,10 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                         pixmap = QPixmap(resolved_path)
                         if not pixmap.isNull():
                             self.lblAnimalPix.setPixmap(pixmap.scaled(100, 100, QtCore.Qt.KeepAspectRatio))
-                            LaUtils.debug.log(f"Successfully loaded and scaled animal image", "UI")
+                            LaUtils.debug.log(f"Set animal image from: {resolved_path}", "UI")
                         else:
-                            LaUtils.debug.log(f"Failed to create pixmap from: {resolved_path}", "Error")
+                            LaUtils.debug.log(f"Could not create pixmap from: {resolved_path}", "Error")
+                            self.lblAnimalPix.clear()
                     else:
                         # Try alternate path in images directory
                         imagesDir = LaUtils.userImagesDirPath()
@@ -1311,13 +1371,13 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                             pixmap = QPixmap(alternativePath)
                             if not pixmap.isNull():
                                 self.lblAnimalPix.setPixmap(pixmap.scaled(100, 100, QtCore.Qt.KeepAspectRatio))
-                                LaUtils.debug.log(f"Successfully loaded animal image from alternate path", "UI")
+                                LaUtils.debug.log(f"Set animal image from alternate path: {alternativePath}", "UI")
                             else:
-                                LaUtils.debug.log(f"Failed to load animal image from alternate path", "Error")
+                                LaUtils.debug.log(f"Could not create pixmap from alternate path: {alternativePath}", "Error")
+                                self.lblAnimalPix.clear()
                         else:
-                            LaUtils.debug.log(f"No valid image file found at any location", "Warning")
-                else:
-                    LaUtils.debug.log(f"No image file specified for animal: {animal.name}", "Warning")
+                            LaUtils.debug.log(f"No image file found at either path for animal: {animal.name}", "Warning")
+                            self.lblAnimalPix.clear()
 
         except Exception as e:
             LaUtils.debug.log(f"Error showing animal details: {str(e)}", "Error")
@@ -1392,21 +1452,27 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                             self.lblCropPix.setPixmap(pixmap)
                             LaUtils.debug.log("Crop image loaded successfully", "UI")
                         else:
-                            # Try alternative path in user images directory
-                            LaUtils.debug.log(f"Failed to create pixmap from {resolved_path}", "Error")
-                            imagesDir = LaUtils.userImagesDirPath()
-                            imageFileName = os.path.basename(str(image_path))
-                            alternativePath = os.path.join(imagesDir, imageFileName)
+                            LaUtils.debug.log(f"Failed to create pixmap from: {resolved_path}", "Error")
+                            self.lblCropPix.clear()
+                    else:
+                        # Try alternate path in user images directory
+                        imagesDir = LaUtils.userImagesDirPath()
+                        imageFileName = os.path.basename(str(image_path))
+                        alternativePath = os.path.join(imagesDir, imageFileName)
+                        LaUtils.debug.log(f"Trying alternate image path: {alternativePath}", "UI")
 
-                            if os.path.exists(alternativePath):
-                                pixmap = QPixmap(alternativePath)
-                                if not pixmap.isNull():
-                                    self.lblCropPix.setPixmap(pixmap)
-                                    LaUtils.debug.log(f"Successfully loaded image from alternate path: {alternativePath}", "UI")
-                                else:
-                                    LaUtils.debug.log(f"Failed to load image from alternate path: {alternativePath}", "Error")
+                        if os.path.exists(alternativePath):
+                            pixmap = QPixmap(alternativePath)
+                            if not pixmap.isNull():
+                                self.lblCropPix.setPixmap(pixmap)
+                                LaUtils.debug.log("Crop image loaded successfully from alternate path", "UI")
                             else:
-                                LaUtils.debug.log(f"No valid image path found", "Warning")
+                                LaUtils.debug.log(f"Failed to create pixmap from alternate path: {alternativePath}", "Error")
+                                self.lblCropPix.clear()
+                        else:
+                            LaUtils.debug.log(f"No valid image path found for crop: {crop.name}", "Warning")
+                            self.lblCropPix.clear()
+
         except Exception as e:
             LaUtils.debug.log(f"Error showing crop details: {str(e)}", "Error")
             import traceback
@@ -1594,12 +1660,10 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             # Note: Selected animals/crops are updated directly in updateCrop/AnimalCalculations
 
             LaUtils.debug.log("Model updated successfully from UI", "Model")
-
         except Exception as e:
             LaUtils.debug.log(f"Error updating model from UI: {str(e)}", "Error")
             import traceback
             LaUtils.debug.log(f"Traceback: {traceback.format_exc()}", "Error")
-
 
     def updateCropCalculations(self, theCrop: LaCrop):
         """Update calculations for a crop.
@@ -1790,14 +1854,14 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         self.cboxIncludeDairy.toggled.connect(self.on_cboxIncludeDairy_toggled)
         self.cboxLimitDairy.toggled.connect(self.on_cboxLimitDairy_toggled)
         self.cboxBaseOnPlants.toggled.connect(self.on_cboxBaseOnPlants_toggled)
-        
+
         # Connect spinboxes
         self.sbLimitDairyPercent.valueChanged.connect(self.on_sbLimitDairyPercent_valueChanged)
         self.sbDailyCalories.valueChanged.connect(self.on_sbDailyCalories_valueChanged)
         self.sbDairyUtilisation.valueChanged.connect(self.on_sbDairyUtilisation_valueChanged)
         self.sbPopulation.valueChanged.connect(self.on_sbPopulation_valueChanged)
         self.sbCommonRasterValue.valueChanged.connect(self.on_sbCommonRasterValue_valueChanged)
-        
+
         # Connect combo boxes
         self.cbAreaUnits.currentIndexChanged.connect(self.on_cbAreaUnits_changed)
         self.cbCommonLandEnergyType.currentIndexChanged.connect(self.on_cbCommonLandEnergyType_changed)
@@ -1814,36 +1878,36 @@ class LaMainFormBase(QDialog, FORM_CLASS):
 
     def on_sbCommonRasterValue_valueChanged(self, value):
         """Handle common raster value changes.
-        
+
         This method updates the model's common raster value when the user
         changes the value in the common raster value spinbox.
-        
+
         Args:
             value: The new value from the spinbox
         """
         if hasattr(self, 'model'):
             from la.lib.la import AreaUnits
             LaUtils.debug.log(f"Common Raster Value changed to: {value}", "Settings")
-            
+
             # Get the current area units
             selected_area_unit = AreaUnits.Dunum if self.cbAreaUnits.currentText() == "Dunum" else AreaUnits.Hectare
-            
+
             # Update the model with the new value
             if hasattr(self.model, 'setCommonLandValue'):
                 self.model.setCommonLandValue(value, selected_area_unit)
             elif hasattr(self.model, 'commonLandValue'):
                 self.model.commonLandValue = value
-            
+
             # Recalculate with the new value
             self.setDietLabels()
 
     # Add the missing checkbox handlers here
     def on_cboxIncludeDairy_toggled(self, checked):
         """Handle include dairy checkbox changes.
-        
+
         This method updates the model's includeDairy property when the user
         toggles the Include Dairy checkbox.
-        
+
         Args:
             checked: Boolean indicating if the checkbox is checked
         """
@@ -1854,10 +1918,10 @@ class LaMainFormBase(QDialog, FORM_CLASS):
 
     def on_cboxLimitDairy_toggled(self, checked):
         """Handle limit dairy checkbox changes.
-        
+
         This method updates the model's limitDairy property when the user
         toggles the Limit Dairy checkbox.
-        
+
         Args:
             checked: Boolean indicating if the checkbox is checked
         """
@@ -1937,3 +2001,67 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             # Update model property
             self.model.specificLandEnergyType = selected_energy_type
             self.setDietLabels()
+
+    def updateBasicLabels(self):
+        """Update basic diet labels without performing heavy calculations.
+        This is called when percentages don't total 100% to provide immediate feedback
+        while avoiding unnecessary heavy computation."""
+        try:
+            # Get values from UI
+            myOverallPlantPercent = 100 - self.sliderDiet.value()  # Plant/Meat slider
+            myOverallMeatPercent = self.sliderDiet.value()
+
+            # Plant breakdown
+            myTameCropPercent = self.sliderCrop.value()  # Tame/Wild plant slider
+            myWildPlantPercent = 100 - self.sliderCrop.value()
+
+            # Meat breakdown
+            myTameMeatPercent = self.sliderMeat.value()  # Tame/Wild meat slider
+            myWildMeatPercent = 100 - self.sliderMeat.value()
+
+            # Calculate actual percentages of total diet
+            myCropPortion = (myOverallPlantPercent * myTameCropPercent) / 100.0
+            myWildPlantPortion = (myOverallPlantPercent * myWildPlantPercent) / 100.0
+            myTameMeatPortion = (myOverallMeatPercent * myTameMeatPercent) / 100.0
+            myWildMeatPortion = (myOverallMeatPercent * myWildMeatPercent) / 100.0
+
+            # Update percentage labels
+            self.labelPortionPlants.setText(f"{myOverallPlantPercent:.1f}")
+            self.labelPortionMeat.setText(f"{myOverallMeatPercent:.1f}")
+            self.labelPortionCrops.setText(f"{myCropPortion:.1f}")
+            self.labelPortionTameMeat.setText(f"{myTameMeatPortion:.1f}")
+            self.labelPortionWildMeat.setText(f"{myWildMeatPortion:.1f}")
+            self.labelPortionWildPlants.setText(f"{myWildPlantPortion:.1f}")
+
+            # Calculate basic calories
+            myDailyCals = self.sbDailyCalories.value()
+            myPopulation = self.sbPopulation.value()
+            myTotalAnnualMcals = (myDailyCals * myPopulation * 365) / 1000000.0  # Convert to MCals
+
+            # Update calorie labels
+            self.labelCaloriesSettlement.setText(f"{myTotalAnnualMcals:.1f}")
+            self.labelCaloriesIndividual.setText(f"{(myDailyCals * 365 / 1000.0):.1f}") # this displays as kCals so we need to adjust it
+
+            # Update component calorie labels
+            myCropMcals = myTotalAnnualMcals * myCropPortion * 0.01
+            myTameMeatMcals = myTotalAnnualMcals * myTameMeatPortion * 0.01
+            myWildMeatMcals = myTotalAnnualMcals * myWildMeatPortion * 0.01
+            myWildPlantMcals = myTotalAnnualMcals * myWildPlantPortion * 0.01
+
+            self.labelCaloriesCrops.setText(f"{myCropMcals:.1f}")
+            self.labelCaloriesTameMeat.setText(f"{myTameMeatMcals:.1f}")
+            self.labelCaloriesWildMeat.setText(f"{myWildMeatMcals:.1f}")
+            self.labelCaloriesWildPlants.setText(f"{myWildPlantMcals:.1f}")
+
+            # Clear dairy-related labels since we can't calculate them
+            self.labelPortionAllDairy.setText("0.0")
+            self.labelPortionDairy.setText("0.0")
+            self.labelCaloriesDairy.setText("0.0")
+            self.labelDairySurplus.setText("Dairy contributions not calculated until plants and animals are both 100%")
+
+            LaUtils.debug.log("Basic diet labels updated (no full calculation)", "Diet")
+
+        except Exception as e:
+            LaUtils.debug.log(f"Error updating basic labels: {str(e)}", "Error")
+            import traceback
+            LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")

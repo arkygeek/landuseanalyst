@@ -23,6 +23,8 @@ from qgis.PyQt.QtCore import QFile, QTextStream, QObject, QDir, QSettings, QFile
 from la.lib.laanimalparameter import LaAnimalParameter
 from la.lib.laanimal import LaAnimal
 from la.lib.lacropparameter import LaCropParameter
+
+# from la.gui.ladebugdialog import LaDebugDialog
 # from la.lib.lacrop import LaCrop
 
 class LaMessageBus(QObject):
@@ -31,51 +33,6 @@ class LaMessageBus(QObject):
 
 # Create a global instance of the message bus that can be imported
 MESSAGE_BUS = LaMessageBus()
-
-
-class LaDebugForm(QDialog):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.setupUi()
-
-    def setupUi(self):
-        layout = QVBoxLayout()
-
-        # Add filter controls
-        filterLayout = QHBoxLayout()
-        self.filterCombo = QComboBox()
-        self.filterCombo.addItem("All Messages")
-        self.filterCombo.addItems(LaUtils.debug.getComponents())
-        self.filterCombo.currentTextChanged.connect(self.updateDisplay)
-        filterLayout.addWidget(QLabel("Filter by type:"))
-        filterLayout.addWidget(self.filterCombo)
-        filterLayout.addStretch()
-        layout.addLayout(filterLayout)
-
-        # Debug output text area
-        self.textEdit = QTextEdit()
-        self.textEdit.setReadOnly(True)
-        layout.addWidget(self.textEdit)
-
-        # Show line numbers checkbox
-        self.showLineNumbers = QCheckBox("Show Line Numbers")
-        self.showLineNumbers.setChecked(False)
-        self.showLineNumbers.stateChanged.connect(self.updateDisplay)
-        layout.addWidget(self.showLineNumbers)
-
-        self.setLayout(layout)
-        self.setWindowTitle("Debug Log")
-        self.resize(600, 400)
-
-        self.updateDisplay()
-
-    def updateDisplay(self):
-        component = None if self.filterCombo.currentText() == "All Messages" else self.filterCombo.currentText()
-        messages = LaUtils.debug.get_history(
-            component_filter=component,
-            with_line_numbers=self.showLineNumbers.isChecked()
-        )
-        self.textEdit.setHtml("<br>".join(messages))
 
 
 class LaDebugLogger:
@@ -798,16 +755,6 @@ class LaUtils:
         theAnimalParameter.save()
 
     @staticmethod
-    def generateGuid() -> str:
-        """
-        Generates a new GUID.
-
-        :return: The generated GUID
-        :rtype: str
-        """
-        return str(uuid.uuid4())
-
-    @staticmethod
     def saveToFile(theFilename: str, theData: str) -> None:
         """
         Saves data to a file with the specified filename.
@@ -1037,3 +984,16 @@ class LaUtils:
 
         LaUtils.debug.log(f"Could not find image: {filename}")
         return ""
+
+    @staticmethod
+    def getDebugDialog(parent=None):
+        """Returns the debug dialog singleton instance.
+        
+        Args:
+            parent: Optional parent widget for the dialog
+            
+        Returns:
+            LaDebugDialog: The debug dialog instance
+        """
+        from la.gui.ladebugdialog import LaDebugDialog
+        return LaDebugDialog.get_instance(parent)

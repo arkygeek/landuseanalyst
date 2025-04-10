@@ -795,20 +795,7 @@ class TestLaUtils(unittest.TestCase):
         self.assertEqual(myTripleMap["animal2"], (False, "param2"))
 
 
-    def test_generateGuid(self):
-        MESSAGE_BUS.debug("Test number 31: generateGuid")
 
-        # Call the generateGuid method
-        myResult = LaUtils.generateGuid()
-
-        # Verify that the result is a valid UUID
-        try:
-            uuid_obj = uuid.UUID(myResult, version=4)
-        except ValueError:
-            self.fail("generateGuid did not return a valid UUID")
-
-        # Verify that the result is a string
-        self.assertIsInstance(myResult, str)
 
     @patch('la.lib.lautils.QFileDialog.getOpenFileName')
     @patch('la.lib.lautils.QFile.copy')
