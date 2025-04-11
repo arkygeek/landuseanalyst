@@ -56,7 +56,7 @@ class LaMainForm(LaMainFormBase):
         # Initialize the model first
         self.model = LaModel(self)
         # Connect the new signal for calculation logging
-        self.model.logCalculationStep.connect(self.logToAllChannels) # Add this line
+        self.model._logCalculationStep.connect(self.logToAllChannels) # Add this line
 
         # Initialize diet labels
         self.mDietLabels = LaDietLabels(parent=self)

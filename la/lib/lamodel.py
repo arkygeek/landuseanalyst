@@ -101,7 +101,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
     _walkingTimeChanged = pyqtSignal()
 
     # Add a new signal for logging calculation steps to the UI
-    logCalculationStep = pyqtSignal(str)
+    _logCalculationStep = pyqtSignal(str)
 
     def __init__(self, parent=None):
         QDialog.__init__(self, parent)
