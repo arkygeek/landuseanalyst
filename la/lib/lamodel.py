@@ -110,14 +110,14 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         LaSerialisable.__init__(self)
         # Assign a new guid with LaGuid setGuid() if there is none being passed in
         self.mGuid: str
-        if not self.guid:
+        if not self.mGuid:
             self.setGuid()
-
+        
         
         # Model properties
-        self.mName = ""
-        self.mPopulation = "100"
-        self.mTotalLandNeeded = "0"
+        self.mName = str()
+        self.mPopulation = int()
+        self.mTotalLandNeeded = int()
         
         # Diet calculation properties
         self.mAnimals = {}
@@ -127,7 +127,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         self.limitDairy = True
         self.limitDairyPercent = 10
         self.caloriesPerPersonDaily = 2500
-        self.dairyUtilisation = 100
+        self.dairyUtilisation = 50
         
         # Store calculation results
         self.lastDietLabels = None
