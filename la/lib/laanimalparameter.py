@@ -47,7 +47,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self._mUseSpecificGrazingLand = False
             self._mFodderUse = 0.0
             self._mFoodSourceMap: Dict[str, LaFoodSource] = {}
-            self._fallowUsage = Priority.None_
+            self._fallowUsage = Priority.Nope
             self._rasterName = ""
             self._areaUnits = AreaUnits.Dunum
             self._energyType = EnergyType.KCalories
@@ -461,7 +461,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
         elif myFallowUsage == "Low":
             self._fallowUsage = Priority.Low
         else:
-            self._fallowUsage = Priority.None_
+            self._fallowUsage = Priority.Nope
 
         self._rasterName = LaUtils.xmlDecode(myTopElement.firstChildElement("rasterName").text())
         return True

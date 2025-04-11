@@ -40,7 +40,7 @@ class Priority(Enum):
 
     Attributes:
     ----------
-    None_ : int
+    Nope : int
         The priority level for no priority.
     High : int
         The priority level for high priority.
@@ -49,7 +49,7 @@ class Priority(Enum):
     Low : int
         The priority level for low priority.
     """
-    None_ = 0
+    Nope = 0
     High = 1
     Medium = 2
     Low = 3

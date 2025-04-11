@@ -123,7 +123,7 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
         self.cbFallowUsage.addItem("HIGH Fallow Priority", Priority.High)
         self.cbFallowUsage.addItem("MED Fallow Priority", Priority.Medium)
         self.cbFallowUsage.addItem("LOW Fallow Priority", Priority.Low)
-        self.cbFallowUsage.addItem("Do Not Graze Fallow", Priority.None_)
+        self.cbFallowUsage.addItem("Do Not Graze Fallow", Priority.Nope)
 
         LaUtils.debug.log("setupFallowComboBox: Initialized fallow priority combo box")
 

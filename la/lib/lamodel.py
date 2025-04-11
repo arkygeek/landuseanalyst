@@ -686,7 +686,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         self.mDietLabels = []  # Assuming diet labels are stored in a more complex structure
         self.mLandBeingGrazed = LandBeingGrazed[root.findtext('landBeingGrazed', default="Common")] # Changed default to match enum
         self.mLandFound = LandFound[root.findtext('landFound', default="NotEnough")] # Changed default to match enum
-        self.mPriority = Priority[root.findtext('priority', default="None_")] # Changed default to match enum
+        self.mPriority = Priority[root.findtext('priority', default="Nope")] # Changed default to match enum
         self.mDescription = root.findtext('description', default="No Description Set")
         self.mAreaUnits = AreaUnits[root.findtext('areaUnits', default="Hectare")] # Changed default to match enum
         self.mStatus = Status[root.findtext('status', default="MoreThanEnoughToCompletelySatisfy")] # Changed default to match enum
