@@ -59,7 +59,7 @@ class LaMainForm(LaMainFormBase):
         self.model.logCalculationStep.connect(self.logToAllChannels) # Add this line
 
         # Initialize diet labels
-        self.diet_labels = LaDietLabels(parent=self)
+        self.mDietLabels = LaDietLabels(parent=self)
 
         # Basic UI setup
         self.setup()
@@ -69,7 +69,7 @@ class LaMainForm(LaMainFormBase):
         self.connect_additional_signals()
 
         # Connect diet label signals to UI update slots - do this once
-        self._connect_diet_label_signals(self.diet_labels)
+        self._connectDietLabelSignals(self.mDietLabels)
 
         # Initialize diet labels with default values
         self.setDietLabels()  # This will calculate initial values based on default slider positions
@@ -212,9 +212,9 @@ class LaMainForm(LaMainFormBase):
     def connect_diet_label_signals(self):
         """This method is deprecated - use _connect_diet_label_signals() instead"""
         # Delegate to the main connection method for compatibility with any existing calls
-        dietLabels = self.diet_labels if hasattr(self, 'diet_labels') else None
+        dietLabels = self.mDietLabels if hasattr(self, 'diet_labels') else None
         if dietLabels:
-            self._connect_diet_label_signals(dietLabels)
+            self._connectDietLabelSignals(dietLabels)
         else:
             LaUtils.debug.log("Warning: deprecated connect_diet_label_signals called with no diet_labels available", "Warning")
 
@@ -342,7 +342,7 @@ class LaMainForm(LaMainFormBase):
         # Delegate to our unified logging method
         self.logToAllChannels(message)
 
-    def logToAllChannels(self, message):
+    def logToAllChannels(self, theMessage):
         """
         Unified logging method that sends messages to all log channels.
         This is the central logging method that all other logging methods should use.
@@ -350,12 +350,12 @@ class LaMainForm(LaMainFormBase):
         Args:
             message: The message to log
         """
-        # Force console output for debugging
-        print(f"LOG: {message}")
+        # Force console output for debugging ** only use in desperation as it consumes a lot of additional memory
+        # print(f"LOG: {theMessage}")
 
         # Add the message to the logs tab
         if hasattr(self, 'tbLogs'):
-            self.tbLogs.append(message)
+            self.tbLogs.append(theMessage)
             self.tbLogs.ensureCursorVisible()
             # Force UI update immediately
             self.tbLogs.repaint()
@@ -363,14 +363,14 @@ class LaMainForm(LaMainFormBase):
 
         # Add the message to the report tab
         if hasattr(self, 'tbReport'):
-            self.tbReport.append(message)
+            self.tbReport.append(theMessage)
             # Force UI update
             self.tbReport.repaint()
             QtWidgets.QApplication.processEvents()
 
         # Log to debug dialog if exists and visible
         if hasattr(self, '_debug_dialog') and self._debug_dialog is not None and self._debug_dialog.isVisible():
-            self._debug_dialog.add_debug_message(message)
+            self._debug_dialog.addDebugMessage(theMessage)
 
     def on_debug_message(self, message: str):
         """Handle debug messages from the message bus."""
@@ -464,8 +464,8 @@ class LaMainForm(LaMainFormBase):
             # Store reference to the diet labels from the calculation for signal connections
             # This assumes the base class method updated the model with calculations
             if hasattr(self.model, 'lastDietLabels') and self.model.lastDietLabels:
-                self.diet_labels = self.model.lastDietLabels
-                self._connect_diet_label_signals(self.diet_labels)
+                self.mDietLabels = self.model.lastDietLabels
+                self._connectDietLabelSignals(self.mDietLabels)
             
             # Update calculations (this might trigger more logging)
             self.updateCalculations()
@@ -526,7 +526,7 @@ class LaMainForm(LaMainFormBase):
 
     # --- private methods ---
 
-    def _connect_diet_label_signals(self, dietLabels):
+    def _connectDietLabelSignals(self, dietLabels):
         """Connect diet label signals to UI update slots."""
         try:
             if not dietLabels:

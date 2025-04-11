@@ -103,101 +103,39 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
     # Add a new signal for logging calculation steps to the UI
     logCalculationStep = pyqtSignal(str)
 
-    def __init__(self, parent=None, theModel=None):
-        """
-        Initialize the LaModel instance.
+    def __init__(self, parent=None):
+        QDialog.__init__(self, parent)
+        
+        # Initialize LaSerialisable (maintains backward compatibility)
+        LaSerialisable.__init__(self)
+        # Assign a new guid with LaGuid setGuid() if there is none being passed in
+        self.mGuid: str
+        if not self.guid:
+            self.setGuid()
 
-        Args:
-            parent (QWidget, optional): The parent widget. Defaults to None.
-            theModel (LaModel, optional): An existing LaModel instance to copy attributes from. Defaults to None.
-        """
-        super().__init__(parent)
-        if theModel is not None:
-            self.mName = theModel.name
-            self.mPopulation = theModel.population
-            self.mGuid = theModel.guid
-            self.mPeriod = theModel.period
-            self.mProjection = theModel.projection
-            self.mEasting = theModel.easting
-            self.mNorthing = theModel.northing
-            self.mEuclideanDistance = theModel.euclideanDistance
-            self.mWalkingTime = theModel.walkingTime
-            self.mPathDistance = theModel.pathDistance
-            self.mPrecision = theModel.precision
-            self.mDietPercent = theModel.dietPercent
-            self.mPercentOfDietThatIsFromCrops = theModel.percentOfDietThatIsFromCrops
-            self.mMeatPercent = theModel.meatPercent
-            self.mCaloriesPerPersonDaily = theModel.caloriesPerPersonDaily
-            self.mDairyUtilisation = theModel.dairyUtilisation
-            self.mBaseOnPlants = theModel.baseOnPlants
-            self.mIncludeDairy = theModel.includeDairy
-            self.mLimitDairy = theModel.limitDairy
-            self.mLimitDairyPercent = theModel.limitDairyPercent
-            self.mFallowStatus = theModel.fallowStatus
-            self.mFallowRatio = theModel.fallowRatio
-            self.mLandBeingGrazed = theModel.landBeingGrazed
-            self.mLandFound = theModel.landFound
-
-            self.mCommonLandValue = theModel.commonLandValue
-            self.mCommonLandAreaUnits = theModel.commonLandAreaUnits
-            self.mSpecificLandAreaUnits = theModel.specificLandAreaUnits # Added assignment
-            self.mSpecificLandEnergyType = theModel.specificLandEnergyType # Added assignment
-            self.mHerdSize = theModel.herdSize
-            self.mAnimals = {}
-            self.mCrops = {}
-            self.mDiets = {}
-            self.mDietLabels = []
-            self.mPriority = theModel.priority
-            self.mDescription  = theModel.description
-            self.mAreaUnits = theModel.areaUnits
-            self.mStatus = theModel.status
-            self.mIcon = None
-        else:
-            self.setGuid(None)
-            self.mName = "Default Site"
-            self.mPopulation = 1000
-            self.mPeriod = "No Period Set"
-            self.mProjection = 100
-            self.mPrecision = 5
-            self.mDietPercent = 25
-            self.mPercentOfDietThatIsFromCrops = 10
-            self.mMeatPercent = 10
-            self.mCaloriesPerPersonDaily = 2500
-            self.mDairyUtilisation = 100
-            self.mBaseOnPlants = True
-            self.mIncludeDairy = True
-            self.mLimitDairy = False
-            self.mLimitDairyPercent = 10
-            self.mFallowStatus = Status.MoreThanEnoughToCompletelySatisfy
-            self.mFallowRatio = 1
-            self.mEasting = 0
-            self.mNorthing = 0
-            self.mEuclideanDistance = True
-            self.mWalkingTime = False
-            self.mPathDistance = False
-            self.mLandBeingGrazed = LandBeingGrazed.Common
-            self.mLandFound = LandFound.NotEnough
-
-            self.mCommonLandValue = 0.0
-            self.mCommonLandAreaUnits = AreaUnits.Hectare
-            self.mSpecificLandAreaUnits = AreaUnits.Hectare # Added default
-            self.mSpecificLandEnergyType = EnergyType.KCalories # Corrected default
-            self.mHerdSize = 0
-            self.mAnimals = {}
-            self.mCrops = {}
-            self.mDiets = {}
-            self.mDietLabels = []
-            self.mPriority = Priority.None_
-            self.mDescription = "No Description Set"
-            self.mAreaUnits = AreaUnits.Hectare
-            self.mStatus = Status.MoreThanEnoughToCompletelySatisfy
-            self.mIcon = None
-
-        # Initialize value map for fallow allocation
-        self._mValueMap = {}
-        self.logger = logging.getLogger(__name__)
-
-
+        
+        # Model properties
+        self.mName = ""
+        self.mPopulation = "100"
+        self.mTotalLandNeeded = "0"
+        
+        # Diet calculation properties
+        self.mAnimals = {}
+        self.mCrops = {}
+        self.baseOnPlants = False
+        self.includeDairy = True
+        self.limitDairy = True
+        self.limitDairyPercent = 10
+        self.caloriesPerPersonDaily = 2500
+        self.dairyUtilisation = 100
+        
+        # Store calculation results
+        self.lastDietLabels = None
+        
+        # Create logger for this class
+        from qgis.core import QgsMessageLog
+        self.logger = QgsMessageLog.instance()
+    
     def logMessage(self, theMessage: str):
         """
         Logs a message using the logger.
@@ -1722,180 +1660,206 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         return myDietLabels
 
 
-    def toHtml(self) -> str:
-        """Generate an HTML representation of the model."""
-        html = f"<h1>Model Report</h1>\\n"
-        html += f"<p><strong>Name:</strong> {self.name}</p>\\n"
-        html += f"<p><strong>Population:</strong> {self.population}</p>\\n"
-        html += f"<p><strong>Period:</strong> {self.period}</p>\\n"
-        html += f"<p><strong>Projection:</strong> {self.projection}</p>\\n"
-        html += f"<p><strong>Easting:</strong> {self.easting}</p>\\n"
-        html += f"<p><strong>Northing:</strong> {self.northing}</p>\\n"
-        html += f"<p><strong>Diet Percent:</strong> {self.dietPercent}%</p>\\n"
-        html += f"<p><strong>Meat Percent:</strong> {self.meatPercent}%</p>\\n"
-        html += f"<p><strong>Calories Per Person Daily:</strong> {self.caloriesPerPersonDaily}</p>\\n"
-        html += f"<p><strong>Dairy Utilisation:</strong> {self.dairyUtilisation}%</p>\\n"
-        html += f"<p><strong>Base on Plants:</strong> {self.baseOnPlants}</p>\\n"
-        html += f"<p><strong>Include Dairy:</strong> {self.includeDairy}</p>\\n"
-        html += f"<p><strong>Limit Dairy:</strong> {self.limitDairy}</p>\\n"
-        html += f"<p><strong>Limit Dairy Percent:</strong> {self.limitDairyPercent}%</p>\\n"
-        html += f"<p><strong>Common Land Value:</strong> {self.commonLandValue}</p>\\n"
-        html += f"<p><strong>Common Land Area Units:</strong> {self.commonLandAreaUnits}</p>\\n"
+    def toHtmlCalorieCropTargets(self) -> str:
+        """Generate HTML report for crop calorie targets."""
+        html = "<h3>Crop Calorie Targets</h3>"
+        
+        if not self.lastDietLabels:
+            return html + "<p>No calculation results available</p>"
+        
+        html += "<table border='1' cellpadding='4'>"
+        html += "<tr><th>Crop</th><th>Calories (kcal)</th><th>Percentage</th></tr>"
+        
+        # Get crop calorie targets from lastDietLabels if available
+        total_calories = 0
+        crop_calories = {}
+        
+        if hasattr(self.lastDietLabels, 'cropCalorieTargets'):
+            crop_calories = self.lastDietLabels.cropCalorieTargets
+            total_calories = sum(crop_calories.values()) if crop_calories else 0
+        
+        # Generate rows for each crop
+        if crop_calories:
+            for crop_guid, calories in crop_calories.items():
+                crop = LaUtils.getCrop(crop_guid)
+                crop_name = crop.name if crop and crop.name else "Unknown"
+                percentage = (calories / total_calories * 100) if total_calories > 0 else 0
+                html += f"<tr><td>{crop_name}</td><td>{calories:,.0f}</td><td>{percentage:.1f}%</td></tr>"
+        else:
+            html += "<tr><td colspan='3'>No crop calorie targets calculated</td></tr>"
+        
+        html += "</table>"
         return html
-
-
-    def allocateFallowGrazingLand(self, theFallowMCalsAvailable: float, theAnimalMCalRequirementMap: Dict[str, float]) -> None:
-        """Allocate fallow grazing land to animals based on their priority.
-
-        Args:
-            theFallowMCalsAvailable: MCals available from fallow land
-            theAnimalMCalRequirementMap: Map of animal GUIDs to MCal requirements
-        """
-        from la.lib.lautils import LaUtils
-        from la.lib.la import Priority
-
-        LaUtils.debug.log(f"Starting fallow grazing land allocation with {theFallowMCalsAvailable:.2f} MCal available", "Diet")
-
-        if theFallowMCalsAvailable <= 0 or not theAnimalMCalRequirementMap:
-            LaUtils.debug.log("No fallow land or no animals to allocate to", "Diet")
-            return
-
-        # Create maps to hold animals by priority
-        highPriorityMap = {}
-        mediumPriorityMap = {}
-        lowPriorityMap = {}
-
-        # Group animals by fallow access priority
-        for animalGuid, mCalRequirement in theAnimalMCalRequirementMap.items():
-            if mCalRequirement <= 0:
-                continue
-
-            # Get animal parameter
-            paramGuid = self.mAnimals.get(animalGuid, "")
-            if not paramGuid:
-                continue
-
-            animalParameter = LaUtils.getAnimalParameter(paramGuid)
-            if not animalParameter:
-                continue
-
-            # Get fallow usage priority
-            try:
-                fallowUsage = getattr(animalParameter, 'fallowUsage', Priority.None_)
-                if fallowUsage == Priority.High:
-                    highPriorityMap[animalGuid] = mCalRequirement
-                elif fallowUsage == Priority.Medium:
-                    mediumPriorityMap[animalGuid] = mCalRequirement
-                elif fallowUsage == Priority.Low:
-                    lowPriorityMap[animalGuid] = mCalRequirement
-            except Exception as e:
-                LaUtils.debug.log(f"Error getting fallow usage for animal {animalGuid}: {str(e)}", "Error")
-
-        # Track remaining MCals to distribute
-        remainingMCals = theFallowMCalsAvailable
-
-        # Allocate to high priority animals first
-        if highPriorityMap:
-            LaUtils.debug.log(f"Allocating to {len(highPriorityMap)} high priority animals", "Diet")
-            remainingMCals = self.doTheFallowAllocation(Priority.High, remainingMCals, highPriorityMap)
-
-        # Then to medium priority animals
-        if mediumPriorityMap and remainingMCals > 0:
-            LaUtils.debug.log(f"Allocating to {len(mediumPriorityMap)} medium priority animals", "Diet")
-            remainingMCals = self.doTheFallowAllocation(Priority.Medium, remainingMCals, mediumPriorityMap)
-
-        # Finally to low priority animals
-        if lowPriorityMap and remainingMCals > 0:
-            LaUtils.debug.log(f"Allocating to {len(lowPriorityMap)} low priority animals", "Diet")
-            remainingMCals = self.doTheFallowAllocation(Priority.Low, remainingMCals, lowPriorityMap)
-
-        LaUtils.debug.log(f"Fallow allocation complete. {remainingMCals:.2f} MCal remains unallocated.", "Diet")
-
-
-    def doTheFallowAllocation(self, thePriority: Priority, theAvailableFallowValue: float,
-                            theAnimalMCalRequirementMap: Dict[str, float]) -> float:
-        """Allocate fallow land to animals of a specific priority using match case.
-
-        Args:
-            thePriority: Priority level being processed
-            theAvailableFallowValue: MCals available from fallow land
-            theAnimalMCalRequirementMap: Map of animal GUIDs to MCal requirements
-                                         for the current priority group.
-
-        Returns:
-            float: Remaining MCals after allocation
-        """
-        from la.lib.lautils import LaUtils
-        from la.lib.la import Status # Ensure Status enum is imported
-
-        if theAvailableFallowValue <= 0 or not theAnimalMCalRequirementMap:
-            LaUtils.debug.log(f"No fallow allocation needed for priority {thePriority.name}. Available: {theAvailableFallowValue}, Animals: {len(theAnimalMCalRequirementMap)}", "Diet")
-            return theAvailableFallowValue
-
-        # Calculate total MCals needed by this priority group
-        myTotalNeeded = sum(theAnimalMCalRequirementMap.values())
-        LaUtils.debug.log(f"Priority {thePriority.name}: Total Needed = {myTotalNeeded:.2f} MCal, Available Fallow = {theAvailableFallowValue:.2f} MCal", "Diet")
-
-        # Determine the fallow status based on C++ logic
-        myFallowDifference = theAvailableFallowValue - myTotalNeeded
-        myFallowStatus = Status.MoreThanEnoughToCompletelySatisfy if myFallowDifference > 0 else Status.NotEnoughToCompletelySatisfy
-
-        myFallowStatusString = "More than Enough" if myFallowStatus == Status.MoreThanEnoughToCompletelySatisfy else "Not Enough"
-        LaUtils.debug.log(f"Fallow Status: {myFallowStatusString}", "Diet")
-
-        myRemainingFallow = 0.0
-
-        # Use match case based on the calculated status
-        match myFallowStatus:
-            case Status.MoreThanEnoughToCompletelySatisfy:
-                LaUtils.debug.log("CASE: MoreThanEnoughToCompletelySatisfy", "Diet")
-                # Each animal in this group gets its full requirement met by fallow.
-                # Reduce their remaining requirement in the main value map (_mValueMap) to zero.
-                for myAnimalGuid, myMCalRequirement in theAnimalMCalRequirementMap.items():
-                    if myAnimalGuid in self._mValueMap:
-                        # Check if the current requirement is less than or equal to the value in the map
-                        # This prevents accidentally reducing requirement below zero if it was already partially met
-                        myReduction = min(myMCalRequirement, self._mValueMap[myAnimalGuid])
-                        self._mValueMap[myAnimalGuid] -= myReduction
-                        # Ensure it doesn't go below zero due to floating point issues
-                        self._mValueMap[myAnimalGuid] = max(0, self._mValueMap[myAnimalGuid])
-                        LaUtils.debug.log(f"  Animal {myAnimalGuid}: Requirement fully met by fallow. Reduced by {myReduction:.2f}. Remaining need: {self._mValueMap[myAnimalGuid]:.2f}", "Diet")
-                    else:
-                        LaUtils.debug.log(f"  Animal {myAnimalGuid} not found in _mValueMap during fallow allocation.", "Warning")
-
-                # Calculate and return the leftover fallow value
-                myRemainingFallow = myFallowDifference # or theAvailableFallowValue - totalNeeded
-                LaUtils.debug.log(f"Remaining Fallow Value after allocation: {myRemainingFallow:.2f}", "Diet")
-
-            case Status.NotEnoughToCompletelySatisfy:
-                LaUtils.debug.log("CASE: NotEnoughToCompletelySatisfy", "Diet")
-                # Distribute the available fallow proportionally among animals in this group.
-                if myTotalNeeded > 0: # Avoid division by zero
-                    for myAnimalGuid, myMCalRequirement in theAnimalMCalRequirementMap.items():
-                        if myAnimalGuid in self._mValueMap:
-                            # Calculate the proportion of available fallow this animal gets
-                            myProportion = myMCalRequirement / myTotalNeeded
-                            myAllocatedMCals = theAvailableFallowValue * myProportion
-                            LaUtils.debug.log(f"  Animal {myAnimalGuid}: Needs {myMCalRequirement:.2f}, Proportion {myProportion:.4f}, Allocated {myAllocatedMCals:.2f}", "Diet")
-
-                            # Reduce the animal's requirement in the main value map
-                            # Check if the current requirement is less than or equal to the value in the map
-                            myReduction = min(myAllocatedMCals, self._mValueMap[myAnimalGuid])
-                            self._mValueMap[myAnimalGuid] -= myReduction
-                            # Ensure it doesn't go below zero
-                            self._mValueMap[myAnimalGuid] = max(0, self._mValueMap[myAnimalGuid])
-                            LaUtils.debug.log(f"  Animal {myAnimalGuid}: Requirement reduced by {myReduction:.2f}. Remaining need: {self._mValueMap[myAnimalGuid]:.2f}", "Diet")
-                        else:
-                            LaUtils.debug.log(f"  Animal {myAnimalGuid} not found in _mValueMap during fallow allocation.", "Warning")
-                else:
-                    LaUtils.debug.log("  Total needed is zero, skipping proportional allocation.", "Diet")
-
-                # All available fallow has been used
-                myRemainingFallow = 0.0
-                LaUtils.debug.log(f"All available fallow allocated. Remaining Fallow Value: {myRemainingFallow:.2f}", "Diet")
-
-            case _: # Default case, should not happen with Status enum
-                LaUtils.debug.log(f"Unexpected fallow status: {myFallowStatus}", "Error")
-                myRemainingFallow = theAvailableFallowValue # Return original value if status is unknown
-
-        return myRemainingFallow
+    
+    def toHtmlCalorieAnimalTargets(self) -> str:
+        """Generate HTML report for animal calorie targets."""
+        html = "<h3>Animal Calorie Targets</h3>"
+        
+        if not self.lastDietLabels:
+            return html + "<p>No calculation results available</p>"
+        
+        html += "<table border='1' cellpadding='4'>"
+        html += "<tr><th>Animal</th><th>Calories (kcal)</th><th>Percentage</th></tr>"
+        
+        # Get animal calorie targets from lastDietLabels if available
+        total_calories = 0
+        animal_calories = {}
+        
+        if hasattr(self.lastDietLabels, 'animalCalorieTargets'):
+            animal_calories = self.lastDietLabels.animalCalorieTargets
+            total_calories = sum(animal_calories.values()) if animal_calories else 0
+        
+        # Generate rows for each animal
+        if animal_calories:
+            for animal_guid, calories in animal_calories.items():
+                animal = LaUtils.getAnimal(animal_guid)
+                animal_name = animal.name if animal and animal.name else "Unknown"
+                percentage = (calories / total_calories * 100) if total_calories > 0 else 0
+                html += f"<tr><td>{animal_name}</td><td>{calories:,.0f}</td><td>{percentage:.1f}%</td></tr>"
+        else:
+            html += "<tr><td colspan='3'>No animal calorie targets calculated</td></tr>"
+        
+        html += "</table>"
+        return html
+    
+    def toHtmlProductionCropTargets(self) -> str:
+        """Generate HTML report for crop production targets."""
+        html = "<h3>Crop Production Targets</h3>"
+        
+        if not self.lastDietLabels:
+            return html + "<p>No calculation results available</p>"
+        
+        html += "<table border='1' cellpadding='4'>"
+        html += "<tr><th>Crop</th><th>Production (kg)</th><th>Percentage</th></tr>"
+        
+        # Get crop production targets from lastDietLabels if available
+        total_production = 0
+        crop_production = {}
+        
+        if hasattr(self.lastDietLabels, 'cropProductionTargets'):
+            crop_production = self.lastDietLabels.cropProductionTargets
+            total_production = sum(crop_production.values()) if crop_production else 0
+        
+        # Generate rows for each crop
+        if crop_production:
+            for crop_guid, production in crop_production.items():
+                crop = LaUtils.getCrop(crop_guid)
+                crop_name = crop.name if crop and crop.name else "Unknown"
+                percentage = (production / total_production * 100) if total_production > 0 else 0
+                html += f"<tr><td>{crop_name}</td><td>{production:,.1f}</td><td>{percentage:.1f}%</td></tr>"
+        else:
+            html += "<tr><td colspan='3'>No crop production targets calculated</td></tr>"
+        
+        html += "</table>"
+        return html
+    
+    def toHtmlProductionAnimalTargets(self) -> str:
+        """Generate HTML report for animal production targets."""
+        html = "<h3>Animal Production Targets</h3>"
+        
+        if not self.lastDietLabels:
+            return html + "<p>No calculation results available</p>"
+        
+        html += "<table border='1' cellpadding='4'>"
+        html += "<tr><th>Animal</th><th>Production (kg)</th><th>Percentage</th></tr>"
+        
+        # Get animal production targets from lastDietLabels if available
+        total_production = 0
+        animal_production = {}
+        
+        if hasattr(self.lastDietLabels, 'animalProductionTargets'):
+            animal_production = self.lastDietLabels.animalProductionTargets
+            total_production = sum(animal_production.values()) if animal_production else 0
+        
+        # Generate rows for each animal
+        if animal_production:
+            for animal_guid, production in animal_production.items():
+                animal = LaUtils.getAnimal(animal_guid)
+                animal_name = animal.name if animal and animal.name else "Unknown"
+                percentage = (production / total_production * 100) if total_production > 0 else 0
+                html += f"<tr><td>{animal_name}</td><td>{production:,.1f}</td><td>{percentage:.1f}%</td></tr>"
+        else:
+            html += "<tr><td colspan='3'>No animal production targets calculated</td></tr>"
+        
+        html += "</table>"
+        return html
+    
+    def toHtmlAreaCropTargets(self) -> str:
+        """Generate HTML report for crop area targets."""
+        html = "<h3>Crop Area Targets</h3>"
+        
+        if not self.lastDietLabels:
+            return html + "<p>No calculation results available</p>"
+        
+        html += "<table border='1' cellpadding='4'>"
+        html += "<tr><th>Crop</th><th>Area (ha)</th><th>Percentage</th></tr>"
+        
+        # Get crop area targets from lastDietLabels if available
+        total_area = 0
+        crop_areas = {}
+        
+        if hasattr(self.lastDietLabels, 'cropAreaTargets'):
+            crop_areas = self.lastDietLabels.cropAreaTargets
+            total_area = sum(crop_areas.values()) if crop_areas else 0
+        
+        # Generate rows for each crop
+        if crop_areas:
+            for crop_guid, area in crop_areas.items():
+                crop = LaUtils.getCrop(crop_guid)
+                crop_name = crop.name if crop and crop.name else "Unknown"
+                percentage = (area / total_area * 100) if total_area > 0 else 0
+                html += f"<tr><td>{crop_name}</td><td>{area:,.2f}</td><td>{percentage:.1f}%</td></tr>"
+        else:
+            html += "<tr><td colspan='3'>No crop area targets calculated</td></tr>"
+        
+        html += "</table>"
+        return html
+    
+    def toHtmlAreaAnimalTargets(self) -> str:
+        """Generate HTML report for animal area targets."""
+        html = "<h3>Animal Area Targets</h3>"
+        
+        if not self.lastDietLabels:
+            return html + "<p>No calculation results available</p>"
+        
+        html += "<table border='1' cellpadding='4'>"
+        html += "<tr><th>Animal</th><th>Area (ha)</th><th>Percentage</th></tr>"
+        
+        # Get animal area targets from lastDietLabels if available
+        total_area = 0
+        animal_areas = {}
+        
+        if hasattr(self.lastDietLabels, 'animalAreaTargets'):
+            animal_areas = self.lastDietLabels.animalAreaTargets
+            total_area = sum(animal_areas.values()) if animal_areas else 0
+        
+        # Generate rows for each animal
+        if animal_areas:
+            for animal_guid, area in animal_areas.items():
+                animal = LaUtils.getAnimal(animal_guid)
+                animal_name = animal.name if animal and animal.name else "Unknown"
+                percentage = (area / total_area * 100) if total_area > 0 else 0
+                html += f"<tr><td>{animal_name}</td><td>{area:,.2f}</td><td>{percentage:.1f}%</td></tr>"
+        else:
+            html += "<tr><td colspan='3'>No animal area targets calculated</td></tr>"
+        
+        html += "</table>"
+        return html
+    
+    def toHtml(self) -> str:
+        """Generate HTML report for the model."""
+        html = f"<h3>Model Settings</h3>"
+        html += "<table border='1' cellpadding='4'>"
+        html += f"<tr><td><b>Population:</b></td><td>{self.population}</td></tr>"
+        html += f"<tr><td><b>Calories per person per day:</b></td><td>{self.caloriesPerPersonDaily}</td></tr>"
+        
+        method = "Plants First" if self.baseOnPlants else "Animals First"
+        dairy = "Included in Calculation" if self.includeDairy else "Calculated Separately"
+        dairy_limit = f"Limited to {self.limitDairyPercent}%" if self.limitDairy else "Not Limited"
+        
+        html += f"<tr><td><b>Calculation Method:</b></td><td>{method}</td></tr>"
+        html += f"<tr><td><b>Dairy:</b></td><td>{dairy}</td></tr>"
+        html += f"<tr><td><b>Dairy Limit:</b></td><td>{dairy_limit}</td></tr>"
+        html += "</table>"
+        
+        return html

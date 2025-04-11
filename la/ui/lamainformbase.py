@@ -278,7 +278,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             self.model.name = self.lineEditSiteName.text() # Assuming lineEditSiteName exists
             self.model.population = self.sbPopulation.value()
             self.model.period = self.lineEditPeriod.text() # Assuming lineEditPeriod exists
-            self.model.caloriesPerPersonDaily = self.sbDailyCalories.value()
+            self.model.mCaloriesPerPersonDaily = self.sbDailyCalories.value()
 
             # Location / Distance (Assuming these widgets exist based on C++ code)
             # Add try-except for text conversions that might fail
@@ -301,13 +301,13 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             self.model.percentOfDietThatIsFromCrops = self.sliderCrop.value() # This corresponds to TAME crop % in C++ slider logic, but WILD plant in model property logic? Check C++ UI vs Model property link. Let's assume model property is WILD plant %.
 
             # Dairy Settings
-            self.model.dairyUtilisation = self.sbDairyUtilisation.value()
-            self.model.includeDairy = self.cboxIncludeDairy.isChecked()
-            self.model.limitDairy = self.cboxLimitDairy.isChecked()
-            self.model.limitDairyPercent = self.sbLimitDairyPercent.value()
+            self.model.mDairyUtilisation = self.sbDairyUtilisation.value()
+            self.model.mIncludeDairy = self.cboxIncludeDairy.isChecked()
+            self.model.mLimitDairy = self.cboxLimitDairy.isChecked()
+            self.model.mLimitDairyPercent = self.sbLimitDairyPercent.value()
 
             # Calculation Base
-            self.model.baseOnPlants = self.cboxBaseOnPlants.isChecked()
+            self.model.mBaseOnPlants = self.cboxBaseOnPlants.isChecked()
 
             # Common Land Settings
             selected_area_unit_text = self.cbAreaUnits.currentText()
@@ -417,15 +417,15 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                 return
 
             # --- 4. Select and Run Calculation Method ---
-            if self.model.baseOnPlants:
-                if self.model.includeDairy:
+            if self.model.mBaseOnPlants:
+                if self.model.mIncludeDairy:
                     LaUtils.debug.log("Running doCalcsPlantsFirstIncludeDairy", "Diet")
                     myDietLabels = self.model.doCalcsPlantsFirstIncludeDairy()
                 else:
                     LaUtils.debug.log("Running doCalcsPlantsFirstDairySeparate", "Diet")
                     myDietLabels = self.model.doCalcsPlantsFirstDairySeparate()
             else:
-                if self.model.includeDairy:
+                if self.model.mIncludeDairy:
                     LaUtils.debug.log("Running doCalcsAnimalsFirstIncludeDairy", "Diet")
                     # NOTE: C++ calls doCalcsAnimalsFirstIncludeDiary (typo in original?)
                     # Assuming Python method is doCalcsAnimalsFirstIncludeDairy
@@ -1635,14 +1635,14 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             self.model.percentOfDietThatIsFromCrops = self.sliderCrop.value() # Corresponds to wild plant %
 
             # Update checkbox values
-            self.model.includeDairy = self.cboxIncludeDairy.isChecked()
-            self.model.limitDairy = self.cboxLimitDairy.isChecked()
-            self.model.baseOnPlants = self.cboxBaseOnPlants.isChecked()
+            self.model.mIncludeDairy = self.cboxIncludeDairy.isChecked()
+            self.model.mLimitDairy = self.cboxLimitDairy.isChecked()
+            self.model.mBaseOnPlants = self.cboxBaseOnPlants.isChecked()
 
             # Update spinbox values
-            self.model.limitDairyPercent = self.sbLimitDairyPercent.value()
+            self.model.mLimitDairyPercent = self.sbLimitDairyPercent.value()
             self.model.mCaloriesPerPersonDaily = self.sbDailyCalories.value() # Check property name
-            self.model.dairyUtilisation = self.sbDairyUtilisation.value() # Check property name
+            self.model.mDairyUtilisation = self.sbDairyUtilisation.value() # Check property name
             self.model.population = self.sbPopulation.value() # Check property name
 
             # Update combo box selections
@@ -1704,13 +1704,13 @@ class LaMainFormBase(QDialog, FORM_CLASS):
 
             # Calculate diet labels based on settings
             myDietLabels = None
-            if self.model.baseOnPlants:
-                if self.model.includeDairy:
+            if self.model.mBaseOnPlants:
+                if self.model.mIncludeDairy:
                     myDietLabels = self.model.doCalcsPlantsFirstIncludeDairy()
                 else:
                     myDietLabels = self.model.doCalcsPlantsFirstDairySeparate()
             else:
-                if self.model.includeDairy:
+                if self.model.mIncludeDairy:
                     myDietLabels = self.model.doCalcsAnimalsFirstIncludeDairy()
                 else:
                     myDietLabels = self.model.doCalcsAnimalsFirstDairySeparate()
@@ -1781,13 +1781,13 @@ class LaMainFormBase(QDialog, FORM_CLASS):
 
                 # Calculate diet labels based on settings
                 myDietLabels = LaDietLabels()
-                if self.model.baseOnPlants:
-                    if self.model.includeDairy:
+                if self.model.mBaseOnPlants:
+                    if self.model.mIncludeDairy:
                         myDietLabels = self.model.doCalcsPlantsFirstIncludeDairy()
                     else:
                         myDietLabels = self.model.doCalcsPlantsFirstDairySeparate()
                 else:
-                    if self.model.includeDairy:
+                    if self.model.mIncludeDairy:
                         myDietLabels = self.model.doCalcsAnimalsFirstIncludeDairy()
                     else:
                         myDietLabels = self.model.doCalcsAnimalsFirstDairySeparate()
@@ -1913,7 +1913,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         """
         if hasattr(self, 'model'):
             LaUtils.debug.log(f"Include Dairy checkbox toggled: {checked}", "Diet")
-            self.model.includeDairy = checked
+            self.model.mIncludeDairy = checked
             self.setDietLabels()
 
     def on_cboxLimitDairy_toggled(self, checked):
@@ -1927,7 +1927,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         """
         if hasattr(self, 'model'):
             LaUtils.debug.log(f"Limit Dairy checkbox toggled: {checked}", "Diet")
-            self.model.limitDairy = checked
+            self.model.mLimitDairy = checked
             self.setDietLabels()
 
     def on_cboxBaseOnPlants_toggled(self, checked):
@@ -1935,7 +1935,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         # ... existing implementation ...
         if hasattr(self, 'model'):
             LaUtils.debug.log(f"Base On Plants checkbox toggled: {checked}", "Diet")
-            self.model.baseOnPlants = checked
+            self.model.mBaseOnPlants = checked
             self.setDietLabels()
 
     # Add the missing spinbox handlers here
@@ -1943,7 +1943,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         """Handle limit dairy percent spinbox changes."""
         if hasattr(self, 'model'):
             LaUtils.debug.log(f"Limit Dairy Percent changed to: {value}", "Diet")
-            self.model.limitDairyPercent = value
+            self.model.mLimitDairyPercent = value
             self.setDietLabels()
 
     def on_sbDailyCalories_valueChanged(self, value):
@@ -1954,7 +1954,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             if hasattr(self.model, 'mCaloriesPerPersonDaily'):
                  self.model.mCaloriesPerPersonDaily = value
             elif hasattr(self.model, 'caloriesPerPersonDaily'):
-                 self.model.caloriesPerPersonDaily = value
+                 self.model.mCaloriesPerPersonDaily = value
             self.setDietLabels()
 
     def on_sbDairyUtilisation_valueChanged(self, value):
@@ -1963,7 +1963,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             LaUtils.debug.log(f"Dairy Utilisation changed to: {value}", "Diet")
             # Update the correct model property (adjust name if needed)
             if hasattr(self.model, 'dairyUtilisation'):
-                self.model.dairyUtilisation = value
+                self.model.mDairyUtilisation = value
             self.setDietLabels()
 
     def on_sbPopulation_valueChanged(self, value):

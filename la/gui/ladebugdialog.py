@@ -52,15 +52,18 @@ class DebugTextEdit(QPlainTextEdit):
         self.setLineWrapMode(QPlainTextEdit.NoWrap) # Default no wrap
 
         # Configure the editor font
-        font = QFont("Monospace")
-        font.setStyleHint(QFont.TypeWriter)
-        self.setFont(font)
+        myFont = QFont("Monospace")
+        myFont.setStyleHint(QFont.TypeWriter)
+        self.setFont(myFont)
 
         # Create line number area
-        self.lineNumberArea = LineNumberArea(self)
+        self.mLineNumberArea = LineNumberArea(self)
 
         # This checkbox will be set by the parent dialog after initialization
-        self.showLineNumbersCheckbox: Optional[QCheckBox] = None
+        self.mShowLineNumbersCheckbox: Optional[QCheckBox] = None
+
+        # Initialize line number mapping
+        self.mLineNumberMappings = []
 
         # Connect signals for updating line number area
         self.blockCountChanged.connect(self.updateLineNumberAreaWidth)
@@ -74,50 +77,50 @@ class DebugTextEdit(QPlainTextEdit):
 
     def lineNumberAreaWidth(self) -> int:
         """Calculate the width of the line number area."""
-        if not self.showLineNumbersCheckbox or not self.showLineNumbersCheckbox.isChecked():
+        if not self.mShowLineNumbersCheckbox or not self.mShowLineNumbersCheckbox.isChecked():
             return 0 # No width if line numbers are hidden
 
-        digits = 1
-        max_val = max(1, self.blockCount())
-        while max_val >= 10:
-            max_val //= 10
-            digits += 1
+        myDigits = 1
+        myMaxVal = max(1, self.blockCount())
+        while myMaxVal >= 10:
+            myMaxVal //= 10
+            myDigits += 1
 
         # Calculate space needed for the highest line number + padding
         # Ensure at least 2 digits width for aesthetics
-        space = 5 + self.fontMetrics().horizontalAdvance('9') * max(digits, 2)
-        return space
+        mySpace = 5 + self.fontMetrics().horizontalAdvance('9') * max(myDigits, 2)
+        return mySpace
 
     def updateLineNumberAreaWidth(self):
         """Update the viewport margins to accommodate line numbers."""
         self.setViewportMargins(self.lineNumberAreaWidth(), 0, 0, 0)
 
-    def updateLineNumberArea(self, rect: QRect, dy: int):
+    def updateLineNumberArea(self, theRect: QRect, theVerticalScrollDelta: int):
         """Update the line number area when the text view is scrolled."""
-        if dy:
-            self.lineNumberArea.scroll(0, dy)
+        if theVerticalScrollDelta:
+            self.mLineNumberArea.scroll(0, theVerticalScrollDelta)
         else:
             # Update the specific area that needs repainting
-            self.lineNumberArea.update(0, rect.y(), self.lineNumberArea.width(), rect.height())
+            self.mLineNumberArea.update(0, theRect.y(), self.mLineNumberArea.width(), theRect.height())
 
-        if rect.contains(self.viewport().rect()):
+        if theRect.contains(self.viewport().rect()):
             self.updateLineNumberAreaWidth()
 
-    def resizeEvent(self, event: 'QResizeEvent'):
+    def resizeEvent(self, theEvent: 'QResizeEvent'):
         """Handle resize events to update line number area geometry."""
-        super().resizeEvent(event)
-        cr = self.contentsRect()
-        self.lineNumberArea.setGeometry(QRect(cr.left(), cr.top(),
-                                             self.lineNumberAreaWidth(), cr.height()))
+        super().resizeEvent(theEvent)
+        myContentsRect = self.contentsRect()
+        self.mLineNumberArea.setGeometry(QRect(myContentsRect.left(), myContentsRect.top(),
+                                             self.lineNumberAreaWidth(), myContentsRect.height()))
 
-    def lineNumberAreaPaintEvent(self, event: 'QPaintEvent'):
+    def lineNumberAreaPaintEvent(self, theEvent: 'QPaintEvent'):
         """Paint the line numbers in the line number area."""
-        if not self.showLineNumbersCheckbox or not self.showLineNumbersCheckbox.isChecked():
+        if not self.mShowLineNumbersCheckbox or not self.mShowLineNumbersCheckbox.isChecked():
             return # Don't paint if hidden
 
-        painter = QPainter(self.lineNumberArea)
+        painter = QPainter(self.mLineNumberArea)
         # Use a slightly different background for the line number area
-        painter.fillRect(event.rect(), QColor("#F0F0F0"))
+        painter.fillRect(theEvent.rect(), QColor("#F0F0F0"))
 
         block = self.firstVisibleBlock()
         blockNumber = block.blockNumber()
@@ -125,11 +128,11 @@ class DebugTextEdit(QPlainTextEdit):
         top = self.blockBoundingGeometry(block).translated(self.contentOffset()).top()
         bottom = top + self.blockBoundingRect(block).height()
         height = self.fontMetrics().height()
-        width = self.lineNumberArea.width() - 5 # Right padding
+        width = self.mLineNumberArea.width() - 5 # Right padding
 
         # Iterate over visible blocks
-        while block.isValid() and top <= event.rect().bottom():
-            if block.isVisible() and bottom >= event.rect().top():
+        while block.isValid() and top <= theEvent.rect().bottom():
+            if block.isVisible() and bottom >= theEvent.rect().top():
                 number = str(blockNumber + 1)
                 painter.setPen(QColor("#FF0000")) # Red color for line numbers
                 painter.setFont(self.font())
@@ -157,8 +160,8 @@ class DebugTextEdit(QPlainTextEdit):
     def toggleLineNumbers(self, show: bool):
         """Toggle the display of line numbers."""
         self.updateLineNumberAreaWidth()
-        self.lineNumberArea.setVisible(show) # Show/hide the widget itself
-        self.lineNumberArea.update() # Force repaint
+        self.mLineNumberArea.setVisible(show) # Show/hide the widget itself
+        self.mLineNumberArea.update() # Force repaint
 
 
 # --- Main Debug Dialog ---
@@ -310,7 +313,7 @@ class LaDebugDialog(QDialog):
         buttonLayout.addWidget(self.mShowLineNumbersCheckbox)
 
         # Link the checkbox to the text edit
-        self.mTextEdit.showLineNumbersCheckbox = self.mShowLineNumbersCheckbox
+        self.mTextEdit.mShowLineNumbersCheckbox = self.mShowLineNumbersCheckbox
 
         self.mWordWrapCheckbox = QCheckBox("Word wrap")
         self.mWordWrapCheckbox.setToolTip("Toggle word wrapping for long lines")
@@ -542,8 +545,8 @@ class LaDebugDialog(QDialog):
         self.mTextEdit.appendPlainText(formatted_text)
         
         # Store the mapping of visual lines to actual line numbers for the line number area to use
-        self.mTextEdit.line_number_mapping = line_numbers
-        self.mTextEdit.lineNumberArea.update()  # Force the line number area to update
+        self.mTextEdit.mLineNumberMappings = line_numbers
+        self.mTextEdit.mLineNumberArea.update()  # Force the line number area to update
         
         self.mTextEdit.setUpdatesEnabled(True)  # Re-enable updates
 
