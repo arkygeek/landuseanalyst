@@ -104,45 +104,45 @@ class LaMainForm(LaMainFormBase):
                 return
 
             # Get the GUID of the selected animal
-            animal_guid = current_item.data(Qt.UserRole)
-            if hasattr(animal_guid, 'guid') and callable(animal_guid.guid):
-                animal_guid = animal_guid.guid()  # Call the method to get the GUID string
+            myAnimalGuid = current_item.data(Qt.UserRole)
+            if not myAnimalGuid:
+                LaUtils.debug.log("No GUID found for selected animal", "Error")
+                return
+            myAnimalGuid = str(myAnimalGuid) # Ensure string
 
-            # Make sure we have a string GUID
-            animal_guid = str(animal_guid)
-
-            LaUtils.debug.log(f"Using animal GUID: {animal_guid}", "Calculation")
-
-            # Get the animal object
-            animal = LaUtils.getAnimal(animal_guid)
-            if not animal:
-                LaUtils.debug.log(f"Could not find animal with GUID: {animal_guid}", "Error")
+            # Get the animal object for display purposes
+            myAnimal = LaUtils.getAnimal(myAnimalGuid)
+            if not myAnimal:
+                LaUtils.debug.log(f"Could not find animal with GUID: {myAnimalGuid}", "Error")
                 return
 
-            # Perform calculations based on diet settings
-            diet_labels = None
-            if self.cboxBaseOnPlants.isChecked():
-                if self.cboxIncludeDairy.isChecked():
-                    diet_labels = self.model.doCalcsPlantsFirstIncludeDairy()
+            # Display the animal image if available
+            if hasattr(self, 'lblAnimalPicCalcs') and hasattr(myAnimal, 'imageFile'):
+                myImagePath = LaUtils.resolvePath(str(myAnimal.imageFile), 'image')
+                if myImagePath and os.path.exists(myImagePath):
+                    self.lblAnimalPicCalcs.setPixmap(QtGui.QPixmap(myImagePath))
                 else:
-                    diet_labels = self.model.doCalcsPlantsFirstDairySeparate()
-            else:
-                if self.cboxIncludeDairy.isChecked():
-                    diet_labels = self.model.doCalcsAnimalsFirstIncludeDairy()
-                else:
-                    diet_labels = self.model.doCalcsAnimalsFirstDairySeparate()
+                    self.lblAnimalPicCalcs.clear()
 
-            # Get the calculation report for this animal
-            if hasattr(diet_labels, 'animalCalcsReportMap'):
-                report_map = self.getPropertyValue(diet_labels, 'animalCalcsReportMap')
-                if isinstance(report_map, dict):
-                    if animal_guid in report_map:
-                        report_pair = report_map[animal_guid]
-                        if isinstance(report_pair, tuple) and len(report_pair) > 0:
-                            report_string = report_pair[0]
-                            if hasattr(self, 'textBrowserResultsAnimals'):
-                                self.textBrowserResultsAnimals.setText(report_string)
-                                LaUtils.debug.log(f"Animal {animal.name} calculation report displayed", "Calculation")
+            # --- Retrieve the stored calculation report --- 
+            myReportString = "No calculation results available for this animal."
+            if hasattr(self.model, 'lastDietLabels') and self.model.lastDietLabels:
+                myReportMap = self.getPropertyValue(self.model.lastDietLabels, 'animalCalcsReportMap')
+                if isinstance(myReportMap, dict) and myAnimalGuid in myReportMap:
+                    myReportPair = myReportMap[myAnimalGuid]
+                    if isinstance(myReportPair, tuple) and len(myReportPair) > 0:
+                        myReportString = myReportPair[0] # Get the report text
+                        LaUtils.debug.log(f"Retrieved report for animal {myAnimal.name}", "Calculation")
+                    else:
+                        LaUtils.debug.log(f"Report data format error for animal {myAnimalGuid}", "Error")
+                else:
+                    LaUtils.debug.log(f"No report found in map for animal {myAnimalGuid}", "Calculation")
+            else:
+                LaUtils.debug.log("lastDietLabels not found or empty on model", "Error")
+
+            # Update the text browser
+            if hasattr(self, 'textBrowserResultsAnimals'):
+                self.textBrowserResultsAnimals.setText(myReportString)
 
         except Exception as e:
             LaUtils.debug.log(f"Error displaying animal calculations: {str(e)}", "Error")
@@ -228,77 +228,46 @@ class LaMainForm(LaMainFormBase):
             if current_item is None:
                 return
 
-            # Check that both animal and crop percentages are at 100%
-            if self.labelAnimalCheck.text() != "100%" or self.labelCropCheck.text() != "100%":
-                self.tbReport.setText("Check that Animals and Crops are both at 100%\n")
-                self.tbReport.append("I am NOT going to do anything until they are!")
-                return
-
             # Get the GUID of the selected crop
-            crop_guid = current_item.data(Qt.UserRole)
-            if hasattr(crop_guid, 'guid') and callable(crop_guid.guid):
-                crop_guid = crop_guid.guid()  # Call the method to get the GUID string
-
-            # Make sure we have a string GUID
-            crop_guid = str(crop_guid)
-
-            LaUtils.debug.log(f"Using crop GUID: {crop_guid}", "Calculation")
-
-            # Get the GUID of the selected crop
-            crop_guid = current_item.data(Qt.UserRole)
-            if not crop_guid:
+            myCropGuid = current_item.data(Qt.UserRole)
+            if not myCropGuid:
                 LaUtils.debug.log("No GUID found for selected crop", "Error")
                 return
+            myCropGuid = str(myCropGuid) # Ensure string
 
-            # Get the crop object
-            crop = LaUtils.getCrop(crop_guid)
-            if not crop:
-                LaUtils.debug.log(f"Could not find crop with GUID: {crop_guid}", "Error")
+            # Get the crop object for display purposes
+            myCrop = LaUtils.getCrop(myCropGuid)
+            if not myCrop:
+                LaUtils.debug.log(f"Could not find crop with GUID: {myCropGuid}", "Error")
                 return
 
-            # Set up model with current UI values
-            self.configureModelFromUi()
-
             # Display the crop image if available
-            if hasattr(self, 'lblCropPicCalcs') and hasattr(crop, 'imageFile'):
-                image_path = crop.imageFile
-                if image_path and os.path.exists(image_path):
-                    self.lblCropPicCalcs.setPixmap(QtGui.QPixmap(image_path))
+            if hasattr(self, 'lblCropPicCalcs') and hasattr(myCrop, 'imageFile'):
+                myImagePath = LaUtils.resolvePath(str(myCrop.imageFile), 'image')
+                if myImagePath and os.path.exists(myImagePath):
+                    self.lblCropPicCalcs.setPixmap(QtGui.QPixmap(myImagePath))
                 else:
                     self.lblCropPicCalcs.clear()
 
-            # Perform calculations based on diet settings
-            diet_labels = None
-            if self.cboxBaseOnPlants.isChecked():
-                if self.cboxIncludeDairy.isChecked():
-                    diet_labels = self.model.doCalcsPlantsFirstIncludeDairy()
-                    LaUtils.debug.log("Using plants-first with dairy included calculation", "Diet")
+            # --- Retrieve the stored calculation report --- 
+            myReportString = "No calculation results available for this crop."
+            if hasattr(self.model, 'lastDietLabels') and self.model.lastDietLabels:
+                myReportMap = self.getPropertyValue(self.model.lastDietLabels, 'cropCalcsReportMap')
+                if isinstance(myReportMap, dict) and myCropGuid in myReportMap:
+                    myReportPair = myReportMap[myCropGuid]
+                    if isinstance(myReportPair, tuple) and len(myReportPair) > 0:
+                        myReportString = myReportPair[0] # Get the report text
+                        LaUtils.debug.log(f"Retrieved report for crop {myCrop.name}", "Calculation")
+                    else:
+                        LaUtils.debug.log(f"Report data format error for crop {myCropGuid}", "Error")
                 else:
-                    diet_labels = self.model.doCalcsPlantsFirstDairySeparate()
-                    LaUtils.debug.log("Using plants-first with dairy separate calculation", "Diet")
+                    LaUtils.debug.log(f"No report found in map for crop {myCropGuid}", "Calculation")
             else:
-                if self.cboxIncludeDairy.isChecked():
-                    diet_labels = self.model.doCalcsAnimalsFirstIncludeDairy()  # Fixed typo
-                    LaUtils.debug.log("Using animals-first with dairy included calculation", "Diet")
-                else:
-                    diet_labels = self.model.doCalcsAnimalsFirstDairySeparate()
-                    LaUtils.debug.log("Using animals-first with dairy separate calculation", "Diet")
+                LaUtils.debug.log("lastDietLabels not found or empty on model", "Error")
 
-            # Get the calculation report for this crop
-            if hasattr(diet_labels, 'cropCalcsReportMap'):
-                report_map = self.getPropertyValue(diet_labels, 'cropCalcsReportMap')
-                if isinstance(report_map, dict):
-                    actual_guid = str(crop_guid)
-                    if actual_guid in report_map:
-                        report_pair = report_map[actual_guid]
-                        if isinstance(report_pair, tuple) and len(report_pair) > 0:
-                            report_string = report_pair[0]
-                            if hasattr(self, 'textBrowserResultsCrop'):
-                                self.textBrowserResultsCrop.setText(report_string)
-                                LaUtils.debug.log(f"Crop {crop.name} calculation report displayed", "Calculation")
-
-            # Also display model HTML in the report tab for debugging
-            self.tbReport.setHtml(self.model.toHtml())
+            # Update the text browser
+            if hasattr(self, 'textBrowserResultsCrop'):
+                self.textBrowserResultsCrop.setText(myReportString)
 
         except Exception as e:
             LaUtils.debug.log(f"Error displaying crop calculations: {str(e)}", "Error")

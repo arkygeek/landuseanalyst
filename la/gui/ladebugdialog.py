@@ -4,399 +4,616 @@
 Debug dialog for Landuse Analyst - Singleton Pattern Implementation
 """
 import os
+import re
+from typing import List, Dict, Optional
+
 from qgis.PyQt.QtWidgets import (
     QDialog, QVBoxLayout, QHBoxLayout,
-    QPlainTextEdit, QPushButton, QCheckBox, QWidget, QLabel, QComboBox
+    QPlainTextEdit, QPushButton, QCheckBox, QWidget, QLabel,
+    QScrollArea, QApplication, QTextEdit
 )
-from qgis.PyQt.QtCore import Qt, QSettings, QSize, QRect
-from qgis.PyQt.QtGui import QFont, QTextCursor, QPainter, QColor
-from la.lib.lautils import MESSAGE_BUS
+from qgis.PyQt.QtCore import Qt, QSettings, QSize, QRect, pyqtSlot
+from qgis.PyQt.QtGui import QPaintEvent, QResizeEvent, QFont, QPainter, QColor, QTextFormat, QCloseEvent, QTextCursor, QTextBlockFormat, QTextCharFormat
 
+# la.lib.lautils contains MESSAGE_BUS and LaUtils.LaDebugLogger
+from la.lib.lautils import MESSAGE_BUS, LaUtils
+
+# --- Helper Widget for Line Numbers ---
 
 class LineNumberArea(QWidget):
-    """Line number area widget for QPlainTextEdit."""
+    """Line number area widget for DebugTextEdit."""
 
-    def __init__(self, editor):
+    def __init__(self, editor: 'DebugTextEdit'):
         """Initialize with parent editor."""
         super().__init__(editor)
         self.editor = editor
+        self.setBackgroundRole(self.editor.backgroundRole())
+        self.setAutoFillBackground(True)
 
-    def sizeHint(self):
+
+    def sizeHint(self) -> QSize:
         """Return recommended size for the widget."""
-        return QSize(self.editor.line_number_area_width(), 0)
+        return QSize(self.editor.lineNumberAreaWidth(), 0)
 
-    def paintEvent(self, event):
+    def paintEvent(self, event: 'QPaintEvent'):
         """Paint the line numbers."""
-        if not self.editor.show_line_numbers.isChecked():
-            return
+        # Delegate painting to the editor
+        self.editor.lineNumberAreaPaintEvent(event)
 
-        # Set the background color
-        painter = QPainter(self)
-        painter.fillRect(event.rect(), QColor("#F0F0F0"))  # Light gray background
-
-        # Paint the line numbers
-        block = self.editor.firstVisibleBlock()
-        block_number = block.blockNumber()
-        top = int(self.editor.blockBoundingGeometry(block).translated(
-            self.editor.contentOffset()).top())
-        bottom = top + int(self.editor.blockBoundingRect(block).height())
-        width = self.width() - 5  # Right margin
-
-        # Maintain alignment with wrapped or unwrapped lines
-        while block.isValid() and top <= event.rect().bottom():
-            if block.isVisible() and bottom >= event.rect().top():
-                # Draw line number in red
-                painter.setPen(QColor("#CC0000"))  # Red color
-                painter.setFont(self.editor.font())
-                painter.drawText(0, top, width, self.editor.fontMetrics().height(),
-                                Qt.AlignRight, str(block_number + 1))
-
-            block = block.next()
-            top = bottom
-            bottom = top + int(self.editor.blockBoundingRect(block).height())
-            block_number += 1
-
+# --- Custom Text Edit with Line Numbers ---
 
 class DebugTextEdit(QPlainTextEdit):
     """Enhanced QPlainTextEdit with line numbers."""
 
-    def __init__(self, parent=None):
+    def __init__(self, parent: Optional[QWidget] = None):
         """Initialize with parent."""
         super().__init__(parent)
         self.setReadOnly(True)
-        self.setLineWrapMode(QPlainTextEdit.NoWrap)
+        self.setLineWrapMode(QPlainTextEdit.NoWrap) # Default no wrap
 
-        # Configure the editor
+        # Configure the editor font
         font = QFont("Monospace")
         font.setStyleHint(QFont.TypeWriter)
         self.setFont(font)
 
         # Create line number area
-        self.line_number_area = LineNumberArea(self)
+        self.lineNumberArea = LineNumberArea(self)
 
-        # This checkbox will be set by the parent dialog
-        self.show_line_numbers = None
+        # This checkbox will be set by the parent dialog after initialization
+        self.showLineNumbersCheckbox: Optional[QCheckBox] = None
 
-        # Connect signals
-        self.blockCountChanged.connect(self.update_line_number_area_width)
-        self.updateRequest.connect(self.update_line_number_area)
+        # Connect signals for updating line number area
+        self.blockCountChanged.connect(self.updateLineNumberAreaWidth)
+        self.updateRequest.connect(self.updateLineNumberArea)
+        self.cursorPositionChanged.connect(self.highlightCurrentLine) # Optional: highlight current line
 
-    def line_number_area_width(self):
+        # Initial update
+        self.updateLineNumberAreaWidth()
+        # self.highlightCurrentLine() # Uncomment if initial highlight is desired
+
+
+    def lineNumberAreaWidth(self) -> int:
         """Calculate the width of the line number area."""
-        if not hasattr(self, 'show_line_numbers') or not self.show_line_numbers or not self.show_line_numbers.isChecked():
-            return 0
+        if not self.showLineNumbersCheckbox or not self.showLineNumbersCheckbox.isChecked():
+            return 0 # No width if line numbers are hidden
 
-        max_width = 0
-        block_count = self.blockCount()
+        digits = 1
+        max_val = max(1, self.blockCount())
+        while max_val >= 10:
+            max_val //= 10
+            digits += 1
 
-        # Calculate space needed for the highest line number
-        digits = len(str(block_count))
-        digits = max(digits, 2)  # At least 2 digits for aesthetics
+        # Calculate space needed for the highest line number + padding
+        # Ensure at least 2 digits width for aesthetics
+        space = 5 + self.fontMetrics().horizontalAdvance('9') * max(digits, 2)
+        return space
 
-        # Width = number of digits * width of a single digit + padding
-        max_width = digits * self.fontMetrics().width('9') + 10
-
-        return max_width
-
-    def update_line_number_area_width(self):
+    def updateLineNumberAreaWidth(self):
         """Update the viewport margins to accommodate line numbers."""
-        self.setViewportMargins(self.line_number_area_width(), 0, 0, 0)
+        self.setViewportMargins(self.lineNumberAreaWidth(), 0, 0, 0)
 
-    def update_line_number_area(self, rect, dy):
+    def updateLineNumberArea(self, rect: QRect, dy: int):
         """Update the line number area when the text view is scrolled."""
         if dy:
-            self.line_number_area.scroll(0, dy)
+            self.lineNumberArea.scroll(0, dy)
         else:
-            self.line_number_area.update(0, rect.y(), self.line_number_area.width(), rect.height())
+            # Update the specific area that needs repainting
+            self.lineNumberArea.update(0, rect.y(), self.lineNumberArea.width(), rect.height())
 
         if rect.contains(self.viewport().rect()):
-            self.update_line_number_area_width()
+            self.updateLineNumberAreaWidth()
 
-    def resizeEvent(self, event):
-        """Handle resize events to update line number area."""
+    def resizeEvent(self, event: 'QResizeEvent'):
+        """Handle resize events to update line number area geometry."""
         super().resizeEvent(event)
-
         cr = self.contentsRect()
-        self.line_number_area.setGeometry(QRect(cr.left(), cr.top(),
-                                             self.line_number_area_width(), cr.height()))
+        self.lineNumberArea.setGeometry(QRect(cr.left(), cr.top(),
+                                             self.lineNumberAreaWidth(), cr.height()))
 
-    def toggle_line_numbers(self, show):
+    def lineNumberAreaPaintEvent(self, event: 'QPaintEvent'):
+        """Paint the line numbers in the line number area."""
+        if not self.showLineNumbersCheckbox or not self.showLineNumbersCheckbox.isChecked():
+            return # Don't paint if hidden
+
+        painter = QPainter(self.lineNumberArea)
+        # Use a slightly different background for the line number area
+        painter.fillRect(event.rect(), QColor("#F0F0F0"))
+
+        block = self.firstVisibleBlock()
+        blockNumber = block.blockNumber()
+        # Get the top/bottom geometry relative to the viewport
+        top = self.blockBoundingGeometry(block).translated(self.contentOffset()).top()
+        bottom = top + self.blockBoundingRect(block).height()
+        height = self.fontMetrics().height()
+        width = self.lineNumberArea.width() - 5 # Right padding
+
+        # Iterate over visible blocks
+        while block.isValid() and top <= event.rect().bottom():
+            if block.isVisible() and bottom >= event.rect().top():
+                number = str(blockNumber + 1)
+                painter.setPen(QColor("#FF0000")) # Red color for line numbers
+                painter.setFont(self.font())
+                painter.drawText(0, int(top), width, height, Qt.AlignRight, number)
+
+            block = block.next()
+            top = bottom
+            bottom = top + self.blockBoundingRect(block).height()
+            blockNumber += 1
+
+    def highlightCurrentLine(self):
+        """Optional: Highlight the background of the current line."""
+        # This is optional styling and can be removed if not needed
+        extraSelections = []
+        if not self.isReadOnly():
+            selection = QTextEdit.ExtraSelection()
+            lineColor = QColor(Qt.yellow).lighter(160)
+            selection.format.setBackground(lineColor)
+            selection.format.setProperty(QTextFormat.FullWidthSelection, True)
+            selection.cursor = self.textCursor()
+            selection.cursor.clearSelection()
+            extraSelections.append(selection)
+        self.setExtraSelections(extraSelections)
+
+    def toggleLineNumbers(self, show: bool):
         """Toggle the display of line numbers."""
-        self.update_line_number_area_width()
-        self.line_number_area.update()
+        self.updateLineNumberAreaWidth()
+        self.lineNumberArea.setVisible(show) # Show/hide the widget itself
+        self.lineNumberArea.update() # Force repaint
 
+
+# --- Main Debug Dialog ---
 
 class LaDebugDialog(QDialog):
     """
-    Non-modal debug dialog with proper Qt parenting and lifecycle management
-    Implemented as a singleton to ensure only one instance exists
+    Non-modal debug dialog with filtering, line numbers, and auto-scroll.
+    Implemented as a singleton to ensure only one instance exists.
     """
-    # Singleton instance
-    _instance = None
+    _instance: Optional['LaDebugDialog'] = None
 
     @classmethod
-    def get_instance(cls, parent=None):
-        """Get or create the singleton instance"""
-        if cls._instance is None or not cls._instance.isVisible():
-            # If instance doesn't exist or was closed, create a new one
+    def get_instance(cls, parent: Optional[QWidget] = None) -> 'LaDebugDialog':
+        """Get or create the singleton instance."""
+        if cls._instance is None:
+            print("Creating new LaDebugDialog instance")
             cls._instance = LaDebugDialog(parent)
+        elif not cls._instance.isVisible():
+             # If instance exists but is hidden, ensure it's properly parented and show
+             print("Reusing hidden LaDebugDialog instance")
+             if parent and cls._instance.parent() != parent:
+                 cls._instance.setParent(parent) # Re-parent if necessary
+             # cls._instance.show() # Optionally show immediately
+        else:
+             print("Returning visible LaDebugDialog instance")
+
         return cls._instance
 
-    def __init__(self, parent=None):
-        """Initialize with parent for proper window management"""
-        super().__init__(parent)
+    def __init__(self, parent: Optional[QWidget] = None):
+        """Initialize with parent for proper window management."""
+        if LaDebugDialog._instance is not None:
+             # This should ideally not happen if get_instance is used correctly,
+             # but serves as a safeguard against direct instantiation.
+             raise RuntimeError("LaDebugDialog is a singleton, use get_instance()")
 
-        # Window configuration
+        super().__init__(parent)
+        LaDebugDialog._instance = self # Register the instance
+
+        # --- Internal State ---
+        self.mMessages: List[str] = [] # Store raw messages received
+        self.mFilterCheckboxes: Dict[str, QCheckBox] = {}
+
+        # --- Window Configuration ---
         self.setWindowTitle("Landuse Analyst - Debug Log")
         self.setMinimumSize(800, 400)
+        # Standard dialog flags allowing minimize/maximize/close
         self.setWindowFlags(
             Qt.Dialog |
             Qt.WindowTitleHint |
             Qt.WindowCloseButtonHint |
             Qt.WindowMinMaxButtonsHint
         )
-
         # Do NOT set WA_DeleteOnClose as we want the singleton to persist
 
-        # Restore saved size
+        # Restore saved geometry (position and size)
         settings = QSettings()
-        saved_size = settings.value("landuse_analyst/debug_dialog_size", QSize(800, 400))
-        self.resize(saved_size)
+        saved_geometry = settings.value("landuse_analyst/debug_dialog_geometry")
+        if saved_geometry:
+            self.restoreGeometry(saved_geometry)
+        else:
+             # Default size if no geometry saved
+            self.resize(QSize(800, 400))
 
-        # UI setup
-        self._setup_ui()
+        # --- UI Setup ---
+        self._setupUi()
 
-        # Connect signals - but check if already connected to avoid duplicates
+        # --- Connect to Global Message Bus ---
+        # Ensure clean connection
         try:
-            MESSAGE_BUS.debugMessaged.disconnect(self.add_debug_message)
+            MESSAGE_BUS.debugMessaged.disconnect(self.addDebugMessage)
         except TypeError:
-            # Was not connected, which is fine
-            pass
+            pass # Signal was not connected
+        MESSAGE_BUS.debugMessaged.connect(self.addDebugMessage)
 
-        MESSAGE_BUS.debugMessaged.connect(self.add_debug_message)
+        # --- Load Initial State ---
+        self._loadFilterPreferences() # Load which filters were checked
+        self.applyFilters() # Apply filters to load initial history
 
-    def _setup_ui(self):
-        """Initialize UI components"""
-        layout = QVBoxLayout()
-        self.setLayout(layout)
 
-        # Add filter controls at the top
-        filter_layout = QHBoxLayout()
-        
-        # Message type filter combo box
-        from la.lib.lautils import LaUtils
-        self.filter_combo = QComboBox(self)
-        self.filter_combo.addItem("All Messages")
-        
-        # Get current component types and ensure important ones are included
-        components = LaUtils.debug.getComponents()
-        
-        # Always include these important categories even if not in history
-        important_types = ["Error", "Calculations", "Diet", "Animals", "Crops"]
-        for item in important_types:
-            if item not in components:
-                components.append(item)
-                
-        self.filter_combo.addItems(sorted(components))
-        self.filter_combo.currentTextChanged.connect(self.apply_filter)
-        
-        filter_layout.addWidget(QLabel("Filter by type:"))
-        filter_layout.addWidget(self.filter_combo)
-        filter_layout.addStretch()
-        layout.addLayout(filter_layout)
+    def _setupUi(self):
+        """Initialize UI components and layout."""
+        # Use a horizontal main layout
+        mainLayout = QHBoxLayout(self)
 
-        # Text area - using custom QPlainTextEdit with line numbers
-        self.text_edit = DebugTextEdit(self)
-        layout.addWidget(self.text_edit)
+        # ---- LEFT SIDE: FILTERS ----
+        filterPanel = QWidget()
+        filterPanel.setMaximumWidth(200) # Limit width of filter panel
+        filterLayout = QVBoxLayout(filterPanel)
+        filterLayout.setContentsMargins(5, 5, 5, 5) # Add some margin
 
-        # Button row
-        button_layout = QHBoxLayout()
+        # Filter section title
+        filterTitle = QLabel("<b>Message Types</b>")
+        filterLayout.addWidget(filterTitle)
 
-        self.clear_button = QPushButton("Clear")
-        self.clear_button.clicked.connect(self.clear_log)
-        button_layout.addWidget(self.clear_button)
+        # "Select All" checkbox
+        self.mSelectAllCheckbox = QCheckBox("All Message Types")
+        self.mSelectAllCheckbox.setChecked(True) # Start with all selected
+        self.mSelectAllCheckbox.stateChanged.connect(self._toggleAllFilters)
+        filterLayout.addWidget(self.mSelectAllCheckbox)
 
-        self.auto_scroll = QCheckBox("Auto-scroll")
-        self.auto_scroll.setChecked(True)
-        button_layout.addWidget(self.auto_scroll)
+        # Scrollable area for filter checkboxes
+        scrollArea = QScrollArea()
+        scrollArea.setWidgetResizable(True)
+        scrollArea.setFrameShape(QScrollArea.StyledPanel) # Add a subtle frame
+        scrollWidget = QWidget()
+        self.mFilterScrollLayout = QVBoxLayout(scrollWidget) # Store layout reference
+        self.mFilterScrollLayout.setSpacing(2) # Compact spacing
+        self.mFilterScrollLayout.setAlignment(Qt.AlignTop) # Align checkboxes to top
 
-        # Add line numbers checkbox
-        self.show_line_numbers = QCheckBox("Show line numbers")
-        self.show_line_numbers.setChecked(False)
-        self.show_line_numbers.toggled.connect(self.toggle_line_numbers)
-        button_layout.addWidget(self.show_line_numbers)
+        # Add initial known components (sorted)
+        initialComponents = sorted(LaUtils.debug.getComponents())
+        for component in initialComponents:
+            self._addFilterCheckbox(component)
 
-        # Assign line numbers checkbox to the text edit
-        setattr(self.text_edit, 'show_line_numbers', self.show_line_numbers)
+        # Add stretch to push checkboxes to top when few items
+        self.mFilterScrollLayout.addStretch(1)
 
-        # Add word wrap checkbox
-        self.word_wrap = QCheckBox("Word wrap")
-        self.word_wrap.setChecked(False)
-        self.word_wrap.toggled.connect(self.toggle_word_wrap)
-        button_layout.addWidget(self.word_wrap)
+        # Set up scrollable area
+        scrollWidget.setLayout(self.mFilterScrollLayout)
+        scrollArea.setWidget(scrollWidget)
+        filterLayout.addWidget(scrollArea, 1) # Scroll area takes available vertical space
 
-        button_layout.addStretch()
+        # ---- RIGHT SIDE: TEXT AREA AND BUTTONS ----
+        rightPanel = QWidget()
+        rightLayout = QVBoxLayout(rightPanel)
+        rightLayout.setContentsMargins(0, 5, 5, 5) # Match filter panel margins
 
-        self.copy_button = QPushButton("Copy All")
-        self.copy_button.clicked.connect(self.copy_all)
-        button_layout.addWidget(self.copy_button)
+        # Text area
+        self.mTextEdit = DebugTextEdit(self)
+        rightLayout.addWidget(self.mTextEdit, 1) # Text edit takes most space
 
-        self.close_button = QPushButton("Close")
-        self.close_button.clicked.connect(self.hide)
-        button_layout.addWidget(self.close_button)
+        # --- Button Row ---
+        buttonLayout = QHBoxLayout()
+        buttonLayout.setSpacing(10)
 
-        layout.addLayout(button_layout)
+        self.mClearButton = QPushButton("Clear")
+        self.mClearButton.setToolTip("Clear the log display")
+        self.mClearButton.clicked.connect(self._clearLog)
+        buttonLayout.addWidget(self.mClearButton)
 
-        # Load preferences from settings
+        self.mAutoScrollCheckbox = QCheckBox("Auto-scroll")
+        self.mAutoScrollCheckbox.setToolTip("Automatically scroll to the bottom when new messages arrive")
+        self.mAutoScrollCheckbox.setChecked(True)
+        buttonLayout.addWidget(self.mAutoScrollCheckbox)
+
+        self.mShowLineNumbersCheckbox = QCheckBox("Show line numbers")
+        self.mShowLineNumbersCheckbox.setToolTip("Toggle visibility of line numbers")
+        self.mShowLineNumbersCheckbox.toggled.connect(self._toggleLineNumbers)
+        buttonLayout.addWidget(self.mShowLineNumbersCheckbox)
+
+        # Link the checkbox to the text edit
+        self.mTextEdit.showLineNumbersCheckbox = self.mShowLineNumbersCheckbox
+
+        self.mWordWrapCheckbox = QCheckBox("Word wrap")
+        self.mWordWrapCheckbox.setToolTip("Toggle word wrapping for long lines")
+        self.mWordWrapCheckbox.toggled.connect(self._toggleWordWrap)
+        buttonLayout.addWidget(self.mWordWrapCheckbox)
+
+        buttonLayout.addStretch() # Push buttons to the right
+
+        self.mCopyButton = QPushButton("Copy All")
+        self.mCopyButton.setToolTip("Copy the entire log content to the clipboard")
+        self.mCopyButton.clicked.connect(self._copyAll)
+        buttonLayout.addWidget(self.mCopyButton)
+
+        self.mCloseButton = QPushButton("Hide") # Changed text to "Hide"
+        self.mCloseButton.setToolTip("Hide the debug window (does not close the application)")
+        self.mCloseButton.clicked.connect(self.hide) # Use hide() directly
+        buttonLayout.addWidget(self.mCloseButton)
+
+        # Add button layout to right panel
+        rightLayout.addLayout(buttonLayout)
+
+        # Add panels to main layout
+        mainLayout.addWidget(filterPanel)
+        mainLayout.addWidget(rightPanel, 1) # Right panel takes more horizontal space
+
+        # Load preferences from settings for checkboxes
         settings = QSettings()
-        show_lines = settings.value("landuse_analyst/debug_show_line_numbers", False, type=bool)
-        self.show_line_numbers.setChecked(show_lines)
+        showLines = settings.value("landuse_analyst/debug_show_line_numbers", False, type=bool)
+        self.mShowLineNumbersCheckbox.setChecked(showLines)
+        # Ensure initial state matches checkbox
+        self.mTextEdit.toggleLineNumbers(showLines)
 
-        word_wrap = settings.value("landuse_analyst/debug_word_wrap", False, type=bool)
-        self.word_wrap.setChecked(word_wrap)
-        
-        # Load saved filter preference
-        saved_filter = settings.value("landuse_analyst/debug_message_filter", "All Messages")
-        index = self.filter_combo.findText(saved_filter)
-        if index >= 0:
-            self.filter_combo.setCurrentIndex(index)
+        wordWrap = settings.value("landuse_analyst/debug_word_wrap", False, type=bool)
+        self.mWordWrapCheckbox.setChecked(wordWrap)
+        # Ensure initial state matches checkbox
+        self._toggleWordWrap(wordWrap) # Call slot to apply wrap mode
 
-        # Initialize word wrap based on saved preference
-        self.toggle_word_wrap(word_wrap)
+    def _addFilterCheckbox(self, component: str):
+        """Adds a checkbox for a given component type to the filter list."""
+        if component in self.mFilterCheckboxes:
+            return # Already exists
 
-    def add_debug_message(self, message: str):
-        """Add message to log with auto-scroll handling and filter respect"""
-        if not message:
-            return
+        checkbox = QCheckBox(component)
+        checkbox.setChecked(True) # New filters default to checked
+        checkbox.stateChanged.connect(self.applyFilters)
 
-        # Check if message matches current filter
-        current_filter = self.filter_combo.currentText()
-        if current_filter != "All Messages":
-            # Messages are in format "Component: Message"
-            if not message.startswith(current_filter + ":"):
-                return
-        
-        # Strip any HTML tags before displaying
-        clean_message = self._strip_html_tags(message)
-        self.text_edit.appendPlainText(clean_message)
-        
-        if self.auto_scroll.isChecked():
-            cursor = self.text_edit.textCursor()
-            cursor.movePosition(QTextCursor.End)
-            self.text_edit.setTextCursor(cursor)
+        # Insert checkbox alphabetically into the layout
+        inserted = False
+        for i in range(self.mFilterScrollLayout.count() - 1): # Exclude the stretch
+            item = self.mFilterScrollLayout.itemAt(i)
+            widget = item.widget()
+            if isinstance(widget, QCheckBox) and widget.text() > component:
+                self.mFilterScrollLayout.insertWidget(i, checkbox)
+                inserted = True
+                break
+        if not inserted:
+            # Insert before the stretch if not inserted alphabetically
+             self.mFilterScrollLayout.insertWidget(self.mFilterScrollLayout.count() - 1, checkbox)
 
-    def add_messages_from_history(self, messages_list: list):
-        """Bulk load historical messages"""
-        if not messages_list:
-            return
+        self.mFilterCheckboxes[component] = checkbox
 
-        # Temporarily disable updates to improve performance
-        self.text_edit.setUpdatesEnabled(False)
 
-        # Strip HTML tags and add messages
-        stripped_messages = [self._strip_html_tags(msg) for msg in messages_list]
-        self.text_edit.appendPlainText("\n".join(stripped_messages))
+    @pyqtSlot(str)
+    def addDebugMessage(self, message: str):
+        """Slot to receive and process a new debug message."""
+        # Store the raw message internally
+        self.mMessages.append(message)
 
-        # Re-enable updates
-        self.text_edit.setUpdatesEnabled(True)
+        # Check if the message's component type filter exists, add if not
+        component = self._getComponentFromMessage(message)
+        if component and component not in self.mFilterCheckboxes:
+            self._addFilterCheckbox(component)
+            # No need to re-apply all filters here, just check if the new type is active
+            # (which it will be by default)
 
-        if self.auto_scroll.isChecked():
-            cursor = self.text_edit.textCursor()
-            cursor.movePosition(QTextCursor.End)
-            self.text_edit.setTextCursor(cursor)
+        # Check if the component of the new message is currently enabled in filters
+        if component in self.mFilterCheckboxes and self.mFilterCheckboxes[component].isChecked():
+            # If the filter for this message type is active, append it to the text edit
+            is_at_bottom = False
+            scrollbar = self.mTextEdit.verticalScrollBar()
+            if self.mAutoScrollCheckbox.isChecked():
+                # Check if scrollbar is near the bottom before appending
+                is_at_bottom = scrollbar.value() >= (scrollbar.maximum() - 5)
 
-    def clear_log(self):
-        """Clear all messages"""
-        self.text_edit.clear()
+            # Append the message (potentially with line number formatting)
+            display_message = self._formatMessageForDisplay(message)
+            self.mTextEdit.appendPlainText(display_message) # Use plain text to avoid formatting issues
 
-    def copy_all(self):
-        """Copy full log to clipboard"""
-        self.text_edit.selectAll()
-        self.text_edit.copy()
-        cursor = self.text_edit.textCursor()
-        cursor.clearSelection()
-        self.text_edit.setTextCursor(cursor)
+            if self.mAutoScrollCheckbox.isChecked() and is_at_bottom:
+                scrollbar.setValue(scrollbar.maximum()) # Scroll to bottom
 
-    def closeEvent(self, event):
-        """Handle proper cleanup but preserve the singleton instance"""
-        # Save size
+
+    def _getComponentFromMessage(self, message: str) -> Optional[str]:
+        """Extracts the component part (e.g., 'UI', 'Diet') from a raw message."""
+        # Simple split, assumes "Component: Message" format
+        parts = message.split(':', 1)
+        if parts:
+            return parts[0].strip()
+        return None
+
+    def _formatMessageForDisplay(self, message: str) -> str:
+        """Formats a raw message for display (e.g., adding line numbers if enabled)."""
+        # Currently, we just display the raw message as plain text.
+        # If line numbers were added by the source, they would be part of the string.
+        # If we wanted client-side line numbers (less reliable if filtered),
+        # we would calculate the line number based on mTextEdit.blockCount() here.
+        # For simplicity, let's assume line numbers are NOT added here.
+        return self._stripHtmlTags(message) # Ensure clean display
+
+    def _stripHtmlTags(self, text: str) -> str:
+        """Remove HTML tags from text."""
+        # Simple regex to remove tags - might need refinement for complex HTML
+        clean = re.compile('<.*?>')
+        return re.sub(clean, '', text)
+
+    def _saveFilterPreferences(self):
+        """Save filter checkbox states to QSettings."""
         settings = QSettings()
-        settings.setValue("landuse_analyst/debug_dialog_size", self.size())
+        active_filters = [comp for comp, cb in self.mFilterCheckboxes.items() if cb.isChecked()]
+        settings.setValue("landuse_analyst/debug_active_filters", active_filters)
+        LaUtils.debug.log(f"Saved active filters: {active_filters}", "Debug")
 
-        # Instead of closing, just hide the dialog and ignore the event
+
+    def _loadFilterPreferences(self):
+        """Load saved filter checkbox states from QSettings."""
+        settings = QSettings()
+        active_filters = settings.value("landuse_analyst/debug_active_filters", [])
+        LaUtils.debug.log(f"Loading active filters: {active_filters}", "Debug")
+
+        # Block signals during update
+        self.mSelectAllCheckbox.blockSignals(True)
+        for checkbox in self.mFilterCheckboxes.values():
+            checkbox.blockSignals(True)
+
+        # If no saved filters, default to all checked
+        if not active_filters:
+             active_filters = list(self.mFilterCheckboxes.keys())
+             for checkbox in self.mFilterCheckboxes.values():
+                 checkbox.setChecked(True)
+        else:
+             for component, checkbox in self.mFilterCheckboxes.items():
+                 checkbox.setChecked(component in active_filters)
+
+        # Unblock signals
+        for checkbox in self.mFilterCheckboxes.values():
+            checkbox.blockSignals(False)
+        self.mSelectAllCheckbox.blockSignals(False)
+
+        # Update the "Select All" checkbox state
+        self._updateSelectAllState()
+
+    def _updateSelectAllState(self):
+        """Update the 'Select All' checkbox based on individual filter states."""
+        all_checked = True
+        any_checked = False
+        if not self.mFilterCheckboxes: # Handle case with no filters yet
+            all_checked = False
+        else:
+            for checkbox in self.mFilterCheckboxes.values():
+                if checkbox.isChecked():
+                    any_checked = True
+                else:
+                    all_checked = False
+                if any_checked and not all_checked: # Optimization
+                    break
+
+        # Block signals to prevent recursive calls
+        self.mSelectAllCheckbox.blockSignals(True)
+        if all_checked:
+            self.mSelectAllCheckbox.setCheckState(Qt.Checked)
+        elif any_checked:
+            self.mSelectAllCheckbox.setCheckState(Qt.PartiallyChecked)
+        else:
+            self.mSelectAllCheckbox.setCheckState(Qt.Unchecked)
+        self.mSelectAllCheckbox.blockSignals(False)
+
+    @pyqtSlot(int)
+    def _toggleAllFilters(self, state: int):
+        """Toggle all individual filter checkboxes based on 'Select All' state."""
+        check_state = (state == Qt.Checked)
+
+        # Block signals on individual checkboxes during update
+        for checkbox in self.mFilterCheckboxes.values():
+            checkbox.blockSignals(True)
+            checkbox.setChecked(check_state)
+            checkbox.blockSignals(False)
+
+        # Apply the filters once after all changes
+        self.applyFilters()
+
+
+    @pyqtSlot()
+    def applyFilters(self):
+        """Apply current filters to the displayed messages."""
+        # Update the state of the 'Select All' checkbox first
+        self._updateSelectAllState()
+        # Save the current filter selection
+        self._saveFilterPreferences()
+
+        # Get the set of currently active filter components
+        active_filters = {comp for comp, cb in self.mFilterCheckboxes.items() if cb.isChecked()}
+        LaUtils.debug.log(f"Applying filters: {active_filters}", "Debug")
+
+        # Filter messages but keep track of the original line number for each visible message
+        visible_messages = []
+        line_numbers = []
+        line_count = 1
+        
+        for message in self.mMessages:
+            component = self._getComponentFromMessage(message)
+            if component in active_filters:
+                # Only include messages that match active filters
+                visible_messages.append(self._formatMessageForDisplay(message))
+                line_numbers.append(line_count)
+            line_count += 1
+
+        # Update the text edit efficiently
+        self.mTextEdit.setUpdatesEnabled(False)  # Disable updates for performance
+        self.mTextEdit.clear()
+        
+        # Create a special formatted text that includes line numbers in red at the beginning of each line
+        formatted_text = ""
+        for i, (message, line_num) in enumerate(zip(visible_messages, line_numbers)):
+            if i > 0:
+                formatted_text += "\n"
+            # We don't actually include the line number in the text since the line number area will handle that
+            formatted_text += message
+        
+        self.mTextEdit.appendPlainText(formatted_text)
+        
+        # Store the mapping of visual lines to actual line numbers for the line number area to use
+        self.mTextEdit.line_number_mapping = line_numbers
+        self.mTextEdit.lineNumberArea.update()  # Force the line number area to update
+        
+        self.mTextEdit.setUpdatesEnabled(True)  # Re-enable updates
+
+        # Handle auto-scroll after content update
+        if self.mAutoScrollCheckbox.isChecked():
+            scrollbar = self.mTextEdit.verticalScrollBar()
+            scrollbar.setValue(scrollbar.maximum())
+
+        LaUtils.debug.log("Filters applied with preserved line numbering.", "Debug")
+
+    @pyqtSlot()
+    def _clearLog(self):
+        """Clear stored messages and the display."""
+        self.mMessages.clear()
+        self.mTextEdit.clear()
+        LaUtils.debug.log("Log cleared.", "Debug")
+        # Optionally clear LaUtils.debug history?
+        # LaUtils.debug.clearHistory()
+
+
+    @pyqtSlot()
+    def _copyAll(self):
+        """Copy the currently displayed log content to the clipboard."""
+        clipboard = QApplication.clipboard()
+        if clipboard:
+            clipboard.setText(self.mTextEdit.toPlainText())
+            LaUtils.debug.log("Displayed log copied to clipboard.", "Debug")
+
+    def closeEvent(self, event: 'QCloseEvent'):
+        """Handle closing the dialog (hides instead of deleting)."""
+        # Save geometry (position and size)
+        settings = QSettings()
+        settings.setValue("landuse_analyst/debug_dialog_geometry", self.saveGeometry())
+
+        # Save other preferences (already handled by toggles)
+        self._saveFilterPreferences() # Ensure latest filter state is saved
+
+        # Hide the dialog instead of accepting the close event
         self.hide()
-        event.ignore()
+        event.ignore() # Prevent the dialog from being destroyed
+        LaUtils.debug.log("Debug dialog hidden.", "Debug")
 
-        # Do NOT disconnect signals as we want to keep receiving them
-
-    def toggle_line_numbers(self, checked):
-        """Toggle line numbers visibility
-
-        Args:
-            checked: Whether line numbers should be shown
-        """
+    @pyqtSlot(bool)
+    def _toggleLineNumbers(self, checked: bool):
+        """Toggle line numbers visibility."""
         # Save the setting
         settings = QSettings()
         settings.setValue("landuse_analyst/debug_show_line_numbers", checked)
+        # Update the text edit widget
+        self.mTextEdit.toggleLineNumbers(checked)
+        LaUtils.debug.log(f"Show line numbers toggled: {checked}", "Debug")
 
-        # Update the line number area
-        self.text_edit.toggle_line_numbers(checked)
-
-    def toggle_word_wrap(self, checked):
-        """Toggle word wrap setting
-
-        Args:
-            checked: Whether word wrap should be enabled
-        """
+    @pyqtSlot(bool)
+    def _toggleWordWrap(self, checked: bool):
+        """Toggle word wrap setting."""
         # Save the setting
         settings = QSettings()
         settings.setValue("landuse_analyst/debug_word_wrap", checked)
+        # Update the text edit widget's wrap mode
+        wrap_mode = QPlainTextEdit.WidgetWidth if checked else QPlainTextEdit.NoWrap
+        self.mTextEdit.setLineWrapMode(wrap_mode)
+        # Update line number area as wrapping affects layout
+        self.mTextEdit.updateLineNumberAreaWidth()
+        LaUtils.debug.log(f"Word wrap toggled: {checked}", "Debug")
 
-        # Update the text edit widget
-        if checked:
-            self.text_edit.setLineWrapMode(QPlainTextEdit.WidgetWidth)
-        else:
-            self.text_edit.setLineWrapMode(QPlainTextEdit.NoWrap)
-
-        # Update the line number area since line wrapping may change layout
-        self.text_edit.update_line_number_area_width()
-        self.text_edit.line_number_area.update()
-
-    def apply_filter(self, filter_type: str):
-        """Apply message type filter and update display.
-        
-        Args:
-            filter_type: The message type to filter by, or "All Messages" for no filter
-        """
-        # Save the filter preference
-        settings = QSettings()
-        settings.setValue("landuse_analyst/debug_message_filter", filter_type)
-
-        # Clear current display
-        self.text_edit.clear()
-
-        # Get filtered message history
-        from la.lib.lautils import LaUtils
-        messages = LaUtils.debug.getHistory(
-            component_filter="" if filter_type == "All Messages" else filter_type,
-            with_line_numbers=self.show_line_numbers.isChecked()
-        )
-
-        # Add filtered messages
-        self.add_messages_from_history(messages)
-
-    def _strip_html_tags(self, text):
-        """Remove HTML tags from text for proper display in QPlainTextEdit.
-        
-        Args:
-            text: Text containing HTML formatting
-            
-        Returns:
-            Plain text without HTML tags
-        """
-        import re
-        # Replace HTML color spans with their content
-        text = re.sub(r'<span[^>]*>(.*?)</span>', r'\1', text)
-        # Replace any other HTML tags
-        text = re.sub(r'<[^>]*>', '', text)
-        return text
+    # Make sure the instance is cleaned up if the application quits
+    # This might require connecting to qApp.aboutToQuit() if parent is None
+    # or relying on Qt's parent-child cleanup mechanism if parent is provided.
+    def __del__(self):
+         print(f"LaDebugDialog instance {id(self)} being deleted.")
+         # Clean up singleton reference if this instance is the one registered
+         if LaDebugDialog._instance is self:
+             LaDebugDialog._instance = None
