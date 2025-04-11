@@ -1,5 +1,4 @@
 {
-  // Python Settings
   "python.analysis.extraPaths": [
     "/home/arkygeek/anaconda3/envs/qgis_dev/share/qgis/python",
     "/home/arkygeek/anaconda3/envs/qgis_dev/share/qgis/python/plugins"
@@ -9,32 +8,27 @@
     "/home/arkygeek/anaconda3/envs/qgis_dev/share/qgis/python/plugins"
   ],
   "python.defaultInterpreterPath": "/home/arkygeek/anaconda3/envs/qgis_dev/bin/python",
-  // "python.condaPath": "/home/arkygeek/anaconda3/bin/conda",
   "python.terminal.activateEnvInCurrentTerminal": true,
   "python.terminal.shellIntegration.enabled": true,
   "python.analysis.indexing": true,
   "python.analysis.inlayHints.variableTypes": true,
   "python.analysis.regenerateStdLibIndices": true,
   "python.languageServer": "Default",
-  // "python.jediEnabled": false,
   "python.terminal.executeInFileDir": true,
-  // "python-envs.terminal.showActivateButton": true,
   "python-envs.defaultEnvManager": "ms-python.python:conda",
   "python-envs.defaultPackageManager": "ms-python.python:conda",
-
-  // Terminal Profile
   "terminal.integrated.profiles.linux": {
     "conda-zsh": {
       "path": "zsh",
-      "args": ["-l"],
+      "args": [
+        "-l"
+      ],
       "env": {
         "CONDA_DEFAULT_ENV": "qgis_dev"
       }
     }
   },
   "terminal.integrated.defaultProfile.linux": "conda-zsh",
-
-  // Other settings
   "python.analysis.typeCheckingMode": "basic",
   "python-envs.pythonProjects": [],
   "python.formatting.provider": "black",
@@ -66,7 +60,9 @@
           "keyword.operator.new.js",
           "variable.parameter.function-call.python"
         ],
-        "settings": { "fontStyle": "italic" }
+        "settings": {
+          "fontStyle": "italic"
+        }
       },
       {
         "scope": [
@@ -78,7 +74,9 @@
           "constant.numeric.json",
           "entity.name.type.class.js"
         ],
-        "settings": { "fontStyle": "" }
+        "settings": {
+          "fontStyle": ""
+        }
       },
       {
         "scope": [
@@ -127,5 +125,62 @@
   },
   "cmake.ignoreCMakeListsMissing": true,
   "IDX.aI.enableInlineCompletion": true,
-  "IDX.aI.enableCodebaseIndexing": true
+  "IDX.aI.enableCodebaseIndexing": true,
+  "C_Cpp_Runner.msvcBatchPath": "",
+  "C_Cpp_Runner.cCompilerPath": "gcc",
+  "C_Cpp_Runner.cppCompilerPath": "g++",
+  "C_Cpp_Runner.debuggerPath": "gdb",
+  "C_Cpp_Runner.cStandard": "",
+  "C_Cpp_Runner.cppStandard": "",
+  "C_Cpp_Runner.useMsvc": false,
+  "C_Cpp_Runner.warnings": [
+    "-Wall",
+    "-Wextra",
+    "-Wpedantic",
+    "-Wshadow",
+    "-Wformat=2",
+    "-Wcast-align",
+    "-Wconversion",
+    "-Wsign-conversion",
+    "-Wnull-dereference"
+  ],
+  "C_Cpp_Runner.msvcWarnings": [
+    "/W4",
+    "/permissive-",
+    "/w14242",
+    "/w14287",
+    "/w14296",
+    "/w14311",
+    "/w14826",
+    "/w44062",
+    "/w44242",
+    "/w14905",
+    "/w14906",
+    "/w14263",
+    "/w44265",
+    "/w14928"
+  ],
+  "C_Cpp_Runner.enableWarnings": true,
+  "C_Cpp_Runner.warningsAsError": false,
+  "C_Cpp_Runner.compilerArgs": [],
+  "C_Cpp_Runner.linkerArgs": [],
+  "C_Cpp_Runner.includePaths": [],
+  "C_Cpp_Runner.includeSearch": [
+    "*",
+    "**/*"
+  ],
+  "C_Cpp_Runner.excludeSearch": [
+    "**/build",
+    "**/build/**",
+    "**/.*",
+    "**/.*/**",
+    "**/.vscode",
+    "**/.vscode/**"
+  ],
+  "C_Cpp_Runner.useAddressSanitizer": false,
+  "C_Cpp_Runner.useUndefinedSanitizer": false,
+  "C_Cpp_Runner.useLeakSanitizer": false,
+  "C_Cpp_Runner.showCompilationTime": false,
+  "C_Cpp_Runner.useLinkTimeOptimization": false,
+  "C_Cpp_Runner.msvcSecureNoWarnings": false
 }
