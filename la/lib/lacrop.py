@@ -30,57 +30,57 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
     The `Type` type hint is used to refer to the class itself.
 
     Attributes:
-        name (str): The name of the crop.
-        description (str): A description of the crop.
-        yield (int): The yield of the crop in kg/ha.
-        cropCalories (int): The number of calories produced by the crop.
-        fodderProduction (int): The amount of fodder produced by the crop.
-        fodderValue (int): The value of the fodder produced by the crop.
-        cropFodderEnergyType (str): The type of energy produced by the crop.
-        areaUnits (str): The units used to measure the area of the crop.
-        imageFile (str): The image file used to represent the crop.
+        mName (str): The name of the crop.
+        mDescription (str): A description of the crop.
+        mYield (int): The yield of the crop in kg/ha.
+        mCropCalories (int): The number of calories produced by the crop.
+        mFodderProduction (int): The amount of fodder produced by the crop.
+        mFodderValue (int): The value of the fodder produced by the crop.
+        mCropFodderEnergyType (str): The type of energy produced by the crop.
+        mAreaUnits (str): The units used to measure the area of the crop.
+        mImageFile (str): The image file used to represent the crop.
     """
-    nameChanged = pyqtSignal(str)
-    descriptionChanged = pyqtSignal(str)
-    yieldChanged = pyqtSignal(int)
-    cropCaloriesChanged = pyqtSignal(int)
-    cropFodderProductionChanged = pyqtSignal(int)
-    cropFodderValueChanged = pyqtSignal(int)
-    cropFodderEnergyTypeChanged = pyqtSignal(LaEnergyType)
-    areaUnitsChanged = pyqtSignal(LaAreaUnits)
-    imageFileChanged = pyqtSignal(str)
+    _nameChanged = pyqtSignal(str)
+    _descriptionChanged = pyqtSignal(str)
+    _yieldChanged = pyqtSignal(int)
+    _cropCaloriesChanged = pyqtSignal(int)
+    _cropFodderProductionChanged = pyqtSignal(int)
+    _cropFodderValueChanged = pyqtSignal(int)
+    _cropFodderEnergyTypeChanged = pyqtSignal(LaEnergyType)
+    _areaUnitsChanged = pyqtSignal(LaAreaUnits)
+    _imageFileChanged = pyqtSignal(str)
 
     def __init__(self, theCrop: Optional[Type['LaCrop']] = None, parent=None):
         """Initializes a new instance of the LaCrop class.
 
         Args:
-            the_crop (Optional[Type['LaCrop']]): An existing LaCrop object to copy.
+            theCrop (Optional[Type['LaCrop']]): An existing LaCrop object to copy.
                 If provided, the new instance will be a copy of the existing object.
                 If not provided, the new instance will be initialized with default values.
         """
         super().__init__(parent)
         if theCrop is None: # If NO crop is provided, initialize with default values.
-            self._mGuid = LaGuid.setGuid(self, None)
-            self._mName = "No Name Set"
-            self._mDescription = "Not Set"
-            self._mCropYield = 60
-            self._mCalories = 3000
-            self._mFodderProduction = 50
-            self._mFodderValue = 1000
-            self._mImageFile = ""
-            self._mFodderEnergyType = ""
-            self._mAreaUnits = ""
+            self.mGuid = LaGuid.setGuid(self, None)
+            self.mName = "No Name Set"
+            self.mDescription = "Not Set"
+            self.mCropYield = 60
+            self.mCalories = 3000
+            self.mFodderProduction = 50
+            self.mFodderValue = 1000
+            self.mImageFile = ""
+            self.mFodderEnergyType = ""
+            self.mAreaUnits = ""
         else: # If a crop IS provided, copy the values from the existing crop.
-            self._mGuid = theCrop.guid
-            self._mName = theCrop.name
-            self._mDescription = theCrop.description
-            self._mCropYield = theCrop.cropYield
-            self._mCalories = theCrop.cropCalories
-            self._mFodderProduction = theCrop.cropFodderProduction
-            self._mFodderValue = theCrop.cropFodderValue
-            self._mFodderEnergyType = theCrop.cropFodderEnergyType
-            self._mAreaUnits = theCrop.areaUnits
-            self._mImageFile = theCrop.imageFile
+            self.mGuid = theCrop.guid
+            self.mName = theCrop.name
+            self.mDescription = theCrop.description
+            self.mCropYield = theCrop.cropYield
+            self.mCalories = theCrop.cropCalories
+            self.mFodderProduction = theCrop.cropFodderProduction
+            self.mFodderValue = theCrop.cropFodderValue
+            self.mFodderEnergyType = theCrop.cropFodderEnergyType
+            self.mAreaUnits = theCrop.areaUnits
+            self.mImageFile = theCrop.imageFile
 
     def __eq__(self, other):
         """
@@ -137,7 +137,7 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         :returns: The crop's GUID
         :rtype: str
         """
-        return self._mGuid
+        return self.mGuid
 
     @guid.setter
     def guid(self, theGuid):
@@ -147,9 +147,9 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         :param value: The new GUID value
         :type value: str
         """
-        self._mGuid = theGuid
+        self.mGuid = theGuid
 
-    @pyqtProperty(str, notify=nameChanged)
+    @pyqtProperty(str, notify=_nameChanged)
     def name(self): #type: ignore
         """
         Get the name of this crop.
@@ -157,7 +157,7 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         :returns: The crop's name
         :rtype: str
         """
-        return self._mName
+        return self.mName
 
     @name.setter
     def name(self, name):
@@ -167,11 +167,11 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         :param name: The new crop name
         :type name: str
         """
-        if self._mName != name:
-            self._mName = name
-            self.nameChanged.emit(name)
+        if self.mName != name:
+            self.mName = name
+            self._nameChanged.emit(name)
 
-    @pyqtProperty(str, notify=descriptionChanged)
+    @pyqtProperty(str, notify=_descriptionChanged)
     def description(self): #type: ignore
         """
         Get the description of this crop.
@@ -179,7 +179,7 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         :returns: The crop's description
         :rtype: str
         """
-        return self._mDescription
+        return self.mDescription
 
     @description.setter
     def description(self, description):
@@ -189,11 +189,11 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         :param description: The new crop description
         :type description: str
         """
-        if self._mDescription != description:
-            self._mDescription = description
-            self.descriptionChanged.emit(description)
+        if self.mDescription != description:
+            self.mDescription = description
+            self._descriptionChanged.emit(description)
 
-    @pyqtProperty(int, notify=yieldChanged)
+    @pyqtProperty(int, notify=_yieldChanged)
     def cropYield(self): #type: ignore
         """
         Get the yield value for this crop (kg/ha or kg/dunum).
@@ -201,8 +201,8 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         :returns: The crop's yield value
         :rtype: int
         """
-        myCropYield = self._mCropYield
-        return self._mCropYield
+        myCropYield = self.mCropYield
+        return self.mCropYield
 
     @cropYield.setter
     def cropYield(self, theYield):
@@ -212,11 +212,11 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         :param theYield: The new yield value
         :type theYield: int
         """
-        if self._mCropYield != theYield:
-            self._mCropYield = theYield
-            self.yieldChanged.emit(theYield)
+        if self.mCropYield != theYield:
+            self.mCropYield = theYield
+            self._yieldChanged.emit(theYield)
 
-    @pyqtProperty(int, notify=cropCaloriesChanged)
+    @pyqtProperty(int, notify=_cropCaloriesChanged)
     def cropCalories(self): #type: ignore
         """
         Get the caloric value per kg of this crop.
@@ -224,7 +224,7 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         :returns: The calories per kilogram
         :rtype: int
         """
-        return self._mCalories
+        return self.mCalories
 
     @cropCalories.setter
     def cropCalories(self, cropCalories):
@@ -234,11 +234,11 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         :param cropCalories: The new caloric value
         :type cropCalories: int
         """
-        if self._mCalories != cropCalories:
-            self._mCalories = cropCalories
-            self.cropCaloriesChanged.emit(cropCalories)
+        if self.mCalories != cropCalories:
+            self.mCalories = cropCalories
+            self._cropCaloriesChanged.emit(cropCalories)
 
-    @pyqtProperty(int, notify=cropFodderProductionChanged)
+    @pyqtProperty(int, notify=_cropFodderProductionChanged)
     def cropFodderProduction(self): #type: ignore
         """
         Get the fodder production amount for this crop.
@@ -246,7 +246,7 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         :returns: The amount of fodder produced per area unit
         :rtype: int
         """
-        return self._mFodderProduction
+        return self.mFodderProduction
 
     @cropFodderProduction.setter
     def cropFodderProduction(self, theCropFodderProduction):
@@ -256,11 +256,11 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         :param theCropFodderProduction: The new fodder production value
         :type theCropFodderProduction: int
         """
-        if self._mFodderProduction != theCropFodderProduction:
-            self._mFodderProduction = theCropFodderProduction
-            self.cropFodderProductionChanged.emit(theCropFodderProduction)
+        if self.mFodderProduction != theCropFodderProduction:
+            self.mFodderProduction = theCropFodderProduction
+            self._cropFodderProductionChanged.emit(theCropFodderProduction)
 
-    @pyqtProperty(int, notify=cropFodderValueChanged)
+    @pyqtProperty(int, notify=_cropFodderValueChanged)
     def cropFodderValue(self): #type: ignore
         """
         Get the nutritional value of fodder produced by this crop.
@@ -268,7 +268,7 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         :returns: The fodder's nutritional value
         :rtype: int
         """
-        return self._mFodderValue
+        return self.mFodderValue
 
     @cropFodderValue.setter
     def cropFodderValue(self, cropFodderValue):
@@ -278,11 +278,11 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         :param cropFodderValue: The new fodder nutritional value
         :type cropFodderValue: int
         """
-        if self._mFodderValue != cropFodderValue:
-            self._mFodderValue = cropFodderValue
-            self.cropFodderValueChanged.emit(cropFodderValue)
+        if self.mFodderValue != cropFodderValue:
+            self.mFodderValue = cropFodderValue
+            self._cropFodderValueChanged.emit(cropFodderValue)
 
-    @pyqtProperty(LaEnergyType, notify=cropFodderEnergyTypeChanged)
+    @pyqtProperty(LaEnergyType, notify=_cropFodderEnergyTypeChanged)
     def cropFodderEnergyType(self): #type: ignore
         """
         Get the energy type for measuring fodder value (KCalories or TDN).
@@ -290,7 +290,7 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         :returns: The fodder energy measurement type
         :rtype: LaEnergyType
         """
-        return self._mFodderEnergyType
+        return self.mFodderEnergyType
 
     @cropFodderEnergyType.setter
     def cropFodderEnergyType(self, theCropFodderEnergyType):
@@ -300,11 +300,11 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         :param cropFodderEnergyType: The new fodder energy measurement type
         :type cropFodderEnergyType: LaEnergyType
         """
-        if self._mFodderEnergyType != theCropFodderEnergyType:
-            self._mFodderEnergyType = theCropFodderEnergyType
-            self.cropFodderEnergyTypeChanged.emit(theCropFodderEnergyType)
+        if self.mFodderEnergyType != theCropFodderEnergyType:
+            self.mFodderEnergyType = theCropFodderEnergyType
+            self._cropFodderEnergyTypeChanged.emit(theCropFodderEnergyType)
 
-    @pyqtProperty(LaAreaUnits, notify=areaUnitsChanged)
+    @pyqtProperty(LaAreaUnits, notify=_areaUnitsChanged)
     def areaUnits(self): #type: ignore
         """
         Get the area units used for this crop (Hectare or Dunum).
@@ -312,7 +312,7 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         :returns: The area units used for yield calculations
         :rtype: LaAreaUnits
         """
-        return self._mAreaUnits
+        return self.mAreaUnits
 
     @areaUnits.setter
     def areaUnits(self, theAreaUnits):
@@ -322,11 +322,11 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         :param theAreaUnits: The new area units
         :type theAreaUnits: LaAreaUnits
         """
-        if self._mAreaUnits != theAreaUnits:
-            self._mAreaUnits = theAreaUnits
-            self.areaUnitsChanged.emit(theAreaUnits)
+        if self.mAreaUnits != theAreaUnits:
+            self.mAreaUnits = theAreaUnits
+            self._areaUnitsChanged.emit(theAreaUnits)
 
-    @pyqtProperty(str, notify=imageFileChanged)
+    @pyqtProperty(str, notify=_imageFileChanged)
     def imageFile(self): #type: ignore
         """
         Get the path to the image file representing this crop.
@@ -334,7 +334,7 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         :returns: The image file path
         :rtype: str
         """
-        return self._mImageFile
+        return self.mImageFile
 
     @imageFile.setter
     def imageFile(self, imageFile) -> None:
@@ -344,9 +344,9 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         :param imageFile: The new image file path
         :type imageFile: str
         """
-        if self._mImageFile != imageFile:
-            self._mImageFile = imageFile
-            self.imageFileChanged.emit(imageFile)
+        if self.mImageFile != imageFile:
+            self.mImageFile = imageFile
+            self._imageFileChanged.emit(imageFile)
 
     def fromXml(self, theXml):
         """
@@ -372,59 +372,59 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         self.guid = myTopElement.attribute("guid")
         
         # Parse name - check for both name and n tags for backward compatibility
-        self._mName = LaUtils.xmlDecode(myTopElement.firstChildElement("name").text())
-        if not self._mName:
-            self._mName = LaUtils.xmlDecode(myTopElement.firstChildElement("n").text())
+        self.mName = LaUtils.xmlDecode(myTopElement.firstChildElement("name").text())
+        if not self.mName:
+            self.mName = LaUtils.xmlDecode(myTopElement.firstChildElement("n").text())
         
-        self._mDescription = LaUtils.xmlDecode(myTopElement.firstChildElement("description").text())
+        self.mDescription = LaUtils.xmlDecode(myTopElement.firstChildElement("description").text())
         
         # Safe integer conversions with default values
         try:
             crop_yield_text = myTopElement.firstChildElement("cropYield").text()
-            self._mCropYield = int(crop_yield_text) if crop_yield_text else 60
+            self.mCropYield = int(crop_yield_text) if crop_yield_text else 60
         except (ValueError, TypeError):
-            self._mCropYield = 60
+            self.mCropYield = 60
             
         try:
             calories_text = myTopElement.firstChildElement("cropCalories").text()
-            self._mCalories = int(calories_text) if calories_text else 3000
+            self.mCalories = int(calories_text) if calories_text else 3000
         except (ValueError, TypeError):
-            self._mCalories = 3000
+            self.mCalories = 3000
             
         try:
             fodder_production_text = myTopElement.firstChildElement("fodderProduction").text()
-            self._mFodderProduction = int(fodder_production_text) if fodder_production_text else 50
+            self.mFodderProduction = int(fodder_production_text) if fodder_production_text else 50
         except (ValueError, TypeError):
-            self._mFodderProduction = 50
+            self.mFodderProduction = 50
             
         try:
             fodder_calories_text = myTopElement.firstChildElement("fodderCalories").text()
-            self._mFodderValue = int(fodder_calories_text) if fodder_calories_text else 1000
+            self.mFodderValue = int(fodder_calories_text) if fodder_calories_text else 1000
         except (ValueError, TypeError):
-            self._mFodderValue = 1000
+            self.mFodderValue = 1000
 
         # Parse cropFodderEnergyType using match-case with safe default
         myCropFodderEnergyType = myTopElement.firstChildElement("cropFodderEnergyType").text()
         if myCropFodderEnergyType == "KCalories":
-            self._mFodderEnergyType = LaEnergyType.KCalories
+            self.mFodderEnergyType = LaEnergyType.KCalories
         elif myCropFodderEnergyType == "TDN":
-            self._mFodderEnergyType = LaEnergyType.TDN
+            self.mFodderEnergyType = LaEnergyType.TDN
         else:
-            self._mFodderEnergyType = LaEnergyType.KCalories  # Default
+            self.mFodderEnergyType = LaEnergyType.KCalories  # Default
         
         # Parse areaUnits using match-case with safe default
         myAreaUnits = myTopElement.firstChildElement("areaUnits").text()
         if myAreaUnits == "Dunum":
-            self._mAreaUnits = LaAreaUnits.Dunum
+            self.mAreaUnits = LaAreaUnits.Dunum
         elif myAreaUnits == "Hectare":
-            self._mAreaUnits = LaAreaUnits.Hectare
+            self.mAreaUnits = LaAreaUnits.Hectare
         else:
-            self._mAreaUnits = LaAreaUnits.Dunum  # Default
+            self.mAreaUnits = LaAreaUnits.Dunum  # Default
         
-        self._mImageFile = myTopElement.firstChildElement("imageFile").text()
+        self.mImageFile = myTopElement.firstChildElement("imageFile").text()
         
         # Log successful parsing
-        LaUtils.debug.log(f"After fromXml - cropYield: {self._mCropYield}, cropFodderProduction: {self._mFodderProduction}")
+        LaUtils.debug.log(f"After fromXml - cropYield: {self.mCropYield}, cropFodderProduction: {self.mFodderProduction}")
         
         return True
 
@@ -477,11 +477,11 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         xml += f'  <fodderProduction>{self.cropFodderProduction}</fodderProduction>\n'
         xml += f'  <fodderCalories>{self.cropFodderValue}</fodderCalories>\n'
         # Convert energy type enum to string using match-case
-        match self._mFodderEnergyType:
+        match self.mFodderEnergyType:
             case LaEnergyType.KCalories: myCropFodderEnergyTypeString = "KCalories"
             case LaEnergyType.TDN: myCropFodderEnergyTypeString = "TDN"
         # Convert area units enum to string using match-case
-        match self._mAreaUnits:
+        match self.mAreaUnits:
             case LaAreaUnits.Dunum: myAreaUnitsString = "Dunum"
             case LaAreaUnits.Hectare: myAreaUnitsString = "Hectare"
         xml += f'  <cropFodderEnergyType>{myCropFodderEnergyTypeString}</cropFodderEnergyType>\n'

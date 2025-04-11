@@ -56,7 +56,7 @@ class LaMainForm(LaMainFormBase):
         # Initialize the model first
         self.model = LaModel(self)
         # Connect the new signal for calculation logging
-        self.model._logCalculationStep.connect(self.logToAllChannels) # Add this line
+        self.model.logCalculationStep.connect(self.logToAllChannels) # Add this line
 
         # Initialize diet labels
         self.mDietLabels = LaDietLabels(parent=self)
@@ -75,17 +75,17 @@ class LaMainForm(LaMainFormBase):
         self.setDietLabels()  # This will calculate initial values based on default slider positions
 
         # Initialize debug dialog
-        self._debug_dialog = None
-        debugMode = QSettings().value("landuse_analyst/debug", False, type=bool)
-        LaUtils.debug.initialize(enabled=debugMode)
+        self.myDebugDialog = None
+        myDebugMode = QSettings().value("landuse_analyst/debug", False, type=bool)
+        LaUtils.debug.isEnabled(myDebugMode)
 
-        if debugMode:
+        if myDebugMode:
             from la.gui.ladebugdialog import LaDebugDialog
-            self._debug_dialog = LaDebugDialog(parent=self)
-            if hasattr(self._debug_dialog, 'add_debug_message'):
-                MESSAGE_BUS.debugMessaged.connect(self._debug_dialog.add_debug_message)
-            if self._debug_dialog is not None:
-                self._debug_dialog.show()
+            self.myDebugDialog = LaDebugDialog(parent=self)
+            if hasattr(self.myDebugDialog, 'addDebugMessage'):
+                MESSAGE_BUS.debugMessaged.connect(self.myDebugDialog.addDebugMessage)
+            if self.myDebugDialog is not None:
+                self.myDebugDialog.show()
 
         # Connect debug message bus to main form
         MESSAGE_BUS.debugMessaged.connect(self.on_debug_message)
@@ -126,8 +126,8 @@ class LaMainForm(LaMainFormBase):
 
             # --- Retrieve the stored calculation report --- 
             myReportString = "No calculation results available for this animal."
-            if hasattr(self.model, 'lastDietLabels') and self.model.lastDietLabels:
-                myReportMap = self.getPropertyValue(self.model.lastDietLabels, 'animalCalcsReportMap')
+            if hasattr(self.model, 'lastDietLabels') and self.model.mLastDietLabels:
+                myReportMap = self.getPropertyValue(self.model.mLastDietLabels, 'animalCalcsReportMap')
                 if isinstance(myReportMap, dict) and myAnimalGuid in myReportMap:
                     myReportPair = myReportMap[myAnimalGuid]
                     if isinstance(myReportPair, tuple) and len(myReportPair) > 0:
@@ -251,8 +251,8 @@ class LaMainForm(LaMainFormBase):
 
             # --- Retrieve the stored calculation report --- 
             myReportString = "No calculation results available for this crop."
-            if hasattr(self.model, 'lastDietLabels') and self.model.lastDietLabels:
-                myReportMap = self.getPropertyValue(self.model.lastDietLabels, 'cropCalcsReportMap')
+            if hasattr(self.model, 'lastDietLabels') and self.model.mLastDietLabels:
+                myReportMap = self.getPropertyValue(self.model.mLastDietLabels, 'cropCalcsReportMap')
                 if isinstance(myReportMap, dict) and myCropGuid in myReportMap:
                     myReportPair = myReportMap[myCropGuid]
                     if isinstance(myReportPair, tuple) and len(myReportPair) > 0:
@@ -369,8 +369,8 @@ class LaMainForm(LaMainFormBase):
             QtWidgets.QApplication.processEvents()
 
         # Log to debug dialog if exists and visible
-        if hasattr(self, '_debug_dialog') and self._debug_dialog is not None and self._debug_dialog.isVisible():
-            self._debug_dialog.addDebugMessage(theMessage)
+        if hasattr(self, '_debug_dialog') and self.myDebugDialog is not None and self.myDebugDialog.isVisible():
+            self.myDebugDialog.addDebugMessage(theMessage)
 
     def on_debug_message(self, message: str):
         """Handle debug messages from the message bus."""
@@ -463,8 +463,8 @@ class LaMainForm(LaMainFormBase):
             
             # Store reference to the diet labels from the calculation for signal connections
             # This assumes the base class method updated the model with calculations
-            if hasattr(self.model, 'lastDietLabels') and self.model.lastDietLabels:
-                self.mDietLabels = self.model.lastDietLabels
+            if hasattr(self.model, 'lastDietLabels') and self.model.mLastDietLabels:
+                self.mDietLabels = self.model.mLastDietLabels
                 self._connectDietLabelSignals(self.mDietLabels)
             
             # Update calculations (this might trigger more logging)
@@ -585,11 +585,11 @@ class LaMainForm(LaMainFormBase):
 
     def ensure_debug_dialog_visible(self):
         """Ensure the debug dialog is created and visible."""
-        if not self._debug_dialog:
+        if not self.myDebugDialog:
             from la.gui.ladebugdialog import LaDebugDialog
-            self._debug_dialog = LaDebugDialog(parent=self)
-            MESSAGE_BUS.debugMessaged.connect(self._debug_dialog.add_debug_message)
-        self._debug_dialog.show()
+            self.myDebugDialog = LaDebugDialog(parent=self)
+            MESSAGE_BUS.debugMessaged.connect(self.myDebugDialog.add_debug_message)
+        self.myDebugDialog.show()
 
     def getPropertyValue(self, obj, prop_name: str):
         """Helper method to safely get PyQt property values"""
@@ -602,14 +602,14 @@ class LaMainForm(LaMainFormBase):
 
     def on_debug_dialog_closed(self):
         """Handle debug dialog close event."""
-        self._debug_dialog = None
+        self.myDebugDialog = None
 
     def override_on_cbDebug_clicked(self):
         """Override for debug checkbox click handler."""
         if self.cbDebug.isChecked():
             self.ensure_debug_dialog_visible()
-        elif self._debug_dialog:
-            self._debug_dialog.close()
+        elif self.myDebugDialog:
+            self.myDebugDialog.close()
 
     def on_pushButtonRun_clicked(self):
         """
@@ -656,7 +656,7 @@ class LaMainForm(LaMainFormBase):
                     calculation_type = "Animals First (Dairy Separate)"
             
             # Store the diet labels for future reference
-            self.model.lastDietLabels = diet_labels
+            self.model.mLastDietLabels = diet_labels
             
             # Generate the report
             self.tbReport.clear()

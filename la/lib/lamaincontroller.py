@@ -344,22 +344,22 @@ class LaMainController(QObject):
                 if hasattr(self.model, 'animals'):
                     # Convert Dict[str, Tuple[bool, str]] to Dict[str, str]
                     # Only store the parameter GUID for enabled animals
-                    animals_map = {
+                    myAnimalsMap = {
                         guid: param_guid
                         for guid, (enabled, param_guid) in self.animalsMap.items()
                         if enabled and param_guid
                     }
-                    self.model.animals = animals_map
+                    self.model.animals = myAnimalsMap
 
                 if hasattr(self.model, 'crops'):
                     # Convert Dict[str, Tuple[bool, str]] to Dict[str, str]
                     # Only store the parameter GUID for enabled crops
-                    crops_map = {
+                    myCropsMap = {
                         guid: param_guid
                         for guid, (enabled, param_guid) in self.cropsMap.items()
                         if enabled and param_guid
                     }
-                    self.model.crops = crops_map
+                    self.model.crops = myCropsMap
 
                 LaUtils.debug.log("Controller settings saved to model", "Controller")
         except Exception as e:

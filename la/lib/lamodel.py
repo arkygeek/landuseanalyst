@@ -101,49 +101,79 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
     _walkingTimeChanged = pyqtSignal()
 
     # Add a new signal for logging calculation steps to the UI
-    _logCalculationStep = pyqtSignal(str)
+    logCalculationStep = pyqtSignal(str)
 
     def __init__(self, parent=None):
+        # Call constructors of all base classes
         QDialog.__init__(self, parent)
-        
+        LaSerialisable.__init__(self) # Assuming LaSerialisable might have its own init logic
+        LaGuid.__init__(self) # Explicitly call LaGuid constructor to initialize _mGuid
+
         # Initialize LaSerialisable (maintains backward compatibility)
-        LaSerialisable.__init__(self)
-        # Assign a new guid with LaGuid setGuid() if there is none being passed in
-        self.mGuid: str
-        if not self.mGuid:
-            self.setGuid()
-        
-        
+        # Check the underlying _mGuid attribute directly to avoid property/method confusion
+        if not self._mGuid:
+            self.setGuid() # Generate a new GUID if one wasn't set
+
         # Model properties
-        self.mName = str()
-        self.mPopulation = int()
-        self.mTotalLandNeeded = int()
-        
+        self.mName = ""
+        self.mPopulation = "100"
+        self.mTotalLandNeeded = "0"
+
+        # Added missing fields that are used in property getters/setters
+        self.mPeriod = ""
+        self.mProjection = 0
+        self.mEasting = 0
+        self.mNorthing = 0
+        self.mEuclideanDistance = False
+        self.mWalkingTime = False
+        self.mPathDistance = False
+        self.mPrecision = 5
+        self.mDietPercent = 25
+        self.mPercentOfDietThatIsFromCrops = 10
+        self.mMeatPercent = 10
+        self.mCommonLandValue = 0.0
+        self.mCommonLandAreaUnits = 0  # Will be properly set from AreaUnits enum
+        self.mSpecificLandAreaUnits = 0
+        self.mSpecificLandEnergyType = 0
+        self.mHerdSize = 0
+        self.mFallowStatus = 0
+        self.mFallowRatio = 1
+        self.mDescription = ""
+        self.mAreaUnits = 0
+        self.mStatus = 0
+        self.mLandBeingGrazed = 0
+        self.mLandFound = 0
+        self.mPriority = 0
+
+        # Value map for fallow land calculations
+        self._mValueMap = {}
+
         # Diet calculation properties
         self.mAnimals = {}
         self.mCrops = {}
-        self.baseOnPlants = False
-        self.includeDairy = True
-        self.limitDairy = True
-        self.limitDairyPercent = 10
-        self.caloriesPerPersonDaily = 2500
-        self.dairyUtilisation = 50
-        
+        self.mBaseOnPlants = False
+        self.mIncludeDairy = True
+        self.mLimitDairy = True
+        self.mLimitDairyPercent = 10
+        self.mCaloriesPerPersonDaily = 2500
+        self.mDairyUtilisation = 100
+
         # Store calculation results
-        self.lastDietLabels = None
-        
-        # Create logger for this class
-        from qgis.core import QgsMessageLog
-        self.logger = QgsMessageLog.instance()
-    
+        self.mLastDietLabels = LaDietLabels()
+
+        # Use MESSAGE_BUS for logging instead of QgsMessageLog
+        self.mLogger = MESSAGE_BUS
+
+
     def logMessage(self, theMessage: str):
         """
-        Logs a message using the logger.
+        Logs a message using the MESSAGE_BUS.
 
         Args:
             message (str): The message to log.
         """
-        self.logger.info(theMessage)
+        # Emit the message through MESSAGE_BUS with "Model" as the component type
+        self.mLogger.debugMessaged.emit(f"Model: {theMessage}")
 
 
     def __del__(self):
@@ -173,7 +203,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
     @pyqtProperty(int, notify=_populationChanged)
     def population(self) -> int: # type: ignore
-        return int(str(self.mPopulation))
+        return int(self.mPopulation)
     @population.setter
     def population(self, thePopulation: int):
         if self.mPopulation != thePopulation:
@@ -243,7 +273,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
     @pyqtProperty(int, notify=_caloriesPerPersonDailyChanged)
     def caloriesPerPersonDaily(self) -> int: # type: ignore
-        return int(self.mCaloriesPerPersonDaily)
+        return self.mCaloriesPerPersonDaily
     @caloriesPerPersonDaily.setter
     def caloriesPerPersonDaily(self, theCaloriesPerPersonDaily: int):
         if self.mCaloriesPerPersonDaily != theCaloriesPerPersonDaily:
@@ -253,45 +283,30 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
     @pyqtProperty(int, notify=_dairyUtilisationChanged)
     def dairyUtilisation(self) -> int: # type: ignore
-        # Ensure we return an integer, handling potential stored strings
-        try:
-            # Attempt to convert directly if it's already numeric or a clean string
-            return int(self.mDairyUtilisation)
-        except (ValueError, TypeError):
-            # If conversion fails, try cleaning the string (remove '%', spaces)
-            try:
-                cleaned_value = str(self.mDairyUtilisation).replace('%', '').strip()
-                return int(cleaned_value)
-            except (ValueError, TypeError):
-                # If cleaning also fails, return a default value (e.g., 0 or handle as error)
-                self.logger.warning(f"Could not convert mDairyUtilisation '{self.mDairyUtilisation}' to int. Returning 0.")
-                return 0
+        return self.mDairyUtilisation
     @dairyUtilisation.setter
     def dairyUtilisation(self, thePercent: Union[int, float, str]): # Allow string input
         try:
-            # Try to convert input to a numeric value
             numeric_value = 0
             if isinstance(thePercent, str):
-                # Clean the string if it's passed
                 cleaned_value = thePercent.replace('%', '').strip()
-                numeric_value = int(float(cleaned_value)) # Use float first for potential decimals
+                numeric_value = int(float(cleaned_value))
             else:
                 numeric_value = int(thePercent)
 
-            # Store the numeric value and emit signal if changed
-            if not hasattr(self, 'mDairyUtilisation') or self.mDairyUtilisation != numeric_value:
+            # Ensure the value is within a reasonable range if needed
+            # numeric_value = max(0, min(100, numeric_value))
+
+            if self.mDairyUtilisation != numeric_value:
                 self.mDairyUtilisation = numeric_value
                 self._dairyUtilisationChanged.emit()
         except (ValueError, TypeError) as e:
-            self.logger.error(f"Failed to set dairyUtilisation with value '{thePercent}': {e}")
-            # Optionally set a default value or raise the error
-            # self.mDairyUtilisation = 0 # Example default
-            # self._dairyUtilisationChanged.emit()
+            self.mLogger.error(f"Failed to set dairyUtilisation with value '{thePercent}': {e}")
 
 
     @pyqtProperty(bool, notify=_baseOnPlantsChanged)
     def baseOnPlants(self) -> bool: # type: ignore
-        return bool(self.mBaseOnPlants)
+        return self.mBaseOnPlants
         """ Hint on usage to read and set the checkbox state
             # When reading from checkbox
             self._baseOnPlants = self.cboxBaseOnPlants.isChecked()
@@ -306,7 +321,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
     @pyqtProperty(bool, notify=_includeDairyChanged)
     def includeDairy(self) -> bool: # type: ignore
-        return bool(self.mIncludeDairy)
+        return self.mIncludeDairy
     @includeDairy.setter
     def includeDairy(self, theBool: bool):
         if self.mIncludeDairy != theBool:
@@ -316,7 +331,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
     @pyqtProperty(bool, notify=_limitDairyChanged)
     def limitDairy(self) -> bool: # type: ignore
-        return bool(self.mLimitDairy)
+        return self.mLimitDairy
     @limitDairy.setter
     def limitDairy(self, theBool: bool):
         if self.mLimitDairy != theBool:
@@ -326,9 +341,11 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
     @pyqtProperty(int, notify=_limitDairyPercentChanged)
     def limitDairyPercent(self) -> int: # type: ignore
-        return int(str(self.mLimitDairyPercent))
+        return self.mLimitDairyPercent
     @limitDairyPercent.setter
     def limitDairyPercent(self, thePercent: int):
+        # Ensure the value is within a reasonable range if needed
+        # thePercent = max(0, min(100, thePercent))
         if self.mLimitDairyPercent != thePercent:
             self.mLimitDairyPercent = thePercent
             self._limitDairyPercentChanged.emit()
@@ -637,7 +654,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
         self.mGuid = self.setGuid(root.attrib.get('guid'))
         self.mName = root.findtext('name', default="No Name Set")
-        self.mPopulation = int(root.findtext('population', default="1000"))
+        self.mPopulation: int = int(root.findtext('population', default="1000"))
         self.mPeriod = root.findtext('period', default="No Period Set")
         self.mProjection = int(root.findtext('projection', default="100"))
         self.mEasting = int(root.findtext('easting', default="0"))
@@ -706,7 +723,6 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         myString += f'  <dairyUtilisation>{self.mDairyUtilisation}</dairyUtilisation>\\n'
         myString += '</model>\\n'
         return myString
-
 
     def doCalcsPlantsFirstIncludeDairy(self) -> LaDietLabels:
         from la.lib.lautils import LaUtils
@@ -1663,21 +1679,21 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
     def toHtmlCalorieCropTargets(self) -> str:
         """Generate HTML report for crop calorie targets."""
         html = "<h3>Crop Calorie Targets</h3>"
-        
+
         if not self.lastDietLabels:
             return html + "<p>No calculation results available</p>"
-        
+
         html += "<table border='1' cellpadding='4'>"
         html += "<tr><th>Crop</th><th>Calories (kcal)</th><th>Percentage</th></tr>"
-        
+
         # Get crop calorie targets from lastDietLabels if available
         total_calories = 0
         crop_calories = {}
-        
+
         if hasattr(self.lastDietLabels, 'cropCalorieTargets'):
             crop_calories = self.lastDietLabels.cropCalorieTargets
             total_calories = sum(crop_calories.values()) if crop_calories else 0
-        
+
         # Generate rows for each crop
         if crop_calories:
             for crop_guid, calories in crop_calories.items():
@@ -1687,28 +1703,28 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                 html += f"<tr><td>{crop_name}</td><td>{calories:,.0f}</td><td>{percentage:.1f}%</td></tr>"
         else:
             html += "<tr><td colspan='3'>No crop calorie targets calculated</td></tr>"
-        
+
         html += "</table>"
         return html
-    
+
     def toHtmlCalorieAnimalTargets(self) -> str:
         """Generate HTML report for animal calorie targets."""
         html = "<h3>Animal Calorie Targets</h3>"
-        
+
         if not self.lastDietLabels:
             return html + "<p>No calculation results available</p>"
-        
+
         html += "<table border='1' cellpadding='4'>"
         html += "<tr><th>Animal</th><th>Calories (kcal)</th><th>Percentage</th></tr>"
-        
+
         # Get animal calorie targets from lastDietLabels if available
         total_calories = 0
         animal_calories = {}
-        
+
         if hasattr(self.lastDietLabels, 'animalCalorieTargets'):
             animal_calories = self.lastDietLabels.animalCalorieTargets
             total_calories = sum(animal_calories.values()) if animal_calories else 0
-        
+
         # Generate rows for each animal
         if animal_calories:
             for animal_guid, calories in animal_calories.items():
@@ -1718,28 +1734,28 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                 html += f"<tr><td>{animal_name}</td><td>{calories:,.0f}</td><td>{percentage:.1f}%</td></tr>"
         else:
             html += "<tr><td colspan='3'>No animal calorie targets calculated</td></tr>"
-        
+
         html += "</table>"
         return html
-    
+
     def toHtmlProductionCropTargets(self) -> str:
         """Generate HTML report for crop production targets."""
         html = "<h3>Crop Production Targets</h3>"
-        
+
         if not self.lastDietLabels:
             return html + "<p>No calculation results available</p>"
-        
+
         html += "<table border='1' cellpadding='4'>"
         html += "<tr><th>Crop</th><th>Production (kg)</th><th>Percentage</th></tr>"
-        
+
         # Get crop production targets from lastDietLabels if available
         total_production = 0
         crop_production = {}
-        
+
         if hasattr(self.lastDietLabels, 'cropProductionTargets'):
             crop_production = self.lastDietLabels.cropProductionTargets
             total_production = sum(crop_production.values()) if crop_production else 0
-        
+
         # Generate rows for each crop
         if crop_production:
             for crop_guid, production in crop_production.items():
@@ -1749,28 +1765,28 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                 html += f"<tr><td>{crop_name}</td><td>{production:,.1f}</td><td>{percentage:.1f}%</td></tr>"
         else:
             html += "<tr><td colspan='3'>No crop production targets calculated</td></tr>"
-        
+
         html += "</table>"
         return html
-    
+
     def toHtmlProductionAnimalTargets(self) -> str:
         """Generate HTML report for animal production targets."""
         html = "<h3>Animal Production Targets</h3>"
-        
+
         if not self.lastDietLabels:
             return html + "<p>No calculation results available</p>"
-        
+
         html += "<table border='1' cellpadding='4'>"
         html += "<tr><th>Animal</th><th>Production (kg)</th><th>Percentage</th></tr>"
-        
+
         # Get animal production targets from lastDietLabels if available
         total_production = 0
         animal_production = {}
-        
+
         if hasattr(self.lastDietLabels, 'animalProductionTargets'):
             animal_production = self.lastDietLabels.animalProductionTargets
             total_production = sum(animal_production.values()) if animal_production else 0
-        
+
         # Generate rows for each animal
         if animal_production:
             for animal_guid, production in animal_production.items():
@@ -1780,28 +1796,28 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                 html += f"<tr><td>{animal_name}</td><td>{production:,.1f}</td><td>{percentage:.1f}%</td></tr>"
         else:
             html += "<tr><td colspan='3'>No animal production targets calculated</td></tr>"
-        
+
         html += "</table>"
         return html
-    
+
     def toHtmlAreaCropTargets(self) -> str:
         """Generate HTML report for crop area targets."""
         html = "<h3>Crop Area Targets</h3>"
-        
+
         if not self.lastDietLabels:
             return html + "<p>No calculation results available</p>"
-        
+
         html += "<table border='1' cellpadding='4'>"
         html += "<tr><th>Crop</th><th>Area (ha)</th><th>Percentage</th></tr>"
-        
+
         # Get crop area targets from lastDietLabels if available
         total_area = 0
         crop_areas = {}
-        
+
         if hasattr(self.lastDietLabels, 'cropAreaTargets'):
             crop_areas = self.lastDietLabels.cropAreaTargets
             total_area = sum(crop_areas.values()) if crop_areas else 0
-        
+
         # Generate rows for each crop
         if crop_areas:
             for crop_guid, area in crop_areas.items():
@@ -1811,28 +1827,28 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                 html += f"<tr><td>{crop_name}</td><td>{area:,.2f}</td><td>{percentage:.1f}%</td></tr>"
         else:
             html += "<tr><td colspan='3'>No crop area targets calculated</td></tr>"
-        
+
         html += "</table>"
         return html
-    
+
     def toHtmlAreaAnimalTargets(self) -> str:
         """Generate HTML report for animal area targets."""
         html = "<h3>Animal Area Targets</h3>"
-        
+
         if not self.lastDietLabels:
             return html + "<p>No calculation results available</p>"
-        
+
         html += "<table border='1' cellpadding='4'>"
         html += "<tr><th>Animal</th><th>Area (ha)</th><th>Percentage</th></tr>"
-        
+
         # Get animal area targets from lastDietLabels if available
         total_area = 0
         animal_areas = {}
-        
+
         if hasattr(self.lastDietLabels, 'animalAreaTargets'):
             animal_areas = self.lastDietLabels.animalAreaTargets
             total_area = sum(animal_areas.values()) if animal_areas else 0
-        
+
         # Generate rows for each animal
         if animal_areas:
             for animal_guid, area in animal_areas.items():
@@ -1842,24 +1858,24 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                 html += f"<tr><td>{animal_name}</td><td>{area:,.2f}</td><td>{percentage:.1f}%</td></tr>"
         else:
             html += "<tr><td colspan='3'>No animal area targets calculated</td></tr>"
-        
+
         html += "</table>"
         return html
-    
+
     def toHtml(self) -> str:
         """Generate HTML report for the model."""
         html = f"<h3>Model Settings</h3>"
         html += "<table border='1' cellpadding='4'>"
         html += f"<tr><td><b>Population:</b></td><td>{self.population}</td></tr>"
         html += f"<tr><td><b>Calories per person per day:</b></td><td>{self.caloriesPerPersonDaily}</td></tr>"
-        
+
         method = "Plants First" if self.baseOnPlants else "Animals First"
         dairy = "Included in Calculation" if self.includeDairy else "Calculated Separately"
         dairy_limit = f"Limited to {self.limitDairyPercent}%" if self.limitDairy else "Not Limited"
-        
+
         html += f"<tr><td><b>Calculation Method:</b></td><td>{method}</td></tr>"
         html += f"<tr><td><b>Dairy:</b></td><td>{dairy}</td></tr>"
         html += f"<tr><td><b>Dairy Limit:</b></td><td>{dairy_limit}</td></tr>"
         html += "</table>"
-        
+
         return html
