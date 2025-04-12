@@ -150,8 +150,8 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         self.mValueMap = {} # Corresponds to mValueMap in C++
 
         # Diet calculation properties
-        self.mAnimalsMap: dict[str, str] = {} # Corresponds to mAnimalsMap in C++
-        self.mCropsMap: dict[str, str] = {} # Corresponds to mCropsMap in C++
+        self.mAnimalsMap: dict[str, float] = {} # Corresponds to mAnimalsMap in C++
+        self.mCropsMap: dict[str, float] = {} # Corresponds to mCropsMap in C++
         self.mBaseOnPlants = False
         self.mIncludeDairy = True
         self.mLimitDairy = True
@@ -1034,9 +1034,6 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         """
         from la.lib.lautils import LaUtils
         from la.lib.la import LaReportMap
-        
-        myDietLabels = LaDietLabels()
-        myAnimal = LaAnimal()
 
 
 
@@ -1044,19 +1041,38 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         self.mAnimalCalcsReportMap = {} # Equivalent to C++ LaReportMap
         self.mValueMap = {} # Equivalent to C++ LaReportMap
         self.mAnimalCalcsReportMap = {} # Equivalent to C++ LaReportMap
-        
-        
-        
-        
-        fodderNeedsPerCrop = {} # Equivalent to C++ myFoodSourceMapCounter (QMap<QString, float>)
+
+        myAnimalCalcsReportMap: Dict[str, Tuple[str, float]] = {} # Equivalent to C++ LaReportMap
+        myCropCalcsReportMap: Dict[str, Tuple[str, float]] = {} # Equivalent to C++ LaReportMap
+
+        myAnimalsMap: Dict[str, float] = {} # for storing the calculations to send to fallow allocation
+
+        myFodderNeedsPerCrop = {} # Equivalent to C++ myFoodSourceMapCounter (QMap<QString, float>)
         animalMCalRequirementMap = {} # Stores initial MCal requirements for fallow allocation
+
+        myDietLabels = LaDietLabels()
+        myAnimal = LaAnimal()
+
+        myCrops: Dict[str, float] = self.mCropsMap  # for storing crop data
+
+
+        # Assuming my_crops is a dictionary (equivalent to QMap<QString, QString>)
+        # e.g., my_crops = {"crop_guid_1": "crop_name_1", "crop_guid_2": "crop_name_2"}
+        
+        myFoodSourceMapCounter: Dict[str, float] = {}  # for storing food source data Initialize an empty dictionary (equivalent to QMap<QString, int>)
+        
+        # Iterate through the keys of the my_crops dictionary
+        for myCropGuid in myCrops:
+            # Insert the key into myFoodSourceMapCounter with a value of 0
+            myFoodSourceMapCounter[myCropGuid] = 0
+            # myFoodSourceMapCounter will now be like: {"cropGuid1": 0, "cropGuid2": 0, ...}
 
         # Log calculation start
         LaUtils.debug.log("Starting doCalcsAnimalsFirstDairySeparate calculation (Python Port)", "Diet")
 
         try:
             # --- 1. Input Parameter Extraction & Initial Calculations ---
-            calories_daily = float(self.mCaloriesPerPersonDaily)
+            myCaloriesDaily = float(self.mCaloriesPerPersonDaily)
             population_count = float(self.mPopulation)
             # Convert percentages to decimals right away
             meat_percent_of_animal_diet = float(self.mMeatPercent) / 100.0
@@ -1068,12 +1084,12 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             domestic_crop_portion_of_plant = float(self.mPercentOfDietThatIsFromCrops) / 100.0
             wild_meat_portion_of_animal_diet = 1.0 - meat_percent_of_animal_diet # C++: myWildMeatPortion
 
-            LaUtils.debug.log(f"Input parameters - calories_daily: {calories_daily}, population: {population_count}", "Diet")
+            LaUtils.debug.log(f"Input parameters - calories_daily: {myCaloriesDaily}, population: {population_count}", "Diet")
             LaUtils.debug.log(f"Diet parameters - meat_percent_of_animal_diet: {meat_percent_of_animal_diet*100}%, animal_diet_percent_of_total: {animal_diet_percent_of_total*100}%", "Diet")
             LaUtils.debug.log(f"Dairy parameters - utilisation: {dairy_utilisation*100}%, limit: {limit_dairy_bool}, limit_percent: {limit_dairy_percent*100}%", "Diet")
             LaUtils.debug.log(f"Plant parameters - plant_percent_of_total: {plant_percent_of_total*100}%, domestic_crop_portion_of_plant: {domestic_crop_portion_of_plant*100}%", "Diet")
 
-            myMCalsIndividualAnnual = calories_daily * 365.0 / 1000.0  # MCal/person/year
+            myMCalsIndividualAnnual = myCaloriesDaily * 365.0 / 1000.0  # MCal/person/year
             myMCalsSettlementAnnual = myMCalsIndividualAnnual * population_count # MCal/settlement/year
 
             LaUtils.debug.log(f"myMCalsIndividualAnnual = {myMCalsIndividualAnnual}", "Diet")
@@ -1084,9 +1100,9 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             myTameMeatMCalorieCounter = 0.0 # Accumulates potential tame meat MCals from all animals
 
             # Initialize fodder map (needs to be populated before crop loop)
-            for crop_guid in self.mCropsMap.keys():
-                 fodderNeedsPerCrop[crop_guid] = 0.0
-            LaUtils.debug.log(f"Initialized fodderNeedsPerCrop: {fodderNeedsPerCrop}", "Diet")
+            for myCropGuid in self.mCropsMap.keys():
+                 myFodderNeedsPerCrop[myCropGuid] = 0.0
+            LaUtils.debug.log(f"Initialized fodderNeedsPerCrop: {myFodderNeedsPerCrop}", "Diet")
 
 
             # --- 2. Animal Calculation Loop ---
@@ -1095,40 +1111,40 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                 LaUtils.debug.log(f"--------==        Looping through animal: {myAnimalGuid}         ==-------", "Diet")
                 LaUtils.debug.log("--------==--------------------------------------------==-------", "Diet")
                 try:
-                    animal = LaUtils.getAnimal(myAnimalGuid)
-                    animalParameter = LaUtils.getAnimalParameter(paramGuid)
+                    myAnimal = LaUtils.getAnimal(myAnimalGuid)
+                    myAnimalParameter = LaUtils.getAnimalParameter(paramGuid)
 
-                    if not animal or not animalParameter:
+                    if not myAnimal or not myAnimalParameter:
                         LaUtils.debug.log(f"Missing animal or animal parameter for GUID {myAnimalGuid}", "Warning")
                         continue
 
-                    LaUtils.debug.log(f"Processing animal: {animal.name} (GUID: {myAnimalGuid})", "Diet")
+                    LaUtils.debug.log(f"Processing animal: {myAnimal.name} (GUID: {myAnimalGuid})", "Diet")
 
                     # --- 2a. Get Animal & Parameter Data (with type conversions and defaults) ---
-                    myMilkKgPerDay = float(animal.milkGramsPerDay) * 0.001
-                    myMilkFoodValue = float(animal.milkFoodValue) * 0.001 # MCal/kg
-                    myLactationTime = float(animal.lactationTime)
-                    myWeaningAge = float(animal.weaningAge)
-                    myGestatingTime = float(animal.gestationTime)
-                    myEstrousCycle = float(animal.estrousCycle)
-                    myBabiesPerBirth = float(animal.youngPerBirth or 1) # Default 1
-                    myDeathRate = float(animal.deathRate) * 0.01
-                    myBreedingRatio = float(animal.femalesPerMale or 1) # females per male, default 1
+                    myMilkKgPerDay = float(myAnimal.milkGramsPerDay) * 0.001
+                    myMilkFoodValue = float(myAnimal.milkFoodValue) * 0.001 # MCal/kg
+                    myLactationTime = float(myAnimal.lactationTime)
+                    myWeaningAge = float(myAnimal.weaningAge)
+                    myGestatingTime = float(myAnimal.gestationTime)
+                    myEstrousCycle = float(myAnimal.estrousCycle)
+                    myBabiesPerBirth = float(myAnimal.youngPerBirth or 1) # Default 1
+                    myDeathRate = float(myAnimal.deathRate) * 0.01
+                    myBreedingRatio = float(myAnimal.femalesPerMale or 1) # females per male, default 1
                     if myBreedingRatio <= 0: myBreedingRatio = 1.0 # Avoid division by zero
-                    myKillWeight = float(animal.killWeight)
-                    myUsablePortionOfAnimal = float(animal.usableMeat) * 0.01
-                    myAdultWeight = float(animal.adultWeight)
+                    myKillWeight = float(myAnimal.killWeight)
+                    myUsablePortionOfAnimal = float(myAnimal.usableMeat) * 0.01
+                    myAdultWeight = float(myAnimal.adultWeight)
                     myFemalesToMales = myBreedingRatio # C++ uses same variable
-                    myConceptionEfficiency = float(animal.conceptionEfficiency or 100) * 0.01 # Default 100%
-                    myMeatValueMCal = float(animal.meatFoodValue) * 0.001 # MCal/kg
-                    mySexualMaturity = float(animal.sexualMaturity or 12) # months, default 12
-                    myBreedingYears = float(animal.breedingExpectancy or 1) # years, default 1
+                    myConceptionEfficiency = float(myAnimal.conceptionEfficiency or 100) * 0.01 # Default 100%
+                    myMeatValueMCal = float(myAnimal.meatFoodValue) * 0.001 # MCal/kg
+                    mySexualMaturity = float(myAnimal.sexualMaturity or 12) # months, default 12
+                    myBreedingYears = float(myAnimal.breedingExpectancy or 1) # years, default 1
                     if myBreedingYears <= 0: myBreedingYears = 1.0 # Avoid division by zero
 
                     # Animal's contribution to the *tame meat* portion of the *animal* diet
                     # Default: Equal share among selected animals if parameter not set
                     try:
-                        myAnimalContributionToMeatPortion = float(animalParameter.percentTameMeat or (100.0 / len(self.mAnimalsMap))) * 0.01 # B2
+                        myAnimalContributionToMeatPortion = float(myAnimalParameter.percentTameMeat or (100.0 / len(self.mAnimalsMap))) * 0.01 # B2
                     except ZeroDivisionError:
                          myAnimalContributionToMeatPortion = 0.0
 
@@ -1174,11 +1190,13 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                     myTameMeatMCalorieCounter += myMCalsFromTheMeat
                     myDairyMCalorieCounter += myMCalsUtilizedFromDairy
 
+                    myFoodSourceMap: LaFoodSource = myAnimalParameter.fodderSourceMap()
+
                     # --- 2e. Calculate Herd Size ---
                     # Effective offspring per mother per year considering survival and conception
                     myOffspringPerMotherPerYear = myBirthingEventsPerYear * myBabiesPerBirth * (1.0 - myDeathRate) * myConceptionEfficiency # B22
                     if myOffspringPerMotherPerYear <= 0: # Avoid division by zero
-                        LaUtils.debug.log(f"Warning: Animal {animal.name} has zero effective offspring per mother per year ({myOffspringPerMotherPerYear}). Herd size calculation may be inaccurate.", "Warning")
+                        LaUtils.debug.log(f"Warning: Animal {myAnimal.name} has zero effective offspring per mother per year ({myOffspringPerMotherPerYear}). Herd size calculation may be inaccurate.", "Warning")
                         # Cannot proceed with herd size calculation if this is zero.
                         # Store minimal report and skip feed calculation for this animal.
                         myAnimalReport = f"Cannot calculate herd size: Effective offspring per mother per year is {myOffspringPerMotherPerYear}\\n"
@@ -1222,10 +1240,10 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                     myTotalOffspring = myTotalMaleOffspring * 2.0 # B35 (Matching C++ logic)
 
                     # --- 2f. Calculate Feed Requirements (MCals/year) ---
-                    myFeedForGestating = float(animal.gestating) * 0.001 # MCal/day/mother
-                    myFeedForLactating = float(animal.lactating) * 0.001 # MCal/day/mother
-                    myFeedForMaintenance = float(animal.maintenance) * 0.001 # MCal/day/adult
-                    myFeedForOffspringPerKg = float(animal.juvenile) * 0.001 # MCal/day/kg_offspring
+                    myFeedForGestating = float(myAnimal.gestating) * 0.001 # MCal/day/mother
+                    myFeedForLactating = float(myAnimal.lactating) * 0.001 # MCal/day/mother
+                    myFeedForMaintenance = float(myAnimal.maintenance) * 0.001 # MCal/day/adult
+                    myFeedForOffspringPerKg = float(myAnimal.juvenile) * 0.001 # MCal/day/kg_offspring
 
                     # MCals for mothers during gestation/lactation/maintenance
                     # C++ uses myTotalOffspring for gestating/lactating counts
@@ -1252,7 +1270,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
                     # --- 2g. Calculate Fodder/Grain Contribution ---
                     myAdditionalMCalCounter = 0.0 # MCals provided by grain/fodder
-                    myFoodSourceMap = animalParameter.fodderSourceMap() # Dict[cropGuid, LaFoodSource]
+                    myFoodSourceMap = myAnimalParameter.fodderSourceMap() # Dict[cropGuid, LaFoodSource]
                     LaUtils.debug.log(f"    ----== Calculating Fodder/Grain Needs ==----", "Diet")
                     for myCropGuid, myFoodSource in myFoodSourceMap.items():
                         LaUtils.debug.log(f"        Processing fodder source: Crop GUID {myCropGuid}", "Diet")
@@ -1280,11 +1298,11 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                         myFodderToAddKgTotal = myFodderKgPerDay * myDaysFed * herd_size_for_feed
 
                         # Add grain requirement (kg) to the crop's total needed (for crop loop later)
-                        if myCropGuid in fodderNeedsPerCrop:
-                             fodderNeedsPerCrop[myCropGuid] += myGrainToAddKgTotal
+                        if myCropGuid in myFodderNeedsPerCrop:
+                             myFodderNeedsPerCrop[myCropGuid] += myGrainToAddKgTotal
                         else:
                              # This case shouldn't happen if initialized correctly, but handle it
-                             fodderNeedsPerCrop[myCropGuid] = myGrainToAddKgTotal
+                             myFodderNeedsPerCrop[myCropGuid] = myGrainToAddKgTotal
                              LaUtils.debug.log(f"            Warning: Crop {myCropGuid} not pre-initialized in fodderNeedsPerCrop.", "Warning")
 
                         # Log details for debugging
@@ -1292,8 +1310,8 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                         LaUtils.debug.log(f"            myFodderKgPerDay = {myFodderKgPerDay}", "Diet")
                         LaUtils.debug.log(f"            myDaysFed = {myDaysFed}", "Diet")
                         LaUtils.debug.log(f"            herd_size_for_feed = {herd_size_for_feed}", "Diet")
-                        LaUtils.debug.log(f"            Grain to add (kg) for {animal.name} from {myCrop.name}: {myGrainToAddKgTotal:.2f}", "Diet")
-                        LaUtils.debug.log(f"            Current total grain needed for {myCrop.name}: {fodderNeedsPerCrop[myCropGuid]:.2f}", "Diet")
+                        LaUtils.debug.log(f"            Grain to add (kg) for {myAnimal.name} from {myCrop.name}: {myGrainToAddKgTotal:.2f}", "Diet")
+                        LaUtils.debug.log(f"            Current total grain needed for {myCrop.name}: {myFodderNeedsPerCrop[myCropGuid]:.2f}", "Diet")
 
                         # Calculate MCal provided by this grain/fodder source
                         myGrainMCal = myGrainToAddKgTotal * myFoodValueOfCrop
@@ -1304,7 +1322,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                         LaUtils.debug.log(f"            Food Value of Crop Fodder: {myFoodValueofFodder}", "Diet")
                         LaUtils.debug.log(f"            myGrainMCal = {myGrainMCal:.2f}", "Diet")
                         LaUtils.debug.log(f"            myFodderMCal = {myFodderMCal:.2f}", "Diet")
-                        LaUtils.debug.log(f"            Cumulative MCals from grain/fodder for {animal.name}: {myAdditionalMCalCounter:.2f}", "Diet")
+                        LaUtils.debug.log(f"            Cumulative MCals from grain/fodder for {myAnimal.name}: {myAdditionalMCalCounter:.2f}", "Diet")
 
                     # --- 2h. Adjust Herd MCal Requirement & Store Results ---
                     # Final MCal requirement for this herd (needs to come from grazing/fallow)
@@ -1317,7 +1335,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                     animalMCalRequirementMap[myAnimalGuid] = myAnimalHerdMCalsRequired
 
                     # Build the detailed report string (similar to C++)
-                    myAnimalReport = f"--- Calculation Report for Animal: {animal.name} ({myAnimalGuid}) ---\\n"
+                    myAnimalReport = f"--- Calculation Report for Animal: {myAnimal.name} ({myAnimalGuid}) ---\\n"
                     myAnimalReport += f"Inputs & Intermediate Values:\\n"
                     myAnimalReport += f"  MilkKgPerDay: {myMilkKgPerDay:.3f}, MilkFoodValue: {myMilkFoodValue:.3f} MCal/kg\\n"
                     myAnimalReport += f"  LactationTime: {myLactationTime} days, WeaningAge: {myWeaningAge} days\\n"
@@ -1367,11 +1385,11 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                     myAnimalReport += f"  Total Herd MCals (Before Fodder): {myAnimalHerdMCalsRequired1:.2f} MCal\\n"
                     myAnimalReport += f"  MCals from Fodder/Grain: {myAdditionalMCalCounter:.2f} MCal\\n"
                     myAnimalReport += f"  Final Herd MCals Required (Grazing/Fallow): {myAnimalHerdMCalsRequired:.2f} MCal\\n"
-                    myAnimalReport += f"--- End Report for {animal.name} ---\\n"
+                    myAnimalReport += f"--- End Report for {myAnimal.name} ---\\n"
 
                     # Store report and initial MCal requirement (Area Target is calculated later)
                     myAnimalCalcsReportMap[myAnimalGuid] = (myAnimalReport, 0.0) # Placeholder for area target
-                    LaUtils.debug.log(f"Stored report for {animal.name}. Initial MCal Requirement: {myAnimalHerdMCalsRequired:.2f}", "Diet")
+                    LaUtils.debug.log(f"Stored report for {myAnimal.name}. Initial MCal Requirement: {myAnimalHerdMCalsRequired:.2f}", "Diet")
 
                 except Exception as e:
                     LaUtils.debug.log(f"Error in animal calculation loop for GUID {myAnimalGuid}: {str(e)}", "Error")
@@ -1501,7 +1519,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                     myKgForPeopleTotal = myKgForPeople1 + myKgForPeopleSpoilage + myKgForPeopleReseed
 
                     # Get additional kg needed for animal grain (from map populated in animal loop)
-                    myAnimalKgAdd1 = fodderNeedsPerCrop.get(myCropGuid, 0.0)
+                    myAnimalKgAdd1 = myFodderNeedsPerCrop.get(myCropGuid, 0.0)
 
                     # Adjust animal grain needs for spoilage and reseeding
                     myAnimalKgAddSpoilage = myAnimalKgAdd1 * mySpoilagePercent
