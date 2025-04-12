@@ -304,7 +304,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             self.model.mDairyUtilisation = self.sbDairyUtilisation.value()
             self.model.mIncludeDairy = self.cboxIncludeDairy.isChecked()
             self.model.mLimitDairy = self.cboxLimitDairy.isChecked()
-            self.model.mLimitDairyPercent = self.sbLimitDairyPercent.value()
+            self.model.mLimitDairyPercentage = self.sbLimitDairyPercent.value()
 
             # Calculation Base
             self.model.mBaseOnPlants = self.cboxBaseOnPlants.isChecked()
@@ -1640,7 +1640,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             self.model.mBaseOnPlants = self.cboxBaseOnPlants.isChecked()
 
             # Update spinbox values
-            self.model.mLimitDairyPercent = self.sbLimitDairyPercent.value()
+            self.model.mLimitDairyPercentage = self.sbLimitDairyPercent.value()
             self.model.mCaloriesPerPersonDaily = self.sbDailyCalories.value() # Check property name
             self.model.mDairyUtilisation = self.sbDairyUtilisation.value() # Check property name
             self.model.population = self.sbPopulation.value() # Check property name
@@ -1943,7 +1943,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         """Handle limit dairy percent spinbox changes."""
         if hasattr(self, 'model'):
             LaUtils.debug.log(f"Limit Dairy Percent changed to: {value}", "Diet")
-            self.model.mLimitDairyPercent = value
+            self.model.mLimitDairyPercentage = value
             self.setDietLabels()
 
     def on_sbDailyCalories_valueChanged(self, value):

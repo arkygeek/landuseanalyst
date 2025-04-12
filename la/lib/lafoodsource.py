@@ -23,11 +23,11 @@ class LaFoodSource(QObject):
         cropGuidChanged: Emitted when cropGuid changes.
     """
 
-    grainChanged = pyqtSignal(int)
-    fodderChanged = pyqtSignal(int)
-    daysChanged = pyqtSignal(int)
-    usedChanged = pyqtSignal(bool)
-    cropGuidChanged = pyqtSignal(str)
+    _grainChanged = pyqtSignal(int)
+    _fodderChanged = pyqtSignal(int)
+    _daysChanged = pyqtSignal(int)
+    _usedChanged = pyqtSignal(bool)
+    _cropGuidChanged = pyqtSignal(str)
 
     def __init__(self, parent=None):
         """
@@ -37,13 +37,13 @@ class LaFoodSource(QObject):
             parent (QObject, optional): The parent QObject. Defaults to None.
         """
         super().__init__(parent)
-        self._mGrain = 0
-        self._mFodder = 0
-        self._mDays = 0
-        self._mUsed = False
-        self._mCropGuid = ""
+        self.mGrain = int()
+        self.mFodder = int()
+        self.mDays = int()
+        self.mUsed = bool()
+        self.mCropGuid = str()
 
-    @pyqtProperty(int, notify=grainChanged)
+    @pyqtProperty(int, notify=_grainChanged)
     def grain(self): #type: ignore
         """
         Get the amount of grain produced by this food source.
@@ -51,7 +51,7 @@ class LaFoodSource(QObject):
         Returns:
             int: The grain amount.
         """
-        return int(self._mGrain)
+        return int(self.mGrain)
 
     @grain.setter
     def grain(self, value):
@@ -61,11 +61,11 @@ class LaFoodSource(QObject):
         Args:
             value (int): The new grain amount.
         """
-        if self._mGrain != value:
-            self._mGrain = value
-            self.grainChanged.emit(value)
+        if self.mGrain != value:
+            self.mGrain = value
+            self._grainChanged.emit(value)
 
-    @pyqtProperty(int, notify=fodderChanged)
+    @pyqtProperty(int, notify=_fodderChanged)
     def fodder(self): #type: ignore
         """
         Get the amount of fodder produced by this food source.
@@ -73,7 +73,7 @@ class LaFoodSource(QObject):
         Returns:
             int: The fodder amount.
         """
-        return int(self._mFodder)
+        return int(self.mFodder)
 
     @fodder.setter
     def fodder(self, value):
@@ -83,11 +83,11 @@ class LaFoodSource(QObject):
         Args:
             value (int): The new fodder amount.
         """
-        if self._mFodder != value:
-            self._mFodder = value
-            self.fodderChanged.emit(value)
+        if self.mFodder != value:
+            self.mFodder = value
+            self._fodderChanged.emit(value)
 
-    @pyqtProperty(int, notify=daysChanged)
+    @pyqtProperty(int, notify=_daysChanged)
     def days(self): #type: ignore
         """
         Get the number of days this food source is available/productive.
@@ -95,7 +95,7 @@ class LaFoodSource(QObject):
         Returns:
             int: Number of days.
         """
-        return int(self._mDays)
+        return int(self.mDays)
 
     @days.setter
     def days(self, value):
@@ -105,11 +105,11 @@ class LaFoodSource(QObject):
         Args:
             value (int): The new number of days.
         """
-        if self._mDays != value:
-            self._mDays = value
-            self.daysChanged.emit(value)
+        if self.mDays != value:
+            self.mDays = value
+            self._daysChanged.emit(value)
 
-    @pyqtProperty(bool, notify=usedChanged)
+    @pyqtProperty(bool, notify=_usedChanged)
     def used(self): #type: ignore
         """
         Get whether this food source is being used in the current simulation.
@@ -117,7 +117,7 @@ class LaFoodSource(QObject):
         Returns:
             bool: True if the food source is used, False otherwise.
         """
-        return bool(self._mUsed)
+        return bool(self.mUsed)
 
     @used.setter
     def used(self, value):
@@ -127,11 +127,11 @@ class LaFoodSource(QObject):
         Args:
             value (bool): The new used status.
         """
-        if self._mUsed != value:
-            self._mUsed = value
-            self.usedChanged.emit(value)
+        if self.mUsed != value:
+            self.mUsed = value
+            self._usedChanged.emit(value)
 
-    @pyqtProperty(str, notify=cropGuidChanged)
+    @pyqtProperty(str, notify=_cropGuidChanged)
     def cropGuid(self): #type: ignore
         """
         Get the unique identifier for the crop associated with this food source.
@@ -139,7 +139,7 @@ class LaFoodSource(QObject):
         Returns:
             str: The crop GUID (Globally Unique Identifier).
         """
-        return str(self._mCropGuid)
+        return str(self.mCropGuid)
 
     @cropGuid.setter
     def cropGuid(self, value):
@@ -149,6 +149,6 @@ class LaFoodSource(QObject):
         Args:
             value (str): The new crop GUID.
         """
-        if self._mCropGuid != value:
-            self._mCropGuid = value
-            self.cropGuidChanged.emit(value)
+        if self.mCropGuid != value:
+            self.mCropGuid = value
+            self._cropGuidChanged.emit(value)

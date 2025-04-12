@@ -1,16 +1,25 @@
 {
   "configurations": [
-    {
-      "name": "linux-gcc-x64",
-      "includePath": [
-        "${workspaceFolder}/**"
-      ],
-      "defines": [],
-      "compilerPath": "gcc",
-      "cStandard": "${default}",
-      "cppStandard": "${default}",
-      "intelliSenseMode": "linux-gcc-x64"
-    }
+      {
+          "name": "Linux",
+          "includePath": [
+              "/home/arkygeek/dev/QGis-Projects/landuseanalyst/cppArchive/src/**",
+              "/home/arkygeek/dev/QGis-Projects/landuseanalyst/cppArchive/src/gui/**",
+              "/home/arkygeek/dev/QGis-Projects/landuseanalyst/cppArchive/src/lib/**",
+              "/home/arkygeek/dev/QGis-Projects/landuseanalyst/cppArchive/src/ui/**",
+              "/home/arkygeek/dev/QGis-Projects/landuseanalyst/cppArchive/src/resources/**",
+              "/usr/include/x86_64-linux-gnu/qt6/QtCore",
+              "/usr/include/x86_64-linux-gnu/qt6",
+              "/usr/include/x86_64-linux-gnu/qt6/QtWidgets",
+              "/usr/include/x86_64-linux-gnu/qt6/QtXml",
+              "${workspaceFolder}/**"
+          ],
+          "defines": [],
+          "compilerPath": "/usr/bin/gcc",
+          "cStandard": "c17",
+          "cppStandard": "gnu++17",
+          "intelliSenseMode": "linux-gcc-x64"
+      }
   ],
   "version": 4
 }

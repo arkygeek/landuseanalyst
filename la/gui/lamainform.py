@@ -126,8 +126,8 @@ class LaMainForm(LaMainFormBase):
 
             # --- Retrieve the stored calculation report --- 
             myReportString = "No calculation results available for this animal."
-            if hasattr(self.model, 'lastDietLabels') and self.model.mLastDietLabels:
-                myReportMap = self.getPropertyValue(self.model.mLastDietLabels, 'animalCalcsReportMap')
+            if hasattr(self.model, 'lastDietLabels') and self.model.mDietLabels:
+                myReportMap = self.getPropertyValue(self.model.mDietLabels, 'animalCalcsReportMap')
                 if isinstance(myReportMap, dict) and myAnimalGuid in myReportMap:
                     myReportPair = myReportMap[myAnimalGuid]
                     if isinstance(myReportPair, tuple) and len(myReportPair) > 0:
@@ -251,8 +251,8 @@ class LaMainForm(LaMainFormBase):
 
             # --- Retrieve the stored calculation report --- 
             myReportString = "No calculation results available for this crop."
-            if hasattr(self.model, 'lastDietLabels') and self.model.mLastDietLabels:
-                myReportMap = self.getPropertyValue(self.model.mLastDietLabels, 'cropCalcsReportMap')
+            if hasattr(self.model, 'lastDietLabels') and self.model.mDietLabels:
+                myReportMap = self.getPropertyValue(self.model.mDietLabels, 'cropCalcsReportMap')
                 if isinstance(myReportMap, dict) and myCropGuid in myReportMap:
                     myReportPair = myReportMap[myCropGuid]
                     if isinstance(myReportPair, tuple) and len(myReportPair) > 0:
@@ -463,8 +463,8 @@ class LaMainForm(LaMainFormBase):
             
             # Store reference to the diet labels from the calculation for signal connections
             # This assumes the base class method updated the model with calculations
-            if hasattr(self.model, 'lastDietLabels') and self.model.mLastDietLabels:
-                self.mDietLabels = self.model.mLastDietLabels
+            if hasattr(self.model, 'lastDietLabels') and self.model.mDietLabels:
+                self.mDietLabels = self.model.mDietLabels
                 self._connectDietLabelSignals(self.mDietLabels)
             
             # Update calculations (this might trigger more logging)
@@ -576,8 +576,8 @@ class LaMainForm(LaMainFormBase):
             self.model.caloriesPerPersonDaily = self.sbDailyCalories.value()
 
             # Configure model with selected animals and crops
-            self.model.mAnimals = self.getSelectedAnimals()
-            self.model.mCrops = self.getSelectedCrops()
+            self.model.mAnimalsMap = self.getSelectedAnimals()
+            self.model.mCropsMap = self.getSelectedCrops()
 
             # Configure dairy utilisation if available
             if hasattr(self, 'sbDairyUtilisation'):
@@ -656,7 +656,7 @@ class LaMainForm(LaMainFormBase):
                     calculation_type = "Animals First (Dairy Separate)"
             
             # Store the diet labels for future reference
-            self.model.mLastDietLabels = diet_labels
+            self.model.mDietLabels = diet_labels
             
             # Generate the report
             self.tbReport.clear()
