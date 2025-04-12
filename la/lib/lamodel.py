@@ -1520,6 +1520,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                 myCropCalcsReportMap[myCropGuid] = myReportAndAreaTarget
 
             # --- Fallow Allocation ---
+            # --- Fallow Allocation ---
             self.allocateFallowGrazingLand(myMCalsFromFallowCounter, myAnimalsMap)
 
             # --- Final Animal Report Update ---
@@ -1530,39 +1531,49 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             # To do this, I will iterate through the report, and transfer the targets from mValueMap
             #    as well as add on to the report
 
-            for myAnimalGuid, report_and_initial_mcal in myAnimalCalcsReportMap.items():
-                # print("--------==---------------------------------------------==-------")
-                # print("--------==        Looping to Update Animal Map         ==-------")
-                # print("--------==---------------------------------------------==-------")
+            # Direct port of the C++ iteration and update logic
+            # QMapIterator <QString,QPair<QString,float> > myReportIterator(myAnimalCalcsReportMap);
+            # while (myReportIterator.hasNext())
+            for myAnimalGuid, myPair in myAnimalCalcsReportMap.items():
+                # myReportIterator.next(); # Implicit in Python loop
+                # QString myAnimalGuid = myReportIterator.key();
+                # LaAnimal myAnimal = LaUtils::getAnimal(myAnimalGuid); # Not used in C++ snippet
 
-                myAnimal = LaUtils.getAnimal(myAnimalGuid) # Needed? Not used in C++ snippet
+                # QPair <QString,float> myPair; # myPair is the loop variable (value)
+                # myPair = myReportIterator.value();
 
-                # Unpack the tuple
-                myReport: str = report_and_initial_mcal # Initial MCal value is not used here
-                # print(f"     ****** dump of myPair {report_and_initial_mcal}") # Python tuple representation
+                myReport: str = myPair[0] # QString myReport = myPair.first;
+                # float myMCalTarget = mValueMap.value(myAnimalGuid);
+                myMCalTarget: float = float(self.mValueMap[myAnimalGuid]) # Direct access, may raise KeyError if key not found
 
-                # Get the *final* MCal target after fallow allocation from mValueMap
-                myMCalTarget: float = self.mValueMap.get(myAnimalGuid, 0.0) # Use get for safety
-
-                # print(f"        *** contents of myMCalTarget: {myMCalTarget}")
-                # Assuming mCommonGrazingValue is a member variable like in C++
+                # float myLandValue = mCommonGrazingValue;
+                # Assuming mCommonLandValue is the Python equivalent
                 myLandValue: float = self.mCommonLandValue
-                # print(f"  mCommonGrazingValue= {myLandValue}")
+                # float myAreaTarget = myMCalTarget / myLandValue; # No division guard as requested
                 myAreaTarget: float = myMCalTarget / myLandValue
-                # print(f" myAreaTarget = {myAreaTarget}")
 
-                # Append final values to the report string
-                myReport += f"Final MCal Target = {int(myMCalTarget)}\n" # Cast to int like C++
-                myReport += f"Final Area Target = {int(myAreaTarget)}\n" # Cast to int like C++
+                # myPair.second = myAreaTarget; # Tuples are immutable, create new one later
 
-                # Update the map with the modified report and the final area target
-                # print(f"my Report should look like: {myReport}")
-                myAnimalCalcsReportMap[myAnimalGuid] = (myReport, myAreaTarget)
-                # C++ also updates mAnimalCalcReport - assuming myAnimalCalcsReportMap is the intended target here
-                # self.mAnimalCalcReport[myAnimalGuid] = (myReport, myAreaTarget) # If mAnimalCalcReport is a separate member dict
+                # myReport += QString("Final MCal Target = " + QString::number(static_cast <int>(myMCalTarget)) + "\n");
+                myReport += f"Final MCal Target = {int(myMCalTarget)}\n"
+                # myReport += QString("Final Area Target = " + QString::number(static_cast <int>(myAreaTarget)) + "\n");
+                myReport += f"Final Area Target = {int(myAreaTarget)}\n"
+
+                # myPair.first = myReport; # Tuples are immutable, create new one
+
+                # Create the updated tuple
+                updatedPair: Tuple[str, float] = (myReport, myAreaTarget)
+
+                # myAnimalCalcsReportMap[myAnimalGuid] = myPair;
+                myAnimalCalcsReportMap[myAnimalGuid] = updatedPair
+                # mAnimalCalcReport.insert(myAnimalGuid,myPair);
+                # Assuming self.mAnimalCalcReport is the intended member dictionary
+                if not hasattr(self, 'mAnimalCalcReport'):
+                    self.mAnimalCalcReport = {} # Initialize if it doesn't exist
+                self.mAnimalCalcReport[myAnimalGuid] = updatedPair
+
 
             # print(f"myFinal Calculations for animals map: \n{myAnimalCalcsReportMap}") # Python dict representation
-
             # print(f"myDairyLimit = {myDairyLimit}")
             # print(f"myDomesticMeatPercent = {myDomesticMeatPercent}")
             # print(f"myWildMeatPercent = {myWildMeatPercent}")
@@ -1604,7 +1615,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             myDietLabels.plantsPortionPct = myOverallPlantPercent * 100. # Total plant
             myDietLabels.kiloCaloriesIndividualAnnual = myMCalsIndividualAnnual * 1000.0 # Convert back to kCal
             myDietLabels.megaCaloriesSettlementAnnual = myMCalsSettlementAnnual
-            myDietLabels.dairySurplus = myOverallDairySurplusMCals
+            myDietLabels.dairySurplusMCalories = myOverallDairySurplusMCals
 
             # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
             # -=-=-=-=-=- Setting the report info with area targets -=-=-=-=-=-
