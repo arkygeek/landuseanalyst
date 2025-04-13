@@ -85,6 +85,8 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
     _iconChanged = pyqtSignal()
     _includeDairyChanged = pyqtSignal()
     _landBeingGrazedChanged = pyqtSignal()
+    _commonLandValueChanged = pyqtSignal()
+    _commonGrazingValueChanged = pyqtSignal()
     _landFoundChanged = pyqtSignal()
     _limitDairyChanged = pyqtSignal()
     _limitDairyPercentChanged = pyqtSignal()
@@ -133,6 +135,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         self.mPercentOfDietThatIsFromCrops = 10
         self.mMeatPercent = 10
         self.mCommonLandValue = 0.0
+        self.mCommonGrazingValue = 0.0
         self.mCommonLandAreaUnits = 0  # Will be properly set from AreaUnits enum
         self.mSpecificLandAreaUnits = 0
         self.mSpecificLandEnergyType = 0
@@ -314,8 +317,8 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                 self.mDairyUtilisation = numeric_value
                 self._dairyUtilisationChanged.emit()
         except (ValueError, TypeError) as e:
-            self.mLogger.error(f"Failed to set dairyUtilisation with value '{thePercent}': {e}")
-
+            # self.logCalculationStep(f"Failed to set dairyUtilisation with value '{thePercent}': {e}")
+            LaUtils.debug.log(f"Error details: Failed to set dairyUtilisation with value '{thePercent}': {e}", "Error")
 
     @pyqtProperty(bool, notify=_baseOnPlantsChanged)
     def baseOnPlants(self) -> bool: # type: ignore
@@ -443,6 +446,15 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         if self.mCommonLandValue != theValue:
             self.mCommonLandValue = theValue
             self._commonLandValueChanged.emit()
+
+    @pyqtProperty(float, notify=_commonGrazingValueChanged)
+    def commonGrazingValue(self) -> float: # type: ignore
+        return float(str(self.mCommonGrazingValue))
+    @commonGrazingValue.setter
+    def commonGrazingValue(self, theValue: float):
+        if self.mCommonGrazingValue != theValue:
+            self.mCommonGrazingValue = theValue
+            self._commonGrazingValueChanged.emit()
 
 
     @pyqtProperty(AreaUnits, notify=_commonLandAreaUnitsChanged)
@@ -1548,7 +1560,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
                 # float myLandValue = mCommonGrazingValue;
                 # Assuming mCommonLandValue is the Python equivalent
-                myLandValue: float = self.mCommonLandValue
+                myLandValue: float = self.mCommonGrazingValue # Assuming this is a class attribute
                 # float myAreaTarget = myMCalTarget / myLandValue; # No division guard as requested
                 myAreaTarget: float = myMCalTarget / myLandValue
 

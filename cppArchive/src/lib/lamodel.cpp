@@ -140,21 +140,17 @@ bool    LaModel::includeDairy() const { return mIncludeDairy;}
 bool    LaModel::limitDairy() const { return mLimitDairy;}
 float   LaModel::limitDairyPercent() const { return mLimitDairyPercentage;}
 float   LaModel::foodValueCommonLand() const { return mCommonGrazingValue;}
+
 QMap <QString, float> LaModel::animalCalorieTargetsMap() const { return mCaloriesProvidedByMeatMap; }
 QMap <QString, float> LaModel::animalFeedRequirementsMap() const { return mValueMap;}
 QMap <QString, float> LaModel::animalProductionTargetsMap() const { return mProductionRequiredAnimalsMap;}
-QMap <QString, float> LaModel::animalAreaTargetsMap() const
-                      { return mAreaTargetsAnimalsMap; }
-QMap <QString, float> LaModel::cropCalorieTargetsMap() const
-                      { return mCaloriesProvidedByCropsMap;}
-QMap <QString, float> LaModel::cropProductionTargetsMap() const
-                      { return mProductionRequiredCropsMap;}
-QMap <QString, float> LaModel::cropAreaTargetsMap() const
-                      { return mAreaTargetsCropsMap; }
-QMap <QString, QString> LaModel::calcsAnimalsMap()
-                        { return mCalcsAnimalsMap; }
-QMap <QString, QString> LaModel::calcsCropsMap()
-                        { return mCalcsCropsMap; }
+QMap <QString, float> LaModel::animalAreaTargetsMap() const { return mAreaTargetsAnimalsMap; }
+QMap <QString, float> LaModel::cropCalorieTargetsMap() const { return mCaloriesProvidedByCropsMap;}
+QMap <QString, float> LaModel::cropProductionTargetsMap() const { return mProductionRequiredCropsMap;}
+QMap <QString, float> LaModel::cropAreaTargetsMap() const { return mAreaTargetsCropsMap; }
+QMap <QString, QString> LaModel::calcsAnimalsMap() { return mCalcsAnimalsMap; }
+QMap <QString, QString> LaModel::calcsCropsMap() { return mCalcsCropsMap; }
+
 void LaModel::setFallowStatus (Status theStatus) { mFallowStatus=theStatus; }
 void LaModel::setFallowRatio (float theRatio) { mFallowRatio=theRatio; }
 void LaModel::setName (QString theName) { mName=theName; }
