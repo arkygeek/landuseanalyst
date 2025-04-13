@@ -112,18 +112,20 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         LaSerialisable.__init__(self) # Assuming LaSerialisable might have its own init logic
         LaGuid.__init__(self) # Explicitly call LaGuid constructor to initialize _mGuid
 
+        self.mTotalLandNeeded = 0
+
         # Initialize LaSerialisable (maintains backward compatibility)
         # Check the underlying _mGuid attribute directly to avoid property/method confusion
         if not self._mGuid:
             self.setGuid() # Generate a new GUID if one wasn't set
 
+
         # Model properties
         self.mName = ""
         self.mPopulation = 100
-        self.mTotalLandNeeded = 0
 
         # Added missing fields that are used in property getters/setters
-        self.mPeriod = ""
+        self.mPeriod = "No Period Set"
         self.mProjection = 0
         self.mEasting = 0
         self.mNorthing = 0
@@ -136,7 +138,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         self.mMeatPercent = 10
         self.mCommonLandValue = 0.0
         self.mCommonGrazingValue = 0.0
-        self.mCommonLandAreaUnits = 0  # Will be properly set from AreaUnits enum
+        self.mCommonLandAreaUnits: AreaUnits = AreaUnits.Hectare
         self.mSpecificLandAreaUnits = 0
         self.mSpecificLandEnergyType = 0
         self.mHerdSize = 0
@@ -463,7 +465,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
     @commonLandAreaUnits.setter
     def commonLandAreaUnits(self, theAreaUnits: AreaUnits):
         if self.mCommonLandAreaUnits != theAreaUnits:
-            self.mCommonLandAreaUnits = theAreaUnits
+            self.mCommonLandAreaUnits: AreaUnits = theAreaUnits
             self._commonLandAreaUnitsChanged.emit()
 
 
