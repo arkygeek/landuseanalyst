@@ -1876,7 +1876,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         self.tblCrops.cellChanged.connect(self.cropCalcSelectionChanged)
         self.cbDebug.clicked.connect(self.on_cbDebug_clicked)
 
-    def on_sbCommonRasterValue_valueChanged(self, value):
+    def on_sbCommonRasterValue_valueChanged(self, theValue):
         """Handle common raster value changes.
 
         This method updates the model's common raster value when the user
@@ -1886,17 +1886,23 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             value: The new value from the spinbox
         """
         if hasattr(self, 'model'):
-            from la.lib.la import AreaUnits
-            LaUtils.debug.log(f"Common Raster Value changed to: {value}", "Settings")
+            LaUtils.debug.log(f"Common Raster Value changed to: {theValue}", "Settings")
 
             # Get the current area units
-            selected_area_unit = AreaUnits.Dunum if self.cbAreaUnits.currentText() == "Dunum" else AreaUnits.Hectare
+            match self.cbAreaUnits.currentText():
+                case "Dunum":
+                    mySelectedAreaUnit: AreaUnits = AreaUnits.Dunum
+                case "Hectare":
+                    mySelectedAreaUnit: AreaUnits = AreaUnits.Hectare
+                case _:
+                    # Default to Hectare or handle unexpected values
+                    mySelectedAreaUnit: AreaUnits = AreaUnits.Hectare
+                    LaUtils.debug.log(f"Unexpected area unit: {self.cbAreaUnits.currentText()}, defaulting to Hectare", "Warning")
+
 
             # Update the model with the new value
-            if hasattr(self.model, 'setCommonLandValue'):
-                self.model.setCommonLandValue(value, selected_area_unit)
-            elif hasattr(self.model, 'commonLandValue'):
-                self.model.commonLandValue = value
+            self.model.mCommonLandValue  = LaUtils.convertAreaToHectares(mySelectedAreaUnit, theValue)
+
 
             # Recalculate with the new value
             self.setDietLabels()

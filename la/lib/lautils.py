@@ -20,6 +20,7 @@ from qgis.PyQt.QtWidgets import (
 )
 from qgis.PyQt.QtCore import QFile, QTextStream, QObject, QDir, QSettings, QFileInfo, pyqtSignal
 # Local application imports
+from la.lib.la import AreaUnits
 from la.lib.laanimalparameter import LaAnimalParameter
 from la.lib.laanimal import LaAnimal
 from la.lib.lacropparameter import LaCropParameter
@@ -389,7 +390,7 @@ class LaUtils:
         return myPath
 
     @staticmethod
-    def convertAreaToHectares(theAreaUnit: str, theArea: float) -> int:
+    def convertAreaToHectares(theAreaUnit: AreaUnits, theArea: float) -> int:
         """
         Converts an area in the specified area unit to hectares.
 

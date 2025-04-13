@@ -112,21 +112,19 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         LaSerialisable.__init__(self) # Assuming LaSerialisable might have its own init logic
         LaGuid.__init__(self) # Explicitly call LaGuid constructor to initialize _mGuid
 
-        self.mTotalLandNeeded = 0
-
         # Initialize LaSerialisable (maintains backward compatibility)
         # Check the underlying _mGuid attribute directly to avoid property/method confusion
         if not self._mGuid:
             self.setGuid() # Generate a new GUID if one wasn't set
 
-
         # Model properties
         self.mName = ""
         self.mPopulation = 100
+        self.mTotalLandNeeded = 0
 
         # Added missing fields that are used in property getters/setters
-        self.mPeriod = "No Period Set"
-        self.mProjection = 0
+        self.mPeriod = ""
+        self.mProjection: int
         self.mEasting = 0
         self.mNorthing = 0
         self.mEuclideanDistance = False
@@ -136,9 +134,9 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         self.mDietPercent = 25
         self.mPercentOfDietThatIsFromCrops = 10
         self.mMeatPercent = 10
+        self.mCommonLandAreaUnits = AreaUnits.Hectare # Will be properly set from AreaUnits enum
         self.mCommonLandValue = 0.0
         self.mCommonGrazingValue = 0.0
-        self.mCommonLandAreaUnits: AreaUnits = AreaUnits.Hectare
         self.mSpecificLandAreaUnits = 0
         self.mSpecificLandEnergyType = 0
         self.mHerdSize = 0
@@ -440,33 +438,57 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             self._pathDistanceChanged.emit()
 
 
-    @pyqtProperty(float, notify=_commonLandValueChanged)
-    def commonLandValue(self) -> float: # type: ignore
-        return float(str(self.mCommonLandValue))
-    @commonLandValue.setter
-    def commonLandValue(self, theValue: float):
-        if self.mCommonLandValue != theValue:
-            self.mCommonLandValue = theValue
-            self._commonLandValueChanged.emit()
+    # REMOVE THIS ENTIRE PROPERTY
+    # @pyqtProperty(int, notify=_commonLandValueChanged)
+    # def commonLandValue(self) -> int: # type: ignore
+    #     return self.mCommonLandValue
+    # @commonLandValue.setter
+    # def commonLandValue(self, theValue: float, theAreaUnits: AreaUnits):
+    #     # if self.mCommonLandValue != theValue:
+    #     from la.lib.lautils import LaUtils
+    #     self.mCommonLandValue: int = LaUtils.convertAreaToHectares(theAreaUnits, theValue)
+    #     self._commonLandValueChanged.emit()
+
 
     @pyqtProperty(float, notify=_commonGrazingValueChanged)
     def commonGrazingValue(self) -> float: # type: ignore
-        return float(str(self.mCommonGrazingValue))
+        # Ensure it returns a float, handle potential initial non-float values if necessary
+        try:
+            return float(self.mCommonGrazingValue)
+        except (ValueError, TypeError):
+            return 0.0 # Default value if conversion fails
     @commonGrazingValue.setter
     def commonGrazingValue(self, theValue: float):
-        if self.mCommonGrazingValue != theValue:
-            self.mCommonGrazingValue = theValue
-            self._commonGrazingValueChanged.emit()
+         # Ensure the input is treated as float
+        try:
+            float_value = float(theValue)
+            if self.mCommonGrazingValue != float_value:
+                self.mCommonGrazingValue = float_value
+                self._commonGrazingValueChanged.emit()
+        except (ValueError, TypeError):
+            LaUtils.debug.log(f"Invalid value passed to commonGrazingValue setter: {theValue}", "Error")
 
 
     @pyqtProperty(AreaUnits, notify=_commonLandAreaUnitsChanged)
     def commonLandAreaUnits(self) -> AreaUnits: # type: ignore
-        return self.mCommonLandAreaUnits # TODO: figure out how to do this
+        # Return the enum member directly
+        return self.mCommonLandAreaUnits
     @commonLandAreaUnits.setter
     def commonLandAreaUnits(self, theAreaUnits: AreaUnits):
-        if self.mCommonLandAreaUnits != theAreaUnits:
-            self.mCommonLandAreaUnits: AreaUnits = theAreaUnits
-            self._commonLandAreaUnitsChanged.emit()
+        # Ensure it's an AreaUnits enum member
+        if isinstance(theAreaUnits, AreaUnits):
+            if self.mCommonLandAreaUnits != theAreaUnits:
+                self.mCommonLandAreaUnits = theAreaUnits
+                self._commonLandAreaUnitsChanged.emit()
+        else:
+            # Attempt conversion if a string name is passed (e.g., from UI)
+            try:
+                myUnitEnum = AreaUnits[str(theAreaUnits)]
+                if self.mCommonLandAreaUnits != myUnitEnum:
+                    self.mCommonLandAreaUnits = myUnitEnum
+                    self._commonLandAreaUnitsChanged.emit()
+            except (KeyError, TypeError):
+                 LaUtils.debug.log(f"Invalid AreaUnits value passed to setter: {theAreaUnits}", "Error")
 
 
     @pyqtProperty(AreaUnits, notify=_specificLandAreaUnitsChanged) # Added property
@@ -475,8 +497,10 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
     @specificLandAreaUnits.setter
     def specificLandAreaUnits(self, theAreaUnits: AreaUnits):
         if self.mSpecificLandAreaUnits != theAreaUnits:
-            self.mSpecificLandAreaUnits = theAreaUnits
-            self._specificLandAreaUnitsChanged.emit()
+            myUnitEnum = AreaUnits[str(theAreaUnits)]
+            if self.mSpecificLandAreaUnits != myUnitEnum:
+                self.mSpecificLandAreaUnits = myUnitEnum
+                self._specificLandAreaUnitsChanged.emit()
 
 
     @pyqtProperty(EnergyType, notify=_specificLandEnergyTypeChanged) # Added property
@@ -1558,13 +1582,30 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
                 myReport: str = myPair[0] # QString myReport = myPair.first;
                 # float myMCalTarget = mValueMap.value(myAnimalGuid);
-                myMCalTarget: float = float(self.mValueMap[myAnimalGuid]) # Direct access, may raise KeyError if key not found
+                myMCalTarget: float = self.mValueMap.get(myAnimalGuid, 0.0) # Use .get for safety
 
                 # float myLandValue = mCommonGrazingValue;
-                # Assuming mCommonLandValue is the Python equivalent
-                myLandValue: float = self.mCommonGrazingValue # Assuming this is a class attribute
-                # float myAreaTarget = myMCalTarget / myLandValue; # No division guard as requested
-                myAreaTarget: float = myMCalTarget / myLandValue
+                # Replicate C++ logic: Get the common grazing value converted to per-hectare
+                # C++ stores the converted value in mCommonGrazingValue via setCommonLandValue.
+                # Python stores raw value and units separately, so convert here.
+                from la.lib.lautils import LaUtils # Ensure LaUtils is imported
+                from la.lib.la import AreaUnits     # Ensure AreaUnits is imported
+
+                # Ensure mCommonGrazingValue is float and mCommonLandAreaUnits is AreaUnits
+                try:
+                    myRawLandValue = float(self.mCommonGrazingValue)
+                    myLandUnits: str = self.mCommonLandAreaUnits.name # Should be AreaUnits enum instance
+                    # Perform conversion similar to C++ setCommonLandValue
+                    myLandValue: int = LaUtils.convertAreaToHectares(myLandUnits, myRawLandValue)
+                except (ValueError, TypeError) as e:
+                     LaUtils.debug.log(f"Error converting common land value for area calculation: {e}. Using 0 ", "Error")
+                     myLandValue: int = 0 # Avoid crashing, but log error
+
+                # float myAreaTarget = myMCalTarget / myLandValue;
+                # Following user request: no division by zero guard explicitly added,
+                # but the try-except above sets myLandValue to 0 on error, implicitly guarding.
+                # If myLandValue is legitimately 0, division by zero will still occur.
+                myAreaTarget: float = float(myMCalTarget / myLandValue)
 
                 # myPair.second = myAreaTarget; # Tuples are immutable, create new one later
 
@@ -1586,8 +1627,8 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                     self.mAnimalCalcReport = {} # Initialize if it doesn't exist
                 self.mAnimalCalcReport[myAnimalGuid] = updatedPair
 
-
             # print(f"myFinal Calculations for animals map: \n{myAnimalCalcsReportMap}") # Python dict representation
+
             # print(f"myDairyLimit = {myDairyLimit}")
             # print(f"myDomesticMeatPercent = {myDomesticMeatPercent}")
             # print(f"myWildMeatPercent = {myWildMeatPercent}")
