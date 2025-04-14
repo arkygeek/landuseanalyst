@@ -637,33 +637,33 @@ class LaMainForm(LaMainFormBase):
                 return
             
             # Perform calculations based on diet settings
-            diet_labels = None
-            calculation_type = ""
+            myDietLabels: LaDietLabels = LaDietLabels()
+            myCalculationType = ""
             
             if self.cboxBaseOnPlants.isChecked():
                 if self.cboxIncludeDairy.isChecked():
-                    diet_labels = self.model.doCalcsPlantsFirstIncludeDairy()
-                    calculation_type = "Plants First (Include Dairy)"
+                    myDietLabels = self.model.doCalcsPlantsFirstIncludeDairy()
+                    myCalculationType = "Plants First (Include Dairy)"
                 else:
-                    diet_labels = self.model.doCalcsPlantsFirstDairySeparate()
-                    calculation_type = "Plants First (Dairy Separate)"
+                    myDietLabels = self.model.doCalcsPlantsFirstDairySeparate()
+                    myCalculationType = "Plants First (Dairy Separate)"
             else:
                 if self.cboxIncludeDairy.isChecked():
-                    diet_labels = self.model.doCalcsAnimalsFirstIncludeDairy()
-                    calculation_type = "Animals First (Include Dairy)"
+                    myDietLabels = self.model.doCalcsAnimalsFirstIncludeDairy()
+                    myCalculationType = "Animals First (Include Dairy)"
                 else:
-                    diet_labels = self.model.doCalcsAnimalsFirstDairySeparate()
-                    calculation_type = "Animals First (Dairy Separate)"
+                    myDietLabels = self.model.doCalcsAnimalsFirstDairySeparate()
+                    myCalculationType = "Animals First (Dairy Separate)"
             
             # Store the diet labels for future reference
-            self.model.mDietLabels = diet_labels
+            self.model.mDietLabels = myDietLabels
             
             # Generate the report
             self.tbReport.clear()
             
             # Main HTML report
             self.tbReport.setHtml(f"<h1>LanduseAnalyst Calculation Results</h1>")
-            self.tbReport.append(f"<h2>Calculation Method: {calculation_type}</h2>")
+            self.tbReport.append(f"<h2>Calculation Method: {myCalculationType}</h2>")
             
             # Add basic model information
             self.tbReport.append(self.model.toHtml())

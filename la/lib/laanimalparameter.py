@@ -96,7 +96,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
     @classmethod
     def getInstanceByName(cls, name):
         for instance in cls._instances:
-            if instance._mName == name:
+            if instance.mName == name:
                 return instance
         return None
 

@@ -196,13 +196,25 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
         if not found_match:
             self.setComboToDefault(self.cboAnimal, self.mAnimalParameter.mAnimalGuid)
             
+        # Set specific grazing land value
+        self.sbSpecificRasterValue.setValue(int(self.mAnimalParameter.mValueSpecificGrazingLand))
+        # Note: sbCommonRasterValue might be handled globally or differently, but let's ensure it reflects the loaded state if possible.
+        # self.sbCommonRasterValue.setValue(int(self.mAnimalParameter.mValueCommonGrazingLand)) # Re-evaluate if this is needed/correct
+
+        # Set Area Units combo box
+        current_area_units = self.mAnimalParameter.mAreaUnits
+        for i in range(self.cbAreaUnits.count()):
+            if self.cbAreaUnits.itemText(i) == current_area_units.name:
+                self.cbAreaUnits.setCurrentIndex(i)
+                break
+
         # Set energy type
-        current_energy_type = self.mAnimalParameter.mSpecificLandEnergyType
+        current_energy_type = self.mAnimalParameter.mSpecificLandEnergyType # Use specificLandEnergyType for this combo
         for i in range(self.cbSpecificLandEnergyType.count()):
             if self.cbSpecificLandEnergyType.itemText(i) == current_energy_type.name:
                 self.cbSpecificLandEnergyType.setCurrentIndex(i)
                 break
-                
+
         # Set fallow usage
         current_fallow = self.mAnimalParameter.mFallowUsage
         for i in range(self.cbFallowUsage.count()):
@@ -210,7 +222,17 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
             if combo_priority == current_fallow:
                 self.cbFallowUsage.setCurrentIndex(i)
                 break
-                
+
+        # Set Raster Name combo box
+        current_raster_name = self.mAnimalParameter.MrasterName
+        raster_index = self.cboRaster.findText(current_raster_name)
+        if raster_index != -1:
+            self.cboRaster.setCurrentIndex(raster_index)
+        else:
+            # Optionally add the raster name if not found, or just select none/default
+            LaUtils.debug.log(f"showAnimalParameter: Raster name '{current_raster_name}' not found in cboRaster")
+            self.cboRaster.setCurrentIndex(-1) # Or set to a default index like 0
+
         # Update the fodder table AFTER setting fodder use state
         self.refreshFodderTable()
         
@@ -402,7 +424,8 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
         for guid, parameter in self.mAnimalParameterMap.items():
             self.tblAnimalParameterProfiles.insertRow(myCurrentRow)
             myFileItem = QTableWidgetItem(str(guid))
-            myNameItem = QTableWidgetItem(str(getattr(parameter, '_mName', "")))
+            # Fix: Use mName instead of _mName to access the property correctly
+            myNameItem = QTableWidgetItem(str(getattr(parameter, 'mName', "")))
 
             self.tblAnimalParameterProfiles.setItem(myCurrentRow, 0, myFileItem)
             self.tblAnimalParameterProfiles.setItem(myCurrentRow, 1, myNameItem)
@@ -428,7 +451,8 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
         LaUtils.debug.log("refreshFodderTable: Updating fodder table for animal parameter")
 
         # Get the food source map from the current animal parameter
-        myFoodSourceMap = self.mAnimalParameter.fodderSourceMap()
+        # Access mFoodSourceMap property directly instead of calling a non-existent method
+        myFoodSourceMap = self.mAnimalParameter.mFoodSourceMap if hasattr(self.mAnimalParameter, 'mFoodSourceMap') else {}
 
         # Update each row in the fodder table
         for myCurrentRow in range(self.tblFodder.rowCount()):

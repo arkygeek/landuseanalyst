@@ -1,8 +1,7 @@
-from qgis.PyQt.QtCore import pyqtSignal, pyqtProperty, QObject # Ensure QObject is imported if not already
+from qgis.PyQt.QtCore import pyqtSignal, pyqtProperty
 from qgis.PyQt.QtWidgets import QDialog
+from qgis.PyQt.QtXml import QDomDocument
 
-import xml.etree.ElementTree as ET
-import logging # Keep standard logging
 from typing import Dict, List, Tuple, Union
 
 from la.lib.laserialisable import LaSerialisable
@@ -10,10 +9,9 @@ from la.lib.laguid import LaGuid
 from la.lib.ladietlabels import LaDietLabels
 from la.lib.lautils import LaUtils, LaMessageBus
 from la.lib.la import AreaUnits, Status, Priority, LandBeingGrazed, LandFound, EnergyType
-from la.lib.la import LaFoodSourceMap, LaReportMap, LaFoodSource, LandFound, LandBeingGrazed, LaTripleMap
+from la.lib.la import LaFoodSourceMap, LaReportMap, LaTripleMap, LaFoodSource, LandFound, LandBeingGrazed
 from la.lib.laanimal import LaAnimal
 from la.lib.lacrop import LaCrop
-from la.lib.laanimalparameter import LaAnimalParameter
 from la.lib.lafoodsource import LaFoodSource
 
 MESSAGE_BUS: LaMessageBus = LaMessageBus()
@@ -137,8 +135,8 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         self.mCommonLandAreaUnits = AreaUnits.Hectare # Will be properly set from AreaUnits enum
         self.mCommonLandValue = 0.0
         self.mCommonGrazingValue = 0.0
-        self.mSpecificLandAreaUnits = 0
-        self.mSpecificLandEnergyType = 0
+        self.mSpecificLandAreaUnits = AreaUnits.Hectare
+        self.mSpecificLandEnergyType = EnergyType.KCalories
         self.mHerdSize = 0
         self.mFallowStatus: Status = Status.NotEnoughToCompletelySatisfy
         self.mFallowRatio = 1
@@ -154,7 +152,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
         # Diet calculation properties
         self.mAnimalsMap: dict[str, str] = {} # Corresponds to mAnimalsMap in C++
-        self.mCropsMap: dict[str, float] = {} # Corresponds to mCropsMap in C++
+        self.mCropsMap: dict[str, str] = {} # Corresponds to mCropsMap in C++
         self.mBaseOnPlants = False
         self.mIncludeDairy = True
         self.mLimitDairy = True
@@ -175,10 +173,10 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         self.mCalcsCropsMap: dict[str, str] = {}
 
         # Store calculation results
-        self.mDietLabels = LaDietLabels()
+        self.mDietLabels: LaDietLabels = LaDietLabels()
 
         # Use MESSAGE_BUS for logging instead of QgsMessageLog
-        self.mLogger = MESSAGE_BUS
+        self.mLogger: LaMessageBus = MESSAGE_BUS
 
 
     def logMessage(self, theMessage: str):
@@ -694,54 +692,68 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         return myReturnValue
 
 
-    def fromXml(self, theXmlData):
+    def fromXml(self, theXml: str) -> bool:
         """
         Initialize the LaModel instance from an XML string.
-
+        
         Args:
-            theXmlData (str): The XML string containing the model data.
+            theXml (str): The XML string containing the model data.
+            
+        Returns:
+            bool: True if successful, False otherwise
         """
-        root = ET.fromstring(theXmlData)
-
-        self.mGuid = self.setGuid(root.attrib.get('guid'))
-        self.mName = root.findtext('name', default="No Name Set")
-        self.mPopulation: int = int(root.findtext('population', default="1000"))
-        self.mPeriod = root.findtext('period', default="No Period Set")
-        self.mProjection = int(root.findtext('projection', default="100"))
-        self.mEasting = int(root.findtext('easting', default="0"))
-        self.mNorthing = int(root.findtext('northing', default="0"))
-        self.mEuclideanDistance = root.findtext('euclideanDistance', default="True") == "True"
-        self.mWalkingTime = root.findtext('walkingTime', default="False") == "False"
-        self.mPathDistance = root.findtext('pathDistance', default="False") == "False"
-        self.mPrecision = int(root.findtext('precision', default="5"))
-        self.mDietPercent = int(root.findtext('dietPercent', default="25"))
-        self.mPercentOfDietThatIsFromCrops = int(root.findtext('plantPercent', default="10"))
-        self.mMeatPercent = int(root.findtext('meatPercent', default="10"))
-        self.mCaloriesPerPersonDaily = int(root.findtext('caloriesPerPersonDaily', default="2500"))
-        self.mBaseOnPlants = root.findtext('baseOnPlants', default="True") == "True"
-        self.mIncludeDairy = root.findtext('includeDairy', default="True") == "True"
-        self.mLimitDairy = root.findtext('limitDairy', default="False") == "False"
-        self.mLimitDairyPercentage = int(root.findtext('limitDairyPercent', default="10"))
-        self.mDairyUtilisation = int(root.findtext('dairyUtilisation', default="100"))
-        self.mFallowStatus = Status[root.findtext('fallowStatus', default="FALLOW")]
-        self.mFallowRatio = int(root.findtext('fallowRatio', default="1"))
-        self.mCommonLandValue = float(root.findtext('commonLandValue', default="0.0"))
-        self.mCommonLandAreaUnits = AreaUnits[root.findtext('commonLandAreaUnits', default="Hectare")] # Changed default to match enum
-        # Added parsing for specific land units and energy type
-        self.mSpecificLandAreaUnits = AreaUnits[root.findtext('specificLandAreaUnits', default="Hectare")]
-        self.mSpecificLandEnergyType = EnergyType[root.findtext('specificLandEnergyType', default="KCalories")] # Corrected default
-        self.mHerdSize = int(root.findtext('herdSize', default="0"))
-        self.mAnimalsMap = {}  # Assuming animals are stored in a more complex structure
-        self.mCropsMap = {}  # Assuming crops are stored in a more complex structure
-        self.mDiets = {}  # Assuming diets are stored in a more complex structure
-        self.mDietLabels = []  # Assuming diet labels are stored in a more complex structure
-        self.mLandBeingGrazed = LandBeingGrazed[root.findtext('landBeingGrazed', default="Common")] # Changed default to match enum
-        self.mLandFound = LandFound[root.findtext('landFound', default="NotEnough")] # Changed default to match enum
-        self.mPriority = Priority[root.findtext('priority', default="Nope")] # Changed default to match enum
-        self.mDescription = root.findtext('description', default="No Description Set")
-        self.mAreaUnits = AreaUnits[root.findtext('areaUnits', default="Hectare")] # Changed default to match enum
-        self.mStatus = Status[root.findtext('status', default="MoreThanEnoughToCompletelySatisfy")] # Changed default to match enum
-        self.mIcon = None  # Assuming icon is handled separately
+        self.logMessage("method ==> bool LaModel::fromXml(QString theXml)")
+        myFlag = ""
+        self.logMessage("Loading model from xml")
+        myDocument = QDomDocument("mydocument")
+        myDocument.setContent(theXml)
+        myTopElement = myDocument.firstChildElement("model")
+        if myTopElement.isNull():
+            # TODO - just make this a warning
+            self.logMessage("top element could not be found!")
+        
+        self.logMessage("Model::fromXml - guid found : " + myTopElement.attribute("guid"))
+        self.setGuid(myTopElement.attribute("guid"))
+        self.logMessage("Model::fromXml - guid set to : " + self.guid)
+        
+        self.mName = LaUtils.xmlDecode(myTopElement.firstChildElement("name").text())
+        self.mPopulation = int(myTopElement.firstChildElement("population").text())
+        self.mPeriod = LaUtils.xmlDecode(myTopElement.firstChildElement("period").text())
+        self.mProjection = int(myTopElement.firstChildElement("projection").text())
+        self.mEasting = int(myTopElement.firstChildElement("easting").text())
+        self.mNorthing = int(myTopElement.firstChildElement("northing").text())
+        
+        myFlag = myTopElement.firstChildElement("euclideanDistance").text()
+        if myFlag == "1":
+            self.mEuclideanDistance = True
+        else:
+            self.mEuclideanDistance = False
+            
+        myFlag = myTopElement.firstChildElement("walkingTime").text()
+        if myFlag == "1":
+            self.mWalkingTime = True
+        else:
+            self.mWalkingTime = False
+            
+        myFlag = myTopElement.firstChildElement("pathDistance").text()
+        if myFlag == "1":
+            self.mPathDistance = True
+        else:
+            self.mPathDistance = False
+            
+        self.mPrecision = int(myTopElement.firstChildElement("precision").text())
+        self.mDietPercent = int(myTopElement.firstChildElement("dietPercent").text())
+        self.mPercentOfDietThatIsFromCrops = int(myTopElement.firstChildElement("plantPercent").text())
+        self.mMeatPercent = int(myTopElement.firstChildElement("meatPercent").text())
+        self.mCaloriesPerPersonDaily = int(myTopElement.firstChildElement("caloriesPerPersonDaily").text())
+        
+        self.mBaseOnPlants = int(myTopElement.firstChildElement("baseOnPlants").text())
+        self.mIncludeDairy = int(myTopElement.firstChildElement("includeDairy").text())
+        self.mLimitDairy = int(myTopElement.firstChildElement("limitDairy").text())
+        self.mLimitDairyPercentage = int(myTopElement.firstChildElement("limitDairyPercent").text())
+        
+        self.mDairyUtilisation = int(myTopElement.firstChildElement("dairyUtilisation").text())
+        return True
 
     def toXml(self) -> str:
         myString = f'<model guid="{self.guid}">\\n'
@@ -969,22 +981,22 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         myAnimal = LaAnimal()
 
         # Initialize base calculations
-        myMCalsIndividualAnnual = self.mCaloriesPerPersonDaily * 365.0
-        myMCalsSettlementAnnual = myMCalsIndividualAnnual * self.mPopulation
-        myDairyMCalorieCounter = 0.0
-        myTameMeatMCalorieCounter = 0.0
-        myWildMeatMCalorieCounter = 0.0
-        mySelectedAnimalsMap = self.mAnimalsMap
+        myMCalsIndividualAnnual: float = self.mCaloriesPerPersonDaily * 365.0
+        myMCalsSettlementAnnual: float = myMCalsIndividualAnnual * self.mPopulation
+        myDairyMCalorieCounter: float = 0.0
+        myTameMeatMCalorieCounter: float = 0.0
+        myWildMeatMCalorieCounter: float = 0.0
+        mySelectedAnimalsMap: Dict[str, str] = self.mAnimalsMap
 
         # Calculate coefficients
-        c1 = 1.0 - self.mMeatPercent
-        c8 = self.mDairyUtilisation
-        c10 = self.mPopulation
-        c11 = self.mCaloriesPerPersonDaily
-        c14 = c10 * c11 * 365.0
-        c15 = self.mDietPercent
-        c12 = self.mPercentOfDietThatIsFromCrops
-        e15 = c14 * c15
+        c1: float = 1.0 - self.mMeatPercent
+        c8: float = float(self.mDairyUtilisation) # convert to float
+        c10: float = float(self.mPopulation) # convert to float
+        c11: float = float( self.mCaloriesPerPersonDaily) # convert to float
+        c14: float = c10 * c11 * 365.0
+        c15: float = float(self.mDietPercent) # convert to float
+        c12: float = float(self.mPercentOfDietThatIsFromCrops) # convert to float
+        e15: float = c14 * c15
 
         LaUtils.debug.log("Starting animal calculations", "Diet")
 
@@ -1000,8 +1012,8 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                 c4 = myAnimal.lactationTime
                 c5 = myAnimal.weaningAge
                 c6 = myAnimal.killWeight
-                c7 = myAnimal.usableMeat * 0.01
-                e2 = c2 * c3 * (c4 - c5)
+                c7 = myAnimal.usableMeat * 0.01 # type: ignore
+                e2 = c2 * c3 * (c4 - c5) # type: ignore
                 e3 = e2 * c8
                 c9 = myAnimal.meatFoodValue
                 e10 = e3 + (c9 * c7 * c6)

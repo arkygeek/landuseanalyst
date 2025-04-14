@@ -102,7 +102,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
         self._initializeDefaults()
 
         if isinstance(theAnimal, LaAnimal):
-            self._copyFromAnimal(theAnimal)
+            self.copyFromAnimal(theAnimal)
 
     def _initializeDefaults(self) -> None:
         """Set default values for all properties."""
@@ -150,7 +150,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
         self.mMaintenance = 0  # calories/day
         self.mJuvenile = 0  # calories/day
 
-    def _copyFromAnimal(self, theAnimal: 'LaAnimal') -> None:
+    def copyFromAnimal(self, theAnimal: 'LaAnimal') -> None:
         """Copy all attributes from another animal instance.
 
         Args:
@@ -797,7 +797,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
             # Energy requirements type
             myFeedEnergyType = myTopElement.firstChildElement("feedEnergyType").text()
             # Default to KCalories if not TDN or element missing/empty
-            self.mFeedEnergyType = LaEnergyType.TDN if myFeedEnergyType == "TDN" else LaEnergyType.KCalories
+            self.mFeedEnergyType: LaEnergyType = LaEnergyType.TDN if myFeedEnergyType == "TDN" else LaEnergyType.KCalories
 
             # Energy requirements
             self.mGestating = int(myTopElement.firstChildElement("gestating").text())
@@ -806,8 +806,8 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
             self.mJuvenile = int(myTopElement.firstChildElement("juvenile").text())
 
             # Dairy
-            milk_text = myTopElement.firstChildElement("milk").text().lower()
-            self.mMilk = milk_text == "true"
+            myMilkText = myTopElement.firstChildElement("milk").text().lower()
+            self.mMilk: bool = True if myMilkText == "true" else False
             self.mMilkGramsPerDay = int(myTopElement.firstChildElement("milkGramsPerDay").text())
             self.mMilkFoodValue = int(myTopElement.firstChildElement("milkFoodValue").text())
             self.mLactationTime = int(myTopElement.firstChildElement("lactationTime").text())

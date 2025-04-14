@@ -36,7 +36,7 @@ class LaMainController(QObject):
     This class coordinates interactions between the UI and models.
     """
 
-    def __init__(self, model: LaModel):
+    def __init__(self, theLaModel: LaModel):
         """
         Initialize the controller with a model.
 
@@ -44,7 +44,7 @@ class LaMainController(QObject):
             model: The model to use
         """
         super().__init__()
-        self.model = model
+        self.model: LaModel = theLaModel
 
         # Initialize maps for tracking selected items
         # Dict[str, Tuple[bool, str]] - GUID -> (enabled, parameterGuid)
@@ -256,10 +256,10 @@ class LaMainController(QObject):
             animalPercent = plantAnimalRatio
             plantPercent = 100 - plantAnimalRatio
 
-            wildAnimalPercent = (animalPercent * wildTameAnimalRatio) / 100
-            tameAnimalPercent = (animalPercent * (100 - wildTameAnimalRatio)) / 100
-            wildPlantPercent = (plantPercent * wildTamePlantRatio) / 100
-            tamePlantPercent = (plantPercent * (100 - wildTamePlantRatio)) / 100
+            wildAnimalPercent = animalPercent * wildTameAnimalRatio
+            tameAnimalPercent = animalPercent * (100 - wildTameAnimalRatio)
+            wildPlantPercent = plantPercent * wildTamePlantRatio
+            tamePlantPercent = plantPercent * (100 - wildTamePlantRatio)
 
             return {
                 'animalPercent': animalPercent,
@@ -344,7 +344,7 @@ class LaMainController(QObject):
                 if hasattr(self.model, 'animals'):
                     # Convert Dict[str, Tuple[bool, str]] to Dict[str, str]
                     # Only store the parameter GUID for enabled animals
-                    myAnimalsMap = {
+                    myAnimalsMap: Dict[str, str] = {
                         guid: param_guid
                         for guid, (enabled, param_guid) in self.animalsMap.items()
                         if enabled and param_guid

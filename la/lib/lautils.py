@@ -460,22 +460,17 @@ class LaUtils:
                         LaUtils.debug.log(f"Animal parameter from {filePath} has no name, skipping", "AnimalParams")
                         continue
 
-                    # Get the actual GUID string, not a method reference
-                    guidValue = myAnimalParameter.mGuid
-
+                    # Get the GUID from the XML filename (without the .xml extension)
+                    # This ensures we use the original GUID that matches the file on disk
+                    fileNameGuid = os.path.splitext(myFileInfo.fileName())[0]
+                    
                     # Debug the parameter values
                     LaUtils.debug.log(f"Loaded animal parameter: '{myAnimalParameter.name}', linked to animal: {myAnimalParameter.animalGuid}, percentTameMeat: {myAnimalParameter.percentTameMeat}", "AnimalParams")
 
-                    # Add the animal parameter to the map using the actual GUID string
-                    if guidValue:
-                        myMap[guidValue] = myAnimalParameter
-                        LaUtils.debug.log(f"Added animal parameter to map with GUID: {guidValue}", "AnimalParams")
-                    else:
-                        LaUtils.debug.log(f"WARNING: Animal parameter '{myAnimalParameter.name}' has no GUID, generating one", "AnimalParams")
-                        guidValue = str(uuid.uuid4())
-                        myAnimalParameter.mGuid = guidValue
-                        myMap[guidValue] = myAnimalParameter
-                        LaUtils.debug.log(f"Generated and added animal parameter with new GUID: {guidValue}", "AnimalParams")
+                    # Set and use the GUID from the filename
+                    myAnimalParameter.mGuid = fileNameGuid
+                    myMap[fileNameGuid] = myAnimalParameter
+                    LaUtils.debug.log(f"Added animal parameter to map with GUID from filename: {fileNameGuid}", "AnimalParams")
                 except Exception as e:
                     LaUtils.debug.log(f"Error loading animal parameter from {myFileInfo.absoluteFilePath()}: {str(e)}", "Error")
                     import traceback

@@ -85,6 +85,12 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         self.mCropParametersMap = {}
         self.mAnimalParametersMap = {}
 
+        # Load settings from QSettings if available
+        settings = QSettings()
+        commonRasterValue = settings.value("LandUseAnalyst/commonValue", 40, type=int)
+        self.sbCommonRasterValue.setValue(commonRasterValue)
+        LaUtils.debug.log(f"Initialized sbCommonRasterValue with value: {commonRasterValue}", "Settings")
+
         # make the form's buttons work
         self.connectSignalsSlots()
 
@@ -941,7 +947,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         # Update any calculations
         self.updateAnimalCalculations(animal)
 
-    def animalCellClicked(self, row, column):
+    def animalCellClicked(self, theRow, theColumn):
         """Handle animal table cell click event.
 
         This method is called when a user clicks on a cell in the animals table.
@@ -951,29 +957,29 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             row: The row index of the clicked cell
             column: The column index of the clicked cell
         """
-        if column == 0:  # Checkbox column
-            item = self.tblAnimals.item(row, column)
-            guid = self.tblAnimals.item(row, 1).data(QtCore.Qt.UserRole)
+        if theColumn == 0:  # Checkbox column
+            myItem = self.tblAnimals.item(theRow, theColumn)
+            myAnimalGuid = self.tblAnimals.item(theRow, 1).data(QtCore.Qt.UserRole)
 
             # Get the current check state
-            isChecked = item.checkState() == QtCore.Qt.Checked
+            isChecked = myItem.checkState() == QtCore.Qt.Checked
 
             # Update the animals map
-            if guid in self.mAnimalsMap:
-                currentValue = self.mAnimalsMap[guid]
-                self.mAnimalsMap[guid] = (isChecked, currentValue[1])
+            if myAnimalGuid in self.mAnimalsMap:
+                currentValue = self.mAnimalsMap[myAnimalGuid]
+                self.mAnimalsMap[myAnimalGuid] = (isChecked, currentValue[1])
 
                 # Update the animal calculations list
                 if isChecked:
                     # Add to calculations list if not already there
-                    self.addAnimalToCalculationsList(guid)
+                    self.addAnimalToCalculationsList(myAnimalGuid)
                 else:
                     # Remove from calculations list
-                    self.removeAnimalFromCalculationsList(guid)
+                    self.removeAnimalFromCalculationsList(myAnimalGuid)
                 self.updateTotalPercentages()
 
         # Handle row selection for viewing details
-        self.showSelectedAnimalDetails(row)
+        self.showSelectedAnimalDetails(theRow)
 
     def cropCellClicked(self, row, column):
         """Handle crop table cell click event.
@@ -986,24 +992,24 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             column: The column index of the clicked cell
         """
         if column == 0:  # Checkbox column
-            item = self.tblCrops.item(row, column)
-            guid = self.tblCrops.item(row, 1).data(QtCore.Qt.UserRole)
+            myItem = self.tblCrops.item(row, column)
+            myCropGuid = self.tblCrops.item(row, 1).data(QtCore.Qt.UserRole)
 
             # Get the current check state
-            isChecked = item.checkState() == QtCore.Qt.Checked
+            isChecked = myItem.checkState() == QtCore.Qt.Checked
 
             # Update the crops map
-            if guid in self.mCropsMap:
-                currentValue = self.mCropsMap[guid]
-                self.mCropsMap[guid] = (isChecked, currentValue[1])
+            if myCropGuid in self.mCropsMap:
+                currentValue = self.mCropsMap[myCropGuid]
+                self.mCropsMap[myCropGuid] = (isChecked, currentValue[1])
 
                 # Update the crop calculations list
                 if isChecked:
                     # Add to calculations list if not already there
-                    self.addCropToCalculationsList(guid)
+                    self.addCropToCalculationsList(myCropGuid)
                 else:
                     # Remove from calculations list
-                    self.removeCropFromCalculationsList(guid)
+                    self.removeCropFromCalculationsList(myCropGuid)
                 self.updateTotalPercentages()
 
         # Handle row selection for viewing details - this shows the crop details
@@ -1034,6 +1040,12 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             if not comboBox:
                 return
             parameterGuid = comboBox.currentData()
+            
+            # Add debugging to verify the parameter GUID exists
+            LaUtils.debug.log(f"animalCalcSelectionChanged: Selected parameter GUID: {parameterGuid}", "Debug")
+            filePath = os.path.join(LaUtils.userAnimalParameterProfilesDirPath(), f"{parameterGuid}.xml")
+            if not os.path.exists(filePath):
+                LaUtils.debug.log(f"animalCalcSelectionChanged: WARNING - Parameter file does not exist: {filePath}", "Error")
 
             # Get the current checked state
             isChecked = self.tblAnimals.item(row, 0).checkState() == QtCore.Qt.Checked
@@ -1159,29 +1171,29 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             except:
                 pass  # Silently ignore any errors in this helper method
 
-    def addAnimalToCalculationsList(self, animalGuid):
+    def addAnimalToCalculationsList(self, theAnimalGuid):
         """Add an animal to the calculations list.
 
         Args:
             animalGuid: The GUID of the animal to add
         """
         # Ensure we have a string GUID
-        animalGuid = str(animalGuid)
+        theAnimalGuid = str(theAnimalGuid)
 
         # Check if the animal is already in the list
         for i in range(self.listWidgetCalculationsAnimal.count()):
             item = self.listWidgetCalculationsAnimal.item(i)
-            if str(item.data(QtCore.Qt.UserRole)) == animalGuid:
+            if item.data(QtCore.Qt.UserRole) == theAnimalGuid:
                 return
 
         # Get the animal object
-        animal = LaUtils.getAnimal(animalGuid)
+        animal: LaAnimal = LaUtils.getAnimal(theAnimalGuid)
         if animal and animal.name:
-            item = QListWidgetItem(str(animal.name))
+            item = QtWidgets.QListWidgetItem(animal.name)
             # Store the actual GUID string
-            item.setData(QtCore.Qt.UserRole, animalGuid)
+            item.setData(QtCore.Qt.UserRole, theAnimalGuid)
             self.listWidgetCalculationsAnimal.addItem(item)
-            LaUtils.debug.log(f"Added animal {animal.name} with GUID {animalGuid} to calculations list", "UI")
+            LaUtils.debug.log(f"Added animal {animal.name} with GUID {theAnimalGuid} to calculations list", "UI")
 
     def removeAnimalFromCalculationsList(self, animalGuid):
         """Remove an animal from the calculations list.
@@ -1208,7 +1220,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                 return
 
         # Add the crop to the list
-        crop = LaUtils.getCrop(cropGuid)
+        crop: LaCrop = LaUtils.getCrop(cropGuid)
         if crop and crop.name:
             item = QtWidgets.QListWidgetItem(crop.name)
             item.setData(QtCore.Qt.UserRole, cropGuid)
@@ -1233,8 +1245,8 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         and animals based on the selected parameters.
         """
         # Calculate animal percentages
-        animalTotal = 0.0
-        myAnimalParametersMap = LaUtils.getAvailableAnimalParameters()
+        myAnimalTotal = 0.0
+        myAnimalParametersMap: dict[str, LaAnimalParameter] = LaUtils.getAvailableAnimalParameters()
         for guid, value in self.mAnimalsMap.items():
             isChecked, parameterGuid = value
             if isChecked and parameterGuid in myAnimalParametersMap:
@@ -1243,9 +1255,12 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                 # Use the same pattern as crops with proper error handling
                 if hasattr(myParameter, 'percentTameMeat'):
                     try:
-                        animalTotal += float(myParameter.percentTameMeat)
+                        myAnimalTotal += myParameter.percentTameMeat # type: ignore
                     except (ValueError, TypeError):
                         LaUtils.debug.log(f"Warning: Invalid percentTameMeat for animal parameter {parameterGuid}", "Warning")
+
+        # Update the totals display
+        self.labelAnimalCheck.setText(f"{myAnimalTotal:.1f}%")
 
         # Calculate crop percentages
         cropTotal = 0.0
@@ -1262,11 +1277,10 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                         print(f"Warning: Invalid percentTameCrop for {parameterGuid}")
 
         # Update the totals display
-        self.labelAnimalCheck.setText(f"{animalTotal:.1f}%")
         self.labelCropCheck.setText(f"{cropTotal:.1f}%")
 
         # Update status icons - using appropriate icon based on percentage
-        animalIconPath = ":/status_ok.png" if abs(animalTotal - 100.0) < 0.1 else ":/status_error.png"
+        animalIconPath = ":/status_ok.png" if abs(myAnimalTotal - 100.0) < 0.1 else ":/status_error.png"
         cropIconPath = ":/status_ok.png" if abs(cropTotal - 100.0) < 0.1 else ":/status_error.png"
 
         # Check if the icon label widgets actually exist before setting pixmap
@@ -1284,7 +1298,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             LaUtils.debug.log(f"Warning: Could not update status icons: {str(e)}", "Warning")
 
         # Log the updated percentages regardless of icon status
-        LaUtils.debug.log(f"Total percentages updated: Animals {animalTotal:.1f}%, Crops {cropTotal:.1f}%", "Calculation")
+        LaUtils.debug.log(f"Total percentages updated: Animals {myAnimalTotal:.1f}%, Crops {cropTotal:.1f}%", "Calculation")
 
     def showSelectedAnimalDetails(self, theRow):
         """Show details for the selected animal."""
@@ -1657,19 +1671,27 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             self.model.commonLandAreaUnits = AreaUnits.Dunum if self.cbAreaUnits.currentText() == "Dunum" else AreaUnits.Hectare
             self.model.specificLandEnergyType = EnergyType.KCalories if self.cbCommonLandEnergyType.currentText() == "KCalories" else EnergyType.TDN
 
-            # Update common raster value
+            # Update common raster value - Add detailed logging
             myCommonRasterValue = self.sbCommonRasterValue.value()
+            LaUtils.debug.log(f"Common raster value from UI: {myCommonRasterValue}", "Debug")
+            
+            # Ensure we never have a zero value that would cause division by zero
+            if myCommonRasterValue <= 0:
+                LaUtils.debug.log(f"Common raster value is {myCommonRasterValue}, which would cause division by zero - setting to default of 40", "Warning")
+                myCommonRasterValue = 40
+                self.sbCommonRasterValue.setValue(myCommonRasterValue)
+                
             mySelectedAreaUnit = self.model.commonLandAreaUnits # Use the already set unit
             self.model.areaUnits = mySelectedAreaUnit
-            self.model.commonLandValue = self.cbAreaUnits.currentText() # Ensure this is set correctly
-
+            self.model.commonLandValue = myCommonRasterValue # Set the numeric value from the spinbox
+            
+            LaUtils.debug.log(f"Set model.commonLandValue to {self.model.commonLandValue}", "Debug")
 
             # Note: Selected animals/crops are updated directly in updateCrop/AnimalCalculations
 
             LaUtils.debug.log("Model updated successfully from UI", "Model")
         except Exception as e:
             LaUtils.debug.log(f"Error updating model from UI: {str(e)}", "Error")
-            import traceback
             LaUtils.debug.log(f"Traceback: {traceback.format_exc()}", "Error")
 
     def updateCropCalculations(self, theCrop: LaCrop):
@@ -1689,25 +1711,30 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             # Setup model with proper parameters from UI first
             self.updateModelFromUI() # *** This call needs the method to exist ***
 
-            # Get selected crops and animals for this specific calculation context
-            mySelectedCropsDict: dict[str, str] = {myCropGuid: myParameterGuid} if myParameterGuid else {} # Only calculate for this crop
-            mySelectedAnimalsDict: dict[str, str] = {}
+            # Debug available parameters
+            availableParams = LaUtils.getAvailableAnimalParameters()
+            LaUtils.debug.log(f"updateAnimalCalculations: Available animal parameters: {list(availableParams.keys())}", "Debug")
+            
+            # Get selected animals and crops for this specific calculation context
+            selected_animals = {}
             for guid, value in self.mAnimalsMap.items():
                 if value[0]:  # If checked
-                    mySelectedAnimalsDict[str(guid)] = str(value[1]) # Ensure strings
+                    selected_animals[str(guid)] = str(value[1]) # Ensure strings
+                    
+            selected_crops = {myCropGuid: myParameterGuid} if myParameterGuid else {} # Only calculate for this crop
 
             # Check if essential selections are made
-            if not mySelectedAnimalsDict:
+            if not selected_animals:
                 self.textBrowserResultsCrop.setText("No animals selected. Please select at least one animal on the 'Diet' tab.")
                 return
-            if not mySelectedCropsDict:
+            if not selected_crops:
                 self.textBrowserResultsCrop.setText("No parameter selected for this crop.")
                 # Optionally clear other fields or return
                 # return # Decide if calculation should proceed without parameters
 
             # Set model parameters for the calculation run
-            self.model.animals = mySelectedAnimalsDict
-            self.model.crops = mySelectedCropsDict
+            self.model.animals = selected_animals
+            self.model.crops = selected_crops
 
             # Calculate diet labels based on settings
             myDietLabels = None
@@ -1724,14 +1751,15 @@ class LaMainFormBase(QDialog, FORM_CLASS):
 
             # Get report from calculations
             if myDietLabels:
-                report_map = myDietLabels.mCropCalcsReportMap
+                report_map = getattr(myDietLabels, 'mCropCalcsReportMap', {})
                 if myCropGuid in report_map:
                     report_pair = report_map[myCropGuid]
-                    report_string = report_pair[0]
+                    report_string = report_pair[0] if isinstance(report_pair, tuple) and len(report_pair) > 0 else str(report_pair)
                     self.textBrowserResultsCrop.setText(report_string)
-                    LaUtils.debug.log("Crop calculation report displayed", "Calculation")
+                    LaUtils.debug.log(f"Crop calculation report displayed for GUID: {myCropGuid}", "Calculation")
                 else:
-                    self.textBrowserResultsCrop.setText(f"No calculation results available for this crop (GUID: {myCropGuid}). Check parameters.")
+                    self.textBrowserResultsCrop.setText(f"No calculation results available for this crop (GUID: {myCropGuid}). Check parameters and ensure the crop is included in calculations.")
+                    LaUtils.debug.log(f"No crop calculation results found for GUID: {myCropGuid} in report map", "Calculation")
             else:
                 self.textBrowserResultsCrop.setText("Calculation failed or did not produce results. Check model configuration and logs.")
         except AttributeError as ae:
@@ -1761,10 +1789,17 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             parameter_guid = None
             if animalGuid in self.mAnimalsMap:
                 parameter_guid = str(self.mAnimalsMap[animalGuid][1]) # Ensure string
+            # --> Add Logging Start
+            LaUtils.debug.log(f"updateAnimalCalculations: For animalGuid '{animalGuid}', found parameter_guid: '{parameter_guid}' in mAnimalsMap", "Calculation")
+            # <-- Add Logging End
 
             # Setup model with proper parameters from UI first
             self.updateModelFromUI() # *** This call needs the method to exist ***
 
+            # Debug available parameters
+            availableParams = LaUtils.getAvailableAnimalParameters()
+            LaUtils.debug.log(f"updateAnimalCalculations: Available animal parameters: {list(availableParams.keys())}", "Debug")
+            
             # Get selected animals and crops for this specific calculation context
             selected_animals = {animalGuid: parameter_guid} if parameter_guid else {} # Only calculate for this animal
             selected_crops = {}
@@ -1778,8 +1813,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                 return
             if not selected_animals:
                  self.textBrowserResultsAnimals.setText("No parameter selected for this animal.")
-                 # Optionally clear other fields or return
-                 # return # Decide if calculation should proceed without parameters
+                 return # Stop processing if no parameter is found
 
             # Set model parameters for the calculation run
             if hasattr(self, 'model'):
@@ -1787,7 +1821,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                 self.model.crops = selected_crops
 
                 # Calculate diet labels based on settings
-                myDietLabels = LaDietLabels()
+                myDietLabels = None
                 if self.model.mBaseOnPlants:
                     if self.model.mIncludeDairy:
                         myDietLabels = self.model.doCalcsPlantsFirstIncludeDairy()
@@ -1800,17 +1834,28 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                         myDietLabels = self.model.doCalcsAnimalsFirstDairySeparate()
 
                 # Get report from calculations
-                if myDietLabels and hasattr(myDietLabels, '_animalCalcsReportMap'):
-                    report_map = myDietLabels.mAnimalCalcsReportMap
-                    if animalGuid in report_map:
-                        report_pair = report_map[animalGuid]
-                        report_string = report_pair[0]
-                        self.textBrowserResultsAnimals.setText(report_string)
-                        LaUtils.debug.log("Animal calculation report displayed", "Calculation")
+                if myDietLabels:
+                    # Safely get the animal calcs report map
+                    if hasattr(myDietLabels, 'mAnimalCalcsReportMap'):
+                        report_map = myDietLabels.mAnimalCalcsReportMap
+                        LaUtils.debug.log(f"Found animal calcs report map with keys: {list(report_map.keys())}", "Calculation")
+                        
+                        if animalGuid in report_map:
+                            report_pair = report_map[animalGuid]
+                            # Handle both tuple and string report formats
+                            if isinstance(report_pair, tuple) and len(report_pair) > 0:
+                                report_string = report_pair[0] 
+                            else:
+                                report_string = str(report_pair)
+                                
+                            self.textBrowserResultsAnimals.setText(report_string)
+                            LaUtils.debug.log(f"Animal calculation report displayed for {animalGuid}", "Calculation")
+                        else:
+                            self.textBrowserResultsAnimals.setText(f"No calculation results available for this animal (GUID: {animalGuid}). Check parameters and ensure the animal is included in calculations.")
+                            LaUtils.debug.log(f"Animal GUID {animalGuid} not found in report map with keys: {list(report_map.keys())}", "Warning")
                     else:
-                        self.textBrowserResultsAnimals.setText(f"No calculation results available for this animal (GUID: {animalGuid}). Check parameters.")
-                elif myDietLabels:
-                     self.textBrowserResultsAnimals.setText("Calculations completed but no specific animal report was generated.")
+                        self.textBrowserResultsAnimals.setText("Calculations completed but no animal report map was generated.")
+                        LaUtils.debug.log("Diet labels object has no mAnimalCalcsReportMap attribute", "Warning")
                 else:
                     self.textBrowserResultsAnimals.setText("Calculation failed or did not produce results. Check model configuration and logs.")
         except AttributeError as ae:
@@ -1883,7 +1928,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         self.tblCrops.cellChanged.connect(self.cropCalcSelectionChanged)
         self.cbDebug.clicked.connect(self.on_cbDebug_clicked)
 
-    def on_sbCommonRasterValue_valueChanged(self, theValue):
+    def on_sbCommonRasterValue_valueChanged(self, theValue: int):
         """Handle common raster value changes.
 
         This method updates the model's common raster value when the user
@@ -1894,22 +1939,25 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         """
         if hasattr(self, 'model'):
             LaUtils.debug.log(f"Common Raster Value changed to: {theValue}", "Settings")
+            
+            # Ensure we have a valid non-zero value
+            if theValue <= 0:
+                theValue = 40
+                self.sbCommonRasterValue.setValue(theValue)
+                LaUtils.debug.log(f"Common Raster Value was invalid, reset to default: {theValue}", "Settings")
 
             # Get the current area units
-            match self.cbAreaUnits.currentText():
-                case "Dunum":
-                    mySelectedAreaUnit: AreaUnits = AreaUnits.Dunum
-                case "Hectare":
-                    mySelectedAreaUnit: AreaUnits = AreaUnits.Hectare
-                case _:
-                    # Default to Hectare or handle unexpected values
-                    mySelectedAreaUnit: AreaUnits = AreaUnits.Hectare
-                    LaUtils.debug.log(f"Unexpected area unit: {self.cbAreaUnits.currentText()}, defaulting to Hectare", "Warning")
-
-
-            # Update the model with the new value
-            self.model.mCommonLandValue  = LaUtils.convertAreaToHectares(mySelectedAreaUnit, theValue)
-
+            myAreaUnit: AreaUnits = AreaUnits.Dunum if self.cbAreaUnits.currentText() == "Dunum" else AreaUnits.Hectare
+            
+            # Set all the model properties to ensure consistency
+            self.model.mCommonLandValue = theValue
+            self.model.areaUnits = myAreaUnit
+            self.model.commonLandAreaUnits = myAreaUnit
+            
+            # Log all settings to help debug
+            LaUtils.debug.log(f"Updated model: commonLandValue={self.model.mCommonLandValue}, " +
+                             f"areaUnits={self.model.areaUnits}, " +
+                             f"commonLandAreaUnits={self.model.commonLandAreaUnits}", "Settings")
 
             # Recalculate with the new value
             self.setDietLabels()
@@ -2025,8 +2073,8 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             myOverallMeatPercent = self.sliderDiet.value()
 
             # Plant breakdown
-            myTameCropPercent = self.sliderCrop.value()  # Tame/Wild plant slider
-            myWildPlantPercent = 100 - self.sliderCrop.value()
+            myTameCropPercent = 100 - self.sliderCrop.value()  # Tame/Wild plant slider
+            myWildPlantPercent = self.sliderCrop.value()
 
             # Meat breakdown
             myTameMeatPercent = self.sliderMeat.value()  # Tame/Wild meat slider
@@ -2053,7 +2101,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
 
             # Update calorie labels
             self.labelCaloriesSettlement.setText(f"{myTotalAnnualMcals:.1f}")
-            self.labelCaloriesIndividual.setText(f"{(myDailyCals * 365 / 1000.0):.1f}") # this displays as kCals so we need to adjust it
+            self.labelCaloriesIndividual.setText(f"{(myDailyCals * 365 / 1000000.0):.1f}") # this displays as kCals so we need to adjust it
 
             # Update component calorie labels
             myCropMcals = myTotalAnnualMcals * myCropPortion * 0.01
