@@ -1238,7 +1238,14 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         for guid, value in self.mAnimalsMap.items():
             isChecked, parameterGuid = value
             if isChecked and parameterGuid in myAnimalParametersMap:
-                animalTotal += float(str(myAnimalParametersMap[parameterGuid].percentTameMeat))
+                # Get the parameter object
+                myParameter = myAnimalParametersMap[parameterGuid]
+                # Use the same pattern as crops with proper error handling
+                if hasattr(myParameter, 'percentTameMeat'):
+                    try:
+                        animalTotal += float(myParameter.percentTameMeat)
+                    except (ValueError, TypeError):
+                        LaUtils.debug.log(f"Warning: Invalid percentTameMeat for animal parameter {parameterGuid}", "Warning")
 
         # Calculate crop percentages
         cropTotal = 0.0
@@ -1247,10 +1254,10 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             isChecked, parameterGuid = value
             if isChecked and parameterGuid in myCropParametersMap:
                 # Use the instance property, not the class property
-                parameter = myCropParametersMap[parameterGuid]
-                if hasattr(parameter, 'percentTameCrop'):
+                myParameter = myCropParametersMap[parameterGuid]
+                if hasattr(myParameter, 'percentTameCrop'):
                     try:
-                        cropTotal += float(parameter.percentTameCrop)
+                        cropTotal += float(myParameter.percentTameCrop)
                     except (ValueError, TypeError):
                         print(f"Warning: Invalid percentTameCrop for {parameterGuid}")
 

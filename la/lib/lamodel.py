@@ -1588,18 +1588,19 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                 # Replicate C++ logic: Get the common grazing value converted to per-hectare
                 # C++ stores the converted value in mCommonGrazingValue via setCommonLandValue.
                 # Python stores raw value and units separately, so convert here.
-                from la.lib.lautils import LaUtils # Ensure LaUtils is imported
-                from la.lib.la import AreaUnits     # Ensure AreaUnits is imported
 
                 # Ensure mCommonGrazingValue is float and mCommonLandAreaUnits is AreaUnits
                 try:
-                    myRawLandValue = float(self.mCommonGrazingValue)
-                    myLandUnits: str = self.mCommonLandAreaUnits.name # Should be AreaUnits enum instance
-                    # Perform conversion similar to C++ setCommonLandValue
-                    myLandValue: int = LaUtils.convertAreaToHectares(myLandUnits, myRawLandValue)
+                    myRawLandValue = int(self.mCommonGrazingValue)
+                    myLandUnit: AreaUnits = self.mCommonLandAreaUnits
+                    myLandValue: int = LaUtils.convertAreaToHectares(myLandUnit, myRawLandValue)
+                    LaUtils.debug.log(f"Raw common land value: {myRawLandValue}", "Debug")
+                    LaUtils.debug.log(f"Common land area units: {myLandUnit}", "Debug")
+                    LaUtils.debug.log(f"Converted common land value: {myLandValue}", "Debug")
+
                 except (ValueError, TypeError) as e:
-                     LaUtils.debug.log(f"Error converting common land value for area calculation: {e}. Using 0 ", "Error")
-                     myLandValue: int = 0 # Avoid crashing, but log error
+                     LaUtils.debug.log(f"Error converting common land value for area calculation: {e}. Using 150 ", "Error")
+                     myLandValue: int = LaUtils.convertAreaToHectares(myLandUnit, 150) # Avoid crashing, use 150 default, and log error
 
                 # float myAreaTarget = myMCalTarget / myLandValue;
                 # Following user request: no division by zero guard explicitly added,

@@ -390,7 +390,7 @@ class LaUtils:
         return myPath
 
     @staticmethod
-    def convertAreaToHectares(theAreaUnit: AreaUnits, theArea: float) -> int:
+    def convertAreaToHectares(theAreaUnit: AreaUnits, theArea: int) -> int:
         """
         Converts an area in the specified area unit to hectares.
 
@@ -406,10 +406,10 @@ class LaUtils:
         # it will make it very easy to work with in the future
         # all need be done is add new units to la.h enum and add
         # into the following code...
-        myHectares = 0.
-        if theAreaUnit == "Dunum":
-            myHectares = theArea * 10.
-        elif theAreaUnit == "Hectare":
+        myHectares: float = 0.
+        if theAreaUnit == AreaUnits.Dunum:
+            myHectares = float(theArea) * 10.
+        elif theAreaUnit == AreaUnits.Hectare:
             myHectares = theArea
         # add new units here after updating la.h enum ex:
         # elif theAreaUnit == "Acre":

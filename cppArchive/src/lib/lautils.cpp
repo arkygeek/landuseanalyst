@@ -232,7 +232,7 @@ const QString LaUtils::userCropParameterProfilesDirPath()
   return myPath;
 }
 
-int LaUtils::convertAreaToHectares(AreaUnits theAreaUnit, int theArea)
+int LaUtils::convertArea ToHectares(AreaUnits theAreaUnit, int theArea)
 {
     // this may seem ridiculous to do it this way, but
     // i plan to include other area units and this way
