@@ -1928,7 +1928,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         self.tblCrops.cellChanged.connect(self.cropCalcSelectionChanged)
         self.cbDebug.clicked.connect(self.on_cbDebug_clicked)
 
-    def on_sbCommonRasterValue_valueChanged(self, theValue: int):
+    def on_sbCommonRasterValue_valueChanged(self, theValue):
         """Handle common raster value changes.
 
         This method updates the model's common raster value when the user
@@ -1937,6 +1937,14 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         Args:
             value: The new value from the spinbox
         """
+        # Ensure the value is an integer
+        if not isinstance(theValue, int):
+            LaUtils.debug.log(f"Common Raster Value is not an integer: {theValue}", "Error")
+            # show what the value being passed actually is
+            LaUtils.debug.log(f"Value type: {type(theValue)}", "Error")
+            return
+
+        # Check if the model is available
         if hasattr(self, 'model'):
             LaUtils.debug.log(f"Common Raster Value changed to: {theValue}", "Settings")
             
@@ -1951,8 +1959,8 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             
             # Set all the model properties to ensure consistency
             self.model.mCommonLandValue = theValue
-            self.model.areaUnits = myAreaUnit
-            self.model.commonLandAreaUnits = myAreaUnit
+            self.model.mAreaUnits = myAreaUnit
+            self.model.mCommonLandAreaUnits = myAreaUnit
             
             # Log all settings to help debug
             LaUtils.debug.log(f"Updated model: commonLandValue={self.model.mCommonLandValue}, " +
