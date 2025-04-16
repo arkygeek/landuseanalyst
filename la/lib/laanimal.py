@@ -180,10 +180,11 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
         self.mGestationTime = theAnimal.gestationTime
         self.mEstrousCycle = theAnimal.estrousCycle
         self.mLactationTime = theAnimal.lactationTime
-        self.mMilk = theAnimal.milk
+        self.mMilk = bool(theAnimal.milk)
         self.mMilkGramsPerDay = theAnimal.milkGramsPerDay
         self.mMilkFoodValue = theAnimal.milkFoodValue
-        self.mFleece = theAnimal.fleece
+        self.mFleece = bool(theAnimal.fleece)
+        self.mFleeceWeightKg = theAnimal.fleeceWeightKg
         self.mFleeceWeightKg = theAnimal.fleeceWeightKg
         self.mImageFile = theAnimal.imageFile
 
