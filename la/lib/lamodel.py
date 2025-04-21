@@ -1,4 +1,4 @@
-from qgis.PyQt.QtCore import pyqtSignal, pyqtProperty
+from qgis.PyQt.QtCore import pyqtSignal, pyqtProperty, QObject
 from qgis.PyQt.QtWidgets import QDialog
 from qgis.PyQt.QtXml import QDomDocument
 
@@ -320,7 +320,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
     @pyqtProperty(bool, notify=_baseOnPlantsChanged)
     def baseOnPlants(self) -> bool: # type: ignore
-        return self.mBaseOnPlants
+        return bool(self.mBaseOnPlants)
         """ Hint on usage to read and set the checkbox state
             # When reading from checkbox
             self._baseOnPlants = self.cboxBaseOnPlants.isChecked()
@@ -335,7 +335,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
     @pyqtProperty(bool, notify=_includeDairyChanged)
     def includeDairy(self) -> bool: # type: ignore
-        return self.mIncludeDairy
+        return bool(self.mIncludeDairy)
     @includeDairy.setter
     def includeDairy(self, theBool: bool):
         if self.mIncludeDairy != theBool:
@@ -345,7 +345,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
     @pyqtProperty(bool, notify=_limitDairyChanged)
     def limitDairy(self) -> bool: # type: ignore
-        return self.mLimitDairy
+        return bool(self.mLimitDairy)
     @limitDairy.setter
     def limitDairy(self, theBool: bool):
         if self.mLimitDairy != theBool:
@@ -551,11 +551,11 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             self._dietsChanged.emit()
 
 
-    @pyqtProperty(str, notify=_dietLabelsChanged) # TODO: check this to see if it is correct
-    def dietLabels(self) -> List[LaDietLabels]: # type: ignore
+    @pyqtProperty(QObject, notify=_dietLabelsChanged)
+    def dietLabels(self) -> LaDietLabels: # type: ignore
         return self.mDietLabels
     @dietLabels.setter
-    def dietLabels(self, theDietLabels: List[LaDietLabels]):
+    def dietLabels(self, theDietLabels: LaDietLabels):
         if self.mDietLabels != theDietLabels:
             self.mDietLabels = theDietLabels
             self._dietLabelsChanged.emit()

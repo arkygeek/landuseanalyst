@@ -164,7 +164,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
         self.mKillWeight = theAnimal.killWeight
         self.mGrowTime = theAnimal.growTime
         self.mDeathRate = theAnimal.deathRate
-        self.mFeedEnergyType = theAnimal.feedEnergyType
+        self.feedEnergyType = theAnimal.feedEnergyType
         self.mGestating = theAnimal.gestating
         self.mLactating = theAnimal.lactating
         self.mMaintenance = theAnimal.maintenance
@@ -391,7 +391,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
         return self.mFeedEnergyType
 
     @feedEnergyType.setter
-    def feedEnergyType(self, theFeedEnergyType):
+    def feedEnergyType(self, theFeedEnergyType: LaEnergyType) -> None:
         """Set the animal's feed energy type.
 
         Args:

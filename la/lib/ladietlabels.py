@@ -88,20 +88,20 @@ class LaDietLabels(QObject, LaSerialisable, LaGuid):
         other.__dict__.update(self.__dict__)
         return other
 
-    def __deepcopy__(self, memo):
+    def __deepcopy__(self, theDict):
         """
         Create a deep copy of this LaDietLabels instance.
 
-        :param memo: Dictionary of id to object references
-        :type memo: dict
-        :return: A new LaDietLabels instance with copies of all values
+        :param theDict: Dictionary of id to object references to avoid recursion
+        :type theDict: dict
+        :return: A new LaDietLabels instance with deep copies of all values
         :rtype: LaDietLabels
         """
-        other = LaDietLabels()
-        memo[id(self)] = other
-        for k, v in self.__dict__.items():
-            setattr(other, k, copy.deepcopy(v, memo))
-        return other
+        myDietLabels = LaDietLabels()
+        theDict[id(self)] = myDietLabels
+        for myAttributeName, myAttributeValue in self.__dict__.items():
+            setattr(myDietLabels, myAttributeName, copy.deepcopy(myAttributeValue, theDict))
+        return myDietLabels
 
     @pyqtProperty(float, notify=_dairyMCaloriesChanged)
     def dairyMCalories(self) -> float: # type: ignore
