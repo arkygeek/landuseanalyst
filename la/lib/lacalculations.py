@@ -1178,258 +1178,7 @@ def doCalcsAnimalsFirstDairySeparate(theModel: 'LaModel') -> LaDietLabels:
 
 
 
-
-    # --- Dairy Limit Calculation ---
-    # ... (logic as before, using calculated counters and model properties like model.mDietPercent) ...
-    myDairyLimit: float = myDairyLimitPercent if myLimitDairyBool else 1.0
-    myDomesticMeatPercent = myTameMeatMCalorieCounter / myMCalsSettlementAnnual if myMCalsSettlementAnnual > 0 else 0.0
-    myWildMeatPortion = (1.0 - theModel.meatPercent / 100.0) # Assumes model.meatPercent is 0-100
-    myWildMeatPercent = myWildMeatPortion * (theModel.dietPercent / 100.0) # Assumes model.dietPercent is 0-100
-    myLimitSatisfies = (myDomesticMeatPercent + myWildMeatPercent + myDairyLimit) > 1.0
-    myNewLimit = max(0.0, 1.0 - myDomesticMeatPercent - myWildMeatPercent) if myLimitSatisfies else myDairyLimit # This was `min` before, double check C++ logic for B17/B18
-    myPotentialDairyPercent = myDairyMCalorieCounter / myMCalsSettlementAnnual if myMCalsSettlementAnnual > 0 else 0.0
-    myPotentialDairyLessThanLimitBool = myPotentialDairyPercent < myDairyLimit
-    myNewDairy = myDairyMCalorieCounter if myPotentialDairyLessThanLimitBool else myNewLimit * myMCalsSettlementAnnual
-    myOverallDairyPercent = myNewDairy / myMCalsSettlementAnnual if myMCalsSettlementAnnual > 0 else 0.0
-
-    # --- Final Overall Percentages ---
-    myOverallMeatPercent = myWildMeatPercent + myDomesticMeatPercent
-    myOverallPlantPercent = max(0.0, 1.0 - myOverallMeatPercent - myOverallDairyPercent) # Ensure non-negative
-    myDomesticCropPortion = theModel.percentOfDietThatIsFromCrops / 100.0 # Assumes model.percent... is 0-100
-    myOverallCropPercent = myOverallPlantPercent * myDomesticCropPortion
-    myOverallWildPlantPercent = myOverallPlantPercent * (1.0 - myDomesticCropPortion)
-
-    # --- Crop Loop ---
-    mySelectedCropsMap = theModel.mCropsMap
-    for myCropGuid, myCropParameterGuid in mySelectedCropsMap.items():
-         # ... (entire crop loop logic, ensure 'self.' is changed to 'model.') ...
-         # Accumulate fallow MCals
-         myMCalsFromFallowCounter += myFallowMCals
-         # Store crop report and area target
-         myCropCalcsReportMap[myCropGuid] = (myCropReport, myCropAreaTarget)
-
-    # --- Fallow Allocation ---
-    # Call the function within this module, passing the model instance
-    allocateFallowGrazingLand(theModel, myMCalsFromFallowCounter, myAnimalsMapForFallow)
-
-    # --- Final Animal Report Update Loop ---
-    # Update the animal report map with final area targets based on fallow allocation results stored in model.mValueMap
-    # for myAnimalGuid, myPair in myAnimalCalcsReportMap.items():
-    for myAnimalGuid, myAnimalParameterGuid in mySelectedAnimalsMap.items():
-        myReport: str = myAnimalCalcsReportMap[myAnimalGuid][0]
-        myFinalMCalTarget: float = theModel.mValueMap.get(myAnimalGuid, 0.0) # Get updated req from model map
-
-        # Calculate Area Target
-        try:
-             # Access common grazing value (already in hectares) from the model
-             myLandValueHectares = theModel.commonGrazingValue # This should be the converted value
-             if myLandValueHectares <= 0:
-                  LaUtils.debug.log(f"Warning: Common Grazing Value ({myLandValueHectares}) is zero or negative for final area calculation for animal {myAnimalGuid}. Setting area target to infinity.", "Warning")
-                  myAreaTarget = float('inf')
-             else:
-                  myAreaTarget = myFinalMCalTarget / myLandValueHectares
-        except Exception as e_area:
-             LaUtils.debug.log(f"Error calculating final area target for {myAnimalGuid}: {e_area}", "Error")
-             myAreaTarget = 0.0 # Default on error
-
-        # Update report string
-        myReport += f"Final MCal Target (Post-Fallow) = {int(myFinalMCalTarget)}\n"
-        myReport += f"Final Area Target (Hectares) = {myAreaTarget:.2f}\n" # Use float for area
-
-        # Update the map with the modified report and final area target
-        myAnimalCalcsReportMap[myAnimalGuid] = (myReport, myAreaTarget)
-
-    # --- Set final values on the LaDietLabels object ---
-    # ... (set all attributes like myDietLabels.dairyMCalories, etc.) ...
-    # Use the calculated overall MCal values and percentages
-    myOverallDomesticMeatMCals = myTameMeatMCalorieCounter # Reaffirm this value
-    myOverallDairyMCals = myOverallDairyPercent * myMCalsSettlementAnnual
-    myOverallWildMeatMCals = myWildMeatPercent * myMCalsSettlementAnnual
-    myOverallCropsMCals = myOverallCropPercent * myMCalsSettlementAnnual
-    myOverallWildPlantsMCals = myOverallWildPlantPercent * myMCalsSettlementAnnual
-    myOverallDairySurplusMCals = max(0.0, myDairyMCalorieCounter - myOverallDairyMCals)
-
-    myDietLabels.dairyMCalories = myOverallDairyMCals
-    myDietLabels.cropMCalories = myOverallCropsMCals
-    myDietLabels.animalMCalories = myOverallDomesticMeatMCals
-    myDietLabels.wildAnimalMCalories = myOverallWildMeatMCals
-    myDietLabels.wildPlantsMCalories = myOverallWildPlantsMCals
-    myDietLabels.dairyPortionPct = myOverallDairyPercent * 100.
-    myDietLabels.tameMeatPortionPct = myDomesticMeatPercent * 100.
-    myDietLabels.cropsPortionPct = myOverallCropPercent * 100.
-    myDietLabels.wildAnimalPortionPct = myWildMeatPercent * 100.
-    myDietLabels.wildPlantsPortionPct = myOverallWildPlantPercent * 100.
-    myDietLabels.animalPortionPct = myOverallMeatPercent * 100.
-    myDietLabels.plantsPortionPct = myOverallPlantPercent * 100.
-    myDietLabels.kiloCaloriesIndividualAnnual = myMCalsIndividualAnnual * 1000.0
-    myDietLabels.megaCaloriesSettlementAnnual = myMCalsSettlementAnnual
-    myDietLabels.dairySurplusMCalories = myOverallDairySurplusMCals
-
-    # Store the final report maps and area target maps
-    myDietLabels.mAnimalCalcsReportMap = myAnimalCalcsReportMap
-    myDietLabels.mCropCalcsReportMap = myCropCalcsReportMap
-    # Extract just the area targets for the specific area target maps
-    myDietLabels.mAnimalAreaTargetsMap = {guid: area for guid, (_, area) in myAnimalCalcsReportMap.items()}
-    myDietLabels.mCropAreaTargetsMap = {guid: area for guid, (_, area) in myCropCalcsReportMap.items()}
-
-
-    LaUtils.debug.log(f"doCalcsAnimalsFirstDairySeparate completed", "Diet")
-    return myDietLabels
-    # --- End of pasted and modified code ---
-
-
 # --- Fallow Allocation Functions ---
-
-def allocateFallowGrazingLand(model: 'LaModel', theFallowMCalsAvailable: float, theAnimalMCalRequirementMap: Dict[str, float]) -> None:
-    # --- Paste the content of LaModel.allocateFallowGrazingLand here ---
-    # --- Remember to change 'self.' to 'model.' ---
-    # --- And 'self.doTheFallowAllocation(...)' to 'doTheFallowAllocation(model, ...)' ---
-    LaUtils.debug.log(f"method ==> allocateFallowGrazingLand(MCals: {theFallowMCalsAvailable})", "Diet")
-    myHighPriorityCount: float = 0.0
-    myMediumPriorityCount: float = 0.0
-    # ... rest of the method logic ...
-    if myTotalFallowValue > 0:
-        myPriority = Priority.High
-        # Call the function in THIS module, passing the model
-        myLeftoverCalories = doTheFallowAllocation(model, myPriority, myTotalFallowValue, myHighPriorityValue, myHighPriorityCount)
-        LaUtils.debug.log(f"Remaining Fallow Calories after HIGH adjustments: {myLeftoverCalories}", "Diet")
-        myTotalFallowValue = myLeftoverCalories
-    # ... medium and low priority calls ...
-
-def doTheFallowAllocation(model: 'LaModel', thePriority: Priority, theAvailableFallowValue: float,
-                           theTotalNeededByGroup: float, theCountInGroup: float) -> float:
-    # --- Paste the content of LaModel.doTheFallowAllocation here ---
-    # --- Remember to change 'self.' to 'model.' ---
-    # --- Especially 'self.mAnimalsMap' to 'model.mAnimalsMap' ---
-    # --- And 'self.mValueMap' to 'model.mValueMap' ---
-
-    from la.lib.lautils import LaUtils
-    from la.lib.la import Status, Priority # Ensure Status enum is imported
-    from la.lib.laanimal import LaAnimal
-    from la.lib.laanimalparameter import LaAnimalParameter
-
-    LaUtils.debug.log(f"method ==> float LaModel::doTheFallowAllocation(Priority {thePriority.name})", "Diet")
-    """Allocate fallow land to animals of a specific priority.
-        Strict port of C++ version's logic, using the C++ style signature.
-
-    Args:
-        thePriority: Priority level being processed
-        theAvailableFallowValue: MCals available from fallow land for this group
-        theTotalNeededByGroup: Total MCals needed by all animals in this priority group
-        theCountInGroup: Number of animals in this priority group (Note: C++ version might pass incorrect count)
-
-    Returns:
-        float: Remaining MCals after allocation for this group
-    """
-    from la.lib.lautils import LaUtils
-    from la.lib.la import Status, Priority # Ensure Status enum is imported
-    from la.lib.laanimal import LaAnimal
-    from la.lib.laanimalparameter import LaAnimalParameter
-
-    LaUtils.debug.log(f"method ==> float LaModel::doTheFallowAllocation(Priority {thePriority.name})", "Diet")
-    LaUtils.debug.log(f"Available Fallow: {theAvailableFallowValue}, Total Needed by Group: {theTotalNeededByGroup}", "Diet")
-
-    myFallowDifference: float = theAvailableFallowValue - theTotalNeededByGroup
-    myFallowStatus: Status
-
-    if myFallowDifference > 0:
-        myFallowStatus = Status.MoreThanEnoughToCompletelySatisfy
-    else:
-        myFallowStatus = Status.NotEnoughToCompletelySatisfy
-
-    myFallowStatusString = "More than Enough" if myFallowStatus == Status.MoreThanEnoughToCompletelySatisfy else "Not Enough"
-    LaUtils.debug.log(f"Fallow Status: {myFallowStatusString}", "Diet")
-
-    myRemainingFallow: float = 0.0
-
-    # Use match case based on the calculated status
-    match myFallowStatus:
-        case Status.MoreThanEnoughToCompletelySatisfy:
-            LaUtils.debug.log("CASE: MoreThanEnoughToCompletelySatisfy", "Diet")
-            # Each animal in this group gets its full requirement met by fallow.
-            # Reduce their remaining requirement in the main value map (mValueMap).
-            # Need to iterate through animals again to find those matching thePriority.
-            for myAnimalGuid, myAnimalParameterGuid in model.mAnimalsMap.items():
-                myAnimalParameter: LaAnimalParameter = LaUtils.getAnimalParameter(myAnimalParameterGuid)
-                if myAnimalParameter.fallowUsage == thePriority:
-                    # Get the animal's individual requirement from mValueMap
-                    myIndividualRequirement = model.mValueMap.get(myAnimalGuid, 0.0)
-                    if myAnimalGuid in model.mValueMap:
-                        # Reduce the value in mValueMap by the full individual requirement
-                        # C++ doesn't explicitly check min, but let's prevent negative values
-                        myReduction = myIndividualRequirement
-                        model.mValueMap[myAnimalGuid] -= myReduction
-                        model.mValueMap[myAnimalGuid] = max(0.0, model.mValueMap[myAnimalGuid]) # Ensure non-negative
-                        LaUtils.debug.log(f"  Animal {myAnimalGuid}: Requirement fully met by fallow. Reduced by {myReduction:.2f}. Remaining need: {model.mValueMap[myAnimalGuid]:.2f}", "Diet")
-                    else:
-                        LaUtils.debug.log(f"  Animal {myAnimalGuid} not found in mValueMap during fallow allocation (MoreThanEnough).", "Warning")
-
-            # Calculate and return the leftover fallow value
-            myRemainingFallow = myFallowDifference
-            LaUtils.debug.log(f"Remaining Fallow Value after allocation: {myRemainingFallow:.2f}", "Diet")
-
-        case Status.NotEnoughToCompletelySatisfy:
-            LaUtils.debug.log("CASE: NotEnoughToCompletelySatisfy", "Diet")
-            # Distribute the available fallow proportionally among animals in this group.
-            # Need to iterate through animals again.
-            for myAnimalGuid, myAnimalParameterGuid in model.mAnimalsMap.items():
-                    myAnimalParameter: LaAnimalParameter = LaUtils.getAnimalParameter(myAnimalParameterGuid)
-                    if myAnimalParameter.fallowUsage == thePriority:
-                        if myAnimalGuid in model.mValueMap:
-                            # Get the animal's individual requirement from mValueMap
-                            myIndividualRequirement = model.mValueMap.get(myAnimalGuid, 0.0)
-
-                            # Calculate the proportion of available fallow this animal gets
-                            # C++ does not guard division by zero here
-                            myProportion = myIndividualRequirement / theTotalNeededByGroup
-                            myAllocatedMCals = theAvailableFallowValue * myProportion
-                            LaUtils.debug.log(f"  Animal {myAnimalGuid}: Needs {myIndividualRequirement:.2f}, Proportion {myProportion:.4f}, Allocated {myAllocatedMCals:.2f}", "Diet")
-
-                            # Reduce the animal's requirement in the main value map
-                            # C++ doesn't explicitly check min, but let's prevent negative values
-                            myReduction = myAllocatedMCals
-                            model.mValueMap[myAnimalGuid] -= myReduction
-                            model.mValueMap[myAnimalGuid] = max(0.0, model.mValueMap[myAnimalGuid]) # Ensure non-negative
-                            LaUtils.debug.log(f"  Animal {myAnimalGuid}: Requirement reduced by {myReduction:.2f}. Remaining need: {model.mValueMap[myAnimalGuid]:.2f}", "Diet")
-                        else:
-                            LaUtils.debug.log(f"  Animal {myAnimalGuid} not found in mValueMap during fallow allocation (NotEnough).", "Warning")
-            # All available fallow has been used
-            myRemainingFallow = 0.0
-            LaUtils.debug.log(f"All available fallow allocated. Remaining Fallow Value: {myRemainingFallow:.2f}", "Diet")
-        case _: # Default case, should not happen with Status enum
-            LaUtils.debug.log(f"Unexpected fallow status: {myFallowStatus}", "Error")
-            myRemainingFallow = theAvailableFallowValue # Return original value if status is unknown
-
-    return myRemainingFallow
-
-# --- Other Calculation Helpers (if any, e.g., requiredValue could move here too) ---
-
-def requiredValue(model: 'LaModel', theAnimalGuid: str) -> float:
-    # --- Paste the content of LaModel.requiredValue here ---
-    # --- Remember to change 'self.' to 'model.' ---
-    # --- And 'self.logMessage(...)' to 'LaUtils.debug.log(...)' or pass logger ---
-    myAnimal = LaUtils.getAnimal(theAnimalGuid)
-    # ... rest of calculation ...
-    LaUtils.debug.log("method ==> def requiredValue(...)", "CalcDetail")
-    # ... rest of logging ...
-    return myReturnValue
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 def allocateFallowGrazingLand(theModel: 'LaModel', theFallowMCalsAvailable: float, theAnimalMCalRequirementMap: Dict[str, float]) -> None:
     """
@@ -1523,6 +1272,130 @@ def allocateFallowGrazingLand(theModel: 'LaModel', theFallowMCalsAvailable: floa
 
     # The doTheFallowAllocation method is responsible for updating the mValueMap with
     # the reduced MCal requirements after allocation
+
+
+
+def doTheFallowAllocation(model: 'LaModel', thePriority: Priority, theAvailableFallowValue: float,
+                           theTotalNeededByGroup: float, theCountInGroup: float) -> float:
+    # --- Paste the content of LaModel.doTheFallowAllocation here ---
+    # --- Remember to change 'self.' to 'model.' ---
+    # --- Especially 'self.mAnimalsMap' to 'model.mAnimalsMap' ---
+    # --- And 'self.mValueMap' to 'model.mValueMap' ---
+
+    from la.lib.lautils import LaUtils
+    from la.lib.la import Status, Priority # Ensure Status enum is imported
+    from la.lib.laanimal import LaAnimal
+    from la.lib.laanimalparameter import LaAnimalParameter
+
+    LaUtils.debug.log(f"method ==> float LaModel::doTheFallowAllocation(Priority {thePriority.name})", "Diet")
+    """Allocate fallow land to animals of a specific priority.
+        Strict port of C++ version's logic, using the C++ style signature.
+
+    Args:
+        thePriority: Priority level being processed
+        theAvailableFallowValue: MCals available from fallow land for this group
+        theTotalNeededByGroup: Total MCals needed by all animals in this priority group
+        theCountInGroup: Number of animals in this priority group (Note: C++ version might pass incorrect count)
+
+    Returns:
+        float: Remaining MCals after allocation for this group
+    """
+    from la.lib.lautils import LaUtils
+    from la.lib.la import Status, Priority # Ensure Status enum is imported
+    from la.lib.laanimal import LaAnimal
+    from la.lib.laanimalparameter import LaAnimalParameter
+
+    LaUtils.debug.log(f"method ==> float LaModel::doTheFallowAllocation(Priority {thePriority.name})", "Diet")
+    LaUtils.debug.log(f"Available Fallow: {theAvailableFallowValue}, Total Needed by Group: {theTotalNeededByGroup}", "Diet")
+
+    myFallowDifference: float = theAvailableFallowValue - theTotalNeededByGroup
+    myFallowStatus: Status
+
+    if myFallowDifference > 0:
+        myFallowStatus = Status.MoreThanEnoughToCompletelySatisfy
+    else:
+        myFallowStatus = Status.NotEnoughToCompletelySatisfy
+
+    myFallowStatusString = "More than Enough" if myFallowStatus == Status.MoreThanEnoughToCompletelySatisfy else "Not Enough"
+    LaUtils.debug.log(f"Fallow Status: {myFallowStatusString}", "Diet")
+
+    myRemainingFallow: float = 0.0
+
+    # Use match case based on the calculated status
+    match myFallowStatus:
+        case Status.MoreThanEnoughToCompletelySatisfy:
+            LaUtils.debug.log("CASE: MoreThanEnoughToCompletelySatisfy", "Diet")
+            # Each animal in this group gets its full requirement met by fallow.
+            # Reduce their remaining requirement in the main value map (mValueMap).
+            # Need to iterate through animals again to find those matching thePriority.
+            for myAnimalGuid, myAnimalParameterGuid in model.mAnimalsMap.items():
+                myAnimalParameter: LaAnimalParameter = LaUtils.getAnimalParameter(myAnimalParameterGuid)
+                if myAnimalParameter.fallowUsage == thePriority:
+                    # Get the animal's individual requirement from mValueMap
+                    myIndividualRequirement = model.mValueMap.get(myAnimalGuid, 0.0)
+                    if myAnimalGuid in model.mValueMap:
+                        # Reduce the value in mValueMap by the full individual requirement
+                        # C++ doesn't explicitly check min, but let's prevent negative values
+                        myReduction = myIndividualRequirement
+                        model.mValueMap[myAnimalGuid] -= myReduction
+                        model.mValueMap[myAnimalGuid] = max(0.0, model.mValueMap[myAnimalGuid]) # Ensure non-negative
+                        LaUtils.debug.log(f"  Animal {myAnimalGuid}: Requirement fully met by fallow. Reduced by {myReduction:.2f}. Remaining need: {model.mValueMap[myAnimalGuid]:.2f}", "Diet")
+                    else:
+                        LaUtils.debug.log(f"  Animal {myAnimalGuid} not found in mValueMap during fallow allocation (MoreThanEnough).", "Warning")
+
+            # Calculate and return the leftover fallow value
+            myRemainingFallow = myFallowDifference
+            LaUtils.debug.log(f"Remaining Fallow Value after allocation: {myRemainingFallow:.2f}", "Diet")
+
+        case Status.NotEnoughToCompletelySatisfy:
+            LaUtils.debug.log("CASE: NotEnoughToCompletelySatisfy", "Diet")
+            # Distribute the available fallow proportionally among animals in this group.
+            # Need to iterate through animals again.
+            for myAnimalGuid, myAnimalParameterGuid in model.mAnimalsMap.items():
+                myAnimalParameter: LaAnimalParameter = LaUtils.getAnimalParameter(myAnimalParameterGuid)
+                if myAnimalParameter.fallowUsage == thePriority:
+                    if myAnimalGuid in model.mValueMap:
+                        # Get the animal's individual requirement from mValueMap
+                        myIndividualRequirement = model.mValueMap.get(myAnimalGuid, 0.0)
+
+                        # Calculate the proportion of available fallow this animal gets
+                        # C++ does not guard division by zero here
+                        myProportion = myIndividualRequirement / theTotalNeededByGroup
+                        myAllocatedMCals = theAvailableFallowValue * myProportion
+                        LaUtils.debug.log(f"  Animal {myAnimalGuid}: Needs {myIndividualRequirement:.2f}, Proportion {myProportion:.4f}, Allocated {myAllocatedMCals:.2f}", "Diet")
+
+                        # Reduce the animal's requirement in the main value map
+                        # C++ doesn't explicitly check min, but let's prevent negative values
+                        myReduction = myAllocatedMCals
+                        model.mValueMap[myAnimalGuid] -= myReduction
+                        model.mValueMap[myAnimalGuid] = max(0.0, model.mValueMap[myAnimalGuid]) # Ensure non-negative
+                        LaUtils.debug.log(f"  Animal {myAnimalGuid}: Requirement reduced by {myReduction:.2f}. Remaining need: {model.mValueMap[myAnimalGuid]:.2f}", "Diet")
+                    else:
+                        LaUtils.debug.log(f"  Animal {myAnimalGuid} not found in mValueMap during fallow allocation (NotEnough).", "Warning")
+            # All available fallow has been used
+            myRemainingFallow = 0.0
+            LaUtils.debug.log(f"All available fallow allocated. Remaining Fallow Value: {myRemainingFallow:.2f}", "Diet")
+        case _: # Default case, should not happen with Status enum
+            LaUtils.debug.log(f"Unexpected fallow status: {myFallowStatus}", "Error")
+            myRemainingFallow = theAvailableFallowValue # Return original value if status is unknown
+
+    return myRemainingFallow
+
+# --- Other Calculation Helpers (if any, e.g., requiredValue could move here too) ---
+
+def requiredValue(model: 'LaModel', theAnimalGuid: str) -> float:
+    # --- Paste the content of LaModel.requiredValue here ---
+    # --- Remember to change 'self.' to 'model.' ---
+    # --- And 'self.logMessage(...)' to 'LaUtils.debug.log(...)' or pass logger ---
+    myAnimal = LaUtils.getAnimal(theAnimalGuid)
+    # ... rest of calculation ...
+    LaUtils.debug.log("method ==> def requiredValue(...)", "CalcDetail")
+    # ... rest of logging ...
+    return myReturnValue
+
+
+
+
 
 
 
