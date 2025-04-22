@@ -2,7 +2,7 @@ from qgis.PyQt.QtCore import pyqtSignal, pyqtProperty, QObject
 from qgis.PyQt.QtWidgets import QDialog
 from qgis.PyQt.QtXml import QDomDocument
 
-from typing import Dict, List, Tuple, Union
+from typing import Dict, List, Tuple, Union, Mapping
 
 from la.lib.laserialisable import LaSerialisable
 from la.lib.laguid import LaGuid
@@ -152,7 +152,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
         # Diet calculation properties
         self.mAnimalsMap: dict[str, str] = {} # Corresponds to mAnimalsMap in C++
-        self.mCropsMap: dict[str, str] = {} # Corresponds to mCropsMap in C++
+        self.mCropsMap: dict = {} # Corresponds to mCropsMap in C++
         self.mBaseOnPlants = False
         self.mIncludeDairy = True
         self.mLimitDairy = True
@@ -436,16 +436,30 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             self._pathDistanceChanged.emit()
 
 
-    # REMOVE THIS ENTIRE PROPERTY
-    # @pyqtProperty(int, notify=_commonLandValueChanged)
-    # def commonLandValue(self) -> int: # type: ignore
-    #     return self.mCommonLandValue
-    # @commonLandValue.setter
-    # def commonLandValue(self, theValue: float, theAreaUnits: AreaUnits):
-    #     # if self.mCommonLandValue != theValue:
-    #     from la.lib.lautils import LaUtils
-    #     self.mCommonLandValue: int = LaUtils.convertAreaToHectares(theAreaUnits, theValue)
-    #     self._commonLandValueChanged.emit()
+    def setCommonLandValue(self, theValue: float, theAreaUnits: AreaUnits):
+        """Set the common land value by converting to hectares first.
+        
+        This is a direct port of C++ version:
+        void LaModel::setCommonLandValue(float theValue, AreaUnits theAreaUnits)
+        { mCommonGrazingValue = LaUtils::convertAreaToHectares(theAreaUnits,theValue); }
+        
+        Args:
+            theValue (float): The value in the specified area units
+            theAreaUnits (AreaUnits): The units of the provided value (Dunum or Hectare)
+        """
+        # Store the raw value for future reference
+        self.mCommonLandValue = float(theValue)
+        
+        # Convert to int as the C++ version expects an int
+        myIntValue = int(theValue)
+        
+        # Convert to hectares and store in mCommonGrazingValue - this is the value used in calculations
+        self.mCommonGrazingValue = LaUtils.convertAreaToHectares(theAreaUnits, myIntValue)
+        
+        LaUtils.debug.log(f"Set mCommonGrazingValue to {self.mCommonGrazingValue} hectares (converted from {theValue} {theAreaUnits.name})", "Debug")
+        
+        # Emit signal for UI updates
+        self._commonLandValueChanged.emit()
 
 
     @pyqtProperty(float, notify=_commonGrazingValueChanged)
@@ -465,6 +479,35 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                 self._commonGrazingValueChanged.emit()
         except (ValueError, TypeError):
             LaUtils.debug.log(f"Invalid value passed to commonGrazingValue setter: {theValue}", "Error")
+            
+    @pyqtProperty(float, notify=_commonLandValueChanged)
+    def commonLandValue(self) -> float: # type: ignore
+        """Get the common land value (raw value before unit conversion).
+        
+        This is the 'raw' value in the current area units, not the converted value in hectares.
+        For calculations, use commonGrazingValue which is always in hectares.
+        
+        Returns:
+            float: The common land value in the current area units.
+        """
+        return float(self.mCommonLandValue)
+
+    @commonLandValue.setter
+    def commonLandValue(self, theValue: float) -> None:
+        """Set the common land value.
+        
+        This setter delegates to setCommonLandValue to ensure proper conversion to hectares.
+        The value is stored both as the raw value (mCommonLandValue) and the hectare-converted
+        value (mCommonGrazingValue) which is used in actual calculations.
+        
+        Args:
+            theValue (float): The value in the current area units
+        """
+        # Store the raw value for display purposes
+        self.mCommonLandValue = float(theValue)
+        # Use the proper method to calculate the hectare equivalent
+        self.setCommonLandValue(theValue, self.mCommonLandAreaUnits)
+        # Note: setCommonLandValue already emits _commonLandValueChanged
 
 
     @pyqtProperty(AreaUnits, notify=_commonLandAreaUnitsChanged)
@@ -964,6 +1007,8 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             LaUtils.debug.log(f"Error in diet calculation: {str(e)}", "Error")
             import traceback
             LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
+            # Return empty or default labels in case of error
+            myDietLabels = LaDietLabels() # Reset to default
 
         return myDietLabels
 
@@ -1141,7 +1186,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                 myAdditionalMCalCounter = 0.
                 myAdditionalMCalCounter1 = 0.
 
-                myMilkKgPerDay = myAnimal.milkGramsPerDay * .001 # type: ignore # entered as Grams so need to convert to kg
+                myMilkKgPerDay = myAnimal.milkGramsPerDay * .001 # type: ignore
                 myMilkFoodValue = myAnimal.milkFoodValue * .001 # type: ignore
                 myLactationTime = myAnimal.lactationTime
                 myWeaningAge = myAnimal.weaningAge
@@ -1266,17 +1311,6 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                 myAnimalReport += "myFeedForLactating = " + str(myFeedForLactating) + "\n"
                 myAnimalReport += "myFeedForMaintenance = " + str(myFeedForMaintenance) + "\n"
                 myAnimalReport += "myFeedForOffspringPerKg = " + str(myFeedForOffspringPerKg) + "\n"
-                myAnimalReport += "myGestatingMCals = " + str(myGestatingMCals) + "\n"
-                myAnimalReport += "myLactatingMCals = " + str(myLactatingMCals) + "\n"
-                myAnimalReport += "myDaysForMaintenance = " + str(myDaysForMaintenance) + "\n"
-                myAnimalReport += "myGestatingTime = " + str(myGestatingTime) + "\n"
-                myAnimalReport += "myLactationTime = " + str(myLactationTime) + "\n"
-                myAnimalReport += "myDryMothers = " + str(myDryMothers) + "\n"
-                myAnimalReport += "myDryMothersMCals = " + str(myDryMothersMCals) + "\n"
-                myAnimalReport += "myOtherMaintenanceMCals = " + str(myOtherMaintenanceMCals) + "\n"
-                myAnimalReport += "myMaintenanceMCals = " + str(myMaintenanceMCals) + "\n"
-                myAnimalReport += "myAdultMalesMCals = " + str(myAdultMalesMCals) + "\n"
-                myAnimalReport += "myOffspringMCals = " + str(myOffspringMCals) + "\n"
 
                 # C++ Debug comments ported directly
                 print(myAnimal.name)
@@ -1292,6 +1326,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                 print("mySexualMaturity = " + str(mySexualMaturity))
                 print("myBreedingYears = " + str(myBreedingYears))
                 print("myAnimalContributionToMeatPortion = " + str(myAnimalContributionToMeatPortion))
+                # Debug line continues
                 print("myAnimalMCalTarget = " + str(myAnimalMCalTarget))
                 print("myPotentialDairyPerOffspring = " + str(myPotentialDairyPerOffspring))
                 print("myValuePerOffspring = " + str(myValuePerOffspring))
@@ -1341,7 +1376,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                 print("myOtherMaintenanceMCals = " + str(myOtherMaintenanceMCals))
                 print("myMaintenanceMCals = " + str(myMaintenanceMCals))
                 print("myAdultMalesMCals = " + str(myAdultMalesMCals))
-                print("myOffspringMCals = "   + str(myOffspringMCals))
+                print("myOffspringMCals = " + str(myOffspringMCals))
 
                 # still looping through the animals here....
 
@@ -1385,7 +1420,6 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                     # print("Total MCals counted so far for grain feeding this animal: " + str(myAdditionalMCalCounter))
 
                 # .^.^.^.^.^.^.^.^.^     Insert data into myAnimalCalcsMap    .^.^.^.^.^.^.^.^.^
-                # .^.^.^.^.^.^.^.^.^      GUID , (theReportString , Area)     .^.^.^.^.^.^.^.^.^
 
                 myAnimalHerdMCalsRequired1 = myGestatingMCals + myLactatingMCals + myMaintenanceMCals + myAdultMalesMCals + myOffspringMCals
                 # print("  ---- AnimalHerd MCals Required before accounting for grain feeding: " + str(myAnimalHerdMCalsRequired1))
@@ -1439,7 +1473,9 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             myOverallMeatPercent = myWildMeatPercent + myDomesticMeatPercent
             myOverallPlantPercent = 1.0 - myOverallMeatPercent - myOverallDairyPercent
             myOverallCropPercent = myOverallPlantPercent * myDomesticCropPortion
-            myOverallWildPlantPercent = myOverallPlantPercent * (1.0 - myPlantPercent)
+            myOverallWildPlantPercent = myOverallPlantPercent * (1.0 - myDomesticCropPortion)
+
+            # Calculate MCals for different components
             myOverallDomesticMeatMCals = myTameMeatMCalorieCounter
             myOverallDairyMCals = myOverallDairyPercent * myMCalsSettlementAnnual
             myOverallWildMeatMCals = myWildMeatPercent * myMCalsSettlementAnnual
@@ -1547,7 +1583,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
                 myCropReport += f"Kg for People = {myKgForPeople}\n"
                 myCropReport += f"KG for Animals = {myAnimalKgAdd}\n"
-                myCropReport += f"Percent of Diet = {myCropPercent * 100.}% \n" # Added space before %
+                myCropReport += f"Percent of Diet = {myCropPercent * 100.}% \n" # Added space before % like C++
                 myCropReport += f"Area Target People: {myCropAreaTargetPeople}\n"
                 myCropReport += f"Area Target Animal: {myCropAreaTargetAnimals}\n"
                 myCropReport += f"Area Target is {myCropAreaTarget}\n"
@@ -1567,6 +1603,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
                 # Create tuple directly
                 myReportAndAreaTarget = (myCropReport, myCropAreaTarget)
+
                 myCropCalcsReportMap[myCropGuid] = myReportAndAreaTarget
 
             # --- Fallow Allocation ---
@@ -1701,60 +1738,65 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             # print("      ££££££££££££££££££££££££££££££££££££")
             # print("   ££££££££££££££££££££££££££££££££££££")
             # print("££££££££££££££££££££££££££££££££££££")
-            myDietLabels.cropCalcsReportMap = myCropCalcsReportMap
-            myDietLabels.animalCalcsReportMap = myAnimalCalcsReportMap # Use the updated map
 
-            return myDietLabels
+            # print(f"myFinal Calculations for animals map: \n{myAnimalCalcsReportMap}") # Python dict representation
 
-        
+            # print(f"myDairyLimit = {myDairyLimit}")
+            # print(f"myDomesticMeatPercent = {myDomesticMeatPercent}")
+            # print(f"myWildMeatPercent = {myWildMeatPercent}")
+            # print(f"myLimitSatisfies = {myLimitSatisfies}")
+            # print(f"myNewLimit = {myNewLimit}")
+            # print(f"myPotentialDairyLessThanLimitBool = {myPotentialDairyLessThanLimitBool}")
+            # print(f"myNewDairy = {myNewDairy}")
+            # print(f"myOverallDairyPercent = {myOverallDairyPercent}")
+            # print(f"myOverallMeatPercent = {myOverallMeatPercent}")
+            # print(f"myOverallPlantPercent = {myOverallPlantPercent}")
+            # print(f"myOverallCropPercent = {myOverallCropPercent}")
+            # print(f"myOverallWildPlantPercent = {myOverallWildPlantPercent}")
+            # print(f"myOverallDomesticMeatMCals = {myOverallDomesticMeatMCals}")
+            # print(f"myOverallDairyMCals = {myOverallDairyMCals}")
+            # print(f"myOverallWildMeatMCals = {myOverallWildMeatMCals}")
+            # print(f"myOverallCropsMCals = {myOverallCropsMCals}")
+            # print(f"myOverallWildPlantsMCals = {myOverallWildPlantsMCals}")
+            # print(f"myOverallMeatMCals = {myOverallMeatMCals}")
+            # print(f"myFirstDairySurplusBool = {myFirstDairySurplusBool}")
+            # print(f"myOverallDairySurplusMCals = {myOverallDairySurplusMCals}")
+            # print("***********************************************************************")
+            # print("**                                                                   **")
+            # print("**                        Calculating Again                          **")
+            # print("**                                                                   **")
+            # print("***********************************************************************")
 
+            # ----------- Set the Diet Labels in preparation for return -------------
+            myDietLabels.dairyMCalories = myOverallDairyMCals
+            myDietLabels.cropMCalories = myOverallCropsMCals
+            myDietLabels.animalMCalories = myOverallDomesticMeatMCals # C++ uses myOverallMeatMCals here, but context suggests tame meat
+            myDietLabels.wildAnimalMCalories = myOverallWildMeatMCals
+            myDietLabels.wildPlantsMCalories = myOverallWildPlantsMCals
+            myDietLabels.dairyPortionPct = myOverallDairyPercent * 100.
+            myDietLabels.tameMeatPortionPct = myDomesticMeatPercent * 100.
+            myDietLabels.cropsPortionPct = myOverallCropPercent * 100.
+            myDietLabels.wildAnimalPortionPct = myWildMeatPercent * 100.
+            myDietLabels.wildPlantsPortionPct = myOverallWildPlantPercent * 100.
+            myDietLabels.animalPortionPct = myOverallMeatPercent * 100. # Total meat
+            myDietLabels.plantsPortionPct = myOverallPlantPercent * 100. # Total plant
+            myDietLabels.kiloCaloriesIndividualAnnual = myMCalsIndividualAnnual * 1000.0 # Convert back to kCal
+            myDietLabels.megaCaloriesSettlementAnnual = myMCalsSettlementAnnual
+            myDietLabels.dairySurplusMCalories = myOverallDairySurplusMCals
 
-
-            
-
-            LaUtils.debug.log("doCalcsAnimalsFirstDairySeparate calculation completed successfully", "Diet")
-            self.mDietLabels = myDietLabels # Store result
-
-        except Exception as e:
-            LaUtils.debug.log(f"Error in doCalcsAnimalsFirstDairySeparate: {str(e)}", "Error")
-            import traceback
-            LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
-            # Return empty or default labels in case of error
-            myDietLabels = LaDietLabels() # Reset to default
-
-        return myDietLabels
-
-
-
-
-
-
-
-
-
-    def allocateFallowGrazingLand(self, theFallowMCalsAvailable: float, theAnimalMCalRequirementMap: Dict[str, float]) -> None:
-            """Allocate fallow grazing land to animals based on their priority.
-            Strict port of C++ version.
-
-            Args:
-                theFallowMCalsAvailable: MCals available from fallow land
-                theAnimalMCalRequirementMap: Map of animal GUIDs to MCal requirements (Used differently than previous Python version)
-            """
-            from la.lib.lautils import LaUtils
-            from la.lib.la import Priority
-            from la.lib.laanimal import LaAnimal
-            from la.lib.laanimalparameter import LaAnimalParameter
-
-            LaUtils.debug.log("method ==> void LaModel::allocateFallowGrazingLand()", "Diet")
-            # We need to divide the available fallow land amongst the animals
-            # that graze fallow. We split the animal breeds by fallow land
-            # access priority (high / medium and low priority).
-            # e.g. We have 10 animal breeds, 6 of which graze fallow,
-            # caw and horse are high priority, shee and pig medium,
-            # chicken and gooxe low.
-
-            myHighPriorityCount: float = 0.0
-            myMediumPriorityCount: float = 0.0
+            # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+            # -=-=-=-=-=- Setting the report info with area targets -=-=-=-=-=-
+            # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+            # print("££££££££££££££££££££££££££££££££££££")
+            # print("   ££££££££££££££££££££££££££££££££££££")
+            # print("      ££££££££££££££££££££££££££££££££££££")
+            # print("   ££££££££££££££££££££££££££££££££££££")
+            # print("££££££££££££££££££££££££££££££££££££")
+            # print("£££")
+            # print(f" £££    mValueMap = {self.mValueMap}") # Python dict representation
+            # print("£££")
+            # print("££££££££££££££££££££££££££££££££££££")
+            # print("   ££££££££££££££££££
             myLowPriorityCount: float = 0.0
             myHighPriorityValue: float = 0.0
             myMediumPriorityValue: float = 0.0
@@ -1843,6 +1885,13 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
             # float myReturnValue = static_cast<float>(myTotalFallowValue);
             # return myReturnValue; # Python function returns None (void equivalent)
+        except Exception as e:
+            LaUtils.debug.log(f"Error in doCalcsAnimalsFirstDairySeparate: {str(e)}", "Error")
+            import traceback
+            LaUtils.debug.log(f"Error details: {traceback.format_exc()}", "Error")
+            return LaDietLabels()  # Return an empty diet labels object in case of error
+
+        return myDietLabels
 
     def doTheFallowAllocation(self, thePriority: Priority, theAvailableFallowValue: float,
                                 theTotalNeededByGroup: float, theCountInGroup: float) -> float:
@@ -1948,6 +1997,101 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
 
 
+    def allocateFallowGrazingLand(self, theFallowMCalsAvailable: float, theAnimalMCalRequirementMap: Dict[str, float]) -> None:
+        """Allocate fallow land for grazing to animals based on their priority and requirements.
+        
+        This method distributes available fallow land MCals to animals based on their priorities:
+        1. High priority animals get first access to fallow grazing
+        2. Medium priority animals get second access
+        3. Low priority animals get third access
+        
+        Args:
+            theFallowMCalsAvailable (float): Total MCals available from fallow land
+            theAnimalMCalRequirementMap (Dict[str, float]): Dictionary mapping animal GUIDs to their MCal requirements
+        """
+        from la.lib.lautils import LaUtils
+        from la.lib.la import Priority, Status
+        from la.lib.laanimal import LaAnimal
+        from la.lib.laanimalparameter import LaAnimalParameter
+        
+        LaUtils.debug.log(f"method ==> allocateFallowGrazingLand(MCals: {theFallowMCalsAvailable})", "Diet")
+        
+        # We need to count the animals in each priority level
+        myHighPriorityCount: float = 0.0
+        myMediumPriorityCount: float = 0.0
+        myLowPriorityCount: float = 0.0
+        myHighPriorityValue: float = 0.0
+        myMediumPriorityValue: float = 0.0
+        myLowPriorityValue: float = 0.0
+        
+        myTotalFallowValue: float = theFallowMCalsAvailable
+        
+        # Count the Animals in each Priority Level and sum their calorie requirements
+        for myAnimalGuid, myMCalRequirement in theAnimalMCalRequirementMap.items():
+            myAnimal: LaAnimal = LaUtils.getAnimal(myAnimalGuid)
+            
+            # Get the animal parameter GUID from the animals map
+            myAnimalParameterGuid = self.mAnimalsMap.get(myAnimalGuid, "")
+            if not myAnimalParameterGuid:
+                LaUtils.debug.log(f"No parameter found for animal {myAnimalGuid}", "Warning")
+                continue
+                
+            myAnimalParameter: LaAnimalParameter = LaUtils.getAnimalParameter(myAnimalParameterGuid)
+            
+            # Match the animal's fallow usage priority
+            match myAnimalParameter.fallowUsage:
+                case Priority.High:
+                    myHighPriorityCount += 1
+                    myHighPriorityValue += myMCalRequirement
+                case Priority.Medium:
+                    myMediumPriorityCount += 1
+                    myMediumPriorityValue += myMCalRequirement
+                case Priority.Low:
+                    myLowPriorityCount += 1
+                    myLowPriorityValue += myMCalRequirement
+                case _:
+                    pass  # Ignore other cases
+        
+        LaUtils.debug.log(f"High Priority Animals: {myHighPriorityCount}", "Diet")
+        LaUtils.debug.log(f"Medium Priority Animals: {myMediumPriorityCount}", "Diet")
+        LaUtils.debug.log(f"Low Priority Animals: {myLowPriorityCount}", "Diet")
+        
+        LaUtils.debug.log(f"High Priority Animal Calorie requirements: {myHighPriorityValue}", "Diet")
+        LaUtils.debug.log(f"Medium Priority Animal Calorie requirements: {myMediumPriorityValue}", "Diet")
+        LaUtils.debug.log(f"Low Priority Animal Calorie requirements: {myLowPriorityValue}", "Diet")
+        
+        LaUtils.debug.log(f"Total Available Fallow Calories before adjustments: {myTotalFallowValue}", "Diet")
+        
+        # Process animals in priority order (High -> Medium -> Low)
+        
+        # HIGH priority animals get allocated fallow cropland
+        if myTotalFallowValue > 0:
+            myPriority = Priority.High
+            myLeftoverCalories = self.doTheFallowAllocation(myPriority, myTotalFallowValue, myHighPriorityValue, myHighPriorityCount)
+            LaUtils.debug.log(f"Remaining Fallow Calories after HIGH adjustments: {myLeftoverCalories}", "Diet")
+            myTotalFallowValue = myLeftoverCalories
+        
+        # MEDIUM priority animals get allocated fallow cropland
+        if myTotalFallowValue > 0:
+            myPriority = Priority.Medium
+            # Using myHighPriorityCount here to match the pattern in doCalcsAnimalsFirstDairySeparate
+            myLeftoverCalories = self.doTheFallowAllocation(myPriority, myTotalFallowValue, myMediumPriorityValue, myHighPriorityCount)
+            LaUtils.debug.log(f"Remaining Fallow Calories after MEDIUM adjustments: {myLeftoverCalories}", "Diet")
+            myTotalFallowValue = myLeftoverCalories
+        
+        # LOW priority animals get allocated fallow cropland
+        if myTotalFallowValue > 0:
+            myPriority = Priority.Low
+            # Using myHighPriorityCount here to match the pattern in doCalcsAnimalsFirstDairySeparate
+            myLeftoverCalories = self.doTheFallowAllocation(myPriority, myTotalFallowValue, myLowPriorityValue, myHighPriorityCount)
+            LaUtils.debug.log(f"Remaining Fallow Calories after LOW adjustments: {myLeftoverCalories}", "Diet")
+            myTotalFallowValue = myLeftoverCalories
+            
+        LaUtils.debug.log(f"Final Remaining Fallow Calories: {myTotalFallowValue}", "Diet")
+        
+        # The doTheFallowAllocation method is responsible for updating the mValueMap with 
+        # the reduced MCal requirements after allocation
+        
     def toHtmlCalorieCropTargets(self) -> str:
         """Generate HTML report for crop calorie targets."""
         html = "<h3>Crop Calorie Targets</h3>"
@@ -2074,34 +2218,54 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
     def toHtmlAreaCropTargets(self) -> str:
         """Generate HTML report for crop area targets."""
-        html = "<h3>Crop Area Targets</h3>"
-
-        if not self.mDietLabels:
-            return html + "<p>No calculation results available</p>"
-
-        html += "<table border='1' cellpadding='4'>"
-        html += "<tr><th>Crop</th><th>Area (ha)</th><th>Percentage</th></tr>"
-
-        # Get crop area targets from mDietLabels if available
-        total_area = 0
-        crop_areas = {}
-
-        if hasattr(self.mDietLabels, 'cropAreaTargets'):
-            crop_areas = self.mDietLabels.cropAreaTargets
-            total_area = sum(crop_areas.values()) if crop_areas else 0
-
-        # Generate rows for each crop
-        if crop_areas:
-            for crop_guid, area in crop_areas.items():
-                crop = LaUtils.getCrop(crop_guid)
-                crop_name = crop.name if crop and crop.name else "Unknown"
-                percentage = (area / total_area * 100) if total_area > 0 else 0
-                html += f"<tr><td>{crop_name}</td><td>{area:,.2f}</td><td>{percentage:.1f}%</td></tr>"
-        else:
-            html += "<tr><td colspan='3'>No crop area targets calculated</td></tr>"
-
-        html += "</table>"
-        return html
+        # This method returns a string for an xml file containing the production
+        # targets for each crop from mAreaTargetsCropsMap
+        
+        # Loop through the mAreaTargetsCropsMap
+        myString = "<h3> Crop Area Targets</h3>\n"
+        myString += "<P STYLE=\"margin-bottom: 0in\"><BR>\n"
+        myString += "\n"
+        myString += "<table>"
+        myString += "  <COL WIDTH=64*>\n"
+        myString += "  <COL WIDTH=16*>\n"
+        myString += "  <tr>\n"
+        myString += "    <th>\n"
+        myString += "      Crop\n"
+        myString += "    </th>\n"
+        myString += "    <th>\n"
+        myString += "      Area\n"
+        myString += "    </th>\n"
+        myString += "  </tr>\n"
+        
+        # Python equivalent of QMapIterator
+        if hasattr(self, 'mAreaTargetsCropsMap'):
+            for myCropGuid, myValue in self.mAreaTargetsCropsMap.items():
+                if myCropGuid != "CommonTarget":
+                    myAreaTarget = float(myValue)
+                    myCrop = LaUtils.getCrop(myCropGuid)
+                    myCropParameter = LaUtils.getCropParameter(self.mCropsMap.get(myCropGuid, ""))
+                    # add to the string to create the xml file
+                    myString += "  <tr>\n"
+                    myString += "    <td>\n"
+                    myString += "      " + LaUtils.xmlEncode(myCrop.name) + "\n"
+                    myString += "    </td>\n"
+                    myString += "    <td>\n"
+                    myString += "      " + str(myAreaTarget) + "\n"
+                    myString += "    </td>\n"
+                    myString += "  </tr>\n"
+                else:
+                    myAreaTarget = str(self.mAreaTargetsCropsMap.get("CommonTarget", 0))
+                    myString += "  <tr>\n"
+                    myString += "    <td>\n"
+                    myString += "      CommonTarget\n"
+                    myString += "    </td>\n"
+                    myString += "    <td>\n"
+                    myString += "      " + myAreaTarget + "\n"
+                    myString += "    </td>\n"
+                    myString += "  </tr>\n"
+        
+        myString += "</table>\n"
+        return myString
 
     def toHtmlAreaAnimalTargets(self) -> str:
         """Generate HTML report for animal area targets."""
@@ -2114,19 +2278,19 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         html += "<tr><th>Animal</th><th>Area (ha)</th><th>Percentage</th></tr>"
 
         # Get animal area targets from mDietLabels if available
-        total_area = 0
-        animal_areas = {}
+        myTotalArea = 0
+        myAnimalAreas = {}
 
         if hasattr(self.mDietLabels, 'animalAreaTargets'):
-            animal_areas = self.mDietLabels.animalAreaTargets
-            total_area = sum(animal_areas.values()) if animal_areas else 0
+            myAnimalAreas = self.mDietLabels.animalAreaTargets
+            myTotalArea = sum(myAnimalAreas.values()) if myAnimalAreas else 0
 
         # Generate rows for each animal
-        if animal_areas:
-            for animal_guid, area in animal_areas.items():
+        if myAnimalAreas:
+            for animal_guid, area in myAnimalAreas.items():
                 animal = LaUtils.getAnimal(animal_guid)
                 animal_name = animal.name if animal and animal.name else "Unknown"
-                percentage = (area / total_area * 100) if total_area > 0 else 0
+                percentage = (area / myTotalArea * 100) if myTotalArea > 0 else 0
                 html += f"<tr><td>{animal_name}</td><td>{area:,.2f}</td><td>{percentage:.1f}%</td></tr>"
         else:
             html += "<tr><td colspan='3'>No animal area targets calculated</td></tr>"
