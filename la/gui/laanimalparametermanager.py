@@ -32,12 +32,12 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
         LaUtils.debug.log("Animal Parameter Manager: Initializing UI")
 
         # Verify key widgets exist
-        for widget_name in ["leName", "leDescription", "cboAnimal", "sbPercentTameMeat",
+        for myWidgetName in ["leName", "leDescription", "cboAnimal", "sbPercentTameMeat",
                             "checkBoxCommonRaster", "checkBoxSpecificRaster", "lblAnimalPic"]:
-            if hasattr(self, widget_name):
-                LaUtils.debug.log(f"Widget {widget_name} found")
+            if hasattr(self, myWidgetName):
+                LaUtils.debug.log(f"Widget {myWidgetName} found")
             else:
-                LaUtils.debug.log(f"WARNING: Widget {widget_name} not found!")
+                LaUtils.debug.log(f"WARNING: Widget {myWidgetName} not found!")
 
         # Make sure the animal parameters table is visible and has correct properties
         if hasattr(self, "tblAnimalParameterProfiles"):
