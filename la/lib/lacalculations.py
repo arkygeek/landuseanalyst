@@ -596,18 +596,6 @@ def doCalcsAnimalsFirstDairySeparate(theModel: 'LaModel') -> LaDietLabels:
             print("myFeedForMaintenance = " + str(myFeedForMaintenance))
             print("myFeedForOffspringPerKg = " + str(myFeedForOffspringPerKg))
 
-            print("myGestatingMCals = " + str(myGestatingMCals))
-            print("myLactatingMCals = " + str(myLactatingMCals))
-            print("myDaysForMaintenance = " + str(myDaysForMaintenance))
-            print("________------~~~~ Number of days gestating: " + str(myGestatingTime))
-            print("________------~~~~ Number of days lactating: " + str(myLactationTime))
-            print("myDryMothers = " + str(myDryMothers))
-            print("myDryMothersMCals = " + str(myDryMothersMCals))
-            print("myOtherMaintenanceMCals = " + str(myOtherMaintenanceMCals))
-            print("myMaintenanceMCals = " + str(myMaintenanceMCals))
-            print("myAdultMalesMCals = " + str(myAdultMalesMCals))
-            print("myOffspringMCals = " + str(myOffspringMCals))
-
             # still looping through the animals here....
 
             # Iterate through fodder map (assuming it's a dict)
@@ -701,7 +689,7 @@ def doCalcsAnimalsFirstDairySeparate(theModel: 'LaModel') -> LaDietLabels:
         # limit the dairy.  if no limit the limit is 100 percent
         myDairyLimit: float = myDairyLimitPercent if myLimitDairyBool else 1.0
         myDomesticMeatPercent = myTameMeatMCalorieCounter / myMCalsSettlementAnnual
-        myWildMeatPortion = (1.0 - theModel.meatPercent / 100.0)
+        myWildMeatPortion = (1.0 - theModel.mMeatPercent / 100.0)
         myWildMeatPercent = myWildMeatPortion * (theModel.dietPercent / 100.0)
         myLimitSatisfies = (myDomesticMeatPercent + myWildMeatPercent + myDairyLimit) > 1.0
         myNewLimit = max(0.0, 1.0 - myDomesticMeatPercent - myWildMeatPercent) if myLimitSatisfies else myDairyLimit # This was `min` before, double check C++ logic for B17/B18
@@ -988,6 +976,7 @@ def doCalcsAnimalsFirstDairySeparate(theModel: 'LaModel') -> LaDietLabels:
         # print(f"myOverallWildMeatMCals = {myOverallWildMeatMCals}")
         # print(f"myOverallCropsMCals = {myOverallCropsMCals}")
         # print(f"myOverallWildPlantsMCals = {myOverallWildPlantsMCals}")
+        # print(f"myOverallMe```python
         # print(f"myOverallMeatMCals = {myOverallMeatMCals}")
         # print(f"myFirstDairySurplusBool = {myFirstDairySurplusBool}")
         # print(f"myOverallDairySurplusMCals = {myOverallDairySurplusMCals}")
@@ -1026,56 +1015,69 @@ def doCalcsAnimalsFirstDairySeparate(theModel: 'LaModel') -> LaDietLabels:
         # print(f" £££    mValueMap = {model.mValueMap}") # Python dict representation
         # print("£££")
         # print("££££££££££££££££££££££££££££££££££££")
-        # print("   ££££££££££££££££££
-        myLowPriorityCount: float = 0.0
-        myHighPriorityValue: float = 0.0
-        myMediumPriorityValue: float = 0.0
-        myLowPriorityValue: float = 0.0
-        # put starting caloric requirements of all used animals floato a map
-        # for reduction due to grazing of fallow crop land
-        # initialiseValueMap(); # Assumed model.mValueMap is already initialized correctly before this call
+        # print("   ££££££££££££££££££££££££££££££££££££")
+        # print("      ££££££££££££££££££££££££££££££££££££")
+        # print("   ££££££££££££££££££££££££££££££££££££")
+        # print("££££££££££££££££££££££££££££££££££££")
 
-        myTotalFallowValue: float = myFallowMCals
+        # print(f"myFinal Calculations for animals map: \n{myAnimalCalcsReportMap}") # Python dict representation
 
-        # Count the Animals in each Priority Level and sum their calorie requirements
-        # Note: C++ iterates mAnimalsMap (animalGuid -> paramGuid)
-        #       High priority uses mValueMap for value summing.
-        #       Medium/Low use theAnimalMCalRequirementMap for value summing.
-        for myAnimalGuid, myAnimalParameterGuid in theModel.mAnimalsMap.items():
-            # myAnimalIterator.next(); # Implicit in Python loop
-            # QString myAnimalGuid = myAnimalIterator.key();
-            # QString myAnimalParameterGuid = myAnimalIterator.value();
-            myAnimal: LaAnimal = LaUtils.getAnimal(myAnimalGuid)
-            myAnimalParameter: LaAnimalParameter = LaUtils.getAnimalParameter(myAnimalParameterGuid)
+        # print(f"myDairyLimit = {myDairyLimit}")
+        # print(f"myDomesticMeatPercent = {myDomesticMeatPercent}")
+        # print(f"myWildMeatPercent = {myWildMeatPercent}")
+        # print(f"myLimitSatisfies = {myLimitSatisfies}")
+        # print(f"myNewLimit = {myNewLimit}")
+        # print(f"myPotentialDairyLessThanLimitBool = {myPotentialDairyLessThanLimitBool}")
+        # print(f"myNewDairy = {myNewDairy}")
+        # print(f"myOverallDairyPercent = {myOverallDairyPercent}")
+        # print(f"myOverallMeatPercent = {myOverallMeatPercent}")
+        # print(f"myOverallPlantPercent = {myOverallPlantPercent}")
+        # print(f"myOverallCropPercent = {myOverallCropPercent}")
+        # print(f"myOverallWildPlantPercent = {myOverallWildPlantPercent}")
+        # print(f"myOverallDomesticMeatMCals = {myOverallDomesticMeatMCals}")
+        # print(f"myOverallDairyMCals = {myOverallDairyMCals}")
+        # print(f"myOverallWildMeatMCals = {myOverallWildMeatMCals}")
+        # print(f"myOverallCropsMCals = {myOverallCropsMCals}")
+        # print(f"myOverallWildPlantsMCals = {myOverallWildPlantsMCals}")
+        # print(f"myOverallMeatMCals = {myOverallMeatMCals}")
+        # print(f"myFirstDairySurplusBool = {myFirstDairySurplusBool}")
+        # print(f"myOverallDairySurplusMCals = {myOverallDairySurplusMCals}")
+        # print("***********************************************************************")
+        # print("**                                                                   **")
+        # print("**                        Calculating Again                          **")
+        # print("**                                                                   **")
+        # print("***********************************************************************")
 
-            # Use match case for the switch statement
-            match myAnimalParameter.fallowUsage: # Assuming fallowUsage is an attribute returning Priority enum
-                case Priority.High:
-                    myHighPriorityCount += 1
-                    LaUtils.debug.log(f"Animal: {myAnimal.name}", "Diet")
-                    # Use model.mValueMap, mirroring C++ for High priority
-                    animal_value = theModel.mValueMap.get(myAnimalGuid, 0.0)
-                    LaUtils.debug.log(f"      : {animal_value}", "Diet")
-                    myHighPriorityValue += animal_value
-                case Priority.Medium:
-                    myMediumPriorityCount += 1
-                    # Use theAnimalMCalRequirementMap, mirroring C++ for Medium priority
-                    animal_value = theAnimalMCalRequirementMap.get(myAnimalGuid, 0.0)
-                    myMediumPriorityValue += animal_value
-                case Priority.Low:
-                    myLowPriorityCount += 1
-                    # Use theAnimalMCalRequirementMap, mirroring C++ for Low priority
-                    animal_value = theAnimalMCalRequirementMap.get(myAnimalGuid, 0.0)
-                    myLowPriorityValue += animal_value
-                case Priority.Nope:
-                    pass # break; equivalent
-                case _: # default: equivalent
-                    pass # break; equivalent
+        # ----------- Set the Diet Labels in preparation for return -------------
+        myDietLabels.dairyMCalories = myOverallDairyMCals
+        myDietLabels.cropMCalories = myOverallCropsMCals
+        myDietLabels.animalMCalories = myOverallDomesticMeatMCals # C++ uses myOverallMeatMCals here, but context suggests tame meat
+        myDietLabels.wildAnimalMCalories = myOverallWildMeatMCals
+        myDietLabels.wildPlantsMCalories = myOverallWildPlantsMCals
+        myDietLabels.dairyPortionPct = myOverallDairyPercent * 100.
+        myDietLabels.tameMeatPortionPct = myDomesticMeatPercent * 100.
+        myDietLabels.cropsPortionPct = myOverallCropPercent * 100.
+        myDietLabels.wildAnimalPortionPct = myWildMeatPercent * 100.
+        myDietLabels.wildPlantsPortionPct = myOverallWildPlantPercent * 100.
+        myDietLabels.animalPortionPct = myOverallMeatPercent * 100. # Total meat
+        myDietLabels.plantsPortionPct = myOverallPlantPercent * 100. # Total plant
+        myDietLabels.kiloCaloriesIndividualAnnual = myMCalsIndividualAnnual * 1000.0 # Convert back to kCal
+        myDietLabels.megaCaloriesSettlementAnnual = myMCalsSettlementAnnual
+        myDietLabels.dairySurplusMCalories = myOverallDairySurplusMCals
 
-        LaUtils.debug.log(f"High Priority Animals: {myHighPriorityCount}", "Diet")
-        LaUtils.debug.log(f"Medium Priority Animals: {myMediumPriorityCount}", "Diet")
-        LaUtils.debug.log(f"Low Priority Animals: {myLowPriorityCount}", "Diet")
-
+        # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+        # -=-=-=-=-=- Setting the report info with area targets -=-=-=-=-=-
+        # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+        # print("££££££££££££££££££££££££££££££££££££")
+        # print("   ££££££££££££££££££££££££££££££££££££")
+        # print("      ££££££££££££££££££££££££££££££££££££")
+        # print("   ££££££££££££££££££££££££££££££££££££")
+        # print("££££££££££££££££££££££££££££££££££££")
+        # print("£££")
+        # print(f" £££    mValueMap = {model.mValueMap}") # Python dict representation
+        # print("£££")
+        # print("££££££££££££££££££££££££££££££££££££")
+        # print("   ££££££££££££££££££££££££££££££££
         LaUtils.debug.log(f"High Priority Animal Calorie requirements: {myHighPriorityValue}", "Diet")
         LaUtils.debug.log(f"Medium Priority Animal Calorie requirements: {myMediumPriorityValue}", "Diet")
         LaUtils.debug.log(f"Low Priority Animal Calorie requirements: {myLowPriorityValue}", "Diet")
@@ -1091,7 +1093,7 @@ def doCalcsAnimalsFirstDairySeparate(theModel: 'LaModel') -> LaDietLabels:
         if myTotalFallowValue > 0:
             myPriority = Priority.High
             # Call the C++ style doTheFallowAllocation
-            myLeftoverCalories = theModel.doTheFallowAllocation(myPriority, myTotalFallowValue, myHighPriorityValue, myHighPriorityCount)
+            myLeftoverCalories = doTheFallowAllocation(myPriority, myTotalFallowValue, myHighPriorityValue, myHighPriorityCount)
             LaUtils.debug.log(f"Remaining Fallow Calories after HIGH adjustments: {myLeftoverCalories}", "Diet")
             myTotalFallowValue = myLeftoverCalories
 
@@ -1100,7 +1102,7 @@ def doCalcsAnimalsFirstDairySeparate(theModel: 'LaModel') -> LaDietLabels:
             myPriority = Priority.Medium
             # Call the C++ style doTheFallowAllocation
             # C++ BUG?: Passes myHighPriorityCount instead of myMediumPriorityCount. Replicating bug.
-            myLeftoverCalories = theModel.doTheFallowAllocation(myPriority, myTotalFallowValue, myMediumPriorityValue, myHighPriorityCount)
+            myLeftoverCalories = doTheFallowAllocation(myPriority, myTotalFallowValue, myMediumPriorityValue, myHighPriorityCount)
             LaUtils.debug.log(f"Remaining Fallow Calories after MED adjustments: {myLeftoverCalories}", "Diet")
             myTotalFallowValue = myLeftoverCalories
 
@@ -1109,7 +1111,7 @@ def doCalcsAnimalsFirstDairySeparate(theModel: 'LaModel') -> LaDietLabels:
             myPriority = Priority.Low
             # Call the C++ style doTheFallowAllocation
             # C++ BUG?: Passes myHighPriorityCount instead of myLowPriorityCount. Replicating bug.
-            myLeftoverCalories = theModel.doTheFallowAllocation(myPriority, myTotalFallowValue, myLowPriorityValue, myHighPriorityCount)
+            myLeftoverCalories = doTheFallowAllocation(myPriority, myTotalFallowValue, myLowPriorityValue, myHighPriorityCount)
             LaUtils.debug.log(f"Remaining Fallow Calories after LOW adjustments: {myLeftoverCalories}", "Diet")
             myTotalFallowValue = myLeftoverCalories
 
@@ -1384,13 +1386,69 @@ def doTheFallowAllocation(model: 'LaModel', thePriority: Priority, theAvailableF
 # --- Other Calculation Helpers (if any, e.g., requiredValue could move here too) ---
 
 def requiredValue(model: 'LaModel', theAnimalGuid: str) -> float:
-    # --- Paste the content of LaModel.requiredValue here ---
-    # --- Remember to change 'self.' to 'model.' ---
-    # --- And 'self.logMessage(...)' to 'LaUtils.debug.log(...)' or pass logger ---
+    """Generic animal model calculation that determines feed requirements.
+    
+    This function calculates the total feed value (in kg) needed annually to support 
+    a herd of animals sufficient to produce a target amount of meat.
+    
+    Args:
+        model: The LaModel instance with required parameters
+        theAnimalGuid: The GUID of the animal to calculate requirements for
+        
+    Returns:
+        float: Total kg value needed annually to feed the entire herd
+    """
+    # this is the generic animal model
     myAnimal = LaUtils.getAnimal(theAnimalGuid)
-    # ... rest of calculation ...
-    LaUtils.debug.log("method ==> def requiredValue(...)", "CalcDetail")
-    # ... rest of logging ...
+    myAnimalProductionTarget = 1  # getProductionTargetsAnimals (theAnimalGuid, static_cast <float> (mCaloriesProvidedByMeatMap.value (theAnimalGuid)))
+    myAnimalsRequired = (myAnimalProductionTarget / myAnimal.killWeight) / (myAnimal.usableMeat * 0.01)
+    myBirthsPerYear = 365.0 / (myAnimal.gestationTime + myAnimal.estrousCycle + myAnimal.weaningAge)
+    myOffspringPerMotherYearly = myBirthsPerYear * myAnimal.youngPerBirth * (1.0-(0.01 * myAnimal.deathRate))
+    myMothersNeededStepOne = myAnimalsRequired / myOffspringPerMotherYearly
+    myMalesStepOne = (myMothersNeededStepOne * myOffspringPerMotherYearly) / 2.0
+    myFemalesStepOne = myMalesStepOne
+    myMotherReplacementsPerYear = myMothersNeededStepOne / myAnimal.breedingExpectancy
+    myAdditionalMothers = (myMotherReplacementsPerYear / myOffspringPerMotherYearly) * 2.0
+    myMalesStepTwo = (myAdditionalMothers * myOffspringPerMotherYearly) / 2.0
+    myFemalesStepTwo = (myAdditionalMothers * myOffspringPerMotherYearly) / 2.0
+    myTotalMothers = myMothersNeededStepOne + myAdditionalMothers
+    myTotalMales = myMalesStepOne + myMalesStepTwo
+    myTotalFemales = myFemalesStepOne - myFemalesStepTwo
+    myTotalJuveniles = myTotalMales + myTotalFemales
+    myTotalMothersValueRequired = myTotalMothers * myAnimal.gestating
+    myTotalJuvenilesValueRequired = myTotalJuveniles * myAnimal.juvenile
+    myValueNeededToFeedAnimals = myTotalMothersValueRequired + myTotalJuvenilesValueRequired
+    myReturnValue = float(myValueNeededToFeedAnimals)
+
+    # log report
+    LaUtils.debug.log("method ==> float LaModel::requiredValue(QString theAnimalGuid)", "CalcDetail")
+    LaUtils.debug.log("animal prodn target = calorie target of animal / food value", "CalcDetail")
+    LaUtils.debug.log(f"mCaloriesProvidedByMeatMap.value(theAnimalGuid): {model.mCaloriesProvidedByMeatMap.get(theAnimalGuid, 0)}", "CalcDetail")
+    LaUtils.debug.log(f"myAnimal.meatFoodValue(): {myAnimal.meatFoodValue/1000.0}", "CalcDetail")
+    LaUtils.debug.log(f"myAnimalProductionTarget = {myAnimalProductionTarget}", "CalcDetail")
+    LaUtils.debug.log(f"slaughter animals reqd: {myAnimalsRequired}", "CalcDetail")
+    LaUtils.debug.log(f"BirthEventsPerYear: {myBirthsPerYear}", "CalcDetail")
+    LaUtils.debug.log(f"OffspringPerMotherYearly = {myOffspringPerMotherYearly}", "CalcDetail")
+    LaUtils.debug.log(f"MothersNeededStepOne = {myMothersNeededStepOne}", "CalcDetail")
+    LaUtils.debug.log(f"MalesStepOne = {myMalesStepOne}", "CalcDetail")
+    LaUtils.debug.log(f"FemalesStepOne = {myFemalesStepOne}", "CalcDetail")
+    LaUtils.debug.log(f"MotherReplacementsPerYear = {myMotherReplacementsPerYear}", "CalcDetail")
+    LaUtils.debug.log(f"AdditionalMothers = {myAdditionalMothers}", "CalcDetail")
+    LaUtils.debug.log(f"MalesStepTwo = {myMalesStepTwo}", "CalcDetail")
+    LaUtils.debug.log(f"FemalesStepTwo = {myFemalesStepTwo}", "CalcDetail")
+    LaUtils.debug.log(f"TotalMothers = {myTotalMothers}", "CalcDetail")
+    LaUtils.debug.log(f"TotalMales = {myTotalMales}", "CalcDetail")
+    LaUtils.debug.log(f"TotalFemales = {myTotalFemales}", "CalcDetail")
+    LaUtils.debug.log(f"TotalJuveniles = {myTotalJuveniles}", "CalcDetail")
+    LaUtils.debug.log(f"Total Adult Females Value(Kg) = {myTotalMothersValueRequired}", "CalcDetail")
+    LaUtils.debug.log(f"Total Juveniles Value(Kg) = {myTotalJuvenilesValueRequired}", "CalcDetail")
+    LaUtils.debug.log(f"Total Value (Kg) Needed To Feed Animals = {myValueNeededToFeedAnimals}", "CalcDetail")
+    LaUtils.debug.log("method ==> float LaModel::requiredValue(QString theAnimalGuid)", "CalcDetail")
+    LaUtils.debug.log(f"Animal: {myAnimal.name}", "CalcDetail")
+    LaUtils.debug.log(f"Breeding Stock: {myTotalMothers}", "CalcDetail")
+    LaUtils.debug.log(f"Juveniles: {myTotalJuveniles}", "CalcDetail")
+    LaUtils.debug.log(f"Kg Value needed annually to feed the entire herd: {myReturnValue}", "CalcDetail")
+    LaUtils.debug.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^", "CalcDetail")
     return myReturnValue
 
 

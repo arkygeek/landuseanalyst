@@ -833,7 +833,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
                 else:
                     # Just store the filename, resolution will be handled on display
                     self.mImageFile = basename
-            
+
             LaUtils.debug.log(f"Set animal image file to: {self.mImageFile}")
 
 

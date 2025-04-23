@@ -1040,7 +1040,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             if not comboBox:
                 return
             parameterGuid = comboBox.currentData()
-            
+
             # Add debugging to verify the parameter GUID exists
             LaUtils.debug.log(f"animalCalcSelectionChanged: Selected parameter GUID: {parameterGuid}", "Debug")
             filePath = os.path.join(LaUtils.userAnimalParameterProfilesDirPath(), f"{parameterGuid}.xml")
@@ -1674,17 +1674,17 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             # Update common raster value - Add detailed logging
             myCommonRasterValue = self.sbCommonRasterValue.value()
             LaUtils.debug.log(f"Common raster value from UI: {myCommonRasterValue}", "Debug")
-            
+
             # Ensure we never have a zero value that would cause division by zero
             if myCommonRasterValue <= 0:
                 LaUtils.debug.log(f"Common raster value is {myCommonRasterValue}, which would cause division by zero - setting to default of 40", "Warning")
                 myCommonRasterValue = 40
                 self.sbCommonRasterValue.setValue(myCommonRasterValue)
-                
+
             mySelectedAreaUnit = self.model.commonLandAreaUnits # Use the already set unit
             self.model.areaUnits = mySelectedAreaUnit
             self.model.commonLandValue = myCommonRasterValue # Set the numeric value from the spinbox
-            
+
             LaUtils.debug.log(f"Set model.commonLandValue to {self.model.commonLandValue}", "Debug")
 
             # Note: Selected animals/crops are updated directly in updateCrop/AnimalCalculations
@@ -1714,13 +1714,13 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             # Debug available parameters
             availableParams = LaUtils.getAvailableAnimalParameters()
             LaUtils.debug.log(f"updateAnimalCalculations: Available animal parameters: {list(availableParams.keys())}", "Debug")
-            
+
             # Get selected animals and crops for this specific calculation context
             selected_animals = {}
             for guid, value in self.mAnimalsMap.items():
                 if value[0]:  # If checked
                     selected_animals[str(guid)] = str(value[1]) # Ensure strings
-                    
+
             selected_crops = {myCropGuid: myParameterGuid} if myParameterGuid else {} # Only calculate for this crop
 
             # Check if essential selections are made
@@ -1799,7 +1799,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             # Debug available parameters
             availableParams = LaUtils.getAvailableAnimalParameters()
             LaUtils.debug.log(f"updateAnimalCalculations: Available animal parameters: {list(availableParams.keys())}", "Debug")
-            
+
             # Get selected animals and crops for this specific calculation context
             selected_animals = {animalGuid: parameter_guid} if parameter_guid else {} # Only calculate for this animal
             selected_crops = {}
@@ -1839,15 +1839,15 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                     if hasattr(myDietLabels, 'mAnimalCalcsReportMap'):
                         report_map = myDietLabels.mAnimalCalcsReportMap
                         LaUtils.debug.log(f"Found animal calcs report map with keys: {list(report_map.keys())}", "Calculation")
-                        
+    
                         if animalGuid in report_map:
                             report_pair = report_map[animalGuid]
                             # Handle both tuple and string report formats
                             if isinstance(report_pair, tuple) and len(report_pair) > 0:
-                                report_string = report_pair[0] 
+                                report_string = report_pair[0]
                             else:
                                 report_string = str(report_pair)
-                                
+            
                             self.textBrowserResultsAnimals.setText(report_string)
                             LaUtils.debug.log(f"Animal calculation report displayed for {animalGuid}", "Calculation")
                         else:
@@ -1947,7 +1947,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         # Check if the model is available
         if hasattr(self, 'model'):
             LaUtils.debug.log(f"Common Raster Value changed to: {theValue}", "Settings")
-            
+
             # Ensure we have a valid non-zero value
             if theValue <= 0:
                 theValue = 40
@@ -1956,12 +1956,12 @@ class LaMainFormBase(QDialog, FORM_CLASS):
 
             # Get the current area units
             myAreaUnit: AreaUnits = AreaUnits.Dunum if self.cbAreaUnits.currentText() == "Dunum" else AreaUnits.Hectare
-            
+
             # Set all the model properties to ensure consistency
             self.model.mCommonLandValue = theValue
             self.model.mAreaUnits = myAreaUnit
             self.model.mCommonLandAreaUnits = myAreaUnit
-            
+
             # Log all settings to help debug
             LaUtils.debug.log(f"Updated model: commonLandValue={self.model.mCommonLandValue}, " +
                              f"areaUnits={self.model.areaUnits}, " +

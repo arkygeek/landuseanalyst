@@ -6,6 +6,7 @@ from typing import Dict, Tuple
 # Assuming la.lib.lacrop contains LaCrop
 # Assuming la.lib.lamodel contains LaModel type hint (use forward reference if needed)
 
+from la.lib.la import AreaUnits
 from la.lib.lautils import LaUtils
 from la.lib.laanimal import LaAnimal
 from la.lib.lacrop import LaCrop
@@ -34,7 +35,34 @@ def toHtmlCalorieCropTargets(model: 'LaModel') -> str:
     myTotalCalories = 0
     myCropCalories = {}
 
-    myCropCalories = model.mDietLabels.cropCalorieTargets
+    # Check for either cropCalorieTargets or mCropAreaTargetsMap
+    # First check mCropAreaTargetsMap - this is available based on debug output
+    if hasattr(model.mDietLabels, 'mCropAreaTargetsMap') and model.mDietLabels.mCropAreaTargetsMap:
+        try:
+            myCropCalories = {guid: float(area) * 1000 for guid, area in model.mDietLabels.mCropAreaTargetsMap.items()}
+        except Exception as e:
+            LaUtils.debug.log(f"Error processing mCropAreaTargetsMap: {str(e)}", "Warning")
+    elif hasattr(model.mDietLabels, 'mCropAreaTargetsMap'):
+        # If we have area targets but not calorie targets, we'll use area as a proxy
+        myCropCalories = {guid: float(area) * 1000 for guid, area in model.mDietLabels.mCropAreaTargetsMap.items()}
+    elif hasattr(model.mDietLabels, 'cropMCalories'):
+        # Use cropMCalories if available (converted to kcal)
+        try:
+            # Convert PyQt property to string then float
+            try:
+                cropMCal = float(str(model.mDietLabels.cropMCalories))
+            except Exception as e:
+                LaUtils.debug.log(f"Error converting cropMCalories: {str(e)}", "Warning")
+                cropMCal = 0.0
+            # Distribute this evenly among crops if we have any crops
+            if hasattr(model, 'mCropsMap') and model.mCropsMap:
+                cropCount = len(model.mCropsMap)
+                for cropGuid in model.mCropsMap.keys():
+                    myCropCalories[cropGuid] = (cropMCal * 1000000) / cropCount  # Convert MCal to kcal and distribute
+        except (TypeError, ValueError):
+            # If conversion to float fails, use a default value
+            LaUtils.debug.log("Could not convert cropMCalories to float", "Warning")
+
     myTotalCalories = sum(myCropCalories.values()) if myCropCalories else 0
 
     # Generate rows for each crop
@@ -64,8 +92,23 @@ def toHtmlCalorieAnimalTargets(model: 'LaModel') -> str:
     myTotalCalories = 0
     myAnimalCalories = {}
 
-    if hasattr(model.mDietLabels, 'animalCalorieTargets'):
-        myAnimalCalories = model.mDietLabels.animalCalorieTargets
+    # Check for mAnimalAreaTargetsMap since it exists in the actual object
+    if hasattr(model.mDietLabels, 'mAnimalAreaTargetsMap') and model.mDietLabels.mAnimalAreaTargetsMap:
+        try:
+            myAnimalCalories = {guid: float(area) * 1000 for guid, area in model.mDietLabels.mAnimalAreaTargetsMap.items()}
+        except Exception as e:
+            LaUtils.debug.log(f"Error processing mAnimalAreaTargetsMap: {str(e)}", "Warning")
+    # Also try animalMCalories if it exists
+    elif hasattr(model.mDietLabels, 'animalMCalories'):
+        try:
+            animalMCal = float(str(model.mDietLabels.animalMCalories))
+            # Distribute this evenly among animals if we have any
+            if hasattr(model, 'mAnimalsMap') and model.mAnimalsMap:
+                animalCount = len(model.mAnimalsMap)
+                for animalGuid in model.mAnimalsMap.keys():
+                    myAnimalCalories[animalGuid] = (animalMCal * 1000000) / animalCount  # Convert MCal to kcal
+        except Exception as e:
+            LaUtils.debug.log(f"Error processing animalMCalories: {str(e)}", "Warning")
         myTotalCalories = sum(myAnimalCalories.values()) if myAnimalCalories else 0
 
     # Generate rows for each animal
@@ -214,6 +257,7 @@ def toHtmlAreaCropTargets(model: 'LaModel') -> str:
     return myString
 
 def toHtmlAreaAnimalTargets(model: 'LaModel') -> str:
+    from la.lib.la import AreaUnits
     """
     Generate HTML report for animal area targets.
     This method returns a string containing the area
@@ -236,10 +280,17 @@ def toHtmlAreaAnimalTargets(model: 'LaModel') -> str:
     if hasattr(model, 'mAreaTargetsAnimalsMap'):
         for myAnimalGuid, myValue in model.mAreaTargetsAnimalsMap.items():
             if myAnimalGuid != "CommonTarget":
-                myAreaTargetUnchanged = float(myValue)
+                myAreaTargetUnchanged = float(str(myValue))
                 myAnimal = LaUtils.getAnimal(myAnimalGuid)
                 myAnimalParameter = LaUtils.getAnimalParameter(model.mAnimalsMap.get(myAnimalGuid, ""))
-                myAreaTarget = LaUtils.convertAreaToHectares(myAnimalParameter.areaUnits, myAreaTargetUnchanged)
+                # For units, convert PyQt property to string and then to enum
+                myUnitStr = str(myAnimalParameter.areaUnits)
+                try:
+                    myUnitEnum: AreaUnits = AreaUnits[myUnitStr]
+                    myAreaTarget = LaUtils.convertAreaToHectares(myUnitEnum, int(myAreaTargetUnchanged))
+                except (KeyError, ValueError):
+                    # Fallback if conversion fails
+                    myAreaTarget = myAreaTargetUnchanged
                 # add to the string to create the xml file
                 myString += "  <tr>\n"
                 myString += "    <td>\n"

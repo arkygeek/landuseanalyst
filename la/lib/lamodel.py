@@ -438,26 +438,26 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
     def setCommonLandValue(self, theValue: float, theAreaUnits: AreaUnits):
         """Set the common land value by converting to hectares first.
-        
+
         This is a direct port of C++ version:
         void LaModel::setCommonLandValue(float theValue, AreaUnits theAreaUnits)
         { mCommonGrazingValue = LaUtils::convertAreaToHectares(theAreaUnits,theValue); }
-        
+
         Args:
             theValue (float): The value in the specified area units
             theAreaUnits (AreaUnits): The units of the provided value (Dunum or Hectare)
         """
         # Store the raw value for future reference
         self.mCommonLandValue = float(theValue)
-        
+
         # Convert to int as the C++ version expects an int
         myIntValue = int(theValue)
-        
+
         # Convert to hectares and store in mCommonGrazingValue - this is the value used in calculations
         self.mCommonGrazingValue = LaUtils.convertAreaToHectares(theAreaUnits, myIntValue)
-        
+
         LaUtils.debug.log(f"Set mCommonGrazingValue to {self.mCommonGrazingValue} hectares (converted from {theValue} {theAreaUnits.name})", "Debug")
-        
+
         # Emit signal for UI updates
         self._commonLandValueChanged.emit()
 
@@ -479,14 +479,14 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
                 self._commonGrazingValueChanged.emit()
         except (ValueError, TypeError):
             LaUtils.debug.log(f"Invalid value passed to commonGrazingValue setter: {theValue}", "Error")
-            
+
     @pyqtProperty(float, notify=_commonLandValueChanged)
     def commonLandValue(self) -> float: # type: ignore
         """Get the common land value (raw value before unit conversion).
-        
+
         This is the 'raw' value in the current area units, not the converted value in hectares.
         For calculations, use commonGrazingValue which is always in hectares.
-        
+
         Returns:
             float: The common land value in the current area units.
         """
@@ -495,11 +495,11 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
     @commonLandValue.setter
     def commonLandValue(self, theValue: float) -> None:
         """Set the common land value.
-        
+
         This setter delegates to setCommonLandValue to ensure proper conversion to hectares.
         The value is stored both as the raw value (mCommonLandValue) and the hectare-converted
         value (mCommonGrazingValue) which is used in actual calculations.
-        
+
         Args:
             theValue (float): The value in the current area units
         """
@@ -677,10 +677,10 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
     def fromXml(self, theXml: str) -> bool:
         """
         Initialize the LaModel instance from an XML string.
-        
+
         Args:
             theXml (str): The XML string containing the model data.
-            
+
         Returns:
             bool: True if successful, False otherwise
         """
@@ -693,47 +693,47 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         if myTopElement.isNull():
             # TODO - just make this a warning
             self.logMessage("top element could not be found!")
-        
+
         self.logMessage("Model::fromXml - guid found : " + myTopElement.attribute("guid"))
         self.setGuid(myTopElement.attribute("guid"))
         self.logMessage("Model::fromXml - guid set to : " + self.guid)
-        
+
         self.mName = LaUtils.xmlDecode(myTopElement.firstChildElement("name").text())
         self.mPopulation = int(myTopElement.firstChildElement("population").text())
         self.mPeriod = LaUtils.xmlDecode(myTopElement.firstChildElement("period").text())
         self.mProjection = int(myTopElement.firstChildElement("projection").text())
         self.mEasting = int(myTopElement.firstChildElement("easting").text())
         self.mNorthing = int(myTopElement.firstChildElement("northing").text())
-        
+
         myFlag = myTopElement.firstChildElement("euclideanDistance").text()
         if myFlag == "1":
             self.mEuclideanDistance = True
         else:
             self.mEuclideanDistance = False
-            
+
         myFlag = myTopElement.firstChildElement("walkingTime").text()
         if myFlag == "1":
             self.mWalkingTime = True
         else:
             self.mWalkingTime = False
-            
+
         myFlag = myTopElement.firstChildElement("pathDistance").text()
         if myFlag == "1":
             self.mPathDistance = True
         else:
             self.mPathDistance = False
-            
+
         self.mPrecision = int(myTopElement.firstChildElement("precision").text())
         self.mDietPercent = int(myTopElement.firstChildElement("dietPercent").text())
         self.mPercentOfDietThatIsFromCrops = int(myTopElement.firstChildElement("plantPercent").text())
         self.mMeatPercent = int(myTopElement.firstChildElement("meatPercent").text())
         self.mCaloriesPerPersonDaily = int(myTopElement.firstChildElement("caloriesPerPersonDaily").text())
-        
+
         self.mBaseOnPlants = int(myTopElement.firstChildElement("baseOnPlants").text())
         self.mIncludeDairy = int(myTopElement.firstChildElement("includeDairy").text())
         self.mLimitDairy = int(myTopElement.firstChildElement("limitDairy").text())
         self.mLimitDairyPercentage = int(myTopElement.firstChildElement("limitDairyPercent").text())
-        
+
         self.mDairyUtilisation = int(myTopElement.firstChildElement("dairyUtilisation").text())
         return True
 
@@ -767,37 +767,37 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         myString += f'  <dairyUtilisation>{self.mDairyUtilisation}</dairyUtilisation>\\n'
         myString += '</model>\\n'
         return myString
-        
+
     def doCalcsAnimalsFirstDairySeparate(self) -> LaDietLabels:
         """
         Proxy method that calls the function in lacalculations.py to calculate diet values
         when animals are prioritized and dairy is separate from meat.
-        
+
         Returns:
             LaDietLabels: Object containing the calculated diet values and requirements
         """
         self.logMessage("Running doCalcsAnimalsFirstDairySeparate")
-        
+
         # Import the lacalculations module
         from la.lib import lacalculations
-        
+
         # Call the function and pass self as the model parameter
         return lacalculations.doCalcsAnimalsFirstDairySeparate(self)
-        
+
     def doCalcsPlantsFirstDairySeperate(self) -> LaDietLabels:
         """
         Proxy method that calls the function in lacalculations.py to calculate diet values
         when plants are prioritized and dairy is separate from meat.
         Note: Original spelling 'Seperate' is maintained for compatibility.
-        
+
         Returns:
             LaDietLabels: Object containing the calculated diet values and requirements
         """
         self.logMessage("Running doCalcsPlantsFirstDairySeperate")
-        
+
         # Import the lacalculations module
         from la.lib import lacalculations
-        
+
         # Check if the function exists with the original spelling, otherwise try the corrected spelling
         if hasattr(lacalculations, 'doCalcsPlantsFirstDairySeperate'):
             return lacalculations.doCalcsPlantsFirstDairySeperate(self)
@@ -807,21 +807,21 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             self.logMessage("Error: Required calculation function not found in lacalculations module")
             # Return an empty diet labels object as fallback
             return LaDietLabels()
-        
+
     def doCalcsAnimalsFirstIncludeDiary(self) -> LaDietLabels:
         """
         Proxy method that calls the function in lacalculations.py to calculate diet values
         when animals are prioritized and dairy is included with meat.
         Note: Original spelling 'Diary' is maintained for compatibility.
-        
+
         Returns:
             LaDietLabels: Object containing the calculated diet values and requirements
         """
         self.logMessage("Running doCalcsAnimalsFirstIncludeDiary")
-        
+
         # Import the lacalculations module
         from la.lib import lacalculations
-        
+
         # Check if the function exists with the original spelling, otherwise try the corrected spelling
         if hasattr(lacalculations, 'doCalcsAnimalsFirstIncludeDiary'):
             return lacalculations.doCalcsAnimalsFirstIncludeDiary(self)
@@ -831,20 +831,20 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             self.logMessage("Error: Required calculation function not found in lacalculations module")
             # Return an empty diet labels object as fallback
             return LaDietLabels()
-        
+
     def doCalcsPlantsFirstIncludeDairy(self) -> LaDietLabels:
         """
         Proxy method that calls the function in lacalculations.py to calculate diet values
         when plants are prioritized and dairy is included with meat.
-        
+
         Returns:
             LaDietLabels: Object containing the calculated diet values and requirements
         """
         self.logMessage("Running doCalcsPlantsFirstIncludeDairy")
-        
+
         # Import the lacalculations module
         from la.lib import lacalculations
-        
+
         # Call the function and pass self as the model parameter
         return lacalculations.doCalcsPlantsFirstIncludeDairy(self)
 
