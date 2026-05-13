@@ -77,7 +77,7 @@ class LaMainForm(LaMainFormBase):
         # Initialize debug dialog
         self.myDebugDialog = None
         myDebugMode = QSettings().value("landuse_analyst/debug", False, type=bool)
-        LaUtils.debug.isEnabled(myDebugMode)
+        LaUtils.debug.setEnabled(myDebugMode)
 
         if myDebugMode:
             from la.gui.ladebugdialog import LaDebugDialog
@@ -164,8 +164,8 @@ class LaMainForm(LaMainFormBase):
             land_needed = self.controller.calculateTotalLandNeeded(
                 population=population,
                 diet_settings=diet_settings,
-                enabled_animals=self.getEnabledAnimals(),
-                enabled_crops=self.getEnabledCrops() if hasattr(self, 'getEnabledCrops') else []
+                enabled_animals=self.getSelectedAnimals(),
+                enabled_crops=self.getSelectedCrops()
             )
 
             # Display the result (UI code stays in form)

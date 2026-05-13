@@ -766,57 +766,150 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
 
 
             # Basic info - try both 'name' and 'n' tags for compatibility
-            # Mimic C++: get text (empty if null), then decode
             name_element = myTopElement.firstChildElement("name")
             if name_element.isNull():
                 name_element = myTopElement.firstChildElement("n") # Fallback
-            self.mName = LaUtils.xmlDecode(myTopElement.firstChildElement("name").text()) # Handles null element returning empty text
+            self.mName = LaUtils.xmlDecode(name_element.text())
             self.mDescription = LaUtils.xmlDecode(myTopElement.firstChildElement("description").text())
             LaUtils.debug.log(f"Loaded animal name: {self.mName}")
 
             # Meat production
-            self.mMeatFoodValue = int(myTopElement.firstChildElement("meatFoodValue").text())
-            self.mUsableMeat = int(myTopElement.firstChildElement("usableMeat").text())
-            self.mKillWeight = int(myTopElement.firstChildElement("killWeight").text())
-            self.mAdultWeight = int(myTopElement.firstChildElement("adultWeight").text())
-            self.mGrowTime = int(myTopElement.firstChildElement("growTime").text())
-            self.mDeathRate = int(myTopElement.firstChildElement("deathRate").text())
+            try:
+                self.mMeatFoodValue = int(myTopElement.firstChildElement("meatFoodValue").text() or 3000)
+            except (ValueError, TypeError):
+                self.mMeatFoodValue = 3000
+                
+            try:
+                self.mUsableMeat = int(myTopElement.firstChildElement("usableMeat").text() or 50)
+            except (ValueError, TypeError):
+                self.mUsableMeat = 50
+                
+            try:
+                self.mKillWeight = int(myTopElement.firstChildElement("killWeight").text() or 100)
+            except (ValueError, TypeError):
+                self.mKillWeight = 100
+                
+            try:
+                self.mAdultWeight = int(myTopElement.firstChildElement("adultWeight").text() or 0)
+            except (ValueError, TypeError):
+                self.mAdultWeight = 0
+                
+            try:
+                self.mGrowTime = int(myTopElement.firstChildElement("growTime").text() or 10)
+            except (ValueError, TypeError):
+                self.mGrowTime = 10
+                
+            try:
+                self.mDeathRate = int(myTopElement.firstChildElement("deathRate").text() or 10)
+            except (ValueError, TypeError):
+                self.mDeathRate = 10
 
             # Reproduction
-            self.mConceptionEfficiency = int(myTopElement.firstChildElement("conceptionEfficiency").text())
-            self.mFemalesToMales = int(myTopElement.firstChildElement("femalesToMales").text())
-            self.mSexualMaturity = int(myTopElement.firstChildElement("sexualMaturity").text())
-            self.mBreedingExpectancy = int(myTopElement.firstChildElement("breedingExpectancy").text())
-            self.mYoungPerBirth = int(myTopElement.firstChildElement("youngPerBirth").text())
-            self.mGestationTime = int(myTopElement.firstChildElement("gestationTime").text())
-            self.mEstrousCycle = int(myTopElement.firstChildElement("estrousCycle").text())
+            try:
+                self.mConceptionEfficiency = int(myTopElement.firstChildElement("conceptionEfficiency").text() or 0)
+            except (ValueError, TypeError):
+                self.mConceptionEfficiency = 0
+                
+            try:
+                self.mFemalesToMales = int(myTopElement.firstChildElement("femalesToMales").text() or 0)
+            except (ValueError, TypeError):
+                self.mFemalesToMales = 0
+                
+            try:
+                self.mSexualMaturity = int(myTopElement.firstChildElement("sexualMaturity").text() or 18)
+            except (ValueError, TypeError):
+                self.mSexualMaturity = 18
+                
+            try:
+                self.mBreedingExpectancy = int(myTopElement.firstChildElement("breedingExpectancy").text() or 5)
+            except (ValueError, TypeError):
+                self.mBreedingExpectancy = 5
+                
+            try:
+                self.mYoungPerBirth = int(myTopElement.firstChildElement("youngPerBirth").text() or 1)
+            except (ValueError, TypeError):
+                self.mYoungPerBirth = 1
+                
+            try:
+                self.mGestationTime = int(myTopElement.firstChildElement("gestationTime").text() or 120)
+            except (ValueError, TypeError):
+                self.mGestationTime = 120
+                
+            try:
+                self.mEstrousCycle = int(myTopElement.firstChildElement("estrousCycle").text() or 21)
+            except (ValueError, TypeError):
+                self.mEstrousCycle = 21
 
             # Early life
-            self.mWeaningAge = int(myTopElement.firstChildElement("weaningAge").text())
-            self.mWeaningWeight = int(myTopElement.firstChildElement("weaningWeight").text())
+            try:
+                self.mWeaningAge = int(myTopElement.firstChildElement("weaningAge").text() or 12)
+            except (ValueError, TypeError):
+                self.mWeaningAge = 12
+                
+            try:
+                self.mWeaningWeight = int(myTopElement.firstChildElement("weaningWeight").text() or 30)
+            except (ValueError, TypeError):
+                self.mWeaningWeight = 30
 
             # Energy requirements type
             myFeedEnergyType = myTopElement.firstChildElement("feedEnergyType").text()
             # Default to KCalories if not TDN or element missing/empty
-            self.mFeedEnergyType: LaEnergyType = LaEnergyType.TDN if myFeedEnergyType == "TDN" else LaEnergyType.KCalories
+            self.mFeedEnergyType = LaEnergyType.TDN if myFeedEnergyType == "TDN" else LaEnergyType.KCalories
 
             # Energy requirements
-            self.mGestating = int(myTopElement.firstChildElement("gestating").text())
-            self.mLactating = int(myTopElement.firstChildElement("lactating").text())
-            self.mMaintenance = int(myTopElement.firstChildElement("maintenance").text())
-            self.mJuvenile = int(myTopElement.firstChildElement("juvenile").text())
+            try:
+                self.mGestating = int(myTopElement.firstChildElement("gestating").text() or 0)
+            except (ValueError, TypeError):
+                self.mGestating = 0
+                
+            try:
+                self.mLactating = int(myTopElement.firstChildElement("lactating").text() or 0)
+            except (ValueError, TypeError):
+                self.mLactating = 0
+                
+            try:
+                self.mMaintenance = int(myTopElement.firstChildElement("maintenance").text() or 0)
+            except (ValueError, TypeError):
+                self.mMaintenance = 0
+                
+            try:
+                self.mJuvenile = int(myTopElement.firstChildElement("juvenile").text() or 0)
+            except (ValueError, TypeError):
+                self.mJuvenile = 0
 
             # Dairy
-            myMilkText = myTopElement.firstChildElement("milk").text().lower()
-            self.mMilk: bool = True if myMilkText == "true" else False
-            self.mMilkGramsPerDay = int(myTopElement.firstChildElement("milkGramsPerDay").text())
-            self.mMilkFoodValue = int(myTopElement.firstChildElement("milkFoodValue").text())
-            self.mLactationTime = int(myTopElement.firstChildElement("lactationTime").text())
+            try:
+                myMilkText = myTopElement.firstChildElement("milk").text().lower()
+                self.mMilk = True if myMilkText == "true" else False
+            except (AttributeError, ValueError):
+                self.mMilk = False
+                
+            try:
+                self.mMilkGramsPerDay = int(myTopElement.firstChildElement("milkGramsPerDay").text() or 0)
+            except (ValueError, TypeError):
+                self.mMilkGramsPerDay = 0
+                
+            try:
+                self.mMilkFoodValue = int(myTopElement.firstChildElement("milkFoodValue").text() or 0)
+            except (ValueError, TypeError):
+                self.mMilkFoodValue = 0
+                
+            try:
+                self.mLactationTime = int(myTopElement.firstChildElement("lactationTime").text() or 0)
+            except (ValueError, TypeError):
+                self.mLactationTime = 0
 
             # Fiber
-            fleece_text = myTopElement.firstChildElement("fleece").text().lower()
-            self.mFleece = fleece_text == "true"
-            self.mFleeceWeightKg = float(myTopElement.firstChildElement("fleeceWeightKg").text())
+            try:
+                fleece_text = myTopElement.firstChildElement("fleece").text().lower()
+                self.mFleece = fleece_text == "true"
+            except (AttributeError, ValueError):
+                self.mFleece = False
+                
+            try:
+                self.mFleeceWeightKg = float(myTopElement.firstChildElement("fleeceWeightKg").text() or 0.0)
+            except (ValueError, TypeError):
+                self.mFleeceWeightKg = 0.0
 
             # Image - Store the full image path correctly
             image_file_text = LaUtils.xmlDecode(myTopElement.firstChildElement("imageFile").text())
@@ -835,7 +928,6 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
                     self.mImageFile = basename
 
             LaUtils.debug.log(f"Set animal image file to: {self.mImageFile}")
-
 
             LaUtils.debug.log(f"Successfully processed XML for animal: {self.mName}")
             return True # Mimic C++ return true even if some elements were missing/invalid

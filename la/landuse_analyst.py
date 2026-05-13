@@ -100,7 +100,7 @@ class LanduseAnalyst:
 
         # Check if plugin was started the first time in current QGIS session
         # Must be set in initGui() to survive plugin reloads
-        self.first_start = None
+        self.first_start = True
 
     # noinspection PyMethodMayBeStatic
     def tr(self, message):

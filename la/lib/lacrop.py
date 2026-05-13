@@ -421,7 +421,20 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         else:
             self.mAreaUnits = LaAreaUnits.Dunum  # Default
         
-        self.mImageFile = myTopElement.firstChildElement("imageFile").text()
+        # Image - Store the full image path correctly with dynamic resolution
+        image_file_text = LaUtils.xmlDecode(myTopElement.firstChildElement("imageFile").text())
+        if image_file_text and os.path.exists(image_file_text):
+            self.mImageFile = image_file_text
+        else:
+            # Try to find the file in the user's images directory
+            import os
+            images_dir = LaUtils.userImagesDirPath()
+            basename = os.path.basename(image_file_text) if image_file_text else ""
+            possible_path = os.path.join(images_dir, basename) if basename else ""
+            if basename and os.path.exists(possible_path):
+                self.mImageFile = possible_path
+            else:
+                self.mImageFile = basename
         
         # Log successful parsing
         LaUtils.debug.log(f"After fromXml - cropYield: {self.mCropYield}, cropFodderProduction: {self.mFodderProduction}")
