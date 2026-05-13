@@ -871,6 +871,9 @@ def doCalcsAnimalsFirstDairySeparate(theModel: 'LaModel') -> LaDietLabels:
         # --- Final Animal Report Update Loop ---
         # Update the animal report map with final area targets based on fallow allocation results stored in model.mValueMap
         # for myAnimalGuid, myPair in myAnimalCalcsReportMap.items():
+
+        myReport = ""
+
         for myAnimalGuid, myAnimalParameterGuid in mySelectedAnimalsMap.items():
             try:
                 myReport = str(myAnimalCalcsReportMap[myAnimalGuid][0])
