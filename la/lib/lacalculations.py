@@ -527,11 +527,13 @@ def doCalcsAnimalsFirstIncludeDairy(theModel: 'LaModel') -> LaDietLabels:
         c21 = e7 * e3
         # C++ line 782: c23 = e7 * c6 * c7 * c9   (meat kcals for this animal)
         c23 = e7 * c6 * c7 * c9
-        # C++ line 783: c22 = (e15 * myAnimalContributionScale) - c21 - c23  (wild meat residual for this animal's share)
-        # Wait, wild meat should be 10% of the budget. 
-        # c1 is 1-Meat%, so e15 * c1 is the total wild meat budget.
-        # We should probably scale the wild meat remainder too so it sums correctly.
-        c22 = (e15 * c1 * myAnimalContributionScale)
+        # C++ line 783 is `c22 = e15 - c21 - c23`. Because e7 is solved to make
+        # c21 + c23 = e15*(1-c1) (the tame-meat budget), this reduces to e15*c1
+        # — the wild-meat budget. We express it directly, scaled by the per-animal
+        # contribution so the multi-animal counter sums correctly:
+        #   sum_i (e15 * c1 * scale_i) = e15 * c1   when sum_i(scale_i) = 1
+        # (Literal C++ port would triple-count with 3 animals: 3 * e15*c1.)
+        c22 = e15 * c1 * myAnimalContributionScale
 
         myDairyMCalorieCounter    += c21
         myWildMeatMCalorieCounter += c22
