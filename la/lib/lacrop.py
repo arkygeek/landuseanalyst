@@ -5,6 +5,7 @@
 # decorator is in the PyQt5.QtCore module. The pyqtProperty decorator is used
 # to define the properties of the LaCrop class, including name, description,
 # cropType, plantingDate, harvestDate, and yieldValue.
+import os
 import warnings
 from typing import Optional, Type
 
@@ -426,8 +427,6 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         if image_file_text and os.path.exists(image_file_text):
             self.mImageFile = image_file_text
         else:
-            # Try to find the file in the user's images directory
-            import os
             images_dir = LaUtils.userImagesDirPath()
             basename = os.path.basename(image_file_text) if image_file_text else ""
             possible_path = os.path.join(images_dir, basename) if basename else ""

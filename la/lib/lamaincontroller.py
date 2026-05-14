@@ -205,8 +205,9 @@ class LaMainController(QObject):
             self.model.crops = enabled_crops
 
         # Calculate total land needed
-        # For now return a simple calculation, implement actual calculation later
-        return float(population) * 0.5  # Placeholder calculation
+        if hasattr(self.model, 'mDietLabels') and self.model.mDietLabels:
+            return getattr(self.model.mDietLabels, 'totalLandNeeded', 0.0)
+        return 0.0
 
     def calculateDietBreakdown(self, plantAnimalRatio, wildTameAnimalRatio, wildTamePlantRatio):
         """Calculate diet breakdown percentages."""

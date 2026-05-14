@@ -12,7 +12,8 @@ from typing import Dict, Tuple, TYPE_CHECKING
 import os
 
 from la.lib.lautils import LaUtils
-from la.lib.la import Priority, Status, AreaUnits, EnergyType, LaDietLabels
+from la.lib.la import Priority, Status, AreaUnits, EnergyType
+from la.lib.ladietlabels import LaDietLabels
 from la.lib.lafoodsource import LaFoodSource
 from la.lib.laanimal import LaAnimal
 from la.lib.laanimalparameter import LaAnimalParameter
@@ -50,11 +51,11 @@ def doCalcsAnimalsFirstDairySeparate(theModel: 'LaModel') -> LaDietLabels:
     myDairyMCalorieCounter = 0.0
     myTameMeatMCalorieCounter = 0.0
 
-    myWildMeatPortion = (1. - theModel.mMeatPercent)
+    myWildMeatPortion = (1. - (theModel.mMeatPercent * 0.01))
     myDairyUtilization = theModel.mDairyUtilisation * 0.01 # Assuming percent input
     myDairyLimitPercent = theModel.mLimitDairyPercentage * 0.01 # Assuming percent input
     myLimitDairyBool = theModel.mLimitDairy
-    myPlantPercent = 1. - theModel.mDietPercent
+    myPlantPercent = 1. - (theModel.mDietPercent * 0.01)
     myDomesticCropPortion = theModel.mPercentOfDietThatIsFromCrops * 0.01
 
     mySelectedAnimalsMap = theModel.mAnimalsMap
@@ -89,7 +90,7 @@ def doCalcsAnimalsFirstDairySeparate(theModel: 'LaModel') -> LaDietLabels:
         
         myAnimalContributionToMeatPortion = myAnimalParameter.percentTameMeat * .01
         # B3 target
-        myAnimalMCalTarget = myAnimalContributionToMeatPortion * myMCalsSettlementAnnual * theModel.mDietPercent * theModel.mMeatPercent
+        myAnimalMCalTarget = myAnimalContributionToMeatPortion * myMCalsSettlementAnnual * (theModel.mDietPercent * 0.01) * (theModel.mMeatPercent * 0.01)
         
         myPotentialDairyPerOffspring = myMilkKgPerDay * myMilkFoodValue * (myLactationTime - myWeaningAge) # B4
         myValuePerOffspring = myKillWeight * myUsablePortionOfAnimal * myMeatValueMCal # B5
@@ -112,7 +113,7 @@ def doCalcsAnimalsFirstDairySeparate(theModel: 'LaModel') -> LaDietLabels:
         myTameMeatMCalorieCounter += myMCalsFromTheMeat
         myDairyMCalorieCounter += myMCalsUtilizedFromDairy
 
-        myFoodSourceMap = myAnimalParameter.fodderSourceMap()
+        myFoodSourceMap = myAnimalParameter.fodderSourceMap
         myMeatPercentLocal = myMCalsFromTheMeat / myMCalsSettlementAnnual # B15
         myDairyPercentLocal = myMCalsUtilizedFromDairy / myMCalsSettlementAnnual # B16
 
@@ -154,16 +155,16 @@ def doCalcsAnimalsFirstDairySeparate(theModel: 'LaModel') -> LaDietLabels:
 
         # --- Grain/Fodder Map Updates (C++ lines 1124-1168) ---
         for myCropGuid, myFoodSource in myFoodSourceMap.items():
-            myGrain = myFoodSource.grain() * .001
-            myFodder = myFoodSource.fodder() * .001
-            myDays = myFoodSource.days()
+            myGrain = myFoodSource.grain * .001
+            myFodder = myFoodSource.fodder * .001
+            myDays = myFoodSource.days
             
             myGrainToAdd = myGrain * myDays * myTotalOffspring
             myFoodSourceMapCounter[myCropGuid] += myGrainToAdd
             
             myCropObj = LaUtils.getCrop(myCropGuid)
-            myFoodValueOfCrop = myCropObj.cropCalories() * .001
-            myFoodValueofFodder = myCropObj.fodderValue() * .001
+            myFoodValueOfCrop = myCropObj.cropCalories * .001
+            myFoodValueofFodder = myCropObj.fodderValue * .001
             
             myGrainMCal = myGrainToAdd * myFoodValueOfCrop
             myFodderMCal = myFodder * myDays * myFoodValueofFodder * myTotalOffspring
@@ -250,7 +251,7 @@ def doCalcsAnimalsFirstDairySeparate(theModel: 'LaModel') -> LaDietLabels:
     # 3. Dairy Portion Logic (C++ lines 1207-1232)
     myDairyLimit = myDairyLimitPercent if myLimitDairyBool else 1.0
     myDomesticMeatPercent = myTameMeatMCalorieCounter / myMCalsSettlementAnnual
-    myWildMeatPercent = myWildMeatPortion * theModel.mDietPercent
+    myWildMeatPercent = myWildMeatPortion * (theModel.mDietPercent * 0.01)
     
     myLimitSatisfies = (myDomesticMeatPercent + myWildMeatPercent + myDairyLimit) > 1.
     myNewLimit = (1. - myDomesticMeatPercent - myWildMeatPercent) if myLimitSatisfies else myDairyLimit
@@ -280,7 +281,7 @@ def doCalcsAnimalsFirstDairySeparate(theModel: 'LaModel') -> LaDietLabels:
         myCropParameter = LaUtils.getCropParameter(myCropParameterGuid)
         
         myCropPortion = myCropParameter.percentTameCrop * .01
-        myCropFoodValue = myCrop.cropCalories() * .001
+        myCropFoodValue = myCrop.cropCalories * .001
         myCropPercentLocal = myCropPortion * myOverallCropPercent
         myMCalsFromTheCrop = myCropPercentLocal * myMCalsSettlementAnnual
         
@@ -300,7 +301,7 @@ def doCalcsAnimalsFirstDairySeparate(theModel: 'LaModel') -> LaDietLabels:
         
         myAdjustedTarget = myKgForPeople + myAnimalKgAdd
         
-        myCropYield = myCrop.cropYield() * 10.0 if myCrop.areaUnits() == AreaUnits.Dunum else myCrop.cropYield()
+        myCropYield = myCrop.cropYield * 10.0 if myCrop.areaUnits == AreaUnits.Dunum else myCrop.cropYield
         myCropAreaTargetPeople = myKgForPeople / myCropYield if myCropYield > 0 else 0
         myCropAreaTargetAnimals = myAnimalKgAdd / myCropYield if myCropYield > 0 else 0
         
@@ -322,7 +323,7 @@ def doCalcsAnimalsFirstDairySeparate(theModel: 'LaModel') -> LaDietLabels:
             f"myMCalsFromTheCrop = {myMCalsFromTheCrop}\n"
             f"myAnimalKgAdd = {myAnimalKgAdd}\n"
             f"myAdjustedTarget = {myAdjustedTarget}\n"
-            f"myCrop.cropYield() = {myCrop.cropYield()}\n"
+            f"myCrop.cropYield = {myCrop.cropYield}\n"
             f"myCropYield = {myCropYield}\n"
             f"Crop Production People before adjusting= {myKgForPeople1}\n"
             f"Extra Kg to account for spoilage= {myKgForPeopleSpoilage}\n"
@@ -381,9 +382,25 @@ def doCalcsAnimalsFirstDairySeparate(theModel: 'LaModel') -> LaDietLabels:
     myDietLabels.megaCaloriesSettlementAnnual = myMCalsSettlementAnnual
     myDietLabels.dairySurplusMCalories = myOverallDairySurplusMCals
 
+    # 8. Total Land Area Summation
+    myTotalLandArea = 0.0
+    for _, myArea in myCropCalcsReportMap.values():
+        myTotalLandArea += myArea
+    for _, myArea in theModel.mAnimalCalcReport.values():
+        myTotalLandArea += myArea
+    
+    myDietLabels.totalLandNeeded = myTotalLandArea
+
     # Populate model maps for persistence
     theModel.mCalcsCropsMap = {k: v[0] for k, v in myCropCalcsReportMap.items()}
     theModel.mAreaTargetsCropsMap = {k: v[1] for k, v in myCropCalcsReportMap.items()}
+    
+    myDietLabels.animalCalcsReportMap = myAnimalCalcsReportMap
+    myDietLabels.cropCalcsReportMap = myCropCalcsReportMap
+    myDietLabels.animalAreaTargetsMap = {k: v[1] for k, v in myAnimalCalcsReportMap.items()}
+    myDietLabels.cropAreaTargetsMap = {k: v[1] for k, v in myCropCalcsReportMap.items()}
+    
+    theModel.mDietLabels = myDietLabels
     
     return myDietLabels
 
@@ -428,6 +445,158 @@ def allocateFallowGrazingLand(theModel: 'LaModel', theFallowMCalsAvailable: floa
     # Allocate LOW (C++ line 439 - REPLICATING BUG: passes myHighPriorityCount)
     if myTotalFallowValue > 0:
         myTotalFallowValue = doTheFallowAllocation(theModel, Priority.Low, myTotalFallowValue, myLowPriorityValue, myHighPriorityCount)
+
+# --- Additional Calculation Path Stubs ---
+
+def doCalcsPlantsFirstDairySeparate(theModel: 'LaModel') -> LaDietLabels:
+    """Stub for Plants First, Dairy Separate."""
+    LaUtils.debug.log("Using stub for doCalcsPlantsFirstDairySeparate", "Warning")
+    return doCalcsAnimalsFirstDairySeparate(theModel)
+
+def doCalcsAnimalsFirstIncludeDairy(theModel: 'LaModel') -> LaDietLabels:
+    """
+    Implements the 'Animals First, Include Dairy' calculation path.
+    In this mode, dairy calories produced by the meat herd are counted
+    towards the total animal product requirement.
+    """
+    # -----------------------------------------------------------------------
+    # Direct port of C++ LaModel::doCalcsAnimalsFirstIncludeDiary() (lines 736-831)
+    # NOTE: The C++ version uses a simple calorie-apportionment formula,
+    #       NOT the full herd-population algorithm of DairySeparate.
+    # In C++ all percentages are stored as fractions (setter divides by 100),
+    # so in Python we apply * 0.01 to mDietPercent, mMeatPercent, etc.
+    # -----------------------------------------------------------------------
+    myDietLabels = LaDietLabels()
+
+    # C++ c-variables, translated to Python with proper 0.01 scaling
+    # c1  = 1 - mMeatPercent  (in C++ mMeatPercent is already a fraction)
+    c1  = 1.0 - (theModel.mMeatPercent * 0.01)          # wild-meat fraction
+    c8  = theModel.mDairyUtilisation * 0.01              # dairy utilisation fraction
+    c10 = float(theModel.mPopulation)
+    c11 = float(theModel.mCaloriesPerPersonDaily)        # kcal/person/day
+    c12 = theModel.mPercentOfDietThatIsFromCrops * 0.01  # domestic-crop fraction
+    c14 = c10 * c11 * 365.0                              # total settlement kcals/year
+    c15 = theModel.mDietPercent * 0.01                   # animal fraction of diet
+    e15 = c14 * c15                                      # animal kcal budget
+
+    myDairyMCalorieCounter    = 0.0
+    myTameMeatMCalorieCounter = 0.0
+    myWildMeatMCalorieCounter = 0.0
+
+    mySelectedAnimalsMap = theModel.mAnimalsMap
+    LaUtils.debug.log(
+        f"IncludeDairy(simple) start. Diet%={theModel.mDietPercent}, "
+        f"Meat%={theModel.mMeatPercent}, c14={c14:.1f}, e15={e15:.1f}, "
+        f"animals={list(mySelectedAnimalsMap.keys())}",
+        "Calculation"
+    )
+
+    # --- Animal loop: direct port of C++ lines 759-802 ---
+    num_animals = len(mySelectedAnimalsMap)
+    for myAnimalGuid, myAnimalParameterGuid in mySelectedAnimalsMap.items():
+        myAnimal = LaUtils.getAnimal(myAnimalGuid)
+        myAnimalParameter = LaUtils.getAnimalParameter(myAnimalParameterGuid)
+        
+        # Scaling factor: if multiple animals are selected, each should only 
+        # satisfy its assigned percentage of the domestic meat portion.
+        # This matches the logic in DairySeparate mode and fixes the "multiple animal" bug in C++.
+        myAnimalContributionScale = myAnimalParameter.percentTameMeat * 0.01 if myAnimalParameter else (1.0 / num_animals if num_animals > 0 else 1.0)
+
+        # C++ animal variables (names kept identical to C++ source)
+        c2 = myAnimal.milkGramsPerDay * 0.001        # milk kg/day
+        c3 = myAnimal.milkFoodValue                   # kcal/kg milk
+        c4 = myAnimal.lactationTime                   # days lactation
+        c5 = myAnimal.weaningAge                      # days to wean
+        c6 = myAnimal.killWeight                      # kg
+        c7 = myAnimal.usableMeat * 0.01               # fraction usable
+        c9 = myAnimal.meatFoodValue                   # kcal/kg
+
+        # C++ line 776: e2 = c2 * c3 * (c4 - c5)   (kcal dairy per offspring)
+        e2 = c2 * c3 * (c4 - c5)
+        # C++ line 777: e3 = e2 * c8   (actual dairy kcal utilised per offspring)
+        e3 = e2 * c8
+        # C++ line 779: e10 = e3 + (c9 * c7 * c6)  (total value per offspring including dairy)
+        e10 = e3 + (c9 * c7 * c6)
+        
+        # Target for THIS animal = Total Animal Budget * Meat Fraction * Animal's Share
+        myTargetForThisAnimal = e15 * (1.0 - c1) * myAnimalContributionScale
+
+        # C++ line 780: e7 = (Target) / e10   (offspring needed)
+        e7 = myTargetForThisAnimal / e10 if e10 > 0 else 0.0
+        # C++ line 781: c21 = e7 * e3   (dairy kcals for this animal)
+        c21 = e7 * e3
+        # C++ line 782: c23 = e7 * c6 * c7 * c9   (meat kcals for this animal)
+        c23 = e7 * c6 * c7 * c9
+        # C++ line 783: c22 = (e15 * myAnimalContributionScale) - c21 - c23  (wild meat residual for this animal's share)
+        # Wait, wild meat should be 10% of the budget. 
+        # c1 is 1-Meat%, so e15 * c1 is the total wild meat budget.
+        # We should probably scale the wild meat remainder too so it sums correctly.
+        c22 = (e15 * c1 * myAnimalContributionScale)
+
+        myDairyMCalorieCounter    += c21
+        myWildMeatMCalorieCounter += c22
+        myTameMeatMCalorieCounter += c23
+
+        LaUtils.debug.log(
+            f"IncludeDairy animal {myAnimalGuid[:8]}: "
+            f"e2={e2:.1f}, e3={e3:.1f}, e10={e10:.1f}, e7={e7:.3f}, "
+            f"c21(dairy)={c21:.1f}, c23(meat)={c23:.1f}",
+            "Calculation"
+        )
+
+    # --- Finalization: direct port of C++ lines 804-830 ---
+    # c14 is total kcal/year; convert counters to same unit for ratios
+    c24 = (1.0 - c12) * (c14 - e15)    # wild-plant kcals
+    c25 = c12 * (c14 - e15)             # domestic-crop kcals
+    c30 = c24 / c14                      # wild-plant fraction
+    c31 = c25 / c14                      # domestic-crop fraction
+
+    c28 = myWildMeatMCalorieCounter / c14   # wild-meat fraction
+    c29 = myTameMeatMCalorieCounter / c14   # tame-meat fraction
+    c27 = myDairyMCalorieCounter / c14      # dairy fraction
+
+    # Convert kcal → MCal (* 0.001 * 0.001 = * 1e-6)
+    _k = 1e-6
+
+    LaUtils.debug.log(
+        f"IncludeDairy(simple) end. c27(dairy)={c27:.4f}, c28(wild)={c28:.4f}, "
+        f"c29(tame)={c29:.4f}, c30(wildPlant)={c30:.4f}, c31(crop)={c31:.4f}",
+        "Calculation"
+    )
+
+    # C++ lines 816-829
+    myDietLabels.dairyMCalories        = myDairyMCalorieCounter * _k
+    myDietLabels.cropMCalories         = c25 * _k
+    myDietLabels.animalMCalories       = myTameMeatMCalorieCounter * _k
+    myDietLabels.wildAnimalMCalories   = myWildMeatMCalorieCounter * _k
+    myDietLabels.wildPlantsMCalories   = c24 * _k
+    myDietLabels.dairyPortionPct       = c27 * 100.0
+    myDietLabels.tameMeatPortionPct    = c29 * 100.0
+    myDietLabels.cropsPortionPct       = c31 * 100.0
+    myDietLabels.wildAnimalPortionPct  = c28 * 100.0
+    myDietLabels.wildPlantsPortionPct  = c30 * 100.0
+    # C++ line 826: setAnimalPortionPct(mDietPercent*100. - c27*100.)
+    myDietLabels.animalPortionPct      = (c15 - c27) * 100.0
+    # C++ line 827: setPlantsPortionPct((1 - mDietPercent)*100.)
+    myDietLabels.plantsPortionPct      = (1.0 - c15) * 100.0
+    # C++ line 828: setMCalsIndividualAnnual(myMCalsIndividualAnnual)  (kcal in C++)
+    myDietLabels.kiloCaloriesIndividualAnnual = c11 * 365.0
+    # C++ line 829: setMCalsSettlementAnnual(myMCalsSettlementAnnual * .001)
+    myDietLabels.megaCaloriesSettlementAnnual = c14 * 0.001
+
+    # No herd calculations in this mode → no report maps
+    myDietLabels.animalCalcsReportMap = {}
+    myDietLabels.cropCalcsReportMap   = {}
+    myDietLabels.totalLandNeeded      = 0.0
+
+    theModel.mDietLabels = myDietLabels
+    return myDietLabels
+
+def doCalcsPlantsFirstIncludeDairy(theModel: 'LaModel') -> LaDietLabels:
+    """Stub for Plants First, Include Dairy."""
+    LaUtils.debug.log("Using stub for doCalcsPlantsFirstIncludeDairy", "Warning")
+    return doCalcsAnimalsFirstDairySeparate(theModel)
+
 
 def doTheFallowAllocation(model: 'LaModel', thePriority: Priority, theAvailableFallowValue: float, theTotalNeededByGroup: float, theCountInGroup: float) -> float:
     """

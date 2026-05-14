@@ -1,8 +1,8 @@
 import os
 from typing import Optional, Type, Union, Dict, Any, cast
 from dataclasses import dataclass
-from PyQt5.QtCore import QObject, pyqtProperty, pyqtSignal
-from PyQt5.QtXml import QDomDocument, QDomElement
+from qgis.PyQt.QtCore import QObject, pyqtProperty, pyqtSignal
+from qgis.PyQt.QtXml import QDomDocument, QDomElement
 from la.lib.laserialisable import LaSerialisable
 from la.lib.laguid import LaGuid
 from la.lib.la import EnergyType as LaEnergyType, AreaUnits as LaAreaUnits

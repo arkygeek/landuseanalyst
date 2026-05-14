@@ -454,8 +454,6 @@ class LaDietLabels(QObject, LaSerialisable, LaGuid):
             self.mCropAreaTargetsMap = theCropAreaTargetsMap
             self._cropAreaTargetsMapChanged.emit(theCropAreaTargetsMap)
     @pyqtProperty(dict, notify=_animalAreaTargetsMapChanged)
-
-
     def animalAreaTargetsMap(self) -> Dict[str, float]: # type: ignore
         """
         Get the animal area targets map.

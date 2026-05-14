@@ -147,8 +147,13 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         self.mLandFound = 0
         self.mPriority = 0
 
-        # Value map for fallow land calculations
-        self.mValueMap = {} # Corresponds to mValueMap in C++
+        # Internal maps used by the calculation engine
+        self.mCalcsCropsMap: Dict[str, str] = {}
+        self.mCalcsAnimalsMap: Dict[str, str] = {}
+        self.mValueMap: Dict[str, float] = {}
+        self.mAnimalCalcReport: Dict[str, Tuple[str, float]] = {}
+        self.mAreaTargetsCropsMap: Dict[str, float] = {}
+        self.mAreaTargetsAnimalsMap: Dict[str, float] = {}
 
         # Diet calculation properties
         self.mAnimalsMap: dict[str, str] = {} # Corresponds to mAnimalsMap in C++
@@ -784,52 +789,36 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         # Call the function and pass self as the model parameter
         return lacalculations.doCalcsAnimalsFirstDairySeparate(self)
 
-    def doCalcsPlantsFirstDairySeperate(self) -> LaDietLabels:
+    def doCalcsPlantsFirstDairySeparate(self) -> LaDietLabels:
         """
         Proxy method that calls the function in lacalculations.py to calculate diet values
         when plants are prioritized and dairy is separate from meat.
-        Note: Original spelling 'Seperate' is maintained for compatibility.
 
         Returns:
             LaDietLabels: Object containing the calculated diet values and requirements
         """
-        self.logMessage("Running doCalcsPlantsFirstDairySeperate")
-
-        # Import the lacalculations module
-        from la.lib import lacalculations
-
-        # Check if the function exists with the original spelling, otherwise try the corrected spelling
-        if hasattr(lacalculations, 'doCalcsPlantsFirstDairySeperate'):
-            return lacalculations.doCalcsPlantsFirstDairySeperate(self)
-        elif hasattr(lacalculations, 'doCalcsPlantsFirstDairySeparate'):
+        try:
+            from la.lib import lacalculations
+            self.logMessage("Running doCalcsPlantsFirstDairySeparate")
             return lacalculations.doCalcsPlantsFirstDairySeparate(self)
-        else:
-            self.logMessage("Error: Required calculation function not found in lacalculations module")
-            # Return an empty diet labels object as fallback
+        except Exception as e:
+            LaUtils.debug.log(f"Error in doCalcsPlantsFirstDairySeparate: {str(e)}", "Error")
             return LaDietLabels()
 
-    def doCalcsAnimalsFirstIncludeDiary(self) -> LaDietLabels:
+    def doCalcsAnimalsFirstIncludeDairy(self) -> LaDietLabels:
         """
         Proxy method that calls the function in lacalculations.py to calculate diet values
         when animals are prioritized and dairy is included with meat.
-        Note: Original spelling 'Diary' is maintained for compatibility.
 
         Returns:
             LaDietLabels: Object containing the calculated diet values and requirements
         """
-        self.logMessage("Running doCalcsAnimalsFirstIncludeDiary")
-
-        # Import the lacalculations module
-        from la.lib import lacalculations
-
-        # Check if the function exists with the original spelling, otherwise try the corrected spelling
-        if hasattr(lacalculations, 'doCalcsAnimalsFirstIncludeDiary'):
-            return lacalculations.doCalcsAnimalsFirstIncludeDiary(self)
-        elif hasattr(lacalculations, 'doCalcsAnimalsFirstIncludeDairy'):
+        try:
+            from la.lib import lacalculations
+            self.logMessage("Running doCalcsAnimalsFirstIncludeDairy")
             return lacalculations.doCalcsAnimalsFirstIncludeDairy(self)
-        else:
-            self.logMessage("Error: Required calculation function not found in lacalculations module")
-            # Return an empty diet labels object as fallback
+        except Exception as e:
+            LaUtils.debug.log(f"Error in doCalcsAnimalsFirstIncludeDairy: {str(e)}", "Error")
             return LaDietLabels()
 
     def doCalcsPlantsFirstIncludeDairy(self) -> LaDietLabels:
@@ -840,11 +829,11 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         Returns:
             LaDietLabels: Object containing the calculated diet values and requirements
         """
-        self.logMessage("Running doCalcsPlantsFirstIncludeDairy")
-
-        # Import the lacalculations module
-        from la.lib import lacalculations
-
-        # Call the function and pass self as the model parameter
-        return lacalculations.doCalcsPlantsFirstIncludeDairy(self)
+        try:
+            from la.lib import lacalculations
+            self.logMessage("Running doCalcsPlantsFirstIncludeDairy")
+            return lacalculations.doCalcsPlantsFirstIncludeDairy(self)
+        except Exception as e:
+            LaUtils.debug.log(f"Error in doCalcsPlantsFirstIncludeDairy: {str(e)}", "Error")
+            return LaDietLabels()
 

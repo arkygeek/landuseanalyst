@@ -11,10 +11,10 @@
       <femalesToMales>20</femalesToMales> <!-- Ratio F:M -->
       <growTime>40</growTime>
       <feedEnergyType>KCalories</feedEnergyType> <!-- Assuming KCalories -->
-      <gestating>3.97</gestating> <!-- Gestation Req'd -->
-      <lactating>5.41</lactating> <!-- Lactation Req'd -->
-      <maintenance>3.2</maintenance> <!-- Maintenance Req'd -->
-      <juvenile>0.03</juvenile> <!-- Juvenile's Req kg-1 -->
+      <gestating>3970</gestating> <!-- Gestation Req'd -->
+      <lactating>5410</lactating> <!-- Lactation Req'd -->
+      <maintenance>3200</maintenance> <!-- Maintenance Req'd -->
+      <juvenile>30</juvenile> <!-- Juvenile's Req kg-1 -->
       <sexualMaturity>18</sexualMaturity>
       <youngPerBirth>1</youngPerBirth>
       <weaningAge>60</weaningAge>
@@ -30,6 +30,7 @@
       <imageFile>sheep.png</imageFile> <!-- Assuming default image -->
       <!-- Parameter Profile GUID is not part of LaAnimal XML structure -->
       <!-- Herd size and fodder info are part of LaAnimalParameter -->
+          <deathRate>30</deathRate>
     </animal>
     <animal guid="1f2a3b4c-5d6e-7f8a-9b0c-d1e2f3a4b5c6">
       <name>Pig</name>
@@ -43,10 +44,10 @@
       <femalesToMales>20</femalesToMales>
       <growTime>40</growTime>
       <feedEnergyType>KCalories</feedEnergyType>
-      <gestating>3.97</gestating>
-      <lactating>5.41</lactating>
+      <gestating>3970</gestating>
+      <lactating>5410</lactating>
       <maintenance>0</maintenance> <!-- Maintenance Req'd is 0 -->
-      <juvenile>0.03</juvenile>
+      <juvenile>30</juvenile>
       <sexualMaturity>18</sexualMaturity>
       <youngPerBirth>6</youngPerBirth>
       <weaningAge>30</weaningAge>
@@ -60,6 +61,7 @@
       <fleece>0</fleece>
       <fleeceWeightKg>0</fleeceWeightKg>
       <imageFile>pig.png</imageFile>
+          <deathRate>30</deathRate>
     </animal>
     <animal guid="2a3b4c5d-6e7f-8a9b-0c1d-e2f3a4b5c6d7">
       <name>Cow</name>
@@ -73,10 +75,10 @@
       <femalesToMales>20</femalesToMales>
       <growTime>50</growTime>
       <feedEnergyType>KCalories</feedEnergyType>
-      <gestating>6</gestating>
-      <lactating>7.5</lactating>
-      <maintenance>5.8</maintenance>
-      <juvenile>0.03</juvenile>
+      <gestating>6000</gestating>
+      <lactating>7500</lactating>
+      <maintenance>5800</maintenance>
+      <juvenile>30</juvenile>
       <sexualMaturity>18</sexualMaturity>
       <youngPerBirth>1</youngPerBirth>
       <weaningAge>60</weaningAge>
@@ -90,6 +92,7 @@
       <fleece>0</fleece>
       <fleeceWeightKg>0</fleeceWeightKg>
       <imageFile>cow.png</imageFile>
+          <deathRate>20</deathRate>
     </animal>
     <animal guid="3b4c5d6e-7f8a-9b0c-1d2e-f3a4b5c6d7e8">
       <name>Goat</name>
@@ -103,10 +106,10 @@
       <femalesToMales>20</femalesToMales>
       <growTime>40</growTime>
       <feedEnergyType>KCalories</feedEnergyType>
-      <gestating>3.97</gestating>
-      <lactating>5.41</lactating>
-      <maintenance>3.2</maintenance>
-      <juvenile>0.03</juvenile>
+      <gestating>3970</gestating>
+      <lactating>5410</lactating>
+      <maintenance>3200</maintenance>
+      <juvenile>30</juvenile>
       <sexualMaturity>18</sexualMaturity>
       <youngPerBirth>1</youngPerBirth>
       <weaningAge>60</weaningAge>
@@ -120,6 +123,7 @@
       <fleece>0</fleece>
       <fleeceWeightKg>0</fleeceWeightKg>
       <imageFile>goat.png</imageFile>
+          <deathRate>30</deathRate>
     </animal>
 </Animals>
 

@@ -404,23 +404,34 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             self.labelCaloriesWildPlants.setText(f"{wild_plant_mcals:.1f}")
 
             # --- 4. Check if we should do full calculation for dairy ---
-            # Ensure the percentage check labels exist before accessing their text
-            myAnimalCheckText = ""
-            myCropCheckText = ""
-            if hasattr(self, 'labelAnimalCheck'):
-                myAnimalCheckText = self.labelAnimalCheck.text()
-            if hasattr(self, 'labelCropCheck'):
-                myCropCheckText = self.labelCropCheck.text()
+            # Use numerical comparison instead of brittle string matching
+            animalTotal = 0.0
+            cropTotal = 0.0
+            
+            try:
+                if hasattr(self, 'labelAnimalCheck'):
+                    animalTotal = float(self.labelAnimalCheck.text().replace('%', ''))
+                if hasattr(self, 'labelCropCheck'):
+                    cropTotal = float(self.labelCropCheck.text().replace('%', ''))
+            except (ValueError, AttributeError):
+                LaUtils.debug.log("Could not parse percentage totals for validation", "Error")
+                animalTotal = 0.0
+                cropTotal = 0.0
 
-            # Only proceed with full calculation if percentages total 100%
-            if myAnimalCheckText != "100.0%" or myCropCheckText != "100.0%":
-                LaUtils.debug.log(f"Skipping full calculation for dairy: Animal%={myAnimalCheckText}, Crop%={myCropCheckText}", "Diet")
+            # Only proceed with full calculation if percentages total ~100%
+            if abs(animalTotal - 100.0) > 0.1 or abs(cropTotal - 100.0) > 0.1:
+                LaUtils.debug.log(f"Skipping full calculation: Animal={animalTotal}%, Crop={cropTotal}%", "Diet")
                 # Clear dairy-related labels since we can't calculate them
                 self.labelPortionAllDairy.setText("0.0")
                 self.labelPortionDairy.setText("0.0")
                 self.labelCaloriesDairy.setText("0.0")
                 self.labelDairySurplus.setText("No Surplus Dairy Produced")
                 return
+
+            # Synchronize the UI's selected animals and crops to the model before calculating
+            if hasattr(self, 'getSelectedAnimals') and hasattr(self, 'getSelectedCrops'):
+                self.model.mAnimalsMap = self.getSelectedAnimals()
+                self.model.mCropsMap = self.getSelectedCrops()
 
             # --- 4. Select and Run Calculation Method ---
             if self.model.mBaseOnPlants:

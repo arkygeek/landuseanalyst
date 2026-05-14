@@ -80,15 +80,11 @@ class LaMainForm(LaMainFormBase):
         LaUtils.debug.setEnabled(myDebugMode)
 
         if myDebugMode:
-            from la.gui.ladebugdialog import LaDebugDialog
-            self.myDebugDialog = LaDebugDialog(parent=self)
-            if hasattr(self.myDebugDialog, 'addDebugMessage'):
-                MESSAGE_BUS.debugMessaged.connect(self.myDebugDialog.addDebugMessage)
-            if self.myDebugDialog is not None:
-                self.myDebugDialog.show()
+            self.ensure_debug_dialog_visible()
 
         # Connect debug message bus to main form
         MESSAGE_BUS.debugMessaged.connect(self.on_debug_message)
+
         LaUtils.debug.log("Application initialized", "MainForm")
 
     # --- alphabetically ordered methods ---
@@ -126,7 +122,7 @@ class LaMainForm(LaMainFormBase):
 
             # --- Retrieve the stored calculation report --- 
             myReportString = "No calculation results available for this animal."
-            if hasattr(self.model, 'lastDietLabels') and self.model.mDietLabels:
+            if hasattr(self.model, 'mDietLabels') and self.model.mDietLabels:
                 myReportMap = self.getPropertyValue(self.model.mDietLabels, 'animalCalcsReportMap')
                 if isinstance(myReportMap, dict) and myAnimalGuid in myReportMap:
                     myReportPair = myReportMap[myAnimalGuid]
@@ -138,7 +134,7 @@ class LaMainForm(LaMainFormBase):
                 else:
                     LaUtils.debug.log(f"No report found in map for animal {myAnimalGuid}", "Calculation")
             else:
-                LaUtils.debug.log("lastDietLabels not found or empty on model", "Error")
+                LaUtils.debug.log("mDietLabels not found or empty on model", "Error")
 
             # Update the text browser
             if hasattr(self, 'textBrowserResultsAnimals'):
@@ -251,7 +247,7 @@ class LaMainForm(LaMainFormBase):
 
             # --- Retrieve the stored calculation report --- 
             myReportString = "No calculation results available for this crop."
-            if hasattr(self.model, 'lastDietLabels') and self.model.mDietLabels:
+            if hasattr(self.model, 'mDietLabels') and self.model.mDietLabels:
                 myReportMap = self.getPropertyValue(self.model.mDietLabels, 'cropCalcsReportMap')
                 if isinstance(myReportMap, dict) and myCropGuid in myReportMap:
                     myReportPair = myReportMap[myCropGuid]
@@ -263,7 +259,7 @@ class LaMainForm(LaMainFormBase):
                 else:
                     LaUtils.debug.log(f"No report found in map for crop {myCropGuid}", "Calculation")
             else:
-                LaUtils.debug.log("lastDietLabels not found or empty on model", "Error")
+                LaUtils.debug.log("mDietLabels not found or empty on model", "Error")
 
             # Update the text browser
             if hasattr(self, 'textBrowserResultsCrop'):
@@ -348,29 +344,17 @@ class LaMainForm(LaMainFormBase):
         This is the central logging method that all other logging methods should use.
 
         Args:
-            message: The message to log
+            theMessage: The message to log
         """
-        # Force console output for debugging ** only use in desperation as it consumes a lot of additional memory
-        # print(f"LOG: {theMessage}")
+        # Log to debug dialog if it exists
+        if hasattr(self, 'myDebugDialog') and self.myDebugDialog is not None:
+            try:
+                self.myDebugDialog.addDebugMessage(theMessage)
+            except Exception:
+                pass
 
-        # Add the message to the logs tab
-        if hasattr(self, 'tbLogs'):
-            self.tbLogs.append(theMessage)
-            self.tbLogs.ensureCursorVisible()
-            # Force UI update immediately
-            self.tbLogs.repaint()
-            QtWidgets.QApplication.processEvents()
-
-        # Add the message to the report tab
-        if hasattr(self, 'tbReport'):
-            self.tbReport.append(theMessage)
-            # Force UI update
-            self.tbReport.repaint()
-            QtWidgets.QApplication.processEvents()
-
-        # Log to debug dialog if exists and visible
-        if hasattr(self, '_debug_dialog') and self.myDebugDialog is not None and self.myDebugDialog.isVisible():
-            self.myDebugDialog.addDebugMessage(theMessage)
+        # Also print to console for development visibility
+        # print(f"DEBUG: {theMessage}")
 
     def on_debug_message(self, message: str):
         """Handle debug messages from the message bus."""
@@ -434,14 +418,12 @@ class LaMainForm(LaMainFormBase):
         # Debug mode
         debugMode = settings.value("landuse_analyst/debug", False, type=bool)
         self.cbDebug.setChecked(debugMode)
-        self.tbReport.setVisible(debugMode)
-
-        # Also set up the Logs tab based on debug mode
+        
+        # We still show/hide the log tab if it exists
         if hasattr(self, 'MainTabs') and hasattr(self, 'log_tab'):
             tabIndex = self.MainTabs.indexOf(self.log_tab)
-            if (tabIndex >= 0):
-                self.MainTabs.setTabEnabled(tabIndex, debugMode)
-            self.log_tab.setVisible(debugMode)
+            if tabIndex >= 0:
+                self.MainTabs.setTabVisible(tabIndex, debugMode)
 
         # Load most recently used values
         if hasattr(self, 'sbPopulation'):
@@ -463,7 +445,7 @@ class LaMainForm(LaMainFormBase):
             
             # Store reference to the diet labels from the calculation for signal connections
             # This assumes the base class method updated the model with calculations
-            if hasattr(self.model, 'lastDietLabels') and self.model.mDietLabels:
+            if hasattr(self.model, 'mDietLabels') and self.model.mDietLabels:
                 self.mDietLabels = self.model.mDietLabels
                 self._connectDietLabelSignals(self.mDietLabels)
             
@@ -587,9 +569,11 @@ class LaMainForm(LaMainFormBase):
         """Ensure the debug dialog is created and visible."""
         if not self.myDebugDialog:
             from la.gui.ladebugdialog import LaDebugDialog
-            self.myDebugDialog = LaDebugDialog(parent=self)
-            MESSAGE_BUS.debugMessaged.connect(self.myDebugDialog.add_debug_message)
+            self.myDebugDialog = LaDebugDialog.get_instance(parent=self)
+            # Signal connection is now handled in __init__ and dialog constructor
         self.myDebugDialog.show()
+        self.myDebugDialog.raise_()
+        self.myDebugDialog.activateWindow()
 
     def getPropertyValue(self, obj, prop_name: str):
         """Helper method to safely get PyQt property values"""
