@@ -7,7 +7,7 @@
   <reseed>20</reseed>
   <cropRotation>1</cropRotation>
   <fallowRatio>1.0</fallowRatio>
-  <fallowValue>5749</fallowValue>
+  <fallowValue>500</fallowValue>
   <fallowEnergyType>KCalories</fallowEnergyType>
   <areaUnits>Hectare</areaUnits>
   <useCommonLand>1</useCommonLand>

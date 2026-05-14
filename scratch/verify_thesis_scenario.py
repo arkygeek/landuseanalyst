@@ -115,6 +115,15 @@ EXPECTED_CROP_HA = {
 }
 TOL_CROP_HA = 1.5
 
+# Per-animal grazing-land area targets in Ha (from 05_animal_targets.csv "Ha Required")
+EXPECTED_ANIMAL_HA = {
+    'Sheep':   9,
+    'Pig':    17,
+    'Cow':    28,
+    'Goat':   30,
+}
+TOL_ANIMAL_HA = 1.5
+
 
 def build_model():
     an_name_to_guid = load_name_to_guid('animalProfiles')
@@ -204,9 +213,25 @@ def main():
         ok = check(crop_name, exp_ha, actual_ha, tol_abs=TOL_CROP_HA)
         all_ok &= ok
 
-    print(f"\n  totalLandNeeded (sum of crop areas): {dl.totalLandNeeded:.2f} Ha")
-    print(f"  Spreadsheet total cropland (human + animal feed): 184 Ha")
-    print(f"  Note: IncludeDairy doesn't compute animal feed crops — expected difference.")
+    # --- Per-animal grazing-land areas ---
+    print("\n  --- Per-animal grazing-land area targets (Ha) — for grazing identification ---")
+    print(f"  {'Animal':<35} {'Spreadsheet':>16} {'Plugin':>16} {'Δ':>12} {'':>5}")
+    print(f"  {'-'*35} {'-'*16} {'-'*16} {'-'*12} {'-'*5}")
+    an_name_by_guid = {v: k for k, v in load_name_to_guid('animalProfiles').items()}
+    for an_name, exp_ha in EXPECTED_ANIMAL_HA.items():
+        guid = next((g for g, n in an_name_by_guid.items() if n == an_name), None)
+        animal_report_map = getattr(model, 'mAnimalCalcReport', {}) or {}
+        if guid is None or guid not in animal_report_map:
+            print(f"  {an_name:<35} {exp_ha:>16,.4f} {'MISSING':>16}")
+            all_ok = False
+            continue
+        actual_ha = animal_report_map[guid][1]
+        ok = check(an_name, exp_ha, actual_ha, tol_abs=TOL_ANIMAL_HA)
+        all_ok &= ok
+
+    print(f"\n  totalLandNeeded (sum of crop + animal Ha): {dl.totalLandNeeded:.2f} Ha")
+    print(f"  Spreadsheet total (crops 184 + animals 84):    268 Ha")
+    print(f"  (Approximate; spreadsheet rounds individual values to nearest int.)")
 
     print(f"\n  Result: {'PASS' if all_ok else 'FAIL'}")
     return 0 if all_ok else 1

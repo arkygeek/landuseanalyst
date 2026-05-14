@@ -14,7 +14,7 @@
       <fodderDays>90</fodderDays>
     </fodderCrop>
   </fodderCrops>
-  <fallowUsage>None</fallowUsage>
+  <fallowUsage>High</fallowUsage>
   <rasterName></rasterName>
   <areaUnits>Dunum</areaUnits>
   <energyType>KCalories</energyType>

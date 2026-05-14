@@ -352,14 +352,29 @@ def doCalcsAnimalsFirstDairySeparate(theModel: 'LaModel') -> LaDietLabels:
     allocateFallowGrazingLand(theModel, myMCalsFromFallowCounter, myAnimalsMap)
 
     # 6. Final Animal Report Aggregation (C++ lines 1365-1398)
+    # After allocateFallowGrazingLand, mValueMap[guid] holds the residual
+    # MCal requirement that must come from grazing land (i.e. total herd
+    # feed minus crop-fed portions minus fallow-grazed portion). Area on
+    # grazing land = residual / per-animal grazing-land productivity. The
+    # productivity comes from the animal parameter's foodValueCommonGrazingLand
+    # (Mcal/Ha) — NOT from theModel.mCommonGrazingValue, which the model
+    # stores as the total available common grazing AREA (Ha), not a
+    # productivity (see lamodel.py line 462: convertAreaToHectares).
     for myAnimalGuid, (myReport, _) in myAnimalCalcsReportMap.items():
         myMCalTarget = theModel.mValueMap.get(myAnimalGuid, 0.0)
-        myLandValue = theModel.mCommonGrazingValue # Assuming Hectare value
-        myAreaTarget = myMCalTarget / myLandValue if myLandValue > 0 else 0
-        
+        myAnimalParameterGuid = theModel.mAnimalsMap.get(myAnimalGuid, "")
+        myAnimalParameter = LaUtils.getAnimalParameter(myAnimalParameterGuid) if myAnimalParameterGuid else None
+        myLandProductivity = (
+            float(myAnimalParameter.valueCommonGrazingLand)
+            if myAnimalParameter and myAnimalParameter.valueCommonGrazingLand > 0
+            else 0.0
+        )
+        myAreaTarget = myMCalTarget / myLandProductivity if myLandProductivity > 0 else 0
+
         updatedReport = myReport + (
             f"Final MCal Target = {int(myMCalTarget)}\n"
-            f"Final Area Target = {int(myAreaTarget)}\n"
+            f"Grazing land productivity = {myLandProductivity} Mcal/Ha\n"
+            f"Final Area Target = {myAreaTarget:.2f} Ha\n"
         )
         theModel.mAnimalCalcReport[myAnimalGuid] = (updatedReport, myAreaTarget)
 

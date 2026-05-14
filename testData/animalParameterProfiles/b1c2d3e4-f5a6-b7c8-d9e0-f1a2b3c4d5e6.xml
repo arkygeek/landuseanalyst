@@ -20,4 +20,5 @@
   <specificLandEnergyType>KCalories</specificLandEnergyType>
   <foodValueCommonGrazingLand>1500</foodValueCommonGrazingLand>
   <foodValueOfSpecificGrazingLand>10</foodValueOfSpecificGrazingLand>
+  <fallowUsage>High</fallowUsage>
 </animalParameter>
