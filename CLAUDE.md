@@ -1,11 +1,35 @@
 # Landuse Analyst — Claude Code Context
 
+## Session startup checklist (do this before anything else)
+
+1. Read `.ai-project-history/landuse-analyst/memories/` — persistent rules and
+   decisions that apply to every session.
+2. Read the most recent `session-YYYY-MM-DD/task.md` in
+   `.ai-project-history/landuse-analyst/` — what is done vs. still pending.
+3. Read that session's `walkthrough.md` for context on why decisions were made.
+
+The sparse-checkout on the submodule should already limit the view to
+`landuse-analyst/` only. If other project folders are visible, run:
+
+```bash
+git -C .ai-project-history sparse-checkout init --cone
+git -C .ai-project-history sparse-checkout set landuse-analyst
+```
+
+## Session shutdown checklist (do this before ending)
+
+1. Update or create `session-YYYY-MM-DD/task.md` and `walkthrough.md`.
+2. If any new persistent rule or decision was made, add a file to `memories/`.
+3. Commit inside the submodule, then advance the pointer in the main repo.
+
 ## What this project is
+
 A QGIS plugin (Python/PyQt5) that models the agricultural catchment area of
 ancient settlements. It is a port of an original C++ plugin. The Python port
 must replicate the C++ behaviour exactly — when in doubt, check `cppArchive/`.
 
 ## Coding standards (strictly enforced)
+
 See `la/CODING_STANDARDS.md` and `la/NAMING_CONVENTIONS.md` for the full rules.
 Key points an AI must not get wrong:
 
@@ -21,10 +45,11 @@ Key points an AI must not get wrong:
 - **Docstrings** — reStructuredText format (`:param x:`, `:type x:`, `:return:`, `:rtype:`)
 
 ## Data files — IMPORTANT
+
 The app reads animal/crop/parameter profiles from `~/.landuseAnalyst/` at
 runtime. These directories must be populated before the plugin shows any data:
 
-```
+```text
 ~/.landuseAnalyst/
     animalProfiles/           ← one .xml per animal
     cropProfiles/             ← one .xml per crop
@@ -40,6 +65,7 @@ to copy it into place (safe to re-run; skips existing files by default).
 Do not confuse it with `testData/`.
 
 ## Key files
+
 - `la/lib/lautils.py` — utility class; owns all path resolution and XML loading
 - `la/lib/lamodel.py` — the calculation engine
 - `la/gui/lamainform.py` — main window implementation
@@ -48,6 +74,7 @@ Do not confuse it with `testData/`.
 - `cppArchive/src/` — original C++ source; the reference implementation
 
 ## Branch conventions
+
 - Active development: `antigravity-collaboration`
 - Main: `main`
 - Always check `cppArchive/` before inventing new behaviour
