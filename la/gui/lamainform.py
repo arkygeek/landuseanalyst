@@ -74,6 +74,12 @@ class LaMainForm(LaMainFormBase):
         # Connect diet label signals to UI update slots - do this once
         self._connectDietLabelSignals(self.mDietLabels)
 
+        # TEMP for thesis verification: preload the Min Pop / Chalcolithic
+        # scenario so we don't have to re-set inputs every plugin reload.
+        # Remove or guard with a setting later. See scratch/thesis_scenarios/
+        # min_pop_chalcolithic/ for the canonical scenario values.
+        self._applyMinPopValidationDefaults()
+
         # Initialize diet labels with default values
         self.setDietLabels()  # This will calculate initial values based on default slider positions
 
@@ -91,6 +97,92 @@ class LaMainForm(LaMainFormBase):
         LaUtils.debug.log("Application initialized", "MainForm")
 
     # --- alphabetically ordered methods ---
+
+    def _applyMinPopValidationDefaults(self):
+        """Preload the 'Min Pop / Chalcolithic / Shuna' thesis verification scenario.
+
+        See scratch/thesis_scenarios/min_pop_chalcolithic/ for the canonical
+        spreadsheet values. Sets sliders / spinboxes / checkboxes and selects
+        all animals + all crops that have parameter profiles, so the user
+        can immediately click a crop or animal in the Calculations tab (or
+        press Run) and get thesis-canonical numbers without re-configuring
+        the UI on every plugin reload.
+
+        Temporary scaffold. Remove or make conditional (e.g. dev-mode flag,
+        explicit menu item) once we have a proper 'Load scenario' UI.
+        """
+        try:
+            from qgis.PyQt.QtCore import Qt as _Qt
+
+            # --- Slider / spinbox / checkbox values ---
+            # Values from scratch/thesis_scenarios/min_pop_chalcolithic/
+            # 01_settlement_input.csv + 03_animal_selection.csv + 09_crop_selection.csv
+            if hasattr(self, 'sbPopulation'):
+                self.sbPopulation.setValue(100)
+            if hasattr(self, 'sbDailyCalories'):
+                self.sbDailyCalories.setValue(2500)
+            if hasattr(self, 'sliderDiet'):
+                self.sliderDiet.setValue(10)     # ALL Meat % (animal portion of diet)
+            if hasattr(self, 'sliderMeat'):
+                self.sliderMeat.setValue(99)     # Domestic Animal Contribution (tame meat %)
+            if hasattr(self, 'sliderCrop'):
+                self.sliderCrop.setValue(90)     # Crop Contribution (domestic crop %)
+            if hasattr(self, 'sbDairyUtilisation'):
+                self.sbDairyUtilisation.setValue(50)
+            if hasattr(self, 'cboxIncludeDairy'):
+                self.cboxIncludeDairy.setChecked(False)  # use DairySeparate algorithm
+            if hasattr(self, 'cboxBaseOnPlants'):
+                self.cboxBaseOnPlants.setChecked(False)  # Animals First
+            if hasattr(self, 'cboxLimitDairy'):
+                self.cboxLimitDairy.setChecked(False)
+
+            # --- Select all animals that have parameter profiles ---
+            if hasattr(self, 'mAnimalsMap'):
+                for myGuid in list(self.mAnimalsMap.keys()):
+                    myIsSelected, myParamGuid = self.mAnimalsMap[myGuid]
+                    if myParamGuid:
+                        self.mAnimalsMap[myGuid] = (True, myParamGuid)
+                        try:
+                            self.addAnimalToCalculationsList(myGuid)
+                        except Exception:
+                            pass
+
+            # --- Select all crops that have parameter profiles ---
+            if hasattr(self, 'mCropsMap'):
+                for myGuid in list(self.mCropsMap.keys()):
+                    myIsSelected, myParamGuid = self.mCropsMap[myGuid]
+                    if myParamGuid:
+                        self.mCropsMap[myGuid] = (True, myParamGuid)
+                        try:
+                            self.addCropToCalculationsList(myGuid)
+                        except Exception:
+                            pass
+
+            # --- Sync table widget checkboxes to match the map state ---
+            if hasattr(self, 'tblAnimals'):
+                for myRow in range(self.tblAnimals.rowCount()):
+                    myItem = self.tblAnimals.item(myRow, 0)
+                    if myItem is not None:
+                        myItem.setCheckState(_Qt.Checked)
+            if hasattr(self, 'tblCrops'):
+                for myRow in range(self.tblCrops.rowCount()):
+                    myItem = self.tblCrops.item(myRow, 0)
+                    if myItem is not None:
+                        myItem.setCheckState(_Qt.Checked)
+
+            LaUtils.debug.log(
+                "Applied Min Pop / Chalcolithic scenario defaults "
+                f"({sum(1 for _, p in self.mAnimalsMap.values() if p)} animals, "
+                f"{sum(1 for _, p in self.mCropsMap.values() if p)} crops selected)",
+                "Setup",
+            )
+
+        except Exception as e:
+            import traceback
+            LaUtils.debug.log(
+                f"Error applying Min Pop validation defaults: {e}\n{traceback.format_exc()}",
+                "Warning",
+            )
 
     @pyqtSlot(QtWidgets.QListWidgetItem, QtWidgets.QListWidgetItem)
     def animalCalcClicked(self, current_item, previous_item):
@@ -524,6 +616,54 @@ class LaMainForm(LaMainFormBase):
             settings.setValue("landuse_analyst/population", self.sbPopulation.value())
 
     # --- private methods ---
+
+    def _applyMinPopValidationDefaults(self):
+        """TEMP: preload thesis Min Pop / Chalcolithic scenario inputs.
+
+        Saves the user from re-setting all the inputs on every plugin reload
+        while we're verifying the calculation engine against the thesis
+        spreadsheet. Inputs match scratch/thesis_scenarios/min_pop_chalcolithic/
+        (Population 100, ALL Meat 10%, Domestic Animal 99%, Domestic Crop 90%,
+        Dairy Utilisation 50%, Animals First + DairySeparate mode). All four
+        animals and all crops with a configured parameter profile are selected.
+        Remove this call from __init__ once the validation phase is done.
+        """
+        try:
+            # Numeric inputs
+            if hasattr(self, 'sbPopulation'):       self.sbPopulation.setValue(100)
+            if hasattr(self, 'sbDailyCalories'):    self.sbDailyCalories.setValue(2500)
+            if hasattr(self, 'sbDairyUtilisation'): self.sbDairyUtilisation.setValue(50)
+
+            # Diet sliders (slider position = percentage on that side of the bar)
+            if hasattr(self, 'sliderDiet'): self.sliderDiet.setValue(10)  # MEAT side = 10% animal
+            if hasattr(self, 'sliderMeat'): self.sliderMeat.setValue(99)  # Domestic side = 99% tame meat
+            if hasattr(self, 'sliderCrop'): self.sliderCrop.setValue(90)  # Domestic side = 90% crops
+
+            # Mode selection — Animals First, Dairy Separate (matches spreadsheet algorithm)
+            if hasattr(self, 'cboxBaseOnPlants'): self.cboxBaseOnPlants.setChecked(False)
+            if hasattr(self, 'cboxIncludeDairy'): self.cboxIncludeDairy.setChecked(False)
+            if hasattr(self, 'cboxLimitDairy'):   self.cboxLimitDairy.setChecked(False)
+
+            # Select all animals (the 4 with parameter profiles, sum to 100%)
+            if hasattr(self, 'mAnimalsMap'):
+                for guid, (_, param_guid) in list(self.mAnimalsMap.items()):
+                    if param_guid:
+                        self.mAnimalsMap[guid] = (True, param_guid)
+
+            # Select all crops that have a parameter profile (8 of the 11 — those
+            # with non-empty param_guid; Grapes/Grass Peas/FreeHull Barley have none)
+            if hasattr(self, 'mCropsMap'):
+                for guid, (_, param_guid) in list(self.mCropsMap.items()):
+                    if param_guid:
+                        self.mCropsMap[guid] = (True, param_guid)
+
+            # Re-render the animal + crop tables so the checkboxes reflect the new state
+            if hasattr(self, 'loadAnimals'): self.loadAnimals()
+            if hasattr(self, 'loadCrops'):   self.loadCrops()
+
+            LaUtils.debug.log("Applied Min Pop / Chalcolithic validation defaults", "Setup")
+        except Exception as e:
+            LaUtils.debug.log(f"Error applying validation defaults: {e}", "Error")
 
     def _connectDietLabelSignals(self, dietLabels):
         """Connect diet label signals to UI update slots."""
