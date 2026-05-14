@@ -1218,34 +1218,34 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                 self.listWidgetCalculationsAnimal.takeItem(i)
                 break
 
-    def addCropToCalculationsList(self, cropGuid):
+    def addCropToCalculationsList(self, theCropGuid):
         """Add a crop to the calculations list.
 
-        Args:
-            cropGuid: The GUID of the crop to add
+        :param theCropGuid: The GUID of the crop to add
+        :type theCropGuid: str
         """
         # Check if the crop is already in the list
         for i in range(self.listWidgetCalculationsCrop.count()):
             item = self.listWidgetCalculationsCrop.item(i)
-            if item.data(QtCore.Qt.UserRole) == cropGuid:
+            if item.data(QtCore.Qt.UserRole) == theCropGuid:
                 return
 
         # Add the crop to the list
-        crop: LaCrop = LaUtils.getCrop(cropGuid)
+        crop: LaCrop = LaUtils.getCrop(theCropGuid)
         if crop and crop.name:
             item = QtWidgets.QListWidgetItem(crop.name)
-            item.setData(QtCore.Qt.UserRole, cropGuid)
+            item.setData(QtCore.Qt.UserRole, theCropGuid)
             self.listWidgetCalculationsCrop.addItem(item)
 
-    def removeCropFromCalculationsList(self, cropGuid):
+    def removeCropFromCalculationsList(self, theCropGuid):
         """Remove a crop from the calculations list.
 
-        Args:
-            cropGuid: The GUID of the crop to remove
+        :param theCropGuid: The GUID of the crop to remove
+        :type theCropGuid: str
         """
         for i in range(self.listWidgetCalculationsCrop.count()):
             item = self.listWidgetCalculationsCrop.item(i)
-            if item.data(QtCore.Qt.UserRole) == cropGuid:
+            if item.data(QtCore.Qt.UserRole) == theCropGuid:
                 self.listWidgetCalculationsCrop.takeItem(i)
                 break
 

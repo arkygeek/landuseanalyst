@@ -29,7 +29,7 @@ class LaSerialisable(metaclass=MetaSerialisable):
         pass
 
     @abstractmethod
-    def fromXml(self, xml_string):
+    def fromXml(self, theXmlString):
         """Initialize the object from an XML string."""
         pass
 

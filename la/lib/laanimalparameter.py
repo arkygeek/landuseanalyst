@@ -147,10 +147,10 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
         return self.mGuid
 
     @guid.setter
-    def guid(self, guid):
-        if self.mGuid != guid:
-            self.mGuid = guid
-            self._guidChanged.emit(guid)
+    def guid(self, theGuid):
+        if self.mGuid != theGuid:
+            self.mGuid = theGuid
+            self._guidChanged.emit(theGuid)
 
     @pyqtProperty(str, notify=_animalGuidChanged)
     def animalGuid(self) -> str: # type: ignore

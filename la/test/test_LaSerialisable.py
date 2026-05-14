@@ -16,24 +16,24 @@ import unittest
 from la.lib.laserialisable import LaSerialisable
 
 class TestSerialisable(LaSerialisable):
-    def __init__(self, name="", guid=""):
+    def __init__(self, theName="", theGuid=""):
         super().__init__()
-        self.name = name
-        self.guid = guid
+        self.name = theName
+        self.guid = theGuid
 
     def toXml(self):
         return f"<test><name>{self.name}</name><guid>{self.guid}</guid></test>"
 
-    def fromXml(self, xml_string):
+    def fromXml(self, theXmlString):
         import xml.etree.ElementTree as ET
-        tree = ET.ElementTree(ET.fromstring(xml_string))
+        tree = ET.ElementTree(ET.fromstring(theXmlString))
         root = tree.getroot()
         self.name = root.find("name").text
         self.guid = root.find("guid").text
 
 class TestLaSerialisable(unittest.TestCase):
     def test_toXml(self):
-        obj = TestSerialisable(name="TestName", guid="1234")
+        obj = TestSerialisable(theName="TestName", theGuid="1234")
         xml = obj.toXml()
         expected_xml = "<test><name>TestName</name><guid>1234</guid></test>"
         self.assertEqual(xml, expected_xml)
@@ -46,7 +46,7 @@ class TestLaSerialisable(unittest.TestCase):
         self.assertEqual(obj.guid, "1234")
 
     def test_toXmlFile(self):
-        obj = TestSerialisable(name="TestName", guid="1234")
+        obj = TestSerialisable(theName="TestName", theGuid="1234")
         result = obj.toXmlFile("/tmp/test.xml")
         self.assertTrue(result)
         with open("/tmp/test.xml", "r") as file:

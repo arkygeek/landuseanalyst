@@ -127,65 +127,68 @@ class LaMainController(QObject):
 
         LaUtils.debug.log(f"Animal {animalGuid} {'enabled' if enabled else 'disabled'}", "Controller")
 
-    def setCropEnabled(self, cropGuid: str, enabled: bool):
+    def setCropEnabled(self, theCropGuid: str, theEnabled: bool):
         """
         Enable or disable a crop for calculations.
 
-        Args:
-            cropGuid: GUID of the crop
-            enabled: Whether the crop should be enabled
+        :param theCropGuid: GUID of the crop
+        :type theCropGuid: str
+        :param theEnabled: Whether the crop should be enabled
+        :type theEnabled: bool
         """
-        if cropGuid in self.mCropsMap:
-            value = self.mCropsMap[cropGuid]
-            if isinstance(value, tuple) and len(value) >= 2:
-                parameterGuid = value[1]
-                self.mCropsMap[cropGuid] = (enabled, parameterGuid)
+        if theCropGuid in self.mCropsMap:
+            myValue = self.mCropsMap[theCropGuid]
+            if isinstance(myValue, tuple) and len(myValue) >= 2:
+                myParameterGuid = myValue[1]
+                self.mCropsMap[theCropGuid] = (theEnabled, myParameterGuid)
             else:
-                self.mCropsMap[cropGuid] = (enabled, "")
+                self.mCropsMap[theCropGuid] = (theEnabled, "")
         else:
-            self.mCropsMap[cropGuid] = (enabled, "")
+            self.mCropsMap[theCropGuid] = (theEnabled, "")
 
-        LaUtils.debug.log(f"Crop {cropGuid} {'enabled' if enabled else 'disabled'}", "Controller")
+        LaUtils.debug.log(f"Crop {theCropGuid} {'enabled' if theEnabled else 'disabled'}", "Controller")
 
-    def setAnimalParameter(self, animalGuid: str, parameterGuid: str):
+    def setAnimalParameter(self, theAnimalGuid: str, theParameterGuid: str):
         """
         Set the parameter to use for an animal.
 
-        Args:
-            animalGuid: GUID of the animal
-            parameterGuid: GUID of the parameter to use
+        :param theAnimalGuid: GUID of the animal
+        :type theAnimalGuid: str
+        :param theParameterGuid: GUID of the parameter to use
+        :type theParameterGuid: str
         """
-        if animalGuid in self.mAnimalsMap:
-            value = self.mAnimalsMap[animalGuid]
-            if isinstance(value, tuple) and len(value) >= 1:
-                enabled = value[0]
-                self.mAnimalsMap[animalGuid] = (enabled, parameterGuid)
+        if theAnimalGuid in self.mAnimalsMap:
+            myValue = self.mAnimalsMap[theAnimalGuid]
+            if isinstance(myValue, tuple) and len(myValue) >= 1:
+                myEnabled = myValue[0]
+                self.mAnimalsMap[theAnimalGuid] = (myEnabled, theParameterGuid)
             else:
-                self.mAnimalsMap[animalGuid] = (False, parameterGuid)
+                self.mAnimalsMap[theAnimalGuid] = (False, theParameterGuid)
         else:
-            self.mAnimalsMap[animalGuid] = (False, parameterGuid)
+            self.mAnimalsMap[theAnimalGuid] = (False, theParameterGuid)
 
-        LaUtils.debug.log(f"Animal {animalGuid} parameter set to {parameterGuid}", "Controller")
+        LaUtils.debug.log(f"Animal {theAnimalGuid} parameter set to {theParameterGuid}", "Controller")
 
-    def setCropParameter(self, cropGuid: str, parameterGuid: str):
+    def setCropParameter(self, theCropGuid: str, theParameterGuid: str):
         """
         Set the parameter to use for a crop.
 
-        Args:
-            cropGuid: GUID of the crop
-            parameterGuid: GUID of the parameter to use
+        :param theCropGuid: GUID of the crop
+        :type theCropGuid: str
+        :param theParameterGuid: GUID of the parameter to use
+        :type theParameterGuid: str
         """
-        if cropGuid in self.mCropsMap:
-            value = self.mCropsMap[cropGuid]
-            if isinstance(value, tuple) and len(value) >= 1:
-                enabled = value[0]
-                self.mCropsMap[cropGuid] = (enabled, parameterGuid)
+        if theCropGuid in self.mCropsMap:
+            myValue = self.mCropsMap[theCropGuid]
+            if isinstance(myValue, tuple) and len(myValue) >= 1:
+                myEnabled = myValue[0]
+                self.mCropsMap[theCropGuid] = (myEnabled, theParameterGuid)
             else:
-                self.mCropsMap[cropGuid] = (False, parameterGuid)
+                self.mCropsMap[theCropGuid] = (False, theParameterGuid)
         else:
-            self.mCropsMap[cropGuid] = (False, parameterGuid)
+            self.mCropsMap[theCropGuid] = (False, theParameterGuid)
 
-        LaUtils.debug.log(f"Crop {cropGuid} parameter set to {parameterGuid}", "Controller")
+        LaUtils.debug.log(f"Crop {theCropGuid} parameter set to {theParameterGuid}", "Controller")
 
     def calculateTotalLandNeeded(self, population, diet_settings, enabled_animals, enabled_crops):
         """Calculate total land needed based on population and diet settings."""

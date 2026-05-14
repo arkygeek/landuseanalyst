@@ -142,13 +142,13 @@ class LaFoodSource(QObject):
         return str(self.mCropGuid)
 
     @cropGuid.setter
-    def cropGuid(self, value):
+    def cropGuid(self, theCropGuid):
         """
         Set the unique identifier for the crop associated with this food source.
 
-        Args:
-            value (str): The new crop GUID.
+        :param theCropGuid: The new crop GUID.
+        :type theCropGuid: str
         """
-        if self.mCropGuid != value:
-            self.mCropGuid = value
-            self._cropGuidChanged.emit(value)
+        if self.mCropGuid != theCropGuid:
+            self.mCropGuid = theCropGuid
+            self._cropGuidChanged.emit(theCropGuid)

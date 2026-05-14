@@ -549,14 +549,14 @@ class LaDietLabels(QObject, LaSerialisable, LaGuid):
         return myXml
 
 
-    def fromXml(self, xml_string: str) -> bool:
+    def fromXml(self, theXmlString: str) -> bool:
         """
         Initialize the LaDietLabels object from XML representation.
 
         Required implementation of the abstract method from LaSerialisable.
 
-        :param xml_string: XML string to parse
-        :type xml_string: str
+        :param theXmlString: XML string to parse
+        :type theXmlString: str
         :return: True if successful, False otherwise
         :rtype: bool
         """
@@ -564,7 +564,7 @@ class LaDietLabels(QObject, LaSerialisable, LaGuid):
 
         try:
             # Parse the XML string
-            root = ET.fromstring(xml_string)
+            root = ET.fromstring(theXmlString)
 
             # Extract values from XML
             if root.find('guid') is not None:
