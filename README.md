@@ -50,6 +50,36 @@ To build the plugin, follow these steps:
     - **Windows:** `C:\Users\<YourUsername>\AppData\Roaming\QGIS\QGIS3\profiles\default\python\plugins\`
     - **macOS:** `~/Library/Application Support/QGIS/QGIS3/profiles/default/python/plugins/`
 
+### Sample Data Setup (Required — animals and crops will be empty without this)
+
+The plugin reads animal and crop profiles from `~/.landuseAnalyst/` on your
+operating system. This directory is **not** created automatically — you must
+populate it before the plugin will show any data.
+
+Sample data is bundled in the `testData/` directory of this repository.
+Run the install script once after cloning:
+
+```bash
+./install_sample_data.sh
+```
+
+This copies the following into `~/.landuseAnalyst/`:
+
+| Source in repo                      | Installed to                                    | Contents                        |
+|-------------------------------------|-------------------------------------------------|---------------------------------|
+| `testData/animalProfiles/`          | `~/.landuseAnalyst/animalProfiles/`             | One `.xml` file per animal      |
+| `testData/cropProfiles/`            | `~/.landuseAnalyst/cropProfiles/`               | One `.xml` file per crop        |
+| `testData/animalParameterProfiles/` | `~/.landuseAnalyst/animalParameterProfiles/`    | One `.xml` file per animal set  |
+| `testData/cropParameterProfiles/`   | `~/.landuseAnalyst/cropParameterProfiles/`      | One `.xml` file per crop set    |
+| `testData/images/`                  | `~/.landuseAnalyst/images/`                     | Thumbnails shown in the UI      |
+
+The script skips files that already exist (safe to re-run). Use `--force` to
+overwrite everything with the bundled defaults.
+
+To add your own animals or crops, drop additional `.xml` files into the
+appropriate subdirectory under `~/.landuseAnalyst/` — the app picks them up
+automatically on next launch.
+
 ### Running the Plugin
 
 1. **Launch QGIS:**
