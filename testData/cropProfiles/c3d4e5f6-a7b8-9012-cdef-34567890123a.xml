@@ -6,5 +6,5 @@
   <fodderProduction>300</fodderProduction>
   <fodderCalories>800</fodderCalories>
   <cropFodderEnergyType>KCalories</cropFodderEnergyType>
-  <yieldUnits>Dunum</yieldUnits>  <imageFile>emmer.png</imageFile>
+  <areaUnits>Hectare</areaUnits>  <imageFile>emmer.png</imageFile>
 </crop>

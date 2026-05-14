@@ -1,0 +1,11 @@
+,Sheep,Pig,Cow,Goat
+Crop,Barley,Barley,Barley,Barley
+Grams-1  Straw/Chaff,1000.0,0.0,4956.0,1000.0
+MCal kg-1,,,,
+Grams-1  Grain,750.0,750.0,1500.0,750.0
+MCal kg-1,,,,
+Days,90.0,90.0,90.0,90.0
+Number of Animals,9.9,24.3,8.8,31.5
+MCals from Straw/Chaff,1264.0,0.0,5605.1,4028.9
+MCals from Grain,2002.8,4919.2,3584.1,6383.8
+MCals from other feed,3266.8,4919.2,9189.2,10412.7

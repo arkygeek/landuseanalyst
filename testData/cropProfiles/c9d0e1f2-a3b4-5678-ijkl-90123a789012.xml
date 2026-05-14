@@ -1,0 +1,10 @@
+<crop guid="c9d0e1f2-a3b4-5678-ijkl-90123a789012">
+  <name>Bitter Vetch</name>
+  <description>Bitter Vetch crop</description>
+  <cropYield>400</cropYield>
+  <cropCalories>3000</cropCalories>
+  <fodderProduction>300</fodderProduction>
+  <fodderCalories>800</fodderCalories>
+  <cropFodderEnergyType>KCalories</cropFodderEnergyType>
+  <areaUnits>Hectare</areaUnits>  <imageFile>bittervetch.png</imageFile>
+</crop>

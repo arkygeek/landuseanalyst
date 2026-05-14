@@ -164,7 +164,7 @@ def doCalcsAnimalsFirstDairySeparate(theModel: 'LaModel') -> LaDietLabels:
             
             myCropObj = LaUtils.getCrop(myCropGuid)
             myFoodValueOfCrop = myCropObj.cropCalories * .001
-            myFoodValueofFodder = myCropObj.fodderValue * .001
+            myFoodValueofFodder = myCropObj.cropFodderValue * .001
             
             myGrainMCal = myGrainToAdd * myFoodValueOfCrop
             myFodderMCal = myFodder * myDays * myFoodValueofFodder * myTotalOffspring

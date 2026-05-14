@@ -1,0 +1,11 @@
+,,Percentage,Calorie Tgt,Prdn Tgt,Total MCals,MCals From,MCals From,MCals From,MCals From,Ha
+,,Tame Diet,Mcal,Kg,Feed Reqd,Straw/Chaff,Grain,Fallow Land,Land,Required
+TRUE,Sheep,3.59%,324,101,"22,138","1,264","2,003","5,117","13,754",9
+TRUE,Pig,36.65%,"3,311","1,035","39,447",0,"4,919","9,118","25,410",17
+TRUE,Cow,47.81%,"4,319","1,350","65,891","5,605","3,584","15,230","41,472",28
+TRUE,Goat,11.95%,"1,080",337,"71,682","4,029","6,384","16,569","44,700",30
+FALSE,Not Defined,0.00%,,,,,,,,
+FALSE,Not Defined,0.00%,,,,,,,,
+FALSE,Not Defined,0.00%,,,,,,,,
+FALSE,Not Defined,0.00%,,,,,,,,
+4,TOTALS,100.00%,"9,033.8","2,823.047","199,158.6","10,898.0","16,890.0","46,034.2","125,336.4",83.6

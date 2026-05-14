@@ -1,0 +1,9 @@
+,Crop 1,Crop 2,Crop 3,Crop 4,Crop 5,Crop 6,Crop 7,Crop 8,Crop 9,Crop 10,Crop 11
+,Horse Bean,Einkorn,Emmer,Lentils,Peas,Olives,Grapes,Grass Peas,Bitter Vetch,Barley,FreeHull Barley
+Yield,500,500,500,300,150,600,600,500,400,500,500
+Units,Ha,Ha,Ha,Ha,Ha,Ha,Ha,Ha,Ha,Ha,Ha
+Mcals/kg,3,3,3,3,3.25,4,3,3,3,3,3
+Fallow Ratio,1,1,1,1,1,0,0,1,1,1,1
+Fallow MCals,500,500,500,500,500,500,500,500,500,500,500
+Fodder Kg,300,300,300,300,100,0,0,300,300,300,300
+Fodder MCals,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,1.42,0.8

@@ -1,292 +1,214 @@
 #!/usr/bin/env python3
 """
-verify_thesis_scenario.py — Thesis Scenario 1 verification
-==========================================================
-Compares the live production calculation engine against the worked example
-in Chapter 5 of Jason Jorgenson's PhD thesis (Figure 5.13).
+verify_thesis_scenario.py — Min Pop / Chalcolithic / Shuna verification
 
-Thesis reference
-----------------
-  Section 5.7.1 (Chalcolithic Results), Figure 5.13:
-    "Scenario 1: Chalcolithic, Minimum Population (100), Meat Portion 10%,
-     Potential Dairy Utilisation = 0%, Gestating animals are fed
-     supplementary feed for 90 days"
+Compares the live production calculation engine's output against the
+authoritative values from the user's macOS Numbers spreadsheet — the
+same spreadsheet that produced the thesis figures.
 
-Mode used in the plugin
------------------------
-  doCalcsAnimalsFirstIncludeDairy  (Animals First, Include Dairy)
-  — Dairy Utilisation is 0% in this scenario, so dairy contribution
-    collapses to zero regardless of the mode; this scenario is therefore
-    cleanest for verifying the percentage / Mcal split math without
-    needing to trust the dairy-per-offspring formula.
+Spreadsheet CSV dump:    scratch/thesis_scenarios/min_pop_chalcolithic/
+Mode used:               doCalcsAnimalsFirstDairySeparate
 
-Thesis inputs (Scenario 1 / Figure 5.13)
-----------------------------------------
-  Population                            : 100
-  Calories per person per day           : 2,500  (=> 912.5 MCal/person/year)
-  Diet portion from animals             : 10%
-  Meat portion that is tame             : 90%   (=> 10% wild meat)
-  Dairy utilisation                     : 0%
-  Percent of plant diet from crops      : 90%
-  Animals selected (4)                  : Sheep, Pig, Cow, Goat
-  Crops selected (8)                    : Horse Bean, Einkorn, Emmer,
-                                          Lentils, Peas, Olives,
-                                          Bitter Vetch, Barley
-  percentTameMeat per animal            : taken from live data
-                                          (Sheep 3.59, Pig 36.65,
-                                           Cow 47.81, Goat 11.95)
-  percentTameCrop per crop              : taken from live data
-                                          (Horse Bean 1.09, Einkorn 5.47,
-                                           Emmer 52.52, Lentils 1.09,
-                                           Peas 3.28, Olives 1.53,
-                                           Bitter Vetch 2.19,
-                                           Barley 32.83)
-  Limit Dairy / supplementary feeding   : not consumed by the IncludeDairy
-                                          aggregate formula
+The spreadsheet uses DairySeparate's "Final Value per juvenile = meat +
+culled_mothers + culled_adult_males" (no dairy in e10), confirmed by
+06_calculations.csv: Cow "Value per juvenile = 640 MCal" (meat-only)
+and "Final Value per juvenile = 750.53 MCal" (meat + culled). The
+IncludeDairy mode uses e10 = meat + dairy, a different formula that
+produces different offspring counts. So even though "dairy" appears in
+the spreadsheet's diet output, the underlying algorithm is DairySeparate's.
 
-  Note: the thesis figure also lists a separate "Animal Crop Selection"
-  (Horse Bean / Emmer / Peas / Bitter Vetch) for fodder/grain feeding;
-  IncludeDairy mode does not act on the per-animal fodder map, so this
-  is informational only for this test.
+Verified metrics:
+  - 5 diet-MCal categories (Domestic Meat, Wild Meat, Dairy, Crops, Wild Plants)
+  - 5 diet portion percentages
+  - Settlement and per-person MCal totals
+  - Per-crop area targets (Ha) — fed to QGIS land identification
 
-Thesis outputs (the values to match)
-------------------------------------
-  Aggregate diet split (overall %):
-    Domestic Meat (tame meat)           :  9 %
-    Wild Meat                           :  1 %
-    Dairy                               :  0 %
-    Crops (domestic plants)             : 81 %
-    Wild Plants                         :  9 %
-  Settlement totals:
-    MCals per person per year           :    912.5
-    City MCals per year                 : 91,250
-
-How this script works
----------------------
-* Builds a `SimpleNamespace` that quacks like an LaModel, populated with
-  the live animal/crop selections from `~/.landuseAnalyst/`. (Same idiom
-  as `scratch/parity_test.py` and `scratch/compare_includedairy_formulas.py`.)
-* Calls the production `doCalcsAnimalsFirstIncludeDairy`.
-* Prints THESIS EXPECTED vs PRODUCTION ACTUAL side by side.
-* Reports PASS only if every metric is within tolerance.
-
-This is a draft. Do not run automatically — review first.
+Run from project root:
+  python3 scratch/verify_thesis_scenario.py
 """
-
-import os
-import sys
-
-# QGIS Python bindings + project root on path
+import os, sys
 sys.path.insert(0, '/usr/share/qgis/python')
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 from qgis.PyQt.QtCore import QCoreApplication
 _app = QCoreApplication([])
-
 from la.lib.lautils import LaUtils
 LaUtils.debug.setEnabled(False)
-from la.lib.lacalculations import doCalcsAnimalsFirstIncludeDairy
-
+from la.lib.lacalculations import doCalcsAnimalsFirstDairySeparate
 from types import SimpleNamespace
 import xml.etree.ElementTree as ET
-
 
 HOME = os.path.expanduser('~/.landuseAnalyst')
 
 
-# -------------------------------------------------------------------------
-# Helpers — discover the animal/crop guid <-> parameter guid mappings
-# -------------------------------------------------------------------------
-def _read_text(el, tag):
-    t = el.findtext(tag, '') or ''
-    return t.strip()
-
-
-def load_param_map(subdir, parent_tag):
-    """Return {parent_guid: param_guid} for every .xml in the given dir.
-
-    parent_tag is the tag inside the parameter file that names the
-    associated animal/crop guid (e.g. 'animal' or 'crop').
-    """
-    out = {}
-    folder = os.path.join(HOME, subdir)
-    for fname in sorted(os.listdir(folder)):
-        if not fname.endswith('.xml'):
-            continue
-        tree = ET.parse(os.path.join(folder, fname))
-        root = tree.getroot()
-        param_guid  = root.get('guid', fname.replace('.xml', ''))
-        parent_guid = _read_text(root, parent_tag)
-        if parent_guid:
-            out[parent_guid] = param_guid
-    return out
+def _t(el, tag):
+    return (el.findtext(tag, '') or '').strip()
 
 
 def load_name_to_guid(subdir):
-    """Return {profile_name: guid} for animal or crop profiles."""
     out = {}
-    folder = os.path.join(HOME, subdir)
-    for fname in sorted(os.listdir(folder)):
+    for fname in sorted(os.listdir(os.path.join(HOME, subdir))):
         if not fname.endswith('.xml'):
             continue
-        tree = ET.parse(os.path.join(folder, fname))
-        root = tree.getroot()
-        name = _read_text(root, 'name')
-        guid = root.get('guid', fname.replace('.xml', ''))
-        if name:
-            out[name] = guid
+        r = ET.parse(os.path.join(HOME, subdir, fname)).getroot()
+        out[_t(r, 'name')] = r.get('guid', fname[:-4])
     return out
 
 
-# -------------------------------------------------------------------------
-# Thesis Scenario 1 inputs
-# -------------------------------------------------------------------------
-SCENARIO_NAME = "Scenario 1 (Chalcolithic, Min Pop 100, Meat 10%, Dairy 0%, Foddered)"
+def load_param_by_parent(subdir, parent_tag):
+    out = {}
+    for fname in sorted(os.listdir(os.path.join(HOME, subdir))):
+        if not fname.endswith('.xml'):
+            continue
+        r = ET.parse(os.path.join(HOME, subdir, fname)).getroot()
+        parent = _t(r, parent_tag)
+        if parent:
+            out[parent] = r.get('guid', fname[:-4])
+    return out
 
-THESIS_ANIMALS = ['Sheep', 'Pig', 'Cow', 'Goat']
-THESIS_CROPS   = ['Horse Bean', 'Einkorn', 'Emmer', 'Lentils',
-                  'Peas', 'Olives', 'Bitter Vetch', 'Barley']
 
-# Expected thesis outputs (overall diet percentages and settlement totals)
+# Scenario per scratch/thesis_scenarios/min_pop_chalcolithic/03_animal_selection.csv
+# and 09_crop_selection.csv
+SELECTED_ANIMALS = ['Sheep', 'Pig', 'Cow', 'Goat']
+SELECTED_CROPS   = ['Horse Bean', 'Einkorn', 'Emmer', 'Lentils',
+                    'Peas', 'Olives', 'Bitter Vetch', 'Barley']
+
+# Inputs per 03_animal_selection.csv + 09_crop_selection.csv
+MODEL_INPUTS = dict(
+    mPopulation=100,
+    mCaloriesPerPersonDaily=2500,
+    mDietPercent=10,         # "ALL Meat %" — meat portion of diet
+    mMeatPercent=99,         # "Domestic Animal Contribution" — tame meat fraction
+    mDairyUtilisation=50,
+    mPercentOfDietThatIsFromCrops=90,
+    mLimitDairy=False,
+    mLimitDairyPercentage=100,
+)
+
+# Expected outputs per 11_diet_calculations.csv
 EXPECTED = {
-    'tameMeatPortionPct':       9.00,
-    'wildAnimalPortionPct':     1.00,
-    'dairyPortionPct':          0.00,
-    'cropsPortionPct':         81.00,
-    'wildPlantsPortionPct':     9.00,
-    'kiloCaloriesIndividualAnnual': 912_500.0,   # = 2500 * 365  (kcal)
-    'megaCaloriesSettlementAnnual':  91_250.0,   # = 912500 * 100 / 1000  (MCal)
+    'animalMCalories':                  9_033.750,
+    'wildAnimalMCalories':                 91.250,
+    'dairyMCalories':                   4_338.044,
+    'cropMCalories':                   70_008.261,
+    'wildPlantsMCalories':              7_778.696,
+    'megaCaloriesSettlementAnnual':    91_250.000,
+    'kiloCaloriesIndividualAnnual':   912_500.000,
+    'tameMeatPortionPct':                   9.90,
+    'wildAnimalPortionPct':                 0.10,
+    'dairyPortionPct':                      4.75,
+    'cropsPortionPct':                     76.72,
+    'wildPlantsPortionPct':                 8.52,
 }
+TOL_PCT_ABS = 0.5
+TOL_REL = 0.005
 
-# Tolerances — thesis values are reported to whole percent, so allow 0.5%
-# slack on percentage rows; settlement Mcal totals must be exact.
-TOL_PCT  = 0.5
-TOL_ABS  = 1e-3
+# Per-crop area targets in Ha (from 10_crop_targets.csv "Area Target Ha")
+EXPECTED_CROP_HA = {
+    'Horse Bean':    2,
+    'Einkorn':       8,
+    'Emmer':        74,
+    'Lentils':       3,
+    'Peas':         14,
+    'Olives':        1,
+    'Bitter Vetch':  4,
+    'Barley':       80,
+}
+TOL_CROP_HA = 1.5
 
 
-# -------------------------------------------------------------------------
-# Build the model
-# -------------------------------------------------------------------------
 def build_model():
-    animal_name_to_guid = load_name_to_guid('animalProfiles')
-    crop_name_to_guid   = load_name_to_guid('cropProfiles')
-    animal_param_map    = load_param_map('animalParameterProfiles', 'animal')
-    crop_param_map      = load_param_map('cropParameterProfiles',   'crop')
+    an_name_to_guid = load_name_to_guid('animalProfiles')
+    cr_name_to_guid = load_name_to_guid('cropProfiles')
+    an_param_by_parent = load_param_by_parent('animalParameterProfiles', 'animal')
+    cr_param_by_parent = load_param_by_parent('cropParameterProfiles', 'crop')
 
-    # Selected animal/crop maps: {parent_guid: param_guid}
-    selected_animals = {}
-    for nm in THESIS_ANIMALS:
-        g = animal_name_to_guid.get(nm)
-        if not g:
-            print(f"  [WARN] thesis animal '{nm}' not in live data — skipping")
-            continue
-        p = animal_param_map.get(g)
-        if not p:
-            print(f"  [WARN] no parameter file for animal '{nm}' (guid={g})")
-            continue
-        selected_animals[g] = p
+    selected_animals_map = {}
+    for n in SELECTED_ANIMALS:
+        guid = an_name_to_guid.get(n)
+        if guid and guid in an_param_by_parent:
+            selected_animals_map[guid] = an_param_by_parent[guid]
 
-    selected_crops = {}
-    for nm in THESIS_CROPS:
-        g = crop_name_to_guid.get(nm)
-        if not g:
-            print(f"  [WARN] thesis crop '{nm}' not in live data — skipping")
-            continue
-        p = crop_param_map.get(g)
-        if not p:
-            print(f"  [WARN] no parameter file for crop '{nm}' (guid={g})")
-            continue
-        selected_crops[g] = p
+    selected_crops_map = {}
+    for n in SELECTED_CROPS:
+        guid = cr_name_to_guid.get(n)
+        if guid and guid in cr_param_by_parent:
+            selected_crops_map[guid] = cr_param_by_parent[guid]
 
-    model = SimpleNamespace(
-        mPopulation=100,
-        mCaloriesPerPersonDaily=2500.0,
-        mDietPercent=10.0,         # 10% animal
-        mMeatPercent=90.0,         # 90% tame meat (=> 10% wild)
-        mDairyUtilisation=0.0,     # NO dairy in Scenario 1
-        mPercentOfDietThatIsFromCrops=90.0,
-        mLimitDairy=False,
-        mLimitDairyPercentage=100.0,
-        mAnimalsMap=selected_animals,
-        mCropsMap=selected_crops,
-        # Production function reads/writes these and uses LaUtils for the
-        # rest of the data; placeholders below keep attribute lookups safe.
-        mDietLabels=None,
-        mCalcsCropsMap={},
-        mCalcsAnimalsMap={},
-        mValueMap={},
-        mAnimalCalcReport={},
-        mAreaTargetsCropsMap={},
-        mCommonGrazingValue=1.0,   # not consumed by IncludeDairy aggregate
-    )
-    return model, selected_animals, selected_crops
+    m = SimpleNamespace(**MODEL_INPUTS,
+                        mAnimalsMap=selected_animals_map,
+                        mCropsMap=selected_crops_map,
+                        mDietLabels=None,
+                        mCalcsCropsMap={}, mCalcsAnimalsMap={},
+                        mValueMap={}, mAnimalCalcReport={},
+                        mAreaTargetsCropsMap={},
+                        mCommonGrazingValue=1.0)
+
+    name_by_guid_crop = {v: k for k, v in cr_name_to_guid.items()}
+    return m, selected_animals_map, selected_crops_map, name_by_guid_crop
 
 
-# -------------------------------------------------------------------------
-# Run + compare
-# -------------------------------------------------------------------------
+def check(name, expected, actual, tol_abs=None, rel=None):
+    if expected == 0:
+        ok = abs(actual) <= (tol_abs or 1e-9)
+    elif tol_abs is not None:
+        ok = abs(actual - expected) <= tol_abs
+    elif rel is not None:
+        ok = abs(actual - expected) <= abs(expected) * rel
+    else:
+        ok = abs(actual - expected) <= max(0.01, abs(expected) * 1e-4)
+    mark = 'PASS' if ok else 'FAIL'
+    delta = actual - expected
+    print(f"  {name:<35} {expected:>16,.4f} {actual:>16,.4f} {delta:>+12,.4f} {mark:>5}")
+    return ok
+
+
 def main():
-    print("=" * 78)
-    print(f"  Thesis Scenario Verification — {SCENARIO_NAME}")
-    print(f"  Mode: doCalcsAnimalsFirstIncludeDairy (Animals First, Include Dairy)")
-    print(f"  Data: {HOME}")
-    print("=" * 78)
+    print("=" * 100)
+    print("  Thesis Verification — Min Pop / Chalcolithic / Shuna")
+    print("  Source: scratch/thesis_scenarios/min_pop_chalcolithic/ (CSV dump)")
+    print("  Mode:   doCalcsAnimalsFirstDairySeparate")
+    print("=" * 100)
 
-    model, animals, crops = build_model()
-    print(f"\n  Animals selected: {len(animals)} (expected {len(THESIS_ANIMALS)})")
-    print(f"  Crops selected:   {len(crops)} (expected {len(THESIS_CROPS)})")
+    model, animals, crops, name_by_guid = build_model()
+    print(f"\n  Animals selected: {len(animals)}/{len(SELECTED_ANIMALS)}   "
+          f"Crops selected: {len(crops)}/{len(SELECTED_CROPS)}")
 
-    dl = doCalcsAnimalsFirstIncludeDairy(model)
+    dl = doCalcsAnimalsFirstDairySeparate(model)
 
-    actual = {
-        'tameMeatPortionPct':       dl.tameMeatPortionPct,
-        'wildAnimalPortionPct':     dl.wildAnimalPortionPct,
-        'dairyPortionPct':          dl.dairyPortionPct,
-        'cropsPortionPct':          dl.cropsPortionPct,
-        'wildPlantsPortionPct':     dl.wildPlantsPortionPct,
-        'kiloCaloriesIndividualAnnual': dl.kiloCaloriesIndividualAnnual,
-        'megaCaloriesSettlementAnnual': dl.megaCaloriesSettlementAnnual,
-    }
-
-    # Display
-    W = 32
-    print()
-    print(f"  {'Metric':<{W}} {'Thesis (expected)':>20} {'Plugin (actual)':>20} {'Δ':>10} {'OK':>4}")
-    print(f"  {'-'*W} {'-'*20} {'-'*20} {'-'*10} {'-'*4}")
+    # --- Diet aggregates ---
+    print("\n  --- Diet aggregates ---")
+    print(f"  {'Metric':<35} {'Spreadsheet':>16} {'Plugin':>16} {'Δ':>12} {'':>5}")
+    print(f"  {'-'*35} {'-'*16} {'-'*16} {'-'*12} {'-'*5}")
     all_ok = True
-    for k in EXPECTED:
-        exp = EXPECTED[k]
-        act = actual[k]
-        if k.endswith('Pct'):
-            tol = TOL_PCT
+    pct_keys = {'tameMeatPortionPct', 'wildAnimalPortionPct', 'dairyPortionPct',
+                'cropsPortionPct', 'wildPlantsPortionPct'}
+    for key, exp in EXPECTED.items():
+        act = getattr(dl, key)
+        if key in pct_keys:
+            ok = check(key, exp, act, tol_abs=TOL_PCT_ABS)
         else:
-            # Mcal/Kcal totals must be exact (these are derived from the
-            # raw inputs, not the thesis figure read-out)
-            tol = max(TOL_ABS, abs(exp) * 1e-9)
-        diff = act - exp
-        ok = abs(diff) <= tol
-        mark = 'PASS' if ok else 'FAIL'
-        if not ok:
+            ok = check(key, exp, act, rel=TOL_REL)
+        all_ok &= ok
+
+    # --- Per-crop areas ---
+    print("\n  --- Per-crop area targets (Ha) — what QGIS uses for land identification ---")
+    print(f"  {'Crop':<35} {'Spreadsheet':>16} {'Plugin':>16} {'Δ':>12} {'':>5}")
+    print(f"  {'-'*35} {'-'*16} {'-'*16} {'-'*12} {'-'*5}")
+    for crop_name, exp_ha in EXPECTED_CROP_HA.items():
+        guid = next((g for g, n in name_by_guid.items() if n == crop_name), None)
+        if guid is None or guid not in dl.cropCalcsReportMap:
+            print(f"  {crop_name:<35} {'N/A':>16} {'MISSING':>16}")
             all_ok = False
-        print(f"  {k:<{W}} {exp:>20,.4f} {act:>20,.4f} {diff:>10,.4f} {mark:>4}")
+            continue
+        actual_ha = dl.cropCalcsReportMap[guid][1]
+        ok = check(crop_name, exp_ha, actual_ha, tol_abs=TOL_CROP_HA)
+        all_ok &= ok
 
-    print()
-    print("=" * 78)
-    print(f"  Result: {'PASS — plugin matches thesis Scenario 1' if all_ok else 'FAIL — see rows marked FAIL above'}")
-    print("=" * 78)
+    print(f"\n  totalLandNeeded (sum of crop areas): {dl.totalLandNeeded:.2f} Ha")
+    print(f"  Spreadsheet total cropland (human + animal feed): 184 Ha")
+    print(f"  Note: IncludeDairy doesn't compute animal feed crops — expected difference.")
 
-    # Also expose the per-crop area targets if the production code populated
-    # them — useful for cross-checking the 158 ha cropland figure on
-    # Fig 5.13. (Note: 158 ha includes fallow land, while the IncludeDairy
-    # Python enhancement reports core crop area only.)
-    if getattr(dl, 'cropAreaTargetsMap', None):
-        print("\n  Per-crop area target (ha) — informational, no thesis row to match exactly:")
-        total = 0.0
-        for guid, ha in dl.cropAreaTargetsMap.items():
-            print(f"    {guid[:8]}...: {ha:>10,.2f} ha")
-            total += ha
-        print(f"    {'TOTAL':<11}: {total:>10,.2f} ha   (thesis Fig 5.13 reports 158 ha including fallow)")
-
+    print(f"\n  Result: {'PASS' if all_ok else 'FAIL'}")
     return 0 if all_ok else 1
 
 

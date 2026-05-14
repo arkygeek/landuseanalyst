@@ -1,0 +1,14 @@
+,,Percentage,MCals for,Calorie Tgt,Percent,Percent for,Prdn Tgt,Area Target,Fallow MCals,Straw/Chaff MCal
+,,Tame Diet,Animal Feed,Mcal,Wastage,re-seeding,Kg,Ha,Available,Available
+TRUE,Horse Bean,1.09%,0,763,30%,20%,382,2,382,
+TRUE,Einkorn,5.47%,0,3829,30%,20%,1915,8,1915,
+TRUE,Emmer,52.52%,0,36768,30%,20%,18384,74,18384,
+TRUE,Lentils,1.09%,0,763,30%,20%,382,3,636,
+TRUE,Peas,3.28%,0,2296,30%,20%,1060,14,3533,
+TRUE,Olives,1.53%,0,1071,30%,0%,348,1,290,
+FALSE,Grapes,0.00%,0,,30%,0%,,,,
+FALSE,Grass Peas,0.00%,0,,30%,20%,,,,
+TRUE,Bitter Vetch,2.19%,0,1533,30%,20%,767,4,958,
+TRUE,Barley,32.83%,16890,39874,30%,20%,19937,80,19937,16986
+FALSE,FreeHull Barley,0.00%,0,,30%,20%,,,,
+,TOTALS,100.00%,16890,86898,,,43173,184,46034,16986

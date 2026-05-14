@@ -6,6 +6,6 @@
   <fodderProduction>300</fodderProduction>
   <fodderCalories>800</fodderCalories>
   <cropFodderEnergyType>KCalories</cropFodderEnergyType>
-  <yieldUnits>Dunum</yieldUnits>
+  <areaUnits>Hectare</areaUnits>
   <imageFile>horsebean.png</imageFile>
 </crop>

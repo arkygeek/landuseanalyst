@@ -1,11 +1,11 @@
 <crop guid="d0e1f2a3-b4c5-6789-jklm-0123b8901234">
   <name>Barley</name>
   <description>Barley crop</description>
-  <cropYield>400</cropYield>
+  <cropYield>500</cropYield>
   <cropCalories>3000</cropCalories>
   <fodderProduction>300</fodderProduction>
   <fodderCalories>1420</fodderCalories>
   <cropFodderEnergyType>KCalories</cropFodderEnergyType>
-  <yieldUnits>Dunum</yieldUnits>
+  <areaUnits>Hectare</areaUnits>
   <imageFile>barley.png</imageFile>
 </crop>

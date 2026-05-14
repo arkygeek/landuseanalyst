@@ -1,10 +1,10 @@
-<crop guid="c9d0e1f2-a3b4-5678-ijkl-90123a789012">
-  <name>Bitter Vetch</name>
-  <description>Bitter Vetch crop</description>
+<crop guid="b8c9d0e1-f2a3-4567-hijk-890123f67890">
+  <name>Grass Peas</name>
+  <description>Grass Peas crop</description>
   <cropYield>500</cropYield>
   <cropCalories>3000</cropCalories>
   <fodderProduction>300</fodderProduction>
   <fodderCalories>800</fodderCalories>
   <cropFodderEnergyType>KCalories</cropFodderEnergyType>
-  <yieldUnits>Dunum</yieldUnits>  <imageFile>bittervetch.png</imageFile>
+  <areaUnits>Hectare</areaUnits>  <imageFile>grasspeas.png</imageFile>
 </crop>
