@@ -458,6 +458,10 @@ def doCalcsAnimalsFirstIncludeDairy(theModel: 'LaModel') -> LaDietLabels:
     Implements the 'Animals First, Include Dairy' calculation path.
     In this mode, dairy calories produced by the meat herd are counted
     towards the total animal product requirement.
+
+    The aggregate diet-label math is a direct port of the C++ original.
+    The per-animal and per-crop *report maps* are a Python-only addition
+    (see PYTHON ENHANCEMENT block below).
     """
     # -----------------------------------------------------------------------
     # Direct port of C++ LaModel::doCalcsAnimalsFirstIncludeDiary() (lines 736-831)
@@ -465,6 +469,20 @@ def doCalcsAnimalsFirstIncludeDairy(theModel: 'LaModel') -> LaDietLabels:
     #       NOT the full herd-population algorithm of DairySeparate.
     # In C++ all percentages are stored as fractions (setter divides by 100),
     # so in Python we apply * 0.01 to mDietPercent, mMeatPercent, etc.
+    #
+    # PYTHON ENHANCEMENT — Per-item calculation reports
+    # -------------------------------------------------
+    # The C++ source has stub getters `getAreaTargetsAnimalsMapAFID()` and
+    # `getAreaTargetsCropsMapAFID()` (lamodel.cpp:1485, :1575) that return
+    # empty QMaps — i.e. the per-animal/per-crop area targets were never
+    # finished for the Include-Dairy modes. The C++ Calculations tab in
+    # this mode therefore shows no per-item breakdown.
+    #
+    # To make the Python plugin's Calculations tab informative in this mode
+    # we synthesize per-item reports here using the same apportionment
+    # pattern DairySeparate uses (animals split by percentTameMeat, crops
+    # split by percentTameCrop). The math is a Python-only extension; the
+    # aggregate diet labels above remain a strict C++ port.
     # -----------------------------------------------------------------------
     myDietLabels = LaDietLabels()
 
@@ -479,9 +497,15 @@ def doCalcsAnimalsFirstIncludeDairy(theModel: 'LaModel') -> LaDietLabels:
     c15 = theModel.mDietPercent * 0.01                   # animal fraction of diet
     e15 = c14 * c15                                      # animal kcal budget
 
+    # kcal → MCal scaling (used by reports and aggregate labels)
+    _K_KCAL_TO_MCAL = 1e-6
+
     myDairyMCalorieCounter    = 0.0
     myTameMeatMCalorieCounter = 0.0
     myWildMeatMCalorieCounter = 0.0
+
+    myAnimalCalcsReportMap: Dict[str, Tuple[str, float]] = {}
+    myCropCalcsReportMap:   Dict[str, Tuple[str, float]] = {}
 
     mySelectedAnimalsMap = theModel.mAnimalsMap
     LaUtils.debug.log(
@@ -546,6 +570,41 @@ def doCalcsAnimalsFirstIncludeDairy(theModel: 'LaModel') -> LaDietLabels:
             "Calculation"
         )
 
+        # --- Per-animal report (IncludeDairy mode — simple apportionment, no herd dynamics) ---
+        myAnimalName = myAnimal.name if myAnimal else "(unknown)"
+        myAnimalReport = (
+            f"Animal: {myAnimalName}\n"
+            f"Mode: Animals First, Include Dairy\n"
+            f"Contribution share (percentTameMeat): {myAnimalContributionScale*100.:.2f}%\n"
+            f"Target kcal for this animal: {myTargetForThisAnimal:,.1f}\n"
+            f"Offspring needed per year: {e7:.3f}\n\n"
+            ".........................\n"
+            ".  Per-Offspring Values  .\n"
+            ".........................\n"
+            f"Milk kg/day: {c2:.4f}\n"
+            f"Milk kcal/kg: {c3:.1f}\n"
+            f"Lactation days: {c4}\n"
+            f"Wean age days: {c5}\n"
+            f"Kill weight kg: {c6}\n"
+            f"Usable meat fraction: {c7:.3f}\n"
+            f"Meat kcal/kg: {c9}\n"
+            f"Dairy potential per offspring (e2): {e2:,.1f} kcal\n"
+            f"Dairy actual after utilisation (e3): {e3:,.1f} kcal\n"
+            f"Total value per offspring (e10): {e10:,.1f} kcal\n\n"
+            ".........................\n"
+            ".    Contributions      .\n"
+            ".........................\n"
+            f"Dairy MCals (c21):           {c21*_K_KCAL_TO_MCAL:,.2f}\n"
+            f"Tame Meat MCals (c23):       {c23*_K_KCAL_TO_MCAL:,.2f}\n"
+            f"Wild Meat MCals (c22 share): {c22*_K_KCAL_TO_MCAL:,.2f}\n"
+            f"Total animal MCals:          {(c21+c23+c22)*_K_KCAL_TO_MCAL:,.2f}\n"
+        )
+        # second tuple element: this animal's contribution in MCals (no herd land calc here)
+        myAnimalCalcsReportMap[myAnimalGuid] = (
+            myAnimalReport,
+            (c21 + c23) * _K_KCAL_TO_MCAL,
+        )
+
     # --- Finalization: direct port of C++ lines 804-830 ---
     # c14 is total kcal/year; convert counters to same unit for ratios
     c24 = (1.0 - c12) * (c14 - e15)    # wild-plant kcals
@@ -558,7 +617,7 @@ def doCalcsAnimalsFirstIncludeDairy(theModel: 'LaModel') -> LaDietLabels:
     c27 = myDairyMCalorieCounter / c14      # dairy fraction
 
     # Convert kcal → MCal (* 0.001 * 0.001 = * 1e-6)
-    _k = 1e-6
+    _k = _K_KCAL_TO_MCAL
 
     LaUtils.debug.log(
         f"IncludeDairy(simple) end. c27(dairy)={c27:.4f}, c28(wild)={c28:.4f}, "
@@ -586,10 +645,70 @@ def doCalcsAnimalsFirstIncludeDairy(theModel: 'LaModel') -> LaDietLabels:
     # C++ line 829: setMCalsSettlementAnnual(myMCalsSettlementAnnual * .001)
     myDietLabels.megaCaloriesSettlementAnnual = c14 * 0.001
 
-    # No herd calculations in this mode → no report maps
-    myDietLabels.animalCalcsReportMap = {}
-    myDietLabels.cropCalcsReportMap   = {}
-    myDietLabels.totalLandNeeded      = 0.0
+    # -----------------------------------------------------------------------
+    # PYTHON ENHANCEMENT — Per-crop synthesis
+    # -----------------------------------------------------------------------
+    # C++ `getAreaTargetsCropsMapAFID()` (lamodel.cpp:1575-1579) is an empty
+    # stub. We split the domestic-crop budget c25 across selected crops
+    # using `cropParameter.percentTameCrop` as each crop's share, then size
+    # the area from cropCalories (kcal/kg) and cropYield (kg per area unit).
+    # Spoilage and reseed adjustments mirror DairySeparate's pattern.
+    # -----------------------------------------------------------------------
+    myTotalCropAreaHa = 0.0
+    for myCropGuid, myCropParameterGuid in theModel.mCropsMap.items():
+        myCrop = LaUtils.getCrop(myCropGuid)
+        myCropParameter = LaUtils.getCropParameter(myCropParameterGuid)
+
+        myCropName  = myCrop.name if myCrop else "(unknown)"
+        myCropShare = (myCropParameter.percentTameCrop * 0.01) if myCropParameter else 0.0
+        myCropKcal  = c25 * myCropShare
+        myCropMCal  = myCropKcal * _K_KCAL_TO_MCAL
+
+        myCropCalsPerKg = myCrop.cropCalories if (myCrop and myCrop.cropCalories > 0) else 0.0
+        myKgForPeopleBase = myCropKcal / myCropCalsPerKg if myCropCalsPerKg > 0 else 0.0
+
+        mySpoilagePct = (myCropParameter.spoilage * 0.01) if myCropParameter else 0.0
+        myReseedPct   = (myCropParameter.reseed   * 0.01) if myCropParameter else 0.0
+        myKgForPeople = myKgForPeopleBase * (1.0 + myReseedPct + mySpoilagePct)
+
+        # Normalize yield to kg/ha (cropYield is kg/dunum if areaUnits == Dunum)
+        myYieldKgPerHa = (
+            myCrop.cropYield * 10.0
+            if myCrop and myCrop.areaUnits == AreaUnits.Dunum
+            else (myCrop.cropYield if myCrop else 0.0)
+        )
+        myCropAreaHa = myKgForPeople / myYieldKgPerHa if myYieldKgPerHa > 0 else 0.0
+        myTotalCropAreaHa += myCropAreaHa
+
+        myCropReport = (
+            f"Crop: {myCropName}\n"
+            f"Mode: Animals First, Include Dairy (Python enhancement)\n"
+            f"Crop share (percentTameCrop): {myCropShare*100.:.2f}%\n"
+            f"Domestic crop budget (c25):   {c25*_K_KCAL_TO_MCAL:,.2f} MCals\n"
+            f"This crop's MCal target:      {myCropMCal:,.2f} MCals\n\n"
+            ".........................\n"
+            ".   Production Target   .\n"
+            ".........................\n"
+            f"Crop calories: {myCropCalsPerKg:,.0f} kcal/kg\n"
+            f"Kg for people (base):                  {myKgForPeopleBase:,.0f} kg\n"
+            f"  + Reseed allowance ({myReseedPct*100.:>5.1f}%): {myKgForPeopleBase*myReseedPct:>10,.0f} kg\n"
+            f"  + Spoilage allowance ({mySpoilagePct*100.:>5.1f}%): {myKgForPeopleBase*mySpoilagePct:>10,.0f} kg\n"
+            f"Adjusted kg target:                    {myKgForPeople:,.0f} kg\n\n"
+            ".........................\n"
+            ".      Area Target      .\n"
+            ".........................\n"
+            f"Yield: {myYieldKgPerHa:,.0f} kg/ha"
+            f"{' (normalized from Dunum)' if (myCrop and myCrop.areaUnits == AreaUnits.Dunum) else ''}\n"
+            f"Area needed: {myCropAreaHa:,.2f} ha\n"
+        )
+        myCropCalcsReportMap[myCropGuid] = (myCropReport, myCropAreaHa)
+
+    # Publish the synthesized maps + area totals (Python enhancement)
+    myDietLabels.animalCalcsReportMap = myAnimalCalcsReportMap
+    myDietLabels.cropCalcsReportMap   = myCropCalcsReportMap
+    myDietLabels.animalAreaTargetsMap = {k: v[1] for k, v in myAnimalCalcsReportMap.items()}
+    myDietLabels.cropAreaTargetsMap   = {k: v[1] for k, v in myCropCalcsReportMap.items()}
+    myDietLabels.totalLandNeeded      = myTotalCropAreaHa
 
     theModel.mDietLabels = myDietLabels
     return myDietLabels
