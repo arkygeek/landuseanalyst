@@ -37,6 +37,10 @@ def doCalcsAnimalsFirstDairySeparate(theModel: 'LaModel') -> LaDietLabels:
     myCropCalcsReportMap: Dict[str, Tuple[str, float]] = {}
     myAnimalCalcsReportMap: Dict[str, Tuple[str, float]] = {}
     myAnimalsMap: Dict[str, float] = {} # For fallow allocation
+    myAnimalProductionKgMap: Dict[str, float] = {}  # kg of meat + dairy per animal per year
+    myCropProductionKgMap: Dict[str, float] = {}    # adjusted kg target per crop per year
+    myAnimalCalorieKcalMap: Dict[str, float] = {}   # this animal's kcal contribution to diet
+    myCropCalorieKcalMap: Dict[str, float] = {}     # this crop's kcal contribution to diet
 
     myDietLabels = LaDietLabels()
     myCrops = theModel.mCropsMap
@@ -112,6 +116,15 @@ def doCalcsAnimalsFirstDairySeparate(theModel: 'LaModel') -> LaDietLabels:
 
         myTameMeatMCalorieCounter += myMCalsFromTheMeat
         myDairyMCalorieCounter += myMCalsUtilizedFromDairy
+
+        # kg-of-product required from this animal per year.
+        # MCals / (MCal/kg) = kg. meatFoodValue/milkFoodValue are kcal/kg in the
+        # XML; the * .001 above converts both sides of these ratios to MCal,
+        # so the units cancel cleanly.
+        myMeatKg = myMCalsFromTheMeat / myMeatValueMCal if myMeatValueMCal > 0 else 0.0
+        myMilkKg = myMCalsUtilizedFromDairy / myMilkFoodValue if myMilkFoodValue > 0 else 0.0
+        myAnimalProductionKgMap[myAnimalGuid] = myMeatKg + myMilkKg
+        myAnimalCalorieKcalMap[myAnimalGuid] = (myMCalsFromTheMeat + myMCalsUtilizedFromDairy) * 1000.0
 
         myFoodSourceMap = myAnimalParameter.fodderSourceMap
         myMeatPercentLocal = myMCalsFromTheMeat / myMCalsSettlementAnnual # B15
@@ -347,6 +360,8 @@ def doCalcsAnimalsFirstDairySeparate(theModel: 'LaModel') -> LaDietLabels:
         )
         
         myCropCalcsReportMap[myCropGuid] = (myCropReport, myCropAreaTarget)
+        myCropProductionKgMap[myCropGuid] = myAdjustedTarget
+        myCropCalorieKcalMap[myCropGuid] = myMCalsFromTheCrop * 1000.0
 
     # 5. Fallow Allocation (C++ line 1356)
     allocateFallowGrazingLand(theModel, myMCalsFromFallowCounter, myAnimalsMap)
@@ -409,7 +424,12 @@ def doCalcsAnimalsFirstDairySeparate(theModel: 'LaModel') -> LaDietLabels:
     # Populate model maps for persistence
     theModel.mCalcsCropsMap = {k: v[0] for k, v in myCropCalcsReportMap.items()}
     theModel.mAreaTargetsCropsMap = {k: v[1] for k, v in myCropCalcsReportMap.items()}
-    
+    theModel.mAreaTargetsAnimalsMap = {k: v[1] for k, v in theModel.mAnimalCalcReport.items()}
+    theModel.mProductionRequiredAnimalsMap = myAnimalProductionKgMap
+    theModel.mProductionRequiredCropsMap = myCropProductionKgMap
+    myDietLabels.mAnimalCalorieKcalMap = myAnimalCalorieKcalMap
+    myDietLabels.mCropCalorieKcalMap = myCropCalorieKcalMap
+
     myDietLabels.animalCalcsReportMap = myAnimalCalcsReportMap
     myDietLabels.cropCalcsReportMap = myCropCalcsReportMap
     myDietLabels.animalAreaTargetsMap = {k: v[1] for k, v in myAnimalCalcsReportMap.items()}
@@ -521,6 +541,11 @@ def doCalcsAnimalsFirstIncludeDairy(theModel: 'LaModel') -> LaDietLabels:
 
     myAnimalCalcsReportMap: Dict[str, Tuple[str, float]] = {}
     myCropCalcsReportMap:   Dict[str, Tuple[str, float]] = {}
+    myAnimalProductionKgMap: Dict[str, float] = {}
+    myCropProductionKgMap:   Dict[str, float] = {}
+    myAnimalAreaHaMap:       Dict[str, float] = {}
+    myAnimalCalorieKcalMap:  Dict[str, float] = {}  # this animal's kcal contribution to diet
+    myCropCalorieKcalMap:    Dict[str, float] = {}  # this crop's kcal contribution to diet
 
     mySelectedAnimalsMap = theModel.mAnimalsMap
     LaUtils.debug.log(
@@ -577,6 +602,26 @@ def doCalcsAnimalsFirstIncludeDairy(theModel: 'LaModel') -> LaDietLabels:
         myDairyMCalorieCounter    += c21
         myWildMeatMCalorieCounter += c22
         myTameMeatMCalorieCounter += c23
+
+        # kg-of-product and grazing-area for this animal. c21/c23 are in kcal;
+        # c3 (milk kcal/kg) and c9 (meat kcal/kg) divide back to kg. Area uses
+        # the same valueCommonGrazingLand productivity as DairySeparate, applied
+        # to the total animal MCal contribution — IncludeDairy mode has no
+        # herd-feed/fallow accounting, so this is an apportionment-level estimate.
+        myMeatKg = c23 / c9 if c9 > 0 else 0.0
+        myMilkKg = c21 / c3 if c3 > 0 else 0.0
+        myAnimalProductionKgMap[myAnimalGuid] = myMeatKg + myMilkKg
+        myAnimalCalorieKcalMap[myAnimalGuid] = c21 + c23
+
+        myLandProductivity = (
+            float(myAnimalParameter.valueCommonGrazingLand)
+            if myAnimalParameter and myAnimalParameter.valueCommonGrazingLand > 0
+            else 0.0
+        )
+        myAnimalContributionMCal = (c21 + c23) * _K_KCAL_TO_MCAL
+        myAnimalAreaHaMap[myAnimalGuid] = (
+            myAnimalContributionMCal / myLandProductivity if myLandProductivity > 0 else 0.0
+        )
 
         LaUtils.debug.log(
             f"IncludeDairy animal {myAnimalGuid[:8]}: "
@@ -717,6 +762,8 @@ def doCalcsAnimalsFirstIncludeDairy(theModel: 'LaModel') -> LaDietLabels:
             f"Area needed: {myCropAreaHa:,.2f} ha\n"
         )
         myCropCalcsReportMap[myCropGuid] = (myCropReport, myCropAreaHa)
+        myCropProductionKgMap[myCropGuid] = myKgForPeople
+        myCropCalorieKcalMap[myCropGuid] = myCropKcal
 
     # Publish the synthesized maps + area totals (Python enhancement)
     myDietLabels.animalCalcsReportMap = myAnimalCalcsReportMap
@@ -724,6 +771,13 @@ def doCalcsAnimalsFirstIncludeDairy(theModel: 'LaModel') -> LaDietLabels:
     myDietLabels.animalAreaTargetsMap = {k: v[1] for k, v in myAnimalCalcsReportMap.items()}
     myDietLabels.cropAreaTargetsMap   = {k: v[1] for k, v in myCropCalcsReportMap.items()}
     myDietLabels.totalLandNeeded      = myTotalCropAreaHa
+
+    theModel.mAreaTargetsCropsMap         = {k: v[1] for k, v in myCropCalcsReportMap.items()}
+    theModel.mAreaTargetsAnimalsMap       = myAnimalAreaHaMap
+    theModel.mProductionRequiredCropsMap  = myCropProductionKgMap
+    theModel.mProductionRequiredAnimalsMap = myAnimalProductionKgMap
+    myDietLabels.mAnimalCalorieKcalMap    = myAnimalCalorieKcalMap
+    myDietLabels.mCropCalorieKcalMap      = myCropCalorieKcalMap
 
     theModel.mDietLabels = myDietLabels
     return myDietLabels

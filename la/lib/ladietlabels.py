@@ -67,6 +67,8 @@ class LaDietLabels(QObject, LaSerialisable, LaGuid):
         self.mDairySurplusMCalories: float = 0.0
         self.mCropAreaTargetsMap = {}  # Map of crop GUID to area target
         self.mAnimalAreaTargetsMap = {}  # Map of animal GUID to area target
+        self.mCropCalorieKcalMap: Dict[str, float] = {}  # Map of crop GUID to dietary kcal contribution
+        self.mAnimalCalorieKcalMap: Dict[str, float] = {}  # Map of animal GUID to dietary kcal contribution
         self.mCropCalcsReportMap: Dict[str, Tuple[str, float]] = {}
         self.mAnimalCalcsReportMap: Dict[str, Tuple[str, float]] = {}
         LaUtils.debug.log("LaDietLabels initialized with default values", "Diet")

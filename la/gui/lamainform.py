@@ -557,9 +557,6 @@ class LaMainForm(LaMainFormBase):
             if hasattr(self.mModel, 'mDietLabels') and self.mModel.mDietLabels:
                 self.mDietLabels = self.mModel.mDietLabels
                 self._connectDietLabelSignals(self.mDietLabels)
-            
-            # Update calculations (this might trigger more logging)
-            self.updateCalculations()
 
         except Exception as e:
             from la.lib.lautils import LaUtils
@@ -799,32 +796,25 @@ class LaMainForm(LaMainFormBase):
             # Store the diet labels for future reference
             self.mModel.mDietLabels = myDietLabels
             
-            # Generate the report. The toHtml* functions live in la.lib.lareports
-            # as module-level functions (not LaModel methods), so we call them
-            # as lareports.toHtml(self.mModel) etc.
+            # Generate the report. Building the full document as one HTML string
+            # and assigning via setHtml() keeps Qt's rich-text engine from
+            # wrapping each fragment in its own paragraph block, which would
+            # break the consistent table styling.
             from la.lib import lareports
-            self.tbReport.clear()
-
-            # Main HTML report
-            self.tbReport.setHtml(f"<h1>LanduseAnalyst Calculation Results</h1>")
-            self.tbReport.append(f"<h2>Calculation Method: {myCalculationType}</h2>")
-
-            # Add basic model information
-            self.tbReport.append(lareports.toHtml(self.mModel))
-
-            # Add specific reports
-            self.tbReport.append("<hr>")
-            self.tbReport.append(lareports.toHtmlCalorieCropTargets(self.mModel))
-            self.tbReport.append("<hr>")
-            self.tbReport.append(lareports.toHtmlCalorieAnimalTargets(self.mModel))
-            self.tbReport.append("<hr>")
-            self.tbReport.append(lareports.toHtmlProductionCropTargets(self.mModel))
-            self.tbReport.append("<hr>")
-            self.tbReport.append(lareports.toHtmlProductionAnimalTargets(self.mModel))
-            self.tbReport.append("<hr>")
-            self.tbReport.append(lareports.toHtmlAreaCropTargets(self.mModel))
-            self.tbReport.append("<hr>")
-            self.tbReport.append(lareports.toHtmlAreaAnimalTargets(self.mModel))
+            myReportHtml = (
+                '<h1 style="color:#3B5A8C; margin-bottom:4px;">'
+                'LanduseAnalyst Calculation Results</h1>'
+                f'<p style="color:#666; font-style:italic; margin-top:0;">'
+                f'Calculation Method: {myCalculationType}</p>'
+                + lareports.toHtml(self.mModel)
+                + lareports.toHtmlCalorieCropTargets(self.mModel)
+                + lareports.toHtmlCalorieAnimalTargets(self.mModel)
+                + lareports.toHtmlProductionCropTargets(self.mModel)
+                + lareports.toHtmlProductionAnimalTargets(self.mModel)
+                + lareports.toHtmlAreaCropTargets(self.mModel)
+                + lareports.toHtmlAreaAnimalTargets(self.mModel)
+            )
+            self.tbReport.setHtml(myReportHtml)
             
             # Switch to the report tab
             if hasattr(self, 'tabWidgetMain'):
