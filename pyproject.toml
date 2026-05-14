@@ -1,0 +1,29 @@
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+extend-exclude = [
+    "build",
+    "dist",
+    "*.egg-info",
+    "ai-project-history",
+    "*_ui.py",
+    "resources_rc.py",
+]
+
+[tool.ruff.lint]
+# Conservative: catches real bugs and unused code, but does NOT enforce
+# stylistic rules that conflict with the project's CODING_STANDARDS.md
+# (camelCase methods, mPrefix members, Hungarian UI prefixes, etc.)
+select = [
+    "F",   # pyflakes: undefined names, unused imports, real bugs
+    "E9",  # syntax errors only (skips whitespace/style checks E1-E7)
+    "W6",  # deprecation warnings only
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["la"]
+
+[tool.ruff.format]
+# Preserve the project's existing mixed quote style instead of forcing one
+quote-style = "preserve"
+indent-style = "space"
