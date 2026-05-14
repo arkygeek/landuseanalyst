@@ -216,8 +216,7 @@ class LaCropParameterManager(LaCropParameterManagerBase):
                 self.cbFallowEnergyType.setCurrentIndex(i)
                 break
 
-        # Use the helper method for area units
-        self.setAreaUnitsIndex(self.mCropParameter.areaUnits)
+        self.cbAreaUnits.setCurrentIndex(self.mCropParameter.areaUnits.value)
         self.updateCropPicture()
 
     def resizeEvent(self, theEvent):
