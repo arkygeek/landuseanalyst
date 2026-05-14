@@ -27,5 +27,5 @@
   <milkFoodValue>940</milkFoodValue>
   <fleece>0</fleece>
   <fleeceWeightKg>1.0</fleeceWeightKg>
-  <imageFile>/home/arkygeek/.landuseAnalyst/images/goat_icon.png</imageFile>
+  <imageFile>goat_icon.png</imageFile>
 </animal>
