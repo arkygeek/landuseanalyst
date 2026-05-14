@@ -32,8 +32,8 @@ This document outlines the coding standards and naming conventions for the PyQt 
       return self.mName
 
   @name.setter
-  def name(self, value):
-      self.mName = value
+  def name(self, theValue):
+      self.mName = theValue
   ```
 
 ## Methods
@@ -46,11 +46,11 @@ This document outlines the coding standards and naming conventions for the PyQt 
   def getName(self):
       return self.mName  # Use mName for regular member variables
 
-  def setName(self, value):
-      self.mName = value  # Use mName for regular member variables
+  def setName(self, theValue):
+      self.mName = theValue  # Use mName for regular member variables
 
   def getProtectedName(self):
-      return self._mName  # Use _mName for protected member variables
+      return self._mName  # Use _mName for private/cache member variables
   ```
 
 ## UI Element Naming
@@ -63,7 +63,7 @@ Maintain the same prefixes used in the C++ codebase, but note these are separate
 | Generic Label   | label  | label_2         |
 | Push Button     | pbn    | pbnApply        |
 | Spin Box        | sb     | sbCropYield     |
-| Combo Box       | cbo    | cboCrop         | <!-- Fixed inconsistency from cb to cbo -->
+| Combo Box       | cb     | cbAreaUnits     |
 | Table Widget    | tbl    | tblCrops        |
 | Line Edit       | le     | leName          |
 | Group Box       | grp    | grpProfiles     |
@@ -89,15 +89,15 @@ Maintain the same prefixes used in the C++ codebase, but note these are separate
 
 ## Comments and Documentation
 
-- Use docstrings for classes and methods following the Google Python Style Guide
+- Use docstrings for classes and methods following reStructuredText (ReST) format
 - Reference member variables with appropriate prefix in documentation
 - Example:
   ```python
   def cropYield(self):
       """Get the crop yield.
 
-      Returns:
-          int: The crop yield value from the mCropYield member variable
+      :return: The crop yield value from the mCropYield member variable
+      :rtype: int
       """
       return self.mCropYield
   ```
@@ -107,13 +107,13 @@ Maintain the same prefixes used in the C++ codebase, but note these are separate
 - Use type hints for function parameters and return values
 - Example:
   ```python
-  def setCropYield(self, yield_value: int) -> None:
+  def setCropYield(self, theYield: int) -> None:
       """Set the crop yield.
 
-      Args:
-          yield_value: The new crop yield value to store in mCropYield
+      :param theYield: The new crop yield value to store in mCropYield
+      :type theYield: int
       """
-      self.mCropYield = yield_value
+      self.mCropYield = theYield
   ```
 
 ## Signal/Slot Naming Conventions

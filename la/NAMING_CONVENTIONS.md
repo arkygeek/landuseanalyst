@@ -37,16 +37,16 @@ best practices where appropriate.
     ```
 - For standard Python properties (not directly exposed via `pyqtProperty` or when providing a Pythonic interface), use `@property` and `@<propertyName>.setter` decorators.
   - The property name itself uses camelCase without prefixes.
-  - The internal member variable follows the `_m` prefix convention.
+  - The internal member variable uses the plain `m` prefix, same as all other member variables.
   - Example (Read/Write):
     ```python
     @property
     def description(self) -> str:
-        return self._mDescription
+        return self.mDescription
 
     @description.setter
     def description(self, theValue: str):
-        self._mDescription = theValue
+        self.mDescription = theValue
     ```
   - Example (Read-Only):
     ```python
@@ -89,8 +89,10 @@ best practices where appropriate.
 ### Member Variables
 - Class member variables use `m` prefix (maintained from C++ convention)
   - Example: `mName`, `mCropYield` (instead of Python-style `_name`, `_cropYield`)
-- Class members that should be treated as "private" start with underscore + m
-  - Example: `_mCropMap`, `_mImageFile`
+- Class members that are genuinely private internals (caches, lazy-loaded state) use `_m` prefix
+  - Example: `_mCropsCache`, `_mGuid`
+  - This is rare — most members are plain `m`
+- pyqtSignals use a plain `_` prefix with no `m` — e.g. `_nameChanged = pyqtSignal(str)`
 - Public properties should not have prefixes
 
 ### Pointer-like References
