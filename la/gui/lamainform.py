@@ -53,8 +53,11 @@ class LaMainForm(LaMainFormBase):
         """
         super(LaMainForm, self).__init__(parent)
 
-        # Initialize the model first
-        self.mModel = LaModel(self)
+        # Use the same LaModel instance the base class (LaMainFormBase) created
+        # at self.model. Aliasing self.mModel → self.model means click handlers
+        # see the same calculation results that setDietLabels populated, instead
+        # of operating on a second disconnected model.
+        self.mModel = self.model
         # Connect the new signal for calculation logging
         self.mModel.logCalculationStep.connect(self.logToAllChannels) # Add this line
 
@@ -120,7 +123,13 @@ class LaMainForm(LaMainFormBase):
                 else:
                     self.lblAnimalPicCalcs.clear()
 
-            # --- Retrieve the stored calculation report --- 
+            # Mirror C++ behaviour (lamainform.cpp::animalCalcClicked at line 1540):
+            # run the calculation fresh on every click so the user doesn't have
+            # to press Run first. setDietLabels pushes current UI state into the
+            # model, dispatches the right doCalcs*, and populates report maps.
+            self.setDietLabels()
+
+            # --- Retrieve the freshly-populated calculation report ---
             myReportString = "No calculation results available for this animal."
             if hasattr(self.mModel, 'mDietLabels') and self.mModel.mDietLabels:
                 myReportMap = self.getPropertyValue(self.mModel.mDietLabels, 'animalCalcsReportMap')
@@ -245,7 +254,15 @@ class LaMainForm(LaMainFormBase):
                 else:
                     self.lblCropPicCalcs.clear()
 
-            # --- Retrieve the stored calculation report --- 
+            # Mirror C++ behaviour (lamainform.cpp::cropCalcClicked at line 1341):
+            # run the calculation fresh on every click so the user doesn't have
+            # to press Run first. setDietLabels pushes current UI state into the
+            # model, dispatches the right doCalcs*, and populates report maps.
+            # The 100% gating check inside setDietLabels prevents calc until
+            # animal + crop percentages both sum to 100%.
+            self.setDietLabels()
+
+            # --- Retrieve the freshly-populated calculation report ---
             myReportString = "No calculation results available for this crop."
             if hasattr(self.mModel, 'mDietLabels') and self.mModel.mDietLabels:
                 myReportMap = self.getPropertyValue(self.mModel.mDietLabels, 'cropCalcsReportMap')
@@ -642,29 +659,32 @@ class LaMainForm(LaMainFormBase):
             # Store the diet labels for future reference
             self.mModel.mDietLabels = myDietLabels
             
-            # Generate the report
+            # Generate the report. The toHtml* functions live in la.lib.lareports
+            # as module-level functions (not LaModel methods), so we call them
+            # as lareports.toHtml(self.mModel) etc.
+            from la.lib import lareports
             self.tbReport.clear()
-            
+
             # Main HTML report
             self.tbReport.setHtml(f"<h1>LanduseAnalyst Calculation Results</h1>")
             self.tbReport.append(f"<h2>Calculation Method: {myCalculationType}</h2>")
-            
+
             # Add basic model information
-            self.tbReport.append(self.mModel.toHtml())
-            
+            self.tbReport.append(lareports.toHtml(self.mModel))
+
             # Add specific reports
             self.tbReport.append("<hr>")
-            self.tbReport.append(self.mModel.toHtmlCalorieCropTargets())
+            self.tbReport.append(lareports.toHtmlCalorieCropTargets(self.mModel))
             self.tbReport.append("<hr>")
-            self.tbReport.append(self.mModel.toHtmlCalorieAnimalTargets())
+            self.tbReport.append(lareports.toHtmlCalorieAnimalTargets(self.mModel))
             self.tbReport.append("<hr>")
-            self.tbReport.append(self.mModel.toHtmlProductionCropTargets())
+            self.tbReport.append(lareports.toHtmlProductionCropTargets(self.mModel))
             self.tbReport.append("<hr>")
-            self.tbReport.append(self.mModel.toHtmlProductionAnimalTargets())
+            self.tbReport.append(lareports.toHtmlProductionAnimalTargets(self.mModel))
             self.tbReport.append("<hr>")
-            self.tbReport.append(self.mModel.toHtmlAreaCropTargets())
+            self.tbReport.append(lareports.toHtmlAreaCropTargets(self.mModel))
             self.tbReport.append("<hr>")
-            self.tbReport.append(self.mModel.toHtmlAreaAnimalTargets())
+            self.tbReport.append(lareports.toHtmlAreaAnimalTargets(self.mModel))
             
             # Switch to the report tab
             if hasattr(self, 'tabWidgetMain'):
