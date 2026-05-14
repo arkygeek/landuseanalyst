@@ -671,10 +671,10 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
     @property
     def guid(self) -> str:
-        return self.mGuid
+        return self._mGuid
     @guid.setter
     def guid(self, theGuid: str):
-        if self.mGuid != theGuid:
+        if self._mGuid != theGuid:
             self.setGuid(theGuid)
             self._guidChanged.emit()
 

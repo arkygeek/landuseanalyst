@@ -61,7 +61,7 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         """
         super().__init__(parent)
         if theCrop is None: # If NO crop is provided, initialize with default values.
-            self.mGuid = LaGuid.setGuid(self, None)
+            LaGuid.setGuid(self, None)  # writes self._mGuid
             self.mName = "No Name Set"
             self.mDescription = "Not Set"
             self.mCropYield = 60
@@ -72,7 +72,7 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
             self.mFodderEnergyType = ""
             self.mAreaUnits = ""
         else: # If a crop IS provided, copy the values from the existing crop.
-            self.mGuid = theCrop.guid
+            LaGuid.setGuid(self, theCrop.guid)  # writes self._mGuid
             self.mName = theCrop.name
             self.mDescription = theCrop.description
             self.mCropYield = theCrop.cropYield
@@ -138,7 +138,7 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         :returns: The crop's GUID
         :rtype: str
         """
-        return self.mGuid
+        return self._mGuid
 
     @guid.setter
     def guid(self, theGuid):
@@ -148,7 +148,7 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         :param value: The new GUID value
         :type value: str
         """
-        self.mGuid = theGuid
+        self._mGuid = theGuid
 
     @pyqtProperty(str, notify=_nameChanged)
     def name(self): #type: ignore

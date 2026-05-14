@@ -1,37 +1,34 @@
-from qgis.PyQt.QtCore import QUuid
-from typing import Optional
+import uuid
 
 class LaGuid:
-    """Base class for objects that need a GUID."""
+    """Base class for objects that need a GUID.
+
+    Backing field is `self._mGuid`; public accessor is the `guid` property.
+    Subclasses that define their own pyqtProperty for `guid` must read and
+    write `self._mGuid` (not a separate `self.mGuid`) so the storage stays
+    consistent with `setGuid()`.
+    """
 
     def __init__(self):
-        """Initialize the guid."""
         self._mGuid = ""
 
     @property
-    def guid(self):
-        """Get the GUID as a string."""
+    def guid(self) -> str:
         return str(self._mGuid)
 
-    # Method-style accessor for GUID - for backward compatibility.
-    def guid(self, theValue=None):
-        if theValue is not None:
-            self.setGuid(theValue)
-        else:
-            return str(self._mGuid)
+    @guid.setter
+    def guid(self, theGuid) -> None:
+        """Assign the GUID. Subclasses that override `guid` with a
+        pyqtProperty should still write to `self._mGuid` so the storage
+        stays consistent with `setGuid()` calls."""
+        self._mGuid = str(theGuid) if theGuid is not None else ""
 
-    def setGuid(self, theGuid=None):
-        """
-        Set the GUID to the given value or generate a new one.
+    def setGuid(self, theGuid=None) -> str:
+        """Set the GUID. If `theGuid` is None, generate a new one.
 
-        Args:
-            guid: The GUID to set (optional)
-
-        Returns:
-            The new GUID
+        Returns the new GUID value.
         """
         if theGuid is None:
-            import uuid
             self._mGuid = str(uuid.uuid4())
         else:
             self._mGuid = str(theGuid)

@@ -557,7 +557,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
             # Process each animal
             for myGuid, myAnimal in myAnimalsMap.items():
                 # Get the actual GUID string
-                actualGuid = str(myAnimal.guid()) if callable(getattr(myAnimal, 'guid', None)) else str(myGuid)
+                actualGuid = str(myAnimal.guid)
 
                 LaUtils.debug.log(f"Processing animal: {myAnimal.name} (GUID: {actualGuid})", "Animals")
 

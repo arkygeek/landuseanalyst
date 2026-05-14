@@ -88,12 +88,7 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
         self.cboAnimal.clear()
 
         for guid, animal in myAnimalsMap.items():
-            # Call the guid method to get the actual GUID string
-            if callable(getattr(animal, 'guid', None)):
-                guid_str = animal.guid()
-            else:
-                guid_str = str(guid)
-
+            guid_str = str(animal.guid)
             myName = animal.name
             LaUtils.debug.log(f"setupAnimalsCombo: Adding animal {myName} with actual GUID {guid_str}")
 
@@ -250,14 +245,7 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
         LaUtils.debug.log(f"update_animal_picture: Found {len(animals_map)} animals")
 
         for guid, animal in animals_map.items():
-            # Convert guid to string
-            guid_str = str(guid)
-            if callable(getattr(animal, 'guid', None)):
-                try:
-                    guid_str = animal.guid()
-                except:
-                    guid_str = str(guid)
-
+            guid_str = str(animal.guid)
             LaUtils.debug.log(f"update_animal_picture: Available animal - GUID: {guid_str}, Name: {animal.name}")
 
             # Compare to find match

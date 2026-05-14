@@ -106,7 +106,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
 
     def _initializeDefaults(self) -> None:
         """Set default values for all properties."""
-        self.mGuid: str = LaGuid.setGuid(self, None)
+        LaGuid.setGuid(self, None)  # writes self._mGuid
         # Basic info
         self.mName = "No Name Set"
         self.mDescription = "Not Set"
@@ -156,7 +156,7 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
         Args:
             theAnimal: Source animal to copy from
         """
-        self.setGuid(theAnimal.mGuid)
+        self.setGuid(theAnimal.guid)
         self.mName = theAnimal.name
         self.mDescription = theAnimal.description
         self.mMeatFoodValue = theAnimal.meatFoodValue

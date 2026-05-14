@@ -75,7 +75,7 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
         """
         super().__init__(parent)
         if theCropParameter is None:  # If NO crop parameter is provided, initialize with default values
-            self.mGuid = LaGuid.setGuid(self, None)  # Call with self as first parameter like in lacrop.py
+            LaGuid.setGuid(self, None)  # writes self._mGuid
             self.mName = "No Name Set"
             self.mDescription = "Not Set"
             self.mCropGuid = ""
@@ -91,7 +91,7 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
             self.mUseSpecificLand = False
             self.mRasterName = ""
         else:  # If a crop parameter IS provided, copy the values from the existing parameter
-            self.mGuid = theCropParameter.guid  # Use setter method from LaGuid
+            LaGuid.setGuid(self, theCropParameter.guid)  # writes self._mGuid
             self.mName = theCropParameter.name
             self.mDescription = theCropParameter.description
             self.mCropGuid = theCropParameter.cropGuid
@@ -117,12 +117,12 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
     #    """Set the GUID (Globally Unique Identifier) for this crop parameter."""
     #    self.mGuid = theGuid
 
-    # Use only the PyQt property that calls the LaGuid parent class method
+    # Use only the PyQt property that calls the LaGuid parent class property
     @pyqtProperty(str, notify=_guidChanged)
     def guid(self) -> str:
         """Get the GUID of the crop parameter."""
-        # Call the inherited method from LaGuid and ensure we always return a string
-        result = super().guid()
+        # Read the inherited LaGuid.guid property; ensure we always return a string
+        result = super().guid
         return result if result is not None else ""
 
     @pyqtProperty(str, notify=_nameChanged)

@@ -39,7 +39,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
     def _init_properties(self, theAnimalParameter: Optional['LaAnimalParameter'] = None):
         """Initialize all properties with proper type conversion."""
         if theAnimalParameter is None:
-            self.mGuid = LaGuid.setGuid(self, None)
+            LaGuid.setGuid(self, None)  # writes self._mGuid
             self.mName = "No Name Set"
             self.mDescription = "Not Set"
             self.mAnimalGuid = ""
@@ -58,7 +58,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self.mValueSpecificGrazingLand = 0
         else:
             # Copy properties with safe type conversion
-            self.mGuid = str(getattr(theAnimalParameter, 'mGuid', LaGuid.setGuid(self, None))) # Use getter or default
+            LaGuid.setGuid(self, getattr(theAnimalParameter, 'guid', None))  # writes self._mGuid
             self.mName = str(getattr(theAnimalParameter, 'mName', "No Name Set"))
             self.mDescription = str(getattr(theAnimalParameter, 'mDescription', "Not Set"))
             self.mAnimalGuid = str(getattr(theAnimalParameter, 'mAnimalGuid', ""))
@@ -144,12 +144,12 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
 
     @pyqtProperty(str, notify=_guidChanged)
     def guid(self): # type: ignore
-        return self.mGuid
+        return self._mGuid
 
     @guid.setter
     def guid(self, theGuid):
-        if self.mGuid != theGuid:
-            self.mGuid = theGuid
+        if self._mGuid != theGuid:
+            self._mGuid = theGuid
             self._guidChanged.emit(theGuid)
 
     @pyqtProperty(str, notify=_animalGuidChanged)
