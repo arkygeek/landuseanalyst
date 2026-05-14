@@ -44,18 +44,18 @@ class LaMainController(QObject):
             model: The model to use
         """
         super().__init__()
-        self.model: LaModel = theLaModel
+        self.mModel: LaModel = theLaModel
 
         # Initialize maps for tracking selected items
         # Dict[str, Tuple[bool, str]] - GUID -> (enabled, parameterGuid)
-        self.animalsMap: Dict[str, Tuple[bool, str]] = {}
-        self.cropsMap: Dict[str, Tuple[bool, str]] = {}
+        self.mAnimalsMap: Dict[str, Tuple[bool, str]] = {}
+        self.mCropsMap: Dict[str, Tuple[bool, str]] = {}
 
         # Cache for loaded data
-        self._animals_cache = None
-        self._crops_cache = None
-        self._animal_params_cache = None
-        self._crop_params_cache = None
+        self._mAnimalsCache = None
+        self._mCropsCache = None
+        self._mAnimalParamsCache = None
+        self._mCropParamsCache = None
 
     def getAvailableAnimals(self):
         """Get available animals from the model."""
@@ -68,10 +68,10 @@ class LaMainController(QObject):
         Returns:
             Dictionary of crops by GUID
         """
-        if self._crops_cache is None:
+        if self._mCropsCache is None:
             LaUtils.debug.log("Loading crops from storage", "Controller")
-            self._crops_cache = LaUtils.getAvailableCrops()
-        return self._crops_cache
+            self._mCropsCache = LaUtils.getAvailableCrops()
+        return self._mCropsCache
 
     def getAvailableAnimalParameters(self) -> Dict[str, LaAnimalParameter]:
         """
@@ -80,10 +80,10 @@ class LaMainController(QObject):
         Returns:
             Dictionary of animal parameters by GUID
         """
-        if self._animal_params_cache is None:
+        if self._mAnimalParamsCache is None:
             LaUtils.debug.log("Loading animal parameters from storage", "Controller")
-            self._animal_params_cache = LaUtils.getAvailableAnimalParameters()
-        return self._animal_params_cache
+            self._mAnimalParamsCache = LaUtils.getAvailableAnimalParameters()
+        return self._mAnimalParamsCache
 
     def getAvailableCropParameters(self) -> Dict[str, LaCropParameter]:
         """
@@ -92,20 +92,20 @@ class LaMainController(QObject):
         Returns:
             Dictionary of crop parameters by GUID
         """
-        if self._crop_params_cache is None:
+        if self._mCropParamsCache is None:
             LaUtils.debug.log("Loading crop parameters from storage", "Controller")
-            self._crop_params_cache = LaUtils.getAvailableCropParameters()
-        return self._crop_params_cache
+            self._mCropParamsCache = LaUtils.getAvailableCropParameters()
+        return self._mCropParamsCache
 
     def refreshData(self):
         """
         Force refresh of all cached data.
         """
         LaUtils.debug.log("Refreshing all data caches", "Controller")
-        self._animals_cache = None
-        self._animal_params_cache = None
-        self._crops_cache = None
-        self._crop_params_cache = None
+        self._mAnimalsCache = None
+        self._mAnimalParamsCache = None
+        self._mCropsCache = None
+        self._mCropParamsCache = None
 
     def setAnimalEnabled(self, animalGuid: str, enabled: bool):
         """
@@ -115,15 +115,15 @@ class LaMainController(QObject):
             animalGuid: GUID of the animal
             enabled: Whether the animal should be enabled
         """
-        if animalGuid in self.animalsMap:
-            value = self.animalsMap[animalGuid]
+        if animalGuid in self.mAnimalsMap:
+            value = self.mAnimalsMap[animalGuid]
             if isinstance(value, tuple) and len(value) >= 2:
                 parameterGuid = value[1]
-                self.animalsMap[animalGuid] = (enabled, parameterGuid)
+                self.mAnimalsMap[animalGuid] = (enabled, parameterGuid)
             else:
-                self.animalsMap[animalGuid] = (enabled, "")
+                self.mAnimalsMap[animalGuid] = (enabled, "")
         else:
-            self.animalsMap[animalGuid] = (enabled, "")
+            self.mAnimalsMap[animalGuid] = (enabled, "")
 
         LaUtils.debug.log(f"Animal {animalGuid} {'enabled' if enabled else 'disabled'}", "Controller")
 
@@ -135,15 +135,15 @@ class LaMainController(QObject):
             cropGuid: GUID of the crop
             enabled: Whether the crop should be enabled
         """
-        if cropGuid in self.cropsMap:
-            value = self.cropsMap[cropGuid]
+        if cropGuid in self.mCropsMap:
+            value = self.mCropsMap[cropGuid]
             if isinstance(value, tuple) and len(value) >= 2:
                 parameterGuid = value[1]
-                self.cropsMap[cropGuid] = (enabled, parameterGuid)
+                self.mCropsMap[cropGuid] = (enabled, parameterGuid)
             else:
-                self.cropsMap[cropGuid] = (enabled, "")
+                self.mCropsMap[cropGuid] = (enabled, "")
         else:
-            self.cropsMap[cropGuid] = (enabled, "")
+            self.mCropsMap[cropGuid] = (enabled, "")
 
         LaUtils.debug.log(f"Crop {cropGuid} {'enabled' if enabled else 'disabled'}", "Controller")
 
@@ -155,15 +155,15 @@ class LaMainController(QObject):
             animalGuid: GUID of the animal
             parameterGuid: GUID of the parameter to use
         """
-        if animalGuid in self.animalsMap:
-            value = self.animalsMap[animalGuid]
+        if animalGuid in self.mAnimalsMap:
+            value = self.mAnimalsMap[animalGuid]
             if isinstance(value, tuple) and len(value) >= 1:
                 enabled = value[0]
-                self.animalsMap[animalGuid] = (enabled, parameterGuid)
+                self.mAnimalsMap[animalGuid] = (enabled, parameterGuid)
             else:
-                self.animalsMap[animalGuid] = (False, parameterGuid)
+                self.mAnimalsMap[animalGuid] = (False, parameterGuid)
         else:
-            self.animalsMap[animalGuid] = (False, parameterGuid)
+            self.mAnimalsMap[animalGuid] = (False, parameterGuid)
 
         LaUtils.debug.log(f"Animal {animalGuid} parameter set to {parameterGuid}", "Controller")
 
@@ -175,38 +175,38 @@ class LaMainController(QObject):
             cropGuid: GUID of the crop
             parameterGuid: GUID of the parameter to use
         """
-        if cropGuid in self.cropsMap:
-            value = self.cropsMap[cropGuid]
+        if cropGuid in self.mCropsMap:
+            value = self.mCropsMap[cropGuid]
             if isinstance(value, tuple) and len(value) >= 1:
                 enabled = value[0]
-                self.cropsMap[cropGuid] = (enabled, parameterGuid)
+                self.mCropsMap[cropGuid] = (enabled, parameterGuid)
             else:
-                self.cropsMap[cropGuid] = (False, parameterGuid)
+                self.mCropsMap[cropGuid] = (False, parameterGuid)
         else:
-            self.cropsMap[cropGuid] = (False, parameterGuid)
+            self.mCropsMap[cropGuid] = (False, parameterGuid)
 
         LaUtils.debug.log(f"Crop {cropGuid} parameter set to {parameterGuid}", "Controller")
 
     def calculateTotalLandNeeded(self, population, diet_settings, enabled_animals, enabled_crops):
         """Calculate total land needed based on population and diet settings."""
         # Set diet ratio settings - convert to integers since model expects int
-        self.model.dietPercent = diet_settings['plantAnimalRatio']
-        self.model.percentOfDietThatIsFromCrops = diet_settings['wildTamePlantRatio']
-        self.model.meatPercent = diet_settings['wildTameAnimalRatio']
+        self.mModel.dietPercent = diet_settings['plantAnimalRatio']
+        self.mModel.percentOfDietThatIsFromCrops = diet_settings['wildTamePlantRatio']
+        self.mModel.meatPercent = diet_settings['wildTameAnimalRatio']
 
         # Update population
-        if hasattr(self.model, 'population'):
-            self.model.population = population
+        if hasattr(self.mModel, 'population'):
+            self.mModel.population = population
 
         # Update enabled animals and crops
-        if enabled_animals and hasattr(self.model, 'animals'):
-            self.model.animals = enabled_animals
-        if enabled_crops and hasattr(self.model, 'crops'):
-            self.model.crops = enabled_crops
+        if enabled_animals and hasattr(self.mModel, 'animals'):
+            self.mModel.animals = enabled_animals
+        if enabled_crops and hasattr(self.mModel, 'crops'):
+            self.mModel.crops = enabled_crops
 
         # Calculate total land needed
-        if hasattr(self.model, 'mDietLabels') and self.model.mDietLabels:
-            return getattr(self.model.mDietLabels, 'totalLandNeeded', 0.0)
+        if hasattr(self.mModel, 'mDietLabels') and self.mModel.mDietLabels:
+            return getattr(self.mModel.mDietLabels, 'totalLandNeeded', 0.0)
         return 0.0
 
     def calculateDietBreakdown(self, plantAnimalRatio, wildTameAnimalRatio, wildTamePlantRatio):
@@ -289,7 +289,7 @@ class LaMainController(QObject):
         try:
             animal_params = self.getAvailableAnimalParameters()
 
-            for animal_guid, (is_enabled, param_guid) in self.animalsMap.items():
+            for animal_guid, (is_enabled, param_guid) in self.mAnimalsMap.items():
                 if not is_enabled or not param_guid:
                     continue
 
@@ -317,7 +317,7 @@ class LaMainController(QObject):
         try:
             crop_params = self.getAvailableCropParameters()
 
-            for crop_guid, (is_enabled, param_guid) in self.cropsMap.items():
+            for crop_guid, (is_enabled, param_guid) in self.mCropsMap.items():
                 if not is_enabled or not param_guid:
                     continue
 
@@ -341,26 +341,26 @@ class LaMainController(QObject):
     def saveSettings(self):
         """Save controller settings to the model."""
         try:
-            if self.model:
-                if hasattr(self.model, 'animals'):
+            if self.mModel:
+                if hasattr(self.mModel, 'animals'):
                     # Convert Dict[str, Tuple[bool, str]] to Dict[str, str]
                     # Only store the parameter GUID for enabled animals
                     myAnimalsMap: Dict[str, str] = {
                         guid: param_guid
-                        for guid, (enabled, param_guid) in self.animalsMap.items()
+                        for guid, (enabled, param_guid) in self.mAnimalsMap.items()
                         if enabled and param_guid
                     }
-                    self.model.animals = myAnimalsMap
+                    self.mModel.animals = myAnimalsMap
 
-                if hasattr(self.model, 'crops'):
+                if hasattr(self.mModel, 'crops'):
                     # Convert Dict[str, Tuple[bool, str]] to Dict[str, str]
                     # Only store the parameter GUID for enabled crops
                     myCropsMap = {
                         guid: param_guid
-                        for guid, (enabled, param_guid) in self.cropsMap.items()
+                        for guid, (enabled, param_guid) in self.mCropsMap.items()
                         if enabled and param_guid
                     }
-                    self.model.crops = myCropsMap
+                    self.mModel.crops = myCropsMap
 
                 LaUtils.debug.log("Controller settings saved to model", "Controller")
         except Exception as e:
@@ -369,19 +369,19 @@ class LaMainController(QObject):
     def loadSettings(self):
         """Load controller settings from the model."""
         try:
-            if self.model:
-                if hasattr(self.model, 'animals'):
+            if self.mModel:
+                if hasattr(self.mModel, 'animals'):
                     # Convert Dict[str, str] to Dict[str, Tuple[bool, str]]
-                    self.animalsMap = {
+                    self.mAnimalsMap = {
                         guid: (True, param_guid)
-                        for guid, param_guid in self.model.animals.items()
+                        for guid, param_guid in self.mModel.animals.items()
                     }
 
-                if hasattr(self.model, 'crops'):
+                if hasattr(self.mModel, 'crops'):
                     # Convert Dict[str, str] to Dict[str, Tuple[bool, str]]
-                    self.cropsMap = {
+                    self.mCropsMap = {
                         guid: (True, param_guid)
-                        for guid, param_guid in self.model.crops.items()
+                        for guid, param_guid in self.mModel.crops.items()
                     }
 
                 LaUtils.debug.log("Controller settings loaded from model", "Controller")

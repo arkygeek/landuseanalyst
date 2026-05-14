@@ -49,7 +49,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self.mFodderUse = False # Changed default to bool
             self.mFoodSourceMap: Dict[str, LaFoodSource] = {}
             self.mFallowUsage = Priority.Nope
-            self.MrasterName = ""
+            self.mRasterName = ""
             self.mAreaUnits = AreaUnits.Dunum
             self.mEnergyType = EnergyType.KCalories
             self.mSpecificLandEnergyType = EnergyType.KCalories # Added default
@@ -68,7 +68,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self.mFodderUse = bool(getattr(theAnimalParameter, 'mFodderUse', False)) # Changed to bool
             self.mFoodSourceMap = dict(getattr(theAnimalParameter, 'mFoodSourceMap', {}))
             self.mFallowUsage = getattr(theAnimalParameter, 'mFallowUsage', Priority.Nope) # Use getter or default
-            self.MrasterName = str(getattr(theAnimalParameter, 'mRasterName', "")) # Corrected attribute name
+            self.mRasterName = str(getattr(theAnimalParameter, 'mRasterName', "")) # Corrected attribute name
             self.mAreaUnits = getattr(theAnimalParameter, 'mAreaUnits', AreaUnits.Dunum) # Use getter or default
             self.mEnergyType = getattr(theAnimalParameter, 'mEnergyType', EnergyType.KCalories) # Use getter or default
             self.mSpecificLandEnergyType = getattr(theAnimalParameter, 'mSpecificLandEnergyType', EnergyType.KCalories) # Use getter or default
@@ -82,7 +82,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
         myAttributes = [
             'mGuid', 'mName', 'mDescription', 'mAnimalGuid', 'mPercentTameMeat',
             'mUseCommonGrazingLand', 'mUseSpecificGrazingLand', 'mFodderUse',
-            'mFoodSourceMap', 'mFallowUsage', 'MrasterName', 'mAreaUnits',
+            'mFoodSourceMap', 'mFallowUsage', 'mRasterName', 'mAreaUnits',
             'mEnergyType', 'mSpecificLandEnergyType', 'mValueCommonGrazingLand',
             'mValueSpecificGrazingLand'
         ]
@@ -249,12 +249,12 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
 
     @pyqtProperty(str, notify=_rasterNameChanged)
     def rasterName(self): # type: ignore
-        return self.MrasterName
+        return self.mRasterName
 
     @rasterName.setter
     def rasterName(self, rasterName):
-        if self.MrasterName != rasterName:
-            self.MrasterName = rasterName
+        if self.mRasterName != rasterName:
+            self.mRasterName = rasterName
             self._rasterNameChanged.emit(rasterName)
 
     @pyqtProperty(AreaUnits, notify=_areaUnitsChanged)  # Changed type hint from object
@@ -468,7 +468,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
         else:
             self.mFallowUsage = Priority.Nope
 
-        self.MrasterName = LaUtils.xmlDecode(myTopElement.firstChildElement("rasterName").text())
+        self.mRasterName = LaUtils.xmlDecode(myTopElement.firstChildElement("rasterName").text())
         return True
 
     def toXml(self) -> str:
@@ -557,8 +557,8 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
 
         myString += f'<tr><td><b>Fallow Usage:</b></td><td>{fallowUsageStr}</td></tr>'
 
-        if self.MrasterName:
-            myString += f'<tr><td><b>Raster Mask:</b></td><td>{self.MrasterName}</td></tr>'
+        if self.mRasterName:
+            myString += f'<tr><td><b>Raster Mask:</b></td><td>{self.mRasterName}</td></tr>'
 
         myString += '</table>'
         return myString

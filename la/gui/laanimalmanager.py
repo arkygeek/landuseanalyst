@@ -21,10 +21,10 @@ FORM_CLASS, _ = uic.loadUiType(
 class LaAnimalTableModel(QAbstractTableModel):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.animals = []
+        self.mAnimals = []
 
     def rowCount(self, parent=QModelIndex()):
-        return len(self.animals)
+        return len(self.mAnimals)
 
     def columnCount(self, parent=QModelIndex()):
         return 2
@@ -35,7 +35,7 @@ class LaAnimalTableModel(QAbstractTableModel):
 
         row = index.row()
         col = index.column()
-        animal = self.animals[row]
+        animal = self.mAnimals[row]
 
         if role == Qt.DisplayRole:
             if col == 0:
@@ -63,17 +63,17 @@ class LaAnimalTableModel(QAbstractTableModel):
         return None
 
     def addAnimal(self, animal):
-        self.beginInsertRows(QModelIndex(), len(self.animals), len(self.animals))
-        self.animals.append(animal)
+        self.beginInsertRows(QModelIndex(), len(self.mAnimals), len(self.mAnimals))
+        self.mAnimals.append(animal)
         self.endInsertRows()
 
     def removeAnimal(self, index):
         self.beginRemoveRows(QModelIndex(), index, index)
-        del self.animals[index]
+        del self.mAnimals[index]
         self.endRemoveRows()
 
     def getAnimal(self, index):
-        return self.animals[index]
+        return self.mAnimals[index]
 
 
 # class LaAnimalManagerBase(QDialog, FORM_CLASS):
@@ -108,8 +108,8 @@ class LaAnimalManager(LaAnimalManagerBase):
         self.mAnimalsMap = theAnimalsMap.copy() if theAnimalsMap else {}
 
         # Initialize other variables
-        self.imageFile = ""
-        self.animal = LaAnimal()
+        self.mImageFile = ""
+        self.mAnimal = LaAnimal()
 
         # Connect signals/slots
         self.connectSignalsSlots()
@@ -212,8 +212,8 @@ class LaAnimalManager(LaAnimalManagerBase):
         self.selectAnimal(f"{myGuid}.xml")
 
         # Update the image if available
-        if hasattr(self, 'animal') and self.animal and hasattr(self.animal, 'imageFile') and self.animal.imageFile:
-            image_path = LaUtils.resolvePath(str(self.animal.imageFile), 'image')
+        if hasattr(self, 'mAnimal') and self.mAnimal and hasattr(self.mAnimal, 'imageFile') and self.mAnimal.imageFile:
+            image_path = LaUtils.resolvePath(str(self.mAnimal.imageFile), 'image')
             if os.path.exists(image_path):
                 pixmap = QPixmap(image_path)
                 if not pixmap.isNull():
@@ -231,32 +231,32 @@ class LaAnimalManager(LaAnimalManagerBase):
 
         if os.path.exists(filePath):
             myAnimal.fromXmlFile(filePath)
-            self.animal = myAnimal
+            self.mAnimal = myAnimal
             self.showAnimal()
         else:
             LaUtils.debug.log(f"Error: File does not exist: {filePath}")
 
     def showAnimal(self):
         """Display animal in the form."""
-        if not self.animal:
+        if not self.mAnimal:
             return
 
         # Basic info
-        self.leName.setText(self.animal.name)
-        self.leDescription.setText(self.animal.description)
+        self.leName.setText(self.mAnimal.name)
+        self.leDescription.setText(self.mAnimal.description)
 
         # Meat production
-        self.sbMeatFoodValue.setValue(self.animal.meatFoodValue)
-        self.sbUsableMeatPercent.setValue(self.animal.usableMeat)
-        self.sbKillWeight.setValue(self.animal.killWeight)
-        self.sbAdultWeight.setValue(self.animal.adultWeight)
-        self.sbConceptionEfficiency.setValue(self.animal.conceptionEfficiency)
-        self.sbFemalesToMales.setValue(self.animal.femalesPerMale)
-        self.sbGrowTime.setValue(self.animal.growTime)
-        self.sbDeathRate.setValue(self.animal.deathRate)
+        self.sbMeatFoodValue.setValue(self.mAnimal.meatFoodValue)
+        self.sbUsableMeatPercent.setValue(self.mAnimal.usableMeat)
+        self.sbKillWeight.setValue(self.mAnimal.killWeight)
+        self.sbAdultWeight.setValue(self.mAnimal.adultWeight)
+        self.sbConceptionEfficiency.setValue(self.mAnimal.conceptionEfficiency)
+        self.sbFemalesToMales.setValue(self.mAnimal.femalesPerMale)
+        self.sbGrowTime.setValue(self.mAnimal.growTime)
+        self.sbDeathRate.setValue(self.mAnimal.deathRate)
 
         # Handle feed energy type - get the actual enum value
-        energy_type = self.animal.mFeedEnergyType  # Access the internal value directly
+        energy_type = self.mAnimal.mFeedEnergyType  # Access the internal value directly
         try:
             if isinstance(energy_type, LaEnergyType):
                 energy_index = energy_type.value
@@ -269,30 +269,30 @@ class LaAnimalManager(LaAnimalManagerBase):
         self.cbFeedEnergyType.setCurrentIndex(energy_index)
 
         # Energy values
-        self.sbEnergyForPregnant.setValue(self.animal.gestating)
-        self.sbEnergyForLactating.setValue(self.animal.lactating)
-        self.sbEnergyForMaintenance.setValue(self.animal.maintenance)
-        self.sbEnergyForJuvenilePerKg.setValue(self.animal.juvenile)
+        self.sbEnergyForPregnant.setValue(self.mAnimal.gestating)
+        self.sbEnergyForLactating.setValue(self.mAnimal.lactating)
+        self.sbEnergyForMaintenance.setValue(self.mAnimal.maintenance)
+        self.sbEnergyForJuvenilePerKg.setValue(self.mAnimal.juvenile)
 
         # Reproduction
-        self.sbSexualMaturity.setValue(self.animal.sexualMaturity)
-        self.sbBreedingLife.setValue(self.animal.breedingExpectancy)
-        self.sbYoungPerBirth.setValue(self.animal.youngPerBirth)
-        self.sbWeaningAge.setValue(self.animal.weaningAge)
-        self.sbWeaningWeight.setValue(self.animal.weaningWeight)
-        self.sbGestationTime.setValue(self.animal.gestationTime)
-        self.sbEstrousCycleTime.setValue(self.animal.estrousCycle)
-        self.sbLactationTime.setValue(self.animal.lactationTime)
+        self.sbSexualMaturity.setValue(self.mAnimal.sexualMaturity)
+        self.sbBreedingLife.setValue(self.mAnimal.breedingExpectancy)
+        self.sbYoungPerBirth.setValue(self.mAnimal.youngPerBirth)
+        self.sbWeaningAge.setValue(self.mAnimal.weaningAge)
+        self.sbWeaningWeight.setValue(self.mAnimal.weaningWeight)
+        self.sbGestationTime.setValue(self.mAnimal.gestationTime)
+        self.sbEstrousCycleTime.setValue(self.mAnimal.estrousCycle)
+        self.sbLactationTime.setValue(self.mAnimal.lactationTime)
 
         # By-products - Missing in original implementation
-        self.checkBoxMilk.setChecked(self.animal.milk)
-        self.sbMilk.setValue(self.animal.milkGramsPerDay)
-        self.sbMilkFoodValue.setValue(self.animal.milkFoodValue)
-        self.checkBoxFleece.setChecked(self.animal.fleece)
-        self.sbFleeceWeight.setValue(int(self.animal.fleeceWeightKg))
+        self.checkBoxMilk.setChecked(self.mAnimal.milk)
+        self.sbMilk.setValue(self.mAnimal.milkGramsPerDay)
+        self.sbMilkFoodValue.setValue(self.mAnimal.milkFoodValue)
+        self.checkBoxFleece.setChecked(self.mAnimal.fleece)
+        self.sbFleeceWeight.setValue(int(self.mAnimal.fleeceWeightKg))
 
         # Update the image display
-        image_file = getattr(self.animal, '_imageFile', '')  # Access internal value directly
+        image_file = getattr(self.mAnimal, '_imageFile', '')  # Access internal value directly
         if image_file:
             # Use LaUtils.resolveImagePath to find the image
             image_path = LaUtils.resolveImagePath(image_file)
@@ -324,29 +324,29 @@ class LaAnimalManager(LaAnimalManagerBase):
         """Create a new animal."""
         myAnimal = LaAnimal()
         myAnimal.setGuid(None)  # Generate new GUID
-        self.animal = myAnimal
+        self.mAnimal = myAnimal
         self.showAnimal()
 
     def on_toolCopy_clicked(self):
         """Copy the selected animal."""
-        if not self.animal:
+        if not self.mAnimal:
             return
 
-        myAnimal = LaAnimal(self.animal)
+        myAnimal = LaAnimal(self.mAnimal)
         myAnimal.setGuid(None)  # Generate new GUID
-        self.animal = myAnimal
+        self.mAnimal = myAnimal
         self.showAnimal()
 
     def on_toolDelete_clicked(self):
         """Delete the selected animal."""
-        if not self.animal:
+        if not self.mAnimal:
             return
 
         # Confirm deletion
         reply = QMessageBox.question(
             self,
             "Confirm Delete",
-            f"Are you sure you want to delete {self.animal.name}?",
+            f"Are you sure you want to delete {self.mAnimal.name}?",
             QMessageBox.Yes | QMessageBox.No,
             QMessageBox.No
         )
@@ -354,7 +354,7 @@ class LaAnimalManager(LaAnimalManagerBase):
         if reply == QMessageBox.Yes:
             # Delete the file
             myAnimalDir = LaUtils.userAnimalProfilesDirPath()
-            filePath = os.path.join(myAnimalDir, f"{self.animal.guid}.xml")
+            filePath = os.path.join(myAnimalDir, f"{self.mAnimal.guid}.xml")
 
             try:
                 os.remove(filePath)
@@ -368,61 +368,61 @@ class LaAnimalManager(LaAnimalManagerBase):
 
     def on_pbnApply_clicked(self):
         """Apply changes to the animal."""
-        if not self.animal:
+        if not self.mAnimal:
             return
 
         # Update animal with form values
-        self.animal.name = self.leName.text()
-        self.animal.description = self.leDescription.text()
+        self.mAnimal.name = self.leName.text()
+        self.mAnimal.description = self.leDescription.text()
 
         # Set basic properties
-        self.animal.meatFoodValue = self.sbMeatFoodValue.value()
-        self.animal.usableMeat = self.sbUsableMeatPercent.value()
-        self.animal.killWeight = self.sbKillWeight.value()
-        self.animal.adultWeight = self.sbAdultWeight.value()
-        self.animal.growTime = self.sbGrowTime.value()
-        self.animal.deathRate = self.sbDeathRate.value()
+        self.mAnimal.meatFoodValue = self.sbMeatFoodValue.value()
+        self.mAnimal.usableMeat = self.sbUsableMeatPercent.value()
+        self.mAnimal.killWeight = self.sbKillWeight.value()
+        self.mAnimal.adultWeight = self.sbAdultWeight.value()
+        self.mAnimal.growTime = self.sbGrowTime.value()
+        self.mAnimal.deathRate = self.sbDeathRate.value()
 
         # Set feed energy type using internal attribute
-        self.animal.mFeedEnergyType = LaEnergyType(self.cbFeedEnergyType.currentIndex())
+        self.mAnimal.mFeedEnergyType = LaEnergyType(self.cbFeedEnergyType.currentIndex())
 
         # Set feed energy requirements - missing in original implementation
-        self.animal.gestating = self.sbEnergyForPregnant.value()
-        self.animal.lactating = self.sbEnergyForLactating.value()
-        self.animal.maintenance = self.sbEnergyForMaintenance.value()
-        self.animal.juvenile = self.sbEnergyForJuvenilePerKg.value()
+        self.mAnimal.gestating = self.sbEnergyForPregnant.value()
+        self.mAnimal.lactating = self.sbEnergyForLactating.value()
+        self.mAnimal.maintenance = self.sbEnergyForMaintenance.value()
+        self.mAnimal.juvenile = self.sbEnergyForJuvenilePerKg.value()
 
         # Set reproduction parameters
-        self.animal.sexualMaturity = self.sbSexualMaturity.value()
-        self.animal.breedingExpectancy = self.sbBreedingLife.value()
-        self.animal.youngPerBirth = self.sbYoungPerBirth.value()
-        self.animal.weaningAge = self.sbWeaningAge.value()
-        self.animal.weaningWeight = self.sbWeaningWeight.value()
-        self.animal.gestationTime = self.sbGestationTime.value()
-        self.animal.estrousCycle = self.sbEstrousCycleTime.value()
-        self.animal.lactationTime = self.sbLactationTime.value()
+        self.mAnimal.sexualMaturity = self.sbSexualMaturity.value()
+        self.mAnimal.breedingExpectancy = self.sbBreedingLife.value()
+        self.mAnimal.youngPerBirth = self.sbYoungPerBirth.value()
+        self.mAnimal.weaningAge = self.sbWeaningAge.value()
+        self.mAnimal.weaningWeight = self.sbWeaningWeight.value()
+        self.mAnimal.gestationTime = self.sbGestationTime.value()
+        self.mAnimal.estrousCycle = self.sbEstrousCycleTime.value()
+        self.mAnimal.lactationTime = self.sbLactationTime.value()
 
         # Set by-products - missing in original implementation
-        self.animal.milk = self.checkBoxMilk.isChecked()
-        self.animal.milkGramsPerDay = self.sbMilk.value()
-        self.animal.milkFoodValue = self.sbMilkFoodValue.value()
-        self.animal.fleece = self.checkBoxFleece.isChecked()
-        self.animal.fleeceWeightKg = self.sbFleeceWeight.value()
+        self.mAnimal.milk = self.checkBoxMilk.isChecked()
+        self.mAnimal.milkGramsPerDay = self.sbMilk.value()
+        self.mAnimal.milkFoodValue = self.sbMilkFoodValue.value()
+        self.mAnimal.fleece = self.checkBoxFleece.isChecked()
+        self.mAnimal.fleeceWeightKg = self.sbFleeceWeight.value()
 
         # Handle image file
-        if self.imageFile:
+        if self.mImageFile:
             # Use LaUtils to handle image copying and saving
             target_image_path = LaUtils.openGraphicFile()
             if target_image_path:
-                self.animal.imageFile = os.path.basename(target_image_path)  # Store just the filename
+                self.mAnimal.imageFile = os.path.basename(target_image_path)  # Store just the filename
 
         # Save animal to file
-        target_file = os.path.join(LaUtils.userAnimalProfilesDirPath(), f"{self.animal.guid}.xml")
+        target_file = os.path.join(LaUtils.userAnimalProfilesDirPath(), f"{self.mAnimal.guid}.xml")
         LaUtils.debug.log(f"Saving animal to: {target_file}")
-        success = self.animal.toXmlFile(target_file)
+        success = self.mAnimal.toXmlFile(target_file)
 
         if success:
-            self.refreshAnimalTable(self.animal.guid)
+            self.refreshAnimalTable(self.mAnimal.guid)
         else:
             QMessageBox.warning(self, "Landuse Analyst", f"Failed to save animal to {target_file}")
             return
@@ -439,7 +439,7 @@ class LaAnimalManager(LaAnimalManagerBase):
         )[0]  # getOpenFileName returns (filename, filter)
         
         if imagePath:
-            self.imageFile = imagePath
+            self.mImageFile = imagePath
             
             # Display the image
             pixmap = QPixmap(imagePath)

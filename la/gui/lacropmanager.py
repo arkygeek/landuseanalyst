@@ -56,8 +56,8 @@ class LaCropManager(LaCropManagerBase):
                 self.mCropsMap[guid] = value
 
         # Initialize other variables
-        self.imageFile = ""
-        self.crop = LaCrop()
+        self.mImageFile = ""
+        self.mCrop = LaCrop()
 
         # Initialize combo boxes
         self.setupComboBoxes()
@@ -139,8 +139,8 @@ class LaCropManager(LaCropManagerBase):
         """Create a new crop."""
         myCrop = LaCrop()
         myCrop.setGuid(None)  # Generate a new GUID
-        self.crop = myCrop
-        self.imageFile = ""
+        self.mCrop = myCrop
+        self.mImageFile = ""
         self.showCrop()
 
         # Clear form fields for new crop
@@ -203,18 +203,18 @@ class LaCropManager(LaCropManagerBase):
             QMessageBox.warning(self, "Copy Crop", f"Could not find crop file: {myOriginalFileName}")
             return
 
-        self.crop = LaCrop()
-        self.crop.fromXmlFile(myOriginalFileName)
+        self.mCrop = LaCrop()
+        self.mCrop.fromXmlFile(myOriginalFileName)
 
         # Change name to indicate it's a copy
-        myNewName = self.crop.name
-        self.crop.name = f"{myNewName} (copy)"
+        myNewName = self.mCrop.name
+        self.mCrop.name = f"{myNewName} (copy)"
 
         # Generate a new GUID
-        self.crop.setGuid(None)
+        self.mCrop.setGuid(None)
 
         # Keep the same image
-        self.imageFile = self.crop.imageFile
+        self.mImageFile = self.mCrop.imageFile
 
         self.showCrop()
 
@@ -263,8 +263,8 @@ class LaCropManager(LaCropManagerBase):
                     self.lblCropPix.setPixmap(scaledPixmap)
 
                     # Store just the filename, not the full path
-                    self.imageFile = baseFileName
-                    LaUtils.debug.log(f"DEBUG: Image set to: {self.imageFile}")
+                    self.mImageFile = baseFileName
+                    LaUtils.debug.log(f"DEBUG: Image set to: {self.mImageFile}")
                 else:
                     QMessageBox.warning(self, "Image Error", "Could not load the selected image.")
                     LaUtils.debug.log(f"DEBUG: Failed to load image from {savedPath}")
@@ -290,15 +290,15 @@ class LaCropManager(LaCropManagerBase):
                 LaUtils.debug.log(f"DEBUG: XML file doesn't exist: {myOriginalFileName}")
                 return
 
-            self.crop = LaCrop()
+            self.mCrop = LaCrop()
             LaUtils.debug.log(f"DEBUG: Loading crop from XML file: {myOriginalFileName}")
-            success = self.crop.fromXmlFile(myOriginalFileName)
+            success = self.mCrop.fromXmlFile(myOriginalFileName)
             LaUtils.debug.log(f"DEBUG: fromXmlFile result: {success}")
 
             if success:
-                LaUtils.debug.log(f"DEBUG: After loading - cropYield: {self.crop.cropYield}, type: {type(self.crop.cropYield)}")
-                LaUtils.debug.log(f"DEBUG: After loading - cropFodderProduction: {self.crop.cropFodderProduction}, type: {type(self.crop.cropFodderProduction)}")
-                LaUtils.debug.log(f"DEBUG: Image path from crop: {self.crop.imageFile}")
+                LaUtils.debug.log(f"DEBUG: After loading - cropYield: {self.mCrop.cropYield}, type: {type(self.mCrop.cropYield)}")
+                LaUtils.debug.log(f"DEBUG: After loading - cropFodderProduction: {self.mCrop.cropFodderProduction}, type: {type(self.mCrop.cropFodderProduction)}")
+                LaUtils.debug.log(f"DEBUG: Image path from crop: {self.mCrop.imageFile}")
 
                 self.showCrop()
             else:
@@ -311,52 +311,52 @@ class LaCropManager(LaCropManagerBase):
     def showCrop(self):
         """Show the current crop in the form."""
         try:
-            LaUtils.debug.log(f"Showing crop: {self.crop.name}")
-            LaUtils.debug.log(f"cropYield value: {self.crop.cropYield}, type: {type(self.crop.cropYield)}")
-            LaUtils.debug.log(f"cropFodderProduction value: {self.crop.cropFodderProduction}, type: {type(self.crop.cropFodderProduction)}")
+            LaUtils.debug.log(f"Showing crop: {self.mCrop.name}")
+            LaUtils.debug.log(f"cropYield value: {self.mCrop.cropYield}, type: {type(self.mCrop.cropYield)}")
+            LaUtils.debug.log(f"cropFodderProduction value: {self.mCrop.cropFodderProduction}, type: {type(self.mCrop.cropFodderProduction)}")
 
-            self.leName.setText(str(self.crop.name))
-            self.leDescription.setText(str(self.crop.description))
+            self.leName.setText(str(self.mCrop.name))
+            self.leDescription.setText(str(self.mCrop.description))
 
             # Handle cropYield - ensure it's an integer
             try:
-                self.sbCropYield.setValue(int(self.crop.cropYield))
+                self.sbCropYield.setValue(int(self.mCrop.cropYield))
             except (ValueError, TypeError) as e:
                 LaUtils.debug.log(f"Error converting cropYield: {e}")
                 self.sbCropYield.setValue(0)
 
             # Handle cropCalories
             try:
-                self.sbCropCalories.setValue(int(self.crop.cropCalories))
+                self.sbCropCalories.setValue(int(self.mCrop.cropCalories))
             except (ValueError, TypeError) as e:
                 LaUtils.debug.log(f"Error converting cropCalories: {e}")
                 self.sbCropCalories.setValue(0)
 
             # Handle cropFodderProduction
             try:
-                self.sbCropFodderProduction.setValue(int(self.crop.cropFodderProduction))
+                self.sbCropFodderProduction.setValue(int(self.mCrop.cropFodderProduction))
             except (ValueError, TypeError) as e:
                 LaUtils.debug.log(f"Error converting cropFodderProduction: {e}")
                 self.sbCropFodderProduction.setValue(0)
 
             # Handle cropFodderValue
             try:
-                self.sbCropFodderValue.setValue(int(self.crop.cropFodderValue))
+                self.sbCropFodderValue.setValue(int(self.mCrop.cropFodderValue))
             except (ValueError, TypeError) as e:
                 LaUtils.debug.log(f"Error converting cropFodderValue: {e}")
                 self.sbCropFodderValue.setValue(0)
 
             # For area units, find the enum value index directly
-            if isinstance(self.crop.areaUnits,LaAreaUnits):
+            if isinstance(self.mCrop.areaUnits,LaAreaUnits):
                 # If it's already an enum, use its value directly
-                areaUnitsValue = self.crop.areaUnits.value
+                areaUnitsValue = self.mCrop.areaUnits.value
             else:
                 # Try to convert to int or look up in the enum
                 try:
-                    areaUnitsValue = int(self.crop.areaUnits)
+                    areaUnitsValue = int(self.mCrop.areaUnits)
                 except (ValueError, TypeError):
                     # Convert string representation to enum value if possible
-                    areaUnitsStr = str(self.crop.areaUnits)
+                    areaUnitsStr = str(self.mCrop.areaUnits)
                     for unit in LaAreaUnits:
                         if unit.name in areaUnitsStr:
                             areaUnitsValue = unit.value
@@ -369,13 +369,13 @@ class LaCropManager(LaCropManagerBase):
             self.cbAreaUnits.setCurrentIndex(areaUnitsIndex)
 
             # Similarly for energy type
-            if isinstance(self.crop.cropFodderEnergyType, LaEnergyType):
-                energyTypeValue = self.crop.cropFodderEnergyType.value
+            if isinstance(self.mCrop.cropFodderEnergyType, LaEnergyType):
+                energyTypeValue = self.mCrop.cropFodderEnergyType.value
             else:
                 try:
-                    energyTypeValue = int(self.crop.cropFodderEnergyType)
+                    energyTypeValue = int(self.mCrop.cropFodderEnergyType)
                 except (ValueError, TypeError):
-                    energyTypeStr = str(self.crop.cropFodderEnergyType)
+                    energyTypeStr = str(self.mCrop.cropFodderEnergyType)
                     for etype in LaEnergyType:
                         if etype.name in energyTypeStr:
                             energyTypeValue = etype.value
@@ -387,13 +387,13 @@ class LaCropManager(LaCropManagerBase):
             self.cbFodderEnergyType.setCurrentIndex(energyTypeIndex)
 
             # Show image if available
-            if hasattr(self.crop, 'imageFile') and self.crop.imageFile:
+            if hasattr(self.mCrop, 'imageFile') and self.mCrop.imageFile:
                 # Resolve image path using LaUtils
-                imagePath = LaUtils.resolvePath(self.crop.imageFile, 'image')
+                imagePath = LaUtils.resolvePath(self.mCrop.imageFile, 'image')
                 LaUtils.debug.log(f"Resolved image path: {imagePath}")
 
-                # Update self.imageFile so it gets saved correctly
-                self.imageFile = self.crop.imageFile
+                # Update self.mImageFile so it gets saved correctly
+                self.mImageFile = self.mCrop.imageFile
 
                 # Try to load the image
                 if os.path.exists(imagePath):
@@ -409,7 +409,7 @@ class LaCropManager(LaCropManagerBase):
 
                     # Try from images directory
                     imagesDir = LaUtils.userImagesDirPath()
-                    imageFileName = os.path.basename(self.crop.imageFile)
+                    imageFileName = os.path.basename(self.mCrop.imageFile)
                     alternativePath = os.path.join(imagesDir, imageFileName)
 
                     if os.path.exists(alternativePath):
@@ -456,24 +456,24 @@ class LaCropManager(LaCropManagerBase):
                 return
 
             # Save crop data from form
-            self.crop.name = self.leName.text().strip()
-            self.crop.description = self.leDescription.text().strip()
-            self.crop.cropYield = int(self.sbCropYield.value())  # Ensure cropYield is saved as an integer
-            self.crop.cropCalories = self.sbCropCalories.value()
-            self.crop.cropFodderProduction = self.sbCropFodderProduction.value()
-            self.crop.cropFodderValue = self.sbCropFodderValue.value()
-            self.crop.areaUnits =LaAreaUnits(self.cbAreaUnits.currentIndex())
-            self.crop.cropFodderEnergyType = LaEnergyType(self.cbFodderEnergyType.currentIndex())
+            self.mCrop.name = self.leName.text().strip()
+            self.mCrop.description = self.leDescription.text().strip()
+            self.mCrop.cropYield = int(self.sbCropYield.value())  # Ensure cropYield is saved as an integer
+            self.mCrop.cropCalories = self.sbCropCalories.value()
+            self.mCrop.cropFodderProduction = self.sbCropFodderProduction.value()
+            self.mCrop.cropFodderValue = self.sbCropFodderValue.value()
+            self.mCrop.areaUnits =LaAreaUnits(self.cbAreaUnits.currentIndex())
+            self.mCrop.cropFodderEnergyType = LaEnergyType(self.cbFodderEnergyType.currentIndex())
 
             # Store just the filename, not the full path for the image
-            if self.imageFile:
-                self.crop.imageFile = os.path.basename(self.imageFile)
+            if self.mImageFile:
+                self.mCrop.imageFile = os.path.basename(self.mImageFile)
 
-            LaUtils.debug.log(f"DEBUG: Saving crop with image: {self.crop.imageFile}")
+            LaUtils.debug.log(f"DEBUG: Saving crop with image: {self.mCrop.imageFile}")
 
             # Make sure we have a valid GUID
-            if not self.crop.guid:
-                self.crop.setGuid(None)
+            if not self.mCrop.guid:
+                self.mCrop.setGuid(None)
 
             # Ensure crops directory exists
             cropDirPath = LaUtils.userCropProfilesDirPath()
@@ -481,13 +481,13 @@ class LaCropManager(LaCropManagerBase):
                 os.makedirs(cropDirPath)
 
             # Save to file
-            myFileName = cropDirPath + "/" + str(self.crop.guid) + ".xml"
-            success = self.crop.toXmlFile(myFileName)
+            myFileName = cropDirPath + "/" + str(self.mCrop.guid) + ".xml"
+            success = self.mCrop.toXmlFile(myFileName)
 
             if success:
                 LaUtils.debug.log(f"DEBUG: Successfully saved crop to {myFileName}")
                 # Refresh the table, selecting the saved crop
-                self.refreshCropTable(self.crop.guid)
+                self.refreshCropTable(self.mCrop.guid)
 
                 # Accept and close the dialog
                 super(LaCropManager, self).accept()

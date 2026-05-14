@@ -54,9 +54,9 @@ class LaMainForm(LaMainFormBase):
         super(LaMainForm, self).__init__(parent)
 
         # Initialize the model first
-        self.model = LaModel(self)
+        self.mModel = LaModel(self)
         # Connect the new signal for calculation logging
-        self.model.logCalculationStep.connect(self.logToAllChannels) # Add this line
+        self.mModel.logCalculationStep.connect(self.logToAllChannels) # Add this line
 
         # Initialize diet labels
         self.mDietLabels = LaDietLabels(parent=self)
@@ -75,7 +75,7 @@ class LaMainForm(LaMainFormBase):
         self.setDietLabels()  # This will calculate initial values based on default slider positions
 
         # Initialize debug dialog
-        self.myDebugDialog = None
+        self.mDebugDialog = None
         myDebugMode = QSettings().value("landuse_analyst/debug", False, type=bool)
         LaUtils.debug.setEnabled(myDebugMode)
 
@@ -122,8 +122,8 @@ class LaMainForm(LaMainFormBase):
 
             # --- Retrieve the stored calculation report --- 
             myReportString = "No calculation results available for this animal."
-            if hasattr(self.model, 'mDietLabels') and self.model.mDietLabels:
-                myReportMap = self.getPropertyValue(self.model.mDietLabels, 'animalCalcsReportMap')
+            if hasattr(self.mModel, 'mDietLabels') and self.mModel.mDietLabels:
+                myReportMap = self.getPropertyValue(self.mModel.mDietLabels, 'animalCalcsReportMap')
                 if isinstance(myReportMap, dict) and myAnimalGuid in myReportMap:
                     myReportPair = myReportMap[myAnimalGuid]
                     if isinstance(myReportPair, tuple) and len(myReportPair) > 0:
@@ -247,8 +247,8 @@ class LaMainForm(LaMainFormBase):
 
             # --- Retrieve the stored calculation report --- 
             myReportString = "No calculation results available for this crop."
-            if hasattr(self.model, 'mDietLabels') and self.model.mDietLabels:
-                myReportMap = self.getPropertyValue(self.model.mDietLabels, 'cropCalcsReportMap')
+            if hasattr(self.mModel, 'mDietLabels') and self.mModel.mDietLabels:
+                myReportMap = self.getPropertyValue(self.mModel.mDietLabels, 'cropCalcsReportMap')
                 if isinstance(myReportMap, dict) and myCropGuid in myReportMap:
                     myReportPair = myReportMap[myCropGuid]
                     if isinstance(myReportPair, tuple) and len(myReportPair) > 0:
@@ -347,9 +347,9 @@ class LaMainForm(LaMainFormBase):
             theMessage: The message to log
         """
         # Log to debug dialog if it exists
-        if hasattr(self, 'myDebugDialog') and self.myDebugDialog is not None:
+        if hasattr(self, 'mDebugDialog') and self.mDebugDialog is not None:
             try:
-                self.myDebugDialog.addDebugMessage(theMessage)
+                self.mDebugDialog.addDebugMessage(theMessage)
             except Exception:
                 pass
 
@@ -445,8 +445,8 @@ class LaMainForm(LaMainFormBase):
             
             # Store reference to the diet labels from the calculation for signal connections
             # This assumes the base class method updated the model with calculations
-            if hasattr(self.model, 'mDietLabels') and self.model.mDietLabels:
-                self.mDietLabels = self.model.mDietLabels
+            if hasattr(self.mModel, 'mDietLabels') and self.mModel.mDietLabels:
+                self.mDietLabels = self.mModel.mDietLabels
                 self._connectDietLabelSignals(self.mDietLabels)
             
             # Update calculations (this might trigger more logging)
@@ -551,29 +551,29 @@ class LaMainForm(LaMainFormBase):
         """Configure the model with current UI values."""
         if hasattr(self, 'model'):
             # Configure basic settings
-            self.model.baseOnPlants = self.cboxBaseOnPlants.isChecked()
-            self.model.includeDairy = self.cboxIncludeDairy.isChecked()
-            self.model.limitDairy = self.cboxLimitDairy.isChecked()
-            self.model.limitDairyPercent = self.sbLimitDairyPercent.value()
-            self.model.caloriesPerPersonDaily = self.sbDailyCalories.value()
+            self.mModel.baseOnPlants = self.cboxBaseOnPlants.isChecked()
+            self.mModel.includeDairy = self.cboxIncludeDairy.isChecked()
+            self.mModel.limitDairy = self.cboxLimitDairy.isChecked()
+            self.mModel.limitDairyPercent = self.sbLimitDairyPercent.value()
+            self.mModel.caloriesPerPersonDaily = self.sbDailyCalories.value()
 
             # Configure model with selected animals and crops
-            self.model.mAnimalsMap = self.getSelectedAnimals()
-            self.model.mCropsMap = self.getSelectedCrops()
+            self.mModel.mAnimalsMap = self.getSelectedAnimals()
+            self.mModel.mCropsMap = self.getSelectedCrops()
 
             # Configure dairy utilisation if available
             if hasattr(self, 'sbDairyUtilisation'):
-                self.model.dairyUtilisation = self.sbDairyUtilisation.value()
+                self.mModel.dairyUtilisation = self.sbDairyUtilisation.value()
 
     def ensure_debug_dialog_visible(self):
         """Ensure the debug dialog is created and visible."""
-        if not self.myDebugDialog:
+        if not self.mDebugDialog:
             from la.gui.ladebugdialog import LaDebugDialog
-            self.myDebugDialog = LaDebugDialog.get_instance(parent=self)
+            self.mDebugDialog = LaDebugDialog.get_instance(parent=self)
             # Signal connection is now handled in __init__ and dialog constructor
-        self.myDebugDialog.show()
-        self.myDebugDialog.raise_()
-        self.myDebugDialog.activateWindow()
+        self.mDebugDialog.show()
+        self.mDebugDialog.raise_()
+        self.mDebugDialog.activateWindow()
 
     def getPropertyValue(self, obj, prop_name: str):
         """Helper method to safely get PyQt property values"""
@@ -586,14 +586,14 @@ class LaMainForm(LaMainFormBase):
 
     def on_debug_dialog_closed(self):
         """Handle debug dialog close event."""
-        self.myDebugDialog = None
+        self.mDebugDialog = None
 
     def override_on_cbDebug_clicked(self):
         """Override for debug checkbox click handler."""
         if self.cbDebug.isChecked():
             self.ensure_debug_dialog_visible()
-        elif self.myDebugDialog:
-            self.myDebugDialog.close()
+        elif self.mDebugDialog:
+            self.mDebugDialog.close()
 
     def on_pushButtonRun_clicked(self):
         """
@@ -626,21 +626,21 @@ class LaMainForm(LaMainFormBase):
             
             if self.cboxBaseOnPlants.isChecked():
                 if self.cboxIncludeDairy.isChecked():
-                    myDietLabels = self.model.doCalcsPlantsFirstIncludeDairy()
+                    myDietLabels = self.mModel.doCalcsPlantsFirstIncludeDairy()
                     myCalculationType = "Plants First (Include Dairy)"
                 else:
-                    myDietLabels = self.model.doCalcsPlantsFirstDairySeparate()
+                    myDietLabels = self.mModel.doCalcsPlantsFirstDairySeparate()
                     myCalculationType = "Plants First (Dairy Separate)"
             else:
                 if self.cboxIncludeDairy.isChecked():
-                    myDietLabels = self.model.doCalcsAnimalsFirstIncludeDairy()
+                    myDietLabels = self.mModel.doCalcsAnimalsFirstIncludeDairy()
                     myCalculationType = "Animals First (Include Dairy)"
                 else:
-                    myDietLabels = self.model.doCalcsAnimalsFirstDairySeparate()
+                    myDietLabels = self.mModel.doCalcsAnimalsFirstDairySeparate()
                     myCalculationType = "Animals First (Dairy Separate)"
             
             # Store the diet labels for future reference
-            self.model.mDietLabels = myDietLabels
+            self.mModel.mDietLabels = myDietLabels
             
             # Generate the report
             self.tbReport.clear()
@@ -650,21 +650,21 @@ class LaMainForm(LaMainFormBase):
             self.tbReport.append(f"<h2>Calculation Method: {myCalculationType}</h2>")
             
             # Add basic model information
-            self.tbReport.append(self.model.toHtml())
+            self.tbReport.append(self.mModel.toHtml())
             
             # Add specific reports
             self.tbReport.append("<hr>")
-            self.tbReport.append(self.model.toHtmlCalorieCropTargets())
+            self.tbReport.append(self.mModel.toHtmlCalorieCropTargets())
             self.tbReport.append("<hr>")
-            self.tbReport.append(self.model.toHtmlCalorieAnimalTargets())
+            self.tbReport.append(self.mModel.toHtmlCalorieAnimalTargets())
             self.tbReport.append("<hr>")
-            self.tbReport.append(self.model.toHtmlProductionCropTargets())
+            self.tbReport.append(self.mModel.toHtmlProductionCropTargets())
             self.tbReport.append("<hr>")
-            self.tbReport.append(self.model.toHtmlProductionAnimalTargets())
+            self.tbReport.append(self.mModel.toHtmlProductionAnimalTargets())
             self.tbReport.append("<hr>")
-            self.tbReport.append(self.model.toHtmlAreaCropTargets())
+            self.tbReport.append(self.mModel.toHtmlAreaCropTargets())
             self.tbReport.append("<hr>")
-            self.tbReport.append(self.model.toHtmlAreaAnimalTargets())
+            self.tbReport.append(self.mModel.toHtmlAreaAnimalTargets())
             
             # Switch to the report tab
             if hasattr(self, 'tabWidgetMain'):
