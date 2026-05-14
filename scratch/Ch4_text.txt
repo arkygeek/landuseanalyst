@@ -1,0 +1,1525 @@
+Chapter 4
+
+Methodology Overview
+4.1
+
+Introduction
+
+The previous chapter presented a history of site catchment analysis, which provides
+a basis to which the methodology presented in this chapter can be compared. The
+methodology developed for this research and presented in this chapter focusses on
+looking at subsistence strategies to determine landuse and landscape engagement. It
+has been very specifically developed to be capable of being used not just in EBA south
+Levantine sites, but anywhere in the world, and during any period. It must be stressed
+that the images produced by the modelling process (i.e. maps) are not maps of past
+land use, but rather a model of the parameters within which past land use practices
+would have operated.
+Many different factors are used in this modelling process, and the chapter begins
+by explaining how some of these factors require special consideration. These special
+factors are important, because they generally relate to what we, as archaeologists, have
+no clear evidence for. Following this, a detailed examination of the algorithms used in
+these components is presented, providing the necessary information for a clear understanding of the final portion of the chapter which explains how the modelling process
+is implemented using software which I have developed specifically for this purpose4.1 .
+A major goal of my research is to assess potential sustaining areas of settlement and
+putative zones of landscape use as a means of understanding landscape impact and engagement. With this in mind, I set out to develop a systematic method of determining
+what land was more likely to or not to have been used by a settlement for acquiring its
+food, or more succinctly the settlement subsistence catchment area. Previous methodological approaches to the analysis of landscape use have been unable to encompass all
+the factors known to influence prehistoric land use, and thus the outcomes risk a distorted picture of potential landuse patterns because they are presented by examining
+4.1
+As much as possible, the use of specialised technical jargon has been avoided; for example, no
+discussion is made of independent and dependent variables, or whether methods are linear or curvilinear,
+etc. Instead, the methodology is explained as simply as possible, and in a logical step by step order, just
+as it was developed. The process is quite complex, and is easier to present in this way.
+
+45
+
+only a select few input factors.
+“Artefacts can’t tell us anything about the past because the past does
+not exist. We cannot touch the past, see it or feel it; it is utterly dead
+and gone. Our beloved artefacts actually belong to the present. They exist
+in the here and now. They may or may not have been made and used by
+real people thousands of years ago, but our assessment of the date of their
+manufacture and use is itself an assessment that we make, and that is made
+in the present. Until we invent a time machine, the past exists only in the
+things we say about it.” (Johnson 1999, 12)
+A model, although constructed in the present, is not so different from the artefacts
+and features that are uncovered when we excavate. In order to model a non-extant
+settlement, the first step should be to take a critical look at any and all data that is
+available for use as input. Incorporating as much archaeological evidence as possible
+from excavated sites is paramount for creating a robust and credible landuse model.
+Archaeological evidence, for example, can indicate the crops that were being sown,
+and the animals that were being raised. From this information, inferences can then be
+made to estimate the contribution each crop and animal would have had towards the
+caloric needs of the people of the settlement. Without engaging with this body of data,
+the outcome of any landuse model could be criticised as being completely speculative,
+which addresses the problem with the Vita Finzi Higgs approach at inferring site function from landscape (Jarman et al. 1972). This chapter focuses on this data, and looks
+at how it is acquired and used.
+There are two extreme approaches to modelling: attempting to incorporate every
+conceivable aspect of the phenomenon being modelled or using a minimalist approach
+by including only the most essential factors. The methodology developed in this research uses the former; however, as Bevan (2008, 3) asserts, “... the risk of hyper-real
+models ... is that they can become so bewilderingly complex that they lose all explanatory strength.” and this fact has not been lost here. The Landuse Analyst software
+which has been written to implement the methodology presented in this thesis has
+made much of the added complexity ‘transparent’. While before the development of
+this software it would have taken hours to examine, for example, the effects of dairy
+potential utilisation on cropland requirements, it is now possible to examine literally
+hundreds of different scenarios in a few seconds; by simply adjusting sliders in the software, the user can immediately see the effects, in real time, caused by the change of
+value. Another simplification that is used in this thesis involves land classification and
+environmental factors. Instead of using a rigourous classification system for each crop
+and animal used in the model (which Landuse Analyst has been designed to do) only
+two classes were used: land suitable for growing crops and land suitable for grazing an46
+
+imals. Further, the method of classifying the land’s suitability has, as will be explained,
+been limited to just one factor (slope). Also, even though it is simple to incorporate
+into Landuse Analyst, no adjustments have been made for potential variations in crop
+yields or weight gains of animals that would have resulted from environmental fluctuations (e.g. drought); each variation of an input factor results in an exponential
+increase in the number of scenarios to examine and although it takes very little time
+to set up and get results from each scenario, the massive amount of resultant data becomes overwhelming. This simplification has been intentional, not only for the reasons
+stated above, but also due to the time restraints imposed on this research.
+
+4.1.1 Input Variables
+Nearly all of the influencing factors considered in my research have been discussed and
+proposed/implemented in previous studies, but only ever one or two at a time. This
+research takes a more holistic approach by looking at as many factors and as much
+available data as conceivably possible that relate to influencing how past peoples may
+have impacted their local environment. Considering as many variables as possible that
+may have influenced landscape use can only increase the credibility of any inferences
+drawn from the data. The complexity of this holistic approach is only possible because
+of the incredible leaps in computing power in recent years.
+When choosing input values for use in a model it is important to recognise those
+factors that have numerous acceptable values. The speed and ease of use of the model
+makes light the task of examining a whole range of acceptable values. Variations of
+these values (within the acceptable range) have the potential to change results, and
+therefore deserve careful consideration. Nearly all of the values used in this discussion
+of the methodology are for illustration purposes. Each case study where this methodology is applied will be assessed individually to determine the most suitable values for
+the required input variables. For example, if an average expected yield for a crop is
+from 40-50 kg hectare−1 , then by using low, mid and high values (or in this example
+40, 45 and 50 kg) rather than simply taking the mean value of 45, it is possible to see
+the effect of fluctuating yields (or our choices for crop yield values) in the results of
+the modelling process. One issue with this approach is that if several input variables
+have acceptable ranges, exploring all of them results in a large number of alternative
+scenarios but the ability to examine the effects of using the highs and lows allows for a
+more realistic assessment of likely behaviours in the past. Careful examination of these
+outcomes allows for one to discriminate more easily those factors that have the most
+significant role in past landuse and thus differential effects on the landscape. In turn
+this allows one to focus on determining more precise interpretation for behaviours. To
+summarise, this methodology uses as many acceptable variations of as many influencing factors as possible, rather just providing only a few scenarios based on mean values.
+47
+
+This ultimately allows for a more nuanced understanding of landscape use and possible
+variability on past landscape use.
+
+4.1.2
+
+Algorithm Development
+
+The process of developing the modelling algorithm began with a single goal: the identification of enough suitable land surrounding a site to produce minimum subsistence
+requirements. From this basis, I worked backwards to develop the steps required to
+achieve this goal. The calculation of the amount (or area) of land needed to sustain
+a settlement is a primary requirement, for only if the area of land required to produce enough food to feed the settlement is known, is it possible for a GIS to locate the
+suitable land equal to that area surrounding the site.
+In order to achieve this, it was necessary to calculate the amount of food required
+to provide the basic subsistence needs of the community. By estimating a range of
+past population sizes and structures it was possible to estimate a range of total caloric
+requirements for EB communities. By breaking the community’s diet down into the
+contribution made by individual crops and animals utilised at a given site and calculating requisite herd size and estimating crop yields, it is possible to arrive at a production
+target for each individual crop and animal utilised by past communities.
+In order to calculate the amount of grain, meat and other vegetable goods that
+needed to be produced the calories each food item would be responsible for contributing to the diet needed to be determined. There are four primary calculation categories
+in the process:
+• Calculating Calorie Targets - It was necessary to calculate targets in two stages.
+In the first stage an overall calorie target for the entire population is calculated.
+
+The overall calorie target is per annum, as it is later used to determine annual
+food production levels. In a second step the population’s diet is broken down into
+its individual components, represented in the end as a percentage of the diet (see
+Figure 4.1). This percentage of overall diet is then applied to the yearly calorie
+requirements, resulting in individual calorie targets for each food item.
+• Calculating Production Targets - Production Target calculations require a CALO-
+
+RIE TARGET and the food energy value of each dietary component (food source)
+in the model. A production target is the amount of food required to satisfy the
+calorie target. Once the number of calories each food source must supply is
+known, the production target can be calculated.
+
+• Calculating Area Targets - This step requires a PRODUCTION TARGET as well as
+
+the expected production levels (yields for crops, herd size for animals) for each
+food item believed to have been part of the diet. Dividing the production target
+48
+
+by the yield (crops) or multiplying by the area of land required (per animal), an
+area target can be calculated.
+• Locating the land - To locate possible land use areas in a GIS, an AREA TARGET
+is needed. Once an area of land that the population required to grow its crops
+and graze its animals is known, a GIS can then be used to search for the suitable
+land surrounding a site equal to this area target and once identified, highlighted
+and shown on a map.
+Critical initial input factors (See Figure 4.2 and Tables C.1, C.2, and C.3 on pages
+375, 376, and 377 for all input variables) are an estimate of the settlement’s population
+and the average daily energy requirements (in Millions of Calories, or MCals) of an
+average member of the population. By multiplying these figures, the total number of
+calories required per day for the settlement is calculated. This figure then needs to
+be multiplied by 365 to get a yearly calorie target required to feed the populace (see
+Formula F4 in Figure 4.10). The value must be per annum because crops and animals
+are modelled using an annual cycle.
+
+4.2
+
+Process Overview
+
+The final product of the model is a map of the settlement’s calculated ‘footprint’ (subsistence catchment area) on the landscape. The model is created by carefully examining
+palaeobotanical and faunal remains to reconstruct the makeup of the diet. Diet composition, together with a population estimate, is the starting point of the modelling process. With this information, it is possible to derive calorie targets for each contributor
+to the population diet. Calorie targets make it possible to calculate production targets,
+and production targets allow land area targets to be determined. Once the area of land
+required to produce enough food to sustain the population (the area target) has been
+calculated, that amount of land most proximate to the settlement, classified as being
+suitable for each crop or animal, is located and plotted onto a map.
+
+4.2.1 Calorie Targets
+We do know various things about the behaviour of past communities. We know, through
+botanical and faunal analyses, what crops they grew and consumed, and which animals were being exploited. Additionally, we can determine the respective significance
+of each within a plant or animal sector of the economy. It is more difficult to understand the relative contribution of plants and meat products with isotope analyses. As
+illustrated in Figure 4.1, individual animals and crops contribute to sub groups of the
+overall diet makeup. The diet composition, divided into plant and animal based groups,
+is further divided into ‘domestic’ and ‘other’ sources. If the food item is domestic, and
+49
+
+Figure 4.1: Breaking down the composition of a settlement’s diet. (conceptual figures). ‘Other’
+sources are considered to be either a non-domestic contribution such as fish, wild berries,
+gazelles, and so on, but can also be used to account for food sources imported from other
+settlements.
+
+grown/raised by the inhabitants of the settlement, it is considered domestic. If the
+food item comes from any other source (for example fishing, gathering, trade) then
+it is put into the ‘other’ category. This is done because the sustaining catchment area
+is based on agricultural and grazing requirements only. The domestic portion of each
+primary group (plants/animals) is made up of all of the domestic plants and animals
+which have been determined to have been a part of the settlements diet. By using
+these divisions and groups, it is possible to give each domestic diet contributor a percent value depicting it’s individual contribution to both the diet overall as well as to
+the corresponding domestic plant/animal sub group. Once this percent of contribution
+has been calculated, it gets multiplied by the annual MCals required by the settlement.
+This results in a yearly calorie target for each individual crop and domestic animal.
+50
+
+Figure 4.2: The input variables required for the diet modelling.
+
+The input variables required are listed in Tables C.1(page 375), C.2(page 376) and
+C.3(page 377). Whenever possible, primary data should be used for these definitions,
+but often it is impossible to get this. For example, it may not be possible to know what
+the gestational dietary requirements are for a particular breed of caprine because that
+breed simply no longer exists. In these cases, there is no choice but to base the values
+on the closest ‘match’ we can find and may include values from current breeds/crops
+that closely match those being defined. As with any of the input variables, many of the
+values used to define the crop or animal species will have acceptable ranges. The effects
+of varying these values has not been within the time scope of this thesis, but would be
+an interesting angle to pursue in the future. My suspicions are that those factors which
+would have the greatest impact on crops would be yield. For animals it would almost
+certainly be a combination of the number of young born per birthing event, the size
+51
+
+of the animal, the speed at which it gains weight, and dairy production capacity. The
+fact that three levels of dairy utilisation has been modelled does in fact emulate the
+production capacity. As for the weight gain and size, because it is being modelled on
+an annual cycle, these factors are less likely to bear any real significance on the final
+outcome, as a stable herd will be reproducing every year, which means that once the
+herd is stabilised, it is less important how long it takes for them to attain slaughter
+weight. This would have implications on feeding requirements, which in turn would
+have further effects on other parts of the model, but, again, it has simply not been
+possible to explore these further complicated permutations due to time constraints.
+Dietary Division
+Diet derives from plant and animal products. The relative contribution of each in the
+archaeological record is difficult to assess. Teeth will give some indication, and where
+this analysis has been done should be considered. Animals can provide calories from
+either meat or secondary products such as dairy or blood. The use of animal blood as a
+dietary supplement is not explored in this thesis, however dairy use is heavily explored.
+There have been ethnographic examples of the use of blood as a food source in both
+caprines and bovines (Dimbleby et al. 1969, 252), but due to the dearth of archaeological evidence for this type of secondary exploitation and the added complexities
+involved with the modelling, blood use is excluded, and dairy is the only secondary
+animal product explored in this research. This choice was influenced in part by the fact
+that dairy has an advantage over blood in that milk can be fermented and processed
+into foods like butter, yogurt or cheese, allowing it to be preserved for a much longer
+period of time, making it possible to stockpile surplus production for use throughout
+the year. Additionally, animals also can potentially contribute hides, wool, hair, bones,
+dung (for both fertiliser and as a fuel source) and traction.
+Plant based food sources and animal based food sources get modelled separately,
+and are split at the second level of analysis. They are modelled separately because, unlike crops that only have land requirements, animals have the additional requirements
+of feed and the maintenance of a breeding herd. The percent of the diet emanating
+from domestic crops and animals needs to be determined. At this stage, the input is
+made for animal contributions only, because dairy use will affect the plant contribution
+to the diet. This effect is due to the fact that dairy is a by product of meat production, and if meat production is set at a certain level, the rest of the diet is satisfied by
+other sources. If dairy is not used, the rest of the diet is satisfied from plant based
+food. If dairy is utilised, a portion of what plants would have been solely responsible
+for would therefore be satisfied by the dairy, thus lowering the amount of plant based
+food required. The next step divides both the plant and meat portions into domestic and non-domestic (wild/other) sources. For the purposes of determining a site’s
+52
+
+Figure 4.3: Breakdown of the meat portion of the diet. (conceptual figures)
+
+sustaining catchment area, only domestic sources are explored in this model. The exclusion of other food sources in determining a catchment is justified for two reasons.
+First, the period being examined relied heavily on domestic food production, minimising the importance of other food sources. Secondly, food procurement from sources
+other than those grown or raised locally would be next to impossible to model, as fishing, hunting, gathering and trading can come from nearly anywhere. For these reasons,
+non-domestic dietary contributors are not used except to lessen the amount of domestic
+food production required to sustain the settlement (see Figure 4.5, formula A1 ).
+
+4.2.2 Production Targets
+Production targets are measures of weight (in kilograms) that each crop and animal
+must produce to satisfy the Calorie Targets. Weight is used for production targets
+because crop yield and animal meat production data are usually expressed as units of
+weight. For example crop yields are often expressed as Kg Ha−1 and animals are portion
+of their live weight that is usable as food. Using the calorie target and the food value
+53
+
+Figure 4.4: Breakdown of the plant portion of the diet. Note that the input figures for percent
+of diet were: HorseBean 7%, Einkorn 13%, Emmer 34%, Lentils 12%, Peas 15%, Olives 18%.
+These numbers translate to the ones shown above after processing as in Fig. 4.1.
+
+of the crop, the production target (necessary to meet these needs) is calculated. These
+values are simple to incorporate into the algorithm. For example, if the settlement
+requires 337,500 MCals of meat from sheep annually, and sheep meat has a food value
+of 3 MCals Kg−1 , then 337, 500 ÷ 3 = 112, 500 Kg year−1 of sheep meat needs to be
+produced. When animals get slaughtered, only part of their carcasses are usable for
+food. If, for example, 50% of a goat’s live body weight is usable as food, and the
+initial production target calculation results in a target for goat meat of 10,000 Kg, the
+second stage of the production �target calculation
+� process would change this to 20,000
+Kg by dividing 10,000 by 50%
+
+10,000
+50% = 20, 000 . It is important to remember that in
+
+this algorithm production targets for animals are consistently expressed in terms of
+kilograms of live weight.
+
+Production targets for animals are very important for the remaining calculations,
+as they allow herd sizes to be calculated. Following the herd size calculations, it is
+possible to determine the potential dietary contribution from dairy products, and only
+after this has been determined can any targets for plant based contributions be made.
+54
+
+Figure 4.5: The initial calculations required in the model.
+
+Figure 4.6: The calculations required to begin modelling the herds.
+
+Before a possible range of estimated dairy contributions can be calculated, herd
+sizes must be calculated. It is critical to fully understand how this is done as the logic
+can appear to be circular. The situation seems to be that herd size is worked out before
+dairy can be calculated, and herd size is calculated dependent on an animal contribution to the diet which can only be calculated in relation to a plant contribution, which
+can’t be calculated until a dairy contribution is known. After many failed attempts,
+the method adopted to overcome this problem was for the meat contribution to be
+static, with all remaining contribution levels spawning from that value. By basing the
+calculations on meat first, it allows for herd sizes to be calculated, from which dairy
+production levels can be calculated and incorporated into the equation, which then allows the plant based portion of the diet to be calculated. If the overall animal to plant
+ratio is wanted to be static, this is still possible using this method. There is a method
+55
+
+Figure 4.7: Herd Size calculations
+
+of combining meat and dairy production levels which simply limits dairy contribution
+to a percent of diet. If an overall animal contribution of 30% was desired, and the
+meat contribution (including ‘other’ sources, not just domestic) was 20% then dairy
+could be limited to 10% which would limit the combined meat and dairy contribution
+to 30%. Doing this does not guarantee the overall animal contribution will be 30%
+however, as the dairy production may not be sufficient to supply this (10% in this example) amount. Using the production target (as calculated above), which gives kg of
+live weight, the number of offspring required per year to fulfil the production target is
+calculated. This accomplished by simply dividing the required kg of meat by the meat
+yield of the animal at it’s average slaughter weight. It does become more complicated,
+however, when other issues come into play. These other issues increase the number of
+offspring required to both meet the production targets and sustain the breeding herd
+size.
+Breeding animals all eventually die. When they die, they become potential sources
+of food for the settlement. This fact is incorporated into the model by using the (a)
+number of useful breeding years expected from an animal, (b) the age of sexual matu56
+
+Figure 4.8: The calculations required to breakdown the demographics of the herd.
+
+rity , (c) the average weight of offspring at slaughter and (d) the average weight of an
+adult. On this basis one can calculate the number of animals it takes to supply enough
+meat to meet the production target. For example, if an animal reaches sexual maturity
+at 1.5 years, and it is expected that each female will viable for 5 years, every 6.5 years
+that animal will (1) need to be replaced and (2) can be eaten. Thus, it is possible to
+predict how many adults from the breeding stock will be available every year for food,
+as well as how many extra offspring must be kept for replenishing these animals.
+
+57
+
+Figure 4.9: The calculations required to breakdown the diet composition of the herd.
+
+58
+
+Figure 4.10: The calculations required to breakdown the diet contribution of the herd.
+
+59
+
+Crop production targets can be adjusted to accommodate for both wastage (during
+harvest/storage) and seed stock retained for next years sowing. These estimated values
+are expressed as a percentage of the harvest. For example, using a value of 20%, which
+has been proposed as a (possibly somewhat high) value for wastage (Ellison 1983,
+189), if 1000 kg of emmer was harvested, wastage is estimated at 20% and seed stock
+retention estimated at 15%, 35% of the 1000 kg (or 350 kg) of emmer is not going to
+be usable as food. This means that when calculating the production target the sum of
+the wastage and seed stock must be added to the amount required by the settlement
+(for both themselves and animal feed if applicable). To illustrate this (using conceptual
+figures), if a settlement required 850 kg of emmer to feed themselves and 150 kg to feed
+their animals, an additional 35% (350 kg) must be added to the 1000 kg requirement
+when calculating the production target in order to accommodate the wastage (20% or
+250 kg) and seed stock retention (15% or 150 kg). This can be expressed with the
+formula:
+CropP rodT arget = (HumanN eeds + AnimalN eeds) · (1 + W astage% + SeedStock%)
+
+4.2.3
+
+Area Targets
+
+Once production targets have been found, it is possible to calculate area targets for
+each crop and animal by looking at yield values for crops, and grazing requirements
+for animals. A simple formula of P roductionT arget ÷ CropY ield = AreaT arget gives
+an area target for crops. As with production targets, area targets are complicated for
+
+animals because their land requirements are based on herd size, and it is not just the
+number of animals needed for slaughter that is required. A breeding herd large enough
+to consistently produce enough offspring to satisfy the annual production target has to
+be added into the equation as well. Adding to the complexity is the possibility that
+animals grazed fallow crop land, ate fodder or grain from the crops being grown, or
+grazed other types of land.
+Crop Rotation
+A number of benefits result from the practice of crop rotation. By allowing the land to
+‘rest’ for a year, or sowing nitrogen fixing crops like legumes after a cereal crop, soil
+life is extended, average yields are consistently higher, and overall fertility is increased.
+Consideration for the practice of crop rotation is critical when determining how much
+land was required for food production, as it can more than double the necessary land
+requirements. Crop rotation can be expressed as a ratio of sown land to fallow land.
+If a ratio of 1:1 is used, this means that the practice was to sow half of their land and
+leave last year’s sown land fallow. If a parcel of land was sown two years in a row, and
+left fallow for the third year, the ratio would be 2:1 (or 1:0.5).
+60
+
+More complex crop rotation can also be expressed as a simple ratio. Such a situation
+might be sowing ten hectares of wheat in year one, then the same ten hectares to lentils
+in year two, and fallowing the same in year three. In order to maintain the production
+of lentils and wheat using this rotation, the farmer needs ten hectares of cropland for
+wheat, another ten hectares for lentils, and still have enough fallow to rest the land in
+the rotation every third year.
+Year 1
+
+Year 2
+
+Year 3
+
+Land Parcel 1 :
+
+W heat
+
+then �
+
+Lentils
+
+then �
+
+Fallow
+
+Land Parcel 2 :
+
+Lentils
+
+then �
+
+Fallow
+
+then �
+
+W heat
+
+Land Parcel 3 :
+
+Fallow
+
+then �
+
+W heat
+
+then �
+
+Lentils
+
+Table 4.1: A more complicated example of crop rotation that includes the sowing of lentils
+directly into the previous year’s wheat crop.
+
+As seen in Table 4.1, in any given year between the three parcels of land, there are
+two parcels of land being sown, and one parcel of land in fallow. This is a ratio of
+2 : 1.00. To express this as a 1 : x ratio however, we just multiply both by the reciprocal
+of the value for crop. In this case, the crop’s value is 2, and the reciprocal of 2 is 12 so
+we end up with: 22 : 1.00
+2 = 1 : 0.5. Note that in the example presented in the table, this
+ratio is also applicable to lentils.
+Crop rotation has the potential to lower animal grazing land requirements. It is
+possible for animals to graze fallow land, which reduces the amount of grazing land
+otherwise required to sustain the animals. In order to calculate the contribution of
+fallow land it is necessary to know its food value to the animals. The ratio of crop land
+to fallow land together with the food value of the fallow land allows for an accurate
+adjustment of the grazing land requirements for the animal herds.
+Animal Herd Size
+Herd size estimates are required to calculate the potential amount of grazing land
+exploited around settlements. A generic herd size algorithm is difficult, in part because
+different animals have different dietary requirements and even when they are the same,
+they require different amounts of feed depending on their condition (pregnant versus
+lactating for example) or even weather conditions (animals require more feed in cold
+weather than in warm weather for example)4.2 . Further complicating this issue, not all
+4.2
+
+Personal experience from 25 years spent on a farm working with cattle and pigs.
+
+61
+
+land that can be grazed has the same food value to the animals. In order to consider as
+many of these factors as possible, the algorithm (see Figure 4.7 on page 56) uses many
+physical characteristics of the animals (see Table C.2 on page 376) and the desired
+amount of meat production (See formula A1 in Fig. 4.5 on page 55).
+There are two basic sets of input variables in the herd size algorithm. The first is
+the production level required by the settlement (Formula A1 in Figure 4.5), and the
+second is the physiological characteristics of the animals (Table C.2). All of the input
+variables required for this process are outlined in Figure 4.2 on page 51. The algorithm
+assumes that females that become pregnant do so after one oestrous cycle beyond the
+weaning age of their last birthing event.
+One of the most difficult aspects of this process is consideration of the potential
+dairy products from the herds. Modelling of dairy production potential in conjunction
+with all of the other dietary factors used in this methodology has not been done in the
+past. A large part of the model is dedicated to doing just this. It has been argued that
+dairy products were so important that without them, nomadic pastoralism might not
+have even been possible (Kohler-Rollefson 1992, 16).
+There are many factors which make it difficult to reconstruct the dynamics of a herd
+based on archaeological remains. A faunal assemblage is an essentially static snapshot
+of a ‘favoured’ assemblage. What is needed is a method of using this data as a basis
+to generate a dynamic model of animal reproduction and herd maintenance. First and
+foremost, as all faunal analysts are aware of, this snapshot is only a very small piece of
+the pie. If you consider that, over the course of even 10 years, a small community of
+1000 people may well have consumed tens of thousands of animals4.3 . Animals may
+have been slaughtered elsewhere, and the joints of meat brought into the settlement
+for consumption. Bones could have been eaten by dogs, scavenged by wild animals,
+succumbed to attrition over the millennia, or been removed from the archaeological
+record by any number of other means. There is also the possibility that some of the
+animals in the herd were not killed or eaten on site(Payne 1973, p301). For whatever
+reason, in comparison to the number of animals that would have been used at the
+site, the percentage, as represented in the faunal remains, represents only a miniscule
+portion of these. Perhaps there is another way of approaching this issue.
+It can be inferred, with reasonable certainty (even from sparse faunal assemblages)
+that the animals (or at least the meat-joints from the animals) represented by those
+bones were present at the site. Therefore one can further infer that these animals con4.3
+I have calculated this as follows. 1000 people each requiring 2500 Calories day−1 of which 15% are
+to be derived from meat. This means that 1000 · 2500 = 2,500,000 Calories are required each day for
+the settlement. Meat is therefore responsible for supplying 2,500,000 · 0.150 = 375,000. Meat supplies
+approximately 3200 Calories kg−1 so 375,000 ÷ 3200 = 117.19 kg of meat day−1 . If an average kill
+weight is 30 kg, at 50% usable meat per animal, that is 15.00 kg of meat animal−1 and 117.19 ÷ 15.00
+= 7.81 animals day−1 . Multiply this by 365 and you get 2852 animals per year. This means that there are
+potentially 28,516 animals being eaten every 10 years.
+
+62
+
+tributed to the diet. It is also possible to use other means (for example, appropriate
+ethnographic examples or isotope analysis on human remains in the assemblage) to
+estimate the portion of the diet that came from animal sources. With these factors considered, a method of reconstructing a herd based on the known physiological aspects
+of the animals, in conjunction with, rather than solely on, the faunal remains is next
+described.
+There are biological attributes specific to species that affect herd demographics. For
+example, we know their gestation periods, oestrous cycles, number of young (typically)
+born, etc. We need only assume that the management strategies employed by the
+herders was, at the very minimum, one which would allow the size of the herd to
+remain (at minimum) constant.
+When examining kill off patterns, authors often pick a weight or age for slaughter4.4 , and use that as an average (Danti 2000).
+
+Other attempts have been made to
+
+more accurately depict herd outputs by Cribb (1984), who used 10 points in time to
+stop and examine output capacity. This study fell short of my needs, however, in that
+it did not do any agent based analysis at all. By agent based, in this case I mean that
+animals born on a particular day are treated differently than those born on subsequent
+days. In my following example, all animals born on the first day of the birthing season
+are treated (collectively) uniquely4.5 .
+By giving the animals unique identification, I am able to calculate their individual
+contributions towards the settlement’s meat needs, fleece production, and also, importantly, dairy contributions from their mothers.
+If, for the purpose of the model, we assume that people were eating a relatively
+static amount of meat per day, which accounted for a specific percentage of their
+calorific needs, then it is possible to calculate the size of the herd that would be required to supply that much meat, as well as keeping the herd size maintained. To
+calculate the size of the herd, I developed an algorithm which uses a combination of
+physical characteristics of the animal and a knowledge of the desired level of meat
+production (See Fig. 4.11).
+There are two input sections in this algorithm. The first section is the desired production level. The second section is for all of the physical characteristics of the animal.
+The variables used (see Figure 4.2) are specific enough to allow for any animal to be
+defined.
+This process assumes that females will become pregnant after one oestrous cycle
+beyond the weaning age of their last birthing event. The outcome is the number of
+4.4
+
+One of the things that has bothered me from the beginning is the fact that I have not been able to
+find any examples in the literature of a complete examination of how a herd of animals would have been
+utilized. By this, I mean what ages would the animals have been eaten at, their weights, and the number
+of adult females and males required to sustain the level of production.
+4.5
+in comparison to any others born on any other day
+
+63
+
+Figure 4.11: This is a simplified version of the algorithm used to calculate Animal Herd Sizes.
+This process requires that the production target has already been worked out.
+
+mothers in the herd, the number of mothers to be culled, the number of adult males,
+and the number of juveniles born each year4.6 .
+Of course not every birthing event will occur on the same day. A caprine birthing
+season, in fact, spans approximately two months, typically January and February(Cribb
+1984, p167), which is used in the following example. This range means that there will
+be up to 2 months age difference between any given year’s offspring. Using a conservative figure of .1057 kg day−1 weight gain, this means a potential weight variation
+amongst the new offspring of 6.34 kg. If there was 51 birthing events a day throughout
+the two months, that would be a difference of 6.34 kg in terms of total availability.
+Given that a population of 1000 people getting 25% of their calories from meat (See
+footnote on page 62) would require about 195 kg of meat per day (or 390.6 kg of live
+animal weight) this is a significant difference.
+The approach taken is one which takes these difference into account. The steps will
+be presented for the first few days of the process to illustrate how this process works.
+Assume for this example that, at the beginning, there are no yearling animals in the
+herd which are available for human consumption4.7 .
+4.6
+4.7
+
+Using these results, it is then possible to calculate potential dairy production as well.
+Not including those yearlings which have been held back for breeding herd replacements.
+
+64
+
+• Day 1 (January 1, Year 1).
+51 lambs are born, weighing 1 kg each.
+• Day 2 (January 2, Year 1).
+51 lambs are born, weighing 1 kg each.
+The 51 Day 1 lambs now weigh 1.1057 kg.
+• Day 3 (January 3, Year 1).
+51 lambs are born, weighing 1 kg each.
+The 51 Day 1 lambs now weigh 1.2114 kg.
+The 51 Day 2 lambs now weigh 1.1057 kg.
+• Day 4 (January 4, Year 1).
+51 lambs are born, weighing 1 kg each.
+The 51 Day 1 lambs now weigh 1.3171 kg.
+The 51 Day 2 lambs now weigh 1.2114 kg.
+The 51 Day 3 lambs now weigh 1.1057 kg.
+• and so on...
+The next interesting bit comes when the animals weigh just over 16 kg, which is
+about the same time that meat derived from culled adults would have been consumed
+(which is explained on page 66).
+• By May 8th the Day 1 (January 1st ) lambs weigh 16.609 kg each. 24 of these
+animals is 24 · 16.609 = 398.616 kg total weight, which is 8.016 kg. more than the
+
+390.6 kg. that is required. Note that the excess of 8.016 is less than the weight of
+one of the animals being slaughtered. Also important to note is that only animals
+born on January 1st are being slaughtered. This is important, as it allows the
+meat utilisation to be extended further, as will be described later. We now know
+that we have:
+1. 24 skins from animals that were 127 days old, weighing 16.609 kg.
+2. From those slaughtered animals who were oldest (whom shared a birthday
+remember), 9 get slaughtered at a future date.
+• The next day, May 9th , there are still 9 January 1st animals left, but they now
+
+weigh 16.730 kg each. These nine animals will be slaughtered, providing 9 ·
+16.730 = 150.57 kg of the 390.6, leaving a shortfall of 390.6 − 150.57 = 240.03
+
+kg. Remember that there was 8.016 kg. left over from May 8th though, so in
+65
+
+fact, the shortfall is only 240.03 − 8.016 = 232.014 kg.. There are 51 January
+
+2nd animals available, and they now weigh 16.609 kg each. This means that
+232.014 ÷ 16.609 = 13.969173 animals need to get slaughtered. However, since
+you cannot kill part of an animal, 14 of the January 2nd animals will be killed,
+
+giving 14 · 16.609 = 232.526 kg. When these two figures are summed, we find that
+
+we have 150.57 + 232.526 + 8.016 = 391.112 kg. This is an excess of 391.112 −
+390.6 = 0.512 kg..
+
+1. 9 skins and fleeces4.8 from animals that were 128 days old, weighing 16.73
+kg.
+2. 14 skins and fleeces from animals that were 127 days old, weighing 16.609
+kg.
+3. From those slaughtered animals who were oldest (whom shared a birthday
+of January 1st remember), none get to live to see another day.
+4. From those slaughtered animals who shared a birthday of January 2nd however, 37 are not slaughtered on this day, and so remain available for future
+consumption.
+This pattern carries on until all of the animals born that year4.9 have been slaughtered.
+This occurs on December 27th . From this point on, they will be forced to eat their
+breeding stock if they are to continue supplying themselves with domestic meat at 25%
+of their calorific intake. This is not problematic, however, because for a herd of this
+size, there are 855 mothers culled every year. With an average adult weight of about
+60 kg. this will provide 388.64 kg a day for 132 days which, not surprisingly, is the
+exact number of days until next years animals will start to be eaten.
+With this herd ‘configuration’ entered into the diet model 25% of the settlement’s
+diet needs are supplied by meat. If potential milk production from this herd is considered, a surprisingly large portion of the settlements caloric requirements (43% over and
+above meat) could have been supplied solely from the dairy products of this so-called
+‘meat optimised’ herd.
+The first goal above was to produce a certain amount of meat per year that would
+satisfy the population’s needs, which in the above example, was 390.6 kg of live animal
+per day, or 195.3 kg of meat. This works out to about 3060 caprine offspring per year
+plus 855 culled adults from the breeding stock.
+The date at which the years’ new-borns are going to start to be eaten is proposed
+to be the date at which they run out of culled breeding stock meat. In the example
+4.8
+
+I am not sure at what age/weight it would be viable to take a fleece from an animal.
+I have not mentioned the fact that the 51 animals per day is not inclusive of the additional animals
+being used as breeding replacements. These I have taken as being spread out and not at the most efficient
+time because I feel that the best animals would have been selected for breeding stock, and that they could
+have been born on any day during the birthing season. So for simplicity, these animals have been ignored
+to this point.
+4.9
+
+66
+
+above, 972 adult females would be replaced each year. Given an average weight of
+60kg each, this would mean that a total of 972 · 60 = 58, 320 kg. would be supplied
+by them alone. Being consumed at a rate of 390.6 kg. day−1 , this would mean that
+
+they could satisfy the settlement’s meat needs for 58, 320 ÷ 390.6 = 149.3 days. This
+
+would leave the yearly offspring responsible for 365 − 149 = 215 days. Given that food
+is most scarce and/or difficult to find during the winter, however, perhaps it would be
+then that the breeding stock culls would be utilized as a primary food source. There is
+also another approach to consider; imagine a herder, trying to maintain their herd. Part
+of herd maintenance involves selecting animals for breeding, and culling those that are
+not reliable breeders. If caprines have a 150 day gestation period, and breeding takes
+place in July and August, it would not be until towards the end of the 150 days that
+they could reliably tell whether a female had successfully been impregnated4.10 which
+also suggests that they would be culled at the same time of year.
+It is likely that the strategy used for selecting replacement mothers would have been
+to keep all new females for as long as possible. The older the female is, the better you
+are able to judge it’s suitability for breeding. When it is possible to determine the sex
+of the animals in the faunal assemblage, I suspect we would see that almost all of the
+smallest/youngest animals would have been males. As soon as the people ran out of
+males to eat, I would expect that there would be just the females deemed as unsuitable
+for breeding comprising the diet.
+Along these lines, looking at the ages of the adult females culled from the herd, I
+suspect that we would see some tendencies for a majority of the culls from ‘old’ animals
+in addition to some from the age of first breeding age onwards. First time breeders that
+were unsuccessful may have been culled rather than fed all winter and likewise for
+older animals. One possible exception may occur if, when a first time breeder failed to
+conceive, they were given a second chance the following year. This would show a one
+year gap in the assemblage that, if present, would support this hypothesis.
+Animals to be culled from the breeding herd would likely have not been given the
+same priority to supplemental feeding as those animals which had been successfully
+impregnated. An assumption is made that if an animal is pregnant, she is not going
+to be culled, therefore it is proposed that for the duration of the gestation period, the
+pregnant animals would have been given preferential treatment. Perhaps they would
+not even be kept at the settlement for supplemental feeding but brought in as and when
+required. Faunal assemblages would also be affected if animals had been brought to the
+settlement for processing (slaughter), as opposed to them arriving already processed
+(i.e. slaughtering and butchering occurred off site somewhere and just meat and joints
+brought to the settlement.)
+If wool was important enough to the people then we might also see a change in
+4.10
+
+This would also maximise the length of time the yearly offspring would have to grow.
+
+67
+
+this strategy. One problem with modelling wool based herds is that they are seemingly
+counter-intuitive, because whilst they increase the wool production, the production of
+meat and dairy, as well as the sustainability of the herd, actually is decreased, and less
+efficient (Munson 2000)4.11 .
+Once potential herd size has been calculated, land area requirements can also be
+calculated with two additional pieces of information: (1) the food value of the land
+must be known, and (2) the feed requirements of the animals. If the total feed requirements of the entire herd is divided by the food value of the land, the required area
+results.
+
+4.2.4
+
+Land Suitability
+
+Once area targets have been found for each crop and animal, the land surrounding the
+site is classified as being either suitable or unsuitable for each. Classification is based
+on factors such as soil type, slope, geology, modern day use, rainfall, or proximity to
+water. Crops and animals must be assigned land either exclusive to their use, or shared
+with other specified crops or animals. Each crop and animal (or commonly shared land
+for crops/animals) will need to be found individually. It is therefore imperative that
+care is taken when classifying the land that there is no overlap, ensuring that land does
+not get ‘used’ more than once.
+Land Suitability Masks
+Binary rasters must be created for each crop and animal, or for each group of animals/crops using commonly defined land. Binary rasters have values of 0 or 1 only. A value
+of 1 indicates land suitability and a value of 0 indicates unsuitability. This allows the
+raster to be multiplied by the cost surface surrounding the settlement, which results
+in all unsuitable areas having a value of 0, while the other values retain their original
+value because they are being multiplied by 1.
+Cost Surfaces
+People tend to utilise the resources in the immediate vicinity of their occupation site
+(Browman 1976, 469), so when searching for land that satisfies the area targets, the
+co-ordinates of the settlement are used as a starting point, moving outwards to a point
+where all suitable land equals the area target. A cost surface needs to be created
+with its origin at the site. 4.12 The cost surface makes it possible to look only at the
+wanted features, determined by using the binary raster masks to see which cells of the
+4.11
+
+Little attention is paid to wool production potential and its possible influence on landscape use in
+this thesis, although it would be a very interesting avenue to explore in future work.
+4.12
+Imagine a cost surface as a large sheet of graph paper with each square on the sheet containing a
+value. If the site is put at the centre of this sheet of graph paper, that centre cell would have a value of
+zero. As we move away from the site, the values increase incrementally.
+
+68
+
+cost surface are ‘covered’. For example, it is possible with this method to look only at
+suitable land, as indicated by the binary raster mask, which falls within a range on the
+cost surface from the site (which has a value of 0) to a higher value in the cost surface.
+In this way, it is possible to stipulate the outer extents of a ‘containment area’, or in
+essence the outer extents of the catchment. The same algorithm is used for every kind
+of cost surface created . All three methods (Euclidean, path distance and walking time)
+require a Digital Elevation Model (DEM) to generate a cost surface. The higher the
+resolution of the DEM, the more accurate the cost surface will be.
+Walking Time Walking Time is the primary method used in this research for the
+creation of cost surfaces used to define a catchment area. The anisotropic cost surface
+that is generated for this method uses a DEM to calculate how long it would take to
+walk from a starting point (the site, or ZERO on the cost surface) to all points on the
+DEM. The cost surface can be given a maximum value in seconds (for example, to limit
+the area to a five hour walk, a cost surface with values from 0 to 18,000 is used (See
+Fig. 4.12).
+
+Figure 4.12: Cost Surface generated by GRASS module r.walk (notice the effect rivers have)
+
+To take into account the extra time required to cross rivers, and make areas such
+as lakes impassable, an increase in the travel time on the cost surface must be made.
+69
+
+Although an approximation, assigning additional cost (in this case time) to rivers and
+lakes can be useful for indicating preference of land choice. To do this, the river must
+be digitized, and buffered wide enough to ensure continuity when converted to a raster.
+It is critical that the river is continuous once in raster form (there are no breaks in the
+cells defining the river). The river has a value of 1 at this point, and all other cells a
+value of 0.
+Increasing the value of the river to a higher value determines the time added for
+crossing the river; the higher the value, the more time it adds. This value is dependent
+on the topography, the width of the buffered area, and the increased value. For example, in order to add an hour to the crossing time of the Jordan river, a 100 m buffer
+was used, and a value of 100 was added. Next, a slope raster is created from an ASTER
+DEM of the area surrounding the site. The river raster (with the increased value) is
+added to the slope raster, and the result used as a friction map when creating the cost
+surface. This gives results such as those seen in Figure 4.12 on page 69.
+Path Distance
+
+Path Distance is another anisotropic cost surface creation method that
+
+looks at elevation data from a DEM and calculates distance from the site taking into
+account the extra distances travelled going up or down slopes. The process is identical
+to walking time, except that time is not a factor.
+Euclidean The Euclidean method ignores all topographic features of the landscape
+when moving outwards from the site, creating an istropic cost surface; essentially we
+are drawing concentric circles around the site. On this cost surface, all cells which the
+circle passes through will have the same value. Put simply, if a circle is drawn on a
+piece of graph paper, shade in every square that the line goes through. The result is a
+cost surface with each step away from the site increasing equally by one regardless of
+topography.
+
+4.2.5
+
+Land Identification
+
+In order to identify a particular area of classified, suitable land, a perimeter value, or
+maximum extent of a cost surface, must be found, within which the area of suitable
+land (that is almost certainly going to be comprised of multiple, irregularly shaped
+polygons) satisfies the area target being looked for. Complicating this is the fact that
+the irregularly shaped polygons from the land classification may be bisected by the
+outer limit of the catchment area defined by this outer perimeter value.
+Incremental method
+To find the suitable land equal to the area target that is in closest proximity to the site,
+a conditional loop is used which defines the outer extent of the catchment area, and
+70
+
+Figure 4.13: Path distance cost surface generated by GRASS module r.walk with λ = 0 (walking
+features disabled)
+
+then calculates the area of suitable land contained within it. This process is identical
+for all analysis methods. Early attempts started at the closest point to the site that
+could potentially solve the problem 4.13 , and then moved steadily outwards until the
+area target was found.
+The amount to move outward in each step was an input variable, and might have
+been a value like 30 (which in the case of walking distance means 30 seconds. On a
+cost surface ranging from 0 to 20,000 this meant that potentially, there would have to
+be 20,000
+30 or nearly 7000 iterations in the search.) The steps involved were:
+1. Set the initial boundary at which to start the analysis
+4.13
+
+The closest point, or minimum radius, is a perfect circle equal in area to the target.
+
+71
+
+Figure 4.14: Euclidean cost surface generated by GRASS module r.cost with an input raster
+which has every value equal to 1
+
+2. Calculate the area of suitable land found within this boundary
+3. If the area of land required has been satisfied, write the results to a new file for
+that item and exit the loop
+4. Increase the value of the analysis boundary
+5. Repeat the loop (starting at Step 2)
+This method proved extremely time consuming; if even 3,500 iterations (about half
+of the conceptual cost surface map) was required, and each loop took as little as 45
+seconds, the computation time would be nearly 44 hours. Multiply this, then, by the
+number of individual crops and animals in the model and the run time suddenly needed
+to be expressed in days or weeks.
+Binary method
+To increase the efficiency and reduce run times, a modified binary search algorithm
+is used. This involves a somewhat different approach than the incremental method;
+instead of using a step value, a percentage value is used. This percentage value is
+called the Precision.
+72
+
+The area of land deemed by LA as equalling the current area target gets changed
+into a target range ± the precision value multiplied by the target area. If a value of 5%
+
+is entered, and the area target is 100 hectares, LA accepts 100 ± ( 100·5%
+) (which is 97.5
+2
+to 102.5 hectares) as the target area.
+
+The loop uses three terms, CurrentM idV alue F irstV alue and LastV alue. At the
+beginning of the process, F irstV alue = 0 and LastV alue = 18, 000 which coincides
+with the full extent of the cost surface. CurrentM idV alue is calculated within the
+loop. The loop works like this:
+alue
+1. Set the analysis boundary: CurrentM idV alue = F irstV alue+LastV
+.
+2
+
+2. Calculate the area of suitable land found within the boundary whose outermost
+boundary is CurrentM idV alue
+3. If the contained area falls within the target range, write the results to a new file
+and exit the loop
+4. If the contained area is more than the maximum value in the target range, set
+a halfway between F irstV alue and CurrentM idV alue. This is done by making
+LastV alue = CurrentM idV alue and then returning back to step number one.
+(Note F irstV alue remains unchanged.)
+5. If the contained area is less than the minimum value in the target range, set a
+halfway between LastV alue and CurrentM idV alue. This is done by making
+F irstV alue = CurrentM idV alue and then returning back to step number one.
+(Note LastV alue remains unchanged.)
+By using this method, the maximum number of iterations in the loop for the same
+conceptual cost surface is only 17. This method of searching for the area targets makes
+a huge difference efficiency and run times. A typical run is now ≈ 2 to 3 minutes,
+compared to days and weeks using the incremental method. This allows for a fast
+systematic examination of the many different permutations of an entire model on even
+average computer systems.
+
+4.3
+
+Landuse Analyst
+
+Early attempts at consolidation of the modelling process involved a compilation of
+scripts written in BASH4.14 , but after the incorporation of the many factors (such as
+different crops and animals, fallow, fallow grazing, etc), it was evident that a script
+was not going to be ideal; the complexity of the animal and crop modelling in particular made using the scripts both slow and awkward. While the scripting approach
+4.14
+
+BASH is a UNIX scripting language
+
+73
+
+worked well for a proof of concept, a full implementation of all desired factors would
+include a large number of hard coded variables and complicated, difficult to modify
+code requiring changes for each scenario. This did not provide a flexible environment
+for experimentation.
+Consultation with developers of other modelling software led to the decision to
+create an application in the programming language C++. Alongside the C++, it was
+possible to implement TrollTech’s Qt libraries4.15 to create a user friendly GUI4.16 . This
+research analyzes multiple sites, so software flexible enough to use without modification would be very advantageous. This wad accomplished by allowing all of the
+influencing factors examined to be entered as input variables. Each crop grown, each
+type of animal raised, along with the settlement characteristics needed to be defined
+with a common set of variables. The result of this approach is a software application
+that works in any part of the world, and for any post-agriculture period4.17 .
+What began as a small script grew into a very flexible, user friendly application that
+can be used not only for the research presented in this thesis, but by any archaeologist,
+studying any time period, for any type of crop or animal, in any area of the world. I
+have called this software Landuse Analyst (Figure 4.15).
+c
+Landuse Analyst�
+(LA) has been written to be a cross-platform4.18 FOSS (Free Open
+
+Source Software) application licensed under the GPL license4.19 It is released under this
+license because it incorporates code from other applications which are also licensed this
+way (GRASS, Open Modeler, etc)4.20 .
+LA fully implements all aspects of the methodology described in Section 4.2 and is
+presented in detail in the remainder of this chapter. Each distinct part of the software
+has it’s own section, complete with screenshots. The source code for LA is in Appendix
+D beginning on page 379.
+In addition to archaeological data, diet variables and physiological characteristics,
+LA requires geographical input. The software does not deal directly with the creation
+of this information, which must be done using GRASS, but when run from within a
+GRASS shell, it can directly work with data that has been previously prepared. Of
+primary importance are the DEM and the land suitability (classification) masks.
+
+4.15
+
+http://www.trolltech.com
+Graphical User Interface
+4.17
+The input variables can even be adjusted in such a way that it could be used for pre-agriculture
+periods as well.
+4.18
+Runs on Linux, Unix, Mac and Windows Computers
+4.19
+this license guarantees that Landuse Analyst will remain free, with the source code available to
+anyone wishing to make enhancements and/or modifications.
+4.20
+The source code is hosted at http://code.google.com/p/landuseanalyst and is freely available for
+download.
+4.16
+
+74
+
+Land suitability raster masks
+The land suitability masks must be binary rasters, meaning that the cells of the raster
+file only contain 0 or 1 (NULL values are currently not supported). The land that is
+deemed suitable for use should be set to a value of 1, and the rest of the land is set to
+0. This binary raster can then be multiplied by a selection layer (as created by either
+Walking Distance, Path Distance, or Euclidean methods). This selection layer (also a
+binary raster) grows in size until enough area is found within it’s bounds - identifying
+the land to be analysed.
+LA gives the option of using three different methods for landuse classification:
+1. Use only the user supplied classification map (a binary mask) which can be based
+on any number of factors, including but not limited to rainfall, soil type, geology,
+elevation, ground cover and modern landuse.
+2. Use minimum and maximum slope values to create a classification map which will
+be used exclusively. This can also be done for common crop land and common
+grazing land independently. For example, it is possible to stipulate 0◦ ≤ m ≤ 9◦
+for crops and 9◦ < m ≤ 15◦ for grazing land, where m = slope.
+
+3. Use a combination of the two classification maps above. Slope can be chosen to
+either add to or subtract from the user supplied map, or alternatively, the user
+supplied map can either add to or subtract from the slope map. This combination of the two can be very useful if, for example, a user wishes to use a soil
+classification map as the primary indication of landuse suitability, but refine that
+map by taking out the land they consider too steep for use. In this case the program generated slope masks would be subtracted from the user supplied (soil)
+classification map.
+Land Re-designation
+Another notable feature of LA is land re-designation. Land that is suitable for the
+production of crops is almost certainly suitable for grazing as well. For this reason, LA
+finds all of the cropland first. Once the area targets for all crops have been satisfied,
+land classified for use by crops that was not needed is re-designated as being suitable
+for common grazing land and added to the land already designated as being suitable
+for grazing.
+
+75
+
+One challenging aspect of the methodology to incorporate into the model was the
+animal modelling. Animals are difficult to calculate area targets for because their land
+requirements are largely based on their numbers, and a herd of adult females large
+enough to sustain a steady supply of offspring with numbers enough to keep the production targets met has to be added into the equation as well. In addition, animals can
+graze fallow crop land, eat fodder from the crops being grown, and graze other types
+of land. LA takes these interactions into account in its computations. Herd Size determination is one of the most complicated algorithms (See Section 4.2.3, page 61) that
+LA uses. Further complicating the issue, not all land that can be grazed has the same
+food value to the animals. LA address these issues as well. Landuse Analyst requires a
+complete definition of all of the crops and animals that a settlement used including (for
+animals) information relating to their dietary requirements, their reproduction cycle,
+and their grazing preferences4.21 .
+
+4.3.1
+
+LA’s Opening Screen
+
+c
+Figure 4.15: The main screen in Landuse Analyst�
+where the user enters the basic site details,
+modelling method, and GIS information
+
+4.21
+
+Interesting work was done on herd modelling by Cribb (1984, 1987) and he is now considered by
+many to have been much ahead of his time.
+
+76
+
+Basic Input
+The opening screen in LA allows basic details for the site being modeled to be entered.
+Input boxes for the name, period, population and geographical co-ordinates of the site
+are located on this screen in the ‘Settlement Information’ section.
+Catchment creation methods
+Also selected from this screen is the Modelling Method. LA can use three different
+methods of creating catchments by varying the type of cost surface generated. The
+three choices available on the opening screen are Euclidean, Walking Time, and Path
+Distance. These methods are discussed in detail in section 4.2.4 on page 68. For any
+of the three choices, the precision value must be set in order to give LA a range for
+which the area can fall into while searching. The smaller the value, the more precise
+the results will be, however values under 5 are not recommended because it could
+make finding the area target impossible. This is due to limitations imposed by DEM
+resolution which can make the minimum step outwards more than the range deemed
+acceptable with the precision setting. For example, using a 30m resolution DEM, the
+area difference between 1000m and 1030m from the origin (using Euclidean method)
+is π · 10302 − π · 10002 = 3332915.646 − 3141592.654 = 191322.9922m2 which is a large
+area, and it gets bigger the further out on the cost surface you go.
+GRASS Data
+When LA is launched from a GRASS shell, a list of available mapsets appears in a drop
+down menu on the opening screen. This allows the software to do three things. First, it
+allows LA to use any of the GIS layers which were prepared for use as land classification
+masks. Second, the DEM required for the creation of the cost surface used in the land
+search routines must be contained in the selected mapset. Thirdly, all of the results
+from the land search process will be saved to the selected mapset.
+
+77
+
+4.3.2
+
+LA’s Diet Screen
+
+Figure 4.16: The Diet screen sets the dietary divisions and other basic diet input factors, and
+displays a detailed breakdown of the diet.
+
+78
+
+4.3.3 LA’s Crops Screen
+
+Figure 4.17: The main Crops screen where the crops to be included in the model are selected,
+their attributes displayed, and information for common land classification set. The Crop Manager and Crop Parameter Manager are launched from this screen.
+
+Each crop that gets defined in the Crop Manager is listed in a table at the top of this
+screen. If an individual crop is to be included in the analysis, a checkmark is placed
+in the checkbox to the left. Each crop also has a drop down menu where parameters
+which have been associated to the crop in the Crop Parameter Manager can be selected.
+If more than one crop is to use the same type of land, a common landuse classification mask raster can be selected from the drop down list once the Use Custom Suitability
+Mask for Common Cropland checkbox has been checked. If slope is desired for use as
+a land classification factor, it can be generated and incorporated into the analysis from
+79
+
+this screen. Checking the associated checkbox allows a maximum usable slope to be
+defined. If both suitability masks are selected, the slope mask is applied to the custom
+mask.
+
+4.3.4
+
+LA Crop Manager
+
+Every crop has unique characteristics, and LA splits these defining qualities into two
+main areas: details of the plant and parameter settings.
+Defining the Plants LA uses several input fields to define a plant (Fig.4.18).
+1. Name - This is, quite simply, the name you wish to give the crop. This can be
+the same as another crop, as LA uses a GUID (Globally Unique IDentifier) when
+saving the data. An example of when this could be useful is perhaps when the
+same crop is grown on different land, which gives lower or higher yields. It is
+therefore possible, for example, to have three crops called ‘Wheat’, each with
+different average yields corresponding to the land classified as suitable for it. In
+order to tell the difference between these like-named crops, there is the Notes
+field (#2 in this list).
+2. Notes - This field is used to differentiate between crops that have the same, or
+similar, names. For example, if we were to continue using the wheat example
+from above, you might use ‘Marginal Land’, ‘Average Land’, and ‘Ideal Land’ to
+reflect the respective yield expectancies.
+3. Yield - Here you must enter what you think the average yield for the crop would
+have been. This is a measure of Kg produced per the given area of sown land.
+Currently, you can choose between dunums and hectares as area units.
+4. Food Value - The number of calories in 1 Kg of that part of the crop which is
+eaten (ie. the grain or fruit).
+5. Fodder - Fodder is the straw and chaff left after processing the crop or grain.
+This means that you must take into account the use of straw and chaff in other
+applications or activities such as textile or pottery production, etc. The Fodder
+Yield is a measure of weight how many Kg of Straw and Chaff (per area unit) that
+is made available to animals for feed. Enter the number of Kilograms expected
+to be produced from this crop per area unit4.22 . Note that this fodder amount
+is solely for consumption by animals. If straw or chaff is being used for other
+purposes, it must be taken out of the total expected fodder level.
+4.22
+
+This has to be the same as the setting for Yield area units, which is currently either Dunums or Hectares
+
+80
+
+6. TDN - The TDN (Total Digestive Nutrients) of the fodder is, like grazing land, a
+measure of the food value of the fodder.
+7. Area Units - Although Landuse Analyst’s output is always expressed in Hectares,
+you can choose between Hectares and Dunums when defining your crops. This is
+particularly useful if the source of your data is in Dunums, and not Hectares.4.23
+
+4.3.5 LA’s Crop Parameters
+Once the plants that are being grown as crops have been defined, LA needs the specifics
+of how each crop is being grown, as well as what portion of the settlement’s diet it
+provides (Fig. 4.19). It also needs to know what land is capable of growing each crop.
+This is done by selecting Common or Specific Land Suitability masks (if Specific Land
+is selected, the Raster Mask must be selected from the drop down list on this screen).
+The two critical entries here, however, are crop rotation and the selection of suitability
+masks.
+Crop Rotation
+
+As stated previously (Section 4.2.3 on page 60), specifying the use of
+
+the common farming technique of crop rotation (Table 4.1) is critical when determining
+how much land is required for food production, as it has the potential to more than
+double the area target for a crop. Complicated crop rotation scenarios are possible in
+LA, and the process of setting this up are explained in detail in section 4.2.3 on page
+60.
+Another important aspect of defining crop rotation concerns animals. It is possible
+for animals to graze the fallow land, which will reduce the amount of grazing land
+otherwise required to sustain the animals. If fallow land is to be grazed, this box must
+be checked.
+Using the ratio of crop land to fallow land along with the food value of the fallow
+land allows LA to accurately adjust the grazing land requirements for the animal herds.
+In order to know the contribution fallow land makes to the animal’s feed requirements,
+it is necessary to know the food value of the available fallow land. This is given in the
+Fallow’s Food Value settings. The settings are in units of energy per area of land. Again,
+a choice between TDN/MCals and Dunums/Hectares is offered for convenience.
+Required Surplus Production In addition to the production levels required for supplying the settlement with food, allowances for next year’s sowing and spoilage must
+be made. This is expressed as the percentage of the production level (calculated for the
+settlement’s food needs) which has to be added to that level. Using the values shown
+4.23
+
+It is relatively simple to add other area units by changing the source code, and at some point, the
+ability to do so will actually be integrated into the software as an advanced feature.
+
+81
+
+in Figure 4.19, an additional 20% + 30% = 50% of the settlement’s production target
+must be added to account for the two.
+
+82
+
+Figure 4.18: The characteristics of each crop is entered in the Crop Manager, which is launched
+from the main Crops screen.
+
+83
+
+Figure 4.19: From the Crop Parameter Manager details for land suitability classification maps,
+diet contribution and other settings relating to agricultural techniques are made.
+
+84
+
+4.3.6 LA’s Animal Screen
+
+Figure 4.20: The main Animals screen where the animals to be included in the model are
+selected, their attributes displayed, and information for common grazing land classification set.
+The Animal Manager and Animal Parameter Manager are launched from this screen.
+
+Each species that gets defined in the Animal Manager is listed in a table at the top
+of this screen. If an individual species is to be included in the analysis, a checkmark
+is placed in the checkbox to the left. Each species also has a drop down menu where
+parameters which have been associated to the animal in the Animal Parameter Manager
+can be selected.
+If more than one animal is to use the same grazing land, a common grazing land
+classification mask raster can be selected from the drop down list once the Use Custom
+85
+
+Suitability Mask for Common Grazing Land checkbox has been checked. If common
+grazing land is being used, the food value of this land must be entered on this screen.
+If slope is desired for use as a land classification factor, it can be generated and incorporated into the analysis from this screen. Checking the associated checkbox allows
+a maximum usable slope to be defined. The lower setting should be the same as the
+upper setting for slope mask of common cropland (if common cropland is using a slope
+mask). If both suitability masks are selected, the slope mask is applied to the custom
+mask.
+
+4.3.7
+
+LA’s Animal Manager
+
+Figure 4.21: The characteristics of each animal are entered in the Animal Manager, which is
+launched from the main Crops screen.
+
+LA uses several input variables to define an animal (Fig. 4.21).
+86
+
+Animal Description
+1. Name - Enter the name of the species you are defining in the name field. As with
+crops, you do not need a unique name. You can have, for example, two animals
+defined, both named ‘Sheep’. LandUse Analyst uses a special method of saving
+the animals to eliminate the issue of duplicate filenames. The Notes field allows
+a convenient way to differentiate between like-named animals.
+2. Notes - Because LandUse Analyst allows more than one type of animal to be defined, the Notes: field allows you to give a brief description of the the animal. For
+example, you may have two ‘Sheep’ defined, and the Notes fields could contain
+‘For Slaughter’ and ‘Wool Producers’ to distinguish between them.
+3. Food Value - Quite simply, this is the number of calories in one kilogram of meat
+from the animal. A common value for this variable is around 3000.
+4. Usable Meat - The production targets for animals are in Kg of meat, so to be
+compatible with animal numbers, you must know the percentage of the animal’s
+live weight that is usable for food. You can also take into account here the efficiency of the butchering technique that the population used. In other words, if
+you believe they were wasteful, this is where you would make an adjustment to
+integrate that.
+5. Kill Weight - The average live weight of the animals at the time of slaughter.
+Animals may have been slaughtered for butchering at any weight, but LandUse
+Analyst needs to know the average weight of the animals when they are slaughtered.
+6. Weaning Weight - This is the average live weight of the individual offspring at
+the time when they are no longer allowed to suckle from their mother (weaning
+age).
+7. Grow Time - The length of time from birth to slaughter weight. This is quite
+important for estimating the herd size. The longer it takes an animal to reach
+slaughter weight from birth, the higher the number of animals alive at any given
+time. This will have a direct affect on the amount of feed required to sustain the
+herd.
+8. Death Rate - LandUse Analyst accommodates for birthing deaths only. If an animal survives to weaning age but dies before slaughter, it is not modeled at this
+time. However, you can adjust the death rate setting to indicate the average
+survival rate of births. This is important for determining herd size, as it affects
+the number of mothers needed to sustain the production levels required by the
+settlement.
+87
+
+9. Sexual Maturity - The age in months at which the females become sexually mature.
+10. Adult Weight - The average weight of an adult animal. This value is used when
+calculating the dietary contribution that animals culled from the breeding herd
+make.
+11. Females:Males - This ratio indicates the number of females in the breeding herd
+that one sexually mature male can service.
+12. Breeding Life - Once sexual maturity is reached, the expected additional number
+of years the animals will be viable for breeding.
+13. Conception % - The percent of adult females that become pregnant after breeding
+has been attempted.
+14. Young/Birth - Average number of young born per birthing event.
+15. Weaning Age - The average age at which the offspring are weaned from their
+mother.
+16. Gestation Time - The number of days of gestation for the animal.
+17. Estrous Cycle - The number of days in the animals’ estrous cycle.
+18. Lactation Time - The total number of days after birth that the female is capable
+of producing milk.
+Daily Feed Requirements
+1. Select Units - The software supports units of MCalories or TDN (Total Digestible
+Nutrients) for measuring the animals daily feed requirements. This choice is
+available to make it easier to incorporate data from different sources. The software automatically converts TDN values to MCals for consistency.
+2. Pregnant Female - Average daily feed requirements during gestation.
+3. Lactating Female - Average daily feed requirements while lactating.
+4. Maintenance (Adult) - Average daily feed requirements while neither gestating
+nor lactating. This value also applies to adult males in the herd.
+5. Juvenile - This value is the daily feed requirement per kilogram of the offspring.
+As the animals increase in size, their daily feed requirements grow. Animals can
+experience very rapid growth that slows with age. Using this method allows for a
+non-linear tabulation of their total annual requirement if desired. The algorithms
+88
+
+in this thesis use a simpler, linear growth rate assumption, but the software is
+capable of the other. The linear method was used because it is simpler, and as the
+goal of this research is not in modelling herds but rather studying landscape, the
+difference the more complicated non-linear method makes would not be appreciably different in the end.
+By-Products
+1. Milk Checkbox - If the animal is capable of producing dairy products, this box
+must be checked.
+2. Milk - The mean grams of milk day−1 the animal is capable of producing.
+3. Food Value - The food energy in the animal’s milk.
+4. Fleece Checkbox - If this animal produces a fleece, this box must be checked.
+5. Fleece - The mean weight a fleece produced animal−1 year−1 .
+• Common Land - Sometimes land is suitable for grazing by more than one type
+of animal. LA can designate a single suitability mask for grazing land that is
+suitable for several types of animals. It is also possible to have an animal use
+both common land and specific land at the same time. When this is the desire,
+equal preference is given to all animals grazing the common land. It may also
+have been the case that some animals were given preference to the common
+land if the other suitable land was further away than the other animals using it.
+A workaround for this problem is that LA produces classified maps of the land
+being used, so if one animal is being forced to travel much further than others,
+the settings can be changed to balance this by removing the other animals one
+at a time from using the common grazing land. It may turn out, however, that
+there is no ‘ideal’ solution, and that the animals simply have to travel the extra
+distance.
+• Specific Land - Sometimes it is desirable to specify that land is suitable for grazing by only one type of animal. LA allows a unique land suitability mask to be
+
+designated for an individual animal. Animals can use both common land and
+specific land at the same time, as mentioned above.4.24
+
+4.3.8 LA’s Animal Parameters
+Modelling animals using generic input fields presents several challenges that plants do
+not. For starters, a certain number of females must be kept solely as breeding stock,
+4.24
+
+More detailed information on this is available in LA’s Application Handbook, but since this method is
+not used in this thesis, is not described here.
+
+89
+
+and this number must be calculated based upon production requirements. Secondly,
+the possibility exists that part of the animals’ diet was from either straw/chaff left over
+from harvesting crops, or directly from harvested grain. In the case of grain being used
+as feed, the amount used must be considered when determining the production targets
+for the crops. Thirdly, if crop rotation was happening and fallow land was present,
+there is the possibility that this was used as grazing land, and would therefore reduce
+the amount of natural grazing land required. This also adds complexity to the crop
+models because grazing fallow land adds fertilizer, potentially increasing yields. This
+phenomenon can be factored in to Landuse Analyst by manually adjusting the expected
+yield of the affected crops.
+
+Details
+1. Name - Enter a description of the parameter settings being defined in the name
+field. As with crops and animals, you do not need a unique name. You can
+have, for example, two parameters defined, both named ‘EEBI’. LA uses a special
+method of saving the animals to eliminate the issue of duplicate filenames. The
+Notes field allows a convenient way to differentiate between like-named parameters.
+2. Notes - Because LA allows more than one type of parameter to be defined, the
+Notes field allows for a brief description of the the parameter. For example,
+you may have two parameter settings named ‘EEBI’ defined, and the Notes fields
+could contain ‘Animals Fed Supplements’ and ‘Animals Not Fed Supplements’ to
+distinguish between them. This makes it easy to set up multiple scenarios, beneficial when wanting to duplicate the same parameter settings for more than one
+analysis.
+3. Animal - All defined animals appear in this drop down list. This must be set to
+indicate which animals these parameter settings apply to.
+4. Raster Mask - If a specific land classification mask is to be used in addition to
+or instead of Common Grazing Land, the raster mask is selected from the drop
+down list, which lists all available rasters in the currently selected mapset (set on
+the Main Screen).
+5. Fallow Priority - If the animals are allowed to graze fallow cropland, their access
+priority is set from this drop down menu. Likewise, if the animal is not to be
+allowed access to the fallow land, that option is also available in the list.
+90
+
+Land Suitability Selection
+1. Common Land - When checked, the common land classification mask is to be
+used when searching for suitable land.
+2. Specific Land - When checked, the specific land classification mask set from the
+drop down menu above is to be used when searching for suitable land.
+Portion of Domestic Meat Diet
+1. Entry Box - The animals portion (expressed as a percent) of the domestic meat
+portion of the diet is entered here.
+2. More - To determine the correct setting for the entry box above, pressing the More
+button brings up the Assemblage Conversion Utility which assists in the process of
+allowing for differences in body weight of the different animals when calculating
+diet contribution input values.
+LA allows animals to use fodder as food. The fodder contribution is expressed
+as grams per day for both the crop produce and/or the crop’s straw/chaff (fodder).
+The number of days animals are fed is also entered. In this model, the only animals
+eligible to receive supplemental feed are those gestating. This can be easily changed
+but currently requires minor adjustments to the source code4.25 .
+The model distinguishes between fodder (straw/chaff) and straight grain, providing
+separate input fields for each. When setting up the model, the user supplies fodder
+production levels for the crops, as well as caloric levels for the fodder. The software
+calculates the total available fodder from all crops, and if the entered amount from the
+crops selected for supplying fodder ends up being too much, fodder from the rest of the
+crops is used. If the total amount of fodder available from all crops is still insufficient,
+the amount of fodder being fed to the animal is reduced to the amount available from
+the crops being grown in the model. When more than one type of animal is being fed
+fodder, and this occurs, the amount is divided proportionately.
+
+4.3.9 LA’s Assemblage Conversion Utility
+When the Assemblage Conversion Utility is first opened, there are no entries in the table.
+Animals can be entered from a list, or manually. If more than one scenario is to be
+explored, there is no need to exit the utility; simply pushing the Clear Table button
+takes the user back to a blank table. If desired, the table, with or without the results,
+can be saved to a file with a name of their choice by clicking on the Save button. The
+resultant file can then be imported into a spreadsheet or database program.
+4.25
+
+The ability to give select animals different supplementary feed will be a future enhancement to the
+software.
+
+91
+
+Automatic Entry
+The most convenient way is to simply select the animals included in the analysis from
+the drop down list, select the count type, the amount, and click Insert. The choices of
+count type are NISP, MNI and total weight (in kg). If a mistake is made after the Insert
+button has been pushed, all values in the table can be edited, as in a spreadsheet, by
+simply double clicking on the relevant cell in the table. Once all desired entries have
+been put into the table, a push of the Calculate button completes the % of Diet column
+of the table with entries for the adjusted diet portions.
+Manual Entry
+The manual entry method is offered in case the model has not been completely set
+up yet, in which case not all animals are necessarily available from the drop down
+list. This method involves manually entering the name of the animal, the kilograms of
+usable meat obtainable per animal, and the number. Beyond this, all other aspects are
+identical to those of the automatic entry method.
+
+4.3.10
+
+LA’s Calculations Screen
+
+Once all of the input factors have been entered, the Calculation screen becomes available. This screen is split into two halves, with a list of all crops and their calculation
+results on the left, and a list of all animals and their calculations on the right. By
+clicking on a crop or animal, the adjacent column is automatically populated with the
+results. Several report screens are available from this screen, from which the text can
+be copied and pasted into software of the user’s choice. If the results are wanted for
+placement on a website, pushing the HTML button will generate a complete report that
+is ready for publishing onto a website.
+
+4.3.11
+
+LA’s Results Screen
+
+The Results screen lists the input variables in their entirety as well as the results of all
+calculations. This is a rough and ready kind of report that the user can scroll through
+to check on whatever it is they want to see. The results are not displayed until after the
+GIS analysis has been completed.
+
+4.3.12
+
+LA’s Log Screen
+
+The log screen shows the various steps of the algorithms used for calculating results. A
+high level of output can be enabled here by selecting the Debugging feature from the
+Help screen. This allows a user to scrutinise the way in which the data is handled. For
+example, in debugging mode, each step of the fallow allocation process can be seen,
+92
+
+and while not in debugging mode, only the results of the fallow land distribution is
+available.
+
+93
+
+Figure 4.22: The Animal Parameter Manager sets grazing land suitability classification maps,
+animals’ diet supplements from fodder or other crop products and fallow cropland grazing
+priorities.
+
+94
+
+Figure 4.23: Launched from the Animal Parameter Manager, the Assemblage Conversion Utility
+provides a quick and easy method for compensating for the different meat yields per animal
+when calculating each animal’s percent contribution to the inhabitants of the settlement’s diet.
+
+95
+
+Figure 4.24: The Calculations screen showing all crops and animals in the model and their
+associated calculations.
+
+96
+
+Figure 4.25: The Results screen, showing all model input variables used.
+
+97
+
+Figure 4.26: The Log screen shows details of the GIS process once the analysis has been run.
+
+98
+
+4.3.13 LA’s Help Screen
+
+Figure 4.27: The Help screen contains LA’s Application Handbook, a comprehensive Help Manual for using the software.
+
+The Application Handbook is a comprehensive guide to using LA. Each input variable is listed with a full explanation of it’s purpose. Each control (e.g. slider, steppers,
+checkboxes) is fully explained. In addition, the overall process is outlined and explained as well.
+In addition to the Application Manual, if a user hovers their cursor over any input
+field, a brief description (called a Tool Tip) is displayed. On top of this, it is possible
+to right click on any input field or control and a detailed explanation of it’s purpose or
+instructions of its use will be given.
+
+4.3.14 Future development
+LA is still in the early stages of its development and many improvements to usability
+and application capabilities are planned. That said, the application is already capable
+of producing useful results (though more testing is still needed) in a more flexible, user
+friendly and efficient manner than the original BASH prototype.
+99
+
+There are many routes that LA can take from this point with respect to it’s future
+development; it can continue on as a standalone application, or turn into a plugin
+for another application like openModeler or QGis. Before these decisions are made,
+however, the features in the current version must be finalised and implemented. Some
+features which are currently in the planning phase are network analysis for inter-site
+relationships, experiment settings, where the model can be set to run a given number
+of times using different input variables, and report generation complete with graphs
+and maps.
+The incorporated network analysis feature will be able to automatically look at all
+contemporaneous sites in a given area, and examine production potential. If a site can
+potentially produce excess of one resource, but falls short in another, it will look to
+neighboring sites to see if they can make up the difference. If there is a potential for
+trade or supplementation, the most efficient walking routes can then be found using
+r.drain on a cost surface generated with r.walk. This could potentially show the likely
+pathways between sites, as well as how intensively used they might have been. Taking
+this further, one might look for places where these routes merge, or cross, which might
+be an indicator for a potential archaeological site which has yet to be discovered. This
+can be used for resources besides agricultural ones, so exploring the potentials of this
+will be very exciting.
+The current version of LA requires that every scenario be modeled manually and
+separately. For example, one might wish to look at how adjusting the yield of crops
+would affect the land requirements to simulate drought years. One might also want to
+compare the results of different dietary proportions of meat content to plant content.
+With the experiment module, it will be possible to have the software automatically
+cycle through all of these different scenarios automatically.
+Drawing on features developed in openModeler, I plan to have LA compile better
+quality reports, complete with spreadsheets and graphs. This will be a great time saving
+feature. In addition, this will provide consistent results presentation that will make it
+easier to systematically compare results with other users.
+One big feature will be the ability to present and share data online. The infrastructure of the software has been designed from the very beginning with this in mind. The
+ability to access the entire program, GIS and all, from a web browser is also completely
+feasible because of this. In my mind, this would be the greatest enhancement of all.
+Having thoroughly explained the methodology in this chapter, the implementation
+will be demonstrated in Chapter 5, where a detailed exploration of multiple scenarios
+will be presented for the site of Tel esh Shuna North in the Jordan Valley.
+
+100
+
+

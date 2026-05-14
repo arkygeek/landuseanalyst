@@ -1,0 +1,279 @@
+Figure 6.18: Regional map showing weighted path networks, EB I sites (sized), results of
+XTENT analysis, and catchment analysis results for EEBI minimum population maximum grazing extents largest footprints scenario. Light green indicates land desired for use by one settlement. Dark green indicates land desired for use by 2 settlements. Red and Yellow indicate
+several sites desiring the same land.
+
+351
+
+Figure 6.19: Regional map showing weighted path networks, EB I sites (sized), results of
+XTENT analysis, and catchment analysis results for EEBI maximum population maximum crop
+extents largest footprints scenario. Light green indicates land desired for use by one settlement.
+Dark green indicates land desired for use by 2 settlements. Red and Yellow indicate several sites
+desiring the same land.
+
+352
+
+6.6
+
+Applying Networks to Shuna
+“Site catchment analysis probably gives us a good rough sketch of the resources within walking distance of a village. What it does not give us is a
+sketch of the network of interrelationships by which those resources were
+manipulated.”
+– Rossmann 1976, 103
+
+The results of the network analysis can be applied to some of the results presented
+in Chapter 5, where several different landuse scenarios were presented. In particular, the larger population levels for EEBI and LEBI Shuna will benefit because of the
+potentially large amounts of land required, and the potential for competition from
+neighbouring sites for land. For example, as shown in Figure 5.100 on page 249, which
+depicts the catchments calculated for EEBI Maximum Population (3000), Meat 30%,
+the footprints are very large, and very variable depending on the dairy utilisation and
+animal foddering factors.
+Once the regional path network has been established, and subsistence landuse
+catchments have been generated for each site in the network, it is possible to do much
+deeper analysis considering the subsistence needs of (and potential production of) each
+site in the network. Given the massive amounts of data required to properly set up each
+of the EBA I sites in the southern Levant (from data from the palaeobotanical and faunal records) for LA to perform the modelling in a robust fashion, the huge amount
+of computational time required, plus the time constraints placed on this research, it
+has not been possible to take this analysis beyond the point to which it has been presented. Further discussion of the potential of regional route networks in conjunction
+with subsistence landuse catchment is discussed in the following (final) chapter of this
+thesis.
+Because there was a suspected subsistence strategy change from the EEBI to the
+LEBI the early EB I diet has been used here to see if the subsistence strategies linked to
+an EEBI diet could support higher population levels seen in the LEBI.
+As evident in 6.16, which illustrates minimum population estimates and subsistence
+strategy scenario producing maximum cropland requirements there is little overlap and
+there should be no problems maintaining this population with this scenario. Taking
+the population level to a higher level however results in a much different picture as
+evident in 6.17. Here we see the entire Jordan valley dedicated to cultivation and crop
+production. Even when looking at the maximum population with a subsistence strategy
+known to produce a minimum area of cropland requirement as in 6.17the majority of
+the arable land in the Jordan valley is being intensively cultivated.
+Minimum populations and a subsistence strategy which produces the smallest cropland requirements as in Figure 6.16 shows very little overlap suggesting that this combi353
+
+nation of population and subsistence strategies could have been successfully employed.
+Once grazing land requirements are considered in this regional view it becomes clear
+how much of the region was required for food production to sustain the growing population. Looking at Figure 6.19 in particular there is very little room for expansion
+therefore subsistence strategy change would be required in order for population levels to increase much beyond this level. Again looking at the minimum population the
+subsistence strategies which produce the smallest footprints (e.g. Figures 6.14 to 6.15)
+suggest there would have been ample room for expansion for agricultural lands to accommodate and increasing population without having to change subsistence strategies.
+One other aspect visibly apparent from these regional maps is that land used for
+grazing in the lower population scenarios would have had to been converted to use as
+cropland as population levels increased. If this were to happen simultaneously to settlements near each other, there would be potential for increased conflict over landuse;
+because grazing land is less intensively used in comparison to cultivated cropland there
+is less visible signs of control / ownership than there would be with cultivated land thus
+if one settlement began cultivating land that previously another site had used for grazing it would be immediately apparent and arrangements/agreements would have been
+necessary to avoid conflict.
+As populations grew and the amount of cultivated land continued to expand outwards from the settlements fewer choices would have been available to the shepherds
+for grazing their herds. This could have negative consequences if the variety of ecological zones in their grazing range was reduced as it would have increased vulnerability
+to fluctuations in weather patterns. Restricted access to grazing lands could have triggered an increased reliance on the use of fodder to lessen the vulnerabilities associated
+with access to fewer ecological zones. Another effect of large populations using an
+EEBI subsistence strategy is that grazing lands are becoming increasingly distant in
+some cases reaching nearly 20 kms which is a substantial distance to move a herd. By
+the time the overlapping grazing land is relocated to areas which are not being used
+for either grazing or under-cultivation by other settlements the potential for population
+increases was essentially limited to this level.
+Because grazing land requires no human input for use, and is only ever used when
+there is grass available for the animals to eat, grazing areas would have a low and
+ephemeral human presence in comparison to land which is under cultivation. Taking
+this into account and also considering that grazing lands are located further away from
+the security of the settlement and its associated busy cropland, it is the grazing lands
+which would be easiest for other settlements to encroach upon. People could not lightly
+crop another settlements cultivated land without being discovered. It would be possible
+however to lightly graze another settlements distant grazing lands without it being
+discovered. Cultivated land is obvious grazing land is not. The mere fact that the land
+354
+
+is cultivated gives a powerful image of ownership and control of that land.
+As populations increased the ‘obvious’ cropland would have been much less likely
+to be a source of ongoing conflict in comparison to the more distant less intensively
+used grazing lands. In particular during times of drought scenarios such as those represented in 6.17 would almost certainly resulted in many problems in this regard. To
+lessen the problems associated with subsistence strategies that require large amounts of
+cultivated land and extensive grazing lands subsistence strategies could be adjusted, as
+was illustrated throughout Chapter 5. Changes, such as an increased use of dairy products, the foddering of animals to reduce grazing land requirements and less meat in the
+diet, (as is suggested by the LEBI archaeological evidence at Shuna see Figure 5.10 on
+page 131) would have accommodated higher populations than the early EB I scenarios
+used in this chapter.
+The clustering of large sites would not be problematic if there was no environmental problems like drought because as discussed above the land under cultivation would
+have had to have been in use under arrangement. It does mean however, that the
+majority of land in and around the settlements was increasingly dedicated to use as
+crop land as population levels increased. Once all of the available land was in use as
+crop land (which seems to be the case in the Jordan valley given the scenarios shown
+6.17 for example) it would seem likely that these communities would have benefited
+from some kind of arrangement with settlements outside of the crop catchment areas
+required by these large settlements; thus, it would be unsurprising to see many smaller
+sites in areas less amenable to agriculture that could provide the animal products that
+the larger centres have become less able to produce themselves. This tendency is apparent in these maps, which lends support to this possibility.
+It is easy to imagine grazing areas becoming more distant from the settlement as
+a result of increasing cultivation, with shepherds taking their families with them into
+these distant areas and establishing a small settlement. This strategy would have made
+it easier for them to make their living, while reinforcing their control/ownership of the
+area with their increased presence. This could have been a development of convenience
+and could easily have developed into a system which some might recognise as being
+urban.
+As croplands were expanding, and before the majority of arable land was being
+cultivated prospective cropland in use by shepherds for grazing would have been more
+important to maintain control/ownership over than areas which were less suitable for
+agricultural use. One might expect therefore to see indications of people attempting to
+mark these areas in such a way that they would have been clearly identified as belonging to them. A small settlement would be a good way of doing this as it not only does
+this by a physical structure but also a human presence. If the cropland continued to
+expand to accommodate the increasing population and these small settlements became
+355
+
+surrounded by the cropland (pushing grazing land further away) it would again have
+been beneficial to leave that settlement and start a new one in the now more distant
+grazing area for the same reasons as before. This might in part explain why the Early
+Bronze Age saw a cycle of settlements appearing and subsequently being abandoned.
+Especially in areas where cropland supplying the larger settlements were in proximity to each other it is reasonable to think that these areas would have made more
+effort to clearly mark their territories and field boundaries, terraces etc. might have
+been important. The route network is much more complex and dense in areas of which
+are under intensive agricultural use, clearly they are more complex simply because of
+the number of sites but it is clear from the maps that the majority of these sites creating
+this increased complexity are small, with most being under 1 hectare in size.
+The limitations of XTENT modelling (and other models that use fixed behavioural
+assumptions) becomes evident now that such a vast range of catchment areas has
+been shown possible for any individual site; the estimated size/population of a site
+has clearly been shown to not be the only influencing factor with respect to the size of
+a site’s area. Unlike EXTENT, Landuse Analyst directly attempts to engage with the data
+more openly and inductively by actively exploring multiple assumptions. In the future,
+it will be very interesting to try and incorporate the strengths of other methodologies
+into Landuse Analyst (see Sections 3.4.1 on page 46 and 7.1 on page 364).
+It is interesting to note that there appears to be more small sites in the Jordan
+valley clustered around large sites than elsewhere in the region. This could be due to
+the geographical constraints of the valley and the river limiting access to the growing
+need for arable land. It is interesting to see that there appears to be more medium
+sized sites clustered around the large sites in the west than there are in the Jordan
+valley where we see a lot more small sites clustered around the medium to large sites.
+To the east of the Jordan river it appears there would be less potential for conflict and
+competition for land, but this could be a result of the natural boundary formed by the
+Jordan River or due to the abrupt change in landscape experienced east of the Jordan
+valley. Additionally, it could be partly attributed to the fact that, in this preliminary
+regional study, it has not been possible to include all of the sites east of the Jordan
+valley due to lack of data. These issues mean that this observation is made with a
+certain degree of caution. Similar observations are noticeable however, in the region
+to the south and west of Lake Tiberias.
+To conclude, an examination of these scenarios at this regional level would seem
+to suggest that the subsistence strategies suggested from an early EB I diet which was
+arguably more dependent on primary animal products would not have been sustainable
+with a high population. I am suggesting therefore that because population levels did
+increase a subsistence strategy change would have been necessary.
+The following final chapter of this thesis discusses how this research has addressed
+356
+
+the research questions posed in Chapter One. Additionally, it presents the future potential development of this work, not only in relation to the analysis presented in Chapters
+5 and 6, but also for additional applications and enhancements to the methodology
+(and Landuse Analyst in particular).
+
+357
+
+358
+
+Chapter 7
+
+Conclusions
+7.1
+
+Introduction
+
+This thesis has demonstrated a method of systematic analysis designed to calculate
+the extent and approximate location of subsistence catchment areas for settlements
+of the prehistoric southern Levant. The methodology which has been used to model
+subsistence catchment areas has been based solidly on archaeological data, and further enhanced with the incorporation of the physiological characteristics of the plants
+and animals found in the palaeobotanical and faunal assemblage as well as by the use
+of both modern and palaeoenvironmental factors. A systematic analysis using many
+different combinations of input factors (for example, using a range of values for population, crop yield estimates, contribution of dairy products to the diet and so on) has
+shown that significant differences in landscape engagement result.
+In the introduction to this thesis I proposed several research questions that might
+provide insight into the phenomena seen in the Early Bronze Age, particularly the
+appearance of an increased density of large and small settlements in the fourth millennium BC.
+If we understand urban communities as (at least partly) requiring access to resources to sustain them beyond those afforded by their immediate hinterland,
+then insight into the above question of whether these Early Bronze Age communities could be sustained by their immediately adjacent local landscape will
+surely be a valuable contribution to this debate.
+Questions:
+Did Early Bronze Age communities outgrow the capacity of the immediately
+adjacent local landscape to support themselves, and what sort of impact on the
+landscape can we understand such communities to have had?
+Can an empirically rigorous argument be made that, contrary to the main
+trend in scholarly literature on the Early Bronze Age over the past 15 years,
+land-pressures under conditions of population growth in the EBA favoured the
+development of regional site dependencies, exchange networks and perhaps also
+settlement hierarchies?
+
+Two approaches can be adopted to defining immediately adjacent local landscapes.
+359
+
+One approach is traditional within geography and employs concepts of travel time to
+exploit fields by farming communities. The local landscape is then defined as the land
+that can be exploited within one days return journey, typically 5 kms, as classically
+utilised in preliminary site catchment analyses. As a basis for catchment analysis this
+approach has been seen to be flawed as discussed in Chapter 3.
+In particular it has been suggested that this imposes a modern western economic
+viewpoint on the landscape. However, in practice many communities that do not exhibit such ergonomic conceptual frameworks nevertheless operate within such constraints and its is therefore convenient to address this question in reference to such a
+framework. Using this criterion Shuna, for example, would almost certainly not have
+required crop land beyond these limits and in that sense had not outgrown the capacity
+of the local environment to sustain itself. This approach would conclude that Shuna
+would most likely not be an appropriate representation of an urban settlement.
+A second approach, however, is to understand whether enough land would have
+been available around sites like Shuna given the demands of the wider settlement
+world and especially adjacent settlements. In this regard under a number of scenarios
+there would have been considerable problems for a community like Shuna to meet
+crop needs from the local landscape and it is plausible other communities grew food
+made available to at least some at sites like Shuna through exchange or ‘taxation’.
+From this angle, it does seem likely that the sustaining areas of adjacent sites would
+have impinged upon that of Shuna. As a result, it may have been difficult for Shuna
+to support itself without acting in some way as an urban centre with regards to these
+other settlements. Conversely, if approached from the opposite angle looking first at the
+smaller settlements, would it have been feasible for them to have had their subsistence
+catchment area completely engulfed by a much larger settlement without this type of
+relationship?
+As stated earlier, the conversion of huge areas of land to cultivation must have
+occurred to sustain the increasing population. I feel that it has been demonstrated that
+at a minimum, changes in agricultural strategies had to have occurred to support the
+populations witnessed in the EBA. At the very least, production levels of food had to
+increase in response to population increases. While clearing of land for use as cultivated
+cropland was certainly not new, the scale at which it must have occurred in the EBA
+was.
+As a result of the regional analysis done in Chapter 6, it is, I believe, quite reasonable to consider the possibility that, as the landscape surrounding settlements became
+more devoted to the production of cultivated lands (resulting in more distant pastures),
+these outlying areas could have been places where people involved with the rearing of
+animals might have moved to on a possibly permanent basis.
+Whilst this move may have been one of convenience, it could be interpreted as the
+360
+
+beginnings of a form of urbanism. With higher populations came the need for more
+food. An examination of just one community, as was done with Shuna in Chapter 5,
+shows that it is possible to sustain any population with any of the scenarios entered
+into the model. When viewed regionally, however, it has been shown that access to a
+sufficient area of suitable land becomes a limiting factor. I believe that a better way
+to approach this question is to ask if communities outgrew the production potential of
+their subsistence strategy given the area of suitable land to which they had access.
+The mere presence of smaller sites within even what has been shown to be the
+smallest possible crop land extents (e.g. Figure 6.12 page 345) argues for a more
+complex asymmetric relationship between these communities that are at the heart of
+some understandings of urbanism. If considered in the context of higher populations
+and other modelled scenarios, it becomes even more evident that these relationships
+must have existed. Although Chesson and Philip argue against urbanism in favour of
+their corporate village model, I feel that, at least in part, they fail to consider some of
+these types of relationships that are urban in nature, even if they are not exactly like
+the form of urbanism we see in Mesopotamia.
+Not only has the the scale of the settlement been demonstrated as being an important factor for assessing landscape engagement, but it has also been demonstrated
+how valuable it is to consider the wider region when assessing the feasibility of proposed land use resulting from various subsistence strategies. The modelling software
+proved useful in that it has provided a way to quickly and systematically examine so
+many scenarios. Chapter 6 has indicated that certain areas, such as the Jordan Valley, were likely to have had to have close ties to neighbouring communities, especially
+as populations continued to climb and the need for cultivated land increased. It has
+also shown an interesting trend for small sites to be surrounded by the cropland of the
+larger settlements. Given the coarse temporal resolution available to us, the fact that
+these small sites appear to lie within crop land extents might mean that they were in
+their community’s grazing land extent when first established.
+Questions:
+Is it possible to find evidence to support the proposition that agricultural intensification must have been associated with the development of the new larger
+scale of EBA communities?
+Can we find evidence that, as Philip (2003) and Chesson (2003) put it, such
+communities ‘inscribed’ themselves on their landscape in new ways, and are
+these communities likely to have been some of the first to have had a significant negative impact on their physical environment?
+
+By examining a large number of different scenarios, it has been shown that certain
+strategies appear more favourable than others depending in part on circumstance. For
+example, the suspected ‘meatier’ diet of the Chalcolithic was observed to be sufficient
+only up to a certain population level, at which point a change of subsistence strategy
+361
+
+

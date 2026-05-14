@@ -1,0 +1,1353 @@
+return myCrop ;
+}
+}
+}
+LaCrop myCrop ;
+return myCrop ;
+
+// blank crop
+
+}
+const QString LaUtils :: u s e r C o n v e r s i o n T a b l e s D i r P a t h ()
+{
+// always saved in the users home dir under . landuse Analyst /
+QString myPath = QDir :: homePath () + QString ( " /. landus eAnalys t / " ) +
+QDir :: separator () + " c o n v e r s i o n T a b l e s " + QDir :: separator () ;
+QDir () . mkpath ( myPath ) ;
+return myPath ;
+}
+const QString LaUtils :: u s e r A n i m a l P a r a m e t e r P r o f i l e s D i r P a t h ()
+{
+// alg profiles are always saved in the users home dir under .
+land useAnaly st /
+QString myPath = QDir :: homePath () + QString ( " /. landus eAnalys t / " ) +
+QDir :: separator () + " a n i m a l P a r a m e t e r P r o f i l e s " + QDir :: separator () ;
+QDir () . mkpath ( myPath ) ;
+return myPath ;
+}
+const QString LaUtils :: u s e r I m a g e s D i r P a t h ()
+{
+QString myPath = QDir :: homePath () + QString ( " /. landus eAnalys t " ) +
+QDir :: separator () + " images " + QDir :: separator () ;
+QDir () . mkpath ( myPath ) ;
+return myPath ;
+}
+const QString LaUtils :: u s e r C r o p P a r a m e t e r P r o f i l e s D i r P a t h ()
+{
+// alg profiles are always saved in the users home dir under .
+land useAnaly st /
+QString myPath = QDir :: homePath () + QString ( " /. landus eAnalys t / " ) +
+QDir :: separator () + " c r o p P a r a m e t e r P r o f i l e s " + QDir :: separator () ;
+QDir () . mkpath ( myPath ) ;
+return myPath ;
+}
+int LaUtils :: c o n v e r t A r e a T o H e c t a r e s ( AreaUnits theAreaUnit , int theArea )
+{
+// this may seem ridiculous to do it this way , but
+// i plan to include other area units and this way
+// it will make it very easy to work with in the future
+// all need be done is add new units to la . h enum and enter
+// into the following switch ...
+float myHectares = 0.;
+switch ( theAreaUnit )
+// Dunum , Hectare
+{
+case Dunum :
+myHectares = theArea * 10.;
+break ;
+case Hectare :
+myHectares = theArea ;
+break ;
+/*
+add new units here after updating la . h enum ex :
+case Acre :
+HyHectares = theArea / 2.47105381;
+break ;
+*/
+}
+return static_cast < int >( myHectares ) ;
+}
+LaUtils :: A n i m a l P a r a m e t e r M a p LaUtils :: g e t A v a i l a b l e A n i m a l P a r a m e t e r s ()
+
+586
+
+{
+LaUtils :: A n i m a l P a r a m e t e r M a p myMap ;
+QDir myDirectory ( u s e r A n i m a l P a r a m e t e r P r o f i l e s D i r P a t h () ) ;
+myDirectory . setFilter ( QDir :: Dirs | QDir :: Files | QDir :: NoSymLinks ) ;
+QFileInfoList myList = myDirectory . entryInfoList () ;
+for ( unsigned int i = 0; i < static_cast < unsigned int >( myList . size () ) ; ++ i )
+{
+QFileInfo myFileInfo = myList . at ( i ) ;
+// Ignore directories
+if ( myFileInfo . fileName () == " . " || myFileInfo . fileName () == " .. " )
+{
+continue ;
+}
+// if the filename ends in . xml try to load it into our layerSets listing
+if ( myFileInfo . co mpleteSu ffix () == " xml " )
+{
+// // qDebug (" Loading a n im al Pa r am et er : " + myList . at ( i ) .
+a b s o l u t e F i l e P at h () . toLocal8Bit () ) ;
+LaAnimalParameter myAnimalParameter ;
+m y A n i m a l P a r a m e t e r . fromXmlFile ( myFileInfo . a b s o l u t e F i l e P a t h () ) ;
+if ( m y A n i m a l P a r a m e t e r . name () . isEmpty () )
+{
+// qDebug (" A ni ma lP a ra me te r name was empty !") ;
+continue ;
+}
+// // qDebug (" Adding " + m y A n i m a l P a r a m e t e r . name () ) ;
+// // qDebug ( m y A n i m a l P a r a m e t e r . toText () . toLocal8Bit () ) ;
+myMap [ m y A n i m a l P a r a m e t e r . guid () ]= m y A n i m a l P a r a m e t e r ;
+
+// for debug only ...
+;
+// qDebug (" ++ lautil Restoring " +
+//
+QString :: number ( m y A n i m a l P a r a m e t e r . fo dd er S ou rc eM a p () . count () ) .
+toLocal8Bit ()
+//
++ " food sources into animal parameter .") ;
+}
+}
+return myMap ;
+}
+L a A n i m a l P a r a m e t e r LaUtils :: g e t A n i m a l P a r a m e t e r ( QString theGuid )
+{
+QDir myDirectory ( u s e r A n i m a l P a r a m e t e r P r o f i l e s D i r P a t h () ) ;
+myDirectory . setFilter ( QDir :: Dirs | QDir :: Files | QDir :: NoSymLinks ) ;
+QFileInfoList myList = myDirectory . entryInfoList () ;
+for ( unsigned int i = 0; i < static_cast < unsigned int >( myList . size () ) ; ++ i )
+{
+QFileInfo myFileInfo = myList . at ( i ) ;
+// Ignore directories
+if ( myFileInfo . fileName () == " . " || myFileInfo . fileName () == " .. " )
+{
+continue ;
+}
+// if the filename ends in . xml try to load it into our layerSets listing
+if ( myFileInfo . co mpleteSu ffix () == " xml " )
+{
+// // qDebug (" Loading a n im al Pa r am et er : " + myList . at ( i ) .
+a b s o l u t e F i l e P at h () . toLocal8Bit () ) ;
+LaAnimalParameter myAnimalParameter ;
+m y A n i m a l P a r a m e t e r . fromXmlFile ( myFileInfo . a b s o l u t e F i l e P a t h () ) ;
+if ( m y A n i m a l P a r a m e t e r . name () . isEmpty () )
+{
+// qDebug (" A ni ma lP a ra me te r name was empty !") ;
+continue ;
+}
+// // qDebug (" Adding " + m y A n i m a l P a r a m e t e r . name () ) ;
+// // qDebug ( m y A n i m a l P a r a m e t e r . toText () . toLocal8Bit () ) ;
+if ( m y A n i m a l P a r a m e t e r . guid () == theGuid )
+{
+
+587
+
+return m y A n i m a l P a r a m e t e r ;
+}
+}
+}
+LaAnimalParameter myAnimalParameter ;
+return m y A n i m a l P a r a m e t e r ;
+// retrun a blank one since no match found
+}
+LaUtils :: C r o p P a r a m e t e r M ap LaUtils :: g e t A v a i l a b l e C r o p P a r a m e t e r s ()
+{
+LaUtils :: C r o p P a r a m e t e r M a p myMap ;
+QDir myDirectory ( u s e r C r o p P a r a m e t e r P r o f i l e s D i r P a t h () ) ;
+myDirectory . setFilter ( QDir :: Dirs | QDir :: Files | QDir :: NoSymLinks ) ;
+QFileInfoList myList = myDirectory . entryInfoList () ;
+for ( unsigned int i = 0; i < static_cast < unsigned int >( myList . size () ) ; ++ i )
+{
+QFileInfo myFileInfo = myList . at ( i ) ;
+// Ignore directories
+if ( myFileInfo . fileName () == " . " || myFileInfo . fileName () == " .. " )
+{
+continue ;
+}
+// if the filename ends in . xml try to load it into our layerSets listing
+if ( myFileInfo . co mpleteS uffix () == " xml " )
+{
+// // qDebug (" Loading cropParameter : " + myList . at ( i ) . a b so l u t e F i l e P a t h
+() . toLocal8Bit () ) ;
+L aC ro pP a ra me te r my Cr o pP ar am e te r ;
+m yC ro pP a ra me te r . fromXmlFile ( myFileInfo . a b s o l u te F i l e P a t h () ) ;
+if ( m yC ro pP a ra me te r . name () . isEmpty () )
+{
+// // qDebug (" CropParameter name was empty !") ;
+continue ;
+}
+// // qDebug (" Adding " + my Cr o pP ar am e te r . name () ) ;
+myMap [ m y Cr op Pa r am et er . guid () ]= my Cr op P ar am et e r ;
+// // qDebug ( m yC ro p Pa ra m et er . toText () . toLocal8Bit () ) ;
+}
+}
+return myMap ;
+}
+L aC ro pP a ra me te r LaUtils :: g e t C r o p P a r a m e t e r ( QString theGuid )
+{
+QDir myDirectory ( u s e r C r o p P a r a m e t e r P r o f i l e s D i r P a t h () ) ;
+myDirectory . setFilter ( QDir :: Dirs | QDir :: Files | QDir :: NoSymLinks ) ;
+QFileInfoList myList = myDirectory . entryInfoList () ;
+for ( unsigned int i = 0; i < static_cast < unsigned int >( myList . size () ) ; ++ i )
+{
+QFileInfo myFileInfo = myList . at ( i ) ;
+// Ignore directories
+if ( myFileInfo . fileName () == " . " || myFileInfo . fileName () == " .. " )
+{
+continue ;
+}
+// if the filename ends in . xml try to load it into our layerSets listing
+if ( myFileInfo . co mpleteS uffix () == " xml " )
+{
+// // qDebug (" Loading a n im al Pa r am et er : " + myList . at ( i ) .
+a b s o l u t e F i l e P a th () . toLocal8Bit () ) ;
+L aC ro pP a ra me te r my Cr o pP ar am e te r ;
+m yC ro pP a ra me te r . fromXmlFile ( myFileInfo . a b s o l u te F i l e P a t h () ) ;
+if ( m yC ro pP a ra me te r . name () . isEmpty () )
+{
+// qDebug (" CropParameter name was empty !") ;
+continue ;
+}
+// // qDebug (" Adding " + my Cr o pP ar am e te r . name () ) ;
+// // qDebug ( m yC ro p Pa ra m et er . toText () . toLocal8Bit () ) ;
+
+588
+
+if ( my C ro pP a ra me te r . guid () == theGuid )
+{
+return m y Cr op Pa r am et er ;
+}
+}
+}
+L aC ro pP a ra me te r my Cr o pP ar am e te r ;
+return m yC r op Pa ra m et er ;
+// retrun a blank one since no match found
+}
+
+QStringList LaUtils :: sortList ( QStringList theList )
+{
+// sort the taxon list alpabetically descending order
+theList . sort () ;
+// this sorts ascending !
+// flip the sort order
+QStringList mySortedList ;
+QStringList :: Iterator myIterator = theList . end () ;
+while ( myIterator != theList . begin () )
+{
+myIterator - -;
+mySortedList << * myIterator ;
+}
+return mySortedList ;
+}
+QStringList LaUtils :: uniqueList ( QStringList theList )
+{
+// remove any duplicates from a sorted list
+QStringList myUniqueList ;
+QString myLast = " " ;
+Q S t r i n g L i s t I t e r a t o r myIterator ( theList ) ;
+while ( myIterator . hasNext () )
+{
+QString myCurrent = myIterator . next () ;
+if ( myCurrent != myLast )
+{
+myUniqueList << myCurrent ;
+}
+myLast = myCurrent ;
+}
+return myUniqueList ;
+}
+// return a string list of all the experiment files
+QStringList LaUtils :: g e t E x p e r i m e n t s L i s t ()
+{
+QStringList my E x p e r i m e n t L i s t ;
+QSettings mySettings ;
+QString myWorkDir = mySettings . value ( " dataDirs / dataDir " , QDir :: homePath () +
+QDir :: separator () + " . l anduseAn alyst " ) . toString () +
+QString ( " / modelOutputs / " ) ;
+QDir myDirectory ( myWorkDir ) ;
+myDirectory . setFilter ( QDir :: Dirs | QDir :: Files | QDir :: NoSymLinks ) ;
+// // qDebug (" Current directory is : " + myWorkDir . toAscii () ) ;
+QFileInfoList myList = myDirectory . entryInfoList () ;
+for ( unsigned int i = 0; i < static_cast < unsigned int >( myList . size () ) ; ++ i )
+{
+QFileInfo myFileInfo = myList . at ( i ) ;
+// // qDebug (" Get Ex pe ri m en ts Li s t Scanning : " + myFileInfo . fileName () .
+toLocal8Bit () ) ;
+if ( myFileInfo . fileName () == " . " || myFileInfo . fileName () == " .. " )
+{
+continue ;
+}
+// if this is an empty dir , just skip it ...
+if ( myFileInfo . absoluteDir () . count () < 1)
+{
+continue ;
+
+589
+
+}
+// todo - check that the file is a directory ( it should be )
+// Now look in each dir under the workdir for the xml experiment file
+// the experiment file should be named < dir name >. xml
+QString myFile = myFileInfo . absolutePath () + QDir :: separator ()
++ myFileInfo . fileName () + QDir :: separator ()
++ myFileInfo . fileName () + " . xml " ;
+// // qDebug (" Get Ex pe ri m en ts Li s t Checking : " + myFile . toLocal8Bit () ) ;
+if ( QFile :: exists ( myFile ) )
+{
+m y E x p e r i m e n t L is t << myFile ;
+// // qDebug (" Get Ex pe ri m en ts Li s t Adding : " + myFile . toLocal8Bit () ) ;
+}
+}
+return m y E x p e r im e n t L i s t ;
+}
+bool LaUtils :: c reateTex tFile ( QString theFileName , QString theData )
+{
+// create the txt file
+QFile myFile ( theFileName ) ;
+if ( myFile . open ( QIODevice :: WriteOnly ) )
+{
+QTextStream myQTextStream ( & myFile ) ;
+myQTextStream << theData ;
+}
+else
+{
+return false ;
+}
+myFile . close () ;
+return true ;
+}
+QString LaUtils :: xmlEncode ( QString theString )
+{
+theString = theString . replace ( " <" ," & lt ; " ) ;
+theString = theString . replace ( " >" ," & gt ; " ) ;
+theString = theString . replace ( " & " ," & amp ; " ) ;
+return theString ;
+}
+QString LaUtils :: xmlDecode ( QString theString )
+{
+theString = theString . replace ( " & lt ; " ," <" ) ;
+theString = theString . replace ( " & gt ; " ," >" ) ;
+theString = theString . replace ( " & amp ; " ," & " ) ;
+return theString ;
+}
+QString LaUtils :: get Standar dCss ()
+{
+QString myStyle = " . glossy { background - color : q li ne a rg ra di e nt ( x1 :0 , y1 :0 , x2
+:0 , y2 :1 , stop :0 #616161 , stop : 0.5 #505050 , stop : 0.6 #434343 , stop :1
+#656565) ; color : white ; padding - left : 4 px ; border : 1 px solid #6 c6c6c ; } " ;
+myStyle += " body { background : white ;} " ;
+myStyle += " h1 { font - size : 22 pt ; color : #0063 F7 ; } " ;
+myStyle += " h2 { font - size : 18 pt ; color : #0063 F7 ; } " ;
+myStyle += " h3 { font - size : 14 pt ; color : #0063 F7 ; } " ;
+myStyle += " . cellHeader { color :#466 aa5 ; font - size : 12 pt ;} " ;
+myStyle += " . p ar am e te rH ea d er { font - weight : bold ;} " ;
+myStyle += " . largeCell { color :#000000; font - size : 12 pt ;} " ;
+myStyle += " . table { "
+" border - width : 1 px 1 px 1 px 1 px ; "
+" border - spacing : 2 px ; "
+" border - style : solid solid solid solid ; "
+" border - color : black black black black ; "
+" border - collapse : separate ; "
+" background - color : white ; "
+
+590
+
+"}";
+return myStyle ;
+}
+QString LaUtils :: op en Gr a ph ic Fi l e ()
+{
+QString myHomePath = QDir :: homePath () ;
+QString myFileName = QFileDialog :: ge t Op en Fi l eN am e (0 , " Choose an image " ,
+myHomePath , " Images (*. png *. xpm *. jpg ) " ) ;
+QFileInfo fi ( myFileName ) ;
+QString myName = fi . fileName () ;
+QString m y D e s t i n a t i o n F i l e P a t h N a m e = u s e r I m a g e s D i r P a t h () + myName ;
+QFile :: copy ( myFileName , m y D e s t i n a t i o n F i l e P a t h N a m e ) ;
+return m y D e s t i n a t i o n F i l e P a t h N a m e ;
+}
+QString LaUtils :: saveFile ()
+{
+QString myHomePath = QDir :: homePath () ;
+QString myFileName = QFileDialog :: ge t Sa ve Fi l eN am e (0 , " Choose a file name " ,
+u s e r C o n v e r s i o n T a b l e s D i r P a t h () , " *. csv " ) ;
+QFileInfo fi ( myFileName ) ;
+QString myName = fi . fileName () ;
+QString m y D e s t i n a t i o n F i l e P a t h N a m e = u s e r C o n v e r s i o n T a b l e s D i r P a t h () + myName ;
+return m y D e s t i n a t i o n F i l e P a t h N a m e ;
+}
+
+591
+
+592
+
+Appendix E
+
+Crop Characteristics
+
+Einkorn
+
+Emmer
+
+Lentils
+
+Peas
+
+Olives
+
+Grapes
+
+Grass Peas
+
+Bitter Vetch
+
+Barley
+
+Free Hull Barley
+
+Yield
+Units
+Mcals kg−1
+Fallow Ratio
+Fallow MCals
+Fodder Kg
+Fodder MCals
+
+Horse Bean
+
+Table E.1: Defining characteristics of crops
+
+500
+Ha
+3
+1
+500
+300
+0.8
+
+500
+Ha
+3
+1
+500
+300
+0.8
+
+500
+Ha
+3
+1
+500
+300
+0.8
+
+300
+Ha
+3
+1
+500
+300
+0.8
+
+150
+Ha
+3.25
+1
+500
+100
+0.8
+
+600
+Ha
+4
+0
+500
+0
+0.8
+
+600
+Ha
+3
+0
+500
+0
+0.8
+
+500
+Ha
+3
+1
+500
+300
+0.8
+
+400
+Ha
+3
+1
+500
+300
+0.8
+
+500
+Ha
+3
+1
+500
+300
+1.42
+
+500
+Ha
+3
+1
+500
+300
+0.8
+
+The values used in Table E.1 have been derived from a variety of sources. It can
+rightfully be argued that any one of these values might have been higher or lower; for
+example there is no possible way to know the exact yield of any crop in the past, so how
+can a yield of 500 kg/ha be justified? Even today, farmers do not know what the yield
+of any particular field will be until they harvest it, and that yield can be very different
+even from another field on ‘the other side of the fence’. The values used are, for the
+purposes of the model, approximations that, even if not perfect, will not invalidate the
+outcome of the model given the imprecise nature of many of the other variables which
+are used (e.g. variables where minimum and maximum values have been adopted,
+such as population levels, will ‘absorb’ imprecisions regarding the input factors used
+to define crops). Additionally, there are other major influencing factors that cannot be
+known such as sowing rates, harvesting efficiency, and so on.
+In the interests of consistency for use in the model, and to compensate for loss
+of energy due to cooking and other factors (as well as to simplify the model), I have
+opted to use conservative and ‘even’ values which have been based on a large number
+of sources ranging from personal communications and animal science websites to aca593
+
+demic journals and PhD theses. The final numbers, therefore, may not perfectly match
+any one source in their entirety, but they are reasonable approximations. Some of the
+primary references used are as follows. Yield values have been adapted from Campbell
+(2009, Tables 5.3 and 5.4) and (Ellison 1981, 40). The food value for the crops have
+been based upon USDA figures, which, for example, state that wheat has approximately
+3.2 to 3.4 Mcals per kg and that pulses contain 3.2 to 3.5 Mcals (USDA 2009). Straw
+and chaff (fodder) values adapted from Simms and Russell (1997, Table I).
+
+594
+
+Appendix F
+
+Animal Characteristics
+Table F.1: Defining characteristics of animals
+Sheep
+
+Pig
+
+Cow
+
+Goat
+
+Mcalories
+Usable
+Average Kill Weight
+Weaning Weight
+Adult Weight
+Grow Time
+Death Rate
+Conception Efficiency
+Sex Maturity
+Breeding Years
+Babies Birth−1
+Wean Age
+Gestation
+Oestrous Cycle
+Lactation Time
+Ratio F:M breedstock
+
+3.200
+50.00%
+30
+8
+60
+40
+30.00%
+80.00%
+18.00
+5
+1
+60
+150
+21
+210
+20
+
+3.200
+50.00%
+100
+2
+200
+40
+30.00%
+70.00%
+18
+5
+6
+30
+115
+21
+30
+20
+
+3.200
+50.00%
+400
+50
+625
+50
+20.00%
+85.00%
+18
+8
+1
+60
+279
+21
+240
+20
+
+3.200
+50.00%
+30
+8
+60
+40
+30.00%
+80.00%
+18
+5
+1
+60
+150
+21
+210
+20
+
+Desired Herd Size
+Mixed Herd Numbers
+
+50
+25
+
+0
+0
+
+10
+2
+
+50
+25
+
+Milk grams day−1
+Milk Mcals Kg−1
+
+0.94
+0.940
+
+0
+0
+
+6
+0.94
+
+0.9
+0.940
+
+Gestation Reqd
+Lactation Reqd
+Maintenance Reqd
+Juveniles Req kg−1
+Land Energy Hectare−1
+
+3.970
+5.410
+3.200
+0.030
+1500
+
+3.970
+5.410
+0
+0.030
+1500
+
+6
+7.5
+5.8
+0.030
+1500
+
+3.970
+5.410
+3.2
+0.030
+1500
+
+Fodder Fed From Crop
+
+Crop10
+Barley
+1000
+750
+90
+
+Crop10
+Barley
+0
+750
+90
+
+Crop10
+Barley
+4956
+1500
+90
+
+Crop10
+Barley
+1000
+750
+90
+
+Grams−1 Straw/Chaff
+Grams−1 Grain
+Days on supplemental feed
+
+The values used in Table F.1 have, like the crop species characteristics (Appendix E
+595
+
+on page 593) been derived from a variety of sources (e.g. Bhattacharyal and Harb
+(1973, Tables 2 and 4), Danti (2000, 57-64), Breman and de Wit (1983, 1344-1346)
+Balasse and Tresset (2002, 858) and Tennesee Health and Science Center (2009)). It
+can again rightfully be argued that many of these values could have been higher or
+lower; for example there is no possible way to know what the precise weaning age
+was, or precisely how many males were kept in relation to females and so on. The
+purpose of the large number of input variables used to model the herds is to allow for
+a consistent and systematic method for any species to be defined for use in the model.
+Slight inaccuracies of these variables have very little effect on the overall outcome of
+the model. Conceivably, the factors that would tend to have the most effect tend to
+be values that remain relatively consistent with any specific species (such as: offspring
+per birthing event, gestation time, age of sexual maturity) and are thus less likely to be
+significantly inaccurate.
+
+596
+
+Bibliography
+Abbo, S., Shtienberg, D., Lichtenzveig, J., Lev-Yadun, S., and Gopher, A. (2003). The
+chickpea, summer cropping, and a new model for pulse domestication in the ancient
+Near East. Quarterly Review of Biology, 78(4):435–448.
+Adams, R. (1962). Agriculture and urban life in early south-western Iran. Science,
+136(3511):109–122.
+Aitken, R. (1977). Wilderness Areas in Scotland. PhD thesis, University of Aberdeen.
+Akazawa, T. (1980). Fishing adaptation of prehistoric hunter-gatherers at the Nittano
+site, Japan. Journal of Archaeological Science, 7:325–344.
+Aldenderfer, M. (1987). Assessing the impact of quantitative thinking on archaeological
+research: historical and evolutionary insights. In Aldenderfer, M. S. (Ed.), Quantitative Research in Archaeology: Progress and Prospects. Newbury Park, California: Sage
+Publications.
+Algaze, G., Fessler, D., and Evolution, S. (2001). A reconsideration of the origins of
+human settlement and social differentiation. In Wolff, S. R. (Ed.), Studies in the
+Archaeology of Israel and Neighboring Lands in Memory of Douglas L. Esse, volume 59
+of Studies in Ancient Oriental Civilization, Pp. 9–28. The Oriental Institute of the
+University of Chicago.
+Amiran, R. and Gophna, R. (1992). The correlation between Lower Egypt and Canaan
+during the Early Bronze I period. In van den Brink, E. C. (Ed.), The Nile Delta in Transition: 4th-3rd Millennium BC, Pp. 357–360. Israel Exploration Society, Jerusalem.
+Anschuetz, K. F., Wilshusen, R. H., and Scheick, C. L. (2001). An archaeology of landscapes: perspectives and directions. Journal of Archaeological Research, 9(2):157–
+211.
+Arnon, I. (1972). Crop Production in Dry Regions: Background and Principles. Leonard
+Hill, London.
+597
+
+Ayala, G. and French, C. (2005). Erosion modeling of past land-use practices in the
+Fiume di Sotto di Troina river valley, north-central Sicily. Geoarchaeology: An International Journal, 20(2):149–167.
+Bailey, G. (1978). The Role of Shell Middens in Prehistoric Economies. Phd thesis, University of Cambridge, unpublished.
+Bailey, G. (1982). Coasts, lakes and littorals: Denmark; Cantabrian coast. In Jarman,
+M. R., Bailey, G., and Jarman, H. N. (Eds.), Early European Agriculture, Pp. 81–107.
+Cambridge: Cambridge University Press.
+Bailey, G. and Davidson, I. (1983). Site exploitation territories and topography: two
+case studies from Palaeolithic Spain. Journal of Archaeological Science, 10(2):87–115.
+Baird, D. and Philip, G. (Eds.). (forthcoming), The Development of Social Complexity in
+the Southern Levant. Excavations at Tell Esh-Shuna North, Jordan. Levant Supplementary Monographs Series. Council for British Research in the Levant.
+Baird, D. and Philip, G. (1992). Preliminary report on the first (1991) season of excavations at Tell esh-Shuna north. Annuals of the Department of Antiquities of Jordan,
+34:71–88.
+Baird, D. and Philip, G. (1994). Preliminary report on the third (1993) season of
+excavations at Tell esh-Shuna north. Levant, XXVI:111–133. with contributions by
+Paul Croft, Catriona Gibson, Margaret Judd, and Dianne Rowan.
+Baja, S., Chapman, D. M., and Dragovich, D. (2001). A conceptual model for assessing
+agricultural land suitability at a catchment level using a continuous approach in GIS:.
+In Proceedings of the Geospatial Information and Agriculture Conference.
+Balasse, M. and Tresset, A. (2002). Early weaning of Neolithic domestic cattle (Bercy,
+France) revealed by intra-tooth variation in nitrogen isotope ratios. Journal of Archaeological Science, 29(8):853–859.
+Bar-Yosef, O. and Belfer-Cohen, A. (1992). From foraging to farming in the Mediterranean Levant. In Gebauer, A. B. and Price, T. D. (Eds.), Transitions to Agriculture in
+Prehistory, Pp. 21–48. Prehistory Press, Madison.
+Bartov, Y., Stein, M., Enzel, Y., Agnon, A., and Reches, Z. (2002). Lake levels and
+sequence stratigraphy of Lake Lisan, the late Pleistocene precursor of the Dead Sea.
+Quaternary Research, 57:9–21.
+Baruch, U. (1986). The Late Holocene vegetational history of Lake Kinneret (Sea of
+Galilee), Israel. Paléorient, 12(2):37–48.
+598
+
+Bay-Petersen, J. (1982). Coasts, lakes and littorals: the Polish littoral. In M.R. Jarman,
+G. B. and Jarman, H. (Eds.), Early European Agriculture, Pp. 107–112. Cambridge
+University Press, Cambridge.
+Bell, B. (1971). The dark ages in ancient history I, the dark age in Egypt. American
+Journal of Archaeology, 75:1–26.
+Ben-Tor, A. (1992a). The Archaeology of Ancient Israel. Yale University Press. translated
+by R. Greenberg.
+Ben-Tor, A. (1992b). The Early Bronze Age. In Ben-Tor (1992a), Pp. 81–125. translated
+by R. Greenberg.
+Bevan, A. (2008). Computational models for understanding movement and territory. http://www.homepages.ucl.ac.uk/˜tcrnahb/downloads/Bevan08 manuscript.pdf,
+accessed 08/25/2009.
+Bevan, A. and Conolly, J. (2002). GIS, archaeological survey, and landscape archaeology on the island of Kythera, Greece. Journal of Field Archaeology, 29(1/2):123–138.
+Bhattacharyal, A. and Harb, M. (1973). Sheep production on natural pasture by roaming bedouins in Lebanon. Journal of Range Management, 26(4):266–269.
+Blumler, M. (1993). Successional pattern and landscape sensitivity in the Mediterranean and Near East. In Landscape Sensitivity, Pp. 287–305. John Wiley and Sons
+Ltd Chichester (United Kingdom).
+Bohannon, R. (1997). Comfortable and maximum walking speed of adults aged 20-79
+years: reference values and determinants. Age and Ageing, 29(1):15–19.
+Bourke, S. J. (1997). The ‘pre-Ghassulian’ sequence at Teleilat Ghassul. In Gebel, H.
+G. K., Kafafi, Z., and Rollefson, G. (Eds.), The Prehistory of Jordan II: Perspectives from
+1997, Studies in early Near Eastern production, subsistence, and environment 4, Pp.
+395–417. Ex Oriente, Berlin.
+Bourke, S. J. (2001). The Chalcolithic period. In MacDonald, B., Adams, R., and
+Bienkowski, P. A. (Eds.), The Archaeology of Jordan, Pp. 107–163. Sheffield Academic
+Press, Sheffield.
+Braun, E., van den Brink, E. C. M., Gophna, R., and Goren, Y. (2001). New evidence
+for Egyptian connections during a late phase of Early Bronze Age I from the Soreq
+Basin in south-central Israel. In Wolff, S. R. (Ed.), Studies in the Archaeology of Israel
+and Neighboring Lands in Memory of Douglas L. Esse, volume 59 of Studies in Ancient
+Oriental Civilization, Pp. 59–98. The Oriental Institute of the University of Chicago.
+599
+
+Breman, H. and de Wit, C. (1983). Rangeland productivity and exploitation in the
+Sahel. Science, 221(4618):1341–1347.
+Broshi, M. and Gophna, R. (1984). The settlements and population of Palestine during
+the Early Bronze Age II-III. Bulletin of the American Schools of Oriental Research,
+253(253):41–53.
+Browman, D. (1976). Demographic correlations of the Wari conquest of Junin. American Antiquity, 41(4):465–477.
+Brumfiel, E. (1976). Regional growth in the eastern valley of Mexico: a test of the
+“population pressure” hypothesis. In The Early Mesoamerican Village: Archaeological
+Research Strategy for an Endangered Species, Pp. 234–249. Academic Press, New York.
+Burrough, P. (1986). Principles of Geographical Information Systems. Oxford Claredon
+Press.
+Campbell, D. E. (2009). Sustainable Assumptions: Modelling the Ecological Impacts of
+Pre-Pottery Neolithic Farming Communities in the Levant. Unpublished PhD Dissertation, School of Archaeology Classics and Egyptology, University of Liverpool: Liverpool, UK.
+Cassels, R. (1972). Locational analysis of prehistoric settlement in New Zealand.
+Mankind, 8:212–222.
+Chesson, M. S. (1997). Urban Households in Early Bronze Age Communities of SyroPalestine. Unpublished PhD Dissertation, Department of Anthropology, Harvard University: Cambridge, Massachusetts.
+Chesson, M. S. (1999). Libraries of the dead: Early Bronze Age charnel houses and social identity at urban Bab edh-Dhra’, Jordan. Journal of Anthropological Archaeology,
+18:137–164.
+Chesson, M. S. (2000). Ceramics and daily life in the EBA household: forum, function
+and action in residential compounds at Tell el-Handaquq south, Jordan. In Philip,
+G. and Baird, D. (Eds.), Ceramics and Change in the Early Bronze Age of the Southern
+Levant, Pp. 365–379. Sheffield Academic Press.
+Chesson, M. S. (2003). Households, Houses, Neighborhoods and Corporate Villages.
+Journal of Mediterranean Archaeology, 16(1):79–102.
+Chisholm, M. (1968). Rural Settlement and Land Use. Hutchinson, London, 2nd edition.
+Christopherson, G., Guertin, D., Kunzmann, M., and Potter, T. (1996). Comparison
+of Interpolation Algorithms for Digital Elevation Model Generation and Subsequent
+600
+
+Viewshed Analysis. In Proceedings of the First Biennial Conference on Research in
+Colorado Plateau US National ParksTransactions and Proceedings, Series, volume 10,
+Pp. 226–233.
+Clark, G. (1976). Domestication and social evolution. Philosophical Transactions of the
+Royal Society of London. Series B, Biological Sciences (1934-1990), 275(936):5–11.
+Clark, G. and Yi, S. (1983). Niche-width variation in Cantabrian archaeofaunas: a
+diachronic study. In Clutton-Brock, J. and Grigson, C. (Eds.), Hunters and Their Prey,
+volume 1: Animals and Archaeology, Pp. 183–208. BAR International Series 163,
+Oxford.
+Clarke, D. L. (1968). Analytical Archaeology. Methuen, London, 1st edition.
+Clarke, D. L. (1978). Analytical Archaeology. (revised by R. W. Chapman). Methuen,
+London, 2nd edition.
+Clarke, K. C. (1997). Getting started with geographic information systems. In Prentice
+Hall Series in Geographic Information Science. Simon & Shuster, New Jersey.
+Cordova, C. E. (2005). The degradation of the ancient Near Eastern environment. In
+Snell, D. C. (Ed.), A Companion to the Ancient Near East, Pp. 109–125. Blackwell
+Publishing, Oxford.
+Courty, M. and Weiss, H. J. (1997). The scenario of environmental degradation in the
+Tell Leilan Region, NE Syria, during the late 3rd Millennium abrupt climate change.
+In Dalfes, H., Kukla, G., and Weiss, H. J. (Eds.), Third Millennium B.C. Climate Change
+and Old World Collapse, Pp. 107–147. Springer, Berlin.
+Cowgill, G. L. (2004). Origins and development of urbanism: archaeological perspectives. Annual Review of Anthropology, 33(1):525–549.
+Cribb, R. (1984). Computer simulation of herding systems as an interpretive and
+heuristic device in the study of kill-off strategies. In Clutton-Brock, J. and Grigson,
+C. (Eds.), Animals and Archaeology: 3 Early Herders and Their Flocks, Pp. 161–171.
+B.A.R. International Series.
+Cribb, R. (1987). The logic of the herd: a computer simulation of archaeological herd
+structure. Journal Of Anthropological Archaeology, 6:376–415.
+Croft, P. (forthcoming) Animal remains from Shuna. In Baird, D. and Philip, G. (Eds.),
+The Development of Social Complexity in the Southern Levant. Excavations at Tell EshShuna North, Jordan, Levant Supplementary Monographs Series. Council for British
+Research in the Levant.
+601
+
+Danti, M. D. (2000). Early Bronze Age Settlement and Land Use in the Tell Es-Sweyhat
+Region, Syria. PhD thesis, University of Pennsylvania.
+Darvill, T. (2008). The Concise Oxford Dictionary of Archaeology. Oxford University
+Press, 2nd edition.
+Davidson, I. (1976). Les Mallaetes and Mondùver: the economy of a human group in
+prehistoric Spain. In de G. Sieveking, G., Longworth, I. K., and Wilson, K. E. (Eds.),
+Problems in Economic and Social Archaeology, Pp. 483–499.
+de Contenson, H. (1960). Three soundings in the Jordan Valley. Annuals of the Department of Antiquities of Jordan, 4-5:12–98.
+Dennel, R. W. and Webley, D. P. (1975). Prehistoric settlement and landuse in southern
+Bulgaria. In Higgs, E. S. (Ed.), Palaeoeconomy, Pp. 97–109. Cambridge University
+Press, London.
+Dever, W. (1989). The collapse of the urban Early Bronze Age in Palestine—toward a
+systemic analysis. In Amiran, R. and Gophna, R. (Eds.), L’urbanisation de la Palestine
+à l’âge du Bronze Ancien, Pp. 225–246. BAR International Series, Oxford.
+Dimbleby, G., Ucko, P., and Zohary, D. (1969). The domestication and exploitation of
+plants and animals. Duckworth, London.
+Duecker, K. (1979). Land resource information systems: a review of fifteen years experience. Geo-processing, 1(2):105–128.
+Ebert, D. (2006). Predictive modelling and time: An experiment in temporal archaeological predictive models. Internet Archaeology, 20:2–3.
+Ebert, J. I. (2000). The state of the art in ’inductive’ predictive modeling: seven big
+mistakes (and lots of smaller ones). In Wescott, K. L. and Brandon, R. J. (Eds.),
+Practical Applications of GIS for Archaeologists, Pp. 129–135. Taylor & Francis Ltd.
+Ellison, R. (1981). Diet in Mesopotamia: the evidence of the barley ration texts (c.
+3000-1400 B.C.). Iraq, 43(1):35–45.
+Ellison, R. (1983). Some thoughts on the diet of Mesopotamia from c. 3000-600 B.C.
+Iraq, 45(1):146–150.
+Esse, D. L. (1989). Secondary state formation and collapse in Early Bronze Age Palestine. In de Miroschedji, P. (Ed.), L’urbanisation de la Palestine à l’age du Bronze Ancien,
+Series 527, Pp. 81–96. British Archaeological Reports, International, Oxford.
+Esse, D. L. (1991). Subsistence, Trade and Social Change in Early Bronze Age Palestine.
+Number 50 in Studies in Ancient Oriental Civilization. The University of Chicago,
+Chicago.
+602
+
+Falconer, S. E. (1995). Rural responses to early urbanism: Bronze Age household and
+village economy at Tell el-Hayyat, Jordan. Journal of Field Archaeology, 22(4):399–
+419.
+Falconer, S. E. and Savage, S. H. (1995). Heartlands and hinterlands: alternative
+trajectories of early urbanization in Mesopotamia and the southern Levant. American
+Antiquity, 60(1):37–58.
+Fall, P., Falconer, S., and Lines, L. (2002). Agricultural intensification and the secondary
+products revolution along the Jordan Rift. Human Ecology, 30(4):445–482.
+Fall, P. L., Lines, L., and Falconer, S. E. (1998). Seeds of civilization: Bronze Age rural
+economy and ecology in the southern Levant. Annals of the Association of American
+Geographers, 88(1):107–125.
+Finkelstein, I. (1995). Two notes on Early Bronze Age urbanization and urbanism. Tel
+Aviv: Journal of the Institute of Archaeology of Tel Aviv University, 22:47–69.
+Finkelstein, I. and Gophna, R. (1993). Settlement, demographic, and economic patterns in the highlands of Palestine in the Chalcolithic and Early Bronze periods and
+the beginning of urbanism. Bulletin of the American Schools of Oriental Research,
+289(289):1–22.
+Finkelstein, I., Lederman, Z., and Bunimovitzm, S. (1997). Highlands of many cultures.
+The southern Sumaria survey: The sites. Tel Aviv University, Tel Aviv.
+Fitzjohn, M. (2007). Viewing places: GIS applications for examining the perception of
+space in the mountains of Sicily. World Archaeology, 39(1):36–50.
+Flannery, K. (1972). The origins of the village as a settlement type in Mesoamerica and
+the Near East: A comparative study. Man, Settlement and Urbanism, Pp. 23–53.
+Flannery, K. (1976a). The village and its catchment area. The Early Mesoamerican
+Village. Edited by KV Flannery. Academic Press, New York, Pp. 91–128.
+Flannery, K. (1976b). The village and its catchment area. In Flannery, K. (Ed.),
+The Early Mesoamerican Village: Archaeological Research Strategy for an Endangered
+Species, Pp. 91–128. Emerald Group Pub Ltd.
+Fletcher, R. (2008). Some spatial analyses of Chalcolithic settlement in southern Israel.
+Journal of Archaeological Science, 35(7):2048–2058.
+Foote,
+as
+
+K. E. and Lynch,
+an
+
+Integrating
+
+M. (2000).
+
+Technology:
+
+Geographic Information Systems
+
+Context,
+
+Concepts,
+
+and
+
+http://www.colorado.edu/geography/gcraft/notes/intro/intro.html,
+08/25/2009).
+603
+
+Definitions.
+(accessed
+
+Gamble, C. S. (1978). Resource exploitation and the spatial patterning of huntergatherers: a case study. In D. Green, C. H. and Spriggs, M. (Eds.), Social Organisation and Settlement, volume 47, Pp. 153–185. Oxford: B. A. R. International Series
+(Suplementary).
+Gamble, C. S. (1979). Hunting strategies in the central European Palaeolithic. Proceedings of the Prehistoric Society, 45:35–52.
+Genz, H. (2000). The organisation of Early Bronze Age metalworking in the southern
+Levant. Paléorient, 26(1):55–65.
+Gibson, E. (2006). The Archaeology of Movement in a Mediterranean Landscape. Journal of Mediterranean Archaeology, 20(1):61–87.
+Given, M., Corley, H., and Sollars, L. (2007). Joining the dots: continuous survey,
+routine practice and the interpretation of a Cypriot landscape’. Internet Archaeology,
+20.
+Goldberg, P. and Rosen, A. M. (1987). Early Holocene Palaeoenvironments of Israel. In
+Levy, T. E. (Ed.), Shiqmim I: Studies Concerning Chalcolithic Societies in the Northern
+Negev Desert, Israel, 356, Pp. 23–33. BAR International Series, Oxford.
+Golden, J. M. (2004). Ancient Canaan and Israel: New Perspectives. ABC-CLIO, Inc,
+Denver, Colorado.
+Gophna, R. and Portugali, J. (1988). Settlement and demographic processes in Israel’s
+Coastal Plain from the Chalcolithic to the Middle Bronze Age. Bulletin of the American
+Schools of Oriental Research, 269:11–8.
+Gophna, R. and Tsuk, T. (2005). Chalcolithic settlements in the western Samaria
+foothills. Tel Aviv, 32(1):3–19.
+Gourad, K. (1999). Geographic Information System in Archaeology: the Survey. Master’s thesis, Hunter College of the City University of New York (unpublished).
+Grigson, C. (1987). Shiqmim: Pastoralism and other aspects of animal management in
+the Chalcolithic of the northern Negev. In Levy, T. E. (Ed.), Shiqmim I: Studies Concerning Chalcolithic Societies in the Northern Negev Desert, Israel, BAR International
+Series 356, Pp. 219–241. Archaeopress, Oxford.
+Grigson, C. (1995). Plough and pasture in the early economy of the southern Levant. In Levy, T. E. (Ed.), The Archaeology of Society in the Holy Land, Pp. 245–268.
+Continuum International Publishing Group.
+604
+
+Grigson, C. (1998). Plough and pasture in the early economy of the southern Levant. In
+Levy, T. E. (Ed.), The Archaeology of Society in the Holy Land, Pp. 245–268. Leicester
+University Press.
+Grigson, C. (2007). Culture, ecology, and pigs from the 5th to the 3rd millennium BC
+around the fertile crescent. In Albarella, U., Dobney, K., Ervynck, A., and RowleyConwy, P. (Eds.), Pigs and Humans 10,000 Years of Interaction, Pp. 83–108. Oxford
+University Press, USA.
+Gustavson-Gaube, C. and Erskine, R. (1985). Tell esh-Shuna North 1984: a preliminary
+report. Annuals of the Department of Antiquities of Jordan, 29:43–87.
+Gustavson-Gaube, C. and Erskine, R. (1986). Tell esh-Shuna North 1984: a preliminary
+report. Annuals of the Department of Antiquities of Jordan, 30:65–114.
+Hanbury-Tenison, J. (1986). The late Chalcolithic to early Bronze I transition in Palestine and Transjordan. Bar International Series 311. British Archaeological Reports,
+Oxford.
+Hare, T. S. (2004). Using measures of cost distance in the estimation of polity boundaries in the Postclassic Yautepec valley, Mexico. Journal of Archaeological Science,
+31:799–814.
+Harris, T. M. and Lock, G. R. (1996). Toward an evaluation of GIS in European archaeology: the past, present and future of theory and application. In Aldenderfer,
+M. and Maschner, H. D. G. (Eds.), Anthropology, Space and Geographical Information
+Systems, Pp. 350–365. Oxford University Press, New York.
+Harrison, T. P. and Savage, S. H. (2003). Settlement heterogeneity and multivariate
+craft production in the Early Bronze Age Southern Levant. Journal of Mediterranean
+Archaeology, 16(1):33–57.
+Hastorf, C. A. (1980). Changing resource use in subsistence agricultural froups of the
+prehistoric Mimbres River Valley, New Mexico. In Earle, T. K. and Christenson, A. L.
+(Eds.), Modeling Change in Prehistoric Subsistence Economies, Pp. 79–120. Academic
+Press, New York.
+Henkin, Z., Gutman, M., Aharon, H., Perevolotsky, A., Ungar, E., and Seligman, N.
+(2005). Suitability of Mediterranean oak woodland for beef herd husbandry. Agriculture, Ecosystems and Environment, 109(3-4):255–261.
+Hesse, B. (1990). Pig lovers and pig haters: patterns of Palestinian pork production.
+Journal of Ethnobiology, 10:195–225.
+605
+
+Hesse, B. and Wapnish, P. (2001). Commodities and cuisine: animals in the Early
+Bronze Age of northern Palestine. In Wolff, S. R. (Ed.), Studies in the Archaeology of
+Israel and Neighboring Lands in Memory of Douglas L. Esse, volume 59 of Studies in
+Ancient Oriental Civilization, Pp. 251–283. The Oriental Institute of the University of
+Chicago.
+Hodder, I. R. and Orton, C. R. (1976). Spatial Analysis in Archaeology. Cambridge
+University Press, Cambridge.
+Holden, Tim, D. (forthcoming) The Plant remains from Tell-Shuna North, Jordan Valley. In Baird, D. and Philip, G. (Eds.), The Development of Social Complexity in the
+Southern Levant. Excavations at Tell Esh-Shuna North, Jordan, Levant Supplementary
+Monographs Series. Council for British Research in the Levant.
+Ilan, O. and Sebbane, M. (1989). Copper metallurgy, trade and the urbanization of
+southern Canaan in the Chalcolithic and Early Bronze Age. In de Miroschedji, P.
+(Ed.), L’urbanisation de la Palestine à l’âge du Bronze Ancien, BAR International Series
+527, Pp. 139–162. Archaeopress, Oxford.
+Jarman, H. N., Bay-Petersen, J. L., and Clark, G. (1976). Agriculture in prehistoric
+Europe - the lowlands [and discussion]. Philosophical Transactions of the Royal Society
+of London. Series B, Biological Sciences (1934-1990), 275(936):175–186.
+Jarman, M., Vita-Finzi, C., and Higgs, E. (1972). Site catchment analysis in archaeology. Man, Settlement and Urbanism, Pp. 61–66.
+Jewell, E., Abate, F., and McKean, E. (2001). The New Oxford American Dictionary.
+Oxford University Press.
+Jochim, M. A. (1976). Hunter-Gatherer Subsistence and Settlement. Academic Press,
+New York.
+Joffe, A. (1993). Settlement and Society in the Early Bronze Age I and II, Southern Levant.
+Sheffield Academic Press.
+Joffe, A. (2004). Athens and Jerusalem in the third millennium: culture, comparison, and the evolution of social complexity. Journal of Mediterranean Archaeology,
+17(2):247–267.
+Joffe, A. and Dessel, J. (1995). Redefining chronology and terminology for the Chalcolithic of the southern Levant. Current Anthropology, 36:507–518.
+Joffe, A. H. (1991). Early Bronze I and the evolution of social complexity in the southern Levant. Journal of Mediterranean Archaeology, 4(1):3–58.
+606
+
+Johnson, M. (1999). Archaeological Theory: An Introduction. Blackwell Publishing,
+Oxford.
+Kempinski, A. (1989).
+
+Urbanization and metallurgy in southern Canaan.
+
+In
+
+de Miroschedji, P. (Ed.), L’urbanisation de la Palestine à l’age du Bronze Ancien, Bar
+International Series 527, Pp. 163–168. British Archaeological Reports, Oxford.
+Kempinski, A. (1992). Fortifications, public buildings, and town planning in the Early
+Bronze Age. In Kempinski, A. and Reich, R. (Eds.), The Architecture of Ancient Israel,
+Pp. 68–80. Israel Exploration Society, Jerusalem.
+Kenyon, K. M. (1956). Tombs of the intermediate Early Bronze-Middle Bronze at Tell
+el-Ajjul. Annuals of the Department of Antiquities of Jordan, 3:41–45.
+Kenyon, K. M. (1959). Some observations on the beginnings of settlement in the Near
+East. The Journal of the Royal Anthropological Institute of Great Britain and Ireland,
+89(1):35–43.
+Kohler-Rollefson, I. (1992). A model for the development of nomadic pastoralism on
+the Transjordan plateau. In Bar-Yosef, O. and Khazanov, A. (Eds.), Pastoralism in
+the Levant: Archaeological Materials in Anthropological Perspectives, number 10 in
+Monographs in World Archaeology, Pp. 11–19. Prehistory Press.
+Kramer, C. (1982). Village ethnoarchaeology: rural Iran archaeological perspective. Academic Press, New York.
+Kvamme, K. (1996). Recent directions and developments in geographical information
+systems. Journal of Archaeological Research, 7(2):153–201.
+Kvamme, K. (2007). Integrating multiple geophysical datasets. Remote Sensing in
+Archaeology, Interdisciplinary Contributions to Archaeology book series, New York:
+Springer.
+Kvamme, K. L. (2008). Remote Sensing Approaches to Archaeological Reasoning: Pattern Recognition and Physical Principles. Archaeological concepts for the study of the
+cultural past, p. 65.
+Langmuir, E. (1984). Mountaincraft and leadership. The Scottish Sports Council/MLTB.
+Cordee, Leicester.
+Lee, R. B. (1969). !Kung Bushman subsistence: an input-output analysis. In Vayda,
+A. P. (Ed.), Environment and Cultural Behavior, Pp. 47–79. Natural History Press,
+Garden City, New York.
+607
+
+Legg, R. and Taylor, D. (2006). Modeling environmental influences on the locations of
+Irish early medieval ringforts. Geoarchaeology: An International Journal, 21(3):201–
+220.
+Leonard, Albert, J. (1992). The Jordan Valley Survey, 1953: Some Unpublished Soundings Conducted by James Mellaart, volume 50. The American Schools of Oriental
+Research.
+Levy, T. E. (1983). The emergence of specialized pastoralism in the southern Levant.
+World Archaeology, 15(1):15–36.
+Levy, T. E. (1992). Transhumance, subsistence, and social evolution. In Bar-Yosef,
+O. and Khazanov, A. (Eds.), Pastoralism in the Levant: Archaeological Materials in
+Anthropological Perspectives, number 10 in Monographs in World Archaeology, Pp.
+65–83. Prehistory Press.
+Levy, T. E. (1995). Cult, metallurgy and rank societies: Chalcolithic. In Levy, T. E. (Ed.),
+The Archaeology of Society in the Holy Land, Pp. 226–243. Continuum International
+Publishing Group.
+Levy, T. E. and Alon, D. (1987). Settlement Patterns along the Nahal Beersheva-lower
+Nahal Besor: Models of subsistence in the northern Negev. In Levy, T. E. (Ed.),
+Shiqmim I, number 356 in BAR International Series, Pp. 45–138. Archaeopress, Oxford.
+Macumber, P. G. (2001). Evolving landscape and environment in Jordan. In Adams,
+R. M., Bienkowski, B., and Adam, P. (Eds.), The Archaeology of Jordan, Pp. 1–30.
+Sheffield Academic Press, Sheffield, England.
+Masashi, A. (2008). The development of urbanism and pastoral nomads in the Southern Levant : Chalcolithic and Early Bronze Age stone tool production industries and
+flint mines in the Jafr Basin, South Jordan. Unpublished Ph.D. thesis, University of
+Liverpool.
+Mazar, A. (1990). Archaeology of the Land of the Bible. Doubleday, New York.
+McCreery, D. W. (2003). The paleoethnobotany of Bāb edh-Dhrā’. In Rast, W. and
+Schaub, R. (Eds.), Bāb edh-Dhrā’: Excavations at the Town Site (1975-1981), Reports of the Expedition to the Dead Sea Plain, Jordan, 2, Pp. 449–463. Eisenbrauns,
+Winona Lake.
+Mellaart, J. (1962). Preliminary report of the archaeological survey in the Yarmouk
+and Jordan Valley. ADAJ, 6-7:126–157.
+608
+
+Millard, A. (forthcoming) The radiocarbon dates from Shuna. In Baird, D. and Philip,
+G. (Eds.), The Development of Social Complexity in the Southern Levant. Excavations
+at Tell Esh-Shuna North, Jordan, Levant Supplementary Monographs Series. Council
+for British Research in the Levant.
+Munson, P. (2000). Age-correlated differential destruction of bones and its effect on
+archaeological mortality profiles and its effect on archaeological mortality profiles of
+domestic sheep and goats. Journal Of Archaeological Science, 27:391–407.
+Munson, P. J. and Yarnell, R. A. (1971). Subsistence ecology of Scovill, a terminal
+Middle Woodland Village. American Antiquity, 36:410–431.
+Murakami, M. (1995). Managing Water for Peace in the Middle East: Alternative Strategies. United Nations University Press The United Nations University.
+Oates, J. (1973). The background and development of early farming communities in
+Mesopotamia and the Zagros. Proceedings of the Prehistoric Society. 39:147–181.
+Olsen, W. J. (1985). Application of space-born remote sensing in archaeology. Remote
+Sensing Newsletter, The University of Arizona, Fall/Winter 1985.
+Orton, C. (1980). Mathematics in Archaeology, volume 3 of Collins Archaeology. Harper
+Collins, New York, illustrated edition.
+Payne, S. (1973). Kill-off patterns in sheep and goats: the Mandibles from Asvan Kale.
+Anatolian Studies, 23:281–303.
+Peebles, C. S. (1978). Determinants of settlement size and location in the Moundville
+phase. In Smith, B. D. (Ed.), Mississippian Settlement Patterns, Pp. 369–416. Academic Press, New York.
+Philip, G. (2001). The Early Bronze I-III Ages. In Adams, R., MacDonald, B., and
+Bienkowski, P. A. (Eds.), The Archaeology of Jordan, Pp. 163–232. Sheffield Academic
+Press, Sheffield, England.
+Philip, G. (2003). The Early Bronze Age of the southern Levant. Journal of Mediterranean Archaeology, 16:103–132.
+Philip, G. and Baird, D. (1993). Preliminary report on the second (1992) season of
+excavations at Tell esh-Shuna north. Levant, XXV:13–36.
+Philip, G. and Baird, D. (1995). The Shuna project, 1994. Archaeological Reports of the
+Universities of Durham and Newcastle upon Tyne, 18:18–23.
+Privat, K., O’Connell, T., Neal, K., and Hedges, R. (2002). Fermented dairy product analysis and paleodietary repercussions: is stable isotape analysis not cheesy
+609
+
+enough? In Mulville, J. and Outram, A. (Eds.), The Zooarchaeological of Fats, Oils,
+Milk and Dairying, Pp. 60–66. Oxbow Books, Oxford.
+Probst, G., Mercier, J., Bruggimann, O., and Rakotobarison, A. (1992). Organisation et management Tome 3: guider le développement de l’entreprise. Les éditions
+de l’organisation, Paris.
+Quintero, L. A., Wilke, P. J., and Rollefson, G. O. (2002). From Flint Mine to Fan
+Scraper: The Late Prehistoric Jafr Industrial Complex. Bulletin of the American
+Schools of Oriental Research, 327:17–48.
+Redding, R. (1991). The role of the pig in the subsistence system of ancient Egypt: a
+parable on the potential of faunal data. In Crabtree, P. and Ryan, K. (Eds.), Animal
+Use and Culture Change, Pp. 21–30. Museum Applied Science Center for Archaeology,
+University of Pennsylvania.
+Renfrew, C. and Level, E. (1979). Exploring dominance: predicting polities from centers. In Transformations: Mathematical Approaches to Culture Change, Pp. 145–167.
+Academic Press.
+Richard, S. (1987). Archaeological sources for the history of Palestine: the Early Bronze
+Age: the rise and collapse of urbanism. The Biblical Archaeologist, 50(1):22–43.
+Robb, J. and Van Hove, D. (2003). Gardening, foraging and herding: Neolithic land
+use and social territories in Southern Italy. Antiquity Oxford, 77(296):241–254.
+Roper, D. C. (1979). The method and theory of site catchment analysis: a review. In
+Schiffer, M. G. (Ed.), Advances in Archaeological Method and Theory, volume 2, Pp.
+119–140. Academic Press, New York.
+Rosen, A. (1995). The social response to environmental change in Early Bronze Age
+Canaan. Journal of Anthropological Archaeology, 14:26–44.
+Rossmann, D. L. (1976). A site catchment analysis of San Lorenzo, Veracruz. In Flannery, K. (Ed.), The Early Mesoamerican Village: Archaeological Research Strategy for
+an Endangered Species, The village and its catchment area, Pp. 95–103. Academic
+Press, New York.
+Rowan, Y. M. and Golden, J. (2009). The Chalcolithic period of the southern Levant: s
+synthetic review. Journal of World Prehistory, 22(1):1–92.
+Sahlins, M. (1972). Stone Age Economics. Aldine/de Gruyter, New York.
+Savage, S. H. (1990). Modelling the Late Archaic social landscape. In Allen, K., Green,
+S., and Zubrow, E. (Eds.), Interpreting Space: GIS and Archaeology, Pp. 330–355.
+Taylor & Francis, London.
+610
+
+Savage, S. H. and Falconer, S. E. (2003). Spatial and statistical inference of Late Bronze
+Age polities in the southern Levant. Bulletin of the American Schools of Oriental
+Research, 330(330):31–45.
+Schumacher, G. (1890). Northern Ajlun, ’within the decapolis’. London: Palestine
+Exploration Fund.
+Schumacher, G. (1895). Pella. London: Palestine Exploration Fund.
+Schwartz, G. M. (1994). Rural economic specialization and early urbanization in the
+Khabur Valley, Syria. In Schwartz, G. M. and Falconer, S. E. (Eds.), Archaeological
+Views from the Countryside: Village Communities in Early Complex Societies, Pp. 19–
+36. Smithsonian Institute, Washington, DC.
+Schwellnus, W. (1974). Wartberg-Gruppe und Hessische Megalithik: ein Beitrag zum
+späten Neolithikum des hessischen Berglandes. PhD thesis, Inaugural-Dissertation zur
+Erlangung der Doktorwurde des Fachbereichs Altertumswissenschaften der PhillipsUniversität Marburg/Lahn.
+Sebastian, L. and Judge, J. W. (1988). Predicting the past: correlation, explanation,
+and the use of archaeological models. In Altschul, H. (Ed.), Quantifying the Present
+and Predicting the Past: Theory, Method, and Application of Archaeological Predictive
+Modelling, Pp. 1–17. U.S. Department of the Interior, Bureau of Land Management.
+Seligman, N. (1996). Management of Mediterranean Grasslands. The Ecology And
+Management Of Grazing Systems., Pp. 359–391. CAB International, Oxford, Uk.
+Sherratt, A. (1983). The secondary exploitation of animals in the Old World. World
+Archaeology, 15(1):90–104.
+Simms, S. R. and Russell, K. W. (1997). Bedouin hand harvesting of wheat and barley: implications for early cultivation in southwestern Asia. Current Anthropology,
+38(4):696–702.
+Stager, L. (1985). The first fruits of civilization. In Tubb, J. N. (Ed.), Palestine in the
+Bronze and Iron ages. Papers in honour of Olga Tufnell., Pp. 172–188. Institute of
+Archaeology, London.
+Stager, L. E. (1992). The periodization of Palestine from Neolithic through Bronze Age
+times. In Ehrlich, R. W. (Ed.), Chronologies in Old World Archaeology, Pp. 22–41.
+University of Chicago Press, 3rd edition.
+Star, J. and Estes, J. (1990). Geographic information systems: an introduction. Taylor &
+Francis.
+611
+
+Steward, J. H. (1955). Theory of Culture Change. University of Illinois Press Urbana.
+Sturdy, D. (1975). Some reindeer economies in prehistoric Europe. In Higgs, E. S.
+(Ed.), Palaeoeconomy, Pp. 55–95. Cambridge University Press.
+Tennesee
+
+Health
+
+and
+
+Department
+
+Sheep.
+
+Science
+of
+
+Center
+
+(2009).
+
+Pigs,
+
+Comparative
+
+Medicine,
+
+University
+
+Goats
+of
+
+and
+
+Tennesee,
+
+http://www.utmem.edu/compmed/Pigs.html (accessed 07/05/2009).
+Tobler, W. R. (1959). Automation and cartography. Geographical Review, 49:526–534.
+Townsend, C. and Guest, E. (1974). Flora of Iraq. Ministry of Agriculture & Agrarian
+Reform of the Republic of Iraq.
+Tyrwhitt, J. (1950). Surveys for planning. Town and country planning textbook, Pp.
+146–178.
+US Geological Survey (Accessed 10-May-2009).
+
+Water Data Banks Project.
+
+Mid-
+
+dle East Peace Process Overview of Middle East Water Resources, (http://exactme.org/overview/p0607.htm).
+USDA (2009).
+vice.
+
+U.S. Department of Agriculture, Agricultural Research Ser-
+
+USDA National Nutrient Database for Standard Reference, Release 22,
+
+http://www.ars.usda.gov/nutrientdata (accessed 01/05/2010).
+Van Hove, D. (2002). Long-term modelling of material and symbolic environments: a
+reconstruction of Neolithic Calabria on the basis of GIS and agent-based modelling
+approaches. In Muskett, G. (Ed.), SOMA 2001 : Symposium on Mediterranean archaeology ; proceedings of the fifth annual meeting of postgraduate researchers The
+University of Liverpool, 23-25 February 2001, Pp. 4–11. B.A.R. International Series
+1040, Oxford.
+Van Hove, D. (2003a). Human landscapes on different scales: an integrated GIS approach. In Brysbaert, A. (Ed.), SOMA 2002: Symposium on Mediterranean Archaeology: proceedings of the sixth annual meeting of postgraduate researchers, University
+of Glasgow, Department of Archaeology, 15-17 February, 2002, Pp. 149–156. B.A.R.
+International Series 1142, Oxford.
+Van Hove, D. (2003b). Imagining Calabria: a GIS approach to Neolithic landscapes.
+Unpublished PhD Dissertation, University of Southampton.
+van Joolen, E. (2003). Archaeological Land Evaluation: A Reconstruction of the Suitability of Ancient Landscapes for Various Land Uses in Italy Focused on the First Millennium
+BC.
+612
+
+Virri, T. J. (1946). Maanjako-olojen vaikutuksesta maataloustuotantoon. Maatalous
+(Published by Agronomien yhdistys), 39:6–11.
+Vita-Finzi, C. and Higgs, E. (1970). Prehistoric economy in the Mount Carmel Area
+of Palestine: Site Catchment Analysis. In Proceedings of the Prehistoric Society, volume 36, Pp. 1–37.
+Voorrips, A. (1987). Formal and statistical models in archaeology. In Aldenderfer,
+M. S. (Ed.), Quantitative Research in Archaeology: Progress and Prospects, Pp. 61–72.
+Newbury Park, California: Sage Publications.
+Wagstaff, M. (1992). Agricultural terraces: the Vasilikos Valley, Cyprus. Past and Present
+Soil Erosion: Archaeological and Geographical Perspectives, Pp. 155–161.
+Wagstaff, M. and Gamble, C. (1982). Island resources and their limitations. In Renfrew,
+C. and Wagstaff, M. (Eds.), An Island Polity, Pp. 95–105. Cambridge University Press.
+Wainwright, J. (2008). Can modelling enable us to understand the rôle of humans in
+landscape evolution? Geoforum, 39(2):659–674.
+Warren, R. E. (1990a). Predictive modeling of archaeological site location: a case study
+in the Midwest. In Allen, K., Green, S., and Zubrow, E. (Eds.), Interpreting Space: GIS
+and Archaeology, Pp. 201–215. Taylor & Francis, London.
+Warren, R. E. (1990b). Predictive modelling in archaeology: a primer. In Allen, K.,
+Green, S., and Zubrow, E. (Eds.), Interpreting Space: GIS and Archaeology, Pp. 90–
+111. Taylor & Francis, London.
+Webley, D. P. (1972). Soils and site location in prehistoric Palestine. In Higgs, E. S.
+(Ed.), Papers in Economic Prehistory, Pp. 169–180. Cambridge University Press.
+Weiss, H. J., Courty, M., Wetterstrom, W., Guichard, F., Senior, L., Meadow, R. H.,
+and Curnow, A. (1993).
+
+The genesis and collapse of third millennium north
+
+Mesopotamian civilization. Science, 261:995–1004.
+Wheatley, D. and Gillings, M. (2002). Spatial Technology and Archaeology: The Archaeological Applications of GIS. Taylor and Francis.
+Whitehead, P., Smith, S., Wade, A., Mithen, S., Finlayson, B., Sellwood, B., and Valdes,
+P. (2008). Modelling of hydrology and potential population levels at Bronze Age
+Jawa, northern Jordan: a Monte Carlo approach to cope with uncertainty. Journal of
+Archaeological Science, 35(3):517–529.
+Whitelaw, T. (1991). The ethnoarchaeology of recent rural settlement and land use
+in northwest Keos. In Cherry, J., Davis, J., and Mantzourani, E. (Eds.), Landscape
+613
+
+Archaeology as Long-Term History: Northern Keos in the Cyeladic Islands, volume 16,
+Pp. 403–454. University of California.
+Wilkinson, T. J. (1994). The structure and dynamics of dry-farming states in Upper
+Mesopotamia. Current Anthropology, 35(5):483–520.
+Wilkinson, T. J. (2003). Archaeological Landscapes of the Near East. University of Arizona Press, Tuscon.
+Wilkinson, T. J., Christiansen, J. H., Widell, J. U., and Altaweel, M. (2007). Urbanization within a dynamic environment: modeling Bronze Age communities in upper
+Mesopotamia. American Anthropologist, 109(1):52–68.
+Wobst, H. M. (1978). The archaeo-ethnology of hunter-gatherers or the tyranny of the
+ethnographic record in archaeology. American Antiquity, 43:303–309.
+Wright, G. E. (1938). The chronology of Palestinian pottery in Middle Bronze I. Bulletin
+of the American Schools of Oriental Research, 261:27–34.
+Zarky, A. (1976). Statistical analysis of site catchment at Ocós, Guatemala. In Flannery,
+K. (Ed.), The Early Mesoamerican Village, Pp. 117–130. New York: Academic Press.
+Zohary, M. (1962). Plant life of Palestine: Israel and Jordan. New York, p. 262.
+
+614
+
+

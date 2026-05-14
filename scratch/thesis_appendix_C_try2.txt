@@ -1,0 +1,2367 @@
+D.2
+
+Animal Parameter Manager
+
+D.2.1
+
+laanimalparametermanager.h
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+*
+Copyright ( C ) 2007 ,2008 ,2009 Jason Jorgenson jason . jorgenson@liv . ac . uk *
+*
+( C ) 2007
+Tim Sutton tim@linfiniti . com
+*
+*
+*
+*
+This program is free software ; you can redistribute it and / or modify
+*
+*
+it under the terms of the GNU General Public License as published by
+*
+*
+the Free Software Foundation ; either version 2 of the License , or
+*
+*
+( at your option ) any later version .
+*
+*
+*
+*
+This program is distributed in the hope that it will be useful ,
+*
+*
+but WITHOUT ANY WARRANTY ; without even the implied warranty of
+*
+*
+M ER C HA NT AB I LI TY or FITNESS FOR A PARTICULAR PURPOSE . See the
+*
+*
+GNU General Public License for more details .
+*
+*
+*
+*
+You should have received a copy of the GNU General Public License
+*
+*
+along with this program ; if not , write to the
+*
+*
+Free Software Foundation , Inc . ,
+*
+*
+59 Temple Place - Suite 330 , Boston , MA 02111 -1307 , USA .
+*
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+# ifndef L A A N I M A L P A R A M E T E R M A N A G E R _ H
+# define L A A N I M A L P A R A M E T E R M A N A G E R _ H
+// QT Includes
+# include < QDialog >
+// Local Includes
+# include < u i _ l a a n i m a l p a r a m e t e r m a n a g e r b a s e .h >
+# include < l a a n i m a l p a r a m e t e r .h >
+# include < lautils .h >
+# include < QSpinBox >
+class QT re e Wi dg et I te m ;
+/* *
+This is the main gui class
+@author Tim Sutton , Jason Jorgenson
+*/
+class L a A n i m a l P a r a m e t e r M a n a g e r : public QDialog , private Ui ::
+LaAnimalParameterManagerBase
+{
+Q_OBJECT
+public :
+L a A n i m a l P a r a m e t e r M a n a g e r ( QPair < LaTripleMap , int > & thePair , AreaUnits &
+theAreaUnits , EnergyType & theEnergyType , QWidget * parent = 0 , Qt ::
+WFlags fl = 0 ) ;
+~ L a A n i m a l P a r a m e t e r M a n a g e r () ;
+public slots :
+// void o n _ p u s h B u t t o n L o a d _ c l i c k e d () ;
+// void o n _ p u s h B u t t o n S a v e _ c l i c k e d () ;
+void s e t S e l e c t e d C r o p s M a p ( LaTripleMap t h e S e l e c t e d C r o p s M a p ) ;
+private slots :
+void cellClicked ( int theRow , int theColumn ) ;
+void o n _ c b o A n i m a l _ c h a n g e d ( int theValue ) ;
+void s h o w A n i m a l P a r a m e t e r () ;
+void o n _ t o o l C o p y _ c l i c k e d () ;
+void o n _ t o o l N e w _ c l i c k e d () ;
+void o n _ t o o l D e l e t e _ c l i c k e d () ;
+void o n _ p b n A p p l y _ c l i c k e d () ;
+void o n _ p b n M o r e _ c l i c k e d () ;
+void resizeEvent ( QResizeEvent *) ;
+
+private :
+
+396
+
+void
+void
+void
+void
+void
+void
+void
+void
+
+r e f r e s h A n i m a l P a r a m e t e r T a b l e ( QString theGuid =0) ;
+s e l e c t A n i m a l P a r a m e t e r ( QString theFileName ) ;
+r e f r e s h F o d d e r T a b l e ( QString theGuid =0) ;
+readSettings () ;
+writeSettings () ;
+s e t F a l l o w C o m b o B o x () ;
+s e t S p e c i f i c L a n d E n e r g y T y p e () ;
+populate Fodder () ;
+
+/* * @TODO move this into LaGuiUtils - a gui subclass of LaUtils */
+bool s e t C o m b o T o D e f a u l t ( QComboBox * thepCombo , QString theDefault ) ;
+LaUtils :: A n i m a l P a r a m e t e r M a p m A n i m a l P a r a m e t e r M a p ;
+LaUtils :: CropMap mCropMap ;
+L a A n i m a l P a r a m e t e r m A n i m a l P a ra m e t e r ;
+LaTripleMap m S e l e c t e d C r o p s M a p ;
+int m C o m m o n G r a z e d L a n d V a l u e ;
+AreaUnits m C o m m o n G r a z i n g L a n d A r e a U n i t s ;
+// EnergyType m S p e c i f i c L a n d E n e r g y T y p e ;
+};
+# endif
+
+D.2.2
+
+// L A A N I M A L P A R A M E T E R M A N A G E R _ H
+
+laanimalparametermanager.cpp
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+*
+Copyright ( C ) 2007 ,2008 ,2009 Jason Jorgenson jason . jorgenson@liv . ac . uk *
+*
+( C ) 2007
+Tim Sutton tim@linfiniti . com
+*
+*
+*
+*
+This program is free software ; you can redistribute it and / or modify
+*
+*
+it under the terms of the GNU General Public License as published by
+*
+*
+the Free Software Foundation ; either version 2 of the License , or
+*
+*
+( at your option ) any later version .
+*
+*
+*
+*
+This program is distributed in the hope that it will be useful ,
+*
+*
+but WITHOUT ANY WARRANTY ; without even the implied warranty of
+*
+*
+M ER C HA NT AB I LI TY or FITNESS FOR A PARTICULAR PURPOSE . See the
+*
+*
+GNU General Public License for more details .
+*
+*
+*
+*
+You should have received a copy of the GNU General Public License
+*
+*
+along with this program ; if not , write to the
+*
+*
+Free Software Foundation , Inc . ,
+*
+*
+59 Temple Place - Suite 330 , Boston , MA 02111 -1307 , USA .
+*
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+# include " l a a n i m a l p a r a m e t e r m a n a g e r . h "
+# include " la . h "
+# include " lautils . h "
+# include " laanimal . h "
+# include " lafoodsource . h "
+# include " lamainform . h "
+# include " lagrass . h "
+# include " l a a s s e m b l a g e c o n v e r s i o n . h "
+# include < QSettings >
+# include < QTreeWidget >
+# include < QTreeWidgetItem >
+# include < QTableWidgetItem >
+# include < QDir >
+# include < QFile >
+# include < QTextStream >
+# include < QProcess >
+# include < QStringList >
+# include < QString >
+# include < QMessageBox >
+# include < QHeaderView >
+# include < QTableWidget >
+# include < QTableWidgetItem >
+
+397
+
+# include
+# include
+# include
+# include
+# include
+
+< QFileDialog >
+< QListWidgetItem >
+< QIcon >
+< QDebug >
+< QPair >
+
+L a A n i m a l P a r a m e t e r M a n a g e r :: L a A n i m a l P a r a m e t e r M a n a g e r ( QPair < LaTripleMap , int > &
+thePair , AreaUnits & theAreaUnits , EnergyType & theEnergyType , QWidget *
+parent , Qt :: WFlags fl )
+: QDialog ( parent , fl )
+{
+// required by Qt4 to initialise the ui
+setupUi ( this ) ;
+readSettings () ;
+lblAnimalPic - > s e t S c a l e d C o n t e n t s ( true ) ;
+QStringList myList ;
+LaGrass myGrass ;
+QStringList myMapsetList = myGrass . getMapsetList () ;
+Q S t r i n g L i s t I t e r a t o r myIterator1 ( myMapsetList ) ;
+while ( myIterator1 . hasNext () )
+{
+// append the raster names in this mapet to our full list
+myList << myGrass . getRasterList ( myIterator1 . next () ) ;
+}
+// myGrass . getRasterList ( myMapsetList ) ;
+cboRaster - > addItems ( myList ) ;
+m S e l e c t e d C r o p s M a p = thePair . first ;
+m C o m m o n G r a z e d L a n d V a l u e = thePair . second ;
+m C o m m o n G r a z i n g L a n d A r e a U n i t s = theAreaUnits ;
+sbCommonRasterValue - > setReadOnly ( false ) ;
+sbCommonRasterValue - > setValue ( m C o m m o n G r a z e d L a n d V a l u e ) ;
+sbCommonRasterValue - > setReadOnly ( true ) ;
+connect ( tblAnimalParameterProfiles , SIGNAL ( cellClicked ( int , int ) ) ,
+this , SLOT ( cellClicked ( int , int ) ) ) ;
+connect ( cboAnimal , SIGNAL ( c u r r e n t I n d e x C h a n g e d ( int ) ) ,
+this , SLOT ( o n _ c b o A n i m a l _ c h a n g e d ( int ) ) ) ;
+// connect ( pbnMore , SIGNAL ( clicked () ) ,
+// this , SLOT ( o n _ p b n M o r e _ c l i c k e d () ) ) ;
+r e f r e s h A n i m a l P a r a m e t e r T a b l e () ;
+// disable these buttons unless experimental is allowed
+pbnImport - > setVisible ( false ) ;
+pbnExport - > setVisible ( false ) ;
+// populate the animals combo
+LaUtils :: AnimalMap myAnimalsMap ;
+myAnimalsMap = LaUtils :: g e t A v a i l a b l e A n i m a l s () ;
+QMapIterator < QString , LaAnimal > myIterator ( myAnimalsMap ) ;
+while ( myIterator . hasNext () )
+{
+myIterator . next () ;
+LaAnimal myAnimal = myIterator . value () ;
+QString myGuid = myAnimal . guid () ;
+QString myName = myAnimal . name () ;
+QIcon myIcon ;
+myIcon . addFile ( " :/ localdata . png " ) ;
+cboAnimal - > addItem ( myName , myGuid ) ;
+}
+cbAreaUnits - > addItem ( " Dunum " ) ;
+cbAreaUnits - > addItem ( " Hectare " ) ;
+// cbSpecificLandEnergyType - > addItem (" KCalories ") ;
+// cbSpecificLandEnergyType - > addItem (" TDN ") ;
+s e t S p e c i f i c L a n d E n e r g y T y p e () ;
+s e t F a l l o w C o m b o B o x () ;
+popu lateFodd er () ;
+r e f r e s h A n i m a l P a r a m e t e r T a b l e () ;
+}
+L a A n i m a l P a r a m e t e r M a n a g e r ::~ L a A n i m a l P a r a m e t e r M a n a g e r ()
+{
+writeSettings () ;
+}
+
+398
+
+void L a A n i m a l P a r a m e t e r M a n a g e r :: readSettings ()
+{
+QSettings mySettings ;
+QPoint pos = mySettings . value ( " mainwindow / pos " , QPoint (200 , 200) ) . toPoint () ;
+QSize size = mySettings . value ( " mainwindow / size " , QSize (400 , 400) ) . toSize () ;
+resize ( size ) ;
+move ( pos ) ;
+}
+void L a A n i m a l P a r a m e t e r M a n a g e r :: writeSettings ()
+{
+QSettings mySettings ;
+mySettings . setValue ( " mainwindow / pos " , pos () ) ;
+mySettings . setValue ( " mainwindow / size " , size () ) ;
+}
+void L a A n i m a l P a r a m e t e r M a n a g e r :: r e f r e s h A n i m a l P a r a m e t e r T a b l e ( QString theGuid )
+{
+m A n i m a l P a r a m e t e r M a p . clear () ;
+tblAnimalParameterProfiles - > clear () ;
+tblAnimalParameterProfiles - > setRowCount (0) ;
+tblAnimalParameterProfiles - > setColum nCount (2) ;
+
+// we do this in two passes
+// in the first pass we populate a qmap with all the animal parameters
+// we find ....
+m A n i m a l P a r a m e t e r M a p = LaUtils :: g e t A v a i l a b l e A n i m a l P a r a m e t e r s () ;
+// the second pass populates the table
+// doing it from the map ensures that the rows
+// are sorted by a ni ma l pa ra me t er name
+int mySelectedRow =0;
+int myCurrentRow =0;
+QMapIterator < QString , LaAnimalParameter > myIterator ( m A n i m a l P a r a m e t e r M a p ) ;
+while ( myIterator . hasNext () )
+{
+myIterator . next () ;
+L a A n i m a l P a r a m e t e r m y A n i m a l P a r a m e t e r = myIterator . value () ;
+// qDebug ( m y A n i m a l P a r a m e t e r . toText () . toLocal8Bit () ) ;
+if ( theGuid . isEmpty () )
+{
+// qDebug () JDT < < " No default active row was requested . Assigning to
+m y A n i m a l P a r a m e t e r . guid () !";
+theGuid = m y A n i m a l P a r a m e t e r . guid () ;
+}
+if ( m y A n i m a l P a r a m e t e r . guid () == theGuid )
+{
+mySelectedRow = myCurrentRow ;
+}
+// Insert new row ready to fill with details
+tblAnimalParameterProfiles - > insertRow ( myCurrentRow ) ;
+QString myGuid = m y A n i m a l P a r a m e t e r . guid () ;
+// qDebug () JDT < < " Inserting an im a lP ar am e te r into table with guid : " <<
+myGuid ;
+// Add details to the new row
+Q T a b l e W i d g e t I t e m * my p Fi le Na m eI te m = new Q T a b l e W i d g e t I t e m ( myGuid ) ;
+tblAnimalParameterProfiles - > setItem ( myCurrentRow , 0 , my p Fi le Na m eI te m ) ;
+Q T a b l e W i d g e t I t e m * mypNameItem = new Q T a b l e W i d g e t I te m ( m y A n i m a l P a r a m e t e r .
+name () + " ( " + m y A n i m a l P a r a m e t e r . description () + " ) " ) ;
+tblAnimalParameterProfiles - > setItem ( myCurrentRow , 1 , mypNameItem ) ;
+// display an icon indicating if the layerset is local or remote ( e . g .
+terralib )
+// L a A n i m a l P a r a m e t e r :: Origin myOrigin = m y A n i m a l P a r a m e t e r . origin () ;
+// if ( myOrigin == L a A n i m a l P a r a m e t e r :: USERPROFILE )
+// {
+QIcon myIcon ;
+
+399
+
+myIcon . addFile ( " :/ localdata . png " ) ;
+mypNameItem - > setIcon ( myIcon ) ;
+// }
+// else if ( myOrigin == L a A n i m a l P a r a m e t e r :: ADAPTERP ROFILE )
+// {
+// QIcon myIcon ;
+// myIcon . addFile (":/ remotedata . png ") ;
+// mypNameItem - > setIcon ( myIcon ) ;
+// }
+// else if ( myOrigin == L a A n i m a l P a r a m e t e r :: UNDEFINED )
+// {
+// mypNameItem - > setTextColor ( Qt :: yellow ) ;
+// }
+myCurrentRow ++;
+}
+if ( myCurrentRow >0)
+{
+tblAnimalParameterProfiles - > setCurre ntCell ( mySelectedRow ,1) ;
+cellClicked ( mySelectedRow ,1) ;
+}
+else
+{
+o n _ t o o l N e w _ c l i c k e d () ;
+}
+QStringList headerLabels ;
+headerLabels << " File Name " << " Name " ;
+tblAnimalParameterProfiles - > s e t H o r i z o n t a l H e a d e r L a b e l s ( headerLabels ) ;
+tblAnimalParameterProfiles - > s etColum nWidth (0 ,0) ;
+tblAnimalParameterProfiles - > s etColum nWidth (1 , tblAnimalParameterProfiles - >
+width () ) ;
+tblAnimalParameterProfiles - > h o r i z o n t a l H e a d e r () -> hide () ;
+tblAnimalParameterProfiles - > v ertical Header () -> hide () ;
+tblAnimalParameterProfiles - > h o r i z o n t a l H e a d e r () -> setResizeMode (1 , QHeaderView
+:: Stretch ) ;
+tblAnimalParameterProfiles - > sortItems (1 , Qt :: Ascen dingOrde r ) ;
+}
+void L a A n i m a l P a r a m e t e r M a n a g e r :: popu lateFod der ()
+{
+tblFodder - > clear () ;
+tblFodder - > setRowCount (0) ;
+tblFodder - > setColu mnCount (4) ;
+int myCurrentRow =0;
+QMap < QString , LaCrop > myCropsMap ;
+myCropsMap = LaUtils :: g e t A v a i l a b l e C r o p s () ;
+QMapIterator < QString , LaCrop > myIterator ( myCropsMap ) ;
+while ( myIterator . hasNext () )
+{
+myIterator . next () ;
+LaCrop myCrop = myIterator . value () ;
+QString myGuid = myCrop . guid () ;
+QString myName = myCrop . name () ;
+tblFodder - > insertRow ( myCurrentRow ) ;
+// Add details to the new row
+Q T a b l e W i d g e t I te m * mypNameItem = new Q T a b l e W i d g e tI t e m ( myCrop . name () ) ;
+if ( m S e l e c t e d C r o p s M a p . contains ( myGuid ) == true )
+{
+QPair < bool , QString > myPair = m S e l e c t e d C r o p s M a p . value ( myGuid ) ;
+if ( myPair . first )
+{
+QIcon myIcon ;
+myIcon . addFile ( " :/ status_ok . png " ) ;
+mypNameItem - > setIcon ( myIcon ) ;
+}
+else
+
+400
+
+{
+QIcon myIcon ;
+myIcon . addFile ( " :/ status_error . png " ) ;
+mypNameItem - > setIcon ( myIcon ) ;
+}
+}
+else
+{
+QIcon myIcon ;
+myIcon . addFile ( " :/ status_error . png " ) ;
+mypNameItem - > setIcon ( myIcon ) ;
+}
+mypNameItem - > setCheckState ( Qt :: Unchecked ) ;
+mypNameItem - > setData ( Qt :: UserRole , myGuid ) ;
+tblFodder - > setItem ( myCurrentRow , 0 , mypNameItem ) ;
+// mypNameItem - > setIcon ( myIcon ) ;
+// create a var to hold the percentage for each selected parameter
+// add the crop parameters combo to the form
+QSpinBox * mypSpinFodder = new QSpinBox ( this ) ;
+// mypSpinFodder - > addItem ( myParameterName , my Pa ra m et er Gu i d ) ;
+QSpinBox * mypSpinGrain = new QSpinBox ( this ) ;
+QSpinBox * mypSpinDays = new QSpinBox ( this ) ;
+mypSpinGrain - > setMaximum (10000) ;
+mypSpinFodder - > setMaximum (10000) ;
+mypSpinDays - > setMaximum (365) ;
+const int m y D e f a u l t F o d d e r V a l u e =0;
+const int m y D e f a u l t G r a i n V a l u e =0;
+const int m y D e f a u l t D a y s V a l u e =0;
+mypSpinFodder - > setValue ( m y D e f a u l t F o d d e r V a l u e ) ;
+mypSpinGrain - > setValue ( m y D e f a u l t G r a i n V a l u e ) ;
+mypSpinDays - > setValue ( m y D e f a u l t D a y s V a l u e ) ;
+// myCropsMap [ myGuid ]= myValue ;
+tblFodder - > setCellWidget ( myCurrentRow , 1 , mypSpinFodder ) ;
+tblFodder - > setCellWidget ( myCurrentRow , 2 , mypSpinGrain ) ;
+tblFodder - > setCellWidget ( myCurrentRow , 3 , mypSpinDays ) ;
+myCurrentRow ++;
+}
+}
+void L a A n i m a l P a r a m e t e r M a n a g e r :: r e f r e s h F o d d e r T a b l e ( QString theGuid )
+{
+L aF oo dS o ur ce Ma p my Fo o dS ou rc e Ma p = m A ni m a l P a r a m e t e r . fo d de rS ou r ce Ma p () ;
+for ( int myCurrentRow =0; myCurrentRow < tblFodder - > rowCount () ;
+myCurrentRow ++)
+{
+Q T a b l e W i d g e t I t e m * mypItem = tblFodder - > item ( myCurrentRow ,0) ;
+QString myGuid = mypItem - > data ( Qt :: UserRole ) . toString () ;
+// qDebug () JDT < < " tblFodderGuid : " << myGuid ;
+QSpinBox * my p F o d d e r S p i n B o x = qobject_cast < QSpinBox * > ( tblFodder - >
+cellWidget ( myCurrentRow ,1) ) ;
+QSpinBox * m yp Gr a in Sp in B ox = qobject_cast < QSpinBox * > ( tblFodder - >
+cellWidget ( myCurrentRow ,2) ) ;
+QSpinBox * mypDays SpinBox = qobject_cast < QSpinBox * > ( tblFodder - >
+cellWidget ( myCurrentRow ,3) ) ;
+if ( my F oo dS o ur ce Ma p . contains ( myGuid ) )
+{
+LaFoodSource myFoodSource = m y Fo od So u rc eM ap . value ( myGuid ) ;
+int myFodderValue = myFoodSource . fodder () ;
+int myGrainValue = myFoodSource . grain () ;
+int myDaysValue = myFoodSource . days () ;
+// / @TODO remove this debug stuff
+// qDebug () JDT < < " value from map for myFodderValue : " << QString :: number (
+myFodderValue ) ;
+
+401
+
+// qDebug () JDT < < " value from map for myGrainValue : " << QString :: number (
+myGrainValue ) ;
+// qDebug () JDT < < " value from map for myDaysValue : " << QString :: number (
+myDaysValue ) ;
+mypFodderSpinBox - > setValue ( myFodderValue ) ;
+mypGrainSpinBox - > setValue ( myGrainValue ) ;
+mypDaysSpinBox - > setValue ( myDaysValue ) ;
+mypItem - > setCheckState ( Qt :: Checked ) ;
+// qDebug () JDT < < "++++ Crop Guid in fodder Table : " << myGuid ;
+// Q_ASSERT ( m y S e l e c t e d C r o p s M a p . contains ( myGuid ) ) ;
+// QString m y G u i d F r o m S e l e c t e d M a p = m y S e l e c t e d C r o p s M a p . value ( myGuid ) ;
+// qDebug ("++ - - Crop Guid from selected map : " + m y G u i d F r o m S e l e c t e d M a p .
+toLocal8Bit () ) ;
+// qDebug () << "++ - - Crop Guid from selected map :" <<
+myGuidFromSelectedMap ;
+}
+else
+{
+mypFodderSpinBox - > setValue (0) ;
+mypGrainSpinBox - > setValue (0) ;
+mypDaysSpinBox - > setValue (0) ;
+mypItem - > setCheckState ( Qt :: Unchecked ) ;
+}
+}
+}
+void L a A n i m a l P a r a m e t e r M a n a g e r :: cellClicked ( int theRow , int theColumn )
+{
+// note we use the alg name not the id becuase user may have customised
+params
+// qDebug (" L a A n i m a l P a r a m e t e r M a n a g e r :: cellClicked ") ;
+QString myGuid = tblAnimalParameterProfiles - > item ( tblAnimalParameterProfiles
+- > currentRow () ,0) -> text () ;
+// qDebug (" Guid is : " + myGuid . toLocal8Bit () ) ;
+QString myFileName = myGuid + " . xml " ;
+s e l e c t A n i m a l P a r a m e t e r ( myFileName ) ;
+}
+void L a A n i m a l P a r a m e t e r M a n a g e r :: s e l e c t A n i m a l P a r a m e t e r ( QString theFileName )
+{
+// qDebug (" s e l e c t A n i m a l P a r a m e t e r Called : " + theFileName . toLocal8Bit () ) ;
+QString m y A n i m a l P a r a m e t e r D i r = LaUtils :: u s e r A n i m a l P a r a m e t e r P r o f i l e s D i r P a t h ()
+;
+m A n i m a l P a r a m e t e r . fromXmlFile ( m y A n i m a l P a r a m e t e r D i r + QDir :: separator () +
+theFileName ) ;
+//
+// for debuggin only :
+//
+// qDebug () JDT < < " - - Restoring " << QString :: number ( m A n i m a l P a r a m e t e r .
+f od de rS o ur ce Ma p () . count () ) << " food sources into animal parameter .";
+// end of deub section
+s h o w A n i m a l P a r a m e t e r () ;
+}
+void L a A n i m a l P a r a m e t e r M a n a g e r :: s h o w A n i m a l P a r a m e t e r ()
+{
+leName - > setText ( m A n i m al P a r a m e t e r . name () ) ;
+leDescription - > setText ( m A n i m a l P a r a me t e r . description () ) ;
+s e t C o m b o T o D e f a u l t ( cboAnimal , m A n i m a l P a r a m e t e r . animalGuid () ) ;
+sbPercentTameMeat - > setValue ( m A n i m a l P a r a m et e r . p er c en tT am e Me at () ) ;
+checkBoxCommonRaster - > setChecked ( m An i m a l P a r a m e t e r . u s e C o m m o n G r a z i n g L a n d () ) ;
+checkBoxSpecificRaster - > setChecked ( m A n i m a l P a r a m e t e r . u s e S p e c i f i c G r a z i n g L a n d ()
+);
+sbSpecificRasterValue - > setValue ( m A n i m a l P a r am e t e r . V a l u e S p e c i f i c G r a z i n g L a n d () )
+;
+sbCommonRasterValue - > setValue ( m C o m m o n G r a z e d L a n d V a l u e ) ;
+cbAreaUnits - > se tC ur r en tI nd e x ( m A n i m a l P a r a m e t e r . areaUnits () ) ;
+cbSpecificLandEnergyType - > s et Cu r re nt In d ex ( m A n i m a l P a r a m et e r . energyType () ) ;
+
+402
+
+grpFodderUse - > setChecked ( m A n i m a l P a r a m e t e r . fodderUse () ) ;
+r e f r e s h F o d d e r T a b l e () ;
+if ( m A n i m a l P a r a m e t e r . fallowUsage () == High )
+{
+s e t C o m b o T o D e f a u l t ( cbFallowUsage , tr ( " High " ) ) ;
+}
+else if ( m A n i m a l P a r a m e t e r . fallowUsage () == Medium )
+{
+s e t C o m b o T o D e f a u l t ( cbFallowUsage , tr ( " Medium " ) ) ;
+}
+else if ( m A n i m a l P a r a m e t e r . fallowUsage () == Low )
+{
+s e t C o m b o T o D e f a u l t ( cbFallowUsage , tr ( " Low " ) ) ;
+}
+else
+{
+s e t C o m b o T o D e f a u l t ( cbFallowUsage , tr ( " None " ) ) ;
+}
+// leRasterName - > setText ( m A n i m a l P a r a m e t e r . rasterName () ) ;
+}
+void L a A n i m a l P a r a m e t e r M a n a g e r :: o n _ t o o l N e w _ c l i c k e d ()
+{
+qDebug ( " New toolbutton clicked " ) ;
+LaAnimalParameter myAnimalParameter ;
+m y A n i m a l P a r a m e t e r . setGuid () ;
+mAnimalParameter = myAnimalParameter ;
+s h o w A n i m a l P a r a m e t e r () ;
+}
+void L a A n i m a l P a r a m e t e r M a n a g e r :: resizeEvent ( QResizeEvent * theEvent )
+{
+tblAnimalParameterProfiles - > setColum nWidth (0 ,0) ;
+tblAnimalParameterProfiles - > setColum nWidth (1 , tblAnimalParameterProfiles - >
+width () ) ;
+tblAnimalParameterProfiles - > h o r i z o n t a l H e a d e r () -> setResizeMode (1 , QHeaderView
+:: Stretch ) ;
+}
+void L a A n i m a l P a r a m e t e r M a n a g e r :: o n _ t o o l C o p y _ c l i c k e d ()
+{
+qDebug ( " Copy toolbutton clicked " ) ;
+if ( tblAnimalParameterProfiles - > currentRow () < 0)
+{
+return ;
+}
+// to clone , we get the algorithm guid that is currently selected
+QString myGuid = tblAnimalParameterProfiles - > item ( tblAnimalParameterProfiles
+- > currentRow () ,0) -> text () ;
+if ( myGuid . isEmpty () )
+{
+return ;
+}
+QString m y O r i g i n a l F i l e N a m e = LaUtils :: u s e r A n i m a l P a r a m e t e r P r o f i l e s D i r P a t h () +
+QDir :: separator () + myGuid + " . xml " ;
+LaAnimalParameter myAnimalParameter ;
+m y A n i m a l P a r a m e t e r . fromXmlFile ( m y O r i g i n a l F i l e N a m e ) ;
+/*
+int myCount = 1;
+while ( m A n i m a l P a r a m e t e r . contains ( myProfileName ) )
+{
+myProfileName = tr (" Copy ") + QString :: number ( myCount ++) + " of " +
+m y A n i m a l P a r a m e t e r . name () ;
+}
+*/
+// assign this layerset its own guid
+m y A n i m a l P a r a m e t e r . setGuid () ;
+
+403
+
+QString myNewFileName = LaUtils :: u s e r A n i m a l P a r a m e t e r P r o f i l e s D i r P a t h () + QDir
+:: separator () + m y A n i m a l P a r a m e t e r . guid () + " . xml " ;
+m y A n i m a l P a r a m e t e r . setName ( tr ( " Copy of " ) + m y A n i m a l P a r a m e t e r . name () ) ;
+m y A n i m a l P a r a m e t e r . toXmlFile ( myNewFileName ) ;
+r e f r e s h A n i m a l P a r a m e t e r T a b l e ( m y A n i m a l P a r a m e t e r . guid () ) ;
+r e f r e s h F o d d e r T a b l e () ;
+}
+void L a A n i m a l P a r a m e t e r M a n a g e r :: o n _ t o o l D e l e t e _ c l i c k e d ()
+{
+qDebug ( " Delete toolbutton clicked " ) ;
+if ( tblAnimalParameterProfiles - > currentRow () < 0)
+{
+return ;
+}
+QString myGuid = tblAnimalParameterProfiles - > item ( tblAnimalParameterProfiles
+- > currentRow () ,0) -> text () ;
+if (! myGuid . isEmpty () )
+{
+QFile myFile ( LaUtils :: u s e r A n i m a l P a r a m e t e r P r o f i l e s D i r P a t h () + QDir ::
+separator () + myGuid + " . xml " ) ;
+if (! myFile . remove () )
+{
+QMessageBox :: warning ( this , tr ( " Landuse Analyst " ) ,
+tr ( " Unable to delete file \ n " ) + myFile . fileName () ) ;
+}
+r e f r e s h A n i m a l P a r a m e t e r T a b l e () ;
+r e f r e s h F o d d e r T a b l e () ;
+}
+}
+void L a A n i m a l P a r a m e t e r M a n a g e r :: o n _ c b o A n i m a l _ c h a n g e d ( int theIndex )
+{
+LaAnimal myAnimal = LaUtils :: getAnimal ( cboAnimal - > itemData ( cboAnimal - >
+currentIndex () , Qt :: UserRole ) . toString () ) ;
+QString myAnimalPic = myAnimal . imageFile () ;
+lblAnimalPic - > setPixmap ( myAnimalPic ) ;
+}
+void L a A n i m a l P a r a m e t e r M a n a g e r :: o n _ p b n M o r e _ c l i c k e d ()
+{
+LaAssemblageConversion myAssemblageConversion ;
+m y A s s e m b l a g e C o n v e r s i o n . exec () ;
+}
+void L a A n i m a l P a r a m e t e r M a n a g e r :: o n _ p b n A p p l y _ c l i c k e d ()
+{
+m A n i m a l P a r a m e t e r . setName ( leName - > text () ) ;
+m A n i m a l P a r a m e t e r . setDe scriptio n ( leDescription - > text () ) ;
+m A n i m a l P a r a m e t e r . setAnimalGuid ( cboAnimal - > itemData ( cboAnimal - > currentIndex ()
+, Qt :: UserRole ) . toString () ) ;
+m A n i m a l P a r a m e t e r . s e t P e r c e n t T a m e M e a t ( sbPercentTameMeat - > value () ) ;
+m A n i m a l P a r a m e t e r . s e t U s e C o m m o n G r a z i n g L a n d ( checkBoxCommonRaster - > isChecked () ) ;
+m A n i m a l P a r a m e t e r . s e t U s e S p e c i f i c G r a z i n g L a n d ( checkBoxSpecificRaster - > isChecked
+() ) ;
+QString m y S e l e c t e d A r e a U n i t = QString ( cbAreaUnits - > currentText () ) ;
+QString m y S e l e c t e d E n e r g y T y p e = QString ( cbSpecificLandEnergyType - > currentText
+() ) ;
+AreaUnits myAreaUnits ;
+EnergyType myEnergyType ;
+if ( m y S e l e c t e d E n e r g y T y p e == " KCalories " )
+{
+myEnergyType = KCalories ;
+m A n i m a l P a r a m e te r . setEnergyType ( myEnergyType ) ;
+}
+else if ( m y S e l e c t e d E n e r g y T y p e == " TDN " )
+{
+myEnergyType = TDN ;
+m A n i m a l P a r a m e te r . setEnergyType ( myEnergyType ) ;
+
+404
+
+}
+if ( m y S e l e c t e d A r e a U n i t == " Dunum " )
+{
+myAreaUnits = Dunum ;
+m A n i m a l P a r a m e t e r . setAreaUnits ( myAreaUnits ) ;
+}
+else if ( m y S e l e c t e d A r e a U n i t == " Hectare " )
+{
+myAreaUnits = Hectare ;
+m A n i m a l P a r a m e t e r . setAreaUnits ( myAreaUnits ) ;
+}
+m A n i m a l P a r a m e t e r . s e t V a l u e C o m m o n G r a z i n g L a n d ( sbCommonRasterValue - > value () ) ;
+m A n i m a l P a r a m e t e r . s e t V a l u e S p e c i f i c G r a z i n g L a n d ( sbSpecificRasterValue - > value () )
+;
+m A n i m a l P a r a m e t e r . setFodderUse ( grpFodderUse - > isChecked () ) ;
+// populate the fodder map from the table .
+L aF oo dS o ur ce Ma p my Fo o dS ou rc e Ma p ;
+int myRowCount = tblFodder - > rowCount () ;
+for ( int myCurrentRow =0; myCurrentRow < myRowCount ; ++ myCurrentRow )
+{
+Q T a b l e W i d g e t I t e m * mypNameWidget =
+tblFodder - > item ( myCurrentRow ,0) ;
+QSpinBox * my p F o d d e r S p i n B o x =
+qobject_cast < QSpinBox * >
+( tblFodder - > cellWidget ( myCurrentRow ,1) ) ;
+QSpinBox * m yp Gr a in Sp in B ox =
+qobject_cast < QSpinBox * >
+( tblFodder - > cellWidget ( myCurrentRow ,2) ) ;
+QSpinBox * mypDays SpinBox =
+qobject_cast < QSpinBox * >
+( tblFodder - > cellWidget ( myCurrentRow ,3) ) ;
+// dont bother doing anything further if the
+// first widget in the row is not checked
+if (! mypNameWidget - > checkState () )
+{
+continue ;
+}
+LaFoodSource myFoodSource ;
+myFoodSource . setFodder ( mypFodderSpinBox - > value () ) ;
+myFoodSource . setGrain ( mypGrainSpinBox - > value () ) ;
+myFoodSource . setDays ( mypDaysSpinBox - > value () ) ;
+QString myGuid = mypNameWidget - > data ( Qt :: UserRole ) . toString () ;
+m yF oo dS o ur ce Ma p . insert ( myGuid , myFoodSource ) ;
+}
+// qDebug () JDT < < " Inserting " << m yF o od So ur c eM ap . count () << " food sources
+into animal parameter .";
+m A n i m a l P a r a m e t e r . setFodderData ( m yF o od So ur c eM ap ) ;
+
+QString myFallowUsage = QString ( cbFallowUsage - > currentText () ) ;
+// s e t F a l l o w C o m b o B o x () ;
+Priority myPriority ;
+if ( myFallowUsage == " HIGH Fallow Priority " )
+{
+myPriority = High ;
+m A n i m a l P a r a m e t e r . setFa llowUsag e ( myPriority ) ;
+}
+else if ( myFallowUsage == " MED Fallow Priority " )
+{
+myPriority = Medium ;
+m A n i m a l P a r a m e t e r . setFa llowUsag e ( myPriority ) ;
+
+405
+
+}
+else if ( myFallowUsage == " LOW Fallow Priority " )
+{
+myPriority = Low ;
+m A n i m a l P a r a m e te r . setFal lowUsage ( myPriority ) ;
+}
+else
+{
+myPriority = None ;
+m A n i m a l P a r a m e te r . setFal lowUsage ( myPriority ) ;
+}
+m A n i m a l P a r a m e t e r . setRasterName ( cboRaster - > currentText () ) ;
+m A n i m a l P a r a m e t e r . toXmlFile ( LaUtils :: u s e r A n i m a l P a r a m e t e r P r o f i l e s D i r P a t h () +
+QDir :: separator () + m A n i m a l P a r a m et e r . guid () + " . xml " ) ;
+r e f r e s h A n i m a l P a r a m e t e r T a b l e ( m An i m a l P a r a m e t e r . guid () ) ;
+r e f r e s h F o d d e r T a b l e () ;
+}
+void L a A n i m a l P a r a m e t e r M a n a g e r :: s e t S e l e c t e d C r o p s M a p ( LaTripleMap
+theSelectedCropsMap )
+{
+mSelectedCropsMap = theSelectedCropsMap ;
+}
+bool L a A n i m a l P a r a m e t e r M a n a g e r :: s e t C o m b o T o D e f a u l t ( QComboBox * thepCombo ,
+QString theDefault )
+{
+if (! theDefault . isEmpty () )
+{
+// loop through list looking for a match
+for ( int myCounter = 0; myCounter < thepCombo - > count () ; myCounter ++ )
+{
+thepCombo - > s et Cu rr e nt In de x ( myCounter ) ;
+if ( thepCombo - > itemData ( myCounter , Qt :: UserRole ) == theDefault )
+{
+break ;
+}
+}
+}
+else
+{
+return false ;
+}
+return true ;
+}
+void L a A n i m a l P a r a m e t e r M a n a g e r :: s e t F a l l o w C o m b o B o x ()
+{
+cbFallowUsage - > addItem ( " Do Not Graze Fallow " , " None " ) ;
+cbFallowUsage - > addItem ( " HIGH Fallow Priority " , " High " ) ;
+cbFallowUsage - > addItem ( " MED Fallow Priority " , " Medium " ) ;
+cbFallowUsage - > addItem ( " LOW Fallow Priority " , " Low " ) ;
+}
+void L a A n i m a l P a r a m e t e r M a n a g e r :: s e t S p e c i f i c L a n d E n e r g y T y p e ()
+{
+cbSpecificLandEnergyType - > addItem ( /* " Use KCalories " , */ " KCalories " ) ;
+cbSpecificLandEnergyType - > addItem ( /* " Use TDN " , */ " TDN " ) ;
+}
+
+406
+
+D.3
+
+Assemblage Conversion
+
+D.3.1
+
+laassemblageconversion.h
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+*
+Copyright ( C ) 2007 ,2008 ,2009 Jason Jorgenson jason . jorgenson@liv . ac . uk *
+*
+( C ) 2007
+Tim Sutton tim@linfiniti . com
+*
+*
+*
+*
+This program is free software ; you can redistribute it and / or modify
+*
+*
+it under the terms of the GNU General Public License as published by
+*
+*
+the Free Software Foundation ; either version 2 of the License , or
+*
+*
+( at your option ) any later version .
+*
+*
+*
+*
+This program is distributed in the hope that it will be useful ,
+*
+*
+but WITHOUT ANY WARRANTY ; without even the implied warranty of
+*
+*
+M ER C HA NT AB I LI TY or FITNESS FOR A PARTICULAR PURPOSE . See the
+*
+*
+GNU General Public License for more details .
+*
+*
+*
+*
+You should have received a copy of the GNU General Public License
+*
+*
+along with this program ; if not , write to the
+*
+*
+Free Software Foundation , Inc . ,
+*
+*
+59 Temple Place - Suite 330 , Boston , MA 02111 -1307 , USA .
+*
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+# ifndef L A A S S E M B L A G E C O N V E R S I O N _ H
+# define L A A S S E M B L A G E C O N V E R S I O N _ H
+// QT Includes
+# include < QDialog >
+// Local Includes
+# include < u i _ l a a s s e m b l a g e c o n v e r s i o n b a s e .h >
+# include < l a a n i m a l p a r a m e t e r .h >
+# include < lautils .h >
+# include < QSpinBox >
+class QT re eW i dg et I te m ;
+class L a A s s e m b l a g e C o n v e r s i o n : public QDialog , private Ui ::
+LaAssemblageConversionBase
+{
+Q_OBJECT
+public :
+L a A s s e m b l a g e C o n v e r s i o n ( QWidget * parent = 0 , Qt :: WFlags fl = 0 ) ;
+~ L a A s s e m b l a g e C o n v e r s i o n () ;
+public slots :
+virtual void
+virtual void
+virtual void
+virtual void
+
+o n _ p b n I n s e r t _ c l i c k e d () ;
+o n _ p b n C a l c u l a t e _ c l i c k e d () ;
+o n _ p b n C l e a r T a b l e _ c l i c k e d () ;
+o n _ p b n S a v e _ c l i c k e d () ;
+
+private slots :
+void resizeEvent ( QResizeEvent *) ;
+private :
+void refreshTable () ;
+void readSettings () ;
+void writeSettings () ;
+/* * @TODO move this into LaGuiUtils - a gui subclass of LaUtils */
+bool s e t C o m b o T o D e f a u l t ( QComboBox * thepCombo , QString theDefault ) ;
+LaUtils :: A n i m a l P a r a m e t e r M a p m A n i m a l P a r a m e t e r M a p ;
+LaUtils :: CropMap mCropMap ;
+L a A n i m a l P a r a m e t e r m A n i m a l P a ra m e t e r ;
+// int mRowCount ;
+};
+
+407
+
+# endif
+
+// L A A S S E M B L A G E C O N V E R S I O N _ H
+
+D.3.2
+
+laassemblageconversion.cpp
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+*
+Copyright ( C ) 2007 ,2008 ,2009 Jason Jorgenson jason . jorgenson@liv . ac . uk *
+*
+( C ) 2007
+Tim Sutton tim@linfiniti . com
+*
+*
+*
+*
+This program is free software ; you can redistribute it and / or modify
+*
+*
+it under the terms of the GNU General Public License as published by
+*
+*
+the Free Software Foundation ; either version 2 of the License , or
+*
+*
+( at your option ) any later version .
+*
+*
+*
+*
+This program is distributed in the hope that it will be useful ,
+*
+*
+but WITHOUT ANY WARRANTY ; without even the implied warranty of
+*
+*
+M ER C HA NT AB I LI TY or FITNESS FOR A PARTICULAR PURPOSE . See the
+*
+*
+GNU General Public License for more details .
+*
+*
+*
+*
+You should have received a copy of the GNU General Public License
+*
+*
+along with this program ; if not , write to the
+*
+*
+Free Software Foundation , Inc . ,
+*
+*
+59 Temple Place - Suite 330 , Boston , MA 02111 -1307 , USA .
+*
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+# include " l a a s s e m b l a g e c o n v e r s i o n . h "
+# include " la . h "
+# include " lautils . h "
+# include " laanimal . h "
+# include " lafoodsource . h "
+# include " lamainform . h "
+# include
+# include
+# include
+# include
+# include
+# include
+# include
+# include
+# include
+# include
+# include
+# include
+# include
+# include
+# include
+# include
+# include
+# include
+# include
+
+< QSettings >
+< QTreeWidget >
+< QTreeWidgetItem >
+< QTableWidgetItem >
+< QDir >
+< QFile >
+< QTextStream >
+< QProcess >
+< QStringList >
+< QString >
+< QMessageBox >
+< QHeaderView >
+< QTableWidget >
+< QTableWidgetItem >
+< QFileDialog >
+< QListWidgetItem >
+< QIcon >
+< QtDebug >
+< QPair >
+
+L a A s s e m b l a g e C o n v e r s i o n :: L a A s s e m b l a g e C o n v e r s i o n ( QWidget * parent , Qt :: WFlags
+fl )
+: QDialog ( parent , fl )
+{
+// required by Qt4 to initialise the ui
+setupUi ( this ) ;
+readSettings () ;
+// connect ( pbnInsert , SIGNAL ( clicked () ) ,
+//
+this , SLOT ( o n _ p b n I n s e r t _ c l i c k e d () ) ) ;
+tblAnimals - > set ColumnC ount (5) ;
+// populate the animals combo
+LaUtils :: AnimalMap myAnimalsMap ;
+myAnimalsMap = LaUtils :: g e t A v a i l a b l e A n i m a l s () ;
+QMapIterator < QString , LaAnimal > myIterator ( myAnimalsMap ) ;
+
+408
+
+while ( myIterator . hasNext () )
+{
+myIterator . next () ;
+LaAnimal myAnimal = myIterator . value () ;
+QString myGuid = myAnimal . guid () ;
+QString myName = myAnimal . name () ;
+QIcon myIcon ;
+myIcon . addFile ( " :/ localdata . png " ) ;
+cboAnimal - > addItem ( myName , myGuid ) ;
+}
+}
+// Sallah : How ?
+// Indy : I don ’t know , I ’m making this up as I go .
+L a A s s e m b l a g e C o n v e r s i o n ::~ L a A s s e m b l a g e C o n v e r s i o n ()
+{
+writeSettings () ;
+}
+void L a A s s e m b l a g e C o n v e r s i o n :: readSettings ()
+{
+QSettings mySettings ;
+QPoint pos = mySettings . value ( " mainwindow / pos " , QPoint (200 , 200) ) . toPoint () ;
+QSize size = mySettings . value ( " mainwindow / size " , QSize (400 , 400) ) . toSize () ;
+resize ( size ) ;
+move ( pos ) ;
+}
+void L a A s s e m b l a g e C o n v e r s i o n :: writeSettings ()
+{
+QSettings mySettings ;
+mySettings . setValue ( " mainwindow / pos " , pos () ) ;
+mySettings . setValue ( " mainwindow / size " , size () ) ;
+}
+void L a A s s e m b l a g e C o n v e r s i o n :: resizeEvent ( QResizeEvent * theEvent )
+{
+// tblAnimals - > se tColumnW idth (0 ,0) ;
+// tblAnimals - > se tColumnW idth (1 , tblAnimals - > width () ) ;
+tblAnimals - > h o r i z o n t a l H e a d er () -> setResizeMode (0 , QHeaderView :: Stretch ) ;
+}
+void L a A s s e m b l a g e C o n v e r s i o n :: o n _ p b n I n s e r t _ c l i c k e d ()
+{
+// add an animal to the table
+// qDebug () JDT < < " pbnInsert ";
+int myRowCount = tblAnimals - > rowCount () ;
+// qDebug () JDT < < " rowCount : " << myRowCount ;
+if ( rbManual - > isChecked () == true )
+{
+// qDebug () JDT < < " manual is checked ";
+// add item to table from manual inputs
+tblAnimals - > insertRow ( myRowCount ) ;
+QString myName = leAnimal - > text () ;
+int myUsableMeat = sbUsableMeat - > value () ;
+int myCalsPerKg = sbCalsPerKg - > value () ;
+float myNumber = dsbNumber - > value () ;
+Q T a b l e W i d g e t I t e m * mypNameItem = new Q T a b l e W i d g e t I te m ( myName ) ;
+tblAnimals - > setItem ( myRowCount , 0 , mypNameItem ) ;
+// qDebug () JDT < < " myName = " << myName ;
+Q T a b l e W i d g e t I t e m * m y p U s a b l e M e a t I t e m = new Q T a b l e W id g e t I t e m ( QString :: number (
+myUsableMeat ) ) ;
+tblAnimals - > setItem ( myRowCount , 2 , m y p U s a b l e M e a t I t e m ) ;
+
+409
+
+Q T a b l e W i d g e t I te m * m y p C a l s P e r K g I t e m = new Q T a b l e W i d g e t I t e m ( QString :: number (
+myCalsPerKg ) ) ;
+tblAnimals - > setItem ( myRowCount , 3 , m y p Ca l s P e r K g I t e m ) ;
+Q T a b l e W i d g e t I te m * mypNumber = new Q T a b l e W i d g e t It e m ( QString :: number ( myNumber
+));
+tblAnimals - > setItem ( myRowCount , 1 , mypNumber ) ;
+// tblAnimals - > insertRow ( myRowCount ) ;
+}
+else if ( rbAuto - > isChecked () == true )
+{
+// add item to table from pre - defined animals
+// qDebug () JDT < < " auto is checked ";
+LaAnimal myAnimal = LaUtils :: getAnimal ( cboAnimal - > itemData ( cboAnimal - >
+currentIndex () , Qt :: UserRole ) . toString () ) ;
+tblAnimals - > insertRow ( myRowCount ) ;
+QString myName = myAnimal . name () ;
+int m y U s a b l e M e a t P e r c e n t = myAnimal . usableMeat () ;
+int myKillWeight = myAnimal . killWeight () ;
+int myCalsPerKg = myAnimal . meatFoodValue () ;
+float myUsableMeat = (0.01* m y U s a b l e M e a t P e r c e n t ) * myKillWeight ;
+float myNumber = dsbNumber - > value () ;
+Q T a b l e W i d g e t I te m * mypNameItem = new Q T a b l e W i d g e tI t e m ( myName ) ;
+tblAnimals - > setItem ( myRowCount , 0 , mypNameItem ) ;
+// qDebug () JDT < < " myName = " << myName ;
+Q T a b l e W i d g e t I te m * m y p U s a b l e M e a t I t e m = new Q T a b le W i d g e t I t e m ( QString :: number (
+myUsableMeat ) ) ;
+tblAnimals - > setItem ( myRowCount , 2 , m y p U s a b l e M e a t I t e m ) ;
+Q T a b l e W i d g e t I te m * m y p C a l s P e r K g I t e m = new Q T a b l e W i d g e t I t e m ( QString :: number (
+myCalsPerKg ) ) ;
+tblAnimals - > setItem ( myRowCount , 3 , m y p Ca l s P e r K g I t e m ) ;
+
+Q T a b l e W i d g e t I te m * mypNumber = new Q T a b l e W i d g e t It e m ( QString :: number ( myNumber
+));
+tblAnimals - > setItem ( myRowCount , 1 , mypNumber ) ;
+}
+else
+{
+// qDebug () JDT < < " nothing selected , just returning ";
+return ;
+}
+return ;
+}
+void L a A s s e m b l a g e C o n v e r s i o n :: o n _ p b n C a l c u l a t e _ c l i c k e d ()
+{
+// calculate the percent of diet based on entries in tblAnimals
+// iterate through the table and get a sum of the adjusted meat value
+// which is the NISP * weight of usable meat * calories per kg
+float my Ad j us tm en t Su m = 0.0;
+float m y C o n t r i b u t i o n T o D i e t = 0.0;
+// iterate through table
+for ( int myCurrentRow =0; myCurrentRow < tblAnimals - > rowCount () ; myCurrentRow
+++)
+{
+// Q T a bl e W i d g e t I t e m * mypNameWidget
+= tblAnimals - > item (
+myCurrentRow ,0) ;
+Q T a b l e W i d g e t I te m * m yp N um be rW i dg et
+= tblAnimals - > item ( myCurrentRow ,1)
+;
+Q T a b l e W i d g e t I te m * m y p U s a b l e M e a t W i d g e t = tblAnimals - > item ( myCurrentRow ,2)
+;
+Q T a b l e W i d g e t I te m * m y p C a l s P e r K g W i d g e t
+= tblAnimals - > item ( myCurrentRow ,3)
+;
+
+410
+
+m yA dj us t me nt Su m += ( mypNumberWidget - > text () . toFloat () )
+* ( mypUsableMeatWidget - > text () . toInt () )
+* ( mypCalsPerKgWidget - > text () . toInt () )
+* 0.001;
+// to keep figures within limits
+// qDebug () JDT < < " row : " << myCurrentRow < <" Adjustment sum : " <<
+m yA dj us t me nt S um ;
+}
+// iterate table again , adding percentage contribution to diet
+float my De b ug Su mC h ec k = 0.0;
+for ( int myCurrentRow1 =0; myCurrentRow1 < tblAnimals - > rowCount () ;
+myCurrentRow1 ++)
+{
+Q T a b l e W i d g e t I t e m * m yp N um be r Wi dg et
+= tblAnimals - > item ( myCurrentRow1
+,1) ;
+Q T a b l e W i d g e t I t e m * m y p U s a b l e M e a t W i d g e t = tblAnimals - > item ( myCurrentRow1
+,2) ;
+QTableWidgetItem * mypCalsPerKgWidget
+= tblAnimals - > item ( myCurrentRow1
+,3) ;
+m y C o n t r i b u t i o n T o D i e t = ((( mypNumberWidget - > text () . toFloat () )
+* ( mypUsableMeatWidget - > text () . toInt () )
+* ( mypCalsPerKgWidget - > text () . toInt () )
+* 0.001)
+/ m yA dj u st me nt S um )
+* 100.0;
+// to make it percent ( ie . 10.56% instead of
+0.1056)
+m yD eb ug S um Ch ec k += m y C o n t r i b u t i o n T o D i e t ;
+Q T a b l e W i d g e t I t e m * m y p C o n t r i b u t i o n T o D i e t = new Q T ab l e W i d g e t I t e m ( QString ::
+number ( m y C o n t r i b u t i o n T o D i e t ) ) ;
+tblAnimals - > setItem ( myCurrentRow1 , 4 , m y p C o n t r i b u t i o n T o D i e t ) ;
+// qDebug () JDT < < " debug sum check : " << m y De bu gS u mC he ck ;
+}
+// qDebug () JDT < < " Final debug sum ( should be 100) : " << m yD e bu gS um C he ck ;
+
+}
+void L a A s s e m b l a g e C o n v e r s i o n :: o n _ p b n S a v e _ c l i c k e d ()
+{
+QString myString = " Name , Number , UsableMeat , CalsPerKg , PercentDiet " ;
+myString += " \ n " ;
+for ( int myCurrentRow =0; myCurrentRow < tblAnimals - > rowCount () ; myCurrentRow
+++)
+{
+Q T a b l e W i d g e t I t e m * mypNameWidget
+= tblAnimals - > item ( myCurrentRow
+,0) ;
+Q T a b l e W i d g e t I t e m * m yp N um be r Wi dg et
+= tblAnimals - > item ( myCurrentRow
+,1) ;
+QTableWidgetItem * mypUsableMeatWidget
+= tblAnimals - > item ( myCurrentRow
+,2) ;
+QTableWidgetItem * mypCalsPerKgWidget
+= tblAnimals - > item ( myCurrentRow
+,3) ;
+Q T a b l e W i d g e t I t e m * m y p C o n t r i b u t i o n T o D i e t = tblAnimals - > item ( myCurrentRow
+,4) ;
+myString
+myString
+myString
+myString
+myString
+myString
+
++=
++=
++=
++=
++=
++=
+
+mypNameWidget - > text ()
+mypNumberWidget - > text ()
+mypUsableMeatWidget - > text ()
+mypCalsPerKgWidget - > text ()
+mypContributionToDiet - > text ()
+"\n";
+
++
++
++
++
++
+
+}
+LaUtils myUtils ;
+QString myFileName = myUtils . saveFile () ;
+myUtils . creat eTextFi le ( myFileName , myString ) ;
+return ;
+}
+
+411
+
+" ," ;
+" ," ;
+" ," ;
+" ," ;
+" ," ;
+
+void L a A s s e m b l a g e C o n v e r s i o n :: o n _ p b n C l e a r T a b l e _ c l i c k e d ()
+{
+tblAnimals - > clear () ;
+}
+void L a A s s e m b l a g e C o n v e r s i o n :: refreshTable ()
+{
+//
+}
+bool L a A s s e m b l a g e C o n v e r s i o n :: s e t C o m b o T o D e f a u l t ( QComboBox * thepCombo , QString
+theDefault )
+{
+if (! theDefault . isEmpty () )
+{
+// loop through list looking for a match
+for ( int myCounter = 0; myCounter < thepCombo - > count () ; myCounter ++ )
+{
+thepCombo - > s et Cu rr e nt In de x ( myCounter ) ;
+if ( thepCombo - > itemData ( myCounter , Qt :: UserRole ) == theDefault )
+{
+break ;
+}
+}
+}
+else
+{
+return false ;
+}
+return true ;
+}
+
+412
+
+D.4
+
+Crop Manager
+
+D.4.1
+
+lacropmanager.h
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+*
+Copyright ( C ) 2007 ,2008 ,2009 Jason Jorgenson jason . jorgenson@liv . ac . uk *
+*
+( C ) 2007
+Tim Sutton tim@linfiniti . com
+*
+*
+*
+*
+This program is free software ; you can redistribute it and / or modify
+*
+*
+it under the terms of the GNU General Public License as published by
+*
+*
+the Free Software Foundation ; either version 2 of the License , or
+*
+*
+( at your option ) any later version .
+*
+*
+*
+*
+This program is distributed in the hope that it will be useful ,
+*
+*
+but WITHOUT ANY WARRANTY ; without even the implied warranty of
+*
+*
+M ER C HA NT AB I LI TY or FITNESS FOR A PARTICULAR PURPOSE . See the
+*
+*
+GNU General Public License for more details .
+*
+*
+*
+*
+You should have received a copy of the GNU General Public License
+*
+*
+along with this program ; if not , write to the
+*
+*
+Free Software Foundation , Inc . ,
+*
+*
+59 Temple Place - Suite 330 , Boston , MA 02111 -1307 , USA .
+*
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+# ifndef LA CR OP M AN AG ER _ H
+# define LA CR OP M AN AG ER _ H
+// QT Includes
+# include < QDialog >
+// Local Includes
+# include < u i _ l a c r o p m a n a g e r b a s e .h >
+# include < lacrop .h >
+# include < lautils .h >
+class QT re eW i dg et I te m ;
+/* *
+This is the main gui class
+@author Tim Sutton , Jason Jorgenson
+*/
+class LaCropManager : public QDialog , private Ui :: L a C r o p M a n a g e r B a s e
+{
+Q_OBJECT
+public :
+LaCropManager ( QWidget * parent = 0 , Qt :: WFlags fl = 0 ) ;
+~ LaCropManager () ;
+public slots :
+void o n _ p u s h B u t t o n L o a d _ c l i c k e d () ;
+void o n _ p u s h B u t t o n S a v e _ c l i c k e d () ;
+void o n _ p b n C r o p P i c _ c l i c k e d () ;
+private slots :
+void cellClicked ( int theRow , int theColumn ) ;
+void showCrop () ;
+void o n _ t o o l C o p y _ c l i c k e d () ;
+void o n _ t o o l N e w _ c l i c k e d () ;
+void o n _ t o o l D e l e t e _ c l i c k e d () ;
+void o n _ p b n A p p l y _ c l i c k e d () ;
+void resizeEvent ( QResizeEvent *) ;
+private :
+void r e f r e s h C r o p T a b l e ( QString theGuid =0) ;
+void selectCrop ( QString theFileName ) ;
+LaUtils :: CropMap mCropMap ;
+LaCrop mCrop ;
+void readSettings () ;
+void writeSettings () ;
+QString mImageFile ;
+};
+
+413
+
+# endif
+
+// L A C R O P F O R M M A I N _ H
+
+D.4.2
+
+lacropmanager.cpp
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+*
+Copyright ( C ) 2007 ,2008 ,2009 Jason Jorgenson jason . jorgenson@liv . ac . uk *
+*
+( C ) 2007
+Tim Sutton tim@linfiniti . com
+*
+*
+*
+*
+This program is free software ; you can redistribute it and / or modify
+*
+*
+it under the terms of the GNU General Public License as published by
+*
+*
+the Free Software Foundation ; either version 2 of the License , or
+*
+*
+( at your option ) any later version .
+*
+*
+*
+*
+This program is distributed in the hope that it will be useful ,
+*
+*
+but WITHOUT ANY WARRANTY ; without even the implied warranty of
+*
+*
+M ER C HA NT AB I LI TY or FITNESS FOR A PARTICULAR PURPOSE . See the
+*
+*
+GNU General Public License for more details .
+*
+*
+*
+*
+You should have received a copy of the GNU General Public License
+*
+*
+along with this program ; if not , write to the
+*
+*
+Free Software Foundation , Inc . ,
+*
+*
+59 Temple Place - Suite 330 , Boston , MA 02111 -1307 , USA .
+*
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+# include " lacropmanager . h "
+# include " lautils . h "
+# include < QSettings >
+# include < QTreeWidget >
+# include < QTreeWidgetItem >
+# include < QTableWidgetItem >
+# include < QDir >
+# include < QFile >
+# include < QTextStream >
+# include < QProcess >
+# include < QStringList >
+# include < QString >
+# include < QMessageBox >
+# include < QHeaderView >
+# include < QTableWidget >
+# include < QTableWidgetItem >
+# include < QFileDialog >
+# include < QListWidgetItem >
+# include < QDebug >
+LaCropManager :: LaCropManager ( QWidget * parent , Qt :: WFlags fl )
+: QDialog ( parent , fl )
+{
+// required by Qt4 to initialise the ui
+setupUi ( this ) ;
+readSettings () ;
+lblCropPix - > s e t S c a l e d C o n t e n t s ( true ) ;
+connect ( tblCrops , SIGNAL ( cellClicked ( int , int ) ) ,
+this , SLOT ( cellClicked ( int , int ) ) ) ;
+cbAreaUnits - > addItem ( " Dunum " ) ;
+cbAreaUnits - > addItem ( " Hectare " ) ;
+cbFodderEnergyType - > addItem ( " KCalories " ) ;
+cbFodderEnergyType - > addItem ( " TDN " ) ;
+r e f r e s h C r o p T a b l e () ;
+// disable these buttons unless experimental is allowed
+pbnImport - > setVisible ( false ) ;
+pbnExport - > setVisible ( false ) ;
+}
+LaCropManager ::~ LaCropManager ()
+{
+writeSettings () ;
+
+414
+
+}
+void LaCropManager :: readSettings ()
+{
+QSettings mySettings ;
+QPoint pos = mySettings . value ( " mainwindow / pos " , QPoint (200 , 200) ) . toPoint () ;
+QSize size = mySettings . value ( " mainwindow / size " , QSize (400 , 400) ) . toSize () ;
+resize ( size ) ;
+move ( pos ) ;
+}
+void LaCropManager :: writeSettings ()
+{
+QSettings mySettings ;
+mySettings . setValue ( " mainwindow / pos " , pos () ) ;
+mySettings . setValue ( " mainwindow / size " , size () ) ;
+}
+void LaCropManager :: o n _ p b n C r o p P i c _ c l i c k e d ()
+{
+LaUtils myUtils ;
+QString myFile = myUtils . op e nG ra p hi cF il e () ;
+lblCropPix - > setPixmap ( myFile ) ;
+mImageFile = myFile ;
+}
+void LaCropManager :: r e f r es h C r o p T a b l e ( QString theGuid )
+{
+mCropMap . clear () ;
+tblCrops - > clear () ;
+tblCrops - > setRowCount (0) ;
+tblCrops - > se tColumnC ount (2) ;
+
+// we do this in two passes
+// in the first pass we populate a qmap with all the layersets
+// we find ....
+mCropMap = LaUtils :: g e t A v a i l a b l e C r o p s () ;
+// the second pass populates the table
+// doing it from the map ensures that the rows
+// are sorted by layerset name
+int mySelectedRow =0;
+int myCurrentRow =0;
+QMapIterator < QString , LaCrop > myIterator ( mCropMap ) ;
+while ( myIterator . hasNext () )
+{
+myIterator . next () ;
+LaCrop myCrop = myIterator . value () ;
+// qDebug () JDT < < myCrop . toText () ;
+if ( theGuid . isEmpty () )
+{
+// qDebug () JDT < < " No default active row was requested . Assigning to myCrop
+. guid () !";
+theGuid = myCrop . guid () ;
+}
+if ( myCrop . guid () == theGuid )
+{
+mySelectedRow = myCurrentRow ;
+}
+// Insert new row ready to fill with details
+tblCrops - > insertRow ( myCurrentRow ) ;
+QString myGuid = myCrop . guid () ;
+// qDebug () JDT < < " Inserting crop with guid : " << myGuid ;
+// Add details to the new row
+Q T a b l e W i d g e t I t e m * my p Fi le Na m eI te m = new Q T a b l e W i d g e t I t e m ( myGuid ) ;
+tblCrops - > setItem ( myCurrentRow , 0 , my pF i le Na me I te m ) ;
+Q T a b l e W i d g e t I t e m * mypNameItem = new Q T a b l e W i d g e t I te m ( myCrop . name () ) ;
+
+415
+
+tblCrops - > setItem ( myCurrentRow , 1 , mypNameItem ) ;
+// display an icon indicating if the layerset is local or remote ( e . g .
+terralib )
+// LaCrop :: Origin myOrigin = myCrop . origin () ;
+// if ( myOrigin == LaCrop :: USERPROFILE )
+// {
+QIcon myIcon ;
+myIcon . addFile ( " :/ localdata . png " ) ;
+mypNameItem - > setIcon ( myIcon ) ;
+// }
+// else if ( myOrigin == LaCrop :: ADA PTERPROF ILE )
+// {
+// QIcon myIcon ;
+// myIcon . addFile (":/ remotedata . png ") ;
+// mypNameItem - > setIcon ( myIcon ) ;
+// }
+// else if ( myOrigin == LaCrop :: UNDEFINED )
+// {
+// mypNameItem - > setTextColor ( Qt :: yellow ) ;
+// }
+myCurrentRow ++;
+}
+if ( myCurrentRow >0)
+{
+tblCrops - > se tCurren tCell ( mySelectedRow ,1) ;
+cellClicked ( mySelectedRow ,1) ;
+}
+else
+{
+o n _ t o o l N e w _ c l i c k e d () ;
+}
+QStringList headerLabels ;
+headerLabels << " File Name " << " Name " ;
+tblCrops - > s e t H o r i z o n t a l H e a d e r L a b e l s ( headerLabels ) ;
+tblCrops - > se tColumnW idth (0 ,0) ;
+tblCrops - > se tColumnW idth (1 , tblCrops - > width () ) ;
+tblCrops - > h o r i z o n t a l H e a d e r () -> hide () ;
+tblCrops - > ve rticalHe ader () -> hide () ;
+tblCrops - > h o r i z o n t a l H e a d e r () -> setResizeMode (1 , QHeaderView :: Stretch ) ;
+}
+void LaCropManager :: cellClicked ( int theRow , int theColumn )
+{
+// note we use the alg name not the id because user may have customised
+params
+// qDebug () JDT < < " LaCropManager :: cellClicked ";
+QString myGuid = tblCrops - > item ( tblCrops - > currentRow () ,0) -> text () ;
+// qDebug () JDT < < " Guid is : " << myGuid ;
+QString myFileName = myGuid + " . xml " ;
+selectCrop ( myFileName ) ;
+}
+void LaCropManager :: selectCrop ( QString theFileName )
+{
+// qDebug () JDT < < " selectCrop Called : " << theFileName ;
+QString myCropDir = LaUtils :: u s e r C r o p P r o f i l e s D i r P a t h () ;
+LaCrop myCrop ;
+myCrop . fromXmlFile ( myCropDir + QDir :: separator () + theFileName ) ;
+leName - > setText ( myCrop . name () ) ;
+mCrop = myCrop ;
+showCrop () ;
+}
+void LaCropManager :: showCrop ()
+{
+leName - > setText ( mCrop . name () ) ;
+leDescription - > setText ( mCrop . description () ) ;
+sbCropYield - > setValue ( mCrop . cropYield () ) ;
+sbCropCalories - > setValue ( mCrop . cropCalories () ) ;
+sbCropFodderProduction - > setValue ( mCrop . f o d d e r P r o d u c ti o n () ) ;
+
+416
+
+sbCropFodderValue - > setValue ( mCrop . fodderValue () ) ;
+cbAreaUnits - > s e tC ur re n tI nd e x ( mCrop . areaUnits () ) ;
+cbFodderEnergyType - > s et C ur re nt I nd ex ( mCrop . c r o p F o d d e r E n e r g y T y p e () ) ;
+lblCropPix - > setPixmap ( mCrop . imageFile () ) ;
+}
+void LaCropManager :: o n _ p u s h B u t t o n L o a d _ c l i c k e d ()
+{
+//
+mCrop . fromXmlFile ( " / tmp / crop . xml " ) ;
+showCrop () ;
+}
+void LaCropManager :: o n _ p u s h B u t t o n S a v e _ c l i c k e d ()
+{
+}
+void LaCropManager :: o n _ t o o l N e w _ c l i c k e d ()
+{
+// qDebug () JDT < < " New toolbutton clicked ";
+LaCrop myCrop ;
+myCrop . setGuid () ;
+mCrop = myCrop ;
+showCrop () ;
+}
+void LaCropManager :: resizeEvent ( QResizeEvent * theEvent )
+{
+tblCrops - > se tColumnW idth (0 ,0) ;
+tblCrops - > se tColumnW idth (1 , tblCrops - > width () ) ;
+tblCrops - > h o r i z o n t a l H e a d e r () -> setResizeMode (1 , QHeaderView :: Stretch ) ;
+}
+void LaCropManager :: o n _ t o o l C o p y _ c l i c k e d ()
+{
+// qDebug () JDT < < " Copy toolbutton clicked ";
+if ( tblCrops - > currentRow () < 0)
+{
+return ;
+}
+// to clone , we get the algorithm guid that is currently selected
+QString myGuid = tblCrops - > item ( tblCrops - > currentRow () ,0) -> text () ;
+if ( myGuid . isEmpty () )
+{
+return ;
+}
+QString m y O r i g i n a l F i l e N a m e = LaUtils :: u s e r C r o p P r o f i l e s D i r P a t h () + QDir ::
+separator () + myGuid + " . xml " ;
+LaCrop myCrop ;
+myCrop . fromXmlFile ( m y O r i g i n a l F i l e N a m e ) ;
+/*
+int myCount = 1;
+while ( mCrop . contains ( myProfileName ) )
+{
+myProfileName = tr (" Copy ") + QString :: number ( myCount ++) + " of " + myCrop
+. name () ;
+}
+*/
+// assign this layerset its own guid
+myCrop . setGuid () ;
+QString myNewFileName = LaUtils :: u s e r C r o p P r o f i l e s D i r P a t h () + QDir :: separator
+() + myCrop . guid () + " . xml " ;
+myCrop . setName ( tr ( " Copy of " ) + myCrop . name () ) ;
+myCrop . toXmlFile ( myNewFileName ) ;
+r e f r e s h C r o p T a b l e ( myCrop . guid () ) ;
+}
+void LaCropManager :: o n _ t o o l D e l e t e _ c l i c k e d ()
+{
+// qDebug () JDT < < " Delete toolbutton clicked ";
+if ( tblCrops - > currentRow () < 0)
+
+417
+
+{
+return ;
+}
+QString myGuid = tblCrops - > item ( tblCrops - > currentRow () ,0) -> text () ;
+if (! myGuid . isEmpty () )
+{
+QFile myFile ( LaUtils :: u s e r C r o p P r o f i l e s D i r P a t h () + QDir :: separator () +
+myGuid + " . xml " ) ;
+if (! myFile . remove () )
+{
+QMessageBox :: warning ( this , tr ( " Landuse Analyst " ) ,
+tr ( " Unable to delete file \ n " ) + myFile . fileName () ) ;
+}
+r e f r e s h C r o p T a bl e () ;
+}
+}
+void LaCropManager :: o n _ p b n A p p l y _ c l i c k e d ()
+{
+mCrop . setName ( leName - > text () ) ;
+mCrop . setDe scripti on ( leDescription - > text () ) ;
+mCrop . setCropYield ( sbCropYield - > value () ) ;
+mCrop . s e tC ro pC a lo ri es ( sbCropCalories - > value () ) ;
+mCrop . s e t F o d d e r P r o d u c t i o n ( sbCropFodderProduction - > value () ) ;
+mCrop . s e t C r o p F o d d e r V a l u e ( sbCropFodderValue - > value () ) ;
+QString m y S e l e c t e d A r e a U n i t = QString ( cbAreaUnits - > currentText () ) ;
+AreaUnits myAreaUnits ;
+if ( m y S e l e c t e d A r e a U n i t == " Dunum " )
+{
+myAreaUnits = Dunum ;
+mCrop . setAreaUnits ( myAreaUnits ) ;
+}
+else if ( m y S e l e c t e d A r e a U n i t == " Hectare " )
+{
+myAreaUnits = Hectare ;
+mCrop . setAreaUnits ( myAreaUnits ) ;
+}
+mCrop . setImageFile ( mImageFile ) ;
+mCrop . toXmlFile ( LaUtils :: u s e r C r o p P r o f i l e s D i r P a t h () +
+QDir :: separator () + mCrop . guid () + " . xml " ) ;
+r e f r e s h C r o p T a b l e ( mCrop . guid () ) ;
+}
+
+418
+
+D.5
+
+Crop Parameter Manager
+
+D.5.1
+
+lacropparametermanager.h
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+*
+Copyright ( C ) 2007 ,2008 ,2009 Jason Jorgenson jason . jorgenson@liv . ac . uk *
+*
+( C ) 2007
+Tim Sutton tim@linfiniti . com
+*
+*
+*
+*
+This program is free software ; you can redistribute it and / or modify
+*
+*
+it under the terms of the GNU General Public License as published by
+*
+*
+the Free Software Foundation ; either version 2 of the License , or
+*
+*
+( at your option ) any later version .
+*
+*
+*
+*
+This program is distributed in the hope that it will be useful ,
+*
+*
+but WITHOUT ANY WARRANTY ; without even the implied warranty of
+*
+*
+M ER C HA NT AB I LI TY or FITNESS FOR A PARTICULAR PURPOSE . See the
+*
+*
+GNU General Public License for more details .
+*
+*
+*
+*
+You should have received a copy of the GNU General Public License
+*
+*
+along with this program ; if not , write to the
+*
+*
+Free Software Foundation , Inc . ,
+*
+*
+59 Temple Place - Suite 330 , Boston , MA 02111 -1307 , USA .
+*
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+# ifndef L A C R O P P A R A M E T E R M A N A G E R _ H
+# define L A C R O P P A R A M E T E R M A N A G E R _ H
+// QT Includes
+# include < QDialog >
+# include < QComboBox >
+// Local Includes
+# include < u i _ l a c r o p p a r a m e t e r m a n a g e r b a s e .h >
+# include < l ac ro pp a ra me te r .h >
+# include < lautils .h >
+class QT re eW i dg et I te m ;
+/* *
+This is the main gui class
+@author Tim Sutton , Jason Jorgenson
+*/
+class L a C r o p P a r a m e t e r M a n a g e r : public QDialog , private Ui ::
+LaCropParameterManagerBase
+{
+Q_OBJECT
+public :
+L a C r o p P a r a m e t e r M a n a g e r ( QWidget * parent = 0 , Qt :: WFlags fl = 0 ) ;
+~ L a C r o p P a r a m e t e r M a n a g e r () ;
+public slots :
+// void o n _ p u s h B u t t o n L o a d _ c l i c k e d () ;
+// void o n _ p u s h B u t t o n S a v e _ c l i c k e d () ;
+private slots :
+void cellClicked ( int theRow , int theColumn ) ;
+void o n _ c b o C r o p _ c h a n g e d ( int theIndex ) ;
+void s h o w C r o p P a r a m e t e r () ;
+void o n _ t o o l C o p y _ c l i c k e d () ;
+void o n _ t o o l N e w _ c l i c k e d () ;
+void o n _ t o o l D e l e t e _ c l i c k e d () ;
+void o n _ p b n A p p l y _ c l i c k e d () ;
+void resizeEvent ( QResizeEvent *) ;
+private :
+void r e f r e s h C r o p P a r a m e t e r T a b l e ( QString theGuid =0) ;
+void s e l e c t C r o p P a r a m e t e r ( QString theFileName ) ;
+LaUtils :: C r o p P a r a m e t e r M ap m C r o p P a r a m e t e r M a p ;
+L aC ro pP a ra me te r mC ropPara meter ;
+void readSettings () ;
+void writeSettings () ;
+
+419
+
+/* * @TODO move this into LaGuiUtils - a gui subclass of LaUtils */
+bool s e t C o m b o T o D e f a u l t ( QComboBox * thepCombo , QString theDefault ) ;
+};
+# endif
+
+D.5.2
+
+// L A C R O P F O R M M A I N _ H
+
+lacropparametermanager.cpp
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+*
+Copyright ( C ) 2007 ,2008 ,2009 Jason Jorgenson jason . jorgenson@liv . ac . uk *
+*
+( C ) 2007
+Tim Sutton tim@linfiniti . com
+*
+*
+*
+*
+This program is free software ; you can redistribute it and / or modify
+*
+*
+it under the terms of the GNU General Public License as published by
+*
+*
+the Free Software Foundation ; either version 2 of the License , or
+*
+*
+( at your option ) any later version .
+*
+*
+*
+*
+This program is distributed in the hope that it will be useful ,
+*
+*
+but WITHOUT ANY WARRANTY ; without even the implied warranty of
+*
+*
+M ER C HA NT AB I LI TY or FITNESS FOR A PARTICULAR PURPOSE . See the
+*
+*
+GNU General Public License for more details .
+*
+*
+*
+*
+You should have received a copy of the GNU General Public License
+*
+*
+along with this program ; if not , write to the
+*
+*
+Free Software Foundation , Inc . ,
+*
+*
+59 Temple Place - Suite 330 , Boston , MA 02111 -1307 , USA .
+*
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+# include " l a c r o p p a r a m e t e r m a n a g e r . h "
+# include " lautils . h "
+# include " lacrop . h "
+# include " lagrass . h "
+# include < QSettings >
+# include < QTreeWidget >
+# include < QTreeWidgetItem >
+# include < QTableWidgetItem >
+# include < QDir >
+# include < QFile >
+# include < QTextStream >
+# include < QProcess >
+# include < QStringList >
+# include < QString >
+# include < QMessageBox >
+# include < QHeaderView >
+# include < QTableWidget >
+# include < QTableWidgetItem >
+# include < QFileDialog >
+# include < QListWidgetItem >
+# include < QComboBox >
+L a C r o p P a r a m e t e r M a n a g e r :: L a C r o p P a r a m e t e r M a n a g e r ( QWidget * parent , Qt :: WFlags
+fl )
+: QDialog ( parent , fl )
+{
+// required by Qt4 to initialise the ui
+setupUi ( this ) ;
+readSettings () ;
+connect ( tblCropParameterProfiles , SIGNAL ( cellClicked ( int , int ) ) ,
+this , SLOT ( cellClicked ( int , int ) ) ) ;
+QStringList myList ;
+LaGrass myGrass ;
+QStringList myMapsetList = myGrass . getMapsetList () ;
+Q S t r i n g L i s t I t e r a t o r myIterator1 ( myMapsetList ) ;
+while ( myIterator1 . hasNext () )
+{
+// append the raster names in this mapet to our full list
+myList << myGrass . getRasterList ( myIterator1 . next () ) ;
+
+420
+
+}
+// myGrass . getRasterList ( myMapsetList ) ;
+cboRaster - > addItems ( myList ) ;
+// disable these buttons unless experimental is allowed
+pbnImport - > setVisible ( false ) ;
+pbnExport - > setVisible ( false ) ;
+lblCropPic - > s e t S c a l e d C o n t e n t s ( true ) ;
+// populate the plants combo
+LaUtils :: CropMap myCropsMap ;
+myCropsMap = LaUtils :: g e t A v a i l a b l e C r o p s () ;
+QMapIterator < QString , LaCrop > myIterator ( myCropsMap ) ;
+while ( myIterator . hasNext () )
+{
+myIterator . next () ;
+LaCrop myCrop = myIterator . value () ;
+QString myGuid = myCrop . guid () ;
+QString myName = myCrop . name () ;
+QIcon myIcon ;
+myIcon . addFile ( " :/ localdata . png " ) ;
+cboCrop - > addItem ( myName , myGuid ) ;
+}
+connect ( cboCrop , SIGNAL ( c u r r e n t I n d e x C h a n g e d ( int ) ) ,
+this , SLOT ( o n _ c b o C r o p _ c h a n g e d ( int ) ) ) ;
+// insert all area units into the comboBox
+cbAreaUnits - > addItem ( " Dunum " ) ;
+cbAreaUnits - > addItem ( " Hectare " ) ;
+r e f r e s h C r o p P a r a m e t e r T a b l e () ;
+}
+L a C r o p P a r a m e t e r M a n a g e r ::~ L a C r o p P a r a m e t e r M a n a g e r ()
+{
+writeSettings () ;
+}
+void L a C r o p P a r a m e t e r M a n a g e r :: readSettings ()
+{
+QSettings mySettings ;
+QPoint pos = mySettings . value ( " mainwindow / pos " , QPoint (200 , 200) ) . toPoint () ;
+QSize size = mySettings . value ( " mainwindow / size " , QSize (400 , 400) ) . toSize () ;
+resize ( size ) ;
+move ( pos ) ;
+}
+void L a C r o p P a r a m e t e r M a n a g e r :: writeSettings ()
+{
+QSettings mySettings ;
+mySettings . setValue ( " mainwindow / pos " , pos () ) ;
+mySettings . setValue ( " mainwindow / size " , size () ) ;
+}
+void L a C r o p P a r a m e t e r M a n a g e r :: r e f r e s h C r o p P a r a m e t e r T a b l e ( QString theGuid )
+{
+m C r o p P a r a m e t e r M a p . clear () ;
+tblCropParameterProfiles - > clear () ;
+tblCropParameterProfiles - > setRowCount (0) ;
+tblCropParameterProfiles - > setColu mnCount (2) ;
+
+// we do this in two passes
+// in the first pass we populate a qmap with all the layersets
+// we find ....
+m C r o p P a r a m e t e r M a p = LaUtils :: g e t A v a i l a b l e C r o p P a r a m e t e r s () ;
+// the second pass populates the table
+// doing it from the map ensures that the rows
+// are sorted by layerset name
+
+421
+
+int mySelectedRow =0;
+int myCurrentRow =0;
+QMapIterator < QString , LaCropParameter > myIterator ( m C r o p P a r a m e t e r M a p ) ;
+while ( myIterator . hasNext () )
+{
+myIterator . next () ;
+L aC ro p Pa ra me t er my C ro pP ar a me te r = myIterator . value () ;
+// qDebug ( my Cr o pP ar am e te r . toText () . toLocal8Bit () ) ;
+if ( theGuid . isEmpty () )
+{
+// qDebug (" No default active row was requested . Assigning to
+m yC ro pP a ra me te r . guid () !") ;;
+theGuid = m yC r op Pa ra m et er . guid () ;
+}
+if ( m yC ro pP a ra me te r . guid () == theGuid )
+{
+mySelectedRow = myCurrentRow ;
+}
+// Insert new row ready to fill with details
+tblCropParameterProfiles - > insertRow ( myCurrentRow ) ;
+QString myGuid = m yC ro p Pa ra me t er . guid () ;
+// qDebug (" Inserting crop parameter with guid : " + myGuid . toLocal8Bit () ) ;
+// Add details to the new row
+Q T a b l e W i d g e t I te m * my pF i le Na me I te m = new Q T a b l e W i d g e t I t e m ( myGuid ) ;
+tblCropParameterProfiles - > setItem ( myCurrentRow , 0 , m yp Fi l eN am eI t em ) ;
+Q T a b l e W i d g e t I te m * mypNameItem = new Q T a b l e W i d g e tI t e m ( m yC ro p Pa ra me t er . name
+() + " ( " + m yC ro pP a ra me te r . description () + " ) " ) ;
+tblCropParameterProfiles - > setItem ( myCurrentRow , 1 , mypNameItem ) ;
+// display an icon indicating if the layerset is local or remote ( e . g .
+terralib )
+// L aC r op Pa ra m et er :: Origin myOrigin = my Cr o pP ar am e te r . origin () ;
+// if ( myOrigin == La Cr op P ar am et e r :: USERPROFILE )
+// {
+QIcon myIcon ;
+myIcon . addFile ( " :/ localdata . png " ) ;
+mypNameItem - > setIcon ( myIcon ) ;
+// }
+// else if ( myOrigin == La C ro pP a ra me te r :: ADA PTERPROF ILE )
+// {
+// QIcon myIcon ;
+// myIcon . addFile (":/ remotedata . png ") ;
+// mypNameItem - > setIcon ( myIcon ) ;
+// }
+// else if ( myOrigin == La C ro pP a ra me te r :: UNDEFINED )
+// {
+// mypNameItem - > setTextColor ( Qt :: yellow ) ;
+// }
+myCurrentRow ++;
+}
+if ( myCurrentRow >0)
+{
+tblCropParameterProfiles - > setCurr entCell ( mySelectedRow ,1) ;
+cellClicked ( mySelectedRow ,1) ;
+}
+else
+{
+o n _ t o o l N e w _ c l i c k e d () ;
+}
+QStringList headerLabels ;
+headerLabels << " File Name " << " Name " ;
+tblCropParameterProfiles - > s e t H o r i z o n t a l H e a d e r L a b e l s ( headerLabels ) ;
+tblCropParameterProfiles - > setColu mnWidth (0 ,0) ;
+tblCropParameterProfiles - > setColu mnWidth (1 , tblCropParameterProfiles - > width ()
+);
+tblCropParameterProfiles - > ho r i z o n t a l H e a d e r () -> hide () ;
+tblCropParameterProfiles - > vertica lHeader () -> hide () ;
+tblCropParameterProfiles - > ho r i z o n t a l H e a d e r () -> setResizeMode (1 , QHeaderView ::
+Stretch ) ;
+}
+
+422
+
+void L a C r o p P a r a m e t e r M a n a g e r :: o n _ c b o C r o p _ c h a n g e d ( int theIndex )
+{
+LaCrop myCrop = LaUtils :: getCrop ( cboCrop - > itemData ( cboCrop - > currentIndex () ,
+Qt :: UserRole ) . toString () ) ;
+QString myCropPic = myCrop . imageFile () ;
+
+lblCropPic - > setPixmap ( myCropPic ) ;
+}
+void L a C r o p P a r a m e t e r M a n a g e r :: cellClicked ( int theRow , int theColumn )
+{
+// note we use the alg name not the id because user may have customised
+params
+// qDebug (" L a C r o p P a r a m e t e r M a n a g e r :: cellClicked ") ;
+QString myGuid = tblCropParameterProfiles - > item ( tblCropParameterProfiles - >
+currentRow () ,0) -> text () ;
+// qDebug (" Guid is : " + myGuid . toLocal8Bit () ) ;
+QString myFileName = myGuid + " . xml " ;
+s e l e c t C r o p P a r a m e t e r ( myFileName ) ;
+LaCrop myCrop = LaUtils :: getCrop ( cboCrop - > itemData ( cboCrop - > currentIndex () ,
+Qt :: UserRole ) . toString () ) ;
+QString myAnimalPic = myCrop . imageFile () ;
+lblCropPic - > setPixmap ( myAnimalPic ) ;
+}
+void L a C r o p P a r a m e t e r M a n a g e r :: s e l e c t C r o p P a r a m e t e r ( QString theFileName )
+{
+// qDebug (" s e l e c t C r o p P a r a m e t e r Called : " + theFileName . toLocal8Bit () ) ;
+QString m y C r o p P a r a m e t e r D i r = LaUtils :: u s e r C r o p P a r a m e t e r P r o f i l e s D i r P a t h () ;
+L aC ro pP a ra me te r my Cr o pP ar am e te r ;
+m yC ro pP a ra me te r . fromXmlFile ( m y C r o p P a r a m e t e r D i r + QDir :: separator () +
+theFileName ) ;
+leName - > setText ( m y Cr op Pa r am et er . name () ) ;
+mCrop Paramet er = my Cr op P ar am et e r ;
+s h o w C r o p P a r a m e t e r () ;
+}
+void L a C r o p P a r a m e t e r M a n a g e r :: s h o w C r o p P a r a m e t e r ()
+{
+leName - > setText ( mCrop Paramet er . name () ) ;
+leDescription - > setText ( mCro pParamet er . description () ) ;
+s e t C o m b o T o D e f a u l t ( cboCrop , mCrop Paramete r . cropGuid () ) ;
+sbPercentTameCrop - > setValue ( mCro pParame ter . pe rc e nt Ta me C ro p () ) ;
+sbSpoilage - > setValue ( mCro pParame ter . spoilage () ) ;
+sbReseed - > setValue ( mCr opParam eter . reseed () ) ;
+grpCropRotation - > setChecked ( m CropPar ameter . cropRotation () ) ;
+sbFallowRatio - > setValue ( mCr opParam eter . fallowRatio () ) ;
+sbFallowValue - > setValue ( mCr opParam eter . fallowValue () ) ;
+cbAreaUnits - > s e tC ur re n tI nd e x ( m CropPar ameter . areaUnits () ) ;
+checkBoxUseCommonLand - > setChecked ( mCropPar ameter . useCommonLand () ) ;
+checkBoxUseSpecificLand - > setChecked ( mCr opParame ter . us e Sp ec if i cL an d () ) ;
+// cboRastere - > setText ( mCro pParamet er . rasterName () ) ;
+}
+void L a C r o p P a r a m e t e r M a n a g e r :: o n _ t o o l N e w _ c l i c k e d ()
+{
+// qDebug (" New toolbutton clicked ") ;
+L aC ro pP a ra me te r my Cr o pP ar am e te r ;
+m yC ro pP a ra me te r . setGuid () ;
+mCrop Paramet er = my Cr op P ar am e te r ;
+s h o w C r o p P a r a m e t e r () ;
+}
+void L a C r o p P a r a m e t e r M a n a g e r :: resizeEvent ( QResizeEvent * theEvent )
+{
+tblCropParameterProfiles - > setColu mnWidth (0 ,0) ;
+tblCropParameterProfiles - > setColu mnWidth (1 , tblCropParameterProfiles - > width ()
+);
+
+423
+
+tblCropParameterProfiles - > ho r i z o n t a l H e a d e r () -> setResizeMode (1 , QHeaderView ::
+Stretch ) ;
+}
+void L a C r o p P a r a m e t e r M a n a g e r :: o n _ t o o l C o p y _ c l i c k e d ()
+{
+// qDebug (" Copy toolbutton clicked ") ;
+if ( tblCropParameterProfiles - > currentRow () < 0)
+{
+return ;
+}
+// to clone , we get the algorithm guid that is currently selected
+QString myGuid = tblCropParameterProfiles - > item ( tblCropParameterProfiles - >
+currentRow () ,0) -> text () ;
+if ( myGuid . isEmpty () )
+{
+return ;
+}
+QString m y O r i g i n a l F i l e N a m e = LaUtils :: u s e r C r o p P a r a m e t e r P r o f i l e s D i r P a t h () +
+QDir :: separator () + myGuid + " . xml " ;
+L aC ro pP a ra me t er my C ro pP ar a me te r ;
+m yC ro pP a ra me t er . fromXmlFile ( m y O r i g i n a l F i l e N a m e ) ;
+/*
+int myCount = 1;
+while ( m CropPara meter . contains ( myProfileName ) )
+{
+myProfileName = tr (" Copy ") + QString :: number ( myCount ++) + " of " +
+m yC ro pP a ra me te r . name () ;
+}
+*/
+// assign this layerset its own guid
+m yC ro pP a ra me t er . setGuid () ;
+QString myNewFileName = LaUtils :: u s e r C r o p P a r a m e t e r P r o f i l e s D i r P a t h () + QDir ::
+separator () + my Cr op P ar am et e r . guid () + " . xml " ;
+m yC ro pP a ra me t er . setName ( tr ( " Copy of " ) + m yC ro pP a ra me t er . name () ) ;
+m yC ro pP a ra me t er . toXmlFile ( myNewFileName ) ;
+r e f r e s h C r o p P a r a m e t e r T a b l e ( m yC ro pP a ra me te r . guid () ) ;
+}
+void L a C r o p P a r a m e t e r M a n a g e r :: o n _ t o o l D e l e t e _ c l i c k e d ()
+{
+// qDebug (" Delete toolbutton clicked ") ;
+if ( tblCropParameterProfiles - > currentRow () < 0)
+{
+return ;
+}
+QString myGuid = tblCropParameterProfiles - > item ( tblCropParameterProfiles - >
+currentRow () ,0) -> text () ;
+if (! myGuid . isEmpty () )
+{
+QFile myFile ( LaUtils :: u s e r C r o p P a r a m e t e r P r o f i l e s D i r P a t h () + QDir :: separator
+() + myGuid + " . xml " ) ;
+if (! myFile . remove () )
+{
+QMessageBox :: warning ( this , tr ( " Landuse Analyst " ) ,
+tr ( " Unable to delete file \ n " ) + myFile . fileName () ) ;
+}
+r e f r e s h C r o p P a r a m e t e r T a b l e () ;
+}
+}
+void L a C r o p P a r a m e t e r M a n a g e r :: o n _ p b n A p p l y _ c l i c k e d ()
+{
+mCro pParamet er . setName ( leName - > text () ) ;
+mCro pParamet er . set Descrip tion ( leDescription - > text () ) ;
+mCro pParamet er . setCropGuid ( cboCrop - > itemData ( cboCrop - > currentIndex () , Qt ::
+UserRole ) . toString () ) ;
+mCro pParamet er . s e t P e r c e n t T a m e C r o p ( sbPercentTameCrop - > value () ) ;
+mCro pParamet er . setSpoilage ( sbSpoilage - > value () ) ;
+mCro pParamet er . setReseed ( sbReseed - > value () ) ;
+mCro pParamet er . se tC r op Ro ta t io n ( grpCropRotation - > isChecked () ) ;
+mCro pParamet er . set FallowR atio ( sbFallowRatio - > value () ) ;
+
+424
+
+mCrop Paramet er . set FallowVa lue ( sbFallowValue - > value () ) ;
+QString m y S e l e c t e d A r e a U n i t = QString ( cbAreaUnits - > currentText () ) ;
+AreaUnits myAreaUnits ;
+if ( m y S e l e c t e d A r e a U n i t == " Dunum " )
+{
+myAreaUnits = Dunum ;
+mCrop Paramet er . setAreaUnits ( myAreaUnits ) ;
+}
+else if ( m y S e l e c t e d A r e a U n i t == " Hectare " )
+{
+myAreaUnits = Hectare ;
+mCrop Paramet er . setAreaUnits ( myAreaUnits ) ;
+}
+mCrop Paramet er . s e t U s e C o m m o n L a nd ( checkBoxUseCommonLand - > isChecked () ) ;
+mCrop Paramet er . s e t U s e S p e c i f i c L a n d ( checkBoxUseSpecificLand - > isChecked () ) ;
+mCrop Paramet er . setRasterName ( cboRaster - > currentText () ) ;
+mCrop Paramet er . toXmlFile ( LaUtils :: u s e r C r o p P a r a m e t e r P r o f i l e s D i r P a t h () +
+QDir :: separator () + mCro pParamet er . guid () + " . xml " ) ;
+r e f r e s h C r o p P a r a m e t e r T a b l e ( mCropPa rameter . guid () ) ;
+}
+bool L a C r o p P a r a m e t e r M a n a g e r :: s e t C o m b o T o D e f a u l t ( QComboBox * thepCombo , QString
+theDefault )
+{
+if (! theDefault . isEmpty () )
+{
+// loop through list looking for a match
+for ( int myCounter = 0; myCounter < thepCombo - > count () ; myCounter ++ )
+{
+thepCombo - > s et Cu r re nt In d ex ( myCounter ) ;
+if ( thepCombo - > itemData ( myCounter , Qt :: UserRole ) == theDefault )
+{
+break ;
+}
+}
+}
+else
+{
+return false ;
+}
+return true ;
+}
+
+425
+
+D.6
+
+Grass Process
+
+D.6.1
+
+lagrassprocess.h
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+*
+Copyright ( C ) 2007 ,2008 ,2009 Jason Jorgenson jason . jorgenson@liv . ac . uk *
+*
+( C ) 2007
+Tim Sutton tim@linfiniti . com
+*
+*
+*
+*
+This program is free software ; you can redistribute it and / or modify
+*
+*
+it under the terms of the GNU General Public License as published by
+*
+*
+the Free Software Foundation ; either version 2 of the License , or
+*
+*
+( at your option ) any later version .
+*
+*
+*
+*
+This program is distributed in the hope that it will be useful ,
+*
+*
+but WITHOUT ANY WARRANTY ; without even the implied warranty of
+*
+*
+M ER C HA NT AB I LI TY or FITNESS FOR A PARTICULAR PURPOSE . See the
+*
+*
+GNU General Public License for more details .
+*
+*
+*
+*
+You should have received a copy of the GNU General Public License
+*
+*
+along with this program ; if not , write to the
+*
+*
+Free Software Foundation , Inc . ,
+*
+*
+59 Temple Place - Suite 330 , Boston , MA 02111 -1307 , USA .
+*
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+# ifndef L A G R A S S P R O CE S S _ H
+# define L A G R A S S P R O CE S S _ H
+// QT Includes
+# include < QDialog >
+// Local Includes
+# include < lautils .h >
+# include " u i _ l a g r a s s p r o c e s s b a s e . h "
+# include " la . h "
+class QT re e Wi dg et I te m ;
+/* *
+This is the grass process gui class
+@author Jason Jorgenson
+*/
+class LaG rassPro cess : public QDialog , private Ui :: L a G r a s s P r o c e s s B a s e
+{
+Q_OBJECT
+public :
+LaGr assProce ss ( LaRasterInfo theRasterInfo , QPair < int , int > theCoordinates ,
+QPair < QMap < QString , int > , QMap < QString , int > > &
+thePairOfAreaTargetMaps , QWidget * parent = 0 , Qt :: WFlags fl = 0 ) ;
+~ La GrassPro cess () ;
+
+public slots :
+
+/* * when called starts the grass analysis */
+void accept () ;
+/* * aborts the grass analysis process */
+// void reject () ;
+void s e t P b a r T a r g e t R a n g e ( int theTarget ) ;
+void s e t P b a r O v e r a l l R a n g e ( int theOverall ) ;
+void u p d a t e C u r r e n t P r o g r e s s ( int theArea ) ;
+void u p d a t e O v e r a l l P r o g r e s s ( int theStep ) ;
+void w r i t e G r a s s M e s s a g e ( QString th e Gr as sM e ss ag e ) ;
+void updatePreview ( QString thePrevi ewFile ) ;
+void updateGraphic ( QString theGraph icFile ) ;
+void t o g g l e B u s y P r o g r e s s B a r ( bool theStatus ) ;
+float analyseModel ( QString theItem , QString theRasterMask , int
+theAreaTarget ) ;
+LandFound g e tS ea rc h St at us ( int theCurrentlyContainedArea , int theAreaTarget
+, int thePrecision ) ;
+
+426
+
+

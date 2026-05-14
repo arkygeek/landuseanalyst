@@ -1,0 +1,2452 @@
+myAn imalRepo rt += QString ( " my M ea tV al u eM Ca l = " + QString :: number (
+m yM ea tV a lu eM Ca l ) + " \ n " ) ;
+myAn imalRepo rt += QString ( " m y S e x u a l M a t u r i t y = " + QString :: number (
+m y S e x u a l M a t u r i ty ) + " \ n " ) ;
+myAn imalRepo rt += QString ( " my B re ed in g Ye ar s = " + QString :: number (
+m yB re ed i ng Ye ar s ) + " \ n " ) ;
+myAn imalRepo rt += QString ( " m y A n i m a l C o n t r i b u t i o n T o M e a t P o r t i o n = " + QString
+:: number ( m y A n i m a l C o n t r i b u t i o n T o M e a t P o r t i o n ) + " \ n " ) ;
+myAn imalRepo rt += QString ( " m y A n i m a l M C a l T a r g e t = " + QString :: number (
+myAnimalMCalTarget ) + "\n");
+myAn imalRepo rt += QString ( " m y P o t e n t i a l D a i r y P e r O f f s p r i n g = " + QString ::
+number ( m y P o t e n t i a l D a i r y P e r O f f s p r i n g ) + " \ n " ) ;
+myAn imalRepo rt += QString ( " m y V a l u e P e r O f f s p r i n g = " + QString :: number (
+myValuePerOffspring ) + "\n");
+myAn imalRepo rt += QString ( " m y A c t u a l D a i r y V a l u e O f O f f s p r i n g = " + QString ::
+number ( m y A c t u a l D a i r y V a l u e O f O f f s p r i n g ) + " \ n " ) ;
+myAn imalRepo rt += QString ( " m y C u l l e d M o t h e r s V a l u e = " + QString :: number (
+myCulledMothersValue ) + "\n");
+myAn imalRepo rt += QString ( " m y C u l l e d A d u l t M a l e s V a l u e = " + QString :: number (
+myCulledAdultMalesValue ) + "\n");
+myAn imalRepo rt += QString ( " m y F i n a l O f f s p r i n g V a l u e = " + QString :: number (
+myFinalOffspringValue ) + "\n");
+myAn imalRepo rt += QString ( " m y O f f s p r i n g N e e d e d P e r Y e a r = " + QString :: number (
+myOffspringNeededPerYear ) + "\n");
+myAn imalRepo rt += QString ( " m y M C a l s F r o m T h e M e a t = " + QString :: number (
+myMCalsFromTheMeat ) + "\n");
+myAn imalRepo rt += QString ( " m y M C a l s U t i l i z e d F r o m D a i r y = " + QString :: number (
+myMCalsUtilizedFromDairy ) + "\n");
+myAn imalRepo rt += QString ( " m y T a m e M e a t M C a l o r i e C o u n t e r = " + QString :: number
+( myTameMeatMCalorieCounter ) + "\n");
+myAn imalRepo rt += QString ( " m y D a i r y M C a l o r i e C o u n t e r = " + QString :: number (
+myDairyMCalorieCounter ) + "\n");
+myAn imalRepo rt += QString ( " \ n " ) ;
+myAn imalRepo rt += QString ( " m y B i r t h i n g E v e n t s P e r Y e a r = " + QString :: number (
+myBirthingEventsPerYear ) + "\n");
+myAn imalRepo rt += QString ( " m y O f f s p r i n g P e r M o t h e r P e r Y e a r = " + QString ::
+number ( m y O f f s p r i n g P e r M o t h e r P e r Y e a r ) + " \ n " ) ;
+myAn imalRepo rt += QString ( " m y M o t h e r s N e e d e d S t e p O n e = " + QString :: number (
+myMothersNeededStepOne ) + "\n");
+myAn imalRepo rt += QString ( " m yMalesSt epOne = " + QString :: number (
+myMa lesStepO ne ) + " \ n " ) ;
+myAn imalRepo rt += QString ( " m y F e m a l e s S t e p O n e = " + QString :: number (
+m y F e m a l e s S t e p O ne ) + " \ n " ) ;
+myAn imalRepo rt += QString ( " m y R e p l a c e m e n t M o t h e r s P e r Y e a r = " + QString ::
+number ( m y R e p l a c e m e n t M o t h e r s P e r Y e a r ) + " \ n " ) ;
+myAn imalRepo rt += QString ( " m y B r e e d i n g M a l e s R e q u i r e d = " + QString :: number (
+myBreedingMalesRequired ) + "\n");
+myAn imalRepo rt += QString ( " m y A d d i t i o n a l M o t h e r s = " + QString :: number (
+myAdditionalMothers ) + "\n");
+myAn imalRepo rt += QString ( " m yMalesSt epTwo = " + QString :: number (
+myMa lesStepT wo ) + " \ n " ) ;
+myAn imalRepo rt += QString ( " m y F e m a l e s S t e p T w o = " + QString :: number (
+m y F e m a l e s S t e p T wo ) + " \ n " ) ;
+myAn imalRepo rt += QString ( " \ n " ) ;
+myAn imalRepo rt += QString ( " m yTotalMo thers = " + QString :: number (
+myTo talMothe rs ) + " \ n " ) ;
+myAn imalRepo rt += QString ( " m y T o t a l M a l e O f f s p r i n g = " + QString :: number (
+myTotalMaleOffspring ) + "\n");
+myAn imalRepo rt += QString ( " m y T o t a l F e m a l e O f f s p r i n g = " + QString :: number (
+myTotalFemaleOffspring ) + "\n");
+myAn imalRepo rt += QString ( " m y T o t a l O f f s p r i n g = " + QString :: number (
+m y T o t a l O f f s p r i ng ) + " \ n " ) ;
+myAn imalRepo rt += QString ( " m y F e e d F o r G e s t a t i n g = " + QString :: number (
+myFeedForGestating ) + "\n");
+myAn imalRepo rt += QString ( " m y F e e d F o r L a c t a t i n g = " + QString :: number (
+myFeedForLactating ) + "\n");
+myAn imalRepo rt += QString ( " m y F e e d F o r M a i n t e n a n c e = " + QString :: number (
+myFeedForMaintenance ) + "\n");
+myAn imalRepo rt += QString ( " m y F e e d F o r O f f s p r i n g P e r K g = " + QString :: number (
+myFeedForOffspringPerKg ) + "\n");
+
+556
+
+myAni malRepo rt += QString ( " m y G e s t a t i n g M C a l s = " + QString :: number (
+m y G e s t a t i n g M Ca l s ) + " \ n " ) ;
+myAni malRepo rt += QString ( " m y L a c t a t i n g M C a l s = " + QString :: number (
+m y L a c t a t i n g M Ca l s ) + " \ n " ) ;
+myAni malRepo rt += QString ( " m y D a y s F o r M a i n t e n a n c e = " + QString :: number (
+myDaysForMaintenance ) + "\n");
+myAni malRepo rt += QString ( " my G es ta ti n gT im e = " + QString :: number (
+m yG es ta t in gT i me ) + " \ n " ) ;
+myAni malRepo rt += QString ( " my L ac ta ti o nT im e = " + QString :: number (
+m yL ac ta t io nT i me ) + " \ n " ) ;
+myAni malRepo rt += QString ( " myDryMothers = " + QString :: number ( myDryMothers
+) + "\n");
+myAni malRepo rt += QString ( " m y D r y M o t h e r s M C a l s = " + QString :: number (
+myDryMothersMCals ) + "\n");
+myAni malRepo rt += QString ( " m y O t h e r M a i n t e n a n c e M C a l s = " + QString :: number (
+myOtherMaintenanceMCals ) + "\n");
+myAni malRepo rt += QString ( " m y M a i n t e n a n c e M C a l s = " + QString :: number (
+myMaintenanceMCals ) + "\n");
+myAni malRepo rt += QString ( " m y A d u l t M a l e s M C a l s = " + QString :: number (
+myAdultMalesMCals ) + "\n");
+myAni malRepo rt += QString ( " m y O f f s p r i n g M C a l s = " + QString :: number (
+m y O f f s p r i n g M Ca l s ) + " \ n " ) ;
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+qDebug () JASON << myAnimal . name () ;
+qDebug () JASON << " myMilkK gPerDay = " << myMilkK gPerDay ;
+qDebug () JASON << " m yM il k Fo od Va l ue = " << m yM i lk Fo od V al ue ;
+qDebug () JASON << " m yL ac t at io nT i me = " << m yL a ct at io n Ti me ;
+qDebug () JASON << " myWeaningAge = " << myWeaningAge ;
+qDebug () JASON << " myKillWeight = " << myKillWeight ;
+qDebug () JASON << " m y U s a b l e P o r t i o n O f A n i m a l = " << m y U s a b l e P o r t i o n O f A n i m a l
+;
+qDebug () JASON << " myAdultWeight = " << myAdultWeight ;
+qDebug () JASON << " my F e m a l e s T o M a l e s = " << m y F e m a l e s T oM a l e s ;
+qDebug () JASON << " m yM ea t Va lu eM C al = " << m yM e at Va lu e MC al ;
+qDebug () JASON << " my S e x u a l M a t u r i t y = " << m y S e x u a l M a tu r i t y ;
+qDebug () JASON << " m yB re e di ng Ye a rs = " << m yB r ee di ng Y ea rs ;
+qDebug () JASON << " m y A n i m a l C o n t r i b u t i o n T o M e a t P o r t i o n = " <<
+myAnimalContributionToMeatPortion ;
+qDebug () JASON << " m y A n i m a l M C a l T a r g e t = " << m y A n i m a l M C a l T a r g e t ;
+qDebug () JASON << " m y P o t e n t i a l D a i r y P e r O f f s p r i n g = " <<
+myPotentialDairyPerOffspring ;
+qDebug () JASON << " m y V a l u e P e r O f f s p r i n g = " << m y V a l u e P e r O f f s p r i n g ;
+qDebug () JASON << " m y A c t u a l D a i r y V a l u e O f O f f s p r i n g = " <<
+myActualDairyValueOfOffspring ;
+qDebug () JASON << " m y C u l l e d M o t h e r s V a l u e = " << m y C u l l e d M o t h e r s V a l u e ;
+qDebug () JASON << " m y C u l l e d A d u l t M a l e s V a l u e = " << m y C u l l e d A d u l t M a l e s V a l u e
+;
+qDebug () JASON << " m y F i n a l O f f s p r i n g V a l u e = " << m y F i n a l O f f s p r i n g V a l u e ;
+qDebug () JASON << " m y O f f s p r i n g N e e d e d P e r Y e a r = " <<
+myOffspringNeededPerYear ;
+qDebug () JASON << " m y M C a l s F r o m T h e M e a t = " << m y M C a l s F r o m T h e M e a t ;
+qDebug () JASON << " m y M C a l s U t i l i z e d F r o m D a i r y = " <<
+myMCalsUtilizedFromDairy ;
+qDebug () JASON << " m y T a m e M e a t M C a l o r i e C o u n t e r = " <<
+myTameMeatMCalorieCounter ;
+qDebug () JASON << " m y D a i r y M C a l o r i e C o u n t e r = " << m y D a i r y M C a l o r i e C o u n t e r ;
+
+// qDebug () JASON << " m y B i r t h i n g E v e n t s P e r Y e a r = " << m y B i r t h i n g E v e n t s P e r Y e a r
+;
+// qDebug () JASON << " m y O f f s p r i n g P e r M o t h e r P e r Y e a r = " <<
+myOffspringPerMotherPerYear ;
+// qDebug () JASON << " m y M o t h e r s N e e d e d S t e p O n e = " << m y M o t h e r s N e e d e d S t e p O n e ;
+// qDebug () JASON << " myMales StepOne = " << myMales StepOne ;
+// qDebug () JASON << " my F e m a l e s S t e p O n e = " << m y F e m a l e s S te p O n e ;
+
+557
+
+// qDebug () JASON << " m y R e p l a c e m e n t M o t h e r s P e r Y e a r = " <<
+myReplacementMothersPerYear ;
+// qDebug () JASON << " m y B r e e d i n g M a l e s R e q u i r e d = " << m y B r e e d i n g M a l e s R e q u i r e d
+;
+// qDebug () JASON << " m y A d d i t i o n a l M o t h e r s = " << m y A d d i t i o n a l M o t h e r s ;
+// qDebug () JASON << " myMale sStepTwo = " << myMales StepTwo ;
+// qDebug () JASON << " m yF e m a l e s S t e p T w o = " << m y F e m a l e s S t e pT w o ;
+// qDebug () JASON << "
+++
+++
+";
+// qDebug () JASON << " + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + " ;
+// qDebug () JASON << "
+++ + ++
+";
+// qDebug () JASON << " + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + " ;
+// qDebug () JASON << "
+++
+++
+";
+//
+//
+//
+//
+
+qDebug () JASON
+qDebug () JASON
+qDebug () JASON
+qDebug () JASON
+
+<<
+<<
+<<
+<<
+
+" myTota lMothers = " << myTotal Mothers ;
+" m y T o t a l M a l e O f f s p r i n g = " << m y T o t a l M a l e O f f s p r i n g ;
+" m y T o t a l F e m a l e O f f s p r i n g = " << m y T o t a l F e m a l e O f f s p r i n g ;
+" m yT o t a l O f f s p r i n g = " << m y T o t a l O f f s p ri n g ;
+
+//
+//
+//
+//
+
+qDebug () JASON
+qDebug () JASON
+qDebug () JASON
+qDebug () JASON
+;
+
+<<
+<<
+<<
+<<
+
+" m y F e e d F o r G e s t a t i n g = " << m y F e e d F o r G e s t a t i n g ;
+" m y F e e d F o r L a c t a t i n g = " << m y F e e d F o r L a c t a t i n g ;
+" m y F e e d F o r M a i n t e n a n c e = " << m y F e e d F o r M a i n t e n a n c e ;
+" m y F e e d F o r O f f s p r i n g P e r K g = " << m y F e e d F o r O f f s p r i n g P e r K g
+
+//
+//
+//
+//
+
+qDebug () JASON << " m yG e s t a t i n g M C a l s = " << m y G e s t a t i n g M Ca l s ;
+qDebug () JASON << " m yL a c t a t i n g M C a l s = " << m y L a c t a t i n g M Ca l s ;
+qDebug () JASON << " m y D a y s F o r M a i n t e n a n c e = " << m y D a y s F o r M a i n t e n a n c e ;
+qDebug () JASON << " ________ - - - - - -~~~~ Number of days gestating : " <<
+m yG es ta t in gT im e ;
+qDebug () JASON << " ________ - - - - - -~~~~ Number of days lactating : " <<
+m yL ac ta t io nT im e ;
+qDebug () JASON << " myDryMothers = " << myDryMothers ;
+qDebug () JASON << " m y D r y M o t h e r s M C a l s = " << m y D r y M o t h e r s M C a l s ;
+qDebug () JASON << " m y O t h e r M a i n t e n a n c e M C a l s = " << m y O t h e r M a i n t e n a n c e M C a l s
+;
+qDebug () JASON << " m y M a i n t e n a n c e M C a l s = " << m y M a i n t e n a n c e M C a l s ;
+qDebug () JASON << " m y A d u l t M a l e s M C a l s = " << m y A d u l t M a l e s M C a l s ;
+qDebug () JASON << " m yO f f s p r i n g M C a l s = "
+<< m y O f f s p r i n g M Ca l s ;
+
+//
+//
+//
+//
+//
+//
+//
+
+// still looping through the animals here ....
+QMapIterator < QString , LaFoodSource > myNextCrop ( m yF o od So ur c eM ap ) ;
+while ( myNextCrop . hasNext () )
+{
+// qDebug () JASON << "
+- - - -== - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -== - - - -";
+// qDebug () JASON << "
+- - - -==
+Adding to the fodder Map
+== - - - -";
+// qDebug () JASON << "
+- - - -== - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -== - - - -";
+myNextCrop . next () ;
+QString myCropGuid = myNextCrop . key () ;
+LaFoodSource myFoodSource = m y Fo od So u rc eM ap . value ( myCropGuid ) ;
+float myGrain = myFoodSource . grain () * .001;
+float myFodder = myFoodSource . fodder () * .001;
+float myDays = myFoodSource . days () ;
+float myGrainToAdd = myGrain * myDays * m y T o t a l O f f s p r i n g ;
+float myGrainTotal = m y F o o d S o u r c e M a p C o u n t e r . value ( myCropGuid ) +
+myGrainToAdd ;
+// qDebug () JASON << "
+myGrain = " << myGrain ;
+// qDebug () JASON << "
+myFodder = " << myFodder ;
+// qDebug () JASON << "
+myDays = " << myDays ;
+// qDebug () JASON << " previous value of the fodder counter : " <<
+m y F o o d S o u r c e M a p C o u n t e r . value ( myCropGuid ) ;
+m y F o o d S o u r c e M a p C o u n t e r . insert ( myCropGuid , myGrainTotal ) ;
+// qDebug () JASON << " - - - -- - - > next value of the fodder counter : " <<
+m y F o o d S o u r c e M a p C o u n t e r . value ( myCropGuid ) ;
+
+558
+
+// qDebug () JASON << " Additional MCal counter original Value : " <<
+myAdditionalMCalCounter ;
+LaCrop myCrop = LaUtils :: getCrop ( myCropGuid ) ;
+float m y F o o d V a l u e O f C r o p = myCrop . cropCalories () * .001;
+float m y F o o d V a l u e o f F o d d e r = myCrop . fodderValue () * .001;
+// qDebug () JASON << " Food Value of the Crop : " << m y F o o d V a l u e O f C r o p ;
+// qDebug () JASON << " Food Value of the Fodder : " << m y F o o d V a l u e o f F o d d e r ;
+float myGrainMCal = myGrainToAdd * m y F o o d V a l u e O f C r o p ;
+float myFodderMCal = myFodder * myDays * m y F o o d V a l u e o f F o d d e r *
+m y T o t a l O f f s p r in g ;
+m y A d d i t i o n a l M C a l C o u n t e r 1 += myFodderMCal ;
+m y A d d i t i o n a l M C a l C o u n t e r += myGrainMCal + myFodderMCal ; // ok , I wimped
+out here ...
+// myFodderMCal really should be checked to make sure that there is
+actually enough
+// straw and chaff produced from the crop to cover the requested amount .
+// qDebug () JASON << " myGrainMCal = " << myGrainMCal ;
+// qDebug () JASON << " myFodderMCal = " << myFodderMCal ;
+// qDebug () JASON << " Crop Name : " << myCrop . name () ;
+// qDebug () JASON << " value to add grain : " << myGrainToAdd ;
+// qDebug () JASON << " Value now of the fodder counter : " <<
+m y F o o d S o u r c e M a p C o u n t e r . value ( myCropGuid ) ;
+// qDebug () JASON << " m y F o o d S o u r c e M a p C o u n t e r = " <<
+myFoodSourceMapCounter ;
+// qDebug () JASON << " Total MCals counted so far for grain feeding this
+animal : " << m y A d d i t i o n a l M C a l C o u n t e r ;
+}
+// . ^ . ^ . ^ . ^ . ^ . ^ . ^ . ^ . ^
+.^.^.^.^.^.^.^.^.^
+// . ^ . ^ . ^ . ^ . ^ . ^ . ^ . ^ . ^
+.^.^.^.^.^.^.^.^.^
+
+Insert data into m y A n i m a l C a l c s M a p
+GUID , ( t he Re po r tS tr in g , Area )
+
+float m y A n i m a l H e r d M C a l s R e q u i r e d 1 = m y G e s t a t i n gM C a l s + m yL a c t a t i n g M C a l s +
+myMaintenanceMCals + myAdultMalesMCals + myOffspringMCals ;
+// qDebug () JASON << " ---- AnimalHerd MCals Required before accounting for
+grain feeding : " << m y A n i m a l H e r d M C a l s R e q u i r e d 1 ;
+// the next line adjusts for the grain contribution
+float m y A n i m a l H e r d M C a l s R e q u i r e d = m y A n i m a l H e r d M C a l s R e q u i r e d 1 myAdditionalMCalCounter ;
+// qDebug () JASON << " ---- AnimalHerd MCals Required * AFTER * accounting
+for grain feeding : " << m y A n i m a l H e r d M C a l s R e q u i r e d ;
+myAni malRepo rt += QString ( " m y A n i m a l H e r d M C a l s R e q u i r e d 1 = " + QString ::
+number ( m y A n i m a l H e r d M C a l s R e q u i r e d 1 ) + " \ n " ) ;
+myAni malRepo rt += QString ( " m y A n i m a l H e r d M C a l s R e q u i r e d = " + QString :: number
+( myAnimalHerdMCalsRequired ) + "\n");
+myAni malRepo rt += QString ( " . . . . . . . . . . . . . . . . . . . . . . . . . \ n " ) ;
+myAni malRepo rt += QString ( " .
+Summary
+.\ n " ) ;
+myAni malRepo rt += QString ( " . . . . . . . . . . . . . . . . . . . . . . . . . \ n " ) ;
+myAni malRepo rt += QString ( " MCal Target = " + QString :: number (
+myMCalsFromTheMeat ) + "\n");
+myAni malRepo rt += QString ( " Dairy Contribution = " + QString :: number (
+myMCalsUtilizedFromDairy ) + "\n");
+myAni malRepo rt += QString ( " Meat Percent = " + QString :: number (
+myMeatPercent *100.) + " \% \ n " ) ;
+myAni malRepo rt += QString ( " Dairy Percent = " + QString :: number (
+myDa iryPerce nt *100.) + " \% \ n " ) ;
+myAni malRepo rt += QString ( " Number of Offspring = " + QString :: number (
+m y T o t a l M a l e O f f s p r i n g * 2.) + " \ n " ) ;
+myAni malRepo rt += QString ( " Number of Mothers = " + QString :: number (
+myTo talMothe rs ) + " \ n " ) ;
+myAni malRepo rt += QString ( " Number of Breeding Males = " + QString :: number (
+myBreedingMalesRequired ) + "\n");
+// float myLandValue = m y A n i m a l P a r a m e t e r . V a l u e C o m m o n G r a z i n g L a n d () ;
+// qDebug () JASON << " the common land grazing value I have is : " <<
+myLandValue ;
+
+559
+
+// qDebug () JASON << " the Herd MCals are . originally . :" <<
+myAnimalHerdMCalsRequired ;
+// qDebug () JASON << " and they are being temporarily stored in the report
+map slot for area target for further adjustment ";
+// float m y A n i m a l A r e a T a r g e t = m y A n i m a l H e r d M C a l s R e q u i r e d / myLandValue ;
+// qDebug () JASON << " but at this point we would need " <<
+m y A n i m a l A r e a T a r g e t << " Ha of Land ";
+QPair < QString , float > m y R e p o r t A n d A r e a T a r g e t ;
+m y R e p o r t A n d A r e a T a r g e t . first = myAnim alReport ;
+m y R e p o r t A n d A r e a T a r g e t . second = m y A n i m a l H e r d M C a l s R e q u i r e d ;
+m y A n i m a l C a l c s R e p o r t M a p . insert ( myAnimalGuid , m y R e p o r t A n d A r e a T a r g e t ) ;
+myAnimalsMap . insert ( myAnimalGuid , m y A n i m a l H e r d M C a l s R e q u i r e d ) ;
+mValueMap . insert ( myAnimalGuid , m y A n i m a l H e r d M C a l s R e q u i r e d ) ;
+} // done looping through the animals here
+// - - - - - - - - - - - Dairy Portion to be calculated - - - - - - - - - - - // ------ the check should be : SUM ( B11 .. B15 ) == 1.0 -----// limit the dairy . if no limit the limit is 100 percent
+float myDairyLimit = m y L i m i t D a i ry B o o l ? m y D a i r y L i m i t P e r c e n t : 1.; // B22
+float m y D o m e s t i c M e a t P e r c e n t = m y T a m e M e a t M C a l o r i e C o u n t e r /
+m y M C a l s S e t t l e m e n t A n n u a l ; // B11
+float m y W i l d M e a t P e r c e n t = m y W i l d M e a t P o r t i o n * mDietPercent ; // B13
+bool m y L i m i t S a t i s f i e s = ( m y D o m e s t i c M e a t P e r c e n t + m y W i l d M e a t P e r c e n t +
+myDairyLimit ) > 1. ? TRUE : FALSE ; // B21 -- BOOL -float myNewLimit = m y L i m i t S a t i s f i e s ? (1. - m y D o m e s t i c M e a t P e r c e n t m y W i l d M e a t P e r c e n t ) : myDairyLimit ; // B20
+bool m y P o t e n t i a l D a i r y L e s s T h a n L i m i t B o o l = ( m y D a i r y M C a l o r i e C o u n t e r /
+m y M C a l s S e t t l e m e n t A n n u a l ) < myDairyLimit ? TRUE : FALSE ; // B19 -- BOOL -float myNewDairy = m y P o t e n t i a l D a i r y L e s s T h a n L i m i t B o o l ?
+m y D a i r y M C a l o r i e C o u n t e r : myNewLimit * m y M C a l s S e t t l e m e n t A n n u a l ; // B18
+float m y O v e r a l l D a i r y P e r c e n t = myNewDairy / m y M C a l s S e t t l e m e n t A n n u a l ; // B12
+and B8
+// --- To get the final Crops and Wild Plants percent , we need to get the
+overall Meat and Dairy First --float m y O v e r a l l M e a t P e r c e n t = m y W i l d M e a t P e r c e n t + m y D o m e s t i c M e a t P e r c e n t ; //
+B7
+float m y O v e r a l l P l a n t P e r c e n t = 1. - m y O v e r a l l M e a t P e r c e n t m y O v e r a l l D a i r y P e r c e n t ; // B6
+float m y O v e r a l l C r o p P e r c e n t = m y O v e r a l l P l a n t P e r c e n t * m y D o m e s t i c C r o p P o r t i o n ;
+// B14
+float m y O v e r a l l W i l d P l a n t P e r c e n t = m y O v e r a l l P l a n t P e r c e n t * ( 1. myPl antPerce nt ) ; // B15
+float m y O v e r a l l D o m e s t i c M e a t M C a l s = m y T a m e M e a t M C a l o r i e C o u n t e r ; // B25
+float m y O v e r a l l D a i r y M C a l s = m y O v e r a l l D a i r y P e r c e n t * m y M C a l s S e t t l e m e n t A n n u a l ;
+// B26
+float m y O v e r a l l W i l d M e a t M C a l s = m y W i l d M e a t P e r c e n t * m y M C a l s S e t t l e m e n t A n n u a l ;
+// B27
+float m y O v e r a l l C r o p s M C a l s = m y O v e r a l l C r o p P e r c e n t * m y M C a l s S e t t l e m e n t A n n u a l ;
+// B28
+float m y O v e r a l l W i l d P l a n t s M C a l s = m y O v e r a l l W i l d P l a n t P e r c e n t *
+m y M C a l s S e t t l e m e n t A n n u a l ; // B29
+float m y O v e r a l l M e a t M C a l s = m y O v e r a l l W i l d M e a t M C a l s +
+myOverallDomesticMeatMCals ;
+float m y F i r s t D a i r y S u r p l u s B o o l = m y D a i r y M C a l o r i e C o u n t e r - m y O v e r a l l D a i r y M C a l s
+;
+float m y O V e r a l l D a i r y S u r p l u s M C a l s = m y F i r s t D a i r y S u r p l u s B o o l > 0 ?
+m y F i r s t D a i r y S u r p l u s B o o l : 0;
+float m y M C a l s F r o m F a l l o w C o u n t e r = 0.;
+// QString myCropReport = QString (" m y O v e r a l l P l a n t P e r c e n t = " + QString ::
+number ( m y O v e r a l l P l a n t P e r c e n t ) + "\ n ") ;
+// myCropReport += QString (" m y D o m e s t i c C r o p P o r t i o n = " + QString :: number (
+m y D o m e s t i c C r o p P o r t i o n ) + "\ n ") ;
+// myCropReport += QString (" m y O v e r a l l C r o p P e r c e n t = " + QString :: number (
+m y O v e r a l l C r o p P e r c e n t ) + "\ n ") ;
+// myCropReport += QString (" m y O v e r a l l M e a t P e r c e n t = " + QString :: number (
+m y O v e r a l l M e a t P e r c e n t ) + "\ n ") ;
+
+560
+
+// myCropReport += QString (" m y O v e r a l l D a i r y P e r c e n t = " + QString :: number (
+m y O v e r a l l D a i r y P e r c e n t ) + "\ n ") ;
+// myCropReport += QString (" - - - - - = " ) ;//+ QString :: number ( HOLDER ) + "\ n ") ;
+// now that we have dairy contributions calculated we can calculate targets
+for crops
+QMap < QString , QString > m y S e l e c t e d C r o p s M a p = mCropsMap ;
+QMapIterator < QString , QString > m y N e x t C r o p I t e r a t o r ( m y S e l e c t e d C r o p s M a p ) ;
+while ( m y N e x t C r o p I t e r a t o r . hasNext () )
+{
+// qDebug () JASON << "
+** - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -**
+";
+// qDebug () JASON << "**********
+Looping through the crops
+**********";
+// qDebug () JASON << "
+** - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -**
+";
+m y N e x t C r o p I t e r a t o r . next () ;
+QString myCropGuid = m y N e x t C r o p I t e r a t o r . key () ;
+QString m y C r o p P a r a m e t e r G u i d = m y N e x t C r o p I t e r a t o r . value () ;
+LaCrop myCrop = LaUtils :: getCrop ( myCropGuid ) ;
+L aC ro pP a ra me te r my Cr o pP ar am e te r = LaUtils :: g et C r o p P a r a m e t e r (
+myCropParameterGuid );
+float myCropPortion = my Cr o pP ar am e te r . p er ce n tT am eC r op () * .01;
+// qDebug () JASON << "
+myCropPortion = " << myCropPortion ;
+float my Cr o pF oo dV a lu e = myCrop . cropCalories () * .001;
+// qDebug () JASON << "
+m yC r op Fo od V al ue = " << m yC ro pF o od Va lu e ;
+float myCropPercent = myCropPortion /* * m y O v e r a l l P l a n t P e r c e n t */ *
+myOverallCropPercent ;
+// qDebug () JASON << "
+m y O v e r a l l C r o p P e r c e n t = " <<
+myOverallCropPercent ;
+// qDebug () JASON << "
+myCropPercent = " << myCropPercent ;
+float m y M C a l s F r o m T h e C r o p = myCropPercent * m y M C a l s S e t t l e m e n t A n n u a l ;
+float myK gForPeo ple1 = m y M C a l s F r o m T h e C r o p / ( m yC r op Fo od V al ue ) ;
+float myA nimalKg Add1 = m y F o o d S o u r c e M a p C o u n t e r . value ( myCropGuid ) ;
+// adjust for spoilage and reseeding here
+float m y S p o i l a g e P e r c e n t = my Cr op P ar am et e r . spoilage () * .01;
+float my Re s ee dP er c en t = m yC ro p Pa ra me t er . reseed () * .01;
+float m y K g F o r P e o p l e R e s e e d = ( myKgFo rPeople1 * m y Re se ed P er ce nt ) ;
+float m y K g F o r P e o p l e S p o i l a g e = ( myK gForPeop le1 * m y S p o i l a g e P e r c e n t ) ;
+float myKgForPeople = m y K g F o r P e o p l e R e s e e d + m y K g F o r P e o p l e S p o i l a g e +
+myKg ForPeopl e1 ;
+float m y A n i m a l K g A d d R e s e e d = ( myAnim alKgAdd1 * m y Re se ed P er ce nt ) ;
+float m y A n i m a l K g A d d S p o i l a g e = ( myA nimalKgA dd1 * m y S p o i l a g e P e r c e n t ) ;
+float myAnimalKgAdd = m y A n i m a l K g A d d R e s e e d + m y A n i m a l K g A d d S p o i l a g e +
+myAn imalKgAd d1 ;
+float m y A d j u s t e d T a r g e t = myKgForPeople + myAnimalKgAdd ;
+float myCropYield = myCrop . areaUnits () == Dunum ? myCrop . cropYield () *10. :
+myCrop . cropYield () ;
+float m y C r o p A r e a T a r g e t P e o p l e = myKgForPeople / myCropYield ;
+float m y C r o p A r e a T a r g e t A n i m a l s = myAnimalKgAdd / myCropYield ;
+float
+float
+float
+float
+
+myRatio = m y Cr op Pa r am et er . fallowRatio () ;
+myFallowValue = my Cr o pP ar am e te r . fallowValue () ;
+m y C r o p A r e a T a r g e t 1 = m y A d j u s t e d T a rg e t / myCropYield ;
+m y C r o p A r e a T a r g e t = m y C r o p A r e a T a r g e t 1 * ( myRatio + 1.) ;
+
+float myFallowArea = myRatio * m y C r o p A r e a T a r g e t 1 ;
+float myFallowMCals = myFallowArea * myFallowValue ;
+
+m y M C a l s F r o m F a l l o w C o u n t e r += myFallowMCals ;
+
+561
+
+QString myCropReport = QString ( " MCals People = " + QString :: number (
+myMCalsFromTheCrop ) + "\n");
+myCropReport += QString ( " myCropPortion = " + QString :: number ( myCropPortion
+) + "\n");
+myCropReport += QString ( " my Cr op F oo dV al u e = " + QString :: number (
+m yC ro pF o od Va lu e ) + " \ n " ) ;
+myCropReport += QString ( " m y O v e r a l l C r o p P e r c e n t = " + QString :: number (
+myOverallCropPercent ) + "\n");
+myCropReport += QString ( " myCropPercent = " + QString :: number ( myCropPercent
+) + "\n");
+myCropReport += QString ( " m y M C a l s F r o m T h e C r o p = " + QString :: number (
+myMCalsFromTheCrop ) + "\n");
+myCropReport += QString ( " myAnimalKgAdd = " + QString :: number ( myAnimalKgAdd
+) + "\n");
+myCropReport += QString ( " m y A d j u s t e d T a rg e t = " + QString :: number (
+m y A d j u s t e d T a r g et ) + " \ n " ) ;
+myCropReport += QString ( " myCrop . cropYield () = " + QString :: number ( myCrop .
+cropYield () ) + " \ n " ) ;
+myCropReport += QString ( " myCropYield = " + QString :: number ( myCropYield ) +
+"\n");
+myCropReport += QString ( " Crop Production People before adjusting = " +
+QString :: number ( myKgFor People1 ) + " \ n " ) ;
+myCropReport += QString ( " Extra Kg to account for spoilage = " + QString ::
+number ( m y K g F o r P e o p l e S p o i l a g e ) + " \ n " ) ;
+myCropReport += QString ( " Extra Kg to account for reseeding = " + QString ::
+number ( m y K g F o r P e o p l e R e s e e d ) + " \ n " ) ;
+myCropReport += QString ( " Crop Production People after adjusting = " +
+QString :: number ( myKgForPeople ) + " \ n " ) ;
+myCropReport += QString ( " Crop Production Animal before adjusting = " +
+QString :: number ( myAnima lKgAdd1 ) + " \ n " ) ;
+myCropReport += QString ( " Extra Kg to account for spoilage = " + QString ::
+number ( m y A n i m a l K g A d d S p o i l a g e ) + " \ n " ) ;
+myCropReport += QString ( " Extra Kg to account for reseeding = " + QString ::
+number ( m y A n i m a l K g A d d R e s e e d ) + " \ n " ) ;
+myCropReport += QString ( " Crop Production Animal after adjusting = " +
+QString :: number ( myAnimalKgAdd ) + " \ n " ) ;
+myCropReport += QString ( " m y C r o p A r e a T a rg e t People = " + QString :: number (
+myCropAreaTargetPeople ) + "\n");
+myCropReport += QString ( " m y C r o p A r e a T a rg e t Animals = " + QString :: number (
+myCropAreaTargetAnimals ) + "\n");
+myCropReport += QString ( " m y C r o p A r e a T a rg e t = " + QString :: number (
+m y C r o p A r e a T a r g et ) + " \ n " ) ;
+myCropReport += QString ( " \ n " ) ;
+
+myCropReport += QString ( " Kg for People = " + QString :: number ( myKgForPeople
+) + "\n");
+myCropReport += QString ( " KG for Animals = " + QString :: number (
+myAnimalKgAdd ) + " \ n " ) ;
+myCropReport += QString ( " Percent of Diet = " + QString :: number (
+myCropPercent * 100.) + " \% \ n " ) ;
+myCropReport += QString ( " Area Target People : " + QString :: number (
+myCropAreaTargetPeople ) + "\n");
+myCropReport += QString ( " Area Target Animal : " + QString :: number (
+myCropAreaTargetAnimals ) + "\n");
+myCropReport += QString ( " Area Target is " + QString :: number (
+m y C r o p A r e a T a r g et ) + " \ n " ) ;
+myCropReport += QString ( " myFallowValue = " + QString :: number (
+myFallowValue ) + " \ n " ) ;
+myCropReport += QString ( " MCals from Fallow : " + QString :: number (
+myFallowMCals ) + " \ n " ) ;
+
+562
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+qDebug () JASON << " ______ myCropPortion = " << myCropPortion ;
+qDebug () JASON << " ______ m yC ro pF o od Va lu e = " << my Cr op F oo dV al u e ;
+qDebug () JASON << " ______ myCropPercent = " << myCropPercent ;
+qDebug () JASON << " ______ m y M C a l s F r o m T h e C r o p = " << m y M C a l s F r o m T h e C r o p ;
+qDebug () JASON << " ______ myKgForPeople = " << myKgForPeople ;
+qDebug () JASON << " ______ m yAnimal sKgAdd = " << myAnimalKgAdd ;
+qDebug () JASON << " ______ my Area Target : " << m y C r o p A r e a T a r g e t ;
+qDebug () JASON << " ______ MCals from Fallow = " << myFallowMCals ;
+qDebug () JASON << " ______ MCals total from Fallow Counter = " <<
+myMCalsFromFallowCounter ;
+
+QPair < QString , float > m y R e p o r t A n d A r e a T a r g e t ;
+m y R e p o r t A n d A r e a T a r g e t . first = myCropReport ;
+m y R e p o r t A n d A r e a T a r g e t . second = m y C r o p A re a T a r g e t ;
+m y C r o p C a l c s R e p o r t M a p . insert ( myCropGuid , m y R e p o r t A n d A r e a T a r g e t ) ;
+}
+a l l o c a t e F a l l o w G r a z i n g L a n d ( myMCalsFromFallowCounter , myAnimalsMap ) ;
+// finally , we have the mcal target for the animal herd , stored in mValueMap
+!!!!!!!
+// So at this stage all we have to do is polish up the data contained in
+myAnimalCalcsMap
+//
+so that it contains the final area target along with the rest of the
+calculations to
+//
+be sent in the QString portion of the QPair
+// To do this , I will iterate through the report , and transfer the targets
+from mValueMap
+//
+as well as add on to the report
+QMapIterator < QString , QPair < QString , float > > m y R e p o r t I t e r a t o r (
+myAnimalCalcsReportMap );
+while ( m y R e p o r t I t e r a t o r . hasNext () )
+{
+// qDebug () JASON <<
+" - - - - - - - -== - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -== - - - - - - -";
+// qDebug () JASON << " - - - - - - - -==
+Looping to Update Animal Map
+== - - - - - - -";
+// qDebug () JASON <<
+" - - - - - - - -== - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -== - - - - - - -";
+m y R e p o r t I t e r a t o r . next () ;
+QString myAnimalGuid = m y R e p o r t I t e ra t o r . key () ;
+LaAnimal myAnimal = LaUtils :: getAnimal ( myAnimalGuid ) ;
+// and now we do the magic B - D
+QPair < QString , float > myPair ;
+myPair = m y R e p o r t I t e r a t o r . value () ;
+// qDebug () JASON << "
+****** dump of myPair " << myPair ;
+QString myReport = myPair . first ;
+float myMCalTarget = mValueMap . value ( myAnimalGuid ) ;
+// qDebug () JASON << "
+*** contents of myMCalTarget : " <<
+myMCalTarget ;
+float myLandValue = m C o m m o n G r a z i n g V a l u e ;
+// qDebug () JASON << " m C o m m o n G r a z i n g V a l u e = " << m C o m m o n G r a z i n g V a l u e ;
+float myAreaTarget = myMCalTarget / myLandValue ;
+// qDebug () JASON << " myAreaTarget = " << myAreaTarget ;
+myPair . second = myAreaTarget ;
+myReport += QString ( " Final MCal Target = " + QString :: number ( static_cast <
+int >( myMCalTarget ) ) + " \ n " ) ;
+myReport += QString ( " Final Area Target = " + QString :: number ( static_cast <
+int >( myAreaTarget ) ) + " \ n " ) ;
+myPair . first = myReport ;
+// qDebug () JASON << " my Report should look like : " << myReport ;
+
+563
+
+m y A n i m a l C a l c s R e p o r t M a p [ myAnimalGuid ] = myPair ;
+m A n i m a l C a l c R e p o r t . insert ( myAnimalGuid , myPair ) ;
+}
+// qDebug () JASON << " myFinal Calculations for animals map : \ n " <<
+mAnimalCalcReport ;
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+qDebug () JASON << " myDairyLimit = " << myDairyLimit ;
+qDebug () JASON << " m y D o m e s t i c M e a t P e r c e n t = " << m y D o m e s t i c M e a t P e r c e n t ;
+qDebug () JASON << " m y W i l d M e a t P e r c e n t = " << m y W i l d M e a t P e r c e n t ;
+qDebug () JASON << " m yL i m i t S a t i s f i e s = " << m y L i m i t S a t i sf i e s ;
+qDebug () JASON << " myNewLimit = " << myNewLimit ;
+qDebug () JASON << " m y P o t e n t i a l D a i r y L e s s T h a n L i m i t B o o l = " <<
+myPotentialDairyLessThanLimitBool ;
+qDebug () JASON << " myNewDairy = " << myNewDairy ;
+qDebug () JASON << " m y O v e r a l l D a i r y P e r c e n t = " << m y O v e r a l l D a i r y P e r c e n t ;
+qDebug () JASON << " m y O v e r a l l M e a t P e r c e n t = " << m y O v e r a l l M e a t P e r c e n t ;
+qDebug () JASON << " m y O v e r a l l P l a n t P e r c e n t = " << m y O v e r a l l P l a n t P e r c e n t ;
+qDebug () JASON << " m y O v e r a l l C r o p P e r c e n t = " << m y O v e r a l l C r o p P e r c e n t ;
+qDebug () JASON << " m y O v e r a l l W i l d P l a n t P e r c e n t = " <<
+myOverallWildPlantPercent ;
+qDebug () JASON << " m y O v e r a l l D o m e s t i c M e a t M C a l s = " <<
+myOverallDomesticMeatMCals ;
+qDebug () JASON << " m y O v e r a l l D a i r y M C a l s = " << m y O v e r a l l D a i r y M C a l s ;
+qDebug () JASON << " m y O v e r a l l W i l d M e a t M C a l s = " << m y O v e r a l l W i l d M e a t M C a l s ;
+qDebug () JASON << " m y O v e r a l l C r o p s M C a l s = " << m y O v e r a l l C r o p s M C a l s ;
+qDebug () JASON << " m y O v e r a l l W i l d P l a n t s M C a l s = " << m y O v e r a l l W i l d P l a n t s M C a l s
+;
+qDebug () JASON << " m y O v e r a l l M e a t M C a l s = " << m y O v e r a l l M e a t M C a l s ;
+qDebug () JASON << " m y F i r s t D a i r y S u r p l u s B o o l = " << m y F i r s t D a i r y S u r p l u s B o o l ;
+qDebug () JASON << " m y O v e r a l l D a i r y S u r p l u s M C a l s = " <<
+myOVerallDairySurplusMCals ;
+qDebug () JASON <<
+"***********************************************************************";
+qDebug () JASON << "**
+**";
+qDebug () JASON << "**
+Calculating Again
+**";
+qDebug () JASON << "**
+**";
+qDebug () JASON <<
+"***********************************************************************";
+
+// - - - - - - - - - - - Set the Diet Labels in preparation for return - - - - - - - - - - - - myDietLabels . s e t D a i r y M C a l o r i e s ( m y O v e r a l l D a i r y M C a l s ) ;
+myDietLabels . s e t C r o pM C a l o r i e s ( m y O v e r a l l C r o p s M C a l s ) ;
+myDietLabels . s e t A n i m a l M C a l o r i e s ( m y O v e r a l l M e a t M C a l s ) ;
+myDietLabels . s e t W i l d A n i m a l M C a l o r i e s ( m y O v e r a l l W i l d M e a t M C a l s ) ;
+myDietLabels . s e t W i l d P l a n t s M C a l o r i e s ( m y O v e r a l l W i l d P l a n t s M C a l s ) ;
+myDietLabels . s e t D a i r y P o r t i o n P c t ( m y O v e r a l l D a i r y P e r c e n t *100.) ;
+myDietLabels . s e t T a m e M e a t P o r t i o n P c t ( m y D o m e s t i c M e a t P e r c e n t *100.) ;
+myDietLabels . s e t C r o p s P o r t i o n P c t ( m y O v e r a l l C r o p P e r c e n t *100.) ;
+myDietLabels . s e t W i l d A n i m a l P o r t i o n P c t ( m y W i l d M e a t P e r c e n t *100.) ;
+myDietLabels . s e t W i l d P l a n t s P o r t i o n P c t ( m y O v e r a l l W i l d P l a n t P e r c e n t *100.) ;
+myDietLabels . s e t A n i m a l P o r t i o n P c t ( m y O v e r a l l M e a t P e r c e n t *100.) ;
+myDietLabels . s e t P l a n t s P o r t i o n P c t ( m y O v e r a l l P l a n t P e r c e n t *100.) ;
+myDietLabels . s e t M C a l s I n d i v i d u a l A n n u a l ( m y M C a l s I n d i v i d u a l A n n u a l ) ;
+myDietLabels . s e t M C a l s S e t t l e m e n t A n n u a l ( m y M C a l s S e t t l e m e n t A n n u a l ) ;
+myDietLabels . s e t D a i r y S u r p l u s M C a l o r i e s ( m y O V e r a l l D a i r y S u r p l u s M C a l s ) ;
+// -= -= -= -= -= -= -= -= -= -= -= -= -= -= -= -= -= -= -= -= -= -= -= -= -= -= -= -= -= -= -= -= // -= -= -= -= -= - Setting the report info with area targets -= -= -= -= -= // -= -= -= -= -= -= -= -= -= -= -= -= -= -= -= -= -= -= -= -= -= -= -= -= -= -= -= -= -= -= -= -= // qDebug () JASON << "
+";
+// qDebug () JASON << "
+";
+
+564
+
+// qDebug () JASON << "
+";
+// qDebug () JASON << "
+";
+// qDebug () JASON << "
+";
+//
+//
+//
+//
+
+qDebug () JASON
+qDebug () JASON
+qDebug () JASON
+qDebug () JASON
+
+<<
+<<
+<<
+<<
+
+"
+"
+"
+"
+
+";
+mValueMap = " << mValueMap ;;
+";
+";
+
+// qDebug () JASON << "
+";
+// qDebug () JASON << "
+";
+// qDebug () JASON << "
+";
+// qDebug () JASON << "
+";
+myDietLabels . s e t C r o p C a l c s R e p o r t M a p ( m y C r o p C a l c s R e p o r t M a p ) ;
+myDietLabels . s e t A n i m a l C a l c s R e p o r t M a p ( m A n i m a l C a l c R e p o r t ) ;
+
+return myDietLabels ;
+}
+QMap < QString , float > LaModel :: g e t A r e a T a r g e t s A n i m a l s M a p P F I D ()
+{
+QMap < QString , float > m y A r e a T a r g e t s A n i m a l s M a p ;
+return m y A r e a T a r g e t s A n i m a l s M a p ;
+}
+QMap < QString , float > LaModel :: g e t A r e a T a r g e t s A n i m a l s M a p P F D S ()
+{
+QMap < QString , float > m y A r e a T a r g e t s A n i m a l s M a p ;
+return m y A r e a T a r g e t s A n i m a l s M a p ;
+}
+QMap < QString , float > LaModel :: g e t A r e a T a r g e t s A n i m a l s M a p A F I D ()
+{
+LaDietLabels myDietLabels ;
+float m y M C a l s I n d i v i d u a l A n n u a l = m C a l o r i e s P e r P e r s o n D a i l y * 365.0;
+float m y M C a l s S e t t l e m e n t A n n u a l = ( m y M C a l s I n d i v i d u a l A n n u a l ) * mPopulation ;
+float m y D a i r y U t i l i s a t i o n = m D a i r y U t i l i s a t i o n ;
+float m y D a i r y M C a l o r i e C o u n t e r = 0.0;
+QMap < QString , QString > m y S e l e c t e d A n i m a l s M a p = mAnimalsMap ;
+QMapIterator < QString , QString > m y N e x t A n i m a l I t e r a t o r ( m y S e l e c t e d A n i m a l s M a p ) ;
+while ( m y N e x t A n i m a l I t e r a t o r . hasNext () )
+{
+m y N e x t A n i m a l I t e r a t o r . next () ;
+QString myAnimalGuid = m y N e x t A n i m a l I t e r a t o r . key () ;
+QString m y A n i m a l P a r a m e t e r G u i d = m y N e x t A n i m a l I t e r a t o r . value () ;
+LaAnimal myAnimal = LaUtils :: getAnimal ( myAnimalGuid ) ;
+L a A n i m a l P a r a m e t e r m y A n i m a l P a r a m e t e r = LaUtils :: g e t A n i m a l P a r a m e t e r (
+myAnimalParameterGuid );
+float c2 = myAnimal . m il k Gr am sP e rD ay () * 1000.;
+float c3 = myAnimal . milkFoodValue () ;
+float my Da y sO fM il k in g = myAnimal . lactationTime () - myAnimal . weaningAge () ;
+float m y K C a l o r i e s F r o m M i l k = ( my Da y sO fM il k in g
+* c3
+* c2 ) / 1000.;
+float m y M C a l o r i e s F r o m M i l k = m y K C a l o r i e s F r o m M i l k / 1000.;
+m y D a i r y M C a l o r i e C o u n t e r += m y M C a l o r i e s F r o m M i l k ;
+// qDebug () JASON << " Adding " << m y K C a l o r i e s F r o m M i l k << " KCalories to
+total KCalories from milk which is now at : "
+<<
+
+565
+
+m y D a i r y M C a l o r i e C o u n t e r << " MCalories ";
+}
+
+float
+float
+float
+float
+
+myDairyMCalories = myDairyUtilisation * myDairyMCalorieCounter ;
+myDairyPortionPct = ( myDairyMCalories ) / myMCalsSettlementAnnual ;
+m y A n i m a l s C a l o r i e T a r g e t = m y M C a l s S e t t l e m e n t A n n u a l * mDietPercent ;
+m y A n i m a l C a l s M i n u s D a i r y B i t = m y A n i m a l s C a l o r i e T a r g e t - m y D ai r y M C a l o r i e s ;
+
+float m y W i l d A n i m a l M C a l o r i e s = m y A n i m a l C a l s M i n u s D a i r y B i t * (1. - mMeatPercent
+);
+float m y T a m e A n i m a l M C a l o r i e s = m y A n i m a l C a l s M i n u s D a i r y B i t * ( mMeatPercent ) ;
+float m y W i l d A n i m a l P o r t i o n P c t = m y W i l d A n i m a l M C a l o r i e s /
+myMCalsSettlementAnnual ;
+float m y T a m e M e a t P o r t i o n P c t = m y T a m e A n i m a l M C a l o r i e s / (
+myMCalsSettlementAnnual - myDairyMCalories );
+float m y P l a n t s P o r t i o n P c t = 1. - m y W i l d A n i m a l P o r t i o n P c t myTameMeatPortionPct - myDairyPortionPct ;
+float m y C r o p s P o r t i o n P c t = m y P l a n t s P o r t i o n P c t * (
+mPercentOfDietThatIsFromCrops );
+float m y W i l d P l a n t s P o r t i o n P c t = m y P l a n t s P o r t i o n P c t * (1. mPercentOfDietThatIsFromCrops );
+float my Cr o pM Ca lo r ie s = m y M C a l s S e t t l e m e n t A n n u a l * m y C r o p s P o r t i o n P c t ;
+float m y W i l d P l a n t s M C a l o r i e s = m y M C a l s S e t t l e m e n t A n n u a l *
+myWildPlantsPortionPct ;
+
+float m y A n i m a l P o r t i o n P c t = mDietPercent ;
+myDietLabels . s e t D a i r y M C a l o r i e s ( m y Da i r y M C a l o r i e s ) ;
+myDietLabels . s e t C r o pM C a l o r i e s ( m yC ro pM C al or ie s ) ;
+myDietLabels . s e t A n i m a l M C a l o r i e s ( m y T a m e A n i m a l M C a l o r i e s ) ;
+myDietLabels . s e t W i l d A n i m a l M C a l o r i e s ( m y W i l d A n i m a l M C a l o r i e s ) ;
+myDietLabels . s e t W i l d P l a n t s M C a l o r i e s ( m y W i l d P l a n t s M C a l o r i e s ) ;
+myDietLabels . s e t D a i r y P o r t i o n P c t ( m y D a i r y P o r t i o n P c t *100.) ;
+myDietLabels . s e t T a m e M e a t P o r t i o n P c t ( m y T a m e M e a t P o r t i o n P c t *100.) ;
+myDietLabels . s e t C r o p s P o r t i o n P c t ( m y C r o p s P o r t i o n P c t *100.) ;
+myDietLabels . s e t W i l d A n i m a l P o r t i o n P c t ( m y W i l d A n i m a l P o r t i o n P c t *100.) ;
+myDietLabels . s e t W i l d P l a n t s P o r t i o n P c t ( m y W i l d P l a n t s P o r t i o n P c t *100.) ;
+myDietLabels . s e t P l a n t s P o r t i o n P c t ( m y P l a n t s P o r t i o n P c t *100.) ;
+myDietLabels . s e t A n i m a l P o r t i o n P c t ( m y A n i m a l P o r t i o n P c t *100.) ;
+myDietLabels . s e t M C a l s I n d i v i d u a l A n n u a l ( m y M C a l s I n d i v i d u a l A n n u a l ) ;
+myDietLabels . s e t M C a l s S e t t l e m e n t A n n u a l ( m y M C a l s S e t t l e m e n t A n n u a l ) ;
+{
+QMap < QString , float > m y A r e a T a r g e t s A n i m a l s M a p ;
+return m y A r e a T a r g e t s A n i m a l s M a p ;
+}
+}
+QMap < QString , float > LaModel :: g e t A r e a T a r g e t s A n i m a l s M a p A F D S ()
+{
+QMap < QString , float > m y A r e a T a r g e t s A n i m a l s M a p ;
+return m y A r e a T a r g e t s A n i m a l s M a p ;
+}
+
+QMap < QString , float > LaModel :: g e t A r e a T a r g e t s C r o p s M a p P F I D ()
+{
+QMap < QString , float > m y A r e a T a r g e t s C r o p s M a p ;
+return m y A r e a T a r g e t s C r o p s M a p ;
+}
+QMap < QString , float > LaModel :: g e t A r e a T a r g e t s C r o p s M a p P F D S ()
+{
+QMap < QString , float > m y A r e a T a r g e t s C r o p s M a p ;
+return m y A r e a T a r g e t s C r o p s M a p ;
+}
+
+566
+
+QMap < QString , float > LaModel :: g e t A r e a T a r g e t s C r o p s M a p A F I D ()
+{
+QMap < QString , float > m y A r e a T a r g e t s C r o p s M a p ;
+return m y A r e a T a r g e t s C r o p s M a p ;
+}
+QMap < QString , float > LaModel :: g e t A r e a T a r g e t s C r o p s M a p A F D S ()
+{
+QMap < QString , float > m y A r e a T a r g e t s C r o p s M a p ;
+return m y A r e a T a r g e t s C r o p s M a p ;
+}
+// REPORTS
+bool LaModel :: fromXml ( QString theXml )
+{
+logMessage ( " method == > bool LaModel :: fromXml ( QString theXml ) " ) ;
+QString myFlag ;
+logMessage ( " Loading model from xml " ) ;
+QDomDocument myDocument ( " mydocument " ) ;
+myDocument . setContent ( theXml ) ;
+QDomElement myTopElement = myDocument . f i r s t C h i l d E l e m e n t ( " model " ) ;
+if ( myTopElement . isNull () )
+{
+// TODO - just make this a warning
+logMessage ( " top element could not be found ! " ) ;
+}
+logMessage ( " Model :: fromXml - guid found : " + myTopElement . attribute ( " guid " )
+. toLocal8Bit () ) ;
+setGuid ( myTopElement . attribute ( " guid " ) ) ;
+logMessage ( " Model :: fromXml - guid set to : " + guid () . toLocal8Bit () ) ;
+mName = LaUtils :: xmlDecode ( myTopElement . f i r s t C h i l d E l e m e n t ( " name " ) . text () ) ;
+mPopulation = QString ( myTopElement . f i r s t C h i l d E l e m e n t ( " population " ) . text () ) .
+toInt () ;
+mPeriod = LaUtils :: xmlDecode ( myTopElement . f i r s t C h i l d E l e m e n t ( " period " ) . text () ) ;
+mProjection = QString ( myTopElement . f i r s t C h i l d E l e m e n t ( " projection " ) . text () ) .
+toInt () ;
+mEasting = QString ( myTopElement . f i r s t C h i l d E l e m e n t ( " easting " ) . text () ) . toInt () ;
+mNorthing = QString ( myTopElement . f i r s t C h i l d E l e m e n t ( " northing " ) . text () ) . toInt ()
+;
+myFlag = myTopElement . f i r s t C h i l d E l e m e n t ( " e u c l i d e a n D i s t a n c e " ) . text () ;
+if ( myFlag == " 1 " )
+{
+m E u c l i d e a n D i s t a n c e = true ;
+}
+else
+{
+m E u c l i d e a n D i s t a n c e = false ;
+}
+myFlag = myTopElement . f i r s t C h i l d E l e m e n t ( " walkingTime " ) . text () ;
+if ( myFlag == " 1 " )
+{
+mWalkingTime = true ;
+}
+else
+{
+mWalkingTime = false ;
+}
+myFlag = myTopElement . f i r s t C h i l d E l e m e n t ( " pathDistance " ) . text () ;
+if ( myFlag == " 1 " )
+{
+mPathDistance = true ;
+}
+else
+{
+mPathDistance = false ;
+}
+mPrecision = QString ( myTopElement . f i r s t C h i l d E l e m e n t ( " precision " ) . text () ) . toInt
+() ;
+
+567
+
+mDietPercent = QString ( myTopElement . f i r s t C h i l d E l e m e n t ( " dietPercent " ) . text () ) .
+toInt () ;
+m P e r c e n t O f D i e t T h a t I s F r o m C r o p s = QString ( myTopElement . f i r s t C h i l d E l e m e n t ( "
+plantPercent " ) . text () ) . toInt () ;
+mMeatPercent = QString ( myTopElement . f i r s t C h i l d E l e m e n t ( " meatPercent " ) . text () ) .
+toInt () ;
+m C a l o r i e s P e r P e r s o n D a i l y = QString ( myTopElement . f i r s t C h i l d E l e m e n t ( "
+c a l o r i e s P e r P e r s o n D a i l y " ) . text () ) . toInt () ;
+mBaseOnPlants = QString ( myTopElement . f i r s t C h i l d E l e m e n t ( " baseOnPlants " ) . text () )
+. toInt () ;
+mIncludeDairy = QString ( myTopElement . f i r s t C h i l d E l e m e n t ( " includeDairy " ) . text () )
+. toInt () ;
+mLimitDairy = QString ( myTopElement . f i r s t C h i l d E l e m e n t ( " limitDairy " ) . text () ) .
+toInt () ;
+m L i m i t D a i r y P e r c e n t a g e = QString ( myTopElement . f i r s t C h i l d E l e m e n t ( "
+l i m i t D a i r y P e r c e n t " ) . text () ) . toInt () ;
+m D a i r y U t i l i s a t i o n = QString ( myTopElement . f i r s t C h i l d E l e m e n t ( " d a i r y U t i l i s a t i o n " )
+. text () ) . toInt () ;
+return true ;
+}
+QString LaModel :: toXml ()
+{
+logMessage ( " method == > QString LaModel :: toXml () " ) ;
+QString myString ;
+myString += QString ( " < model guid =\" " + guid () + " \" >\ n " ) ;
+myString += QString ( " < name > " + LaUtils :: xmlEncode ( mName ) + " </ name >\ n " ) ;
+myString += QString ( " < population > " + QString :: number ( mPopulation ) + " </
+population >\ n " ) ;
+myString += QString ( " < period > " + LaUtils :: xmlEncode ( mPeriod ) + " </ period >\ n "
+);
+myString += QString ( " < projection > " + QString :: number ( mProjection ) + " </
+projection >\ n " ) ;
+myString += QString ( " < easting > " + QString :: number ( mEasting ) + " </ easting >\ n "
+);
+myString += QString ( " < northing > " + QString :: number ( mNorthing ) + " </ northing
+>\ n " ) ;
+myString += QString ( " < euclideanDistance > " + QString :: number (
+m E u c l i d e a n D i s t a n c e ) + " </ euclideanDistance >\ n " ) ;
+myString += QString ( " < walkingTime > " + QString :: number ( mWalkingTime ) + " </
+walkingTime >\ n " ) ;
+myString += QString ( " < pathDistance > " + QString :: number ( mPathDistance ) + " </
+pathDistance >\ n " ) ;
+myString += QString ( " < precision > " + QString :: number ( mPrecision ) + " </
+precision >\ n " ) ;
+myString += QString ( " < dietPercent > " + QString :: number ( mDietPercent ) + " </
+dietPercent >\ n " ) ;
+myString += QString ( " < plantPercent > " + QString :: number (
+m P e r c e n t O f D i e t T h a t I s F r o m C r o p s ) + " </ plantPercent >\ n " ) ;
+myString += QString ( " < meatPercent > " + QString :: number ( mMeatPercent ) + " </
+meatPercent >\ n " ) ;
+myString += QString ( " < caloriesPerPersonDaily > " + QString :: number (
+m C a l o r i e s P e r P e r s o n D a i l y ) + " </ caloriesPerPersonDaily >\ n " ) ;
+myString += QString ( " < baseOnPlants > " + QString :: number ( mBaseOnPlants ) + " </
+baseOnPlants >\ n " ) ;
+myString += QString ( " < includeDairy > " + QString :: number ( mIncludeDairy ) + " </
+includeDairy >\ n " ) ;
+myString += QString ( " < limitDairy > " + QString :: number ( mLimitDairy ) + " </
+limitDairy >\ n " ) ;
+myString += QString ( " < limitDairyPercent > " + QString :: number (
+m L i m i t D a i r y P e r c e n t a g e ) + " </ limitDairyPercent >\ n " ) ;
+myString += QString ( " < dairyUtilisation > " + QString :: number ( m D a i r y U t i l i s a t i o n
+) + " </ dairyUtilisation >\ n " ) ;
+myString += QString ( " </ model >\ n " ) ;
+return myString ;
+}
+
+568
+
+QString LaModel :: toText ()
+{
+logMessage ( " method == > QString LaModel :: toText () " ) ;
+QString myString ;
+myString += QString ( " guid = > " + guid () + " \ n " ) ;
+myString += QString ( " name = > " + LaUtils :: xmlEncode ( mName ) + " \ n " ) ;
+myString += QString ( " population = > " + QString :: number ( mPopulation ) + " \ n " ) ;
+myString += QString ( " period = > " + LaUtils :: xmlEncode ( mPeriod ) + " \ n " ) ;
+myString += QString ( " projection = > " + QString :: number ( mProjection ) + " \ n " ) ;
+myString += QString ( " easting = > " + QString :: number ( mEasting ) + " \ n " ) ;
+myString += QString ( " northing = > " + QString :: number ( mNorthing ) + " \ n " ) ;
+myString += QString ( " e u c l i d e a n D i s t a n c e = > " + QString :: number ( m E u c l i d e a n D i s t a n c e
+) + "\n");
+myString += QString ( " walkingTime = > " + QString :: number ( mWalkingTime ) + " \ n " ) ;
+myString += QString ( " pathDistance = > " + QString :: number ( mPathDistance ) + " \ n " ) ;
+myString += QString ( " precision = > " + QString :: number ( mPrecision ) + " \ n " ) ;
+myString += QString ( " dietPercent = > " + QString :: number ( mDietPercent ) + " \ n " ) ;
+myString += QString ( " plantPercent = > " + QString :: number (
+mPercentOfDietThatIsFromCrops ) + "\n");
+myString += QString ( " meatPercent = > " + QString :: number ( mMeatPercent ) + " \ n " ) ;
+myString += QString ( " c a l o r i e s P e r P e r s o n D a i l y = > " + QString :: number (
+mCaloriesPerPersonDaily ) + "\n");
+myString += QString ( " baseOnPlants = > " + QString :: number ( mBaseOnPlants ) + " \ n " ) ;
+myString += QString ( " includeDairy = > " + QString :: number ( mIncludeDairy ) + " \ n " ) ;
+myString += QString ( " limitDairy = > " + QString :: number ( mLimitDairy ) + " \ n " ) ;
+myString += QString ( " l i m i t D a i r y P e r c e n t = > " + QString :: number (
+mLimitDairyPercentage ) + "\n");
+myString += QString ( " d a i ry U t i l i s a t i o n = > " + QString :: number ( m D a i r y U t i l i s a t i o n )
++ "\n");
+return myString ;
+}
+QString LaModel :: toHtml ()
+{
+logMessage ( " method == > QString LaModel :: toHtml () " ) ;
+QString myString ;
+myString += " <h1 > Model Report </ h1 > " ;
+myString += " <h3 > " + LaUtils :: xmlEncode ( mName ) + " </ h3 > " ;
+// myString +=" GUID :" + guid () + " < br / >";
+myString += " <br > Population : " + QString :: number ( mPopulation ) + " </ br > " ;
+myString += " <br > Period : " + LaUtils :: xmlEncode ( mPeriod ) + " </ br > " ;
+myString += " <br > Projection : " + QString :: number ( mProjection ) + " </ br > " ;
+myString += " <br > Easting : " + QString :: number ( mEasting ) + " </ br > " ;
+myString += " <br > Northing : " + QString :: number ( mNorthing ) + " </ br > " ;
+myString += " <br > Euclidean Distance : " + QString :: number ( m E u c l i d e a n D i s t a n c e ) +
+" </ br > " ;
+myString += " <br > Walking Time : " + QString :: number ( mWalkingTime ) + " </ br > " ;
+myString += " <br > Path Distance : " + QString :: number ( mPathDistance ) + " </ br > " ;
+myString += " <br > Precision : " + QString :: number ( mPrecision ) + " </ br > " ;
+myString += " <br > Diet Percent " + QString :: number ( mDietPercent ) + " </ br > " ;
+myString += " <br > Plant Percent : " + QString :: number (
+m P e r c e n t O f D i e t T h a t I s F r o m C r o p s ) + " </ br > " ;
+myString += " <br > Meat Percent : " + QString :: number ( mMeatPercent ) + " </ br > " ;
+myString += " <br > Calories Per Person Daily : " + QString :: number (
+m C a l o r i e s P e r P e r s o n D a i l y ) + " </ br > " ;
+myString += " <br > BaseOnPlants = > " + QString :: number ( mBaseOnPlants ) + " </ br > " ;
+myString += " <br > IncludeDairy = > " + QString :: number ( mIncludeDairy ) + " </ br > " ;
+myString += " <br > LimitDairy = > " + QString :: number ( mLimitDairy ) + " </ br > " ;
+myString += " <br > L i m i t D a i r y P e r c e n t = > " + QString :: number ( m L i m i t D a i r y P e r c e n t a g e )
++ " </ br > " ;
+myString += " <br > Dairy Use : " + QString :: number ( m D a i r y U t i l i s a t i o n ) + " </ br > " ;
+// iterate through animals
+QMapIterator < QString , QString > m y A n i ma l I t e r a t o r ( mAnimalsMap ) ;
+while ( m y A n i m a l I t e r a t o r . hasNext () )
+{
+
+569
+
+m y A n i m a l I t e r a to r . next () ;
+QString myAnimalGuid = m y A n i m a l It e r a t o r . key () ;
+QString m y A n i m a l P a r a m e t e r G u i d = m y A n i m al I t e r a t o r . value () ;
+// QString myText = " Animal " + myAnimalGuid . toLocal8Bit () +
+// " , ";
+// myText += m y A n i m a l P a r a m e t e r G u i d . toLocal8Bit () ;
+// myText += " ";
+// myString += myText + " < br / >";
+LaAnimal myAnimal = LaUtils :: getAnimal ( myAnimalGuid ) ;
+myString += " <br > " ;
+myString += myAnimal . toHtml () ;
+myString += " </ br > " ;
+L a A n i m a l P a r a m e t e r myParameter = LaUtils :: g e t A n i m a l P a r a m e t e r (
+myAnimalParameterGuid );
+myString += " <br > " ;
+myString += myParameter . toHtml () ;
+myString += " </ br > " ;
+}
+// iterate through crops
+QMapIterator < QString , QString > myCro pIterato r ( mCropsMap ) ;
+while ( m yCropIte rator . hasNext () )
+{
+myCr opIterat or . next () ;
+QString myCropGuid = myCropIt erator . key () ;
+QString m y C r o p P a r a m e t e r G u i d = m yCropIt erator . value () ;
+// QString myText = " Crop " + myCropGuid . toLocal8Bit () +
+// " , ";
+// myText += m y C r o p P a r a m e t e r G u i d . toLocal8Bit () ;
+// myText += " ";
+// myString += myText + " < br / >";
+LaCrop myCrop = LaUtils :: getCrop ( myCropGuid ) ;
+myString += myCrop . toHtml () ;
+myString += " < br / > " ;
+L aC ro p Pa ra me t er myParameter = LaUtils :: g e t C r o pP a r a m e t e r (
+myCropParameterGuid );
+myString += myParameter . toHtml () ;
+myString += " < br / > " ;
+}
+return myString ;
+}
+void LaModel :: logMessage ( QString theMessage )
+{
+emit message ( theMessage ) ;
+}
+QString LaModel :: t o H t m l C a l o r i e C r o p T a r g e t s ()
+{
+// This method returns a QString for an xml file containing the calorie
+// targets for each crop from m C a l o r i e s P r o v i d e d B y C r o p s M a p
+// Loop through the m C a l o r i e s P r o v i d e d B y C r o p s M a p
+QString myString ;
+myString += QString ( " <h3 > Crop Calorie Targets </ h3 >\ n " ) ;
+myString += QString ( " < table > " ) ;
+myString += QString ( " <tr >\ n " ) ;
+myString += QString ( "
+<th >\ n " ) ;
+myString += QString ( "
+Crop \ n " ) ;
+myString += QString ( "
+</ th >\ n " ) ;
+myString += QString ( "
+<th >\ n " ) ;
+myString += QString ( "
+kCalories \ n " ) ;
+myString += QString ( "
+</ th >\ n " ) ;
+myString += QString ( " </ tr >\ n " ) ;
+QMapIterator < QString , float > myCro pIterat or ( m C a l o r i e s P r o v i d e d B y C r o p s M a p ) ;
+while ( m yCropIte rator . hasNext () )
+{
+myCr opIterat or . next () ;
+QString myCropGuid = myCropIt erator . key () ;
+
+570
+
+float my Ca l or ie Ta r ge t = static_cast < float >( my CropIter ator . value () ) ;
+LaCrop myCrop = LaUtils :: getCrop ( myCropGuid ) ;
+L aC ro pP a ra me te r my Cr o pP ar am e te r = LaUtils :: g et C r o p P a r a m e t e r ( mCropsMap .
+value ( myCropGuid ) ) ;
+// add to the QString to create the html file
+myString
+myString
+myString
+myString
+myString
+myString
+myString
+myString
+
+}
+
++=
++=
++=
++=
++=
++=
++=
++=
+
+QString ( "
+QString ( "
+QString ( "
+QString ( "
+QString ( "
+QString ( "
+QString ( "
+QString ( "
+
+<tr >\ n " ) ;
+<td >\ n " ) ;
+" + LaUtils :: xmlEncode ( myCrop . name () ) + " \ n " ) ;
+</ td >\ n " ) ;
+<td >\ n " ) ;
+" + QString :: number ( m yC a lo ri eT a rg et ) + " \ n " ) ;
+</ td >\ n " ) ;
+</ tr >\ n " ) ;
+
+// add to the QString to create the xml file
+// myString += QString (" < crop >\ n ") ;
+// myString += QString ("
+< guid =\"" + myCr opItera tor . key () + "\" >\ n ") ;
+// myString += QString ("
+< name >" + LaUtils :: xmlEncode ( myCrop . name () ) +
+" </ name >\ n ") ;
+// myString += QString ("
+< description >" + LaUtils :: xmlEncode ( myCrop .
+description () ) + " </ description >\ n ") ;
+// myString += QString ("
+< parameterGuid =\"" + m y Cr op Pa r am et er . guid () +
+"\" >\ n ") ;
+// myString += QString ("
+< name >" + LaUtils :: xmlEncode ( m yC ro p Pa ra me t er .
+name () ) + " </ name >\ n ") ;
+// myString += QString ("
+< calorieTarget >" + QString :: number (
+m yC al or i eT ar ge t ) + " </ calorieTarget >\ n ") ;
+// myString += QString (" </ crop >\ n ") ;
+// while crop iterator
+
+myString += QString ( " </ table >\ n " ) ;
+return myString ;
+}
+QString LaModel :: t o H t m l C a l o r i e A n i m a l T a r g e t s ()
+{
+// This method returns a QString for an xml file containing the calorie
+// targets for each animal from m C a l o r i e s P r o v i d e d B y M e a t M a p
+// Loop through the m C a l o r i e s P r o v i d e d B y A n i a m l s M a p
+QString myString ;
+myString += QString ( " <h3 > Animal Calorie Targets </ h3 >\ n " ) ;
+myString += QString ( " <P STYLE =\" margin - bottom : 0 in \" > < BR >\ n " ) ;
+myString += QString ( " \ n " ) ;
+myString += QString ( " < table > " ) ;
+myString += QString ( " < COL WIDTH =64* >\ n " ) ;
+myString += QString ( " < COL WIDTH =16* >\ n " ) ;
+myString += QString ( " <tr >\ n " ) ;
+myString += QString ( "
+<th >\ n " ) ;
+myString += QString ( "
+Animal \ n " ) ;
+myString += QString ( "
+</ th >\ n " ) ;
+myString += QString ( "
+<th >\ n " ) ;
+myString += QString ( "
+kCalories \ n " ) ;
+myString += QString ( "
+</ th >\ n " ) ;
+myString += QString ( " </ tr >\ n " ) ;
+QMapIterator < QString , float > m y A n i m a lI t e r a t o r ( m C a l o r i e s P r o v i d e d B y M e a t M a p ) ;
+while ( m y A n i m a l I t e r a t o r . hasNext () )
+{
+m y A n i m a l I t e r a t o r . next () ;
+QString myAnimalGuid = m y A n i m a l I t e ra t o r . key () ;
+float my Ca l or ie Ta r ge t = static_cast < float >( m y A n i m a l I t e r a t o r . value () ) ;
+LaAnimal myAnimal = LaUtils :: getAnimal ( myAnimalGuid ) ;
+L a A n i m a l P a r a m e t e r m y A n i m a l P a r a m e t e r = LaUtils :: g e t A n i m a l P a r a m e t e r (
+mAnimalsMap . value ( myAnimalGuid ) ) ;
+myString += QString ( " <tr >\ n " ) ;
+myString += QString ( "
+<td >\ n " ) ;
+
+571
+
+myString
+;
+myString
+myString
+myString
+myString
+myString
+
++= QString ( "
++=
++=
++=
++=
++=
+
+QString ( "
+QString ( "
+QString ( "
+QString ( "
+QString ( "
+
+" + LaUtils :: xmlEncode ( myAnimal . name () ) + " \ n " )
+</ td >\ n " ) ;
+<td >\ n " ) ;
+" + QString :: number ( m yC a lo ri eT a rg et ) + " \ n " ) ;
+</ td >\ n " ) ;
+</ tr >\ n " ) ;
+
+// add to the QString to create the xml file
+// myString += QString (" < animal >\ n ") ;
+// myString += QString ("
+< guid =\"" + m y A n i m a l I t e r a to r . key () + "\" >\ n ")
+;
+// myString += QString ("
+< name >" + LaUtils :: xmlEncode ( myAnimal . name () )
++ " </ name >\ n ") ;
+// myString += QString ("
+< description >" + LaUtils :: xmlEncode ( myAnimal .
+description () ) + " </ description >\ n ") ;
+// myString += QString ("
+< parameterGuid =\"" + m y A n i m a l P a r a m e t e r . guid ()
++ "\" >\ n ") ;
+// myString += QString ("
+< name >" + LaUtils :: xmlEncode (
+m y A n i m a l P a r a m e t e r . name () ) + " </ name >\ n ") ;
+// myString += QString ("
+< calorieTarget >" + QString :: number (
+m yC al or i eT ar ge t ) + " </ calorieTarget >\ n ") ;
+// myString += QString (" </ animal >\ n ") ;
+}
+
+// while animal iterator
+myString += QString ( " </ table >\ n " ) ;
+return myString ;
+
+}
+QString LaModel :: t o H t m l P r o d u c t i o n C r o p T a r g e t s ()
+{
+// This method returns a QString for an xml file containing the production
+// targets for each crop from m P r o d u c t i o n R e q u i r e d C r o p s M a p
+// Loop through the m P r o d u c t i o n R e q u i r e d C r o p s M a p
+QString myString ;
+myString += QString ( " <h3 > Crop Production Targets </ h3 >\ n " ) ;
+myString += QString ( " <P STYLE =\" margin - bottom : 0 in \" > < BR >\ n " ) ;
+myString += QString ( " \ n " ) ;
+myString += QString ( " < table > " ) ;
+myString += QString ( " < COL WIDTH =64* >\ n " ) ;
+myString += QString ( " < COL WIDTH =16* >\ n " ) ;
+myString += QString ( " <tr >\ n " ) ;
+myString += QString ( "
+<th >\ n " ) ;
+myString += QString ( "
+Crop \ n " ) ;
+myString += QString ( "
+</ th >\ n " ) ;
+myString += QString ( "
+<th >\ n " ) ;
+myString += QString ( "
+Kg \ n " ) ;
+myString += QString ( "
+</ th >\ n " ) ;
+myString += QString ( " </ tr >\ n " ) ;
+QMapIterator < QString , float > myCro pIterat or ( m P r o d u c t i o n R e q u i r e d C r o p s M a p ) ;
+while ( m yCropIte rator . hasNext () )
+{
+myCr opIterat or . next () ;
+QString myCropGuid = myCropIt erator . key () ;
+float m y P r o d u c t i o n T a r g e t = static_cast < float >( myCro pIterat or . value () ) ;
+LaCrop myCrop = LaUtils :: getCrop ( myCropGuid ) ;
+L aC ro p Pa ra me t er my C ro pP ar a me te r = LaUtils :: g e tC r o p P a r a m e t e r ( mCropsMap .
+value ( myCropGuid ) ) ;
+// add to the QString to create the xml file
+myString += QString ( " <tr >\ n " ) ;
+myString += QString ( "
+<td >\ n " ) ;
+myString += QString ( "
+" + LaUtils :: xmlEncode ( myCrop . name () ) + " \ n " ) ;
+myString += QString ( "
+</ td >\ n " ) ;
+myString += QString ( "
+<td >\ n " ) ;
+myString += QString ( "
+" + QString :: number ( m y P r o d u c t i o n T a r g e t ) + " \ n " )
+;
+myString += QString ( "
+</ td >\ n " ) ;
+myString += QString ( " </ tr >\ n " ) ;
+}
+// while crop iterator
+
+572
+
+myString += QString ( " </ table >\ n " ) ;
+return myString ;
+}
+QString LaModel :: t o H t m l P r o d u c t i o n A n i m a l T a r g e t s ()
+{
+// Sallah , I said * no * camels . That ’s * five * camels . Can ’t you count ?
+// This method returns a QString for an xml file containing the production
+// targets for each animal from m P r o d u c t i o n R e q u i r e d A n i m a l s M a p
+// Loop through the m P r o d u c t i o n R e q u i r e d A n i m a l s M a p
+QString myString ;
+myString += QString ( " <h3 > Animal Production Targets </ h3 >\ n " ) ;
+myString += QString ( " <P STYLE =\" margin - bottom : 0 in \" > < BR >\ n " ) ;
+myString += QString ( " \ n " ) ;
+myString += QString ( " < table > " ) ;
+myString += QString ( " < COL WIDTH =64* >\ n " ) ;
+myString += QString ( " < COL WIDTH =16* >\ n " ) ;
+myString += QString ( " <tr >\ n " ) ;
+myString += QString ( "
+<th >\ n " ) ;
+myString += QString ( "
+Animal \ n " ) ;
+myString += QString ( "
+</ th >\ n " ) ;
+myString += QString ( "
+<th >\ n " ) ;
+myString += QString ( "
+Kg \ n " ) ;
+myString += QString ( "
+</ th >\ n " ) ;
+myString += QString ( " </ tr >\ n " ) ;
+QMapIterator < QString , float > m y A n i m a lI t e r a t o r ( m P r o d u c t i o n R e q u i r e d A n i m a l s M a p
+);
+while ( m y A n i m a l I t e r a t o r . hasNext () )
+{
+m y A n i m a l I t e r a t o r . next () ;
+QString myAnimalGuid = m y A n i m a l I t e ra t o r . key () ;
+float m y P r o d u c t i o n T a r g e t = static_cast < float >( m y A n i m a lI t e r a t o r . value () ) ;
+LaAnimal myAnimal = LaUtils :: getAnimal ( myAnimalGuid ) ;
+L a A n i m a l P a r a m e t e r m y A n i m a l P a r a m e t e r = LaUtils :: g e t A n i m a l P a r a m e t e r (
+mAnimalsMap . value ( myAnimalGuid ) ) ;
+// add to the QString to create the xml file
+myString += QString ( " <tr >\ n " ) ;
+myString += QString ( "
+<td >\ n " ) ;
+myString += QString ( "
+" + LaUtils :: xmlEncode ( myAnimal . name () ) + " \ n " )
+;
+myString += QString ( "
+</ td >\ n " ) ;
+myString += QString ( "
+<td >\ n " ) ;
+myString += QString ( "
+" + QString :: number ( m y P r o d u c t i o n T a r g e t ) + " \ n " )
+;
+myString += QString ( "
+</ td >\ n " ) ;
+myString += QString ( " </ tr >\ n " ) ;
+}
+// while crop iterator
+myString += QString ( " </ table >\ n " ) ;
+return myString ;
+}
+QString LaModel :: t o H t m l A r e a C r o p T a r g e t s ()
+{
+// This method returns a QString for an xml file containing the production
+// targets for each crop from m A r e a T a r g e t s C r o p s M a p
+// Loop through the m A r e a T a r g e t s C r o p s M a p
+QString myString ;
+myString += QString ( " <h3 > Crop Area Targets </ h3 >\ n " ) ;
+myString += QString ( " <P STYLE =\" margin - bottom : 0 in \" > < BR >\ n " ) ;
+myString += QString ( " \ n " ) ;
+myString += QString ( " < table > " ) ;
+myString += QString ( " < COL WIDTH =64* >\ n " ) ;
+myString += QString ( " < COL WIDTH =16* >\ n " ) ;
+myString += QString ( " <tr >\ n " ) ;
+
+573
+
+myString += QString ( "
+<th >\ n " ) ;
+myString += QString ( "
+Crop \ n " ) ;
+myString += QString ( "
+</ th >\ n " ) ;
+myString += QString ( "
+<th >\ n " ) ;
+myString += QString ( "
+Area \ n " ) ;
+myString += QString ( "
+</ th >\ n " ) ;
+myString += QString ( " </ tr >\ n " ) ;
+QMapIterator < QString , float > myCro pIterat or ( m A r e a T a r g e t s C r o p s M a p ) ;
+while ( m yCropIte rator . hasNext () )
+{
+myCr opIterat or . next () ;
+QString myCropGuid = myCropIt erator . key () ;
+if ( myCropGuid != " CommonTarget " )
+{
+float myAreaTarget = static_cast < float >( myCropI terator . value () ) ;
+LaCrop myCrop = LaUtils :: getCrop ( myCropGuid ) ;
+L aC ro pP a ra me te r my Cr o pP ar am e te r = LaUtils :: g e t C r o p P a r a m e t e r ( mCropsMap .
+value ( myCropGuid ) ) ;
+// add to the QString to create the xml file
+myString += QString ( " <tr >\ n " ) ;
+myString += QString ( "
+<td >\ n " ) ;
+myString += QString ( "
+" + LaUtils :: xmlEncode ( myCrop . name () ) + " \ n " )
+;
+myString += QString ( "
+</ td >\ n " ) ;
+myString += QString ( "
+<td >\ n " ) ;
+myString += QString ( "
+" + QString :: number ( myAreaTarget ) + " \ n " ) ;
+myString += QString ( "
+</ td >\ n " ) ;
+myString += QString ( " </ tr >\ n " ) ;
+}
+else
+{
+QString myAreaTarget = QString :: number ( m A r e a T a r g e t s C r o p s M a p . value ( "
+CommonTarget " ) ) ;
+myString += QString ( " <tr >\ n " ) ;
+myString += QString ( "
+<td >\ n " ) ;
+myString += QString ( "
+CommonTarget \ n " ) ;
+myString += QString ( "
+</ td >\ n " ) ;
+myString += QString ( "
+<td >\ n " ) ;
+myString += QString ( "
+" + myAreaTarget + " \ n " ) ;
+myString += QString ( "
+</ td >\ n " ) ;
+myString += QString ( " </ tr >\ n " ) ;
+}
+}
+// while crop iterator
+myString += QString ( " </ table >\ n " ) ;
+return myString ;
+}
+QString LaModel :: t o H t m l A r e a A n i m a l T a r g e t s ()
+{
+// This method returns a QString for an xml file containing the production
+// targets for each animal from m A r e a T a r g e t s A n i m a l s M a p
+// Loop through the m A r e a T a r g e t s A n i m a l s M a p
+QString myString ;
+myString += QString ( " <h3 > Animal Area Targets </ h3 >\ n " ) ;
+myString += QString ( " \ n " ) ;
+myString += QString ( " < table > " ) ;
+myString += QString ( " <tr >\ n " ) ;
+myString += QString ( "
+<th >\ n " ) ;
+myString += QString ( "
+Animal \ n " ) ;
+myString += QString ( "
+</ th >\ n " ) ;
+myString += QString ( "
+<th >\ n " ) ;
+myString += QString ( "
+Area \ n " ) ;
+myString += QString ( "
+</ th >\ n " ) ;
+myString += QString ( " </ tr >\ n " ) ;
+QMapIterator < QString , float > m y A n i m a l It e r a t o r ( m A r e a T a r g e t s A n i m a l s M a p ) ;
+while ( m y A n i m a l I t e r a t o r . hasNext () )
+{
+m y A n i m a l I t e r a to r . next () ;
+
+574
+
+QString myAnimalGuid = m y A n i m a l I t e ra t o r . key () ;
+if ( myAnimalGuid != " CommonTarget " )
+{
+float m y A r e a T a r g e t U n c h a n g e d = static_cast < float >( m y A n i m a l I t e r a t o r . value
+() ) ;
+LaAnimal myAnimal = LaUtils :: getAnimal ( myAnimalGuid ) ;
+L a A n i m a l P a r a m e t e r m y A n i m a l P a r a m e t e r = LaUtils :: g e t A n i m a l P a r a m e t e r (
+mAnimalsMap . value ( myAnimalGuid ) ) ;
+float myAreaTarget = LaUtils :: c o n v e r t A r e a T o H e c t a r e s ( m y A n i m a l P a r a m e t e r .
+areaUnits () , m y A r e a T a r g e t U n c h a n g e d ) ;
+// add to the QString to create the xml file
+myString += QString ( " <tr >\ n " ) ;
+myString += QString ( "
+<td >\ n " ) ;
+myString += QString ( "
+" + LaUtils :: xmlEncode ( myAnimal . name () ) + " \ n
+");
+myString += QString ( "
+</ td >\ n " ) ;
+myString += QString ( "
+<td >\ n " ) ;
+myString += QString ( "
+" + QString :: number ( myAreaTarget ) + " \ n " ) ;
+myString += QString ( "
+</ td >\ n " ) ;
+myString += QString ( " </ tr >\ n " ) ;
+}
+else
+{
+QString myAreaTarget = QString :: number ( m A r e a T a r g e t s A n i m a l s M a p . value ( "
+CommonTarget " ) ) ;
+myString += QString ( " <tr >\ n " ) ;
+myString += QString ( "
+<td >\ n " ) ;
+myString += QString ( "
+CommonTarget \ n " ) ;
+myString += QString ( "
+</ td >\ n " ) ;
+myString += QString ( "
+<td >\ n " ) ;
+myString += QString ( "
+" + myAreaTarget + " \ n " ) ;
+myString += QString ( "
+</ td >\ n " ) ;
+myString += QString ( " </ tr >\ n " ) ;
+}
+}
+myString += QString ( " </ table >\ n " ) ;
+return myString ;
+}
+QMap < QString , float > LaModel :: g e t A r e a T a r g e t s A n i m a l s M a p ()
+{
+return m A r e a T a r g e t s A n i m a l s M a p ;
+}
+QMap < QString , float > LaModel :: g e t A r e a T a r g e t s C r o p s M a p ()
+{
+return m A r e a T a r g e t s C r o p s M a p ;
+}
+
+575
+
+D.20
+
+Serialisable
+
+D.20.1
+
+laserialisable.h
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+*
+Copyright ( C ) 2007 ,2008 ,2009 Jason Jorgenson jason . jorgenson@liv . ac . uk *
+*
+( C ) 2007
+Tim Sutton tim@linfiniti . com
+*
+*
+*
+*
+This program is free software ; you can redistribute it and / or modify
+*
+*
+it under the terms of the GNU General Public License as published by
+*
+*
+the Free Software Foundation ; either version 2 of the License , or
+*
+*
+( at your option ) any later version .
+*
+*
+*
+*
+This program is distributed in the hope that it will be useful ,
+*
+*
+but WITHOUT ANY WARRANTY ; without even the implied warranty of
+*
+*
+M ER C HA NT AB I LI TY or FITNESS FOR A PARTICULAR PURPOSE . See the
+*
+*
+GNU General Public License for more details .
+*
+*
+*
+*
+You should have received a copy of the GNU General Public License
+*
+*
+along with this program ; if not , write to the
+*
+*
+Free Software Foundation , Inc . ,
+*
+*
+59 Temple Place - Suite 330 , Boston , MA 02111 -1307 , USA .
+*
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+# ifndef L A S E R I A L I S AB L E _ H
+# define L A S E R I A L I S AB L E _ H
+class QString ;
+# include < QFile >
+/* *
+* An abstract base class for any class that is serialiseable to xml
+* @author Tim Sutton
+*/
+class LaS erialis able
+{
+public :
+/* * Constructor . */
+LaSe rialisab le () ;
+/* * Desctructor . */
+virtual ~ L aSeriali sable () ;
+/* * Write this object to xml and return result as qstring ( virtual ) . */
+virtual QString toXml () =0;
+/* * Write this object to xml and return result as qstring ( virtual ) .
+* We provide a basic default impleme ntation where given a file name ,
+* we will write the serialised xml to that file .
+* Internally it uses toXml () method above so that must be properly
+implemented .
+*/
+virtual bool toXmlFile ( const QString theFileName ) ;
+/* * Read this object from xml and return result as true for success , false
+for failure ( virtual ) . */
+virtual bool fromXml ( const QString theXml ) =0;
+/* * Read this object from xml in a file and return result as true for
+success , false for failure .
+* Internally it uses fromXml ( QString ) method above so that must be
+properly implemented .
+*/
+virtual bool fromXmlFile ( const QString theFileName ) ;
+};
+# endif
+
+// L A S E R I A L I S A B L E _ H
+
+D.20.2
+
+laserialisable.cpp
+576
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+*
+Copyright ( C ) 2007 ,2008 ,2009 Jason Jorgenson jason . jorgenson@liv . ac . uk *
+*
+( C ) 2007
+Tim Sutton tim@linfiniti . com
+*
+*
+*
+*
+This program is free software ; you can redistribute it and / or modify
+*
+*
+it under the terms of the GNU General Public License as published by
+*
+*
+the Free Software Foundation ; either version 2 of the License , or
+*
+*
+( at your option ) any later version .
+*
+*
+*
+*
+This program is distributed in the hope that it will be useful ,
+*
+*
+but WITHOUT ANY WARRANTY ; without even the implied warranty of
+*
+*
+M ER C HA NT AB I LI TY or FITNESS FOR A PARTICULAR PURPOSE . See the
+*
+*
+GNU General Public License for more details .
+*
+*
+*
+*
+You should have received a copy of the GNU General Public License
+*
+*
+along with this program ; if not , write to the
+*
+*
+Free Software Foundation , Inc . ,
+*
+*
+59 Temple Place - Suite 330 , Boston , MA 02111 -1307 , USA .
+*
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+# include
+# include
+# include
+# include
+# include
+
+" laserial isable . h "
+< QFile >
+< QString >
+< QTextStream >
+< QDebug >
+
+LaSe rialisab le :: L aSerial isable ()
+{
+}
+LaSe rialisab le ::~ LaSeria lisable ()
+{
+}
+bool LaSeria lisable :: toXmlFile ( const QString theFileName )
+{
+bool myResult = false ;
+QFile myFile ( theFileName ) ;
+if ( myFile . open ( QIODevice :: WriteOnly ) )
+{
+QTextStream myQTextStream ( & myFile ) ;
+myQTextStream << this - > toXml () ;
+myFile . close () ;
+myResult = true ;
+}
+else
+{
+// @TODO Error handler !
+myResult = false ;
+}
+return myResult ;
+}
+bool LaSeria lisable :: fromXmlFile ( const QString theFileName )
+{
+bool myResult = false ;
+QFile myFile ( theFileName ) ;
+if ( myFile . open ( QIODevice :: ReadOnly ) )
+{
+myResult = this - > fromXml ( myFile . readAll () ) ;
+myFile . close () ;
+}
+else
+{
+// qDebug () JDT < < " Failed to open " << theFileName << " for d es e ri al is a ti on
+";
+// @TODO Error handler !
+myResult = false ;
+}
+return myResult ;
+
+577
+
+}
+
+578
+
+D.21
+
+Utils
+
+D.21.1
+
+lautils.h
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+*
+Copyright ( C ) 2007 ,2008 ,2009 Jason Jorgenson jason . jorgenson@liv . ac . uk *
+*
+( C ) 2007
+Tim Sutton tim@linfiniti . com
+*
+*
+*
+*
+This program is free software ; you can redistribute it and / or modify
+*
+*
+it under the terms of the GNU General Public License as published by
+*
+*
+the Free Software Foundation ; either version 2 of the License , or
+*
+*
+( at your option ) any later version .
+*
+*
+*
+*
+This program is distributed in the hope that it will be useful ,
+*
+*
+but WITHOUT ANY WARRANTY ; without even the implied warranty of
+*
+*
+M ER C HA NT AB I LI TY or FITNESS FOR A PARTICULAR PURPOSE . See the
+*
+*
+GNU General Public License for more details .
+*
+*
+*
+*
+You should have received a copy of the GNU General Public License
+*
+*
+along with this program ; if not , write to the
+*
+*
+Free Software Foundation , Inc . ,
+*
+*
+59 Temple Place - Suite 330 , Boston , MA 02111 -1307 , USA .
+*
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+# ifndef LAUTILS_H
+# define LAUTILS_H
+class QString ;
+class QStringList ;
+# include < QHash >
+# include < QMap >
+# include " laanimal . h "
+# include " lacrop . h "
+# include " l a a n i m a l p a r a m e t e r . h "
+# include " l ac ro pp a ra me te r . h "
+# include " la . h "
+/* * This is a helper class with mainly static methods for easily
+* obtaining the directories and paths relating to the application
+* for example the users settings dir .
+*/
+class LaUtils
+{
+public :
+/* *
+* Find the place on the filesystem where user data
+* are stored .
+*
+* Typically this will be ~/. landuseA nalyst
+*
+* @return QString containing the relevant directory name
+*/
+static const QString u s e r S e t t i n g s D i r P a t h () ;
+/* *
+* Find the place on the filesystem where user defined animal
+* profiles are stored .
+*
+* Typically this will be ~/. landuseA nalyst / animal Profiles
+*
+* @return QString containing the relevant directory name
+*/
+static const QString u s e r A n i m a l P r o f i l e s D i r P a t h () ;
+/* *
+* Find the place on the filesystem where user defined animal
+* model parameter profiles are stored .
+*
+* Typically this will be ~/. landuseA nalyst / a ni m a l P a r a m e t e r s
+*
+* @return QString containing the relevant directory name
+*/
+
+579
+
+static const QString u s e r A n i m a l P a r a m e t e r s D i r P a t h () ;
+/* *
+* Find the place on the filesystem where user defined crop
+* model parameter profiles are stored .
+*
+* Typically this will be ~/. landuseA nalyst / cropPa rameters
+*
+* @return QString containing the relevant directory name
+*/
+static const QString u s e r C r o p P a r a m e t e r s D i r P a t h () ;
+/* * Get the place where model outputs are to be stored .
+* By default this is in ~/. landuse Analyst / modelOutputs
+* But if m od e lO ut pu t sD ir is specified in QSettings , it will override
+* the default .
+*/
+static const QString g e t M o d e l O u t p u t D i r () ;
+/* *
+* Find the place on the filesystem where user defined crop
+* profiles are stored .
+*
+* Typically this will be ~/. landuseA nalyst / crops
+*
+* @return QString containing the relevant directory name
+*/
+static const QString u s e r C r o p P r o f i l e s D i r P a t h () ;
+/* *
+* Find the place on the filesystem where user images
+* are stored .
+*
+* Typically this will be ~/. landuseA nalyst / images
+*
+* @return QString containing the relevant directory name
+*/
+static const QString u s e r I m a g e s D i r P a t h () ;
+
+/* * This typedef is used to refer to a collection of layersets .
+* the key is the layerset name
+* the value is the layerset itself
+*/
+typedef QMap < QString , LaCrop > CropMap ;
+/* * Get a QMap of the avaliable layersets in the users layersets directory
+* @return a QMap < QString , OmgLayerSet > where the QString key is the
+layerset name
+* */
+static LaUtils :: CropMap g e t A v a i l a b l e C r o p s () ;
+/* * Get a LaCrop given its GUID .
+* If no matching crop is found , a blank one is
+* returned .
+*/
+static LaCrop getCrop ( QString theGuid ) ;
+/* * This typedef is used to refer to a collection of layersets .
+* the key is the layerset name
+* the value is the layerset itself
+*/
+typedef QMap < QString , LaAnimal > AnimalMap ;
+/* * Get a LaAnimal given its GUID .
+* If no matching animal is found , a blank one is
+* returned .
+*/
+static LaAnimal getAnimal ( QString theGuid ) ;
+/* *
+* Find the place on the filesystem where user defined cropParameter
+* profiles are stored .
+*
+
+580
+
+* Typically this will be ~/. landuseA nalyst / cropPa rameters
+*
+* @return QString containing the relevant directory name
+*/
+static const QString u s e r C r o p P a r a m e t e r P r o f i l e s D i r P a t h () ;
+/* *
+* Find the place on the filesystem where user created
+* conversion tables in csv format are stored
+*
+* Typically this will be ~/. landuseA nalyst / c on v e r s i o n T a b l e s
+*
+* @return QString containing the relevant directory name
+*/
+static const QString u s e r C o n v e r s i o n T a b l e s D i r P a t h () ;
+/* * This typedef is used to refer to a collection of layersets .
+* the key is the layerset name
+* the value is the layerset itself
+*/
+typedef QMap < QString , LaCropParameter > C r o p P a r a m et e r M a p ;
+/* * Get a QMap of the avaliable layersets in the users layersets directory
+* @return a QMap < QString , OmgLayerSet > where the QString key is the
+layerset name
+* */
+static LaUtils :: C r o p Pa r a m e t e r M a p g e t A v a i l a b l e C r o p P a r a m e t e r s () ;
+/* * Get a La C ro pP ar a me te r given its GUID .
+* If no matching a ni m al pa ra m et er is found , a blank one is
+* returned .
+*/
+static L aC r op Pa r am et er g e t C r o p P a r a m e t e r ( QString theGuid ) ;
+/* * This typedef is used to refer to a collection of layersets .
+* the key is the layerset name
+* the value is the layerset itself
+*/
+typedef QMap < QString , LaAnimalParameter > A n i m a l P a r a m e t e r M a p ;
+/* * Get a QMap of the avaliable layersets in the users layersets directory
+* @return a QMap < QString , OmgLayerSet > where the QString key is the
+layerset name
+* */
+static LaUtils :: A n i m a l P a r a m e t e r M a p g e t A v a i l a b l e A n i m a l P a r a m e t e r s () ;
+/* * Get a L a A n i m a l P a r a m e t e r given its GUID .
+* If no matching a ni m al pa ra m et er is found , a blank one is
+* returned .
+*/
+static L a A n i m a l P a r a m e t e r g e t A n i m a l P a r a m e t e r ( QString theGuid ) ;
+static int c o n v e r t A r e a T o H e c t a r e s ( AreaUnits theAreaUnit , int theArea ) ;
+/* *
+* Find the place on the filesystem where user defined a ni ma lP a ra me te r
+* profiles are stored .
+*
+* Typically this will be ~/. landuseA nalyst / a n i m a l P a r a m e t e r P r o f i l e s
+*
+* @return QString containing the relevant directory name
+*/
+static const QString u s e r A n i m a l P a r a m e t e r P r o f i l e s D i r P a t h () ;
+
+/* * Get a QMap of the avaliable animals from the users animals directory
+* @return a QMap < QString , OmgLayerSet > where the QString key is
+* the animal name .
+* */
+static LaUtils :: AnimalMap g e t A v a i l a b l e A n i m a l s () ;
+
+581
+
+/* * Sort a string list into descending alphabetic order
+* and return the result .
+* @param theList - the QStringList to be sorted
+* @return QStringList - sorted in descending alphabetical order
+*/
+static QStringList sortList ( QStringList theList ) ;
+/* * Remove any duplucate entries from a sorted list
+* @param theList - the QStringList to be sorted
+* @return QStringList - a list with no sequential duplicates
+*/
+static QStringList uniqueList ( QStringList theList ) ;
+/* * Scan the users work directory looking for experiment files
+* and return the list of files found .
+* @return A QStringList of files found
+*/
+static QStringList g e t E x p e r i m e n t s L i s t () ;
+/* * A helper method to easily write a file to disk .
+* @param theFileName - the filename to be created or overwritten
+* @param theData - the data that will be written into the file
+* @return bool - false if the file could not be written
+*/
+static bool cr eateText File ( QString theFileName , QString theData ) ;
+/* * A helper method to xml encode any special chars in a string
+* ( < > & etc ) will become (& lt ; & gt ; & amp ; etc )
+* @param QString - the string to be properly encoded
+* @return A QString with the special chars properly encoded
+*/
+static QString xmlEncode ( QString theString ) ;
+/* * A helper method to xml deencode any special chars in a string
+* (& lt ; & gt ; & amp ; etc ) will become ( < > & etc )
+* @param QString - the string to be properly decoded
+* @return A QString with the encoded chars properly decoded
+*/
+static QString xmlDecode ( QString theString ) ;
+/* * Get the standard style sheet for reports . Typically this will be
+* used like this :
+* QString myStyle = getStand ardCss () ;
+* textBrowserFoo - > document () -> s e t D e f a u l t S t y l e s h e e t ( myStyle ) ;
+*/
+static QString getSt andardC ss () ;
+QString op en Gr a ph ic Fi l e () ;
+QString saveFile () ;
+private :
+};
+
+# endif
+
+D.21.2
+
+lautils.cpp
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+*
+Copyright ( C ) 2007 ,2008 ,2009 Jason Jorgenson jason . jorgenson@liv . ac . uk *
+*
+( C ) 2007
+Tim Sutton tim@linfiniti . com
+*
+*
+*
+*
+This program is free software ; you can redistribute it and / or modify
+*
+*
+it under the terms of the GNU General Public License as published by
+*
+*
+the Free Software Foundation ; either version 2 of the License , or
+*
+*
+( at your option ) any later version .
+*
+*
+*
+
+582
+
+*
+This program is distributed in the hope that it will be useful ,
+*
+*
+but WITHOUT ANY WARRANTY ; without even the implied warranty of
+*
+*
+M ER C HA NT AB I LI TY or FITNESS FOR A PARTICULAR PURPOSE . See the
+*
+*
+GNU General Public License for more details .
+*
+*
+*
+*
+You should have received a copy of the GNU General Public License
+*
+*
+along with this program ; if not , write to the
+*
+*
+Free Software Foundation , Inc . ,
+*
+*
+59 Temple Place - Suite 330 , Boston , MA 02111 -1307 , USA .
+*
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+# include " lautils . h "
+# include " laanimal . h "
+# include " lacrop . h "
+# include " l a a n i m a l p a r a m e t e r . h "
+# include " l ac ro pp a ra me te r . h "
+# include " la . h "
+# include
+# include
+# include
+# include
+# include
+# include
+# include
+# include
+# include
+
+< QApplication >
+< QDir >
+< QFile >
+< QPluginLoader >
+< QSettings >
+< QString >
+< QStringList >
+< QVector >
+< QtXml >
+
+# include < QFileDialog >
+# ifdef Q_OS_MACX
+// for getting app bundle path
+# include < A p p l i c a t i o n S e r v i c e s / A p p l i c a t i o n S e r v i c e s .h >
+# endif
+
+/* *
+* Returns the path to the settings directory in user ’s home dir
+*/
+const QString LaUtils :: u s e r S e t t i n g s D i r P a t h ()
+{
+QSettings mySettings ;
+QString myPath =
+mySettings . value ( " dataDirs / dataDir " , QDir :: homePath () + QString ( " /.
+land useAnaly st / " ) ) . toString () ;
+// Make sure the users settings dir actually exists
+// // qDebug (" LaUtils :: u s e r S e t t i n g s D i r P a t h () = " + myPath . toLocal8Bit () ) ;
+QDir () . mkpath ( myPath ) ;
+return myPath ;
+}
+const QString LaUtils :: g e t M o d e l O u t p u t D i r ()
+{
+QString myPath = u s e r S e t t i n g s D i r P a t h () + QDir :: separator () + " modelOutputs " + QDir
+:: separator () ;
+QDir () . mkpath ( myPath ) ;
+return myPath ;
+}
+const QString LaUtils :: u s e r A n i m a l P r o f i l e s D i r P a t h ()
+{
+// alg profiles are always saved in the users home dir under .
+land useAnaly st /
+QString myPath = QDir :: homePath () + QString ( " /. landus eAnalyst / " ) +
+QDir :: separator () + " ani malProf iles " + QDir :: separator () ;
+QDir () . mkpath ( myPath ) ;
+return myPath ;
+}
+
+const QString LaUtils :: u s e r C r o p P r o f i l e s D i r P a t h ()
+{
+// alg profiles are always saved in the users home dir under .
+land useAnaly st /
+
+583
+
+QString myPath = QDir :: homePath () + QString ( " /. landus eAnalys t / " ) +
+QDir :: separator () + " cropProfiles " + QDir :: separator () ;
+QDir () . mkpath ( myPath ) ;
+return myPath ;
+}
+
+LaUtils :: AnimalMap LaUtils :: g e t A v a i l a b l e A n i m a l s ()
+{
+LaUtils :: AnimalMap myMap ;
+QDir myDirectory ( u s e r A n i m a l P r o f i l e s D i r P a t h () ) ;
+myDirectory . setFilter ( QDir :: Dirs | QDir :: Files | QDir :: NoSymLinks ) ;
+QFileInfoList myList = myDirectory . entryInfoList () ;
+for ( unsigned int i = 0; i < static_cast < unsigned int >( myList . size () ) ; ++ i )
+{
+QFileInfo myFileInfo = myList . at ( i ) ;
+// Ignore directories
+if ( myFileInfo . fileName () == " . " || myFileInfo . fileName () == " .. " )
+{
+continue ;
+}
+// if the filename ends in . xml try to load it into our layerSets listing
+if ( myFileInfo . co mpleteS uffix () == " xml " )
+{
+// // qDebug (" Loading animal : " + myList . at ( i ) . a b s o l u t e F i l e P a t h () .
+toLocal8Bit () ) ;
+LaAnimal myAnimal ;
+myAnimal . fromXmlFile ( myFileInfo . a b s o l u t e F i l e P a t h () ) ;
+if ( myAnimal . name () . isEmpty () )
+{
+// qDebug (" Animal name was empty !") ;
+continue ;
+}
+// // qDebug (" Adding " + myAnimal . name () ) ;
+// // qDebug ( myAnimal . toText () . toLocal8Bit () ) ;
+myMap [ myAnimal . guid () ]= myAnimal ;
+}
+}
+return myMap ;
+}
+LaAnimal LaUtils :: getAnimal ( QString theGuid )
+{
+QDir myDirectory ( u s e r A n i m a l P r o f i l e s D i r P a t h () ) ;
+myDirectory . setFilter ( QDir :: Dirs | QDir :: Files | QDir :: NoSymLinks ) ;
+QFileInfoList myList = myDirectory . entryInfoList () ;
+for ( unsigned int i = 0; i < static_cast < unsigned int >( myList . size () ) ; ++ i )
+{
+QFileInfo myFileInfo = myList . at ( i ) ;
+// Ignore directories
+if ( myFileInfo . fileName () == " . " || myFileInfo . fileName () == " .. " )
+{
+continue ;
+}
+// if the filename ends in . xml try to load it into our layerSets listing
+if ( myFileInfo . co mpleteS uffix () == " xml " )
+{
+// // qDebug (" Loading animal : " + myList . at ( i ) . a b s o l u t e F i l e P a t h () .
+toLocal8Bit () ) ;
+LaAnimal myAnimal ;
+myAnimal . fromXmlFile ( myFileInfo . a b s o l u t e F i l e P a t h () ) ;
+if ( myAnimal . name () . isEmpty () )
+{
+// qDebug (" Animal name was empty !") ;
+continue ;
+}
+// // qDebug (" Adding " + myAnimal . name () ) ;
+// // qDebug ( myAnimal . toText () . toLocal8Bit () ) ;
+if ( myAnimal . guid () == theGuid )
+{
+return myAnimal ;
+
+584
+
+}
+}
+}
+LaAnimal myAnimal ;
+return myAnimal ;
+
+// blank animal
+
+}
+LaUtils :: CropMap LaUtils :: g e t A v a i l a b l e C r o p s ()
+{
+LaUtils :: CropMap myMap ;
+QDir myDirectory ( u s e r C r o p P r o f i l e s D i r P a t h () ) ;
+myDirectory . setFilter ( QDir :: Dirs | QDir :: Files | QDir :: NoSymLinks ) ;
+QFileInfoList myList = myDirectory . entryInfoList () ;
+for ( unsigned int i = 0; i < static_cast < unsigned int >( myList . size () ) ; ++ i )
+{
+QFileInfo myFileInfo = myList . at ( i ) ;
+// Ignore directories
+if ( myFileInfo . fileName () == " . " || myFileInfo . fileName () == " .. " )
+{
+continue ;
+}
+// if the filename ends in . xml try to load it into our layerSets listing
+if ( myFileInfo . co mpleteSu ffix () == " xml " )
+{
+// // qDebug (" Loading crop : " + myList . at ( i ) . a b s ol u t e F i l e P a t h () .
+toLocal8Bit () ) ;
+LaCrop myCrop ;
+myCrop . fromXmlFile ( myFileInfo . a b s o l u t e F i l e P a t h () ) ;
+if ( myCrop . name () . isEmpty () )
+{
+// qDebug (" Crop name was empty !") ;
+continue ;
+}
+// // qDebug (" Adding " + myCrop . name () ) ;
+myMap [ myCrop . guid () ]= myCrop ;
+// // qDebug ( myCrop . toText () . toLocal8Bit () ) ;
+}
+}
+return myMap ;
+}
+LaCrop LaUtils :: getCrop ( QString theGuid )
+{
+QDir myDirectory ( u s e r C r o p P r o f i l e s D i r P a t h () ) ;
+myDirectory . setFilter ( QDir :: Dirs | QDir :: Files | QDir :: NoSymLinks ) ;
+QFileInfoList myList = myDirectory . entryInfoList () ;
+for ( unsigned int i = 0; i < static_cast < unsigned int >( myList . size () ) ; ++ i )
+{
+QFileInfo myFileInfo = myList . at ( i ) ;
+// Ignore directories
+if ( myFileInfo . fileName () == " . " || myFileInfo . fileName () == " .. " )
+{
+continue ;
+}
+// if the filename ends in . xml try to load it into our layerSets listing
+if ( myFileInfo . co mpleteSu ffix () == " xml " )
+{
+// // qDebug (" Loading crop : " + myList . at ( i ) . a b s ol u t e F i l e P a t h () .
+toLocal8Bit () ) ;
+LaCrop myCrop ;
+myCrop . fromXmlFile ( myFileInfo . a b s o l u t e F i l e P a t h () ) ;
+if ( myCrop . name () . isEmpty () )
+{
+// qDebug (" Crop name was empty !") ;
+continue ;
+}
+// // qDebug (" Adding " + myCrop . name () ) ;
+// // qDebug ( myCrop . toText () . toLocal8Bit () ) ;
+if ( myCrop . guid () == theGuid )
+{
+
+585
+
+return myCrop ;
+}
+}
+}
+LaCrop myCrop ;
+return myCrop ;
+
+// blank crop
+
+}
+const QString LaUtils :: u s e r C o n v e r s i o n T a b l e s D i r P a t h ()
+{
+// always saved in the users home dir under . landuse Analyst /
+QString myPath = QDir :: homePath () + QString ( " /. landus eAnalys t / " ) +
+QDir :: separator () + " c o n v e r s i o n T a b l e s " + QDir :: separator () ;
+QDir () . mkpath ( myPath ) ;
+return myPath ;
+}
+const QString LaUtils :: u s e r A n i m a l P a r a m e t e r P r o f i l e s D i r P a t h ()
+{
+// alg profiles are always saved in the users home dir under .
+land useAnaly st /
+QString myPath = QDir :: homePath () + QString ( " /. landus eAnalys t / " ) +
+QDir :: separator () + " a n i m a l P a r a m e t e r P r o f i l e s " + QDir :: separator () ;
+QDir () . mkpath ( myPath ) ;
+return myPath ;
+}
+const QString LaUtils :: u s e r I m a g e s D i r P a t h ()
+{
+QString myPath = QDir :: homePath () + QString ( " /. landus eAnalys t " ) +
+QDir :: separator () + " images " + QDir :: separator () ;
+QDir () . mkpath ( myPath ) ;
+return myPath ;
+}
+const QString LaUtils :: u s e r C r o p P a r a m e t e r P r o f i l e s D i r P a t h ()
+{
+// alg profiles are always saved in the users home dir under .
+land useAnaly st /
+QString myPath = QDir :: homePath () + QString ( " /. landus eAnalys t / " ) +
+QDir :: separator () + " c r o p P a r a m e t e r P r o f i l e s " + QDir :: separator () ;
+QDir () . mkpath ( myPath ) ;
+return myPath ;
+}
+int LaUtils :: c o n v e r t A r e a T o H e c t a r e s ( AreaUnits theAreaUnit , int theArea )
+{
+// this may seem ridiculous to do it this way , but
+// i plan to include other area units and this way
+// it will make it very easy to work with in the future
+// all need be done is add new units to la . h enum and enter
+// into the following switch ...
+float myHectares = 0.;
+switch ( theAreaUnit )
+// Dunum , Hectare
+{
+case Dunum :
+myHectares = theArea * 10.;
+break ;
+case Hectare :
+myHectares = theArea ;
+break ;
+/*
+add new units here after updating la . h enum ex :
+case Acre :
+HyHectares = theArea / 2.47105381;
+break ;
+*/
+}
+return static_cast < int >( myHectares ) ;
+}
+LaUtils :: A n i m a l P a r a m e t e r M a p LaUtils :: g e t A v a i l a b l e A n i m a l P a r a m e t e r s ()
+
+586
+
+

@@ -1,0 +1,440 @@
+beginnings of a form of urbanism. With higher populations came the need for more
+food. An examination of just one community, as was done with Shuna in Chapter 5,
+shows that it is possible to sustain any population with any of the scenarios entered
+into the model. When viewed regionally, however, it has been shown that access to a
+sufficient area of suitable land becomes a limiting factor. I believe that a better way
+to approach this question is to ask if communities outgrew the production potential of
+their subsistence strategy given the area of suitable land to which they had access.
+The mere presence of smaller sites within even what has been shown to be the
+smallest possible crop land extents (e.g. Figure 6.12 page 345) argues for a more
+complex asymmetric relationship between these communities that are at the heart of
+some understandings of urbanism. If considered in the context of higher populations
+and other modelled scenarios, it becomes even more evident that these relationships
+must have existed. Although Chesson and Philip argue against urbanism in favour of
+their corporate village model, I feel that, at least in part, they fail to consider some of
+these types of relationships that are urban in nature, even if they are not exactly like
+the form of urbanism we see in Mesopotamia.
+Not only has the the scale of the settlement been demonstrated as being an important factor for assessing landscape engagement, but it has also been demonstrated
+how valuable it is to consider the wider region when assessing the feasibility of proposed land use resulting from various subsistence strategies. The modelling software
+proved useful in that it has provided a way to quickly and systematically examine so
+many scenarios. Chapter 6 has indicated that certain areas, such as the Jordan Valley, were likely to have had to have close ties to neighbouring communities, especially
+as populations continued to climb and the need for cultivated land increased. It has
+also shown an interesting trend for small sites to be surrounded by the cropland of the
+larger settlements. Given the coarse temporal resolution available to us, the fact that
+these small sites appear to lie within crop land extents might mean that they were in
+their community’s grazing land extent when first established.
+Questions:
+Is it possible to find evidence to support the proposition that agricultural intensification must have been associated with the development of the new larger
+scale of EBA communities?
+Can we find evidence that, as Philip (2003) and Chesson (2003) put it, such
+communities ‘inscribed’ themselves on their landscape in new ways, and are
+these communities likely to have been some of the first to have had a significant negative impact on their physical environment?
+
+By examining a large number of different scenarios, it has been shown that certain
+strategies appear more favourable than others depending in part on circumstance. For
+example, the suspected ‘meatier’ diet of the Chalcolithic was observed to be sufficient
+only up to a certain population level, at which point a change of subsistence strategy
+361
+
+appears to be needed if population levels were to continue to climb. Because populations are based on a combined use of site size and population density estimates, it is
+necessary to talk in terms of population density estimates, as the site sizes are calculated from the archaeological evidence, whilst the human population density can only
+be estimated. Therefore, given that we have an idea of what the settlement sizes were
+during the various phases of occupation, maximum and minimum populations should
+be used. That being said, as time progressed from the EEBI, settlement sizes could be
+seen to increase, and even using minimum values for population density, population
+levels corresponding to the site sizes were shown to be problematic under certain subsistence strategies. I suspect that changes in subsistence strategies would have been
+slow to change until/unless something occurred which made it a necessity. Simply
+expanding your territory using the same strategy would have worked to a point, but
+eventually this expansion reaches a limit, forcing something to change. This limit to
+expansion can be from any number of things, such as natural barriers like river or large
+bodies of water, changing ecological zones, or competition for land from neighbouring
+communities. When these limits were reached, a more efficient use of the available
+land was likely to have had to occur if population levels were seen to have increased.
+This was shown to be possible throughout the course of Chapter 5, and is supported
+by the archaeological evidence (e.g. the increasing proportions of cattle perhaps indicating greater ploughing at Shuna, or the ‘disappearance’ of pigs perhaps being an
+indication for the intentional drainage of bottom lands, and so on).
+With cultivation being a very visible inscription on the landscape already, I propose
+that other more deliberate attempts to indicate an association of communities to their
+more distant grazing lands could have been made. Although my research has not been
+able to explore these issues directly, it seems reasonable that one might find features
+such as dolmens in these areas, deliberately placed to ensure that the land was in use
+by them. In addition the packing of landscapes like the Jordan valley with the fields,
+fallow as well as cultivated, of significant number of adjacent communities seems likely
+to have demanded systems of the signalling of land ownership more clearly than in the
+past.
+On this basis one suspects visible land boundaries would have been a prominent
+feature of such densely utilised ares of landscape as the Jordan valley and Jezreel.
+Likewise long term investment in increasing areas of olive and vine cultivation in the
+surrounding hills were likely marked by field boundaries and terracing. One is even
+tempted to imagine the appearance of a classically Mediterranean landscape for the
+first time in the fourth millennium BC.
+As stated above, when a current subsistence strategy had consumed all available
+suitable land, something had to change, and it has been shown throughout the course of
+this thesis that this could very well have been a change to the diet/subsistence strategy.
+362
+
+Questions:
+How did such relatively large communities sustain themselves within the environments in which they operated?
+What sorts of land use can we interpret from the available data on subsistence practices combined with environmental evidence and our understanding
+of their landscapes?
+If we can ascertain the types of land use, what scale of activity relating to
+the associated land use can we understand to have operated in these circumstances?
+
+After examining a large number of scenarios using set combinations of values for input
+data that had a range of acceptable values, it has become evident that studies of this
+nature on settlements in isolation are incomplete; only by examining land use on a
+regional scale can we begin to understand how subsistence strategies can be linked to
+environmental evidence, and begin to more fully understand the ancient landscape.
+Land use requirements suggest extensive arable land was needed for large settlements,
+often focused largely on alluvial, low lying areas with pasture ‘forced’ into the hills, but
+was likely managed around the important ‘cash’ crops like olive and viticulture (‘olive
+culture’ was probably practised by Shuna’s inhabitants, as indicated by the significant
+amounts of olive wood amongst the Shuna charcoals.). My dynamic model for caprine
+and cattle herd management indicates very significant opportunities for dairying, even
+without a strong ‘dairy’ signature in the faunal remains.
+It has become clear that as populations grew regionally, so too did the likelihood
+for increased impact of these communities on their landscapes. Both the specific Shuna
+case study and the more generalised ‘network’ analysis indicate that even at minimum
+likely population levels, very extensive tracts of the Jordan and Jezreel valleys and
+adjacent hills were under cultivation and subject to regular grazing pressure.
+The proposed impacts are supported by the limited and low resolution palynological
+work from the Huleh (Wilkinson 2003, 26-27) that show an increase in olive pollen
+in the EBA. At least in certain areas, like in the Jordan valley, the implications are
+that there almost certainly had to have been a major impact on the shaping of the
+landscape and on natural processes within the landscape. Given the limited scope of
+analysis possible in this thesis, statements like this remain general on the whole, but
+certainly, for this specific area, this is a precise consequence of the diets, subsistence
+strategies and populations that have being modelled.
+Because it has been shown that there was this high likelihood for such intensive use
+of and modification to the landscape, future development of this work will benefit from
+the contributions of studies dealing with some wider issues that have been raised about
+soil erosion, land nutrient depletion, deforestation, and so on (e.g. Wilkinson et al.
+2007, Wilkinson 2003, Henkin et al. 2005, Blumler 1993, Fall et al. 2002, Seligman
+1996).
+363
+
+Even a quick, casual glance at the outcome of the regional analysis done in Chapter
+6 makes it obvious that these communities must have had a major impact, for example, on the natural vegetation of the area. Grazing would have affected vegetation,
+the woodland in the hills would have been affected by the clearance, and the wetland
+areas in the valley must have also been affected. Even when looking at scenarios which
+indicated the smallest areas of required cropland, on a regional scale this would have
+required huge amounts of land to be cleared and put under cultivation. These unprecedented changes to the landscape must have presented these ancient communities with
+many new problems with which they would have had to learn to deal with for the first
+time.
+Certainly, given the scale of cultivation alone, there would have been potential for
+massive impact on the land. If people responded to any of the new challenges resulting
+from these changes in the wrong way, there most certainly is the possibility that it could
+have had very negative effects on their surrounding environment.
+The use of site catchment analysis helps address several of these questions, but
+previous ‘site catchment’ studies have generally only focussed on individual
+settlements; however, settlements and communities exist in networks. In particular, one of the notable features of the Early Bronze settlement record is the
+obvious existence of networks of communities, especially in the larger communities (Philip 2001, 207).
+Question:
+What can a combined study of land use and routes connecting a network of settlements allow us to understand about relationships between settlements and
+the nature of such networks?
+
+The development of Landuse Analyst has proven to be a very efficient and useful way
+to utilise as many input factors as possible in a land use model. Although it took a
+huge amount of time to design and create, the payoff has been worthwhile; it is now
+possible to very quickly explore any conceivable number of combinations of factors in
+a very short amount of time, and provides a tool which will provide a systematic way
+of comparing results across a wide range of archaeological scenarios.
+Although somewhat preliminary in nature, Chapter Six has shown that Landuse
+Analyst can effectively be employed together with other GIS techniques to offer insights
+into landscape use not possible in the past. The analysis done in this research really
+only scratches the surface of insights which this kind of work can yield.
+As discussed in Section 3.4.1 on page 46, the methodology and software presented
+in this thesis could be a valuable addition for many different projects. The future combination of Landuse Analyst7.1 , settlement land use modelling and regional network
+analysis will prove exciting indeed in a multitude of applications.
+7.1
+
+also combined with the fact that continually faster hardware will allow for increased resolutions of
+input data
+
+364
+
+7.2
+
+Methodological Development and Future Work
+
+Developing a methodology for use in this thesis resulted in the creation of Landuse
+Analyst, a tool which has the capacity to provide a large number of different avenues
+for future research.
+There is a wealth of information provided by Landuse Analyst that I have not been
+able to touch upon in this thesis. For example, as a result of the herd re-constructions,
+the number of adult females, males, newborns and juveniles is calculated. These estimates could be used to provide further insights into the relationships between the
+animals and the inhabitants of the settlement. For example (using conceptual numbers), if the settlement being modelled had a population of 3000 people and a total
+cattle herd of 750 adults, it could suggest that every 4 people had one cow, or if one
+were to estimate a household family size at eight persons, 2 cows per family. One could
+also approach this from other angles, such as using ethnographic studies to determine
+how many cows one shepherd (or a family unit) could manage. If that number was
+15 (again, conceptual numbers for illustrative purposes only), then 50 shepherds (or
+50 family units) could have looked after the cattle, leaving 2600 people (or 325 families) to deal with the goats, sheep, crops, pot making, and so forth. Reconstructing
+animal management strategies like this could allow for a more sophisticated analysis
+of landuse, whereby one might examine on a local level strategies which could have
+been employed for the sharing of grazing land. This could be put into a more temporal
+perspective as well, taking into account when animals would have been wanted for use
+in the fields as draught animals, or kept nearby to maximise the collection of milk for
+the production of dairy products, in conjunction with the annual climatic cycle and the
+various ecological zones available to them.
+Increasing importance of route location has been linked to viticulture intensification (Gibson 2006, 78), which would be an interesting avenue to explore in a higher
+resolution analysis. One of the issues raised is that leaking liquids or crushed fruit from
+vine crops result in slippery trails, so careful clearing of routes was done as a way of
+safeguarding the transport of this important produce. Even at this lower resolution, it
+is interesting to see that the routes through hill-country, which is also the landscape
+which is best suited for vine crops, tend to follow the wadi bottoms. This might be
+problematic for transport of liquids, as vegetation can be dense in these areas. Routes
+through the wadis therefore might have been cleared, and their constant use would
+have resulted in hard packed soils. This, and the lack of vegetation on these trails
+could have accelerated erosion, and resulted in the need for a constant changing of
+route locations over time. This may have, at times, encouraged trade or exchange with
+more distant communities which had less risky routes; likewise, it could also have just
+resulted in a more difficult route to be used. To better investigate this type of route
+365
+
+placement in future studies, it would be beneficial to closely look at ground cover in
+addition to topographical features to allow these factors to be taken into consideration.
+Surplus potential can also be examined. Landuse Analyst can limit the amount of
+dairy which contributes to the diet, and calculates any surplus. This data could be
+used in conjunction with regional network studies exploring potential trade relations
+between settlements, or to see if some settlements were better suited physiographically
+to focus on the overproduction of certain commodities to keep other settlements (which
+may have been less suited for the production of this product) supplied.
+Landuse Analyst also calculates animal density, and could prove especially insightful
+when looking at animals which could have provided traction. For example, is there any
+evident change in the number of adult cattle when the area of cultivated land being
+used increases? If there is, does it coincide with the use of the plough? If so, did this in
+turn make the production of certain crops for use as fodder more feasible, thus lowering
+the land requirements for grazing? As pointed out in Chapter 5, these relationships are
+supported by the archaeological record at Shuna (Chapter 5, page 319). This recursive
+relationship with the archaeological record means that it will be possible to address
+some of the new questions arising from this type of analysis.
+By changing the contributions of non-domestic food items in Landuse Analyst, it is
+also possible to examine scenarios where people would have resorted to an increased
+utilisation of these resources (e.g. fishing, hunting, collecting of other wild plants)
+during times of stress (like drought or crop failure due to disease).
+Clearly, the resolution of the geographical data used to classify land suitable for use
+by the crops and animal herds can always be improved. The simple approach taken
+in this thesis was to use only one classification factor (slope), but Landuse Analyst has
+been specifically designed to use any combination of factors. Factors such as soil types,
+rainfall patterns, more complex crop rotations, salinity problems and so on can be taken
+into consideration when setting up the model.
+Crops and animals can, on an individual basis, be given either sole access to, or
+the first choice to access specific land, as well as to land deemed suitable for use by all
+crops. Grazing of fallow land can be done in a more sophisticated manner as well. In
+Chapter 5, where detailed analysis was done at Shuna, all animals were given equal
+access to fallow land for grazing.
+Landuse Analyst does provide an easy system for granting access to fallow land
+for grazing to the animals using a three level access priority system, so that if one was
+wishing to look at the use of grazing lands in more detail, this could be used to do do so
+in a very detailed way. For example, if cattle were given first priority to all fallow land in
+order to keep them close to the settlement for dairy production and traction purposes,
+this might change the herding strategies used further out from the settlement.
+The archaeological record can only provide us with clues as to what the crops being
+366
+
+grown were. By looking at remains which might represent several hundred years,
+annual variations of sowing choices are impossible to know. Landuse Analyst provides
+an easy way to explore if there is an effect from sowing crops in varying ratios. By
+simply changing the contribution levels of an individual crop (or animal for that matter)
+one can instantly see the results. If, for example, one wanted to see what might have
+happened if people responded to dry conditions at the time of sowing by planting
+more barley, this can easily be done. All of the potential effects, including foddering
+animals, dairy production contributions, fallow grazing, etc, are instantly calculated.
+The ability to explore these types of temporally high resolution scenarios could provide
+interesting insights into how ancient peoples responded to different events especially
+as the resolution of the palaeoenvironmental record continues to improve as does the
+modelling of palaeoenvironments.
+It also allows for an examination of whether temporary increases in production of
+certain items could have been possible. For example, if one wanted to explore the situation where one settlement experienced a temporary food shortage due to localised
+drought for example, it could be modelled by changing population levels. This would
+be done by first noting the levels required and produced by the drought stricken settlement, and then cutting their population level according to the severity of the drought;
+if for example, you wanted to simulate a 75% failure, and the settlement had a population of 1000 people, one could cut the population by 75%, and note the production
+levels. This shortage could be added onto a neighbouring site by adding the population
+cut from the drought stricken site to it’s own. By manipulating crop rotation values or
+the ratios of the crops being sown, it is possible to look for a way in which this extra
+production might have been incorporated into the agricultural land at the disposal of
+the site providing the assistance. The effects of interrupting their normal cycle of crop
+rotation could even be explored for the following year by lowering yields of the crops
+to simulate the negative effect of sowing the fallow land to help out the neighbours.
+By manipulating the values used to define the animals in Landuse Analyst, it is
+possible to simulate the use breeding stock in animal herds for emergency food. For
+example, one could increase the number of offspring per birthing event, while at the
+same time lowering the size of the offspring at slaughter. To explain, it is necessary
+to build a small scenario. Assume that an animal normally gives birth one baby a
+year, and the weight at slaughter is 100 kg. If you wish to model the halving of the
+breeding herd, you can give that animal two babies per year, and reduce the slaughter
+weight to 50 kg. This will effectively halve the breeding herd size (thus halving the
+potential dairy production levels as well). Further tweaks are possible as well, such
+as adjustments to animal food requirements and so on that might be used to provide
+increasingly sophisticated scenarios that might be wanted in order to simulate changes
+to foddering strategies and so forth.
+367
+
+7.3
+
+Concluding Remarks
+
+I have demonstrated in this thesis a method of using palaeobotanical and faunal assemblages to help reconstruct potential subsistence strategies and land use models,
+and provided a detailed implementation of this methodology at the south Levantine
+site of Tel esh Shuna North in the Jordan Valley. The results of this analysis were further extended to incorporate 125 additional sites, providing a regional context which
+allowed further observations and isights to be made. By focussing on the inclusion of
+as much archaeological evidence as possible, the reconstructed environments which
+emerge from this analysis avoid many of the problems associated with more theoretical
+approaches. The ‘bottom-up’ approach taken in this research allows for a closer relationship to the archaeological material, facilitating the synthesis of diet, subsistence
+strategies and land management techniques between many forms of archaeological evidence in a clear, systematic and replicable manner. By creating Landuse Analyst, (an
+open source tool that is freely available to anyone, runs on any computer, and which
+can be used for any time period at any location in the world), I have not only moved
+beyond the usual restraints imposed by the use of proprietary software packages (e.g.
+cost, data format, operating system requirements, and so on), but I have also avoided
+the problem of developing a methodology specific to, and directly applicable to, only
+the area of study in the topic of this research thus allowing future researchers to directly utilise these methods (via Landuse Analyst) into their own unique and specific
+areas of interest.
+In the introduction to this thesis I highlighted several questions related to settlement patterns of the early bronze age. Using the site of Shuna I have illustrated not
+only how land use can vary depending upon the particular characteristics of a subsistence strategy according to variations in the diet, but also how these strategies would
+likely have had to change over time to accommodate an increasing population. As
+communities grow larger, the subsistence strategies, which are constrained to the environment in which they operated, had to change when/if this environment became fully
+exploited. The size of a prehistoric settlement would also have affected its impact upon
+the surrounding environment and resultantly the strategies used by people to modify
+the landscape to suit their needs.
+It has been shown in this thesis that by the EEBI, the southern Levant could have
+indeed been confronted with this issue. If we look at the maximum (or even average)
+scenarios, it actually seems quite likely that already by the EEBI these communities
+would have had a pretty significant impact; the majority of the Jordan Valley has been
+shown to have likely been nearly completely devoted to use as croplands, and it is
+likely that significant areas adjacent to the valley would have been taken into fields and
+terraces, coupled with large amounts of land which would have had to have been in use
+368
+
+as pasture. This all suggests that it seems extremely likely that these communities for
+the first time had significantly altered their landscape and impacted their environment,
+and thus, that they did in no small way inscribe themselves on their landscape.
+
+369
+
+370
+
+Appendix A
+
+Botanical Data
+A.1
+
+Shuna Botanical Data
+
+The botanical remains in the following three tables was used to calculate the approximate contributions of the major components of the diet at Shuna. All three of the
+charts have been reformatted by myself, but are drawn completely from the work of
+Holden which is to be included in the forthcoming monograph on Shuna by Baird and
+Philip.
+
+371
+
+Table A.1: CARBONISED PLANT REMAINS FROM ESH SHUNA - Chalcolithic
+
+372
+
+Latin Name
+
+Plant Part
+
+Common Name
+
+Rumex cf. acetosella
+Rumex sp.
+cf. Rumex sp
+cf. Polygonaceae
+cf. Chenopodium sp.
+Amaranthus sp.
+Adonis sp.
+Ranunculus sp.
+Astragalus sp.
+cf. Astragalus sp.
+Vicia sp.
+Vicia/Lathyrus sp.
+Vicia/Lathyrus/Pisum sp.
+Trifolieae, Medicago type
+Trifolieae, Lotus/Trifolium type
+cf. Trifolieae, Lotus/Trifolium type
+Trifolieae, Trigonella type
+Scorpiurus muricatus L.
+Leguminosae indet.
+Leguminosae indet (large seeded)
+Leguminosae indet (small seeded)
+Malva sp.
+cf. Bupleurum sp.
+Chrysanthemum sp.
+Continued on Next Page. . .
+
+nutlet
+nutlet
+nutlet
+nutlet
+nutlet
+seed
+achene
+achene
+seed
+seed
+seed
+seed
+seed
+seed
+seed
+seed
+seed
+seed
+seed
+seed
+seed
+seed
+fruit
+achene
+
+sheep’s sorrel
+dock
+dock
+knotweed family
+goosefoot, etc.
+amaranth
+pheasants eye
+buttercup/crowfoot
+vetch
+vetch
+vetch
+vetch/tare/vetchling
+vetch/tare/vetchling
+medik
+trefoil/clover
+trefoil/clover
+
+pea family
+pea family
+pea family
+mallow
+
+Count
+1
+1
+1
+2
+1
+1
+10
+1
+2
+2
+1
+13
+1
+6
+61
+2
+10
+290
+13
+21
+2
+2
+1
+2
+
+

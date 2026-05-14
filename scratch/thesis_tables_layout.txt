@@ -1,0 +1,273 @@
+        Taxon       NISP    Weight
+        Cattle      14.9      45.6
+        Caprines    38.5      18.8
+        Pig         45.7      35.4
+        Equid          0         0
+        Wild         0.9       0.2
+
+
+                    (a)                                       (b)
+
+
+
+
+        Taxon       NISP    Weight
+        Cattle       9.7      27.5
+        Caprines    47.2      27.5
+        Pig         40.4      36.5
+        Equid          0         0
+        Wild         2.6       8.5
+
+
+                     (c)                                      (d)
+
+
+
+
+        Taxon       NISP    Weight
+        Cattle      28.9      56.7
+        Caprines    46.2      20.6
+        Pig         20.7      18.5
+        Equid        0.2       0.4
+        Wild         3.9       3.2
+
+
+                     (e)                                       (f)
+
+Figure B.1: Multi-period Animal Representation Data (Holden)
+(a) remains during Chalcolithic                  (b) chart for Chalcolithic
+(c) remains during EEBI                          (d) chart for EEBI
+(e) remains during LEBI                          (f) chart for LEBI
+
+
+
+                                             384
+Appendix C
+
+Model Inputs
+
+C.1   Variables
+
+
+
+
+       Table C.1: The model input variables required for the modelling process.
+
+
+
+
+                                        385
+Table C.2: The animal input variables required for the modelling process.
+
+
+
+
+                                  386
+Table C.3: The crop input variables required for the modelling process.
+
+
+
+
+                                 387
+388
+Appendix D
+
+Landuse Analyst Source Code
+
+D.1         Animal Manager
+D.1.1        laanimalmanager.h
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+  *       Copyright ( C ) 2007 ,2008 ,2009 Jason Jorgenson jason . jorgenson@liv . ac . uk *
+  *                           ( C ) 2007                            Tim Sutton tim@linfiniti . com                                                     *
+  *                                                                                                                                                    *
+  *       This program is free software ; you can redistribute it and / or modify                                                                      *
+  *       it under the terms of the GNU General Public License as published by                                                                         *
+  *       the Free Software Foundation ; either version 2 of the License , or                                                                          *
+  *       ( at your option ) any later version .                                                                                                       *
+  *                                                                                                                                                    *
+  *       This program is distributed in the hope that it will be useful ,                                                                             *
+  *       but WITHOUT ANY WARRANTY ; without even the implied warranty of                                                                              *
+  *       M ER C HA NT AB I LI TY or FITNESS FOR A PARTICULAR PURPOSE . See the                                                                        *
+  *       GNU General Public License for more details .                                                                                                *
+  *                                                                                                                                                    *
+  *       You should have received a copy of the GNU General Public License                                                                            *
+  *       along with this program ; if not , write to the                                                                                              *
+  *       Free Software Foundation , Inc . ,                                                                                                           *
+  *       59 Temple Place - Suite 330 , Boston , MA 02111 -1307 , USA .                                                                                *
+  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+# ifndef L A A N I M A L M A N A G E R _ H
+# define L A A N I M A L M A N A G E R _ H
+
+   // QT Includes
+# include < QDialog >
+   // Local Includes
+# include < u i _ l a a n i m a l m a n a g e r b a s e .h >
+# include < laanimal .h >
+# include < lautils .h >
+
+class QT re eW i dg et I te m ;
+
+class La An im a lM an a ge r : public QDialog , private Ui :: L a A n i m a l M a n a g e r B a s e
+{
+  Q_OBJECT
+  public :
+
+       L aA ni ma l Ma na ge r ( QWidget * parent = 0 , Qt :: WFlags fl = 0 ) ;
+       ~ La An i ma lM an a ge r () ;
+
+    public slots :
+      /* * when called loads animal profile from an XML file
+         */
+      void o n _ p u s h B u t t o n L o a d _ c l i c k e d () ;
+
+
+
+                                                                          389
+         virtual void o n _ p u s h B u t t o n S a v e _ c l i c k e d () ;
+         virtual void o n _ p b n A n i m a l P i c _ c l i c k e d () ;
+     private slots :
+         void cellClicked ( int theRow , int theColumn ) ;
+         void showAnimal () ;
+         void o n _ t o o l C o p y _ c l i c k e d () ;
+         void o n _ t o o l N e w _ c l i c k e d () ;
+         void o n _ t o o l D e l e t e _ c l i c k e d () ;
+         void o n _ p b n A p p l y _ c l i c k e d () ;
+
+           void resizeEvent ( QResizeEvent *) ;
+
+     private :
+         void r e f r e s h A n i m a l T a b l e ( QString theGuid =0) ;
+         void selectAnimal ( QString theFileName ) ;
+
+           LaUtils :: AnimalMap mAnimalMap ;
+           LaAnimal mAnimal ;
+           void readSettings () ;
+           void writeSettings () ;
+           QString mImageFile ;
+};
+
+# endif          // L A A N I M A L F O R M M A I N _ H
+
+
+
+
+D.1.2        laanimalmanager.cpp
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+  *       Copyright ( C ) 2007 ,2008 ,2009 Jason Jorgenson jason . jorgenson@liv . ac . uk *
+  *                           ( C ) 2007                            Tim Sutton tim@linfiniti . com                                                     *
+  *                                                                                                                                                    *
+  *       This program is free software ; you can redistribute it and / or modify                                                                      *
+  *       it under the terms of the GNU General Public License as published by                                                                         *
+  *       the Free Software Foundation ; either version 2 of the License , or                                                                          *
+  *       ( at your option ) any later version .                                                                                                       *
+  *                                                                                                                                                    *
+  *       This program is distributed in the hope that it will be useful ,                                                                             *
+  *       but WITHOUT ANY WARRANTY ; without even the implied warranty of                                                                              *
+  *       M ER C HA NT AB I LI TY or FITNESS FOR A PARTICULAR PURPOSE . See the                                                                        *
+  *       GNU General Public License for more details .                                                                                                *
+  *                                                                                                                                                    *
+  *       You should have received a copy of the GNU General Public License                                                                            *
+  *       along with this program ; if not , write to the                                                                                              *
+  *       Free Software Foundation , Inc . ,                                                                                                           *
+  *       59 Temple Place - Suite 330 , Boston , MA 02111 -1307 , USA .                                                                                *
+  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+# include " la a ni ma lm a na ge r . h "
+# include " lautils . h "
+# include < QSettings >
+# include < QTreeWidget >
+# include < QTreeWidgetItem >
+# include < QTableWidgetItem >
+# include < QDir >
+# include < QFile >
+# include < QTextStream >
+# include < QProcess >
+# include < QStringList >
+# include < QString >
+# include < QMessageBox >
+# include < QHeaderView >
+# include < QTableWidget >
+# include < QTableWidgetItem >
+# include < QFileDialog >
+# include < QListWidgetItem >
+# include < QLabel >
+# include < QPixmap >
+
+
+                                                                          390
+# include < QDebug >
+   L aA ni ma l Ma na ge r :: La An i ma lM an a ge r ( QWidget * parent , Qt :: WFlags fl )
+: QDialog ( parent , fl )
+{
+      // required by Qt4 to initialise the ui
+   setupUi ( this ) ;
+   readSettings () ;
+   lblAnimalPix - > s e t S c a l e d C o n t e n t s ( true ) ;
+   connect ( tblAnimals , SIGNAL ( cellClicked ( int , int ) ) ,
+         this , SLOT ( cellClicked ( int , int ) ) ) ;
+      // connect ( pbnAnimalPic , SIGNAL ( clicked () ) , this , SLOT (
+            o n _ p b n A n i m a l P i c _ c l i c k e d () ) ) ;
+
+   r e f r e s h A n i m a l T a b l e () ;
+       // disable these buttons unless experimental is allowed
+   pbnImport - > setVisible ( false ) ;
+   pbnExport - > setVisible ( false ) ;
+}
+//
+L aA ni ma l Ma na ge r ::~ La A ni ma lM a na ge r ()
+{
+   writeSettings () ;
+}
+
+void L aA ni ma l Ma na g er :: readSettings ()
+{
+  QSettings mySettings ;
+  QPoint pos = mySettings . value ( " mainwindow / pos " , QPoint (200 , 200) ) . toPoint () ;
+  QSize size = mySettings . value ( " mainwindow / size " , QSize (400 , 400) ) . toSize () ;
+  resize ( size ) ;
+  move ( pos ) ;
+}
+
+void L aA ni ma l Ma na g er :: writeSettings ()
+{
+  QSettings mySettings ;
+  mySettings . setValue ( " mainwindow / pos " , pos () ) ;
+  mySettings . setValue ( " mainwindow / size " , size () ) ;
+}
+
+void L aA ni ma l Ma na g er :: r e f r e s h A n i m a l T a b l e ( QString theGuid )
+{
+  mAnimalMap . clear () ;
+  tblAnimals - > clear () ;
+  tblAnimals - > setRowCount (0) ;
+  tblAnimals - > set ColumnCo unt (2) ;
+
+     // we do this in two passes
+     // in the first pass we populate a qmap with all the layersets
+     // we find ....
+   mAnimalMap = LaUtils :: g e t A v a i l a b l e A n i m a l s () ;
+
+      // the second pass populates the table
+      // doing it from the map ensures that the rows
+      // are sorted by layerset name
+
+   int mySelectedRow =0;
+   int myCurrentRow =0;
+   QMapIterator < QString , LaAnimal > myIterator ( mAnimalMap ) ;
+   while ( myIterator . hasNext () )
+   {
+      myIterator . next () ;
+      LaAnimal myAnimal = myIterator . value () ;
+     // qDebug () JDT < < myAnimal . toText () ;
+      if ( theGuid . isEmpty () )
+      {
+           // qDebug (" No default active row was requested . Assigning to myAnimal .
+                guid () !") ;;
+        theGuid = myAnimal . guid () ;
+      }
+
+
+                                                         391
+
