@@ -1,10 +1,10 @@
 <crop guid="e1f2a3b4-c5d6-7890-klmn-123c90123456">
   <name>Free Hull Barley</name>
   <description>Free Hull Barley crop</description>
-  <cropYield>500</cropYield>
-  <cropCalories>3</cropCalories>
+  <cropYield>400</cropYield>
+  <cropCalories>3000</cropCalories>
   <fodderProduction>300</fodderProduction>
-  <fodderCalories>0.8</fodderCalories>
+  <fodderCalories>1420</fodderCalories>
   <cropFodderEnergyType>KCalories</cropFodderEnergyType>
   <yieldUnits>Dunum</yieldUnits>  <imageFile>freehullbarley.png</imageFile>
 </crop>

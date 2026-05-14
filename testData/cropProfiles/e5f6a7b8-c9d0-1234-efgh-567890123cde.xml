@@ -1,10 +1,10 @@
 <crop guid="e5f6a7b8-c9d0-1234-efgh-567890123cde">
   <name>Peas</name>
   <description>Peas crop</description>
-  <cropYield>150</cropYield>
-  <cropCalories>3.25</cropCalories>
-  <fodderProduction>100</fodderProduction>
-  <fodderCalories>0.8</fodderCalories>
+  <cropYield>300</cropYield>
+  <cropCalories>3000</cropCalories>
+  <fodderProduction>300</fodderProduction>
+  <fodderCalories>800</fodderCalories>
   <cropFodderEnergyType>KCalories</cropFodderEnergyType>
   <yieldUnits>Dunum</yieldUnits>  <imageFile>peas.png</imageFile>
 </crop>

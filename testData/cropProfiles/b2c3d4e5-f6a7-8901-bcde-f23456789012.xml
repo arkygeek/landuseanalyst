@@ -2,9 +2,9 @@
   <name>Einkorn</name>
   <description>Einkorn wheat crop</description>
   <cropYield>500</cropYield>
-  <cropCalories>3</cropCalories>
+  <cropCalories>3000</cropCalories>
   <fodderProduction>300</fodderProduction>
-  <fodderCalories>0.8</fodderCalories>
+  <fodderCalories>800</fodderCalories>
   <cropFodderEnergyType>KCalories</cropFodderEnergyType>
   <yieldUnits>Dunum</yieldUnits>  <imageFile>einkorn.png</imageFile>
 </crop>

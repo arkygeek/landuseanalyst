@@ -8,12 +8,12 @@
   <conceptionEfficiency>70</conceptionEfficiency>
   <femalesToMales>20</femalesToMales>
   <growTime>40</growTime>
-  <deathRate>0</deathRate>
+  <deathRate>30</deathRate>
   <feedEnergyType>KCalories</feedEnergyType>
-  <gestating>3.97</gestating>
-  <lactating>5.41</lactating>
+  <gestating>3970</gestating>
+  <lactating>5410</lactating>
   <maintenance>0</maintenance>
-  <juvenile>0.03</juvenile>
+  <juvenile>30</juvenile>
   <sexualMaturity>18</sexualMaturity>
   <breedingExpectancy>5</breedingExpectancy>
   <youngPerBirth>6</youngPerBirth>
