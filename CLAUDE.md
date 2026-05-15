@@ -75,6 +75,10 @@ Do not confuse it with `testData/`.
 
 ## Branch conventions
 
-- Active development: `antigravity-collaboration`
-- Main: `main`
+- Active development: `main`
 - Always check `cppArchive/` before inventing new behaviour
+
+The `antigravity-collaboration` branch was retired on 2026-05-14 once its
+work was force-pushed onto `main`. The old pre-merge `main` is preserved
+as `origin/backup-main-2026-05-14` in case anything ever needs to be
+recovered from it.
