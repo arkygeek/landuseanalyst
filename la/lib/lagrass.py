@@ -1,585 +1,368 @@
-# lagrass.py
+"""
+lagrass.py — QGIS Processing wrapper for the catchment-analysis GRASS calls.
 
-# Import guard to prevent circular imports
-# if __name__ == "__main__":
-#   from gui.lamainform import LaMainForm
-# else:
-# from gui.lamainform import LaMainForm
+This is the ONLY module that talks to ``processing.run("grass:...")``. Every
+other module talks to it in Landuse-Analyst-domain verbs (``makeWalkCost``,
+``reclass``, ``getArea``) so the orchestrator can be unit-tested against a
+mock and so future moves between GRASS, QGIS-native, or pure-Python
+back-ends only touch one file.
 
-from typing import Dict, List, Tuple
-from qgis.PyQt.QtCore import QObject, pyqtSignal, pyqtSlot
+End users need zero extra Python packages — the QGIS install bundles the
+GRASS provider plus matplotlib, numpy, and GDAL.
+"""
+
+import os
+from typing import List, Optional
+
+from qgis.PyQt.QtCore import QObject, pyqtSignal
+
+
+class LaGrassError(RuntimeError):
+    """Raised when a GRASS-via-QGIS-Processing call fails or returns no output."""
+
 
 class LaGrass(QObject):
+    """
+    Thin wrapper around the GRASS algorithms the catchment analysis needs.
+
+    The wrapper snapshots a processing region (extent + cell size) from the
+    supplied DEM at construction time, so every algorithm produces a
+    co-registered raster. Intermediate GeoTIFFs are tracked in
+    ``_mTempRasters`` and removed by :meth:`cleanup` unless promoted via
+    :meth:`writeOutput`.
+
+    :ivar mRegionExtent: ``QgsRectangle`` snapshot of the DEM extent.
+    :ivar mCellSize: Cell size in CRS units (from the DEM x-pixel width).
+    :ivar mDemPath: Filesystem path of the DEM raster.
+    :ivar mScratchDir: Directory for intermediate + output GeoTIFFs.
+    """
+
     message = pyqtSignal(str)
 
-    def __init__(self):
+    def __init__(self, theDemLayer, theScratchDir: str) -> None:
+        """
+        :param theDemLayer: ``QgsRasterLayer`` for the DEM. Drives region.
+        :type theDemLayer: qgis.core.QgsRasterLayer
+        :param theScratchDir: Directory for temp + output rasters. Created
+            if it doesn't exist.
+        :type theScratchDir: str
+        """
         super().__init__()
+        os.makedirs(theScratchDir, exist_ok=True)
+        self.mScratchDir = theScratchDir
+        self.mDemPath = theDemLayer.source()
+        self.mRegionExtent = theDemLayer.extent()
+        self.mCellSize = float(theDemLayer.rasterUnitsPerPixelX())
+        self._mTempRasters: List[str] = []
+        # Algorithm-id probe: QGIS 3.x usually exposes "grass7:..." but
+        # may also expose "grass:..." in some bundles. Cache whichever works.
+        self._mWalkId: Optional[str]    = self._probeAlg(("grass7:r.walk",       "grass:r.walk"))
+        self._mCostId: Optional[str]    = self._probeAlg(("grass7:r.cost",       "grass:r.cost"))
+        self._mMapcalcId: Optional[str] = self._probeAlg(("grass7:r.mapcalc.simple", "grass:r.mapcalc.simple"))
 
-    def runCommand(self, theCommand: str, theArguments: List[str], theErrorLog: str) -> str:
-        pass
+    # ------------------------------------------------------------------
+    # Cost-surface builders
+    # ------------------------------------------------------------------
+    def makeWalkCost(self, theX: float, theY: float) -> str:
+        """
+        Run ``grass:r.walk`` against the stored DEM, seeded at the settlement.
 
-    def runCommand(self, theCommand: str, theArguments: List[str]) -> str:
-        pass
+        Parameter values match the C++ original: Tobler's walking function
+        coefficients (0.72, 6.0, 1.9998, -1.9998), lambda 0.75,
+        slope_factor -0.2125, max_cost 40000, Knight's-move on.
 
-    def getMapsetList(self) -> List[str]:
-        pass
+        :param theX: Settlement easting in DEM CRS units.
+        :param theY: Settlement northing in DEM CRS units.
+        :return: Absolute path of the output cost-surface GeoTIFF.
+        :rtype: str
+        :raises LaGrassError: If ``grass:r.walk`` isn't available or fails.
+        """
+        if self._mWalkId is None:
+            raise LaGrassError(
+                "grass:r.walk is not available. Enable the GRASS Processing "
+                "provider in QGIS, then restart the plugin."
+            )
+        myFriction = self._uniformFrictionFromDem()
+        myOutPath = self._tempPath("walkCost")
+        myParams = {
+            "elevation":         self.mDemPath,
+            "friction":          myFriction,
+            "start_coordinates": f"{theX},{theY}",
+            "max_cost":          40000,
+            "walk_coefficient":  "0.72,6.0,1.9998,-1.9998",
+            "lambda":            0.75,
+            "slope_factor":      -0.2125,
+            "-k":                True,
+            "output":            myOutPath,
+            "GRASS_REGION_PARAMETER":          self._regionString(),
+            "GRASS_REGION_CELLSIZE_PARAMETER": self.mCellSize,
+            "GRASS_RASTER_FORMAT_OPT":         "",
+            "GRASS_RASTER_FORMAT_META":        "",
+        }
+        self._runAlg(self._mWalkId, myParams)
+        self._mTempRasters.append(myOutPath)
+        self.message.emit(f"Built walk-cost surface from ({theX:.1f}, {theY:.1f}).")
+        return myOutPath
 
-    def getRasterList(self, theMapset: str, thePrependMapsetFlag: bool = True) -> List[str]:
-        pass
+    def makeEuclideanCost(self, theX: float, theY: float) -> str:
+        """
+        Run ``grass:r.cost`` with a uniform-1 friction raster, seeded at
+        the settlement. Cost units come out in metres directly.
 
-    def createFrictionMap(self, theBaseRaster: str, theOutputRaster: str) -> bool:
-        pass
+        :param theX: Settlement easting in DEM CRS units.
+        :param theY: Settlement northing in DEM CRS units.
+        :return: Absolute path of the output cost raster.
+        :rtype: str
+        :raises LaGrassError: If ``grass:r.cost`` isn't available or fails.
+        """
+        if self._mCostId is None:
+            raise LaGrassError(
+                "grass:r.cost is not available. Enable the GRASS Processing "
+                "provider in QGIS, then restart the plugin."
+            )
+        myFriction = self._uniformFrictionFromDem()
+        myOutPath = self._tempPath("euclideanCost")
+        myParams = {
+            "input":             myFriction,
+            "start_coordinates": f"{theX},{theY}",
+            "max_cost":          40000,
+            "output":            myOutPath,
+            "GRASS_REGION_PARAMETER":          self._regionString(),
+            "GRASS_REGION_CELLSIZE_PARAMETER": self.mCellSize,
+        }
+        self._runAlg(self._mCostId, myParams)
+        self._mTempRasters.append(myOutPath)
+        self.message.emit(f"Built Euclidean-cost surface from ({theX:.1f}, {theY:.1f}).")
+        return myOutPath
 
-    def copyMap(self, theOriginalRaster: str, theCopy: str) -> bool:
-        pass
+    # ------------------------------------------------------------------
+    # Per-iteration ops
+    # ------------------------------------------------------------------
+    def reclass(self, theCostRaster: str, theThreshold: float) -> str:
+        """
+        Binary mask of cells with ``cost < threshold``. Cells at or above
+        the threshold become null.
 
-    def createMask(self, theCostSurface: str, theMaskRaster: str) -> bool:
-        pass
+        :param theCostRaster: Absolute path of a cost-surface raster.
+        :param theThreshold: Cost-distance threshold.
+        :return: Absolute path of a 1/null binary mask GeoTIFF.
+        :rtype: str
+        """
+        myOutPath = self._tempPath(f"reclass_{int(theThreshold)}")
+        myParams = self._mapcalcParams(
+            theExpression=f"if(A < {theThreshold}, 1, null())",
+            theA=theCostRaster,
+            theOutput=myOutPath,
+        )
+        self._runAlg(self._mMapcalcId, myParams)
+        self._mTempRasters.append(myOutPath)
+        return myOutPath
 
-    def createInverseMask(self, theMin: float, theMaskRaster: str) -> bool:
-        pass
+    def createMask(self, theReclassed: str, theSuitabilityRaster: str) -> str:
+        """
+        Intersect the cost-bounded reclass with a suitability raster.
 
-    def createCombinedMask(self, theCostSurface: str, theMaskRaster: str) -> bool:
-        pass
+        Result cells are 1 only where the reclass is 1 AND the suitability
+        raster is ≥ 1; null elsewhere.
 
-    def mergeMaps(self, theLeftoversGoHere: str) -> bool:
-        pass
+        :param theReclassed: Output of :meth:`reclass`.
+        :param theSuitabilityRaster: Per-crop / per-animal suitability raster.
+        :return: Absolute path of a 1/null mask GeoTIFF.
+        :rtype: str
+        """
+        myOutPath = self._tempPath("mask")
+        myParams = self._mapcalcParams(
+            theExpression="if(A >= 1 && B >= 1, 1, null())",
+            theA=theReclassed,
+            theB=theSuitabilityRaster,
+            theOutput=myOutPath,
+        )
+        self._runAlg(self._mMapcalcId, myParams)
+        self._mTempRasters.append(myOutPath)
+        return myOutPath
 
-    def getArea(self, theLayerName: str) -> float:
-        pass
+    def createInverseMask(
+        self,
+        theCostRaster: str,
+        theThreshold: float,
+        theBaseSuitability: str,
+    ) -> str:
+        """
+        Suitable cells that fell OUTSIDE the catchment.
 
-    def reclass(self, theRaster: str, theMax: int) -> bool:
-        pass
+        Used by the orchestrator to compute the "leftover" common-crop
+        suitable area that becomes available to animals as common grazing.
 
-    def removeFile(self, theFile: str) -> bool:
-        pass
+        :param theCostRaster: The cost surface from :meth:`makeWalkCost`
+            or :meth:`makeEuclideanCost`.
+        :param theThreshold: Cost threshold used for the catchment.
+        :param theBaseSuitability: The suitability raster the catchment was
+            allocated from.
+        :return: Absolute path of a 1/null leftover mask GeoTIFF.
+        :rtype: str
+        """
+        myOutPath = self._tempPath(f"inverse_{int(theThreshold)}")
+        myParams = self._mapcalcParams(
+            theExpression=f"if(B >= 1 && A >= {theThreshold}, 1, null())",
+            theA=theCostRaster,
+            theB=theBaseSuitability,
+            theOutput=myOutPath,
+        )
+        self._runAlg(self._mMapcalcId, myParams)
+        self._mTempRasters.append(myOutPath)
+        return myOutPath
 
-    def makeWalkCost(self, theX: int, theY: int, theDEM: str) -> bool:
-        pass
+    def mergeMaps(self, theA: str, theB: str) -> str:
+        """
+        Union of two 1/null binary masks.
 
-    def makeEuclideanCost(self, theX: int, theY: int) -> None:
-        pass
+        :param theA: First mask raster path.
+        :param theB: Second mask raster path.
+        :return: Absolute path of a merged 1/null mask GeoTIFF.
+        :rtype: str
+        """
+        myOutPath = self._tempPath("merge")
+        myParams = self._mapcalcParams(
+            theExpression="if(A >= 1 || B >= 1, 1, null())",
+            theA=theA,
+            theB=theB,
+            theOutput=myOutPath,
+        )
+        self._runAlg(self._mMapcalcId, myParams)
+        self._mTempRasters.append(myOutPath)
+        return myOutPath
 
-    def makePathDistanceCost(self, theX: int, theY: int) -> None:
-        pass
+    def getArea(self, theMaskRaster: str) -> float:
+        """
+        Area of cells with value 1 in a binary mask, in hectares.
 
-    def writeMetaData(self, theMetaData: List[str]) -> None:
-        pass
+        Uses GDAL + NumPy directly (both ship with QGIS) — faster and more
+        robust than parsing the text output of ``r.stats``.
 
-    def logMessage(self, theMessage: str) -> None:
-        self.message.emit(theMessage)
+        :param theMaskRaster: Path of a 1/null binary mask GeoTIFF.
+        :return: Area in hectares.
+        :rtype: float
+        """
+        from osgeo import gdal
+        import numpy as np
 
-    def __init__(self):
-        super().__init__()
-
-    def runCommand(self, theCommand: str, theArguments: List[str], theErrorLog: str) -> str:
-        # Implementation of runCommand method
-        pass
-
-    def runCommand(self, theCommand: str, theArguments: List[str]) -> str:
-        # Implementation of runCommand method
-        pass
-
-    def getMapsetList(self) -> List[str]:
-        # Implementation of getMapsetList method
-        myCommand = "g.mapsets"
-        myArguments = ["-l"]
-        myResult = self.runCommand(myCommand, myArguments) # assuming runCommand is implemented
-        myResult = myResult.strip()
-        myList = myResult.split() # split on whitespace by default
-        return myList
-
-    def getRasterList(self, theMapset: str, thePrependMapsetFlag: bool = True) -> List[str]:
-        # Implementation of getRasterList method
-        myCommand = "g.list"
-        myArguments = ["type=rast", "mapset=" + theMapset]
-        myResult = self.runCommand(myCommand, myArguments)
-        if "no raster files available" in myResult:
-            return []
-        myResult = myResult.replace("raster files available in mapset " + theMapset + ":", "")
-        myResult = myResult.strip()
-        myList = myResult.split()
-        myFinalList = []
-        if thePrependMapsetFlag:
-            for myString in myList:
-                myFinalList.append(myString + "@" + theMapset)
+        myDataset = gdal.Open(theMaskRaster)
+        if myDataset is None:
+            raise LaGrassError(f"Could not open mask raster {theMaskRaster}")
+        myBand = myDataset.GetRasterBand(1)
+        myArray = myBand.ReadAsArray()
+        myGeoTransform = myDataset.GetGeoTransform()
+        myCellAreaM2 = abs(myGeoTransform[1] * myGeoTransform[5])
+        # Treat NaN and band-null as non-counting; "==1" captures the mask.
+        myNoData = myBand.GetNoDataValue()
+        if myNoData is not None:
+            myCount = int(np.sum((myArray == 1) & (myArray != myNoData)))
         else:
-            myFinalList = myList
-        return myFinalList
-
-    def createFrictionMap(self, theBaseRaster: str, theOutputRaster: str) -> bool:
-        # Implementation of createFrictionMap method
-        myCommand = "r.mapcalc"
-        myArguments = [theOutputRaster + " = if(isnull(" + theBaseRaster + "), null(), 1)"]
-        myErrorLog = ""
-        myResult = self.runCommand(myCommand, myArguments, myErrorLog)
-        if myErrorLog == "":
-            return True
-        else:
-            return False
-
-    def copyMap(self, theOriginalRaster: str, theCopy: str) -> bool:
-        # Implementation of copyMap method
-        pass
-
-    def createMask(self, theCostSurface: str, theMaskRaster: str) -> bool:
-        # Implementation of createMask method
-        pass
-
-    def createInverseMask(self, theMin: float, theMaskRaster: str) -> bool:
-        # Implementation of createInverseMask method
-        pass
-
-    def createCombinedMask(self, theCostSurface: str, theMaskRaster: str) -> bool:
-        # Implementation of createCombinedMask method
-        pass
-
-    def mergeMaps(self, theLeftoversGoHere: str) -> bool:
-        # Implementation of mergeMaps method
-        pass
-
-    def getArea(self, theLayerName: str) -> float:
-        # Implementation of getArea method
-        pass
-
-    def reclass(self, theRaster: str, theMax: int) -> bool:
-        # Implementation of reclass method
-        pass
-
-    def removeFile(self, theFile: str) -> bool:
-        # Implementation of removeFile method
-        pass
-
-    def makeWalkCost(self, theX: int, theY: int, theDEM: str) -> bool:
-        # Implementation of makeWalkCost method
-        pass
-
-    def makeEuclideanCost(self, theX: int, theY: int) -> None:
-        # Implementation of makeEuclideanCost method
-        pass
-
-    def makePathDistanceCost(self, theX: int, theY: int) -> None:
-        # Implementation of makePathDistanceCost method
-        pass
-
-    def writeMetaData(self, theMetaData: List[str]) -> None:
-        # Implementation of writeMetaData method
-        pass
-
-    def logMessage(self, theMessage: str) -> None:
-        self.message.emit(theMessage)
-
-
-
-
-
-
-
-# # lagrass.py
-# from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot, Qt
-# from typing import Dict, List, Tuple
-# from la.lib.la import *
-# from la.lib.ladietlabels import LaDietLabels
-
-# class LaGrass(QObject):
-#     def __init__(self, parent=None):
-#         super().__init__(parent)
-
-#     @pyqtSlot(str, str)
-#     def setName(self, guid: str, name: str):
-#         # Implementation of setName method
-#         pass
-
-#     @pyqtSlot(str, str)
-#     def setDescription(self, guid: str, description: str):
-#         # Implementation of setDescription method
-#         pass
-
-#     @pyqtSlot(str, result=La)
-#     def getDiet(self, guid: str) -> La:
-#         # Implementation of getDiet method
-#         pass
-
-#     @pyqtSlot(str, La)
-#     def addDiet(self, guid: str, diet: La):
-#         # Implementation of addDiet method
-#         pass
-
-#     @pyqtSlot(str, result=LaDietLabels)
-#     def getDietLabels(self, guid: str) -> LaDietLabels:
-#         # Implementation of getDietLabels method
-#         pass
-
-#     @pyqtSlot(str, LaDietLabels)
-#     def setDietLabels(self, guid: str, dietLabels: LaDietLabels):
-#         # Implementation of setDietLabels method
-#         pass
-
-#     @pyqtSlot(str, result=List[str])
-#     def getDietNames(self, guid: str) -> List[str]:
-#         # Implementation of getDietNames method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDiet(self, guid: str, name: str) -> bool:
-#         # Implementation of hasDiet method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabel(self, guid: str, label: str) -> bool:
-#         # Implementation of hasDietLabel method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietName(self, guid: str, name: str) -> bool:
-#         # Implementation of hasDietName method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietDescription(self, guid: str, description: str) -> bool:
-#         # Implementation of hasDietDescription method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelValue(self, guid: str, labelValue: str) -> bool:
-#         # Implementation of hasDietLabelValue method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelName(self, guid: str, labelName: str) -> bool:
-#         # Implementation of hasDietLabelName method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelDescription(self, guid: str, labelDescription: str) -> bool:
-#         # Implementation of hasDietLabelDescription method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelColor(self, guid: str, labelColor: str) -> bool:
-#         # Implementation of hasDietLabelColor method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelFont(self, guid: str, labelFont: str) -> bool:
-#         # Implementation of hasDietLabelFont method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelSize(self, guid: str, labelSize: str) -> bool:
-#         # Implementation of hasDietLabelSize method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelStyle(self, guid: str, labelStyle: str) -> bool:
-#         # Implementation of hasDietLabelStyle method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelWeight(self, guid: str, labelWeight: str) -> bool:
-#         # Implementation of hasDietLabelWeight method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelAlignment(self, guid: str, labelAlignment: str) -> bool:
-#         # Implementation of hasDietLabelAlignment method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelBackgroundColor(self, guid: str, labelBackgroundColor: str) -> bool:
-#         # Implementation of hasDietLabelBackgroundColor method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelBorderColor(self, guid: str, labelBorderColor: str) -> bool:
-#         # Implementation of hasDietLabelBorderColor method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelBorderWidth(self, guid: str, labelBorderWidth: str) -> bool:
-#         # Implementation of hasDietLabelBorderWidth method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelBorderStyle(self, guid: str, labelBorderStyle: str) -> bool:
-#         # Implementation of hasDietLabelBorderStyle method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelBorderRadius(self, guid: str, labelBorderRadius: str) -> bool:
-#         # Implementation of hasDietLabelBorderRadius method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelPadding(self, guid: str, labelPadding: str) -> bool:
-#         # Implementation of hasDietLabelPadding method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelMargin(self, guid: str, labelMargin: str) -> bool:
-#         # Implementation of hasDietLabelMargin method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelOpacity(self, guid: str, labelOpacity: str) -> bool:
-#         # Implementation of hasDietLabelOpacity method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelVisibility(self, guid: str, labelVisibility: str) -> bool:
-#         # Implementation of hasDietLabelVisibility method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelZIndex(self, guid: str, labelZIndex: str) -> bool:
-#         # Implementation of hasDietLabelZIndex method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelRotation(self, guid: str, labelRotation: str) -> bool:
-#         # Implementation of hasDietLabelRotation method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelOffsetX(self, guid: str, labelOffsetX: str) -> bool:
-#         # Implementation of hasDietLabelOffsetX method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelOffsetY(self, guid: str, labelOffsetY: str) -> bool:
-#         # Implementation of hasDietLabelOffsetY method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelAnchorX(self, guid: str, labelAnchorX: str) -> bool:
-#         # Implementation of hasDietLabelAnchorX method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelAnchorY(self, guid: str, labelAnchorY: str) -> bool:
-#         # Implementation of hasDietLabelAnchorY method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelAnchorPoint(self, guid: str, labelAnchorPoint: str) -> bool:
-#         # Implementation of hasDietLabelAnchorPoint method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelPlacement(self, guid: str, labelPlacement: str) -> bool:
-#         # Implementation of hasDietLabelPlacement method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelPriority(self, guid: str, labelPriority: str) -> bool:
-#         # Implementation of hasDietLabelPriority method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelCollision(self, guid: str, labelCollision: str) -> bool:
-#         # Implementation of hasDietLabelCollision method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelConflictResolution(self, guid: str, labelConflictResolution: str) -> bool:
-#         # Implementation of hasDietLabelConflictResolution method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelMaxScale(self, guid: str, labelMaxScale: str) -> bool:
-#         # Implementation of hasDietLabelMaxScale method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelMinScale(self, guid: str, labelMinScale: str) -> bool:
-#         # Implementation of hasDietLabelMinScale method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelMaxZoom(self, guid: str, labelMaxZoom: str) -> bool:
-#         # Implementation of hasDietLabelMaxZoom method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelMinZoom(self, guid: str, labelMinZoom: str) -> bool:
-#         # Implementation of hasDietLabelMinZoom method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelMaxResolution(self, guid: str, labelMaxResolution: str) -> bool:
-#         # Implementation of hasDietLabelMaxResolution method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelMinResolution(self, guid: str, labelMinResolution: str) -> bool:
-#         # Implementation of hasDietLabelMinResolution method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelFilter(self, guid: str, labelFilter: str) -> bool:
-#         # Implementation of hasDietLabelFilter method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelExpression(self, guid: str, labelExpression: str) -> bool:
-#         # Implementation of hasDietLabelExpression method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelDataDefinedProperty(self, guid: str, labelDataDefinedProperty: str) -> bool:
-#         # Implementation of hasDietLabelDataDefinedProperty method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelDataDefinedLabel(self, guid: str, labelDataDefinedLabel: str) -> bool:
-#         # Implementation of hasDietLabelDataDefinedLabel method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelDataDefinedSize(self, guid: str, labelDataDefinedSize: str) -> bool:
-#         # Implementation of hasDietLabelDataDefinedSize method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelDataDefinedRotation(self, guid: str, labelDataDefinedRotation: str) -> bool:
-#         # Implementation of hasDietLabelDataDefinedRotation method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelDataDefinedColor(self, guid: str, labelDataDefinedColor: str) -> bool:
-#         # Implementation of hasDietLabelDataDefinedColor method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelDataDefinedOpacity(self, guid: str, labelDataDefinedOpacity: str) -> bool:
-#         # Implementation of hasDietLabelDataDefinedOpacity method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelDataDefinedFont(self, guid: str, labelDataDefinedFont: str) -> bool:
-#         # Implementation of hasDietLabelDataDefinedFont method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelDataDefinedOffsetX(self, guid: str, labelDataDefinedOffsetX: str) -> bool:
-#         # Implementation of hasDietLabelDataDefinedOffsetX method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelDataDefinedOffsetY(self, guid: str, labelDataDefinedOffsetY: str) -> bool:
-#         # Implementation of hasDietLabelDataDefinedOffsetY method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelDataDefinedAnchorX(self, guid: str, labelDataDefinedAnchorX: str) -> bool:
-#         # Implementation of hasDietLabelDataDefinedAnchorX method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelDataDefinedAnchorY(self, guid: str, labelDataDefinedAnchorY: str) -> bool:
-#         # Implementation of hasDietLabelDataDefinedAnchorY method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelDataDefinedAnchorPoint(self, guid: str, labelDataDefinedAnchorPoint: str) -> bool:
-#         # Implementation of hasDietLabelDataDefinedAnchorPoint method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelDataDefinedPlacement(self, guid: str, labelDataDefinedPlacement: str) -> bool:
-#         # Implementation of hasDietLabelDataDefinedPlacement method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelDataDefinedPriority(self, guid: str, labelDataDefinedPriority: str) -> bool:
-#         # Implementation of hasDietLabelDataDefinedPriority method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelDataDefinedCollision(self, guid: str, labelDataDefinedCollision: str) -> bool:
-#         # Implementation of hasDietLabelDataDefinedCollision method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelDataDefinedConflictResolution(self, guid: str, labelDataDefinedConflictResolution: str) -> bool:
-#         # Implementation of hasDietLabelDataDefinedConflictResolution method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelDataDefinedMaxScale(self, guid: str, labelDataDefinedMaxScale: str) -> bool:
-#         # Implementation of hasDietLabelDataDefinedMaxScale method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelDataDefinedMinScale(self, guid: str, labelDataDefinedMinScale: str) -> bool:
-#         # Implementation of hasDietLabelDataDefinedMinScale method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelDataDefinedMaxZoom(self, guid: str, labelDataDefinedMaxZoom: str) -> bool:
-#         # Implementation of hasDietLabelDataDefinedMaxZoom method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelDataDefinedMinZoom(self, guid: str, labelDataDefinedMinZoom: str) -> bool:
-#         # Implementation of hasDietLabelDataDefinedMinZoom method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelDataDefinedMaxResolution(self, guid: str, labelDataDefinedMaxResolution: str) -> bool:
-#         # Implementation of hasDietLabelDataDefinedMaxResolution method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelDataDefinedMinResolution(self, guid: str, labelDataDefinedMinResolution: str) -> bool:
-#         # Implementation of hasDietLabelDataDefinedMinResolution method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelDataDefinedFilter(self, guid: str, labelDataDefinedFilter: str) -> bool:
-#         # Implementation of hasDietLabelDataDefinedFilter method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelDataDefinedExpression(self, guid: str, labelDataDefinedExpression: str) -> bool:
-#         # Implementation of hasDietLabelDataDefinedExpression method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelDataDefinedProperty(self, guid: str, labelDataDefinedProperty: str) -> bool:
-#         # Implementation of hasDietLabelDataDefinedProperty method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelDataDefinedLabel(self, guid: str, labelDataDefinedLabel: str) -> bool:
-#         # Implementation of hasDietLabelDataDefinedLabel method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelDataDefinedSize(self, guid: str, labelDataDefinedSize: str) -> bool:
-#         # Implementation of hasDietLabelDataDefinedSize method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelDataDefinedRotation(self, guid: str, labelDataDefinedRotation: str) -> bool:
-#         # Implementation of hasDietLabelDataDefinedRotation method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelDataDefinedColor(self, guid: str, labelDataDefinedColor: str) -> bool:
-#         # Implementation of hasDietLabelDataDefinedColor method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelDataDefinedOpacity(self, guid: str, labelDataDefinedOpacity: str) -> bool:
-#         # Implementation of hasDietLabelDataDefinedOpacity method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelDataDefinedFont(self, guid: str, labelDataDefinedFont: str) -> bool:
-#         # Implementation of hasDietLabelDataDefinedFont method
-#         pass
-
-#     @pyqtSlot(str, str, result=bool)
-#     def hasDietLabelDataDefinedOffsetX(self, guid: str, labelDataDefinedOffsetX: str) -> bool:
-#         # Implementation of hasDietLabelDataDefinedOffsetX method
+            myCount = int(np.sum(myArray == 1))
+        return myCount * myCellAreaM2 / 10000.0
+
+    # ------------------------------------------------------------------
+    # Lifecycle / IO
+    # ------------------------------------------------------------------
+    def writeOutput(self, theMaskRaster: str, theOutputName: str) -> str:
+        """
+        Promote a temp raster to a stable output path; drop it from cleanup.
+
+        :param theMaskRaster: Path returned by :meth:`createMask` etc.
+        :param theOutputName: Filename (no path, no extension) for the kept file.
+        :return: Absolute path of the promoted GeoTIFF.
+        :rtype: str
+        """
+        import shutil
+        mySafe = "".join(c if c.isalnum() or c in "._-" else "_" for c in theOutputName)
+        myDest = os.path.join(self.mScratchDir, f"{mySafe}.tif")
+        shutil.copyfile(theMaskRaster, myDest)
+        if theMaskRaster in self._mTempRasters:
+            self._mTempRasters.remove(theMaskRaster)
+        return myDest
+
+    def cleanup(self) -> None:
+        """Remove every intermediate raster not promoted via :meth:`writeOutput`."""
+        for myPath in list(self._mTempRasters):
+            try:
+                if os.path.exists(myPath):
+                    os.remove(myPath)
+            except OSError:
+                pass
+        self._mTempRasters.clear()
+
+    # ------------------------------------------------------------------
+    # Internals
+    # ------------------------------------------------------------------
+    def _runAlg(self, theAlgId: Optional[str], theParams: dict) -> dict:
+        """Wrap ``processing.run`` with a uniform error path."""
+        if theAlgId is None:
+            raise LaGrassError("Required GRASS algorithm is not available.")
+        from qgis import processing  # imported lazily so non-QGIS test contexts can still import this module
+        try:
+            return processing.run(theAlgId, theParams)
+        except Exception as e:
+            raise LaGrassError(f"{theAlgId} failed: {e}") from e
+
+    def _probeAlg(self, theIds) -> Optional[str]:
+        """Return the first algorithm id that the processing registry knows about."""
+        try:
+            from qgis.core import QgsApplication
+            myReg = QgsApplication.processingRegistry()
+        except Exception:
+            return None
+        for myId in theIds:
+            if myReg.algorithmById(myId) is not None:
+                return myId
+        return None
+
+    def _regionString(self) -> str:
+        """``"xmin,xmax,ymin,ymax"`` for the snapshotted DEM extent."""
+        myExtent = self.mRegionExtent
+        return (
+            f"{myExtent.xMinimum()},{myExtent.xMaximum()},"
+            f"{myExtent.yMinimum()},{myExtent.yMaximum()}"
+        )
+
+    def _tempPath(self, theStem: str) -> str:
+        """Build a unique temp GeoTIFF path under the scratch dir."""
+        myCounter = len(self._mTempRasters)
+        return os.path.join(self.mScratchDir, f"_la_{theStem}_{myCounter:04d}.tif")
+
+    def _uniformFrictionFromDem(self) -> str:
+        """
+        Synthesise a uniform-1 friction raster covering the DEM.
+
+        The C++ code reused the DEM as friction (a bug); we follow what the
+        algorithm actually wants — a uniform-cost raster with valid pixels
+        wherever the DEM is defined.
+        """
+        myOutPath = self._tempPath("friction")
+        myParams = self._mapcalcParams(
+            theExpression="if(isnull(A), null(), 1)",
+            theA=self.mDemPath,
+            theOutput=myOutPath,
+        )
+        self._runAlg(self._mMapcalcId, myParams)
+        self._mTempRasters.append(myOutPath)
+        return myOutPath
+
+    def _mapcalcParams(
+        self,
+        theExpression: str,
+        theA: Optional[str] = None,
+        theB: Optional[str] = None,
+        theC: Optional[str] = None,
+        theOutput: Optional[str] = None,
+    ) -> dict:
+        """Common parameter dict for ``grass:r.mapcalc.simple``."""
+        myParams: dict = {
+            "expression": theExpression,
+            "output":     theOutput,
+            "GRASS_REGION_PARAMETER":          self._regionString(),
+            "GRASS_REGION_CELLSIZE_PARAMETER": self.mCellSize,
+        }
+        if theA is not None: myParams["a"] = theA
+        if theB is not None: myParams["b"] = theB
+        if theC is not None: myParams["c"] = theC
+        return myParams

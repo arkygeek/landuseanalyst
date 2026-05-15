@@ -1,34 +1,100 @@
-# lagrassprocesslib.py
-from qgis.PyQt.QtCore import QObject
-from typing import Dict, List, Tuple
-from la.lib.la import La
-from la.lib.ladietlabels import LaDietLabels
+"""
+lagrassprocesslib.py — availability probe for the GRASS algorithms the
+catchment analysis needs.
 
-class LaGrassProcessLib(QObject):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-
-    def process(self, xml: str) -> Dict[str, La]:
-        pass
-
-    def serialize(self, diets: Dict[str, La]) -> str:
-        pass
-
+The original C++ class was an XML-driven workflow runner; the Python port
+doesn't use that pattern (the LaModel already carries the state, and the
+orchestrator is :class:`la.lib.lacatchment.LaCatchment`). This module now
+exposes a small static helper the main form uses to decide whether to show
+a friendly "enable GRASS provider" message before launching a run.
 """
 
-This code defines a LaGrassProcessLib class in Python using PyQt5.
+from typing import Optional, Set, Tuple
 
-The class inherits from QObject and defines two methods, process and serialize,
-    which are equivalent to the process and serialize methods defined in the
-    original lagrassprocesslib.cpp file.
 
-The process method takes an XML string as input and returns a dictionary of
-    La objects, while the serialize method takes a dictionary of La objects as
-    input and returns an XML string.
+class LaGrassProcessLib:
+    """
+    Static probes for the QGIS Processing algorithm registry.
 
-lagrassprocesslib.cpp defines implementation of LaGrassProcessLib class in C++.
+    The QGIS GRASS provider exposes algorithms under either ``grass:`` or
+    ``grass7:`` ids depending on the QGIS bundle. We probe both prefixes
+    for each operation we need and treat the first match as canonical.
+    """
 
-The Python version of the class does not require an implementation file, as the
-    methods are defined in the class definition using decorators.
+    # Pairs of (preferred, fallback) ids per operation
+    _PAIRS: Tuple[Tuple[str, str], ...] = (
+        ("grass7:r.walk",           "grass:r.walk"),
+        ("grass7:r.cost",           "grass:r.cost"),
+        ("grass7:r.mapcalc.simple", "grass:r.mapcalc.simple"),
+    )
 
-"""
+    @classmethod
+    def isAvailable(cls) -> bool:
+        """
+        True iff every algorithm the catchment analysis needs is registered.
+
+        :return: ``True`` if r.walk OR r.cost AND r.mapcalc.simple are present
+            (cost surface requires either walk or cost; mapcalc is mandatory).
+        :rtype: bool
+        """
+        myFound = cls.availableAlgorithms()
+        myHasCost = ("grass7:r.walk" in myFound or "grass:r.walk" in myFound
+                     or "grass7:r.cost" in myFound or "grass:r.cost" in myFound)
+        myHasMapcalc = ("grass7:r.mapcalc.simple" in myFound
+                        or "grass:r.mapcalc.simple" in myFound)
+        return bool(myHasCost and myHasMapcalc)
+
+    @classmethod
+    def availableAlgorithms(cls) -> Set[str]:
+        """
+        :return: Set of algorithm ids the Processing registry knows about,
+            from the candidates this module probes for.
+        :rtype: Set[str]
+        """
+        myResult: Set[str] = set()
+        try:
+            from qgis.core import QgsApplication
+            myReg = QgsApplication.processingRegistry()
+        except Exception:
+            return myResult
+        for myPair in cls._PAIRS:
+            for myId in myPair:
+                if myReg.algorithmById(myId) is not None:
+                    myResult.add(myId)
+        return myResult
+
+    @classmethod
+    def walkAlgorithmId(cls) -> Optional[str]:
+        """
+        :return: The first available id for ``r.walk``, or ``None``.
+        :rtype: Optional[str]
+        """
+        return cls._firstAvailable(("grass7:r.walk", "grass:r.walk"))
+
+    @classmethod
+    def costAlgorithmId(cls) -> Optional[str]:
+        """
+        :return: The first available id for ``r.cost``, or ``None``.
+        :rtype: Optional[str]
+        """
+        return cls._firstAvailable(("grass7:r.cost", "grass:r.cost"))
+
+    @classmethod
+    def mapcalcAlgorithmId(cls) -> Optional[str]:
+        """
+        :return: The first available id for ``r.mapcalc.simple``, or ``None``.
+        :rtype: Optional[str]
+        """
+        return cls._firstAvailable(("grass7:r.mapcalc.simple", "grass:r.mapcalc.simple"))
+
+    @classmethod
+    def _firstAvailable(cls, theIds: Tuple[str, ...]) -> Optional[str]:
+        try:
+            from qgis.core import QgsApplication
+            myReg = QgsApplication.processingRegistry()
+        except Exception:
+            return None
+        for myId in theIds:
+            if myReg.algorithmById(myId) is not None:
+                return myId
+        return None

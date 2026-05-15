@@ -9,7 +9,6 @@ from la.lib.lacropparameter import LaCropParameter
 from la.lib.lautils import LaUtils
 from la.lib.laguid import LaGuid
 from la.lib.la import AreaUnits as LaAreaUnits, EnergyType as LaEnergyType
-from la.lib.lagrass import LaGrass
 import os
 
 class LaCropParameterTableModel(QAbstractTableModel):
@@ -83,12 +82,10 @@ class LaCropParameterManager(LaCropParameterManagerBase):
         super(LaCropParameterManager, self).__init__(parent, flags)
         self.readSettings()
         self.tblCropParameterProfiles.cellClicked.connect(self.cellClicked)
-        myList = []
-        myGrass = LaGrass()
-        myMapsetList = ""  # myGrass.getMapsetList() @TODO get Grass stuff working
-
-        # Set up the raster combo box
-        self.cboRaster.addItems(myList)
+        # Raster combo box is populated by the Phase-1b raster picker work.
+        # For now, leave empty — the rasterName field is set programmatically
+        # by the synth-data generator in Phase-1a.
+        self.cboRaster.addItems([])
         self.pbnImport.setVisible(False)
         self.pbnExport.setVisible(False)
         self.lblCropPic.setScaledContents(True)

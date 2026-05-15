@@ -17,7 +17,6 @@ from la.ui.laanimalparametermanagerbase import LaAnimalParameterManagerBase
 from la.lib.laanimalparameter import LaAnimalParameter
 from la.lib.lautils import LaUtils
 from la.lib.la import AreaUnits, EnergyType, Priority
-from la.lib.lagrass import LaGrass
 import os
 
 class LaAnimalParameterManager(LaAnimalParameterManagerBase):
