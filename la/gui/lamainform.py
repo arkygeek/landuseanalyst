@@ -66,6 +66,7 @@ class LaMainForm(LaMainFormBase):
 
         # Basic UI setup
         self.setup()
+        self._addFullReportButton()
         self.loadImages()
         self.refresh()
         self.readSettings()
@@ -662,6 +663,167 @@ class LaMainForm(LaMainFormBase):
         except Exception as e:
             LaUtils.debug.log(f"Error applying validation defaults: {e}", "Error")
 
+    def _addFullReportButton(self):
+        """Wrap tbReport in a container that adds a Results-tab toolbar with
+        [Full Report] [Export PDF] [Export JSON] buttons above the report.
+
+        The tab itself shows the simple styled-tables version (fast to render).
+        The Full Report button opens a modal with the rich version (tables +
+        matplotlib chart PNGs). Exports work directly from the toolbar without
+        needing the modal open — they generate the full report HTML on demand
+        and route it through QTextDocument (for PDF) or lareports.toDict
+        (for JSON).
+        """
+        from qgis.PyQt.QtWidgets import (
+            QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QSplitter, QSizePolicy
+        )
+
+        myOldWidget = getattr(self, "tbReport", None)
+        if myOldWidget is None:
+            return
+        myParent = myOldWidget.parentWidget()
+        if myParent is None:
+            return
+
+        # tbReport's parent in the .ui is a QSplitter. Wrap tbReport in a
+        # container that adds a toolbar above it, then put the container back
+        # where tbReport was.
+        #
+        # Force Expanding/Expanding on both the container AND the existing
+        # report widget. The .ui file pins tbReport to Fixed/Fixed which makes
+        # QSplitter shrink it to a tiny default — override here so the report
+        # fills the available space in the Results tab.
+        myContainer = QWidget(myParent)
+        myContainer.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        myOldWidget.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        myOldWidget.setMinimumSize(0, 0)
+        myVBox = QVBoxLayout(myContainer)
+        myVBox.setContentsMargins(0, 0, 0, 0)
+        myVBox.setSpacing(4)
+
+        myButtonRow = QHBoxLayout()
+        self.pbnFullReport = QPushButton("Full Report", myContainer)
+        self.pbnExportPdf  = QPushButton("Export PDF",  myContainer)
+        self.pbnExportJson = QPushButton("Export JSON", myContainer)
+        self.pbnFullReport.setToolTip("Open the full report (tables + charts) in a new window")
+        self.pbnExportPdf.setToolTip("Save the full report (tables + charts) as a PDF")
+        self.pbnExportJson.setToolTip("Save the report data as JSON (for downstream tooling)")
+        self.pbnFullReport.clicked.connect(self._onFullReport)
+        self.pbnExportPdf.clicked.connect(self._onExportPdf)
+        self.pbnExportJson.clicked.connect(self._onExportJson)
+        myButtonRow.addWidget(self.pbnFullReport)
+        myButtonRow.addWidget(self.pbnExportPdf)
+        myButtonRow.addWidget(self.pbnExportJson)
+        myButtonRow.addStretch()
+        myVBox.addLayout(myButtonRow)
+
+        # Swap tbReport into the container, handling QSplitter parents
+        if isinstance(myParent, QSplitter):
+            mySplitIndex = myParent.indexOf(myOldWidget)
+            myOldWidget.setParent(None)
+            myParent.insertWidget(mySplitIndex, myContainer)
+        else:
+            myLayout = myParent.layout()
+            if myLayout is not None:
+                myLayout.replaceWidget(myOldWidget, myContainer)
+
+        myOldWidget.setParent(myContainer)
+        myVBox.addWidget(myOldWidget, stretch=1)
+        # self.tbReport stays the same QTextBrowser — Run handler still works.
+
+    def _onFullReport(self):
+        """Run the calc, then open the modal report viewer."""
+        if not self._ensureFreshCalc():
+            return
+        from la.gui.lareportdialog import LaReportDialog
+        self._reportDialog = LaReportDialog(
+            self.mModel, theCalculationType=self._calculationTypeLabel(), parent=self
+        )
+        self._reportDialog.show()
+
+    def _onExportPdf(self):
+        """Export the full report (tables + charts) to a PDF via QTextDocument."""
+        from qgis.PyQt.QtWidgets import QFileDialog
+        from qgis.PyQt.QtPrintSupport import QPrinter
+        from qgis.PyQt.QtGui import QTextDocument
+        from la.lib import lareports
+
+        if not self._ensureFreshCalc():
+            return
+
+        myDefault = self._defaultExportFilename("pdf")
+        myPath, _ = QFileDialog.getSaveFileName(
+            self, "Export Report as PDF", myDefault, "PDF Files (*.pdf)"
+        )
+        if not myPath:
+            return
+
+        try:
+            myDoc = QTextDocument()
+            myDoc.setHtml(lareports.buildFullReportHtml(
+                self.mModel, theCalculationType=self._calculationTypeLabel()
+            ))
+            myPrinter = QPrinter(QPrinter.HighResolution)
+            myPrinter.setOutputFormat(QPrinter.PdfFormat)
+            myPrinter.setOutputFileName(myPath)
+            myDoc.print_(myPrinter)
+            LaUtils.debug.log(f"Exported report PDF to {myPath}", "Setup")
+            if hasattr(self, "statusBar"):
+                self.statusBar().showMessage(f"PDF exported to {myPath}", 5000)
+        except Exception as e:
+            LaUtils.debug.log(f"PDF export failed: {e}", "Error")
+
+    def _onExportJson(self):
+        """Export the report's underlying data as JSON."""
+        import json
+        from qgis.PyQt.QtWidgets import QFileDialog
+        from la.lib import lareports
+
+        if not self._ensureFreshCalc():
+            return
+
+        myDefault = self._defaultExportFilename("json")
+        myPath, _ = QFileDialog.getSaveFileName(
+            self, "Export Report Data as JSON", myDefault, "JSON Files (*.json)"
+        )
+        if not myPath:
+            return
+
+        try:
+            myData = lareports.toDict(self.mModel)
+            with open(myPath, "w", encoding="utf-8") as myFile:
+                json.dump(myData, myFile, indent=2, ensure_ascii=False)
+            LaUtils.debug.log(f"Exported report data JSON to {myPath}", "Setup")
+            if hasattr(self, "statusBar"):
+                self.statusBar().showMessage(f"JSON exported to {myPath}", 5000)
+        except Exception as e:
+            LaUtils.debug.log(f"JSON export failed: {e}", "Error")
+
+    def _ensureFreshCalc(self) -> bool:
+        """Run the model calc with current UI values. Returns True on success."""
+        if hasattr(self, "on_pushButtonRun_clicked"):
+            try:
+                self.on_pushButtonRun_clicked()
+            except Exception as e:
+                LaUtils.debug.log(f"Run failed: {e}", "Error")
+                return False
+        return bool(getattr(self.mModel, "mDietLabels", None))
+
+    def _calculationTypeLabel(self) -> str:
+        if self.cboxBaseOnPlants.isChecked():
+            return "Plants First (" + (
+                "Include Dairy" if self.cboxIncludeDairy.isChecked() else "Dairy Separate"
+            ) + ")"
+        return "Animals First (" + (
+            "Include Dairy" if self.cboxIncludeDairy.isChecked() else "Dairy Separate"
+        ) + ")"
+
+    def _defaultExportFilename(self, theExt: str) -> str:
+        import os
+        myName = getattr(self.mModel, "name", "") or "landuse_analyst_report"
+        mySafe = "".join(c if c.isalnum() or c in "-_." else "_" for c in str(myName))
+        return os.path.join(os.path.expanduser("~"), f"{mySafe}.{theExt}")
+
     def _connectDietLabelSignals(self, dietLabels):
         """Connect diet label signals to UI update slots."""
         try:
@@ -769,9 +931,11 @@ class LaMainForm(LaMainFormBase):
             cropPercentTotal = float(self.labelCropCheck.text().replace('%', ''))
             
             if abs(animalPercentTotal - 100.0) > 0.1 or abs(cropPercentTotal - 100.0) > 0.1:
-                self.tbReport.setHtml("<h2>Error: Percentages Must Equal 100%</h2>")
-                self.tbReport.append("<p>Check that Animals and Crops are both at 100%.</p>")
-                self.tbReport.append("<p>I am NOT going to do anything until they are!</p>")
+                self.tbReport.setHtml(
+                    "<h2>Error: Percentages Must Equal 100%</h2>"
+                    "<p>Check that Animals and Crops are both at 100%.</p>"
+                    "<p>I am NOT going to do anything until they are!</p>"
+                )
                 return
             
             # Perform calculations based on diet settings
@@ -800,13 +964,17 @@ class LaMainForm(LaMainFormBase):
             # and assigning via setHtml() keeps Qt's rich-text engine from
             # wrapping each fragment in its own paragraph block, which would
             # break the consistent table styling.
+            # The tab gets the simple, fast-rendering version: scenario header,
+            # diet summary, selections + settings, diet composition (as tables),
+            # plus the six per-item target tables. Charts and exports live in
+            # the "Full Report" modal — see _onFullReport.
             from la.lib import lareports
             myReportHtml = (
                 '<h1 style="color:#3B5A8C; margin-bottom:4px;">'
                 'LanduseAnalyst Calculation Results</h1>'
                 f'<p style="color:#666; font-style:italic; margin-top:0;">'
                 f'Calculation Method: {myCalculationType}</p>'
-                + lareports.toHtml(self.mModel)
+                + lareports.toHtml(self.mModel, theIncludeCharts=False)
                 + lareports.toHtmlCalorieCropTargets(self.mModel)
                 + lareports.toHtmlCalorieAnimalTargets(self.mModel)
                 + lareports.toHtmlProductionCropTargets(self.mModel)

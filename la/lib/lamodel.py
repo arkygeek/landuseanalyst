@@ -152,6 +152,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         self.mCalcsAnimalsMap: Dict[str, str] = {}
         self.mValueMap: Dict[str, float] = {}
         self.mAnimalCalcReport: Dict[str, Tuple[str, float]] = {}
+        self.mAnimalHerdMap: Dict[str, Dict[str, float]] = {}
         self.mAreaTargetsCropsMap: Dict[str, float] = {}
         self.mAreaTargetsAnimalsMap: Dict[str, float] = {}
 

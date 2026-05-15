@@ -1,12 +1,17 @@
 """
 lareports.py - HTML report generation for the Landuse Analyst plugin.
 
-Produces a thesis-style report layout rendered by Qt's QTextBrowser.
-Qt's rich-text engine only supports a subset of HTML/CSS, so the layout
-uses tables, inline styles, and bgcolor attributes rather than flexbox/grid.
+Produces a thesis-style report layout for QTextBrowser, which is what
+QGIS ships natively on every platform. Charts are generated via matplotlib
+(also bundled with QGIS everywhere) → PNG → base64 → inline <img> tags,
+so they render through QTextBrowser without needing PyQtWebEngine.
+
+This means end users get the full report — tables AND charts — with zero
+extra setup on any QGIS install.
 """
 
-from typing import Dict, List, Tuple, Optional
+import math
+from typing import Dict, List, Tuple, Optional, Sequence
 from typing import TYPE_CHECKING
 
 from la.lib.la import AreaUnits
@@ -28,6 +33,13 @@ _ROW_ALT         = "#F2F5FA"
 _SUBTOTAL_BG     = "#CFDBEF"
 _HEADER_TEXT     = "white"
 _MUTED           = "#666666"
+
+# Categorical palettes for charts
+_PALETTE_DIET      = ["#4CAF50", "#E65100", "#FFB300"]                         # plants / meat / dairy
+_PALETTE_BREAKDOWN = ["#E65100", "#8D6E63", "#FFB300", "#A5D6A7", "#388E3C"]   # tame meat / wild meat / dairy / wild plants / crops
+_PALETTE_ANIMALS   = ["#5C6BC0", "#EF5350", "#FFA726", "#26A69A", "#AB47BC", "#8D6E63"]
+_PALETTE_CROPS     = ["#66BB6A", "#9CCC65", "#D4E157", "#FFEE58", "#FFCA28",
+                      "#FFA726", "#FF7043", "#8D6E63", "#A1887F", "#BCAAA4", "#CFD8DC"]
 
 
 def _sectionTitle(theTitle: str, theColor: str = _BLUE_HEADER_BG) -> str:
@@ -117,14 +129,215 @@ def _safeAttr(theObj, theAttr: str, theDefault=0.0):
 
 
 # ---------------------------------------------------------------------------
+# Chart helpers — matplotlib → PNG → base64 → inline <img>
+# ---------------------------------------------------------------------------
+# matplotlib ships with every QGIS install (Linux deb/rpm, Windows OSGeo4W,
+# macOS bundle, conda-forge), so charts work out of the box for end users
+# with no extra setup. We render through Figure + FigureCanvasAgg directly
+# (no pyplot) so the chosen matplotlib backend in the running QGIS process
+# doesn't affect us.
+
+def _figureToImgTag(theFig, theMaxWidthCss: str = "100%") -> str:
+    """Render a matplotlib Figure to a base64-encoded inline <img> tag."""
+    import base64
+    from io import BytesIO
+    from matplotlib.backends.backend_agg import FigureCanvasAgg
+
+    myCanvas = FigureCanvasAgg(theFig)
+    myBuffer = BytesIO()
+    myCanvas.print_png(myBuffer)
+    myEncoded = base64.b64encode(myBuffer.getvalue()).decode("ascii")
+    return (
+        f'<img src="data:image/png;base64,{myEncoded}" '
+        f'style="max-width:{theMaxWidthCss}; vertical-align:top;"/>'
+    )
+
+
+def _chartPie(
+    theSlices: List[Tuple[str, float, str]],
+    theSize: Tuple[float, float] = (4.5, 4.5),
+) -> str:
+    """Pie chart with slice labels + autopct."""
+    from matplotlib.figure import Figure
+
+    myFiltered = [(l, float(v), c) for l, v, c in theSlices if float(v) > 0]
+    if not myFiltered:
+        return f'<div style="color:{_MUTED}; font-style:italic;">No data.</div>'
+
+    myFig = Figure(figsize=theSize, facecolor="white", dpi=100)
+    myAx = myFig.add_subplot(111)
+    myLabels = [l for l, _, _ in myFiltered]
+    myValues = [v for _, v, _ in myFiltered]
+    myColors = [c for _, _, c in myFiltered]
+
+    _, _, myAutotexts = myAx.pie(
+        myValues,
+        labels=myLabels,
+        colors=myColors,
+        autopct="%1.1f%%",
+        startangle=90,
+        wedgeprops={"edgecolor": "white", "linewidth": 2},
+        textprops={"fontsize": 10},
+        pctdistance=0.72,
+    )
+    for myAutoText in myAutotexts:
+        myAutoText.set_color("white")
+        myAutoText.set_fontweight("bold")
+    myAx.set_aspect("equal")
+    myFig.tight_layout()
+    return _figureToImgTag(myFig)
+
+
+def _chartHorizontalBars(
+    theItems: List[Tuple[str, float, str]],
+    theSize: Tuple[float, float] = (6.8, 3.2),
+    theValueFmt: str = "{:,.0f}",
+) -> str:
+    """Horizontal bar chart. Items: (label, value, color)."""
+    from matplotlib.figure import Figure
+
+    if not theItems:
+        return f'<div style="color:{_MUTED}; font-style:italic;">No data.</div>'
+
+    myFig = Figure(figsize=theSize, facecolor="white", dpi=100)
+    myAx = myFig.add_subplot(111)
+    myLabels = [item[0] for item in theItems]
+    myValues = [float(item[1]) for item in theItems]
+    myColors = [item[2] for item in theItems]
+    myYPos = list(range(len(theItems)))
+
+    myAx.barh(myYPos, myValues, color=myColors, edgecolor="white", linewidth=1)
+    myAx.set_yticks(myYPos)
+    myAx.set_yticklabels(myLabels, fontsize=10)
+    myAx.invert_yaxis()
+
+    myMax = max(myValues) if myValues else 0
+    for myIndex, myValue in enumerate(myValues):
+        myAx.text(
+            myValue + myMax * 0.01,
+            myIndex,
+            theValueFmt.format(myValue),
+            va="center",
+            fontsize=9,
+            color="#333",
+        )
+
+    myAx.spines["top"].set_visible(False)
+    myAx.spines["right"].set_visible(False)
+    myAx.tick_params(left=False)
+    myAx.set_xlim(0, myMax * 1.18 if myMax > 0 else 1)
+    myFig.tight_layout()
+    return _figureToImgTag(myFig)
+
+
+def _chartStackedVerticalBar(
+    theStacks: List[Tuple[str, float, str]],
+    theSize: Tuple[float, float] = (3.4, 5.4),
+    theUnitLabel: str = "",
+) -> str:
+    """One vertical stacked bar — segments labelled inside, legend on right."""
+    from matplotlib.figure import Figure
+
+    myFiltered = [(l, float(v), c) for l, v, c in theStacks if float(v) > 0]
+    if not myFiltered:
+        return f'<div style="color:{_MUTED}; font-style:italic;">No data.</div>'
+
+    myFig = Figure(figsize=theSize, facecolor="white", dpi=100)
+    myAx = myFig.add_subplot(111)
+    myTotal = sum(v for _, v, _ in myFiltered)
+    myBottom = 0.0
+    for myLabel, myValue, myColor in myFiltered:
+        myAx.bar(
+            0, myValue, bottom=myBottom, color=myColor, edgecolor="white",
+            linewidth=1.5, width=0.55, label=myLabel,
+        )
+        if myValue / myTotal > 0.04:
+            myAx.text(
+                0, myBottom + myValue / 2.0,
+                f"{myValue:,.1f}",
+                ha="center", va="center",
+                color="white", fontsize=9, fontweight="bold",
+            )
+        myBottom += myValue
+
+    myAx.set_xticks([])
+    if theUnitLabel:
+        myAx.set_ylabel(theUnitLabel, fontsize=10)
+    myAx.set_xlim(-0.6, 0.6)
+    myAx.legend(
+        loc="center left", bbox_to_anchor=(1.0, 0.5), fontsize=9, frameon=False,
+    )
+    myAx.spines["top"].set_visible(False)
+    myAx.spines["right"].set_visible(False)
+    myFig.tight_layout()
+    return _figureToImgTag(myFig)
+
+
+def _chartGroupedBars(
+    theGroupLabels: List[str],
+    theSeries: List[Tuple[str, List[float], str]],
+    theSize: Tuple[float, float] = (6.2, 3.6),
+    theValueFmt: str = "{:,.0f}",
+) -> str:
+    """Grouped vertical bars (e.g. Adults vs Offspring per animal)."""
+    from matplotlib.figure import Figure
+
+    if not theGroupLabels or not theSeries:
+        return f'<div style="color:{_MUTED}; font-style:italic;">No data.</div>'
+
+    myFig = Figure(figsize=theSize, facecolor="white", dpi=100)
+    myAx = myFig.add_subplot(111)
+
+    myN = len(theGroupLabels)
+    myS = len(theSeries)
+    myWidth = 0.8 / myS
+    myXBase = list(range(myN))
+
+    for myIndex, (myName, myValues, myColor) in enumerate(theSeries):
+        myOffset = (myIndex - (myS - 1) / 2.0) * myWidth
+        myValsFloat = [float(v) for v in myValues] + [0.0] * (myN - len(myValues))
+        myXs = [x + myOffset for x in myXBase]
+        myBars = myAx.bar(
+            myXs, myValsFloat[:myN], myWidth, color=myColor,
+            edgecolor="white", linewidth=1, label=myName,
+        )
+        for myBar, myVal in zip(myBars, myValsFloat[:myN]):
+            if myVal > 0:
+                myAx.text(
+                    myBar.get_x() + myBar.get_width() / 2,
+                    myBar.get_height(),
+                    " " + theValueFmt.format(myVal),
+                    ha="center", va="bottom", fontsize=8, color="#333",
+                )
+
+    myAx.set_xticks(myXBase)
+    myAx.set_xticklabels(theGroupLabels, fontsize=10)
+    myAx.legend(fontsize=9, loc="upper right", frameon=False)
+    myAx.spines["top"].set_visible(False)
+    myAx.spines["right"].set_visible(False)
+    myAx.tick_params(bottom=False)
+    myFig.tight_layout()
+    return _figureToImgTag(myFig)
+
+
+# ---------------------------------------------------------------------------
 # Top-level "Model Settings" / Summary + Selections + Diet Composition
 # ---------------------------------------------------------------------------
-def toHtml(model: "LaModel") -> str:
-    """Top section: scenario header, summary metrics, selections, diet composition."""
+def toHtml(model: "LaModel", theIncludeCharts: bool = True) -> str:
+    """Top section: scenario header, summary metrics, selections, and (if
+    charts can render) the diet-composition pie panel.
+
+    :param theIncludeCharts: when False (QTextBrowser mode), the SVG pie
+        section is replaced with a small tabular fallback so the report
+        doesn't show raw SVG text leaks.
+    """
     myHtml = _scenarioHeader(model)
     myHtml += _summaryPanel(model)
     myHtml += _selectionsPanel(model)
-    myHtml += _dietCompositionPanel(model)
+    if theIncludeCharts:
+        myHtml += _dietCompositionPanel(model)
+    else:
+        myHtml += _dietCompositionTablePanel(model)
     return myHtml
 
 
@@ -291,7 +504,56 @@ def _selectionsPanel(model: "LaModel") -> str:
 
 
 def _dietCompositionPanel(model: "LaModel") -> str:
-    """Tabular replacement for the thesis pie charts."""
+    """Two pie charts mirroring the thesis figure: top-level diet split
+    (Plants / Meat / Dairy) and detailed breakdown."""
+    myDietLabels = getattr(model, "mDietLabels", None)
+    if not myDietLabels:
+        return ""
+
+    myPlantsPct      = _safeAttr(myDietLabels, "plantsPortionPct", 0.0)
+    myDairyPct       = _safeAttr(myDietLabels, "dairyPortionPct", 0.0)
+    myCropsPct       = _safeAttr(myDietLabels, "cropsPortionPct", 0.0)
+    myTameMeatPct    = _safeAttr(myDietLabels, "tameMeatPortionPct", 0.0)
+    myWildAnimalPct  = _safeAttr(myDietLabels, "wildAnimalPortionPct", 0.0)
+    myWildPlantsPct  = _safeAttr(myDietLabels, "wildPlantsPortionPct", 0.0)
+    myMeatPct        = myTameMeatPct + myWildAnimalPct
+
+    myPiePlants = _chartPie(
+        [
+            ("Plants",  myPlantsPct,           _PALETTE_DIET[0]),
+            ("Meat",    myMeatPct,             _PALETTE_DIET[1]),
+            ("Dairy",   myDairyPct,            _PALETTE_DIET[2]),
+        ],
+        theSize=(4.0, 4.0),
+    )
+    myPieBreakdown = _chartPie(
+        [
+            ("Domestic Meat", myTameMeatPct,   _PALETTE_BREAKDOWN[0]),
+            ("Wild Meat",     myWildAnimalPct, _PALETTE_BREAKDOWN[1]),
+            ("Dairy",         myDairyPct,      _PALETTE_BREAKDOWN[2]),
+            ("Wild Plants",   myWildPlantsPct, _PALETTE_BREAKDOWN[3]),
+            ("Crops",         myCropsPct,      _PALETTE_BREAKDOWN[4]),
+        ],
+        theSize=(4.0, 4.0),
+    )
+
+    myHtml  = _sectionTitle("Diet Composition")
+    myHtml += (
+        '<table width="100%" cellpadding="10" cellspacing="0" border="0">'
+        '<tr>'
+        f'<td align="center" valign="top" width="50%">'
+        f'<div style="font-weight:bold; margin-bottom:6px;">Diet Split</div>'
+        f'{myPiePlants}</td>'
+        f'<td align="center" valign="top" width="50%">'
+        f'<div style="font-weight:bold; margin-bottom:6px;">Detailed Breakdown</div>'
+        f'{myPieBreakdown}</td>'
+        '</tr></table>'
+    )
+    return myHtml
+
+
+def _dietCompositionTablePanel(model: "LaModel") -> str:
+    """Tabular fallback for QTextBrowser mode (where SVG can't render)."""
     myDietLabels = getattr(model, "mDietLabels", None)
     if not myDietLabels:
         return ""
@@ -315,7 +577,7 @@ def _dietCompositionPanel(model: "LaModel") -> str:
         ],
         theFooter=["Animal Total", f"{myAnimalPct + myDairyPct:.2f}%"],
     )
-    myHtml += '<br/>'
+    myHtml += "<br/>"
     myHtml += _styledTable(
         theHeaders=["Plant Breakdown", "% of Diet"],
         theRows=[
@@ -456,6 +718,256 @@ def toHtmlAreaAnimalTargets(model: "LaModel") -> str:
         theFooter=myFooter,
     )
     return myHtml
+
+
+# ---------------------------------------------------------------------------
+# Chart panels — top-level functions called by the Run handler
+# ---------------------------------------------------------------------------
+def toHtmlMCalorieContributions(model: "LaModel") -> str:
+    """Horizontal bar chart: Domestic Meat / Dairy / Wild Meat / Crops / Wild Plants."""
+    myDietLabels = getattr(model, "mDietLabels", None)
+    if not myDietLabels:
+        return ""
+
+    myMeat       = _safeAttr(myDietLabels, "animalMCalories", 0.0)
+    myDairy      = _safeAttr(myDietLabels, "dairyMCalories", 0.0)
+    myWildMeat   = _safeAttr(myDietLabels, "wildAnimalMCalories", 0.0)
+    myCrops      = _safeAttr(myDietLabels, "cropMCalories", 0.0)
+    myWildPlants = _safeAttr(myDietLabels, "wildPlantsMCalories", 0.0)
+
+    myItems = [
+        ("Domestic Meat", myMeat,       _PALETTE_BREAKDOWN[0]),
+        ("Dairy",         myDairy,      _PALETTE_BREAKDOWN[2]),
+        ("Wild Meat",     myWildMeat,   _PALETTE_BREAKDOWN[1]),
+        ("Crops",         myCrops,      _PALETTE_BREAKDOWN[4]),
+        ("Wild Plants",   myWildPlants, _PALETTE_BREAKDOWN[3]),
+    ]
+
+    myHtml  = _sectionTitle("MCalorie Contributions to the Overall Diet")
+    myHtml += '<div style="padding:10px;">'
+    myHtml += _chartHorizontalBars(myItems, theValueFmt="{:,.0f} MCals")
+    myHtml += '</div>'
+    return myHtml
+
+
+def toHtmlHectaresLand(model: "LaModel") -> str:
+    """Two vertical stacked bars: Hectares Grazing Land + Hectares Crop Land."""
+    myAnimalAreaMap = getattr(model, "mAreaTargetsAnimalsMap", {}) or {}
+    myCropAreaMap   = getattr(model, "mAreaTargetsCropsMap", {}) or {}
+
+    myAnimalStacks: List[Tuple[str, float, str]] = []
+    for myIndex, (myGuid, myValue) in enumerate(myAnimalAreaMap.items()):
+        if myGuid == "CommonTarget":
+            continue
+        myAnimal = LaUtils.getAnimal(myGuid)
+        myName   = myAnimal.name if myAnimal else "Unknown"
+        myColor  = _PALETTE_ANIMALS[myIndex % len(_PALETTE_ANIMALS)]
+        myAnimalStacks.append((myName, float(myValue), myColor))
+
+    myCropStacks: List[Tuple[str, float, str]] = []
+    for myIndex, (myGuid, myValue) in enumerate(myCropAreaMap.items()):
+        if myGuid == "CommonTarget":
+            continue
+        myCrop  = LaUtils.getCrop(myGuid)
+        myName  = myCrop.name if myCrop else "Unknown"
+        myColor = _PALETTE_CROPS[myIndex % len(_PALETTE_CROPS)]
+        myCropStacks.append((myName, float(myValue), myColor))
+
+    myAnimalSvg = _chartStackedVerticalBar(
+        myAnimalStacks, theUnitLabel="Hectares"
+    )
+    myCropSvg = _chartStackedVerticalBar(
+        myCropStacks, theUnitLabel="Hectares"
+    )
+
+    myHtml  = _sectionTitle("Land Composition")
+    myHtml += (
+        '<table width="100%" cellpadding="10" cellspacing="0" border="0">'
+        '<tr>'
+        f'<td align="center" valign="top" width="50%">'
+        f'<div style="font-weight:bold; margin-bottom:6px;">Hectares Grazing Land</div>'
+        f'{myAnimalSvg}</td>'
+        f'<td align="center" valign="top" width="50%">'
+        f'<div style="font-weight:bold; margin-bottom:6px;">Hectares Crop Land</div>'
+        f'{myCropSvg}</td>'
+        '</tr></table>'
+    )
+    return myHtml
+
+
+def toHtmlHerdCharts(model: "LaModel") -> str:
+    """Two grouped bar charts: Animals per Hectare + Herd Sizes."""
+    myHerdMap = getattr(model, "mAnimalHerdMap", {}) or {}
+    myAreaMap = getattr(model, "mAreaTargetsAnimalsMap", {}) or {}
+
+    if not myHerdMap:
+        myHtml  = _sectionTitle("Herd Characteristics")
+        myHtml += (
+            f'<p style="color:{_MUTED}; font-style:italic; padding:10px;">'
+            'Herd dynamics are only computed in Animals First / Dairy Separate '
+            'mode. Switch to that mode to see Animals-per-Hectare and Herd-Size '
+            'charts.</p>'
+        )
+        return myHtml
+
+    myGuids       = list(myHerdMap.keys())
+    myLabels      = [LaUtils.getAnimal(g).name if LaUtils.getAnimal(g) else "Unknown" for g in myGuids]
+    myAdults      = [myHerdMap[g].get("adults",    0.0) for g in myGuids]
+    myOffspring   = [myHerdMap[g].get("offspring", 0.0) for g in myGuids]
+    myDensityAdults    = [(a / float(myAreaMap.get(g, 0)) if myAreaMap.get(g, 0) else 0.0)
+                          for a, g in zip(myAdults, myGuids)]
+    myDensityOffspring = [(o / float(myAreaMap.get(g, 0)) if myAreaMap.get(g, 0) else 0.0)
+                          for o, g in zip(myOffspring, myGuids)]
+
+    myAdultColor     = "#3F51B5"
+    myOffspringColor = "#FF9800"
+
+    myHerdSizesSvg = _chartGroupedBars(
+        myLabels,
+        [
+            ("Adults",    myAdults,    myAdultColor),
+            ("Offspring", myOffspring, myOffspringColor),
+        ],
+        theValueFmt="{:,.0f}",
+    )
+    myDensitySvg = _chartGroupedBars(
+        myLabels,
+        [
+            ("Adults",    myDensityAdults,    myAdultColor),
+            ("Offspring", myDensityOffspring, myOffspringColor),
+        ],
+        theValueFmt="{:,.1f}",
+    )
+
+    myHtml  = _sectionTitle("Herd Characteristics")
+    myHtml += (
+        '<table width="100%" cellpadding="10" cellspacing="0" border="0">'
+        '<tr>'
+        f'<td align="center" valign="top" width="50%">'
+        f'<div style="font-weight:bold; margin-bottom:6px;">Herd Sizes</div>'
+        f'{myHerdSizesSvg}</td>'
+        f'<td align="center" valign="top" width="50%">'
+        f'<div style="font-weight:bold; margin-bottom:6px;">Animals per Hectare</div>'
+        f'{myDensitySvg}</td>'
+        '</tr></table>'
+    )
+    return myHtml
+
+
+# ---------------------------------------------------------------------------
+# Full-report assembly — shared by the modal viewer and the PDF exporter
+# ---------------------------------------------------------------------------
+def buildFullReportHtml(model: "LaModel", theCalculationType: str = "") -> str:
+    """Compose the complete thesis-style report HTML (tables + chart PNGs).
+
+    Used by both the modal viewer (LaReportDialog) and the PDF exporter so
+    they share the same source of truth. Includes basic styling and a
+    wrapping <html>/<body> so it renders correctly through QTextBrowser
+    and through QTextDocument.print_() to PDF.
+    """
+    return (
+        "<html><head><meta charset='utf-8'><style>"
+        "body { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; "
+        "       color: #222; }"
+        "h1 { color: #3B5A8C; margin: 0 0 4px 0; }"
+        "p.subtitle { color: #666; font-style: italic; margin: 0 0 12px 0; }"
+        "</style></head><body>"
+        "<h1>LanduseAnalyst Calculation Results</h1>"
+        f"<p class='subtitle'>Calculation Method: {theCalculationType}</p>"
+        + toHtml(model, theIncludeCharts=True)
+        + toHtmlMCalorieContributions(model)
+        + toHtmlCalorieCropTargets(model)
+        + toHtmlCalorieAnimalTargets(model)
+        + toHtmlProductionCropTargets(model)
+        + toHtmlProductionAnimalTargets(model)
+        + toHtmlAreaCropTargets(model)
+        + toHtmlAreaAnimalTargets(model)
+        + toHtmlHectaresLand(model)
+        + toHtmlHerdCharts(model)
+        + "</body></html>"
+    )
+
+
+# ---------------------------------------------------------------------------
+# JSON serialization (for export)
+# ---------------------------------------------------------------------------
+def toDict(model: "LaModel") -> Dict:
+    """Serialize the model + computed results to a plain-dict for JSON export.
+
+    Keys use human-readable animal/crop names (resolved via LaUtils) rather
+    than GUIDs so the export file is meaningful to a person reading it.
+    """
+    myDietLabels = getattr(model, "mDietLabels", None)
+
+    def _resolveAnimals(theMap):
+        myResult = {}
+        for myGuid, myValue in (theMap or {}).items():
+            if myGuid == "CommonTarget":
+                myResult["__commonTarget"] = myValue
+                continue
+            myAnimal = LaUtils.getAnimal(myGuid)
+            myName = myAnimal.name if myAnimal else myGuid
+            myResult[myName] = myValue
+        return myResult
+
+    def _resolveCrops(theMap):
+        myResult = {}
+        for myGuid, myValue in (theMap or {}).items():
+            if myGuid == "CommonTarget":
+                myResult["__commonTarget"] = myValue
+                continue
+            myCrop = LaUtils.getCrop(myGuid)
+            myName = myCrop.name if myCrop else myGuid
+            myResult[myName] = myValue
+        return myResult
+
+    return {
+        "settings": {
+            "name":                   getattr(model, "name", ""),
+            "period":                 getattr(model, "period", ""),
+            "population":             int(_safeAttr(model, "population", 0)),
+            "caloriesPerPersonDaily": int(_safeAttr(model, "caloriesPerPersonDaily", 0)),
+            "dietPercent":            _safeAttr(model, "dietPercent", 0),
+            "meatPercent":            _safeAttr(model, "meatPercent", 0),
+            "cropPercent":            _safeAttr(model, "cropPercent", 0),
+            "dairyUtilisation":       _safeAttr(model, "dairyUtilisation", 0),
+            "baseOnPlants":           bool(getattr(model, "baseOnPlants", False)),
+            "includeDairy":           bool(getattr(model, "includeDairy", False)),
+            "limitDairy":             bool(getattr(model, "limitDairy", False)),
+            "limitDairyPercent":      _safeAttr(model, "limitDairyPercent", 100),
+        },
+        "dietPortionPercent": {
+            "plants":      _safeAttr(myDietLabels, "plantsPortionPct", 0),
+            "animals":     _safeAttr(myDietLabels, "animalPortionPct", 0),
+            "tameMeat":    _safeAttr(myDietLabels, "tameMeatPortionPct", 0),
+            "wildMeat":    _safeAttr(myDietLabels, "wildAnimalPortionPct", 0),
+            "dairy":       _safeAttr(myDietLabels, "dairyPortionPct", 0),
+            "crops":       _safeAttr(myDietLabels, "cropsPortionPct", 0),
+            "wildPlants":  _safeAttr(myDietLabels, "wildPlantsPortionPct", 0),
+        },
+        "mcalories": {
+            "settlementAnnual": _safeAttr(myDietLabels, "megaCaloriesSettlementAnnual", 0),
+            "perPersonAnnual":  _safeAttr(myDietLabels, "kiloCaloriesIndividualAnnual", 0),
+            "crops":            _safeAttr(myDietLabels, "cropMCalories", 0),
+            "animals":          _safeAttr(myDietLabels, "animalMCalories", 0),
+            "dairy":            _safeAttr(myDietLabels, "dairyMCalories", 0),
+            "wildMeat":         _safeAttr(myDietLabels, "wildAnimalMCalories", 0),
+            "wildPlants":       _safeAttr(myDietLabels, "wildPlantsMCalories", 0),
+            "dairySurplus":     _safeAttr(myDietLabels, "dairySurplusMCalories", 0),
+        },
+        "totalLandHa": _safeAttr(myDietLabels, "totalLandNeeded", 0),
+        "crops": {
+            "areaHa":     _resolveCrops(getattr(model, "mAreaTargetsCropsMap", {})),
+            "productionKg": _resolveCrops(getattr(model, "mProductionRequiredCropsMap", {})),
+            "calorieKcal":  _resolveCrops(getattr(myDietLabels, "mCropCalorieKcalMap", {})),
+        },
+        "animals": {
+            "areaHa":     _resolveAnimals(getattr(model, "mAreaTargetsAnimalsMap", {})),
+            "productionKg": _resolveAnimals(getattr(model, "mProductionRequiredAnimalsMap", {})),
+            "calorieKcal":  _resolveAnimals(getattr(myDietLabels, "mAnimalCalorieKcalMap", {})),
+            "herd":         _resolveAnimals(getattr(model, "mAnimalHerdMap", {})),
+        },
+    }
 
 
 # ---------------------------------------------------------------------------

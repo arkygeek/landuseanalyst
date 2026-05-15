@@ -41,6 +41,7 @@ def doCalcsAnimalsFirstDairySeparate(theModel: 'LaModel') -> LaDietLabels:
     myCropProductionKgMap: Dict[str, float] = {}    # adjusted kg target per crop per year
     myAnimalCalorieKcalMap: Dict[str, float] = {}   # this animal's kcal contribution to diet
     myCropCalorieKcalMap: Dict[str, float] = {}     # this crop's kcal contribution to diet
+    myAnimalHerdMap: Dict[str, Dict[str, float]] = {}  # per-animal herd-size breakdown
 
     myDietLabels = LaDietLabels()
     myCrops = theModel.mCropsMap
@@ -261,6 +262,15 @@ def doCalcsAnimalsFirstDairySeparate(theModel: 'LaModel') -> LaDietLabels:
         myAnimalsMap[myAnimalGuid] = myAnimalHerdMCalsRequired
         theModel.mValueMap[myAnimalGuid] = myAnimalHerdMCalsRequired
 
+        myTotalOffspring = myTotalMaleOffspring * 2.0
+        myAdults = myTotalMothers + myBreedingMalesRequired
+        myAnimalHerdMap[myAnimalGuid] = {
+            "mothers":        float(myTotalMothers),
+            "breedingMales":  float(myBreedingMalesRequired),
+            "offspring":      float(myTotalOffspring),
+            "adults":         float(myAdults),
+        }
+
     # 3. Dairy Portion Logic (C++ lines 1207-1232)
     myDairyLimit = myDairyLimitPercent if myLimitDairyBool else 1.0
     myDomesticMeatPercent = myTameMeatMCalorieCounter / myMCalsSettlementAnnual
@@ -427,6 +437,7 @@ def doCalcsAnimalsFirstDairySeparate(theModel: 'LaModel') -> LaDietLabels:
     theModel.mAreaTargetsAnimalsMap = {k: v[1] for k, v in theModel.mAnimalCalcReport.items()}
     theModel.mProductionRequiredAnimalsMap = myAnimalProductionKgMap
     theModel.mProductionRequiredCropsMap = myCropProductionKgMap
+    theModel.mAnimalHerdMap = myAnimalHerdMap
     myDietLabels.mAnimalCalorieKcalMap = myAnimalCalorieKcalMap
     myDietLabels.mCropCalorieKcalMap = myCropCalorieKcalMap
 
@@ -776,6 +787,7 @@ def doCalcsAnimalsFirstIncludeDairy(theModel: 'LaModel') -> LaDietLabels:
     theModel.mAreaTargetsAnimalsMap       = myAnimalAreaHaMap
     theModel.mProductionRequiredCropsMap  = myCropProductionKgMap
     theModel.mProductionRequiredAnimalsMap = myAnimalProductionKgMap
+    theModel.mAnimalHerdMap                = {}  # IncludeDairy has no herd dynamics
     myDietLabels.mAnimalCalorieKcalMap    = myAnimalCalorieKcalMap
     myDietLabels.mCropCalorieKcalMap      = myCropCalorieKcalMap
 
