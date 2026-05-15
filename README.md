@@ -123,6 +123,48 @@ For more detailed information on the project, including design decisions and imp
 - [Thesis available here](https://www.researchgate.net/publication/311589270_The_Impact_of_South_Levantine_Early_Bronze_Age_Communities_On_Their_Landscapes)
 - [Class Documentation](https://arkygeek.github.io/landuseanalyst)
 
+## Acknowledgments
+
+This plugin's GIS catchment analysis ports the workflow of the original
+C++ Landuse Analyst into Python + QGIS Processing. Several pieces of
+upstream work are essential to it:
+
+### GRASS r.walk
+
+The reference cost-distance algorithm for the **Walking Time** distance
+method is GRASS `r.walk`. When the QGIS Processing GRASS provider on a
+user's system has `r.walk` registered, the plugin invokes it directly
+via `processing.run("grass:r.walk", …)`. When `r.walk` isn't registered
+(a common situation across QGIS bundles, even with GRASS itself
+installed), the plugin falls back to a pure-Python implementation in
+`la.lib.lagrass.LaGrass._makeWalkCostPure` that uses **Tobler's hiking
+function** + scipy's Dijkstra to produce a co-registered cost surface.
+
+The reference GRASS implementation was originally written by **Steno
+Fontanari** (ITC-IRST, 1992) and **Pierre de Mouveaux**, and is
+maintained by the GRASS GIS development team — Markus Neteler, Hamish
+Bowman, Roberto Flor and many others.
+
+GRASS r.walk source:
+[OSGeo/grass — raster/r.walk](https://github.com/OSGeo/grass/tree/main/raster/r.walk)
+
+### Tobler's hiking function
+
+The pure-Python fallback uses Waldo Tobler's hiking function, a
+canonical model for anisotropic walking-velocity over terrain:
+
+> Tobler, W. (1993). *Three Presentations on Geographical Analysis and
+> Modeling: Non-Isotropic Geographic Modeling; Speculations on the
+> Geometry of Geography; and Global Spatial Analysis.* National Center
+> for Geographic Information and Analysis, Technical Report 93-1.
+
+### Other GRASS algorithms
+
+The catchment workflow also uses `grass:r.cost` (for the Euclidean
+distance method) and `grass:r.mapcalc.simple` (for raster reclassing,
+masking, and merging). Same upstream credit to the GRASS GIS
+development team.
+
 ## Contact
 
 For any questions or contributions, please contact Jason Jorgenson at [jjorgenson a@t gmail.com].

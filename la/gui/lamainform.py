@@ -67,6 +67,7 @@ class LaMainForm(LaMainFormBase):
         # Basic UI setup
         self.setup()
         self._addFullReportButton()
+        self._upgradeGisCombos()
         self.loadImages()
         self.refresh()
         self.readSettings()
@@ -731,6 +732,183 @@ class LaMainForm(LaMainFormBase):
         myVBox.addWidget(myOldWidget, stretch=1)
         # self.tbReport stays the same QTextBrowser — Run handler still works.
 
+    def _upgradeGisCombos(self):
+        """
+        Promote the .ui's plain ``cboDEM`` ``QComboBox`` to a
+        ``QgsMapLayerComboBox`` and add sibling combos for common-crop and
+        common-grazing suitability rasters.
+
+        Done programmatically so the .ui file stays a simple Designer-compatible
+        artefact (no customwidget declarations needed). Same pattern used by
+        :meth:`_addFullReportButton`.
+        """
+        from qgis.PyQt.QtWidgets import QLabel
+        from qgis.gui import QgsMapLayerComboBox
+        from qgis.core import QgsMapLayerProxyModel
+
+        myDemCombo = getattr(self, "cboDEM", None)
+        if myDemCombo is None:
+            LaUtils.debug.log("cboDEM not found; skipping GIS combo upgrade.", "Warning")
+            return
+        myParent = myDemCombo.parentWidget()
+        myLayout = myParent.layout() if myParent else None
+        if myLayout is None:
+            LaUtils.debug.log(
+                "cboDEM has no parent layout; skipping GIS combo upgrade.", "Warning"
+            )
+            return
+
+        # Find cboDEM's grid position
+        myIndex = myLayout.indexOf(myDemCombo)
+        try:
+            myRow, myCol, _, _ = myLayout.getItemPosition(myIndex)
+        except Exception:
+            LaUtils.debug.log(
+                "cboDEM not in a QGridLayout; skipping GIS combo upgrade.", "Warning"
+            )
+            return
+
+        # Replace cboDEM with a QgsMapLayerComboBox in-place
+        myNewDem = QgsMapLayerComboBox(myParent)
+        myNewDem.setObjectName("cboDEM")
+        myNewDem.setFilters(QgsMapLayerProxyModel.RasterLayer)
+        myNewDem.setAllowEmptyLayer(True, "(no DEM — skip GIS analysis)")
+        myLayout.replaceWidget(myDemCombo, myNewDem)
+        myDemCombo.deleteLater()
+        self.cboDEM = myNewDem
+
+        # Add common-crop and common-grazing combos right below the DEM row
+        self.cboCommonCrop = QgsMapLayerComboBox(myParent)
+        self.cboCommonCrop.setObjectName("cboCommonCrop")
+        self.cboCommonCrop.setFilters(QgsMapLayerProxyModel.RasterLayer)
+        self.cboCommonCrop.setAllowEmptyLayer(True, "(no common-crop raster)")
+
+        self.cboCommonGrazing = QgsMapLayerComboBox(myParent)
+        self.cboCommonGrazing.setObjectName("cboCommonGrazing")
+        self.cboCommonGrazing.setFilters(QgsMapLayerProxyModel.RasterLayer)
+        self.cboCommonGrazing.setAllowEmptyLayer(True, "(no common-grazing raster)")
+
+        # Mirror the "DEM:" label column at myCol-2 (label) + myCol (combo).
+        myLabelCol = max(0, myCol - 2)
+        myLblCC = QLabel("Common Crop Raster:", myParent)
+        myLblCC.setAlignment(myLblCC.alignment() | 0x0002)  # right-align numeric flag — harmless on label
+        myLayout.addWidget(myLblCC,                 myRow + 1, myLabelCol)
+        myLayout.addWidget(self.cboCommonCrop,      myRow + 1, myCol)
+
+        myLblCG = QLabel("Common Grazing Raster:", myParent)
+        myLayout.addWidget(myLblCG,                 myRow + 2, myLabelCol)
+        myLayout.addWidget(self.cboCommonGrazing,   myRow + 2, myCol)
+
+        LaUtils.debug.log("Upgraded GIS combos (DEM + common-crop + common-grazing).", "Setup")
+
+    def _configureGisInputsFromUi(self):
+        """
+        Read DEM / common-crop / common-grazing layer ids and the chosen
+        distance method from the form. Returns ``None`` if no DEM is picked
+        (caller treats that as "run diet report only").
+
+        :rtype: la.lib.lacatchment.LaCatchmentInputs | None
+        """
+        from la.lib.lacatchment import LaCatchmentInputs, DistanceMethod
+
+        myDemLayer = self.cboDEM.currentLayer() if hasattr(self, "cboDEM") else None
+        if myDemLayer is None:
+            return None
+
+        myCcLayer = self.cboCommonCrop.currentLayer()    if hasattr(self, "cboCommonCrop")    else None
+        myCgLayer = self.cboCommonGrazing.currentLayer() if hasattr(self, "cboCommonGrazing") else None
+
+        # Match the radio buttons we already wire in configureModelFromUi
+        myMethod = DistanceMethod.WalkingTime
+        if hasattr(self, "radioButtonEuclidean") and self.radioButtonEuclidean.isChecked():
+            myMethod = DistanceMethod.Euclidean
+        elif hasattr(self, "radioButtonPathDistance") and self.radioButtonPathDistance.isChecked():
+            myMethod = DistanceMethod.PathDistance
+
+        return LaCatchmentInputs(
+            demLayerId=myDemLayer.id(),
+            commonCropLayerId=myCcLayer.id() if myCcLayer is not None else None,
+            commonGrazingLayerId=myCgLayer.id() if myCgLayer is not None else None,
+            method=myMethod,
+        )
+
+    def _launchCatchmentTask(self, theInputs) -> None:
+        """
+        Verify GRASS Processing availability + chosen method, then submit a
+        :class:`la.gui.lacatchmenttask.LaCatchmentTask` to the QGIS task
+        manager.
+
+        :param theInputs: :class:`la.lib.lacatchment.LaCatchmentInputs`.
+        """
+        from qgis.PyQt.QtWidgets import QMessageBox
+        from qgis.core import QgsApplication
+        from la.lib.lacatchment import DistanceMethod
+        from la.lib.lagrassprocesslib import LaGrassProcessLib
+        from la.gui.lacatchmenttask import LaCatchmentTask
+
+        if theInputs.method is DistanceMethod.PathDistance:
+            QMessageBox.warning(
+                self,
+                "Path Distance not implemented",
+                "Path Distance is not implemented yet. Please choose Walking "
+                "Time or Euclidean. The diet report has been generated; "
+                "skipping the GIS run.",
+            )
+            return
+
+        # Method-specific availability check.
+        #
+        # Walking Time has a pure-Python fallback (LaGrass._makeWalkCostPure
+        # using Tobler's hiking function + scipy Dijkstra), so it doesn't
+        # require grass:r.walk to be registered — only the per-iteration
+        # rasterwork via grass:r.mapcalc.simple.
+        #
+        # Euclidean uses grass:r.cost with a uniform-1 friction; that
+        # algorithm IS required (no pure-Python fallback for Euclidean yet —
+        # could be added later, but r.cost is much more reliably registered
+        # in QGIS Processing GRASS providers than r.walk).
+        myMapcalcAlg = LaGrassProcessLib.mapcalcAlgorithmId()
+        myMissing = []
+        if myMapcalcAlg is None:
+            myMissing.append("grass:r.mapcalc.simple")
+        if theInputs.method is DistanceMethod.Euclidean:
+            if LaGrassProcessLib.costAlgorithmId() is None:
+                myMissing.append("grass:r.cost")
+
+        if myMissing:
+            myMissingLines = "\n".join(f"  • {m}" for m in myMissing)
+            QMessageBox.warning(
+                self,
+                "GRASS algorithm(s) unavailable",
+                "The catchment-analysis step needs the following GRASS "
+                "algorithm(s) which aren't registered in this QGIS:\n\n"
+                f"{myMissingLines}\n\n"
+                "Likely causes:\n"
+                "• The GRASS Processing provider is disabled — enable it via "
+                "Settings → Options → Processing → Providers → GRASS.\n"
+                "• GRASS itself isn't installed alongside QGIS — install it "
+                "(macOS: `brew install grass`; Linux: package manager; "
+                "Windows: OSGeo4W) and restart QGIS.\n\n"
+                "The diet report has been generated; the GIS step is skipped.",
+            )
+            return
+
+        myTask = LaCatchmentTask(self.mModel, theInputs)
+        myTask.grassMessage.connect(self._onCatchmentMessage)
+        QgsApplication.taskManager().addTask(myTask)
+        # Keep a reference so Python doesn't garbage-collect it
+        self._mCatchmentTask = myTask
+        LaUtils.debug.log("Catchment task submitted to QGIS task manager.", "Setup")
+        if hasattr(self, "statusBar"):
+            self.statusBar().showMessage(
+                "Catchment analysis running — see QGIS task manager for progress.",
+                8000,
+            )
+
+    def _onCatchmentMessage(self, theMessage: str) -> None:
+        """Mirror catchment-task log messages into the plugin's debug log."""
+        LaUtils.debug.log(theMessage, "Calculation")
+
     def _onFullReport(self):
         """Run the calc, then open the modal report viewer."""
         if not self._ensureFreshCalc():
@@ -993,9 +1171,20 @@ class LaMainForm(LaMainFormBase):
             # Update status
             if hasattr(self, 'statusBar'):
                 self.statusBar().showMessage("Calculation complete", 3000)
-            
+
             LaUtils.debug.log("Model calculations completed successfully", "Calculation")
-            
+
+            # Tail step: if the user has picked a DEM, run the catchment
+            # analysis in the background. The diet report has already
+            # rendered; this just adds GIS output to the canvas when ready.
+            myGisInputs = self._configureGisInputsFromUi()
+            if myGisInputs is not None:
+                self._launchCatchmentTask(myGisInputs)
+            else:
+                LaUtils.debug.log(
+                    "No DEM selected — skipping catchment analysis.", "Setup"
+                )
+
         except Exception as e:
             LaUtils.debug.log(f"Error running model: {str(e)}", "Error")
             import traceback

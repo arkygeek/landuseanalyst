@@ -43,16 +43,18 @@ from osgeo import gdal, osr
 # ---------------------------------------------------------------------------
 # 200×200 cells at 20 m resolution = 4 km × 4 km = 1600 ha total.
 # Comfortably bigger than the Min-Pop scenario's ~268 ha demand.
+# Settlement at the centre — easting/northing the orchestrator will use.
+# These match the .ui defaults and the thesis canonical Shuna site:
+# UTM 36N, 744800 E, 3611100 N (Jordan, Chalcolithic period).
+SETTLEMENT_X = 744800.0
+SETTLEMENT_Y = 3611100.0
+_CRS_EPSG    = 32636   # UTM 36N — the thesis CRS
+
 _GRID_W      = 200
 _GRID_H      = 200
 _CELL_SIZE   = 20.0
-_ORIGIN_X    = 500000.0 - (_GRID_W * _CELL_SIZE) / 2.0   # UTM-like centre
-_ORIGIN_Y    = 4000000.0 + (_GRID_H * _CELL_SIZE) / 2.0   # GDAL uses upper-left origin
-_CRS_EPSG    = 32633   # UTM 33N — any metric CRS is fine for a synth scenario
-
-# Settlement at the centre — easting/northing the orchestrator will use.
-SETTLEMENT_X = 500000.0
-SETTLEMENT_Y = 4000000.0
+_ORIGIN_X    = SETTLEMENT_X - (_GRID_W * _CELL_SIZE) / 2.0
+_ORIGIN_Y    = SETTLEMENT_Y + (_GRID_H * _CELL_SIZE) / 2.0   # GDAL upper-left origin
 
 # Project paths
 _PROJECT_ROOT  = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))

@@ -152,3 +152,6 @@ la/debugLog.html
 
 # Other-IDE artifact
 .gemini/
+
+# Runtime debug-report dump
+scratch/debugReport.htm

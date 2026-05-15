@@ -57,10 +57,9 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
         self.tblAnimalParameterProfiles.cellClicked.connect(self.cellClicked)
         self.cboAnimal.currentIndexChanged.connect(self.on_cboAnimal_changed)
 
-        # Set up the raster combo box with available maps
-        myList = []  # Will be populated by grass module later
-        myMapsetList = []  # Will be populated by grass module later
-        self.cboRaster.addItems(myList)
+        # Promote cboRaster from QComboBox to QgsMapLayerComboBox so users
+        # can pick a loaded raster layer as the suitability surface.
+        self._upgradeRasterCombo()
 
         # Hide experimental features
         self.pbnImport.setVisible(False)
@@ -80,6 +79,52 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
         # Initialize table and fodder
         self.refreshAnimalParameterTable()
         self.populateFodder()
+
+    def _upgradeRasterCombo(self):
+        """Replace ``cboRaster`` (plain QComboBox in the .ui) with a
+        ``QgsMapLayerComboBox`` filtered to raster layers, so the user can
+        pick the suitability surface for this animal parameter directly
+        from currently-loaded QGIS layers.
+
+        Falls back silently if ``cboRaster`` isn't present or
+        ``qgis.gui`` isn't importable.
+        """
+        try:
+            from qgis.gui import QgsMapLayerComboBox
+            from qgis.core import QgsMapLayerProxyModel
+        except ImportError:
+            return
+
+        myOld = getattr(self, "cboRaster", None)
+        if myOld is None:
+            return
+        myParent = myOld.parentWidget()
+        myLayout = myParent.layout() if myParent else None
+        if myLayout is None:
+            return
+        myNew = QgsMapLayerComboBox(myParent)
+        myNew.setObjectName("cboRaster")
+        myNew.setFilters(QgsMapLayerProxyModel.RasterLayer)
+        myNew.setAllowEmptyLayer(True, "(no suitability raster)")
+        myLayout.replaceWidget(myOld, myNew)
+        myOld.deleteLater()
+        self.cboRaster = myNew
+
+    def _restoreRasterCombo(self, theRasterName: str) -> None:
+        """Set cboRaster's current layer to whichever loaded layer's
+        ``source()`` matches the given path. Empty/missing → no selection."""
+        try:
+            from qgis.core import QgsProject
+        except ImportError:
+            return
+        if not theRasterName:
+            self.cboRaster.setCurrentIndex(0)
+            return
+        for myLayer in QgsProject.instance().mapLayers().values():
+            if getattr(myLayer, "source", lambda: "")() == theRasterName:
+                self.cboRaster.setLayer(myLayer)
+                return
+        self.cboRaster.setCurrentIndex(0)
 
     def setupAnimalsCombo(self):
         """Set up the animals combo box."""
@@ -217,15 +262,11 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
                 self.cbFallowUsage.setCurrentIndex(i)
                 break
 
-        # Set Raster Name combo box
-        current_raster_name = self.mAnimalParameter.MrasterName
-        raster_index = self.cboRaster.findText(current_raster_name)
-        if raster_index != -1:
-            self.cboRaster.setCurrentIndex(raster_index)
-        else:
-            # Optionally add the raster name if not found, or just select none/default
-            LaUtils.debug.log(f"showAnimalParameter: Raster name '{current_raster_name}' not found in cboRaster")
-            self.cboRaster.setCurrentIndex(-1) # Or set to a default index like 0
+        # Set suitability raster from the QgsMapLayerComboBox by matching
+        # the persisted source path against currently-loaded layers.
+        # (Note: the parameter property is `rasterName`, not the broken
+        # `MrasterName` typo that lived here previously.)
+        self._restoreRasterCombo(self.mAnimalParameter.rasterName)
 
         # Update the fodder table AFTER setting fodder use state
         self.refreshFodderTable()
@@ -379,8 +420,11 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
             LaUtils.debug.log(f"on_pbnApply_clicked: Invalid energy type selected: {mySelectedEnergyTypeText}, defaulting to KCalories")
             self.mAnimalParameter.mSpecificLandEnergyType = EnergyType.KCalories
 
-        # Save raster name by assigning to private attribute
-        self.mAnimalParameter.MrasterName = self.cboRaster.currentText()
+        # Save the suitability raster's source path via the QgsMapLayerComboBox.
+        # (Fixed: previously assigned to a non-existent 'MrasterName' attribute,
+        # which silently failed to persist.)
+        myLayer = self.cboRaster.currentLayer() if hasattr(self.cboRaster, "currentLayer") else None
+        self.mAnimalParameter.rasterName = myLayer.source() if myLayer is not None else ""
         
         # Set fallow usage based on combo box data by assigning to private attribute
         index = self.cbFallowUsage.currentIndex()

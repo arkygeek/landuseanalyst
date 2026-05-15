@@ -65,23 +65,27 @@ class LaGrass(QObject):
     # ------------------------------------------------------------------
     def makeWalkCost(self, theX: float, theY: float) -> str:
         """
-        Run ``grass:r.walk`` against the stored DEM, seeded at the settlement.
+        Build an anisotropic walking-cost surface around the settlement.
 
-        Parameter values match the C++ original: Tobler's walking function
-        coefficients (0.72, 6.0, 1.9998, -1.9998), lambda 0.75,
-        slope_factor -0.2125, max_cost 40000, Knight's-move on.
+        Tries ``grass:r.walk`` first (the fastest path for users who have a
+        full GRASS install with the algorithm registered). Falls back to a
+        pure-Python Tobler-based implementation
+        (:meth:`_makeWalkCostPure`) when ``r.walk`` isn't available in the
+        QGIS Processing GRASS provider — a common case, because the
+        provider intermittently excludes ``r.walk`` across QGIS versions
+        even when GRASS itself is installed.
 
         :param theX: Settlement easting in DEM CRS units.
         :param theY: Settlement northing in DEM CRS units.
         :return: Absolute path of the output cost-surface GeoTIFF.
         :rtype: str
-        :raises LaGrassError: If ``grass:r.walk`` isn't available or fails.
         """
         if self._mWalkId is None:
-            raise LaGrassError(
-                "grass:r.walk is not available. Enable the GRASS Processing "
-                "provider in QGIS, then restart the plugin."
+            self.message.emit(
+                "grass:r.walk not registered; using pure-Python Tobler "
+                "walking-cost fallback."
             )
+            return self._makeWalkCostPure(theX, theY)
         myFriction = self._uniformFrictionFromDem()
         myOutPath = self._tempPath("walkCost")
         myParams = {
@@ -290,6 +294,215 @@ class LaGrass(QObject):
             except OSError:
                 pass
         self._mTempRasters.clear()
+
+    # ------------------------------------------------------------------
+    # Pure-Python r.walk replacement
+    # ------------------------------------------------------------------
+    def _makeWalkCostPure(self, theX: float, theY: float) -> str:
+        """
+        Pure-Python anisotropic walking-cost surface using Tobler's hiking
+        function on the DEM grid, with Dijkstra propagation from the
+        settlement.
+
+        Why this exists
+        ---------------
+        The reference path is GRASS ``r.walk`` (called via ``grass:r.walk``
+        in QGIS Processing). For a portable QGIS plugin we need a fallback:
+        even when GRASS itself is installed, the QGIS Processing GRASS
+        provider intermittently excludes ``r.walk`` from its registered
+        algorithm list across QGIS bundles (the macOS standalone bundle
+        and several Linux distributions don't expose it). End users would
+        otherwise see "grass:r.walk is not available" errors despite
+        having GRASS on their machine; this method gives every user the
+        Walking Time analysis without any GRASS or extra-install
+        dependency.
+
+        Math
+        ----
+        Edge cost is computed per-pair-of-adjacent-cells using **Tobler's
+        hiking function** (Tobler, 1993):
+
+            v(slope) = V_PEAK * exp(-K * |slope + BIAS|)        [km/h]
+
+        with the canonical parameters
+
+            V_PEAK = 6.0    (km/h, peak walking speed)
+            K      = 3.5    (slope penalty)
+            BIAS   = 0.05   (peak occurs at gentle downhill)
+
+        For each directed edge (cell A → cell B):
+
+            slope     = (z_B − z_A) / horizontal_distance        [signed]
+            velocity  = Tobler(slope)                            [km/h]
+            edge_cost = horizontal_distance / velocity_in_m_per_s [seconds]
+
+        The full grid is then represented as a directed sparse graph
+        (8-connected, anisotropic — uphill and downhill from the same
+        edge have different costs) and Dijkstra propagates accumulated
+        cost from the settlement seed. Cells beyond ``MAX_COST`` seconds
+        of walking are masked to null in the output.
+
+        Output is a Float32 GeoTIFF co-registered with the DEM, with
+        nodata = NaN, units = seconds of walking time. This matches the
+        units the binary-search threshold sweep in
+        :class:`la.lib.lacatchment.LaCatchment` expects (the bracket
+        ``[0, 40000]`` corresponds to up to ~11 hours of walking, in
+        line with the C++ original's max_cost setting).
+
+        ACKNOWLEDGMENTS
+        ---------------
+        The reference algorithm — GRASS ``r.walk`` — was originally
+        written by Steno Fontanari (ITC-IRST, 1992) and Pierre de
+        Mouveaux, and is maintained by the GRASS GIS development team:
+        Markus Neteler, Hamish Bowman, Roberto Flor and many others.
+        Source: https://github.com/OSGeo/grass/tree/main/raster/r.walk
+
+        The walking-velocity model is Waldo Tobler's hiking function:
+        Tobler, W. (1993). "Three Presentations on Geographical Analysis
+        and Modeling: Non-Isotropic Geographic Modeling; Speculations on
+        the Geometry of Geography; and Global Spatial Analysis."
+        National Center for Geographic Information and Analysis,
+        Technical Report 93-1.
+
+        The Landuse Analyst plugin's binary-search catchment workflow
+        (which consumes the cost surface this method produces) is a
+        Python port of Jason Jorgenson's C++ Landuse Analyst — see
+        ``cppArchive/`` in this codebase.
+
+        :param theX: Settlement easting in DEM CRS units.
+        :param theY: Settlement northing in DEM CRS units.
+        :return: Absolute path of a Float32 cost-surface GeoTIFF.
+        :rtype: str
+        :raises LaGrassError: On unreadable DEM or seed outside DEM extent.
+        """
+        import math
+        import numpy as np
+        from osgeo import gdal
+        from scipy.sparse import csr_matrix
+        from scipy.sparse.csgraph import dijkstra
+
+        # Tobler's hiking function parameters — see method docstring.
+        _V_PEAK_KMH    = 6.0
+        _SLOPE_PENALTY = 3.5
+        _DOWNHILL_BIAS = 0.05
+        _MAX_COST_SEC  = 40000.0     # ~11 h walking — matches C++ max_cost
+
+        # --- 1. Read DEM into a NumPy array, capture georeferencing ---
+        myDataset = gdal.Open(self.mDemPath)
+        if myDataset is None:
+            raise LaGrassError(f"Could not open DEM {self.mDemPath}")
+        myDem        = myDataset.GetRasterBand(1).ReadAsArray().astype(np.float64)
+        myGeoTrans   = myDataset.GetGeoTransform()
+        myProjection = myDataset.GetProjection()
+        myCellX      = abs(myGeoTrans[1])
+        myCellY      = abs(myGeoTrans[5])
+        myCellDiag   = math.sqrt(myCellX ** 2 + myCellY ** 2)
+        myRows, myCols = myDem.shape
+
+        # --- 2. Locate the seed cell from settlement coordinates ---
+        # GeoTransform: (originX, pixelW, 0, originY, 0, -pixelH) for
+        # north-up rasters. Inverse is straightforward.
+        mySeedCol = int((theX - myGeoTrans[0]) / myGeoTrans[1])
+        mySeedRow = int((theY - myGeoTrans[3]) / myGeoTrans[5])
+        if not (0 <= mySeedRow < myRows and 0 <= mySeedCol < myCols):
+            raise LaGrassError(
+                f"Settlement ({theX}, {theY}) maps to cell "
+                f"({mySeedRow}, {mySeedCol}) outside DEM "
+                f"({myRows} × {myCols})."
+            )
+
+        # --- 3. Build a directed sparse cost graph (8-neighbor) ---
+        # For each of the 8 directions we vectorise across the whole DEM:
+        #   * compute slope from "src" cells to "dst" cells (signed)
+        #   * compute Tobler velocity (km/h) per edge
+        #   * convert to edge-cost in seconds
+        # Then accumulate into COO arrays for a single csr_matrix at the end.
+        myDirections = [
+            (-1,  0, myCellY),     # N
+            (-1,  1, myCellDiag),  # NE
+            ( 0,  1, myCellX),     # E
+            ( 1,  1, myCellDiag),  # SE
+            ( 1,  0, myCellY),     # S
+            ( 1, -1, myCellDiag),  # SW
+            ( 0, -1, myCellX),     # W
+            (-1, -1, myCellDiag),  # NW
+        ]
+
+        myRowIdxList:  List[np.ndarray] = []
+        myColIdxList:  List[np.ndarray] = []
+        myDataList:    List[np.ndarray] = []
+
+        for myDr, myDc, myEdgeLen in myDirections:
+            # In-bounds windows for src (where dst exists) and dst.
+            mySrcRowStart, mySrcRowStop = max(0, -myDr), min(myRows, myRows - myDr)
+            mySrcColStart, mySrcColStop = max(0, -myDc), min(myCols, myCols - myDc)
+            myDstRowStart, myDstRowStop = max(0,  myDr), min(myRows, myRows + myDr)
+            myDstColStart, myDstColStop = max(0,  myDc), min(myCols, myCols + myDc)
+
+            mySrcZ = myDem[mySrcRowStart:mySrcRowStop, mySrcColStart:mySrcColStop]
+            myDstZ = myDem[myDstRowStart:myDstRowStop, myDstColStart:myDstColStop]
+
+            # Signed slope: positive = uphill from src to dst.
+            mySlope = (myDstZ - mySrcZ) / myEdgeLen
+
+            # Tobler velocity (km/h); convert to m/s for cost-in-seconds.
+            myVelKmh = _V_PEAK_KMH * np.exp(
+                -_SLOPE_PENALTY * np.abs(mySlope + _DOWNHILL_BIAS)
+            )
+            myVelMs = myVelKmh * (1000.0 / 3600.0)
+            # Clamp to a tiny positive so absolute cliffs don't blow up.
+            myEdgeCost = myEdgeLen / np.maximum(myVelMs, 1e-6)
+
+            # Flatten (row, col) → flat index for src and dst.
+            mySrcRowGrid, mySrcColGrid = np.meshgrid(
+                np.arange(mySrcRowStart, mySrcRowStop),
+                np.arange(mySrcColStart, mySrcColStop),
+                indexing="ij",
+            )
+            myDstRowGrid, myDstColGrid = np.meshgrid(
+                np.arange(myDstRowStart, myDstRowStop),
+                np.arange(myDstColStart, myDstColStop),
+                indexing="ij",
+            )
+            myRowIdxList.append((mySrcRowGrid * myCols + mySrcColGrid).ravel())
+            myColIdxList.append((myDstRowGrid * myCols + myDstColGrid).ravel())
+            myDataList.append(myEdgeCost.ravel())
+
+        myRowIdx = np.concatenate(myRowIdxList)
+        myColIdx = np.concatenate(myColIdxList)
+        myCosts  = np.concatenate(myDataList)
+        myN      = myRows * myCols
+        myGraph  = csr_matrix((myCosts, (myRowIdx, myColIdx)), shape=(myN, myN))
+
+        # --- 4. Dijkstra from the seed ---
+        mySeedFlat = mySeedRow * myCols + mySeedCol
+        myDistFlat = dijkstra(csgraph=myGraph, indices=mySeedFlat)
+        myCostGrid = myDistFlat.reshape(myRows, myCols)
+
+        # Mask cells beyond max_cost or unreachable (∞).
+        myCostGrid[~np.isfinite(myCostGrid)] = np.nan
+        myCostGrid[myCostGrid > _MAX_COST_SEC] = np.nan
+
+        # --- 5. Write the output GeoTIFF ---
+        myOutPath = self._tempPath("walkCost_pure")
+        myDriver = gdal.GetDriverByName("GTiff")
+        myOutDs  = myDriver.Create(
+            myOutPath, myCols, myRows, 1, gdal.GDT_Float32,
+            options=["COMPRESS=LZW", "TILED=YES"],
+        )
+        myOutDs.SetGeoTransform(myGeoTrans)
+        myOutDs.SetProjection(myProjection)
+        myOutBand = myOutDs.GetRasterBand(1)
+        myOutBand.SetNoDataValue(float("nan"))
+        myOutBand.WriteArray(myCostGrid.astype(np.float32))
+        myOutBand.FlushCache()
+        myOutDs.FlushCache()
+        self._mTempRasters.append(myOutPath)
+        self.message.emit(
+            f"Built walk-cost surface (pure-Python Tobler) from "
+            f"({theX:.1f}, {theY:.1f})."
+        )
+        return myOutPath
 
     # ------------------------------------------------------------------
     # Internals

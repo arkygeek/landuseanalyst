@@ -82,10 +82,10 @@ class LaCropParameterManager(LaCropParameterManagerBase):
         super(LaCropParameterManager, self).__init__(parent, flags)
         self.readSettings()
         self.tblCropParameterProfiles.cellClicked.connect(self.cellClicked)
-        # Raster combo box is populated by the Phase-1b raster picker work.
-        # For now, leave empty — the rasterName field is set programmatically
-        # by the synth-data generator in Phase-1a.
-        self.cboRaster.addItems([])
+        # Promote cboRaster from a plain QComboBox to a QgsMapLayerComboBox
+        # so users can pick a loaded raster layer as the suitability surface
+        # for this crop parameter. See _upgradeRasterCombo for details.
+        self._upgradeRasterCombo()
         self.pbnImport.setVisible(False)
         self.pbnExport.setVisible(False)
         self.lblCropPic.setScaledContents(True)
@@ -214,7 +214,55 @@ class LaCropParameterManager(LaCropParameterManagerBase):
                 break
 
         self.cbAreaUnits.setCurrentIndex(self.mCropParameter.areaUnits.value)
+        self._restoreRasterCombo(self.mCropParameter.rasterName)
         self.updateCropPicture()
+
+    def _upgradeRasterCombo(self):
+        """Replace ``cboRaster`` (plain QComboBox in the .ui) with a
+        ``QgsMapLayerComboBox`` filtered to raster layers, so the user can
+        pick the suitability surface for this crop parameter directly from
+        currently-loaded QGIS layers.
+
+        Falls back silently if ``cboRaster`` isn't present (some forms may
+        not have it) or if ``qgis.gui`` isn't importable in the host.
+        """
+        try:
+            from qgis.gui import QgsMapLayerComboBox
+            from qgis.core import QgsMapLayerProxyModel
+        except ImportError:
+            return
+
+        myOld = getattr(self, "cboRaster", None)
+        if myOld is None:
+            return
+        myParent = myOld.parentWidget()
+        myLayout = myParent.layout() if myParent else None
+        if myLayout is None:
+            return
+        myNew = QgsMapLayerComboBox(myParent)
+        myNew.setObjectName("cboRaster")
+        myNew.setFilters(QgsMapLayerProxyModel.RasterLayer)
+        myNew.setAllowEmptyLayer(True, "(no suitability raster)")
+        myLayout.replaceWidget(myOld, myNew)
+        myOld.deleteLater()
+        self.cboRaster = myNew
+
+    def _restoreRasterCombo(self, theRasterName: str) -> None:
+        """Set cboRaster's current layer to whichever loaded layer's
+        ``source()`` matches the given path. Empty/missing → no selection."""
+        try:
+            from qgis.core import QgsProject
+        except ImportError:
+            return
+        if not theRasterName:
+            self.cboRaster.setCurrentIndex(0)  # the empty entry
+            return
+        for myLayer in QgsProject.instance().mapLayers().values():
+            if getattr(myLayer, "source", lambda: "")() == theRasterName:
+                self.cboRaster.setLayer(myLayer)
+                return
+        # No matching loaded layer — leave selection empty
+        self.cboRaster.setCurrentIndex(0)
 
     def resizeEvent(self, theEvent):
         """Handle resize event to adjust table columns"""
@@ -373,9 +421,13 @@ class LaCropParameterManager(LaCropParameterManagerBase):
         elif unit_text == "Hectare":
             self.mCropParameter.areaUnits = AreaUnits.Hectare
 
-        # Get the raster name if available
+        # Save the suitability raster's source path. cboRaster is a
+        # QgsMapLayerComboBox after _upgradeRasterCombo runs, so currentLayer()
+        # gives the QgsMapLayer; we persist its source() (file path) so the
+        # rasterName survives across QGIS sessions.
         if hasattr(self, 'cboRaster'):
-            self.mCropParameter.rasterName = self.cboRaster.currentText()
+            myLayer = self.cboRaster.currentLayer() if hasattr(self.cboRaster, "currentLayer") else None
+            self.mCropParameter.rasterName = myLayer.source() if myLayer is not None else ""
 
         # Use safe_guid for consistent string representation
         target_file = os.path.join(LaUtils.userCropParameterProfilesDirPath(), f"{self.mCropParameter.guid}.xml")
