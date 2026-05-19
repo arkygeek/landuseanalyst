@@ -152,6 +152,8 @@ class LaGrass(QObject):
         :return: Absolute path of a 1/null binary mask GeoTIFF.
         :rtype: str
         """
+        if self._mMapcalcId is None:
+            return self._reclassPure(theCostRaster, theThreshold)
         myOutPath = self._tempPath(f"reclass_{int(theThreshold)}")
         myParams = self._mapcalcParams(
             theExpression=f"if(A < {theThreshold}, 1, null())",
@@ -174,6 +176,8 @@ class LaGrass(QObject):
         :return: Absolute path of a 1/null mask GeoTIFF.
         :rtype: str
         """
+        if self._mMapcalcId is None:
+            return self._createMaskPure(theReclassed, theSuitabilityRaster)
         myOutPath = self._tempPath("mask")
         myParams = self._mapcalcParams(
             theExpression="if(A >= 1 && B >= 1, 1, null())",
@@ -205,6 +209,10 @@ class LaGrass(QObject):
         :return: Absolute path of a 1/null leftover mask GeoTIFF.
         :rtype: str
         """
+        if self._mMapcalcId is None:
+            return self._createInverseMaskPure(
+                theCostRaster, theThreshold, theBaseSuitability,
+            )
         myOutPath = self._tempPath(f"inverse_{int(theThreshold)}")
         myParams = self._mapcalcParams(
             theExpression=f"if(B >= 1 && A >= {theThreshold}, 1, null())",
@@ -225,6 +233,8 @@ class LaGrass(QObject):
         :return: Absolute path of a merged 1/null mask GeoTIFF.
         :rtype: str
         """
+        if self._mMapcalcId is None:
+            return self._mergeMapsPure(theA, theB)
         myOutPath = self._tempPath("merge")
         myParams = self._mapcalcParams(
             theExpression="if(A >= 1 || B >= 1, 1, null())",
@@ -503,6 +513,159 @@ class LaGrass(QObject):
             f"({theX:.1f}, {theY:.1f})."
         )
         return myOutPath
+
+    # ------------------------------------------------------------------
+    # Pure-Python r.mapcalc.simple replacements
+    # ------------------------------------------------------------------
+    # The four ops below mirror the GRASS ``r.mapcalc.simple`` expressions
+    # used in :meth:`reclass`, :meth:`createMask`, :meth:`createInverseMask`,
+    # and :meth:`mergeMaps`. The public methods route to these when
+    # ``self._mMapcalcId is None`` — same gate that protects the r.walk
+    # fallback. The fallbacks unlock fully-headless catchment runs (handy
+    # for tests) and provide a portability backstop for users whose QGIS
+    # bundle ships the GRASS provider without the mapcalc algorithm
+    # registered.
+    #
+    # Semantic-match notes
+    # --------------------
+    # - GRASS ``null()`` becomes 0 in a ``uint8`` mask with ``nodata=0`` —
+    #   downstream consumers (:meth:`getArea`, the orchestrator) test for
+    #   ``== 1`` so 0 and null are equivalent.
+    # - ``cost < threshold`` against a NaN cell evaluates ``False`` in
+    #   NumPy, matching GRASS's null-propagation in the same comparison.
+    # - Co-registration: every output GeoTIFF re-uses the reference
+    #   raster's geotransform + projection so the cost surface, masks,
+    #   suitability rasters, and outputs all line up cell-for-cell.
+
+    def _reclassPure(self, theCostRaster: str, theThreshold: float) -> str:
+        """Pure-Python equivalent of ``if(cost < threshold, 1, null())``.
+
+        :param theCostRaster: Absolute path of a cost-surface raster.
+        :param theThreshold: Cost-distance threshold.
+        :return: Absolute path of a 1/0 uint8 mask GeoTIFF (nodata=0).
+        :rtype: str
+        """
+        import numpy as np
+
+        myCost = self._readBand(theCostRaster)
+        # NaN < anything is False, which matches GRASS null-propagation.
+        myMask = (myCost < theThreshold).astype(np.uint8)
+        myOutPath = self._tempPath(f"reclass_pure_{int(theThreshold)}")
+        self._writeMaskCoregistered(myMask, theCostRaster, myOutPath)
+        self._mTempRasters.append(myOutPath)
+        return myOutPath
+
+    def _createMaskPure(
+        self, theReclassed: str, theSuitabilityRaster: str,
+    ) -> str:
+        """Pure-Python equivalent of ``if(A >= 1 && B >= 1, 1, null())``.
+
+        :param theReclassed: Output of :meth:`_reclassPure`.
+        :param theSuitabilityRaster: Per-item suitability raster.
+        :return: Absolute path of a 1/0 uint8 mask GeoTIFF (nodata=0).
+        :rtype: str
+        """
+        import numpy as np
+
+        myA = self._readBand(theReclassed)
+        myB = self._readBand(theSuitabilityRaster)
+        myMask = ((myA >= 1) & (myB >= 1)).astype(np.uint8)
+        myOutPath = self._tempPath("mask_pure")
+        self._writeMaskCoregistered(myMask, theReclassed, myOutPath)
+        self._mTempRasters.append(myOutPath)
+        return myOutPath
+
+    def _createInverseMaskPure(
+        self,
+        theCostRaster:      str,
+        theThreshold:       float,
+        theBaseSuitability: str,
+    ) -> str:
+        """Pure-Python equivalent of ``if(B >= 1 && A >= threshold, 1, null())``.
+
+        :param theCostRaster: The cost surface.
+        :param theThreshold: Cost threshold used for the catchment.
+        :param theBaseSuitability: The suitability raster the catchment was
+            allocated from.
+        :return: Absolute path of a 1/0 uint8 leftover mask GeoTIFF.
+        :rtype: str
+        """
+        import numpy as np
+
+        myCost = self._readBand(theCostRaster)
+        myBase = self._readBand(theBaseSuitability)
+        # NaN >= threshold is False — unreachable cells don't count as leftover.
+        myMask = ((myBase >= 1) & (myCost >= theThreshold)).astype(np.uint8)
+        myOutPath = self._tempPath(f"inverse_pure_{int(theThreshold)}")
+        self._writeMaskCoregistered(myMask, theCostRaster, myOutPath)
+        self._mTempRasters.append(myOutPath)
+        return myOutPath
+
+    def _mergeMapsPure(self, theA: str, theB: str) -> str:
+        """Pure-Python equivalent of ``if(A >= 1 || B >= 1, 1, null())``.
+
+        :param theA: First mask raster path.
+        :param theB: Second mask raster path.
+        :return: Absolute path of a 1/0 uint8 union mask GeoTIFF.
+        :rtype: str
+        """
+        import numpy as np
+
+        myArrA = self._readBand(theA)
+        myArrB = self._readBand(theB)
+        myMask = ((myArrA >= 1) | (myArrB >= 1)).astype(np.uint8)
+        myOutPath = self._tempPath("merge_pure")
+        self._writeMaskCoregistered(myMask, theA, myOutPath)
+        self._mTempRasters.append(myOutPath)
+        return myOutPath
+
+    def _readBand(self, thePath: str):
+        """Read band 1 of a raster into a NumPy array.
+
+        Wraps ``gdal.Open(...).GetRasterBand(1).ReadAsArray()`` so the
+        Dataset reference outlives the read — chaining all three calls
+        on one line lets Python free the Dataset mid-call and segfaults
+        under the GDAL Python bindings.
+
+        :param thePath: Absolute path of a single-band GDAL-readable raster.
+        :return: 2-D NumPy array of the band's values.
+        """
+        from osgeo import gdal
+
+        myDataset = gdal.Open(thePath)
+        if myDataset is None:
+            raise LaGrassError(f"Could not open {thePath}")
+        return myDataset.GetRasterBand(1).ReadAsArray()
+
+    def _writeMaskCoregistered(
+        self, theMask, theReferenceRaster: str, theOutPath: str,
+    ) -> None:
+        """Write a uint8 ``{0,1}`` mask co-registered with a reference raster.
+
+        :param theMask: 2-D ``numpy.ndarray`` of ``uint8`` values (0 or 1).
+        :param theReferenceRaster: Path to read geotransform + projection
+            from. Cell grid must match ``theMask``.
+        :param theOutPath: Absolute output path.
+        :rtype: None
+        """
+        from osgeo import gdal
+
+        myReference   = gdal.Open(theReferenceRaster)
+        myGeoTrans    = myReference.GetGeoTransform()
+        myProjection  = myReference.GetProjection()
+        myRows, myCols = theMask.shape
+        myDriver = gdal.GetDriverByName("GTiff")
+        myOutDs  = myDriver.Create(
+            theOutPath, myCols, myRows, 1, gdal.GDT_Byte,
+            options=["COMPRESS=LZW", "TILED=YES"],
+        )
+        myOutDs.SetGeoTransform(myGeoTrans)
+        myOutDs.SetProjection(myProjection)
+        myOutBand = myOutDs.GetRasterBand(1)
+        myOutBand.SetNoDataValue(0)
+        myOutBand.WriteArray(theMask)
+        myOutBand.FlushCache()
+        myOutDs.FlushCache()
 
     # ------------------------------------------------------------------
     # Internals
