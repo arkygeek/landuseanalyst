@@ -28,7 +28,7 @@ To build the plugin, follow these steps:
 
 1. **Clone the Repository:**
     ```bash
-    git clone https://github.com/yourusername/landuseanalyst.git
+    git clone https://github.com/arkygeek/landuseanalyst.git
     cd landuseanalyst
     ```
 
@@ -90,6 +90,35 @@ automatically on next launch.
 
 3. **Using the Plugin:**
     Access the plugin from the QGIS toolbar or the Plugins menu.
+
+## Worked End-to-End Tutorial Walkthrough
+
+To verify the integration and execution of the catchment engine, you can run a simulation using the bundled Shuna dataset:
+
+1. **Setup Sample Data:**
+    Ensure you have run `./install_sample_data.sh` to install the crop/animal profiles under `~/.landuseAnalyst/`.
+
+2. **Load Input Layers:**
+    Load the Shuna DEM raster layer located at `la/test/xmlData/GrassData/demShuna` into your QGIS workspace.
+
+3. **Open Landuse Analyst:**
+    Click the Landuse Analyst icon on the QGIS toolbar to open the main form.
+
+4. **Configure Settings:**
+    - **DEM Layer:** Select `demShuna` from the dropdown list.
+    - **Settlement Coordinates:** Enter Easting `744800.0` and Northing `3611100.0` (UTM Zone 36N).
+    - **Population:** Set to `600`.
+    - **Scenario / Crops:** Add `WheatTest` with a target crop area of `50.0` Ha.
+    - **Catchment Method:** Select `Walking Time` (which uses Tobler's Hiking Function).
+    - **Precision:** Set to `5.0%` (producing a half-window of `±2.5%` or `±1.25` Ha).
+
+5. **Run the Solver:**
+    Click **Run**. The catchment solver executes dynamically in a background QgsTask.
+
+6. **Verify Results:**
+    - The simulation performs binary search iterations to find the walking threshold.
+    - It converges at a threshold of **`1582.0` seconds** of walking time, achieving **`50.31` Ha** of wheat cropland.
+    - The output raster `WheatTest_t1582_a50.tif` is automatically generated and added as a layer to your QGIS project under the `Catchment Analysis` group styled with semi-transparency.
 
 ## Coding and Naming Conventions
 

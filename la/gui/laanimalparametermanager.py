@@ -60,6 +60,7 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
         # Promote cboRaster from QComboBox to QgsMapLayerComboBox so users
         # can pick a loaded raster layer as the suitability surface.
         self._upgradeRasterCombo()
+        self._addPreferredSlopeControls()
 
         # Hide experimental features
         self.pbnImport.setVisible(False)
@@ -125,6 +126,31 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
                 self.cboRaster.setLayer(myLayer)
                 return
         self.cboRaster.setCurrentIndex(0)
+
+    def _addPreferredSlopeControls(self):
+        """Add preferred slope limit controls dynamically to the details group box layout."""
+        from qgis.PyQt.QtWidgets import QLabel, QDoubleSpinBox
+        
+        self.lblSlopeMin = QLabel("Preferred Slope Min:", self.groupBox)
+        self.sbSlopeMin = QDoubleSpinBox(self.groupBox)
+        self.sbSlopeMin.setRange(0.0, 90.0)
+        self.sbSlopeMin.setDecimals(1)
+        self.sbSlopeMin.setSingleStep(0.5)
+        self.sbSlopeMin.setSuffix("°")
+        
+        self.lblSlopeMax = QLabel("Preferred Slope Max:", self.groupBox)
+        self.sbSlopeMax = QDoubleSpinBox(self.groupBox)
+        self.sbSlopeMax.setRange(0.0, 90.0)
+        self.sbSlopeMax.setDecimals(1)
+        self.sbSlopeMax.setSingleStep(0.5)
+        self.sbSlopeMax.setSuffix("°")
+        
+        myLayout = self.groupBox.layout()
+        if myLayout is not None:
+            myLayout.addWidget(self.lblSlopeMin, 5, 0)
+            myLayout.addWidget(self.sbSlopeMin, 5, 1)
+            myLayout.addWidget(self.lblSlopeMax, 6, 0)
+            myLayout.addWidget(self.sbSlopeMax, 6, 1)
 
     def setupAnimalsCombo(self):
         """Set up the animals combo box."""
@@ -268,6 +294,10 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
         # `MrasterName` typo that lived here previously.)
         self._restoreRasterCombo(self.mAnimalParameter.rasterName)
 
+        # Set preferred slope spinboxes
+        self.sbSlopeMin.setValue(float(self.mAnimalParameter.preferredSlopeMin))
+        self.sbSlopeMax.setValue(float(self.mAnimalParameter.preferredSlopeMax))
+
         # Update the fodder table AFTER setting fodder use state
         self.refreshFodderTable()
         
@@ -369,6 +399,9 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
         self.mAnimalParameter.mUseCommonGrazingLand = self.checkBoxCommonRaster.isChecked()
         self.mAnimalParameter.mUseSpecificGrazingLand = self.checkBoxSpecificRaster.isChecked()
         self.mAnimalParameter.mValueSpecificGrazingLand = self.sbSpecificRasterValue.value()
+        
+        self.mAnimalParameter.preferredSlopeMin = float(self.sbSlopeMin.value())
+        self.mAnimalParameter.preferredSlopeMax = float(self.sbSlopeMax.value())
 
         # Set fodder use from group box checked state
         self.mAnimalParameter.mFodderUse = bool(self.grpFodderUse.isChecked())

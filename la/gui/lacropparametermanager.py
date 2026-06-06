@@ -86,6 +86,7 @@ class LaCropParameterManager(LaCropParameterManagerBase):
         # so users can pick a loaded raster layer as the suitability surface
         # for this crop parameter. See _upgradeRasterCombo for details.
         self._upgradeRasterCombo()
+        self._addPreferredSlopeControls()
         self.pbnImport.setVisible(False)
         self.pbnExport.setVisible(False)
         self.lblCropPic.setScaledContents(True)
@@ -213,6 +214,10 @@ class LaCropParameterManager(LaCropParameterManagerBase):
                 self.cbFallowEnergyType.setCurrentIndex(i)
                 break
 
+        # Preferred slope limits
+        self.sbSlopeMin.setValue(float(self.mCropParameter.preferredSlopeMin))
+        self.sbSlopeMax.setValue(float(self.mCropParameter.preferredSlopeMax))
+
         self.cbAreaUnits.setCurrentIndex(self.mCropParameter.areaUnits.value)
         self._restoreRasterCombo(self.mCropParameter.rasterName)
         self.updateCropPicture()
@@ -263,6 +268,31 @@ class LaCropParameterManager(LaCropParameterManagerBase):
                 return
         # No matching loaded layer — leave selection empty
         self.cboRaster.setCurrentIndex(0)
+
+    def _addPreferredSlopeControls(self):
+        """Add preferred slope limit controls dynamically to the suitable land group box layout."""
+        from qgis.PyQt.QtWidgets import QLabel, QDoubleSpinBox
+        
+        self.lblSlopeMin = QLabel("Preferred Slope Min:", self.groupBoxSuitableLand)
+        self.sbSlopeMin = QDoubleSpinBox(self.groupBoxSuitableLand)
+        self.sbSlopeMin.setRange(0.0, 90.0)
+        self.sbSlopeMin.setDecimals(1)
+        self.sbSlopeMin.setSingleStep(0.5)
+        self.sbSlopeMin.setSuffix("°")
+        
+        self.lblSlopeMax = QLabel("Preferred Slope Max:", self.groupBoxSuitableLand)
+        self.sbSlopeMax = QDoubleSpinBox(self.groupBoxSuitableLand)
+        self.sbSlopeMax.setRange(0.0, 90.0)
+        self.sbSlopeMax.setDecimals(1)
+        self.sbSlopeMax.setSingleStep(0.5)
+        self.sbSlopeMax.setSuffix("°")
+        
+        myLayout = self.groupBoxSuitableLand.layout()
+        if myLayout is not None:
+            myLayout.addWidget(self.lblSlopeMin, 3, 0)
+            myLayout.addWidget(self.sbSlopeMin, 3, 1)
+            myLayout.addWidget(self.lblSlopeMax, 4, 0)
+            myLayout.addWidget(self.sbSlopeMax, 4, 1)
 
     def resizeEvent(self, theEvent):
         """Handle resize event to adjust table columns"""
@@ -405,6 +435,8 @@ class LaCropParameterManager(LaCropParameterManagerBase):
             self.mCropParameter.reseed = int(self.sbReseed.value())
             self.mCropParameter.fallowRatio = float(self.sbFallowRatio.value())
             self.mCropParameter.fallowValue = int(self.sbFallowValue.value())
+            self.mCropParameter.preferredSlopeMin = float(self.sbSlopeMin.value())
+            self.mCropParameter.preferredSlopeMax = float(self.sbSlopeMax.value())
         except (ValueError, TypeError) as e:
             print(f"Error converting values in on_pbnApply_clicked: {e}")
 
