@@ -465,6 +465,12 @@ class LaCatchment(QObject):
 
             return self._packageResults(myResults)
         finally:
+            # Prevent cleanup from deleting successfully generated catchment outputs
+            myResults_list = locals().get("myResults", [])
+            for myItem in myResults_list:
+                if myItem.outputPath and myItem.outputPath in self.mGrass._mTempRasters:
+                    self.mGrass._mTempRasters.remove(myItem.outputPath)
+
             if hasattr(self, 'mCostRaster') and self.mCostRaster and self.mCostRaster in self.mGrass._mTempRasters:
                 self.mGrass._mTempRasters.remove(self.mCostRaster)
             self.mGrass.cleanup()

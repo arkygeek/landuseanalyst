@@ -58,7 +58,7 @@ class LaGrass(QObject):
         # may also expose "grass:..." in some bundles. Cache whichever works.
         self._mWalkId: Optional[str]    = self._probeAlg(("grass7:r.walk",       "grass:r.walk"))
         self._mCostId: Optional[str]    = self._probeAlg(("grass7:r.cost",       "grass:r.cost"))
-        self._mMapcalcId: Optional[str] = self._probeAlg(("grass7:r.mapcalc.simple", "grass:r.mapcalc.simple"))
+        self._mMapcalcId: Optional[str] = None  # Force pure-Python NumPy fallback for thread-safety and performance
 
     # ------------------------------------------------------------------
     # Cost-surface builders
