@@ -452,8 +452,10 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
             reseedText = myTopElement.firstChildElement("reseed").text()
             self.mReseed = int(reseedText) if reseedText else 0
 
-            # Parse boolean and other values
-            self.mCropRotation = myTopElement.firstChildElement("cropRotation").text()
+            try:
+                self.mCropRotation = bool(int(myTopElement.firstChildElement("cropRotation").text() or 0))
+            except (ValueError, TypeError):
+                self.mCropRotation = False
             self.mFallowRatio = float(myTopElement.firstChildElement("fallowRatio").text())
             fallowValText = myTopElement.firstChildElement("fallowValue").text()
             if not fallowValText:
@@ -476,8 +478,16 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
             myAreaUnits = myTopElement.firstChildElement("areaUnits").text()
             self.mAreaUnits = LaAreaUnits.Dunum if myAreaUnits == "Dunum" else LaAreaUnits.Hectare
 
-            self.mUseCommonLand = myTopElement.firstChildElement("useCommonLand").text()
-            self.mUseSpecificLand = myTopElement.firstChildElement("useSpecificLand").text()
+            try:
+                self.mUseCommonLand = bool(int(myTopElement.firstChildElement("useCommonLand").text() or 0))
+            except (ValueError, TypeError):
+                self.mUseCommonLand = False
+
+            try:
+                self.mUseSpecificLand = bool(int(myTopElement.firstChildElement("useSpecificLand").text() or 0))
+            except (ValueError, TypeError):
+                self.mUseSpecificLand = False
+
             self.mRasterName = LaUtils.xmlDecode(myTopElement.firstChildElement("rasterName").text())
 
             # Parse slope preference elements, defaulting if missing

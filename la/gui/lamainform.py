@@ -1200,3 +1200,147 @@ class LaMainForm(LaMainFormBase):
             if self.tabWidgetMain.tabText(i) == tabName:
                 return i
         return -1
+
+    @pyqtSlot()
+    def on_pushButtonSave_clicked(self):
+        """Handle save scenario button click."""
+        myFileName, _ = QtWidgets.QFileDialog.getSaveFileName(
+            self,
+            "Save Scenario Profile",
+            "",
+            "XML Files (*.xml)"
+        )
+        if myFileName:
+            self.configureModelFromUi()
+            try:
+                myXml = self.mModel.exportScenario()
+                with open(myFileName, 'w', encoding='utf-8') as myFile:
+                    myFile.write(myXml)
+                QtWidgets.QMessageBox.information(
+                    self,
+                    "Scenario Saved",
+                    f"Successfully saved scenario profile to:\n{myFileName}"
+                )
+            except Exception as myEx:
+                QtWidgets.QMessageBox.critical(
+                    self,
+                    "Save Error",
+                    f"Failed to save scenario profile:\n{str(myEx)}"
+                )
+
+    @pyqtSlot()
+    def on_pushButtonLoad_clicked(self):
+        """Handle load scenario button click."""
+        myFileName, _ = QtWidgets.QFileDialog.getOpenFileName(
+            self,
+            "Load Scenario Profile",
+            "",
+            "XML Files (*.xml)"
+        )
+        if myFileName:
+            try:
+                with open(myFileName, 'r', encoding='utf-8') as myFile:
+                    myXml = myFile.read()
+                
+                if not self.mModel.importScenario(myXml):
+                    raise ValueError("Failed to parse scenario XML file.")
+                
+                # Update MainForm selections from Model's selections
+                self.mCropsMap.clear()
+                myAvailableCrops = LaUtils.getAvailableCrops()
+                for myGuid in myAvailableCrops.keys():
+                    if myGuid in self.mModel.mCropsMap:
+                        self.mCropsMap[myGuid] = (True, self.mModel.mCropsMap[myGuid])
+                    else:
+                        self.mCropsMap[myGuid] = (False, "")
+                        
+                self.mAnimalsMap.clear()
+                myAvailableAnimals = LaUtils.getAvailableAnimals()
+                for myGuid in myAvailableAnimals.keys():
+                    if myGuid in self.mModel.mAnimalsMap:
+                        self.mAnimalsMap[myGuid] = (True, self.mModel.mAnimalsMap[myGuid])
+                    else:
+                        self.mAnimalsMap[myGuid] = (False, "")
+                
+                # Populate UI controls from Model properties
+                self.populateUiFromModel()
+                
+                # Refresh tables to show imported selections
+                self.loadCrops()
+                self.loadAnimals()
+                
+                # Update diet labels and run calculations
+                self.setDietLabels()
+                self.updateCalculations()
+                
+                QtWidgets.QMessageBox.information(
+                    self,
+                    "Scenario Loaded",
+                    f"Successfully loaded scenario profile from:\n{myFileName}"
+                )
+            except Exception as myEx:
+                QtWidgets.QMessageBox.critical(
+                    self,
+                    "Load Error",
+                    f"Failed to load scenario profile:\n{str(myEx)}"
+                )
+
+    def populateUiFromModel(self):
+        """Populate UI widgets with values from self.mModel."""
+        if not hasattr(self, 'mModel'):
+            return
+
+        if hasattr(self, 'lineEditSiteName'):
+            self.lineEditSiteName.setText(self.mModel.name)
+        if hasattr(self, 'lineEditPeriod'):
+            self.lineEditPeriod.setText(self.mModel.period)
+        if hasattr(self, 'sbPopulation'):
+            self.sbPopulation.setValue(self.mModel.population)
+        if hasattr(self, 'lineEditEasting'):
+            self.lineEditEasting.setText(str(self.mModel.easting))
+        if hasattr(self, 'lineEditNorthing'):
+            self.lineEditNorthing.setText(str(self.mModel.northing))
+        if hasattr(self, 'sbDailyCalories'):
+            self.sbDailyCalories.setValue(self.mModel.caloriesPerPersonDaily)
+        if hasattr(self, 'cboxBaseOnPlants'):
+            self.cboxBaseOnPlants.setChecked(self.mModel.baseOnPlants)
+        if hasattr(self, 'cboxIncludeDairy'):
+            self.cboxIncludeDairy.setChecked(self.mModel.includeDairy)
+        if hasattr(self, 'cboxLimitDairy'):
+            self.cboxLimitDairy.setChecked(self.mModel.limitDairy)
+        if hasattr(self, 'sbLimitDairyPercent'):
+            self.sbLimitDairyPercent.setValue(self.mModel.limitDairyPercent)
+        if hasattr(self, 'sbDairyUtilisation'):
+            self.sbDairyUtilisation.setValue(self.mModel.dairyUtilisation)
+        if hasattr(self, 'sbModelPrecision'):
+            self.sbModelPrecision.setValue(self.mModel.precision)
+
+        if hasattr(self, 'radioButtonEuclidean'):
+            self.radioButtonEuclidean.setChecked(self.mModel.euclideanDistance)
+        if hasattr(self, 'radioButtonWalkingTime'):
+            self.radioButtonWalkingTime.setChecked(self.mModel.walkingTime)
+        if hasattr(self, 'radioButtonPathDistance'):
+            self.radioButtonPathDistance.setChecked(self.mModel.pathDistance)
+
+        if hasattr(self, 'cbAreaUnits'):
+            myText = self.mModel.commonLandAreaUnits.name
+            myIndex = self.cbAreaUnits.findText(myText)
+            if myIndex >= 0:
+                self.cbAreaUnits.setCurrentIndex(myIndex)
+
+        if hasattr(self, 'cbCommonLandEnergyType'):
+            myText = self.mModel.specificLandEnergyType.name
+            myIndex = self.cbCommonLandEnergyType.findText(myText)
+            if myIndex >= 0:
+                self.cbCommonLandEnergyType.setCurrentIndex(myIndex)
+
+        if hasattr(self, 'sbCommonRasterValue'):
+            self.sbCommonRasterValue.setValue(self.mModel.commonLandValue)
+
+        if hasattr(self, 'sliderDiet'):
+            self.sliderDiet.setValue(self.mModel.dietPercent)
+        if hasattr(self, 'sliderMeat'):
+            self.sliderMeat.setValue(self.mModel.meatPercent)
+        if hasattr(self, 'sliderCrop'):
+            self.sliderCrop.setValue(self.mModel.percentOfDietThatIsFromCrops)
+

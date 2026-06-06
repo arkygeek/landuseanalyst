@@ -202,11 +202,28 @@ class LanduseAnalyst:
         self.iface.addToolBarIcon(self.action)
         self.iface.addPluginToMenu("&Landuse Analyst", self.action)
 
+        # Register processing provider
+        try:
+            from qgis.core import QgsApplication
+            from la.processing.la_processing_provider import LaProcessingProvider
+            self.provider = LaProcessingProvider()
+            QgsApplication.processingRegistry().addProvider(self.provider)
+        except Exception as e:
+            print(f"Failed to register Landuse Analyst Processing Provider: {e}")
+
 
     def unload(self):
         """Removes the plugin menu item and icon from QGIS GUI."""
         self.iface.removeToolBarIcon(self.action)
         self.iface.removePluginMenu("&Landuse Analyst", self.action)
+
+        # Unregister processing provider
+        try:
+            from qgis.core import QgsApplication
+            if hasattr(self, 'provider') and self.provider is not None:
+                QgsApplication.processingRegistry().removeProvider(self.provider)
+        except Exception as e:
+            print(f"Failed to unregister Landuse Analyst Processing Provider: {e}")
 
 
     def run(self):

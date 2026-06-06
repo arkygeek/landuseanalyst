@@ -138,6 +138,35 @@ class LaUtils:
     # Initialize the debug logger
     debug = LaDebugLogger()
 
+    # In-memory overrides registry for headless scenarios
+    _crop_overrides = {}
+    _crop_param_overrides = {}
+    _animal_overrides = {}
+    _animal_param_overrides = {}
+
+    @staticmethod
+    def registerCrop(crop):
+        LaUtils._crop_overrides[crop.guid] = crop
+
+    @staticmethod
+    def registerCropParameter(param):
+        LaUtils._crop_param_overrides[param.guid] = param
+
+    @staticmethod
+    def registerAnimal(animal):
+        LaUtils._animal_overrides[animal.guid] = animal
+
+    @staticmethod
+    def registerAnimalParameter(param):
+        LaUtils._animal_param_overrides[param.guid] = param
+
+    @staticmethod
+    def clearRegistries():
+        LaUtils._crop_overrides.clear()
+        LaUtils._crop_param_overrides.clear()
+        LaUtils._animal_overrides.clear()
+        LaUtils._animal_param_overrides.clear()
+
     @staticmethod
     def userSettingsDirPath() -> str:
         """
@@ -253,6 +282,9 @@ class LaUtils:
         :return: An animal object
         :rtype: LaAnimal
         """
+        if hasattr(LaUtils, '_animal_overrides') and theGuid in LaUtils._animal_overrides:
+            return LaUtils._animal_overrides[theGuid]
+        
         myDirectory = QDir(LaUtils.userAnimalProfilesDirPath())
         myList = myDirectory.entryInfoList(QDir.Files | QDir.NoSymLinks, QDir.Name)
         for myFileInfo in myList:
@@ -330,6 +362,9 @@ class LaUtils:
         :return: A crop object
         :rtype: LaCrop
         """
+        if hasattr(LaUtils, '_crop_overrides') and theGuid in LaUtils._crop_overrides:
+            return LaUtils._crop_overrides[theGuid]
+
         from la.lib.lacrop import LaCrop  # Move the import here to avoid circular import
         myDirectory = QDir(LaUtils.userCropProfilesDirPath())
         myList = myDirectory.entryInfoList(QDir.Files | QDir.NoSymLinks)
@@ -503,6 +538,9 @@ class LaUtils:
         :return: An animal parameter object
         :rtype: LaAnimalParameter
         """
+        if hasattr(LaUtils, '_animal_param_overrides') and theGuid in LaUtils._animal_param_overrides:
+            return LaUtils._animal_param_overrides[theGuid]
+
         myDirectory = QDir(LaUtils.userAnimalParameterProfilesDirPath())
         myList = myDirectory.entryInfoList(QDir.Files | QDir.NoSymLinks)
         for myFileInfo in myList:
@@ -576,6 +614,9 @@ class LaUtils:
         :return: A crop parameter object
         :rtype: LaCropParameter
         """
+        if hasattr(LaUtils, '_crop_param_overrides') and theGuid in LaUtils._crop_param_overrides:
+            return LaUtils._crop_param_overrides[theGuid]
+
         from la.lib.lacropparameter import LaCropParameter  # Move the import here to avoid circular import
         myCropParameter = LaCropParameter()
         myFilePath = os.path.join(LaUtils.userCropParameterProfilesDirPath(), f"{theGuid}.xml")

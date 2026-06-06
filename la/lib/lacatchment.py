@@ -465,6 +465,8 @@ class LaCatchment(QObject):
 
             return self._packageResults(myResults)
         finally:
+            if hasattr(self, 'mCostRaster') and self.mCostRaster and self.mCostRaster in self.mGrass._mTempRasters:
+                self.mGrass._mTempRasters.remove(self.mCostRaster)
             self.mGrass.cleanup()
 
     # ------------------------------------------------------------------

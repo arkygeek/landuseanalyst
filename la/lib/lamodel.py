@@ -122,7 +122,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
         # Added missing fields that are used in property getters/setters
         self.mPeriod = ""
-        self.mProjection: int
+        self.mProjection = 0
         self.mEasting = 0
         self.mNorthing = 0
         self.mEuclideanDistance = False
@@ -394,7 +394,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
     @pyqtProperty(int, notify=_eastingChanged)
     def easting(self) -> int: # type: ignore
-        return int(str(self.mEasting))
+        return int(float(self.mEasting))
     @easting.setter
     def easting(self, theEasting: int):
         if self.mEasting != theEasting:
@@ -404,7 +404,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
     @pyqtProperty(int, notify=_northingChanged)
     def northing(self) -> int: # type: ignore
-        return int(str(self.mNorthing))
+        return int(float(self.mNorthing))
     @northing.setter
     def northing(self, theNorthing: int):
         if self.mNorthing != theNorthing:
@@ -708,8 +708,8 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         self.mPopulation = int(myTopElement.firstChildElement("population").text())
         self.mPeriod = LaUtils.xmlDecode(myTopElement.firstChildElement("period").text())
         self.mProjection = int(myTopElement.firstChildElement("projection").text())
-        self.mEasting = int(myTopElement.firstChildElement("easting").text())
-        self.mNorthing = int(myTopElement.firstChildElement("northing").text())
+        self.mEasting = float(myTopElement.firstChildElement("easting").text())
+        self.mNorthing = float(myTopElement.firstChildElement("northing").text())
 
         myFlag = myTopElement.firstChildElement("euclideanDistance").text()
         if myFlag == "1":
@@ -735,9 +735,13 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         self.mMeatPercent = int(myTopElement.firstChildElement("meatPercent").text())
         self.mCaloriesPerPersonDaily = int(myTopElement.firstChildElement("caloriesPerPersonDaily").text())
 
-        self.mBaseOnPlants = int(myTopElement.firstChildElement("baseOnPlants").text())
-        self.mIncludeDairy = int(myTopElement.firstChildElement("includeDairy").text())
-        self.mLimitDairy = int(myTopElement.firstChildElement("limitDairy").text())
+        def parse_bool(el):
+            txt = el.text().lower()
+            return txt in ("true", "1")
+
+        self.mBaseOnPlants = parse_bool(myTopElement.firstChildElement("baseOnPlants"))
+        self.mIncludeDairy = parse_bool(myTopElement.firstChildElement("includeDairy"))
+        self.mLimitDairy = parse_bool(myTopElement.firstChildElement("limitDairy"))
         self.mLimitDairyPercentage = int(myTopElement.firstChildElement("limitDairyPercent").text())
 
         self.mDairyUtilisation = int(myTopElement.firstChildElement("dairyUtilisation").text())
@@ -837,4 +841,139 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         except Exception as e:
             LaUtils.debug.log(f"Error in doCalcsPlantsFirstIncludeDairy: {str(e)}", "Error")
             return LaDietLabels()
+
+    def exportScenario(self) -> str:
+        """Export the entire scenario configuration as a unified XML string."""
+        xml = '<landuseAnalystScenario>\n'
+        
+        # 1. Embed Model settings
+        xml += self.toXml()
+        
+        # 2. Embed selected crops mappings
+        xml += '  <selectedCrops>\n'
+        for crop_guid, param_guid in self.mCropsMap.items():
+            xml += f'    <selectedCrop cropGuid="{crop_guid}" parameterGuid="{param_guid}" />\n'
+        xml += '  </selectedCrops>\n'
+        
+        # 3. Embed selected animals mappings
+        xml += '  <selectedAnimals>\n'
+        for animal_guid, param_guid in self.mAnimalsMap.items():
+            xml += f'    <selectedAnimal animalGuid="{animal_guid}" parameterGuid="{param_guid}" />\n'
+        xml += '  </selectedAnimals>\n'
+        
+        # 4. Embed actual Crop definitions and parameters
+        xml += '  <crops>\n'
+        for crop_guid, param_guid in self.mCropsMap.items():
+            crop = LaUtils.getCrop(crop_guid)
+            if crop and crop.name:
+                xml += crop.toXml()
+            param = LaUtils.getCropParameter(param_guid)
+            if param and param.name:
+                xml += param.toXml()
+        xml += '  </crops>\n'
+        
+        # 5. Embed actual Animal definitions and parameters
+        xml += '  <animals>\n'
+        for animal_guid, param_guid in self.mAnimalsMap.items():
+            animal = LaUtils.getAnimal(animal_guid)
+            if animal and animal.name:
+                xml += animal.toXml()
+            param = LaUtils.getAnimalParameter(param_guid)
+            if param and param.name:
+                xml += param.toXml()
+        xml += '  </animals>\n'
+        
+        xml += '</landuseAnalystScenario>\n'
+        return xml
+
+    def importScenario(self, theXml: str) -> bool:
+        """Import a unified scenario configuration from an XML string."""
+        doc = QDomDocument("scenario")
+        if not doc.setContent(theXml):
+            return False
+            
+        root = doc.firstChildElement("landuseAnalystScenario")
+        if root.isNull():
+            return False
+            
+        def _el_to_string(el):
+            tmp_doc = QDomDocument()
+            tmp_doc.appendChild(tmp_doc.importNode(el, True))
+            return tmp_doc.toString()
+            
+        # 1. Parse Model node
+        model_el = root.firstChildElement("model")
+        if not model_el.isNull():
+            model_xml = _el_to_string(model_el)
+            self.fromXml(model_xml)
+            
+        # 2. Parse selected crops mappings
+        self.mCropsMap.clear()
+        crops_map_el = root.firstChildElement("selectedCrops")
+        if not crops_map_el.isNull():
+            crop_node = crops_map_el.firstChildElement("selectedCrop")
+            while not crop_node.isNull():
+                c_guid = crop_node.attribute("cropGuid")
+                p_guid = crop_node.attribute("parameterGuid")
+                if c_guid:
+                    self.mCropsMap[c_guid] = p_guid
+                crop_node = crop_node.nextSiblingElement("selectedCrop")
+                
+        # 3. Parse selected animals mappings
+        self.mAnimalsMap.clear()
+        animals_map_el = root.firstChildElement("selectedAnimals")
+        if not animals_map_el.isNull():
+            animal_node = animals_map_el.firstChildElement("selectedAnimal")
+            while not animal_node.isNull():
+                a_guid = animal_node.attribute("animalGuid")
+                p_guid = animal_node.attribute("parameterGuid")
+                if a_guid:
+                    self.mAnimalsMap[a_guid] = p_guid
+                animal_node = animal_node.nextSiblingElement("selectedAnimal")
+                
+        # 4. Load crop objects and crop parameter objects, registering them into LaUtils registries
+        from la.lib.lacrop import LaCrop
+        from la.lib.lacropparameter import LaCropParameter
+        
+        crops_el = root.firstChildElement("crops")
+        if not crops_el.isNull():
+            crop_node = crops_el.firstChildElement("crop")
+            while not crop_node.isNull():
+                crop = LaCrop()
+                crop.fromXml(_el_to_string(crop_node))
+                if crop.guid:
+                    LaUtils.registerCrop(crop)
+                crop_node = crop_node.nextSiblingElement("crop")
+                
+            param_node = crops_el.firstChildElement("cropParameter")
+            while not param_node.isNull():
+                param = LaCropParameter()
+                param.fromXml(_el_to_string(param_node))
+                if param.guid:
+                    LaUtils.registerCropParameter(param)
+                param_node = param_node.nextSiblingElement("cropParameter")
+                
+        # 5. Load animal objects and animal parameter objects, registering them into LaUtils
+        from la.lib.laanimal import LaAnimal
+        from la.lib.laanimalparameter import LaAnimalParameter
+        
+        animals_el = root.firstChildElement("animals")
+        if not animals_el.isNull():
+            animal_node = animals_el.firstChildElement("animal")
+            while not animal_node.isNull():
+                animal = LaAnimal()
+                animal.fromXml(_el_to_string(animal_node))
+                if animal.guid:
+                    LaUtils.registerAnimal(animal)
+                animal_node = animal_node.nextSiblingElement("animal")
+                
+            param_node = animals_el.firstChildElement("animalParameter")
+            while not param_node.isNull():
+                param = LaAnimalParameter()
+                param.fromXml(_el_to_string(param_node))
+                if param.guid:
+                    LaUtils.registerAnimalParameter(param)
+                param_node = param_node.nextSiblingElement("animalParameter")
+                
+        return True
 
