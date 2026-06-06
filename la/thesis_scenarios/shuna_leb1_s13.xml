@@ -294,8 +294,8 @@
   <areaUnits>Dunum</areaUnits>
   <energyType>KCalories</energyType>
   <specificLandEnergyType>KCalories</specificLandEnergyType>
-  <valueCommonGrazingLand>0</valueCommonGrazingLand>
-  <valueSpecificGrazingLand>0</valueSpecificGrazingLand>
+  <valueCommonGrazingLand>1500</valueCommonGrazingLand>
+  <valueSpecificGrazingLand>10</valueSpecificGrazingLand>
   <preferredSlopeMin>0.0</preferredSlopeMin>
   <preferredSlopeMax>15.0</preferredSlopeMax>
 </animalParameter>
@@ -343,8 +343,8 @@
   <areaUnits>Dunum</areaUnits>
   <energyType>KCalories</energyType>
   <specificLandEnergyType>KCalories</specificLandEnergyType>
-  <valueCommonGrazingLand>0</valueCommonGrazingLand>
-  <valueSpecificGrazingLand>0</valueSpecificGrazingLand>
+  <valueCommonGrazingLand>1500</valueCommonGrazingLand>
+  <valueSpecificGrazingLand>10</valueSpecificGrazingLand>
   <preferredSlopeMin>0.0</preferredSlopeMin>
   <preferredSlopeMax>15.0</preferredSlopeMax>
 </animalParameter>
@@ -392,8 +392,8 @@
   <areaUnits>Dunum</areaUnits>
   <energyType>KCalories</energyType>
   <specificLandEnergyType>KCalories</specificLandEnergyType>
-  <valueCommonGrazingLand>0</valueCommonGrazingLand>
-  <valueSpecificGrazingLand>0</valueSpecificGrazingLand>
+  <valueCommonGrazingLand>1500</valueCommonGrazingLand>
+  <valueSpecificGrazingLand>10</valueSpecificGrazingLand>
   <preferredSlopeMin>0.0</preferredSlopeMin>
   <preferredSlopeMax>15.0</preferredSlopeMax>
 </animalParameter>
@@ -441,8 +441,8 @@
   <areaUnits>Dunum</areaUnits>
   <energyType>KCalories</energyType>
   <specificLandEnergyType>KCalories</specificLandEnergyType>
-  <valueCommonGrazingLand>0</valueCommonGrazingLand>
-  <valueSpecificGrazingLand>0</valueSpecificGrazingLand>
+  <valueCommonGrazingLand>1500</valueCommonGrazingLand>
+  <valueSpecificGrazingLand>10</valueSpecificGrazingLand>
   <preferredSlopeMin>0.0</preferredSlopeMin>
   <preferredSlopeMax>15.0</preferredSlopeMax>
 </animalParameter>

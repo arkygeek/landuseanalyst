@@ -400,12 +400,18 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self.mUseSpecificGrazingLand = False
             
         try:
-            self.mValueCommonGrazingLand = int(myTopElement.firstChildElement("foodValueCommonGrazingLand").text() or 0)
+            val = myTopElement.firstChildElement("valueCommonGrazingLand").text()
+            if not val:
+                val = myTopElement.firstChildElement("foodValueCommonGrazingLand").text()
+            self.mValueCommonGrazingLand = int(val or 0)
         except (ValueError, TypeError):
             self.mValueCommonGrazingLand = 0
             
         try:
-            self.mValueSpecificGrazingLand = int(myTopElement.firstChildElement("foodValueOfSpecificGrazingLand").text() or 0)
+            val = myTopElement.firstChildElement("valueSpecificGrazingLand").text()
+            if not val:
+                val = myTopElement.firstChildElement("foodValueOfSpecificGrazingLand").text()
+            self.mValueSpecificGrazingLand = int(val or 0)
         except (ValueError, TypeError):
             self.mValueSpecificGrazingLand = 0
 

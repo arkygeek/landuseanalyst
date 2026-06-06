@@ -172,6 +172,17 @@ class LaCatchmentTask(QgsTask):
                 myProject.addMapLayer(myCostLayer, False)
                 myRunGroup.addLayer(myCostLayer)
 
+        # Create subgroup folders inside the run group
+        myCropsGroup = myRunGroup.addGroup("Crops")
+        myAnimalsGroup = myRunGroup.addGroup("Animals")
+
+        # Identify selected crop names to partition results into Crops vs. Animals groups
+        myCropNames = set()
+        for myGuid in self.mModel.mCropsMap.keys():
+            myCrop = LaUtils.getCrop(myGuid)
+            if myCrop and getattr(myCrop, "name", None):
+                myCropNames.add(myCrop.name)
+
         # Then the per-item masks, with the catchment-mask style if it exists
         for myItem in self.mResults.items:
             if myItem.outputPath is None or myItem.status is SearchStatus.Skipped:
@@ -185,7 +196,13 @@ class LaCatchmentTask(QgsTask):
                 continue
             self._applyMaskStyle(myLayer)
             myProject.addMapLayer(myLayer, False)
-            myRunGroup.addLayer(myLayer)
+            
+            # Route to the appropriate subgroup
+            isCrop = (myItem.itemName == "commonCrop") or (myItem.itemName in myCropNames)
+            if isCrop:
+                myCropsGroup.addLayer(myLayer)
+            else:
+                myAnimalsGroup.addLayer(myLayer)
 
         # Add settlement point layer (bright red circle symbol)
         try:

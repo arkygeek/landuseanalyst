@@ -745,6 +745,39 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         self.mLimitDairyPercentage = int(myTopElement.firstChildElement("limitDairyPercent").text())
 
         self.mDairyUtilisation = int(myTopElement.firstChildElement("dairyUtilisation").text())
+
+        # Parse additional model attributes
+        try:
+            self.mCommonLandValue = float(myTopElement.firstChildElement("commonLandValue").text() or 0.0)
+        except (ValueError, TypeError):
+            self.mCommonLandValue = 0.0
+
+        try:
+            units_text = myTopElement.firstChildElement("commonLandAreaUnits").text()
+            self.mCommonLandAreaUnits = AreaUnits[units_text] if units_text in AreaUnits.__members__ else AreaUnits.Hectare
+        except Exception:
+            self.mCommonLandAreaUnits = AreaUnits.Hectare
+
+        try:
+            units_text = myTopElement.firstChildElement("specificLandAreaUnits").text()
+            self.mSpecificLandAreaUnits = AreaUnits[units_text] if units_text in AreaUnits.__members__ else AreaUnits.Hectare
+        except Exception:
+            self.mSpecificLandAreaUnits = AreaUnits.Hectare
+
+        try:
+            et_text = myTopElement.firstChildElement("specificLandEnergyType").text()
+            self.mSpecificLandEnergyType = EnergyType[et_text] if et_text in EnergyType.__members__ else EnergyType.KCalories
+        except Exception:
+            self.mSpecificLandEnergyType = EnergyType.KCalories
+
+        try:
+            self.mHerdSize = int(myTopElement.firstChildElement("herdSize").text() or 0)
+        except (ValueError, TypeError):
+            self.mHerdSize = 0
+
+        # Update the converted mCommonGrazingValue used in calculations
+        self.setCommonLandValue(self.mCommonLandValue, self.mCommonLandAreaUnits)
+
         return True
 
     def toXml(self) -> str:
