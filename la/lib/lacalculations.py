@@ -629,7 +629,7 @@ def doCalcsAnimalsFirstIncludeDairy(theModel: 'LaModel') -> LaDietLabels:
             if myAnimalParameter and myAnimalParameter.valueCommonGrazingLand > 0
             else 0.0
         )
-        myAnimalContributionMCal = (c21 + c23) * _K_KCAL_TO_MCAL
+        myAnimalContributionMCal = (c21 + c23) * 1e-3
         myAnimalAreaHaMap[myAnimalGuid] = (
             myAnimalContributionMCal / myLandProductivity if myLandProductivity > 0 else 0.0
         )

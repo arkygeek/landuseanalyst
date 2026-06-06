@@ -228,8 +228,10 @@ class LaCatchmentTask(QgsTask):
         except Exception as e:
             self.grassMessage.emit(f"[WARN] Failed to add settlement point layer: {e}")
 
-        # Collapse the run group by default to keep the legend tree clean
-        myRunGroup.setExpanded(False)
+        # Expand the run group and its subgroups by default so results are immediately visible
+        myRunGroup.setExpanded(True)
+        myCropsGroup.setExpanded(True)
+        myAnimalsGroup.setExpanded(True)
 
         self.grassMessage.emit(
             f"[DONE] Added {len(self.mResults.items)} item(s) to layer group "
