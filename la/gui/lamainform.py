@@ -1634,15 +1634,71 @@ class LaMainForm(LaMainFormBase):
         if dem_layer is None:
             dem_layer = QgsRasterLayer(target_dem, "Shuna DEM")
             if dem_layer.isValid():
+                from qgis.core import QgsRasterBandStats, QgsRasterShader, QgsColorRampShader, QgsSingleBandPseudoColorRenderer
+                from qgis.PyQt.QtGui import QColor
+                
+                myProvider = dem_layer.dataProvider()
+                myStats = myProvider.bandStatistics(1, QgsRasterBandStats.All)
+                myMin = myStats.minimumValue
+                myMax = myStats.maximumValue
+                
+                if myMax <= myMin:
+                    myMax = myMin + 1.0
+                    
+                myColorRampItems = [
+                    QgsColorRampShader.ColorRampItem(myMin, QColor(46, 125, 50), "Low Valley"),
+                    QgsColorRampShader.ColorRampItem(myMin + 0.25 * (myMax - myMin), QColor(139, 195, 74), "Lowland"),
+                    QgsColorRampShader.ColorRampItem(myMin + 0.50 * (myMax - myMin), QColor(255, 235, 59), "Midland"),
+                    QgsColorRampShader.ColorRampItem(myMin + 0.75 * (myMax - myMin), QColor(141, 110, 99), "Highland"),
+                    QgsColorRampShader.ColorRampItem(myMax, QColor(245, 245, 245), "Peaks"),
+                ]
+                
+                myShader = QgsRasterShader()
+                myColorRampShader = QgsColorRampShader()
+                myColorRampShader.setColorRampType(QgsColorRampShader.Interpolated)
+                myColorRampShader.setColorRampItemList(myColorRampItems)
+                myShader.setRasterShaderFunction(myColorRampShader)
+                
+                myRenderer = QgsSingleBandPseudoColorRenderer(
+                    dem_layer.dataProvider(), 1, myShader
+                )
+                dem_layer.setRenderer(myRenderer)
+                
                 QgsProject.instance().addMapLayer(dem_layer)
                 loaded_new = True
             else:
                 QtWidgets.QMessageBox.critical(self, "Invalid Raster", f"Failed to load DEM: {target_dem}")
                 
+        # Load Shuna Hillshade if not present
+        hillshade_layer = None
+        for layer in QgsProject.instance().mapLayers().values():
+            if isinstance(layer, QgsRasterLayer) and layer.name() == "Shuna Hillshade":
+                hillshade_layer = layer
+                break
+                
+        if hillshade_layer is None:
+            hillshade_layer = QgsRasterLayer(target_dem, "Shuna Hillshade")
+            if hillshade_layer.isValid():
+                from qgis.core import QgsHillshadeRenderer
+                
+                myHillRenderer = QgsHillshadeRenderer(
+                    hillshade_layer.dataProvider(), 1, 315, 45
+                )
+                myHillRenderer.setMultiDirectional(True)
+                hillshade_layer.setRenderer(myHillRenderer)
+                hillshade_layer.setBlendMode(QtGui.QPainter.CompositionMode_Multiply)
+                
+                QgsProject.instance().addMapLayer(hillshade_layer)
+                loaded_new = True
+                
         if suit_layer is None:
             suit_layer = QgsRasterLayer(target_suit, "Shuna Suitability")
             if suit_layer.isValid():
                 QgsProject.instance().addMapLayer(suit_layer)
+                # Uncheck it so it doesn't block the DEM hillshade
+                myNode = QgsProject.instance().layerTreeRoot().findLayer(suit_layer.id())
+                if myNode is not None:
+                    myNode.setItemVisibilityChecked(False)
                 loaded_new = True
             else:
                 QtWidgets.QMessageBox.critical(self, "Invalid Raster", f"Failed to load Suitability: {target_suit}")

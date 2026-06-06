@@ -162,15 +162,15 @@ class LaCatchmentTask(QgsTask):
             myGroup = myRoot.insertGroup(0, _GROUP_NAME)
         myRunGroup = myGroup.addGroup(self._runGroupName())
 
-        # Cost surface first — semi-transparent gradient via default renderer
+        # Cost surface first — styled with a beautiful brown/tan singleband pseudocolor style
         if self.mResults.costRasterPath:
             myCostLayer = QgsRasterLayer(
                 self.mResults.costRasterPath, "Cost surface"
             )
             if myCostLayer.isValid():
+                self._applyCostSurfaceStyle(myCostLayer)
                 myProject.addMapLayer(myCostLayer, False)
                 myRunGroup.addLayer(myCostLayer)
-                myCostLayer.setOpacity(0.55)
 
         # Then the per-item masks, with the catchment-mask style if it exists
         for myItem in self.mResults.items:
@@ -183,9 +183,36 @@ class LaCatchmentTask(QgsTask):
                     f"{myItem.outputPath}"
                 )
                 continue
+            self._applyMaskStyle(myLayer)
             myProject.addMapLayer(myLayer, False)
             myRunGroup.addLayer(myLayer)
-            self._applyMaskStyle(myLayer)
+
+        # Add settlement point layer (bright red circle symbol)
+        try:
+            from qgis.core import QgsVectorLayer, QgsFeature, QgsGeometry, QgsPointXY, QgsSingleSymbolRenderer, QgsMarkerSymbol
+            myProjectCrs = myProject.crs().authid() if myProject.crs().isValid() else f"EPSG:{self.mModel.projection}"
+            myPointLayer = QgsVectorLayer(f"Point?crs={myProjectCrs}", "Settlement", "memory")
+            if myPointLayer.isValid():
+                myPr = myPointLayer.dataProvider()
+                myFeat = QgsFeature()
+                myFeat.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(float(self.mModel.easting), float(self.mModel.northing))))
+                myPr.addFeatures([myFeat])
+                
+                mySymbol = QgsMarkerSymbol.createSimple({
+                    'name': 'circle',
+                    'color': 'red',
+                    'size': '4.0',
+                    'outline_color': 'black',
+                    'outline_width': '0.5'
+                })
+                myPointLayer.setRenderer(QgsSingleSymbolRenderer(mySymbol))
+                myProject.addMapLayer(myPointLayer, False)
+                myRunGroup.insertLayer(0, myPointLayer)
+        except Exception as e:
+            self.grassMessage.emit(f"[WARN] Failed to add settlement point layer: {e}")
+
+        # Collapse the run group by default to keep the legend tree clean
+        myRunGroup.setExpanded(False)
 
         self.grassMessage.emit(
             f"[DONE] Added {len(self.mResults.items)} item(s) to layer group "
@@ -302,3 +329,37 @@ class LaCatchmentTask(QgsTask):
         if os.path.exists(_QML_STYLE):
             theLayer.loadNamedStyle(_QML_STYLE)
             theLayer.triggerRepaint()
+
+    @staticmethod
+    def _applyCostSurfaceStyle(theLayer: QgsRasterLayer) -> None:
+        """Apply a premium brown/tan singleband pseudocolor style to the cost surface."""
+        from qgis.core import QgsRasterBandStats, QgsRasterShader, QgsColorRampShader, QgsSingleBandPseudoColorRenderer
+        from qgis.PyQt.QtGui import QColor
+        
+        myProvider = theLayer.dataProvider()
+        myStats = myProvider.bandStatistics(1, QgsRasterBandStats.All)
+        myMin = myStats.minimumValue
+        myMax = myStats.maximumValue
+        
+        if myMax <= myMin:
+            myMax = myMin + 1.0
+            
+        myColorRampItems = [
+            QgsColorRampShader.ColorRampItem(myMin, QColor(255, 250, 230, 20), "0%"),
+            QgsColorRampShader.ColorRampItem(myMin + 0.25 * (myMax - myMin), QColor(252, 216, 144, 100), "25%"),
+            QgsColorRampShader.ColorRampItem(myMin + 0.50 * (myMax - myMin), QColor(230, 159, 69, 150), "50%"),
+            QgsColorRampShader.ColorRampItem(myMin + 0.75 * (myMax - myMin), QColor(179, 100, 27, 200), "75%"),
+            QgsColorRampShader.ColorRampItem(myMax, QColor(102, 51, 0, 240), "100%"),
+        ]
+        
+        myShader = QgsRasterShader()
+        myColorRampShader = QgsColorRampShader()
+        myColorRampShader.setColorRampType(QgsColorRampShader.Interpolated)
+        myColorRampShader.setColorRampItemList(myColorRampItems)
+        myShader.setRasterShaderFunction(myColorRampShader)
+        
+        myRenderer = QgsSingleBandPseudoColorRenderer(
+            theLayer.dataProvider(), 1, myShader
+        )
+        theLayer.setRenderer(myRenderer)
+        theLayer.setOpacity(0.45)
