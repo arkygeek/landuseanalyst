@@ -554,10 +554,9 @@ class LaMainForm(LaMainFormBase):
             # Call the parent class implementation which has the complete implementation
             super(LaMainForm, self).setDietLabels()
             
-            # Store reference to the diet labels from the calculation for signal connections
-            # This assumes the base class method updated the model with calculations
-            if hasattr(self.mModel, 'mDietLabels') and self.mModel.mDietLabels:
-                self.mDietLabels = self.mModel.mDietLabels
+            myModel = getattr(self, 'mModel', getattr(self, 'model', None))
+            if myModel and hasattr(myModel, 'mDietLabels') and myModel.mDietLabels:
+                self.mDietLabels = myModel.mDietLabels
                 self._connectDietLabelSignals(self.mDietLabels)
 
         except Exception as e:
@@ -584,6 +583,9 @@ class LaMainForm(LaMainFormBase):
             self.loadImages()
             self.refresh()
             self.readSettings()
+
+            # Setup Jorgenson Thesis UI
+            self.initThesisUi()
 
         except Exception as e:
             LaUtils.debug.log(f"Error in setup: {str(e)}", "Error")
@@ -1290,57 +1292,335 @@ class LaMainForm(LaMainFormBase):
         if not hasattr(self, 'mModel'):
             return
 
-        if hasattr(self, 'lineEditSiteName'):
-            self.lineEditSiteName.setText(self.mModel.name)
-        if hasattr(self, 'lineEditPeriod'):
-            self.lineEditPeriod.setText(self.mModel.period)
-        if hasattr(self, 'sbPopulation'):
-            self.sbPopulation.setValue(self.mModel.population)
-        if hasattr(self, 'lineEditEasting'):
-            self.lineEditEasting.setText(str(self.mModel.easting))
-        if hasattr(self, 'lineEditNorthing'):
-            self.lineEditNorthing.setText(str(self.mModel.northing))
-        if hasattr(self, 'sbDailyCalories'):
-            self.sbDailyCalories.setValue(self.mModel.caloriesPerPersonDaily)
-        if hasattr(self, 'cboxBaseOnPlants'):
-            self.cboxBaseOnPlants.setChecked(self.mModel.baseOnPlants)
-        if hasattr(self, 'cboxIncludeDairy'):
-            self.cboxIncludeDairy.setChecked(self.mModel.includeDairy)
-        if hasattr(self, 'cboxLimitDairy'):
-            self.cboxLimitDairy.setChecked(self.mModel.limitDairy)
-        if hasattr(self, 'sbLimitDairyPercent'):
-            self.sbLimitDairyPercent.setValue(self.mModel.limitDairyPercent)
-        if hasattr(self, 'sbDairyUtilisation'):
-            self.sbDairyUtilisation.setValue(self.mModel.dairyUtilisation)
-        if hasattr(self, 'sbModelPrecision'):
-            self.sbModelPrecision.setValue(self.mModel.precision)
+        widgets = [
+            'lineEditSiteName', 'lineEditPeriod', 'sbPopulation', 'lineEditEasting', 'lineEditNorthing',
+            'sbDailyCalories', 'cboxBaseOnPlants', 'cboxIncludeDairy', 'cboxLimitDairy', 'sbLimitDairyPercent',
+            'sbDairyUtilisation', 'sbModelPrecision', 'radioButtonEuclidean', 'radioButtonWalkingTime',
+            'radioButtonPathDistance', 'cbAreaUnits', 'cbCommonLandEnergyType', 'sbCommonRasterValue',
+            'sliderDiet', 'sliderMeat', 'sliderCrop'
+        ]
+        
+        # Block signals to prevent GUI feedback loops
+        blocked_states = {}
+        for name in widgets:
+            widget = getattr(self, name, None)
+            if widget is not None:
+                blocked_states[widget] = widget.blockSignals(True)
 
-        if hasattr(self, 'radioButtonEuclidean'):
-            self.radioButtonEuclidean.setChecked(self.mModel.euclideanDistance)
-        if hasattr(self, 'radioButtonWalkingTime'):
-            self.radioButtonWalkingTime.setChecked(self.mModel.walkingTime)
-        if hasattr(self, 'radioButtonPathDistance'):
-            self.radioButtonPathDistance.setChecked(self.mModel.pathDistance)
+        try:
+            if hasattr(self, 'lineEditSiteName'):
+                self.lineEditSiteName.setText(self.mModel.name)
+            if hasattr(self, 'lineEditPeriod'):
+                self.lineEditPeriod.setText(self.mModel.period)
+            if hasattr(self, 'sbPopulation'):
+                self.sbPopulation.setValue(self.mModel.population)
+            if hasattr(self, 'lineEditEasting'):
+                self.lineEditEasting.setText(str(self.mModel.easting))
+            if hasattr(self, 'lineEditNorthing'):
+                self.lineEditNorthing.setText(str(self.mModel.northing))
+            if hasattr(self, 'sbDailyCalories'):
+                self.sbDailyCalories.setValue(self.mModel.caloriesPerPersonDaily)
+            if hasattr(self, 'cboxBaseOnPlants'):
+                self.cboxBaseOnPlants.setChecked(self.mModel.baseOnPlants)
+            if hasattr(self, 'cboxIncludeDairy'):
+                self.cboxIncludeDairy.setChecked(self.mModel.includeDairy)
+            if hasattr(self, 'cboxLimitDairy'):
+                self.cboxLimitDairy.setChecked(self.mModel.limitDairy)
+            if hasattr(self, 'sbLimitDairyPercent'):
+                self.sbLimitDairyPercent.setValue(self.mModel.limitDairyPercent)
+            if hasattr(self, 'sbDairyUtilisation'):
+                self.sbDairyUtilisation.setValue(self.mModel.dairyUtilisation)
+            if hasattr(self, 'sbModelPrecision'):
+                self.sbModelPrecision.setValue(self.mModel.precision)
 
-        if hasattr(self, 'cbAreaUnits'):
-            myText = self.mModel.commonLandAreaUnits.name
-            myIndex = self.cbAreaUnits.findText(myText)
-            if myIndex >= 0:
-                self.cbAreaUnits.setCurrentIndex(myIndex)
+            if hasattr(self, 'radioButtonEuclidean'):
+                self.radioButtonEuclidean.setChecked(self.mModel.euclideanDistance)
+            if hasattr(self, 'radioButtonWalkingTime'):
+                self.radioButtonWalkingTime.setChecked(self.mModel.walkingTime)
+            if hasattr(self, 'radioButtonPathDistance'):
+                self.radioButtonPathDistance.setChecked(self.mModel.pathDistance)
 
-        if hasattr(self, 'cbCommonLandEnergyType'):
-            myText = self.mModel.specificLandEnergyType.name
-            myIndex = self.cbCommonLandEnergyType.findText(myText)
-            if myIndex >= 0:
-                self.cbCommonLandEnergyType.setCurrentIndex(myIndex)
+            if hasattr(self, 'cbAreaUnits'):
+                myText = self.mModel.commonLandAreaUnits.name
+                myIndex = self.cbAreaUnits.findText(myText)
+                if myIndex >= 0:
+                    self.cbAreaUnits.setCurrentIndex(myIndex)
 
-        if hasattr(self, 'sbCommonRasterValue'):
-            self.sbCommonRasterValue.setValue(self.mModel.commonLandValue)
+            if hasattr(self, 'cbCommonLandEnergyType'):
+                myText = self.mModel.specificLandEnergyType.name
+                myIndex = self.cbCommonLandEnergyType.findText(myText)
+                if myIndex >= 0:
+                    self.cbCommonLandEnergyType.setCurrentIndex(myIndex)
 
-        if hasattr(self, 'sliderDiet'):
-            self.sliderDiet.setValue(self.mModel.dietPercent)
-        if hasattr(self, 'sliderMeat'):
-            self.sliderMeat.setValue(self.mModel.meatPercent)
-        if hasattr(self, 'sliderCrop'):
-            self.sliderCrop.setValue(self.mModel.percentOfDietThatIsFromCrops)
+            if hasattr(self, 'sbCommonRasterValue'):
+                self.sbCommonRasterValue.setValue(int(self.mModel.commonLandValue or 0))
+
+            if hasattr(self, 'sliderDiet'):
+                self.sliderDiet.setValue(self.mModel.dietPercent)
+            if hasattr(self, 'sliderMeat'):
+                self.sliderMeat.setValue(self.mModel.meatPercent)
+            if hasattr(self, 'sliderCrop'):
+                self.sliderCrop.setValue(self.mModel.percentOfDietThatIsFromCrops)
+        finally:
+            # Restore signals
+            for widget, state in blocked_states.items():
+                widget.blockSignals(state)
+
+    def initThesisUi(self):
+        """Set up the Jorgenson Thesis Scenarios and Shuna Demo Data UI components."""
+        from qgis.PyQt.QtWidgets import QGroupBox, QGridLayout, QLabel, QComboBox, QPushButton
+        from qgis.PyQt.QtCore import Qt
+        
+        # 1. Create the GroupBox
+        self.grpThesis = QGroupBox("Jorgenson PhD Thesis Scenarios & Shuna Demo Data", self.main_tab)
+        
+        # 2. Grid Layout inside the GroupBox
+        myThesisLayout = QGridLayout(self.grpThesis)
+        
+        # Label
+        self.lblThesis = QLabel("Select Thesis Scenario:", self.grpThesis)
+        myThesisLayout.addWidget(self.lblThesis, 0, 0)
+        
+        # Combobox
+        self.cboThesisScenarios = QComboBox(self.grpThesis)
+        self.cboThesisScenarios.setMinimumWidth(300)
+        myThesisLayout.addWidget(self.cboThesisScenarios, 0, 1)
+        
+        # Button: Load Scenario
+        self.btnLoadThesisScenario = QPushButton("Load Scenario", self.grpThesis)
+        self.btnLoadThesisScenario.clicked.connect(self.on_btnLoadThesisScenario_clicked)
+        myThesisLayout.addWidget(self.btnLoadThesisScenario, 0, 2)
+        
+        # Button: Load Shuna Layers
+        self.btnLoadShunaLayers = QPushButton("Load Shuna Map Layers", self.grpThesis)
+        self.btnLoadShunaLayers.clicked.connect(self.on_btnLoadShunaLayers_clicked)
+        myThesisLayout.addWidget(self.btnLoadShunaLayers, 0, 3)
+        
+        # 3. Add the GroupBox to the main tab layout
+        # In main_tab, the grid layout has row 2 which previously had a spacer in column 1.
+        # Let's add grpThesis at Row 2, Column 1, spanning 1 row and 2 columns.
+        if self.main_tab.layout():
+            self.main_tab.layout().addWidget(self.grpThesis, 2, 1, 1, 2)
+            
+        # 4. Populate the combobox with scenarios
+        self.populateThesisScenariosCombo()
+
+    def populateThesisScenariosCombo(self):
+        """Search the plugin's thesis_scenarios folder and populate the combobox."""
+        import xml.etree.ElementTree as ET
+        
+        plugin_dir = os.path.dirname(os.path.dirname(__file__))
+        thesis_scenarios_dir = os.path.join(plugin_dir, "thesis_scenarios")
+        
+        if not os.path.exists(thesis_scenarios_dir):
+            LaUtils.debug.log(f"Thesis scenarios directory not found: {thesis_scenarios_dir}", "Warning")
+            return
+            
+        # List xml files
+        xml_files = sorted([f for f in os.listdir(thesis_scenarios_dir) if f.endswith(".xml")])
+        for filename in xml_files:
+            file_path = os.path.join(thesis_scenarios_dir, filename)
+            try:
+                tree = ET.parse(file_path)
+                root = tree.getroot()
+                model_el = root.find("model")
+                if model_el is not None:
+                    name_el = model_el.find("name")
+                    if name_el is not None and name_el.text:
+                        scenario_name = name_el.text
+                        self.cboThesisScenarios.addItem(scenario_name, file_path)
+            except Exception as e:
+                LaUtils.debug.log(f"Error parsing scenario {filename}: {e}", "Warning")
+
+    def on_btnLoadThesisScenario_clicked(self):
+        """Load the selected thesis scenario."""
+        index = self.cboThesisScenarios.currentIndex()
+        if index < 0:
+            return
+        file_path = self.cboThesisScenarios.itemData(index)
+        if not file_path or not os.path.exists(file_path):
+            QtWidgets.QMessageBox.warning(self, "File Not Found", "The scenario file could not be found.")
+            return
+            
+        try:
+            with open(file_path, 'r', encoding='utf-8') as myFile:
+                myXml = myFile.read()
+            
+            # Clear registries before importing scenario to avoid mixing up parameter data
+            LaUtils.clearRegistries()
+            
+            if not self.mModel.importScenario(myXml):
+                raise ValueError("Failed to parse scenario XML file.")
+            
+            # Update MainForm selections from Model's selections
+            self.mCropsMap.clear()
+            myAvailableCrops = LaUtils.getAvailableCrops()
+            for myGuid in myAvailableCrops.keys():
+                if myGuid in self.mModel.mCropsMap:
+                    self.mCropsMap[myGuid] = (True, self.mModel.mCropsMap[myGuid])
+                else:
+                    self.mCropsMap[myGuid] = (False, "")
+                    
+            self.mAnimalsMap.clear()
+            myAvailableAnimals = LaUtils.getAvailableAnimals()
+            for myGuid in myAvailableAnimals.keys():
+                if myGuid in self.mModel.mAnimalsMap:
+                    self.mAnimalsMap[myGuid] = (True, self.mModel.mAnimalsMap[myGuid])
+                else:
+                    self.mAnimalsMap[myGuid] = (False, "")
+            
+            # Populate UI controls from Model properties
+            self.populateUiFromModel()
+            
+            # Refresh tables to show imported selections
+            self.loadCrops()
+            self.loadAnimals()
+            
+            # Update diet labels and run calculations
+            self.setDietLabels()
+            self.updateCalculations()
+            
+            # Auto-select the loaded rasters if they are loaded in QGIS
+            self._selectLoadedLayersInCombos()
+            
+            QtWidgets.QMessageBox.information(
+                self,
+                "Scenario Loaded",
+                f"Successfully loaded thesis scenario:\n{self.cboThesisScenarios.itemText(index)}"
+            )
+        except Exception as myEx:
+            import traceback
+            LaUtils.debug.log(f"Load thesis scenario error: {str(myEx)}\n{traceback.format_exc()}", "Error")
+            QtWidgets.QMessageBox.critical(
+                self,
+                "Load Error",
+                f"Failed to load scenario profile:\n{str(myEx)}"
+            )
+
+    def on_btnLoadShunaLayers_clicked(self):
+        """Load Shuna DEM and suitability rasters into QGIS canvas."""
+        dem_name = "dem_full.tif"
+        suit_name = "suitability_full.tif"
+        
+        user_dir = LaUtils.userSettingsDirPath()
+        shuna_dir = os.path.join(user_dir, "shuna")
+        os.makedirs(shuna_dir, exist_ok=True)
+        
+        target_dem = os.path.join(shuna_dir, dem_name)
+        target_suit = os.path.join(shuna_dir, suit_name)
+        
+        # Source paths to search:
+        search_dirs = [
+            "/home/arkygeek/Dev/LA/landuseanalyst-web/data/shuna",
+            os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "landuseanalyst-web", "data", "shuna")),
+            os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "data")),
+        ]
+        
+        found_dem = os.path.exists(target_dem)
+        found_suit = os.path.exists(target_suit)
+        
+        import shutil
+        for name, target_path, found in [
+            (dem_name, target_dem, found_dem),
+            (suit_name, target_suit, found_suit)
+        ]:
+            if not found:
+                # Try to find it
+                for s_dir in search_dirs:
+                    src_path = os.path.join(s_dir, name)
+                    if os.path.exists(src_path):
+                        try:
+                            shutil.copy(src_path, target_path)
+                            if name == dem_name:
+                                found_dem = True
+                            else:
+                                found_suit = True
+                            break
+                        except Exception as e:
+                            LaUtils.debug.log(f"Failed to copy {name} from {src_path}: {e}", "Error")
+                            
+        if not found_dem or not found_suit:
+            QtWidgets.QMessageBox.warning(
+                self,
+                "Data Not Found",
+                "Could not locate Shuna demo raster files. Please ensure the landuseanalyst-web repository is located next to the plugin."
+            )
+            return
+            
+        # Register in QGIS Project
+        from qgis.core import QgsRasterLayer, QgsProject
+        
+        # Check if already loaded
+        dem_layer = None
+        suit_layer = None
+        
+        for layer in QgsProject.instance().mapLayers().values():
+            if isinstance(layer, QgsRasterLayer):
+                source = layer.source()
+                if source == target_dem or layer.name() == "Shuna DEM":
+                    dem_layer = layer
+                elif source == target_suit or layer.name() == "Shuna Suitability":
+                    suit_layer = layer
+                    
+        # Load them if not present
+        loaded_new = False
+        if dem_layer is None:
+            dem_layer = QgsRasterLayer(target_dem, "Shuna DEM")
+            if dem_layer.isValid():
+                QgsProject.instance().addMapLayer(dem_layer)
+                loaded_new = True
+            else:
+                QtWidgets.QMessageBox.critical(self, "Invalid Raster", f"Failed to load DEM: {target_dem}")
+                
+        if suit_layer is None:
+            suit_layer = QgsRasterLayer(target_suit, "Shuna Suitability")
+            if suit_layer.isValid():
+                QgsProject.instance().addMapLayer(suit_layer)
+                loaded_new = True
+            else:
+                QtWidgets.QMessageBox.critical(self, "Invalid Raster", f"Failed to load Suitability: {target_suit}")
+                
+        # Select them in the combos
+        if dem_layer and hasattr(self, "cboDEM"):
+            self.cboDEM.setLayer(dem_layer)
+        if suit_layer and hasattr(self, "cboCommonCrop"):
+            self.cboCommonCrop.setLayer(suit_layer)
+            
+        if loaded_new:
+            QtWidgets.QMessageBox.information(
+                self,
+                "Layers Loaded",
+                "Successfully loaded Shuna DEM and Suitability layers into QGIS project."
+            )
+        else:
+            QtWidgets.QMessageBox.information(
+                self,
+                "Layers Active",
+                "Shuna DEM and Suitability layers are already active in the project."
+            )
+
+    def _selectLoadedLayersInCombos(self):
+        """Auto-select matching loaded map layers in DEM and Common Crop combo boxes."""
+        from qgis.core import QgsProject, QgsRasterLayer
+        
+        user_dir = LaUtils.userSettingsDirPath()
+        shuna_dir = os.path.join(user_dir, "shuna")
+        target_dem = os.path.join(shuna_dir, "dem_full.tif")
+        target_suit = os.path.join(shuna_dir, "suitability_full.tif")
+        
+        dem_layer = None
+        suit_layer = None
+        
+        for layer in QgsProject.instance().mapLayers().values():
+            if isinstance(layer, QgsRasterLayer):
+                source = layer.source()
+                if source == target_dem or layer.name() == "Shuna DEM":
+                    dem_layer = layer
+                elif source == target_suit or layer.name() == "Shuna Suitability":
+                    suit_layer = layer
+                    
+        if dem_layer and hasattr(self, "cboDEM"):
+            self.cboDEM.setLayer(dem_layer)
+        if suit_layer and hasattr(self, "cboCommonCrop"):
+            self.cboCommonCrop.setLayer(suit_layer)
 
