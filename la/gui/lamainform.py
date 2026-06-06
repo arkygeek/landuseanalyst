@@ -895,8 +895,9 @@ class LaMainForm(LaMainFormBase):
             )
             return
 
-        myTask = LaCatchmentTask(self.mModel, theInputs)
+        myTask = LaCatchmentTask(self.mModel, theInputs, theLivePreview=True)
         myTask.grassMessage.connect(self._onCatchmentMessage)
+        myTask.previewUpdated.connect(self._onCatchmentPreviewUpdated)
         QgsApplication.taskManager().addTask(myTask)
         # Keep a reference so Python doesn't garbage-collect it
         self._mCatchmentTask = myTask
@@ -910,6 +911,72 @@ class LaMainForm(LaMainFormBase):
     def _onCatchmentMessage(self, theMessage: str) -> None:
         """Mirror catchment-task log messages into the plugin's debug log."""
         LaUtils.debug.log(theMessage, "Calculation")
+
+    def _onCatchmentPreviewUpdated(
+        self,
+        theItemName:  str,
+        theRasterPath: str,
+        theThreshold: float,
+        theAchieved:  float,
+        theTarget:    float,
+    ) -> None:
+        """
+        Slot called when the background catchment task updates its search preview.
+        Loads/updates a temporary raster layer in the "Live Search" group.
+        """
+        try:
+            from qgis.core import QgsProject, QgsRasterLayer, QgsLayerTreeNode
+            from qgis.utils import iface
+            from la.gui.lacatchmenttask import _GROUP_NAME, _QML_STYLE
+
+            myProject = QgsProject.instance()
+            myRoot = myProject.layerTreeRoot()
+
+            # Ensure "Catchment Analysis" group exists
+            myGroup = myRoot.findGroup(_GROUP_NAME)
+            if myGroup is None:
+                myGroup = myRoot.insertGroup(0, _GROUP_NAME)
+
+            # Ensure "Live Search" subgroup exists
+            myLiveGroup = myGroup.findGroup("Live Search")
+            if myLiveGroup is None:
+                myLiveGroup = myGroup.insertGroup(0, "Live Search")
+
+            # Find if layer already exists in the Live Search group
+            myExistingLayer = None
+            for myNode in myLiveGroup.children():
+                if myNode.nodeType() == QgsLayerTreeNode.NodeLayer:
+                    myLyr = myNode.layer()
+                    if myLyr is not None and myLyr.name().startswith(f"Preview: {theItemName}"):
+                        myExistingLayer = myLyr
+                        break
+
+            myNewName = f"Preview: {theItemName} (iter threshold: {theThreshold:.1f}, area: {theAchieved:.1f} Ha / target {theTarget:.1f})"
+
+            if myExistingLayer is not None:
+                # Reload data provider to refresh canvas cache
+                myExistingLayer.dataProvider().reloadData()
+                myExistingLayer.setName(myNewName)
+                myExistingLayer.triggerRepaint()
+            else:
+                # Create a new layer
+                myLayer = QgsRasterLayer(theRasterPath, myNewName)
+                if myLayer.isValid():
+                    # Apply style
+                    if os.path.exists(_QML_STYLE):
+                        myLayer.loadNamedStyle(_QML_STYLE)
+                    myProject.addMapLayer(myLayer, False)
+                    # Add to the top of the Live Search group
+                    myLiveGroup.insertLayer(0, myLayer)
+                    myLayer.triggerRepaint()
+
+            # Force map canvas refresh to display the changes immediately
+            if iface is not None and iface.mapCanvas() is not None:
+                iface.mapCanvas().refresh()
+
+        except Exception as e:
+            import traceback
+            LaUtils.debug.log(f"Error updating catchment preview: {e}\n{traceback.format_exc()}", "Warning")
 
     def _onFullReport(self):
         """Run the calc, then open the modal report viewer."""

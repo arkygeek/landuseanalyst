@@ -61,8 +61,9 @@ class LaCatchmentTask(QgsTask):
     overallProgress = pyqtSignal(int, int)
     targetProgress  = pyqtSignal(int, int)
     grassMessage    = pyqtSignal(str)
+    previewUpdated  = pyqtSignal(str, str, float, float, float)
 
-    def __init__(self, theModel, theInputs: LaCatchmentInputs) -> None:
+    def __init__(self, theModel, theInputs: LaCatchmentInputs, theLivePreview: bool = False) -> None:
         """
         :param theModel: The ``LaModel`` with diet calc already populated.
         :type theModel: la.lib.lamodel.LaModel
@@ -72,6 +73,7 @@ class LaCatchmentTask(QgsTask):
         super().__init__("Landuse Analyst — Catchment Analysis", QgsTask.CanCancel)
         self.mModel:    "LaModel" = theModel
         self.mInputs:   LaCatchmentInputs = theInputs
+        self.theLivePreview = theLivePreview
         self.mResults:  Optional[LaCatchmentResults] = None
         self.mErrorText: Optional[str] = None
         self._mScratchDir: str = self._buildScratchDir()
@@ -108,9 +110,11 @@ class LaCatchmentTask(QgsTask):
             )
             self._mCatchment.logged.connect(self._onLogged)
             self._mCatchment.progress.connect(self._onProgress)
+            self._mCatchment.previewUpdated.connect(self.previewUpdated)
 
             self.mResults = self._mCatchment.runCatchmentAnalysis(
                 self.mModel, self.mInputs, theIsCanceledFn=self.isCanceled,
+                theLivePreview=self.theLivePreview
             )
             return True
         except LaGisInputError as e:
@@ -137,6 +141,12 @@ class LaCatchmentTask(QgsTask):
         On failure: log the error; the main form's ``grassMessage``
         connection will already have surfaced log messages to the user.
         """
+        # Cleanup the Live Search group and its layers
+        try:
+            self._cleanupLiveSearchGroup()
+        except Exception as e:
+            LaUtils.debug.log(f"Failed to cleanup live search group: {e}", "Warning")
+
         if not theResult:
             myMsg = self.mErrorText or "Catchment analysis did not complete."
             LaUtils.debug.log(f"Catchment task failed: {myMsg}", "Error")
@@ -182,6 +192,35 @@ class LaCatchmentTask(QgsTask):
             f"'{_GROUP_NAME}'."
         )
         LaUtils.debug.log("Catchment task complete", "Calculation")
+
+    def _cleanupLiveSearchGroup(self) -> None:
+        myProject = QgsProject.instance()
+        myRoot = myProject.layerTreeRoot()
+        myGroup = myRoot.findGroup(_GROUP_NAME)
+        if myGroup is not None:
+            myLiveGroup = myGroup.findGroup("Live Search")
+            if myLiveGroup is not None:
+                # Remove all layers inside the Live Search group from the project
+                myLayersToRemove = []
+                for myNode in myLiveGroup.children():
+                    from qgis.core import QgsLayerTreeNode
+                    if myNode.nodeType() == QgsLayerTreeNode.NodeLayer:
+                        myLyr = myNode.layer()
+                        if myLyr is not None:
+                            myLayersToRemove.append(myLyr)
+                
+                # Remove the layers from the project and delete their files from disk
+                for myLyr in myLayersToRemove:
+                    mySrc = myLyr.source()
+                    myProject.removeMapLayer(myLyr.id())
+                    if mySrc and os.path.exists(mySrc) and os.path.basename(mySrc).startswith("_la_preview_"):
+                        try:
+                            os.remove(mySrc)
+                        except Exception as e:
+                            LaUtils.debug.log(f"Failed to remove preview file {mySrc}: {e}", "Warning")
+                
+                # Remove the group itself
+                myGroup.removeChildNode(myLiveGroup)
 
     def cancel(self) -> None:
         """Cooperative cancel — :class:`LaCatchment` polls :meth:`isCanceled`."""

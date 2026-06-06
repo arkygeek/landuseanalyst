@@ -12,9 +12,13 @@ binary search trivially mockable in unit tests.
 
 from dataclasses import dataclass, field
 from enum import Enum
+import os
+import shutil
+import time
 from typing import Callable, Dict, List, Optional
 
 from qgis.PyQt.QtCore import QObject, pyqtSignal
+
 
 from la.lib.lagrass import LaGrass, LaGrassError
 from la.lib.lautils import LaUtils
@@ -109,6 +113,7 @@ class LaCatchment(QObject):
 
     progress = pyqtSignal(int, int, int)   # (overallDone, iter, maxIter)
     logged   = pyqtSignal(str)
+    previewUpdated = pyqtSignal(str, str, float, float, float)  # (itemName, rasterPath, threshold, achievedHa, targetHa)
 
     def __init__(self, theGrass: LaGrass, thePrecisionPct: int) -> None:
         super().__init__()
@@ -165,6 +170,7 @@ class LaCatchment(QObject):
         theSuitabilityRaster: str,
         theAreaTargetHa:      float,
         theIsCanceledFn:      Callable[[], bool] = lambda: False,
+        theLivePreview:       bool = False,
     ) -> AnalyseResult:
         """
         Binary-search a cost threshold whose catchment matches a target Ha.
@@ -224,6 +230,17 @@ class LaCatchment(QObject):
                 myBestThresh = myMid
                 myBestPath   = myMask
 
+            if theLivePreview:
+                myPreviewPath = os.path.join(self.mGrass.mScratchDir, f"_la_preview_{theItemName}.tif")
+                try:
+                    shutil.copyfile(myMask, myPreviewPath)
+                    if myPreviewPath not in self.mGrass._mTempRasters:
+                        self.mGrass._mTempRasters.append(myPreviewPath)
+                    self.previewUpdated.emit(theItemName, myPreviewPath, myMid, myAchieved, theAreaTargetHa)
+                    time.sleep(0.15)
+                except Exception as e:
+                    self.logged.emit(f"Failed to copy live preview for {theItemName}: {e}")
+
             self.progress.emit(self._mOverallDone, myIteration, _MAX_ITERATIONS)
             self.logged.emit(
                 f"{theItemName}: iter {myIteration}/{_MAX_ITERATIONS} "
@@ -268,6 +285,7 @@ class LaCatchment(QObject):
         theModel,
         theInputs:        LaCatchmentInputs,
         theIsCanceledFn:  Callable[[], bool] = lambda: False,
+        theLivePreview:   bool = False,
     ) -> LaCatchmentResults:
         """
         Run the full crops → common-crop → animals → common-grazing pipeline.
@@ -332,6 +350,7 @@ class LaCatchment(QObject):
 
                     myResults.append(self.analyseItem(
                         myItem["name"], myEffectiveSuitability, myItem["areaHa"], theIsCanceledFn,
+                        theLivePreview=theLivePreview,
                     ))
                 except LaGrassError as e:
                     myResults.append(AnalyseResult(
@@ -371,6 +390,7 @@ class LaCatchment(QObject):
 
                     myCommonResult = self.analyseItem(
                         "commonCrop", myEffectiveCommonCrop, myCommonCropAreaHa, theIsCanceledFn,
+                        theLivePreview=theLivePreview,
                     )
                     myResults.append(myCommonResult)
                     myCommonCropThreshold = myCommonResult.threshold
@@ -410,6 +430,7 @@ class LaCatchment(QObject):
 
                     myResults.append(self.analyseItem(
                         myItem["name"], myEffectiveSuitability, myItem["areaHa"], theIsCanceledFn,
+                        theLivePreview=theLivePreview,
                     ))
                 except LaGrassError as e:
                     myResults.append(AnalyseResult(
@@ -454,6 +475,7 @@ class LaCatchment(QObject):
 
                     myResults.append(self.analyseItem(
                         "commonGrazing", myEffectiveCommonGrazing, myCommonGrazingAreaHa, theIsCanceledFn,
+                        theLivePreview=theLivePreview,
                     ))
                 except LaGrassError as e:
                     myResults.append(AnalyseResult(
@@ -470,6 +492,11 @@ class LaCatchment(QObject):
             for myItem in myResults_list:
                 if myItem.outputPath and myItem.outputPath in self.mGrass._mTempRasters:
                     self.mGrass._mTempRasters.remove(myItem.outputPath)
+
+            # Prevent cleanup from deleting preview rasters during background run
+            for myTemp in list(self.mGrass._mTempRasters):
+                if os.path.basename(myTemp).startswith("_la_preview_"):
+                    self.mGrass._mTempRasters.remove(myTemp)
 
             if hasattr(self, 'mCostRaster') and self.mCostRaster and self.mCostRaster in self.mGrass._mTempRasters:
                 self.mGrass._mTempRasters.remove(self.mCostRaster)
