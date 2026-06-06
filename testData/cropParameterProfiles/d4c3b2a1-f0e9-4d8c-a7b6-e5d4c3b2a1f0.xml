@@ -11,6 +11,8 @@
   <fallowEnergyType>KCalories</fallowEnergyType>
   <areaUnits>Hectare</areaUnits>
   <useCommonLand>1</useCommonLand>
-  <useSpecificLand>0</useSpecificLand>
+  <useSpecificLand>1</useSpecificLand>
   <rasterName></rasterName>
+  <preferredSlopeMin>0.0</preferredSlopeMin>
+  <preferredSlopeMax>9.0</preferredSlopeMax>
 </cropParameter>

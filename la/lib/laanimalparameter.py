@@ -28,6 +28,8 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
     _valueCommonGrazingLandChanged = pyqtSignal(int)  # Added signal for common grazing land value
     _valueSpecificGrazingLandChanged = pyqtSignal(int)  # Added signal for specific grazing land value
     _fodderSourceMapChanged = pyqtSignal(dict)  # Added signal for fodder source map changes
+    _preferredSlopeMinChanged = pyqtSignal(float)
+    _preferredSlopeMaxChanged = pyqtSignal(float)
 
     _instances = []
 
@@ -56,6 +58,8 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             # No default values for grazing land productivity, matching C++ implementation
             self.mValueCommonGrazingLand = 0
             self.mValueSpecificGrazingLand = 0
+            self.mPreferredSlopeMin = 0.0
+            self.mPreferredSlopeMax = 15.0
         else:
             # Copy properties with safe type conversion
             LaGuid.setGuid(self, getattr(theAnimalParameter, 'guid', None))  # writes self._mGuid
@@ -74,17 +78,19 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self.mSpecificLandEnergyType = getattr(theAnimalParameter, 'mSpecificLandEnergyType', EnergyType.KCalories) # Use getter or default
             self.mValueCommonGrazingLand = int(getattr(theAnimalParameter, 'mValueCommonGrazingLand', 0))
             self.mValueSpecificGrazingLand = int(getattr(theAnimalParameter, 'mValueSpecificGrazingLand', 0))
+            self.mPreferredSlopeMin = getattr(theAnimalParameter, 'preferredSlopeMin', 0.0)
+            self.mPreferredSlopeMax = getattr(theAnimalParameter, 'preferredSlopeMax', 15.0)
 
     def __eq__(self, other):
         if not isinstance(other, LaAnimalParameter):
             return False
         # Compare all relevant attributes
         myAttributes = [
-            'mGuid', 'mName', 'mDescription', 'mAnimalGuid', 'mPercentTameMeat',
+            '_mGuid', 'mName', 'mDescription', 'mAnimalGuid', 'mPercentTameMeat',
             'mUseCommonGrazingLand', 'mUseSpecificGrazingLand', 'mFodderUse',
             'mFoodSourceMap', 'mFallowUsage', 'mRasterName', 'mAreaUnits',
             'mEnergyType', 'mSpecificLandEnergyType', 'mValueCommonGrazingLand',
-            'mValueSpecificGrazingLand'
+            'mValueSpecificGrazingLand', 'mPreferredSlopeMin', 'mPreferredSlopeMax'
         ]
         return all(getattr(self, attr) == getattr(other, attr) for attr in myAttributes)
 
@@ -319,6 +325,38 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self.mValueSpecificGrazingLand = value
             self._valueSpecificGrazingLandChanged.emit(value)
 
+    @pyqtProperty(float, notify=_preferredSlopeMinChanged)
+    def preferredSlopeMin(self) -> float:
+        """Get the minimum preferred slope in degrees."""
+        return float(self.mPreferredSlopeMin)
+
+    @preferredSlopeMin.setter
+    def preferredSlopeMin(self, value: float) -> None:
+        """Set the minimum preferred slope in degrees."""
+        try:
+            val = float(value)
+            if self.mPreferredSlopeMin != val:
+                self.mPreferredSlopeMin = val
+                self._preferredSlopeMinChanged.emit(val)
+        except (ValueError, TypeError):
+            pass
+
+    @pyqtProperty(float, notify=_preferredSlopeMaxChanged)
+    def preferredSlopeMax(self) -> float:
+        """Get the maximum preferred slope in degrees."""
+        return float(self.mPreferredSlopeMax)
+
+    @preferredSlopeMax.setter
+    def preferredSlopeMax(self, value: float) -> None:
+        """Set the maximum preferred slope in degrees."""
+        try:
+            val = float(value)
+            if self.mPreferredSlopeMax != val:
+                self.mPreferredSlopeMax = val
+                self._preferredSlopeMaxChanged.emit(val)
+        except (ValueError, TypeError):
+            pass
+
 
     def fromXml(self, theXml):
         """
@@ -469,6 +507,20 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self.mFallowUsage = Priority.Nope
 
         self.mRasterName = LaUtils.xmlDecode(myTopElement.firstChildElement("rasterName").text())
+
+        # Parse preferred slope boundaries (min and max)
+        slopeMinEl = myTopElement.firstChildElement("preferredSlopeMin")
+        if not slopeMinEl.isNull() and slopeMinEl.text():
+            self.mPreferredSlopeMin = float(slopeMinEl.text())
+        else:
+            self.mPreferredSlopeMin = 0.0
+
+        slopeMaxEl = myTopElement.firstChildElement("preferredSlopeMax")
+        if not slopeMaxEl.isNull() and slopeMaxEl.text():
+            self.mPreferredSlopeMax = float(slopeMaxEl.text())
+        else:
+            self.mPreferredSlopeMax = 15.0
+
         return True
 
     def toXml(self) -> str:
@@ -512,6 +564,8 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
         myString += f"  <specificLandEnergyType>{self.mSpecificLandEnergyType.name}</specificLandEnergyType>\n"
         myString += f"  <valueCommonGrazingLand>{self.valueCommonGrazingLand}</valueCommonGrazingLand>\n"
         myString += f"  <valueSpecificGrazingLand>{self.valueSpecificGrazingLand}</valueSpecificGrazingLand>\n"
+        myString += f"  <preferredSlopeMin>{self.preferredSlopeMin}</preferredSlopeMin>\n"
+        myString += f"  <preferredSlopeMax>{self.preferredSlopeMax}</preferredSlopeMax>\n"
         myString += "</animalParameter>\n"
         return myString
 

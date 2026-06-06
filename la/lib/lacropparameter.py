@@ -63,6 +63,8 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
     _useCommonLandChanged = pyqtSignal(bool)
     _useSpecificLandChanged = pyqtSignal(bool)
     _rasterNameChanged = pyqtSignal(str)
+    _preferredSlopeMinChanged = pyqtSignal(float)
+    _preferredSlopeMaxChanged = pyqtSignal(float)
 
     def __init__(self, theCropParameter: Optional['LaCropParameter'] = None, parent=None):
         """
@@ -90,6 +92,8 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
             self.mUseCommonLand = False
             self.mUseSpecificLand = False
             self.mRasterName = ""
+            self.mPreferredSlopeMin = 0.0
+            self.mPreferredSlopeMax = 9.0
         else:  # If a crop parameter IS provided, copy the values from the existing parameter
             LaGuid.setGuid(self, theCropParameter.guid)  # writes self._mGuid
             self.mName = theCropParameter.name
@@ -105,6 +109,19 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
             self.mUseCommonLand = theCropParameter.useCommonLand
             self.mUseSpecificLand = theCropParameter.useSpecificLand
             self.mRasterName = theCropParameter.rasterName
+            self.mPreferredSlopeMin = getattr(theCropParameter, 'preferredSlopeMin', 0.0)
+            self.mPreferredSlopeMax = getattr(theCropParameter, 'preferredSlopeMax', 9.0)
+
+    def __eq__(self, other):
+        if not isinstance(other, LaCropParameter):
+            return False
+        myAttributes = [
+            '_mGuid', 'mName', 'mDescription', 'mCropGuid', 'mPercentTameCrop',
+            'mSpoilage', 'mReseed', 'mCropRotation', 'mFallowRatio', 'mFallowEnergyType',
+            'mFallowValue', 'mAreaUnits', 'mUseCommonLand', 'mUseSpecificLand',
+            'mRasterName', 'mPreferredSlopeMin', 'mPreferredSlopeMax'
+        ]
+        return all(getattr(self, attr) == getattr(other, attr) for attr in myAttributes)
 
     # Remove the conflicting property accessor methods
     # @property
@@ -340,6 +357,38 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
             self.mRasterName = theValue
             self._rasterNameChanged.emit(theValue)
 
+    @pyqtProperty(float, notify=_preferredSlopeMinChanged)
+    def preferredSlopeMin(self) -> float:
+        """Get the minimum preferred slope in degrees."""
+        return float(self.mPreferredSlopeMin)
+
+    @preferredSlopeMin.setter
+    def preferredSlopeMin(self, theValue: float) -> None:
+        """Set the minimum preferred slope in degrees."""
+        try:
+            myFloatValue = float(theValue)
+            if self.mPreferredSlopeMin != myFloatValue:
+                self.mPreferredSlopeMin = myFloatValue
+                self._preferredSlopeMinChanged.emit(myFloatValue)
+        except (ValueError, TypeError):
+            pass
+
+    @pyqtProperty(float, notify=_preferredSlopeMaxChanged)
+    def preferredSlopeMax(self) -> float:
+        """Get the maximum preferred slope in degrees."""
+        return float(self.mPreferredSlopeMax)
+
+    @preferredSlopeMax.setter
+    def preferredSlopeMax(self, theValue: float) -> None:
+        """Set the maximum preferred slope in degrees."""
+        try:
+            myFloatValue = float(theValue)
+            if self.mPreferredSlopeMax != myFloatValue:
+                self.mPreferredSlopeMax = myFloatValue
+                self._preferredSlopeMaxChanged.emit(myFloatValue)
+        except (ValueError, TypeError):
+            pass
+
     def toXml(self) -> str:
         """
         Convert this crop parameter to XML.
@@ -365,6 +414,8 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
         myString += f"  <useCommonLand>{1 if self.useCommonLand else 0}</useCommonLand>\n"
         myString += f"  <useSpecificLand>{1 if self.useSpecificLand else 0}</useSpecificLand>\n"
         myString += f"  <rasterName>{self.rasterName}</rasterName>\n"
+        myString += f"  <preferredSlopeMin>{self.preferredSlopeMin}</preferredSlopeMin>\n"
+        myString += f"  <preferredSlopeMax>{self.preferredSlopeMax}</preferredSlopeMax>\n"
         myString += "</cropParameter>\n"
         return myString
 
@@ -404,7 +455,10 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
             # Parse boolean and other values
             self.mCropRotation = myTopElement.firstChildElement("cropRotation").text()
             self.mFallowRatio = float(myTopElement.firstChildElement("fallowRatio").text())
-            self.mFallowValue = int(myTopElement.firstChildElement("fallowValue").text())
+            fallowValText = myTopElement.firstChildElement("fallowValue").text()
+            if not fallowValText:
+                fallowValText = myTopElement.firstChildElement("fallowTDN").text()
+            self.mFallowValue = int(fallowValText) if fallowValText else 0
 
             # Handle fallow energy type
             energyTypeElement = myTopElement.firstChildElement("fallowEnergyType")
@@ -425,6 +479,19 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
             self.mUseCommonLand = myTopElement.firstChildElement("useCommonLand").text()
             self.mUseSpecificLand = myTopElement.firstChildElement("useSpecificLand").text()
             self.mRasterName = LaUtils.xmlDecode(myTopElement.firstChildElement("rasterName").text())
+
+            # Parse slope preference elements, defaulting if missing
+            slopeMinEl = myTopElement.firstChildElement("preferredSlopeMin")
+            if not slopeMinEl.isNull() and slopeMinEl.text():
+                self.mPreferredSlopeMin = float(slopeMinEl.text())
+            else:
+                self.mPreferredSlopeMin = 0.0
+
+            slopeMaxEl = myTopElement.firstChildElement("preferredSlopeMax")
+            if not slopeMaxEl.isNull() and slopeMaxEl.text():
+                self.mPreferredSlopeMax = float(slopeMaxEl.text())
+            else:
+                self.mPreferredSlopeMax = 9.0
 
             return True
         except Exception as e:

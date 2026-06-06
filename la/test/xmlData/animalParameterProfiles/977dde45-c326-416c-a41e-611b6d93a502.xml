@@ -2,25 +2,17 @@
   <name>pig params</name>
   <description>No pig param notes</description>
   <animal>4ee39cc4-8f9a-45fa-825c-8e1d96fc3984</animal>
-  <percentTameMeat>33</percentTameMeat>
+  <percentTameMeat>33.0</percentTameMeat>
   <useCommonGrazingLand>1</useCommonGrazingLand>
   <useSpecificGrazingLand>0</useSpecificGrazingLand>
-  <foodValueOfCommonGrazingLand>50</foodValueOfCommonGrazingLand>
-  <foodValueOfSpecificGrazingLand>16</foodValueOfSpecificGrazingLand>
-  <areaUnits>-1</areaUnits>
-  <fodderUse>1</fodderUse>
-   <fodderCrops>
-    <fodderCrop>
-      <fodderCropGuid>1b7d0917-78af-4a12-a5c6-222994f1866e</fodderCropGuid>
-      <fodderStrawChaff>3</fodderStrawChaff>
-      <fodderGrain>3</fodderGrain>
-    </fodderCrop>
-    <fodderCrop>
-      <fodderCropGuid>d413884f-45d8-457b-9c2f-e479f291bbeb</fodderCropGuid>
-      <fodderStrawChaff>12</fodderStrawChaff>
-      <fodderGrain>6</fodderGrain>
-    </fodderCrop>
-   </fodderCrops>
+  <fodderUse>False</fodderUse>
   <fallowUsage>Low</fallowUsage>
-  <rasterName>PigMask</RasterName>
+  <rasterName>PigMask</rasterName>
+  <areaUnits>Dunum</areaUnits>
+  <energyType>KCalories</energyType>
+  <specificLandEnergyType>KCalories</specificLandEnergyType>
+  <valueCommonGrazingLand>0</valueCommonGrazingLand>
+  <valueSpecificGrazingLand>0</valueSpecificGrazingLand>
+  <preferredSlopeMin>0.0</preferredSlopeMin>
+  <preferredSlopeMax>15.0</preferredSlopeMax>
 </animalParameter>

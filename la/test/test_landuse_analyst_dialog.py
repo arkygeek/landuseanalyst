@@ -14,9 +14,9 @@ __copyright__ = 'Copyright 2022, Dr. Jason S. Jorgenson'
 
 import unittest
 
-from qgis.PyQt.QtGui import QDialogButtonBox, QDialog
+from qgis.PyQt.QtWidgets import QDialogButtonBox, QDialog
 
-from landuse_analyst_dialog import LaMainForm
+from la.gui.lamainform import LaMainForm
 
 from utilities import get_qgis_app
 QGIS_APP = get_qgis_app()
@@ -35,16 +35,13 @@ class LaMainFormTest(unittest.TestCase):
 
     def test_dialog_ok(self):
         """Test we can click OK."""
-
-        button = self.dialog.button_box.button(QDialogButtonBox.Ok)
-        button.click()
+        self.dialog.accept()
         result = self.dialog.result()
         self.assertEqual(result, QDialog.Accepted)
 
     def test_dialog_cancel(self):
         """Test we can click cancel."""
-        button = self.dialog.button_box.button(QDialogButtonBox.Cancel)
-        button.click()
+        self.dialog.pushButtonExit.click()
         result = self.dialog.result()
         self.assertEqual(result, QDialog.Rejected)
 

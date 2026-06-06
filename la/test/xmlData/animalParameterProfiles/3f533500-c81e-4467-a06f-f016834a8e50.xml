@@ -2,18 +2,17 @@
   <name>Sample Animal Parameter 1</name>
   <description>Sample Animal Parameter 1</description>
   <animal>69484c00-449d-40a8-88cb-ef9097b83a0c</animal>
-  <percentTameMeat>0</percentTameMeat>
+  <percentTameMeat>0.0</percentTameMeat>
   <useCommonGrazingLand>1</useCommonGrazingLand>
   <useSpecificGrazingLand>1</useSpecificGrazingLand>
-  <foodValueOfCommonGrazingLand>11</foodValueOfCommonGrazingLand>
-  <foodValueOfSpecificGrazingLand>28900188</foodValueOfSpecificGrazingLand>
-  <areaUnits>1</areaUnits>
-  <fodderUse>1</fodderUse>
-  <fodderSource1>100</fodderSource1>
-  <fodderSource1Grain>0</fodderSource1Grain>
-  <fodderSource2>-3</fodderSource2>
-  <fodderSource2Grain>0</fodderSource2Grain>
-  <fodderSource3>100</fodderSource3>
-  <fodderSource3Grain>0</fodderSource3Grain>
-  <fallowUsage></fallowUsage>
+  <fodderUse>False</fodderUse>
+  <fallowUsage>None</fallowUsage>
+  <rasterName></rasterName>
+  <areaUnits>Dunum</areaUnits>
+  <energyType>KCalories</energyType>
+  <specificLandEnergyType>KCalories</specificLandEnergyType>
+  <valueCommonGrazingLand>0</valueCommonGrazingLand>
+  <valueSpecificGrazingLand>0</valueSpecificGrazingLand>
+  <preferredSlopeMin>0.0</preferredSlopeMin>
+  <preferredSlopeMax>15.0</preferredSlopeMax>
 </animalParameter>

@@ -188,6 +188,22 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
         self.mFleeceWeightKg = theAnimal.fleeceWeightKg
         self.mImageFile = theAnimal.imageFile
 
+    def __eq__(self, other):
+        """Compare this animal with another for equality."""
+        if not isinstance(other, LaAnimal):
+            return False
+        myAttributes = [
+            '_mGuid', 'mName', 'mDescription', 'mImageFile',
+            'mMeatFoodValue', 'mUsableMeat', 'mKillWeight', 'mAdultWeight',
+            'mGrowTime', 'mDeathRate', 'mSexualMaturity', 'mBreedingExpectancy',
+            'mYoungPerBirth', 'mGestationTime', 'mEstrousCycle',
+            'mConceptionEfficiency', 'mFemalesToMales', 'mWeaningAge',
+            'mWeaningWeight', 'mMilk', 'mMilkGramsPerDay', 'mMilkFoodValue',
+            'mLactationTime', 'mFleece', 'mFleeceWeightKg', 'mFeedEnergyType',
+            'mGestating', 'mLactating', 'mMaintenance', 'mJuvenile'
+        ]
+        return all(getattr(self, attr) == getattr(other, attr) for attr in myAttributes)
+
     def validate(self) -> Dict[str, str]:
         """Validate the animal's attributes.
 

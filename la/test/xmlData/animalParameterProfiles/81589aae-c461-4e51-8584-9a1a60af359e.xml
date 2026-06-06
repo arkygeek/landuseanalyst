@@ -2,25 +2,17 @@
   <name>cow params</name>
   <description>No cow param notes</description>
   <animal>7b71ee13-a992-4226-b5cf-5f69f071a265</animal>
-  <percentTameMeat>33</percentTameMeat>
+  <percentTameMeat>33.0</percentTameMeat>
   <useCommonGrazingLand>0</useCommonGrazingLand>
   <useSpecificGrazingLand>1</useSpecificGrazingLand>
-  <foodValueOfCommonGrazingLand>0</foodValueOfCommonGrazingLand>
-  <foodValueOfSpecificGrazingLand>16</foodValueOfSpecificGrazingLand>
-  <areaUnits>-1</areaUnits>
-  <fodderUse>1</fodderUse>
-   <fodderCrops>
-    <fodderCrop>
-      <fodderCropGuid>1b7d0917-78af-4a12-a5c6-222994f1866e</fodderCropGuid>
-      <fodderStrawChaff>1</fodderStrawChaff>
-      <fodderGrain>2</fodderGrain>
-    </fodderCrop>
-    <fodderCrop>
-      <fodderCropGuid>74e7a763-2961-495e-a6ee-5126cbb0cf5e</fodderCropGuid>
-      <fodderStrawChaff>3</fodderStrawChaff>
-      <fodderGrain>4</fodderGrain>
-    </fodderCrop>
-   </fodderCrops>
+  <fodderUse>False</fodderUse>
   <fallowUsage>High</fallowUsage>
-  <rasterName>CowMask</RasterName>
+  <rasterName>CowMask</rasterName>
+  <areaUnits>Dunum</areaUnits>
+  <energyType>KCalories</energyType>
+  <specificLandEnergyType>KCalories</specificLandEnergyType>
+  <valueCommonGrazingLand>0</valueCommonGrazingLand>
+  <valueSpecificGrazingLand>0</valueSpecificGrazingLand>
+  <preferredSlopeMin>0.0</preferredSlopeMin>
+  <preferredSlopeMax>15.0</preferredSlopeMax>
 </animalParameter>

@@ -32,6 +32,11 @@ class LaMessageBus(QObject):
     """Message bus for communication between components."""
     debugMessaged = pyqtSignal(str)  # Signal emitted when debug messages are logged
 
+    def debug(self, theMessage: str) -> None:
+        """Log a debug message and emit the debugMessaged signal."""
+        print(f"[DEBUG] {theMessage}")
+        self.debugMessaged.emit(theMessage)
+
 # Create a global instance of the message bus that can be imported
 MESSAGE_BUS = LaMessageBus()
 
@@ -178,9 +183,9 @@ class LaUtils:
         :return: A string representing the path to the animal profiles directory
         :rtype: str
         """
-        path = os.path.join(LaUtils.userDataPath(), 'animalProfiles')
-        LaUtils.ensureDirectoryExists(path)
-        return path
+        myPath = QDir.homePath() + "/.landuseAnalyst/animalProfiles/"
+        QDir().mkpath(myPath)
+        return myPath
 
     @staticmethod
     def userCropProfilesDirPath() -> str:
@@ -192,9 +197,9 @@ class LaUtils:
         :return: A string representing the path to the crop profiles directory
         :rtype: str
         """
-        path = os.path.join(LaUtils.userDataPath(), 'cropProfiles')
-        LaUtils.ensureDirectoryExists(path)
-        return path
+        myPath = QDir.homePath() + "/.landuseAnalyst/cropProfiles/"
+        QDir().mkpath(myPath)
+        return myPath
 
     @staticmethod
     def getAvailableAnimals() -> Dict[str, LaAnimal]:
@@ -271,7 +276,7 @@ class LaUtils:
                     return myLaAnimal
 
         LaUtils.debug.log(f"No animal found with GUID {theGuid}, returning blank animal", "Animals")
-        return myLaAnimal
+        return LaAnimal()
 
     @staticmethod
     def getAvailableCrops(): # -> Dict[str, LaCrop]
@@ -358,9 +363,9 @@ class LaUtils:
 
     @staticmethod
     def userAnimalParameterProfilesDirPath() -> str:
-        path = os.path.join(LaUtils.userDataPath(), 'animalParameterProfiles')
-        LaUtils.ensureDirectoryExists(path)
-        return path
+        myPath = QDir.homePath() + "/.landuseAnalyst/animalParameterProfiles/"
+        QDir().mkpath(myPath)
+        return myPath
 
     @staticmethod
     def userImagesDirPath() -> str:
@@ -384,9 +389,8 @@ class LaUtils:
         :return: The path to the directory where crop parameter profiles are stored
         :rtype: str
         """
-        import os
-        myPath = os.path.join(os.path.expanduser("~"), ".landuseAnalyst", "cropParameterProfiles")
-        os.makedirs(myPath, exist_ok=True)
+        myPath = QDir.homePath() + "/.landuseAnalyst/cropParameterProfiles/"
+        QDir().mkpath(myPath)
         return myPath
 
     @staticmethod
@@ -407,9 +411,18 @@ class LaUtils:
         # all need be done is add new units to la.h enum and add
         # into the following code...
         myHectares: float = 0.
-        if theAreaUnit == AreaUnits.Dunum:
+        
+        # Coerce string inputs to AreaUnits enum
+        myUnit = theAreaUnit
+        if isinstance(myUnit, str):
+            if myUnit == "Dunum":
+                myUnit = AreaUnits.Dunum
+            elif myUnit == "Hectare":
+                myUnit = AreaUnits.Hectare
+
+        if myUnit == AreaUnits.Dunum:
             myHectares = float(theArea) * 10.
-        elif theAreaUnit == AreaUnits.Hectare:
+        elif myUnit == AreaUnits.Hectare:
             myHectares = theArea
         # add new units here after updating la.h enum ex:
         # elif theAreaUnit == "Acre":

@@ -307,13 +307,12 @@ class LaCatchment(QObject):
             myDedicatedAnimalsAreaHa = sum(it["areaHa"] for it in myDedicatedAnimals)
 
             # Overall progress total = dedicated crops + 1 (common crop) +
-            # dedicated animals + 1 (common grazing). Common steps only
-            # count if they will actually run.
+            # dedicated animals + 1 (common grazing).
             self._mOverallTotal = (
                 len(myDedicatedCrops)
-                + (1 if (myCommonCropAreaHa > 0 and myCommonCropPath) else 0)
+                + (1 if (myCommonCropAreaHa > 0) else 0)
                 + len(myDedicatedAnimals)
-                + (1 if (myCommonGrazingAreaHa > 0 and myCommonGrazingPath) else 0)
+                + (1 if (myCommonGrazingAreaHa > 0) else 0)
             )
             self._mOverallDone = 0
             myResults: List[AnalyseResult] = []
@@ -322,9 +321,24 @@ class LaCatchment(QObject):
             for myItem in myDedicatedCrops:
                 if theIsCanceledFn():
                     break
-                myResults.append(self.analyseItem(
-                    myItem["name"], myItem["raster"], myItem["areaHa"], theIsCanceledFn,
-                ))
+                try:
+                    mySlopeMask = self.mGrass.createSlopeMask(
+                        myItem["preferredSlopeMin"], myItem["preferredSlopeMax"]
+                    )
+                    if myItem["raster"]:
+                        myEffectiveSuitability = self.mGrass.createMask(mySlopeMask, myItem["raster"])
+                    else:
+                        myEffectiveSuitability = mySlopeMask
+
+                    myResults.append(self.analyseItem(
+                        myItem["name"], myEffectiveSuitability, myItem["areaHa"], theIsCanceledFn,
+                    ))
+                except LaGrassError as e:
+                    myResults.append(AnalyseResult(
+                        myItem["name"], 0.0, 0.0, myItem["areaHa"], None,
+                        SearchStatus.Failed,
+                        f"Failed to create suitability/slope mask: {e}",
+                    ))
                 self._mOverallDone += 1
 
             # Skipped crops (no raster + not common-land) → recorded for transparency
@@ -339,43 +353,70 @@ class LaCatchment(QObject):
             # 4. Common-crop catchment + leftover for animals
             myLeftoverRaster: Optional[str] = None
             myCommonCropThreshold: Optional[float] = None
-            if myCommonCropAreaHa > 0 and myCommonCropPath:
+            if myCommonCropAreaHa > 0:
                 if theIsCanceledFn():
                     return self._packageResults(myResults)
-                myCommonResult = self.analyseItem(
-                    "commonCrop", myCommonCropPath, myCommonCropAreaHa, theIsCanceledFn,
-                )
-                myResults.append(myCommonResult)
-                self._mOverallDone += 1
-                myCommonCropThreshold = myCommonResult.threshold
-                if myCommonResult.status is SearchStatus.Converged:
-                    try:
+
+                myCommonCropSlopeMin = min(it["preferredSlopeMin"] for it in myCommonCrops) if myCommonCrops else 0.0
+                myCommonCropSlopeMax = max(it["preferredSlopeMax"] for it in myCommonCrops) if myCommonCrops else 9.0
+
+                try:
+                    myCommonCropSlopeMask = self.mGrass.createSlopeMask(
+                        myCommonCropSlopeMin, myCommonCropSlopeMax
+                    )
+                    if myCommonCropPath:
+                        myEffectiveCommonCrop = self.mGrass.createMask(myCommonCropSlopeMask, myCommonCropPath)
+                    else:
+                        myEffectiveCommonCrop = myCommonCropSlopeMask
+
+                    myCommonResult = self.analyseItem(
+                        "commonCrop", myEffectiveCommonCrop, myCommonCropAreaHa, theIsCanceledFn,
+                    )
+                    myResults.append(myCommonResult)
+                    myCommonCropThreshold = myCommonResult.threshold
+
+                    if myCommonResult.status is SearchStatus.Converged:
                         myLeftoverRaster = self.mGrass.createInverseMask(
-                            self.mCostRaster, myCommonCropThreshold, myCommonCropPath,
+                            self.mCostRaster, myCommonCropThreshold, myEffectiveCommonCrop,
                         )
-                    except LaGrassError as e:
-                        self.logged.emit(f"createInverseMask failed: {e}")
-            elif myCommonCropAreaHa > 0 and not myCommonCropPath:
-                self.logged.emit(
-                    f"Common-crop demand of {myCommonCropAreaHa:.2f} Ha but no "
-                    "common-crop raster picked; skipping."
-                )
+                except LaGrassError as e:
+                    myResults.append(AnalyseResult(
+                        "commonCrop", 0.0, 0.0, myCommonCropAreaHa, None,
+                        SearchStatus.Failed,
+                        f"Common crop catchment failed: {e}",
+                    ))
+                self._mOverallDone += 1
 
             # 5. Dedicated animals — merged with leftover if available
             for myItem in myDedicatedAnimals:
                 if theIsCanceledFn():
                     break
-                mySuitability = myItem["raster"]
-                if myLeftoverRaster is not None:
-                    try:
-                        mySuitability = self.mGrass.mergeMaps(myLeftoverRaster, myItem["raster"])
-                    except LaGrassError as e:
-                        self.logged.emit(
-                            f"mergeMaps failed for {myItem['name']}, falling back to raw raster: {e}"
-                        )
-                myResults.append(self.analyseItem(
-                    myItem["name"], mySuitability, myItem["areaHa"], theIsCanceledFn,
-                ))
+                try:
+                    mySlopeMask = self.mGrass.createSlopeMask(
+                        myItem["preferredSlopeMin"], myItem["preferredSlopeMax"]
+                    )
+                    if myItem["raster"]:
+                        if myLeftoverRaster is not None:
+                            myBaseSuit = self.mGrass.mergeMaps(myLeftoverRaster, myItem["raster"])
+                        else:
+                            myBaseSuit = myItem["raster"]
+                        myEffectiveSuitability = self.mGrass.createMask(myBaseSuit, mySlopeMask)
+                    else:
+                        # Slope-only mode
+                        if myLeftoverRaster is not None:
+                            myEffectiveSuitability = self.mGrass.createMask(myLeftoverRaster, mySlopeMask)
+                        else:
+                            myEffectiveSuitability = mySlopeMask
+
+                    myResults.append(self.analyseItem(
+                        myItem["name"], myEffectiveSuitability, myItem["areaHa"], theIsCanceledFn,
+                    ))
+                except LaGrassError as e:
+                    myResults.append(AnalyseResult(
+                        myItem["name"], 0.0, 0.0, myItem["areaHa"], None,
+                        SearchStatus.Failed,
+                        f"Failed to create suitability/slope mask: {e}",
+                    ))
                 self._mOverallDone += 1
 
             for myItem in mySkippedAnimals:
@@ -387,25 +428,40 @@ class LaCatchment(QObject):
                 self.logged.emit(f"Skipped: {myItem['name']} — no raster, not common.")
 
             # 6. Common-grazing catchment
-            if myCommonGrazingAreaHa > 0 and myCommonGrazingPath:
-                if not theIsCanceledFn():
-                    mySuitability = myCommonGrazingPath
-                    if myLeftoverRaster is not None:
-                        try:
-                            mySuitability = self.mGrass.mergeMaps(
-                                myLeftoverRaster, myCommonGrazingPath,
-                            )
-                        except LaGrassError as e:
-                            self.logged.emit(f"mergeMaps for common grazing failed: {e}")
+            if myCommonGrazingAreaHa > 0:
+                if theIsCanceledFn():
+                    return self._packageResults(myResults)
+
+                myCommonGrazingSlopeMin = min(it["preferredSlopeMin"] for it in myCommonAnimals) if myCommonAnimals else 0.0
+                myCommonGrazingSlopeMax = max(it["preferredSlopeMax"] for it in myCommonAnimals) if myCommonAnimals else 15.0
+
+                try:
+                    myCommonGrazingSlopeMask = self.mGrass.createSlopeMask(
+                        myCommonGrazingSlopeMin, myCommonGrazingSlopeMax
+                    )
+                    if myCommonGrazingPath:
+                        if myLeftoverRaster is not None:
+                            myBaseSuit = self.mGrass.mergeMaps(myLeftoverRaster, myCommonGrazingPath)
+                        else:
+                            myBaseSuit = myCommonGrazingPath
+                        myEffectiveCommonGrazing = self.mGrass.createMask(myBaseSuit, myCommonGrazingSlopeMask)
+                    else:
+                        # Slope-only mode
+                        if myLeftoverRaster is not None:
+                            myEffectiveCommonGrazing = self.mGrass.createMask(myLeftoverRaster, myCommonGrazingSlopeMask)
+                        else:
+                            myEffectiveCommonGrazing = myCommonGrazingSlopeMask
+
                     myResults.append(self.analyseItem(
-                        "commonGrazing", mySuitability, myCommonGrazingAreaHa, theIsCanceledFn,
+                        "commonGrazing", myEffectiveCommonGrazing, myCommonGrazingAreaHa, theIsCanceledFn,
                     ))
-                    self._mOverallDone += 1
-            elif myCommonGrazingAreaHa > 0 and not myCommonGrazingPath:
-                self.logged.emit(
-                    f"Common-grazing demand of {myCommonGrazingAreaHa:.2f} Ha but no "
-                    "common-grazing raster picked; skipping."
-                )
+                except LaGrassError as e:
+                    myResults.append(AnalyseResult(
+                        "commonGrazing", 0.0, 0.0, myCommonGrazingAreaHa, None,
+                        SearchStatus.Failed,
+                        f"Common grazing catchment failed: {e}",
+                    ))
+                self._mOverallDone += 1
 
             return self._packageResults(myResults)
         finally:
@@ -464,15 +520,20 @@ class LaCatchment(QObject):
             myRasterName = (getattr(myParam, "rasterName", "") or "").strip() if myParam else ""
             myUsesCommon = bool(getattr(myParam, myCommonFlag, False)) if myParam else False
 
+            mySlopeMin = float(getattr(myParam, "preferredSlopeMin", 0.0)) if myParam else 0.0
+            mySlopeMax = float(getattr(myParam, "preferredSlopeMax", 9.0 if theKind == "crops" else 15.0)) if myParam else (9.0 if theKind == "crops" else 15.0)
+
             myRecord = {
                 "guid":   myGuid,
                 "name":   myName,
                 "areaHa": float(myAreaHa),
                 "raster": myRasterName,
+                "preferredSlopeMin": mySlopeMin,
+                "preferredSlopeMax": mySlopeMax,
             }
             if myUsesCommon:
                 myCommon.append(myRecord)
-            elif myRasterName:
+            elif myRasterName or myParam:
                 myDedicated.append(myRecord)
             else:
                 mySkipped.append(myRecord)

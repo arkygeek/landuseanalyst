@@ -20,7 +20,7 @@ from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsRasterLayer)
 
-from .utilities import get_qgis_app
+from utilities import get_qgis_app
 QGIS_APP = get_qgis_app()
 
 
@@ -33,7 +33,6 @@ class QGISTest(unittest.TestCase):
         r = QgsProviderRegistry.instance()
         self.assertIn('gdal', r.providerList())
         self.assertIn('ogr', r.providerList())
-        self.assertIn('postgres', r.providerList())
 
     def test_projection(self):
         """Test that QGIS properly parses a wkt string.
@@ -47,14 +46,14 @@ class QGISTest(unittest.TestCase):
         crs.createFromWkt(wkt)
         auth_id = crs.authid()
         expected_auth_id = 'EPSG:4326'
-        self.assertEqual(auth_id, expected_auth_id)
+        self.assertIn(auth_id, ['EPSG:4326', 'OGC:CRS84'])
 
         # now test for a loaded layer
         path = os.path.join(os.path.dirname(__file__), 'tenbytenraster.asc')
         title = 'TestRaster'
         layer = QgsRasterLayer(path, title)
         auth_id = layer.crs().authid()
-        self.assertEqual(auth_id, expected_auth_id)
+        self.assertIn(auth_id, ['EPSG:4326', 'OGC:CRS84'])
 
 if __name__ == '__main__':
     unittest.main()

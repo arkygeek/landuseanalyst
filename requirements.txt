@@ -1,1 +1,5 @@
-# this file will contain a list of all required dependencies 
+# required dependencies for landuseanalyst QGIS plugin
+numpy
+scipy
+matplotlib
+pytest

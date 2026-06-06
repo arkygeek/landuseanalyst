@@ -224,6 +224,54 @@ class LaGrass(QObject):
         self._mTempRasters.append(myOutPath)
         return myOutPath
 
+    def createSlopeMask(self, theSlopeMin: float, theSlopeMax: float) -> str:
+        """
+        Generate a binary raster mask (1 where slope is in [theSlopeMin, theSlopeMax],
+        0/null elsewhere) by computing slope in degrees from the DEM.
+
+        :param theSlopeMin: Minimum preferred slope in degrees.
+        :param theSlopeMax: Maximum preferred slope in degrees.
+        :return: Absolute path of a 1/0 binary mask GeoTIFF.
+        :rtype: str
+        """
+        import numpy as np
+        from osgeo import gdal
+
+        # 1. Read DEM array and get dimensions
+        myDem = self._readBand(self.mDemPath).astype(np.float64)
+        
+        # 2. Get cell resolution from geotransform
+        myDataset = gdal.Open(self.mDemPath)
+        if myDataset is None:
+            raise LaGrassError(f"Could not open DEM {self.mDemPath}")
+        myGeoTrans = myDataset.GetGeoTransform()
+        myCellX = abs(myGeoTrans[1])
+        myCellY = abs(myGeoTrans[5])
+        
+        # 3. Calculate gradients and slope in degrees (central differences)
+        myDzDy, myDzDx = np.gradient(myDem, myCellY, myCellX)
+        myMagnitude = np.sqrt(myDzDy ** 2 + myDzDx ** 2)
+        mySlopeRad = np.arctan(myMagnitude)
+        mySlopeDeg = np.degrees(mySlopeRad)
+        
+        # 4. Create binary mask: 1 where slope is in range, 0/null elsewhere
+        myNoDataVal = myDataset.GetRasterBand(1).GetNoDataValue()
+        myValidMask = np.isfinite(myDem)
+        if myNoDataVal is not None:
+            myValidMask = myValidMask & (myDem != myNoDataVal)
+            
+        myMask = (myValidMask & (mySlopeDeg >= theSlopeMin) & (mySlopeDeg <= theSlopeMax)).astype(np.uint8)
+        
+        # 5. Write the mask GeoTIFF
+        myOutPath = self._tempPath(f"slopeMask_{int(theSlopeMin)}_{int(theSlopeMax)}")
+        self._writeMaskCoregistered(myMask, self.mDemPath, myOutPath)
+        self._mTempRasters.append(myOutPath)
+        
+        self.message.emit(
+            f"Generated slope mask in range [{theSlopeMin:.1f}°, {theSlopeMax:.1f}°]."
+        )
+        return myOutPath
+
     def mergeMaps(self, theA: str, theB: str) -> str:
         """
         Union of two 1/null binary masks.
