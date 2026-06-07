@@ -957,17 +957,16 @@ class LaMainForm(LaMainFormBase):
                 # Reload data provider to refresh canvas cache
                 myExistingLayer.dataProvider().reloadData()
                 myExistingLayer.setName(myNewName)
+                self._applyPreviewMaskStyle(myExistingLayer, theItemName)
                 myExistingLayer.triggerRepaint()
             else:
                 # Create a new layer
                 myLayer = QgsRasterLayer(theRasterPath, myNewName)
                 if myLayer.isValid():
-                    # Apply style
-                    if os.path.exists(_QML_STYLE):
-                        myLayer.loadNamedStyle(_QML_STYLE)
                     myProject.addMapLayer(myLayer, False)
                     # Add to the top of the Live Search group
                     myLiveGroup.insertLayer(0, myLayer)
+                    self._applyPreviewMaskStyle(myLayer, theItemName)
                     myLayer.triggerRepaint()
 
             # Force map canvas refresh to display the changes immediately
@@ -977,6 +976,57 @@ class LaMainForm(LaMainFormBase):
         except Exception as e:
             import traceback
             LaUtils.debug.log(f"Error updating catchment preview: {e}\n{traceback.format_exc()}", "Warning")
+
+    def _applyPreviewMaskStyle(self, theLayer, theItemName: str) -> None:
+        """Apply a premium single-value mask style programmatically with transparent 0 values."""
+        from qgis.core import QgsRasterShader, QgsColorRampShader, QgsSingleBandPseudoColorRenderer
+        from qgis.PyQt.QtGui import QColor
+        
+        # Determine color
+        name = theItemName.lower()
+        if "crop" in name or name.startswith("commoncrop"):
+            myColor = QColor(34, 139, 34, 180)     # Forest Green
+        elif "pig" in name:
+            myColor = QColor(219, 112, 147, 180)   # Pink
+        elif "cow" in name:
+            myColor = QColor(160, 82, 45, 180)     # Sienna brown
+        elif "goat" in name:
+            myColor = QColor(218, 165, 32, 180)    # Goldenrod
+        elif "sheep" in name:
+            myColor = QColor(59, 90, 140, 180)     # Blue/Indigo
+        else:
+            import hashlib
+            h = int(hashlib.md5(theItemName.encode('utf-8')).hexdigest(), 16)
+            r = (h & 0xFF0000) >> 16
+            g = (h & 0x00FF00) >> 8
+            b = h & 0x0000FF
+            r = int((r + 255) / 2)
+            g = int((g + 255) / 2)
+            b = int((b + 255) / 2)
+            myColor = QColor(r, g, b, 180)
+            
+        myColorRampItems = [
+            QgsColorRampShader.ColorRampItem(0.0, QColor(0, 0, 0, 0), "background"),
+            QgsColorRampShader.ColorRampItem(1.0, myColor, "catchment"),
+        ]
+        
+        myShader = QgsRasterShader()
+        myColorRampShader = QgsColorRampShader()
+        myColorRampShader.setColorRampType(QgsColorRampShader.Exact)
+        myColorRampShader.setColorRampItemList(myColorRampItems)
+        myShader.setRasterShaderFunction(myColorRampShader)
+        
+        myRenderer = QgsSingleBandPseudoColorRenderer(
+            theLayer.dataProvider(), 1, myShader
+        )
+        theLayer.setRenderer(myRenderer)
+        
+        # Collapse the preview layer in the legend tree to keep it clean
+        myProject = QgsProject.instance()
+        myRoot = myProject.layerTreeRoot()
+        myNode = myRoot.findLayer(theLayer.id())
+        if myNode:
+            myNode.setExpanded(False)
 
     def _onFullReport(self):
         """Run the calc, then open the modal report viewer."""

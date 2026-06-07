@@ -168,9 +168,13 @@ class LaCatchmentTask(QgsTask):
                 self.mResults.costRasterPath, "Cost surface"
             )
             if myCostLayer.isValid():
-                self._applyCostSurfaceStyle(myCostLayer)
                 myProject.addMapLayer(myCostLayer, False)
+                self._applyCostSurfaceStyle(myCostLayer)
                 myRunGroup.addLayer(myCostLayer)
+                # Collapse in the legend
+                myNode = myRunGroup.findLayer(myCostLayer.id())
+                if myNode:
+                    myNode.setExpanded(False)
 
         # Create subgroup folders inside the run group
         myCropsGroup = myRunGroup.addGroup("Crops")
@@ -194,8 +198,10 @@ class LaCatchmentTask(QgsTask):
                     f"{myItem.outputPath}"
                 )
                 continue
-            self._applyMaskStyle(myLayer)
             myProject.addMapLayer(myLayer, False)
+            from qgis.PyQt.QtGui import QColor
+            myColor = self._colorForItem(myItem.itemName)
+            self._applyMaskStyle(myLayer, myColor)
             
             # Route to the appropriate subgroup
             isCrop = (myItem.itemName == "commonCrop") or (myItem.itemName in myCropNames)
@@ -232,6 +238,12 @@ class LaCatchmentTask(QgsTask):
         myRunGroup.setExpanded(True)
         myCropsGroup.setExpanded(True)
         myAnimalsGroup.setExpanded(True)
+
+        # Collapse the individual layer nodes to keep the legend tree clean
+        for myChild in myCropsGroup.children():
+            myChild.setExpanded(False)
+        for myChild in myAnimalsGroup.children():
+            myChild.setExpanded(False)
 
         self.grassMessage.emit(
             f"[DONE] Added {len(self.mResults.items)} item(s) to layer group "
@@ -344,10 +356,52 @@ class LaCatchmentTask(QgsTask):
         )
 
     @staticmethod
-    def _applyMaskStyle(theLayer: QgsRasterLayer) -> None:
-        if os.path.exists(_QML_STYLE):
-            theLayer.loadNamedStyle(_QML_STYLE)
-            theLayer.triggerRepaint()
+    def _colorForItem(theItemName: str) -> "QColor":
+        from qgis.PyQt.QtGui import QColor
+        name = theItemName.lower()
+        if "crop" in name or name.startswith("commoncrop"):
+            return QColor(34, 139, 34, 180)     # Forest Green
+        elif "pig" in name:
+            return QColor(219, 112, 147, 180)   # Pink
+        elif "cow" in name:
+            return QColor(160, 82, 45, 180)     # Sienna brown
+        elif "goat" in name:
+            return QColor(218, 165, 32, 180)    # Goldenrod
+        elif "sheep" in name:
+            return QColor(59, 90, 140, 180)     # Blue/Indigo
+        
+        import hashlib
+        h = int(hashlib.md5(theItemName.encode('utf-8')).hexdigest(), 16)
+        r = (h & 0xFF0000) >> 16
+        g = (h & 0x00FF00) >> 8
+        b = h & 0x0000FF
+        r = int((r + 255) / 2)
+        g = int((g + 255) / 2)
+        b = int((b + 255) / 2)
+        return QColor(r, g, b, 180)
+
+    @staticmethod
+    def _applyMaskStyle(theLayer: QgsRasterLayer, theColor: "QColor") -> None:
+        """Apply a premium single-value mask style with the specified color, making 0 transparent."""
+        from qgis.core import QgsRasterShader, QgsColorRampShader, QgsSingleBandPseudoColorRenderer
+        from qgis.PyQt.QtGui import QColor
+        
+        myColorRampItems = [
+            QgsColorRampShader.ColorRampItem(0.0, QColor(0, 0, 0, 0), "background"),
+            QgsColorRampShader.ColorRampItem(1.0, theColor, "catchment"),
+        ]
+        
+        myShader = QgsRasterShader()
+        myColorRampShader = QgsColorRampShader()
+        myColorRampShader.setColorRampType(QgsColorRampShader.Exact)
+        myColorRampShader.setColorRampItemList(myColorRampItems)
+        myShader.setRasterShaderFunction(myColorRampShader)
+        
+        myRenderer = QgsSingleBandPseudoColorRenderer(
+            theLayer.dataProvider(), 1, myShader
+        )
+        theLayer.setRenderer(myRenderer)
+        theLayer.triggerRepaint()
 
     @staticmethod
     def _applyCostSurfaceStyle(theLayer: QgsRasterLayer) -> None:
