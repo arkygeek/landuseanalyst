@@ -555,6 +555,8 @@ class LaGrass(QObject):
         myOutBand.WriteArray(myCostGrid.astype(np.float32))
         myOutBand.FlushCache()
         myOutDs.FlushCache()
+        myOutBand = None
+        myOutDs = None
         self._mTempRasters.append(myOutPath)
         self.message.emit(
             f"Built walk-cost surface (pure-Python Tobler) from "
@@ -714,6 +716,8 @@ class LaGrass(QObject):
         myOutBand.WriteArray(theMask)
         myOutBand.FlushCache()
         myOutDs.FlushCache()
+        myOutBand = None
+        myOutDs = None
 
     # ------------------------------------------------------------------
     # Internals
