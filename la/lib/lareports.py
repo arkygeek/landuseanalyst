@@ -369,6 +369,12 @@ def _scenarioHeader(model: "LaModel") -> str:
         f'<td><b>Calculation Method</b></td><td align="right">{myMethod}</td>'
         f'<td><b>Dairy</b></td><td align="right">{myDairy}</td>'
         f"</tr>"
+        f'<tr>'
+        f'<td><b>Fallow Grazing Used</b></td>'
+        f'<td align="right">{_fmtNum(_safeAttr(model, "mFallowMCalAllocated", 0.0))} MCal</td>'
+        f'<td><b>Fallow Grazing Available</b></td>'
+        f'<td align="right">{_fmtNum(_safeAttr(model, "mFallowMCalPool", 0.0))} MCal</td>'
+        f"</tr>"
     )
     myHtml += "</table>"
     return myHtml

@@ -151,6 +151,13 @@ class LaModel(QObject, LaSerialisable, LaGuid):
         self.mAnimalHerdMap: Dict[str, Dict[str, float]] = {}
         self.mAreaTargetsCropsMap: Dict[str, float] = {}
         self.mAreaTargetsAnimalsMap: Dict[str, float] = {}
+        # Sown / rested split of the crop targets and the fallow-grazing ledger
+        # (populated by doCalcsAnimalsFirstDairySeparate).
+        self.mAreaTargetsCropsSownMap: Dict[str, float] = {}
+        self.mAreaTargetsCropsFallowMap: Dict[str, float] = {}
+        self.mFallowMCalPool = 0.0
+        self.mFallowMCalAllocated = 0.0
+        self.mFallowMCalResidual = 0.0
 
         # Diet calculation properties
         self.mAnimalsMap: dict[str, str] = {} # Corresponds to mAnimalsMap in C++

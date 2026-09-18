@@ -5,7 +5,7 @@ from qgis.PyQt.QtXml import QDomDocument
 from la.lib.laserialisable import LaSerialisable
 from la.lib.laguid import LaGuid
 from la.lib.lafoodsource import LaFoodSource
-from la.lib.la import Priority, AreaUnits, EnergyType
+from la.lib.la import Priority, AreaUnits, EnergyType, DEFAULT_GRAZING_SLOPE_MAX_DEGREES
 from la.resources_rc import *
 
 class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
@@ -21,6 +21,9 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
     _foodSourceMapChanged = pyqtSignal(dict)
     _fallowUsageChanged = pyqtSignal(object)
     _rasterNameChanged = pyqtSignal(str)
+    _applySlopeLimitChanged = pyqtSignal(bool)
+    _slopeMinDegreesChanged = pyqtSignal(float)
+    _slopeMaxDegreesChanged = pyqtSignal(float)
     _areaUnitsChanged = pyqtSignal(object)  # Added signal for area units
     _energyTypeChanged = pyqtSignal(object)  # Added signal for energy type
     _specificLandEnergyTypeChanged = pyqtSignal(object) # Added signal for specific land energy type
@@ -49,6 +52,9 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self.mFoodSourceMap: Dict[str, LaFoodSource] = {}
             self.mFallowUsage = Priority.Nope
             self.mRasterName = ""
+            self.mApplySlopeLimit = True
+            self.mSlopeMinDegrees = 0.0
+            self.mSlopeMaxDegrees = DEFAULT_GRAZING_SLOPE_MAX_DEGREES
             self.mAreaUnits = AreaUnits.Dunum
             self.mEnergyType = EnergyType.KCalories
             self.mSpecificLandEnergyType = EnergyType.KCalories # Added default
@@ -68,6 +74,9 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self.mFoodSourceMap = dict(getattr(theAnimalParameter, 'mFoodSourceMap', {}))
             self.mFallowUsage = getattr(theAnimalParameter, 'mFallowUsage', Priority.Nope) # Use getter or default
             self.mRasterName = str(getattr(theAnimalParameter, 'mRasterName', "")) # Corrected attribute name
+            self.mApplySlopeLimit = bool(getattr(theAnimalParameter, 'mApplySlopeLimit', True))
+            self.mSlopeMinDegrees = float(getattr(theAnimalParameter, 'mSlopeMinDegrees', 0.0))
+            self.mSlopeMaxDegrees = float(getattr(theAnimalParameter, 'mSlopeMaxDegrees', DEFAULT_GRAZING_SLOPE_MAX_DEGREES))
             self.mAreaUnits = getattr(theAnimalParameter, 'mAreaUnits', AreaUnits.Dunum) # Use getter or default
             self.mEnergyType = getattr(theAnimalParameter, 'mEnergyType', EnergyType.KCalories) # Use getter or default
             self.mSpecificLandEnergyType = getattr(theAnimalParameter, 'mSpecificLandEnergyType', EnergyType.KCalories) # Use getter or default
@@ -82,7 +91,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             '_mGuid', 'mName', 'mDescription', 'mAnimalGuid', 'mPercentTameMeat',
             'mUseCommonGrazingLand', 'mUseSpecificGrazingLand', 'mFodderUse',
             'mFoodSourceMap', 'mFallowUsage', 'mRasterName', 'mAreaUnits',
-            'mEnergyType', 'mSpecificLandEnergyType', 'mValueCommonGrazingLand',
+            'mEnergyType', 'mSpecificLandEnergyType', 'mValueCommonGrazingLand', 'mApplySlopeLimit', 'mSlopeMinDegrees', 'mSlopeMaxDegrees',
             'mValueSpecificGrazingLand'
         ]
         return all(getattr(self, attr) == getattr(other, attr) for attr in myAttributes)
@@ -490,7 +499,56 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self.mFallowUsage = Priority.Nope
 
         self.mRasterName = LaUtils.xmlDecode(myTopElement.firstChildElement("rasterName").text())
+
+        # Preferred land (slope band). Absent in profiles written before the
+        # per-item slope limits existed: fall back to the thesis defaults.
+        myApplyText = myTopElement.firstChildElement("applySlopeLimit").text().strip()
+        self.mApplySlopeLimit = (myApplyText != "0") if myApplyText else True
+        try:
+            self.mSlopeMinDegrees = float(myTopElement.firstChildElement("slopeMinDegrees").text() or 0.0)
+        except ValueError:
+            self.mSlopeMinDegrees = 0.0
+        try:
+            self.mSlopeMaxDegrees = float(myTopElement.firstChildElement("slopeMaxDegrees").text() or DEFAULT_GRAZING_SLOPE_MAX_DEGREES)
+        except ValueError:
+            self.mSlopeMaxDegrees = DEFAULT_GRAZING_SLOPE_MAX_DEGREES
         return True
+
+    @pyqtProperty(bool, notify=_applySlopeLimitChanged)
+    def applySlopeLimit(self) -> bool:  # type: ignore
+        """Whether the slope band below restricts this item's suitable land."""
+        return bool(self.mApplySlopeLimit)
+
+    @applySlopeLimit.setter
+    def applySlopeLimit(self, theValue: bool) -> None:
+        myValue = bool(theValue)
+        if self.mApplySlopeLimit != myValue:
+            self.mApplySlopeLimit = myValue
+            self._applySlopeLimitChanged.emit(myValue)
+
+    @pyqtProperty(float, notify=_slopeMinDegreesChanged)
+    def slopeMinDegrees(self) -> float:  # type: ignore
+        """Gentlest slope (degrees) this item tolerates; 0 = no lower bound."""
+        return float(self.mSlopeMinDegrees)
+
+    @slopeMinDegrees.setter
+    def slopeMinDegrees(self, theValue: float) -> None:
+        myValue = max(0.0, float(theValue))
+        if self.mSlopeMinDegrees != myValue:
+            self.mSlopeMinDegrees = myValue
+            self._slopeMinDegreesChanged.emit(myValue)
+
+    @pyqtProperty(float, notify=_slopeMaxDegreesChanged)
+    def slopeMaxDegrees(self) -> float:  # type: ignore
+        """Steepest slope (degrees) this item tolerates (thesis: 9° crops, 15° grazing)."""
+        return float(self.mSlopeMaxDegrees)
+
+    @slopeMaxDegrees.setter
+    def slopeMaxDegrees(self, theValue: float) -> None:
+        myValue = min(90.0, max(0.0, float(theValue)))
+        if self.mSlopeMaxDegrees != myValue:
+            self.mSlopeMaxDegrees = myValue
+            self._slopeMaxDegreesChanged.emit(myValue)
 
     def toXml(self) -> str:
         from la.lib.lautils import LaUtils
@@ -533,6 +591,9 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
         myString += f"  <specificLandEnergyType>{self.mSpecificLandEnergyType.name}</specificLandEnergyType>\n"
         myString += f"  <foodValueCommonGrazingLand>{self.valueCommonGrazingLand}</foodValueCommonGrazingLand>\n"
         myString += f"  <foodValueOfSpecificGrazingLand>{self.valueSpecificGrazingLand}</foodValueOfSpecificGrazingLand>\n"
+        myString += f"  <applySlopeLimit>{1 if self.mApplySlopeLimit else 0}</applySlopeLimit>\n"
+        myString += f"  <slopeMinDegrees>{self.mSlopeMinDegrees}</slopeMinDegrees>\n"
+        myString += f"  <slopeMaxDegrees>{self.mSlopeMaxDegrees}</slopeMaxDegrees>\n"
         myString += "</animalParameter>\n"
         return myString
 

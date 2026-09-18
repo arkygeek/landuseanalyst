@@ -9,7 +9,7 @@ from la.resources_rc import *
 
 from la.lib.laserialisable import LaSerialisable
 from la.lib.laguid import LaGuid
-from la.lib.la import AreaUnits as LaAreaUnits
+from la.lib.la import AreaUnits as LaAreaUnits, DEFAULT_CROP_SLOPE_MAX_DEGREES
 from la.lib.la import EnergyType as LaEnergyType
 
 class LaCropParameter(QObject, LaSerialisable, LaGuid):
@@ -62,6 +62,9 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
     _useCommonLandChanged = pyqtSignal(bool)
     _useSpecificLandChanged = pyqtSignal(bool)
     _rasterNameChanged = pyqtSignal(str)
+    _applySlopeLimitChanged = pyqtSignal(bool)
+    _slopeMinDegreesChanged = pyqtSignal(float)
+    _slopeMaxDegreesChanged = pyqtSignal(float)
 
     def __eq__(self, other):
         """Two crop parameter sets are equal when GUID and every field match."""
@@ -70,7 +73,7 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
         myAttributes = [
             '_mGuid', 'mName', 'mDescription', 'mCropGuid', 'mPercentTameCrop', 'mSpoilage',
             'mReseed', 'mCropRotation', 'mFallowRatio', 'mFallowValue', 'mFallowEnergyType',
-            'mAreaUnits', 'mUseCommonLand', 'mUseSpecificLand', 'mRasterName',
+            'mAreaUnits', 'mUseCommonLand', 'mUseSpecificLand', 'mRasterName', 'mApplySlopeLimit', 'mSlopeMinDegrees', 'mSlopeMaxDegrees',
         ]
         return all(
             getattr(self, myAttr, None) == getattr(other, myAttr, None) for myAttr in myAttributes
@@ -105,6 +108,9 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
             self.mUseCommonLand = False
             self.mUseSpecificLand = False
             self.mRasterName = ""
+            self.mApplySlopeLimit = True
+            self.mSlopeMinDegrees = 0.0
+            self.mSlopeMaxDegrees = DEFAULT_CROP_SLOPE_MAX_DEGREES
         else:  # If a crop parameter IS provided, copy the values from the existing parameter
             LaGuid.setGuid(self, theCropParameter.guid)  # writes self._mGuid
             self.mName = theCropParameter.name
@@ -120,6 +126,9 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
             self.mUseCommonLand = theCropParameter.useCommonLand
             self.mUseSpecificLand = theCropParameter.useSpecificLand
             self.mRasterName = theCropParameter.rasterName
+            self.mApplySlopeLimit = bool(getattr(theCropParameter, 'mApplySlopeLimit', True))
+            self.mSlopeMinDegrees = float(getattr(theCropParameter, 'mSlopeMinDegrees', 0.0))
+            self.mSlopeMaxDegrees = float(getattr(theCropParameter, 'mSlopeMaxDegrees', DEFAULT_CROP_SLOPE_MAX_DEGREES))
 
     # Remove the conflicting property accessor methods
     # @property
@@ -355,6 +364,42 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
             self.mRasterName = theValue
             self._rasterNameChanged.emit(theValue)
 
+    @pyqtProperty(bool, notify=_applySlopeLimitChanged)
+    def applySlopeLimit(self) -> bool:  # type: ignore
+        """Whether the slope band below restricts this item's suitable land."""
+        return bool(self.mApplySlopeLimit)
+
+    @applySlopeLimit.setter
+    def applySlopeLimit(self, theValue: bool) -> None:
+        myValue = bool(theValue)
+        if self.mApplySlopeLimit != myValue:
+            self.mApplySlopeLimit = myValue
+            self._applySlopeLimitChanged.emit(myValue)
+
+    @pyqtProperty(float, notify=_slopeMinDegreesChanged)
+    def slopeMinDegrees(self) -> float:  # type: ignore
+        """Gentlest slope (degrees) this item tolerates; 0 = no lower bound."""
+        return float(self.mSlopeMinDegrees)
+
+    @slopeMinDegrees.setter
+    def slopeMinDegrees(self, theValue: float) -> None:
+        myValue = max(0.0, float(theValue))
+        if self.mSlopeMinDegrees != myValue:
+            self.mSlopeMinDegrees = myValue
+            self._slopeMinDegreesChanged.emit(myValue)
+
+    @pyqtProperty(float, notify=_slopeMaxDegreesChanged)
+    def slopeMaxDegrees(self) -> float:  # type: ignore
+        """Steepest slope (degrees) this item tolerates (thesis: 9° crops, 15° grazing)."""
+        return float(self.mSlopeMaxDegrees)
+
+    @slopeMaxDegrees.setter
+    def slopeMaxDegrees(self, theValue: float) -> None:
+        myValue = min(90.0, max(0.0, float(theValue)))
+        if self.mSlopeMaxDegrees != myValue:
+            self.mSlopeMaxDegrees = myValue
+            self._slopeMaxDegreesChanged.emit(myValue)
+
     def toXml(self) -> str:
         """
         Convert this crop parameter to XML.
@@ -379,6 +424,9 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
         myString += f"  <useCommonLand>{1 if self.useCommonLand else 0}</useCommonLand>\n"
         myString += f"  <useSpecificLand>{1 if self.useSpecificLand else 0}</useSpecificLand>\n"
         myString += f"  <rasterName>{self.rasterName}</rasterName>\n"
+        myString += f"  <applySlopeLimit>{1 if self.mApplySlopeLimit else 0}</applySlopeLimit>\n"
+        myString += f"  <slopeMinDegrees>{self.mSlopeMinDegrees}</slopeMinDegrees>\n"
+        myString += f"  <slopeMaxDegrees>{self.mSlopeMaxDegrees}</slopeMaxDegrees>\n"
         myString += "</cropParameter>\n"
         return myString
 
@@ -439,6 +487,19 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
             self.mUseCommonLand = myTopElement.firstChildElement("useCommonLand").text()
             self.mUseSpecificLand = myTopElement.firstChildElement("useSpecificLand").text()
             self.mRasterName = LaUtils.xmlDecode(myTopElement.firstChildElement("rasterName").text())
+
+            # Preferred land (slope band). Absent in profiles written before the
+            # per-item slope limits existed: fall back to the thesis defaults.
+            myApplyText = myTopElement.firstChildElement("applySlopeLimit").text().strip()
+            self.mApplySlopeLimit = (myApplyText != "0") if myApplyText else True
+            try:
+                self.mSlopeMinDegrees = float(myTopElement.firstChildElement("slopeMinDegrees").text() or 0.0)
+            except ValueError:
+                self.mSlopeMinDegrees = 0.0
+            try:
+                self.mSlopeMaxDegrees = float(myTopElement.firstChildElement("slopeMaxDegrees").text() or DEFAULT_CROP_SLOPE_MAX_DEGREES)
+            except ValueError:
+                self.mSlopeMaxDegrees = DEFAULT_CROP_SLOPE_MAX_DEGREES
 
             return True
         except Exception as e:

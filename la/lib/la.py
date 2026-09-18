@@ -34,6 +34,13 @@ HerdSize: Tuple[float, float] = (0.0, 0.0)
 LaReportMap: Dict[str, Tuple[str, float]] = {}
 
 # Equivalent to enum types
+# Preferred-land defaults (degrees). The thesis capped cropland at 9° and
+# grazing at 15°; the web port applies these scenario-wide, the plugin stores
+# them per crop / animal parameter profile so olives can differ from wheat.
+DEFAULT_CROP_SLOPE_MAX_DEGREES = 9.0
+DEFAULT_GRAZING_SLOPE_MAX_DEGREES = 15.0
+
+
 class Priority(Enum):
     """
     A class representing the priority levels.

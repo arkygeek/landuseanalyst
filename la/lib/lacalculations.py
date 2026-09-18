@@ -27,6 +27,11 @@ def doCalcsAnimalsFirstDairySeparate(theModel: 'LaModel') -> LaDietLabels:
     theModel.mCalcsAnimalsMap.clear()
     theModel.mValueMap.clear()
     theModel.mAnimalCalcReport.clear()
+    theModel.mAreaTargetsCropsSownMap = {}
+    theModel.mAreaTargetsCropsFallowMap = {}
+    theModel.mFallowMCalPool = 0.0
+    theModel.mFallowMCalAllocated = 0.0
+    theModel.mFallowMCalResidual = 0.0
 
     myCropCalcsReportMap: Dict[str, Tuple[str, float]] = {}
     myAnimalCalcsReportMap: Dict[str, Tuple[str, float]] = {}
@@ -330,6 +335,11 @@ def doCalcsAnimalsFirstDairySeparate(theModel: 'LaModel') -> LaDietLabels:
         myFallowArea = myRatio * myCropAreaTarget1
         myFallowMCals = myFallowArea * myFallowValue
         myMCalsFromFallowCounter += myFallowMCals
+        # Per-crop sown / rested split (the web port's CropResult.sownAreaHa /
+        # fallowAreaHa) so the catchment step can search sown and fallow land
+        # separately and the report can show the rotation.
+        theModel.mAreaTargetsCropsSownMap[myCropGuid] = myCropAreaTarget1
+        theModel.mAreaTargetsCropsFallowMap[myCropGuid] = myFallowArea
         
         myCropReport = (
             f"MCals People = {myMCalsFromTheCrop}\n"
@@ -367,8 +377,11 @@ def doCalcsAnimalsFirstDairySeparate(theModel: 'LaModel') -> LaDietLabels:
         myCropProductionKgMap[myCropGuid] = myAdjustedTarget
         myCropCalorieKcalMap[myCropGuid] = myMCalsFromTheCrop * 1000.0
 
-    # 5. Fallow Allocation (C++ line 1356)
-    allocateFallowGrazingLand(theModel, myMCalsFromFallowCounter, myAnimalsMap)
+    # 5. Fallow Allocation (C++ line 1356) — and the ledger the report shows.
+    myFallowResidual = allocateFallowGrazingLand(theModel, myMCalsFromFallowCounter, myAnimalsMap)
+    theModel.mFallowMCalPool = myMCalsFromFallowCounter
+    theModel.mFallowMCalResidual = max(0.0, myFallowResidual)
+    theModel.mFallowMCalAllocated = max(0.0, myMCalsFromFallowCounter - theModel.mFallowMCalResidual)
 
     # 6. Final Animal Report Aggregation (C++ lines 1365-1398)
     # After allocateFallowGrazingLand, mValueMap[guid] holds the residual
@@ -444,10 +457,12 @@ def doCalcsAnimalsFirstDairySeparate(theModel: 'LaModel') -> LaDietLabels:
     
     return myDietLabels
 
-def allocateFallowGrazingLand(theModel: 'LaModel', theFallowMCalsAvailable: float, theAnimalMCalRequirementMap: Dict[str, float]) -> None:
+def allocateFallowGrazingLand(theModel: 'LaModel', theFallowMCalsAvailable: float, theAnimalMCalRequirementMap: Dict[str, float]) -> float:
     """
     Distributes available fallow land MCals to animals based on priority.
     Direct port of LaModel::allocateFallowGrazingLand() from lamodel.cpp (lines 388-447).
+
+    :return: MCal of fallow grazing left unallocated after the three priority passes.
     """
     myHighPriorityCount = 0.0
     myMediumPriorityCount = 0.0
@@ -474,17 +489,25 @@ def allocateFallowGrazingLand(theModel: 'LaModel', theFallowMCalsAvailable: floa
             myLowPriorityCount += 1
             myLowPriorityValue += myMCalReq
 
+    # Note on the "priority count bug": lamodel.cpp lines 431 and 439 pass the
+    # HIGH group's animal count when allocating to the MEDIUM and LOW groups.
+    # It looks like a bug, but ``doTheFallowAllocation`` never reads its count
+    # argument (neither in C++ nor here — allocation is proportional to each
+    # animal's requirement), so the value passed has no effect on any result.
+    # Each group is given its own count below purely for readability.
+
     # Allocate HIGH (C++ line 423)
     if myTotalFallowValue > 0:
         myTotalFallowValue = doTheFallowAllocation(theModel, Priority.High, myTotalFallowValue, myHighPriorityValue, myHighPriorityCount)
-    
-    # Allocate MEDIUM (C++ line 431 - REPLICATING BUG: passes myHighPriorityCount)
+
+    # Allocate MEDIUM (C++ line 431)
     if myTotalFallowValue > 0:
-        myTotalFallowValue = doTheFallowAllocation(theModel, Priority.Medium, myTotalFallowValue, myMediumPriorityValue, myHighPriorityCount)
-        
-    # Allocate LOW (C++ line 439 - REPLICATING BUG: passes myHighPriorityCount)
+        myTotalFallowValue = doTheFallowAllocation(theModel, Priority.Medium, myTotalFallowValue, myMediumPriorityValue, myMediumPriorityCount)
+
+    # Allocate LOW (C++ line 439)
     if myTotalFallowValue > 0:
-        myTotalFallowValue = doTheFallowAllocation(theModel, Priority.Low, myTotalFallowValue, myLowPriorityValue, myHighPriorityCount)
+        myTotalFallowValue = doTheFallowAllocation(theModel, Priority.Low, myTotalFallowValue, myLowPriorityValue, myLowPriorityCount)
+    return myTotalFallowValue
 
 # --- Additional Calculation Path Stubs ---
 
@@ -803,6 +826,10 @@ def doTheFallowAllocation(model: 'LaModel', thePriority: Priority, theAvailableF
     """
     Allocates fallow value to a priority group.
     Direct port of LaModel::doTheFallowAllocation() from lamodel.cpp (lines 448-498).
+
+    ``theCountInGroup`` is accepted for signature parity with the C++ but is
+    unused there as well: allocation is proportional to each animal's share
+    of ``theTotalNeededByGroup``.
     """
     if theTotalNeededByGroup <= 0: return theAvailableFallowValue
     
