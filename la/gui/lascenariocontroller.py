@@ -398,21 +398,18 @@ class LaScenarioController(QObject):
 
         if theInputs.method is DistanceMethod.PathDistance:
             return "Path Distance is not implemented yet. Choose Walking Time or Euclidean."
-        if theInputs.method is DistanceMethod.WalkingTime:
-            try:
-                import scipy  # noqa: F401
-                return None
-            except ImportError:
-                if LaGrassProcessLib.walkAlgorithmId() is not None:
-                    return None
-                return ("Walking-time cost surfaces need either scipy in the QGIS Python "
-                        "(python -m pip install scipy) or the GRASS Processing provider "
-                        "(grass:r.walk). Neither is available.")
-        if theInputs.method is DistanceMethod.Euclidean:
-            if LaGrassProcessLib.costAlgorithmId() is None:
-                return ("Euclidean cost surfaces currently need the GRASS Processing "
-                        "provider (grass:r.cost), which is not registered in this QGIS.")
-        return None
+        try:
+            import scipy  # noqa: F401
+            return None   # the pure-Python engine handles both methods (heap fallback ≤ 512² without scipy)
+        except ImportError:
+            pass
+        myGrassId = (LaGrassProcessLib.walkAlgorithmId() if theInputs.method is DistanceMethod.WalkingTime
+                     else LaGrassProcessLib.costAlgorithmId())
+        if myGrassId is not None:
+            return None
+        return ("Catchment cost surfaces need scipy in the QGIS Python (python -m pip install scipy) "
+                "for windows larger than 512×512 cells, or the GRASS Processing provider. Small "
+                "windows still run without either; larger ones will stop with an install message.")
 
     def launchCatchment(self) -> bool:
         """Submit the catchment task to the QGIS task manager. Returns True when submitted."""

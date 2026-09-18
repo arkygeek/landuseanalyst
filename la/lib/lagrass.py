@@ -17,6 +17,22 @@ from typing import List, Optional
 from qgis.PyQt.QtCore import QObject, pyqtSignal
 
 
+ENGINE_PURE = "pure"
+ENGINE_GRASS = "grass"
+
+
+class _Extent:
+    """Duck-typed ``QgsRectangle`` (xMinimum() …) for windows built without QGIS."""
+
+    def __init__(self, theXmin: float, theYmin: float, theXmax: float, theYmax: float) -> None:
+        self._mXmin, self._mYmin, self._mXmax, self._mYmax = theXmin, theYmin, theXmax, theYmax
+
+    def xMinimum(self) -> float: return self._mXmin
+    def xMaximum(self) -> float: return self._mXmax
+    def yMinimum(self) -> float: return self._mYmin
+    def yMaximum(self) -> float: return self._mYmax
+
+
 class LaGrassError(RuntimeError):
     """Raised when a GRASS-via-QGIS-Processing call fails or returns no output."""
 
@@ -39,21 +55,29 @@ class LaGrass(QObject):
 
     message = pyqtSignal(str)
 
-    def __init__(self, theDemLayer, theScratchDir: str) -> None:
+    def __init__(self, theDemLayer, theScratchDir: str, theEngine: str = ENGINE_PURE) -> None:
         """
         :param theDemLayer: ``QgsRasterLayer`` for the DEM. Drives region.
         :type theDemLayer: qgis.core.QgsRasterLayer
         :param theScratchDir: Directory for temp + output rasters. Created
             if it doesn't exist.
         :type theScratchDir: str
+        :param theEngine: ``"pure"`` (default) runs the numpy/scipy engine in
+            :mod:`la.lib.laraster` even when GRASS is registered; ``"grass"``
+            prefers the GRASS Processing algorithms and falls back to pure.
         """
         super().__init__()
         os.makedirs(theScratchDir, exist_ok=True)
         self.mScratchDir = theScratchDir
+        self.mEngine = theEngine if theEngine in (ENGINE_PURE, ENGINE_GRASS) else ENGINE_PURE
         self.mDemPath = theDemLayer.source()
+        self.mSourceDemPath = self.mDemPath
         self.mRegionExtent = theDemLayer.extent()
         self.mCellSize = float(theDemLayer.rasterUnitsPerPixelX())
         self._mTempRasters: List[str] = []
+        self._mSlopeRaster: Optional[str] = None
+        self._mSlopeRasterFor: Optional[str] = None
+        self._mWindowShape: Optional[tuple] = None
         # Algorithm-id probe: QGIS 3.x usually exposes "grass7:..." but
         # may also expose "grass:..." in some bundles. Cache whichever works.
         self._mWalkId: Optional[str]    = self._probeAlg(("grass7:r.walk",       "grass:r.walk"))
@@ -80,7 +104,7 @@ class LaGrass(QObject):
         :return: Absolute path of the output cost-surface GeoTIFF.
         :rtype: str
         """
-        if self._mWalkId is None:
+        if self._usePure(self._mWalkId):
             self.message.emit(
                 "grass:r.walk not registered; using pure-Python Tobler "
                 "walking-cost fallback."
@@ -119,11 +143,8 @@ class LaGrass(QObject):
         :rtype: str
         :raises LaGrassError: If ``grass:r.cost`` isn't available or fails.
         """
-        if self._mCostId is None:
-            raise LaGrassError(
-                "grass:r.cost is not available. Enable the GRASS Processing "
-                "provider in QGIS, then restart the plugin."
-            )
+        if self._usePure(self._mCostId):
+            return self._makeEuclideanCostPure(theX, theY)
         myFriction = self._uniformFrictionFromDem()
         myOutPath = self._tempPath("euclideanCost")
         myParams = {
@@ -152,7 +173,7 @@ class LaGrass(QObject):
         :return: Absolute path of a 1/null binary mask GeoTIFF.
         :rtype: str
         """
-        if self._mMapcalcId is None:
+        if self._usePure(self._mMapcalcId):
             return self._reclassPure(theCostRaster, theThreshold)
         myOutPath = self._tempPath(f"reclass_{int(theThreshold)}")
         myParams = self._mapcalcParams(
@@ -176,7 +197,7 @@ class LaGrass(QObject):
         :return: Absolute path of a 1/null mask GeoTIFF.
         :rtype: str
         """
-        if self._mMapcalcId is None:
+        if self._usePure(self._mMapcalcId):
             return self._createMaskPure(theReclassed, theSuitabilityRaster)
         myOutPath = self._tempPath("mask")
         myParams = self._mapcalcParams(
@@ -209,7 +230,7 @@ class LaGrass(QObject):
         :return: Absolute path of a 1/null leftover mask GeoTIFF.
         :rtype: str
         """
-        if self._mMapcalcId is None:
+        if self._usePure(self._mMapcalcId):
             return self._createInverseMaskPure(
                 theCostRaster, theThreshold, theBaseSuitability,
             )
@@ -233,7 +254,7 @@ class LaGrass(QObject):
         :return: Absolute path of a merged 1/null mask GeoTIFF.
         :rtype: str
         """
-        if self._mMapcalcId is None:
+        if self._usePure(self._mMapcalcId):
             return self._mergeMapsPure(theA, theB)
         myOutPath = self._tempPath("merge")
         myParams = self._mapcalcParams(
@@ -358,6 +379,138 @@ class LaGrass(QObject):
     # - Co-registration: every output GeoTIFF re-uses the reference
     #   raster's geotransform + projection so the cost surface, masks,
     #   suitability rasters, and outputs all line up cell-for-cell.
+
+    def _usePure(self, theAlgId: Optional[str]) -> bool:
+        """True when the pure-Python engine should handle a step (default, or GRASS alg missing)."""
+        return self.mEngine != ENGINE_GRASS or theAlgId is None
+
+    def _makeEuclideanCostPure(self, theX: float, theY: float) -> str:
+        """Pure-Python Euclidean (octagonal metric) cost surface, in metres."""
+        from la.lib import laraster
+        try:
+            myOutPath = laraster.makeEuclideanCost(self.mDemPath, theX, theY, self.mScratchDir)
+        except (FileNotFoundError, ValueError) as myError:
+            raise LaGrassError(str(myError)) from myError
+        self._mTempRasters.append(myOutPath)
+        self.message.emit(f"Built Euclidean-cost surface (pure-Python) from ({theX:.1f}, {theY:.1f}).")
+        return myOutPath
+
+    # ------------------------------------------------------------------
+    # Windowing, alignment, slope (pure-Python only)
+    # ------------------------------------------------------------------
+    def windowAroundSeed(self, theX: float, theY: float, thePixels: int) -> tuple:
+        """
+        Restrict the working region to a ``thePixels``-square window of the
+        source DEM centred on the seed (clipped to the DEM). Every later cost,
+        slope and mask raster is built on that window.
+
+        :return: ``(columns, rows)`` of the window actually cut.
+        :raises LaGrassError: If the DEM cannot be read or the seed is outside it.
+        """
+        from osgeo import gdal
+        myDataset = gdal.Open(self.mSourceDemPath)
+        if myDataset is None:
+            raise LaGrassError(f"Could not open DEM {self.mSourceDemPath}")
+        myGeoTrans = myDataset.GetGeoTransform()
+        myCols, myRows = myDataset.RasterXSize, myDataset.RasterYSize
+        myCol = int((theX - myGeoTrans[0]) / myGeoTrans[1])
+        myRow = int((theY - myGeoTrans[3]) / myGeoTrans[5])
+        if not (0 <= myCol < myCols and 0 <= myRow < myRows):
+            raise LaGrassError(f"Seed ({theX}, {theY}) lies outside the DEM.")
+        myHalf = max(1, int(thePixels)) // 2
+        myCol0 = max(0, myCol - myHalf)
+        myRow0 = max(0, myRow - myHalf)
+        myCol1 = min(myCols, myCol - myHalf + int(thePixels))
+        myRow1 = min(myRows, myRow - myHalf + int(thePixels))
+        myWidth, myHeight = myCol1 - myCol0, myRow1 - myRow0
+        if myWidth >= myCols and myHeight >= myRows:
+            myOutPath = self.mSourceDemPath  # window covers the whole DEM: nothing to cut
+        else:
+            myOutPath = self._tempPath(f"demWindow_{int(thePixels)}")
+            gdal.Translate(myOutPath, myDataset, srcWin=[myCol0, myRow0, myWidth, myHeight],
+                           format="GTiff", creationOptions=["COMPRESS=LZW", "TILED=YES"])
+            self._mTempRasters.append(myOutPath)
+        myDataset = None
+        self.mDemPath = myOutPath
+        myXmin = myGeoTrans[0] + myCol0 * myGeoTrans[1]
+        myYmax = myGeoTrans[3] + myRow0 * myGeoTrans[5]
+        self.mRegionExtent = _Extent(myXmin, myYmax + myHeight * myGeoTrans[5], myXmin + myWidth * myGeoTrans[1], myYmax)
+        self.mCellSize = abs(myGeoTrans[1])
+        self._mWindowShape = (myWidth, myHeight)
+        self._mSlopeRaster = None
+        self.message.emit(f"Working window: {myWidth} × {myHeight} cells around the seed.")
+        return myWidth, myHeight
+
+    def resetWindow(self) -> None:
+        """Go back to the full source DEM."""
+        self.mDemPath = self.mSourceDemPath
+        self._mSlopeRaster = None
+        self._mWindowShape = None
+
+    def alignRaster(self, thePath: str) -> str:
+        """
+        Warp a suitability raster onto the current DEM grid (nearest neighbour, uint8).
+
+        Handles suitability layers with a different extent, resolution or CRS
+        than the DEM — the web app's "auto-align suitability to DEM".
+        """
+        from osgeo import gdal
+        myDem = gdal.Open(self.mDemPath)
+        if myDem is None:
+            raise LaGrassError(f"Could not open DEM {self.mDemPath}")
+        myGeoTrans = myDem.GetGeoTransform()
+        myCols, myRows = myDem.RasterXSize, myDem.RasterYSize
+        myProjection = myDem.GetProjection()
+        myDem = None
+        mySource = gdal.Open(thePath)
+        if mySource is None:
+            raise LaGrassError(f"Could not open suitability raster {thePath}")
+        mySourceProjection = mySource.GetProjection()
+        mySource = None
+        myXmin = myGeoTrans[0]
+        myYmax = myGeoTrans[3]
+        myBounds = (myXmin, myYmax + myRows * myGeoTrans[5], myXmin + myCols * myGeoTrans[1], myYmax)
+        myOutPath = self._tempPath("aligned")
+        myOptions = dict(format="GTiff", outputBounds=myBounds, width=myCols, height=myRows,
+                         resampleAlg="near", outputType=gdal.GDT_Byte, dstNodata=0,
+                         creationOptions=["COMPRESS=LZW", "TILED=YES"])
+        if myProjection and mySourceProjection and myProjection != mySourceProjection:
+            myOptions["dstSRS"] = myProjection
+        myResult = gdal.Warp(myOutPath, thePath, **myOptions)
+        if myResult is None:
+            raise LaGrassError(f"Could not align {thePath} to the DEM grid.")
+        myResult = None
+        self._mTempRasters.append(myOutPath)
+        return myOutPath
+
+    def slopeFromDem(self) -> str:
+        """Slope raster (degrees) of the current DEM window, computed once per window."""
+        from la.lib import laraster
+        if self._mSlopeRaster is None or self._mSlopeRasterFor != self.mDemPath:
+            self._mSlopeRaster = self._registerTemp(laraster.slopeFromDem, self.mDemPath)
+            self._mSlopeRasterFor = self.mDemPath
+        return self._mSlopeRaster
+
+    def slopeBandMask(self, theMinDegrees: float, theMaxDegrees: float) -> str:
+        """uint8 mask of cells whose slope lies within ``[min, max]`` degrees."""
+        import numpy as np
+        from la.lib import laraster
+        mySlope, myGeoTrans, myProjection = laraster._readBand(self.slopeFromDem())
+        myMask = (np.isfinite(mySlope) & (mySlope >= float(theMinDegrees)) & (mySlope <= float(theMaxDegrees)))
+        myOutPath = self._tempPath(f"slopeBand_{int(theMinDegrees)}_{int(theMaxDegrees)}")
+        laraster._writeGeoTiff(myOutPath, myMask.astype(np.uint8), myGeoTrans, myProjection, np.uint8, 0)
+        self._mTempRasters.append(myOutPath)
+        return myOutPath
+
+    def subtractMasks(self, theOuterMask: str, theInnerMask: str) -> str:
+        """Cells set in ``theOuterMask`` but not in ``theInnerMask`` (fallow = total − sown)."""
+        from la.lib import laraster
+        return self._registerTemp(laraster.subtractMasks, theOuterMask, theInnerMask)
+
+    @staticmethod
+    def maskTouchesBorder(theMaskPath: Optional[str]) -> bool:
+        from la.lib import laraster
+        return laraster.maskTouchesBorder(theMaskPath)
 
     def _registerTemp(self, theCall, *theArgs) -> str:
         """Run a :mod:`laraster` op and register its output as a temp raster.

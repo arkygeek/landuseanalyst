@@ -179,13 +179,15 @@ class LaSettingsDock(QgsDockWidget):
             myLayer = theCombo.currentLayer()
             return myLayer.source() if myLayer is not None else ""
 
-        return {
+        myBlock = {
             "catchmentEnabled": bool(myPanel.isChecked()),
             "demSource": _source(myPanel.cboDem),
             "commonCropSource": _source(myPanel.cboCommonCrop),
             "commonGrazingSource": _source(myPanel.cboCommonGrazing),
             "distanceMethod": myPanel.method().name,
         }
+        myBlock.update(myPanel.optionsBlock())
+        return myBlock
 
     def applyPluginBlock(self, theBlock: dict) -> None:
         """Restore layer choices by matching loaded layers' source paths."""
@@ -205,6 +207,7 @@ class LaSettingsDock(QgsDockWidget):
             myPanel.radioEuclidean.setChecked(True)
         else:
             myPanel.radioWalkingTime.setChecked(True)
+        myPanel.applyOptionsBlock(theBlock)
 
     def _notify(self, theText: str, theLevel) -> None:
         if self.mIface is not None:

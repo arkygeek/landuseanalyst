@@ -31,6 +31,7 @@ _QML_MASK_STYLE = os.path.join(
 
 # Mask fills: crop land vs grazing land.
 _CROP_COLOUR    = QColor(46, 139, 87, 170)    # sea green
+_FALLOW_COLOUR  = QColor(154, 205, 50, 150)   # yellow-green: rested cropland
 _GRAZING_COLOUR = QColor(218, 165, 32, 170)   # goldenrod
 
 # Walking-cost ramp (seconds): near → far. Warm tans keep the DEM legible.
@@ -57,17 +58,17 @@ class LaLayerStyles:
     """Static helpers that apply the plugin's renderers to QGIS layers."""
 
     @staticmethod
-    def applyCatchmentMaskStyle(theLayer: QgsRasterLayer, theIsCrop: bool = True) -> None:
+    def applyCatchmentMaskStyle(theLayer: QgsRasterLayer, theIsCrop: bool = True, theCategory: str = "") -> None:
         """
         Style a ``{0,1}`` catchment mask: value 1 filled, 0 transparent.
 
-        Uses ``la/resources/styles/catchment_mask.qml`` when present, then
-        recolours class 1 for crop vs grazing land.
-
         :param theLayer: Loaded mask raster layer.
         :param theIsCrop: True for crop land (green), False for grazing (amber).
+        :param theCategory: ``"fallow"`` picks the lighter rested-cropland colour.
         """
         myColour = _CROP_COLOUR if theIsCrop else _GRAZING_COLOUR
+        if theCategory == "fallow":
+            myColour = _FALLOW_COLOUR
         myClasses = [
             QgsPalettedRasterRenderer.Class(1, myColour, "Catchment"),
         ]

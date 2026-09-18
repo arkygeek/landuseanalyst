@@ -108,7 +108,7 @@ class LaCatchmentTask(QgsTask):
                     "the current project."
                 )
                 return False
-            self._mGrass = LaGrass(myDem, self._mScratchDir)
+            self._mGrass = LaGrass(myDem, self._mScratchDir, theEngine=getattr(self.mInputs, "engine", "pure"))
             self._mCatchment = LaCatchment(
                 self._mGrass, thePrecisionPct=self._modelPrecision()
             )
@@ -179,6 +179,8 @@ class LaCatchmentTask(QgsTask):
         for myItem in self.mResults.items:
             if myItem.outputPath is None or myItem.status is SearchStatus.Skipped:
                 continue
+            if myItem.category == "total":
+                continue  # the sown + fallow pair already shows the total cropland
             myLayer = QgsRasterLayer(myItem.outputPath, self._layerName(myItem))
             if not myLayer.isValid():
                 self.grassMessage.emit(
@@ -187,9 +189,10 @@ class LaCatchmentTask(QgsTask):
                 )
                 continue
             myProject.addMapLayer(myLayer, False)
-            myIsCrop = myItem.itemName == "commonCrop" or myItem.itemName in myCropNames
+            myIsCrop = (myItem.kind == "crop" if myItem.kind
+                        else myItem.itemName == "commonCrop" or myItem.itemName in myCropNames)
             (myCropsGroup if myIsCrop else myAnimalsGroup).addLayer(myLayer)
-            LaLayerStyles.applyCatchmentMaskStyle(myLayer, theIsCrop=myIsCrop)
+            LaLayerStyles.applyCatchmentMaskStyle(myLayer, theIsCrop=myIsCrop, theCategory=myItem.category)
             myAdded += 1
         for mySubGroup in (myCropsGroup, myAnimalsGroup):
             if not mySubGroup.children():
@@ -280,8 +283,9 @@ class LaCatchmentTask(QgsTask):
         myStatusBadge = ""
         if theItem.status is SearchStatus.Failed:
             myStatusBadge = "  ⚠"
+        myCategory = f" {theItem.category}" if theItem.category else ""
         return (
-            f"{theItem.itemName} ({theItem.achievedHa:.1f} Ha"
+            f"{theItem.itemName}{myCategory} ({theItem.achievedHa:.1f} Ha"
             f" / target {theItem.targetHa:.1f}){myStatusBadge}"
         )
 

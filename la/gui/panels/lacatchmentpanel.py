@@ -4,10 +4,11 @@ from typing import Optional
 
 from qgis.PyQt.QtCore import pyqtSignal
 from qgis.PyQt.QtWidgets import (
-    QButtonGroup, QFormLayout, QHBoxLayout, QLabel, QRadioButton, QToolButton, QVBoxLayout, QWidget,
+    QButtonGroup, QCheckBox, QComboBox, QFormLayout, QHBoxLayout, QLabel, QRadioButton, QToolButton,
+    QVBoxLayout, QWidget,
 )
 from qgis.core import Qgis, QgsMapLayerProxyModel, QgsPointXY, QgsRasterLayer
-from qgis.gui import QgsCollapsibleGroupBox, QgsDoubleSpinBox, QgsMapLayerComboBox, QgsMessageBar
+from qgis.gui import QgsCollapsibleGroupBox, QgsDoubleSpinBox, QgsMapLayerComboBox, QgsMessageBar, QgsSpinBox
 
 from la.gui.lascenariocontroller import LaScenarioController
 from la.lib.lacatchment import DistanceMethod, LaCatchmentInputs
@@ -86,6 +87,45 @@ class LaCatchmentPanel(QgsCollapsibleGroupBox):
         myMethodRow.addStretch()
         myLayout.addLayout(myMethodRow)
 
+        self.cbApplySlopeLimits = QCheckBox("Apply each item's preferred slope band", self)
+        self.cbApplySlopeLimits.setObjectName("cbApplySlopeLimits")
+        self.cbApplySlopeLimits.setChecked(True)
+        self.cbApplySlopeLimits.setToolTip(
+            "Intersect every suitability raster with the slope band from the crop / animal parameter set "
+            "(thesis: 9° crops, 15° grazing). Untick to reproduce runs made before slope limits existed.")
+        myLayout.addWidget(self.cbApplySlopeLimits)
+        self.cbSlopeOnly = QCheckBox("Items without a suitability raster use the slope band alone", self)
+        self.cbSlopeOnly.setObjectName("cbSlopeOnlySuitability")
+        self.cbSlopeOnly.setToolTip("Lets a scenario run anywhere with only a DEM: suitable land = cells inside the slope band.")
+        myLayout.addWidget(self.cbSlopeOnly)
+        self.cbSplitFallow = QCheckBox("Split cropland into sown and fallow masks", self)
+        self.cbSplitFallow.setObjectName("cbSplitFallow")
+        self.cbSplitFallow.setChecked(True)
+        self.cbSplitFallow.setToolTip("Search the cultivated area and the total cropland separately; fallow = total − sown.")
+        myLayout.addWidget(self.cbSplitFallow)
+
+        myAdvancedRow = QHBoxLayout()
+        myAdvancedRow.addWidget(QLabel("Window", self))
+        self.sbWindowPixels = QgsSpinBox(self)
+        self.sbWindowPixels.setObjectName("sbWindowPixels")
+        self.sbWindowPixels.setRange(0, 1500)
+        self.sbWindowPixels.setSingleStep(50)
+        self.sbWindowPixels.setSpecialValueText("auto")
+        self.sbWindowPixels.setSuffix(" cells")
+        self.sbWindowPixels.setToolTip(
+            "Working window around the seed, in DEM cells. Auto = sized from the land targets and widened "
+            "when a catchment reaches the edge. Cap 1500 (≈630 MB of memory).")
+        myAdvancedRow.addWidget(self.sbWindowPixels)
+        myAdvancedRow.addWidget(QLabel("Engine", self))
+        self.cboEngine = QComboBox(self)
+        self.cboEngine.setObjectName("cboEngine")
+        self.cboEngine.addItem("Pure Python (scipy)", "pure")
+        self.cboEngine.addItem("GRASS r.walk / r.cost", "grass")
+        self.cboEngine.setToolTip("Pure Python matches the web version exactly and supports windows, slope bands and barriers. "
+                                  "GRASS is the legacy path; it falls back to pure Python for anything GRASS lacks.")
+        myAdvancedRow.addWidget(self.cboEngine, 1)
+        myLayout.addLayout(myAdvancedRow)
+
         self.cboDem.layerChanged.connect(self._onDemChanged)
         self.cboCommonCrop.layerChanged.connect(lambda _l: self.validate())
         self.cboCommonGrazing.layerChanged.connect(lambda _l: self.validate())
@@ -142,7 +182,35 @@ class LaCatchmentPanel(QgsCollapsibleGroupBox):
             commonCropLayerId=myCrop.id() if myCrop is not None else None,
             commonGrazingLayerId=myGrazing.id() if myGrazing is not None else None,
             method=self.method(),
+            windowPixels=self.sbWindowPixels.value() or None,
+            applySlopeLimits=self.cbApplySlopeLimits.isChecked(),
+            useSlopeOnlySuitability=self.cbSlopeOnly.isChecked(),
+            splitFallow=self.cbSplitFallow.isChecked(),
+            engine=self.cboEngine.currentData() or "pure",
         )
+
+    def optionsBlock(self) -> dict:
+        """Catchment options for the scenario file's plugin block."""
+        return {
+            "windowPixels": int(self.sbWindowPixels.value()),
+            "applySlopeLimits": self.cbApplySlopeLimits.isChecked(),
+            "useSlopeOnlySuitability": self.cbSlopeOnly.isChecked(),
+            "splitFallow": self.cbSplitFallow.isChecked(),
+            "engine": self.cboEngine.currentData() or "pure",
+        }
+
+    def applyOptionsBlock(self, theBlock: dict) -> None:
+        if "windowPixels" in theBlock:
+            self.sbWindowPixels.setValue(int(theBlock.get("windowPixels") or 0))
+        if "applySlopeLimits" in theBlock:
+            self.cbApplySlopeLimits.setChecked(bool(theBlock["applySlopeLimits"]))
+        if "useSlopeOnlySuitability" in theBlock:
+            self.cbSlopeOnly.setChecked(bool(theBlock["useSlopeOnlySuitability"]))
+        if "splitFallow" in theBlock:
+            self.cbSplitFallow.setChecked(bool(theBlock["splitFallow"]))
+        myIndex = self.cboEngine.findData(theBlock.get("engine", "pure"))
+        if myIndex >= 0:
+            self.cboEngine.setCurrentIndex(myIndex)
 
     def setSeed(self, theX: float, theY: float) -> None:
         """Set the seed (DEM CRS) from the map tool and push it to the controller."""
