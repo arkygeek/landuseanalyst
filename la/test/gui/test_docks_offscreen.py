@@ -70,3 +70,21 @@ def test_help_tab_lists_embedded_topics(workspace):
     assert myFirstGroup.childCount() > 0
     myResults.treeHelp.setCurrentItem(myFirstGroup.child(0))
     assert len(myResults.textHelp.toPlainText()) > 20
+
+
+def test_barrier_layer_can_be_created_and_exported(workspace, tmp_path, monkeypatch):
+    import os
+    from qgis.core import QgsProject
+
+    _, mySettings, _ = workspace
+    monkeypatch.setattr(os.path, "expanduser", lambda p: str(tmp_path) if p == "~" else p)
+    myPanel = mySettings.catchmentPanel
+    myLayer = myPanel.createBarrierLayer()
+    assert myLayer.isValid() and myLayer.isEditable()
+    assert {f.name() for f in myLayer.fields()} >= {"name", "barrier_type", "crossing_penalty"}
+    assert myPanel.barrierLayer() is myLayer
+    myLayer.commitChanges()
+    myPath = myPanel.exportBarriers()
+    assert myPath and myPath.endswith(".gpkg") and os.path.exists(myPath)
+    assert "barriersSource" in mySettings.pluginBlock()
+    QgsProject.instance().removeMapLayer(myLayer.id())

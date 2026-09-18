@@ -185,6 +185,7 @@ class LaSettingsDock(QgsDockWidget):
             "commonCropSource": _source(myPanel.cboCommonCrop),
             "commonGrazingSource": _source(myPanel.cboCommonGrazing),
             "distanceMethod": myPanel.method().name,
+            "barriersSource": _source(myPanel.cboBarriers),
         }
         myBlock.update(myPanel.optionsBlock())
         return myBlock
@@ -197,7 +198,8 @@ class LaSettingsDock(QgsDockWidget):
         myPanel.setChecked(bool(theBlock.get("catchmentEnabled", False)))
         myBySource = {myLayer.source(): myLayer for myLayer in QgsProject.instance().mapLayers().values()}
         for myKey, myCombo in (("demSource", myPanel.cboDem), ("commonCropSource", myPanel.cboCommonCrop),
-                               ("commonGrazingSource", myPanel.cboCommonGrazing)):
+                               ("commonGrazingSource", myPanel.cboCommonGrazing),
+                               ("barriersSource", myPanel.cboBarriers)):
             mySource = theBlock.get(myKey) or ""
             if mySource in myBySource:
                 myCombo.setLayer(myBySource[mySource])

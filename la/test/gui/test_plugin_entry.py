@@ -57,7 +57,7 @@ def test_plugin_lifecycle():
     myPlugin = LanduseAnalyst(myIface)
     myPlugin.initGui()
     assert len(myIface.toolbarActions) == 1
-    assert len(myIface.menuActions) == 2
+    assert len(myIface.menuActions) == 1
 
     myPlugin.openWorkspace()
     assert len(myIface.docks) == 2

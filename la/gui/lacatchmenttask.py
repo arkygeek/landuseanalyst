@@ -12,7 +12,7 @@ Signal flow::
     LaGrass        -- message  -->  LaCatchment.logged
     LaCatchment    -- logged   -->  LaCatchmentTask.grassMessage
     LaCatchment    -- progress -->  LaCatchmentTask.overallProgress + targetProgress
-    LaCatchmentTask.{overall,target}Progress + grassMessage -->  LaMainForm progress + log widgets
+    LaCatchmentTask.{overall,target}Progress + grassMessage -->  LaScenarioController -> settings dock footer
 """
 
 import os

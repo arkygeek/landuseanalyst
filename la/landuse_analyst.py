@@ -4,8 +4,7 @@ landuse_analyst.py — QGIS plugin entry point for Landuse Analyst.
 
 Registers a toolbar button / menu that opens the two-dock workspace
 (:class:`la.gui.lasettingsdock.LaSettingsDock` on the left,
-:class:`la.gui.laresultsdock.LaResultsDock` on the right), plus a menu entry
-for the deprecated single-window form.
+:class:`la.gui.laresultsdock.LaResultsDock` on the right).
 """
 
 import os
@@ -36,7 +35,6 @@ class LanduseAnalyst:
         self.mController = None
         self.mSettingsDock = None
         self.mResultsDock = None
-        self.mLegacyForm = None
         self._installTranslator()
 
     def _installTranslator(self) -> None:
@@ -66,11 +64,6 @@ class LanduseAnalyst:
         self.iface.addPluginToMenu(_MENU, self.actionOpen)
         self.actions.append(self.actionOpen)
 
-        self.actionLegacy = QAction(self.tr("Legacy form (deprecated)…"), self.iface.mainWindow())
-        self.actionLegacy.setStatusTip(self.tr("Open the previous single-window interface"))
-        self.actionLegacy.triggered.connect(self.openLegacyForm)
-        self.iface.addPluginToMenu(_MENU, self.actionLegacy)
-        self.actions.append(self.actionLegacy)
 
     def unload(self):
         """Removes the plugin menu items, icon and docks from the QGIS GUI."""
@@ -85,9 +78,6 @@ class LanduseAnalyst:
         self.mSettingsDock = None
         self.mResultsDock = None
         self.mController = None
-        if self.mLegacyForm is not None:
-            self.mLegacyForm.close()
-            self.mLegacyForm = None
 
     # ------------------------------------------------------------------
     # Workspace
@@ -107,16 +97,6 @@ class LanduseAnalyst:
         for myDock in (self.mSettingsDock, self.mResultsDock):
             myDock.setUserVisible(True)
             myDock.raise_()
-
-    def openLegacyForm(self):
-        """Show the previous single-window dialog (modeless, so QGIS stays usable)."""
-        if self.mLegacyForm is None:
-            from la.gui.lamainform import LaMainForm
-            self.mLegacyForm = LaMainForm(self.iface.mainWindow())
-            self.mLegacyForm.setWindowFlags(self.mLegacyForm.windowFlags() | Qt.Window)
-        self.mLegacyForm.show()
-        self.mLegacyForm.raise_()
-        self.mLegacyForm.activateWindow()
 
     def run(self):
         """Backwards-compatible alias for the toolbar action."""

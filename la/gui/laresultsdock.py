@@ -213,14 +213,44 @@ class LaResultsDock(QgsDockWidget):
                 self.catchmentTilesLayout.addWidget(myLabel, 0, 0, 1, 2)
             return
         self.lblCatchmentHeading.show()
-        for myIndex, myItem in enumerate(myResults.items):
+        myWindow = getattr(myResults, "windowShape", None)
+        myHeading = "<b>Catchment runs</b>"
+        if myWindow:
+            myHeading += f" <span style='color:palette(mid)'>· window {myWindow[0]} × {myWindow[1]} cells"
+            if getattr(myResults, "retried", False):
+                myHeading += ", widened once the first catchment reached the edge"
+            myHeading += "</span>"
+        myFeatures = getattr(myResults, "barrierFeatures", None)
+        if myFeatures is not None:
+            myCells = getattr(myResults, "barrierCells", 0) or 0
+            if myFeatures and myCells:
+                myHeading += (f"<br><span style='color:palette(mid)'>barriers: {myFeatures} feature(s) on "
+                              f"{myCells} cell(s)</span>")
+            elif myFeatures:
+                myHeading += (f"<br><span style='color:#a33a2a'>barriers: {myFeatures} feature(s) supplied but "
+                              f"none inside the window — water was NOT modelled (check the layer CRS)</span>")
+        self.lblCatchmentHeading.setText(myHeading)
+        myShown = [i for i in myResults.items if getattr(i, "category", "") != "total"]
+        for myIndex, myItem in enumerate(myShown):
             myStatus = {SearchStatus.Converged: "converged", SearchStatus.Failed: "did not converge",
                         SearchStatus.Skipped: "skipped"}.get(myItem.status, str(myItem.status))
-            mySub = f"target {myItem.targetHa:,.1f} Ha · {myStatus} · threshold {myItem.threshold:,.0f} s"
+            mySub = f"target {myItem.targetHa:,.1f} Ha · {myStatus} · threshold {myItem.threshold:,.0f}"
+            myIterations = getattr(myItem, "iterations", 0)
+            if myIterations:
+                mySub += f" · {myIterations} iterations"
+            myBand = getattr(myItem, "slopeBand", None)
+            if myBand:
+                mySub += f"\nslope {myBand[0]:.0f}–{myBand[1]:.0f}°"
+                myPct = getattr(myItem, "slopeEliminatedPct", None)
+                if myPct is not None:
+                    mySub += f" removed {myPct:.0f} % of the suitable land"
+            if getattr(myItem, "elevationMin", None) is not None:
+                mySub += f"\nelevation {myItem.elevationMin:,.0f} – {myItem.elevationMax:,.0f} m"
             if myItem.message:
                 mySub += f"\n{myItem.message}"
+            myTitle = myItem.itemName + (f" ({myItem.category})" if getattr(myItem, "category", "") else "")
             self.catchmentTilesLayout.addWidget(
-                self._tile(myItem.itemName, f"{myItem.achievedHa:,.1f} Ha", mySub,
+                self._tile(myTitle, f"{myItem.achievedHa:,.1f} Ha", mySub,
                            theAccent=myItem.status is SearchStatus.Converged),
                 myIndex // 2, myIndex % 2)
 

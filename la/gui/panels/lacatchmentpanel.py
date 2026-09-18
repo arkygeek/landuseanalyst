@@ -2,12 +2,18 @@
 
 from typing import Optional
 
-from qgis.PyQt.QtCore import pyqtSignal
+import os
+import time
+
+from qgis.PyQt.QtCore import QVariant, pyqtSignal
 from qgis.PyQt.QtWidgets import (
     QButtonGroup, QCheckBox, QComboBox, QFormLayout, QHBoxLayout, QLabel, QRadioButton, QToolButton,
     QVBoxLayout, QWidget,
 )
-from qgis.core import Qgis, QgsMapLayerProxyModel, QgsPointXY, QgsRasterLayer
+from qgis.core import (
+    Qgis, QgsCoordinateTransformContext, QgsField, QgsFields, QgsMapLayerProxyModel, QgsPointXY,
+    QgsProject, QgsRasterLayer, QgsVectorFileWriter, QgsVectorLayer,
+)
 from qgis.gui import QgsCollapsibleGroupBox, QgsDoubleSpinBox, QgsMapLayerComboBox, QgsMessageBar, QgsSpinBox
 
 from la.gui.lascenariocontroller import LaScenarioController
@@ -50,6 +56,23 @@ class LaCatchmentPanel(QgsCollapsibleGroupBox):
         self.cboCommonGrazing = self._rasterCombo(
             "cboCommonGrazing", "Suitability raster (1 = suitable) for animals that use common grazing.", True)
         myForm.addRow("Common grazing", self.cboCommonGrazing)
+        myBarrierRow = QHBoxLayout()
+        self.cboBarriers = QgsMapLayerComboBox(self)
+        self.cboBarriers.setObjectName("cboBarriers")
+        self.cboBarriers.setFilters(QgsMapLayerProxyModel.LineLayer | QgsMapLayerProxyModel.PolygonLayer)
+        self.cboBarriers.setAllowEmptyLayer(True)
+        self.cboBarriers.setLayer(None)
+        self.cboBarriers.setToolTip(
+            "Rivers, lakes and walls that slow or block walking. Polygons are impassable, lines cost a "
+            "30-minute ford; a numeric 'crossing_penalty' field (minutes, negative = impassable) or a "
+            "'barrier_type' field ('ford' / 'impassable') overrides that per feature.")
+        self.pbnDigitiseBarriers = QToolButton(self)
+        self.pbnDigitiseBarriers.setObjectName("pbnDigitiseBarriers")
+        self.pbnDigitiseBarriers.setText("Digitise…")
+        self.pbnDigitiseBarriers.setToolTip("Create a scratch barrier layer with the right fields and start editing it.")
+        myBarrierRow.addWidget(self.cboBarriers, 1)
+        myBarrierRow.addWidget(self.pbnDigitiseBarriers)
+        myForm.addRow("Barriers", myBarrierRow)
         myLayout.addLayout(myForm)
 
         mySeedRow = QHBoxLayout()
@@ -126,6 +149,7 @@ class LaCatchmentPanel(QgsCollapsibleGroupBox):
         myAdvancedRow.addWidget(self.cboEngine, 1)
         myLayout.addLayout(myAdvancedRow)
 
+        self.pbnDigitiseBarriers.clicked.connect(self.createBarrierLayer)
         self.cboDem.layerChanged.connect(self._onDemChanged)
         self.cboCommonCrop.layerChanged.connect(lambda _l: self.validate())
         self.cboCommonGrazing.layerChanged.connect(lambda _l: self.validate())
@@ -187,7 +211,49 @@ class LaCatchmentPanel(QgsCollapsibleGroupBox):
             useSlopeOnlySuitability=self.cbSlopeOnly.isChecked(),
             splitFallow=self.cbSplitFallow.isChecked(),
             engine=self.cboEngine.currentData() or "pure",
+            barriersPath=self.exportBarriers(),
         )
+
+    def barrierLayer(self) -> Optional[QgsVectorLayer]:
+        myLayer = self.cboBarriers.currentLayer()
+        return myLayer if isinstance(myLayer, QgsVectorLayer) else None
+
+    def exportBarriers(self) -> Optional[str]:
+        """
+        Write the chosen barrier layer to a GeoPackage the engine can read off
+        the main thread (memory layers have no file behind them).
+        """
+        myLayer = self.barrierLayer()
+        if myLayer is None:
+            return None
+        myDir = os.path.join(os.path.expanduser("~"), ".landuseAnalyst", "scratch")
+        os.makedirs(myDir, exist_ok=True)
+        myPath = os.path.join(myDir, f"barriers_{int(time.time())}.gpkg")
+        myOptions = QgsVectorFileWriter.SaveVectorOptions()
+        myOptions.driverName = "GPKG"
+        myOptions.fileEncoding = "UTF-8"
+        myError, myMessage, *_ = QgsVectorFileWriter.writeAsVectorFormatV3(
+            myLayer, myPath, QgsCoordinateTransformContext(), myOptions)
+        if myError != QgsVectorFileWriter.NoError:
+            self.messageBar.pushMessage(f"Could not export the barrier layer: {myMessage}", Qgis.Warning, 8)
+            return None
+        return myPath
+
+    def createBarrierLayer(self) -> QgsVectorLayer:
+        """Add a scratch 'LA barriers' line layer with the penalty fields and select it."""
+        myCrs = self.demCrs()
+        myUri = "LineString" + (f"?crs={myCrs.authid()}" if myCrs is not None and myCrs.isValid() else "")
+        myLayer = QgsVectorLayer(myUri, "LA barriers", "memory")
+        myFields = QgsFields()
+        myFields.append(QgsField("name", QVariant.String))
+        myFields.append(QgsField("barrier_type", QVariant.String))
+        myFields.append(QgsField("crossing_penalty", QVariant.Double))
+        myLayer.dataProvider().addAttributes(myFields)
+        myLayer.updateFields()
+        QgsProject.instance().addMapLayer(myLayer)
+        self.cboBarriers.setLayer(myLayer)
+        myLayer.startEditing()
+        return myLayer
 
     def optionsBlock(self) -> dict:
         """Catchment options for the scenario file's plugin block."""

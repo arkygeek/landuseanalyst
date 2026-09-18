@@ -87,7 +87,7 @@ class LaGrass(QObject):
     # ------------------------------------------------------------------
     # Cost-surface builders
     # ------------------------------------------------------------------
-    def makeWalkCost(self, theX: float, theY: float) -> str:
+    def makeWalkCost(self, theX: float, theY: float, theFriction=None) -> str:
         """
         Build an anisotropic walking-cost surface around the settlement.
 
@@ -104,12 +104,10 @@ class LaGrass(QObject):
         :return: Absolute path of the output cost-surface GeoTIFF.
         :rtype: str
         """
-        if self._usePure(self._mWalkId):
-            self.message.emit(
-                "grass:r.walk not registered; using pure-Python Tobler "
-                "walking-cost fallback."
-            )
-            return self._makeWalkCostPure(theX, theY)
+        if self._usePure(self._mWalkId) or theFriction is not None:
+            if theFriction is not None and not self._usePure(self._mWalkId):
+                self.message.emit("Barriers need the pure-Python engine; not using grass:r.walk for this run.")
+            return self._makeWalkCostPure(theX, theY, theFriction)
         myFriction = self._uniformFrictionFromDem()
         myOutPath = self._tempPath("walkCost")
         myParams = {
@@ -132,7 +130,7 @@ class LaGrass(QObject):
         self.message.emit(f"Built walk-cost surface from ({theX:.1f}, {theY:.1f}).")
         return myOutPath
 
-    def makeEuclideanCost(self, theX: float, theY: float) -> str:
+    def makeEuclideanCost(self, theX: float, theY: float, theFriction=None) -> str:
         """
         Run ``grass:r.cost`` with a uniform-1 friction raster, seeded at
         the settlement. Cost units come out in metres directly.
@@ -143,8 +141,8 @@ class LaGrass(QObject):
         :rtype: str
         :raises LaGrassError: If ``grass:r.cost`` isn't available or fails.
         """
-        if self._usePure(self._mCostId):
-            return self._makeEuclideanCostPure(theX, theY)
+        if self._usePure(self._mCostId) or theFriction is not None:
+            return self._makeEuclideanCostPure(theX, theY, theFriction)
         myFriction = self._uniformFrictionFromDem()
         myOutPath = self._tempPath("euclideanCost")
         myParams = {
@@ -320,7 +318,7 @@ class LaGrass(QObject):
     # ------------------------------------------------------------------
     # Pure-Python r.walk replacement
     # ------------------------------------------------------------------
-    def _makeWalkCostPure(self, theX: float, theY: float) -> str:
+    def _makeWalkCostPure(self, theX: float, theY: float, theFriction=None) -> str:
         """
         Pure-Python anisotropic walking-cost surface using Tobler's hiking
         function on the DEM grid, with Dijkstra propagation from the
@@ -348,7 +346,7 @@ class LaGrass(QObject):
 
         try:
             myOutPath = laraster.makeWalkCost(
-                self.mDemPath, theX, theY, self.mScratchDir,
+                self.mDemPath, theX, theY, self.mScratchDir, theFriction=theFriction,
             )
         except (FileNotFoundError, ValueError) as myError:
             raise LaGrassError(str(myError)) from myError
@@ -384,11 +382,12 @@ class LaGrass(QObject):
         """True when the pure-Python engine should handle a step (default, or GRASS alg missing)."""
         return self.mEngine != ENGINE_GRASS or theAlgId is None
 
-    def _makeEuclideanCostPure(self, theX: float, theY: float) -> str:
+    def _makeEuclideanCostPure(self, theX: float, theY: float, theFriction=None) -> str:
         """Pure-Python Euclidean (octagonal metric) cost surface, in metres."""
         from la.lib import laraster
         try:
-            myOutPath = laraster.makeEuclideanCost(self.mDemPath, theX, theY, self.mScratchDir)
+            myOutPath = laraster.makeEuclideanCost(self.mDemPath, theX, theY, self.mScratchDir,
+                                                   theFriction=theFriction)
         except (FileNotFoundError, ValueError) as myError:
             raise LaGrassError(str(myError)) from myError
         self._mTempRasters.append(myOutPath)

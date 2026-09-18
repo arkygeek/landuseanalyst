@@ -95,6 +95,7 @@ class LaCatchmentInputs:
     useSlopeOnlySuitability: bool = False         # band alone when an item has no raster
     splitFallow:          bool = True             # sown + fallow masks per crop
     engine:               str = "pure"            # "pure" | "grass"
+    barriersPath:         Optional[str] = None    # OGR-readable rivers/lakes/walls (exported by the UI)
 
 
 @dataclass(frozen=True)
@@ -106,6 +107,8 @@ class LaCatchmentResults:
     windowShape:    Optional[Tuple[int, int]] = None
     slopeRasterPath: Optional[str] = None
     retried:        bool = False
+    barrierFeatures: Optional[int] = None   # features supplied (None = no barrier layer)
+    barrierCells:    Optional[int] = None   # cells that actually received friction
 
 
 # ---------------------------------------------------------------------------
@@ -160,6 +163,7 @@ class LaCatchment(QObject):
         self.mPrecisionPct = max(int(thePrecisionPct), 1)
         self.mCostRaster: Optional[str] = None
         self.mSlopeRaster: Optional[str] = None
+        self.mBarrierEffect = None   # la.lib.labarriers.BarrierEffect for the last pass
         self._mOverallDone = 0
         self._mOverallTotal = 0
 
@@ -167,7 +171,7 @@ class LaCatchment(QObject):
     # Cost surface
     # ------------------------------------------------------------------
     def prepareCostSurface(
-        self, theEasting: float, theNorthing: float, theMethod: DistanceMethod,
+        self, theEasting: float, theNorthing: float, theMethod: DistanceMethod, theFriction=None,
     ) -> str:
         """
         Build the cost surface around the settlement on the current window.
@@ -175,6 +179,7 @@ class LaCatchment(QObject):
         :param theEasting:  Settlement easting in DEM CRS units.
         :param theNorthing: Settlement northing in DEM CRS units.
         :param theMethod:   :class:`DistanceMethod` enum value.
+        :param theFriction: Optional friction grid (s/m, inf = impassable) on the window.
         :return: Absolute path of the cost-surface GeoTIFF (kept, not temp).
         :raises LaGisInputError: If the coords lie outside the DEM extent.
         :raises NotImplementedError: For :attr:`DistanceMethod.PathDistance`.
@@ -188,9 +193,9 @@ class LaCatchment(QObject):
                 f"{myExtent.yMinimum()}..{myExtent.yMaximum()})."
             )
         if theMethod is DistanceMethod.WalkingTime:
-            myRaw = self.mGrass.makeWalkCost(theEasting, theNorthing)
+            myRaw = self.mGrass.makeWalkCost(theEasting, theNorthing, theFriction)
         elif theMethod is DistanceMethod.Euclidean:
-            myRaw = self.mGrass.makeEuclideanCost(theEasting, theNorthing)
+            myRaw = self.mGrass.makeEuclideanCost(theEasting, theNorthing, theFriction)
         else:
             raise NotImplementedError(
                 "Path Distance is not implemented yet; please select Walking Time or Euclidean."
@@ -369,14 +374,37 @@ class LaCatchment(QObject):
                     myRetried = True
                     self.mGrass.cleanup()
                     continue
+                myEffect = self.mBarrierEffect
                 return LaCatchmentResults(
                     items=myResults, costRasterPath=self.mCostRaster, windowPixels=myPixels,
                     windowShape=myShape, slopeRasterPath=self.mSlopeRaster, retried=myRetried,
+                    barrierFeatures=myEffect.features if myEffect else None,
+                    barrierCells=myEffect.cells if myEffect else None,
                 )
         except LaGrassError as e:
             raise LaGisInputError(str(e)) from e
         finally:
             self.mGrass.cleanup()
+
+    def _barrierFriction(self, theBarriersPath: Optional[str]):
+        """Rasterise the barrier layer onto the current window; records supplied vs reached counts."""
+        self.mBarrierEffect = None
+        if not theBarriersPath:
+            return None
+        from la.lib import labarriers
+        try:
+            myFriction, myEffect = labarriers.frictionFromVector(theBarriersPath, self.mGrass.mDemPath)
+        except (FileNotFoundError, RuntimeError) as e:
+            raise LaGisInputError(f"Could not use the barrier layer: {e}") from e
+        self.mBarrierEffect = myEffect
+        if myEffect.features and not myEffect.reachedRaster:
+            self.logged.emit(
+                f"[WARN] {myEffect.features} barrier feature(s) supplied but none fall inside the working "
+                f"window — check the layer's CRS and extent. Water has NOT been modelled in this run."
+            )
+        elif myEffect.features:
+            self.logged.emit(f"Barriers: {myEffect.features} feature(s) touching {myEffect.cells} cell(s).")
+        return myFriction
 
     def _suggestWindowPixels(self, theModel) -> int:
         from la.lib import laraster
@@ -391,7 +419,8 @@ class LaCatchment(QObject):
         myCommonCropPath    = self._resolveLayerPath(theInputs.commonCropLayerId)
         myCommonGrazingPath = self._resolveLayerPath(theInputs.commonGrazingLayerId)
 
-        self.prepareCostSurface(theEasting, theNorthing, theInputs.method)
+        myFriction = self._barrierFriction(theInputs.barriersPath)
+        self.prepareCostSurface(theEasting, theNorthing, theInputs.method, myFriction)
 
         myCrops   = self._collectItems(theModel, "crop", theInputs)
         myAnimals = self._collectItems(theModel, "animal", theInputs)

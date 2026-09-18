@@ -172,3 +172,42 @@ def test_auto_window_retries_when_clipped(shuna, monkeypatch):
                             applySlopeLimits=False, splitFallow=False)
     assert myResults.windowShape == (200, 200)
     assert not myResults.retried or any("re-running" in m for m in myLog)
+
+
+def _wallGeojson(thePath, theX, theY0, theY1, theProps=None):
+    import json
+    myDoc = {"type": "FeatureCollection",
+             "crs": {"type": "name", "properties": {"name": "urn:ogc:def:crs:EPSG::32636"}},
+             "features": [{"type": "Feature", "properties": theProps or {"barrier_type": "impassable"},
+                           "geometry": {"type": "LineString", "coordinates": [[theX, theY0], [theX, theY1]]}}]}
+    with open(thePath, "w") as f:
+        json.dump(myDoc, f)
+
+
+def test_barrier_wall_blocks_the_catchment_and_is_recorded(shuna, monkeypatch, tmp_path):
+    from la.lib.lacatchment import SearchStatus
+
+    myWall = str(tmp_path / "wall.geojson")
+    # north-south wall 300 m east of the seed, spanning the whole window
+    _wallGeojson(myWall, SETTLEMENT_X + 300.0, SETTLEMENT_Y + 4000.0, SETTLEMENT_Y - 4000.0)
+    myResults, myLog = _run(shuna, _Model({"wheat": 50.0}), _Parameter(shuna["all"]), monkeypatch,
+                            applySlopeLimits=False, splitFallow=False, windowPixels=200, barriersPath=myWall)
+    assert myResults.barrierFeatures == 1 and myResults.barrierCells and myResults.barrierCells >= 190
+    myItem = myResults.items[0]
+    assert myItem.status is SearchStatus.Converged
+    myCost = gdal.Open(myResults.costRasterPath).ReadAsArray()
+    myDs = gdal.Open(shuna["dem"]); gt = myDs.GetGeoTransform(); myDs = None
+    mySeedCol = int((SETTLEMENT_X - gt[0]) / gt[1]); mySeedRow = int((SETTLEMENT_Y - gt[3]) / gt[5])
+    assert np.isfinite(myCost[mySeedRow, mySeedCol - 5])
+    assert np.isnan(myCost[mySeedRow, mySeedCol + 40])          # east of the wall: unreachable
+    assert any("Barriers: 1 feature" in m for m in myLog)
+
+
+def test_barrier_outside_the_window_is_reported_not_silently_ignored(shuna, monkeypatch, tmp_path):
+    myWall = str(tmp_path / "far.geojson")
+    _wallGeojson(myWall, SETTLEMENT_X + 50000.0, SETTLEMENT_Y + 100.0, SETTLEMENT_Y - 100.0)
+    myResults, myLog = _run(shuna, _Model({"wheat": 50.0}), _Parameter(shuna["suit"]), monkeypatch,
+                            applySlopeLimits=False, splitFallow=False, windowPixels=200, barriersPath=myWall)
+    assert myResults.barrierFeatures == 1 and myResults.barrierCells == 0
+    assert any("NOT been modelled" in m for m in myLog)
+    assert myResults.items[0].threshold == pytest.approx(1328.125, abs=0.01)   # nothing changed

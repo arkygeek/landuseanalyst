@@ -13,7 +13,7 @@ directly. The controller:
   relays its progress,
 * renders / exports the report.
 
-This is the logic formerly spread over ``LaMainForm.on_pushButtonRun_clicked``,
+This is the logic formerly spread over the retired single-window form's ``on_pushButtonRun_clicked``,
 ``_configureGisInputsFromUi``, ``_launchCatchmentTask`` and the export slots.
 """
 

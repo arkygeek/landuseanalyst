@@ -19,7 +19,7 @@ LanduseAnalyst plugin for QGIS
 
 # noinspection PyPep8Naming
 def classFactory(iface):  # pylint: disable=invalid-name
-    """Load LaMainForm class from gui/lamainform.py
+    """Load the LanduseAnalyst plugin class from landuse_analyst.py
 
     :param iface: A QGIS interface instance.
     :type iface: QgsInterface
