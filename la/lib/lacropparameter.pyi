@@ -1,4 +1,4 @@
-from typing import Optional, Union
+from typing import Optional
 from PyQt5.QtCore import QObject, pyqtSignal
 from la.lib.laserialisable import LaSerialisable
 from la.lib.laguid import LaGuid

@@ -1,11 +1,10 @@
 import os
-from typing import Optional, Type, Union, Dict, Any, cast
-from dataclasses import dataclass
+from typing import Optional, Dict, cast
 from qgis.PyQt.QtCore import QObject, pyqtProperty, pyqtSignal
-from qgis.PyQt.QtXml import QDomDocument, QDomElement
+from qgis.PyQt.QtXml import QDomDocument
 from la.lib.laserialisable import LaSerialisable
 from la.lib.laguid import LaGuid
-from la.lib.la import EnergyType as LaEnergyType, AreaUnits as LaAreaUnits
+from la.lib.la import EnergyType as LaEnergyType
 from la.resources_rc import *
 
 class LaAnimal(QObject, LaSerialisable, LaGuid):

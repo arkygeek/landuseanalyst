@@ -1,7 +1,6 @@
 # lacropparameter.py
 import warnings
-from typing import Optional, Type, Dict
-import os
+from typing import Optional
 
 from qgis.PyQt.QtCore import QObject, pyqtSignal, pyqtProperty
 from qgis.PyQt.QtXml import QDomDocument
@@ -347,7 +346,6 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
         :return: The XML representation of this crop parameter
         :rtype: str
         """
-        from la.lib.lautils import LaUtils
         myString = f"<cropParameter guid=\"{self.guid}\">\n"
         myString += f"  <name>{self.name}</name>\n"
         myString += f"  <description>{self.description}</description>\n"

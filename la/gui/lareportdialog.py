@@ -11,12 +11,10 @@ the main form's Results-tab toolbar so they're discoverable without
 opening this dialog first.
 """
 
-from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtWidgets import (
     QDialog, QVBoxLayout, QHBoxLayout, QPushButton, QTextBrowser,
 )
 
-from la.lib.lautils import LaUtils
 from la.lib import lareports
 
 

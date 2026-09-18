@@ -9,14 +9,11 @@ Date created: [Date]
 # Standard library imports
 import os
 import sys
-import uuid
 from builtins import dict as Dict
 from builtins import list as List
-from typing import Tuple, Optional, Callable
 # Third party imports
 from qgis.PyQt.QtWidgets import (
-    QFileDialog, QDialog, QVBoxLayout, QHBoxLayout, QLabel,
-    QTextEdit, QCheckBox, QComboBox
+    QFileDialog
 )
 from qgis.PyQt.QtCore import QFile, QTextStream, QObject, QDir, QSettings, QFileInfo, pyqtSignal
 # Local application imports
@@ -31,6 +28,18 @@ from la.lib.lacropparameter import LaCropParameter
 class LaMessageBus(QObject):
     """Message bus for communication between components."""
     debugMessaged = pyqtSignal(str)  # Signal emitted when debug messages are logged
+
+    def debug(self, theMessage: str, theComponent: str = "General") -> None:
+        """
+        Emit ``debugMessaged`` for ``theMessage``.
+
+        Convenience wrapper so callers (notably the test-suite) can log without
+        going through :class:`LaDebugLogger`.
+
+        :param theMessage: Text to broadcast.
+        :param theComponent: Component tag prefixed to the message.
+        """
+        self.debugMessaged.emit(f"{theComponent}: {theMessage}")
 
 # Create a global instance of the message bus that can be imported
 MESSAGE_BUS = LaMessageBus()
@@ -231,7 +240,7 @@ class LaUtils:
                         myAnimalsMap[guid_str] = myAnimal
                         LaUtils.debug.log(f"Successfully loaded animal: {myAnimal.name}")
                         continue
-                    LaUtils.debug.log(f"Animal has no name, skipping")
+                    LaUtils.debug.log("Animal has no name, skipping")
 
         LaUtils.debug.log(f"Returning {len(myAnimalsMap)} animals", "Animals")
         return myAnimalsMap

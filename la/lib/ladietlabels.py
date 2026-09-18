@@ -1,7 +1,7 @@
 # ladietlabels.py
 import copy
 from typing import Dict, Tuple
-from qgis.PyQt.QtCore import QObject, pyqtProperty, pyqtSignal, pyqtSlot, Qt
+from qgis.PyQt.QtCore import QObject, pyqtProperty, pyqtSignal
 
 from la.lib.laserialisable import LaSerialisable
 from la.lib.laguid import LaGuid

@@ -27,3 +27,10 @@ known-first-party = ["la"]
 # Preserve the project's existing mixed quote style instead of forcing one
 quote-style = "preserve"
 indent-style = "space"
+
+[tool.pytest.ini_options]
+testpaths = ["la/test"]
+python_files = ["test_*.py"]
+# Legacy Plugin-Builder scripts that need a live QGIS desktop or are stale;
+# collected explicitly when they are repaired.
+addopts = "--ignore=la/test/la_test.py --ignore=la/test/test_landuse_analyst_dialog.py --ignore=la/test/test_qgis_environment.py --ignore=la/test/test_translations.py --ignore=la/test/test_init.py --ignore=la/test/test_resources.py"

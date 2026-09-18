@@ -10,7 +10,7 @@ injected as an :class:`la.lib.lagrass.LaGrass` instance. This makes the
 binary search trivially mockable in unit tests.
 """
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum
 from typing import Callable, Dict, List, Optional
 

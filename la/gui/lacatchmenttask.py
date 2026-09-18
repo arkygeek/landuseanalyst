@@ -17,15 +17,13 @@ Signal flow::
 
 import os
 import time
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
 from qgis.PyQt.QtCore import pyqtSignal
 from qgis.core import (
     QgsTask,
     QgsProject,
     QgsRasterLayer,
-    QgsLayerTreeGroup,
-    QgsApplication,
 )
 
 from la.lib.lautils import LaUtils
@@ -38,6 +36,9 @@ from la.lib.lacatchment import (
     SearchStatus,
     LaGisInputError,
 )
+
+if TYPE_CHECKING:  # pragma: no cover
+    from la.lib.lamodel import LaModel
 
 
 _GROUP_NAME = "Catchment Analysis"

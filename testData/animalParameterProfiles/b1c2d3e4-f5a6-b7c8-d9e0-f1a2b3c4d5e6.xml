@@ -1,3 +1,4 @@
+<?xml version='1.0' encoding='utf-8'?>
 <animalParameter guid="b1c2d3e4-f5a6-b7c8-d9e0-f1a2b3c4d5e6">
   <name>Pig Parameters</name>
   <description>Parameters for Pig</description>
@@ -14,7 +15,7 @@
       <fodderDays>90</fodderDays>
     </fodderCrop>
   </fodderCrops>
-  <rasterName></rasterName>
+  <rasterName>/home/arkygeek/dev/QGis-Projects/landuseanalyst/testData/syntheticRasters/animal_b1c2d3e4-f5a6-b7c8-d9e0-f1a2b3c4d5e6.tif</rasterName>
   <areaUnits>Dunum</areaUnits>
   <energyType>KCalories</energyType>
   <specificLandEnergyType>KCalories</specificLandEnergyType>

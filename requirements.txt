@@ -1,1 +1,21 @@
-# this file will contain a list of all required dependencies 
+# Runtime dependencies of the Landuse Analyst QGIS plugin.
+#
+# Everything except scipy ships with the Python bundled in every QGIS
+# distribution (OSGeo4W, the Debian/Ubuntu packages, the conda-forge qgis
+# package and the macOS installer). scipy is needed for the pure-Python
+# walking-cost engine (sparse Dijkstra); without it the plugin falls back
+# to GRASS r.walk when the GRASS Processing provider is enabled.
+#
+# Install scipy into the *QGIS* Python, not your system Python:
+#   OSGeo4W        : install the "python3-scipy" package from the OSGeo4W setup
+#   Debian/Ubuntu  : sudo apt install python3-scipy
+#   conda-forge    : conda install -n <qgis-env> -c conda-forge scipy
+#   anything else  : <qgis python> -m pip install scipy
+#
+# Versions are lower bounds; GDAL must match the QGIS build and is listed
+# for documentation only (pip cannot build it without system GDAL).
+numpy>=1.24
+scipy>=1.13          # numpy 2 ABI compatible
+matplotlib>=3.5      # report charts (object API only, no pyplot)
+pyproj>=3.4
+GDAL>=3.4            # osgeo.gdal / osgeo.osr; provided by QGIS

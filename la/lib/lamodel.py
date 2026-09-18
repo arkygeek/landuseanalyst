@@ -2,16 +2,13 @@ from qgis.PyQt.QtCore import pyqtSignal, pyqtProperty, QObject
 from qgis.PyQt.QtWidgets import QDialog
 from qgis.PyQt.QtXml import QDomDocument
 
-from typing import Dict, List, Tuple, Union, Mapping
+from typing import Dict, Tuple, Union
 
 from la.lib.laserialisable import LaSerialisable
 from la.lib.laguid import LaGuid
 from la.lib.ladietlabels import LaDietLabels
 from la.lib.lautils import LaUtils, LaMessageBus
 from la.lib.la import AreaUnits, Status, Priority, LandBeingGrazed, LandFound, EnergyType
-from la.lib.la import LaFoodSourceMap, LaReportMap, LaTripleMap, LaFoodSource, LandFound, LandBeingGrazed
-from la.lib.laanimal import LaAnimal
-from la.lib.lacrop import LaCrop
 from la.lib.lafoodsource import LaFoodSource
 
 MESSAGE_BUS: LaMessageBus = LaMessageBus()

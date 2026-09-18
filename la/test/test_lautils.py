@@ -1,7 +1,6 @@
 import sys
 import os
 import unittest
-import uuid
 from unittest.mock import patch, MagicMock, mock_open
 from qgis.PyQt.QtWidgets import QApplication
 from qgis.PyQt.QtCore import QDir
@@ -15,10 +14,7 @@ from la.lib.laanimal import LaAnimal
 from la.lib.laanimalparameter import LaAnimalParameter
 from la.lib.lacrop import LaCrop
 from la.lib.lacropparameter import LaCropParameter
-from la.lib.la import LaTripleMap
 
-import threading
-import time
 
 MESSAGE_BUS = LaMessageBus()
 

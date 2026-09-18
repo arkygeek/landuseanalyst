@@ -1,12 +1,11 @@
 import os
-from typing import Optional, Type, Dict, Any, cast
-import warnings
+from typing import Optional, Dict
 from qgis.PyQt.QtCore import QObject, pyqtSignal, pyqtProperty
-from qgis.PyQt.QtXml import QDomDocument, QDomElement, QDomNodeList
+from qgis.PyQt.QtXml import QDomDocument
 from la.lib.laserialisable import LaSerialisable
 from la.lib.laguid import LaGuid
 from la.lib.lafoodsource import LaFoodSource
-from la.lib.la import LaFoodSourceMap, Priority, AreaUnits, EnergyType
+from la.lib.la import Priority, AreaUnits, EnergyType
 from la.resources_rc import *
 
 class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
@@ -327,7 +326,6 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
         """
         from la.lib.lautils import LaUtils
         from la.lib.lafoodsource import LaFoodSource
-        from qgis.PyQt.QtXml import QDomDocument
         from la.lib.la import EnergyType, AreaUnits, Priority
 
         myDocument = QDomDocument("mydocument")

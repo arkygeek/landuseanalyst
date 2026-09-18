@@ -10,14 +10,10 @@ This means end users get the full report — tables AND charts — with zero
 extra setup on any QGIS install.
 """
 
-import math
-from typing import Dict, List, Tuple, Optional, Sequence
+from typing import Dict, List, Tuple, Optional
 from typing import TYPE_CHECKING
 
-from la.lib.la import AreaUnits
 from la.lib.lautils import LaUtils
-from la.lib.laanimal import LaAnimal
-from la.lib.lacrop import LaCrop
 from la.lib.lamodel import LaModel
 
 if TYPE_CHECKING:

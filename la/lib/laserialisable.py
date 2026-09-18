@@ -1,4 +1,3 @@
-import xml.etree.ElementTree as ET
 from abc import ABCMeta, abstractmethod
 from qgis.PyQt import QtWidgets
 import logging

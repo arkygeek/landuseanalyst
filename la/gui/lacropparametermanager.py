@@ -1,14 +1,13 @@
-from qgis.PyQt.QtCore import Qt, QModelIndex, QAbstractTableModel, QDir, QPoint, QSize, QSettings
+from qgis.PyQt.QtCore import Qt, QModelIndex, QAbstractTableModel, QPoint, QSize, QSettings
 from qgis.PyQt.QtGui import QBrush, QColor, QIcon, QPixmap
-from qgis.PyQt.QtWidgets import QDialog, QMessageBox, QHeaderView, QFileDialog, QTableWidgetItem, QApplication
+from qgis.PyQt.QtWidgets import QMessageBox, QHeaderView, QTableWidgetItem
 
 # Import only the base class from UI
 from la.ui.lacropparametermanagerbase import LaCropParameterManagerBase
 
 from la.lib.lacropparameter import LaCropParameter
 from la.lib.lautils import LaUtils
-from la.lib.laguid import LaGuid
-from la.lib.la import AreaUnits as LaAreaUnits, EnergyType as LaEnergyType
+from la.lib.la import EnergyType as LaEnergyType
 import os
 
 class LaCropParameterTableModel(QAbstractTableModel):

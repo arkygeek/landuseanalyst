@@ -1,3 +1,4 @@
+<?xml version='1.0' encoding='utf-8'?>
 <cropParameter guid="e9f8d7c6-b5a4-4f3e-c2d1-b0a9f8e7d6c5">
   <name>Einkorn Params</name>
   <description>Einkorn crop parameters</description>
@@ -12,5 +13,5 @@
   <areaUnits>Hectare</areaUnits>
   <useCommonLand>1</useCommonLand>
   <useSpecificLand>0</useSpecificLand>
-  <rasterName></rasterName>
+  <rasterName>/home/arkygeek/dev/QGis-Projects/landuseanalyst/testData/syntheticRasters/crop_e9f8d7c6-b5a4-4f3e-c2d1-b0a9f8e7d6c5.tif</rasterName>
 </cropParameter>

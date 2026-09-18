@@ -1,3 +1,4 @@
+<?xml version='1.0' encoding='utf-8'?>
 <animalParameter guid="d1e2f3a4-b5c6-d7e8-f9a0-b1c2d3e4f5a6">
   <name>Goat Parameters</name>
   <description>Parameters for Goat</description>
@@ -15,7 +16,7 @@
     </fodderCrop>
   </fodderCrops>
   <fallowUsage>High</fallowUsage>
-  <rasterName></rasterName>
+  <rasterName>/home/arkygeek/dev/QGis-Projects/landuseanalyst/testData/syntheticRasters/animal_d1e2f3a4-b5c6-d7e8-f9a0-b1c2d3e4f5a6.tif</rasterName>
   <areaUnits>Dunum</areaUnits>
   <energyType>KCalories</energyType>
   <specificLandEnergyType>KCalories</specificLandEnergyType>

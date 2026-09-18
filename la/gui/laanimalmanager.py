@@ -1,6 +1,6 @@
 from qgis.PyQt.QtCore import Qt, QModelIndex, QAbstractTableModel, QSettings
 from qgis.PyQt.QtGui import QBrush, QColor, QIcon, QPixmap
-from qgis.PyQt.QtWidgets import QDialog, QTreeWidgetItem, QMessageBox, QTableWidgetItem, QFileDialog, QHeaderView, QComboBox
+from qgis.PyQt.QtWidgets import QMessageBox, QTableWidgetItem, QFileDialog, QHeaderView
 from qgis.PyQt import uic
 import os
 
@@ -8,8 +8,6 @@ from la.lib.laanimal import LaAnimal
 from la.ui.laanimalmanagerbase import LaAnimalManagerBase
 from la.lib.lautils import LaUtils
 from la.lib.la import EnergyType as LaEnergyType
-from la.lib.la import AreaUnits as LaAreaUnits
-from la.lib.la import Priority
 
 FORM_CLASS, _ = uic.loadUiType(
     os.path.join(

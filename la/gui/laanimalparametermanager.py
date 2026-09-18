@@ -11,7 +11,7 @@ Date created: [12-OCT-2023]
 
 from qgis.PyQt.QtCore import Qt, QSettings
 from qgis.PyQt.QtGui import QIcon, QPixmap
-from qgis.PyQt.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QSpinBox, QTableWidget
+from qgis.PyQt.QtWidgets import QMessageBox, QTableWidgetItem, QSpinBox, QTableWidget
 
 from la.ui.laanimalparametermanagerbase import LaAnimalParameterManagerBase
 from la.lib.laanimalparameter import LaAnimalParameter
@@ -653,7 +653,7 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
 
                         pixmap = QPixmap(image_path)
                         if not pixmap.isNull():
-                            LaUtils.debug.log(f"on_cboAnimal_changed: Successfully loaded pixmap")
+                            LaUtils.debug.log("on_cboAnimal_changed: Successfully loaded pixmap")
                             # Make label visible and set properties
                             self.lblAnimalPic.setVisible(True)
                             self.lblAnimalPic.setMinimumSize(100, 100)
@@ -665,7 +665,7 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
                     else:
                         LaUtils.debug.log(f"on_cboAnimal_changed: Image file not found: {image_path}")
                 else:
-                    LaUtils.debug.log(f"on_cboAnimal_changed: Animal has no image file")
+                    LaUtils.debug.log("on_cboAnimal_changed: Animal has no image file")
 
         # If we get here, no image was found
         LaUtils.debug.log("on_cboAnimal_changed: No valid image found, clearing picture label")

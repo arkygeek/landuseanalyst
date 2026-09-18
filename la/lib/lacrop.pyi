@@ -1,5 +1,5 @@
 # lacrop.pyi
-from typing import Optional, Type, overload
+from typing import Optional, Type
 from qgis.PyQt.QtCore import QObject, pyqtSignal
 from la.lib.laguid import LaGuid
 from la.lib.laserialisable import LaSerialisable

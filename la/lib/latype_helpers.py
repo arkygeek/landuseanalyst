@@ -1,4 +1,4 @@
-from typing import TypeVar, Generic, Callable, Any, Optional
+from typing import TypeVar, Any, Optional
 from qgis.PyQt.QtCore import pyqtProperty, pyqtSignal
 
 T = TypeVar('T')

@@ -23,7 +23,7 @@ This file defines the base UI class for the Crop Manager dialog.
     (at your option) any later version.
 """
 
-from qgis.PyQt import QtWidgets, uic
+from qgis.PyQt import uic
 from qgis.PyQt.QtWidgets import QDialog
 import os
 

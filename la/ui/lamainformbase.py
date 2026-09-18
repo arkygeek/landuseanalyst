@@ -21,9 +21,9 @@ on a multitude of demographic and dietary inputs.
     (at your option) any later version.
 """
 import os
+import traceback
 
 # region imports
-from qgis.PyQt.QtWidgets import QListWidgetItem, QTableWidgetItem, QComboBox, QCheckBox
 from qgis.PyQt import uic
 from qgis.PyQt.QtWidgets import QDialog
 from qgis.PyQt.QtCore import QFile, QSettings
@@ -31,9 +31,7 @@ from qgis.PyQt.QtCore import QTextStream
 from qgis.PyQt.QtGui import QIcon
 
 from qgis.PyQt import QtWidgets, QtCore, QtGui
-from qgis.PyQt.QtWidgets import QDialog
-from qgis.PyQt.QtCore import QFile, QTextStream
-from qgis.PyQt.QtGui import QIcon, QPixmap
+from qgis.PyQt.QtGui import QPixmap
 
 from la.lib.lautils import LaUtils
 from la.lib.ladietlabels import LaDietLabels
@@ -1365,7 +1363,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
                 # Get image file path
                 image_file = None
                 if hasattr(animal, 'imageFile'):
-                    LaUtils.debug.log(f"Animal has imageFile attribute", "UI")
+                    LaUtils.debug.log("Animal has imageFile attribute", "UI")
                     # Handle both property and method cases
                     if isinstance(animal.imageFile, str):
                         image_file = animal.imageFile
@@ -1632,7 +1630,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
 
             # Add fodder use if it exists
             if hasattr(theAnimalParameter, 'fodderUse') and theAnimalParameter.fodderUse:
-                html += f"<tr><td><b>Fodder Use:</b></td><td>Yes</td></tr>"
+                html += "<tr><td><b>Fodder Use:</b></td><td>Yes</td></tr>"
 
             # Add fallow usage if it exists
             if hasattr(theAnimalParameter, 'fallowUsage'):
@@ -1776,7 +1774,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         except AttributeError as ae:
             # Catch the specific error if updateModelFromUI is still missing
             if 'updateModelFromUI' in str(ae):
-                LaUtils.debug.log(f"Critical Error: updateModelFromUI method is missing!", "Error")
+                LaUtils.debug.log("Critical Error: updateModelFromUI method is missing!", "Error")
                 self.textBrowserResultsCrop.setText("Error: Required method 'updateModelFromUI' is missing.")
             else:
                 LaUtils.debug.log(f"Attribute error during crop calculations: {str(ae)}", "Error")
@@ -1872,7 +1870,7 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         except AttributeError as ae:
              # Catch the specific error if updateModelFromUI is still missing
              if 'updateModelFromUI' in str(ae):
-                  LaUtils.debug.log(f"Critical Error: updateModelFromUI method is missing!", "Error")
+                  LaUtils.debug.log("Critical Error: updateModelFromUI method is missing!", "Error")
                   self.textBrowserResultsAnimals.setText("Error: Required method 'updateModelFromUI' is missing.")
              else:
                   LaUtils.debug.log(f"Attribute error during animal calculations: {str(ae)}", "Error")

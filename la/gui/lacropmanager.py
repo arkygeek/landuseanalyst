@@ -28,7 +28,7 @@ import shutil
 from qgis.PyQt import QtCore, QtWidgets
 from qgis.PyQt.QtCore import QSettings, Qt
 from qgis.PyQt.QtGui import QIcon, QPixmap
-from qgis.PyQt.QtWidgets import QDialog, QMessageBox, QTableWidgetItem, QFileDialog
+from qgis.PyQt.QtWidgets import QMessageBox, QTableWidgetItem, QFileDialog
 
 from la.ui.lacropmanagerbase import LaCropManagerBase
 from la.lib.lautils import LaUtils, LaMessageBus

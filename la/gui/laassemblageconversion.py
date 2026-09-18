@@ -14,12 +14,11 @@ import os
 from qgis.PyQt.QtCore import Qt, QSettings, QPoint, QSize
 from qgis.PyQt.QtGui import QIcon, QResizeEvent
 from qgis.PyQt.QtWidgets import (QDialog, QTableWidgetItem, QComboBox,
-                                QHeaderView, QWidget, QVBoxLayout, QHBoxLayout,
+                                QHeaderView, QVBoxLayout, QHBoxLayout,
                                 QLabel, QPushButton, QLineEdit, QSpinBox, QDoubleSpinBox,
                                 QRadioButton, QGroupBox, QTableWidget, QFileDialog)
 
 from la.lib.lautils import LaUtils
-from la.lib.laanimal import LaAnimal
 
 
 class LaAssemblageConversion(QDialog):

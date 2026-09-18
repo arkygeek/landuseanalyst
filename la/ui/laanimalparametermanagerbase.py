@@ -18,16 +18,10 @@
 
 # laanimalparametermanagerbase.py  from laanimalparametermanagerbase.ui
 
-import sys
-from datetime import datetime, timezone, timedelta
-import numpy as np
-from enum import Enum
 
-from qgis.PyQt import QtGui, QtWidgets, uic
-from qgis.PyQt.QtWidgets import QMessageBox, QToolTip, QStackedWidget, QHBoxLayout, QVBoxLayout, QSplitter, QFormLayout, QLabel, QFrame, QPushButton, QTableWidget, QTableWidgetItem, QDialog
-from qgis.PyQt.QtWidgets import QApplication, QFileSystemModel, QTreeView, QWidget, QHeaderView
-from qgis.PyQt.QtGui import QPainter, QBrush, QPen, QColor, QFont, QIcon
-from qgis.PyQt.QtCore import Qt, QPoint, QRect, QObject, QEvent, pyqtSignal, pyqtSlot, QSize, QDir
+from qgis.PyQt import QtWidgets, uic
+from qgis.PyQt.QtWidgets import QDialog
+from qgis.PyQt.QtCore import Qt
 import os
 
 # Load the UI file

@@ -6,7 +6,6 @@
 # to define the properties of the LaCrop class, including name, description,
 # cropType, plantingDate, harvestDate, and yieldValue.
 import os
-import warnings
 from typing import Optional, Type
 
 from qgis.PyQt.QtCore import QObject, pyqtSignal, pyqtProperty
@@ -510,7 +509,6 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         :returns: Text string representing the crop's data in key-value format
         :rtype: str
         """
-        from la.lib.lautils import LaUtils  # we import this here to avoid a circular import
 
         myName = str(self.name)
         myGuid = str(self.guid)

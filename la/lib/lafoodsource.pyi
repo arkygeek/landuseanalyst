@@ -1,4 +1,4 @@
-from typing import Optional, Union
+from typing import Optional
 from qgis.PyQt.QtCore import QObject, pyqtSignal
 
 class LaFoodSource(QObject):

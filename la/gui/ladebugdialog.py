@@ -3,7 +3,6 @@
 """
 Debug dialog for Landuse Analyst - Singleton Pattern Implementation
 """
-import os
 import re
 from typing import List, Dict, Optional
 
@@ -13,7 +12,7 @@ from qgis.PyQt.QtWidgets import (
     QScrollArea, QApplication, QTextEdit
 )
 from qgis.PyQt.QtCore import Qt, QSettings, QSize, QRect, pyqtSlot
-from qgis.PyQt.QtGui import QPaintEvent, QResizeEvent, QFont, QPainter, QColor, QTextFormat, QCloseEvent, QTextCursor, QTextBlockFormat, QTextCharFormat
+from qgis.PyQt.QtGui import QPaintEvent, QResizeEvent, QFont, QPainter, QColor, QTextFormat, QCloseEvent
 
 # la.lib.lautils contains MESSAGE_BUS and LaUtils.LaDebugLogger
 from la.lib.lautils import MESSAGE_BUS, LaUtils

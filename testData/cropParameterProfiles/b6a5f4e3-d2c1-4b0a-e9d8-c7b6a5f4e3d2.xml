@@ -1,3 +1,4 @@
+<?xml version='1.0' encoding='utf-8'?>
 <cropParameter guid="b6a5f4e3-d2c1-4b0a-e9d8-c7b6a5f4e3d2">
   <name>Peas Params</name>
   <description>Peas crop parameters</description>
@@ -12,5 +13,5 @@
   <areaUnits>Hectare</areaUnits>
   <useCommonLand>1</useCommonLand>
   <useSpecificLand>0</useSpecificLand>
-  <rasterName></rasterName>
+  <rasterName>/home/arkygeek/dev/QGis-Projects/landuseanalyst/testData/syntheticRasters/crop_b6a5f4e3-d2c1-4b0a-e9d8-c7b6a5f4e3d2.tif</rasterName>
 </cropParameter>

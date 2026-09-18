@@ -19,7 +19,7 @@
 # third party imports
 from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication, QLocale
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtWidgets import QAction, QDialog
+from qgis.PyQt.QtWidgets import QAction
 
 # import of 'built-ins'
 import os.path

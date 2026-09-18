@@ -23,18 +23,15 @@ This file implements the main form functionality.
     (at your option) any later version.
 """
 
-from qgis.PyQt import QtGui, QtCore, QtWidgets
+from qgis.PyQt import QtGui, QtWidgets
 from qgis.PyQt.QtGui import QPixmap
 from qgis.PyQt.QtCore import QSettings, Qt, pyqtSlot
-from qgis.PyQt.QtWidgets import QApplication, QMessageBox, QDialog
+from qgis.PyQt.QtWidgets import QMessageBox
 import os
-from typing import Dict, List, Optional, Union
-from la.lib.laanimal import LaAnimal
+from typing import Dict
 
 from la.ui.lamainformbase import LaMainFormBase
-from la.lib.lamodel import LaModel
 from la.lib.lautils import LaUtils, MESSAGE_BUS
-from la.lib.lamaincontroller import LaMainController
 from la.lib.ladietlabels import LaDietLabels
 
 class LaMainForm(LaMainFormBase):
@@ -247,32 +244,18 @@ class LaMainForm(LaMainFormBase):
             LaUtils.debug.log(f"Error displaying animal calculations: {str(e)}", "Error")
 
     def calculateTotalLandNeeded(self):
-        """Calculate and display the total land needed."""
+        """
+        Log the total land needed as last computed by the model's diet labels.
+
+        The value is produced by :func:`la.lib.lacalculations` and stored on
+        ``self.mModel.mDietLabels``; this method only surfaces it.
+        """
         try:
-            # Get inputs for calculation
-            population = self.sbPopulation.value() if hasattr(self, 'sbPopulation') else 100
-
-            # Package diet settings
-            diet_settings = {
-                'plantAnimalRatio': self.sliderDiet.value(),
-                'wildTameAnimalRatio': self.sliderMeat.value(),
-                'wildTamePlantRatio': self.sliderCrop.value()
-            }
-
-            # Delegate calculation to controller
-            land_needed = self.controller.calculateTotalLandNeeded(
-                population=population,
-                diet_settings=diet_settings,
-                enabled_animals=self.getSelectedAnimals(),
-                enabled_crops=self.getSelectedCrops()
+            myDietLabels = getattr(self.mModel, "mDietLabels", None)
+            myLandNeeded = float(getattr(myDietLabels, "totalLandNeeded", 0.0) or 0.0)
+            LaUtils.debug.log(
+                f"Total land needed calculated: {myLandNeeded:.2f} units", "Calculation"
             )
-
-            # Display the result (UI code stays in form)
-            if hasattr(self, 'lblTotalLandNeeded'):
-                self.lblTotalLandNeeded.setText(f"{land_needed:.2f}")
-
-            LaUtils.debug.log(f"Total land needed calculated: {land_needed:.2f} units", "Calculation")
-
         except Exception as e:
             LaUtils.debug.log(f"Error calculating land needed: {str(e)}", "Error")
 
@@ -569,9 +552,6 @@ class LaMainForm(LaMainFormBase):
     def setup(self):
         """Perform additional setup beyond what's in the base class."""
         try:
-            # Initialize the main controller
-            self.controller = LaMainController(self)
-
             # Set up initial UI state
             if hasattr(self, 'cbDebug'):
                 self.cbDebug.setChecked(False)
@@ -840,7 +820,6 @@ class LaMainForm(LaMainFormBase):
 
         :param theInputs: :class:`la.lib.lacatchment.LaCatchmentInputs`.
         """
-        from qgis.PyQt.QtWidgets import QMessageBox
         from qgis.core import QgsApplication
         from la.lib.lacatchment import DistanceMethod
         from la.lib.lagrassprocesslib import LaGrassProcessLib

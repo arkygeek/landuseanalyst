@@ -9,16 +9,10 @@ Strict mathematical parity with the original C++ research code (lamodel.cpp) is 
 """
 
 from typing import Dict, Tuple, TYPE_CHECKING
-import os
 
 from la.lib.lautils import LaUtils
-from la.lib.la import Priority, Status, AreaUnits, EnergyType
+from la.lib.la import Priority, AreaUnits
 from la.lib.ladietlabels import LaDietLabels
-from la.lib.lafoodsource import LaFoodSource
-from la.lib.laanimal import LaAnimal
-from la.lib.laanimalparameter import LaAnimalParameter
-from la.lib.lacrop import LaCrop
-from la.lib.lacropparameter import LaCropParameter
 
 if TYPE_CHECKING:
     from la.lib.lamodel import LaModel
