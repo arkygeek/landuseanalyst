@@ -19,9 +19,10 @@ This is the logic formerly spread over ``LaMainForm.on_pushButtonRun_clicked``,
 
 import json
 import os
-from typing import Dict, Optional, Tuple
+from typing import Dict, List, Optional, Tuple
 
 from qgis.PyQt.QtCore import QObject, QTimer, pyqtSignal
+from qgis.core import QgsSettings
 
 from la.lib.la import AreaUnits, EnergyType
 from la.lib.lacatalogue import LaCatalogue
@@ -29,6 +30,7 @@ from la.lib.lacatchment import DistanceMethod, LaCatchmentInputs, LaCatchmentRes
 from la.lib.ladietlabels import LaDietLabels
 from la.lib.lamodel import LaModel
 from la.lib.lautils import LaUtils
+from la.lib import lascenarioio
 
 _PERCENT_TOLERANCE = 0.1
 _LIVE_RECALC_DELAY_MS = 150
@@ -62,6 +64,7 @@ class LaScenarioController(QObject):
     catchmentMessage     = pyqtSignal(str)
     catchmentFinished    = pyqtSignal(bool, str)
     modelReplaced        = pyqtSignal()
+    recentScenariosChanged = pyqtSignal()
 
     def __init__(self, parent: Optional[QObject] = None) -> None:
         super().__init__(parent)
@@ -75,6 +78,9 @@ class LaScenarioController(QObject):
         self.mLastCalculationType = ""
         self.mLastCatchmentResults: Optional[LaCatchmentResults] = None
         self._mCatchmentTask = None
+        self.mScenarioPath: Optional[str] = None
+        self.mPluginBlockProvider = None      # callable() -> dict, set by the settings dock
+        self.mPendingPluginBlock: Dict = {}  # plugin block of the last loaded file, for the dock to apply
         self._mRecalcTimer = QTimer(self)
         self._mRecalcTimer.setSingleShot(True)
         self._mRecalcTimer.setInterval(_LIVE_RECALC_DELAY_MS)
@@ -111,6 +117,8 @@ class LaScenarioController(QObject):
         self.mSelectedAnimals.clear()
         self.mLastLabels = None
         self.mLastCatchmentResults = None
+        self.mScenarioPath = None
+        self.mPendingPluginBlock = {}
         self.modelReplaced.emit()
         self.selectionChanged.emit()
         self._touched()
@@ -453,6 +461,64 @@ class LaScenarioController(QObject):
             return  # already reported through completed/failed
         self._mCatchmentTask = None
         self.catchmentFinished.emit(False, theText or "Catchment analysis was cancelled or failed.")
+
+    # ------------------------------------------------------------------
+    # Scenario files (*.lascenario.json)
+    # ------------------------------------------------------------------
+    _RECENT_KEY = "landuseAnalyst/recentScenarios"
+    _RECENT_MAX = 10
+
+    def scenarioDocument(self, theIncludeResults: bool = True) -> Dict:
+        """Current scenario as an interchange document (see :mod:`la.lib.lascenarioio`)."""
+        myPluginBlock = {}
+        if callable(self.mPluginBlockProvider):
+            try:
+                myPluginBlock = dict(self.mPluginBlockProvider() or {})
+            except Exception as e:  # never let a UI hiccup block saving
+                LaUtils.debug.log(f"Plugin block provider failed: {e}", "Warning")
+        myResults = lascenarioio.resultsBlock(self.mModel, self.mLastCalculationType) if theIncludeResults else None
+        return lascenarioio.toDict(self.mModel, self.mSelectedCrops, self.mSelectedAnimals, myPluginBlock, myResults)
+
+    def saveScenario(self, thePath: str) -> str:
+        """Write the scenario to ``thePath`` and remember it. Returns the path written."""
+        myPath = lascenarioio.saveFile(thePath, self.scenarioDocument())
+        self.mScenarioPath = myPath
+        self._rememberRecent(myPath)
+        self.settingsChanged.emit()
+        return myPath
+
+    def loadScenarioDocument(self, theDocument: Dict) -> None:
+        """Replace the model and selections with ``theDocument`` and notify the panels."""
+        self._mRecalcTimer.stop()
+        myModel, myCrops, myAnimals, myPluginBlock = lascenarioio.fromDict(theDocument)
+        self.mModel = myModel
+        self.mSelectedCrops = dict(myCrops)
+        self.mSelectedAnimals = dict(myAnimals)
+        self.mLastLabels = None
+        self.mLastCatchmentResults = None
+        self.mPendingPluginBlock = dict(myPluginBlock)
+        self.modelReplaced.emit()
+        self.selectionChanged.emit()
+        self._touched()
+        if not self.mLivePreview:
+            self.dietChanged.emit(None)
+
+    def loadScenario(self, thePath: str) -> None:
+        self.loadScenarioDocument(lascenarioio.loadFile(thePath))
+        self.mScenarioPath = thePath
+        self._rememberRecent(thePath)
+
+    def recentScenarios(self) -> List[str]:
+        myValue = QgsSettings().value(self._RECENT_KEY, [])
+        if isinstance(myValue, str):
+            myValue = [myValue] if myValue else []
+        return [p for p in (myValue or []) if isinstance(p, str) and os.path.exists(p)]
+
+    def _rememberRecent(self, thePath: str) -> None:
+        myRecent = [p for p in self.recentScenarios() if p != thePath]
+        myRecent.insert(0, thePath)
+        QgsSettings().setValue(self._RECENT_KEY, myRecent[: self._RECENT_MAX])
+        self.recentScenariosChanged.emit()
 
     # ------------------------------------------------------------------
     # Reports and exports

@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+message: "If you use Landuse Analyst, please cite it as below."
+title: "Landuse Analyst: site catchment modelling for QGIS"
+type: software
+authors:
+  - family-names: Jorgenson
+    given-names: Jason S.
+    email: jjorgenson@gmail.com
+repository-code: "https://github.com/arkygeek/landuseanalyst"
+url: "https://la.arkygeek.com"
+version: 1.0.0
+date-released: 2026-09-17
+keywords:
+  - archaeology
+  - site catchment analysis
+  - palaeoeconomy
+  - QGIS
+  - Tobler hiking function
+references:
+  - type: thesis
+    title: "Landuse Analyst: modelling the agricultural catchments of Early Bronze Age settlements in the southern Levant"
+    authors:
+      - family-names: Jorgenson
+        given-names: Jason S.
+    institution:
+      name: University of Liverpool
+    year: 2010

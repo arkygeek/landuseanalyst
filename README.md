@@ -1,54 +1,90 @@
 # Landuse Analyst QGIS Plugin
 
-## Overview
+[![tests](https://github.com/arkygeek/landuseanalyst/actions/workflows/test.yml/badge.svg)](https://github.com/arkygeek/landuseanalyst/actions/workflows/test.yml)
 
-Landuse Analyst is a comprehensive QGIS plugin designed to facilitate land use analysis and management. This project is a port of the original C++ codebase to Python, leveraging the PyQt framework for seamless integration with QGIS.
+Landuse Analyst models the agricultural catchment of an archaeological
+settlement. A diet/herd model turns population, diet composition and
+crop/animal profiles into land-area targets; a walking-time (Tobler) cost
+surface and a binary-search threshold sweep then locate that land around the
+site on a DEM, honouring per-item suitability rasters and slope limits.
 
-## Collaboration Guidelines
+It is the QGIS port of the C++ Landuse Analyst written for Jorgenson (2010,
+University of Liverpool) and shares its engine and golden numbers with the web
+version at <https://la.arkygeek.com>
+([landuseanalyst-web](https://github.com/arkygeek/landuseanalyst-web)).
 
-Please submit all pull requests from the Developer Branch. Ensure that your code adheres to the coding standards and naming conventions outlined in the [CODING_STANDARDS.md](./la/CODING_STANDARDS.md) and [NAMING_CONVENTIONS.md](./la/NAMING_CONVENTIONS.md) files.
+## What you get
 
-## Project Authors
+- **Dockable workspace** — a settings dock (scenario, population & diet with a
+  live donut, crops/animals with parameter sets, optional catchment search,
+  advanced) and a results dock (stat tiles, charts, tables, help, JSON/PDF
+  export). QGIS stays usable while the plugin is open.
+- **Catchment analysis** on the map: pick the DEM and suitability rasters from
+  the project, click the settlement on the canvas, press Calculate. Result
+  masks arrive as styled layers in *Catchment Analysis → ⟨scenario⟩ →
+  Crops / Animals*, with the settlement marker and the walking-cost surface.
+- **Per-item preferred land**: each crop / animal parameter set carries a
+  slope band (thesis defaults 9° crops, 15° grazing) edited in the parameter
+  dialogs.
+- **Thesis parity** pinned by tests (Shuna Chalcolithic S01: 91,250 MCal/yr,
+  191.91 Ha cropland, 82.36 Ha grazing; Shuna catchment 1328.125 s /
+  49.14 Ha).
 
-Jason Jorgenson
+## Requirements
 
-## Build and Installation Instructions
+- QGIS ≥ 3.28 (developed and tested on 3.42).
+- Everything the diet model needs ships with QGIS.
+- Catchment analysis needs **scipy** in the QGIS Python, or the GRASS
+  Processing provider as a fallback. The plugin warns and offers a one-click
+  install when scipy is missing; manual instructions are in
+  [requirements.txt](requirements.txt).
 
-### Prerequisites
+## Installation
 
-Ensure you have the following installed:
-- QGIS (latest version)
-- Python 3.12 or later
-- PyQt5
-- Other dependencies as listed in `requirements.txt`
+1. Clone into your QGIS plugin directory (or clone anywhere and symlink `la/`):
 
-### Building the Plugin
-
-To build the plugin, follow these steps:
-
-1. **Clone the Repository:**
     ```bash
-    git clone https://github.com/yourusername/landuseanalyst.git
-    cd landuseanalyst
+    git clone https://github.com/arkygeek/landuseanalyst.git
+    ln -s "$PWD/landuseanalyst/la" ~/.local/share/QGIS/QGIS3/profiles/default/python/plugins/la
     ```
 
-2. **Set Up the Environment:**
-    ```bash
-    python3 -m venv venv
-    source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
-    pip install -r requirements.txt
-    ```
+    Plugin directories: Linux
+    `~/.local/share/QGIS/QGIS3/profiles/default/python/plugins/`, Windows
+    `%APPDATA%\QGIS\QGIS3\profiles\default\python\plugins\`, macOS
+    `~/Library/Application Support/QGIS/QGIS3/profiles/default/python/plugins/`.
 
-3. **Compile Resources:**
-    ```bash
-    pyrcc5 -o resources_rc.py resources.qrc
-    ```
+2. Install the sample profiles (see below), enable *Landuse Analyst* in the
+   Plugin Manager, and click the toolbar icon.
 
-4. **Install the Plugin:**
-    Copy the `landuseanalyst` directory to your QGIS plugins directory. The location of this directory varies by operating system:
-    - **Linux:** `~/.local/share/QGIS/QGIS3/profiles/default/python/plugins/`
-    - **Windows:** `C:\Users\<YourUsername>\AppData\Roaming\QGIS\QGIS3\profiles\default\python\plugins\`
-    - **macOS:** `~/Library/Application Support/QGIS/QGIS3/profiles/default/python/plugins/`
+Resources are pre-compiled (`la/resources_rc.py`); rebuild only after editing
+`la/resources.qrc`:
+
+```bash
+pyrcc5 -o la/resources_rc.py la/resources.qrc
+```
+
+## Walkthrough
+
+[WALKTHROUGH.md](WALKTHROUGH.md) runs the bundled Shuna data end to end with
+the numbers you should see.
+
+## Development
+
+```bash
+# tests (needs the QGIS Python; the engine tests need only numpy + GDAL)
+QT_QPA_PLATFORM=offscreen python -m pytest -q la/test
+ruff check la
+```
+
+Coding standards and naming conventions live in
+[la/CODING_STANDARDS.md](la/CODING_STANDARDS.md) and
+[la/NAMING_CONVENTIONS.md](la/NAMING_CONVENTIONS.md). Please branch from
+`main` for pull requests. The original C++ (`cppArchive/`) is the reference
+for engine behaviour.
+
+## Citation
+
+See [CITATION.cff](CITATION.cff).
 
 ### Sample Data Setup (Required — animals and crops will be empty without this)
 

@@ -1,0 +1,54 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  engine:
+    name: engine + model (conda, no QGIS desktop)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: conda-incubator/setup-miniconda@v3
+        with:
+          miniforge-version: latest
+          activate-environment: la-engine
+          channels: conda-forge
+      - name: Install numpy / gdal / scipy / pytest
+        run: conda install -y python=3.12 numpy scipy gdal pytest
+      - name: Engine tests (pure numpy + GDAL)
+        run: python -m pytest -q la/test/engine
+
+  qgis:
+    name: full suite inside qgis/qgis:release-3_42
+    runs-on: ubuntu-latest
+    container:
+      image: qgis/qgis:release-3_42
+      options: --user root
+    env:
+      QT_QPA_PLATFORM: offscreen
+      PYTHONPATH: /usr/share/qgis/python:/usr/share/qgis/python/plugins
+    steps:
+      - uses: actions/checkout@v4
+      - name: Python deps missing from the image
+        run: |
+          python3 -m pip install --break-system-packages --quiet pytest scipy matplotlib || \
+          python3 -m pip install --quiet pytest scipy matplotlib
+      - name: Run the suite
+        run: xvfb-run -a python3 -m pytest -q -p no:cacheprovider la/test
+
+  lint:
+    name: ruff
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install ruff
+      - run: ruff check la

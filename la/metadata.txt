@@ -4,32 +4,36 @@
 
 [general]
 name=Landuse Analyst
-qgisMinimumVersion=3.0
-description=Site catchment modelling
-version=0.1
+qgisMinimumVersion=3.28
+description=Site catchment modelling: how much land an ancient settlement needed, and where
+version=1.0.0
 author=Dr. Jason S. Jorgenson
 email=jjorgenson@gmail.com
 
-about=a program that attempts to identify how much of the land surrounding an archaeological site would have been needed to sustain its population.
+about=Models the agricultural catchment of an archaeological site. A diet/herd model turns population, diet composition and crop/animal profiles into land-area targets; a walking-time (Tobler) cost surface and a binary-search threshold sweep then locate that land around the settlement on a DEM with per-item suitability and slope limits. Dockable workspace with live diet preview, results tiles/charts/tables, PDF/JSON export. Python port of the C++ Landuse Analyst used in Jorgenson (2010); shares its engine with la.arkygeek.com.
 
-tracker=http://github.com/arkygeek/landuseanalyst/issues
-repository=http://github.com/arkygeek/landuseanalyst
+tracker=https://github.com/arkygeek/landuseanalyst/issues
+repository=https://github.com/arkygeek/landuseanalyst
 # End of mandatory metadata
 
 # Recommended items:
 
 hasProcessingProvider=no
 # Uncomment the following line and add your changelog:
-# changelog=
+changelog=1.0.0 (2026-09)
+      - Dockable workspace (settings + results docks) replaces the modal dialog; live diet donut and tiles
+      - Catchment analysis: pure-Python Tobler walking cost with scipy, per-item slope limits, result layers grouped and styled
+      - Fixed 1000x animal area targets (kcal/MCal), GDAL file finalisation, XML round trip zeroing grazing values
+      - Requires scipy in the QGIS Python for catchments (see requirements.txt); diet calculations need nothing extra
 
 # Tags are comma separated with spaces allowed
-tags=python, archaeology, modelling, landuse
+tags=python, archaeology, modelling, landuse, catchment, site catchment analysis, tobler, palaeoeconomy
 
-homepage=http://github.com/arkygeek/landuseanalyst
+homepage=https://github.com/arkygeek/landuseanalyst
 category=Plugins
 icon=:/la_icon_small.png
 # experimental flag
-experimental=True
+experimental=False
 
 # deprecated flag (applies to the whole plugin, not just a single version)
 deprecated=False
@@ -39,8 +43,7 @@ deprecated=False
 # Check the documentation for more information.
 # plugin_dependencies=
 
-Category of the plugin: Raster, Vector, Database or Web
-# category=
+# Category of the plugin: Raster, Vector, Database or Web (menu placement is 'Plugins' above)
 
 # If the plugin can run on QGIS Server.
 server=False

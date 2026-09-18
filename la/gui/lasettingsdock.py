@@ -6,6 +6,7 @@ catchment, advanced) inside a scroll area, and a sticky footer with the
 Calculate button. Everything binds to one :class:`LaScenarioController`.
 """
 
+import os
 from typing import Optional
 
 from qgis.PyQt.QtCore import Qt
@@ -85,6 +86,7 @@ class LaSettingsDock(QgsDockWidget):
         self.footer.pbnCancel.clicked.connect(theController.cancelCatchment)
         self.catchmentPanel.pickSeedToggled.connect(self._onPickSeedToggled)
 
+        theController.mPluginBlockProvider = self.pluginBlock
         self.updateSummary()
         myReady, myReason = theController.readiness()
         self.footer.setReady(myReady, myReason)
@@ -161,7 +163,48 @@ class LaSettingsDock(QgsDockWidget):
             myPanel.loadFromController()
         self.agriculturePanel.cropList.rebuild()
         self.agriculturePanel.animalList.rebuild()
+        self.applyPluginBlock(self.mController.mPendingPluginBlock)
         self.updateSummary()
+        myPath = self.mController.mScenarioPath
+        self.setWindowTitle("Landuse Analyst" + (f" — {os.path.basename(myPath)}" if myPath else ""))
+
+    # ------------------------------------------------------------------
+    # Plugin-only scenario settings (layer choices, catchment options)
+    # ------------------------------------------------------------------
+    def pluginBlock(self) -> dict:
+        """Layer sources and catchment options, saved alongside the scenario."""
+        myPanel = self.catchmentPanel
+
+        def _source(theCombo):
+            myLayer = theCombo.currentLayer()
+            return myLayer.source() if myLayer is not None else ""
+
+        return {
+            "catchmentEnabled": bool(myPanel.isChecked()),
+            "demSource": _source(myPanel.cboDem),
+            "commonCropSource": _source(myPanel.cboCommonCrop),
+            "commonGrazingSource": _source(myPanel.cboCommonGrazing),
+            "distanceMethod": myPanel.method().name,
+        }
+
+    def applyPluginBlock(self, theBlock: dict) -> None:
+        """Restore layer choices by matching loaded layers' source paths."""
+        if not theBlock:
+            return
+        myPanel = self.catchmentPanel
+        myPanel.setChecked(bool(theBlock.get("catchmentEnabled", False)))
+        myBySource = {myLayer.source(): myLayer for myLayer in QgsProject.instance().mapLayers().values()}
+        for myKey, myCombo in (("demSource", myPanel.cboDem), ("commonCropSource", myPanel.cboCommonCrop),
+                               ("commonGrazingSource", myPanel.cboCommonGrazing)):
+            mySource = theBlock.get(myKey) or ""
+            if mySource in myBySource:
+                myCombo.setLayer(myBySource[mySource])
+            elif myCombo.allowEmptyLayer():
+                myCombo.setLayer(None)
+        if theBlock.get("distanceMethod") == "Euclidean":
+            myPanel.radioEuclidean.setChecked(True)
+        else:
+            myPanel.radioWalkingTime.setChecked(True)
 
     def _notify(self, theText: str, theLevel) -> None:
         if self.mIface is not None:
