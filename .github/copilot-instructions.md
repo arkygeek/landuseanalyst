@@ -43,7 +43,7 @@ See [NAMING_CONVENTIONS.md](../la/NAMING_CONVENTIONS.md) and [CODING_STANDARDS.m
 ## Core Data Flow Pattern
 
 ```
-User Input (GUI) → Qt Signal → Slot in LaMainForm → LaModel
+User Input (docks) → Qt Signal → LaScenarioController → LaModel / LaCatchmentTask
                                                               ↓
                                                          lacalculations.py
                                                               ↓

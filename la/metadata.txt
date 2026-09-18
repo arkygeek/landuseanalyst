@@ -18,7 +18,7 @@ repository=https://github.com/arkygeek/landuseanalyst
 
 # Recommended items:
 
-hasProcessingProvider=no
+hasProcessingProvider=yes
 # Uncomment the following line and add your changelog:
 changelog=1.0.0 (2026-09)
       - Dockable workspace (settings + results docks) replaces the modal dialog; live diet donut and tiles

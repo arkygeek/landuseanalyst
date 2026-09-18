@@ -72,5 +72,9 @@ def test_plugin_lifecycle():
     assert myIface.mapCanvas().mapTool() is myPlugin.mSettingsDock.mSeedTool
     myPanel.pbnPickSeed.setChecked(False)
 
+    from qgis.core import QgsApplication
+    assert QgsApplication.processingRegistry().providerById("la") is not None
+
     myPlugin.unload()
     assert not myIface.toolbarActions and not myIface.menuActions and not myIface.docks
+    assert QgsApplication.processingRegistry().providerById("la") is None

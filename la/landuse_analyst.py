@@ -35,6 +35,7 @@ class LanduseAnalyst:
         self.mController = None
         self.mSettingsDock = None
         self.mResultsDock = None
+        self.mProvider = None
         self._installTranslator()
 
     def _installTranslator(self) -> None:
@@ -63,6 +64,19 @@ class LanduseAnalyst:
         self.iface.addToolBarIcon(self.actionOpen)
         self.iface.addPluginToMenu(_MENU, self.actionOpen)
         self.actions.append(self.actionOpen)
+        self._registerProvider()
+
+    def _registerProvider(self) -> None:
+        """Expose the regional tools in the Processing toolbox."""
+        try:
+            from qgis.core import QgsApplication
+            from la.processing.laprovider import LaProcessingProvider
+            self.mProvider = LaProcessingProvider()
+            QgsApplication.processingRegistry().addProvider(self.mProvider)
+        except Exception as e:  # Processing may be unavailable in odd builds; the docks still work
+            from la.lib.lautils import LaUtils
+            LaUtils.debug.log(f"Processing provider not registered: {e}", "Warning")
+            self.mProvider = None
 
 
     def unload(self):
@@ -78,6 +92,10 @@ class LanduseAnalyst:
         self.mSettingsDock = None
         self.mResultsDock = None
         self.mController = None
+        if self.mProvider is not None:
+            from qgis.core import QgsApplication
+            QgsApplication.processingRegistry().removeProvider(self.mProvider)
+            self.mProvider = None
 
     # ------------------------------------------------------------------
     # Workspace

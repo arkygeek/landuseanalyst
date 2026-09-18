@@ -58,13 +58,25 @@ live. Shares that do not total 100 % are called out in red under *Agriculture*.
    `lowground.tif`. This "low ground" band is the suitability the golden
    numbers were established with.
 3. In the settings dock tick **Catchment search**, choose the DEM, and set
-   *Common crop land* and *Common grazing* to `lowground`. Type the seed
+   *Common crop land* and *Common grazing* to `lowground`. Leave *Apply each
+   item's preferred slope band* on (crops 9°, grazing 15°) or untick it to reproduce
+   the pre-1.0 numbers. Type the seed
    easting **744800**, northing **3611100** (or press *Pick on map* and click
    the site). Distance: *Walking time (Tobler)*.
 4. Press **Calculate**. Progress shows in the footer; after a few seconds the
    layer tree gains *Catchment Analysis ▸ ⟨scenario⟩* with a red *Settlement*
    point, *Crops* and *Animals* groups holding the converged masks, and the
    semi-transparent *Cost surface*.
+
+### Rivers and lakes as barriers
+
+Press **Digitise…** next to *Barriers* to get a scratch line layer with
+`barrier_type` and `crossing_penalty` fields, draw the Jordan along the valley
+floor (or pick an existing river / lake layer in the combo), and Calculate
+again. Lines cost a 30-minute ford unless you set `crossing_penalty` (minutes;
+negative = impassable); polygons are impassable. The results heading reports
+how many features touched the working window — if it says none did, the
+layer's CRS or extent is wrong and water has not been modelled.
 
 To check the engine against its golden number run the bundled test instead:
 
