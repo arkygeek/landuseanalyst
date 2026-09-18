@@ -85,6 +85,7 @@ class LaCropParameterManager(LaCropParameterManagerBase):
         # so users can pick a loaded raster layer as the suitability surface
         # for this crop parameter. See _upgradeRasterCombo for details.
         self._upgradeRasterCombo()
+        self._addPreferredLandGroup()
         self.pbnImport.setVisible(False)
         self.pbnExport.setVisible(False)
         self.lblCropPic.setScaledContents(True)
@@ -214,6 +215,8 @@ class LaCropParameterManager(LaCropParameterManagerBase):
 
         self.cbAreaUnits.setCurrentIndex(self.mCropParameter.areaUnits.value)
         self._restoreRasterCombo(self.mCropParameter.rasterName)
+        if hasattr(self, "grpPreferredLand"):
+            self.grpPreferredLand.loadFrom(self.mCropParameter)
         self.updateCropPicture()
 
     def _upgradeRasterCombo(self):
@@ -245,6 +248,16 @@ class LaCropParameterManager(LaCropParameterManagerBase):
         myLayout.replaceWidget(myOld, myNew)
         myOld.deleteLater()
         self.cboRaster = myNew
+
+    def _addPreferredLandGroup(self):
+        """Add the per-crop slope band editor below the suitability raster combo."""
+        from la.gui.widgets.lapreferredlandwidget import LaPreferredLandWidget
+
+        self.grpPreferredLand = LaPreferredLandWidget("this crop", self)
+        if not LaPreferredLandWidget.attachBelow(getattr(self, "cboRaster", None), self.grpPreferredLand):
+            myTop = self.layout()
+            if myTop is not None:
+                myTop.addWidget(self.grpPreferredLand)
 
     def _restoreRasterCombo(self, theRasterName: str) -> None:
         """Set cboRaster's current layer to whichever loaded layer's
@@ -427,6 +440,9 @@ class LaCropParameterManager(LaCropParameterManagerBase):
         if hasattr(self, 'cboRaster'):
             myLayer = self.cboRaster.currentLayer() if hasattr(self.cboRaster, "currentLayer") else None
             self.mCropParameter.rasterName = myLayer.source() if myLayer is not None else ""
+
+        if hasattr(self, "grpPreferredLand"):
+            self.grpPreferredLand.applyTo(self.mCropParameter)
 
         # Use safe_guid for consistent string representation
         target_file = os.path.join(LaUtils.userCropParameterProfilesDirPath(), f"{self.mCropParameter.guid}.xml")

@@ -60,6 +60,7 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
         # Promote cboRaster from QComboBox to QgsMapLayerComboBox so users
         # can pick a loaded raster layer as the suitability surface.
         self._upgradeRasterCombo()
+        self._addPreferredLandGroup()
 
         # Hide experimental features
         self.pbnImport.setVisible(False)
@@ -109,6 +110,16 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
         myLayout.replaceWidget(myOld, myNew)
         myOld.deleteLater()
         self.cboRaster = myNew
+
+    def _addPreferredLandGroup(self):
+        """Add the per-animal slope band editor below the grazing raster combo."""
+        from la.gui.widgets.lapreferredlandwidget import LaPreferredLandWidget
+
+        self.grpPreferredLand = LaPreferredLandWidget("grazing for this animal", self)
+        if not LaPreferredLandWidget.attachBelow(getattr(self, "cboRaster", None), self.grpPreferredLand):
+            myTop = self.layout()
+            if myTop is not None:
+                myTop.addWidget(self.grpPreferredLand)
 
     def _restoreRasterCombo(self, theRasterName: str) -> None:
         """Set cboRaster's current layer to whichever loaded layer's
@@ -267,6 +278,8 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
         # (Note: the parameter property is `rasterName`, not the broken
         # `MrasterName` typo that lived here previously.)
         self._restoreRasterCombo(self.mAnimalParameter.rasterName)
+        if hasattr(self, "grpPreferredLand"):
+            self.grpPreferredLand.loadFrom(self.mAnimalParameter)
 
         # Update the fodder table AFTER setting fodder use state
         self.refreshFodderTable()
@@ -430,6 +443,9 @@ class LaAnimalParameterManager(LaAnimalParameterManagerBase):
         index = self.cbFallowUsage.currentIndex()
         if index >= 0:
             self.mAnimalParameter.mFallowUsage = self.cbFallowUsage.itemData(index)
+
+        if hasattr(self, "grpPreferredLand"):
+            self.grpPreferredLand.applyTo(self.mAnimalParameter)
 
         # Save parameter to file
         filepath = os.path.join(LaUtils.userAnimalParameterProfilesDirPath(),
