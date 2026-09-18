@@ -87,6 +87,20 @@ QT_QPA_PLATFORM=offscreen python la/test/test_lacatchment_shuna.py
 
 (a single 50 Ha crop on the low-ground suitability, 200 × 200-cell window).
 
+## 3b. Regional tools (Processing toolbox)
+
+*Processing ▸ Toolbox ▸ Landuse Analyst ▸ Regional analysis* has three
+algorithms that take a point layer of settlements:
+
+- **Thiessen territories** — Voronoi polygons clipped to an extent.
+- **XTent influence territories** — Renfrew & Level's size-weighted model
+  (a = 0.5, k = 0.001 per metre by default) with an optional winner raster.
+- **Walking routes between settlements** — Tobler least-cost routes along the
+  Delaunay network over a DEM, bundled through way-points, with optional
+  barriers, plus a route-usage raster.
+
+They run in batch mode and the graphical modeller like any other algorithm.
+
 ## 4. Save your own scenario
 
 Change anything, press **Save as…**, and reopen it later from **Recent**. The
