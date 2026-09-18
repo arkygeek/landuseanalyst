@@ -43,7 +43,7 @@ See [NAMING_CONVENTIONS.md](../la/NAMING_CONVENTIONS.md) and [CODING_STANDARDS.m
 ## Core Data Flow Pattern
 
 ```
-User Input (GUI) → Qt Signal → Slot in LaMainForm → LaMainController → LaModel
+User Input (GUI) → Qt Signal → Slot in LaMainForm → LaModel
                                                               ↓
                                                          lacalculations.py
                                                               ↓
@@ -183,7 +183,6 @@ The plugin runs on **Linux, Windows, macOS**. Key differences:
 - Plugin directory: `~/.local/share/QGIS/QGIS3/profiles/default/python/plugins/` (Linux)
 - See README.md for Windows/macOS paths
 - Windows may need `plastique` style set explicitly (`app.setStyle('plastique')`)
-- macOS bundles Qt frameworks; check library paths in `gui/main.py`
 
 ## Integration with QGIS
 

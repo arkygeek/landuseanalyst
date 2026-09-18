@@ -1,8 +1,0 @@
-<area shape="rect" href="$classLaModel.html#0c721507f11831e4ddc824c700123635" title="LaModel::logMessage" alt="" coords="479,52,625,76">
-<area shape="rect" href="$classLaModel.html#35e2401571bd7dd7411cec0062a6a4a9" title="LaModel::reportForCrop" alt="" coords="272,102,429,126">
-<area shape="rect" href="$classLaUtils.html#7f444ecadda6970730d87db2d166091e" title="LaUtils::getCrop" alt="" coords="495,100,609,124">
-<area shape="rect" href="$classLaCrop.html#e2c84ed6c0c693b3edc22e0de658c275" title="LaCrop::name" alt="" coords="728,150,829,174">
-<area shape="rect" href="$classLaSerialisable.html#2442a25a3044b53a6a34f1e2387d35c0" title="LaSerialisable::fromXmlFile" alt="" coords="689,6,868,30">
-<area shape="rect" href="$classLaGuid.html#38e7b78e2ef37526ffb1bad6af4cf745" title="LaGuid::guid" alt="" coords="732,54,825,78">
-<area shape="rect" href="$classLaUtils.html#fc911327dedf1b19d1e8d00dc6566cc7" title="LaUtils::userCropProfilesDirPath" alt="" coords="675,102,883,126">
-<area shape="rect" href="$classLaSerialisable.html#442dee3c693fc9d4e180bbe319015a45" title="LaSerialisable::fromXml" alt="" coords="931,6,1091,30">

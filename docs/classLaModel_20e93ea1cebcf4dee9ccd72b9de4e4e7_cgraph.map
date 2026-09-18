@@ -1,9 +1,0 @@
-<area shape="rect" href="$classLaUtils.html#31401524c3416531ef439851cd69cd21" title="LaUtils::getAnimal" alt="" coords="241,150,369,174">
-<area shape="rect" href="$classLaUtils.html#fd9d58e854e54a9ce823ebe0b177471f" title="LaUtils::getAnimalParameter" alt="" coords="212,102,399,126">
-<area shape="rect" href="$classLaSerialisable.html#2442a25a3044b53a6a34f1e2387d35c0" title="LaSerialisable::fromXmlFile" alt="" coords="500,102,679,126">
-<area shape="rect" href="$classLaGuid.html#38e7b78e2ef37526ffb1bad6af4cf745" title="LaGuid::guid" alt="" coords="543,150,636,174">
-<area shape="rect" href="$classLaAnimal.html#e1ff383858093056914370f969a2304a" title="LaAnimal::name" alt="" coords="532,198,647,222">
-<area shape="rect" href="$classLaUtils.html#4efbb82253462579bce5c3cf486a4d82" title="LaUtils::userAnimalProfilesDirPath" alt="" coords="479,246,700,270">
-<area shape="rect" href="$classLaSerialisable.html#442dee3c693fc9d4e180bbe319015a45" title="LaSerialisable::fromXml" alt="" coords="779,102,939,126">
-<area shape="rect" href="$classLaAnimalParameter.html#804809c4c95b5964b705a962909ce613" title="LaAnimalParameter::name" alt="" coords="501,6,677,30">
-<area shape="rect" href="$classLaUtils.html#171ca0ae00f656744a5109fd66d49764" title="LaUtils::userAnimalParameterProfilesDirPath" alt="" coords="449,54,729,78">
