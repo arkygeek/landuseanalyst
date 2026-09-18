@@ -153,6 +153,13 @@ class LaCatchment(QObject):
                 "Path Distance is not implemented yet; please select "
                 "Walking Time or Euclidean."
             )
+        # makeWalkCost / makeEuclideanCost register their output as an
+        # intermediate raster, and cleanup() (run in runCatchmentAnalysis's
+        # finally block) would delete it before the task adds it to the map.
+        # Promote it to a kept output so the cost-surface layer is valid.
+        self.mCostRaster = self.mGrass.writeOutput(
+            self.mCostRaster, f"costSurface_{theMethod.name}"
+        )
         self.logged.emit(f"Cost surface ready: {self.mCostRaster}")
         return self.mCostRaster
 

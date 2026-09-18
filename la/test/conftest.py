@@ -24,13 +24,16 @@ if _REPO_ROOT not in sys.path:
 
 try:
     from qgis.PyQt import sip as _sip
-    from qgis.PyQt.QtWidgets import QApplication as _QApplication
+    from qgis.core import QgsApplication as _QgsApplication
 
     # Qt/QGIS C++ objects (QDialog-based LaModel, module-level QObjects) are
     # torn down in arbitrary order at interpreter exit and segfault the test
     # process (exit 139) even when every test passed. Let the OS reclaim them.
     _sip.setdestroyonexit(False)
-    _APP = _QApplication.instance() or _QApplication([])
+    _APP = _QgsApplication.instance()
+    if _APP is None:
+        _APP = _QgsApplication([], False)
+        _APP.initQgis()
 except ImportError:  # pragma: no cover - engine-only environments without Qt
     _APP = None
 
@@ -88,7 +91,7 @@ def sampleProfilesDir(repoRoot, monkeypatch) -> str:
 
 @pytest.fixture(scope="session")
 def qtApp():
-    """A ``QApplication`` for tests that construct QObject-based model classes."""
+    """The session ``QgsApplication`` for tests that construct Qt / QGIS objects."""
     if _APP is None:
         pytest.skip("Qt is not available in this environment")
     return _APP

@@ -8,9 +8,8 @@ Date created: [Date]
 """
 # Standard library imports
 import os
+from typing import Dict, List, Tuple, TYPE_CHECKING
 import sys
-from builtins import dict as Dict
-from builtins import list as List
 # Third party imports
 from qgis.PyQt.QtWidgets import (
     QFileDialog
@@ -21,6 +20,9 @@ from la.lib.la import AreaUnits
 from la.lib.laanimalparameter import LaAnimalParameter
 from la.lib.laanimal import LaAnimal
 from la.lib.lacropparameter import LaCropParameter
+
+if TYPE_CHECKING:  # pragma: no cover - avoids the lacrop <-> lautils import cycle
+    from la.lib.lacrop import LaCrop
 
 # from la.gui.ladebugdialog import LaDebugDialog
 # from la.lib.lacrop import LaCrop
@@ -205,151 +207,132 @@ class LaUtils:
         LaUtils.ensureDirectoryExists(path)
         return path
 
+    # ------------------------------------------------------------------
+    # Profile catalogue cache
+    # ------------------------------------------------------------------
+    # Every getX()/getAvailableX() used to re-scan its directory and re-parse
+    # every XML file on each call; the calculation engine calls them dozens
+    # of times per run and the UI on every slider tick. We now cache the raw
+    # XML text per directory, keyed by a cheap (name, mtime, size) signature
+    # from os.scandir, and build fresh objects from the cached text so that
+    # callers can never mutate a shared instance.
+    _mProfileTextCache: Dict[str, Tuple[tuple, Dict[str, str]]] = {}
+
+    @staticmethod
+    def _directorySignature(theDirPath: str) -> tuple:
+        """(name, mtime_ns, size) for every .xml file in ``theDirPath``, sorted by name."""
+        try:
+            myEntries = []
+            for myEntry in os.scandir(theDirPath):
+                if myEntry.is_file() and myEntry.name.lower().endswith(".xml"):
+                    myStat = myEntry.stat()
+                    myEntries.append((myEntry.name, myStat.st_mtime_ns, myStat.st_size))
+        except OSError:
+            return ()
+        return tuple(sorted(myEntries))
+
+    @staticmethod
+    def _profileTexts(theDirPath: str) -> Dict[str, str]:
+        """Map of ``filename → xml text`` for ``theDirPath``, served from cache when unchanged."""
+        LaUtils.ensureDirectoryExists(theDirPath)
+        mySignature = LaUtils._directorySignature(theDirPath)
+        myCached = LaUtils._mProfileTextCache.get(theDirPath)
+        if myCached is not None and myCached[0] == mySignature:
+            return myCached[1]
+        myTexts: Dict[str, str] = {}
+        for myName, _, _ in mySignature:
+            myPath = os.path.join(theDirPath, myName)
+            try:
+                with open(myPath, "r", encoding="utf-8") as myFile:
+                    myTexts[myName] = myFile.read()
+            except OSError as e:
+                LaUtils.debug.log(f"Could not read profile {myPath}: {e}", "Warning")
+        LaUtils._mProfileTextCache[theDirPath] = (mySignature, myTexts)
+        return myTexts
+
+    @staticmethod
+    def _loadProfiles(theDirPath: str, theFactory, theComponent: str) -> Dict[str, object]:
+        """
+        Build ``guid → object`` for every valid profile in ``theDirPath``.
+
+        :param theDirPath: Directory holding one XML file per profile.
+        :param theFactory: Zero-argument callable returning a fresh, empty object
+            with ``fromXml``/``name``/``guid``.
+        :param theComponent: Debug-log component tag.
+        """
+        myMap: Dict[str, object] = {}
+        for myFileName, myText in LaUtils._profileTexts(theDirPath).items():
+            myObject = theFactory()
+            try:
+                myObject.fromXml(myText)
+            except Exception as e:  # malformed profile: skip, never abort the catalogue
+                LaUtils.debug.log(f"Failed to parse {myFileName}: {e}", theComponent)
+                continue
+            if not getattr(myObject, "name", ""):
+                continue
+            myGuid = str(getattr(myObject, "guid", "") or "") or os.path.splitext(myFileName)[0]
+            myMap[myGuid] = myObject
+        return myMap
+
+    @staticmethod
+    def invalidateProfileCache() -> None:
+        """Drop the cached profile texts (call after writing profiles programmatically)."""
+        LaUtils._mProfileTextCache.clear()
+
+    @staticmethod
+    def _findProfile(theDirPath: str, theFactory, theGuid: str, theComponent: str):
+        """Return the profile whose GUID (or file stem) is ``theGuid``, else a blank object."""
+        myMap = LaUtils._loadProfiles(theDirPath, theFactory, theComponent)
+        myObject = myMap.get(str(theGuid))
+        if myObject is not None:
+            return myObject
+        for myFileName in LaUtils._profileTexts(theDirPath):
+            if os.path.splitext(myFileName)[0] == str(theGuid):
+                myCandidate = theFactory()
+                myCandidate.fromXml(LaUtils._profileTexts(theDirPath)[myFileName])
+                if getattr(myCandidate, "name", ""):
+                    return myCandidate
+        return theFactory()
+
     @staticmethod
     def getAvailableAnimals() -> Dict[str, LaAnimal]:
         """
-        Returns a dictionary of available animals.
+        Returns a dictionary of available animals keyed by GUID.
 
-        The keys are the GUIDs of the animals, and the values are the animal objects.
-
-        :return: A dictionary of available animals
         :rtype: Dict[str, LaAnimal]
         """
-        myAnimalsMap = {}
-        myDirectory = QDir(LaUtils.userAnimalProfilesDirPath())
-        myList = myDirectory.entryInfoList(QDir.Files | QDir.NoSymLinks, QDir.Name)
-
-        LaUtils.debug.log(f"Looking for animals in directory: {LaUtils.userAnimalProfilesDirPath()}", "Animals")
-        LaUtils.debug.log(f"Found {len(myList)} files", "Animals")
-
-        for myFileInfo in myList:
-            # Ignore directories
-            if myFileInfo.fileName() in [".", ".."]:
-                continue
-            # if the filename ends in .xml try to load it into our animals listing
-            if myFileInfo.completeSuffix() == "xml":
-                filePath = myFileInfo.absoluteFilePath()
-                LaUtils.debug.log(f"Loading animal from file: {filePath}", "Animals")
-                myAnimal = LaAnimal()
-                if myAnimal.fromXmlFile(filePath):
-                    # Store the GUID as a string
-                    guid_str = str(myAnimal.guid)
-                    LaUtils.debug.log(f"Loading animal with GUID in lautils.py: {guid_str}")
-                    if myAnimal.name:
-                        LaUtils.debug.log(f"Loaded animal name: {myAnimal.name}")
-                        myAnimalsMap[guid_str] = myAnimal
-                        LaUtils.debug.log(f"Successfully loaded animal: {myAnimal.name}")
-                        continue
-                    LaUtils.debug.log("Animal has no name, skipping")
-
-        LaUtils.debug.log(f"Returning {len(myAnimalsMap)} animals", "Animals")
-        return myAnimalsMap
+        return LaUtils._loadProfiles(LaUtils.userAnimalProfilesDirPath(), LaAnimal, "Animals")
 
     @staticmethod
     def getAnimal(theGuid: str) -> LaAnimal:
         """
-        Returns an animal object with the given GUID.
-
-        If no such animal exists, returns a blank animal.
+        Returns the animal with the given GUID, or a blank ``LaAnimal`` if none exists.
 
         :param theGuid: The GUID of the animal to return
-        :type theGuid: str
-        :return: An animal object
         :rtype: LaAnimal
         """
-        myDirectory = QDir(LaUtils.userAnimalProfilesDirPath())
-        myList = myDirectory.entryInfoList(QDir.Files | QDir.NoSymLinks, QDir.Name)
-        for myFileInfo in myList:
-            # Ignore directories
-            if myFileInfo.fileName() in [".", ".."]:
-                continue
-            # if the filename ends in .xml try to load it into our layerSets listing
-            if myFileInfo.completeSuffix() == "xml":
-                myLaAnimal = LaAnimal()
-                myLaAnimal.fromXmlFile(myFileInfo.absoluteFilePath())
-                if myLaAnimal.name == "":
-                    LaUtils.debug.log(f"Animal from {myFileInfo.absoluteFilePath()} has no name, skipping", "Animals")
-                    continue
-
-                # Get the actual string GUID value for comparison
-                myAnimalGuid = myLaAnimal.guid
-                LaUtils.debug.log(f"Checking animal {myLaAnimal.name} with GUID {myAnimalGuid} against requested GUID {theGuid}", "Animals")
-
-                if myAnimalGuid == theGuid:
-                    LaUtils.debug.log(f"Found animal matching GUID {theGuid}", "Animals")
-                    return myLaAnimal
-
-        LaUtils.debug.log(f"No animal found with GUID {theGuid}, returning blank animal", "Animals")
-        return LaAnimal()
+        return LaUtils._findProfile(LaUtils.userAnimalProfilesDirPath(), LaAnimal, theGuid, "Animals")
 
     @staticmethod
-    def getAvailableCrops(): # -> Dict[str, LaCrop]
-        from la.lib.lacrop import LaCrop  # Move the import here to avoid circular import
+    def getAvailableCrops() -> Dict[str, "LaCrop"]:
         """
-        Returns a dictionary of available crops.
+        Returns a dictionary of available crops keyed by GUID.
 
-        The keys are the GUIDs of the crops, and the values are the crop objects.
-
-        :return: A dictionary of available crops
         :rtype: Dict[str, LaCrop]
         """
-        myCropsMap = {}
-        myDirectory = QDir(LaUtils.userCropProfilesDirPath())
-        myList = myDirectory.entryInfoList(QDir.Files | QDir.NoSymLinks, QDir.Name)
-
-        LaUtils.debug.log(f"Looking for crops in directory: {LaUtils.userCropProfilesDirPath()}", "Crops")
-        LaUtils.debug.log(f"Found {len(myList)} files", "Crops")
-
-        for myFileInfo in myList:
-            # Ignore directories
-            if myFileInfo.fileName() in [".", ".."]:
-                continue
-            # if the filename ends in .xml try to load it into our crops listing
-            if myFileInfo.completeSuffix() == "xml":
-                filePath = myFileInfo.absoluteFilePath()
-                LaUtils.debug.log(f"Loading crop from file: {filePath}", "Crops")
-                myCrop = LaCrop()
-                loadSuccess = myCrop.fromXmlFile(filePath)
-                if not loadSuccess:
-                    LaUtils.debug.log(f"Failed to load crop from {filePath}", "Crops")
-                    continue
-                if myCrop.name == "":
-                    LaUtils.debug.log(f"Crop from {filePath} has no name, skipping", "Crops")
-                    continue
-                myCropsMap[myCrop.guid] = myCrop
-                LaUtils.debug.log(f"Successfully loaded crop: {myCrop.name}, cropYield: {myCrop.cropYield}", "Crops")
-
-        LaUtils.debug.log(f"Returning {len(myCropsMap)} crops", "Crops")
-        return myCropsMap
+        from la.lib.lacrop import LaCrop
+        return LaUtils._loadProfiles(LaUtils.userCropProfilesDirPath(), LaCrop, "Crops")
 
     @staticmethod
-    def getCrop(theGuid: str): # -> LaCrop
+    def getCrop(theGuid: str) -> "LaCrop":
         """
-        Returns a crop object with the given GUID.
-
-        If no such crop exists, returns a blank crop.
+        Returns the crop with the given GUID, or a blank ``LaCrop`` if none exists.
 
         :param theGuid: The GUID of the crop to return
-        :type theGuid: str
-        :return: A crop object
         :rtype: LaCrop
         """
-        from la.lib.lacrop import LaCrop  # Move the import here to avoid circular import
-        myDirectory = QDir(LaUtils.userCropProfilesDirPath())
-        myList = myDirectory.entryInfoList(QDir.Files | QDir.NoSymLinks)
-        for myFileInfo in myList:
-            # Ignore directories
-            if myFileInfo.fileName() in [".", ".."]:
-                continue
-            # if the filename ends in .xml try to load it into our layerSets listing
-            if myFileInfo.completeSuffix() == "xml":
-                myCrop = LaCrop()
-                myCrop.fromXmlFile(myFileInfo.absoluteFilePath())
-                if myCrop.name == "":
-                    continue
-                if myCrop.guid == theGuid:
-                    return myCrop
-        return LaCrop()
+        from la.lib.lacrop import LaCrop
+        return LaUtils._findProfile(LaUtils.userCropProfilesDirPath(), LaCrop, theGuid, "Crops")
 
     @staticmethod
     def userConversionTablesDirPath() -> str:
@@ -428,159 +411,48 @@ class LaUtils:
     @staticmethod
     def getAvailableAnimalParameters() -> Dict[str, LaAnimalParameter]:
         """
-        Returns a dictionary of available animal parameters.
-        This method scans the directory returned by `userAnimalParameterProfilesDirPath()`
-        for XML files, each of which is expected to define an animal parameter.
-        Each file is parsed into an `LaAnimalParameter` object.
-        :return: A dictionary of available animal parameters
+        Returns a dictionary of available animal parameter sets keyed by GUID.
+
         :rtype: Dict[str, LaAnimalParameter]
         """
-        myMap = {}
-        myDirectory = QDir(LaUtils.userAnimalParameterProfilesDirPath())
-        # Log the directory being scanned
-        LaUtils.debug.log(f"Scanning for animal parameters in: {LaUtils.userAnimalParameterProfilesDirPath()}", "AnimalParams")
-        # Check if the directory exists
-        if not os.path.exists(LaUtils.userAnimalParameterProfilesDirPath()):
-            LaUtils.debug.log(f"Animal parameters directory does not exist: {LaUtils.userAnimalParameterProfilesDirPath()}", "AnimalParams")
-            try:
-                os.makedirs(LaUtils.userAnimalParameterProfilesDirPath(), exist_ok=True)
-                LaUtils.debug.log(f"Created animal parameters directory: {LaUtils.userAnimalParameterProfilesDirPath()}", "AnimalParams")
-            except Exception as e:
-                LaUtils.debug.log(f"Failed to create animal parameters directory: {str(e)}", "AnimalParams")
-                return myMap
-        myList = myDirectory.entryInfoList(QDir.Dirs | QDir.Files | QDir.NoSymLinks)
-        LaUtils.debug.log(f"Found {len(myList)} entries in the animal parameters directory", "AnimalParams")
-        for myFileInfo in myList:
-            # Ignore directories
-            if myFileInfo.fileName() in [".", ".."]:
-                continue
-            # if the filename ends in .xml try to load it into our layerSets listing
-            if myFileInfo.completeSuffix() == "xml":
-                try:
-                    filePath = myFileInfo.absoluteFilePath()
-                    LaUtils.debug.log(f"Loading animal parameter from: {filePath}", "AnimalParams")
-                    myAnimalParameter = LaAnimalParameter()
-                    success = myAnimalParameter.fromXmlFile(filePath)
-                    if not success:
-                        LaUtils.debug.log(f"Failed to load animal parameter from file: {filePath}", "AnimalParams")
-                        continue
-                    if not myAnimalParameter.name:
-                        LaUtils.debug.log(f"Animal parameter from {filePath} has no name, skipping", "AnimalParams")
-                        continue
-
-                    # Get the GUID from the XML filename (without the .xml extension)
-                    # This ensures we use the original GUID that matches the file on disk
-                    fileNameGuid = os.path.splitext(myFileInfo.fileName())[0]
-                    
-                    # Debug the parameter values
-                    LaUtils.debug.log(f"Loaded animal parameter: '{myAnimalParameter.name}', linked to animal: {myAnimalParameter.animalGuid}, percentTameMeat: {myAnimalParameter.percentTameMeat}", "AnimalParams")
-
-                    # Set and use the GUID from the filename
-                    myAnimalParameter.mGuid = fileNameGuid
-                    myMap[fileNameGuid] = myAnimalParameter
-                    LaUtils.debug.log(f"Added animal parameter to map with GUID from filename: {fileNameGuid}", "AnimalParams")
-                except Exception as e:
-                    LaUtils.debug.log(f"Error loading animal parameter from {myFileInfo.absoluteFilePath()}: {str(e)}", "Error")
-                    import traceback
-                    LaUtils.debug.log(traceback.format_exc(), "Error")
-        LaUtils.debug.log(f"Loaded {len(myMap)} animal parameters successfully", "AnimalParams")
-        return myMap
+        return LaUtils._loadProfiles(
+            LaUtils.userAnimalParameterProfilesDirPath(), LaAnimalParameter, "AnimalParams"
+        )
 
     @staticmethod
     def getAnimalParameter(theGuid: str) -> LaAnimalParameter:
         """
-        Returns an animal parameter object with the given GUID.
-
-        If no such animal parameter exists, returns a blank animal parameter.
+        Returns the animal parameter set with the given GUID, or a blank one if none exists.
 
         :param theGuid: The GUID of the animal parameter to return
-        :type theGuid: str
-        :return: An animal parameter object
         :rtype: LaAnimalParameter
         """
-        myDirectory = QDir(LaUtils.userAnimalParameterProfilesDirPath())
-        myList = myDirectory.entryInfoList(QDir.Files | QDir.NoSymLinks)
-        for myFileInfo in myList:
-            # Ignore directories
-            if myFileInfo.fileName() in [".", ".."]:
-                continue
-            # if the filename ends in .xml try to load it into our layerSets listing
-            if myFileInfo.completeSuffix() == "xml":
-                myAnimalParameter = LaAnimalParameter()
-                myAnimalParameter.fromXmlFile(myFileInfo.absoluteFilePath())
-                if myAnimalParameter.name == "":
-                    continue
-                if myAnimalParameter.guid == theGuid:
-                    return myAnimalParameter
-        return LaAnimalParameter()
+        return LaUtils._findProfile(
+            LaUtils.userAnimalParameterProfilesDirPath(), LaAnimalParameter, theGuid, "AnimalParams"
+        )
 
     @staticmethod
     def getAvailableCropParameters() -> Dict[str, LaCropParameter]:
         """
-        Returns a dictionary of available crop parameters.
+        Returns a dictionary of available crop parameter sets keyed by GUID.
 
-        This method scans the directory returned by `userCropParameterProfilesDirPath()`
-        for XML files, each of which is expected to define a crop parameter.
-        Each file is parsed into an `LaCropParameter` object.
-
-        :return: A dictionary of available crop parameters
         :rtype: Dict[str, LaCropParameter]
         """
-        myMap = {}
-        myDirectory = QDir(LaUtils.userCropParameterProfilesDirPath())
-        myList = myDirectory.entryInfoList(QDir.Dirs | QDir.Files | QDir.NoSymLinks)
-
-        LaUtils.debug.log(f"Scanning for crop parameters in: {LaUtils.userCropParameterProfilesDirPath()}", "CropParams")
-        LaUtils.debug.log(f"Found {len(myList)} entries", "CropParams")
-
-        for myFileInfo in myList:
-            # Ignore directories
-            if myFileInfo.fileName() in [".", ".."]:
-                continue
-            # if the filename ends in .xml try to load it
-            if myFileInfo.completeSuffix() == "xml":
-                try:
-                    filePath = myFileInfo.absoluteFilePath()
-                    LaUtils.debug.log(f"Loading crop parameter from: {filePath}", "CropParams")
-                    myCropParameter = LaCropParameter()
-                    success = myCropParameter.fromXmlFile(filePath)
-                    if not success:
-                        LaUtils.debug.log(f"Failed to load crop parameter from file: {filePath}", "CropParams")
-                        continue
-                    if not myCropParameter.name:
-                        LaUtils.debug.log(f"Crop parameter from {filePath} has no name, skipping", "CropParams")
-                        continue
-                    # Debug the parameter values
-                    LaUtils.debug.log(f"Loaded crop parameter: '{myCropParameter.name}', percentTameCrop={myCropParameter.percentTameCrop}", "CropParams")
-                    myMap[myCropParameter.guid] = myCropParameter
-                except Exception as e:
-                    LaUtils.debug.log(f"Error loading crop parameter: {str(e)}", "CropParams")
-
-        LaUtils.debug.log(f"Returning {len(myMap)} crop parameters", "CropParams")
-        return myMap
+        return LaUtils._loadProfiles(
+            LaUtils.userCropParameterProfilesDirPath(), LaCropParameter, "CropParams"
+        )
 
     @staticmethod
     def getCropParameter(theGuid: str) -> LaCropParameter:
         """
-        Returns a crop parameter object with the given GUID.
-
-        If no such crop parameter exists, returns a blank crop parameter.
+        Returns the crop parameter set with the given GUID, or a blank one if none exists.
 
         :param theGuid: The GUID of the crop parameter to return
-        :type theGuid: str
-        :return: A crop parameter object
         :rtype: LaCropParameter
         """
-        from la.lib.lacropparameter import LaCropParameter  # Move the import here to avoid circular import
-        myCropParameter = LaCropParameter()
-        myFilePath = os.path.join(LaUtils.userCropParameterProfilesDirPath(), f"{theGuid}.xml")
-        if os.path.exists(myFilePath):
-            with open(myFilePath, 'r') as myFile:
-                myXmlContent = myFile.read()
-                myCropParameter.fromXml(myXmlContent)
-        if myCropParameter.name == "":
-            return LaCropParameter()
-        return myCropParameter
+        return LaUtils._findProfile(
+            LaUtils.userCropParameterProfilesDirPath(), LaCropParameter, theGuid, "CropParams"
+        )
 
     @staticmethod
     def sortList(theList: List[str]) -> List[str]:

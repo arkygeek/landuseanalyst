@@ -63,6 +63,10 @@ class LaCatchmentTask(QgsTask):
     overallProgress = pyqtSignal(int, int)
     targetProgress  = pyqtSignal(int, int)
     grassMessage    = pyqtSignal(str)
+    # Emitted from finished() on the main thread, *before* QgsTaskManager
+    # deletes the task, so listeners never touch a dead wrapper.
+    completed       = pyqtSignal(object)   # LaCatchmentResults
+    failed          = pyqtSignal(str)
 
     def __init__(self, theModel, theInputs: LaCatchmentInputs) -> None:
         """
@@ -139,12 +143,11 @@ class LaCatchmentTask(QgsTask):
         On failure: log the error; the main form's ``grassMessage``
         connection will already have surfaced log messages to the user.
         """
-        if not theResult:
+        if not theResult or self.mResults is None:
             myMsg = self.mErrorText or "Catchment analysis did not complete."
             LaUtils.debug.log(f"Catchment task failed: {myMsg}", "Error")
             self.grassMessage.emit(f"[FAILED] {myMsg}")
-            return
-        if self.mResults is None:
+            self.failed.emit(myMsg)
             return
 
         myProject = QgsProject.instance()
@@ -205,6 +208,7 @@ class LaCatchmentTask(QgsTask):
             f"[DONE] Added {myAdded} item layer(s) to group '{_GROUP_NAME}'."
         )
         LaUtils.debug.log("Catchment task complete", "Calculation")
+        self.completed.emit(self.mResults)
 
     def cancel(self) -> None:
         """Cooperative cancel — :class:`LaCatchment` polls :meth:`isCanceled`."""

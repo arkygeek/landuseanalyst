@@ -1,5 +1,4 @@
 from qgis.PyQt.QtCore import pyqtSignal, pyqtProperty, QObject
-from qgis.PyQt.QtWidgets import QDialog
 from qgis.PyQt.QtXml import QDomDocument
 
 from typing import Dict, Tuple, Union
@@ -13,7 +12,7 @@ from la.lib.lafoodsource import LaFoodSource
 
 MESSAGE_BUS: LaMessageBus = LaMessageBus()
 
-class LaModel(QDialog, LaSerialisable, LaGuid):
+class LaModel(QObject, LaSerialisable, LaGuid):
     """
     LaModel class represents the main model for the Landuse Analyst plugin.
 
@@ -103,7 +102,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
     def __init__(self, parent=None):
         # Call constructors of all base classes
-        QDialog.__init__(self, parent)
+        QObject.__init__(self, parent)
         LaSerialisable.__init__(self) # Assuming LaSerialisable might have its own init logic
         LaGuid.__init__(self) # Explicitly call LaGuid constructor to initialize _mGuid
 
