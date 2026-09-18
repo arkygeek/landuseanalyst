@@ -88,6 +88,7 @@ class LaSettingsDock(QgsDockWidget):
         self.updateSummary()
         myReady, myReason = theController.readiness()
         self.footer.setReady(myReady, myReason)
+        self._checkDependencies()
 
     @staticmethod
     def _separator(theParent: QWidget) -> QFrame:
@@ -167,6 +168,46 @@ class LaSettingsDock(QgsDockWidget):
             self.mIface.messageBar().pushMessage("Landuse Analyst", theText, theLevel, 6)
         else:
             LaUtils.debug.log(theText, "MainForm")
+
+    # ------------------------------------------------------------------
+    # Dependencies
+    # ------------------------------------------------------------------
+    def _checkDependencies(self) -> None:
+        """Warn (once per dock) when the catchment engine cannot run here, with a fix button."""
+        from la.lib import ladependencies
+
+        myReport = ladependencies.probe()
+        self.mDependencyReport = myReport
+        if not myReport.problems():
+            return
+        myText = " ".join(myReport.problems())
+        if self.mIface is None:
+            LaUtils.debug.log(myText, "Setup")
+            return
+        myBar = self.mIface.messageBar()
+        myWidget = myBar.createMessage("Landuse Analyst", myText)
+        if not myReport.hasScipy:
+            from qgis.PyQt.QtWidgets import QPushButton
+            myButton = QPushButton("Install scipy", myWidget)
+            myButton.clicked.connect(self._installScipy)
+            myWidget.layout().addWidget(myButton)
+        myBar.pushWidget(myWidget, Qgis.Warning, 0)
+
+    def _installScipy(self) -> None:
+        from qgis.PyQt.QtWidgets import QApplication
+        from la.lib import ladependencies
+
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        try:
+            myOk, myOutput = ladependencies.installPackage("scipy")
+        finally:
+            QApplication.restoreOverrideCursor()
+        if myOk:
+            self._notify("scipy installed. Restart QGIS to use the pure-Python catchment engine.", Qgis.Success)
+        else:
+            LaUtils.debug.log(myOutput, "Error")
+            self._notify("pip could not install scipy — see the developer console for the output. "
+                         "Try: " + " ".join(ladependencies.pipInstallCommand("scipy")), Qgis.Critical)
 
     # ------------------------------------------------------------------
     # Seed picking on the canvas

@@ -173,6 +173,14 @@ class LaResultsDock(QgsDockWidget):
             ("Wild foods", f"{float(theLabels.wildAnimalMCalories) + float(theLabels.wildPlantsMCalories):,.0f} MCal",
              f"{float(theLabels.wildAnimalPortionPct) + float(theLabels.wildPlantsPortionPct):.1f} % of the diet"),
         ]
+        mySownMap = getattr(myModel, "mAreaTargetsCropsSownMap", {}) or {}
+        myFallowMap = getattr(myModel, "mAreaTargetsCropsFallowMap", {}) or {}
+        if mySownMap:
+            myPool = float(getattr(myModel, "mFallowMCalPool", 0.0) or 0.0)
+            myUsed = float(getattr(myModel, "mFallowMCalAllocated", 0.0) or 0.0)
+            myTiles.append(("Sown cropland", f"{sum(mySownMap.values()):,.1f} Ha", "cultivated in a given year"))
+            myTiles.append(("Rested fallow", f"{sum(myFallowMap.values()):,.1f} Ha",
+                            f"{myUsed:,.0f} of {myPool:,.0f} MCal fallow grazing used by herds"))
         for myIndex, (myTitle, myValue, mySub) in enumerate(myTiles):
             self.tilesLayout.addWidget(self._tile(myTitle, myValue, mySub, theAccent=myIndex == 0), myIndex // 2, myIndex % 2)
         self._setExportsEnabled(True)
