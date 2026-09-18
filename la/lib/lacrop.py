@@ -94,12 +94,17 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         if not isinstance(other, LaCrop):
             return False
         myAttributes = [
-            '_mName',              '_mDescription',     '_mGuid',
-            '_mCropYield',         '_mCalories',        '_mFodderProduction',
-            '_mFodderValue',       '_mFodderEnergyType', '_mAreaUnits',
-            '_mImageFile'
+            'mName',        'mDescription',      '_mGuid',
+            'mCropYield',   'mCalories',         'mFodderProduction',
+            'mFodderValue', 'mFodderEnergyType', 'mAreaUnits',
+            'mImageFile',
         ]
-        return all(getattr(self, attr) == getattr(other, attr) for attr in myAttributes)
+        return all(
+            getattr(self, myAttr, None) == getattr(other, myAttr, None) for myAttr in myAttributes
+        )
+
+    def __hash__(self):
+        return hash(self._mGuid)
 
     def __del__(self):
         """

@@ -280,7 +280,7 @@ class LaUtils:
                     return myLaAnimal
 
         LaUtils.debug.log(f"No animal found with GUID {theGuid}, returning blank animal", "Animals")
-        return myLaAnimal
+        return LaAnimal()
 
     @staticmethod
     def getAvailableCrops(): # -> Dict[str, LaCrop]
@@ -361,8 +361,8 @@ class LaUtils:
         :return: The path to the user's conversion tables directory
         :rtype: str
         """
-        myPath = QDir.homePath() + "/.landuseAnalyst/conversionTables/"
-        QDir().mkpath(myPath)
+        myPath = os.path.join(LaUtils.userDataPath(), "conversionTables")
+        LaUtils.ensureDirectoryExists(myPath)
         return myPath
 
     @staticmethod
@@ -379,8 +379,8 @@ class LaUtils:
         :return: The path to the user's images directory
         :rtype: str
         """
-        myPath = QDir.homePath() + "/.landuseAnalyst/images/"
-        QDir().mkpath(myPath)
+        myPath = os.path.join(LaUtils.userDataPath(), "images")
+        LaUtils.ensureDirectoryExists(myPath)
         return myPath
 
     @staticmethod
@@ -393,9 +393,8 @@ class LaUtils:
         :return: The path to the directory where crop parameter profiles are stored
         :rtype: str
         """
-        import os
-        myPath = os.path.join(os.path.expanduser("~"), ".landuseAnalyst", "cropParameterProfiles")
-        os.makedirs(myPath, exist_ok=True)
+        myPath = os.path.join(LaUtils.userDataPath(), "cropParameterProfiles")
+        LaUtils.ensureDirectoryExists(myPath)
         return myPath
 
     @staticmethod
@@ -897,9 +896,10 @@ class LaUtils:
         :return: The path to the user's data directory
         :rtype: str
         """
-        home = os.path.expanduser('~')
-        base_dir = '.landuseAnalyst'
-        return os.path.join(home, base_dir)
+        # Single source of truth: the QSettings-backed settings dir (default
+        # ~/.landuseAnalyst/), normalised without a trailing separator so the
+        # per-profile helpers can os.path.join onto it.
+        return os.path.normpath(LaUtils.userSettingsDirPath())
 
     @staticmethod
     def ensureDirectoryExists(path: str) -> str:

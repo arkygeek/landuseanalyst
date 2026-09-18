@@ -24,9 +24,14 @@ from qgis.core import (
     QgsTask,
     QgsProject,
     QgsRasterLayer,
+    QgsVectorLayer,
+    QgsFeature,
+    QgsGeometry,
+    QgsPointXY,
 )
 
 from la.lib.lautils import LaUtils
+from la.gui.lalayerstyles import LaLayerStyles
 from la.lib.lagrass import LaGrass, LaGrassError
 from la.lib.lacatchment import (
     LaCatchment,
@@ -42,10 +47,6 @@ if TYPE_CHECKING:  # pragma: no cover
 
 
 _GROUP_NAME = "Catchment Analysis"
-_QML_STYLE  = os.path.join(
-    os.path.dirname(os.path.dirname(__file__)),  # la/
-    "resources", "styles", "catchment_mask.qml",
-)
 
 
 class LaCatchmentTask(QgsTask):
@@ -151,19 +152,27 @@ class LaCatchmentTask(QgsTask):
         myGroup = myRoot.findGroup(_GROUP_NAME)
         if myGroup is None:
             myGroup = myRoot.insertGroup(0, _GROUP_NAME)
+        myGroup.setExpanded(True)
         myRunGroup = myGroup.addGroup(self._runGroupName())
+        myRunGroup.setExpanded(True)
 
-        # Cost surface first — semi-transparent gradient via default renderer
-        if self.mResults.costRasterPath:
-            myCostLayer = QgsRasterLayer(
-                self.mResults.costRasterPath, "Cost surface"
-            )
-            if myCostLayer.isValid():
-                myProject.addMapLayer(myCostLayer, False)
-                myRunGroup.addLayer(myCostLayer)
-                myCostLayer.setOpacity(0.55)
+        myDemLayer = self._resolveLayer(self.mInputs.demLayerId, "DEM")
+        myCrs = myDemLayer.crs() if myDemLayer is not None else None
 
-        # Then the per-item masks, with the catchment-mask style if it exists
+        # 1. Settlement marker on top so the seed is always visible.
+        mySettlementLayer = self._buildSettlementLayer(myCrs)
+        if mySettlementLayer is not None:
+            myProject.addMapLayer(mySettlementLayer, False)
+            myRunGroup.addLayer(mySettlementLayer)
+
+        # 2. Per-item masks, split into Crops / Animals sub-groups. Both are
+        #    expanded so the results are visible without any clicking.
+        myCropsGroup   = myRunGroup.addGroup("Crops")
+        myAnimalsGroup = myRunGroup.addGroup("Animals")
+        myCropsGroup.setExpanded(True)
+        myAnimalsGroup.setExpanded(True)
+        myCropNames = self._selectedCropNames()
+        myAdded = 0
         for myItem in self.mResults.items:
             if myItem.outputPath is None or myItem.status is SearchStatus.Skipped:
                 continue
@@ -175,12 +184,25 @@ class LaCatchmentTask(QgsTask):
                 )
                 continue
             myProject.addMapLayer(myLayer, False)
-            myRunGroup.addLayer(myLayer)
-            self._applyMaskStyle(myLayer)
+            myIsCrop = myItem.itemName == "commonCrop" or myItem.itemName in myCropNames
+            (myCropsGroup if myIsCrop else myAnimalsGroup).addLayer(myLayer)
+            LaLayerStyles.applyCatchmentMaskStyle(myLayer, theIsCrop=myIsCrop)
+            myAdded += 1
+        for mySubGroup in (myCropsGroup, myAnimalsGroup):
+            if not mySubGroup.children():
+                myRunGroup.removeChildNode(mySubGroup)
+
+        # 3. Cost surface last (bottom of the group), semi-transparent so the
+        #    terrain underneath stays readable.
+        if self.mResults.costRasterPath:
+            myCostLayer = QgsRasterLayer(self.mResults.costRasterPath, "Cost surface (s walking)")
+            if myCostLayer.isValid():
+                myProject.addMapLayer(myCostLayer, False)
+                myRunGroup.addLayer(myCostLayer)
+                LaLayerStyles.applyCostSurfaceStyle(myCostLayer)
 
         self.grassMessage.emit(
-            f"[DONE] Added {len(self.mResults.items)} item(s) to layer group "
-            f"'{_GROUP_NAME}'."
+            f"[DONE] Added {myAdded} item layer(s) to group '{_GROUP_NAME}'."
         )
         LaUtils.debug.log("Catchment task complete", "Calculation")
 
@@ -259,8 +281,39 @@ class LaCatchmentTask(QgsTask):
             f" / target {theItem.targetHa:.1f}){myStatusBadge}"
         )
 
-    @staticmethod
-    def _applyMaskStyle(theLayer: QgsRasterLayer) -> None:
-        if os.path.exists(_QML_STYLE):
-            theLayer.loadNamedStyle(_QML_STYLE)
-            theLayer.triggerRepaint()
+    def _selectedCropNames(self) -> set:
+        """Names of the crops selected on the model, for Crops/Animals grouping."""
+        myNames = set()
+        for myCropGuid in getattr(self.mModel, "mCropsMap", {}).keys():
+            try:
+                myCrop = LaUtils.getCrop(myCropGuid)
+                if myCrop is not None and myCrop.name:
+                    myNames.add(myCrop.name)
+            except Exception:  # pragma: no cover - defensive, catalogue lookups
+                continue
+        return myNames
+
+    def _buildSettlementLayer(self, theCrs) -> Optional[QgsVectorLayer]:
+        """
+        Memory point layer holding the settlement seed, styled as a red circle.
+
+        :param theCrs: CRS of the DEM (``QgsCoordinateReferenceSystem``) or None.
+        :rtype: QgsVectorLayer | None
+        """
+        try:
+            myEasting  = float(getattr(self.mModel, "easting", 0.0))
+            myNorthing = float(getattr(self.mModel, "northing", 0.0))
+        except (TypeError, ValueError):
+            return None
+        myUri = "Point"
+        if theCrs is not None and theCrs.isValid():
+            myUri += f"?crs={theCrs.authid()}"
+        myLayer = QgsVectorLayer(myUri, "Settlement", "memory")
+        if not myLayer.isValid():
+            return None
+        myFeature = QgsFeature()
+        myFeature.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(myEasting, myNorthing)))
+        myLayer.dataProvider().addFeatures([myFeature])
+        myLayer.updateExtents()
+        LaLayerStyles.applySettlementStyle(myLayer)
+        return myLayer

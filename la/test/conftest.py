@@ -22,6 +22,18 @@ _REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")
 if _REPO_ROOT not in sys.path:
     sys.path.insert(0, _REPO_ROOT)
 
+try:
+    from qgis.PyQt import sip as _sip
+    from qgis.PyQt.QtWidgets import QApplication as _QApplication
+
+    # Qt/QGIS C++ objects (QDialog-based LaModel, module-level QObjects) are
+    # torn down in arbitrary order at interpreter exit and segfault the test
+    # process (exit 139) even when every test passed. Let the OS reclaim them.
+    _sip.setdestroyonexit(False)
+    _APP = _QApplication.instance() or _QApplication([])
+except ImportError:  # pragma: no cover - engine-only environments without Qt
+    _APP = None
+
 _TEST_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -54,3 +66,29 @@ def shunaDemPath(testDataDir) -> str:
 def thesisScenarioCsvDir() -> str:
     """Thesis Numbers-spreadsheet dumps for the min-pop Chalcolithic scenario."""
     return os.path.join(_TEST_DIR, "data", "thesis_scenarios", "min_pop_chalcolithic")
+
+
+@pytest.fixture
+def sampleProfilesDir(repoRoot, monkeypatch) -> str:
+    """
+    Point ``LaUtils`` at the repo's ``testData/`` profile catalogue.
+
+    ``testData/`` holds the thesis-canonical Chalcolithic crop/animal
+    profiles (Table E.1/F.1 values), so calculations run against it can be
+    compared with the published thesis numbers and the web app's
+    ``tests/test_thesis_golden_numbers.py``.
+    """
+    from la.lib.lautils import LaUtils
+
+    myDir = os.path.join(repoRoot, "testData")
+    monkeypatch.setattr(LaUtils, "userDataPath", staticmethod(lambda: myDir))
+    monkeypatch.setattr(LaUtils, "userSettingsDirPath", staticmethod(lambda: myDir))
+    return myDir
+
+
+@pytest.fixture(scope="session")
+def qtApp():
+    """A ``QApplication`` for tests that construct QObject-based model classes."""
+    if _APP is None:
+        pytest.skip("Qt is not available in this environment")
+    return _APP

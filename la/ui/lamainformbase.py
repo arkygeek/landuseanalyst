@@ -123,36 +123,18 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         self.cbCommonLandEnergyType.addItem("TDN")
         # endregion
 
-        # region DIET SLIDERS CONNECTED
-        self.sliderDiet.valueChanged.connect(self.on_sliderDiet_valueChanged)
-        self.sliderMeat.valueChanged.connect(self.on_sliderMeat_valueChanged)
-        self.sliderCrop.valueChanged.connect(self.on_sliderCrop_valueChanged)
-        # endregion
-
+        # Signal wiring lives in connectSignalsSlots() (called once from
+        # __init__ below). Slots named on_<objectName>_<signal> are connected
+        # automatically by setupUi()'s connectSlotsByName and must NOT be
+        # connected again here — every duplicate connection re-ran the full
+        # diet calculation per slider tick.
         LaMainFormBase.setDietLabels(self)  # recalculates model (to update the diet labels!)
 
-        # connect the change in tree to it's def
-        self.treeHelp.currentItemChanged.connect(self.current_item_changed)
-
-        # Connect signals to slots
-        self.treeHelp.currentItemChanged.connect(self.helpItemClicked)
-        self.listWidgetCalculationsCrop.currentItemChanged.connect(self.cropCalcClicked)
-        self.listWidgetCalculationsAnimal.currentItemChanged.connect(self.animalCalcClicked)
-        self.pushButtonExit.clicked.connect(QtWidgets.qApp.quit)
-        self.tblAnimals.cellClicked.connect(self.animalCellClicked)
-        self.tblAnimals.cellChanged.connect(self.animalCalcSelectionChanged)
-        self.tblCrops.cellClicked.connect(self.cropCellClicked)
-        self.tblCrops.cellChanged.connect(self.cropCalcSelectionChanged)
-        self.cbDebug.clicked.connect(self.on_cbDebug_clicked)
-
-        # Connect tab widget change signal
-        if hasattr(self, 'tabWidgetMain'):
-            self.tabWidgetMain.currentChanged.connect(self.on_tabWidgetMain_currentChanged)
-
-    def on_tabWidgetMain_currentChanged(self, index):
-        """Handle tab changes in the main tab widget."""
-        # Assuming Calculations tab is the 4th tab (index 3)
-        if index == 3: # Index of the Calculations tab
+    def on_MainTabs_currentChanged(self, index):
+        """Handle tab changes in the main tab widget (auto-connected by name)."""
+        if self.MainTabs.tabText(index) != "Calculations":
+            return
+        if True:
             LaUtils.debug.log("Calculations tab selected", "UI")
             # Check if the animal list has items
             if self.listWidgetCalculationsAnimal.count() > 0:
@@ -1889,53 +1871,31 @@ class LaMainFormBase(QDialog, FORM_CLASS):
         # Update any other UI elements or calculations as needed
 
     def connectSignalsSlots(self):
-        """Connect signals to slots for UI interaction."""
-        # TODO: Menu and toolbar actions will be implemented later
-        # These will include:
-        # - File menu: New, Open, Save, Save As, Preferences
-        # - Help menu: About
-        # - Toolbar: New, Open, Save, Save As, Preferences
+        """
+        Connect the signals whose slot names do not follow Qt's
+        ``on_<objectName>_<signal>`` auto-connect convention.
 
-        # Connect the existing buttons
+        Everything else (sliders, diet checkboxes, spin boxes, Run, Debug,
+        MainTabs) is wired by ``connectSlotsByName`` inside ``setupUi``.
+        """
         self.pushButtonExit.clicked.connect(self.close)
         self.pbnNewCrop.clicked.connect(self.on_clicked_pbnNewCrop)
         self.pbnNewCropParameter.clicked.connect(self.on_clicked_pbnNewCropParameter)
         self.pbnNewAnimal.clicked.connect(self.on_clicked_pbnNewAnimal)
         self.pbnNewAnimalParameter.clicked.connect(self.on_clicked_pbnNewAnimalParameter)
 
-        # Connect tree widget
         self.treeHelp.currentItemChanged.connect(self.current_item_changed)
+        self.treeHelp.currentItemChanged.connect(self.helpItemClicked)
 
-        # Connect sliders
-        self.sliderDiet.valueChanged.connect(self.on_sliderDiet_valueChanged)
-        self.sliderMeat.valueChanged.connect(self.on_sliderMeat_valueChanged)
-        self.sliderCrop.valueChanged.connect(self.on_sliderCrop_valueChanged)
-
-        # Connect checkboxes
-        self.cboxIncludeDairy.toggled.connect(self.on_cboxIncludeDairy_toggled)
-        self.cboxLimitDairy.toggled.connect(self.on_cboxLimitDairy_toggled)
-        self.cboxBaseOnPlants.toggled.connect(self.on_cboxBaseOnPlants_toggled)
-
-        # Connect spinboxes
-        self.sbLimitDairyPercent.valueChanged.connect(self.on_sbLimitDairyPercent_valueChanged)
-        self.sbDailyCalories.valueChanged.connect(self.on_sbDailyCalories_valueChanged)
-        self.sbDairyUtilisation.valueChanged.connect(self.on_sbDairyUtilisation_valueChanged)
-        self.sbPopulation.valueChanged.connect(self.on_sbPopulation_valueChanged)
-        self.sbCommonRasterValue.valueChanged.connect(self.on_sbCommonRasterValue_valueChanged)
-
-        # Connect combo boxes
         self.cbAreaUnits.currentIndexChanged.connect(self.on_cbAreaUnits_changed)
         self.cbCommonLandEnergyType.currentIndexChanged.connect(self.on_cbCommonLandEnergyType_changed)
 
-        # Connect list widgets and tables
-        self.treeHelp.currentItemChanged.connect(self.helpItemClicked)
         self.listWidgetCalculationsCrop.currentItemChanged.connect(self.cropCalcClicked)
         self.listWidgetCalculationsAnimal.currentItemChanged.connect(self.animalCalcClicked)
         self.tblAnimals.cellClicked.connect(self.animalCellClicked)
         self.tblAnimals.cellChanged.connect(self.animalCalcSelectionChanged)
         self.tblCrops.cellClicked.connect(self.cropCellClicked)
         self.tblCrops.cellChanged.connect(self.cropCalcSelectionChanged)
-        self.cbDebug.clicked.connect(self.on_cbDebug_clicked)
 
     def on_sbCommonRasterValue_valueChanged(self, theValue):
         """Handle common raster value changes.

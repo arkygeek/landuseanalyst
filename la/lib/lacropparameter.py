@@ -63,6 +63,22 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
     _useSpecificLandChanged = pyqtSignal(bool)
     _rasterNameChanged = pyqtSignal(str)
 
+    def __eq__(self, other):
+        """Two crop parameter sets are equal when GUID and every field match."""
+        if not isinstance(other, LaCropParameter):
+            return False
+        myAttributes = [
+            '_mGuid', 'mName', 'mDescription', 'mCropGuid', 'mPercentTameCrop', 'mSpoilage',
+            'mReseed', 'mCropRotation', 'mFallowRatio', 'mFallowValue', 'mFallowEnergyType',
+            'mAreaUnits', 'mUseCommonLand', 'mUseSpecificLand', 'mRasterName',
+        ]
+        return all(
+            getattr(self, myAttr, None) == getattr(other, myAttr, None) for myAttr in myAttributes
+        )
+
+    def __hash__(self):
+        return hash(self._mGuid)
+
     def __init__(self, theCropParameter: Optional['LaCropParameter'] = None, parent=None):
         """
         Initialize a new crop parameter object.

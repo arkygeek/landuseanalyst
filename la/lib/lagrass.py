@@ -507,6 +507,12 @@ class LaGrass(QObject):
         myOutBand.WriteArray(myCostGrid.astype(np.float32))
         myOutBand.FlushCache()
         myOutDs.FlushCache()
+        # GDAL only finalises the GeoTIFF (header + directory) when the last
+        # reference to the dataset is dropped. Without these the file stays
+        # write-locked and the very next gdal.Open() on it fails with
+        # "not recognized as a supported file format".
+        myOutBand = None
+        myOutDs = None
         self._mTempRasters.append(myOutPath)
         self.message.emit(
             f"Built walk-cost surface (pure-Python Tobler) from "
@@ -666,6 +672,10 @@ class LaGrass(QObject):
         myOutBand.WriteArray(theMask)
         myOutBand.FlushCache()
         myOutDs.FlushCache()
+        # Release the handles so GDAL finalises the file (see _makeWalkCostPure).
+        myOutBand = None
+        myOutDs = None
+        myReference = None
 
     # ------------------------------------------------------------------
     # Internals

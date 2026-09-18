@@ -29,6 +29,21 @@ class LaFoodSource(QObject):
     _usedChanged = pyqtSignal(bool)
     _cropGuidChanged = pyqtSignal(str)
 
+    def __eq__(self, other):
+        """Food sources are equal when crop, quantities, days and usage flag match."""
+        if not isinstance(other, LaFoodSource):
+            return False
+        return (
+            self.mCropGuid == other.mCropGuid
+            and self.mGrain == other.mGrain
+            and self.mFodder == other.mFodder
+            and self.mDays == other.mDays
+            and self.mUsed == other.mUsed
+        )
+
+    def __hash__(self):
+        return hash((self.mCropGuid, self.mGrain, self.mFodder, self.mDays, self.mUsed))
+
     def __init__(self, parent=None):
         """
         Initialize a new LaFoodSource instance with default values.

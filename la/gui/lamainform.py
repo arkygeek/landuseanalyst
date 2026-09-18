@@ -40,6 +40,11 @@ class LaMainForm(LaMainFormBase):
     This class extends LaMainFormBase with additional functionality.
     """
 
+    @property
+    def mModel(self):
+        """The single :class:`LaModel` owned by :class:`LaMainFormBase` (``self.model``)."""
+        return self.model
+
     def __init__(self, parent=None):
         """
         Constructor for LaMainForm.
@@ -50,11 +55,9 @@ class LaMainForm(LaMainFormBase):
         """
         super(LaMainForm, self).__init__(parent)
 
-        # Use the same LaModel instance the base class (LaMainFormBase) created
-        # at self.model. Aliasing self.mModel → self.model means click handlers
-        # see the same calculation results that setDietLabels populated, instead
-        # of operating on a second disconnected model.
-        self.mModel = self.model
+        # self.mModel is a read-only alias of the base class's self.model (see
+        # the property below), so slots that fire during the base __init__
+        # already see the one shared LaModel.
         # Connect the new signal for calculation logging
         self.mModel.logCalculationStep.connect(self.logToAllChannels) # Add this line
 
@@ -274,20 +277,9 @@ class LaMainForm(LaMainFormBase):
         if hasattr(self, 'cbAreaUnits'):
             self.cbAreaUnits.currentIndexChanged.connect(self.updateCalculations)
 
-        # Connect the debug checkbox to enable/disable debug logging
-        if hasattr(self, 'cbDebug'):
-            self.cbDebug.clicked.connect(self.on_cbDebug_clicked)
-
-        # Override the base class's on_cbDebug_clicked to use our version
-        if hasattr(LaMainFormBase, 'on_cbDebug_clicked'):
-            self.on_cbDebug_clicked = self.override_on_cbDebug_clicked
-
-        # Connect the calculation list item clicks to the handler methods
-        if hasattr(self, 'listWidgetCalculationsAnimal'):
-            self.listWidgetCalculationsAnimal.currentItemChanged.connect(self.animalCalcClicked)
-
-        if hasattr(self, 'listWidgetCalculationsCrop'):
-            self.listWidgetCalculationsCrop.currentItemChanged.connect(self.cropCalcClicked)
+        # cbDebug is auto-connected to on_cbDebug_clicked; route that slot to
+        # this class's implementation.
+        self.on_cbDebug_clicked = self.override_on_cbDebug_clicked
 
         LaUtils.debug.log("Additional signals connected", "Setup")
 
@@ -454,52 +446,6 @@ class LaMainForm(LaMainFormBase):
         """Handle debug messages from the message bus."""
         # Simply delegate to our unified logging method
         self.logToAllChannels(message)
-
-    @pyqtSlot(bool)
-    def on_cboxBaseOnPlants_clicked(self, checked):
-        """Handle base on plants checkbox changes."""
-        self.setDietLabels()
-
-    @pyqtSlot(bool)
-    def on_cboxIncludeDairy_clicked(self, checked):
-        """Handle include dairy checkbox changes."""
-        self.setDietLabels()
-
-    @pyqtSlot(bool)
-    def on_cboxLimitDairy_clicked(self, checked):
-        """Handle limit dairy checkbox changes."""
-        self.setDietLabels()
-
-    @pyqtSlot(int)
-    def on_sbDailyCalories_valueChanged(self, value):
-        """Handle daily calories spinbox value changes."""
-        self.setDietLabels()
-
-    @pyqtSlot(int)
-    def on_sbDairyUtilisation_valueChanged(self, value):
-        """Handle dairy utilisation spinbox value changes."""
-        self.setDietLabels()
-
-    @pyqtSlot(int)
-    def on_sbLimitDairyPercent_valueChanged(self, value):
-        """Handle dairy limit percentage spinbox value changes."""
-        self.setDietLabels()
-
-    @pyqtSlot(int)
-    def on_sliderDiet_valueChanged(self, value):
-        """Handle diet slider value changes."""
-        self.labelMeatPercent.setText(str(value))
-        self.labelCropPercent.setText(str(100 - value))
-        self.setDietLabels()
-
-    @pyqtSlot(int)
-    def on_sliderMeat_valueChanged(self, theValue):
-        """Handle meat ratio slider value changes."""
-        myMinString = 100 - theValue
-        myMaxString = theValue
-        self.labelMeatWildPercent.setText(str(myMinString))
-        self.labelMeatTamePercent.setText(str(myMaxString))
-        self.setDietLabels()
 
     def readSettings(self):
         """Read application settings."""
@@ -1142,10 +1088,10 @@ class LaMainForm(LaMainFormBase):
             self.tbReport.setHtml(myReportHtml)
             
             # Switch to the report tab
-            if hasattr(self, 'tabWidgetMain'):
-                reportTabIndex = self.findTabIndex('Report')
+            if hasattr(self, 'MainTabs'):
+                reportTabIndex = self.findTabIndex('Results')
                 if reportTabIndex >= 0:
-                    self.tabWidgetMain.setCurrentIndex(reportTabIndex)
+                    self.MainTabs.setCurrentIndex(reportTabIndex)
             
             # Update status
             if hasattr(self, 'statusBar'):
@@ -1172,10 +1118,10 @@ class LaMainForm(LaMainFormBase):
             
     def findTabIndex(self, tabName):
         """Find the index of a tab by name."""
-        if not hasattr(self, 'tabWidgetMain'):
+        if not hasattr(self, 'MainTabs'):
             return -1
-            
-        for i in range(self.tabWidgetMain.count()):
-            if self.tabWidgetMain.tabText(i) == tabName:
+
+        for i in range(self.MainTabs.count()):
+            if self.MainTabs.tabText(i) == tabName:
                 return i
         return -1

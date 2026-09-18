@@ -79,7 +79,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             return False
         # Compare all relevant attributes
         myAttributes = [
-            'mGuid', 'mName', 'mDescription', 'mAnimalGuid', 'mPercentTameMeat',
+            '_mGuid', 'mName', 'mDescription', 'mAnimalGuid', 'mPercentTameMeat',
             'mUseCommonGrazingLand', 'mUseSpecificGrazingLand', 'mFodderUse',
             'mFoodSourceMap', 'mFallowUsage', 'mRasterName', 'mAreaUnits',
             'mEnergyType', 'mSpecificLandEnergyType', 'mValueCommonGrazingLand',
@@ -319,6 +319,27 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
             self._valueSpecificGrazingLandChanged.emit(value)
 
 
+    @staticmethod
+    def _readIntWithFallback(theElement, thePrimaryTag: str, theFallbackTag: str, theDefault: int = 0) -> int:
+        """
+        Read an integer child element, trying ``thePrimaryTag`` then ``theFallbackTag``.
+
+        :param theElement: Parent ``QDomElement``.
+        :param thePrimaryTag: Canonical tag name.
+        :param theFallbackTag: Legacy tag name used by older profiles.
+        :param theDefault: Value returned when neither tag holds a number.
+        :rtype: int
+        """
+        for myTag in (thePrimaryTag, theFallbackTag):
+            myText = theElement.firstChildElement(myTag).text().strip()
+            if not myText:
+                continue
+            try:
+                return int(float(myText))
+            except (ValueError, TypeError):
+                continue
+        return theDefault
+
     def fromXml(self, theXml):
         """
         Parse animal parameter data from XML string.
@@ -359,15 +380,17 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
         except (ValueError, TypeError):
             self.mUseSpecificGrazingLand = False
             
-        try:
-            self.mValueCommonGrazingLand = int(myTopElement.firstChildElement("foodValueCommonGrazingLand").text() or 0)
-        except (ValueError, TypeError):
-            self.mValueCommonGrazingLand = 0
-            
-        try:
-            self.mValueSpecificGrazingLand = int(myTopElement.firstChildElement("foodValueOfSpecificGrazingLand").text() or 0)
-        except (ValueError, TypeError):
-            self.mValueSpecificGrazingLand = 0
+        # Grazing-land productivity. The canonical tags are
+        # <foodValueCommonGrazingLand> / <foodValueOfSpecificGrazingLand>;
+        # older profiles (and the toXml of some plugin builds) wrote
+        # <valueCommonGrazingLand> / <valueSpecificGrazingLand> instead, so
+        # fall back to those when the canonical tag is absent or empty.
+        self.mValueCommonGrazingLand = self._readIntWithFallback(
+            myTopElement, "foodValueCommonGrazingLand", "valueCommonGrazingLand"
+        )
+        self.mValueSpecificGrazingLand = self._readIntWithFallback(
+            myTopElement, "foodValueOfSpecificGrazingLand", "valueSpecificGrazingLand"
+        )
 
         # Parse area units
         myAreaUnits = myTopElement.firstChildElement("areaUnits").text()
@@ -508,8 +531,8 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
         myString += f"  <areaUnits>{self.mAreaUnits.name}</areaUnits>\n"
         myString += f"  <energyType>{self.mEnergyType.name}</energyType>\n"
         myString += f"  <specificLandEnergyType>{self.mSpecificLandEnergyType.name}</specificLandEnergyType>\n"
-        myString += f"  <valueCommonGrazingLand>{self.valueCommonGrazingLand}</valueCommonGrazingLand>\n"
-        myString += f"  <valueSpecificGrazingLand>{self.valueSpecificGrazingLand}</valueSpecificGrazingLand>\n"
+        myString += f"  <foodValueCommonGrazingLand>{self.valueCommonGrazingLand}</foodValueCommonGrazingLand>\n"
+        myString += f"  <foodValueOfSpecificGrazingLand>{self.valueSpecificGrazingLand}</foodValueOfSpecificGrazingLand>\n"
         myString += "</animalParameter>\n"
         return myString
 

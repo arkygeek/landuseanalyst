@@ -537,8 +537,13 @@ def doCalcsAnimalsFirstIncludeDairy(theModel: 'LaModel') -> LaDietLabels:
     c15 = theModel.mDietPercent * 0.01                   # animal fraction of diet
     e15 = c14 * c15                                      # animal kcal budget
 
-    # kcal → MCal scaling (used by reports and aggregate labels)
-    _K_KCAL_TO_MCAL = 1e-6
+    # kcal → MCal scaling (used by reports, aggregate labels and the animal
+    # area targets). 1 MCal = 1000 kcal, so the factor is 1e-3. The earlier
+    # 1e-6 ("* 0.001 * 0.001") shrank every animal area target 1000× —
+    # Sheep came out as 0.000216 Ha instead of 0.2162 Ha, smaller than one
+    # 10 m pixel, so the catchment binary search returned empty masks.
+    # Mirrors backend/engine/lamodel.py in landuseanalyst-web.
+    _K_KCAL_TO_MCAL = 1e-3
 
     myDairyMCalorieCounter    = 0.0
     myTameMeatMCalorieCounter = 0.0
@@ -681,7 +686,7 @@ def doCalcsAnimalsFirstIncludeDairy(theModel: 'LaModel') -> LaDietLabels:
     c29 = myTameMeatMCalorieCounter / c14   # tame-meat fraction
     c27 = myDairyMCalorieCounter / c14      # dairy fraction
 
-    # Convert kcal → MCal (* 0.001 * 0.001 = * 1e-6)
+    # Convert kcal → MCal (* 1e-3)
     _k = _K_KCAL_TO_MCAL
 
     LaUtils.debug.log(

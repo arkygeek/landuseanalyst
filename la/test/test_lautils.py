@@ -99,93 +99,48 @@ class TestLaUtils(unittest.TestCase):
         # Assert the directory creation was called
         theMockMakeDirs.assert_called_once_with('/mock/path/to/settings/modelOutputs', exist_ok=True)
 
-    @patch('la.lib.lautils.QDir.mkpath')
-    def test_userAnimalProfilesDirPath(self, theMockMakePath):
-        MESSAGE_BUS.debug("Test number 4: userAnimalProfilesDirPath")
-        # Call the static method
-        myResult = LaUtils.userAnimalProfilesDirPath()
+    def _assertProfileDir(self, theHelperName: str, theSubDir: str):
+        """All per-profile helpers resolve under userDataPath() and create the dir."""
+        import tempfile
+        with tempfile.TemporaryDirectory() as myTempDir:
+            with patch('la.lib.lautils.LaUtils.userSettingsDirPath', return_value=myTempDir):
+                myResult = getattr(LaUtils, theHelperName)()
+        self.assertEqual(myResult, os.path.join(myTempDir, theSubDir))
 
-        # Assert the expected path is returned
-        myExpectedPath = QDir.homePath() + "/.landuseAnalyst/animalProfiles/"
-        self.assertEqual(myResult, myExpectedPath)
+    def test_userAnimalProfilesDirPath(self):
+        self._assertProfileDir('userAnimalProfilesDirPath', 'animalProfiles')
 
-        # Assert the directory creation was called
-        theMockMakePath.assert_called_once_with(myExpectedPath)
+    def test_userCropProfilesDirPath(self):
+        self._assertProfileDir('userCropProfilesDirPath', 'cropProfiles')
 
-    @patch('la.lib.lautils.QDir.mkpath')
-    def test_userCropProfilesDirPath(self, theMockMakePath):
-        MESSAGE_BUS.debug("Test number 5: userCropProfilesDirPath")
-        # Call the static method
-        myResult = LaUtils.userCropProfilesDirPath()
+    def test_userConversionTablesDirPath(self):
+        self._assertProfileDir('userConversionTablesDirPath', 'conversionTables')
 
-        # Assert the expected path is returned
-        myExpectedPath = QDir.homePath() + "/.landuseAnalyst/cropProfiles/"
-        self.assertEqual(myResult, myExpectedPath)
+    def test_userAnimalParameterProfilesDirPath(self):
+        self._assertProfileDir('userAnimalParameterProfilesDirPath', 'animalParameterProfiles')
 
-        # Assert the directory creation was called
-        theMockMakePath.assert_called_once_with(myExpectedPath)
+    def test_userImagesDirPath(self):
+        self._assertProfileDir('userImagesDirPath', 'images')
 
+    def test_userCropParameterProfilesDirPath(self):
+        self._assertProfileDir('userCropParameterProfilesDirPath', 'cropParameterProfiles')
 
-    @patch('la.lib.lautils.QDir.mkpath')
-    def test_userConversionTablesDirPath(self, theMockMakePath):
-        MESSAGE_BUS.debug("Test number 6: userConversionTablesDirPath")
-        # Call the static method
-        myResult = LaUtils.userConversionTablesDirPath()
-
-        # Assert the expected path is returned
-        myExpectedPath = QDir.homePath() + "/.landuseAnalyst/conversionTables/"
-        self.assertEqual(myResult, myExpectedPath)
-
-        # Assert the directory creation was called
-        theMockMakePath.assert_called_once_with(myExpectedPath)
-
-    @patch('la.lib.lautils.QDir.mkpath')
-    def test_userAnimalParameterProfilesDirPath(self, theMockMakePath):
-        MESSAGE_BUS.debug("Test number 7: userAnimalParameterProfilesDirPath")
-        # Call the static method
-        myResult = LaUtils.userAnimalParameterProfilesDirPath()
-
-        # Assert the expected path is returned
-        myExpectedPath = QDir.homePath() + "/.landuseAnalyst/animalParameterProfiles/"
-        self.assertEqual(myResult, myExpectedPath)
-
-        # Assert the directory creation was called
-        theMockMakePath.assert_called_once_with(myExpectedPath)
-
-    @patch('la.lib.lautils.QDir.mkpath')
-    def test_userImagesDirPath(self, theMockMakePath):
-        MESSAGE_BUS.debug("Test number 8: userImagesDirPath")
-        # Call the static method
-        myResult = LaUtils.userImagesDirPath()
-
-        # Assert the expected path is returned
-        myExpectedPath = QDir.homePath() + "/.landuseAnalyst/images/"
-        self.assertEqual(myResult, myExpectedPath)
-
-        # Assert the directory creation was called
-        theMockMakePath.assert_called_once_with(myExpectedPath)
-
-    @patch('la.lib.lautils.QDir.mkpath')
-    def test_userCropParameterProfilesDirPath(self, theMockMakePath):
-        MESSAGE_BUS.debug("Test number 9: userCropParameterProfilesDirPath")
-        # Call the static method
-        myResult = LaUtils.userCropParameterProfilesDirPath()
-
-        # Assert the expected path is returned
-        myExpectedPath = QDir.homePath() + "/.landuseAnalyst/cropParameterProfiles/"
-        self.assertEqual(myResult, myExpectedPath)
-
-        # Assert the directory creation was called
-        theMockMakePath.assert_called_once_with(myExpectedPath)
+    def test_profileDirsAreCreated(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as myTempDir:
+            with patch('la.lib.lautils.LaUtils.userSettingsDirPath', return_value=myTempDir):
+                myPath = LaUtils.userCropParameterProfilesDirPath()
+                self.assertTrue(os.path.isdir(myPath))
 
     def test_convertAreaToHectares(self):
         MESSAGE_BUS.debug("Test number 10: convertAreaToHectares")
         # Test conversion from Dunum to Hectares
-        myResult = LaUtils.convertAreaToHectares("Dunum", 5)
+        from la.lib.la import AreaUnits
+        myResult = LaUtils.convertAreaToHectares(AreaUnits.Dunum, 5)
         self.assertEqual(myResult, 50)
 
         # Test conversion from Hectares to Hectares
-        myResult = LaUtils.convertAreaToHectares("Hectare", 5)
+        myResult = LaUtils.convertAreaToHectares(AreaUnits.Hectare, 5)
         self.assertEqual(myResult, 5)
 
         # Test conversion with an unknown area unit (should return 0)

@@ -119,7 +119,7 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
 
         # Added missing fields that are used in property getters/setters
         self.mPeriod = ""
-        self.mProjection: int
+        self.mProjection = 0  # EPSG code of the settlement coordinates; 0 = unset
         self.mEasting = 0
         self.mNorthing = 0
         self.mEuclideanDistance = False
@@ -450,8 +450,9 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
             theValue (float): The value in the specified area units
             theAreaUnits (AreaUnits): The units of the provided value (Dunum or Hectare)
         """
-        # Store the raw value for future reference
+        # Store the raw value and its units for future reference / serialisation
         self.mCommonLandValue = float(theValue)
+        self.mCommonLandAreaUnits = theAreaUnits
 
         # Convert to int as the C++ version expects an int
         myIntValue = int(theValue)
@@ -738,37 +739,62 @@ class LaModel(QDialog, LaSerialisable, LaGuid):
         self.mLimitDairyPercentage = int(myTopElement.firstChildElement("limitDairyPercent").text())
 
         self.mDairyUtilisation = int(myTopElement.firstChildElement("dairyUtilisation").text())
+
+        # Optional model-level grazing/land attributes. Older scenario files
+        # predate these tags, so every one of them falls back to the value
+        # already held on the model.
+        myCommonLandValueText = myTopElement.firstChildElement("commonLandValue").text().strip()
+        myCommonLandUnitsText = myTopElement.firstChildElement("commonLandAreaUnits").text().strip()
+        if myCommonLandUnitsText in AreaUnits.__members__:
+            self.mCommonLandAreaUnits = AreaUnits[myCommonLandUnitsText]
+        mySpecificLandUnitsText = myTopElement.firstChildElement("specificLandAreaUnits").text().strip()
+        if mySpecificLandUnitsText in AreaUnits.__members__:
+            self.mSpecificLandAreaUnits = AreaUnits[mySpecificLandUnitsText]
+        mySpecificLandEnergyText = myTopElement.firstChildElement("specificLandEnergyType").text().strip()
+        if mySpecificLandEnergyText in EnergyType.__members__:
+            self.mSpecificLandEnergyType = EnergyType[mySpecificLandEnergyText]
+        myHerdSizeText = myTopElement.firstChildElement("herdSize").text().strip()
+        if myHerdSizeText:
+            try:
+                self.mHerdSize = int(float(myHerdSizeText))
+            except ValueError:
+                pass
+        if myCommonLandValueText:
+            try:
+                # Also refreshes mCommonGrazingValue (hectare-converted) used by the calcs.
+                self.setCommonLandValue(float(myCommonLandValueText), self.mCommonLandAreaUnits)
+            except ValueError:
+                pass
         return True
 
     def toXml(self) -> str:
-        myString = f'<model guid="{self.guid}">\\n'
-        myString += f'  <name>{LaUtils.xmlEncode(self.mName)}</name>\\n'
-        myString += f'  <population>{self.mPopulation}</population>\\n'
-        myString += f'  <period>{LaUtils.xmlEncode(self.mPeriod)}</period>\\n'
-        myString += f'  <projection>{self.mProjection}</projection>\\n'
-        myString += f'  <easting>{self.mEasting}</easting>\\n'
-        myString += f'  <northing>{self.mNorthing}</northing>\\n'
-        myString += f'  <euclideanDistance>{self.mEuclideanDistance}</euclideanDistance>\\n'
-        myString += f'  <walkingTime>{self.mWalkingTime}</walkingTime>\\n'
-        myString += f'  <pathDistance>{self.mPathDistance}</pathDistance>\\n'
-        myString += f'  <precision>{self.mPrecision}</precision>\\n'
-        myString += f'  <dietPercent>{self.mDietPercent}</dietPercent>\\n'
-        myString += f'  <plantPercent>{self.mPercentOfDietThatIsFromCrops}</plantPercent>\\n'
-        myString += f'  <meatPercent>{self.mMeatPercent}</meatPercent>\\n'
-        myString += f'  <caloriesPerPersonDaily>{self.mCaloriesPerPersonDaily}</caloriesPerPersonDaily>\\n'
-        myString += f'  <baseOnPlants>{self.mBaseOnPlants}</baseOnPlants>\\n'
-        myString += f'  <includeDairy>{self.mIncludeDairy}</includeDairy>\\n'
-        myString += f'  <limitDairy>{self.mLimitDairy}</limitDairy>\\n'
-        myString += f'  <limitDairyPercent>{self.mLimitDairyPercentage}</limitDairyPercent>\\n'
-        myString += f'  <dairyUtilisation>{self.mDairyUtilisation}</dairyUtilisation>\\n'
+        myString = f'<model guid="{self.guid}">\n'
+        myString += f'  <name>{LaUtils.xmlEncode(self.mName)}</name>\n'
+        myString += f'  <population>{self.mPopulation}</population>\n'
+        myString += f'  <period>{LaUtils.xmlEncode(self.mPeriod)}</period>\n'
+        myString += f'  <projection>{self.mProjection}</projection>\n'
+        myString += f'  <easting>{self.mEasting}</easting>\n'
+        myString += f'  <northing>{self.mNorthing}</northing>\n'
+        myString += f'  <euclideanDistance>{1 if self.mEuclideanDistance else 0}</euclideanDistance>\n'
+        myString += f'  <walkingTime>{1 if self.mWalkingTime else 0}</walkingTime>\n'
+        myString += f'  <pathDistance>{1 if self.mPathDistance else 0}</pathDistance>\n'
+        myString += f'  <precision>{self.mPrecision}</precision>\n'
+        myString += f'  <dietPercent>{self.mDietPercent}</dietPercent>\n'
+        myString += f'  <plantPercent>{self.mPercentOfDietThatIsFromCrops}</plantPercent>\n'
+        myString += f'  <meatPercent>{self.mMeatPercent}</meatPercent>\n'
+        myString += f'  <caloriesPerPersonDaily>{self.mCaloriesPerPersonDaily}</caloriesPerPersonDaily>\n'
+        myString += f'  <baseOnPlants>{1 if self.mBaseOnPlants else 0}</baseOnPlants>\n'
+        myString += f'  <includeDairy>{1 if self.mIncludeDairy else 0}</includeDairy>\n'
+        myString += f'  <limitDairy>{1 if self.mLimitDairy else 0}</limitDairy>\n'
+        myString += f'  <limitDairyPercent>{self.mLimitDairyPercentage}</limitDairyPercent>\n'
+        myString += f'  <dairyUtilisation>{self.mDairyUtilisation}</dairyUtilisation>\n'
         # Added writing for specific land units and energy type
-        myString += f'  <commonLandValue>{self.mCommonLandValue}</commonLandValue>\\n'
-        myString += f'  <commonLandAreaUnits>{self.mCommonLandAreaUnits.name}</commonLandAreaUnits>\\n'
-        myString += f'  <specificLandAreaUnits>{self.mSpecificLandAreaUnits.name}</specificLandAreaUnits>\\n'
-        myString += f'  <specificLandEnergyType>{self.mSpecificLandEnergyType.name}</specificLandEnergyType>\\n'
-        myString += f'  <herdSize>{self.mHerdSize}</herdSize>\\n'
-        myString += f'  <dairyUtilisation>{self.mDairyUtilisation}</dairyUtilisation>\\n'
-        myString += '</model>\\n'
+        myString += f'  <commonLandValue>{self.mCommonLandValue}</commonLandValue>\n'
+        myString += f'  <commonLandAreaUnits>{self.mCommonLandAreaUnits.name}</commonLandAreaUnits>\n'
+        myString += f'  <specificLandAreaUnits>{self.mSpecificLandAreaUnits.name}</specificLandAreaUnits>\n'
+        myString += f'  <specificLandEnergyType>{self.mSpecificLandEnergyType.name}</specificLandEnergyType>\n'
+        myString += f'  <herdSize>{self.mHerdSize}</herdSize>\n'
+        myString += '</model>\n'
         return myString
 
     def doCalcsAnimalsFirstDairySeparate(self) -> LaDietLabels:

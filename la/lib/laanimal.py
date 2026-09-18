@@ -90,6 +90,25 @@ class LaAnimal(QObject, LaSerialisable, LaGuid):
     _imageFileChanged = pyqtSignal(str)
     _femalesPerMaleChanged = pyqtSignal(int)  # Changed from femalesToMalesChanged
 
+    def __eq__(self, other):
+        """Two animals are equal when their GUID and every profile attribute match."""
+        if not isinstance(other, LaAnimal):
+            return False
+        myAttributes = [
+            '_mGuid', 'mName', 'mDescription', 'mImageFile', 'mUsableMeat', 'mKillWeight',
+            'mAdultWeight', 'mGrowTime', 'mMilk', 'mFleece', 'mFleeceWeightKg', 'mMilkGramsPerDay',
+            'mMilkFoodValue', 'mMeatFoodValue', 'mGestating', 'mLactating', 'mJuvenile',
+            'mMaintenance', 'mFeedEnergyType', 'mEstrousCycle', 'mGestationTime', 'mLactationTime',
+            'mYoungPerBirth', 'mWeaningAge', 'mWeaningWeight', 'mSexualMaturity',
+            'mBreedingExpectancy', 'mConceptionEfficiency', 'mDeathRate', 'mFemalesToMales',
+        ]
+        return all(
+            getattr(self, myAttr, None) == getattr(other, myAttr, None) for myAttr in myAttributes
+        )
+
+    def __hash__(self):
+        return hash(self._mGuid)
+
     def __init__(self, theAnimal: Optional['LaAnimal'] = None, parent: Optional[QObject] = None):
         """Initialize an animal with default values or copy from existing.
 
