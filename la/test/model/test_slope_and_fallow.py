@@ -16,7 +16,7 @@ def test_crop_parameter_slope_defaults_and_round_trip():
     myParameter.slopeMaxDegrees = 20.0
     myParameter.slopeMinDegrees = 2.0
     myXml = myParameter.toXml()
-    assert "<slopeMaxDegrees>20.0</slopeMaxDegrees>" in myXml
+    assert "<preferredSlopeMax>20.0</preferredSlopeMax>" in myXml
 
     myCopy = LaCropParameter()
     myCopy.fromXml(myXml)

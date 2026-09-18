@@ -15,6 +15,7 @@ def allAlgorithms() -> List[QgsProcessingAlgorithm]:
     """Fresh instances of every available algorithm."""
     myAlgorithms: List[QgsProcessingAlgorithm] = []
     for myModuleName, myClassName in (
+        ("la.processing.lacatchmentalgorithm", "LaCatchmentAlgorithm"),
         ("la.processing.lathiessenalgorithm", "LaThiessenAlgorithm"),
         ("la.processing.laxtentalgorithm", "LaXtentAlgorithm"),
         ("la.processing.lawalkingroutesalgorithm", "LaWalkingRoutesAlgorithm"),

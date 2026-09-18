@@ -63,6 +63,7 @@ class LaScenarioController(QObject):
     catchmentProgress    = pyqtSignal(int, int, int)
     catchmentMessage     = pyqtSignal(str)
     catchmentFinished    = pyqtSignal(bool, str)
+    catchmentPreview     = pyqtSignal(str, str, float, float, float)   # item, maskPath, threshold, achievedHa, targetHa
     modelReplaced        = pyqtSignal()
     recentScenariosChanged = pyqtSignal()
 
@@ -430,6 +431,7 @@ class LaScenarioController(QObject):
         myTask.overallProgress.connect(lambda done, _total: self.catchmentProgress.emit(done, 0, 0))
         myTask.targetProgress.connect(lambda it, mx: self.catchmentProgress.emit(-1, it, mx))
         myTask.completed.connect(self._onCatchmentCompleted)
+        myTask.previewUpdated.connect(self.catchmentPreview)
         myTask.failed.connect(self._onCatchmentTerminated)
         myTask.taskTerminated.connect(lambda: self._onCatchmentTerminated(""))
         self._mCatchmentTask = myTask
@@ -486,8 +488,12 @@ class LaScenarioController(QObject):
 
     def loadScenarioDocument(self, theDocument: Dict) -> None:
         """Replace the model and selections with ``theDocument`` and notify the panels."""
-        self._mRecalcTimer.stop()
         myModel, myCrops, myAnimals, myPluginBlock = lascenarioio.fromDict(theDocument)
+        self._installModel(myModel, myCrops, myAnimals, myPluginBlock)
+
+    def _installModel(self, theModel, theCrops: Dict[str, str], theAnimals: Dict[str, str], thePluginBlock: Dict) -> None:
+        self._mRecalcTimer.stop()
+        myModel, myCrops, myAnimals, myPluginBlock = theModel, theCrops, theAnimals, thePluginBlock
         self.mModel = myModel
         self.mSelectedCrops = dict(myCrops)
         self.mSelectedAnimals = dict(myAnimals)
@@ -501,7 +507,12 @@ class LaScenarioController(QObject):
             self.dietChanged.emit(None)
 
     def loadScenario(self, thePath: str) -> None:
-        self.loadScenarioDocument(lascenarioio.loadFile(thePath))
+        """Open a ``*.lascenario.json`` or a June 2026 ``<landuseAnalystScenario>`` XML file."""
+        if lascenarioio.isXmlScenario(thePath):
+            myModel, myCrops, myAnimals, myPluginBlock = lascenarioio.loadXmlScenario(thePath)
+            self._installModel(myModel, myCrops, myAnimals, myPluginBlock)
+        else:
+            self.loadScenarioDocument(lascenarioio.loadFile(thePath))
         self.mScenarioPath = thePath
         self._rememberRecent(thePath)
 

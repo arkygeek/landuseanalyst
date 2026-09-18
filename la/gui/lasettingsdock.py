@@ -81,6 +81,7 @@ class LaSettingsDock(QgsDockWidget):
         theController.catchmentProgress.connect(self._onCatchmentProgress)
         theController.catchmentMessage.connect(self._onCatchmentMessage)
         theController.catchmentFinished.connect(self._onCatchmentFinished)
+        theController.catchmentPreview.connect(self._onCatchmentPreview)
         theController.modelReplaced.connect(self._onModelReplaced)
         self.footer.pbnCalculate.clicked.connect(self.onCalculate)
         self.footer.pbnCancel.clicked.connect(theController.cancelCatchment)
@@ -157,6 +158,34 @@ class LaSettingsDock(QgsDockWidget):
     def _onCatchmentFinished(self, theSuccess: bool, theText: str) -> None:
         self.footer.setIdle(theText)
         self._notify(theText, Qgis.Success if theSuccess else Qgis.Warning)
+
+    def _onCatchmentPreview(self, theItem: str, thePath: str, theThreshold: float, theAchieved: float, theTarget: float) -> None:
+        """Show / refresh the current iteration's mask in a transient 'Live Search' group."""
+        from qgis.core import QgsLayerTreeNode, QgsRasterLayer
+        from la.gui.lacatchmenttask import _GROUP_NAME, LIVE_SEARCH_GROUP
+        from la.gui.lalayerstyles import LaLayerStyles
+
+        myProject = QgsProject.instance()
+        myRoot = myProject.layerTreeRoot()
+        myGroup = myRoot.findGroup(_GROUP_NAME) or myRoot.insertGroup(0, _GROUP_NAME)
+        myLive = myGroup.findGroup(LIVE_SEARCH_GROUP) or myGroup.insertGroup(0, LIVE_SEARCH_GROUP)
+        myName = f"Searching {theItem}: {theAchieved:,.1f} Ha / {theTarget:,.1f} at {theThreshold:,.0f}"
+        for myNode in myLive.children():
+            if myNode.nodeType() == QgsLayerTreeNode.NodeLayer and myNode.layer() is not None \
+                    and myNode.layer().customProperty("laPreviewItem") == theItem:
+                myNode.layer().dataProvider().reloadData()
+                myNode.layer().setName(myName)
+                myNode.layer().triggerRepaint()
+                break
+        else:
+            myLayer = QgsRasterLayer(thePath, myName)
+            if myLayer.isValid():
+                myLayer.setCustomProperty("laPreviewItem", theItem)
+                myProject.addMapLayer(myLayer, False)
+                myLive.insertLayer(0, myLayer)
+                LaLayerStyles.applyCatchmentMaskStyle(myLayer, theIsCrop=True, theCategory="preview")
+        if self.mIface is not None:
+            self.mIface.mapCanvas().refresh()
 
     def _onModelReplaced(self) -> None:
         for myPanel in (self.header, self.dietPanel, self.catchmentPanel, self.advancedPanel):

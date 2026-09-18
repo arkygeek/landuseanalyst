@@ -51,6 +51,12 @@ class LaScenarioHeaderPanel(QWidget):
         self.lePeriod.setObjectName("lePeriod")
         self.lePeriod.setPlaceholderText("e.g. Chalcolithic")
         myPeriodRow.addWidget(self.lePeriod, 1)
+        myPeriodRow.addWidget(QLabel("Thesis", self))
+        self.cboThesis = QComboBox(self)
+        self.cboThesis.setObjectName("cboThesisScenarios")
+        self.cboThesis.setToolTip("The 108 Jorgenson thesis scenarios bundled with the plugin.")
+        self.cboThesis.setMinimumWidth(120)
+        myPeriodRow.addWidget(self.cboThesis, 1)
         myPeriodRow.addWidget(QLabel("Recent", self))
         self.cboRecent = QComboBox(self)
         self.cboRecent.setObjectName("cboRecentScenarios")
@@ -66,6 +72,8 @@ class LaScenarioHeaderPanel(QWidget):
         self.pbnScenarioSave.clicked.connect(self._onSave)
         self.pbnScenarioSaveAs.clicked.connect(self._onSaveAs)
         self.cboRecent.activated.connect(self._onRecentActivated)
+        self.cboThesis.activated.connect(self._onThesisActivated)
+        self.populateThesis()
         self.mController.recentScenariosChanged.connect(self.refreshRecent)
         self.refreshRecent()
         self.loadFromController()
@@ -90,7 +98,7 @@ class LaScenarioHeaderPanel(QWidget):
     def _onOpen(self) -> None:
         myStart = os.path.dirname(self.mController.mScenarioPath or "") or os.path.expanduser("~")
         myPath, _ = QFileDialog.getOpenFileName(
-            self, "Open scenario", myStart, "Landuse Analyst scenarios (*.lascenario.json *.json)")
+            self, "Open scenario", myStart, "Landuse Analyst scenarios (*.lascenario.json *.json *.xml)")
         if myPath:
             self.openPath(myPath)
 
@@ -116,6 +124,32 @@ class LaScenarioHeaderPanel(QWidget):
 
     def _onRecentActivated(self, theIndex: int) -> None:
         myPath = self.cboRecent.itemData(theIndex)
+        if myPath:
+            self.openPath(myPath)
+
+    def populateThesis(self) -> None:
+        """List la/scenarios/thesis/*.lascenario.json (index.json order)."""
+        import glob
+        import json
+        myDir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "scenarios", "thesis")
+        self.cboThesis.blockSignals(True)
+        self.cboThesis.clear()
+        self.cboThesis.addItem("—", "")
+        myIndexPath = os.path.join(myDir, "index.json")
+        myEntries = []
+        if os.path.exists(myIndexPath):
+            try:
+                myEntries = [(e["name"], os.path.join(myDir, e["file"])) for e in json.load(open(myIndexPath, encoding="utf-8"))]
+            except (OSError, ValueError, KeyError):
+                myEntries = []
+        if not myEntries:
+            myEntries = [(os.path.basename(p), p) for p in sorted(glob.glob(os.path.join(myDir, "*.lascenario.json")))]
+        for myName, myPath in myEntries:
+            self.cboThesis.addItem(myName, myPath)
+        self.cboThesis.blockSignals(False)
+
+    def _onThesisActivated(self, theIndex: int) -> None:
+        myPath = self.cboThesis.itemData(theIndex)
         if myPath:
             self.openPath(myPath)
 

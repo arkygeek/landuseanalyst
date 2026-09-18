@@ -40,7 +40,7 @@ def test_provider_lists_three_algorithms():
     from la.processing.algorithms import allAlgorithms
 
     myNames = sorted(a.name() for a in allAlgorithms())
-    assert myNames == ["thiessen", "walkingroutes", "xtent"]
+    assert myNames == ["catchment", "thiessen", "walkingroutes", "xtent"]
 
 
 @pytest.mark.usefixtures("qtApp")
@@ -115,3 +115,41 @@ def test_walking_routes_on_the_shuna_window(tmp_path, shunaDemPath):
         assert gdal.Open(myAccumulation).ReadAsArray().max() >= 2
     finally:
         QgsProject.instance().removeMapLayer(myDem.id()); QgsProject.instance().removeMapLayer(mySites.id())
+
+
+@pytest.mark.usefixtures("qtApp", "sampleProfilesDir")
+def test_catchment_algorithm_runs_a_thesis_scenario_headless(tmp_path, shunaDemPath, repoRoot):
+    pytest.importorskip("scipy")
+    from qgis.core import QgsProject, QgsRasterLayer
+    from la.processing.lacatchmentalgorithm import LaCatchmentAlgorithm
+
+    myDemPath = str(tmp_path / "dem.tif")
+    myDs = gdal.Open(shunaDemPath); gt = myDs.GetGeoTransform()
+    myCol = int((SETTLEMENT_X - gt[0]) / gt[1]) - 100; myRow = int((SETTLEMENT_Y - gt[3]) / gt[5]) - 100
+    gdal.Translate(myDemPath, myDs, srcWin=[myCol, myRow, 200, 200], format="GTiff", outputType=gdal.GDT_Float32)
+    myDs = None
+    # low-ground suitability shared by crops and grazing
+    mySuitPath = str(tmp_path / "suit.tif")
+    myDem = gdal.Open(myDemPath); myElev = myDem.GetRasterBand(1).ReadAsArray()
+    myOut = gdal.GetDriverByName("GTiff").Create(mySuitPath, 200, 200, 1, gdal.GDT_Byte)
+    myOut.SetGeoTransform(myDem.GetGeoTransform()); myOut.SetProjection(myDem.GetProjection())
+    myOut.GetRasterBand(1).WriteArray(((myElev >= -100) & (myElev <= 100)).astype(np.uint8)); myOut = None; myDem = None
+
+    myDemLayer = QgsRasterLayer(myDemPath, "dem"); mySuitLayer = QgsRasterLayer(mySuitPath, "suit")
+    QgsProject.instance().addMapLayer(myDemLayer); QgsProject.instance().addMapLayer(mySuitLayer)
+    try:
+        myFolder = str(tmp_path / "masks")
+        myResults, _ = _run(LaCatchmentAlgorithm(), {
+            "INPUT_DEM": myDemLayer.id(),
+            "INPUT_SETTLEMENT": f"{SETTLEMENT_X},{SETTLEMENT_Y} [EPSG:32636]",
+            "INPUT_PROFILE": os.path.join(repoRoot, "la", "scenarios", "thesis", "shuna_chalcolithic_s01.lascenario.json"),
+            "INPUT_COMMON_CROP": mySuitLayer.id(), "INPUT_COMMON_GRAZING": mySuitLayer.id(),
+            "APPLY_SLOPE": False, "SPLIT_FALLOW": False, "WINDOW_PIXELS": 200,
+            "OUTPUT_COST": str(tmp_path / "cost.tif"), "OUTPUT_FOLDER": myFolder})
+        assert os.path.exists(myResults["OUTPUT_COST"])
+        myMasks = [f for f in os.listdir(myFolder) if f.endswith(".tif")]
+        # S01's crops share the common land; its animals use dedicated grazing without a
+        # raster and are reported as skipped, so only the common-crop mask is expected.
+        assert any(f.startswith("commonCrop") for f in myMasks)
+    finally:
+        QgsProject.instance().removeMapLayer(myDemLayer.id()); QgsProject.instance().removeMapLayer(mySuitLayer.id())

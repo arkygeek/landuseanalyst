@@ -12,6 +12,18 @@ from la.lib.lafoodsource import LaFoodSource
 
 MESSAGE_BUS: LaMessageBus = LaMessageBus()
 
+def _xmlBool(theText: str) -> bool:
+    """``1``/``true``/``yes`` (any case) → True. Older files wrote Python's ``True``/``False``."""
+    return str(theText or "").strip().lower() in ("1", "true", "yes")
+
+
+def _xmlInt(theText: str, theDefault: int = 0) -> int:
+    try:
+        return int(float(str(theText).strip()))
+    except (TypeError, ValueError):
+        return theDefault
+
+
 class LaModel(QObject, LaSerialisable, LaGuid):
     """
     LaModel class represents the main model for the Landuse Analyst plugin.
@@ -397,7 +409,7 @@ class LaModel(QObject, LaSerialisable, LaGuid):
 
     @pyqtProperty(int, notify=_eastingChanged)
     def easting(self) -> int: # type: ignore
-        return int(str(self.mEasting))
+        return int(float(self.mEasting))
     @easting.setter
     def easting(self, theEasting: int):
         if self.mEasting != theEasting:
@@ -407,7 +419,7 @@ class LaModel(QObject, LaSerialisable, LaGuid):
 
     @pyqtProperty(int, notify=_northingChanged)
     def northing(self) -> int: # type: ignore
-        return int(str(self.mNorthing))
+        return int(float(self.mNorthing))
     @northing.setter
     def northing(self, theNorthing: int):
         if self.mNorthing != theNorthing:
@@ -709,42 +721,30 @@ class LaModel(QObject, LaSerialisable, LaGuid):
         self.logMessage("Model::fromXml - guid set to : " + self.guid)
 
         self.mName = LaUtils.xmlDecode(myTopElement.firstChildElement("name").text())
-        self.mPopulation = int(myTopElement.firstChildElement("population").text())
+        self.mPopulation = _xmlInt(myTopElement.firstChildElement("population").text())
         self.mPeriod = LaUtils.xmlDecode(myTopElement.firstChildElement("period").text())
-        self.mProjection = int(myTopElement.firstChildElement("projection").text())
-        self.mEasting = int(myTopElement.firstChildElement("easting").text())
-        self.mNorthing = int(myTopElement.firstChildElement("northing").text())
+        self.mProjection = _xmlInt(myTopElement.firstChildElement("projection").text())
+        self.mEasting = float(myTopElement.firstChildElement("easting").text() or 0)
+        self.mNorthing = float(myTopElement.firstChildElement("northing").text() or 0)
 
-        myFlag = myTopElement.firstChildElement("euclideanDistance").text()
-        if myFlag == "1":
-            self.mEuclideanDistance = True
-        else:
-            self.mEuclideanDistance = False
+        self.mEuclideanDistance = _xmlBool(myTopElement.firstChildElement("euclideanDistance").text())
 
-        myFlag = myTopElement.firstChildElement("walkingTime").text()
-        if myFlag == "1":
-            self.mWalkingTime = True
-        else:
-            self.mWalkingTime = False
+        self.mWalkingTime = _xmlBool(myTopElement.firstChildElement("walkingTime").text())
 
-        myFlag = myTopElement.firstChildElement("pathDistance").text()
-        if myFlag == "1":
-            self.mPathDistance = True
-        else:
-            self.mPathDistance = False
+        self.mPathDistance = _xmlBool(myTopElement.firstChildElement("pathDistance").text())
 
-        self.mPrecision = int(myTopElement.firstChildElement("precision").text())
-        self.mDietPercent = int(myTopElement.firstChildElement("dietPercent").text())
-        self.mPercentOfDietThatIsFromCrops = int(myTopElement.firstChildElement("plantPercent").text())
-        self.mMeatPercent = int(myTopElement.firstChildElement("meatPercent").text())
-        self.mCaloriesPerPersonDaily = int(myTopElement.firstChildElement("caloriesPerPersonDaily").text())
+        self.mPrecision = _xmlInt(myTopElement.firstChildElement("precision").text())
+        self.mDietPercent = _xmlInt(myTopElement.firstChildElement("dietPercent").text())
+        self.mPercentOfDietThatIsFromCrops = _xmlInt(myTopElement.firstChildElement("plantPercent").text())
+        self.mMeatPercent = _xmlInt(myTopElement.firstChildElement("meatPercent").text())
+        self.mCaloriesPerPersonDaily = _xmlInt(myTopElement.firstChildElement("caloriesPerPersonDaily").text())
 
-        self.mBaseOnPlants = int(myTopElement.firstChildElement("baseOnPlants").text())
-        self.mIncludeDairy = int(myTopElement.firstChildElement("includeDairy").text())
-        self.mLimitDairy = int(myTopElement.firstChildElement("limitDairy").text())
-        self.mLimitDairyPercentage = int(myTopElement.firstChildElement("limitDairyPercent").text())
+        self.mBaseOnPlants = _xmlBool(myTopElement.firstChildElement("baseOnPlants").text())
+        self.mIncludeDairy = _xmlBool(myTopElement.firstChildElement("includeDairy").text())
+        self.mLimitDairy = _xmlBool(myTopElement.firstChildElement("limitDairy").text())
+        self.mLimitDairyPercentage = _xmlInt(myTopElement.firstChildElement("limitDairyPercent").text())
 
-        self.mDairyUtilisation = int(myTopElement.firstChildElement("dairyUtilisation").text())
+        self.mDairyUtilisation = _xmlInt(myTopElement.firstChildElement("dairyUtilisation").text())
 
         # Optional model-level grazing/land attributes. Older scenario files
         # predate these tags, so every one of them falls back to the value
@@ -771,6 +771,107 @@ class LaModel(QObject, LaSerialisable, LaGuid):
                 self.setCommonLandValue(float(myCommonLandValueText), self.mCommonLandAreaUnits)
             except ValueError:
                 pass
+        return True
+
+    # ------------------------------------------------------------------
+    # Unified scenario XML (<landuseAnalystScenario>) — the format the June 2026
+    # thesis scenario files in la/thesis_scenarios/ use. Embeds the model, the
+    # selections and the full crop/animal definitions so a file is self-contained.
+    # ------------------------------------------------------------------
+    def exportScenario(self) -> str:
+        """Model + selections + embedded crop/animal definitions as one XML string."""
+        myXml = "<landuseAnalystScenario>\n"
+        myXml += self.toXml()
+        myXml += "  <selectedCrops>\n"
+        for myCropGuid, myParameterGuid in self.mCropsMap.items():
+            myXml += f'    <selectedCrop cropGuid="{myCropGuid}" parameterGuid="{myParameterGuid}" />\n'
+        myXml += "  </selectedCrops>\n  <selectedAnimals>\n"
+        for myAnimalGuid, myParameterGuid in self.mAnimalsMap.items():
+            myXml += f'    <selectedAnimal animalGuid="{myAnimalGuid}" parameterGuid="{myParameterGuid}" />\n'
+        myXml += "  </selectedAnimals>\n  <crops>\n"
+        for myCropGuid, myParameterGuid in self.mCropsMap.items():
+            myCrop = LaUtils.getCrop(myCropGuid)
+            if myCrop is not None and myCrop.name:
+                myXml += myCrop.toXml()
+            myParameter = LaUtils.getCropParameter(myParameterGuid) if myParameterGuid else None
+            if myParameter is not None and myParameter.name:
+                myXml += myParameter.toXml()
+        myXml += "  </crops>\n  <animals>\n"
+        for myAnimalGuid, myParameterGuid in self.mAnimalsMap.items():
+            myAnimal = LaUtils.getAnimal(myAnimalGuid)
+            if myAnimal is not None and myAnimal.name:
+                myXml += myAnimal.toXml()
+            myParameter = LaUtils.getAnimalParameter(myParameterGuid) if myParameterGuid else None
+            if myParameter is not None and myParameter.name:
+                myXml += myParameter.toXml()
+        myXml += "  </animals>\n</landuseAnalystScenario>\n"
+        return myXml
+
+    def importScenario(self, theXml: str) -> bool:
+        """
+        Load a ``<landuseAnalystScenario>`` string: model inputs, the crop/animal
+        selections and any embedded definitions (registered as in-memory
+        overrides so GUIDs missing from the local catalogue still resolve).
+
+        :return: False when the text is not a scenario document.
+        """
+        from la.lib.lacrop import LaCrop
+        from la.lib.lacropparameter import LaCropParameter
+        from la.lib.laanimal import LaAnimal
+        from la.lib.laanimalparameter import LaAnimalParameter
+
+        myDocument = QDomDocument("scenario")
+        if not myDocument.setContent(theXml):
+            return False
+        myRoot = myDocument.firstChildElement("landuseAnalystScenario")
+        if myRoot.isNull():
+            return False
+
+        def _elementText(theElement) -> str:
+            myTemp = QDomDocument()
+            myTemp.appendChild(myTemp.importNode(theElement, True))
+            return myTemp.toString()
+
+        myModelElement = myRoot.firstChildElement("model")
+        if not myModelElement.isNull():
+            self.fromXml(_elementText(myModelElement))
+
+        myCatalogueCrops = LaUtils.getAvailableCrops()
+        myCatalogueCropParameters = LaUtils.getAvailableCropParameters()
+        myCatalogueAnimals = LaUtils.getAvailableAnimals()
+        myCatalogueAnimalParameters = LaUtils.getAvailableAnimalParameters()
+        for myContainer, myTag, myFactory, myKnown, myRegister in (
+            ("crops", "crop", LaCrop, myCatalogueCrops, LaUtils.registerCrop),
+            ("crops", "cropParameter", LaCropParameter, myCatalogueCropParameters, LaUtils.registerCropParameter),
+            ("animals", "animal", LaAnimal, myCatalogueAnimals, LaUtils.registerAnimal),
+            ("animals", "animalParameter", LaAnimalParameter, myCatalogueAnimalParameters, LaUtils.registerAnimalParameter),
+        ):
+            myParent = myRoot.firstChildElement(myContainer)
+            if myParent.isNull():
+                continue
+            myElement = myParent.firstChildElement(myTag)
+            while not myElement.isNull():
+                myGuid = myElement.attribute("guid")
+                if myGuid and myGuid not in myKnown:
+                    myObject = myFactory()
+                    try:
+                        myObject.fromXml(_elementText(myElement))
+                        if getattr(myObject, "name", ""):
+                            myRegister(myObject)
+                    except Exception as e:  # a bad embedded definition must not sink the scenario
+                        self.logMessage(f"Skipped embedded {myTag} {myGuid}: {e}")
+                myElement = myElement.nextSiblingElement(myTag)
+
+        self.mCropsMap = {}
+        myCropsElement = myRoot.firstChildElement("selectedCrops").firstChildElement("selectedCrop")
+        while not myCropsElement.isNull():
+            self.mCropsMap[myCropsElement.attribute("cropGuid")] = myCropsElement.attribute("parameterGuid")
+            myCropsElement = myCropsElement.nextSiblingElement("selectedCrop")
+        self.mAnimalsMap = {}
+        myAnimalsElement = myRoot.firstChildElement("selectedAnimals").firstChildElement("selectedAnimal")
+        while not myAnimalsElement.isNull():
+            self.mAnimalsMap[myAnimalsElement.attribute("animalGuid")] = myAnimalsElement.attribute("parameterGuid")
+            myAnimalsElement = myAnimalsElement.nextSiblingElement("selectedAnimal")
         return True
 
     def toXml(self) -> str:

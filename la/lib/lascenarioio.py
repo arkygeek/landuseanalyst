@@ -258,6 +258,32 @@ def saveFile(thePath: str, theDocument: Dict) -> str:
     return myPath
 
 
+def isXmlScenario(thePath: str) -> bool:
+    """True for the June 2026 ``<landuseAnalystScenario>`` XML files (la/thesis_scenarios/)."""
+    if not thePath.lower().endswith(".xml"):
+        return False
+    try:
+        with open(thePath, "r", encoding="utf-8") as myFile:
+            return "<landuseAnalystScenario" in myFile.read(4096)
+    except OSError:
+        return False
+
+
+def loadXmlScenario(thePath: str) -> Tuple[LaModel, Dict[str, str], Dict[str, str], Dict]:
+    """
+    Load a ``<landuseAnalystScenario>`` XML file (model + selections + embedded
+    definitions) into ``(model, selectedCrops, selectedAnimals, pluginBlock)``.
+
+    :raises ValueError: when the file is not a scenario document.
+    """
+    with open(thePath, "r", encoding="utf-8") as myFile:
+        myText = myFile.read()
+    myModel = LaModel()
+    if not myModel.importScenario(myText):
+        raise ValueError("Not a Landuse Analyst scenario XML (missing <landuseAnalystScenario>).")
+    return myModel, dict(myModel.mCropsMap), dict(myModel.mAnimalsMap), {}
+
+
 def loadFile(thePath: str) -> Dict:
     with open(thePath, "r", encoding="utf-8") as myFile:
         return json.load(myFile)

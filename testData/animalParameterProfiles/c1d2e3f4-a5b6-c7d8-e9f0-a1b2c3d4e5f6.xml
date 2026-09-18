@@ -1,4 +1,3 @@
-<?xml version='1.0' encoding='utf-8'?>
 <animalParameter guid="c1d2e3f4-a5b6-c7d8-e9f0-a1b2c3d4e5f6">
   <name>Cow Parameters</name>
   <description>Parameters for Cow</description>
@@ -16,7 +15,7 @@
     </fodderCrop>
   </fodderCrops>
   <fallowUsage>High</fallowUsage>
-  <rasterName>/home/arkygeek/dev/QGis-Projects/landuseanalyst/testData/syntheticRasters/animal_c1d2e3f4-a5b6-c7d8-e9f0-a1b2c3d4e5f6.tif</rasterName>
+  <rasterName></rasterName>
   <areaUnits>Dunum</areaUnits>
   <energyType>KCalories</energyType>
   <specificLandEnergyType>KCalories</specificLandEnergyType>

@@ -2,12 +2,17 @@
   <name>WheatParams</name>
   <description>Not Set</description>
   <crop>1b7d0917-78af-4a12-a5c6-222994f1866e</crop>
-  <percentTameCrop>23</percentTameCrop>
+  <percentTameCrop>23.0</percentTameCrop>
+  <spoilage>0</spoilage>
+  <reseed>0</reseed>
   <cropRotation>1</cropRotation>
-  <fallowRatio>1</fallowRatio>
-  <fallowTDN>400</fallowTDN>
-  <areaUnits>0</areaUnits>
+  <fallowRatio>1.0</fallowRatio>
+  <fallowValue>400</fallowValue>
+  <fallowEnergyType>KCalories</fallowEnergyType>
+  <areaUnits>Hectare</areaUnits>
   <useCommonLand>1</useCommonLand>
-  <useSpecificLand>0</useSpecificLand>
+  <useSpecificLand>1</useSpecificLand>
   <rasterName></rasterName>
+  <preferredSlopeMin>0.0</preferredSlopeMin>
+  <preferredSlopeMax>9.0</preferredSlopeMax>
 </cropParameter>

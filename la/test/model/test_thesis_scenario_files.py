@@ -77,3 +77,25 @@ def test_eeb1_file_resolves_derived_profiles_and_runs(repoRoot):
     myLabels = myController.runDietCalc()
     assert myLabels is not None
     assert myLabels.megaCaloriesSettlementAnnual == pytest.approx(912500.0, abs=0.1)   # 1000 people
+
+
+@pytest.mark.usefixtures("qtApp", "sampleProfilesDir")
+def test_june_xml_scenario_opens_and_matches_s05(repoRoot):
+    """The June 2026 <landuseAnalystScenario> files (la/thesis_scenarios/) open through the same controller."""
+    from la.gui.lascenariocontroller import LaScenarioController
+    from la.lib.lautils import LaUtils
+
+    myPath = os.path.join(repoRoot, "la", "thesis_scenarios", "shuna_chalcolithic_s05.xml")
+    myController = LaScenarioController()
+    myController.setLivePreview(False)
+    myController.loadScenario(myPath)
+    myModel = myController.mModel
+    assert myModel.mPopulation == 100 and myModel.mDietPercent == 10 and myModel.mDairyUtilisation == 100
+    assert myModel.mIncludeDairy is True and myModel.mWalkingTime is True and myModel.mEuclideanDistance is False
+    assert myModel.mEasting == 744800 and myModel.mProjection == 32636
+    assert len(myController.mSelectedCrops) == 8 and len(myController.mSelectedAnimals) == 4
+    assert myController.readiness() == (True, "")
+    myController.runDietCalc()
+    myByName = {LaUtils.getAnimal(g).name: v for g, v in myModel.mAreaTargetsAnimalsMap.items()}
+    assert myByName["Sheep"] == pytest.approx(0.2162, abs=0.0005)
+    LaUtils.clearRegistries()

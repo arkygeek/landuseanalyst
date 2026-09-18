@@ -16,6 +16,7 @@ Deliberately has no QGIS imports — the raster back end is injected as an
 duck-typed DEM layer and stub model.
 """
 
+import os
 import time
 from dataclasses import dataclass, replace
 from enum import Enum
@@ -96,6 +97,7 @@ class LaCatchmentInputs:
     splitFallow:          bool = True             # sown + fallow masks per crop
     engine:               str = "pure"            # "pure" | "grass"
     barriersPath:         Optional[str] = None    # OGR-readable rivers/lakes/walls (exported by the UI)
+    livePreview:          bool = False            # emit every iteration's mask for the map
 
 
 @dataclass(frozen=True)
@@ -156,6 +158,8 @@ class LaCatchment(QObject):
 
     progress = pyqtSignal(int, int, int)   # (overallDone, iter, maxIter)
     logged   = pyqtSignal(str)
+    # (itemName, maskPath, threshold, achievedHa, targetHa) — one per iteration when livePreview is on
+    previewUpdated = pyqtSignal(str, str, float, float, float)
 
     def __init__(self, theGrass: LaGrass, thePrecisionPct: int) -> None:
         super().__init__()
@@ -164,6 +168,7 @@ class LaCatchment(QObject):
         self.mCostRaster: Optional[str] = None
         self.mSlopeRaster: Optional[str] = None
         self.mBarrierEffect = None   # la.lib.labarriers.BarrierEffect for the last pass
+        self.mLivePreview = False
         self._mOverallDone = 0
         self._mOverallTotal = 0
 
@@ -278,6 +283,8 @@ class LaCatchment(QObject):
                 f"{myLabel}: iter {myIteration}/{_MAX_ITERATIONS} thresh={myMid:.0f} "
                 f"achieved={myAchieved:.2f} Ha (target {theAreaTargetHa:.2f})"
             )
+            if self.mLivePreview:
+                self._emitPreview(myLabel, myMask, myMid, myAchieved, theAreaTargetHa)
 
             if myDelta <= myHalfWindow:
                 myOutput = self.mGrass.writeOutput(
@@ -324,6 +331,21 @@ class LaCatchment(QObject):
                              elevationMin=myElevMin, elevationMax=myElevMax,
                              slopeEliminatedPct=mySlopePct, slopeBand=theSlopeBand)
 
+    def _emitPreview(self, theLabel: str, theMaskPath: str, theThreshold: float, theAchieved: float, theTarget: float) -> None:
+        """Copy the iteration's mask to a stable per-item path and announce it (the UI shows it on the map)."""
+        import shutil
+        mySafe = "".join(c if c.isalnum() else "_" for c in theLabel)
+        myPreviewPath = os.path.join(self.mGrass.mScratchDir, f"_la_preview_{mySafe}.tif")
+        try:
+            shutil.copyfile(theMaskPath, myPreviewPath)
+        except OSError as e:
+            self.logged.emit(f"Live preview copy failed for {theLabel}: {e}")
+            return
+        if myPreviewPath not in self.mGrass._mTempRasters:
+            self.mGrass._mTempRasters.append(myPreviewPath)
+        self.previewUpdated.emit(theLabel, myPreviewPath, float(theThreshold), float(theAchieved), float(theTarget))
+        time.sleep(0.12)   # let the canvas redraw between iterations
+
     @staticmethod
     def _outputStem(theItemName: str, theCategory: str, theThreshold: float, theArea: float) -> str:
         myCategory = f"_{theCategory}" if theCategory else ""
@@ -353,6 +375,7 @@ class LaCatchment(QObject):
         """
         myEasting  = float(_safeFloat(theModel, "easting", 0.0))
         myNorthing = float(_safeFloat(theModel, "northing", 0.0))
+        self.mLivePreview = bool(getattr(theInputs, "livePreview", False))
         myAuto = not theInputs.windowPixels
         myPixels = int(theInputs.windowPixels) if not myAuto else self._suggestWindowPixels(theModel)
         myRetried = False

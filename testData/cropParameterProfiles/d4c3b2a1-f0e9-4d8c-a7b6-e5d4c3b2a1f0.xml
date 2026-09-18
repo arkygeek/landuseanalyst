@@ -1,4 +1,3 @@
-<?xml version='1.0' encoding='utf-8'?>
 <cropParameter guid="d4c3b2a1-f0e9-4d8c-a7b6-e5d4c3b2a1f0">
   <name>Bitter Vetch Params</name>
   <description>Bitter Vetch crop parameters</description>
@@ -13,5 +12,5 @@
   <areaUnits>Hectare</areaUnits>
   <useCommonLand>1</useCommonLand>
   <useSpecificLand>0</useSpecificLand>
-  <rasterName>/home/arkygeek/dev/QGis-Projects/landuseanalyst/testData/syntheticRasters/crop_d4c3b2a1-f0e9-4d8c-a7b6-e5d4c3b2a1f0.tif</rasterName>
+  <rasterName></rasterName>
 </cropParameter>

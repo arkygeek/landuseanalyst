@@ -189,9 +189,9 @@ class LaUtils:
         :return: A string representing the path to the animal profiles directory
         :rtype: str
         """
-        path = os.path.join(LaUtils.userDataPath(), 'animalProfiles')
-        LaUtils.ensureDirectoryExists(path)
-        return path
+        myPath = os.path.join(LaUtils.userDataPath(), "animalProfiles")
+        LaUtils.ensureDirectoryExists(myPath)
+        return myPath
 
     @staticmethod
     def userCropProfilesDirPath() -> str:
@@ -203,9 +203,9 @@ class LaUtils:
         :return: A string representing the path to the crop profiles directory
         :rtype: str
         """
-        path = os.path.join(LaUtils.userDataPath(), 'cropProfiles')
-        LaUtils.ensureDirectoryExists(path)
-        return path
+        myPath = os.path.join(LaUtils.userDataPath(), "cropProfiles")
+        LaUtils.ensureDirectoryExists(myPath)
+        return myPath
 
     # ------------------------------------------------------------------
     # Profile catalogue cache
@@ -272,6 +272,7 @@ class LaUtils:
                 continue
             myGuid = str(getattr(myObject, "guid", "") or "") or os.path.splitext(myFileName)[0]
             myMap[myGuid] = myObject
+        myMap.update(LaUtils._mOverrides.get(theFactory.__name__, {}))
         return myMap
 
     @staticmethod
@@ -279,9 +280,49 @@ class LaUtils:
         """Drop the cached profile texts (call after writing profiles programmatically)."""
         LaUtils._mProfileTextCache.clear()
 
+    # ------------------------------------------------------------------
+    # In-memory overrides — definitions embedded in a scenario file (or
+    # created by a headless script) that are not on disk. They shadow the
+    # catalogue for the same GUID and appear in getAvailable*().
+    # ------------------------------------------------------------------
+    _mOverrides: Dict[str, Dict[str, object]] = {
+        "LaCrop": {}, "LaCropParameter": {}, "LaAnimal": {}, "LaAnimalParameter": {},
+    }
+
+    @staticmethod
+    def _register(theKind: str, theObject) -> None:
+        myGuid = str(getattr(theObject, "guid", "") or "")
+        if myGuid:
+            LaUtils._mOverrides[theKind][myGuid] = theObject
+
+    @staticmethod
+    def registerCrop(theCrop) -> None:
+        LaUtils._register("LaCrop", theCrop)
+
+    @staticmethod
+    def registerCropParameter(theParameter) -> None:
+        LaUtils._register("LaCropParameter", theParameter)
+
+    @staticmethod
+    def registerAnimal(theAnimal) -> None:
+        LaUtils._register("LaAnimal", theAnimal)
+
+    @staticmethod
+    def registerAnimalParameter(theParameter) -> None:
+        LaUtils._register("LaAnimalParameter", theParameter)
+
+    @staticmethod
+    def clearRegistries() -> None:
+        """Forget every in-memory override (the on-disk catalogue is unaffected)."""
+        for myMap in LaUtils._mOverrides.values():
+            myMap.clear()
+
     @staticmethod
     def _findProfile(theDirPath: str, theFactory, theGuid: str, theComponent: str):
         """Return the profile whose GUID (or file stem) is ``theGuid``, else a blank object."""
+        myOverride = LaUtils._mOverrides.get(theFactory.__name__, {}).get(str(theGuid))
+        if myOverride is not None:
+            return myOverride
         myMap = LaUtils._loadProfiles(theDirPath, theFactory, theComponent)
         myObject = myMap.get(str(theGuid))
         if myObject is not None:
@@ -350,9 +391,9 @@ class LaUtils:
 
     @staticmethod
     def userAnimalParameterProfilesDirPath() -> str:
-        path = os.path.join(LaUtils.userDataPath(), 'animalParameterProfiles')
-        LaUtils.ensureDirectoryExists(path)
-        return path
+        myPath = os.path.join(LaUtils.userDataPath(), "animalParameterProfiles")
+        LaUtils.ensureDirectoryExists(myPath)
+        return myPath
 
     @staticmethod
     def userImagesDirPath() -> str:
@@ -398,9 +439,18 @@ class LaUtils:
         # all need be done is add new units to la.h enum and add
         # into the following code...
         myHectares: float = 0.
-        if theAreaUnit == AreaUnits.Dunum:
+        
+        # Coerce string inputs to AreaUnits enum
+        myUnit = theAreaUnit
+        if isinstance(myUnit, str):
+            if myUnit == "Dunum":
+                myUnit = AreaUnits.Dunum
+            elif myUnit == "Hectare":
+                myUnit = AreaUnits.Hectare
+
+        if myUnit == AreaUnits.Dunum:
             myHectares = float(theArea) * 10.
-        elif theAreaUnit == AreaUnits.Hectare:
+        elif myUnit == AreaUnits.Hectare:
             myHectares = theArea
         # add new units here after updating la.h enum ex:
         # elif theAreaUnit == "Acre":

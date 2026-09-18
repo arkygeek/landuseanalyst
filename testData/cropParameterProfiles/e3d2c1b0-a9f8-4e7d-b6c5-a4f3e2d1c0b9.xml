@@ -1,4 +1,3 @@
-<?xml version='1.0' encoding='utf-8'?>
 <cropParameter guid="e3d2c1b0-a9f8-4e7d-b6c5-a4f3e2d1c0b9">
   <name>Barley Params</name>
   <description>Barley crop parameters</description>
@@ -13,5 +12,5 @@
   <areaUnits>Hectare</areaUnits>
   <useCommonLand>1</useCommonLand>
   <useSpecificLand>0</useSpecificLand>
-  <rasterName>/home/arkygeek/dev/QGis-Projects/landuseanalyst/testData/syntheticRasters/crop_e3d2c1b0-a9f8-4e7d-b6c5-a4f3e2d1c0b9.tif</rasterName>
+  <rasterName></rasterName>
 </cropParameter>

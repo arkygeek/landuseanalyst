@@ -127,6 +127,20 @@ class LaCatchmentPanel(QgsCollapsibleGroupBox):
         self.cbSplitFallow.setToolTip("Search the cultivated area and the total cropland separately; fallow = total − sown.")
         myLayout.addWidget(self.cbSplitFallow)
 
+        self.cbLivePreview = QCheckBox("Show the search on the map while it runs", self)
+        self.cbLivePreview.setObjectName("cbLivePreview")
+        self.cbLivePreview.setToolTip("Adds a transient 'Live Search' layer that updates every iteration (slower, but you see the binary search converge).")
+        myLayout.addWidget(self.cbLivePreview)
+
+        myDemoRow = QHBoxLayout()
+        self.pbnLoadShunaDemo = QToolButton(self)
+        self.pbnLoadShunaDemo.setObjectName("pbnLoadShunaDemo")
+        self.pbnLoadShunaDemo.setText("Load Shuna demo layers")
+        self.pbnLoadShunaDemo.setToolTip("Load the bundled Tell esh-Shuna DEM (and the web repo's suitability raster when available) and pick them here.")
+        myDemoRow.addWidget(self.pbnLoadShunaDemo)
+        myDemoRow.addStretch()
+        myLayout.addLayout(myDemoRow)
+
         myAdvancedRow = QHBoxLayout()
         myAdvancedRow.addWidget(QLabel("Window", self))
         self.sbWindowPixels = QgsSpinBox(self)
@@ -150,6 +164,7 @@ class LaCatchmentPanel(QgsCollapsibleGroupBox):
         myLayout.addLayout(myAdvancedRow)
 
         self.pbnDigitiseBarriers.clicked.connect(self.createBarrierLayer)
+        self.pbnLoadShunaDemo.clicked.connect(self.loadShunaDemoLayers)
         self.cboDem.layerChanged.connect(self._onDemChanged)
         self.cboCommonCrop.layerChanged.connect(lambda _l: self.validate())
         self.cboCommonGrazing.layerChanged.connect(lambda _l: self.validate())
@@ -212,6 +227,7 @@ class LaCatchmentPanel(QgsCollapsibleGroupBox):
             splitFallow=self.cbSplitFallow.isChecked(),
             engine=self.cboEngine.currentData() or "pure",
             barriersPath=self.exportBarriers(),
+            livePreview=self.cbLivePreview.isChecked(),
         )
 
     def barrierLayer(self) -> Optional[QgsVectorLayer]:
@@ -255,6 +271,63 @@ class LaCatchmentPanel(QgsCollapsibleGroupBox):
         myLayer.startEditing()
         return myLayer
 
+    def loadShunaDemoLayers(self) -> None:
+        """
+        Load the Shuna demo rasters into the project and select them.
+
+        DEM: the bundled `la/test/xmlData/GrassData/demShuna` (GRASS ASCII, UTM 36N).
+        Suitability: `landuseanalyst-web/data/shuna/suitability_full.tif` when that
+        repository sits next to this one (or under ~/.landuseAnalyst/shuna/).
+        """
+        myPluginRoot = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
+        myDemPath = os.path.join(myPluginRoot, "la", "test", "xmlData", "GrassData", "demShuna")
+        myCandidates = [
+            os.path.join(os.path.expanduser("~"), ".landuseAnalyst", "shuna", "suitability_full.tif"),
+            os.path.join(myPluginRoot, "..", "landuseanalyst-web", "data", "shuna", "suitability_full.tif"),
+            os.path.join(os.path.expanduser("~"), "Dev", "LA", "landuseanalyst-web", "data", "shuna", "suitability_full.tif"),
+        ]
+        mySuitabilityPath = next((p for p in myCandidates if os.path.exists(p)), None)
+        myProject = QgsProject.instance()
+
+        def _find(theName, theSource):
+            return next((l for l in myProject.mapLayers().values()
+                         if l.source() == theSource or l.name() == theName), None)
+
+        myDem = _find("Shuna DEM", myDemPath)
+        if myDem is None and os.path.exists(myDemPath):
+            myDem = QgsRasterLayer(myDemPath, "Shuna DEM")
+            if myDem.isValid():
+                myProject.addMapLayer(myDem)
+            else:
+                myDem = None
+        if myDem is None:
+            self.messageBar.pushMessage("The bundled Shuna DEM could not be loaded.", Qgis.Warning, 8)
+            return
+        self.cboDem.setLayer(myDem)
+        mySuitability = None
+        if mySuitabilityPath:
+            mySuitability = _find("Shuna Suitability", mySuitabilityPath)
+            if mySuitability is None:
+                mySuitability = QgsRasterLayer(mySuitabilityPath, "Shuna Suitability")
+                if mySuitability.isValid():
+                    myProject.addMapLayer(mySuitability)
+                else:
+                    mySuitability = None
+        if mySuitability is not None:
+            self.cboCommonCrop.setLayer(mySuitability)
+            self.cboCommonGrazing.setLayer(mySuitability)
+        else:
+            self.messageBar.pushMessage(
+                "Shuna DEM loaded. No suitability raster found — build one with the raster calculator "
+                "(DEM between -100 and 100 m) or tick slope-only suitability.", Qgis.Info, 10)
+        self.setChecked(True)
+        self.setSeed(744800.0, 3611100.0)
+        try:
+            from la.gui.lalayerstyles import LaLayerStyles
+            LaLayerStyles.applyShadedRelief(myDem)
+        except Exception:   # styling is cosmetic; never block the demo
+            pass
+
     def optionsBlock(self) -> dict:
         """Catchment options for the scenario file's plugin block."""
         return {
@@ -263,9 +336,12 @@ class LaCatchmentPanel(QgsCollapsibleGroupBox):
             "useSlopeOnlySuitability": self.cbSlopeOnly.isChecked(),
             "splitFallow": self.cbSplitFallow.isChecked(),
             "engine": self.cboEngine.currentData() or "pure",
+            "livePreview": self.cbLivePreview.isChecked(),
         }
 
     def applyOptionsBlock(self, theBlock: dict) -> None:
+        if "livePreview" in theBlock:
+            self.cbLivePreview.setChecked(bool(theBlock["livePreview"]))
         if "windowPixels" in theBlock:
             self.sbWindowPixels.setValue(int(theBlock.get("windowPixels") or 0))
         if "applySlopeLimits" in theBlock:

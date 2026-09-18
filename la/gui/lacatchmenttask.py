@@ -47,6 +47,7 @@ if TYPE_CHECKING:  # pragma: no cover
 
 
 _GROUP_NAME = "Catchment Analysis"
+LIVE_SEARCH_GROUP = "Live Search"
 
 
 class LaCatchmentTask(QgsTask):
@@ -67,6 +68,7 @@ class LaCatchmentTask(QgsTask):
     # deletes the task, so listeners never touch a dead wrapper.
     completed       = pyqtSignal(object)   # LaCatchmentResults
     failed          = pyqtSignal(str)
+    previewUpdated  = pyqtSignal(str, str, float, float, float)   # relayed from LaCatchment
 
     def __init__(self, theModel, theInputs: LaCatchmentInputs) -> None:
         """
@@ -114,6 +116,7 @@ class LaCatchmentTask(QgsTask):
             )
             self._mCatchment.logged.connect(self._onLogged)
             self._mCatchment.progress.connect(self._onProgress)
+            self._mCatchment.previewUpdated.connect(self.previewUpdated)
 
             self.mResults = self._mCatchment.runCatchmentAnalysis(
                 self.mModel, self.mInputs, theIsCanceledFn=self.isCanceled,
@@ -143,6 +146,7 @@ class LaCatchmentTask(QgsTask):
         On failure: log the error; the main form's ``grassMessage``
         connection will already have surfaced log messages to the user.
         """
+        self._removeLiveSearchGroup()
         if not theResult or self.mResults is None:
             myMsg = self.mErrorText or "Catchment analysis did not complete."
             LaUtils.debug.log(f"Catchment task failed: {myMsg}", "Error")
@@ -288,6 +292,20 @@ class LaCatchmentTask(QgsTask):
             f"{theItem.itemName}{myCategory} ({theItem.achievedHa:.1f} Ha"
             f" / target {theItem.targetHa:.1f}){myStatusBadge}"
         )
+
+    @staticmethod
+    def _removeLiveSearchGroup() -> None:
+        """Drop the transient 'Live Search' preview layers once the real results arrive."""
+        myProject = QgsProject.instance()
+        myGroup = myProject.layerTreeRoot().findGroup(_GROUP_NAME)
+        myLive = myGroup.findGroup(LIVE_SEARCH_GROUP) if myGroup is not None else None
+        if myLive is None:
+            return
+        for myNode in list(myLive.children()):
+            myLayer = getattr(myNode, "layer", lambda: None)()
+            if myLayer is not None:
+                myProject.removeMapLayer(myLayer.id())
+        myGroup.removeChildNode(myLive)
 
     def _selectedCropNames(self) -> set:
         """Names of the crops selected on the model, for Crops/Animals grouping."""

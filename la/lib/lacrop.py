@@ -492,14 +492,17 @@ class LaCrop(QObject, LaSerialisable, LaGuid):
         xml += f'  <cropCalories>{self.cropCalories}</cropCalories>\n'
         xml += f'  <fodderProduction>{self.cropFodderProduction}</fodderProduction>\n'
         xml += f'  <fodderCalories>{self.cropFodderValue}</fodderCalories>\n'
-        # Convert energy type enum to string using match-case
+        # Enum → string, tolerating profiles that stored the names as plain strings
+        myCropFodderEnergyTypeString = "KCalories"
         match self.mFodderEnergyType:
             case LaEnergyType.KCalories: myCropFodderEnergyTypeString = "KCalories"
             case LaEnergyType.TDN: myCropFodderEnergyTypeString = "TDN"
-        # Convert area units enum to string using match-case
+            case "KCalories" | "TDN" as myValue: myCropFodderEnergyTypeString = myValue
+        myAreaUnitsString = "Hectare"
         match self.mAreaUnits:
             case LaAreaUnits.Dunum: myAreaUnitsString = "Dunum"
             case LaAreaUnits.Hectare: myAreaUnitsString = "Hectare"
+            case "Dunum" | "Hectare" as myValue: myAreaUnitsString = myValue
         xml += f'  <cropFodderEnergyType>{myCropFodderEnergyTypeString}</cropFodderEnergyType>\n'
         xml += f'  <areaUnits>{myAreaUnitsString}</areaUnits>\n'
         xml += f'  <imageFile>{LaUtils.xmlEncode(str(self.imageFile))}</imageFile>\n'

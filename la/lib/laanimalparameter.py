@@ -504,14 +504,10 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
         # per-item slope limits existed: fall back to the thesis defaults.
         myApplyText = myTopElement.firstChildElement("applySlopeLimit").text().strip()
         self.mApplySlopeLimit = (myApplyText != "0") if myApplyText else True
-        try:
-            self.mSlopeMinDegrees = float(myTopElement.firstChildElement("slopeMinDegrees").text() or 0.0)
-        except ValueError:
-            self.mSlopeMinDegrees = 0.0
-        try:
-            self.mSlopeMaxDegrees = float(myTopElement.firstChildElement("slopeMaxDegrees").text() or DEFAULT_GRAZING_SLOPE_MAX_DEGREES)
-        except ValueError:
-            self.mSlopeMaxDegrees = DEFAULT_GRAZING_SLOPE_MAX_DEGREES
+        # Tag names: <preferredSlopeMin/Max> (June 2026 files, thesis scenarios) with
+        # <slopeMinDegrees/MaxDegrees> accepted as an alias.
+        self.mSlopeMinDegrees = self._readFloatWithFallback(myTopElement, "preferredSlopeMin", "slopeMinDegrees", 0.0)
+        self.mSlopeMaxDegrees = self._readFloatWithFallback(myTopElement, "preferredSlopeMax", "slopeMaxDegrees", DEFAULT_GRAZING_SLOPE_MAX_DEGREES)
         return True
 
     @pyqtProperty(bool, notify=_applySlopeLimitChanged)
@@ -549,6 +545,35 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
         if self.mSlopeMaxDegrees != myValue:
             self.mSlopeMaxDegrees = myValue
             self._slopeMaxDegreesChanged.emit(myValue)
+
+    @staticmethod
+    def _readFloatWithFallback(theElement, thePrimaryTag: str, theFallbackTag: str, theDefault: float) -> float:
+        """Read a float child element, trying ``thePrimaryTag`` then ``theFallbackTag``."""
+        for myTag in (thePrimaryTag, theFallbackTag):
+            myText = theElement.firstChildElement(myTag).text().strip()
+            if myText:
+                try:
+                    return float(myText)
+                except ValueError:
+                    continue
+        return float(theDefault)
+
+    # Aliases matching the June 2026 API and XML tag names.
+    @property
+    def preferredSlopeMin(self) -> float:
+        return float(self.mSlopeMinDegrees)
+
+    @preferredSlopeMin.setter
+    def preferredSlopeMin(self, theValue: float) -> None:
+        self.slopeMinDegrees = theValue
+
+    @property
+    def preferredSlopeMax(self) -> float:
+        return float(self.mSlopeMaxDegrees)
+
+    @preferredSlopeMax.setter
+    def preferredSlopeMax(self, theValue: float) -> None:
+        self.slopeMaxDegrees = theValue
 
     def toXml(self) -> str:
         from la.lib.lautils import LaUtils
@@ -592,8 +617,8 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
         myString += f"  <foodValueCommonGrazingLand>{self.valueCommonGrazingLand}</foodValueCommonGrazingLand>\n"
         myString += f"  <foodValueOfSpecificGrazingLand>{self.valueSpecificGrazingLand}</foodValueOfSpecificGrazingLand>\n"
         myString += f"  <applySlopeLimit>{1 if self.mApplySlopeLimit else 0}</applySlopeLimit>\n"
-        myString += f"  <slopeMinDegrees>{self.mSlopeMinDegrees}</slopeMinDegrees>\n"
-        myString += f"  <slopeMaxDegrees>{self.mSlopeMaxDegrees}</slopeMaxDegrees>\n"
+        myString += f"  <preferredSlopeMin>{self.mSlopeMinDegrees}</preferredSlopeMin>\n"
+        myString += f"  <preferredSlopeMax>{self.mSlopeMaxDegrees}</preferredSlopeMax>\n"
         myString += "</animalParameter>\n"
         return myString
 

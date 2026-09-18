@@ -69,6 +69,8 @@ class LaLayerStyles:
         myColour = _CROP_COLOUR if theIsCrop else _GRAZING_COLOUR
         if theCategory == "fallow":
             myColour = _FALLOW_COLOUR
+        elif theCategory == "preview":
+            myColour = QColor(255, 140, 0, 150)   # orange: transient search preview
         myClasses = [
             QgsPalettedRasterRenderer.Class(1, myColour, "Catchment"),
         ]

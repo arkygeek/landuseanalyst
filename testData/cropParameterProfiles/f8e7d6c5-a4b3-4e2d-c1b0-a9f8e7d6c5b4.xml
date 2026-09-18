@@ -1,4 +1,3 @@
-<?xml version='1.0' encoding='utf-8'?>
 <cropParameter guid="f8e7d6c5-a4b3-4e2d-c1b0-a9f8e7d6c5b4">
   <name>Emmer Params</name>
   <description>Emmer crop parameters</description>
@@ -13,5 +12,5 @@
   <areaUnits>Hectare</areaUnits>
   <useCommonLand>1</useCommonLand>
   <useSpecificLand>0</useSpecificLand>
-  <rasterName>/home/arkygeek/dev/QGis-Projects/landuseanalyst/testData/syntheticRasters/crop_f8e7d6c5-a4b3-4e2d-c1b0-a9f8e7d6c5b4.tif</rasterName>
+  <rasterName></rasterName>
 </cropParameter>
