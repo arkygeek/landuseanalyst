@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='utf-8'?>
+<animalParameter guid="6f2c7d3a-d728-58a8-9ae1-06b46a81ff3e">
+  <name>Sheep · Late EB I · with feed</name>
+  <description>Thesis-derived for Sheep in Late EB I (with feed).</description>
+  <animal>f1a2b3c4-d5e6-f7a8-b9c0-d1e2f3a4b5c6</animal>
+  <percentTameMeat>7.75</percentTameMeat>
+  <useCommonGrazingLand>0</useCommonGrazingLand>
+  <useSpecificGrazingLand>1</useSpecificGrazingLand>
+  <fodderUse>True</fodderUse>
+  <fodderCrops>
+    <foodSource>
+      <fodderCropGuid>d0e1f2a3-b4c5-6789-jklm-0123b8901234</fodderCropGuid>
+      <fodderStrawChaff>1000</fodderStrawChaff>
+      <fodderGrain>750</fodderGrain>
+      <fodderUse>1</fodderUse>
+      <fodderDays>90</fodderDays>
+    </foodSource>
+  </fodderCrops>
+  <fallowUsage>High</fallowUsage>
+  <rasterName>/home/arkygeek/dev/QGis-Projects/landuseanalyst/testData/syntheticRasters/animal_a1b2c3d4-e5f6-a7b8-c9d0-e1f2a3b4c5d6.tif</rasterName>
+  <areaUnits>Dunum</areaUnits>
+  <energyType>KCalories</energyType>
+  <specificLandEnergyType>KCalories</specificLandEnergyType>
+  <foodValueCommonGrazingLand>1500</foodValueCommonGrazingLand>
+  <foodValueOfSpecificGrazingLand>10</foodValueOfSpecificGrazingLand>
+  <applySlopeLimit>1</applySlopeLimit>
+  <slopeMinDegrees>0.0</slopeMinDegrees>
+  <slopeMaxDegrees>15.0</slopeMaxDegrees>
+</animalParameter>

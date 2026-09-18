@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='utf-8'?>
+<cropParameter guid="4294c129-806e-5f68-a680-2fc212e54b12">
+  <name>Lentils · Late EB I params</name>
+  <description>Thesis-derived parameter set for Lentils in the Late EB I period.</description>
+  <crop>d4e5f6a7-b8c9-0123-defg-4567890123bc</crop>
+  <percentTameCrop>4.13</percentTameCrop>
+  <spoilage>30</spoilage>
+  <reseed>20</reseed>
+  <cropRotation>1</cropRotation>
+  <fallowRatio>1.0</fallowRatio>
+  <fallowValue>500</fallowValue>
+  <fallowEnergyType>KCalories</fallowEnergyType>
+  <areaUnits>Hectare</areaUnits>
+  <useCommonLand>1</useCommonLand>
+  <useSpecificLand>1</useSpecificLand>
+  <rasterName>/home/arkygeek/dev/QGis-Projects/landuseanalyst/testData/syntheticRasters/crop_a7f6e5d4-c3b2-4a1f-d0c9-b8a7f6e5d4c3.tif</rasterName>
+  <applySlopeLimit>1</applySlopeLimit>
+  <slopeMinDegrees>0.0</slopeMinDegrees>
+  <slopeMaxDegrees>9.0</slopeMaxDegrees>
+</cropParameter>

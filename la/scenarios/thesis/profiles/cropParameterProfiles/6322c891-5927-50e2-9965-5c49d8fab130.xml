@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='utf-8'?>
+<cropParameter guid="6322c891-5927-50e2-9965-5c49d8fab130">
+  <name>Bitter Vetch · Late EB I params</name>
+  <description>Thesis-derived parameter set for Bitter Vetch in the Late EB I period.</description>
+  <crop>c9d0e1f2-a3b4-5678-ijkl-90123a789012</crop>
+  <percentTameCrop>1.12</percentTameCrop>
+  <spoilage>30</spoilage>
+  <reseed>20</reseed>
+  <cropRotation>1</cropRotation>
+  <fallowRatio>1.0</fallowRatio>
+  <fallowValue>500</fallowValue>
+  <fallowEnergyType>KCalories</fallowEnergyType>
+  <areaUnits>Hectare</areaUnits>
+  <useCommonLand>1</useCommonLand>
+  <useSpecificLand>1</useSpecificLand>
+  <rasterName>/home/arkygeek/dev/QGis-Projects/landuseanalyst/testData/syntheticRasters/crop_d4c3b2a1-f0e9-4d8c-a7b6-e5d4c3b2a1f0.tif</rasterName>
+  <applySlopeLimit>1</applySlopeLimit>
+  <slopeMinDegrees>0.0</slopeMinDegrees>
+  <slopeMaxDegrees>9.0</slopeMaxDegrees>
+</cropParameter>

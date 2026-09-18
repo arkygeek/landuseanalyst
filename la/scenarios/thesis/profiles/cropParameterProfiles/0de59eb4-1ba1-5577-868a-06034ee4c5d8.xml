@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='utf-8'?>
+<cropParameter guid="0de59eb4-1ba1-5577-868a-06034ee4c5d8">
+  <name>Peas · Late EB I params</name>
+  <description>Thesis-derived parameter set for Peas in the Late EB I period.</description>
+  <crop>e5f6a7b8-c9d0-1234-efgh-567890123cde</crop>
+  <percentTameCrop>15.38</percentTameCrop>
+  <spoilage>30</spoilage>
+  <reseed>20</reseed>
+  <cropRotation>1</cropRotation>
+  <fallowRatio>1.0</fallowRatio>
+  <fallowValue>500</fallowValue>
+  <fallowEnergyType>KCalories</fallowEnergyType>
+  <areaUnits>Hectare</areaUnits>
+  <useCommonLand>1</useCommonLand>
+  <useSpecificLand>1</useSpecificLand>
+  <rasterName>/home/arkygeek/dev/QGis-Projects/landuseanalyst/testData/syntheticRasters/crop_b6a5f4e3-d2c1-4b0a-e9d8-c7b6a5f4e3d2.tif</rasterName>
+  <applySlopeLimit>1</applySlopeLimit>
+  <slopeMinDegrees>0.0</slopeMinDegrees>
+  <slopeMaxDegrees>9.0</slopeMaxDegrees>
+</cropParameter>

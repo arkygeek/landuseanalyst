@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='utf-8'?>
+<animalParameter guid="d0a34a31-0039-5293-a128-024e74019eb6">
+  <name>Goat · Chalcolithic · no feed</name>
+  <description>Thesis-derived for Goat in Chalcolithic (no feed).</description>
+  <animal>3b4c5d6e-7f8a-9b0c-1d2e-f3a4b5c6d7e8</animal>
+  <percentTameMeat>11.95</percentTameMeat>
+  <useCommonGrazingLand>0</useCommonGrazingLand>
+  <useSpecificGrazingLand>1</useSpecificGrazingLand>
+  <fodderUse>False</fodderUse>
+  <fallowUsage>High</fallowUsage>
+  <rasterName>/home/arkygeek/dev/QGis-Projects/landuseanalyst/testData/syntheticRasters/animal_d1e2f3a4-b5c6-d7e8-f9a0-b1c2d3e4f5a6.tif</rasterName>
+  <areaUnits>Dunum</areaUnits>
+  <energyType>KCalories</energyType>
+  <specificLandEnergyType>KCalories</specificLandEnergyType>
+  <foodValueCommonGrazingLand>1500</foodValueCommonGrazingLand>
+  <foodValueOfSpecificGrazingLand>10</foodValueOfSpecificGrazingLand>
+  <applySlopeLimit>1</applySlopeLimit>
+  <slopeMinDegrees>0.0</slopeMinDegrees>
+  <slopeMaxDegrees>15.0</slopeMaxDegrees>
+</animalParameter>

@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='utf-8'?>
+<cropParameter guid="37a224ee-fddf-5dc6-9502-ff59888dfd91">
+  <name>Barley · Late EB I params</name>
+  <description>Thesis-derived parameter set for Barley in the Late EB I period.</description>
+  <crop>d0e1f2a3-b4c5-6789-jklm-0123b8901234</crop>
+  <percentTameCrop>15.89</percentTameCrop>
+  <spoilage>30</spoilage>
+  <reseed>20</reseed>
+  <cropRotation>1</cropRotation>
+  <fallowRatio>1.0</fallowRatio>
+  <fallowValue>500</fallowValue>
+  <fallowEnergyType>KCalories</fallowEnergyType>
+  <areaUnits>Hectare</areaUnits>
+  <useCommonLand>1</useCommonLand>
+  <useSpecificLand>1</useSpecificLand>
+  <rasterName>/home/arkygeek/dev/QGis-Projects/landuseanalyst/testData/syntheticRasters/crop_e3d2c1b0-a9f8-4e7d-b6c5-a4f3e2d1c0b9.tif</rasterName>
+  <applySlopeLimit>1</applySlopeLimit>
+  <slopeMinDegrees>0.0</slopeMinDegrees>
+  <slopeMaxDegrees>9.0</slopeMaxDegrees>
+</cropParameter>

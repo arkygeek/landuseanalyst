@@ -250,30 +250,21 @@ class LaGrass(QObject):
         """
         Area of cells with value 1 in a binary mask, in hectares.
 
-        Uses GDAL + NumPy directly (both ship with QGIS) — faster and more
-        robust than parsing the text output of ``r.stats``.
+        Delegates to :func:`la.lib.laraster.getAreaHa` (GDAL + NumPy, both
+        ship with QGIS) — faster and more robust than parsing the text
+        output of ``r.stats``.
 
         :param theMaskRaster: Path of a 1/null binary mask GeoTIFF.
         :return: Area in hectares.
         :rtype: float
+        :raises LaGrassError: If the mask raster cannot be opened.
         """
-        from osgeo import gdal
-        import numpy as np
+        from la.lib import laraster
 
-        myDataset = gdal.Open(theMaskRaster)
-        if myDataset is None:
-            raise LaGrassError(f"Could not open mask raster {theMaskRaster}")
-        myBand = myDataset.GetRasterBand(1)
-        myArray = myBand.ReadAsArray()
-        myGeoTransform = myDataset.GetGeoTransform()
-        myCellAreaM2 = abs(myGeoTransform[1] * myGeoTransform[5])
-        # Treat NaN and band-null as non-counting; "==1" captures the mask.
-        myNoData = myBand.GetNoDataValue()
-        if myNoData is not None:
-            myCount = int(np.sum((myArray == 1) & (myArray != myNoData)))
-        else:
-            myCount = int(np.sum(myArray == 1))
-        return myCount * myCellAreaM2 / 10000.0
+        try:
+            return laraster.getAreaHa(theMaskRaster)
+        except FileNotFoundError as myError:
+            raise LaGrassError(f"Could not open mask raster {theMaskRaster}") from myError
 
     # ------------------------------------------------------------------
     # Lifecycle / IO
@@ -314,70 +305,17 @@ class LaGrass(QObject):
         function on the DEM grid, with Dijkstra propagation from the
         settlement.
 
-        Why this exists
-        ---------------
-        The reference path is GRASS ``r.walk`` (called via ``grass:r.walk``
-        in QGIS Processing). For a portable QGIS plugin we need a fallback:
-        even when GRASS itself is installed, the QGIS Processing GRASS
-        provider intermittently excludes ``r.walk`` from its registered
-        algorithm list across QGIS bundles (the macOS standalone bundle
-        and several Linux distributions don't expose it). End users would
-        otherwise see "grass:r.walk is not available" errors despite
-        having GRASS on their machine; this method gives every user the
-        Walking Time analysis without any GRASS or extra-install
-        dependency.
+        The algorithm lives in :func:`la.lib.laraster.makeWalkCost` (shared
+        with the Landuse Analyst web app); this method only adapts it to the
+        wrapper's scratch-directory + temp-raster bookkeeping. It exists
+        because the QGIS Processing GRASS provider intermittently excludes
+        ``r.walk`` from its registered algorithms across QGIS bundles, so
+        every user gets the Walking Time analysis without GRASS.
 
-        Math
-        ----
-        Edge cost is computed per-pair-of-adjacent-cells using **Tobler's
-        hiking function** (Tobler, 1993):
-
-            v(slope) = V_PEAK * exp(-K * |slope + BIAS|)        [km/h]
-
-        with the canonical parameters
-
-            V_PEAK = 6.0    (km/h, peak walking speed)
-            K      = 3.5    (slope penalty)
-            BIAS   = 0.05   (peak occurs at gentle downhill)
-
-        For each directed edge (cell A → cell B):
-
-            slope     = (z_B − z_A) / horizontal_distance        [signed]
-            velocity  = Tobler(slope)                            [km/h]
-            edge_cost = horizontal_distance / velocity_in_m_per_s [seconds]
-
-        The full grid is then represented as a directed sparse graph
-        (8-connected, anisotropic — uphill and downhill from the same
-        edge have different costs) and Dijkstra propagates accumulated
-        cost from the settlement seed. Cells beyond ``MAX_COST`` seconds
-        of walking are masked to null in the output.
-
-        Output is a Float32 GeoTIFF co-registered with the DEM, with
-        nodata = NaN, units = seconds of walking time. This matches the
-        units the binary-search threshold sweep in
-        :class:`la.lib.lacatchment.LaCatchment` expects (the bracket
-        ``[0, 40000]`` corresponds to up to ~11 hours of walking, in
-        line with the C++ original's max_cost setting).
-
-        ACKNOWLEDGMENTS
-        ---------------
-        The reference algorithm — GRASS ``r.walk`` — was originally
-        written by Steno Fontanari (ITC-IRST, 1992) and Pierre de
-        Mouveaux, and is maintained by the GRASS GIS development team:
-        Markus Neteler, Hamish Bowman, Roberto Flor and many others.
-        Source: https://github.com/OSGeo/grass/tree/main/raster/r.walk
-
-        The walking-velocity model is Waldo Tobler's hiking function:
-        Tobler, W. (1993). "Three Presentations on Geographical Analysis
-        and Modeling: Non-Isotropic Geographic Modeling; Speculations on
-        the Geometry of Geography; and Global Spatial Analysis."
-        National Center for Geographic Information and Analysis,
-        Technical Report 93-1.
-
-        The Landuse Analyst plugin's binary-search catchment workflow
-        (which consumes the cost surface this method produces) is a
-        Python port of Jason Jorgenson's C++ Landuse Analyst — see
-        ``cppArchive/`` in this codebase.
+        Output is a Float32 GeoTIFF co-registered with the DEM, nodata =
+        NaN, units = seconds of walking time, cells beyond 40 000 s masked
+        to null — the units the binary-search threshold sweep in
+        :class:`la.lib.lacatchment.LaCatchment` expects.
 
         :param theX: Settlement easting in DEM CRS units.
         :param theY: Settlement northing in DEM CRS units.
@@ -385,134 +323,14 @@ class LaGrass(QObject):
         :rtype: str
         :raises LaGrassError: On unreadable DEM or seed outside DEM extent.
         """
-        import math
-        import numpy as np
-        from osgeo import gdal
-        from scipy.sparse import csr_matrix
-        from scipy.sparse.csgraph import dijkstra
+        from la.lib import laraster
 
-        # Tobler's hiking function parameters — see method docstring.
-        _V_PEAK_KMH    = 6.0
-        _SLOPE_PENALTY = 3.5
-        _DOWNHILL_BIAS = 0.05
-        _MAX_COST_SEC  = 40000.0     # ~11 h walking — matches C++ max_cost
-
-        # --- 1. Read DEM into a NumPy array, capture georeferencing ---
-        myDataset = gdal.Open(self.mDemPath)
-        if myDataset is None:
-            raise LaGrassError(f"Could not open DEM {self.mDemPath}")
-        myDem        = myDataset.GetRasterBand(1).ReadAsArray().astype(np.float64)
-        myGeoTrans   = myDataset.GetGeoTransform()
-        myProjection = myDataset.GetProjection()
-        myCellX      = abs(myGeoTrans[1])
-        myCellY      = abs(myGeoTrans[5])
-        myCellDiag   = math.sqrt(myCellX ** 2 + myCellY ** 2)
-        myRows, myCols = myDem.shape
-
-        # --- 2. Locate the seed cell from settlement coordinates ---
-        # GeoTransform: (originX, pixelW, 0, originY, 0, -pixelH) for
-        # north-up rasters. Inverse is straightforward.
-        mySeedCol = int((theX - myGeoTrans[0]) / myGeoTrans[1])
-        mySeedRow = int((theY - myGeoTrans[3]) / myGeoTrans[5])
-        if not (0 <= mySeedRow < myRows and 0 <= mySeedCol < myCols):
-            raise LaGrassError(
-                f"Settlement ({theX}, {theY}) maps to cell "
-                f"({mySeedRow}, {mySeedCol}) outside DEM "
-                f"({myRows} × {myCols})."
+        try:
+            myOutPath = laraster.makeWalkCost(
+                self.mDemPath, theX, theY, self.mScratchDir,
             )
-
-        # --- 3. Build a directed sparse cost graph (8-neighbor) ---
-        # For each of the 8 directions we vectorise across the whole DEM:
-        #   * compute slope from "src" cells to "dst" cells (signed)
-        #   * compute Tobler velocity (km/h) per edge
-        #   * convert to edge-cost in seconds
-        # Then accumulate into COO arrays for a single csr_matrix at the end.
-        myDirections = [
-            (-1,  0, myCellY),     # N
-            (-1,  1, myCellDiag),  # NE
-            ( 0,  1, myCellX),     # E
-            ( 1,  1, myCellDiag),  # SE
-            ( 1,  0, myCellY),     # S
-            ( 1, -1, myCellDiag),  # SW
-            ( 0, -1, myCellX),     # W
-            (-1, -1, myCellDiag),  # NW
-        ]
-
-        myRowIdxList:  List[np.ndarray] = []
-        myColIdxList:  List[np.ndarray] = []
-        myDataList:    List[np.ndarray] = []
-
-        for myDr, myDc, myEdgeLen in myDirections:
-            # In-bounds windows for src (where dst exists) and dst.
-            mySrcRowStart, mySrcRowStop = max(0, -myDr), min(myRows, myRows - myDr)
-            mySrcColStart, mySrcColStop = max(0, -myDc), min(myCols, myCols - myDc)
-            myDstRowStart, myDstRowStop = max(0,  myDr), min(myRows, myRows + myDr)
-            myDstColStart, myDstColStop = max(0,  myDc), min(myCols, myCols + myDc)
-
-            mySrcZ = myDem[mySrcRowStart:mySrcRowStop, mySrcColStart:mySrcColStop]
-            myDstZ = myDem[myDstRowStart:myDstRowStop, myDstColStart:myDstColStop]
-
-            # Signed slope: positive = uphill from src to dst.
-            mySlope = (myDstZ - mySrcZ) / myEdgeLen
-
-            # Tobler velocity (km/h); convert to m/s for cost-in-seconds.
-            myVelKmh = _V_PEAK_KMH * np.exp(
-                -_SLOPE_PENALTY * np.abs(mySlope + _DOWNHILL_BIAS)
-            )
-            myVelMs = myVelKmh * (1000.0 / 3600.0)
-            # Clamp to a tiny positive so absolute cliffs don't blow up.
-            myEdgeCost = myEdgeLen / np.maximum(myVelMs, 1e-6)
-
-            # Flatten (row, col) → flat index for src and dst.
-            mySrcRowGrid, mySrcColGrid = np.meshgrid(
-                np.arange(mySrcRowStart, mySrcRowStop),
-                np.arange(mySrcColStart, mySrcColStop),
-                indexing="ij",
-            )
-            myDstRowGrid, myDstColGrid = np.meshgrid(
-                np.arange(myDstRowStart, myDstRowStop),
-                np.arange(myDstColStart, myDstColStop),
-                indexing="ij",
-            )
-            myRowIdxList.append((mySrcRowGrid * myCols + mySrcColGrid).ravel())
-            myColIdxList.append((myDstRowGrid * myCols + myDstColGrid).ravel())
-            myDataList.append(myEdgeCost.ravel())
-
-        myRowIdx = np.concatenate(myRowIdxList)
-        myColIdx = np.concatenate(myColIdxList)
-        myCosts  = np.concatenate(myDataList)
-        myN      = myRows * myCols
-        myGraph  = csr_matrix((myCosts, (myRowIdx, myColIdx)), shape=(myN, myN))
-
-        # --- 4. Dijkstra from the seed ---
-        mySeedFlat = mySeedRow * myCols + mySeedCol
-        myDistFlat = dijkstra(csgraph=myGraph, indices=mySeedFlat)
-        myCostGrid = myDistFlat.reshape(myRows, myCols)
-
-        # Mask cells beyond max_cost or unreachable (∞).
-        myCostGrid[~np.isfinite(myCostGrid)] = np.nan
-        myCostGrid[myCostGrid > _MAX_COST_SEC] = np.nan
-
-        # --- 5. Write the output GeoTIFF ---
-        myOutPath = self._tempPath("walkCost_pure")
-        myDriver = gdal.GetDriverByName("GTiff")
-        myOutDs  = myDriver.Create(
-            myOutPath, myCols, myRows, 1, gdal.GDT_Float32,
-            options=["COMPRESS=LZW", "TILED=YES"],
-        )
-        myOutDs.SetGeoTransform(myGeoTrans)
-        myOutDs.SetProjection(myProjection)
-        myOutBand = myOutDs.GetRasterBand(1)
-        myOutBand.SetNoDataValue(float("nan"))
-        myOutBand.WriteArray(myCostGrid.astype(np.float32))
-        myOutBand.FlushCache()
-        myOutDs.FlushCache()
-        # GDAL only finalises the GeoTIFF (header + directory) when the last
-        # reference to the dataset is dropped. Without these the file stays
-        # write-locked and the very next gdal.Open() on it fails with
-        # "not recognized as a supported file format".
-        myOutBand = None
-        myOutDs = None
+        except (FileNotFoundError, ValueError) as myError:
+            raise LaGrassError(str(myError)) from myError
         self._mTempRasters.append(myOutPath)
         self.message.emit(
             f"Built walk-cost surface (pure-Python Tobler) from "
@@ -527,10 +345,8 @@ class LaGrass(QObject):
     # used in :meth:`reclass`, :meth:`createMask`, :meth:`createInverseMask`,
     # and :meth:`mergeMaps`. The public methods route to these when
     # ``self._mMapcalcId is None`` — same gate that protects the r.walk
-    # fallback. The fallbacks unlock fully-headless catchment runs (handy
-    # for tests) and provide a portability backstop for users whose QGIS
-    # bundle ships the GRASS provider without the mapcalc algorithm
-    # registered.
+    # fallback. The maths lives in :mod:`la.lib.laraster`; these wrappers
+    # only add temp-raster registration and LaGrassError translation.
     #
     # Semantic-match notes
     # --------------------
@@ -543,6 +359,23 @@ class LaGrass(QObject):
     #   raster's geotransform + projection so the cost surface, masks,
     #   suitability rasters, and outputs all line up cell-for-cell.
 
+    def _registerTemp(self, theCall, *theArgs) -> str:
+        """Run a :mod:`laraster` op and register its output as a temp raster.
+
+        :param theCall: A ``laraster`` function returning an output path.
+        :param theArgs: Positional arguments for ``theCall`` (the scratch
+            directory is appended automatically).
+        :return: The output path.
+        :rtype: str
+        :raises LaGrassError: If an input raster cannot be opened.
+        """
+        try:
+            myOutPath = theCall(*theArgs, self.mScratchDir)
+        except FileNotFoundError as myError:
+            raise LaGrassError(str(myError)) from myError
+        self._mTempRasters.append(myOutPath)
+        return myOutPath
+
     def _reclassPure(self, theCostRaster: str, theThreshold: float) -> str:
         """Pure-Python equivalent of ``if(cost < threshold, 1, null())``.
 
@@ -551,15 +384,9 @@ class LaGrass(QObject):
         :return: Absolute path of a 1/0 uint8 mask GeoTIFF (nodata=0).
         :rtype: str
         """
-        import numpy as np
+        from la.lib import laraster
 
-        myCost = self._readBand(theCostRaster)
-        # NaN < anything is False, which matches GRASS null-propagation.
-        myMask = (myCost < theThreshold).astype(np.uint8)
-        myOutPath = self._tempPath(f"reclass_pure_{int(theThreshold)}")
-        self._writeMaskCoregistered(myMask, theCostRaster, myOutPath)
-        self._mTempRasters.append(myOutPath)
-        return myOutPath
+        return self._registerTemp(laraster.reclassCost, theCostRaster, theThreshold)
 
     def _createMaskPure(
         self, theReclassed: str, theSuitabilityRaster: str,
@@ -571,15 +398,9 @@ class LaGrass(QObject):
         :return: Absolute path of a 1/0 uint8 mask GeoTIFF (nodata=0).
         :rtype: str
         """
-        import numpy as np
+        from la.lib import laraster
 
-        myA = self._readBand(theReclassed)
-        myB = self._readBand(theSuitabilityRaster)
-        myMask = ((myA >= 1) & (myB >= 1)).astype(np.uint8)
-        myOutPath = self._tempPath("mask_pure")
-        self._writeMaskCoregistered(myMask, theReclassed, myOutPath)
-        self._mTempRasters.append(myOutPath)
-        return myOutPath
+        return self._registerTemp(laraster.createMask, theReclassed, theSuitabilityRaster)
 
     def _createInverseMaskPure(
         self,
@@ -596,16 +417,11 @@ class LaGrass(QObject):
         :return: Absolute path of a 1/0 uint8 leftover mask GeoTIFF.
         :rtype: str
         """
-        import numpy as np
+        from la.lib import laraster
 
-        myCost = self._readBand(theCostRaster)
-        myBase = self._readBand(theBaseSuitability)
-        # NaN >= threshold is False — unreachable cells don't count as leftover.
-        myMask = ((myBase >= 1) & (myCost >= theThreshold)).astype(np.uint8)
-        myOutPath = self._tempPath(f"inverse_pure_{int(theThreshold)}")
-        self._writeMaskCoregistered(myMask, theCostRaster, myOutPath)
-        self._mTempRasters.append(myOutPath)
-        return myOutPath
+        return self._registerTemp(
+            laraster.createInverseMask, theCostRaster, theThreshold, theBaseSuitability,
+        )
 
     def _mergeMapsPure(self, theA: str, theB: str) -> str:
         """Pure-Python equivalent of ``if(A >= 1 || B >= 1, 1, null())``.
@@ -615,38 +431,37 @@ class LaGrass(QObject):
         :return: Absolute path of a 1/0 uint8 union mask GeoTIFF.
         :rtype: str
         """
-        import numpy as np
+        from la.lib import laraster
 
-        myArrA = self._readBand(theA)
-        myArrB = self._readBand(theB)
-        myMask = ((myArrA >= 1) | (myArrB >= 1)).astype(np.uint8)
-        myOutPath = self._tempPath("merge_pure")
-        self._writeMaskCoregistered(myMask, theA, myOutPath)
-        self._mTempRasters.append(myOutPath)
-        return myOutPath
+        return self._registerTemp(laraster.mergeMasks, theA, theB)
 
     def _readBand(self, thePath: str):
         """Read band 1 of a raster into a NumPy array.
 
-        Wraps ``gdal.Open(...).GetRasterBand(1).ReadAsArray()`` so the
-        Dataset reference outlives the read — chaining all three calls
-        on one line lets Python free the Dataset mid-call and segfaults
-        under the GDAL Python bindings.
+        Thin wrapper over :func:`la.lib.laraster._readBand`, which keeps the
+        Dataset reference alive for the duration of the read (chaining
+        ``gdal.Open(...).GetRasterBand(1).ReadAsArray()`` on one line lets
+        Python free the Dataset mid-call and segfaults).
 
         :param thePath: Absolute path of a single-band GDAL-readable raster.
         :return: 2-D NumPy array of the band's values.
+        :raises LaGrassError: If the raster cannot be opened.
         """
-        from osgeo import gdal
+        from la.lib import laraster
 
-        myDataset = gdal.Open(thePath)
-        if myDataset is None:
-            raise LaGrassError(f"Could not open {thePath}")
-        return myDataset.GetRasterBand(1).ReadAsArray()
+        try:
+            myArray, _, _ = laraster._readBand(thePath)
+        except FileNotFoundError as myError:
+            raise LaGrassError(f"Could not open {thePath}") from myError
+        return myArray
 
     def _writeMaskCoregistered(
         self, theMask, theReferenceRaster: str, theOutPath: str,
     ) -> None:
         """Write a uint8 ``{0,1}`` mask co-registered with a reference raster.
+
+        Thin wrapper over :func:`la.lib.laraster._writeMaskCoregistered`
+        (LZW, tiled, nodata 0, handles released so GDAL finalises the file).
 
         :param theMask: 2-D ``numpy.ndarray`` of ``uint8`` values (0 or 1).
         :param theReferenceRaster: Path to read geotransform + projection
@@ -654,28 +469,9 @@ class LaGrass(QObject):
         :param theOutPath: Absolute output path.
         :rtype: None
         """
-        from osgeo import gdal
+        from la.lib import laraster
 
-        myReference   = gdal.Open(theReferenceRaster)
-        myGeoTrans    = myReference.GetGeoTransform()
-        myProjection  = myReference.GetProjection()
-        myRows, myCols = theMask.shape
-        myDriver = gdal.GetDriverByName("GTiff")
-        myOutDs  = myDriver.Create(
-            theOutPath, myCols, myRows, 1, gdal.GDT_Byte,
-            options=["COMPRESS=LZW", "TILED=YES"],
-        )
-        myOutDs.SetGeoTransform(myGeoTrans)
-        myOutDs.SetProjection(myProjection)
-        myOutBand = myOutDs.GetRasterBand(1)
-        myOutBand.SetNoDataValue(0)
-        myOutBand.WriteArray(theMask)
-        myOutBand.FlushCache()
-        myOutDs.FlushCache()
-        # Release the handles so GDAL finalises the file (see _makeWalkCostPure).
-        myOutBand = None
-        myOutDs = None
-        myReference = None
+        laraster._writeMaskCoregistered(theMask, theReferenceRaster, theOutPath)
 
     # ------------------------------------------------------------------
     # Internals

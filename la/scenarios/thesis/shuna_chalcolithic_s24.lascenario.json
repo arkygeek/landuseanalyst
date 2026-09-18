@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "generator": "landuseanalyst-qgis/export_thesis_scenarios",
+  "scenario": {
+    "name": "Shuna · Chalcolithic · S24 · pop 600 · meat 20% · dairy 100% · no feed",
+    "description": "Thesis Scenario #24 for the Chalcolithic period at Tell Esh Shuna North. Population 600, meat-share-of-diet 20%, dairy utilisation 100% of potential, without 90-day supplementary feed. Calc mode: Animals First, Dairy Separate (thesis-target).",
+    "period": "Chalcolithic",
+    "population": 600.0,
+    "caloriesPerPersonDaily": 2500,
+    "dietPercentFromPlants": 20.0,
+    "meatPercentTame": 99.0,
+    "cropPercentTame": 90.0,
+    "dairyUtilisation": 100.0,
+    "baseOnPlants": false,
+    "includeDairy": false,
+    "limitDairy": false,
+    "limitDairyPercent": null,
+    "calculationType": "animals_first_dairy_separate",
+    "settlementX": 744800.0,
+    "settlementY": 3611100.0,
+    "crsEpsg": 32636,
+    "precisionPct": 5,
+    "methodEuclidean": false,
+    "cropSlopeMaxDegrees": 9.0,
+    "grazingSlopeMaxDegrees": 15.0,
+    "targetHa": 0.0,
+    "demPath": "",
+    "suitabilityPath": ""
+  },
+  "crops": [
+    {
+      "guid": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      "parameterGuid": "d9e8c7b6-a5f4-4e3d-b2c1-a0f9e8d7c6b5",
+      "name": "Horse Bean",
+      "parameterName": "Horse Bean Params",
+      "percent": 1.09
+    },
+    {
+      "guid": "b2c3d4e5-f6a7-8901-bcde-f23456789012",
+      "parameterGuid": "e9f8d7c6-b5a4-4f3e-c2d1-b0a9f8e7d6c5",
+      "name": "Einkorn",
+      "parameterName": "Einkorn Params",
+      "percent": 5.47
+    },
+    {
+      "guid": "c3d4e5f6-a7b8-9012-cdef-34567890123a",
+      "parameterGuid": "f8e7d6c5-a4b3-4e2d-c1b0-a9f8e7d6c5b4",
+      "name": "Emmer",
+      "parameterName": "Emmer Params",
+      "percent": 52.52
+    },
+    {
+      "guid": "d4e5f6a7-b8c9-0123-defg-4567890123bc",
+      "parameterGuid": "a7f6e5d4-c3b2-4a1f-d0c9-b8a7f6e5d4c3",
+      "name": "Lentils",
+      "parameterName": "Lentils Params",
+      "percent": 1.09
+    },
+    {
+      "guid": "e5f6a7b8-c9d0-1234-efgh-567890123cde",
+      "parameterGuid": "b6a5f4e3-d2c1-4b0a-e9d8-c7b6a5f4e3d2",
+      "name": "Peas",
+      "parameterName": "Peas Params",
+      "percent": 3.28
+    },
+    {
+      "guid": "f6a7b8c9-d0e1-2345-fghi-67890123def4",
+      "parameterGuid": "c5b4a3f2-e1d0-4c9b-f8e7-d6c5b4a3f2e1",
+      "name": "Olives",
+      "parameterName": "Olives Params",
+      "percent": 1.53
+    },
+    {
+      "guid": "c9d0e1f2-a3b4-5678-ijkl-90123a789012",
+      "parameterGuid": "d4c3b2a1-f0e9-4d8c-a7b6-e5d4c3b2a1f0",
+      "name": "Bitter Vetch",
+      "parameterName": "Bitter Vetch Params",
+      "percent": 2.19
+    },
+    {
+      "guid": "d0e1f2a3-b4c5-6789-jklm-0123b8901234",
+      "parameterGuid": "e3d2c1b0-a9f8-4e7d-b6c5-a4f3e2d1c0b9",
+      "name": "Barley",
+      "parameterName": "Barley Params",
+      "percent": 32.83
+    }
+  ],
+  "animals": [
+    {
+      "guid": "f1a2b3c4-d5e6-f7a8-b9c0-d1e2f3a4b5c6",
+      "parameterGuid": "374c5bda-ff01-5b0f-a26d-e1df4812f678",
+      "name": "Sheep",
+      "parameterName": "Sheep · Chalcolithic · no feed",
+      "percent": 3.59
+    },
+    {
+      "guid": "3b4c5d6e-7f8a-9b0c-1d2e-f3a4b5c6d7e8",
+      "parameterGuid": "d0a34a31-0039-5293-a128-024e74019eb6",
+      "name": "Goat",
+      "parameterName": "Goat · Chalcolithic · no feed",
+      "percent": 11.95
+    },
+    {
+      "guid": "2a3b4c5d-6e7f-8a9b-0c1d-e2f3a4b5c6d7",
+      "parameterGuid": "2ec900f7-ab27-5c83-8021-7a390706a626",
+      "name": "Cow",
+      "parameterName": "Cow · Chalcolithic · no feed",
+      "percent": 47.81
+    },
+    {
+      "guid": "1f2a3b4c-5d6e-7f8a-9b0c-d1e2f3a4b5c6",
+      "parameterGuid": "aa423331-94c0-51fc-8e8c-fa087cd593c4",
+      "name": "Pig",
+      "parameterName": "Pig · Chalcolithic · no feed",
+      "percent": 36.65
+    }
+  ],
+  "plugin": {
+    "catchmentEnabled": false,
+    "distanceMethod": "WalkingTime",
+    "commonLandValue": 0.0,
+    "commonLandAreaUnits": "Hectare",
+    "specificLandEnergyType": "KCalories"
+  }
+}

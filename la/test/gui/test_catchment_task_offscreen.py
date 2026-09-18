@@ -73,11 +73,7 @@ class _StubModel:
 @pytest.mark.usefixtures("qtApp")
 def test_controller_runs_catchment_task_and_builds_layer_tree(tmp_path, shunaDemPath, monkeypatch):
     pytest.importorskip("scipy")
-    from qgis.PyQt.QtTest import QTest
-    from qgis.core import QgsProject, QgsRasterLayer, QgsTask
-    from la.gui.lascenariocontroller import LaScenarioController
-    from la.lib.lacatchment import DistanceMethod, LaCatchmentInputs, SearchStatus
-    from la.lib.lautils import LaUtils
+    from qgis.core import QgsProject, QgsRasterLayer
 
     myDemPath = str(tmp_path / "dem.tif")
     mySuitPath = str(tmp_path / "suit.tif")

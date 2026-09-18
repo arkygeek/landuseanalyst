@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='utf-8'?>
+<animalParameter guid="e2dc080a-708c-5452-bc78-0df063102747">
+  <name>Goat · Early EB I · no feed</name>
+  <description>Thesis-derived for Goat in Early EB I (no feed).</description>
+  <animal>3b4c5d6e-7f8a-9b0c-1d2e-f3a4b5c6d7e8</animal>
+  <percentTameMeat>10.38</percentTameMeat>
+  <useCommonGrazingLand>0</useCommonGrazingLand>
+  <useSpecificGrazingLand>1</useSpecificGrazingLand>
+  <fodderUse>False</fodderUse>
+  <fallowUsage>High</fallowUsage>
+  <rasterName>/home/arkygeek/dev/QGis-Projects/landuseanalyst/testData/syntheticRasters/animal_d1e2f3a4-b5c6-d7e8-f9a0-b1c2d3e4f5a6.tif</rasterName>
+  <areaUnits>Dunum</areaUnits>
+  <energyType>KCalories</energyType>
+  <specificLandEnergyType>KCalories</specificLandEnergyType>
+  <foodValueCommonGrazingLand>1500</foodValueCommonGrazingLand>
+  <foodValueOfSpecificGrazingLand>10</foodValueOfSpecificGrazingLand>
+  <applySlopeLimit>1</applySlopeLimit>
+  <slopeMinDegrees>0.0</slopeMinDegrees>
+  <slopeMaxDegrees>15.0</slopeMaxDegrees>
+</animalParameter>

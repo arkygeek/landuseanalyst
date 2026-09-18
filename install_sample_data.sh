@@ -64,6 +64,27 @@ for subdir in "${SUBDIRS[@]}"; do
     echo "  $subdir: copied $count / $total files -> $dst"
 done
 
+# Thesis scenarios (la/scenarios/thesis/*.lascenario.json) reference derived
+# parameter profiles for the EEB1 / LEB1 periods and the no-feed variants;
+# install those too so every scenario file opens with its parameter sets.
+THESIS_PROFILES="$SCRIPT_DIR/la/scenarios/thesis/profiles"
+for subdir in cropParameterProfiles animalParameterProfiles; do
+    src="$THESIS_PROFILES/$subdir"
+    dst="$INSTALL_DIR/$subdir"
+    [[ -d "$src" ]] || continue
+    count=0
+    for f in "$src"/*.xml; do
+        [[ -f "$f" ]] || continue
+        dest_file="$dst/$(basename "$f")"
+        if [[ $FORCE -eq 1 || ! -e "$dest_file" ]]; then
+            cp "$f" "$dest_file"
+            (( count++ )) || true
+        fi
+    done
+    echo "  thesis $subdir: copied $count derived profiles -> $dst"
+done
+echo "  thesis scenarios: open them from la/scenarios/thesis/ with the Open button in the plugin"
+
 echo ""
 echo "Done. Run QGIS and enable the Landuse Analyst plugin to see the data."
 echo "If animals or crops are still missing, check: $INSTALL_DIR"

@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='utf-8'?>
+<cropParameter guid="d6b979bf-3588-510b-9b9c-3597d62d589c">
+  <name>Horse Bean · Late EB I params</name>
+  <description>Thesis-derived parameter set for Horse Bean in the Late EB I period.</description>
+  <crop>a1b2c3d4-e5f6-7890-abcd-ef1234567890</crop>
+  <percentTameCrop>1.0</percentTameCrop>
+  <spoilage>30</spoilage>
+  <reseed>20</reseed>
+  <cropRotation>1</cropRotation>
+  <fallowRatio>1.0</fallowRatio>
+  <fallowValue>500</fallowValue>
+  <fallowEnergyType>KCalories</fallowEnergyType>
+  <areaUnits>Hectare</areaUnits>
+  <useCommonLand>1</useCommonLand>
+  <useSpecificLand>1</useSpecificLand>
+  <rasterName>/home/arkygeek/dev/QGis-Projects/landuseanalyst/testData/syntheticRasters/crop_d9e8c7b6-a5f4-4e3d-b2c1-a0f9e8d7c6b5.tif</rasterName>
+  <applySlopeLimit>1</applySlopeLimit>
+  <slopeMinDegrees>0.0</slopeMinDegrees>
+  <slopeMaxDegrees>9.0</slopeMaxDegrees>
+</cropParameter>

@@ -1,0 +1,434 @@
+[
+  {
+    "file": "shuna_chalcolithic_s01.lascenario.json",
+    "name": "Shuna · Chalcolithic · S01 · pop 100 · meat 10% · dairy 0% · feed"
+  },
+  {
+    "file": "shuna_chalcolithic_s02.lascenario.json",
+    "name": "Shuna · Chalcolithic · S02 · pop 100 · meat 10% · dairy 0% · no feed"
+  },
+  {
+    "file": "shuna_chalcolithic_s03.lascenario.json",
+    "name": "Shuna · Chalcolithic · S03 · pop 100 · meat 10% · dairy 50% · feed"
+  },
+  {
+    "file": "shuna_chalcolithic_s04.lascenario.json",
+    "name": "Shuna · Chalcolithic · S04 · pop 100 · meat 10% · dairy 50% · no feed"
+  },
+  {
+    "file": "shuna_chalcolithic_s05.lascenario.json",
+    "name": "Shuna · Chalcolithic · S05 · pop 100 · meat 10% · dairy 100% · feed"
+  },
+  {
+    "file": "shuna_chalcolithic_s06.lascenario.json",
+    "name": "Shuna · Chalcolithic · S06 · pop 100 · meat 10% · dairy 100% · no feed"
+  },
+  {
+    "file": "shuna_chalcolithic_s07.lascenario.json",
+    "name": "Shuna · Chalcolithic · S07 · pop 600 · meat 10% · dairy 0% · feed"
+  },
+  {
+    "file": "shuna_chalcolithic_s08.lascenario.json",
+    "name": "Shuna · Chalcolithic · S08 · pop 600 · meat 10% · dairy 0% · no feed"
+  },
+  {
+    "file": "shuna_chalcolithic_s09.lascenario.json",
+    "name": "Shuna · Chalcolithic · S09 · pop 600 · meat 10% · dairy 50% · feed"
+  },
+  {
+    "file": "shuna_chalcolithic_s10.lascenario.json",
+    "name": "Shuna · Chalcolithic · S10 · pop 600 · meat 10% · dairy 50% · no feed"
+  },
+  {
+    "file": "shuna_chalcolithic_s11.lascenario.json",
+    "name": "Shuna · Chalcolithic · S11 · pop 600 · meat 10% · dairy 100% · feed"
+  },
+  {
+    "file": "shuna_chalcolithic_s12.lascenario.json",
+    "name": "Shuna · Chalcolithic · S12 · pop 600 · meat 10% · dairy 100% · no feed"
+  },
+  {
+    "file": "shuna_chalcolithic_s13.lascenario.json",
+    "name": "Shuna · Chalcolithic · S13 · pop 100 · meat 20% · dairy 0% · feed"
+  },
+  {
+    "file": "shuna_chalcolithic_s14.lascenario.json",
+    "name": "Shuna · Chalcolithic · S14 · pop 100 · meat 20% · dairy 0% · no feed"
+  },
+  {
+    "file": "shuna_chalcolithic_s15.lascenario.json",
+    "name": "Shuna · Chalcolithic · S15 · pop 100 · meat 20% · dairy 50% · feed"
+  },
+  {
+    "file": "shuna_chalcolithic_s16.lascenario.json",
+    "name": "Shuna · Chalcolithic · S16 · pop 100 · meat 20% · dairy 50% · no feed"
+  },
+  {
+    "file": "shuna_chalcolithic_s17.lascenario.json",
+    "name": "Shuna · Chalcolithic · S17 · pop 100 · meat 20% · dairy 100% · feed"
+  },
+  {
+    "file": "shuna_chalcolithic_s18.lascenario.json",
+    "name": "Shuna · Chalcolithic · S18 · pop 100 · meat 20% · dairy 100% · no feed"
+  },
+  {
+    "file": "shuna_chalcolithic_s19.lascenario.json",
+    "name": "Shuna · Chalcolithic · S19 · pop 600 · meat 20% · dairy 0% · feed"
+  },
+  {
+    "file": "shuna_chalcolithic_s20.lascenario.json",
+    "name": "Shuna · Chalcolithic · S20 · pop 600 · meat 20% · dairy 0% · no feed"
+  },
+  {
+    "file": "shuna_chalcolithic_s21.lascenario.json",
+    "name": "Shuna · Chalcolithic · S21 · pop 600 · meat 20% · dairy 50% · feed"
+  },
+  {
+    "file": "shuna_chalcolithic_s22.lascenario.json",
+    "name": "Shuna · Chalcolithic · S22 · pop 600 · meat 20% · dairy 50% · no feed"
+  },
+  {
+    "file": "shuna_chalcolithic_s23.lascenario.json",
+    "name": "Shuna · Chalcolithic · S23 · pop 600 · meat 20% · dairy 100% · feed"
+  },
+  {
+    "file": "shuna_chalcolithic_s24.lascenario.json",
+    "name": "Shuna · Chalcolithic · S24 · pop 600 · meat 20% · dairy 100% · no feed"
+  },
+  {
+    "file": "shuna_chalcolithic_s25.lascenario.json",
+    "name": "Shuna · Chalcolithic · S25 · pop 100 · meat 30% · dairy 0% · feed"
+  },
+  {
+    "file": "shuna_chalcolithic_s26.lascenario.json",
+    "name": "Shuna · Chalcolithic · S26 · pop 100 · meat 30% · dairy 0% · no feed"
+  },
+  {
+    "file": "shuna_chalcolithic_s27.lascenario.json",
+    "name": "Shuna · Chalcolithic · S27 · pop 100 · meat 30% · dairy 50% · feed"
+  },
+  {
+    "file": "shuna_chalcolithic_s28.lascenario.json",
+    "name": "Shuna · Chalcolithic · S28 · pop 100 · meat 30% · dairy 50% · no feed"
+  },
+  {
+    "file": "shuna_chalcolithic_s29.lascenario.json",
+    "name": "Shuna · Chalcolithic · S29 · pop 100 · meat 30% · dairy 100% · feed"
+  },
+  {
+    "file": "shuna_chalcolithic_s30.lascenario.json",
+    "name": "Shuna · Chalcolithic · S30 · pop 100 · meat 30% · dairy 100% · no feed"
+  },
+  {
+    "file": "shuna_chalcolithic_s31.lascenario.json",
+    "name": "Shuna · Chalcolithic · S31 · pop 600 · meat 30% · dairy 0% · feed"
+  },
+  {
+    "file": "shuna_chalcolithic_s32.lascenario.json",
+    "name": "Shuna · Chalcolithic · S32 · pop 600 · meat 30% · dairy 0% · no feed"
+  },
+  {
+    "file": "shuna_chalcolithic_s33.lascenario.json",
+    "name": "Shuna · Chalcolithic · S33 · pop 600 · meat 30% · dairy 50% · feed"
+  },
+  {
+    "file": "shuna_chalcolithic_s34.lascenario.json",
+    "name": "Shuna · Chalcolithic · S34 · pop 600 · meat 30% · dairy 50% · no feed"
+  },
+  {
+    "file": "shuna_chalcolithic_s35.lascenario.json",
+    "name": "Shuna · Chalcolithic · S35 · pop 600 · meat 30% · dairy 100% · feed"
+  },
+  {
+    "file": "shuna_chalcolithic_s36.lascenario.json",
+    "name": "Shuna · Chalcolithic · S36 · pop 600 · meat 30% · dairy 100% · no feed"
+  },
+  {
+    "file": "shuna_eeb1_s01.lascenario.json",
+    "name": "Shuna · Early EB I · S01 · pop 1,000 · meat 10% · dairy 0% · feed"
+  },
+  {
+    "file": "shuna_eeb1_s02.lascenario.json",
+    "name": "Shuna · Early EB I · S02 · pop 1,000 · meat 10% · dairy 0% · no feed"
+  },
+  {
+    "file": "shuna_eeb1_s03.lascenario.json",
+    "name": "Shuna · Early EB I · S03 · pop 1,000 · meat 10% · dairy 50% · feed"
+  },
+  {
+    "file": "shuna_eeb1_s04.lascenario.json",
+    "name": "Shuna · Early EB I · S04 · pop 1,000 · meat 10% · dairy 50% · no feed"
+  },
+  {
+    "file": "shuna_eeb1_s05.lascenario.json",
+    "name": "Shuna · Early EB I · S05 · pop 1,000 · meat 10% · dairy 100% · feed"
+  },
+  {
+    "file": "shuna_eeb1_s06.lascenario.json",
+    "name": "Shuna · Early EB I · S06 · pop 1,000 · meat 10% · dairy 100% · no feed"
+  },
+  {
+    "file": "shuna_eeb1_s07.lascenario.json",
+    "name": "Shuna · Early EB I · S07 · pop 3,000 · meat 10% · dairy 0% · feed"
+  },
+  {
+    "file": "shuna_eeb1_s08.lascenario.json",
+    "name": "Shuna · Early EB I · S08 · pop 3,000 · meat 10% · dairy 0% · no feed"
+  },
+  {
+    "file": "shuna_eeb1_s09.lascenario.json",
+    "name": "Shuna · Early EB I · S09 · pop 3,000 · meat 10% · dairy 50% · feed"
+  },
+  {
+    "file": "shuna_eeb1_s10.lascenario.json",
+    "name": "Shuna · Early EB I · S10 · pop 3,000 · meat 10% · dairy 50% · no feed"
+  },
+  {
+    "file": "shuna_eeb1_s11.lascenario.json",
+    "name": "Shuna · Early EB I · S11 · pop 3,000 · meat 10% · dairy 100% · feed"
+  },
+  {
+    "file": "shuna_eeb1_s12.lascenario.json",
+    "name": "Shuna · Early EB I · S12 · pop 3,000 · meat 10% · dairy 100% · no feed"
+  },
+  {
+    "file": "shuna_eeb1_s13.lascenario.json",
+    "name": "Shuna · Early EB I · S13 · pop 1,000 · meat 20% · dairy 0% · feed"
+  },
+  {
+    "file": "shuna_eeb1_s14.lascenario.json",
+    "name": "Shuna · Early EB I · S14 · pop 1,000 · meat 20% · dairy 0% · no feed"
+  },
+  {
+    "file": "shuna_eeb1_s15.lascenario.json",
+    "name": "Shuna · Early EB I · S15 · pop 1,000 · meat 20% · dairy 50% · feed"
+  },
+  {
+    "file": "shuna_eeb1_s16.lascenario.json",
+    "name": "Shuna · Early EB I · S16 · pop 1,000 · meat 20% · dairy 50% · no feed"
+  },
+  {
+    "file": "shuna_eeb1_s17.lascenario.json",
+    "name": "Shuna · Early EB I · S17 · pop 1,000 · meat 20% · dairy 100% · feed"
+  },
+  {
+    "file": "shuna_eeb1_s18.lascenario.json",
+    "name": "Shuna · Early EB I · S18 · pop 1,000 · meat 20% · dairy 100% · no feed"
+  },
+  {
+    "file": "shuna_eeb1_s19.lascenario.json",
+    "name": "Shuna · Early EB I · S19 · pop 3,000 · meat 20% · dairy 0% · feed"
+  },
+  {
+    "file": "shuna_eeb1_s20.lascenario.json",
+    "name": "Shuna · Early EB I · S20 · pop 3,000 · meat 20% · dairy 0% · no feed"
+  },
+  {
+    "file": "shuna_eeb1_s21.lascenario.json",
+    "name": "Shuna · Early EB I · S21 · pop 3,000 · meat 20% · dairy 50% · feed"
+  },
+  {
+    "file": "shuna_eeb1_s22.lascenario.json",
+    "name": "Shuna · Early EB I · S22 · pop 3,000 · meat 20% · dairy 50% · no feed"
+  },
+  {
+    "file": "shuna_eeb1_s23.lascenario.json",
+    "name": "Shuna · Early EB I · S23 · pop 3,000 · meat 20% · dairy 100% · feed"
+  },
+  {
+    "file": "shuna_eeb1_s24.lascenario.json",
+    "name": "Shuna · Early EB I · S24 · pop 3,000 · meat 20% · dairy 100% · no feed"
+  },
+  {
+    "file": "shuna_eeb1_s25.lascenario.json",
+    "name": "Shuna · Early EB I · S25 · pop 1,000 · meat 30% · dairy 0% · feed"
+  },
+  {
+    "file": "shuna_eeb1_s26.lascenario.json",
+    "name": "Shuna · Early EB I · S26 · pop 1,000 · meat 30% · dairy 0% · no feed"
+  },
+  {
+    "file": "shuna_eeb1_s27.lascenario.json",
+    "name": "Shuna · Early EB I · S27 · pop 1,000 · meat 30% · dairy 50% · feed"
+  },
+  {
+    "file": "shuna_eeb1_s28.lascenario.json",
+    "name": "Shuna · Early EB I · S28 · pop 1,000 · meat 30% · dairy 50% · no feed"
+  },
+  {
+    "file": "shuna_eeb1_s29.lascenario.json",
+    "name": "Shuna · Early EB I · S29 · pop 1,000 · meat 30% · dairy 100% · feed"
+  },
+  {
+    "file": "shuna_eeb1_s30.lascenario.json",
+    "name": "Shuna · Early EB I · S30 · pop 1,000 · meat 30% · dairy 100% · no feed"
+  },
+  {
+    "file": "shuna_eeb1_s31.lascenario.json",
+    "name": "Shuna · Early EB I · S31 · pop 3,000 · meat 30% · dairy 0% · feed"
+  },
+  {
+    "file": "shuna_eeb1_s32.lascenario.json",
+    "name": "Shuna · Early EB I · S32 · pop 3,000 · meat 30% · dairy 0% · no feed"
+  },
+  {
+    "file": "shuna_eeb1_s33.lascenario.json",
+    "name": "Shuna · Early EB I · S33 · pop 3,000 · meat 30% · dairy 50% · feed"
+  },
+  {
+    "file": "shuna_eeb1_s34.lascenario.json",
+    "name": "Shuna · Early EB I · S34 · pop 3,000 · meat 30% · dairy 50% · no feed"
+  },
+  {
+    "file": "shuna_eeb1_s35.lascenario.json",
+    "name": "Shuna · Early EB I · S35 · pop 3,000 · meat 30% · dairy 100% · feed"
+  },
+  {
+    "file": "shuna_eeb1_s36.lascenario.json",
+    "name": "Shuna · Early EB I · S36 · pop 3,000 · meat 30% · dairy 100% · no feed"
+  },
+  {
+    "file": "shuna_leb1_s01.lascenario.json",
+    "name": "Shuna · Late EB I · S01 · pop 2,000 · meat 10% · dairy 0% · feed"
+  },
+  {
+    "file": "shuna_leb1_s02.lascenario.json",
+    "name": "Shuna · Late EB I · S02 · pop 2,000 · meat 10% · dairy 0% · no feed"
+  },
+  {
+    "file": "shuna_leb1_s03.lascenario.json",
+    "name": "Shuna · Late EB I · S03 · pop 2,000 · meat 10% · dairy 50% · feed"
+  },
+  {
+    "file": "shuna_leb1_s04.lascenario.json",
+    "name": "Shuna · Late EB I · S04 · pop 2,000 · meat 10% · dairy 50% · no feed"
+  },
+  {
+    "file": "shuna_leb1_s05.lascenario.json",
+    "name": "Shuna · Late EB I · S05 · pop 2,000 · meat 10% · dairy 100% · feed"
+  },
+  {
+    "file": "shuna_leb1_s06.lascenario.json",
+    "name": "Shuna · Late EB I · S06 · pop 2,000 · meat 10% · dairy 100% · no feed"
+  },
+  {
+    "file": "shuna_leb1_s07.lascenario.json",
+    "name": "Shuna · Late EB I · S07 · pop 6,000 · meat 10% · dairy 0% · feed"
+  },
+  {
+    "file": "shuna_leb1_s08.lascenario.json",
+    "name": "Shuna · Late EB I · S08 · pop 6,000 · meat 10% · dairy 0% · no feed"
+  },
+  {
+    "file": "shuna_leb1_s09.lascenario.json",
+    "name": "Shuna · Late EB I · S09 · pop 6,000 · meat 10% · dairy 50% · feed"
+  },
+  {
+    "file": "shuna_leb1_s10.lascenario.json",
+    "name": "Shuna · Late EB I · S10 · pop 6,000 · meat 10% · dairy 50% · no feed"
+  },
+  {
+    "file": "shuna_leb1_s11.lascenario.json",
+    "name": "Shuna · Late EB I · S11 · pop 6,000 · meat 10% · dairy 100% · feed"
+  },
+  {
+    "file": "shuna_leb1_s12.lascenario.json",
+    "name": "Shuna · Late EB I · S12 · pop 6,000 · meat 10% · dairy 100% · no feed"
+  },
+  {
+    "file": "shuna_leb1_s13.lascenario.json",
+    "name": "Shuna · Late EB I · S13 · pop 2,000 · meat 20% · dairy 0% · feed"
+  },
+  {
+    "file": "shuna_leb1_s14.lascenario.json",
+    "name": "Shuna · Late EB I · S14 · pop 2,000 · meat 20% · dairy 0% · no feed"
+  },
+  {
+    "file": "shuna_leb1_s15.lascenario.json",
+    "name": "Shuna · Late EB I · S15 · pop 2,000 · meat 20% · dairy 50% · feed"
+  },
+  {
+    "file": "shuna_leb1_s16.lascenario.json",
+    "name": "Shuna · Late EB I · S16 · pop 2,000 · meat 20% · dairy 50% · no feed"
+  },
+  {
+    "file": "shuna_leb1_s17.lascenario.json",
+    "name": "Shuna · Late EB I · S17 · pop 2,000 · meat 20% · dairy 100% · feed"
+  },
+  {
+    "file": "shuna_leb1_s18.lascenario.json",
+    "name": "Shuna · Late EB I · S18 · pop 2,000 · meat 20% · dairy 100% · no feed"
+  },
+  {
+    "file": "shuna_leb1_s19.lascenario.json",
+    "name": "Shuna · Late EB I · S19 · pop 6,000 · meat 20% · dairy 0% · feed"
+  },
+  {
+    "file": "shuna_leb1_s20.lascenario.json",
+    "name": "Shuna · Late EB I · S20 · pop 6,000 · meat 20% · dairy 0% · no feed"
+  },
+  {
+    "file": "shuna_leb1_s21.lascenario.json",
+    "name": "Shuna · Late EB I · S21 · pop 6,000 · meat 20% · dairy 50% · feed"
+  },
+  {
+    "file": "shuna_leb1_s22.lascenario.json",
+    "name": "Shuna · Late EB I · S22 · pop 6,000 · meat 20% · dairy 50% · no feed"
+  },
+  {
+    "file": "shuna_leb1_s23.lascenario.json",
+    "name": "Shuna · Late EB I · S23 · pop 6,000 · meat 20% · dairy 100% · feed"
+  },
+  {
+    "file": "shuna_leb1_s24.lascenario.json",
+    "name": "Shuna · Late EB I · S24 · pop 6,000 · meat 20% · dairy 100% · no feed"
+  },
+  {
+    "file": "shuna_leb1_s25.lascenario.json",
+    "name": "Shuna · Late EB I · S25 · pop 2,000 · meat 30% · dairy 0% · feed"
+  },
+  {
+    "file": "shuna_leb1_s26.lascenario.json",
+    "name": "Shuna · Late EB I · S26 · pop 2,000 · meat 30% · dairy 0% · no feed"
+  },
+  {
+    "file": "shuna_leb1_s27.lascenario.json",
+    "name": "Shuna · Late EB I · S27 · pop 2,000 · meat 30% · dairy 50% · feed"
+  },
+  {
+    "file": "shuna_leb1_s28.lascenario.json",
+    "name": "Shuna · Late EB I · S28 · pop 2,000 · meat 30% · dairy 50% · no feed"
+  },
+  {
+    "file": "shuna_leb1_s29.lascenario.json",
+    "name": "Shuna · Late EB I · S29 · pop 2,000 · meat 30% · dairy 100% · feed"
+  },
+  {
+    "file": "shuna_leb1_s30.lascenario.json",
+    "name": "Shuna · Late EB I · S30 · pop 2,000 · meat 30% · dairy 100% · no feed"
+  },
+  {
+    "file": "shuna_leb1_s31.lascenario.json",
+    "name": "Shuna · Late EB I · S31 · pop 6,000 · meat 30% · dairy 0% · feed"
+  },
+  {
+    "file": "shuna_leb1_s32.lascenario.json",
+    "name": "Shuna · Late EB I · S32 · pop 6,000 · meat 30% · dairy 0% · no feed"
+  },
+  {
+    "file": "shuna_leb1_s33.lascenario.json",
+    "name": "Shuna · Late EB I · S33 · pop 6,000 · meat 30% · dairy 50% · feed"
+  },
+  {
+    "file": "shuna_leb1_s34.lascenario.json",
+    "name": "Shuna · Late EB I · S34 · pop 6,000 · meat 30% · dairy 50% · no feed"
+  },
+  {
+    "file": "shuna_leb1_s35.lascenario.json",
+    "name": "Shuna · Late EB I · S35 · pop 6,000 · meat 30% · dairy 100% · feed"
+  },
+  {
+    "file": "shuna_leb1_s36.lascenario.json",
+    "name": "Shuna · Late EB I · S36 · pop 6,000 · meat 30% · dairy 100% · no feed"
+  }
+]

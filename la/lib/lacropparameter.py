@@ -122,6 +122,7 @@ class LaCropParameter(QObject, LaSerialisable, LaGuid):
             self.mCropRotation = theCropParameter.cropRotation
             self.mFallowRatio = theCropParameter.fallowRatio
             self.mFallowValue = theCropParameter.fallowValue
+            self.mFallowEnergyType = getattr(theCropParameter, "mFallowEnergyType", LaEnergyType.KCalories)
             self.mAreaUnits = theCropParameter.areaUnits
             self.mUseCommonLand = theCropParameter.useCommonLand
             self.mUseSpecificLand = theCropParameter.useSpecificLand

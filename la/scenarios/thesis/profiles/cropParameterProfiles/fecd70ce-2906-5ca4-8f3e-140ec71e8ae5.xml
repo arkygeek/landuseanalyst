@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='utf-8'?>
+<cropParameter guid="fecd70ce-2906-5ca4-8f3e-140ec71e8ae5">
+  <name>Emmer · Early EB I params</name>
+  <description>Thesis-derived parameter set for Emmer in the Early EB I period.</description>
+  <crop>c3d4e5f6-a7b8-9012-cdef-34567890123a</crop>
+  <percentTameCrop>44.0</percentTameCrop>
+  <spoilage>30</spoilage>
+  <reseed>20</reseed>
+  <cropRotation>1</cropRotation>
+  <fallowRatio>1.0</fallowRatio>
+  <fallowValue>500</fallowValue>
+  <fallowEnergyType>KCalories</fallowEnergyType>
+  <areaUnits>Hectare</areaUnits>
+  <useCommonLand>1</useCommonLand>
+  <useSpecificLand>1</useSpecificLand>
+  <rasterName>/home/arkygeek/dev/QGis-Projects/landuseanalyst/testData/syntheticRasters/crop_f8e7d6c5-a4b3-4e2d-c1b0-a9f8e7d6c5b4.tif</rasterName>
+  <applySlopeLimit>1</applySlopeLimit>
+  <slopeMinDegrees>0.0</slopeMinDegrees>
+  <slopeMaxDegrees>9.0</slopeMaxDegrees>
+</cropParameter>
