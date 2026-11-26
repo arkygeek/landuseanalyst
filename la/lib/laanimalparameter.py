@@ -428,11 +428,19 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
         else:
             self.mSpecificLandEnergyType = EnergyType.KCalories  # Default
 
+        def _parseBool(theText: str) -> bool:
+            myClean = (theText or "").strip().lower()
+            if myClean in ("true", "1", "yes"):
+                return True
+            if myClean in ("false", "0", "no", ""):
+                return False
+            try:
+                return bool(int(myClean))
+            except (ValueError, TypeError):
+                return False
+
         # Parse fodder use with safe conversion
-        try:
-            self.mFodderUse = bool(int(myTopElement.firstChildElement("fodderUse").text() or 0))
-        except (ValueError, TypeError):
-            self.mFodderUse = False
+        self.mFodderUse = _parseBool(myTopElement.firstChildElement("fodderUse").text())
 
         # populate the fodder map
         self.mFoodSourceMap.clear()
@@ -440,8 +448,10 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
         # Check for fodderCrops container element
         myFodderCropsElement = myTopElement.firstChildElement("fodderCrops")
         if not myFodderCropsElement.isNull():
-            # Get all fodderCrop elements
+            # Get all fodderCrop elements (or legacy foodSource elements)
             myFodderCropList = myFodderCropsElement.elementsByTagName("fodderCrop")
+            if myFodderCropList.count() == 0:
+                myFodderCropList = myFodderCropsElement.elementsByTagName("foodSource")
             
             for i in range(myFodderCropList.count()):
                 myFoodSourceElement = myFodderCropList.at(i).toElement()
@@ -469,10 +479,7 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
                 # In XML files, the fodder use element might exist at the individual food source level
                 myUsedElement = myFoodSourceElement.firstChildElement("fodderUse")
                 if not myUsedElement.isNull():
-                    try:
-                        myFoodSource.used = bool(int(myUsedElement.text() or 0))
-                    except (ValueError, TypeError):
-                        myFoodSource.used = False
+                    myFoodSource.used = _parseBool(myUsedElement.text())
                 else:
                     # If not found at the individual level, use the global fodderUse setting
                     myFoodSource.used = bool(self.mFodderUse)
@@ -585,19 +592,19 @@ class LaAnimalParameter(QObject, LaSerialisable, LaGuid):
         myString += f"  <percentTameMeat>{self.percentTameMeat}</percentTameMeat>\n"
         myString += f"  <useCommonGrazingLand>{1 if self.useCommonGrazingLand else 0}</useCommonGrazingLand>\n"
         myString += f"  <useSpecificGrazingLand>{1 if self.useSpecificGrazingLand else 0}</useSpecificGrazingLand>\n"
-        myString += f"  <fodderUse>{self.fodderUse}</fodderUse>\n"
+        myString += f"  <fodderUse>{1 if self.fodderUse else 0}</fodderUse>\n"
 
         # Add food source map data
         if self.mFodderUse and self.mFoodSourceMap:
             myString += "  <fodderCrops>\n"
-            for cropGuid, foodSource in dict(self.mFoodSourceMap).items():
-                myString += "    <foodSource>\n"
-                myString += f"      <fodderCropGuid>{cropGuid}</fodderCropGuid>\n"
-                myString += f"      <fodderStrawChaff>{foodSource.fodder}</fodderStrawChaff>\n"
-                myString += f"      <fodderGrain>{foodSource.grain}</fodderGrain>\n"
-                myString += f"      <fodderUse>{1 if foodSource.used else 0}</fodderUse>\n"
-                myString += f"      <fodderDays>{foodSource.days}</fodderDays>\n"
-                myString += "    </foodSource>\n"
+            for myCropGuid, myFoodSource in dict(self.mFoodSourceMap).items():
+                myString += "    <fodderCrop>\n"
+                myString += f"      <fodderCropGuid>{myCropGuid}</fodderCropGuid>\n"
+                myString += f"      <fodderStrawChaff>{myFoodSource.fodder}</fodderStrawChaff>\n"
+                myString += f"      <fodderGrain>{myFoodSource.grain}</fodderGrain>\n"
+                myString += f"      <fodderUse>{1 if myFoodSource.used else 0}</fodderUse>\n"
+                myString += f"      <fodderDays>{myFoodSource.days}</fodderDays>\n"
+                myString += "    </fodderCrop>\n"
             myString += "  </fodderCrops>\n"
 
         # Handle fallowUsage based on Priority enum

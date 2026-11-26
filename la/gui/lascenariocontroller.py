@@ -308,7 +308,7 @@ class LaScenarioController(QObject):
     def calculationTypeLabel(self) -> str:
         myDairy = "Include Dairy" if self.mModel.mIncludeDairy else "Dairy Separate"
         if self.mModel.mBaseOnPlants:
-            return f"Plants First ({myDairy}) — not implemented, Animals First used"
+            return f"Plants First ({myDairy})"
         return f"Animals First ({myDairy})"
 
     def _applySelectionsToModel(self) -> None:

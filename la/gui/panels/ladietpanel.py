@@ -77,11 +77,11 @@ class LaDietPanel(QgsCollapsibleGroupBox):
         myLimitRow.addStretch()
         myLayout.addLayout(myLimitRow)
 
-        self.cbBaseOnPlants = QCheckBox("Plants first (calculation not implemented yet)", self)
+        self.cbBaseOnPlants = QCheckBox("Base calculations on plant percentage (plants first)", self)
         self.cbBaseOnPlants.setObjectName("cbBaseOnPlants")
         self.cbBaseOnPlants.setToolTip(
-            "The C++ original allocated land to crops before animals in this mode. The port "
-            "falls back to Animals First and says so in the report.")
+            "Checked: 'Plants First' — anchors the plant share of the diet at (100% - animal share) "
+            "so dairy never reduces plant calories; meat and dairy fit inside the animal share.")
         myLayout.addWidget(self.cbBaseOnPlants)
 
         self.donut = LaDietDonut(self)

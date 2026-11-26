@@ -1,5 +1,31 @@
 <landuseAnalystScenario>
-<model guid="ff366b08-50c1-5654-87bd-8d43efcd7409">\n  <name>Shuna · Early EB I · S31 · pop 3,000 · meat 30% · dairy 0% · feed</name>\n  <population>3000</population>\n  <period>Early EB I</period>\n  <projection>32636</projection>\n  <easting>744800.0</easting>\n  <northing>3611100.0</northing>\n  <euclideanDistance>False</euclideanDistance>\n  <walkingTime>True</walkingTime>\n  <pathDistance>False</pathDistance>\n  <precision>5</precision>\n  <dietPercent>30</dietPercent>\n  <plantPercent>90</plantPercent>\n  <meatPercent>99</meatPercent>\n  <caloriesPerPersonDaily>2500</caloriesPerPersonDaily>\n  <baseOnPlants>False</baseOnPlants>\n  <includeDairy>True</includeDairy>\n  <limitDairy>False</limitDairy>\n  <limitDairyPercent>0</limitDairyPercent>\n  <dairyUtilisation>0</dairyUtilisation>\n  <commonLandValue>0.0</commonLandValue>\n  <commonLandAreaUnits>Hectare</commonLandAreaUnits>\n  <specificLandAreaUnits>Hectare</specificLandAreaUnits>\n  <specificLandEnergyType>KCalories</specificLandEnergyType>\n  <herdSize>0</herdSize>\n  <dairyUtilisation>0</dairyUtilisation>\n</model>\n  <selectedCrops>
+<model guid="ff366b08-50c1-5654-87bd-8d43efcd7409">
+  <name>Shuna · Early EB I · S31 · pop 3,000 · meat 30% · dairy 0% · feed</name>
+  <population>3000</population>
+  <period>Early EB I</period>
+  <projection>32636</projection>
+  <easting>744800.0</easting>
+  <northing>3611100.0</northing>
+  <euclideanDistance>0</euclideanDistance>
+  <walkingTime>1</walkingTime>
+  <pathDistance>0</pathDistance>
+  <precision>5</precision>
+  <dietPercent>30</dietPercent>
+  <plantPercent>90</plantPercent>
+  <meatPercent>99</meatPercent>
+  <caloriesPerPersonDaily>2500</caloriesPerPersonDaily>
+  <baseOnPlants>0</baseOnPlants>
+  <includeDairy>1</includeDairy>
+  <limitDairy>0</limitDairy>
+  <limitDairyPercent>0</limitDairyPercent>
+  <dairyUtilisation>0</dairyUtilisation>
+  <commonLandValue>0.0</commonLandValue>
+  <commonLandAreaUnits>Hectare</commonLandAreaUnits>
+  <specificLandAreaUnits>Hectare</specificLandAreaUnits>
+  <specificLandEnergyType>KCalories</specificLandEnergyType>
+  <herdSize>0</herdSize>
+</model>
+  <selectedCrops>
     <selectedCrop cropGuid="a1b2c3d4-e5f6-7890-abcd-ef1234567890" parameterGuid="85bbca54-8305-572c-9dae-3f0334fa69ff" />
     <selectedCrop cropGuid="b2c3d4e5-f6a7-8901-bcde-f23456789012" parameterGuid="0ba750b2-8573-5513-9b2d-2339f7d78dc5" />
     <selectedCrop cropGuid="c3d4e5f6-a7b8-9012-cdef-34567890123a" parameterGuid="31310220-c98d-5475-88cc-cd74a80e64a6" />
@@ -25,7 +51,7 @@
   <fodderCalories>800</fodderCalories>
   <cropFodderEnergyType>KCalories</cropFodderEnergyType>
   <areaUnits>Hectare</areaUnits>
-  <imageFile>/home/arkygeek/.landuseAnalyst/images/horsebean.png</imageFile>
+  <imageFile>/tmp/.landuseAnalyst/images/horsebean.png</imageFile>
 </crop>
 <cropParameter guid="85bbca54-8305-572c-9dae-3f0334fa69ff">
   <name>Horse Bean · Early EB I params</name>
@@ -40,8 +66,9 @@
   <fallowEnergyType>KCalories</fallowEnergyType>
   <areaUnits>Hectare</areaUnits>
   <useCommonLand>1</useCommonLand>
-  <useSpecificLand>0</useSpecificLand>
+  <useSpecificLand>1</useSpecificLand>
   <rasterName></rasterName>
+  <applySlopeLimit>1</applySlopeLimit>
   <preferredSlopeMin>0.0</preferredSlopeMin>
   <preferredSlopeMax>9.0</preferredSlopeMax>
 </cropParameter>
@@ -54,7 +81,7 @@
   <fodderCalories>800</fodderCalories>
   <cropFodderEnergyType>KCalories</cropFodderEnergyType>
   <areaUnits>Hectare</areaUnits>
-  <imageFile>/home/arkygeek/.landuseAnalyst/images/einkorn.png</imageFile>
+  <imageFile>/tmp/.landuseAnalyst/images/einkorn.png</imageFile>
 </crop>
 <cropParameter guid="0ba750b2-8573-5513-9b2d-2339f7d78dc5">
   <name>Einkorn · Early EB I params</name>
@@ -69,8 +96,9 @@
   <fallowEnergyType>KCalories</fallowEnergyType>
   <areaUnits>Hectare</areaUnits>
   <useCommonLand>1</useCommonLand>
-  <useSpecificLand>0</useSpecificLand>
+  <useSpecificLand>1</useSpecificLand>
   <rasterName></rasterName>
+  <applySlopeLimit>1</applySlopeLimit>
   <preferredSlopeMin>0.0</preferredSlopeMin>
   <preferredSlopeMax>9.0</preferredSlopeMax>
 </cropParameter>
@@ -83,7 +111,7 @@
   <fodderCalories>800</fodderCalories>
   <cropFodderEnergyType>KCalories</cropFodderEnergyType>
   <areaUnits>Hectare</areaUnits>
-  <imageFile>/home/arkygeek/.landuseAnalyst/images/emmer.png</imageFile>
+  <imageFile>/tmp/.landuseAnalyst/images/emmer.png</imageFile>
 </crop>
 <cropParameter guid="31310220-c98d-5475-88cc-cd74a80e64a6">
   <name>Emmer · Early EB I params</name>
@@ -98,8 +126,9 @@
   <fallowEnergyType>KCalories</fallowEnergyType>
   <areaUnits>Hectare</areaUnits>
   <useCommonLand>1</useCommonLand>
-  <useSpecificLand>0</useSpecificLand>
+  <useSpecificLand>1</useSpecificLand>
   <rasterName></rasterName>
+  <applySlopeLimit>1</applySlopeLimit>
   <preferredSlopeMin>0.0</preferredSlopeMin>
   <preferredSlopeMax>9.0</preferredSlopeMax>
 </cropParameter>
@@ -112,7 +141,7 @@
   <fodderCalories>800</fodderCalories>
   <cropFodderEnergyType>KCalories</cropFodderEnergyType>
   <areaUnits>Hectare</areaUnits>
-  <imageFile>/home/arkygeek/.landuseAnalyst/images/lentils.png</imageFile>
+  <imageFile>/tmp/.landuseAnalyst/images/lentils.png</imageFile>
 </crop>
 <cropParameter guid="4ec44270-1839-5f90-ae07-4586e672dc51">
   <name>Lentils · Early EB I params</name>
@@ -127,8 +156,9 @@
   <fallowEnergyType>KCalories</fallowEnergyType>
   <areaUnits>Hectare</areaUnits>
   <useCommonLand>1</useCommonLand>
-  <useSpecificLand>0</useSpecificLand>
+  <useSpecificLand>1</useSpecificLand>
   <rasterName></rasterName>
+  <applySlopeLimit>1</applySlopeLimit>
   <preferredSlopeMin>0.0</preferredSlopeMin>
   <preferredSlopeMax>9.0</preferredSlopeMax>
 </cropParameter>
@@ -141,7 +171,7 @@
   <fodderCalories>800</fodderCalories>
   <cropFodderEnergyType>KCalories</cropFodderEnergyType>
   <areaUnits>Hectare</areaUnits>
-  <imageFile>/home/arkygeek/.landuseAnalyst/images/peas.png</imageFile>
+  <imageFile>/tmp/.landuseAnalyst/images/peas.png</imageFile>
 </crop>
 <cropParameter guid="8bd125e8-78a7-5ca0-9419-df21d22ecac1">
   <name>Peas · Early EB I params</name>
@@ -156,8 +186,9 @@
   <fallowEnergyType>KCalories</fallowEnergyType>
   <areaUnits>Hectare</areaUnits>
   <useCommonLand>1</useCommonLand>
-  <useSpecificLand>0</useSpecificLand>
+  <useSpecificLand>1</useSpecificLand>
   <rasterName></rasterName>
+  <applySlopeLimit>1</applySlopeLimit>
   <preferredSlopeMin>0.0</preferredSlopeMin>
   <preferredSlopeMax>9.0</preferredSlopeMax>
 </cropParameter>
@@ -170,7 +201,7 @@
   <fodderCalories>800</fodderCalories>
   <cropFodderEnergyType>KCalories</cropFodderEnergyType>
   <areaUnits>Hectare</areaUnits>
-  <imageFile>/home/arkygeek/.landuseAnalyst/images/olives.png</imageFile>
+  <imageFile>/tmp/.landuseAnalyst/images/olives.png</imageFile>
 </crop>
 <cropParameter guid="a584b153-c535-5a15-b215-c5277c42a8cd">
   <name>Olives · Early EB I params</name>
@@ -179,14 +210,15 @@
   <percentTameCrop>3.58</percentTameCrop>
   <spoilage>30</spoilage>
   <reseed>0</reseed>
-  <cropRotation>0</cropRotation>
+  <cropRotation>1</cropRotation>
   <fallowRatio>0.0</fallowRatio>
   <fallowValue>500</fallowValue>
   <fallowEnergyType>KCalories</fallowEnergyType>
   <areaUnits>Hectare</areaUnits>
   <useCommonLand>1</useCommonLand>
-  <useSpecificLand>0</useSpecificLand>
+  <useSpecificLand>1</useSpecificLand>
   <rasterName></rasterName>
+  <applySlopeLimit>1</applySlopeLimit>
   <preferredSlopeMin>0.0</preferredSlopeMin>
   <preferredSlopeMax>9.0</preferredSlopeMax>
 </cropParameter>
@@ -199,7 +231,7 @@
   <fodderCalories>800</fodderCalories>
   <cropFodderEnergyType>KCalories</cropFodderEnergyType>
   <areaUnits>Hectare</areaUnits>
-  <imageFile>/home/arkygeek/.landuseAnalyst/images/bittervetch.png</imageFile>
+  <imageFile>/tmp/.landuseAnalyst/images/bittervetch.png</imageFile>
 </crop>
 <cropParameter guid="8cf53967-3a83-5c47-8fdd-bd1d05c1b486">
   <name>Bitter Vetch · Early EB I params</name>
@@ -214,8 +246,9 @@
   <fallowEnergyType>KCalories</fallowEnergyType>
   <areaUnits>Hectare</areaUnits>
   <useCommonLand>1</useCommonLand>
-  <useSpecificLand>0</useSpecificLand>
+  <useSpecificLand>1</useSpecificLand>
   <rasterName></rasterName>
+  <applySlopeLimit>1</applySlopeLimit>
   <preferredSlopeMin>0.0</preferredSlopeMin>
   <preferredSlopeMax>9.0</preferredSlopeMax>
 </cropParameter>
@@ -228,7 +261,7 @@
   <fodderCalories>1420</fodderCalories>
   <cropFodderEnergyType>KCalories</cropFodderEnergyType>
   <areaUnits>Hectare</areaUnits>
-  <imageFile>/home/arkygeek/.landuseAnalyst/images/barley.png</imageFile>
+  <imageFile>/tmp/.landuseAnalyst/images/barley.png</imageFile>
 </crop>
 <cropParameter guid="e42c0403-b007-53a3-8294-da69d33e1844">
   <name>Barley · Early EB I params</name>
@@ -243,8 +276,9 @@
   <fallowEnergyType>KCalories</fallowEnergyType>
   <areaUnits>Hectare</areaUnits>
   <useCommonLand>1</useCommonLand>
-  <useSpecificLand>0</useSpecificLand>
+  <useSpecificLand>1</useSpecificLand>
   <rasterName></rasterName>
+  <applySlopeLimit>1</applySlopeLimit>
   <preferredSlopeMin>0.0</preferredSlopeMin>
   <preferredSlopeMax>9.0</preferredSlopeMax>
 </cropParameter>
@@ -279,7 +313,7 @@
   <milkFoodValue>940</milkFoodValue>
   <fleece>False</fleece>
   <fleeceWeightKg>10.0</fleeceWeightKg>
-  <imageFile>/home/arkygeek/.landuseAnalyst/images/sheep.png</imageFile>
+  <imageFile>/tmp/.landuseAnalyst/images/sheep.png</imageFile>
 </animal>
 <animalParameter guid="627ceebb-2e4a-598b-a11e-e05512161d17">
   <name>Sheep · Early EB I · with feed</name>
@@ -288,14 +322,24 @@
   <percentTameMeat>12.26</percentTameMeat>
   <useCommonGrazingLand>0</useCommonGrazingLand>
   <useSpecificGrazingLand>1</useSpecificGrazingLand>
-  <fodderUse>True</fodderUse>
+  <fodderUse>1</fodderUse>
+  <fodderCrops>
+    <fodderCrop>
+      <fodderCropGuid>d0e1f2a3-b4c5-6789-jklm-0123b8901234</fodderCropGuid>
+      <fodderStrawChaff>1000</fodderStrawChaff>
+      <fodderGrain>750</fodderGrain>
+      <fodderUse>1</fodderUse>
+      <fodderDays>90</fodderDays>
+    </fodderCrop>
+  </fodderCrops>
   <fallowUsage>High</fallowUsage>
   <rasterName></rasterName>
   <areaUnits>Dunum</areaUnits>
   <energyType>KCalories</energyType>
   <specificLandEnergyType>KCalories</specificLandEnergyType>
-  <valueCommonGrazingLand>1500</valueCommonGrazingLand>
-  <valueSpecificGrazingLand>10</valueSpecificGrazingLand>
+  <foodValueCommonGrazingLand>1500</foodValueCommonGrazingLand>
+  <foodValueOfSpecificGrazingLand>10</foodValueOfSpecificGrazingLand>
+  <applySlopeLimit>1</applySlopeLimit>
   <preferredSlopeMin>0.0</preferredSlopeMin>
   <preferredSlopeMax>15.0</preferredSlopeMax>
 </animalParameter>
@@ -328,7 +372,7 @@
   <milkFoodValue>940</milkFoodValue>
   <fleece>False</fleece>
   <fleeceWeightKg>1.0</fleeceWeightKg>
-  <imageFile>/home/arkygeek/.landuseAnalyst/images/goat_icon.png</imageFile>
+  <imageFile>/tmp/.landuseAnalyst/images/goat_icon.png</imageFile>
 </animal>
 <animalParameter guid="a8850501-9270-51dd-bb32-fc8e41164cc8">
   <name>Goat · Early EB I · with feed</name>
@@ -337,14 +381,24 @@
   <percentTameMeat>10.38</percentTameMeat>
   <useCommonGrazingLand>0</useCommonGrazingLand>
   <useSpecificGrazingLand>1</useSpecificGrazingLand>
-  <fodderUse>True</fodderUse>
+  <fodderUse>1</fodderUse>
+  <fodderCrops>
+    <fodderCrop>
+      <fodderCropGuid>d0e1f2a3-b4c5-6789-jklm-0123b8901234</fodderCropGuid>
+      <fodderStrawChaff>1000</fodderStrawChaff>
+      <fodderGrain>750</fodderGrain>
+      <fodderUse>1</fodderUse>
+      <fodderDays>90</fodderDays>
+    </fodderCrop>
+  </fodderCrops>
   <fallowUsage>High</fallowUsage>
   <rasterName></rasterName>
   <areaUnits>Dunum</areaUnits>
   <energyType>KCalories</energyType>
   <specificLandEnergyType>KCalories</specificLandEnergyType>
-  <valueCommonGrazingLand>1500</valueCommonGrazingLand>
-  <valueSpecificGrazingLand>10</valueSpecificGrazingLand>
+  <foodValueCommonGrazingLand>1500</foodValueCommonGrazingLand>
+  <foodValueOfSpecificGrazingLand>10</foodValueOfSpecificGrazingLand>
+  <applySlopeLimit>1</applySlopeLimit>
   <preferredSlopeMin>0.0</preferredSlopeMin>
   <preferredSlopeMax>15.0</preferredSlopeMax>
 </animalParameter>
@@ -377,7 +431,7 @@
   <milkFoodValue>940</milkFoodValue>
   <fleece>False</fleece>
   <fleeceWeightKg>0.0</fleeceWeightKg>
-  <imageFile>/home/arkygeek/.landuseAnalyst/images/cow.png</imageFile>
+  <imageFile>/tmp/.landuseAnalyst/images/cow.png</imageFile>
 </animal>
 <animalParameter guid="8dbae842-fca1-5d4d-ae25-5550a9f87b5a">
   <name>Cow · Early EB I · with feed</name>
@@ -386,14 +440,24 @@
   <percentTameMeat>37.74</percentTameMeat>
   <useCommonGrazingLand>0</useCommonGrazingLand>
   <useSpecificGrazingLand>1</useSpecificGrazingLand>
-  <fodderUse>True</fodderUse>
+  <fodderUse>1</fodderUse>
+  <fodderCrops>
+    <fodderCrop>
+      <fodderCropGuid>d0e1f2a3-b4c5-6789-jklm-0123b8901234</fodderCropGuid>
+      <fodderStrawChaff>4956</fodderStrawChaff>
+      <fodderGrain>1500</fodderGrain>
+      <fodderUse>1</fodderUse>
+      <fodderDays>90</fodderDays>
+    </fodderCrop>
+  </fodderCrops>
   <fallowUsage>High</fallowUsage>
   <rasterName></rasterName>
   <areaUnits>Dunum</areaUnits>
   <energyType>KCalories</energyType>
   <specificLandEnergyType>KCalories</specificLandEnergyType>
-  <valueCommonGrazingLand>1500</valueCommonGrazingLand>
-  <valueSpecificGrazingLand>10</valueSpecificGrazingLand>
+  <foodValueCommonGrazingLand>1500</foodValueCommonGrazingLand>
+  <foodValueOfSpecificGrazingLand>10</foodValueOfSpecificGrazingLand>
+  <applySlopeLimit>1</applySlopeLimit>
   <preferredSlopeMin>0.0</preferredSlopeMin>
   <preferredSlopeMax>15.0</preferredSlopeMax>
 </animalParameter>
@@ -426,7 +490,7 @@
   <milkFoodValue>0</milkFoodValue>
   <fleece>False</fleece>
   <fleeceWeightKg>0.0</fleeceWeightKg>
-  <imageFile>/home/arkygeek/.landuseAnalyst/images/pig.png</imageFile>
+  <imageFile>/tmp/.landuseAnalyst/images/pig.png</imageFile>
 </animal>
 <animalParameter guid="1581dbec-215c-5663-978b-6c314c1b2df4">
   <name>Pig · Early EB I · with feed</name>
@@ -435,14 +499,24 @@
   <percentTameMeat>39.62</percentTameMeat>
   <useCommonGrazingLand>0</useCommonGrazingLand>
   <useSpecificGrazingLand>1</useSpecificGrazingLand>
-  <fodderUse>True</fodderUse>
+  <fodderUse>1</fodderUse>
+  <fodderCrops>
+    <fodderCrop>
+      <fodderCropGuid>d0e1f2a3-b4c5-6789-jklm-0123b8901234</fodderCropGuid>
+      <fodderStrawChaff>0</fodderStrawChaff>
+      <fodderGrain>750</fodderGrain>
+      <fodderUse>1</fodderUse>
+      <fodderDays>90</fodderDays>
+    </fodderCrop>
+  </fodderCrops>
   <fallowUsage>High</fallowUsage>
   <rasterName></rasterName>
   <areaUnits>Dunum</areaUnits>
   <energyType>KCalories</energyType>
   <specificLandEnergyType>KCalories</specificLandEnergyType>
-  <valueCommonGrazingLand>1500</valueCommonGrazingLand>
-  <valueSpecificGrazingLand>10</valueSpecificGrazingLand>
+  <foodValueCommonGrazingLand>1500</foodValueCommonGrazingLand>
+  <foodValueOfSpecificGrazingLand>10</foodValueOfSpecificGrazingLand>
+  <applySlopeLimit>1</applySlopeLimit>
   <preferredSlopeMin>0.0</preferredSlopeMin>
   <preferredSlopeMax>15.0</preferredSlopeMax>
 </animalParameter>

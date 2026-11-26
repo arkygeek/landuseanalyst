@@ -11,7 +11,7 @@ Strict mathematical parity with the original C++ research code (lamodel.cpp) is 
 from typing import Dict, Tuple, TYPE_CHECKING
 
 from la.lib.lautils import LaUtils
-from la.lib.la import Priority, AreaUnits
+from la.lib.la import Priority, Status, AreaUnits
 from la.lib.ladietlabels import LaDietLabels
 
 if TYPE_CHECKING:
@@ -167,23 +167,26 @@ def doCalcsAnimalsFirstDairySeparate(theModel: 'LaModel') -> LaDietLabels:
         myOffspringMCals = myTotalOffspring * myKillWeight * myFeedForOffspringPerKg * (365. - myWeaningAge)
 
         # --- Grain/Fodder Map Updates (C++ lines 1124-1168) ---
-        for myCropGuid, myFoodSource in myFoodSourceMap.items():
-            myGrain = myFoodSource.grain * .001
-            myFodder = myFoodSource.fodder * .001
-            myDays = myFoodSource.days
-            
-            myGrainToAdd = myGrain * myDays * myTotalOffspring
-            myFoodSourceMapCounter[myCropGuid] += myGrainToAdd
-            
-            myCropObj = LaUtils.getCrop(myCropGuid)
-            myFoodValueOfCrop = myCropObj.cropCalories * .001
-            myFoodValueofFodder = myCropObj.cropFodderValue * .001
-            
-            myGrainMCal = myGrainToAdd * myFoodValueOfCrop
-            myFodderMCal = myFodder * myDays * myFoodValueofFodder * myTotalOffspring
-            
-            myAdditionalMCalCounter1 += myFodderMCal
-            myAdditionalMCalCounter += myGrainMCal + myFodderMCal
+        if myAnimalParameter and myAnimalParameter.fodderUse:
+            for myCropGuid, myFoodSource in myFoodSourceMap.items():
+                if not getattr(myFoodSource, "used", True):
+                    continue
+                myGrain = myFoodSource.grain * .001
+                myFodder = myFoodSource.fodder * .001
+                myDays = myFoodSource.days
+                
+                myGrainToAdd = myGrain * myDays * myTotalOffspring
+                myFoodSourceMapCounter[myCropGuid] = myFoodSourceMapCounter.get(myCropGuid, 0.0) + myGrainToAdd
+                
+                myCropObj = LaUtils.getCrop(myCropGuid)
+                myFoodValueOfCrop = myCropObj.cropCalories * .001
+                myFoodValueofFodder = myCropObj.cropFodderValue * .001
+                
+                myGrainMCal = myGrainToAdd * myFoodValueOfCrop
+                myFodderMCal = myFodder * myDays * myFoodValueofFodder * myTotalOffspring
+                
+                myAdditionalMCalCounter1 += myFodderMCal
+                myAdditionalMCalCounter += myGrainMCal + myFodderMCal
 
         # --- Final Animal Reporting Stage 1 ---
         myAnimalHerdMCalsRequired1 = myGestatingMCals + myLactatingMCals + myMaintenanceMCals + myAdultMalesMCals + myOffspringMCals
@@ -408,6 +411,7 @@ def doCalcsAnimalsFirstDairySeparate(theModel: 'LaModel') -> LaDietLabels:
             f"Grazing land productivity = {myLandProductivity} Mcal/Ha\n"
             f"Final Area Target = {myAreaTarget:.2f} Ha\n"
         )
+        myAnimalCalcsReportMap[myAnimalGuid] = (updatedReport, myAreaTarget)
         theModel.mAnimalCalcReport[myAnimalGuid] = (updatedReport, myAreaTarget)
 
     # 7. Final Diet Label Setup
@@ -440,6 +444,7 @@ def doCalcsAnimalsFirstDairySeparate(theModel: 'LaModel') -> LaDietLabels:
 
     # Populate model maps for persistence
     theModel.mCalcsCropsMap = {k: v[0] for k, v in myCropCalcsReportMap.items()}
+    theModel.mCalcsAnimalsMap = {k: v[0] for k, v in myAnimalCalcsReportMap.items()}
     theModel.mAreaTargetsCropsMap = {k: v[1] for k, v in myCropCalcsReportMap.items()}
     theModel.mAreaTargetsAnimalsMap = {k: v[1] for k, v in theModel.mAnimalCalcReport.items()}
     theModel.mProductionRequiredAnimalsMap = myAnimalProductionKgMap
@@ -509,12 +514,680 @@ def allocateFallowGrazingLand(theModel: 'LaModel', theFallowMCalsAvailable: floa
         myTotalFallowValue = doTheFallowAllocation(theModel, Priority.Low, myTotalFallowValue, myLowPriorityValue, myLowPriorityCount)
     return myTotalFallowValue
 
-# --- Additional Calculation Path Stubs ---
+# --- Plants-First Calculation Paths ---
+
+def _runPlantsFirstCalculations(
+    theModel: 'LaModel',
+    theIncludeDairy: bool,
+) -> LaDietLabels:
+    """
+    Shared calculation engine for 'Plants First, Dairy Separate' and
+    'Plants First, Include Dairy'.
+
+    Anchors the plant portion of the diet at ``100% - mDietPercent`` so dairy
+    never reduces plant calories. The remaining ``mDietPercent`` animal budget
+    covers wild meat plus domestic ``(tame meat + utilized dairy)``:
+      - ``theIncludeDairy=True``: each animal receives ``percentTameMeat`` of
+        the domestic animal budget using combined offspring value
+        (``B9 = juvenile_meat + culled_mothers + culled_males + dairy``, per
+        ``lamodel.cpp:944``). If ``limitDairy`` caps utilized dairy, tame meat
+        scales up so plants remain fixed and excess dairy goes to
+        ``dairySurplusMCalories``.
+      - ``theIncludeDairy=False``: each animal receives ``percentTameMeat`` of
+        tame meat (``B9 = meat + culled_adults``), while settlement-wide dairy
+        displaces tame meat within the fixed ``mDietPercent`` animal budget
+        (respecting ``limitDairy``).
+    """
+    for myMapAttr in ("mCalcsCropsMap", "mCalcsAnimalsMap", "mValueMap", "mAnimalCalcReport"):
+        myExistingMap = getattr(theModel, myMapAttr, None)
+        if isinstance(myExistingMap, dict):
+            myExistingMap.clear()
+        else:
+            setattr(theModel, myMapAttr, {})
+
+    theModel.mAreaTargetsCropsSownMap = {}
+    theModel.mAreaTargetsCropsFallowMap = {}
+    theModel.mFallowMCalPool = 0.0
+    theModel.mFallowMCalAllocated = 0.0
+    theModel.mFallowMCalResidual = 0.0
+
+    myCropCalcsReportMap: Dict[str, Tuple[str, float]] = {}
+    myAnimalCalcsReportMap: Dict[str, Tuple[str, float]] = {}
+    myAnimalsMap: Dict[str, float] = {}
+    myAnimalProductionKgMap: Dict[str, float] = {}
+    myCropProductionKgMap: Dict[str, float] = {}
+    myAnimalCalorieKcalMap: Dict[str, float] = {}
+    myCropCalorieKcalMap: Dict[str, float] = {}
+    myAnimalHerdMap: Dict[str, Dict[str, float]] = {}
+    myAnimalMeatMCalMap: Dict[str, float] = {}
+    myAnimalDairyMCalMap: Dict[str, float] = {}
+
+    myDietLabels = LaDietLabels()
+    myCrops: Dict[str, str] = getattr(theModel, "mCropsMap", {}) or {}
+    myFoodSourceMapCounter: Dict[str, float] = {myGuid: 0.0 for myGuid in myCrops.keys()}
+
+    myMCalsIndividualAnnual = float(theModel.mCaloriesPerPersonDaily) * 365.0 * 0.001
+    myMCalsSettlementAnnual = myMCalsIndividualAnnual * float(theModel.mPopulation)
+    myDairyMCalorieCounter = 0.0
+    myTameMeatMCalorieCounter = 0.0
+
+    myDietFraction = float(theModel.mDietPercent) * 0.01
+    myTameMeatFraction = float(theModel.mMeatPercent) * 0.01
+    myWildMeatPortion = 1.0 - myTameMeatFraction
+    myDairyUtilization = float(theModel.mDairyUtilisation) * 0.01
+    myDairyLimitPercent = float(getattr(theModel, "mLimitDairyPercentage", 100.0)) * 0.01
+    myLimitDairyBool = bool(getattr(theModel, "mLimitDairy", False))
+    myDomesticCropPortion = float(theModel.mPercentOfDietThatIsFromCrops) * 0.01
+
+    mySelectedAnimalsMap: Dict[str, str] = getattr(theModel, "mAnimalsMap", {}) or {}
+    myNumAnimals = len(mySelectedAnimalsMap)
+
+    myTotalConfiguredShare = 0.0
+    for myAnimalGuid, myAnimalParameterGuid in mySelectedAnimalsMap.items():
+        myParam = LaUtils.getAnimalParameter(myAnimalParameterGuid) if myAnimalParameterGuid else None
+        if myParam is not None:
+            myTotalConfiguredShare += float(myParam.percentTameMeat) * 0.01
+
+    myBaseDomesticAnimalBudgetMCals = (
+        myMCalsSettlementAnnual * myDietFraction * myTameMeatFraction
+    )
+    myDomesticTargetBudgetMCals = myBaseDomesticAnimalBudgetMCals
+
+    if myNumAnimals > 0:
+        myWildMeatFraction = myWildMeatPortion * myDietFraction
+        myMaxDomesticFraction = max(0.0, myDietFraction - myWildMeatFraction)
+        myDairyCapFraction = (
+            min(myDairyLimitPercent, myMaxDomesticFraction)
+            if myLimitDairyBool
+            else myMaxDomesticFraction
+        )
+        myDairyCapMCals = myDairyCapFraction * myMCalsSettlementAnnual
+
+        if not theIncludeDairy:
+            myDairyToMeatRatio = 0.0
+            for myAnimalGuid, myAnimalParameterGuid in mySelectedAnimalsMap.items():
+                myAnimal = LaUtils.getAnimal(myAnimalGuid)
+                myAnimalParameter = LaUtils.getAnimalParameter(myAnimalParameterGuid)
+                myShare = (
+                    float(myAnimalParameter.percentTameMeat) * 0.01
+                    if (myTotalConfiguredShare > 0.0 and myAnimalParameter is not None)
+                    else (1.0 / myNumAnimals)
+                )
+                myMilkKgPerDay = myAnimal.milkGramsPerDay * 0.001
+                myMilkFoodValue = myAnimal.milkFoodValue * 0.001
+                myLactationTime = float(myAnimal.lactationTime)
+                myWeaningAge = float(myAnimal.weaningAge)
+                myGestatingTime = float(myAnimal.gestationTime)
+                myEstrousCycle = float(myAnimal.estrousCycle)
+                myBabiesPerBirth = float(myAnimal.youngPerBirth)
+                myKillWeight = float(myAnimal.killWeight)
+                myUsablePortionOfAnimal = myAnimal.usableMeat * 0.01
+                myAdultWeight = float(myAnimal.adultWeight)
+                myFemalesToMales = float(myAnimal.femalesPerMale)
+                myMeatValueMCal = myAnimal.meatFoodValue * 0.001
+                mySexualMaturity = float(myAnimal.sexualMaturity)
+                myBreedingYears = float(myAnimal.breedingExpectancy)
+
+                myPotentialDairy = myMilkKgPerDay * myMilkFoodValue * (myLactationTime - myWeaningAge)
+                myActualDairy = myPotentialDairy * myDairyUtilization
+                myValuePerOffspring = myKillWeight * myUsablePortionOfAnimal * myMeatValueMCal
+                myCycleDays = myWeaningAge + myGestatingTime + myEstrousCycle + myLactationTime
+                myBirthingEvents = max(1.0, (365.0 / myCycleDays) if myCycleDays > 0 else 1.0)
+                myLifeSpanYears = (mySexualMaturity / 12.0) + myBreedingYears
+                myCulledMothers1 = (
+                    myAdultWeight * myMeatValueMCal * myUsablePortionOfAnimal * (1.0 / myLifeSpanYears)
+                    if myLifeSpanYears > 0
+                    else 0.0
+                )
+                myCulledMothers = (
+                    myCulledMothers1 / (myBabiesPerBirth * myBirthingEvents)
+                    if (myBabiesPerBirth * myBirthingEvents) > 0
+                    else 0.0
+                )
+                myCulledMales = (myCulledMothers / myFemalesToMales) if myFemalesToMales > 0 else 0.0
+                myMeatOffspringVal = myValuePerOffspring + myCulledMothers + myCulledMales
+                if myMeatOffspringVal > 0:
+                    myDairyToMeatRatio += myShare * (myActualDairy / myMeatOffspringVal)
+
+            myUnconstrainedTameMeatMCals = (
+                myBaseDomesticAnimalBudgetMCals / (1.0 + myDairyToMeatRatio)
+            )
+            myUnconstrainedDairyMCals = myUnconstrainedTameMeatMCals * myDairyToMeatRatio
+            if myLimitDairyBool and myUnconstrainedDairyMCals > myDairyCapMCals:
+                myDomesticTargetBudgetMCals = max(
+                    0.0, myBaseDomesticAnimalBudgetMCals - myDairyCapMCals
+                )
+            else:
+                myDomesticTargetBudgetMCals = myUnconstrainedTameMeatMCals
+        else:
+            if myLimitDairyBool:
+                myUnconstrainedMeatSum = 0.0
+                myUnconstrainedDairySum = 0.0
+                for myAnimalGuid, myAnimalParameterGuid in mySelectedAnimalsMap.items():
+                    myAnimal = LaUtils.getAnimal(myAnimalGuid)
+                    myAnimalParameter = LaUtils.getAnimalParameter(myAnimalParameterGuid)
+                    myShare = (
+                        float(myAnimalParameter.percentTameMeat) * 0.01
+                        if (myTotalConfiguredShare > 0.0 and myAnimalParameter is not None)
+                        else (1.0 / myNumAnimals)
+                    )
+                    myMilkKgPerDay = myAnimal.milkGramsPerDay * 0.001
+                    myMilkFoodValue = myAnimal.milkFoodValue * 0.001
+                    myLactationTime = float(myAnimal.lactationTime)
+                    myWeaningAge = float(myAnimal.weaningAge)
+                    myGestatingTime = float(myAnimal.gestationTime)
+                    myEstrousCycle = float(myAnimal.estrousCycle)
+                    myBabiesPerBirth = float(myAnimal.youngPerBirth)
+                    myKillWeight = float(myAnimal.killWeight)
+                    myUsablePortionOfAnimal = myAnimal.usableMeat * 0.01
+                    myAdultWeight = float(myAnimal.adultWeight)
+                    myFemalesToMales = float(myAnimal.femalesPerMale)
+                    myMeatValueMCal = myAnimal.meatFoodValue * 0.001
+                    mySexualMaturity = float(myAnimal.sexualMaturity)
+                    myBreedingYears = float(myAnimal.breedingExpectancy)
+
+                    myPotentialDairy = myMilkKgPerDay * myMilkFoodValue * (myLactationTime - myWeaningAge)
+                    myActualDairy = myPotentialDairy * myDairyUtilization
+                    myValuePerOffspring = myKillWeight * myUsablePortionOfAnimal * myMeatValueMCal
+                    myCycleDays = myWeaningAge + myGestatingTime + myEstrousCycle + myLactationTime
+                    myBirthingEvents = max(1.0, (365.0 / myCycleDays) if myCycleDays > 0 else 1.0)
+                    myLifeSpanYears = (mySexualMaturity / 12.0) + myBreedingYears
+                    myCulledMothers1 = (
+                        myAdultWeight * myMeatValueMCal * myUsablePortionOfAnimal * (1.0 / myLifeSpanYears)
+                        if myLifeSpanYears > 0
+                        else 0.0
+                    )
+                    myCulledMothers = (
+                        myCulledMothers1 / (myBabiesPerBirth * myBirthingEvents)
+                        if (myBabiesPerBirth * myBirthingEvents) > 0
+                        else 0.0
+                    )
+                    myCulledMales = (myCulledMothers / myFemalesToMales) if myFemalesToMales > 0 else 0.0
+                    myMeatOffspringVal = myValuePerOffspring + myCulledMothers + myCulledMales
+                    myCombinedOffspringVal = myMeatOffspringVal + myActualDairy
+                    myTarget = myShare * myBaseDomesticAnimalBudgetMCals
+                    myOffspring = (myTarget / myCombinedOffspringVal) if myCombinedOffspringVal > 0 else 0.0
+                    myUnconstrainedMeatSum += myOffspring * myMeatOffspringVal
+                    myUnconstrainedDairySum += myOffspring * myActualDairy
+
+                if myUnconstrainedDairySum > myDairyCapMCals and myUnconstrainedMeatSum > 0:
+                    myRequiredMeatMCals = max(
+                        0.0, myBaseDomesticAnimalBudgetMCals - myDairyCapMCals
+                    )
+                    myScale = myRequiredMeatMCals / myUnconstrainedMeatSum
+                    myDomesticTargetBudgetMCals = myBaseDomesticAnimalBudgetMCals * myScale
+
+    # Animal Loop
+    for myAnimalGuid, myAnimalParameterGuid in mySelectedAnimalsMap.items():
+        myAnimal = LaUtils.getAnimal(myAnimalGuid)
+        myAnimalParameter = LaUtils.getAnimalParameter(myAnimalParameterGuid)
+
+        myAdditionalMCalCounter = 0.0
+        myAdditionalMCalCounter1 = 0.0
+
+        myMilkKgPerDay = myAnimal.milkGramsPerDay * 0.001
+        myMilkFoodValue = myAnimal.milkFoodValue * 0.001
+        myLactationTime = float(myAnimal.lactationTime)
+        myWeaningAge = float(myAnimal.weaningAge)
+        myGestatingTime = float(myAnimal.gestationTime)
+        myEstrousCycle = float(myAnimal.estrousCycle)
+        myBabiesPerBirth = float(myAnimal.youngPerBirth)
+
+        myDeathRate = myAnimal.deathRate * 0.01
+        myBreedingRatio = float(myAnimal.femalesPerMale)
+        myKillWeight = float(myAnimal.killWeight)
+        myUsablePortionOfAnimal = myAnimal.usableMeat * 0.01
+        myAdultWeight = float(myAnimal.adultWeight)
+        myFemalesToMales = float(myAnimal.femalesPerMale)
+        myConceptionEfficiency = myAnimal.conceptionEfficiency * 0.01
+        myMeatValueMCal = myAnimal.meatFoodValue * 0.001
+        mySexualMaturity = float(myAnimal.sexualMaturity)
+        myBreedingYears = float(myAnimal.breedingExpectancy)
+
+        myAnimalContributionToMeatPortion = (
+            float(myAnimalParameter.percentTameMeat) * 0.01
+            if (myTotalConfiguredShare > 0.0 and myAnimalParameter is not None)
+            else ((1.0 / myNumAnimals) if myNumAnimals > 0 else 1.0)
+        )
+        myAnimalMCalTarget = myAnimalContributionToMeatPortion * myDomesticTargetBudgetMCals
+
+        myPotentialDairyPerOffspring = (
+            myMilkKgPerDay * myMilkFoodValue * (myLactationTime - myWeaningAge)
+        )
+        myValuePerOffspring = myKillWeight * myUsablePortionOfAnimal * myMeatValueMCal
+        myActualDairyValueOfOffspring = myPotentialDairyPerOffspring * myDairyUtilization
+
+        myCycleDays = myWeaningAge + myGestatingTime + myEstrousCycle + myLactationTime
+        myBirthingEventsPerYear1 = (365.0 / myCycleDays) if myCycleDays > 0 else 1.0
+        myBirthingEventsPerYear = max(1.0, myBirthingEventsPerYear1)
+
+        myLifeSpanYears = (mySexualMaturity / 12.0) + myBreedingYears
+        myCulledMothersValue1 = (
+            myAdultWeight * myMeatValueMCal * myUsablePortionOfAnimal * (1.0 / myLifeSpanYears)
+            if myLifeSpanYears > 0
+            else 0.0
+        )
+        myCulledMothersValue = (
+            myCulledMothersValue1 / (myBabiesPerBirth * myBirthingEventsPerYear)
+            if (myBabiesPerBirth * myBirthingEventsPerYear) > 0
+            else 0.0
+        )
+        myCulledAdultMalesValue = (
+            myCulledMothersValue / myFemalesToMales if myFemalesToMales > 0 else 0.0
+        )
+
+        myMeatOffspringValue = (
+            myValuePerOffspring + myCulledMothersValue + myCulledAdultMalesValue
+        )
+        myFinalOffspringValue = (
+            myMeatOffspringValue + myActualDairyValueOfOffspring
+            if theIncludeDairy
+            else myMeatOffspringValue
+        )
+        myOffspringNeededPerYear = (
+            myAnimalMCalTarget / myFinalOffspringValue if myFinalOffspringValue > 0 else 0.0
+        )
+
+        myMCalsFromTheMeat = myOffspringNeededPerYear * myMeatOffspringValue
+        myMCalsUtilizedFromDairy = myActualDairyValueOfOffspring * myOffspringNeededPerYear
+
+        myTameMeatMCalorieCounter += myMCalsFromTheMeat
+        myDairyMCalorieCounter += myMCalsUtilizedFromDairy
+        myAnimalMeatMCalMap[myAnimalGuid] = myMCalsFromTheMeat
+        myAnimalDairyMCalMap[myAnimalGuid] = myMCalsUtilizedFromDairy
+
+        myMeatKg = myMCalsFromTheMeat / myMeatValueMCal if myMeatValueMCal > 0 else 0.0
+        myMilkKg = myMCalsUtilizedFromDairy / myMilkFoodValue if myMilkFoodValue > 0 else 0.0
+        myAnimalProductionKgMap[myAnimalGuid] = myMeatKg + myMilkKg
+        myAnimalCalorieKcalMap[myAnimalGuid] = (
+            myMCalsFromTheMeat + myMCalsUtilizedFromDairy
+        ) * 1000.0
+
+        myFoodSourceMap = myAnimalParameter.fodderSourceMap if myAnimalParameter else {}
+        myMeatPercentLocal = (
+            myMCalsFromTheMeat / myMCalsSettlementAnnual if myMCalsSettlementAnnual > 0 else 0.0
+        )
+        myDairyPercentLocal = (
+            myMCalsUtilizedFromDairy / myMCalsSettlementAnnual
+            if myMCalsSettlementAnnual > 0
+            else 0.0
+        )
+
+        myOffspringPerMotherPerYear = (
+            myBirthingEventsPerYear
+            * myBabiesPerBirth
+            * (1.0 - myDeathRate)
+            * myConceptionEfficiency
+        )
+        myMothersNeededStepOne = (
+            myOffspringNeededPerYear / myOffspringPerMotherPerYear
+            if myOffspringPerMotherPerYear > 0
+            else 0.0
+        )
+        myMalesStepOne = myMothersNeededStepOne * myOffspringPerMotherPerYear * 0.5
+        myFemalesStepOne = myMalesStepOne
+
+        myReplacementMothersPerYear = (
+            (myMothersNeededStepOne + (mySexualMaturity / 12.0)) / myBreedingYears
+            if myBreedingYears > 0
+            else 0.0
+        )
+        myBreedingMalesRequired = (
+            ((myMothersNeededStepOne / myBreedingRatio) + myMothersNeededStepOne) / myBreedingRatio
+            if myBreedingRatio > 0
+            else 0.0
+        )
+        myAdditionalMothers = (
+            ((myReplacementMothersPerYear / myOffspringPerMotherPerYear) * 2.0)
+            + (myBreedingMalesRequired * 2.0)
+            if myOffspringPerMotherPerYear > 0
+            else 0.0
+        )
+        myMalesStepTwo = myAdditionalMothers * myOffspringPerMotherPerYear * 0.5
+        myFemalesStepTwo = myMalesStepTwo
+
+        myTotalMothers = myMothersNeededStepOne + myReplacementMothersPerYear
+        myTotalMaleOffspring = myMalesStepOne + myMalesStepTwo
+        myTotalFemaleOffspring = myFemalesStepOne - myFemalesStepTwo
+        myTotalOffspring = myTotalMaleOffspring * 2.0
+
+        myFeedForGestating = myAnimal.gestating * 0.001
+        myFeedForLactating = myAnimal.lactating * 0.001
+        myFeedForMaintenance = myAnimal.maintenance * 0.001
+        myFeedForOffspringPerKg = myAnimal.juvenile * 0.001
+
+        myGestatingMCals = myTotalOffspring * myGestatingTime * myFeedForGestating
+        myLactatingMCals = myTotalOffspring * myLactationTime * myFeedForLactating
+        myDaysForMaintenance = max(0.0, 365.0 - (myGestatingTime + myLactationTime))
+
+        myDryMothers = max(0.0, myTotalMothers - myTotalOffspring)
+        myDryMothersMCals = myDryMothers * 365.0 * myFeedForMaintenance
+        myOtherMaintenanceMCals = myDaysForMaintenance * myTotalOffspring * myFeedForMaintenance
+        myMaintenanceMCals = myDryMothersMCals + myOtherMaintenanceMCals
+
+        myAdultMalesMCals = myBreedingMalesRequired * myFeedForMaintenance * 365.0
+        myOffspringMCals = (
+            myTotalOffspring * myKillWeight * myFeedForOffspringPerKg * (365.0 - myWeaningAge)
+        )
+
+        if myAnimalParameter and myAnimalParameter.fodderUse:
+            for myCropGuid, myFoodSource in myFoodSourceMap.items():
+                if not getattr(myFoodSource, "used", True):
+                    continue
+                myGrain = myFoodSource.grain * 0.001
+                myFodder = myFoodSource.fodder * 0.001
+                myDays = myFoodSource.days
+
+                myGrainToAdd = myGrain * myDays * myTotalOffspring
+                myFoodSourceMapCounter[myCropGuid] = (
+                    myFoodSourceMapCounter.get(myCropGuid, 0.0) + myGrainToAdd
+                )
+
+                myCropObj = LaUtils.getCrop(myCropGuid)
+                myFoodValueOfCrop = myCropObj.cropCalories * 0.001
+                myFoodValueOfFodder = myCropObj.cropFodderValue * 0.001
+
+                myGrainMCal = myGrainToAdd * myFoodValueOfCrop
+                myFodderMCal = myFodder * myDays * myFoodValueOfFodder * myTotalOffspring
+
+                myAdditionalMCalCounter1 += myFodderMCal
+                myAdditionalMCalCounter += myGrainMCal + myFodderMCal
+
+        myAnimalHerdMCalsRequired1 = (
+            myGestatingMCals
+            + myLactatingMCals
+            + myMaintenanceMCals
+            + myAdultMalesMCals
+            + myOffspringMCals
+        )
+        myAnimalHerdMCalsRequired = max(0.0, myAnimalHerdMCalsRequired1 - myAdditionalMCalCounter)
+
+        myAnimalReport = (
+            f"myMilkKgPerDay = {myMilkKgPerDay}\n"
+            f"myMilkFoodValue = {myMilkFoodValue}\n"
+            f"myLactationTime = {myLactationTime}\n"
+            f"myWeaningAge = {myWeaningAge}\n"
+            f"myKillWeight = {myKillWeight}\n"
+            f"myUsablePortionOfAnimal = {myUsablePortionOfAnimal}\n"
+            f"myAdultWeight = {myAdultWeight}\n"
+            f"myFemalesToMales = {myFemalesToMales}\n"
+            f"myMeatValueMCal = {myMeatValueMCal}\n"
+            f"mySexualMaturity = {mySexualMaturity}\n"
+            f"myBreedingYears = {myBreedingYears}\n"
+            f"myAnimalContributionToMeatPortion = {myAnimalContributionToMeatPortion}\n"
+            f"myAnimalMCalTarget = {myAnimalMCalTarget}\n"
+            f"myPotentialDairyPerOffspring = {myPotentialDairyPerOffspring}\n"
+            f"myValuePerOffspring = {myValuePerOffspring}\n"
+            f"myActualDairyValueOfOffspring = {myActualDairyValueOfOffspring}\n"
+            f"myCulledMothersValue = {myCulledMothersValue}\n"
+            f"myCulledAdultMalesValue = {myCulledAdultMalesValue}\n"
+            f"myFinalOffspringValue = {myFinalOffspringValue}\n"
+            f"myOffspringNeededPerYear = {myOffspringNeededPerYear}\n"
+            f"myMCalsFromTheMeat = {myMCalsFromTheMeat}\n"
+            f"myMCalsUtilizedFromDairy = {myMCalsUtilizedFromDairy}\n"
+            f"myTameMeatMCalorieCounter = {myTameMeatMCalorieCounter}\n"
+            f"myDairyMCalorieCounter = {myDairyMCalorieCounter}\n\n"
+            f"myBirthingEventsPerYear = {myBirthingEventsPerYear}\n"
+            f"myOffspringPerMotherPerYear = {myOffspringPerMotherPerYear}\n"
+            f"myMothersNeededStepOne = {myMothersNeededStepOne}\n"
+            f"myMalesStepOne = {myMalesStepOne}\n"
+            f"myFemalesStepOne = {myFemalesStepOne}\n"
+            f"myReplacementMothersPerYear = {myReplacementMothersPerYear}\n"
+            f"myBreedingMalesRequired = {myBreedingMalesRequired}\n"
+            f"myAdditionalMothers = {myAdditionalMothers}\n"
+            f"myMalesStepTwo = {myMalesStepTwo}\n"
+            f"myFemalesStepTwo = {myFemalesStepTwo}\n\n"
+            f"myTotalMothers = {myTotalMothers}\n"
+            f"myTotalMaleOffspring = {myTotalMaleOffspring}\n"
+            f"myTotalFemaleOffspring = {myTotalFemaleOffspring}\n"
+            f"myTotalOffspring = {myTotalOffspring}\n"
+            f"myFeedForGestating = {myFeedForGestating}\n"
+            f"myFeedForLactating = {myFeedForLactating}\n"
+            f"myFeedForMaintenance = {myFeedForMaintenance}\n"
+            f"myFeedForOffspringPerKg = {myFeedForOffspringPerKg}\n"
+            f"myGestatingMCals = {myGestatingMCals}\n"
+            f"myLactatingMCals = {myLactatingMCals}\n"
+            f"myDaysForMaintenance = {myDaysForMaintenance}\n"
+            f"myGestatingTime = {myGestatingTime}\n"
+            f"myLactationTime = {myLactationTime}\n"
+            f"myDryMothers = {myDryMothers}\n"
+            f"myDryMothersMCals = {myDryMothersMCals}\n"
+            f"myOtherMaintenanceMCals = {myOtherMaintenanceMCals}\n"
+            f"myMaintenanceMCals = {myMaintenanceMCals}\n"
+            f"myAdultMalesMCals = {myAdultMalesMCals}\n"
+            f"myOffspringMCals = {myOffspringMCals}\n\n"
+            f"myAnimalHerdMCalsRequired1 = {myAnimalHerdMCalsRequired1}\n"
+            f"myAnimalHerdMCalsRequired = {myAnimalHerdMCalsRequired}\n"
+            ".........................\n"
+            ".        Summary        .\n"
+            ".........................\n"
+            f"MCal Target = {myMCalsFromTheMeat}\n"
+            f"Dairy Contribution = {myMCalsUtilizedFromDairy}\n"
+            f"Meat Percent = {myMeatPercentLocal*100.:.2f}% \n"
+            f"Dairy Percent = {myDairyPercentLocal*100.:.2f}% \n"
+            f"Number of Offspring = {myTotalMaleOffspring * 2.}\n"
+            f"Number of Mothers = {myTotalMothers}\n"
+            f"Number of Breeding Males = {myBreedingMalesRequired}\n"
+        )
+
+        myAnimalCalcsReportMap[myAnimalGuid] = (myAnimalReport, myAnimalHerdMCalsRequired)
+        myAnimalsMap[myAnimalGuid] = myAnimalHerdMCalsRequired
+        theModel.mValueMap[myAnimalGuid] = myAnimalHerdMCalsRequired
+
+        myAdults = myTotalMothers + myBreedingMalesRequired
+        myAnimalHerdMap[myAnimalGuid] = {
+            "mothers":        float(myTotalMothers),
+            "breedingMales":  float(myBreedingMalesRequired),
+            "offspring":      float(myTotalOffspring),
+            "adults":         float(myAdults),
+        }
+
+    # Plants First diet division: Plants are anchored at (1.0 - myDietFraction)
+    myDomesticMeatPercent = (
+        myTameMeatMCalorieCounter / myMCalsSettlementAnnual
+        if myMCalsSettlementAnnual > 0
+        else 0.0
+    )
+    myWildMeatPercent = myWildMeatPortion * myDietFraction
+    myOverallPlantPercent = 1.0 - myDietFraction
+    myMaxDomesticAnimalFraction = max(0.0, myDietFraction - myWildMeatPercent)
+    myDairyLimit = (
+        min(myDairyLimitPercent, myMaxDomesticAnimalFraction)
+        if myLimitDairyBool
+        else myMaxDomesticAnimalFraction
+    )
+    myNewDairy = min(myDairyMCalorieCounter, myDairyLimit * myMCalsSettlementAnnual)
+    myOverallDairyPercent = (
+        myNewDairy / myMCalsSettlementAnnual if myMCalsSettlementAnnual > 0 else 0.0
+    )
+    myOverallMeatPercent = myWildMeatPercent + myDomesticMeatPercent
+
+    myOverallCropPercent = myOverallPlantPercent * myDomesticCropPortion
+    myOverallWildPlantPercent = myOverallPlantPercent * (1.0 - myDomesticCropPortion)
+
+    myOverallDomesticMeatMCals = myTameMeatMCalorieCounter
+    myOverallDairyMCals = myOverallDairyPercent * myMCalsSettlementAnnual
+    myOverallWildMeatMCals = myWildMeatPercent * myMCalsSettlementAnnual
+    myOverallCropsMCals = myOverallCropPercent * myMCalsSettlementAnnual
+    myOverallWildPlantsMCals = myOverallWildPlantPercent * myMCalsSettlementAnnual
+
+    myOverallDairySurplusMCals = max(0.0, myDairyMCalorieCounter - myOverallDairyMCals)
+    myMCalsFromFallowCounter = 0.0
+
+    if myDairyMCalorieCounter > 0.0 and myOverallDairyMCals < myDairyMCalorieCounter:
+        myUtilizedDairyRatio = myOverallDairyMCals / myDairyMCalorieCounter
+        for myAnimalGuid in myAnimalCalorieKcalMap.keys():
+            myMeatMCal = myAnimalMeatMCalMap.get(myAnimalGuid, 0.0)
+            myDairyMCal = myAnimalDairyMCalMap.get(myAnimalGuid, 0.0) * myUtilizedDairyRatio
+            myAnimalCalorieKcalMap[myAnimalGuid] = (myMeatMCal + myDairyMCal) * 1000.0
+
+    # Crop Loop
+    for myCropGuid, myCropParameterGuid in myCrops.items():
+        myCrop = LaUtils.getCrop(myCropGuid)
+        myCropParameter = LaUtils.getCropParameter(myCropParameterGuid)
+
+        myCropPortion = (myCropParameter.percentTameCrop * 0.01) if myCropParameter else 0.0
+        myCropFoodValue = (myCrop.cropCalories * 0.001) if myCrop else 0.0
+        myCropPercentLocal = myCropPortion * myOverallCropPercent
+        myMCalsFromTheCrop = myCropPercentLocal * myMCalsSettlementAnnual
+
+        myKgForPeople1 = myMCalsFromTheCrop / myCropFoodValue if myCropFoodValue > 0 else 0.0
+        myAnimalKgAdd1 = myFoodSourceMapCounter.get(myCropGuid, 0.0)
+
+        mySpoilagePercent = (myCropParameter.spoilage * 0.01) if myCropParameter else 0.0
+        myReseedPercent = (myCropParameter.reseed * 0.01) if myCropParameter else 0.0
+
+        myKgForPeopleReseed = myKgForPeople1 * myReseedPercent
+        myKgForPeopleSpoilage = myKgForPeople1 * mySpoilagePercent
+        myKgForPeople = myKgForPeopleReseed + myKgForPeopleSpoilage + myKgForPeople1
+
+        myAnimalKgAddReseed = myAnimalKgAdd1 * myReseedPercent
+        myAnimalKgAddSpoilage = myAnimalKgAdd1 * mySpoilagePercent
+        myAnimalKgAdd = myAnimalKgAddReseed + myAnimalKgAddSpoilage + myAnimalKgAdd1
+
+        myAdjustedTarget = myKgForPeople + myAnimalKgAdd
+
+        myCropYield = (
+            myCrop.cropYield * 10.0
+            if (myCrop and myCrop.areaUnits == AreaUnits.Dunum)
+            else (float(myCrop.cropYield) if myCrop else 0.0)
+        )
+        myCropAreaTargetPeople = myKgForPeople / myCropYield if myCropYield > 0 else 0.0
+        myCropAreaTargetAnimals = myAnimalKgAdd / myCropYield if myCropYield > 0 else 0.0
+
+        myRatio = float(myCropParameter.fallowRatio) if myCropParameter else 0.0
+        myFallowValue = float(myCropParameter.fallowValue) if myCropParameter else 0.0
+        myCropAreaTarget1 = myAdjustedTarget / myCropYield if myCropYield > 0 else 0.0
+        myCropAreaTarget = myCropAreaTarget1 * (myRatio + 1.0)
+
+        myFallowArea = myRatio * myCropAreaTarget1
+        myFallowMCals = myFallowArea * myFallowValue
+        myMCalsFromFallowCounter += myFallowMCals
+        theModel.mAreaTargetsCropsSownMap[myCropGuid] = myCropAreaTarget1
+        theModel.mAreaTargetsCropsFallowMap[myCropGuid] = myFallowArea
+
+        myRawCropYield = myCrop.cropYield if myCrop else 0.0
+        myCropReport = (
+            f"MCals People = {myMCalsFromTheCrop}\n"
+            f"myCropPortion = {myCropPortion}\n"
+            f"myCropFoodValue = {myCropFoodValue}\n"
+            f"myOverallCropPercent = {myOverallCropPercent}\n"
+            f"myCropPercent = {myCropPercentLocal}\n"
+            f"myMCalsFromTheCrop = {myMCalsFromTheCrop}\n"
+            f"myAnimalKgAdd = {myAnimalKgAdd}\n"
+            f"myAdjustedTarget = {myAdjustedTarget}\n"
+            f"myCrop.cropYield = {myRawCropYield}\n"
+            f"myCropYield = {myCropYield}\n"
+            f"Crop Production People before adjusting= {myKgForPeople1}\n"
+            f"Extra Kg to account for spoilage= {myKgForPeopleSpoilage}\n"
+            f"Extra Kg to account for reseeding= {myKgForPeopleReseed}\n"
+            f"Crop Production People after adjusting= {myKgForPeople}\n"
+            f"Crop Production Animal before adjusting= {myAnimalKgAdd1}\n"
+            f"Extra Kg to account for spoilage= {myAnimalKgAddSpoilage}\n"
+            f"Extra Kg to account for reseeding= {myAnimalKgAddReseed}\n"
+            f"Crop Production Animal after adjusting= {myAnimalKgAdd}\n"
+            f"myCropAreaTarget People = {myCropAreaTargetPeople}\n"
+            f"myCropAreaTarget Animals= {myCropAreaTargetAnimals}\n"
+            f"myCropAreaTarget = {myCropAreaTarget}\n\n"
+            f"Kg for People = {myKgForPeople}\n"
+            f"KG for Animals = {myAnimalKgAdd}\n"
+            f"Percent of Diet = {myCropPercentLocal * 100.:.2f}% \n"
+            f"Area Target People: {myCropAreaTargetPeople}\n"
+            f"Area Target Animal: {myCropAreaTargetAnimals}\n"
+            f"Area Target is {myCropAreaTarget}\n"
+            f"myFallowValue =  {myFallowValue}\n"
+            f"MCals from Fallow: {myFallowMCals}\n"
+        )
+
+        myCropCalcsReportMap[myCropGuid] = (myCropReport, myCropAreaTarget)
+        myCropProductionKgMap[myCropGuid] = myAdjustedTarget
+        myCropCalorieKcalMap[myCropGuid] = myMCalsFromTheCrop * 1000.0
+
+    # Fallow Allocation & ledger
+    myFallowResidual = allocateFallowGrazingLand(theModel, myMCalsFromFallowCounter, myAnimalsMap)
+    theModel.mFallowMCalPool = myMCalsFromFallowCounter
+    theModel.mFallowMCalResidual = max(0.0, myFallowResidual)
+    theModel.mFallowMCalAllocated = max(0.0, myMCalsFromFallowCounter - theModel.mFallowMCalResidual)
+
+    # Final Animal Report Aggregation
+    for myAnimalGuid, (myReport, _) in list(myAnimalCalcsReportMap.items()):
+        myMCalTarget = theModel.mValueMap.get(myAnimalGuid, 0.0)
+        myAnimalParameterGuid = mySelectedAnimalsMap.get(myAnimalGuid, "")
+        myAnimalParameter = (
+            LaUtils.getAnimalParameter(myAnimalParameterGuid)
+            if myAnimalParameterGuid
+            else None
+        )
+        myLandProductivity = (
+            float(myAnimalParameter.valueCommonGrazingLand)
+            if myAnimalParameter and myAnimalParameter.valueCommonGrazingLand > 0
+            else 0.0
+        )
+        myAreaTarget = myMCalTarget / myLandProductivity if myLandProductivity > 0 else 0.0
+
+        myUpdatedReport = myReport + (
+            f"Final MCal Target = {int(myMCalTarget)}\n"
+            f"Grazing land productivity = {myLandProductivity} Mcal/Ha\n"
+            f"Final Area Target = {myAreaTarget:.2f} Ha\n"
+        )
+        myAnimalCalcsReportMap[myAnimalGuid] = (myUpdatedReport, myAreaTarget)
+        theModel.mAnimalCalcReport[myAnimalGuid] = (myUpdatedReport, myAreaTarget)
+
+    # Final Diet Label Setup
+    myDietLabels.dairyMCalories = myOverallDairyMCals
+    myDietLabels.cropMCalories = myOverallCropsMCals
+    myDietLabels.animalMCalories = myOverallDomesticMeatMCals
+    myDietLabels.wildAnimalMCalories = myOverallWildMeatMCals
+    myDietLabels.wildPlantsMCalories = myOverallWildPlantsMCals
+
+    myDietLabels.dairyPortionPct = myOverallDairyPercent * 100.0
+    myDietLabels.tameMeatPortionPct = myDomesticMeatPercent * 100.0
+    myDietLabels.cropsPortionPct = myOverallCropPercent * 100.0
+    myDietLabels.wildAnimalPortionPct = myWildMeatPercent * 100.0
+    myDietLabels.wildPlantsPortionPct = myOverallWildPlantPercent * 100.0
+
+    myDietLabels.animalPortionPct = myOverallMeatPercent * 100.0
+    myDietLabels.plantsPortionPct = myOverallPlantPercent * 100.0
+    myDietLabels.kiloCaloriesIndividualAnnual = myMCalsIndividualAnnual * 1000.0
+    myDietLabels.megaCaloriesSettlementAnnual = myMCalsSettlementAnnual
+    myDietLabels.dairySurplusMCalories = myOverallDairySurplusMCals
+
+    myTotalLandArea = 0.0
+    for _, myArea in myCropCalcsReportMap.values():
+        myTotalLandArea += myArea
+    for _, myArea in theModel.mAnimalCalcReport.values():
+        myTotalLandArea += myArea
+
+    myDietLabels.totalLandNeeded = myTotalLandArea
+
+    theModel.mCalcsCropsMap = {k: v[0] for k, v in myCropCalcsReportMap.items()}
+    theModel.mCalcsAnimalsMap = {k: v[0] for k, v in myAnimalCalcsReportMap.items()}
+    theModel.mAreaTargetsCropsMap = {k: v[1] for k, v in myCropCalcsReportMap.items()}
+    theModel.mAreaTargetsAnimalsMap = {k: v[1] for k, v in theModel.mAnimalCalcReport.items()}
+    theModel.mProductionRequiredAnimalsMap = myAnimalProductionKgMap
+    theModel.mProductionRequiredCropsMap = myCropProductionKgMap
+    theModel.mAnimalHerdMap = myAnimalHerdMap
+    myDietLabels.mAnimalCalorieKcalMap = myAnimalCalorieKcalMap
+    myDietLabels.mCropCalorieKcalMap = myCropCalorieKcalMap
+
+    myDietLabels.animalCalcsReportMap = myAnimalCalcsReportMap
+    myDietLabels.cropCalcsReportMap = myCropCalcsReportMap
+    myDietLabels.animalAreaTargetsMap = {k: v[1] for k, v in theModel.mAnimalCalcReport.items()}
+    myDietLabels.cropAreaTargetsMap = {k: v[1] for k, v in myCropCalcsReportMap.items()}
+
+    theModel.mDietLabels = myDietLabels
+    return myDietLabels
+
 
 def doCalcsPlantsFirstDairySeparate(theModel: 'LaModel') -> LaDietLabels:
-    """Stub for Plants First, Dairy Separate."""
-    LaUtils.debug.log("Using stub for doCalcsPlantsFirstDairySeparate", "Warning")
-    return doCalcsAnimalsFirstDairySeparate(theModel)
+    """
+    Implements the 'Plants First, Dairy Separate' calculation path.
+    Anchors the plant portion of the diet at ``100% - mDietPercent`` so dairy
+    never reduces plant calories. Each animal receives its ``percentTameMeat``
+    share of tame meat (``B9 = meat + culled_adults``), while settlement-wide
+    dairy displaces tame meat within the fixed ``mDietPercent`` animal budget.
+    """
+    return _runPlantsFirstCalculations(theModel, theIncludeDairy=False)
 
 def doCalcsAnimalsFirstIncludeDairy(theModel: 'LaModel') -> LaDietLabels:
     """
@@ -817,12 +1490,17 @@ def doCalcsAnimalsFirstIncludeDairy(theModel: 'LaModel') -> LaDietLabels:
     return myDietLabels
 
 def doCalcsPlantsFirstIncludeDairy(theModel: 'LaModel') -> LaDietLabels:
-    """Stub for Plants First, Include Dairy."""
-    LaUtils.debug.log("Using stub for doCalcsPlantsFirstIncludeDairy", "Warning")
-    return doCalcsAnimalsFirstDairySeparate(theModel)
+    """
+    Implements the 'Plants First, Include Dairy' calculation path.
+    Anchors the plant portion of the diet at ``100% - mDietPercent`` so dairy
+    never reduces plant calories, and solves ``(tame meat + dairy)`` inside the
+    remaining ``mDietPercent`` animal budget using combined offspring value
+    (``B9 = juvenile_meat + culled_mothers + culled_males + dairy``).
+    """
+    return _runPlantsFirstCalculations(theModel, theIncludeDairy=True)
 
 
-def doTheFallowAllocation(model: 'LaModel', thePriority: Priority, theAvailableFallowValue: float, theTotalNeededByGroup: float, theCountInGroup: float) -> float:
+def doTheFallowAllocation(theModel: 'LaModel', thePriority: Priority, theAvailableFallowValue: float, theTotalNeededByGroup: float, theCountInGroup: float) -> float:
     """
     Allocates fallow value to a priority group.
     Direct port of LaModel::doTheFallowAllocation() from lamodel.cpp (lines 448-498).
@@ -831,30 +1509,32 @@ def doTheFallowAllocation(model: 'LaModel', thePriority: Priority, theAvailableF
     unused there as well: allocation is proportional to each animal's share
     of ``theTotalNeededByGroup``.
     """
-    if theTotalNeededByGroup <= 0: return theAvailableFallowValue
+    _ = theCountInGroup
+    if theTotalNeededByGroup <= 0:
+        return theAvailableFallowValue
     
     myFallowDifference = theAvailableFallowValue - theTotalNeededByGroup
     myRemainingFallow = 0.0
     
     if myFallowDifference > 0:
-        # Status.MoreThanEnoughToCompletelySatisfy
-        for myAnimalGuid, myAnimalParameterGuid in model.mAnimalsMap.items():
+        theModel.mFallowStatus = Status.MoreThanEnoughToCompletelySatisfy
+        for myAnimalGuid, myAnimalParameterGuid in theModel.mAnimalsMap.items():
             myAnimalParameter = LaUtils.getAnimalParameter(myAnimalParameterGuid)
-            if myAnimalParameter.fallowUsage == thePriority:
-                if myAnimalGuid in model.mValueMap:
-                    model.mValueMap[myAnimalGuid] = 0.0 # Requirement fully met
+            if myAnimalParameter and myAnimalParameter.fallowUsage == thePriority:
+                if myAnimalGuid in theModel.mValueMap:
+                    theModel.mValueMap[myAnimalGuid] = 0.0 # Requirement fully met
         myRemainingFallow = myFallowDifference
     else:
-        # Status.NotEnoughToCompletelySatisfy
-        for myAnimalGuid, myAnimalParameterGuid in model.mAnimalsMap.items():
+        theModel.mFallowStatus = Status.NotEnoughToCompletelySatisfy
+        for myAnimalGuid, myAnimalParameterGuid in theModel.mAnimalsMap.items():
             myAnimalParameter = LaUtils.getAnimalParameter(myAnimalParameterGuid)
-            if myAnimalParameter.fallowUsage == thePriority:
-                if myAnimalGuid in model.mValueMap:
-                    myIndividualRequirement = model.mValueMap[myAnimalGuid]
+            if myAnimalParameter and myAnimalParameter.fallowUsage == thePriority:
+                if myAnimalGuid in theModel.mValueMap:
+                    myIndividualRequirement = theModel.mValueMap[myAnimalGuid]
                     myProportion = myIndividualRequirement / theTotalNeededByGroup
                     myAllocatedMCals = theAvailableFallowValue * myProportion
-                    model.mValueMap[myAnimalGuid] -= myAllocatedMCals
-                    model.mValueMap[myAnimalGuid] = max(0.0, model.mValueMap[myAnimalGuid])
+                    theModel.mValueMap[myAnimalGuid] -= myAllocatedMCals
+                    theModel.mValueMap[myAnimalGuid] = max(0.0, theModel.mValueMap[myAnimalGuid])
         myRemainingFallow = 0.0
         
     return myRemainingFallow
